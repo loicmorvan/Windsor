@@ -24,9 +24,7 @@ namespace CastleTests
 	using CastleTests.ClassComponents;
 	using CastleTests.Components;
 
-	using NUnit.Framework;
 
-	[TestFixture]
 	public class HandlerFilterTestCase : AbstractContainerTestCase
 	{
 		private class FailIfCalled : IHandlersFilter
@@ -38,8 +36,7 @@ namespace CastleTests
 
 			public IHandler[] SelectHandlers(Type service, IHandler[] handlers)
 			{
-				Assert.Fail("SelectHandlers was called with {0}", service);
-				return null; //< could not compile without returning anything
+				throw new Exception($"SelectHandlers was called with {service}");
 			}
 		}
 
@@ -147,10 +144,10 @@ namespace CastleTests
 
 			public bool HasOpinionAbout(Type service)
 			{
-				Assert.That(OpinionWasChecked, Is.False, "Opinion should not be checked more than once");
+				Assert.False(OpinionWasChecked);
 
 				var wasExpectedService = service == typeof(ISomeService);
-				Assert.That(wasExpectedService, Is.True, "Did not expect {0} to be checked with this handler filter");
+				Assert.True(wasExpectedService);
 
 				OpinionWasChecked = true;
 
@@ -171,83 +168,83 @@ namespace CastleTests
 		{
 		}
 
-		[Test]
+		[Fact]
 		public void Filter_gets_all_assignable_handlers_not_exiplicitly_registered_for_given_service()
 		{
 			Container.Register(Component.For<Task5>(),
-			                   Component.For<Task3>(),
-			                   Component.For<Task2>(),
-			                   Component.For<Task4>(),
-			                   Component.For<Task1>());
+				Component.For<Task3>(),
+				Component.For<Task2>(),
+				Component.For<Task4>(),
+				Component.For<Task1>());
 
 			Container.Kernel.AddHandlersFilter(new ReturnAllHandlersFilter());
 
 			var instances = Container.ResolveAll<ISomeTask>();
 
-			Assert.AreEqual(5, instances.Length);
+			Assert.Equal(5, instances.Length);
 		}
 
-		[Test]
+		[Fact]
 		public void Filter_gets_open_generic_handlers_when_generic_service_requested()
 		{
 			Container.Register(Component.For<IGeneric<A>>().ImplementedBy<GenericImpl1<A>>(),
-			                   Component.For(typeof(GenericImpl2<>)));
+				Component.For(typeof(GenericImpl2<>)));
 			var filter = new DelegatingFilter(typeof(IGeneric<A>));
 			Kernel.AddHandlersFilter(filter);
 
 			Container.ResolveAll<IGeneric<A>>();
 
-			Assert.AreEqual(2, filter.HandlersAsked.Length);
+			Assert.Equal(2, filter.HandlersAsked.Length);
 		}
 
-		[Test]
+		[Fact]
 		public void Filter_returning_empty_collection_respected()
 		{
 			Container.Register(Component.For<ISomeTask>().ImplementedBy<Task5>(),
-			                   Component.For<ISomeTask>().ImplementedBy<Task4>(),
-			                   Component.For<ISomeTask>().ImplementedBy<Task3>(),
-			                   Component.For<ISomeTask>().ImplementedBy<Task2>(),
-			                   Component.For<ISomeTask>().ImplementedBy<Task1>());
+				Component.For<ISomeTask>().ImplementedBy<Task4>(),
+				Component.For<ISomeTask>().ImplementedBy<Task3>(),
+				Component.For<ISomeTask>().ImplementedBy<Task2>(),
+				Component.For<ISomeTask>().ImplementedBy<Task1>());
 
 			Container.Kernel.AddHandlersFilter(new DelegatingFilter(typeof(ISomeTask), h => false));
 
 			var instances = Container.ResolveAll(typeof(ISomeTask));
 
-			Assert.IsEmpty(instances);
+			Assert.Empty(instances);
 		}
 
-		[Test]
+		[Fact]
 		public void HandlerFilterGetsCalledLikeExpected()
 		{
 			Container.Register(Component.For<ISomeService>().ImplementedBy<FirstImplementation>(),
-			                   Component.For<ISomeService>().ImplementedBy<SecondImplementation>(),
-			                   Component.For<ISomeService>().ImplementedBy<ThirdImplementation>());
+				Component.For<ISomeService>().ImplementedBy<SecondImplementation>(),
+				Component.For<ISomeService>().ImplementedBy<ThirdImplementation>());
 
 			var filter = new TestHandlersFilter();
 			Container.Kernel.AddHandlersFilter(filter);
 
 			Container.ResolveAll<ISomeService>();
 
-			Assert.IsTrue(filter.OpinionWasChecked, "Filter's opinion should have been checked once for each handler");
+			Assert.True(filter.OpinionWasChecked, "Filter's opinion should have been checked once for each handler");
 		}
 
-		[Test]
+		[Fact]
 		public void HandlerFiltersPrioritizationAndOrderingIsRespected()
 		{
 			Container.Register(Component.For<ISomeTask>().ImplementedBy<Task5>(),
-			                   Component.For<ISomeTask>().ImplementedBy<Task3>(),
-			                   Component.For<ISomeTask>().ImplementedBy<Task2>(),
-			                   Component.For<ISomeTask>().ImplementedBy<Task4>(),
-			                   Component.For<ISomeTask>().ImplementedBy<Task1>());
+				Component.For<ISomeTask>().ImplementedBy<Task3>(),
+				Component.For<ISomeTask>().ImplementedBy<Task2>(),
+				Component.For<ISomeTask>().ImplementedBy<Task4>(),
+				Component.For<ISomeTask>().ImplementedBy<Task1>());
 
 			Container.Kernel.AddHandlersFilter(new FilterThatRemovedFourthTaskAndOrdersTheRest());
 
 			var instances = Container.ResolveAll(typeof(ISomeTask));
 
-			Assert.That(instances, Has.Length.EqualTo(4));
+			Assert.Equal(4, instances.Length);
 		}
 
-		[Test]
+		[Fact]
 		public void SelectionMethodIsNeverCalledOnFilterWhenItDoesNotHaveAnOpinionForThatService()
 		{
 			Container.Register(Component.For<IUnimportantService>().ImplementedBy<UnimportantImpl>());

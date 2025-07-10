@@ -28,9 +28,9 @@ namespace Castle
 	using CastleTests.ClassComponents;
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class ClassInheritanceTestCase : AbstractContainerTestCase
 	{
 		// TODO: add tests for generics in the hierarchy (open as well?)
@@ -44,7 +44,7 @@ namespace Castle
 			Container.Register(Component.For<CountingInterceptor>().LifeStyle.Transient);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_proxy_class_service_impl_explicitly()
 		{
 			RegisterInterceptor();
@@ -52,10 +52,10 @@ namespace Castle
 
 			var child = Container.Resolve<JohnChild>();
 
-			Assert.IsTrue(IsProxy(child));
+			Assert.True(IsProxy(child));
 		}
 
-		[Test]
+		[Fact]
 		public void Can_proxy_class_service_impl_implicitly()
 		{
 			RegisterInterceptor();
@@ -63,10 +63,10 @@ namespace Castle
 
 			var child = Container.Resolve<JohnChild>();
 
-			Assert.IsTrue(IsProxy(child));
+			Assert.True(IsProxy(child));
 		}
 
-		[Test]
+		[Fact]
 		public void Can_proxy_class_service_with_inherited_implementation()
 		{
 			RegisterInterceptor();
@@ -74,11 +74,11 @@ namespace Castle
 
 			var obj = Container.Resolve<JohnParent>();
 
-			Assert.IsTrue(IsProxy(obj));
-			Assert.IsInstanceOf<JohnChild>(obj);
+			Assert.True(IsProxy(obj));
+			Assert.IsType<JohnChild>(obj);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_proxy_multiple_class_services_and_interface_with_inherited_implementation()
 		{
 			RegisterInterceptor();
@@ -87,12 +87,12 @@ namespace Castle
 
 			var obj = Container.Resolve<JohnParent>();
 
-			Assert.IsTrue(IsProxy(obj));
-			Assert.IsInstanceOf<JohnChild>(obj);
-			Assert.IsInstanceOf<IEmptyService>(obj);
+			Assert.True(IsProxy(obj));
+			Assert.IsType<JohnChild>(obj);
+			Assert.IsType<IEmptyService>(obj, exactMatch:false);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_proxy_multiple_class_services_and_interfaces_incl_generic_with_inherited_implementation()
 		{
 			RegisterInterceptor();
@@ -101,13 +101,13 @@ namespace Castle
 
 			var obj = Container.Resolve<JohnParent>();
 
-			Assert.IsTrue(IsProxy(obj));
-			Assert.IsInstanceOf<JohnChild>(obj);
-			Assert.IsInstanceOf<IEmptyService>(obj);
-			Assert.IsInstanceOf<IGeneric<IEmployee>>(obj);
+			Assert.True(IsProxy(obj));
+			Assert.IsType<JohnChild>(obj);
+			Assert.IsType<IEmptyService>(obj, exactMatch: false);
+			Assert.IsType<IGeneric<IEmployee>>(obj, exactMatch: false);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_proxy_multiple_class_services_with_inherited_implementation()
 		{
 			RegisterInterceptor();
@@ -115,11 +115,11 @@ namespace Castle
 
 			var obj = Container.Resolve<JohnParent>();
 
-			Assert.IsTrue(IsProxy(obj));
-			Assert.IsInstanceOf<JohnChild>(obj);
+			Assert.True(IsProxy(obj));
+			Assert.IsType<JohnChild>(obj);
 		}
 
-		[Test]
+		[Fact]
 		public void GrandParent_and_Parent_of_impl_can_be_the_service()
 		{
 			Container.Register(Component.For<JohnGrandparent, JohnParent>().ImplementedBy<JohnChild>());
@@ -127,34 +127,34 @@ namespace Castle
 			var grandparent = Container.Resolve<JohnGrandparent>();
 			var parent = Container.Resolve<JohnParent>();
 
-			Assert.AreSame(grandparent, parent);
-			Assert.IsInstanceOf<JohnChild>(grandparent);
+			Assert.Same(grandparent, parent);
+			Assert.IsType<JohnChild>(grandparent);
 		}
 
-		[Test]
+		[Fact]
 		public void GrandParent_of_impl_can_be_the_service()
 		{
 			Container.Register(Component.For<JohnGrandparent>().ImplementedBy<JohnChild>());
 
 			var grandparent = Container.Resolve<JohnGrandparent>();
 
-			Assert.IsInstanceOf<JohnChild>(grandparent);
+			Assert.IsType<JohnChild>(grandparent);
 		}
 
-		[Test(Description = "With some conversion operator or black magic this may actually work for someone... so let them try")]
+		[Fact]
 		public void Not_related_service_and_impl_fail_on_resolve()
 		{
 			Container.Register(Component.For<A>().ImplementedBy(typeof(A2)));
 
 			var handler = Kernel.GetHandler(typeof(A));
 
-			Assert.AreEqual(typeof(A), handler.ComponentModel.Services.Single());
-			Assert.AreEqual(typeof(A2), handler.ComponentModel.Implementation);
+			Assert.Equal(typeof(A), handler.ComponentModel.Services.Single());
+			Assert.Equal(typeof(A2), handler.ComponentModel.Implementation);
 			// sure, why not - let them do uncompatible types. Who knows - perhaps by some miracle
 			Assert.Throws<InvalidCastException>(() => Container.Resolve<A>());
 		}
 
-		[Test]
+		[Fact]
 		public void Parent_and_GrandParent_of_impl_can_be_the_service()
 		{
 			Container.Register(Component.For<JohnParent, JohnGrandparent>().ImplementedBy<JohnChild>());
@@ -162,40 +162,40 @@ namespace Castle
 			var grandparent = Container.Resolve<JohnGrandparent>();
 			var parent = Container.Resolve<JohnParent>();
 
-			Assert.AreSame(grandparent, parent);
-			Assert.IsInstanceOf<JohnChild>(grandparent);
+			Assert.Same(grandparent, parent);
+			Assert.IsType<JohnChild>(grandparent);
 		}
 
-		[Test]
+		[Fact]
 		public void Parent_of_impl_can_be_the_service()
 		{
 			Container.Register(Component.For<JohnParent>().ImplementedBy<JohnChild>());
 
 			var parent = Container.Resolve<JohnParent>();
 
-			Assert.IsInstanceOf<JohnChild>(parent);
+			Assert.IsType<JohnChild>(parent);
 		}
 
-		[Test]
+		[Fact]
 		public void Same_class_can_be_used_as_service_and_impl_explicitly()
 		{
 			Container.Register(Component.For<A>().ImplementedBy<A>());
 
 			var handler = Kernel.GetHandler(typeof(A));
 
-			Assert.AreEqual(typeof(A), handler.ComponentModel.Services.Single());
-			Assert.AreEqual(typeof(A), handler.ComponentModel.Implementation);
+			Assert.Equal(typeof(A), handler.ComponentModel.Services.Single());
+			Assert.Equal(typeof(A), handler.ComponentModel.Implementation);
 		}
 
-		[Test]
+		[Fact]
 		public void Same_class_can_be_used_as_service_and_impl_implicitly()
 		{
 			Container.Register(Component.For<A>());
 
 			var handler = Kernel.GetHandler(typeof(A));
 
-			Assert.AreEqual(typeof(A), handler.ComponentModel.Services.Single());
-			Assert.AreEqual(typeof(A), handler.ComponentModel.Implementation);
+			Assert.Equal(typeof(A), handler.ComponentModel.Services.Single());
+			Assert.Equal(typeof(A), handler.ComponentModel.Implementation);
 		}
 	}
 }

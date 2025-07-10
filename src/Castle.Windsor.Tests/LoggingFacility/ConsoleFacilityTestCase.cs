@@ -21,17 +21,15 @@ namespace Castle.Facilities.Logging.Tests
 	using Castle.Facilities.Logging.Tests.Classes;
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor;
-	using NUnit.Framework;
 
-	[TestFixture]
-	public class ConsoleFacilityTestCase : BaseTest
+
+	public class ConsoleFacilityTestCase : BaseTest, IDisposable
 	{
 		private IWindsorContainer container;
 		private StringWriter outWriter = new StringWriter();
 		private StringWriter errorWriter = new StringWriter();
 
-		[SetUp]
-		public void Setup()
+		public ConsoleFacilityTestCase()
 		{
 			container = base.CreateConfiguredContainer<ConsoleFactory>();
 
@@ -42,8 +40,7 @@ namespace Castle.Facilities.Logging.Tests
 			Console.SetError(errorWriter);
 		}
 
-		[TearDown]
-		public void Teardown()
+		public void Dispose()
 		{
 			if (container != null)
 			{
@@ -51,7 +48,7 @@ namespace Castle.Facilities.Logging.Tests
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void SimpleTest()
 		{
 			container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
@@ -63,7 +60,7 @@ namespace Castle.Facilities.Logging.Tests
 			test.DoSomething();
 
 			actualLogOutput = outWriter.GetStringBuilder().ToString();
-			Assert.AreEqual(expectedLogOutput, actualLogOutput);
+			Assert.Equal(expectedLogOutput, actualLogOutput);
 		}
 	}
 }

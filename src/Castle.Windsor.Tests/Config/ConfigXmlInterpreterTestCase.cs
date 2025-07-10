@@ -26,12 +26,12 @@ namespace Castle.Windsor.Tests
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class ConfigXmlInterpreterTestCase
 	{
-		[Test]
+		[Fact]
 		public void ComponentIdGetsLoadedFromTheParsedConfiguration()
 		{
 			var store = new DefaultConfigurationStore();
@@ -42,10 +42,10 @@ namespace Castle.Windsor.Tests
 			var container = new WindsorContainer(store);
 
 			var handler = container.Kernel.GetHandler(typeof(ICalcService));
-			Assert.AreEqual(Core.LifestyleType.Transient, handler.ComponentModel.LifestyleType);
+			Assert.Equal(Core.LifestyleType.Transient, handler.ComponentModel.LifestyleType);
 		}
 
-		[Test]
+		[Fact]
 		public void CorrectConfigurationMapping()
 		{
 			var store = new DefaultConfigurationStore();
@@ -55,10 +55,10 @@ namespace Castle.Windsor.Tests
 
 			var container = new WindsorContainer(store);
 			var facility = container.Kernel.GetFacilities().OfType<HiperFacility>().Single();
-			Assert.IsTrue(facility.Initialized);
+			Assert.True(facility.Initialized);
 		}
 
-		[Test]
+		[Fact]
 		public void MissingManifestResourceConfiguration()
 		{
 			var store = new DefaultConfigurationStore();
@@ -67,7 +67,7 @@ namespace Castle.Windsor.Tests
 			Assert.Throws<ConfigurationProcessingException>(() => new XmlInterpreter(source).ProcessResource(source, store, kernel));
 		}
 
-		[Test]
+		[Fact]
 		public void ProperDeserialization()
 		{
 			var store = new DefaultConfigurationStore();
@@ -76,41 +76,41 @@ namespace Castle.Windsor.Tests
 			IKernel kernel = new DefaultKernel();
 			interpreter.ProcessResource(interpreter.Source, store, kernel);
 
-			Assert.AreEqual(2, store.GetFacilities().Length);
-			Assert.AreEqual(2, store.GetComponents().Length);
-			Assert.AreEqual(2, store.GetConfigurationForChildContainers().Length);
+			Assert.Equal(2, store.GetFacilities().Length);
+			Assert.Equal(2, store.GetComponents().Length);
+			Assert.Equal(2, store.GetConfigurationForChildContainers().Length);
 
 			var config = store.GetFacilityConfiguration(typeof(DummyFacility).FullName);
 			var childItem = config.Children["item"];
-			Assert.IsNotNull(childItem);
-			Assert.AreEqual("value", childItem.Value);
+			Assert.NotNull(childItem);
+			Assert.Equal("value", childItem.Value);
 
 			config = store.GetFacilityConfiguration(typeof(HiperFacility).FullName);
-			Assert.IsNotNull(config);
-			Assert.AreEqual("value within CDATA section", config.Value);
+			Assert.NotNull(config);
+			Assert.Equal("value within CDATA section", config.Value);
 
 			config = store.GetComponentConfiguration("testidcomponent1");
 			childItem = config.Children["item"];
-			Assert.IsNotNull(childItem);
-			Assert.AreEqual("value1", childItem.Value);
+			Assert.NotNull(childItem);
+			Assert.Equal("value1", childItem.Value);
 
 			config = store.GetComponentConfiguration("testidcomponent2");
 			childItem = config.Children["item"];
-			Assert.IsNotNull(childItem);
-			Assert.AreEqual("value2", childItem.Value);
+			Assert.NotNull(childItem);
+			Assert.Equal("value2", childItem.Value);
 
 			config = store.GetChildContainerConfiguration("child1");
-			Assert.IsNotNull(config);
-			Assert.AreEqual(config.Attributes["name"], "child1");
-			Assert.AreEqual("<configuration />", config.Value);
+			Assert.NotNull(config);
+			Assert.Equal("child1", config.Attributes["name"]);
+			Assert.Equal("<configuration />", config.Value);
 
 			config = store.GetChildContainerConfiguration("child2");
-			Assert.IsNotNull(config);
-			Assert.AreEqual(config.Attributes["name"], "child2");
-			Assert.AreEqual("<configuration />", config.Value);
+			Assert.NotNull(config);
+			Assert.Equal("child2", config.Attributes["name"]);
+			Assert.Equal("<configuration />", config.Value);
 		}
 
-		[Test]
+		[Fact]
 		public void ProperManifestDeserialization()
 		{
 			var store = new DefaultConfigurationStore();
@@ -118,41 +118,41 @@ namespace Castle.Windsor.Tests
 			IKernel kernel = new DefaultKernel();
 			interpreter.ProcessResource(interpreter.Source, store, kernel);
 
-			Assert.AreEqual(2, store.GetFacilities().Length);
-			Assert.AreEqual(2, store.GetComponents().Length);
-			Assert.AreEqual(2, store.GetConfigurationForChildContainers().Length);
+			Assert.Equal(2, store.GetFacilities().Length);
+			Assert.Equal(2, store.GetComponents().Length);
+			Assert.Equal(2, store.GetConfigurationForChildContainers().Length);
 
 			var config = store.GetFacilityConfiguration(typeof(DummyFacility).FullName);
 			var childItem = config.Children["item"];
-			Assert.IsNotNull(childItem);
-			Assert.AreEqual("value", childItem.Value);
+			Assert.NotNull(childItem);
+			Assert.Equal("value", childItem.Value);
 
 			config = store.GetFacilityConfiguration(typeof(HiperFacility).FullName);
-			Assert.IsNotNull(config);
-			Assert.AreEqual("value within CDATA section", config.Value);
+			Assert.NotNull(config);
+			Assert.Equal("value within CDATA section", config.Value);
 
 			config = store.GetComponentConfiguration("testidcomponent1");
 			childItem = config.Children["item"];
-			Assert.IsNotNull(childItem);
-			Assert.AreEqual("value1", childItem.Value);
+			Assert.NotNull(childItem);
+			Assert.Equal("value1", childItem.Value);
 
 			config = store.GetComponentConfiguration("testidcomponent2");
 			childItem = config.Children["item"];
-			Assert.IsNotNull(childItem);
-			Assert.AreEqual("value2", childItem.Value);
+			Assert.NotNull(childItem);
+			Assert.Equal("value2", childItem.Value);
 
 			config = store.GetChildContainerConfiguration("child1");
-			Assert.IsNotNull(config);
-			Assert.AreEqual(config.Attributes["name"], "child1");
-			Assert.AreEqual("<configuration />", config.Value);
+			Assert.NotNull(config);
+			Assert.Equal("child1", config.Attributes["name"]);
+			Assert.Equal("<configuration />", config.Value);
 
 			config = store.GetChildContainerConfiguration("child2");
-			Assert.IsNotNull(config);
-			Assert.AreEqual(config.Attributes["name"], "child2");
-			Assert.AreEqual("<configuration />", config.Value);
+			Assert.NotNull(config);
+			Assert.Equal("child2", config.Attributes["name"]);
+			Assert.Equal("<configuration />", config.Value);
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldThrowIfIdAttributeIsPresentInFacilityConfig()
 		{
 			var facilityConfig = Installer.Configuration.FromXml(
@@ -174,10 +174,10 @@ namespace Castle.Windsor.Tests
 	{
 		public void Init(IKernel kernel, IConfiguration facilityConfig)
 		{
-			Assert.IsNotNull(facilityConfig);
+			Assert.NotNull(facilityConfig);
 			var childItem = facilityConfig.Children["item"];
-			Assert.IsNotNull(childItem);
-			Assert.AreEqual("value", childItem.Value);
+			Assert.NotNull(childItem);
+			Assert.Equal("value", childItem.Value);
 		}
 
 		public void Terminate()

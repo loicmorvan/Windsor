@@ -19,7 +19,7 @@ namespace CastleTests.Windsor.Tests
 
 	using Castle.MicroKernel.Registration;
 
-	using NUnit.Framework;
+	
 
 	// Please see DefaultDependencyResolver -> HasAnyComponentInValidState -> RebuildOpenGenericHandlersWithClosedGenericSubHandlers
 	// 
@@ -30,10 +30,10 @@ namespace CastleTests.Windsor.Tests
 	// In this case the DefaultGenericHandler of type IOpenGeneric<> should create a sub DefaultGenericHandler which is bound to IOpenGeneric<ArrayList>
 	// and submit whether it is resolvable or not during the DefaultDependencyResolver -> HasAnyComponentInValidState logic.
 
-	[TestFixture]
+	
 	public class OpenGenericConstructorSelectionTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		[Bug("https://github.com/castleproject/Windsor/issues/136")]
 		public void Resolves_using_most_greedy_constructor_when_having_open_generic_container_registrations_with_inferred_generic_parameters()
 		{

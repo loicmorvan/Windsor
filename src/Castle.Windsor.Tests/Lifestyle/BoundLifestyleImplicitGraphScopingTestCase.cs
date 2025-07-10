@@ -21,11 +21,11 @@ namespace CastleTests.Lifestyle
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
 	public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void Scoped_component_created_for_outermost_sub_graph()
 		{
 			Container.Register(
@@ -37,10 +37,10 @@ namespace CastleTests.Lifestyle
 			var cba = Container.Resolve<CBA>();
 			var inner = ((CBADecorator)cba).Inner;
 
-			Assert.AreSame(cba.A, inner.A);
+			Assert.Same(cba.A, inner.A);
 		}
 
-		[Test]
+		[Fact]
 		public void Scoped_component_disposable_not_tracked()
 		{
 			Container.Register(
@@ -53,7 +53,7 @@ namespace CastleTests.Lifestyle
 			Assert.False(Kernel.ReleasePolicy.HasTrack(cba.A));
 		}
 
-		[Test]
+		[Fact]
 		public void Scoped_component_disposable_root_tracked()
 		{
 			Container.Register(
@@ -66,7 +66,7 @@ namespace CastleTests.Lifestyle
 			Assert.True(Kernel.ReleasePolicy.HasTrack(cba));
 		}
 
-		[Test]
+		[Fact]
 		public void Scoped_component_doesnt_unnecessarily_force_root_to_be_tracked()
 		{
 			Container.Register(
@@ -80,7 +80,7 @@ namespace CastleTests.Lifestyle
 			Assert.False(Kernel.ReleasePolicy.HasTrack(cba.B));
 		}
 
-		[Test]
+		[Fact]
 		public void Scoped_component_doesnt_unnecessarily_get_tracked()
 		{
 			Container.Register(
@@ -93,7 +93,7 @@ namespace CastleTests.Lifestyle
 			Assert.False(Kernel.ReleasePolicy.HasTrack(cba.A));
 		}
 
-		[Test]
+		[Fact]
 		public void Scoped_component_not_released_prematurely()
 		{
 			Container.Register(
@@ -113,7 +113,7 @@ namespace CastleTests.Lifestyle
 			Assert.False(wasADisposedAtTheTimeWhenDisposingB);
 		}
 
-		[Test]
+		[Fact]
 		public void Scoped_component_not_released_prematurely_interdependencies()
 		{
 			Container.Register(
@@ -132,7 +132,7 @@ namespace CastleTests.Lifestyle
 			Assert.False(wasADisposedAtTheTimeWhenDisposingB);
 		}
 
-		[Test]
+		[Fact]
 		public void Scoped_component_not_reused_across_resolves()
 		{
 			Container.Register(
@@ -143,12 +143,12 @@ namespace CastleTests.Lifestyle
 			var one = Container.Resolve<CBA>();
 			var two = Container.Resolve<CBA>();
 
-			Assert.AreNotSame(one.A, two.A);
-			Assert.AreNotSame(one.B.A, two.B.A);
-			Assert.AreNotSame(one.B.A, two.A);
+			Assert.NotSame(one.A, two.A);
+			Assert.NotSame(one.B.A, two.B.A);
+			Assert.NotSame(one.B.A, two.A);
 		}
 
-		[Test]
+		[Fact]
 		public void Scoped_component_properly_release_when_roots_collection_is_involved()
 		{
 			Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel));
@@ -170,7 +170,7 @@ namespace CastleTests.Lifestyle
 			Assert.True(a.All(x => x.Disposed));
 		}
 
-		[Test]
+		[Fact]
 		public void Scoped_component_properly_scoped_when_roots_collection_is_involved()
 		{
 			Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel));
@@ -187,10 +187,10 @@ namespace CastleTests.Lifestyle
 
 			var a = host.Screens.Cast<AppScreenCBA>().Select(s => s.Dependency.A).Distinct().ToArray();
 
-			Assert.AreEqual(3, a.Length);
+			Assert.Equal(3, a.Length);
 		}
 
-		[Test]
+		[Fact]
 		public void Scoped_component_released_when_releasing_root_disposable()
 		{
 			Container.Register(
@@ -206,7 +206,7 @@ namespace CastleTests.Lifestyle
 			Assert.True(a.Disposed);
 		}
 
-		[Test]
+		[Fact]
 		public void Scoped_component_reused()
 		{
 			Container.Register(
@@ -216,10 +216,10 @@ namespace CastleTests.Lifestyle
 
 			var cba = Container.Resolve<CBA>();
 
-			Assert.AreSame(cba.A, cba.B.A);
+			Assert.Same(cba.A, cba.B.A);
 		}
 
-		[Test]
+		[Fact]
 		public void Scoped_nearest_component_created_for_innermost_sub_graph()
 		{
 			Container.Register(
@@ -231,10 +231,10 @@ namespace CastleTests.Lifestyle
 			var cba = Container.Resolve<CBA>();
 			var inner = ((CBADecorator)cba).Inner;
 
-			Assert.AreNotSame(cba.A, inner.A);
+			Assert.NotSame(cba.A, inner.A);
 		}
 
-		[Test]
+		[Fact]
 		public void Scoped_nearest_component_reused_in_subgraph()
 		{
 			Container.Register(
@@ -244,7 +244,7 @@ namespace CastleTests.Lifestyle
 
 			var cba = Container.Resolve<CBA>();
 
-			Assert.AreSame(cba.A, cba.B.A);
+			Assert.Same(cba.A, cba.B.A);
 		}
 	}
 }

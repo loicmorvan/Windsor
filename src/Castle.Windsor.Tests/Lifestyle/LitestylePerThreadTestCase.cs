@@ -24,9 +24,9 @@ namespace CastleTests.Lifestyle
 	using CastleTests;
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class LitestylePerThreadTestCase : AbstractContainerTestCase
 	{
 		private void ExecuteOnAnotherThreadAndWait(Action action)
@@ -40,16 +40,16 @@ namespace CastleTests.Lifestyle
 			@event.WaitOne();
 		}
 
-		[Test]
+		[Fact]
 		public void Disposable_components_are_decommissioned_on_container_Dispose()
 		{
 			Container.Register(Component.For<DisposableComponent>().LifestylePerThread());
 			var a = Container.Resolve<DisposableComponent>();
 			Container.Dispose();
-			Assert.IsTrue(a.Disposed);
+			Assert.True(a.Disposed);
 		}
 
-		[Test]
+		[Fact]
 		public void Disposable_components_are_decommissioned_on_container_Dispose_all_threads()
 		{
 			Container.Register(Component.For<DisposableComponent>().LifeStyle.PerThread);
@@ -59,20 +59,20 @@ namespace CastleTests.Lifestyle
 
 			Container.Dispose();
 
-			Assert.IsTrue(a1.Disposed);
-			Assert.IsTrue(a2.Disposed);
+			Assert.True(a1.Disposed);
+			Assert.True(a2.Disposed);
 		}
 
-		[Test]
+		[Fact]
 		public void Disposable_components_are_not_decommissioned_on_Release_call()
 		{
 			Container.Register(Component.For<DisposableComponent>().LifeStyle.PerThread);
 			var a = Container.Resolve<DisposableComponent>();
 			Container.Release(a);
-			Assert.IsFalse(a.Disposed);
+			Assert.False(a.Disposed);
 		}
 
-		[Test]
+		[Fact]
 		public void Instances_created_on_different_threads_are_not_reused()
 		{
 			Container.Register(Component.For<A>().LifeStyle.PerThread);
@@ -80,19 +80,19 @@ namespace CastleTests.Lifestyle
 			A a2 = null;
 			ExecuteOnAnotherThreadAndWait(() => a2 = Container.Resolve<A>());
 
-			Assert.AreNotSame(a1, a2);
+			Assert.NotSame(a1, a2);
 		}
 
-		[Test]
+		[Fact]
 		public void Instances_created_on_the_same_thread_are_reused()
 		{
 			Container.Register(Component.For<A>().LifeStyle.PerThread);
 			var a1 = Container.Resolve<A>();
 			var a2 = Container.Resolve<A>();
-			Assert.AreSame(a1, a2);
+			Assert.Same(a1, a2);
 		}
 
-		[Test]
+		[Fact]
 		public void Instances_created_on_the_same_thread_are_reused_in_child_container()
 		{
 			Container.Register(Component.For<A>().LifeStyle.PerThread);
@@ -100,7 +100,7 @@ namespace CastleTests.Lifestyle
 			var child = new WindsorContainer();
 			Container.AddChildContainer(child);
 			var a2 = child.Resolve<A>();
-			Assert.AreSame(a1, a2);
+			Assert.Same(a1, a2);
 		}
 	}
 }

@@ -13,14 +13,14 @@
 // limitations under the License.
 
 using Castle.MicroKernel.Registration;
-using NUnit.Framework;
+
 
 namespace Castle.Windsor.Tests.Bugs
 {
-    [TestFixture]
+    
     public class IoC_102
     {
-        [Test]
+        [Fact]
         public void ComponentResolutionOrderForKernelAndDpendencyResolverIsTheSame()
         {
             IWindsorContainer container = new WindsorContainer()
@@ -34,7 +34,7 @@ namespace Castle.Windsor.Tests.Bugs
 
             Consumer consumer = container.Resolve<Consumer>();
             IReader reader2 = container.Resolve<IReader>();
-            Assert.AreSame(reader2, consumer.Reader);
+            Assert.Same(reader2, consumer.Reader);
         }
         
         public interface IReader

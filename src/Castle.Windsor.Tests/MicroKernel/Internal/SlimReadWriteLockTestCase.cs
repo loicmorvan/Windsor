@@ -18,59 +18,59 @@ namespace CastleTests.MicroKernel.Internal
 
 	using Castle.MicroKernel.Internal;
 
-	using NUnit.Framework;
 
-	[TestFixture]
 	public class SlimReadWriteLockTestCase
 	{
 		private SlimReadWriteLock @lock;
 
-		[SetUp]
-		public void SetUp()
+		public SlimReadWriteLockTestCase()
 		{
 			@lock = new SlimReadWriteLock();
 		}
 
-		[Test]
+		[Fact]
 		public void Can_be_used_ForReading_multiple_nested_time()
 		{
 			using (@lock.ForReading())
 			{
 				using (@lock.ForReading())
 				{
-					Assert.IsTrue(@lock.IsReadLockHeld);
+					Assert.True(@lock.IsReadLockHeld);
 				}
-				Assert.IsTrue(@lock.IsReadLockHeld);
+
+				Assert.True(@lock.IsReadLockHeld);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Can_be_used_ForWriting_multiple_nested_time()
 		{
 			using (@lock.ForWriting())
 			{
 				using (@lock.ForWriting())
 				{
-					Assert.IsTrue(@lock.IsWriteLockHeld);
+					Assert.True(@lock.IsWriteLockHeld);
 				}
-				Assert.IsTrue(@lock.IsWriteLockHeld);
+
+				Assert.True(@lock.IsWriteLockHeld);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Can_be_used_ForReadingUpgradeable_multiple_nested_time()
 		{
 			using (@lock.ForReadingUpgradeable())
 			{
 				using (@lock.ForReadingUpgradeable())
 				{
-					Assert.IsTrue(@lock.IsUpgradeableReadLockHeld);
+					Assert.True(@lock.IsUpgradeableReadLockHeld);
 				}
-				Assert.IsTrue(@lock.IsUpgradeableReadLockHeld);
+
+				Assert.True(@lock.IsUpgradeableReadLockHeld);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Can_be_upgraded_from_nested_ForReadingUpgradeable()
 		{
 			using (@lock.ForReadingUpgradeable())
@@ -78,98 +78,100 @@ namespace CastleTests.MicroKernel.Internal
 				using (var holder = @lock.ForReadingUpgradeable())
 				{
 					holder.Upgrade();
-					Assert.IsTrue(@lock.IsWriteLockHeld);
+					Assert.True(@lock.IsWriteLockHeld);
 				}
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Can_be_used_ForReading_when_used_ForWriting()
 		{
 			using (@lock.ForWriting())
 			{
 				using (var holder = @lock.ForReading())
 				{
-					Assert.IsTrue(@lock.IsWriteLockHeld);
-					Assert.IsTrue(holder.LockAcquired);
+					Assert.True(@lock.IsWriteLockHeld);
+					Assert.True(holder.LockAcquired);
 				}
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Can_be_used_ForReading_when_used_ForReadingUpgradeable()
 		{
 			using (@lock.ForReadingUpgradeable())
 			{
 				using (var holder = @lock.ForReading())
 				{
-					Assert.IsTrue(@lock.IsUpgradeableReadLockHeld);
-					Assert.IsTrue(holder.LockAcquired);
+					Assert.True(@lock.IsUpgradeableReadLockHeld);
+					Assert.True(holder.LockAcquired);
 				}
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Can_NOT_be_used_ForReadingUpgradeable_when_used_ForReading()
 		{
 			using (@lock.ForReading())
 			{
-				Assert.Throws(typeof(LockRecursionException), () => @lock.ForReadingUpgradeable());
+				Assert.Throws<LockRecursionException>(() => @lock.ForReadingUpgradeable());
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Can_be_used_ForReadingUpgradeable_when_used_ForWriting()
 		{
 			using (@lock.ForWriting())
 			{
 				using (var holder = @lock.ForReadingUpgradeable())
 				{
-					Assert.IsTrue(@lock.IsWriteLockHeld);
-					Assert.IsTrue(holder.LockAcquired);
+					Assert.True(@lock.IsWriteLockHeld);
+					Assert.True(holder.LockAcquired);
 				}
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Can_NOT_be_used_ForWriting_when_used_ForReading()
 		{
 			using (@lock.ForReading())
 			{
-				Assert.Throws(typeof(LockRecursionException), () => @lock.ForWriting());
+				Assert.Throws<LockRecursionException>(() => @lock.ForWriting());
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Can_be_used_ForWriting_when_used_ForReadingUpgradeable()
 		{
 			using (@lock.ForReadingUpgradeable())
 			{
 				using (var holder = @lock.ForWriting())
 				{
-					Assert.IsTrue(@lock.IsUpgradeableReadLockHeld);
-					Assert.IsTrue(holder.LockAcquired);
+					Assert.True(@lock.IsUpgradeableReadLockHeld);
+					Assert.True(holder.LockAcquired);
 				}
-				Assert.IsTrue(@lock.IsUpgradeableReadLockHeld);
+
+				Assert.True(@lock.IsUpgradeableReadLockHeld);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Can_be_used_ForWriting_when_used_ForReadingUpgradeable_and_upgraded_after()
 		{
 			using (var upg = @lock.ForReadingUpgradeable())
 			{
 				using (var holder = @lock.ForWriting())
 				{
-					Assert.IsTrue(@lock.IsUpgradeableReadLockHeld);
-					Assert.IsTrue(holder.LockAcquired);
+					Assert.True(@lock.IsUpgradeableReadLockHeld);
+					Assert.True(holder.LockAcquired);
 					upg.Upgrade();
 				}
-				Assert.IsTrue(@lock.IsUpgradeableReadLockHeld);
+
+				Assert.True(@lock.IsUpgradeableReadLockHeld);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Can_be_used_ForWriting_when_used_ForReadingUpgradeable_and_upgraded_before()
 		{
 			using (var upg = @lock.ForReadingUpgradeable())
@@ -177,10 +179,11 @@ namespace CastleTests.MicroKernel.Internal
 				upg.Upgrade();
 				using (var holder = @lock.ForWriting())
 				{
-					Assert.IsTrue(@lock.IsUpgradeableReadLockHeld);
-					Assert.IsTrue(holder.LockAcquired);
+					Assert.True(@lock.IsUpgradeableReadLockHeld);
+					Assert.True(holder.LockAcquired);
 				}
-				Assert.IsTrue(@lock.IsUpgradeableReadLockHeld);
+
+				Assert.True(@lock.IsUpgradeableReadLockHeld);
 			}
 		}
 	}

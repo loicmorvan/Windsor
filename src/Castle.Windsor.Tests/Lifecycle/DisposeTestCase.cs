@@ -20,12 +20,12 @@ namespace Castle.Windsor.Tests.Lifecycle
 	using CastleTests;
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class DisposeTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void Disposable_component_for_nondisposable_service_built_via_factory_should_be_disposed_when_released()
 		{
 			SimpleServiceDisposable.DisposedCount = 0;
@@ -35,14 +35,14 @@ namespace Castle.Windsor.Tests.Lifecycle
 
 			var service = Container.Resolve<ISimpleService>();
 
-			Assert.AreEqual(0, SimpleServiceDisposable.DisposedCount);
+			Assert.Equal(0, SimpleServiceDisposable.DisposedCount);
 
 			Container.Release(service);
 
-			Assert.AreEqual(1, SimpleServiceDisposable.DisposedCount);
+			Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
 		}
 
-		[Test]
+		[Fact]
 		public void Disposable_component_for_nondisposable_service_is_tracked()
 		{
 			Container.Register(Component.For<ISimpleService>()
@@ -51,10 +51,10 @@ namespace Castle.Windsor.Tests.Lifecycle
 
 			var service = Container.Resolve<ISimpleService>();
 
-			Assert.IsTrue(Kernel.ReleasePolicy.HasTrack(service));
+			Assert.True(Kernel.ReleasePolicy.HasTrack(service));
 		}
 
-		[Test]
+		[Fact]
 		public void Disposable_component_for_nondisposable_service_should_be_disposed_when_released()
 		{
 			SimpleServiceDisposable.DisposedCount = 0;
@@ -65,20 +65,20 @@ namespace Castle.Windsor.Tests.Lifecycle
 			var service = Container.Resolve<ISimpleService>();
 			Container.Release(service);
 
-			Assert.AreEqual(1, SimpleServiceDisposable.DisposedCount);
+			Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
 		}
 
-		[Test]
+		[Fact]
 		public void Disposable_service_is_tracked()
 		{
 			Container.Register(Component.For<DisposableFoo>().LifeStyle.Transient);
 
 			var foo = Container.Resolve<DisposableFoo>();
 
-			Assert.IsTrue(Kernel.ReleasePolicy.HasTrack(foo));
+			Assert.True(Kernel.ReleasePolicy.HasTrack(foo));
 		}
 
-		[Test]
+		[Fact]
 		public void Disposable_services_should_be_disposed_when_released()
 		{
 			DisposableFoo.ResetDisposedCount();
@@ -87,10 +87,10 @@ namespace Castle.Windsor.Tests.Lifecycle
 			var foo = Container.Resolve<DisposableFoo>();
 			Container.Release(foo);
 
-			Assert.AreEqual(1, DisposableFoo.DisposedCount);
+			Assert.Equal(1, DisposableFoo.DisposedCount);
 		}
 
-		[Test]
+		[Fact]
 		public void Disposable_singleton_dependency_of_transient_open_generic_is_disposed()
 		{
 			DisposableFoo.ResetDisposedCount();
@@ -108,11 +108,11 @@ namespace Castle.Windsor.Tests.Lifecycle
 
 			Container.Dispose();
 
-			Assert.AreEqual(1, DisposableFoo.DisposedCount);
+			Assert.Equal(1, DisposableFoo.DisposedCount);
 			tracker.AssertNoLongerReferenced();
 		}
 
-		[Test]
+		[Fact]
 		public void Disposable_singleton_generic_closed_disposed()
 		{
 			Container.Register(Component.For<DisposableGeneric<A>>());
@@ -120,10 +120,10 @@ namespace Castle.Windsor.Tests.Lifecycle
 
 			Container.Dispose();
 
-			Assert.IsTrue(component.Disposed);
+			Assert.True(component.Disposed);
 		}
 
-		[Test]
+		[Fact]
 		public void Disposable_singleton_generic_closed_inherited_disposed()
 		{
 			Container.Register(Component.For<DisposableGenericA>());
@@ -131,10 +131,10 @@ namespace Castle.Windsor.Tests.Lifecycle
 
 			Container.Dispose();
 
-			Assert.IsTrue(component.Disposed);
+			Assert.True(component.Disposed);
 		}
 
-		[Test]
+		[Fact]
 		public void Disposable_singleton_generic_open_disposed()
 		{
 			Container.Register(Component.For(typeof(DisposableGeneric<>)));
@@ -142,10 +142,10 @@ namespace Castle.Windsor.Tests.Lifecycle
 
 			Container.Dispose();
 
-			Assert.IsTrue(component.Disposed);
+			Assert.True(component.Disposed);
 		}
 
-		[Test]
+		[Fact]
 		public void Disposable_transient_generic_closed_disposed()
 		{
 			Container.Register(Component.For<DisposableGeneric<A>>().LifeStyle.Transient);
@@ -153,10 +153,10 @@ namespace Castle.Windsor.Tests.Lifecycle
 
 			Container.Dispose();
 
-			Assert.IsTrue(component.Disposed);
+			Assert.True(component.Disposed);
 		}
 
-		[Test]
+		[Fact]
 		public void Disposable_transient_generic_closed_inherited_disposed()
 		{
 			Container.Register(Component.For<DisposableGenericA>().LifeStyle.Transient);
@@ -164,10 +164,10 @@ namespace Castle.Windsor.Tests.Lifecycle
 
 			Container.Dispose();
 
-			Assert.IsTrue(component.Disposed);
+			Assert.True(component.Disposed);
 		}
 
-		[Test]
+		[Fact]
 		public void Disposable_transient_generic_open_disposed()
 		{
 			Container.Register(Component.For(typeof(DisposableGeneric<>)).LifeStyle.Transient);
@@ -175,7 +175,7 @@ namespace Castle.Windsor.Tests.Lifecycle
 
 			Container.Dispose();
 
-			Assert.IsTrue(component.Disposed);
+			Assert.True(component.Disposed);
 		}
 	}
 }

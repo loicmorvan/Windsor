@@ -23,12 +23,12 @@ namespace CastleTests.LoggingFacility
 
 	using CastleTests.LoggingFacility.Tests.Classes;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class CustomFacilityTests
 	{
-		[Test]
+		[Fact]
 		public void ReadCustomFacilityConfigFromXML()
 		{
 			using (var container = new WindsorContainer())
@@ -47,7 +47,7 @@ namespace CastleTests.LoggingFacility
 								typeof(CustomLog4NetFactory).AssemblyQualifiedName,
 								typeof(LoggingFacility).AssemblyQualifiedName))));
 				var logger = container.Resolve<ILogger>();
-				Assert.IsInstanceOf<Log4netLogger>(logger);
+				Assert.IsType<Log4netLogger>(logger);
 			}
 		}
 	}

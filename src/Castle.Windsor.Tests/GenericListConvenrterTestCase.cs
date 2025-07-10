@@ -19,12 +19,12 @@ namespace CastleTests
 	using Castle.Core.Resource;
 	using Castle.Windsor.Installer;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class GenericListConvenrterTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void Can_read_component_with_dictionary_of_lists()
 		{
 			var xml =
@@ -50,7 +50,7 @@ namespace CastleTests
 			Container.Install(Configuration.FromXml(new StaticContentResource(xml)));
 			var item = Container.Resolve<IMyObject>();
 
-			Assert.AreEqual(1, item.Count);
+			Assert.Equal(1, item.Count);
 		}
 	}
 

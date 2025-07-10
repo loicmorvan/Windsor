@@ -19,12 +19,12 @@ namespace Castle.MicroKernel.Tests
 	using Castle.Core;
 	using Castle.MicroKernel.Registration;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class TransientMultiConstructorTestCase
 	{
-		[Test]
+		[Fact]
 		public void TransientMultiConstructorTest()
 		{
 			DefaultKernel container = new DefaultKernel();
@@ -39,10 +39,10 @@ namespace Castle.MicroKernel.Tests
 			object a = container.Resolve(typeof(AnyClass), arguments1);
 			object b = container.Resolve(typeof(AnyClass), arguments2);
 
-			Assert.AreNotSame(a, b, "A should not be B");
+			Assert.NotSame(a, b);
 		}
 
-		[Test]
+		[Fact]
 		public void TransientMultipleConstructorNonValueTypeTest()
 		{
 			DefaultKernel container = new DefaultKernel();
@@ -59,14 +59,14 @@ namespace Castle.MicroKernel.Tests
 			object a = container.Resolve(typeof(AnyClassWithReference), arguments1);
 			object b = container.Resolve(typeof(AnyClassWithReference), arguments2);
 
-			Assert.AreNotSame(a, b, "A should not be B");
+			Assert.NotSame(a, b);
 
 			// multi resolve test
 
 			a = container.Resolve(typeof(AnyClassWithReference), arguments1);
 			b = container.Resolve(typeof(AnyClassWithReference), arguments2);
 
-			Assert.AreNotSame(a, b, "A should not be B");
+			Assert.NotSame(a, b);
 		}
 	}
 

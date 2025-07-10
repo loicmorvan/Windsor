@@ -25,21 +25,21 @@ namespace CastleTests
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class ResolveAllTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void Can_resolve_more_than_single_component_for_service()
 		{
 			Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
 			                   Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>());
 			var clocks = Container.ResolveAll<IEmptyService>();
-			Assert.AreEqual(2, clocks.Length);
+			Assert.Equal(2, clocks.Length);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_use_mutliResolve_with_generic_Specialization()
 		{
 			Container.Register(Component.For(typeof(IRepository<>)).ImplementedBy(typeof(DemoRepository<>)),
@@ -48,10 +48,10 @@ namespace CastleTests
 			Container.Resolve<IRepository<IEmptyService>>();
 			var repositories = Container.ResolveAll<IRepository<EmptyServiceA>>();
 
-			Assert.AreEqual(2, repositories.Length);
+			Assert.Equal(2, repositories.Length);
 		}
 
-		[Test]
+		[Fact]
 		public void Exception_on_generic_constraint_violation_of_dependency_is_propagated_not_ignored()
 		{
 			Container.Register(
@@ -65,10 +65,10 @@ namespace CastleTests
 					"Generic component {0} has some generic dependencies which were not successfully closed. This often happens when generic implementation has some additional generic constraints. See inner exception for more details.",
 					typeof(CachingRepository<>).FullName);
 
-			Assert.AreEqual(expectedMessage, exception.Message);
+			Assert.Equal(expectedMessage, exception.Message);
 		}
 
-		[Test]
+		[Fact]
 		public void ResolveAll_honors_order_and_kinf_of_registration()
 		{
 			Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
@@ -77,9 +77,9 @@ namespace CastleTests
 
 			var clocks = Container.ResolveAll<IEmptyService>();
 
-			Assert.IsInstanceOf<EmptyServiceC>(clocks[0]);
-			Assert.IsInstanceOf<EmptyServiceA>(clocks[1]);
-			Assert.IsInstanceOf<EmptyServiceB>(clocks[2]);
+			Assert.IsType<EmptyServiceC>(clocks[0]);
+			Assert.IsType<EmptyServiceA>(clocks[1]);
+			Assert.IsType<EmptyServiceB>(clocks[2]);
 
 			//reversing order
 			ResetContainer();
@@ -89,12 +89,12 @@ namespace CastleTests
 
 			clocks = Container.ResolveAll<IEmptyService>();
 
-			Assert.IsInstanceOf<EmptyServiceC>(clocks[0]);
-			Assert.IsInstanceOf<EmptyServiceB>(clocks[1]);
-			Assert.IsInstanceOf<EmptyServiceA>(clocks[2]);
+			Assert.IsType<EmptyServiceC>(clocks[0]);
+			Assert.IsType<EmptyServiceB>(clocks[1]);
+			Assert.IsType<EmptyServiceA>(clocks[2]);
 		}
 
-		[Test]
+		[Fact]
 		public void ResolveAll_honors_order_of_registration()
 		{
 			Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
@@ -102,8 +102,8 @@ namespace CastleTests
 
 			var clocks = Container.ResolveAll<IEmptyService>();
 
-			Assert.IsInstanceOf<EmptyServiceA>(clocks[0]);
-			Assert.IsInstanceOf<EmptyServiceB>(clocks[1]);
+			Assert.IsType<EmptyServiceA>(clocks[0]);
+			Assert.IsType<EmptyServiceB>(clocks[1]);
 
 			//reversing order
 			ResetContainer();
@@ -112,8 +112,8 @@ namespace CastleTests
 
 			clocks = Container.ResolveAll<IEmptyService>();
 
-			Assert.IsInstanceOf<EmptyServiceB>(clocks[0]);
-			Assert.IsInstanceOf<EmptyServiceA>(clocks[1]);
+			Assert.IsType<EmptyServiceB>(clocks[0]);
+			Assert.IsType<EmptyServiceA>(clocks[1]);
 		}
 	}
 }

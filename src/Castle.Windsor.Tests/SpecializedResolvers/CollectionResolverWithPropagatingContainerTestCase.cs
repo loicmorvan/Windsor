@@ -24,7 +24,7 @@ namespace Castle.MicroKernel.Tests.SpecializedResolvers
 	using Castle.Windsor.Installer;
 	using Castle.Windsor.Proxy;
 
-	using NUnit.Framework;
+	
 
 	public class CollectionResolverWithPropagatingContainerTestCase
 		: CollectionResolverTestCase
@@ -41,7 +41,7 @@ namespace Castle.MicroKernel.Tests.SpecializedResolvers
 					new DefaultComponentInstaller());
 		}
 
-		[Test]
+		[Fact]
 		public void collection_sub_resolver_should_honor_composition_context_if_kernel_propagates_inline_dependencies()
 		{
 			Container.Register(Component.For<ComponentA>().LifestyleTransient());
@@ -50,13 +50,13 @@ namespace Castle.MicroKernel.Tests.SpecializedResolvers
 
 			var additionalArguments = Arguments.FromProperties(new { greeting = "Hello propagating system." });
 			var componentA = Kernel.Resolve<ComponentA>(additionalArguments);
-			Assert.That(componentA, Is.Not.Null);
-			Assert.That(componentA.Greeting, Is.Not.Null);
-			Assert.That(componentA.ComponentsOfB, Is.Not.Null);
-			Assert.That(componentA.ComponentsOfB.Length, Is.EqualTo(2));
+			Assert.NotNull(componentA);
+			Assert.NotNull(componentA.Greeting);
+			Assert.NotNull(componentA.ComponentsOfB);
+			Assert.Equal(2, componentA.ComponentsOfB.Length);
 			foreach (IComponentB componentB in componentA.ComponentsOfB)
 			{
-				Assert.That(componentA.Greeting, Is.EqualTo(componentB.Greeting));
+				Assert.Equal(componentA.Greeting, componentB.Greeting);
 			}
 		}
 

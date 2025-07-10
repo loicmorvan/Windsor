@@ -19,7 +19,7 @@ namespace CastleTests.Interceptors
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
 	public class InterceptorAttributeTestCase : AbstractContainerTestCase
 	{
@@ -33,7 +33,7 @@ namespace CastleTests.Interceptors
 			return ((IProxyTargetAccessor) proxy).GetInterceptors();
 		}
 
-		[Test]
+		[Fact]
 		public void Can_set_interceptor_via_attribute_many()
 		{
 			Container.Register(
@@ -41,38 +41,38 @@ namespace CastleTests.Interceptors
 				Component.For<StandardInterceptor>().Named("FooInterceptor"),
 				Component.For<ICalcService>().ImplementedBy<CalculatorServiceWithStandartInterceptorTwo>());
 			var calcService = Container.Resolve<ICalcService>();
-			Assert.IsTrue(IsProxy(calcService));
-			Assert.AreEqual(2, GetInterceptors(calcService).Length);
+			Assert.True(IsProxy(calcService));
+			Assert.Equal(2, GetInterceptors(calcService).Length);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_set_interceptor_via_attribute_named()
 		{
 			Container.Register(
 				Component.For<StandardInterceptor>().Named("FooInterceptor"),
 				Component.For<ICalcService>().ImplementedBy<CalculatorServiceWithFooInterceptorNamed>());
 			var calcService = Container.Resolve<ICalcService>();
-			Assert.IsTrue(IsProxy(calcService));
+			Assert.True(IsProxy(calcService));
 		}
 
-		[Test]
+		[Fact]
 		public void Can_set_interceptor_via_attribute_typed()
 		{
 			Container.Register(
 				Component.For<StandardInterceptor>(),
 				Component.For<ICalcService>().ImplementedBy<CalculatorServiceWithStandartInterceptorTyped>());
 			var calcService = Container.Resolve<ICalcService>();
-			Assert.IsTrue(IsProxy(calcService));
+			Assert.True(IsProxy(calcService));
 		}
 
-		[Test]
+		[Fact]
 		public void Can_set_interceptor_via_inherited_attribute()
 		{
 			Container.Register(
 				Component.For<StandardInterceptor>(),
 				Component.For<CalculatorServiceWithStandardInterceptor>());
 			var calcService = Container.Resolve<CalculatorServiceWithStandardInterceptor>();
-			Assert.IsTrue(IsProxy(calcService));
+			Assert.True(IsProxy(calcService));
 		}
 	}
 }

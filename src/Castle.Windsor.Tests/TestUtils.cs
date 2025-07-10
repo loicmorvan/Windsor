@@ -21,7 +21,7 @@ namespace CastleTests
 	using System.Text;
 	using System.Text.RegularExpressions;
 
-	using NUnit.Framework;
+	
 
 	public static class TestUtils
 	{

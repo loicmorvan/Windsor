@@ -20,9 +20,7 @@ namespace CastleTests.Facilities.TypedFactory
 	using Castle.MicroKernel.Registration;
 	using Castle.MicroKernel.Resolvers;
 
-	using NUnit.Framework;
 
-	[TestFixture]
 	public class TypedFactorySystemNullableTestCase : AbstractContainerTestCase
 	{
 		protected override void AfterContainerCreated()
@@ -30,7 +28,7 @@ namespace CastleTests.Facilities.TypedFactory
 			Container.AddFacility<TypedFactoryFacility>();
 		}
 
-		[Test]
+		[Fact]
 		public void Null_may_be_specified_through_typed_factory_for_non_optional_System_Nullable_constructor_parameter()
 		{
 			Container.Register(
@@ -42,7 +40,7 @@ namespace CastleTests.Facilities.TypedFactory
 			factory.Invoke(nonOptionalNullableParameter: null);
 		}
 
-		[Test]
+		[Fact]
 		public void Non_optional_System_Nullable_constructor_parameter_is_still_required()
 		{
 			Container.Register(
@@ -52,8 +50,10 @@ namespace CastleTests.Facilities.TypedFactory
 
 			var factory = Container.Resolve<Func<ComponentWithNonOptionalNullableParameter>>();
 
-			Assert.That(() => factory.Invoke(), Throws.InstanceOf<DependencyResolverException>()
-				.With.Property("Message").EqualTo($"Could not resolve non-optional dependency for '{typeof(ComponentWithNonOptionalNullableParameter)}' ({typeof(ComponentWithNonOptionalNullableParameter)}). Parameter 'nonOptionalNullableParameter' type '{typeof(int?).FullName}'"));
+			var exception = Assert.Throws<DependencyResolverException>(() => factory.Invoke());
+			Assert.Equal(
+				$"Could not resolve non-optional dependency for '{typeof(ComponentWithNonOptionalNullableParameter)}' ({typeof(ComponentWithNonOptionalNullableParameter)}). Parameter 'nonOptionalNullableParameter' type '{typeof(int?).FullName}'",
+				exception.Message);
 		}
 
 		public sealed class DependencyFromContainer

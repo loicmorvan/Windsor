@@ -25,26 +25,26 @@ namespace CastleTests.Facilities.TypedFactory
 	using CastleTests.Components;
 	using CastleTests.Facilities.TypedFactory.Factories;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class TypedFactoryDependenciesTestCase : AbstractContainerTestCase
 	{
 		private void AssertHasDependency<TComponent>(string name)
 		{
 			var handler = GetHandler<TComponent>();
 			var dependency = handler.ComponentModel.Dependencies.SingleOrDefault(d => d.DependencyKey == name);
-			Assert.IsNotNull(dependency, "Dependency on '{0}' should exist.", name);
+			Assert.NotNull(dependency);
 		}
 
 		private IHandler GetHandler<T>()
 		{
 			var handler = Container.Kernel.GetHandler(typeof(T));
-			Assert.IsNotNull(handler);
+			Assert.NotNull(handler);
 			return handler;
 		}
 
-		[Test]
+		[Fact]
 		public void Delegate_factory_depends_on_default_interceptor()
 		{
 			Container.AddFacility<TypedFactoryFacility>()
@@ -53,7 +53,7 @@ namespace CastleTests.Facilities.TypedFactory
 			AssertHasDependency<Func<A>>(TypedFactoryFacility.InterceptorKey);
 		}
 
-		[Test]
+		[Fact]
 		public void Interface_factory_depends_on_default_interceptor()
 		{
 			Container.AddFacility<TypedFactoryFacility>()
@@ -62,7 +62,7 @@ namespace CastleTests.Facilities.TypedFactory
 			AssertHasDependency<IDummyComponentFactory>(TypedFactoryFacility.InterceptorKey);
 		}
 
-		[Test]
+		[Fact]
 		public void Interface_factory_depends_on_default_selector_by_default()
 		{
 			Container.AddFacility<TypedFactoryFacility>()

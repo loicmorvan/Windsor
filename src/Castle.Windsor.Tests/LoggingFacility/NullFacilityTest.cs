@@ -14,28 +14,27 @@
 
 namespace Castle.Facilities.Logging.Tests
 {
+	using System;
+
 	using Castle.Core.Logging;
 	using Castle.Facilities.Logging.Tests.Classes;
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor;
-	using NUnit.Framework;
+
 
 	/// <summary>
 	/// Summary description for ConsoleFacitlyTest.
 	/// </summary>
-	[TestFixture]
-	public class NullFacilityTest : BaseTest
+	public class NullFacilityTest : BaseTest, IDisposable
 	{
 		private IWindsorContainer container;
 
-		[SetUp]
-		public void Setup()
+		public NullFacilityTest()
 		{
 			container = base.CreateConfiguredContainer<NullLogFactory>();
 		}
 
-		[TearDown]
-		public void Teardown()
+		public void Dispose()
 		{
 			if (container != null)
 			{
@@ -43,7 +42,7 @@ namespace Castle.Facilities.Logging.Tests
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void SimpleTest()
 		{
 			container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));

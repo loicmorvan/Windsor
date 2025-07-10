@@ -14,6 +14,8 @@
 
 namespace Castle.MicroKernel.Tests
 {
+	using System;
+
 	using Castle.Core;
 	using Castle.Core.Internal;
 	using Castle.MicroKernel.Registration;
@@ -21,26 +23,22 @@ namespace Castle.MicroKernel.Tests
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
 
-	[TestFixture]
-	public class GraphTestCase
+	public class GraphTestCase : IDisposable
 	{
 		private IKernel kernel;
 
-		[TearDown]
 		public void Dispose()
 		{
 			kernel.Dispose();
 		}
 
-		[SetUp]
-		public void Init()
+		public GraphTestCase()
 		{
 			kernel = new DefaultKernel();
 		}
 
-		[Test]
+		[Fact]
 		public void TopologicalSortOnComponents()
 		{
 			kernel.Register(Component.For(typeof(A)).Named("a"));
@@ -49,14 +47,14 @@ namespace Castle.MicroKernel.Tests
 
 			var nodes = kernel.GraphNodes;
 
-			Assert.IsNotNull(nodes);
-			Assert.AreEqual(3, nodes.Length);
+			Assert.NotNull(nodes);
+			Assert.Equal(3, nodes.Length);
 
 			var vertices = TopologicalSortAlgo.Sort(nodes);
 
-			Assert.AreEqual("c", (vertices[0] as ComponentModel).Name);
-			Assert.AreEqual("b", (vertices[1] as ComponentModel).Name);
-			Assert.AreEqual("a", (vertices[2] as ComponentModel).Name);
+			Assert.Equal("c", (vertices[0] as ComponentModel).Name);
+			Assert.Equal("b", (vertices[1] as ComponentModel).Name);
+			Assert.Equal("a", (vertices[2] as ComponentModel).Name);
 		}
 	}
 }

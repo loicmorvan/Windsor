@@ -20,9 +20,9 @@ namespace Castle.Windsor.Tests
 
 	using CastleTests;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class MultiServiceComponentsTestCase : AbstractContainerTestCase
 	{
 		public interface IRepository
@@ -59,7 +59,7 @@ namespace Castle.Windsor.Tests
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_handler_forwarding_using_generics_and_resolveAll()
 		{
 			Container.Register(
@@ -68,11 +68,11 @@ namespace Castle.Windsor.Tests
 				);
 			var services = Container.ResolveAll<IRepository<User>>();
 
-			Assert.AreEqual(1, services.Length);
-			Assert.That(services[0] is MyRepository);
+			Assert.Single(services);
+			Assert.True(services[0] is MyRepository);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_handler_forwarding_with_dependencies()
 		{
 			Container.Register(
@@ -85,7 +85,7 @@ namespace Castle.Windsor.Tests
 			Container.Resolve<ServiceUsingRepository>();
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_multiService_component()
 		{
 			Container.Register(
@@ -93,13 +93,13 @@ namespace Castle.Windsor.Tests
 					.ImplementedBy<MyRepository>()
 				);
 
-			Assert.AreSame(
+			Assert.Same(
 				Container.Resolve<IRepository>(),
 				Container.Resolve<IUserRepository>()
 				);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_several_handler_forwarding()
 		{
 			Container.Register(
@@ -108,17 +108,17 @@ namespace Castle.Windsor.Tests
 					.ImplementedBy<MyRepository>()
 				);
 
-			Assert.AreSame(
+			Assert.Same(
 				Container.Resolve<IRepository<User>>(),
 				Container.Resolve<IUserRepository>()
 				);
-			Assert.AreSame(
+			Assert.Same(
 				Container.Resolve<IRepository>(),
 				Container.Resolve<IUserRepository>()
 				);
 		}
 
-		[Test]
+		[Fact]
 		public void Forwarding_main_service_is_ignored()
 		{
 			Container.Register(
@@ -127,11 +127,11 @@ namespace Castle.Windsor.Tests
 					.ImplementedBy<MyRepository>());
 
 			var allHandlers = Kernel.GetAssignableHandlers(typeof(object));
-			Assert.AreEqual(1, allHandlers.Length);
-			Assert.AreEqual(1, allHandlers.Single().ComponentModel.Services.Count());
+			Assert.Single(allHandlers);
+			Assert.Single(allHandlers.Single().ComponentModel.Services);
 		}
 
-		[Test]
+		[Fact]
 		public void Forwarding_same_service_twice_is_ignored()
 		{
 			Container.Register(
@@ -141,11 +141,11 @@ namespace Castle.Windsor.Tests
 					.ImplementedBy<MyRepository>());
 
 			var allHandlers = Kernel.GetAssignableHandlers(typeof(object));
-			Assert.AreEqual(1, allHandlers.Length);
-			Assert.AreEqual(2, allHandlers.Single().ComponentModel.Services.Count());
+			Assert.Single(allHandlers);
+			Assert.Equal(2, allHandlers.Single().ComponentModel.Services.Count());
 		}
 
-		[Test]
+		[Fact]
 		public void ResolveAll_Will_Only_Resolve_Unique_Handlers()
 		{
 			Container.Register(
@@ -154,7 +154,7 @@ namespace Castle.Windsor.Tests
 				);
 
 			var repos = Container.ResolveAll<IRepository>();
-			Assert.AreEqual(1, repos.Length);
+			Assert.Single(repos);
 		}
 	}
 }

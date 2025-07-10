@@ -21,12 +21,12 @@ namespace CastleTests.Registration
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class TypesTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void Based_on_interface_types_registered()
 		{
 			Container.Register(Types.FromAssembly(GetCurrentAssembly())
@@ -34,13 +34,13 @@ namespace CastleTests.Registration
 				);
 
 			var handlers = Kernel.GetHandlers(typeof(ICommon));
-			Assert.AreEqual(1, handlers.Length);
+			Assert.Single(handlers);
 
 			handlers = Kernel.GetAssignableHandlers(typeof(ICommon));
-			Assert.Greater(handlers.Length, 1);
+			Assert.True(handlers.Length > 1);
 		}
 
-		[Test]
+		[Fact]
 		public void Interface_registered_with_no_implementation_with_interceptor_can_be_used()
 		{
 			Container.Register(

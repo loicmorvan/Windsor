@@ -19,12 +19,12 @@ namespace CastleTests.LoggingFacility
 	using Castle.Facilities.Logging.Tests.Classes;
 	using Castle.MicroKernel.Registration;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class ConsoleLoggerTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		[Bug("FACILITIES-153")]
 		public void Can_specify_level_at_registration_time()
 		{
@@ -32,8 +32,8 @@ namespace CastleTests.LoggingFacility
 			Container.Register(Component.For<SimpleLoggingComponent>());
 
 			var item = Container.Resolve<SimpleLoggingComponent>();
-			Assert.IsTrue(item.Logger.IsFatalEnabled);
-			Assert.IsFalse(item.Logger.IsErrorEnabled);
+			Assert.True(item.Logger.IsFatalEnabled);
+			Assert.False(item.Logger.IsErrorEnabled);
 		}
 	}
 }

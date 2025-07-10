@@ -19,7 +19,7 @@ namespace CastleTests.Facilities.TypedFactory
 	using Castle.Facilities.TypedFactory;
 	using Castle.MicroKernel.Registration;
 
-	using NUnit.Framework;
+	
 
 	public sealed class TypedFactoryDisposeOrderTestCase : AbstractContainerTestCase
 	{
@@ -28,7 +28,7 @@ namespace CastleTests.Facilities.TypedFactory
 			Container.AddFacility<TypedFactoryFacility>();
 		}
 
-		[Test]
+		[Fact]
 		public void Typed_factories_are_not_disposed_before_their_dependents()
 		{
 			Container.Register(

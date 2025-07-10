@@ -21,12 +21,12 @@ namespace CastleTests
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class KernelEvents_EmptyCollectionResolving_TestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void Event_NOT_raised_when_non_empty_collection_is_resolved()
 		{
 			Kernel.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
@@ -37,10 +37,10 @@ namespace CastleTests
 			var services = Container.ResolveAll<IEmptyService>();
 
 			Assert.False(wasRaised);
-			Assert.IsNotEmpty(services);
+			Assert.NotEmpty(services);
 		}
 
-		[Test]
+		[Fact]
 		public void Event_NOT_raised_when_non_empty_collection_is_resolved_from_parent_container()
 		{
 			Kernel.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
@@ -54,10 +54,10 @@ namespace CastleTests
 			var services = childContainer.ResolveAll<IEmptyService>();
 
 			Assert.False(wasRaised);
-			Assert.IsNotEmpty(services);
+			Assert.NotEmpty(services);
 		}
 
-		[Test]
+		[Fact]
 		public void Event_raised_when_empty_collection_is_resolved()
 		{
 			Type type = null;
@@ -65,8 +65,8 @@ namespace CastleTests
 
 			var services = Container.ResolveAll<IEmptyService>();
 
-			Assert.AreEqual(typeof(IEmptyService), type);
-			Assert.IsEmpty(services);
+			Assert.Equal(typeof(IEmptyService), type);
+			Assert.Empty(services);
 		}
 	}
 }

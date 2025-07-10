@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 {
 	using Castle.Core.Configuration;
 
-	using NUnit.Framework;
+	
 
 	public class HiperFacility : IFacility
 	{
@@ -25,8 +25,8 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 
 		public void Init(IKernel kernel, IConfiguration facilityConfig)
 		{
-			Assert.IsNotNull(kernel);
-			Assert.IsNotNull(facilityConfig);
+			Assert.NotNull(kernel);
+			Assert.NotNull(facilityConfig);
 
 			Initialized = true;
 		}

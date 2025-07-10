@@ -36,7 +36,7 @@ using (Container.BeginScope())
 {
 	var a1 = Container.Resolve<A>();
 	var a2 = Container.Resolve<A>();
-	Assert.AreSame(a1, a2);
+	Assert.Same(a1, a2);
 }
 // When the scope is disposed, all resolved components with scoped lifestyle are automatically released. In other words, there's no need to call
 // Container.Release(a1);
@@ -52,7 +52,7 @@ Container.Register(
 	Component.For<CBA>().LifeStyle.Transient);
 
 var cba = Container.Resolve<CBA>();
-Assert.AreSame(cba.A, cba.B.A);
+Assert.Same(cba.A, cba.B.A);
 ```
 
 :information_source: **Not for lazy and factories:** Notice that if you're using `Lazy<ISomething>` or a typed factory, getting value of Lazy, or resolving objects from a typed factory does not bind the resolved objects to the parent scope.

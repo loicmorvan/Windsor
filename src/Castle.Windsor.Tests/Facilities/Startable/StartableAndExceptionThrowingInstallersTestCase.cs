@@ -23,12 +23,12 @@ namespace CastleTests.Facilities.Startable
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class StartableAndExceptionThrowingInstallersTestCase
 	{
-		[Test]
+		[Fact]
 		[Bug("IOC-311")]
 		public void InstallShouldThrowExceptionFromFailedInstaller()
 		{
@@ -56,7 +56,7 @@ namespace CastleTests.Facilities.Startable
 			}
 		}
 
-		[Test]
+		[Fact]
 		[Bug("IOC-311")]
 		public void StartableComponentShouldNotStartIfExceptionThrownByInstaller()
 		{
@@ -80,7 +80,7 @@ namespace CastleTests.Facilities.Startable
 				// being implemented by a using() block or something similar
 				// via OptimizeDependencyResolutionDisposable.Dispose()
 
-				Assert.AreEqual(0, UsesIEmptyService.instancesCreated);
+				Assert.Equal(0, UsesIEmptyService.instancesCreated);
 			}
 		}
 	}

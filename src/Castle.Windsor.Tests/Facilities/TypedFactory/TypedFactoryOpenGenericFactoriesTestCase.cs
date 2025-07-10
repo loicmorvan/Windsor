@@ -20,7 +20,7 @@ namespace CastleTests.Facilities.TypedFactory
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
 	public class TypedFactoryOpenGenericFactoriesTestCase : AbstractContainerTestCase
 	{
@@ -29,7 +29,7 @@ namespace CastleTests.Facilities.TypedFactory
 			Container.AddFacility<TypedFactoryFacility>();
 		}
 
-		[Test(Description = "IOC-282")]
+		[Fact]
 		public void Can_use_open_generic_service_as_typed_factory()
 		{
 			Container.Register(Component.For(typeof(IGenericFactory<>)).AsFactory(),
@@ -39,8 +39,8 @@ namespace CastleTests.Facilities.TypedFactory
 			var aFactory = Container.Resolve<IGenericFactory<A>>();
 			var bFactory = Container.Resolve<IGenericFactory<B>>();
 
-			Assert.IsNotNull(aFactory.Create());
-			Assert.IsNotNull(bFactory.Create());
+			Assert.NotNull(aFactory.Create());
+			Assert.NotNull(bFactory.Create());
 		}
 	}
 }

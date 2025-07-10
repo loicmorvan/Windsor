@@ -75,7 +75,7 @@ A generalisation of the above problem would be to allow scoping objects spanning
 var b = container.Resolve<B>();
 var c = container.Resolve<C>();
 
-Assert.AreSame(b.A, c.A);
+Assert.Same(b.A, c.A);
 ```
 
 That introduces several other problems not present in the simplified graph scenario.

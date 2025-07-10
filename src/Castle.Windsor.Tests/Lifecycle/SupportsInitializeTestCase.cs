@@ -19,12 +19,12 @@ namespace Castle.Windsor.Tests.Lifecycle
 	using CastleTests;
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class SupportsInitializeTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void SupportsInitialize_components_are_not_tracked()
 		{
 			Container.Register(Component.For<ISimpleService>()
@@ -36,7 +36,7 @@ namespace Castle.Windsor.Tests.Lifecycle
 				.AssertNoLongerReferenced();
 		}
 
-		[Test]
+		[Fact]
 		public void SupportsInitialize_components_for_non_SupportsInitialize_service_get_initialized_when_resolved()
 		{
 			Container.Register(Component.For<ISimpleService>()
@@ -45,11 +45,11 @@ namespace Castle.Windsor.Tests.Lifecycle
 
 			var server = (SimpleServiceSupportInitialize)Container.Resolve<ISimpleService>();
 
-			Assert.IsTrue(server.InitBegun);
-			Assert.IsTrue(server.InitEnded);
+			Assert.True(server.InitBegun);
+			Assert.True(server.InitEnded);
 		}
 
-		[Test]
+		[Fact]
 		public void
 			SupportsInitialize_components_for_non_SupportsInitialize_service_get_initialized_when_resolved_via_factoryMethod()
 		{
@@ -59,19 +59,19 @@ namespace Castle.Windsor.Tests.Lifecycle
 
 			var server = (SimpleServiceSupportInitialize)Container.Resolve<ISimpleService>();
 
-			Assert.IsTrue(server.InitBegun);
-			Assert.IsTrue(server.InitEnded);
+			Assert.True(server.InitBegun);
+			Assert.True(server.InitEnded);
 		}
 
-		[Test]
+		[Fact]
 		public void SupportsInitialize_components_get_initialized_when_resolved()
 		{
 			Container.Register(Component.For<SupportInitializeComponent>());
 
 			var server = Container.Resolve<SupportInitializeComponent>();
 
-			Assert.IsTrue(server.InitBegun);
-			Assert.IsTrue(server.InitEnded);
+			Assert.True(server.InitBegun);
+			Assert.True(server.InitEnded);
 		}
 	}
 }

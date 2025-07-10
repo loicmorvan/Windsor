@@ -26,40 +26,40 @@ namespace CastleTests.Registration
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void Can_dispose_component_on_release_disposable_service()
 		{
 			Kernel.Register(Component.For<DisposableComponent>()
 			                	.LifeStyle.Transient
 			                	.UsingFactoryMethod(() => new DisposableComponent()));
 			var component = Kernel.Resolve<DisposableComponent>();
-			Assert.IsFalse(component.Disposed);
+			Assert.False(component.Disposed);
 
 			Kernel.ReleaseComponent(component);
 
-			Assert.IsTrue(component.Disposed);
+			Assert.True(component.Disposed);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_dispose_component_on_release_non_disposable_service_and_impl()
 		{
 			Kernel.Register(Component.For<IComponent>()
 			                	.LifeStyle.Transient
 			                	.UsingFactoryMethod(() => new ComponentWithDispose()));
 			var component = Kernel.Resolve<IComponent>() as ComponentWithDispose;
-			Assert.IsFalse(component.Disposed);
+			Assert.False(component.Disposed);
 
 			Kernel.ReleaseComponent(component);
 
-			Assert.IsTrue(component.Disposed);
+			Assert.True(component.Disposed);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_dispose_component_on_release_non_disposable_service_disposable_impl()
 		{
 			Kernel.Register(Component.For<IComponent>()
@@ -67,28 +67,28 @@ namespace CastleTests.Registration
 			                	.LifeStyle.Transient
 			                	.UsingFactoryMethod(() => new ComponentWithDispose()));
 			var component = Kernel.Resolve<IComponent>() as ComponentWithDispose;
-			Assert.IsFalse(component.Disposed);
+			Assert.False(component.Disposed);
 
 			Kernel.ReleaseComponent(component);
 
-			Assert.IsTrue(component.Disposed);
+			Assert.True(component.Disposed);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_opt_out_of_applying_lifetime_concerns_to_factory_component()
 		{
 			Kernel.Register(Component.For<DisposableComponent>()
 			                	.LifeStyle.Transient
 			                	.UsingFactoryMethod(() => new DisposableComponent(), managedExternally: true));
 			var component = Kernel.Resolve<DisposableComponent>();
-			Assert.IsFalse(component.Disposed);
+			Assert.False(component.Disposed);
 
 			Kernel.ReleaseComponent(component);
 
-			Assert.IsFalse(component.Disposed);
+			Assert.False(component.Disposed);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_properly_resolve_component_from_UsingFactory()
 		{
 			var user = new User { FiscalStability = FiscalStability.DirtFarmer };
@@ -98,10 +98,10 @@ namespace CastleTests.Registration
 				Component.For<ICarProvider>()
 					.UsingFactory((AbstractCarProviderFactory f) => f.Create(Kernel.Resolve<User>()))
 				);
-			Assert.IsInstanceOf<HondaProvider>(Kernel.Resolve<ICarProvider>());
+			Assert.IsType<HondaProvider>(Kernel.Resolve<ICarProvider>());
 		}
 
-		[Test]
+		[Fact]
 		public void Can_properly_resolve_component_from_UsingFactoryMethod()
 		{
 			Kernel.Register(
@@ -110,10 +110,10 @@ namespace CastleTests.Registration
 						() => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
 				);
 
-			Assert.IsInstanceOf<HondaProvider>(Kernel.Resolve<ICarProvider>());
+			Assert.IsType<HondaProvider>(Kernel.Resolve<ICarProvider>());
 		}
 
-		[Test]
+		[Fact]
 		public void Can_properly_resolve_component_from_UsingFactoryMethod_named()
 		{
 			Kernel.Register(
@@ -127,11 +127,11 @@ namespace CastleTests.Registration
 					.Named("hondaProvider")
 				);
 
-			Assert.IsInstanceOf<HondaProvider>(Kernel.Resolve<ICarProvider>("hondaProvider"));
-			Assert.IsInstanceOf<FerrariProvider>(Kernel.Resolve<ICarProvider>("ferrariProvider"));
+			Assert.IsType<HondaProvider>(Kernel.Resolve<ICarProvider>("hondaProvider"));
+			Assert.IsType<FerrariProvider>(Kernel.Resolve<ICarProvider>("ferrariProvider"));
 		}
 
-		[Test]
+		[Fact]
 		public void Can_properly_resolve_component_from_UsingFactoryMethod_with_kernel()
 		{
 			Kernel.Register(
@@ -139,10 +139,10 @@ namespace CastleTests.Registration
 				Component.For<ICarProvider>()
 					.UsingFactoryMethod(k => new AbstractCarProviderFactory().Create(k.Resolve<User>()))
 				);
-			Assert.IsInstanceOf<FerrariProvider>(Kernel.Resolve<ICarProvider>());
+			Assert.IsType<FerrariProvider>(Kernel.Resolve<ICarProvider>());
 		}
 
-		[Test]
+		[Fact]
 		public void Can_properly_resolve_component_from_UsingFactoryMethod_with_kernel_named()
 		{
 			Kernel.Register(
@@ -156,11 +156,11 @@ namespace CastleTests.Registration
 					.Named("hondaProvider")
 				);
 
-			Assert.IsInstanceOf<HondaProvider>(Kernel.Resolve<ICarProvider>("hondaProvider"));
-			Assert.IsInstanceOf<FerrariProvider>(Kernel.Resolve<ICarProvider>("ferrariProvider"));
+			Assert.IsType<HondaProvider>(Kernel.Resolve<ICarProvider>("hondaProvider"));
+			Assert.IsType<FerrariProvider>(Kernel.Resolve<ICarProvider>("ferrariProvider"));
 		}
 
-		[Test]
+		[Fact]
 		public void Can_properly_resolve_component_from_UsingFactoryMethod_with_kernel_with_context()
 		{
 			Kernel.Register(
@@ -172,10 +172,10 @@ namespace CastleTests.Registration
 					                    	.Create(k.Resolve<User>(ctx.AdditionalArguments)))
 				);
 			var carProvider = Kernel.Resolve<ICarProvider>(new Arguments().AddNamed("FiscalStability", FiscalStability.MrMoneyBags));
-			Assert.IsInstanceOf<FerrariProvider>(carProvider);
+			Assert.IsType<FerrariProvider>(carProvider);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_proxy_component_created_via_factory_using_additional_interfaces()
 		{
 			Kernel.Register(Component.For<IComponent>()
@@ -183,10 +183,10 @@ namespace CastleTests.Registration
 			                	.UsingFactoryMethod(() => new TrivialComponent())
 			                	.Proxy.AdditionalInterfaces(typeof(IEmptyService)));
 			var component = Kernel.Resolve<IComponent>();
-			Assert.IsInstanceOf<IEmptyService>(component);
+			Assert.IsType<IEmptyService>(component, exactMatch: false);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_proxy_component_created_via_factory_using_interceptors()
 		{
 			Kernel.Register(
@@ -199,10 +199,10 @@ namespace CastleTests.Registration
 
 			var id = component.ID;
 
-			Assert.IsInstanceOf<IProxyTargetAccessor>(component);
+			Assert.IsType<IProxyTargetAccessor>(component, exactMatch: false);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_proxy_component_created_via_factory_using_interceptors_multiple_services()
 		{
 			Kernel.Register(
@@ -215,10 +215,10 @@ namespace CastleTests.Registration
 
 			var id = component.ID;
 
-			Assert.IsInstanceOf<IProxyTargetAccessor>(component);
+			Assert.IsType<IProxyTargetAccessor>(component, exactMatch: false);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_proxy_component_created_via_factory_using_mixins()
 		{
 			Kernel.Register(Component.For<IComponent>()
@@ -226,21 +226,20 @@ namespace CastleTests.Registration
 			                	.UsingFactoryMethod(() => new TrivialComponent())
 			                	.Proxy.MixIns(new CameraService()));
 			var component = Kernel.Resolve<IComponent>();
-			Assert.IsInstanceOf<ICameraService>(component);
+			Assert.IsType<ICameraService>(component, exactMatch: false);
 		}
 
-		[Test(Description = "see issue IOC-ISSUE-207")]
+		[Fact]
 		public void Can_register_more_than_one_with_factory_method()
 		{
-			Assert.DoesNotThrow(
-				() => Kernel.Register(
+			Kernel.Register(
 					Component.For<ClassWithPrimitiveDependency>()
 						.UsingFactoryMethod(() => new ClassWithPrimitiveDependency(2)),
 					Component.For<ClassWithServiceDependency>()
-						.UsingFactoryMethod(() => new ClassWithServiceDependency(null))));
+						.UsingFactoryMethod(() => new ClassWithServiceDependency(null)));
 		}
 
-		[Test]
+		[Fact]
 		public void Checks_and_throws_an_exception_when_factory_method_returns_null()
 		{
 			Kernel.Register(Component.For<IComponent>()
@@ -250,7 +249,7 @@ namespace CastleTests.Registration
 			Assert.Throws<ComponentActivatorException>(() => Kernel.Resolve<IComponent>());
 		}
 
-		[Test]
+		[Fact]
 		public void Does_not_try_to_set_properties_on_component_resolved_via_factory_method()
 		{
 			Kernel.Register(
@@ -258,10 +257,10 @@ namespace CastleTests.Registration
 				Component.For<A>());
 
 			var aProp = Kernel.Resolve<AProp>();
-			Assert.IsNull(aProp.Prop);
+			Assert.Null(aProp.Prop);
 		}
 
-		[Test]
+		[Fact]
 		[Bug("IOC-332")]
 		public void Factories_returning_proxies_with_no_target_are_not_supported()
 		{
@@ -270,11 +269,11 @@ namespace CastleTests.Registration
 
 			var exception = Assert.Throws<NotSupportedException>(() => Container.Resolve<ICameraService>());
 
-			Assert.AreEqual(@"Can not apply commission concerns to component Late bound CastleTests.Components.ICameraService because it appears to be a target-less proxy. Currently those are not supported.",
+			Assert.Equal(@"Can not apply commission concerns to component Late bound CastleTests.Components.ICameraService because it appears to be a target-less proxy. Currently those are not supported.",
 			                exception.Message);
 		}
 
-		[Test]
+		[Fact]
 		public void Factory_created_abstract_non_disposable_class_services_are_NOT_tracked()
 		{
 			Kernel.Register(Component.For<TrivialComponent>()
@@ -283,10 +282,10 @@ namespace CastleTests.Registration
 
 			var component = Kernel.Resolve<TrivialComponent>();
 
-			Assert.IsFalse(Kernel.ReleasePolicy.HasTrack(component));
+			Assert.False(Kernel.ReleasePolicy.HasTrack(component));
 		}
 
-		[Test]
+		[Fact]
 		public void Factory_created_abstract_non_disposable_interface_services_are_NOT_tracked()
 		{
 			Kernel.Register(Component.For<IComponent>()
@@ -295,10 +294,10 @@ namespace CastleTests.Registration
 
 			var component = Kernel.Resolve<IComponent>();
 
-			Assert.IsFalse(Kernel.ReleasePolicy.HasTrack(component));
+			Assert.False(Kernel.ReleasePolicy.HasTrack(component));
 		}
 
-		[Test]
+		[Fact]
 		public void Factory_created_abstract_non_disposable_services_with_disposable_dependency_are_tracked()
 		{
 			Kernel.Register(
@@ -308,11 +307,11 @@ namespace CastleTests.Registration
 
 			var component = Kernel.Resolve<IComponent>() as TrivialComponentWithDependency;
 
-			Assert.IsTrue(Kernel.ReleasePolicy.HasTrack(component));
-			Assert.IsTrue(Kernel.ReleasePolicy.HasTrack(component.Dependency));
+			Assert.True(Kernel.ReleasePolicy.HasTrack(component));
+			Assert.True(Kernel.ReleasePolicy.HasTrack(component.Dependency));
 		}
 
-		[Test]
+		[Fact]
 		public void Factory_created_abstract_non_disposable_services_with_non_disposable_dependency_are_NOT_tracked()
 		{
 			Kernel.Register(
@@ -322,11 +321,11 @@ namespace CastleTests.Registration
 
 			var component = Kernel.Resolve<IComponent>() as TrivialComponentWithDependency;
 
-			Assert.IsFalse(Kernel.ReleasePolicy.HasTrack(component));
-			Assert.IsFalse(Kernel.ReleasePolicy.HasTrack(component.Dependency));
+			Assert.False(Kernel.ReleasePolicy.HasTrack(component));
+			Assert.False(Kernel.ReleasePolicy.HasTrack(component.Dependency));
 		}
 
-		[Test]
+		[Fact]
 		public void Factory_created_sealed_disposable_services_are_tracked()
 		{
 			Kernel.Register(Component.For<SealedComponentDisposable>()
@@ -335,15 +334,15 @@ namespace CastleTests.Registration
 
 			var component = Kernel.Resolve<SealedComponentDisposable>();
 
-			Assert.IsTrue(Kernel.ReleasePolicy.HasTrack(component));
+			Assert.True(Kernel.ReleasePolicy.HasTrack(component));
 
 			Kernel.ReleaseComponent(component);
 
-			Assert.IsTrue(component.Disposed);
-			Assert.IsFalse(Kernel.ReleasePolicy.HasTrack(component));
+			Assert.True(component.Disposed);
+			Assert.False(Kernel.ReleasePolicy.HasTrack(component));
 		}
 
-		[Test]
+		[Fact]
 		public void Factory_created_sealed_non_disposable_services_are_not_tracked()
 		{
 			Kernel.Register(Component.For<SealedComponent>()
@@ -352,10 +351,10 @@ namespace CastleTests.Registration
 
 			var component = Kernel.Resolve<SealedComponent>();
 
-			Assert.IsFalse(Kernel.ReleasePolicy.HasTrack(component));
+			Assert.False(Kernel.ReleasePolicy.HasTrack(component));
 		}
 
-		[Test]
+		[Fact]
 		public void Factory_created_sealed_non_disposable_services_with_disposable_dependency_are_tracked()
 		{
 			Kernel.Register(
@@ -365,11 +364,11 @@ namespace CastleTests.Registration
 
 			var component = Kernel.Resolve<SealedComponentWithDependency>();
 
-			Assert.IsTrue(Kernel.ReleasePolicy.HasTrack(component));
-			Assert.IsTrue(Kernel.ReleasePolicy.HasTrack(component.Dependency));
+			Assert.True(Kernel.ReleasePolicy.HasTrack(component));
+			Assert.True(Kernel.ReleasePolicy.HasTrack(component.Dependency));
 		}
 
-		[Test]
+		[Fact]
 		public void Factory_created_sealed_non_disposable_services_with_factory_created_disposable_dependency_are_tracked()
 		{
 			Kernel.Register(
@@ -380,11 +379,11 @@ namespace CastleTests.Registration
 
 			var component = Kernel.Resolve<SealedComponentWithDependency>();
 
-			Assert.IsTrue(Kernel.ReleasePolicy.HasTrack(component));
-			Assert.IsTrue(Kernel.ReleasePolicy.HasTrack(component.Dependency));
+			Assert.True(Kernel.ReleasePolicy.HasTrack(component));
+			Assert.True(Kernel.ReleasePolicy.HasTrack(component.Dependency));
 		}
 
-		[Test]
+		[Fact]
 		public void
 			Factory_created_sealed_non_disposable_services_with_factory_created_non_disposable_dependency_are_NOT_tracked()
 		{
@@ -396,11 +395,11 @@ namespace CastleTests.Registration
 
 			var component = Kernel.Resolve<SealedComponentWithDependency>();
 
-			Assert.IsFalse(Kernel.ReleasePolicy.HasTrack(component));
-			Assert.IsFalse(Kernel.ReleasePolicy.HasTrack(component.Dependency));
+			Assert.False(Kernel.ReleasePolicy.HasTrack(component));
+			Assert.False(Kernel.ReleasePolicy.HasTrack(component.Dependency));
 		}
 
-		[Test]
+		[Fact]
 		public void Factory_created_sealed_non_disposable_services_with_non_disposable_dependency_are_NOT_tracked()
 		{
 			Kernel.Register(
@@ -410,11 +409,11 @@ namespace CastleTests.Registration
 
 			var component = Kernel.Resolve<SealedComponentWithDependency>();
 
-			Assert.IsFalse(Kernel.ReleasePolicy.HasTrack(component));
-			Assert.IsFalse(Kernel.ReleasePolicy.HasTrack(component.Dependency));
+			Assert.False(Kernel.ReleasePolicy.HasTrack(component));
+			Assert.False(Kernel.ReleasePolicy.HasTrack(component.Dependency));
 		}
 
-		[Test]
+		[Fact]
 		public void Managed_externally_factory_component_transient_is_not_tracked_by_release_policy()
 		{
 			Kernel.Register(Component.For<DisposableComponent>()
@@ -423,10 +422,10 @@ namespace CastleTests.Registration
 
 			var component = Kernel.Resolve<DisposableComponent>();
 
-			Assert.IsFalse(Kernel.ReleasePolicy.HasTrack(component));
+			Assert.False(Kernel.ReleasePolicy.HasTrack(component));
 		}
 
-		[Test]
+		[Fact]
 		public void Managed_externally_factory_component_transient_is_not_tracked_by_the_container()
 		{
 			Kernel.Register(Component.For<DisposableComponent>()
@@ -438,7 +437,7 @@ namespace CastleTests.Registration
 				.AssertNoLongerReferenced();
 		}
 
-		[Test]
+		[Fact]
 		public void Proxying_type_with_no_default_ctor_throws_helpful_message()
 		{
 			Kernel.Register(
@@ -462,7 +461,7 @@ namespace CastleTests.Registration
 				"Could not find a parameterless constructor. (Parameter 'constructorArguments')";
 #endif
 
-			Assert.AreEqual(expected, exception.Message);
+			Assert.Equal(expected, exception.Message);
 		}
 	}
 }

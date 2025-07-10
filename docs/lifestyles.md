@@ -59,7 +59,7 @@ using (Container.BeginScope()) //extension method
 {
 	var one = Container.Resolve<MyScopedComponent>();
 	var two = Container.Resolve<MyScopedComponent>();
-	Assert.AreSame(one, two);
+	Assert.Same(one, two);
 
 } // releases the instance
 ```

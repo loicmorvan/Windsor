@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 namespace Castle.Windsor.Tests
 {
 	using System;
@@ -21,12 +22,10 @@ namespace Castle.Windsor.Tests
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor;
 
-	using NUnit.Framework;
 
-	[TestFixture]
 	public class HandlerSelectorsTestCase
 	{
-		[Test]
+		[Fact]
 		public void SelectUsingBusinessLogic_DirectSelection()
 		{
 			IWindsorContainer container = new WindsorContainer();
@@ -35,45 +34,44 @@ namespace Castle.Windsor.Tests
 			var selector = new WatcherSelector();
 			container.Kernel.AddHandlerSelector(selector);
 
-			Assert.IsInstanceOf(typeof(BirdWatcher), container.Resolve<IWatcher>(), "default");
+			Assert.IsType<BirdWatcher>(container.Resolve<IWatcher>("default"));
 			selector.Interest = Interest.Astronomy;
-			Assert.IsInstanceOf(typeof(SatiWatcher), container.Resolve<IWatcher>(), "change-by-context");
+			Assert.IsType<SatiWatcher>(container.Resolve<IWatcher>("change-by-context"));
 			selector.Interest = Interest.Biology;
-			Assert.IsInstanceOf(typeof(BirdWatcher), container.Resolve<IWatcher>(), "explicit");
+			Assert.IsType<BirdWatcher>(container.Resolve<IWatcher>("explicit"));
 		}
 
-		[Test]
+		[Fact]
 		public void SelectUsingBusinessLogic_SubDependency()
 		{
 			IWindsorContainer container = new WindsorContainer();
 			container.Register(Component.For(typeof(Person)).LifeStyle.Is(LifestyleType.Transient)).Register(
 				Component.For<IWatcher>().ImplementedBy<BirdWatcher>().Named("bird.watcher")).Register(
-					Component.For<IWatcher>().ImplementedBy<SatiWatcher>().Named("astronomy.watcher"));
+				Component.For<IWatcher>().ImplementedBy<SatiWatcher>().Named("astronomy.watcher"));
 			var selector = new WatcherSelector();
 			container.Kernel.AddHandlerSelector(selector);
 
-			Assert.IsInstanceOf(typeof(BirdWatcher), container.Resolve<Person>().Watcher, "default");
+			Assert.IsType<BirdWatcher>(container.Resolve<Person>("default").Watcher);
 			selector.Interest = Interest.Astronomy;
-			Assert.IsInstanceOf(typeof(SatiWatcher), container.Resolve<Person>().Watcher, "change-by-context");
+			Assert.IsType<SatiWatcher>(container.Resolve<Person>("change-by-context").Watcher);
 			selector.Interest = Interest.Biology;
-			Assert.IsInstanceOf(typeof(BirdWatcher), container.Resolve<Person>().Watcher, "explicit");
+			Assert.IsType<BirdWatcher>(container.Resolve<Person>("explicit").Watcher);
 		}
 
-		[Test]
+		[Fact]
 		public void SubDependencyResolverHasHigherPriorityThanHandlerSelector()
 		{
 			IWindsorContainer container = new WindsorContainer();
 			container.Register(Component.For(typeof(Person)).LifeStyle.Is(LifestyleType.Transient)).Register(
 				Component.For<IWatcher>().ImplementedBy<BirdWatcher>().Named("bird.watcher")).Register(
-					Component.For<IWatcher>().ImplementedBy<SatiWatcher>().Named("astronomy.watcher"));
+				Component.For<IWatcher>().ImplementedBy<SatiWatcher>().Named("astronomy.watcher"));
 			var selector = new WatcherSelector();
 			container.Kernel.AddHandlerSelector(selector);
 			container.Kernel.Resolver.AddSubResolver(new WatchSubDependencySelector());
 
 			selector.Interest = Interest.Biology;
-			Assert.IsInstanceOf(typeof(SatiWatcher), container.Resolve<Person>().Watcher,
-			                    "sub dependency should resolve sati");
-			Assert.IsInstanceOf(typeof(BirdWatcher), container.Resolve<IWatcher>(), "root dependency should resolve bird");
+			Assert.IsType<SatiWatcher>(container.Resolve<Person>("sub dependency should resolve sati").Watcher);
+			Assert.IsType<BirdWatcher>(container.Resolve<IWatcher>("root dependency should resolve bird"));
 		}
 
 		public enum Interest
@@ -121,13 +119,13 @@ namespace Castle.Windsor.Tests
 		public class WatchSubDependencySelector : ISubDependencyResolver
 		{
 			public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
-			                       DependencyModel dependency)
+				DependencyModel dependency)
 			{
 				return dependency.TargetType == typeof(IWatcher);
 			}
 
 			public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
-			                      DependencyModel dependency)
+				DependencyModel dependency)
 			{
 				return new SatiWatcher();
 			}
@@ -151,6 +149,7 @@ namespace Castle.Windsor.Tests
 						return handler;
 					}
 				}
+
 				return null;
 			}
 		}

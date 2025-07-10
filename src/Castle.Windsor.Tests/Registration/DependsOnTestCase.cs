@@ -22,12 +22,12 @@ namespace CastleTests.Registration
 	using CastleTests.Components;
 	using CastleTests.Properties;
 
-	using NUnit.Framework;
+	
 
 	public class DependsOnTestCase : AbstractContainerTestCase
 	{
 #if FEATURE_SYSTEM_CONFIGURATION
-		[Test]
+		[Fact]
 		public void Can_register_configuration_parameters_from_appSettings_inline()
 		{
 			Container.Register(Component.For<ClassWithArguments>()
@@ -37,12 +37,12 @@ namespace CastleTests.Registration
 
 			var obj = Container.Resolve<ClassWithArguments>();
 
-			Assert.AreEqual("a string", obj.Arg1);
-			Assert.AreEqual(42, obj.Arg2);
+			Assert.Equal("a string", obj.Arg1);
+			Assert.Equal(42, obj.Arg2);
 		}
 #endif
 
-		[Test]
+		[Fact]
 		public void can_register_value_from_a_resource_file_with_type()
 		{
 			Container.Register(Component.For<ClassWithArguments>()
@@ -50,10 +50,10 @@ namespace CastleTests.Registration
 				                              Dependency.OnValue("arg2", 2)));
 			var obj = Container.Resolve<ClassWithArguments>();
 
-			Assert.AreEqual("Some resource value", obj.Arg1);
+			Assert.Equal("Some resource value", obj.Arg1);
 		}
 
-		[Test]
+		[Fact]
 		public void can_register_value_from_a_resource_file_with_resourceManager()
 		{
 			Container.Register(Component.For<ClassWithArguments>()
@@ -61,10 +61,10 @@ namespace CastleTests.Registration
 				                              Dependency.OnValue("arg2", 2)));
 			var obj = Container.Resolve<ClassWithArguments>();
 
-			Assert.AreEqual("Some resource value", obj.Arg1);
+			Assert.Equal("Some resource value", obj.Arg1);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_configuration_parameters_from_dynamic_parameters_inline()
 		{
 			Container.Register(Component.For<ClassWithArguments>()
@@ -72,11 +72,11 @@ namespace CastleTests.Registration
 
 			var obj = Container.Resolve<ClassWithArguments>();
 
-			Assert.AreEqual("a string", obj.Arg1);
-			Assert.AreEqual(42, obj.Arg2);
+			Assert.Equal("a string", obj.Arg1);
+			Assert.Equal(42, obj.Arg2);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_configuration_parameters_inline()
 		{
 			Container.Register(Component.For<ClassWithArguments>()
@@ -86,11 +86,11 @@ namespace CastleTests.Registration
 
 			var obj = Container.Resolve<ClassWithArguments>();
 
-			Assert.AreEqual("a string", obj.Arg1);
-			Assert.AreEqual(42, obj.Arg2);
+			Assert.Equal("a string", obj.Arg1);
+			Assert.Equal(42, obj.Arg2);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_named_inline_dependency()
 		{
 			Container.Register(Component.For<ClassWithArguments>()
@@ -100,11 +100,11 @@ namespace CastleTests.Registration
 
 			var obj = Container.Resolve<ClassWithArguments>();
 
-			Assert.AreEqual("a string", obj.Arg1);
-			Assert.AreEqual(42, obj.Arg2);
+			Assert.Equal("a string", obj.Arg1);
+			Assert.Equal(42, obj.Arg2);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_service_override_collection_named_via_names()
 		{
 			Container.Register(
@@ -115,12 +115,12 @@ namespace CastleTests.Registration
 					.DependsOn(Dependency.OnComponentCollection("services", "b", "a")));
 
 			var obj = Container.Resolve<CollectionDepAsConstructor>();
-			Assert.AreEqual(2, obj.Services.Count);
-			Assert.IsInstanceOf<EmptyServiceB>(obj.Services.First());
-			Assert.IsInstanceOf<EmptyServiceA>(obj.Services.Last());
+			Assert.Equal(2, obj.Services.Count);
+			Assert.IsType<EmptyServiceB>(obj.Services.First());
+			Assert.IsType<EmptyServiceA>(obj.Services.Last());
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_service_override_collection_named_via_types()
 		{
 			Container.Register(
@@ -131,12 +131,12 @@ namespace CastleTests.Registration
 					.DependsOn(Dependency.OnComponentCollection("services", typeof(EmptyServiceB), typeof(EmptyServiceA))));
 
 			var obj = Container.Resolve<CollectionDepAsConstructor>();
-			Assert.AreEqual(2, obj.Services.Count);
-			Assert.IsInstanceOf<EmptyServiceB>(obj.Services.First());
-			Assert.IsInstanceOf<EmptyServiceA>(obj.Services.Last());
+			Assert.Equal(2, obj.Services.Count);
+			Assert.IsType<EmptyServiceB>(obj.Services.First());
+			Assert.IsType<EmptyServiceA>(obj.Services.Last());
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_service_override_collection_typed_via_names()
 		{
 			Container.Register(
@@ -147,12 +147,12 @@ namespace CastleTests.Registration
 					.DependsOn(Dependency.OnComponentCollection(typeof(ICollection<IEmptyService>), "b", "a")));
 
 			var obj = Container.Resolve<CollectionDepAsConstructor>();
-			Assert.AreEqual(2, obj.Services.Count);
-			Assert.IsInstanceOf<EmptyServiceB>(obj.Services.First());
-			Assert.IsInstanceOf<EmptyServiceA>(obj.Services.Last());
+			Assert.Equal(2, obj.Services.Count);
+			Assert.IsType<EmptyServiceB>(obj.Services.First());
+			Assert.IsType<EmptyServiceA>(obj.Services.Last());
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_service_override_collection_typed_via_names_generic()
 		{
 			Container.Register(
@@ -163,12 +163,12 @@ namespace CastleTests.Registration
 					.DependsOn(Dependency.OnComponentCollection<ICollection<IEmptyService>>("b", "a")));
 
 			var obj = Container.Resolve<CollectionDepAsConstructor>();
-			Assert.AreEqual(2, obj.Services.Count);
-			Assert.IsInstanceOf<EmptyServiceB>(obj.Services.First());
-			Assert.IsInstanceOf<EmptyServiceA>(obj.Services.Last());
+			Assert.Equal(2, obj.Services.Count);
+			Assert.IsType<EmptyServiceB>(obj.Services.First());
+			Assert.IsType<EmptyServiceA>(obj.Services.Last());
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_service_override_collection_typed_via_types()
 		{
 			Container.Register(
@@ -179,12 +179,12 @@ namespace CastleTests.Registration
 					.DependsOn(Dependency.OnComponentCollection(typeof(ICollection<IEmptyService>), typeof(EmptyServiceB), typeof(EmptyServiceA))));
 
 			var obj = Container.Resolve<CollectionDepAsConstructor>();
-			Assert.AreEqual(2, obj.Services.Count);
-			Assert.IsInstanceOf<EmptyServiceB>(obj.Services.First());
-			Assert.IsInstanceOf<EmptyServiceA>(obj.Services.Last());
+			Assert.Equal(2, obj.Services.Count);
+			Assert.IsType<EmptyServiceB>(obj.Services.First());
+			Assert.IsType<EmptyServiceA>(obj.Services.Last());
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_service_override_collection_typed_via_types_generic()
 		{
 			Container.Register(
@@ -195,12 +195,12 @@ namespace CastleTests.Registration
 					.DependsOn(Dependency.OnComponentCollection<ICollection<IEmptyService>>(typeof(EmptyServiceB), typeof(EmptyServiceA))));
 
 			var obj = Container.Resolve<CollectionDepAsConstructor>();
-			Assert.AreEqual(2, obj.Services.Count);
-			Assert.IsInstanceOf<EmptyServiceB>(obj.Services.First());
-			Assert.IsInstanceOf<EmptyServiceA>(obj.Services.Last());
+			Assert.Equal(2, obj.Services.Count);
+			Assert.IsType<EmptyServiceB>(obj.Services.First());
+			Assert.IsType<EmptyServiceA>(obj.Services.Last());
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_service_override_named_via_name()
 		{
 			Container.Register(
@@ -211,10 +211,10 @@ namespace CastleTests.Registration
 
 			var obj = Container.Resolve<UsesIEmptyService>();
 
-			Assert.IsInstanceOf<EmptyServiceB>(obj.EmptyService);
+			Assert.IsType<EmptyServiceB>(obj.EmptyService);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_service_override_named_via_type()
 		{
 			Container.Register(
@@ -225,10 +225,10 @@ namespace CastleTests.Registration
 
 			var obj = Container.Resolve<UsesIEmptyService>();
 
-			Assert.IsInstanceOf<EmptyServiceB>(obj.EmptyService);
+			Assert.IsType<EmptyServiceB>(obj.EmptyService);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_service_override_typed_via_name()
 		{
 			Container.Register(
@@ -239,10 +239,10 @@ namespace CastleTests.Registration
 
 			var obj = Container.Resolve<UsesIEmptyService>();
 
-			Assert.IsInstanceOf<EmptyServiceB>(obj.EmptyService);
+			Assert.IsType<EmptyServiceB>(obj.EmptyService);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_service_override_typed_via_type()
 		{
 			Container.Register(
@@ -253,10 +253,10 @@ namespace CastleTests.Registration
 
 			var obj = Container.Resolve<UsesIEmptyService>();
 
-			Assert.IsInstanceOf<EmptyServiceB>(obj.EmptyService);
+			Assert.IsType<EmptyServiceB>(obj.EmptyService);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_service_override_typed_via_type_generic()
 		{
 			Container.Register(
@@ -267,10 +267,10 @@ namespace CastleTests.Registration
 
 			var obj = Container.Resolve<UsesIEmptyService>();
 
-			Assert.IsInstanceOf<EmptyServiceB>(obj.EmptyService);
+			Assert.IsType<EmptyServiceB>(obj.EmptyService);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_typed_inline_dependency()
 		{
 			Container.Register(Component.For<ClassWithArguments>()
@@ -280,11 +280,11 @@ namespace CastleTests.Registration
 
 			var obj = Container.Resolve<ClassWithArguments>();
 
-			Assert.AreEqual("a string", obj.Arg1);
-			Assert.AreEqual(42, obj.Arg2);
+			Assert.Equal("a string", obj.Arg1);
+			Assert.Equal(42, obj.Arg2);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_register_typed_inline_dependency_generic()
 		{
 			Container.Register(Component.For<ClassWithArguments>()
@@ -294,8 +294,8 @@ namespace CastleTests.Registration
 
 			var obj = Container.Resolve<ClassWithArguments>();
 
-			Assert.AreEqual("a string", obj.Arg1);
-			Assert.AreEqual(42, obj.Arg2);
+			Assert.Equal("a string", obj.Arg1);
+			Assert.Equal(42, obj.Arg2);
 		}
 	}
 }

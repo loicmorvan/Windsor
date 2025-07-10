@@ -21,33 +21,31 @@ namespace Castle.Facilities.Logging.Tests
 	using Castle.MicroKernel.Registration;
 	using Castle.Services.Logging.Log4netIntegration;
 	using Castle.Windsor;
+
 	using log4net;
 	using log4net.Appender;
 	using log4net.Layout;
 	using log4net.Repository.Hierarchy;
-	using NUnit.Framework;
+
 
 	/// <summary>
 	/// Summary description for ExtendedLog4NetFacilityTests.
 	/// </summary>
-	[TestFixture]
-	public class ExtendedLog4NetFacilityTestCase : BaseTest
+	public class ExtendedLog4NetFacilityTestCase : BaseTest, IDisposable
 	{
 		private IWindsorContainer container;
 
-		[SetUp]
-		public void Setup()
+		public ExtendedLog4NetFacilityTestCase()
 		{
 			container = base.CreateConfiguredContainer<ExtendedLog4netFactory>();
 		}
 
-		[TearDown]
-		public void Teardown()
+		public void Dispose()
 		{
 			container.Dispose();
 		}
 
-		[Test]
+		[Fact]
 		public void SimpleTest()
 		{
 			container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component1"));
@@ -61,7 +59,7 @@ namespace Castle.Facilities.Logging.Tests
 			PatternLayout patternLayout = new PatternLayout("[%-5level] [%logger] - %message%newline");
 			patternLayout.Format(actualLogOutput, memoryAppender.GetEvents()[0]);
 
-			Assert.AreEqual(expectedLogOutput, actualLogOutput.ToString());
+			Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
 
 			container.Register(Component.For(typeof(SmtpServer)).Named("component2"));
 			ISmtpServer smtpServer = container.Resolve<ISmtpServer>("component2");
@@ -75,14 +73,14 @@ namespace Castle.Facilities.Logging.Tests
 			actualLogOutput = new StringWriter();
 			patternLayout = new PatternLayout("[%-5level] [%logger] - %message%newline");
 
-			Assert.AreEqual(memoryAppender.GetEvents().Length, 4);
+			Assert.Equal(4, memoryAppender.GetEvents().Length);
 
 			patternLayout.Format(actualLogOutput, memoryAppender.GetEvents()[3]);
 
-			Assert.AreEqual(expectedLogOutput, actualLogOutput.ToString());
+			Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
 		}
 
-		[Test]
+		[Fact]
 		public void ContextTest()
 		{
 			container.Register(Component.For<ComplexLoggingComponent>().Named("component1"));
@@ -90,13 +88,14 @@ namespace Castle.Facilities.Logging.Tests
 
 			complexLoggingComponent.DoSomeContextual();
 
-			var expectedLogOutput = String.Format("[DEBUG] [Castle.Facilities.Logging.Tests.Classes.ComplexLoggingComponent] [Outside Inside0] [bar] [flam] - Bim, bam boom." + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
+			var expectedLogOutput = String.Format("[DEBUG] [Castle.Facilities.Logging.Tests.Classes.ComplexLoggingComponent] [Outside Inside0] [bar] [flam] - Bim, bam boom." + Environment.NewLine,
+				typeof(SimpleLoggingComponent).FullName);
 			var memoryAppender = ((Hierarchy)LogManager.GetRepository()).Root.GetAppender("memory") as MemoryAppender;
 			var actualLogOutput = new StringWriter();
 			var patternLayout = new PatternLayout("[%-5level] [%logger] [%properties{NDC}] [%properties{foo}] [%properties{flim}] - %message%newline");
 			patternLayout.Format(actualLogOutput, memoryAppender.GetEvents()[0]);
 
-			Assert.AreEqual(expectedLogOutput, actualLogOutput.ToString());
+			Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
 		}
 	}
 }

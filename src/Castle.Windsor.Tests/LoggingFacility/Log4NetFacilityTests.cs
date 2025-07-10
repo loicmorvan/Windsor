@@ -21,33 +21,31 @@ namespace Castle.Facilities.Logging.Tests
 	using Castle.MicroKernel.Registration;
 	using Castle.Services.Logging.Log4netIntegration;
 	using Castle.Windsor;
+
 	using log4net;
 	using log4net.Appender;
 	using log4net.Layout;
 	using log4net.Repository.Hierarchy;
-	using NUnit.Framework;
+
 
 	/// <summary>
 	/// Summary description for Log4NetFacilityTests.
 	/// </summary>
-	[TestFixture]
-	public class Log4NetFacilityTests : BaseTest
+	public class Log4NetFacilityTests : BaseTest, IDisposable
 	{
 		private IWindsorContainer container;
 
-		[SetUp]
-		public void Setup()
+		public Log4NetFacilityTests()
 		{
 			container = base.CreateConfiguredContainer<ExtendedLog4netFactory>();
 		}
 
-		[TearDown]
-		public void Teardown()
+		public void Dispose()
 		{
 			container.Dispose();
 		}
 
-		[Test]
+		[Fact]
 		public void SimpleTest()
 		{
 			container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
@@ -56,12 +54,12 @@ namespace Castle.Facilities.Logging.Tests
 			test.DoSomething();
 
 			String expectedLogOutput = String.Format("[INFO ] [{0}] - Hello world" + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
-			MemoryAppender memoryAppender = ((Hierarchy) LogManager.GetRepository()).Root.GetAppender("memory") as MemoryAppender;
+			MemoryAppender memoryAppender = ((Hierarchy)LogManager.GetRepository()).Root.GetAppender("memory") as MemoryAppender;
 			TextWriter actualLogOutput = new StringWriter();
 			PatternLayout patternLayout = new PatternLayout("[%-5level] [%logger] - %message%newline");
 			patternLayout.Format(actualLogOutput, memoryAppender.GetEvents()[0]);
 
-			Assert.AreEqual(expectedLogOutput, actualLogOutput.ToString());
+			Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
 		}
 	}
 }

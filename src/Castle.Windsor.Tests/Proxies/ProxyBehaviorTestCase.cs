@@ -28,22 +28,22 @@ namespace Castle.Proxies
 	using CastleTests;
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class ProxyBehaviorTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void Proxy_exposes_only_service_interfaces_from_configuration()
 		{
 			Container.Install(
 				Configuration.FromXml(Xml.Embedded("proxyBehavior.xml")));
 			var calcService = Container.Resolve<ICalcService>("default");
-			Assert.IsNotNull(calcService);
-			Assert.IsNotInstanceOf<IDisposable>(calcService, "Service proxy should NOT expose the IDisposable interface");
+			Assert.NotNull(calcService);
+			Assert.IsNotType<IDisposable>(calcService, exactMatch: false);
 		}
 
-		[Test]
+		[Fact]
 		public void ProxyGenarationHook_can_be_OnBehalfAware()
 		{
 			OnBehalfAwareProxyGenerationHook.target = null;
@@ -57,12 +57,12 @@ namespace Castle.Proxies
 
 			var service = Container.Resolve<ISimpleService>();
 
-			Assert.IsTrue(ProxyServices.IsDynamicProxy(service.GetType()));
-			Assert.IsNotNull(OnBehalfAwareProxyGenerationHook.target);
-			Assert.AreEqual(typeof(ISimpleService), OnBehalfAwareProxyGenerationHook.target.Services.Single());
+			Assert.True(ProxyServices.IsDynamicProxy(service.GetType()));
+			Assert.NotNull(OnBehalfAwareProxyGenerationHook.target);
+			Assert.Equal(typeof(ISimpleService), OnBehalfAwareProxyGenerationHook.target.Services.Single());
 		}
 
-		[Test]
+		[Fact]
 		public void OnBehalfAware_ProxyGenarationHook_works_on_dependencies()
 		{
 			OnBehalfAwareProxyGenerationHook.target = null;
@@ -75,12 +75,12 @@ namespace Castle.Proxies
 
 			var service = Container.Resolve<UsesSimpleComponent1>();
 
-			Assert.IsTrue(ProxyServices.IsDynamicProxy(service.Dependency.GetType()));
-			Assert.IsNotNull(OnBehalfAwareProxyGenerationHook.target);
-			Assert.AreEqual(typeof(SimpleComponent1), OnBehalfAwareProxyGenerationHook.target.Services.Single());
+			Assert.True(ProxyServices.IsDynamicProxy(service.Dependency.GetType()));
+			Assert.NotNull(OnBehalfAwareProxyGenerationHook.target);
+			Assert.Equal(typeof(SimpleComponent1), OnBehalfAwareProxyGenerationHook.target.Services.Single());
 		}
 
-		[Test]
+		[Fact]
 		public void InterceptorSelector_can_be_OnBehalfAware()
 		{
 			OnBehalfAwareInterceptorSelector.target = null;
@@ -94,12 +94,12 @@ namespace Castle.Proxies
 
 			var service = Container.Resolve<ISimpleService>();
 
-			Assert.IsTrue(ProxyServices.IsDynamicProxy(service.GetType()));
-			Assert.IsNotNull(OnBehalfAwareInterceptorSelector.target);
-			Assert.AreEqual(typeof(ISimpleService), OnBehalfAwareInterceptorSelector.target.Services.Single());
+			Assert.True(ProxyServices.IsDynamicProxy(service.GetType()));
+			Assert.NotNull(OnBehalfAwareInterceptorSelector.target);
+			Assert.Equal(typeof(ISimpleService), OnBehalfAwareInterceptorSelector.target.Services.Single());
 		}
 
-		[Test]
+		[Fact]
 		public void OnBehalfAware_InterceptorSelector_works_on_dependencies()
 		{
 			OnBehalfAwareInterceptorSelector.target = null;
@@ -112,12 +112,12 @@ namespace Castle.Proxies
 
 			var service = Container.Resolve<UsesSimpleComponent1>();
 
-			Assert.IsTrue(ProxyServices.IsDynamicProxy(service.Dependency.GetType()));
-			Assert.IsNotNull(OnBehalfAwareInterceptorSelector.target);
-			Assert.AreEqual(typeof(SimpleComponent1), OnBehalfAwareInterceptorSelector.target.Services.Single());
+			Assert.True(ProxyServices.IsDynamicProxy(service.Dependency.GetType()));
+			Assert.NotNull(OnBehalfAwareInterceptorSelector.target);
+			Assert.Equal(typeof(SimpleComponent1), OnBehalfAwareInterceptorSelector.target.Services.Single());
 		}
 
-		[Test]
+		[Fact]
 		public void Forwarded_type_proxy_implements_all_service_types_interface_services_only()
 		{
 			Container.Register(Component.For<StandardInterceptor>()
@@ -131,10 +131,10 @@ namespace Castle.Proxies
 			var common = Container.Resolve<ICommon>();
 			var common2 = Container.Resolve<ICommon2>();
 
-			Assert.AreSame(common.GetType(), common2.GetType());
+			Assert.Same(common.GetType(), common2.GetType());
 		}
 
-		[Test]
+		[Fact]
 		public void Forwarded_type_proxy_implements_all_service_types_interface_and_class_services()
 		{
 			Container.Register(Component.For<StandardInterceptor>()
@@ -149,11 +149,11 @@ namespace Castle.Proxies
 			var common2 = Container.Resolve<ICommon2>();
 			var impl = Container.Resolve<TwoInterfacesImpl>();
 
-			Assert.AreSame(common.GetType(), common2.GetType());
-			Assert.AreSame(common.GetType(), impl.GetType());
+			Assert.Same(common.GetType(), common2.GetType());
+			Assert.Same(common.GetType(), impl.GetType());
 		}
 
-		[Test]
+		[Fact]
 		public void Forwarded_type_proxy_implements_all_service_types_class_and_interface_services()
 		{
 			Container.Register(Component.For<StandardInterceptor>()
@@ -168,11 +168,11 @@ namespace Castle.Proxies
 			var common2 = Container.Resolve<ICommon2>();
 			var impl = Container.Resolve<TwoInterfacesImpl>();
 
-			Assert.AreSame(common.GetType(), common2.GetType());
-			Assert.AreSame(common.GetType(), impl.GetType());
+			Assert.Same(common.GetType(), common2.GetType());
+			Assert.Same(common.GetType(), impl.GetType());
 		}
 
-		[Test]
+		[Fact]
 		public void Proxy_implements_only_service_interfaces()
 		{
 			Container.Register(Component.For<CountingInterceptor>()
@@ -184,10 +184,10 @@ namespace Castle.Proxies
 
 			var common = Container.Resolve<ICommon>();
 
-			Assert.IsNotInstanceOf<ICommon2>(common);
+			Assert.IsNotType<ICommon2>(common, exactMatch: false);
 		}
 
-		[Test]
+		[Fact]
 		public void Proxy_implements_only_service_interfaces_or_explicitly_added_interfaces()
 		{
 			Container.Register(Component.For<CountingInterceptor>()
@@ -200,11 +200,11 @@ namespace Castle.Proxies
 
 			var common = Container.Resolve<ICommon>();
 
-			Assert.IsInstanceOf<ICommon2>(common);
+			Assert.IsType<ICommon2>(common, exactMatch: false);
 		}
 
 #if FEATURE_REMOTING
-		[Test]
+		[Fact]
 		public void RequestMarshalByRefProxyWithAttribute()
 		{
 			Container.Register(Component.For<StandardInterceptor>(),
@@ -212,19 +212,19 @@ namespace Castle.Proxies
 
 			var calcService = Container.Resolve<ICalcService>();
 
-			Assert.IsNotInstanceOf<CalculatorServiceWithMarshalByRefProxyBehavior>(calcService,
+			Assert.IsNotType<CalculatorServiceWithMarshalByRefProxyBehavior>(calcService,
 			                                                                       "Service proxy should not expose CalculatorServiceWithMarshalByRefProxyBehavior");
-			Assert.IsInstanceOf<MarshalByRefObject>(calcService, "Service proxy should expose MarshalByRefObject");
-			Assert.IsNotInstanceOf<IDisposable>(calcService, "Service proxy should expose the IDisposable interface");
+			Assert.IsType<MarshalByRefObject>(calcService, "Service proxy should expose MarshalByRefObject");
+			Assert.IsNotType<IDisposable>(calcService, "Service proxy should expose the IDisposable interface");
 		}
 
-		[Test]
+		[Fact]
 		public void InternalInterfaceIgnoredByProxy()
 		{
 			Container.Install(
 				Configuration.FromXml(Xml.Embedded("proxyBehavior.xml")));
 
-			Assert.DoesNotThrow(() => Container.Resolve<object>("hasInternalInterface"));
+			Container.Resolve<object>("hasInternalInterface");
 		}
 #endif
 	}

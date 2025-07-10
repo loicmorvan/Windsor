@@ -20,13 +20,12 @@ namespace CastleTests.Config
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class ConfigTestCase : AbstractContainerTestCase
 	{
-		[Test]
-		[Ignore("Not supported. Would be good to have, not sure if in this form or another")]
+		[Fact(Skip = "Not supported. Would be good to have, not sure if in this form or another")]
 		public void Can_split_configuration_between_multiple_component_elements()
 		{
 			// see http://stackoverflow.com/questions/3253975/castle-windsor-with-xml-includes-customization-problem for real life scenario
@@ -36,7 +35,7 @@ namespace CastleTests.Config
 
 			service.Operation();
 
-			Assert.AreEqual(1, interceptor.InterceptedCallsCount);
+			Assert.Equal(1, interceptor.InterceptedCallsCount);
 		}
 	}
 }

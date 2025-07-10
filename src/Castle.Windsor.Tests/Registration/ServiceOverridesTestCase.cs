@@ -20,12 +20,12 @@ namespace CastleTests.Registration
 	using CastleTests.ClassComponents;
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class ServiceOverridesTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void AddComponent_ArrayServiceOverrides_WorksFine()
 		{
 			Kernel.Register(
@@ -45,13 +45,13 @@ namespace CastleTests.Registration
 			var common1 = Kernel.Resolve<ICommon>("common1");
 			var common2 = Kernel.Resolve<ICommon>("common2");
 			var component = Kernel.Resolve<ClassWithArrayConstructor>();
-			Assert.AreSame(common2, component.First);
-			Assert.AreEqual(2, component.Services.Length);
-			Assert.AreSame(common1, component.Services[0]);
-			Assert.AreSame(common2, component.Services[1]);
+			Assert.Same(common2, component.First);
+			Assert.Equal(2, component.Services.Length);
+			Assert.Same(common1, component.Services[0]);
+			Assert.Same(common2, component.Services[1]);
 		}
 
-		[Test]
+		[Fact]
 		public void AddComponent_GenericListServiceOverrides_WorksFine()
 		{
 			Kernel.Register(
@@ -70,12 +70,12 @@ namespace CastleTests.Registration
 			var common1 = Kernel.Resolve<ICommon>("common1");
 			var common2 = Kernel.Resolve<ICommon>("common2");
 			var component = Kernel.Resolve<ClassWithListConstructor>();
-			Assert.AreEqual(2, component.Services.Count);
-			Assert.AreSame(common1, component.Services[0]);
-			Assert.AreSame(common2, component.Services[1]);
+			Assert.Equal(2, component.Services.Count);
+			Assert.Same(common1, component.Services[0]);
+			Assert.Same(common2, component.Services[1]);
 		}
 
-		[Test]
+		[Fact]
 		public void AddComponent_DependencyOnComponent_WorksFine()
 		{
 			Kernel.Register(
@@ -98,13 +98,13 @@ namespace CastleTests.Registration
 				);
 
 			var customer = Kernel.Resolve<CustomerChain1>("customer2");
-			Assert.IsNotNull(customer.CustomerBase);
-			Assert.AreEqual(customer.CustomerBase.Name, "Caption Hook");
-			Assert.AreEqual(customer.CustomerBase.Address, "Fairyland");
-			Assert.AreEqual(customer.CustomerBase.Age, 45);
+			Assert.NotNull(customer.CustomerBase);
+			Assert.Equal("Caption Hook", customer.CustomerBase.Name);
+			Assert.Equal("Fairyland", customer.CustomerBase.Address);
+			Assert.Equal(45, customer.CustomerBase.Age);
 		}
 
-		[Test]
+		[Fact]
 		public void AddComponent_ServiceOverrides_UsingAnonymousType()
 		{
 			Kernel.Register(
@@ -128,13 +128,13 @@ namespace CastleTests.Registration
 				);
 
 			var customer = Kernel.Resolve<CustomerChain1>("customer2");
-			Assert.IsNotNull(customer.CustomerBase);
-			Assert.AreEqual(customer.CustomerBase.Name, "Caption Hook");
-			Assert.AreEqual(customer.CustomerBase.Address, "Fairyland");
-			Assert.AreEqual(customer.CustomerBase.Age, 45);
+			Assert.NotNull(customer.CustomerBase);
+			Assert.Equal("Caption Hook", customer.CustomerBase.Name);
+			Assert.Equal("Fairyland", customer.CustomerBase.Address);
+			Assert.Equal(45, customer.CustomerBase.Age);
 		}
 
-		[Test]
+		[Fact]
 		public void AddComponent_ServiceOverrides_WorksFine()
 		{
 			Kernel.Register(
@@ -159,13 +159,13 @@ namespace CastleTests.Registration
 				);
 
 			var customer = Kernel.Resolve<CustomerChain1>("customer2");
-			Assert.IsNotNull(customer.CustomerBase);
-			Assert.AreEqual(customer.CustomerBase.Name, "Caption Hook");
-			Assert.AreEqual(customer.CustomerBase.Address, "Fairyland");
-			Assert.AreEqual(customer.CustomerBase.Age, 45);
+			Assert.NotNull(customer.CustomerBase);
+			Assert.Equal("Caption Hook", customer.CustomerBase.Name);
+			Assert.Equal("Fairyland", customer.CustomerBase.Address);
+			Assert.Equal(45, customer.CustomerBase.Age);
 		}
 
-		[Test]
+		[Fact]
 		public void ServiceOverrides_work_via_DependsOn_named_key()
 		{
 			Kernel.Register(
@@ -180,10 +180,10 @@ namespace CastleTests.Registration
 				);
 
 			var service = Kernel.Resolve<UsesIEmptyService>();
-			Assert.IsInstanceOf<EmptyServiceB>(service.EmptyService);
+			Assert.IsType<EmptyServiceB>(service.EmptyService);
 		}
 
-		[Test]
+		[Fact]
 		public void ServiceOverrides_work_via_DependsOn_named_key_typed_value_generic()
 		{
 			Kernel.Register(
@@ -196,10 +196,10 @@ namespace CastleTests.Registration
 				);
 
 			var service = Kernel.Resolve<UsesIEmptyService>();
-			Assert.IsInstanceOf<EmptyServiceB>(service.EmptyService);
+			Assert.IsType<EmptyServiceB>(service.EmptyService);
 		}
 
-		[Test]
+		[Fact]
 		public void ServiceOverrides_work_via_DependsOn_named_key_typed_value_nongeneric()
 		{
 			Kernel.Register(
@@ -212,10 +212,10 @@ namespace CastleTests.Registration
 				);
 
 			var service = Kernel.Resolve<UsesIEmptyService>();
-			Assert.IsInstanceOf<EmptyServiceB>(service.EmptyService);
+			Assert.IsType<EmptyServiceB>(service.EmptyService);
 		}
 
-		[Test]
+		[Fact]
 		public void ServiceOverrides_work_via_DependsOn_typed_key()
 		{
 			Kernel.Register(
@@ -230,10 +230,10 @@ namespace CastleTests.Registration
 				);
 
 			var service = Kernel.Resolve<UsesIEmptyService>();
-			Assert.IsInstanceOf<EmptyServiceB>(service.EmptyService);
+			Assert.IsType<EmptyServiceB>(service.EmptyService);
 		}
 
-		[Test]
+		[Fact]
 		public void ServiceOverrides_works_via_DependsOn_typed_key_Named_value_on_open_generic_type()
 		{
 			Kernel.Register(
@@ -243,7 +243,7 @@ namespace CastleTests.Registration
 
 			var root = (GenericImpl3<int>)Kernel.Resolve<IGeneric<int>>();
 
-			Assert.IsInstanceOf<EmptyServiceB>(root.Value);
+			Assert.IsType<EmptyServiceB>(root.Value);
 		}
 	}
 }

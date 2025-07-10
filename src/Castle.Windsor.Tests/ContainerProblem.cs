@@ -19,12 +19,12 @@ namespace Castle.Windsor.Tests
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Registration;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class ContainerProblem
 	{
-		[Test]
+		[Fact]
 		public void CausesStackOverflow()
 		{
 			IWindsorContainer container = new WindsorContainer();

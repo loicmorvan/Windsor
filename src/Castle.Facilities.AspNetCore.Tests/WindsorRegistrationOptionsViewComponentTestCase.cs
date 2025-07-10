@@ -21,25 +21,21 @@ namespace Castle.Facilities.AspNetCore.Tests
 
 	using Microsoft.AspNetCore.Mvc;
 
-	using NUnit.Framework;
+	
 
-	public abstract class WindsorRegistrationOptionsViewComponentTestCase
+	public abstract class WindsorRegistrationOptionsViewComponentTestCase: IDisposable
 	{
-		[SetUp]
-		public abstract void SetUp();
-
-		[TearDown]
-		public void TearDown()
+		public void Dispose()
 		{
 			testContext.Dispose();
 		}
 
 		protected Framework.TestContext testContext;
 
-		[TestCase(typeof(OverrideViewComponent))]
+		[InlineData(typeof(OverrideViewComponent))]
 		public void Should_resolve_overidden_ViewComponents_using_WindsorRegistrationOptions(Type optionsResolvableType)
 		{
-			Assert.DoesNotThrow(() => { testContext.WindsorContainer.Resolve(optionsResolvableType); });
+			testContext.WindsorContainer.Resolve(optionsResolvableType); 
 		}
 
 		public class OverrideViewComponent : ViewComponent
@@ -47,11 +43,10 @@ namespace Castle.Facilities.AspNetCore.Tests
 		}
 	}
 
-	[TestFixture]
+	
 	public class WindsorRegistrationOptionsForAssembliesViewComponentTestCase : WindsorRegistrationOptionsViewComponentTestCase
 	{
-		[SetUp]
-		public override void SetUp()
+		public WindsorRegistrationOptionsForAssembliesViewComponentTestCase()
 		{
 			testContext = TestContextFactory.Get(opts => opts
 				.UseEntryAssembly(typeof(Uri).Assembly)
@@ -59,11 +54,10 @@ namespace Castle.Facilities.AspNetCore.Tests
 		}
 	}
 
-	[TestFixture]
+	
 	public class WindsorRegistrationOptionsForComponentsViewComponentTestCase : WindsorRegistrationOptionsViewComponentTestCase
 	{
-		[SetUp]
-		public override void SetUp()
+		public WindsorRegistrationOptionsForComponentsViewComponentTestCase()
 		{
 			testContext = TestContextFactory.Get(opts => opts
 				.UseEntryAssembly(typeof(Uri).Assembly)

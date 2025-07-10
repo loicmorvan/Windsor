@@ -16,7 +16,7 @@ namespace CastleTests
 {
 	using System;
 
-	using NUnit.Framework;
+	
 
 	public static class ReferenceTracker
 	{

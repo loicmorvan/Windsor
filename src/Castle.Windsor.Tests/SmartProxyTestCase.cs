@@ -18,20 +18,22 @@ namespace Castle.Windsor.Tests
 	using System.Runtime.Remoting;
 #endif
 
+	using System;
+
 	using Castle.DynamicProxy;
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor.Tests.Interceptors;
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
-	public class SmartProxyTestCase
+	
+	public class SmartProxyTestCase:IDisposable
 	{
 		private IWindsorContainer container;
 
-		[Test]
+		[Fact]
 		public void ConcreteClassProxy()
 		{
 			container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
@@ -39,22 +41,21 @@ namespace Castle.Windsor.Tests
 
 			var service = container.Resolve<CalculatorService>("key");
 
-			Assert.IsNotNull(service);
+			Assert.NotNull(service);
 #if FEATURE_REMOTING
-			Assert.IsFalse(RemotingServices.IsTransparentProxy(service));
+			Assert.False(RemotingServices.IsTransparentProxy(service));
 #endif
-			Assert.AreEqual(5, service.Sum(2, 2));
+			Assert.Equal(5, service.Sum(2, 2));
 		}
 
-		[SetUp]
-		public void Init()
+		public SmartProxyTestCase()
 		{
 			container = new WindsorContainer();
 
 			container.AddFacility<MyInterceptorGreedyFacility>();
 		}
 
-		[Test]
+		[Fact]
 		public void InterfaceInheritance()
 		{
 			container.Register(Component.For<StandardInterceptor>().Named("interceptor"));
@@ -62,10 +63,10 @@ namespace Castle.Windsor.Tests
 
 			var service = container.Resolve<ICameraService>();
 
-			Assert.IsNotNull(service);
+			Assert.NotNull(service);
 		}
 
-		[Test]
+		[Fact]
 		public void InterfaceProxy()
 		{
 			container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
@@ -73,15 +74,14 @@ namespace Castle.Windsor.Tests
 
 			var service = container.Resolve<ICalcService>("key");
 
-			Assert.IsNotNull(service);
+			Assert.NotNull(service);
 #if FEATURE_REMOTING
-			Assert.IsFalse(RemotingServices.IsTransparentProxy(service));
+			Assert.False(RemotingServices.IsTransparentProxy(service));
 #endif
-			Assert.AreEqual(5, service.Sum(2, 2));
+			Assert.Equal(5, service.Sum(2, 2));
 		}
 
-		[TearDown]
-		public void Terminate()
+		public void Dispose()
 		{
 			container.Dispose();
 		}

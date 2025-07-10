@@ -22,41 +22,41 @@ namespace Castle.Windsor.Tests
 	using CastleTests;
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class LifecycledComponentsReleasePolicyTestCase
 	{
 		private IWindsorContainer container;
 		private IReleasePolicy releasePolicy;
 
-		[Test]
+		[Fact]
 		public void AllComponentsReleasePolicy_is_the_default_release_policy_in_Windsor()
 		{
-			Assert.IsInstanceOf<LifecycledComponentsReleasePolicy>(releasePolicy);
+			Assert.IsType<LifecycledComponentsReleasePolicy>(releasePolicy);
 		}
 
-		[Test]
+		[Fact]
 		public void Doesnt_track_simple_components_transient()
 		{
 			container.Register(Transient<A>());
 
 			var a = container.Resolve<A>();
 
-			Assert.IsFalse(releasePolicy.HasTrack(a));
+			Assert.False(releasePolicy.HasTrack(a));
 		}
 
-		[Test]
+		[Fact]
 		public void Doesnt_track_simple_components_with_simple_DynamicDependencies()
 		{
 			container.Register(Transient<A>().DynamicParameters(delegate { }));
 
 			var a = container.Resolve<A>();
 
-			Assert.IsFalse(releasePolicy.HasTrack(a));
+			Assert.False(releasePolicy.HasTrack(a));
 		}
 
-		[Test]
+		[Fact]
 		public void Doesnt_track_simple_components_with_simple_dependencies()
 		{
 			container.Register(Transient<B>(),
@@ -64,10 +64,10 @@ namespace Castle.Windsor.Tests
 
 			var b = container.Resolve<B>();
 
-			Assert.IsFalse(releasePolicy.HasTrack(b));
+			Assert.False(releasePolicy.HasTrack(b));
 		}
 
-		[Test]
+		[Fact]
 		public void Doesnt_track_simple_components_with_simple_dependencies_having_simple_DynamicDependencies()
 		{
 			container.Register(Transient<B>(),
@@ -75,20 +75,20 @@ namespace Castle.Windsor.Tests
 
 			var b = container.Resolve<B>();
 
-			Assert.IsFalse(releasePolicy.HasTrack(b));
+			Assert.False(releasePolicy.HasTrack(b));
 		}
 
-		[Test]
+		[Fact]
 		public void Doesnt_track_singleton()
 		{
 			container.Register(Singleton<A>());
 
 			var a = container.Resolve<A>();
 
-			Assert.IsFalse(releasePolicy.HasTrack(a));
+			Assert.False(releasePolicy.HasTrack(a));
 		}
 
-		[Test]
+		[Fact]
 		public void Release_doesnt_stop_tracking_component_singleton_until_container_is_disposed()
 		{
 			DisposableFoo.ResetDisposedCount();
@@ -99,15 +99,15 @@ namespace Castle.Windsor.Tests
 			tracker.AssertStillReferencedAndDo(foo => container.Release(foo));
 
 			tracker.AssertStillReferenced();
-			Assert.AreEqual(0, DisposableFoo.DisposedCount);
+			Assert.Equal(0, DisposableFoo.DisposedCount);
 
 			container.Dispose();
 
 			tracker.AssertNoLongerReferenced();
-			Assert.AreEqual(1, DisposableFoo.DisposedCount);
+			Assert.Equal(1, DisposableFoo.DisposedCount);
 		}
 
-		[Test]
+		[Fact]
 		public void Release_stops_tracking_component_transient()
 		{
 			container.Register(Transient<DisposableFoo>());
@@ -115,47 +115,46 @@ namespace Castle.Windsor.Tests
 
 			container.Release(foo);
 
-			Assert.IsFalse(releasePolicy.HasTrack(foo));
+			Assert.False(releasePolicy.HasTrack(foo));
 		}
 
-		[SetUp]
-		public void SetUp()
+		public LifecycledComponentsReleasePolicyTestCase()
 		{
 			container = new WindsorContainer();
 			releasePolicy = container.Kernel.ReleasePolicy;
 		}
 
-		[Test]
+		[Fact]
 		public void Tracks_disposable_components()
 		{
 			container.Register(Transient<DisposableFoo>());
 
 			var foo = container.Resolve<DisposableFoo>();
 
-			Assert.IsTrue(releasePolicy.HasTrack(foo));
+			Assert.True(releasePolicy.HasTrack(foo));
 		}
 
-		[Test]
+		[Fact]
 		public void Tracks_simple_components_pooled()
 		{
 			container.Register(Pooled<A>());
 
 			var a = container.Resolve<A>();
 
-			Assert.IsTrue(releasePolicy.HasTrack(a));
+			Assert.True(releasePolicy.HasTrack(a));
 		}
 
-		[Test]
+		[Fact]
 		public void Tracks_simple_components_with_DynamicDependencies_requiring_decommission()
 		{
 			container.Register(Transient<A>().DynamicParameters((kernel, parameters) => delegate { }));
 
 			var a = container.Resolve<A>();
 
-			Assert.IsTrue(releasePolicy.HasTrack(a));
+			Assert.True(releasePolicy.HasTrack(a));
 		}
 
-		[Test]
+		[Fact]
 		public void Tracks_simple_components_with_disposable_dependencies()
 		{
 			container.Register(Transient<DisposableFoo>(),
@@ -163,10 +162,10 @@ namespace Castle.Windsor.Tests
 
 			var hasFoo = container.Resolve<UsesDisposableFoo>();
 
-			Assert.IsTrue(releasePolicy.HasTrack(hasFoo));
+			Assert.True(releasePolicy.HasTrack(hasFoo));
 		}
 
-		[Test]
+		[Fact]
 		public void Tracks_simple_components_with_simple_dependencies_havingDynamicDependencies_requiring_decommission()
 		{
 			container.Register(Transient<B>(),
@@ -174,7 +173,7 @@ namespace Castle.Windsor.Tests
 
 			var b = container.Resolve<B>();
 
-			Assert.IsTrue(releasePolicy.HasTrack(b));
+			Assert.True(releasePolicy.HasTrack(b));
 		}
 
 		private ComponentRegistration<T> Pooled<T>()

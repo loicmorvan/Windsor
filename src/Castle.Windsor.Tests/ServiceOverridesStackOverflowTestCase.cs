@@ -19,12 +19,12 @@ namespace Castle.Windsor.Tests
 
 	using Castle.XmlFiles;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class ServiceOverridesStackOverflowTestCase
 	{
-		[Test]
+		[Fact]
 		public void Should_not_StackOverflow()
 		{
 			var container = new WindsorContainer()
@@ -33,10 +33,10 @@ namespace Castle.Windsor.Tests
 			var channel = container.Resolve<MessageChannel>("MessageChannel1");
 			var array = channel.RootDevice.Children.ToArray();
 
-			Assert.AreSame(channel.RootDevice, container.Resolve<IDevice>("device1"));
-			Assert.AreEqual(2, array.Length);
-			Assert.AreSame(array[0], container.Resolve<IDevice>("device2"));
-			Assert.AreSame(array[1], container.Resolve<IDevice>("device3"));
+			Assert.Same(channel.RootDevice, container.Resolve<IDevice>("device1"));
+			Assert.Equal(2, array.Length);
+			Assert.Same(array[0], container.Resolve<IDevice>("device2"));
+			Assert.Same(array[1], container.Resolve<IDevice>("device3"));
 		}
 	}
 

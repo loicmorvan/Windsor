@@ -23,7 +23,7 @@ namespace CastleTests.Diagnostics
 	using CastleTests.ClassComponents;
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
 	public class AllServicesDiagnosticTestCase : AbstractContainerTestCase
 	{
@@ -35,20 +35,7 @@ namespace CastleTests.Diagnostics
 			diagnostic = host.GetDiagnostic<IAllServicesDiagnostic>();
 		}
 
-		[Test]
-		[Ignore("We order them alphabetically now.")]
-		public void Default_component_for_given_service_comes_first()
-		{
-			Container.Register(Component.For<IEmptyService, EmptyServiceA>().ImplementedBy<EmptyServiceA>(),
-			                   Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().IsDefault(),
-			                   Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
-			                   Component.For<A>());
-
-			var services = diagnostic.Inspect();
-			Assert.AreEqual(typeof(EmptyServiceB), services[typeof(IEmptyService)].First().ComponentModel.Implementation);
-		}
-
-		[Test]
+		[Fact]
 		public void Groups_components_by_exposed_service()
 		{
 			Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
@@ -56,12 +43,12 @@ namespace CastleTests.Diagnostics
 			                   Component.For<A>());
 
 			var services = diagnostic.Inspect();
-			Assert.AreEqual(2, services.Count);
-			Assert.AreEqual(2, services[typeof(IEmptyService)].Count());
-			Assert.AreEqual(1, services[typeof(A)].Count());
+			Assert.Equal(2, services.Count);
+			Assert.Equal(2, services[typeof(IEmptyService)].Count());
+			Assert.Single(services[typeof(A)]);
 		}
 
-		[Test]
+		[Fact]
 		public void Open_generic_handlers_appear_once()
 		{
 			Container.Register(Component.For(typeof(GenericImpl1<>)));
@@ -69,11 +56,11 @@ namespace CastleTests.Diagnostics
 			Container.Resolve<GenericImpl1<B>>();
 
 			var services = diagnostic.Inspect();
-			Assert.AreEqual(1, services.Count);
-			Assert.IsTrue(services.Contains(typeof(GenericImpl1<>)));
+			Assert.Equal(1, services.Count);
+			Assert.True(services.Contains(typeof(GenericImpl1<>)));
 		}
 
-		[Test]
+		[Fact]
 		public void Works_for_multi_service_components()
 		{
 			Container.Register(Component.For<IEmptyService, EmptyServiceA>().ImplementedBy<EmptyServiceA>(),
@@ -81,7 +68,7 @@ namespace CastleTests.Diagnostics
 			                   Component.For<A>());
 
 			var services = diagnostic.Inspect();
-			Assert.AreEqual(3, services.Count);
+			Assert.Equal(3, services.Count);
 		}
 	}
 }

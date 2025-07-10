@@ -14,23 +14,25 @@
 
 namespace CastleTests
 {
+	using System;
 	using System.Reflection;
 
 	using Castle.MicroKernel;
 	using Castle.Windsor;
 
-	using NUnit.Framework;
 
-	[TestFixture]
-	public abstract class AbstractContainerTestCase
+	public abstract class AbstractContainerTestCase : IDisposable
 	{
-		[TearDown]
+		public AbstractContainerTestCase()
+		{
+			Init();
+		}
+
 		public void CleanUp()
 		{
 			container.Dispose();
 		}
 
-		[SetUp]
 		public void Init()
 		{
 			container = BuildContainer();
@@ -67,6 +69,11 @@ namespace CastleTests
 		protected Assembly GetCurrentAssembly()
 		{
 			return typeof(AbstractContainerTestCase).GetTypeInfo().Assembly;
+		}
+
+		public void Dispose()
+		{
+			CleanUp();
 		}
 	}
 }

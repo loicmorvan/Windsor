@@ -21,11 +21,11 @@ namespace Castle.Windsor.Tests
 	using CastleTests;
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
 	public class ByRefDependenciesTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void Can_resolve_type_with_by_ref_dependency()
 		{
 			Container.Register(Component.For<A>(),
@@ -34,7 +34,7 @@ namespace Castle.Windsor.Tests
 			Container.Resolve<HasByRefCtorArgument>();
 		}
 
-		[Test]
+		[Fact]
 		public void Can_resolve_type_with_by_ref_dependency_provided_inline()
 		{
 			Container.Register(Component.For<HasByRefCtorArgument>());
@@ -42,7 +42,7 @@ namespace Castle.Windsor.Tests
 			Container.Resolve<HasByRefCtorArgument>(Arguments.FromProperties(new { a = new A() }));
 		}
 
-		[Test]
+		[Fact]
 		public void Can_resolve_type_with_by_ref_dependency_provided_inline_via_anonymous_type()
 		{
 			Container.Register(Component.For<HasByRefCtorArgument>());

@@ -22,9 +22,9 @@ namespace Castle.Windsor.Tests.Handlers
 	using CastleTests;
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class EmptyConstructorTestCase : AbstractContainerTestCase
 	{
 		private class ExplicitRequiredDependencyDescriptor : IComponentModelDescriptor
@@ -51,24 +51,24 @@ namespace Castle.Windsor.Tests.Handlers
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Component_With_Explicit_Required_Dependency_Will_Be_Marked_Waiting()
 		{
 			Container.Register(Component.For<AProp>()
 			                   	.AddDescriptor(new ExplicitRequiredDependencyDescriptor()));
 
 			var handler = Container.Kernel.GetHandler(typeof(AProp));
-			Assert.AreEqual(HandlerState.WaitingDependency, handler.CurrentState);
+			Assert.Equal(HandlerState.WaitingDependency, handler.CurrentState);
 		}
 
-		[Test]
+		[Fact]
 		public void Component_With_Required_Properies_Will_Be_Marked_Waiting()
 		{
 			Container.Register(Component.For<AProp>()
 			                   	.AddDescriptor(new RequirePropertyDescriptor()));
 
 			var handler = Container.Kernel.GetHandler(typeof(AProp));
-			Assert.AreEqual(HandlerState.WaitingDependency, handler.CurrentState);
+			Assert.Equal(HandlerState.WaitingDependency, handler.CurrentState);
 		}
 	}
 }

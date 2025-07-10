@@ -21,12 +21,12 @@ namespace CastleTests
 
 	using CastleTests.ContainerExtensions;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class CustomSubDependencyResolversTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void Can_detect_dependency_cycle_introduced_by_poorly_implemented_subresolver()
 		{
 			Kernel.Resolver.AddSubResolver(new BadDependencyResolver(Kernel));
@@ -38,7 +38,7 @@ namespace CastleTests
 			Assert.Throws<CircularDependencyException>(() => Container.Resolve<IItemService>());
 		}
 
-		[Test]
+		[Fact]
 		public void Can_detect_waiting_dependency_pointed_to_by_sub_resolver()
 		{
 			Kernel.Resolver.AddSubResolver(new GoodDependencyResolver());

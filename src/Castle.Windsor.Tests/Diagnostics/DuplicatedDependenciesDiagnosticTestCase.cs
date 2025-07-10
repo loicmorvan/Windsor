@@ -22,7 +22,7 @@ namespace CastleTests.Diagnostics
 	using CastleTests.ClassComponents;
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
 	public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCase
 	{
@@ -34,64 +34,64 @@ namespace CastleTests.Diagnostics
 			diagnostic = host.GetDiagnostic<IDuplicatedDependenciesDiagnostic>();
 		}
 
-		[Test]
+		[Fact]
 		public void Can_detect_components_having_duplicated_dependencies_same_name_different_type()
 		{
 			Container.Register(Component.For<HasObjectPropertyAndTypedCtorParameterWithSameName>());
 
 			var result = diagnostic.Inspect();
-			CollectionAssert.IsNotEmpty(result);
+			Assert.NotEmpty(result);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_detect_components_having_duplicated_dependencies_same_type_and_name()
 		{
 			Container.Register(Component.For<HasTwoConstructors>());
 
 			var result = diagnostic.Inspect();
-			CollectionAssert.IsNotEmpty(result);
+			Assert.NotEmpty(result);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_detect_components_having_duplicated_dependencies_same_type_different_name()
 		{
 			Container.Register(Component.For<HasPropertyAndCtorParameterSameTypeDifferentName>());
 			var result = diagnostic.Inspect();
-			CollectionAssert.IsNotEmpty(result);
+			Assert.NotEmpty(result);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_detect_components_having_duplicated_dependencies_same_type_via_constructor()
 		{
 			Container.Register(Component.For<TwoEmptyServiceDependenciesConstructor>());
 			var result = diagnostic.Inspect();
-			CollectionAssert.IsNotEmpty(result);
+			Assert.NotEmpty(result);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_detect_components_having_duplicated_dependencies_same_type_via_properties()
 		{
 			Container.Register(Component.For<TwoEmptyServiceDependenciesProperty>());
 			var result = diagnostic.Inspect();
-			CollectionAssert.IsNotEmpty(result);
+			Assert.NotEmpty(result);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_detect_components_having_duplicated_dependencies_via_service_override()
 		{
 			Container.Register(Component.For<HasObjectPropertyAndTypedCtorParameterDifferentName>()
 				                   .DependsOn(Dependency.OnComponent(typeof(object), typeof(EmptyService2Impl1)),
 				                              Dependency.OnComponent(typeof(IEmptyService), typeof(EmptyService2Impl1))));
 			var result = diagnostic.Inspect();
-			CollectionAssert.IsNotEmpty(result);
+			Assert.NotEmpty(result);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_detect_multiple_dependencies_between_properties_and_constructors()
 		{
 			Container.Register(Component.For<ThreeEmptyServiceDependenciesPropertyAndManyCtors>());
 			var result = diagnostic.Inspect();
-			CollectionAssert.IsNotEmpty(result);
+			Assert.NotEmpty(result);
 		}
 	}
 }

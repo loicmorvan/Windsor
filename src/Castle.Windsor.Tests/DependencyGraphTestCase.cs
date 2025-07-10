@@ -22,12 +22,12 @@ namespace CastleTests
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class DependencyGraphTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void CycleComponentGraphs()
 		{
 			Kernel.Register(Component.For<CycleA>().Named("a"));
@@ -40,10 +40,10 @@ namespace CastleTests
 				string.Format(
 					"Dependency cycle has been detected when trying to resolve component 'a'.{0}The resolution tree that resulted in the cycle is the following:{0}Component 'a' resolved as dependency of{0}	component 'b' resolved as dependency of{0}	component 'a' which is the root component being resolved.{0}",
 					Environment.NewLine);
-			Assert.AreEqual(expectedMessage, exception.Message);
+			Assert.Equal(expectedMessage, exception.Message);
 		}
 
-		[Test]
+		[Fact]
 		public void GraphInvalid()
 		{
 			Kernel.Register(Component.For<B>());
@@ -52,11 +52,11 @@ namespace CastleTests
 			var handlerB = Kernel.GetHandler(typeof(B));
 			var handlerC = Kernel.GetHandler(typeof(C));
 
-			Assert.AreEqual(HandlerState.WaitingDependency, handlerB.CurrentState);
-			Assert.AreEqual(HandlerState.WaitingDependency, handlerC.CurrentState);
+			Assert.Equal(HandlerState.WaitingDependency, handlerB.CurrentState);
+			Assert.Equal(HandlerState.WaitingDependency, handlerC.CurrentState);
 		}
 
-		[Test]
+		[Fact]
 		public void GraphInvalidAndLateValidation()
 		{
 			Kernel.Register(Component.For<B>());
@@ -65,16 +65,16 @@ namespace CastleTests
 			var handlerB = Kernel.GetHandler(typeof(B));
 			var handlerC = Kernel.GetHandler(typeof(C));
 
-			Assert.AreEqual(HandlerState.WaitingDependency, handlerB.CurrentState);
-			Assert.AreEqual(HandlerState.WaitingDependency, handlerC.CurrentState);
+			Assert.Equal(HandlerState.WaitingDependency, handlerB.CurrentState);
+			Assert.Equal(HandlerState.WaitingDependency, handlerC.CurrentState);
 
 			Kernel.Register(Component.For<A>());
 
-			Assert.AreEqual(HandlerState.Valid, handlerB.CurrentState);
-			Assert.AreEqual(HandlerState.Valid, handlerC.CurrentState);
+			Assert.Equal(HandlerState.Valid, handlerB.CurrentState);
+			Assert.Equal(HandlerState.Valid, handlerC.CurrentState);
 		}
 
-		[Test]
+		[Fact]
 		public void Same_transient_interceptor_ctor_and_property_dependencies_no_cycle()
 		{
 			Kernel.Register(Component.For<CountingInterceptor>().LifeStyle.Transient,
@@ -84,7 +84,7 @@ namespace CastleTests
 			var item = Kernel.Resolve<APropCtor>();
 		}
 
-		[Test]
+		[Fact]
 		public void Same_transient_interceptor_ctor_dependencies()
 		{
 			Kernel.Register(Component.For<CountingInterceptor>().LifeStyle.Transient,
@@ -94,7 +94,7 @@ namespace CastleTests
 			Kernel.Resolve<C>();
 		}
 
-		[Test]
+		[Fact]
 		public void Same_transient_interceptor_property_dependencies_cycle()
 		{
 			Kernel.Register(Component.For<CountingInterceptor>().LifeStyle.Transient,
@@ -103,7 +103,7 @@ namespace CastleTests
 			Kernel.Resolve<ACycleProp>();
 		}
 
-		[Test]
+		[Fact]
 		public void Same_transient_interceptor_property_dependencies_no_cycle()
 		{
 			Kernel.Register(Component.For<CountingInterceptor>().LifeStyle.Transient,
@@ -112,16 +112,16 @@ namespace CastleTests
 			Kernel.Resolve<AProp>();
 		}
 
-		[Test]
+		[Fact]
 		public void ValidSituation()
 		{
 			Kernel.Register(Component.For<A>(),
 			                Component.For<B>(),
 			                Component.For<C>());
 
-			Assert.IsNotNull(Kernel.Resolve<A>());
-			Assert.IsNotNull(Kernel.Resolve<B>());
-			Assert.IsNotNull(Kernel.Resolve<C>());
+			Assert.NotNull(Kernel.Resolve<A>());
+			Assert.NotNull(Kernel.Resolve<B>());
+			Assert.NotNull(Kernel.Resolve<C>());
 		}
 	}
 }

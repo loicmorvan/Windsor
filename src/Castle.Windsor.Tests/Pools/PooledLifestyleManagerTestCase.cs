@@ -32,9 +32,9 @@ namespace CastleTests.Pools
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 	{
 		public class DisposableMockObject : IDisposable
@@ -52,7 +52,7 @@ namespace CastleTests.Pools
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void DisposePoolDisposesTrackedComponents()
 		{
 			// Arrange.
@@ -68,10 +68,10 @@ namespace CastleTests.Pools
 			container.Dispose();
 
 			// Assert.
-			Assert.IsTrue(result);
+			Assert.True(result);
 		}
 
-		[Test]
+		[Fact]
 		public void MaxSize()
 		{
 			Kernel.Register(Component.For<PoolableComponent1>());
@@ -87,7 +87,7 @@ namespace CastleTests.Pools
 
 			var other1 = Kernel.Resolve<PoolableComponent1>();
 
-			CollectionAssert.DoesNotContain(instances, other1);
+			Assert.DoesNotContain(other1, instances);
 
 			foreach (var inst in instances)
 			{
@@ -98,23 +98,23 @@ namespace CastleTests.Pools
 
 			var other2 = Kernel.Resolve<PoolableComponent1>();
 
-			Assert.AreNotEqual(other1, other2);
-			CollectionAssert.Contains(instances, other2);
+			Assert.NotEqual(other1, other2);
+			Assert.Contains(other2, instances);
 
 			Kernel.ReleaseComponent(other2);
 		}
 
-		[Test]
+		[Fact]
 		public void Poolable_component_is_always_tracked()
 		{
 			Kernel.Register(Component.For<A>().LifeStyle.Pooled);
 
 			var component = Kernel.Resolve<A>();
 
-			Assert.IsTrue(Kernel.ReleasePolicy.HasTrack(component));
+			Assert.True(Kernel.ReleasePolicy.HasTrack(component));
 		}
 
-		[Test]
+		[Fact]
 		public void Recyclable_component_as_dependency_can_be_reused()
 		{
 			Kernel.Register(Component.For<RecyclableComponent>().LifeStyle.PooledWithSize(1, null),
@@ -123,13 +123,13 @@ namespace CastleTests.Pools
 			Container.Release(component);
 			var componentAgain = Kernel.Resolve<UseRecyclableComponent>();
 
-			Assert.AreSame(componentAgain.Dependency, component.Dependency);
+			Assert.Same(componentAgain.Dependency, component.Dependency);
 
 			Container.Release(componentAgain);
-			Assert.AreEqual(2, componentAgain.Dependency.RecycledCount);
+			Assert.Equal(2, componentAgain.Dependency.RecycledCount);
 		}
 
-		[Test]
+		[Fact]
 		public void Recyclable_component_can_be_reused()
 		{
 			Kernel.Register(Component.For<RecyclableComponent>().LifestylePooled(1));
@@ -137,39 +137,39 @@ namespace CastleTests.Pools
 			Container.Release(component);
 			var componentAgain = Kernel.Resolve<RecyclableComponent>();
 
-			Assert.AreSame(componentAgain, component);
+			Assert.Same(componentAgain, component);
 
 			Container.Release(componentAgain);
-			Assert.AreEqual(2, componentAgain.RecycledCount);
+			Assert.Equal(2, componentAgain.RecycledCount);
 		}
 
-		[Test]
+		[Fact]
 		public void Recyclable_component_gets_recycled_just_once_on_subsequent_release()
 		{
 			Kernel.Register(Component.For<RecyclableComponent>().LifeStyle.PooledWithSize(1, null));
 			var component = Kernel.Resolve<RecyclableComponent>();
 
-			Assert.AreEqual(0, component.RecycledCount);
+			Assert.Equal(0, component.RecycledCount);
 
 			Container.Release(component);
 			Container.Release(component);
 			Container.Release(component);
-			Assert.AreEqual(1, component.RecycledCount);
+			Assert.Equal(1, component.RecycledCount);
 		}
 
-		[Test]
+		[Fact]
 		public void Recyclable_component_gets_recycled_on_release()
 		{
 			Kernel.Register(Component.For<RecyclableComponent>().LifeStyle.PooledWithSize(1, null));
 			var component = Kernel.Resolve<RecyclableComponent>();
 
-			Assert.AreEqual(0, component.RecycledCount);
+			Assert.Equal(0, component.RecycledCount);
 
 			Container.Release(component);
-			Assert.AreEqual(1, component.RecycledCount);
+			Assert.Equal(1, component.RecycledCount);
 		}
 
-		[Test]
+		[Fact]
 		public void Recyclable_component_with_on_release_action_not_released_more_than_necessary()
 		{
 			var count = 0;
@@ -186,11 +186,11 @@ namespace CastleTests.Pools
 				component = Kernel.Resolve<RecyclableComponent>();
 				Container.Release(component);
 			}
-			Assert.AreEqual(10, component.RecycledCount);
-			Assert.AreEqual(0, count);
+			Assert.Equal(10, component.RecycledCount);
+			Assert.Equal(0, count);
 		}
 
-		[Test]
+		[Fact]
 		public void SimpleUsage()
 		{
 			Kernel.Register(Component.For<PoolableComponent1>());
@@ -204,14 +204,14 @@ namespace CastleTests.Pools
 			var other1 = Kernel.Resolve<PoolableComponent1>();
 			var other2 = Kernel.Resolve<PoolableComponent1>();
 
-			Assert.AreSame(inst1, other1);
-			Assert.AreSame(inst2, other2);
+			Assert.Same(inst1, other1);
+			Assert.Same(inst2, other2);
 
 			Kernel.ReleaseComponent(inst2);
 			Kernel.ReleaseComponent(inst1);
 		}
 
-		[Test]
+		[Fact]
 		public void Parallel_usage_only_registers_single_factory()
 		{
 			using (AutoResetEvent evt = new AutoResetEvent(false))
@@ -231,7 +231,7 @@ namespace CastleTests.Pools
 				evt.Set();
 				Thread.Sleep(TimeSpan.FromSeconds(1));
 
-				Assert.That(kernel.parallelCount, Is.EqualTo(0));
+				Assert.Equal(0, kernel.parallelCount);
 			}
 		}
 

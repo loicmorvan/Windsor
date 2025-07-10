@@ -16,14 +16,14 @@ namespace Castle.Core.Tests
 {
 	using System;
 
-	using NUnit.Framework;
+	
 
 	using Castle.Core.Internal;
 
-	[TestFixture]
+	
 	public class GraphTestCase
 	{
-		[Test]
+		[Fact]
 		public void SimpleUsage()
 		{
 			GraphNode parent = new GraphNode();
@@ -31,20 +31,20 @@ namespace Castle.Core.Tests
 			
 			parent.AddDependent(child);
 
-			Assert.AreSame( child, parent.Dependents[0] );
+			Assert.Same( child, parent.Dependents[0] );
 		}
 
-		[Test]
+		[Fact]
 		public void TopologicalSortOneElement()
 		{
 			GraphNode alone = new TestGraphNode("alone");
 
 			IVertex[] nodes = TopologicalSortAlgo.Sort( new[] { alone } );
 
-			Assert.AreSame( alone, nodes[0] );
+			Assert.Same( alone, nodes[0] );
 		}
 
-		[Test]
+		[Fact]
 		public void TopologicalSortSimple()
 		{
 			GraphNode alone = new TestGraphNode("alone");
@@ -58,13 +58,13 @@ namespace Castle.Core.Tests
 			IVertex[] nodes = 
 				TopologicalSortAlgo.Sort( new GraphNode[] { alone, second, first, third } );
 
-			Assert.AreSame( first, nodes[0] );
-			Assert.AreSame( second, nodes[1] );
-			Assert.AreSame( third, nodes[2] );
-			Assert.AreSame( alone, nodes[3] );
+			Assert.Same( first, nodes[0] );
+			Assert.Same( second, nodes[1] );
+			Assert.Same( third, nodes[2] );
+			Assert.Same( alone, nodes[3] );
 		}
 
-		[Test]
+		[Fact]
 		public void ComplexDag()
 		{
 			GraphNode shirt = new TestGraphNode("shirt");
@@ -96,15 +96,15 @@ namespace Castle.Core.Tests
 					new GraphNode[] 
 					{ shirt, tie, jacket, belt, watch, undershorts, pants, shoes, socks} );
 
-			Assert.AreSame( socks, nodes[0] );
-			Assert.AreSame( undershorts, nodes[1] );
-			Assert.AreSame( pants, nodes[2] );
-			Assert.AreSame( shoes, nodes[3] );
-			Assert.AreSame( watch, nodes[4] );
-			Assert.AreSame( shirt, nodes[5] );
-			Assert.AreSame( tie, nodes[6] );
-			Assert.AreSame( belt, nodes[7] );
-			Assert.AreSame( jacket, nodes[8] );
+			Assert.Same( socks, nodes[0] );
+			Assert.Same( undershorts, nodes[1] );
+			Assert.Same( pants, nodes[2] );
+			Assert.Same( shoes, nodes[3] );
+			Assert.Same( watch, nodes[4] );
+			Assert.Same( shirt, nodes[5] );
+			Assert.Same( tie, nodes[6] );
+			Assert.Same( belt, nodes[7] );
+			Assert.Same( jacket, nodes[8] );
 		}
 	}
 

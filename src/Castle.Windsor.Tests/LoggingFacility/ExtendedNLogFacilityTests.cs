@@ -20,30 +20,27 @@ namespace Castle.Facilities.Logging.Tests
 	using Castle.MicroKernel.Registration;
 	using Castle.Services.Logging.NLogIntegration;
 	using Castle.Windsor;
-	using NLog.Targets;
-	using NUnit.Framework;
 
-	[TestFixture]
-	public class ExtendedNLogFacilityTests : BaseTest
+	using NLog.Targets;
+
+
+	public class ExtendedNLogFacilityTests : BaseTest, IDisposable
 	{
 		private IWindsorContainer container;
 
-		[SetUp]
-		public void Setup()
+		public ExtendedNLogFacilityTests()
 		{
 			container = base.CreateConfiguredContainer<ExtendedNLogFactory>();
 		}
 
-		[TearDown]
-		public void Teardown()
+		public void Dispose()
 		{
 			container.Dispose();
 		}
 
-		[Test]
+		[Fact]
 		public void SimpleTest()
 		{
-
 			container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component1"));
 			SimpleLoggingComponent test = container.Resolve<SimpleLoggingComponent>("component1");
 
@@ -52,8 +49,8 @@ namespace Castle.Facilities.Logging.Tests
 			String expectedLogOutput = String.Format("|INFO|{0}|Hello world", typeof(SimpleLoggingComponent).FullName);
 			String actualLogOutput = (NLog.LogManager.Configuration.FindTargetByName("memory") as MemoryTarget).Logs[0].ToString();
 			actualLogOutput = actualLogOutput.Substring(actualLogOutput.IndexOf('|'));
-			
-			Assert.AreEqual(expectedLogOutput, actualLogOutput);
+
+			Assert.Equal(expectedLogOutput, actualLogOutput);
 
 			container.Register(Component.For(typeof(SmtpServer)).Named("component2"));
 			ISmtpServer smtpServer = container.Resolve<ISmtpServer>("component2");
@@ -65,12 +62,11 @@ namespace Castle.Facilities.Logging.Tests
 			expectedLogOutput = String.Format("|INFO|{0}|InternalSend rbellamy@pteradigm.com jobs@castlestronghold.com We're looking for a few good porgrammars.", typeof(SmtpServer).FullName);
 			actualLogOutput = (NLog.LogManager.Configuration.FindTargetByName("memory") as MemoryTarget).Logs[1].ToString();
 			actualLogOutput = actualLogOutput.Substring(actualLogOutput.IndexOf('|'));
-			
-			Assert.AreEqual(expectedLogOutput, actualLogOutput.ToString());
 
+			Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
 		}
 
-		[Test]
+		[Fact]
 		public void ContextTest()
 		{
 			container.Register(Component.For(typeof(ComplexLoggingComponent)).Named("component1"));
@@ -82,7 +78,7 @@ namespace Castle.Facilities.Logging.Tests
 			String actualLogOutput = (NLog.LogManager.Configuration.FindTargetByName("memory1") as MemoryTarget).Logs[0].ToString();
 			actualLogOutput = actualLogOutput.Substring(actualLogOutput.IndexOf('|'));
 
-			Assert.AreEqual(expectedLogOutput, actualLogOutput.ToString());
+			Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
 		}
 	}
 }

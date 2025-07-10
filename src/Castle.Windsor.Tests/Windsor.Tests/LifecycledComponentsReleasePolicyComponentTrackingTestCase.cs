@@ -20,11 +20,11 @@ namespace Castle.Windsor.Tests
 	using CastleTests;
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
 	public class LifecycledComponentsReleasePolicyComponentTrackingTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void Disposable_singleton_as_dependency_of_non_disposable_transient_is_decommissionsed_with_container()
 		{
 			SimpleServiceDisposable.DisposedCount = 0;
@@ -34,11 +34,11 @@ namespace Castle.Windsor.Tests
 			Container.Resolve<HasCtorDependency>();
 			CleanUp();
 
-			Assert.AreEqual(1, SimpleServiceDisposable.DisposedCount);
+			Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
 			;
 		}
 
-		[Test]
+		[Fact]
 		public void Non_disposable_transient_with_disposable_singleton_as_dependency_is_not_tracked()
 		{
 			SimpleServiceDisposable.DisposedCount = 0;
@@ -47,7 +47,7 @@ namespace Castle.Windsor.Tests
 
 			var root = Container.Resolve<HasCtorDependency>();
 
-			Assert.IsFalse(Kernel.ReleasePolicy.HasTrack(root));
+			Assert.False(Kernel.ReleasePolicy.HasTrack(root));
 		}
 	}
 }

@@ -18,12 +18,12 @@ namespace Castle.Windsor.Tests
 
     using CastleTests.Components;
 
-    using NUnit.Framework;
+    
 
-    [TestFixture]
+    
     public class IgnoreSelectTestCase
     {
-        [Test]
+        [Fact]
         public void TestIngoreAttribute()
         {
             var container = new WindsorContainer();

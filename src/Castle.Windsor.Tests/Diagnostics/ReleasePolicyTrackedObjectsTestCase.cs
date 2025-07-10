@@ -29,9 +29,9 @@ namespace CastleTests.Diagnostics
 	using CastleTests.Components;
 	using CastleTests.ContainerExtensions;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class ReleasePolicyTrackedObjectsTestCase : AbstractContainerTestCase
 	{
 		private DebuggerViewItem GetTrackedObjects()
@@ -46,7 +46,7 @@ namespace CastleTests.Diagnostics
 			Container.Register(Component.For<T>().LifeStyle.Transient);
 		}
 
-		[Test]
+		[Fact]
 		public void List_tracked_alive_instances()
 		{
 			Register<DisposableFoo>();
@@ -55,12 +55,12 @@ namespace CastleTests.Diagnostics
 
 			var objects = GetTrackedObjects();
 			var values = (DebuggerViewItem[])objects.Value;
-			Assert.AreEqual(1, values.Length);
+			Assert.Single(values);
 			var viewItem = (MasterDetailsDebuggerViewItem)values.Single().Value;
-			Assert.AreEqual(2, viewItem.Details.Length);
+			Assert.Equal(2, viewItem.Details.Length);
 		}
 
-		[Test]
+		[Fact]
 		public void List_tracked_alive_instances_in_subscopes()
 		{
 			Register<DisposableFoo>();
@@ -71,12 +71,12 @@ namespace CastleTests.Diagnostics
 
 			var objects = GetTrackedObjects();
 			var values = (DebuggerViewItem[])objects.Value;
-			Assert.AreEqual(3, values.Length);
+			Assert.Equal(3, values.Length);
 			var instances = values.SelectMany(v => ((MasterDetailsDebuggerViewItem)v.Value).Details).ToArray();
-			Assert.AreEqual(4, instances.Length);
+			Assert.Equal(4, instances.Length);
 		}
 
-		[Test]
+		[Fact]
 		public void List_tracked_alive_instances_only()
 		{
 			Register<DisposableFoo>();
@@ -86,12 +86,12 @@ namespace CastleTests.Diagnostics
 
 			var objects = GetTrackedObjects();
 			var values = (DebuggerViewItem[])objects.Value;
-			Assert.AreEqual(1, values.Length);
+			Assert.Single(values);
 			var viewItem = (MasterDetailsDebuggerViewItem)values.Single().Value;
-			Assert.AreEqual(1, viewItem.Details.Length);
+			Assert.Single(viewItem.Details);
 		}
 
-		[Test]
+		[Fact]
 		public void NoTrackingReleasePolicy_does_not_appear()
 		{
 #pragma warning disable 612,618
@@ -101,24 +101,24 @@ namespace CastleTests.Diagnostics
 
 			Container.Resolve<DisposableFoo>();
 			var objects = GetTrackedObjects();
-			Assert.IsEmpty((ICollection)objects.Value);
+			Assert.Empty((ICollection)objects.Value);
 		}
 
-		[Test]
+		[Fact]
 		public void Present_even_when_no_objects_were_created()
 		{
 			var objects = GetTrackedObjects();
-			Assert.IsNotNull(objects);
+			Assert.NotNull(objects);
 		}
 
-		[Test]
+		[Fact]
 		public void custom_ReleasePolicy_is_not_shown_if_not_implement_the_interface()
 		{
 			Kernel.ReleasePolicy = new MyCustomReleasePolicy();
 			Register<DisposableFoo>();
 			var foo1 = Container.Resolve<DisposableFoo>();
 			var objects = GetTrackedObjects();
-			Assert.IsEmpty((ICollection)objects.Value);
+			Assert.Empty((ICollection)objects.Value);
 		}
 	}
 }

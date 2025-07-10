@@ -21,9 +21,9 @@ namespace CastleTests.Lifestyle
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class ScopedLifestyleExplicitAndTypedFactoriesTestCase : AbstractContainerTestCase
 	{
 		protected override void AfterContainerCreated()
@@ -31,7 +31,7 @@ namespace CastleTests.Lifestyle
 			Container.AddFacility<TypedFactoryFacility>();
 		}
 
-		[Test]
+		[Fact]
 		public void Can_obtain_scoped_component_via_factory()
 		{
 			Container.Register(Component.For<UsesDisposableFooDelegate>().LifestyleTransient(),
@@ -44,7 +44,7 @@ namespace CastleTests.Lifestyle
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Scoped_component_via_factory_and_outsideinstances_reused_properly()
 		{
 			Container.Register(Component.For<UsesFooAndDelegate>().LifeStyle.Transient,
@@ -56,11 +56,11 @@ namespace CastleTests.Lifestyle
 
 				var one = instance.Foo;
 				var two = instance.GetFoo();
-				Assert.AreSame(one, two);
+				Assert.Same(one, two);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Scoped_component_via_factory_instances_reused_properly()
 		{
 			Container.Register(Component.For<UsesDisposableFooDelegate>().LifeStyle.Transient,
@@ -72,11 +72,11 @@ namespace CastleTests.Lifestyle
 				var one = instance.GetFoo();
 				var two = instance.GetFoo();
 
-				Assert.AreSame(one, two);
+				Assert.Same(one, two);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Scoped_component_via_factory_reused_properly_across_factories()
 		{
 			Container.Register(Component.For<UsesTwoFooDelegates>().LifeStyle.Transient,
@@ -88,7 +88,7 @@ namespace CastleTests.Lifestyle
 				var one = instance.GetFooOne();
 				var two = instance.GetFooTwo();
 
-				Assert.AreSame(one, two);
+				Assert.Same(one, two);
 			}
 		}
 	}

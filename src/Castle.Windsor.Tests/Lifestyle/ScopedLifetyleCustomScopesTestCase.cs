@@ -20,12 +20,12 @@ namespace CastleTests.Lifestyle
 	using CastleTests.Components;
 	using CastleTests.TestInfrastructure;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class ScopedLifetyleCustomScopesTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void Can_use_custom_scope_accessor_with_scoped_lifestyle()
 		{
 			StaticScopeAccessor.ResetScope();
@@ -34,10 +34,10 @@ namespace CastleTests.Lifestyle
 			var a1 = Container.Resolve<A>();
 			var a2 = Container.Resolve<A>();
 
-			Assert.AreSame(a1, a2);
+			Assert.Same(a1, a2);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_use_custom_scope_accessor_with_scoped_lifestyle_generic()
 		{
 			StaticScopeAccessor.ResetScope();
@@ -46,10 +46,10 @@ namespace CastleTests.Lifestyle
 			var a1 = Container.Resolve<A>();
 			var a2 = Container.Resolve<A>();
 
-			Assert.AreSame(a1, a2);
+			Assert.Same(a1, a2);
 		}
 
-		[Test]
+		[Fact]
 		public void Can_use_custom_scope_accessor_with_scoped_lifestyle_multiple()
 		{
 			StaticScopeAccessor.ResetScope();
@@ -60,7 +60,7 @@ namespace CastleTests.Lifestyle
 			var a1 = Container.Resolve<A>();
 			var a2 = Container.Resolve<A>();
 
-			Assert.AreSame(a1, a2);
+			Assert.Same(a1, a2);
 		}
 	}
 }

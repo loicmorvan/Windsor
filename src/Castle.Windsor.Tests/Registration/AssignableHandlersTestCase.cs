@@ -17,12 +17,12 @@ namespace CastleTests.Registration
 	using Castle.MicroKernel.Registration;
 	using Castle.MicroKernel.Tests.ClassComponents;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class AssignableHandlersTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void Ignores_generic_components_where_generic_constrants_are_violated()
 		{
 			Kernel.Register(Component.For<CustomerValidator>(),
@@ -30,7 +30,7 @@ namespace CastleTests.Registration
 
 			var handlers = Kernel.GetAssignableHandlers(typeof(IValidator<CustomerImpl>));
 
-			Assert.AreEqual(1, handlers.Length);
+			Assert.Single(handlers);
 		}
 	}
 }

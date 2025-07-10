@@ -21,9 +21,9 @@ namespace Castle.Windsor.Tests.Facilities.Startable
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class StartableAndDecoratorsTestCase
 	{
 		private class AllInstaller : IWindsorInstaller
@@ -56,7 +56,7 @@ namespace Castle.Windsor.Tests.Facilities.Startable
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void No_startable_explicit_Resolve_resolves_with_no_issues()
 		{
 			using (var container = new WindsorContainer())
@@ -71,7 +71,7 @@ namespace Castle.Windsor.Tests.Facilities.Startable
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Startable_and_components_in_separate_Install_Resolve_Startable_last_works()
 		{
 			using (var container = new WindsorContainer())
@@ -82,7 +82,7 @@ namespace Castle.Windsor.Tests.Facilities.Startable
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Startable_and_components_in_separate_Install_Startable_first_throws()
 		{
 			using (var container = new WindsorContainer())
@@ -97,7 +97,7 @@ namespace Castle.Windsor.Tests.Facilities.Startable
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Startable_and_components_in_separate_Install_Startable_last_works()
 		{
 			using (var container = new WindsorContainer())
@@ -108,7 +108,7 @@ namespace Castle.Windsor.Tests.Facilities.Startable
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Startable_and_components_in_single_Install_works()
 		{
 			using (var container = new WindsorContainer())
@@ -119,7 +119,7 @@ namespace Castle.Windsor.Tests.Facilities.Startable
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Startable_and_components_in_single_Installer_works()
 		{
 			using (var container = new WindsorContainer())
@@ -129,7 +129,7 @@ namespace Castle.Windsor.Tests.Facilities.Startable
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Startable_and_components_in_single_Register_works()
 		{
 			using (var container = new WindsorContainer())
@@ -143,7 +143,7 @@ namespace Castle.Windsor.Tests.Facilities.Startable
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Startable_and_components_separate_Register_Startable_first_throws()
 		{
 			using (var container = new WindsorContainer())
@@ -159,7 +159,7 @@ namespace Castle.Windsor.Tests.Facilities.Startable
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Startable_and_components_separate_Register_Startable_last_works()
 		{
 			using (var container = new WindsorContainer())

@@ -24,13 +24,11 @@ namespace CastleTests.Activators
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
 
-	[TestFixture]
 	[RelatedTestCase(typeof(HelpfulExceptionsOnResolveTestCase), "Some tests about exceptions thrown when constructor not available.")]
 	public class BestConstructorTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void ConstructorWithMoreArguments()
 		{
 			Container.Register(Component.For<A>(),
@@ -40,13 +38,13 @@ namespace CastleTests.Activators
 
 			var service = Container.Resolve<ServiceUser>();
 
-			Assert.IsNotNull(service);
-			Assert.IsNotNull(service.AComponent);
-			Assert.IsNotNull(service.BComponent);
-			Assert.IsNotNull(service.CComponent);
+			Assert.NotNull(service);
+			Assert.NotNull(service.AComponent);
+			Assert.NotNull(service.BComponent);
+			Assert.NotNull(service.CComponent);
 		}
 
-		[Test]
+		[Fact]
 		public void ConstructorWithOneArgument()
 		{
 			Container.Register(Component.For<A>().Named("a"),
@@ -54,13 +52,13 @@ namespace CastleTests.Activators
 
 			var service = Container.Resolve<ServiceUser>("service");
 
-			Assert.IsNotNull(service);
-			Assert.IsNotNull(service.AComponent);
-			Assert.IsNull(service.BComponent);
-			Assert.IsNull(service.CComponent);
+			Assert.NotNull(service);
+			Assert.NotNull(service.AComponent);
+			Assert.Null(service.BComponent);
+			Assert.Null(service.CComponent);
 		}
 
-		[Test]
+		[Fact]
 		public void ConstructorWithTwoArguments()
 		{
 			Container.Register(Component.For<A>().Named("a"),
@@ -69,13 +67,13 @@ namespace CastleTests.Activators
 
 			var service = Container.Resolve<ServiceUser>("service");
 
-			Assert.IsNotNull(service);
-			Assert.IsNotNull(service.AComponent);
-			Assert.IsNotNull(service.BComponent);
-			Assert.IsNull(service.CComponent);
+			Assert.NotNull(service);
+			Assert.NotNull(service.AComponent);
+			Assert.NotNull(service.BComponent);
+			Assert.Null(service.CComponent);
 		}
 
-		[Test]
+		[Fact]
 		public void DefaultComponentActivator_is_used_by_default()
 		{
 			Container.Register(Component.For<A>());
@@ -83,10 +81,10 @@ namespace CastleTests.Activators
 			var handler = Kernel.GetHandler(typeof(A));
 			var activator = ((IKernelInternal)Kernel).CreateComponentActivator(handler.ComponentModel);
 
-			Assert.IsInstanceOf<DefaultComponentActivator>(activator);
+			Assert.IsType<DefaultComponentActivator>(activator);
 		}
 
-		[Test]
+		[Fact]
 		public void ParametersAndServicesBestCase()
 		{
 			var store = new DefaultConfigurationStore();
@@ -106,15 +104,15 @@ namespace CastleTests.Activators
 
 			var service = Container.Resolve<ServiceUser2>("service");
 
-			Assert.IsNotNull(service);
-			Assert.IsNotNull(service.AComponent);
-			Assert.IsNull(service.BComponent);
-			Assert.IsNull(service.CComponent);
-			Assert.AreEqual("hammett", service.Name);
-			Assert.AreEqual(120, service.Port);
+			Assert.NotNull(service);
+			Assert.NotNull(service.AComponent);
+			Assert.Null(service.BComponent);
+			Assert.Null(service.CComponent);
+			Assert.Equal("hammett", service.Name);
+			Assert.Equal(120, service.Port);
 		}
 
-		[Test]
+		[Fact]
 		public void ParametersAndServicesBestCase2()
 		{
 			var store = new DefaultConfigurationStore();
@@ -135,28 +133,28 @@ namespace CastleTests.Activators
 
 			var service = Container.Resolve<ServiceUser2>("service");
 
-			Assert.IsNotNull(service);
-			Assert.IsNotNull(service.AComponent);
-			Assert.IsNull(service.BComponent);
-			Assert.IsNull(service.CComponent);
-			Assert.AreEqual("hammett", service.Name);
-			Assert.AreEqual(120, service.Port);
-			Assert.AreEqual(22, service.ScheduleInterval);
+			Assert.NotNull(service);
+			Assert.NotNull(service.AComponent);
+			Assert.Null(service.BComponent);
+			Assert.Null(service.CComponent);
+			Assert.Equal("hammett", service.Name);
+			Assert.Equal(120, service.Port);
+			Assert.Equal(22, service.ScheduleInterval);
 		}
 
-		[Test]
+		[Fact]
 		public void Two_constructors_but_one_with_satisfiable_dependencies()
 		{
 			Container.Register(Component.For<SimpleComponent1>(),
 			                   Component.For<SimpleComponent2>(),
 			                   Component.For<HasTwoConstructors3>());
 			var component = Container.Resolve<HasTwoConstructors3>();
-			Assert.IsNotNull(component.X);
-			Assert.IsNotNull(component.Y);
-			Assert.IsNull(component.A);
+			Assert.NotNull(component.X);
+			Assert.NotNull(component.Y);
+			Assert.Null(component.A);
 		}
 
-		[Test]
+		[Fact]
 		public void Two_constructors_but_one_with_satisfiable_dependencies_issue_IoC_209()
 		{
 			Container.Register(Component.For<SimpleComponent1>(),
@@ -166,29 +164,28 @@ namespace CastleTests.Activators
 			Container.Resolve<HasTwoConstructors4>();
 		}
 
-		[Test]
+		[Fact]
 		public void Two_constructors_but_one_with_satisfiable_dependencies_registering_dependencies_last()
 		{
 			Container.Register(Component.For<HasTwoConstructors3>(),
 			                   Component.For<SimpleComponent1>(),
 			                   Component.For<SimpleComponent2>());
 			var component = Container.Resolve<HasTwoConstructors3>();
-			Assert.IsNotNull(component.X);
-			Assert.IsNotNull(component.Y);
-			Assert.IsNull(component.A);
+			Assert.NotNull(component.X);
+			Assert.NotNull(component.Y);
+			Assert.Null(component.A);
 		}
 
-		[Test]
+		[Fact]
 		public void Two_constructors_equal_number_of_parameters_pick_one_that_can_be_satisfied()
 		{
 			Container.Register(Component.For<ICommon>().ImplementedBy<CommonImpl1>(),
 			                   Component.For<HasTwoConstructors>());
 
-			Assert.DoesNotThrow(() => Container.Resolve<HasTwoConstructors>());
+			Container.Resolve<HasTwoConstructors>();
 		}
 
-		[Test]
-		[Ignore("This is not actually supported. Not sure if should be.")]
+		[Fact(Skip = "This is not actually supported. Not sure if should be.")]
 		public void Two_satisfiable_constructors_equal_number_of_inline_parameters_pick_one_with_more_service_overrides()
 		{
 			Container.Register(Component.For<ICommon>().ImplementedBy<CommonImpl1>().Named("Mucha"),
@@ -203,11 +200,11 @@ namespace CastleTests.Activators
 			var first = Container.Resolve<HasTwoConstructors>("first");
 			var second = Container.Resolve<HasTwoConstructors>("second");
 
-			Assert.IsNotNull(first.Customer);
-			Assert.IsNotNull(second.Common);
+			Assert.NotNull(first.Customer);
+			Assert.NotNull(second.Common);
 		}
 
-		[Test]
+		[Fact]
 		public void Two_satisfiable_constructors_identical_dependency_kinds_pick_based_on_parameter_names()
 		{
 			Container.Register(Component.For<ICommon>().ImplementedBy<CommonImpl1>(),
@@ -217,11 +214,10 @@ namespace CastleTests.Activators
 			var component = Container.Resolve<HasTwoConstructors>();
 
 			// common is 'smaller' so we pick ctor with dependency named 'common'
-			Assert.Less("common", "customer");
-			Assert.IsNotNull(component.Common);
+			Assert.NotNull(component.Common);
 		}
 
-		[Test]
+		[Fact]
 		public void Two_satisfiable_constructors_pick_one_with_more_inline_parameters()
 		{
 			Container.Register(Component.For<ICommon>().ImplementedBy<CommonImpl1>(),
@@ -230,7 +226,7 @@ namespace CastleTests.Activators
 
 			var component = Container.Resolve<HasTwoConstructors2>();
 
-			Assert.AreEqual("foo", component.Param);
+			Assert.Equal("foo", component.Param);
 		}
 	}
 }

@@ -21,7 +21,7 @@ namespace Castle.ProxyInfrastructure
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy;
 
-	using NUnit.Framework;
+	
 
 	public class OnBehalfAwareProxyGenerationHook : IProxyGenerationHook, IOnBehalfAware
 	{
@@ -34,17 +34,17 @@ namespace Castle.ProxyInfrastructure
 
 		public void MethodsInspected()
 		{
-			Assert.IsNotNull(target);
+			Assert.NotNull(target);
 		}
 
 		public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
 		{
-			Assert.IsNotNull(target);
+			Assert.NotNull(target);
 		}
 
 		public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
 		{
-			Assert.IsNotNull(target);
+			Assert.NotNull(target);
 			return false;
 		}
 	}

@@ -21,7 +21,7 @@ namespace Castle.Windsor.Tests.Bugs.IoC_169
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor;
 
-	using NUnit.Framework;
+	
 
 	public interface IBlackboard
 	{
@@ -65,10 +65,10 @@ namespace Castle.Windsor.Tests.Bugs.IoC_169
 	{
 	}
 
-	[TestFixture]
+	
 	public class IoC_169
 	{
-		[Test]
+		[Fact]
 		public void BulkRegistrations_WhenRegistrationMatchesNoInstancesOfService_StopsStartableFacilityFromWorking()
 		{
 			AbstractBlackboard.PrepareForTest();

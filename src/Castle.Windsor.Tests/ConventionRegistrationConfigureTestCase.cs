@@ -21,7 +21,7 @@ namespace CastleTests
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
 	public class ConventionRegistrationConfigureTestCase : AbstractContainerTestCase
 	{
@@ -31,7 +31,7 @@ namespace CastleTests
 			Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel));
 		}
 
-		[Test]
+		[Fact]
 		public void ConfigureIf_can_be_applied_multiple_times()
 		{
 			Container.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -42,11 +42,11 @@ namespace CastleTests
 			var a = Container.Resolve<IEmptyService>("a");
 			var b = Container.Resolve<IEmptyService>("b");
 
-			Assert.IsInstanceOf<EmptyServiceA>(a);
-			Assert.IsInstanceOf<EmptyServiceB>(b);
+			Assert.IsType<EmptyServiceA>(a);
+			Assert.IsType<EmptyServiceB>(b);
 		}
 
-		[Test]
+		[Fact]
 		public void ConfigureIf_configures_all_matching_components()
 		{
 			Container.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -56,11 +56,11 @@ namespace CastleTests
 			var a = Container.Resolve<IEmptyService>("a");
 			var b = Container.Resolve<IEmptyService>("b");
 
-			Assert.IsInstanceOf<EmptyServiceA>(a);
-			Assert.IsInstanceOf<EmptyServiceB>(b);
+			Assert.IsType<EmptyServiceA>(a);
+			Assert.IsType<EmptyServiceB>(b);
 		}
 
-		[Test]
+		[Fact]
 		public void ConfigureIf_configures_matching_components()
 		{
 			Container.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -69,10 +69,10 @@ namespace CastleTests
 
 			var a = Container.Resolve<IEmptyService>("a");
 
-			Assert.IsInstanceOf<EmptyServiceA>(a);
+			Assert.IsType<EmptyServiceA>(a);
 		}
 
-		[Test]
+		[Fact]
 		public void ConfigureIf_configures_matching_components_and_alternative_configuration_configures_the_rest()
 		{
 			var number = 0;
@@ -82,7 +82,7 @@ namespace CastleTests
 			                   	.ConfigureIf(r => r.Implementation.Name.EndsWith("A"), r => r.Named("A"), r => r.Named((++number).ToString())));
 
 			var a = Container.Resolve<IEmptyService>("a");
-			Assert.IsInstanceOf<EmptyServiceA>(a);
+			Assert.IsType<EmptyServiceA>(a);
 
 			Container.Resolve<IEmptyService>("1");
 			Container.Resolve<IEmptyService>("2");

@@ -18,12 +18,12 @@ namespace Castle.Windsor.Tests
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor.Tests.Interceptors;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class InterceptorsSelectorTestCase
 	{
-		[Test]
+		[Fact]
 		public void CanApplyInterceptorsToSelectedMethods()
 		{
 			IWindsorContainer container = new WindsorContainer();
@@ -35,15 +35,15 @@ namespace Castle.Windsor.Tests
 				Component.For<WasCalledInterceptor>()
 				);
 
-			Assert.IsFalse(WasCalledInterceptor.WasCalled);
+			Assert.False(WasCalledInterceptor.WasCalled);
 
 			var catalog = container.Resolve<ICatalog>();
 			catalog.AddItem("hot dogs");
-			Assert.IsTrue(WasCalledInterceptor.WasCalled);
+			Assert.True(WasCalledInterceptor.WasCalled);
 
 			WasCalledInterceptor.WasCalled = false;
 			catalog.RemoveItem("hot dogs");
-			Assert.IsFalse(WasCalledInterceptor.WasCalled);
+			Assert.False(WasCalledInterceptor.WasCalled);
 		}
 	}
 

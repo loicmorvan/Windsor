@@ -19,12 +19,12 @@ namespace CastleTests
 
 	using CastleTests.Components;
 
-	using NUnit.Framework;
+	
 
-	[TestFixture]
+	
 	public class RegistrationWithAttributeAndXmlTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		[Bug("IOC-295")]
 		public void Registration_via_xml_no_service_specified_uses_service_from_attribute()
 		{
@@ -35,7 +35,7 @@ namespace CastleTests
 </configuration>";
 
 			Container.Install(Configuration.FromXml(new StaticContentResource(xml)));
-			Assert.IsTrue(Kernel.HasComponent(typeof(ISimpleService)));
+			Assert.True(Kernel.HasComponent(typeof(ISimpleService)));
 		}
 	}
 }

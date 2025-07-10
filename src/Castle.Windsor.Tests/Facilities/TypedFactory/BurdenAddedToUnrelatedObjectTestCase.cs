@@ -19,7 +19,7 @@ namespace CastleTests.Facilities.TypedFactory
 	using Castle.Facilities.TypedFactory;
 	using Castle.MicroKernel.Registration;
 
-	using NUnit.Framework;
+	
 
 	public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTestCase
 	{
@@ -28,7 +28,7 @@ namespace CastleTests.Facilities.TypedFactory
 			Container.AddFacility<TypedFactoryFacility>();
 		}
 
-		[Test]
+		[Fact]
 		public void Object_resolved_from_factory_is_not_added_as_burden_of_object_being_created()
 		{
 			Container.Register(

@@ -21,7 +21,7 @@ namespace Castle.ProxyInfrastructure
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy;
 
-	using NUnit.Framework;
+	
 
 	public class OnBehalfAwareInterceptorSelector : IInterceptorSelector, IOnBehalfAware
 	{
@@ -29,7 +29,7 @@ namespace Castle.ProxyInfrastructure
 
 		public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
 		{
-			Assert.IsNotNull(target);
+			Assert.NotNull(target);
 			return interceptors;
 		}
 
