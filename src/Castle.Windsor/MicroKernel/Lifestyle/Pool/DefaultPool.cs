@@ -24,55 +24,55 @@ using Lock = Castle.MicroKernel.Internal.Lock;
 [Serializable]
 public class DefaultPool(int initialSize, int maxsize, IComponentActivator componentActivator) : IPool, IDisposable
 {
-	private readonly Stack<Burden> available = new(initialSize);
-	private readonly IComponentActivator componentActivator = componentActivator;
-	private readonly Dictionary<object, Burden> inUse = new Dictionary<object, Burden>();
-	private readonly int initialSize = initialSize;
-	private readonly int maxsize = maxsize;
-	private readonly Lock rwlock = Lock.Create();
-	private bool initialized;
+	private readonly Stack<Burden> _available = new(initialSize);
+	private readonly IComponentActivator _componentActivator = componentActivator;
+	private readonly Dictionary<object, Burden> _inUse = new();
+	private readonly int _initialSize = initialSize;
+	private readonly int _maxsize = maxsize;
+	private readonly Lock _rwlock = Lock.Create();
+	private bool _initialized;
 
 	public virtual void Dispose()
 	{
-		initialized = false;
+		_initialized = false;
 
-		foreach (var burden in available)
+		foreach (var burden in _available)
 		{
 			burden.Release();
 		}
-		inUse.Clear();
-		available.Clear();
+		_inUse.Clear();
+		_available.Clear();
 	}
 
 	public virtual bool Release(object instance)
 	{
-		using (rwlock.ForWriting())
+		using (_rwlock.ForWriting())
 		{
 			Burden burden;
 
-			if (initialized == false)
+			if (_initialized == false)
 			{
-				if (inUse.TryGetValue(instance, out burden) == true)
+				if (_inUse.TryGetValue(instance, out burden) == true)
 				{
-					inUse.Remove(instance);
+					_inUse.Remove(instance);
 				}
 			}
 			else
 			{
-				if (inUse.TryGetValue(instance, out burden) == false)
+				if (_inUse.TryGetValue(instance, out burden) == false)
 				{
 					return false;
 				}
-				inUse.Remove(instance);
+				_inUse.Remove(instance);
 
-				if (available.Count < maxsize)
+				if (_available.Count < _maxsize)
 				{
-					if (instance is IRecyclable)
+					if (instance is IRecyclable recyclable)
 					{
-						(instance as IRecyclable).Recycle();
+						recyclable.Recycle();
 					}
 
-					available.Push(burden);
+					_available.Push(burden);
 					return false;
 				}
 			}
@@ -80,23 +80,23 @@ public class DefaultPool(int initialSize, int maxsize, IComponentActivator compo
 
 		// Pool is full or has been disposed.
 
-		componentActivator.Destroy(instance);
+		_componentActivator.Destroy(instance);
 		return true;
 	}
 
 	public virtual object Request(CreationContext context, Func<CreationContext, Burden> creationCallback)
 	{
 		Burden burden;
-		using (rwlock.ForWriting())
+		using (_rwlock.ForWriting())
 		{
-			if (!initialized)
+			if (!_initialized)
 			{
 				Intitialize(creationCallback, context);
 			}
 
-			if (available.Count != 0)
+			if (_available.Count != 0)
 			{
-				burden = available.Pop();
+				burden = _available.Pop();
 				context.AttachExistingBurden(burden);
 			}
 			else
@@ -105,7 +105,7 @@ public class DefaultPool(int initialSize, int maxsize, IComponentActivator compo
 			}
 			try
 			{
-				inUse.Add(burden.Instance, burden);
+				_inUse.Add(burden.Instance, burden);
 			}
 			catch (NullReferenceException)
 			{
@@ -121,11 +121,11 @@ public class DefaultPool(int initialSize, int maxsize, IComponentActivator compo
 
 	protected virtual void Intitialize(Func<CreationContext, Burden> createCallback, CreationContext c)
 	{
-		initialized = true;
-		for (var i = 0; i < initialSize; i++)
+		_initialized = true;
+		for (var i = 0; i < _initialSize; i++)
 		{
 			var burden = createCallback(c);
-			available.Push(burden);
+			_available.Push(burden);
 		}
 	}
 }

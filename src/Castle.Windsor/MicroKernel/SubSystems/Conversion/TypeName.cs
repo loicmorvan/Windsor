@@ -19,21 +19,21 @@ using System.Linq;
 
 public class TypeName
 {
-	private readonly string assemblyQualifiedName;
-	private readonly TypeName[] genericTypes;
-	private readonly string name;
-	private readonly string @namespace;
+	private readonly string _assemblyQualifiedName;
+	private readonly TypeName[] _genericTypes;
+	private readonly string _name;
+	private readonly string _namespace;
 
 	public TypeName(string @namespace, string name, TypeName[] genericTypes)
 	{
-		this.name = name;
-		this.genericTypes = genericTypes;
-		this.@namespace = @namespace;
+		this._name = name;
+		this._genericTypes = genericTypes;
+		this._namespace = @namespace;
 	}
 
 	public TypeName(string assemblyQualifiedName)
 	{
-		this.assemblyQualifiedName = assemblyQualifiedName;
+		this._assemblyQualifiedName = assemblyQualifiedName;
 	}
 
 	private string FullName
@@ -42,7 +42,7 @@ public class TypeName
 		{
 			if (HasNamespace)
 			{
-				return @namespace + "." + name;
+				return _namespace + "." + _name;
 			}
 			throw new InvalidOperationException("Namespace was not defined.");
 		}
@@ -50,22 +50,22 @@ public class TypeName
 
 	private bool HasGenericParameters
 	{
-		get { return genericTypes.Length > 0; }
+		get { return _genericTypes.Length > 0; }
 	}
 
 	private bool HasNamespace
 	{
-		get { return String.IsNullOrEmpty(@namespace) == false; }
+		get { return String.IsNullOrEmpty(_namespace) == false; }
 	}
 
 	private bool IsAssemblyQualified
 	{
-		get { return assemblyQualifiedName != null; }
+		get { return _assemblyQualifiedName != null; }
 	}
 
 	private string Name
 	{
-		get { return name; }
+		get { return _name; }
 	}
 
 	public string ExtractAssemblyName()
@@ -74,7 +74,7 @@ public class TypeName
 		{
 			return null;
 		}
-		var tokens = assemblyQualifiedName.Split(new[] { ',' }, StringSplitOptions.None);
+		var tokens = _assemblyQualifiedName.Split([','], StringSplitOptions.None);
 		var indexOfVersion = Array.FindLastIndex(tokens, s => s.TrimStart(' ').StartsWith("Version="));
 		if (indexOfVersion <= 0)
 		{
@@ -91,7 +91,7 @@ public class TypeName
 		}
 		if (IsAssemblyQualified)
 		{
-			return Type.GetType(assemblyQualifiedName, false, true);
+			return Type.GetType(_assemblyQualifiedName, false, true);
 		}
 
 		Type type;
@@ -109,10 +109,10 @@ public class TypeName
 			return type;
 		}
 
-		var genericArgs = new Type[genericTypes.Length];
+		var genericArgs = new Type[_genericTypes.Length];
 		for (var i = 0; i < genericArgs.Length; i++)
 		{
-			genericArgs[i] = genericTypes[i].GetType(converter);
+			genericArgs[i] = _genericTypes[i].GetType(converter);
 		}
 
 		return type.MakeGenericType(genericArgs);

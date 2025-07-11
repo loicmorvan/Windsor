@@ -20,7 +20,7 @@ using Castle.Core;
 
 public class InterceptorDescriptor(InterceptorReference[] interceptors, InterceptorDescriptor.Where where) : IComponentModelDescriptor
 {
-	private readonly int insertIndex;
+	private readonly int _insertIndex;
 
 	public InterceptorDescriptor(InterceptorReference[] interceptors, int insertIndex)
 		: this(interceptors, Where.Insert)
@@ -30,7 +30,7 @@ public class InterceptorDescriptor(InterceptorReference[] interceptors, Intercep
 			throw new ArgumentOutOfRangeException(nameof(insertIndex), "insertIndex must be >= 0");
 		}
 
-		this.insertIndex = insertIndex;
+		this._insertIndex = insertIndex;
 	}
 
 	public InterceptorDescriptor(InterceptorReference[] interceptors) : this(interceptors, Where.Default)
@@ -56,7 +56,7 @@ public class InterceptorDescriptor(InterceptorReference[] interceptors, Intercep
 					break;
 
 				case Where.Insert:
-					model.Interceptors.Insert(insertIndex, interceptor);
+					model.Interceptors.Insert(_insertIndex, interceptor);
 					break;
 
 				default:

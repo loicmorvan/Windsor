@@ -23,7 +23,7 @@ public struct ThreadSafeFlag
 	/// <summary>
 	///   0 == false, 1 = =true
 	/// </summary>
-	private int signaled;
+	private int _signaled;
 
 	/// <summary>
 	///   Signals (sets) the flag.
@@ -31,6 +31,6 @@ public struct ThreadSafeFlag
 	/// <returns><c>true</c> if the current thread signaled the flag, <c>false</c> if some other thread signaled the flag before.</returns>
 	public bool Signal()
 	{
-		return Interlocked.Exchange(ref signaled, 1) == 0;
+		return Interlocked.Exchange(ref _signaled, 1) == 0;
 	}
 }

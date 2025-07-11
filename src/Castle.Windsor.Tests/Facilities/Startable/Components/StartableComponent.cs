@@ -19,26 +19,26 @@ using Castle.Core;
 [Transient]
 public class StartableComponent : IStartable
 {
-	private bool _Started = false;
-	private bool _Stopped = false;
+	private bool _started;
+	private bool _stopped;
 
 	public void Start()
 	{
-		_Started = true;
+		_started = true;
 	}
 
 	public void Stop()
 	{
-		_Stopped = true;
+		_stopped = true;
 	}
 
 	public bool Started
 	{
-		get { return _Started; }
+		get { return _started; }
 	}
 
 	public bool Stopped
 	{
-		get { return _Stopped; }
+		get { return _stopped; }
 	}
 }

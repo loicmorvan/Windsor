@@ -35,7 +35,7 @@ using Castle.Windsor.Configuration.Interpreters;
 /// </summary>
 public class DefaultComponentInstaller : IComponentsInstaller
 {
-	private string assemblyName;
+	private string _assemblyName;
 
 	/// <summary>
 	///   Perform installation.
@@ -78,10 +78,10 @@ public class DefaultComponentInstaller : IComponentsInstaller
 			return;
 		}
 
-		assemblyName = installer.Attributes["assembly"];
-		if (string.IsNullOrEmpty(assemblyName) == false)
+		_assemblyName = installer.Attributes["assembly"];
+		if (string.IsNullOrEmpty(_assemblyName) == false)
 		{
-			var assembly = ReflectionUtil.GetAssemblyNamed(assemblyName);
+			var assembly = ReflectionUtil.GetAssemblyNamed(_assemblyName);
 			if (assemblies.Contains(assembly))
 			{
 				return;
@@ -95,7 +95,7 @@ public class DefaultComponentInstaller : IComponentsInstaller
 		var directory = installer.Attributes["directory"];
 		var mask = installer.Attributes["fileMask"];
 		var token = installer.Attributes["publicKeyToken"];
-		Debug.Assert(directory != null, "directory != null");
+		Debug.Assert(directory != null);
 		var assemblyFilter = new AssemblyFilter(directory, mask);
 		if (token != null)
 		{

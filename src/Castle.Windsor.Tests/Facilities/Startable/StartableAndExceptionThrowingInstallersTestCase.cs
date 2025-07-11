@@ -45,7 +45,7 @@ public class StartableAndExceptionThrowingInstallersTestCase
 		Assert.Throws<NotImplementedException>(
 			() =>
 				container.Install(new ActionBasedInstaller(c => c.Register(Component.For<UsesIEmptyService>().Start())),
-					new ActionBasedInstaller(c => { throw new NotImplementedException(); }),
+					new ActionBasedInstaller(_ => { throw new NotImplementedException(); }),
 					new ActionBasedInstaller(c => c.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>()))));
 	}
 
@@ -53,14 +53,14 @@ public class StartableAndExceptionThrowingInstallersTestCase
 	[Bug("IOC-311")]
 	public void StartableComponentShouldNotStartIfExceptionThrownByInstaller()
 	{
-		UsesIEmptyService.instancesCreated = 0;
+		UsesIEmptyService.InstancesCreated = 0;
 		using var container = new WindsorContainer();
 		container.AddFacility<StartableFacility>(f => f.DeferredStart());
 		Assert.Throws<NotImplementedException>(
 			() =>
 				container.Install(new ActionBasedInstaller(c => c.Register(Component.For<UsesIEmptyService>().Start())),
 					new ActionBasedInstaller(c => c.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>())),
-					new ActionBasedInstaller(c => { throw new NotImplementedException(); })));
+					new ActionBasedInstaller(_ => { throw new NotImplementedException(); })));
 
 		// In this scenario, I've registered IDependencyOfStartableComponent
 		// before the ExceptionThrowingInstaller gets a chance to gum up the works
@@ -72,6 +72,6 @@ public class StartableAndExceptionThrowingInstallersTestCase
 		// being implemented by a using() block or something similar
 		// via OptimizeDependencyResolutionDisposable.Dispose()
 
-		Assert.Equal(0, UsesIEmptyService.instancesCreated);
+		Assert.Equal(0, UsesIEmptyService.InstancesCreated);
 	}
 }

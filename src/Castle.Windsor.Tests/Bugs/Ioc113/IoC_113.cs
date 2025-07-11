@@ -20,53 +20,53 @@ using Castle.Facilities.Startable;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 
-public class IoC_113_When_resolving_initializable_disposable_and_startable_component
+public class IoC113WhenResolvingInitializableDisposableAndStartableComponent
 {
-	public IoC_113_When_resolving_initializable_disposable_and_startable_component()
+	public IoC113WhenResolvingInitializableDisposableAndStartableComponent()
 	{
-		kernel = new DefaultKernel();
+		_kernel = new DefaultKernel();
 
-		kernel.AddFacility<StartableFacility>();
+		_kernel.AddFacility<StartableFacility>();
 
-		kernel.Register(
+		_kernel.Register(
 			Component.For<StartableDisposableAndInitializableComponent>()
 				.LifeStyle.Transient
 		);
 
-		component = kernel.Resolve<StartableDisposableAndInitializableComponent>();
-		component.DoSomething();
-		kernel.ReleaseComponent(component);
+		_component = _kernel.Resolve<StartableDisposableAndInitializableComponent>();
+		_component.DoSomething();
+		_kernel.ReleaseComponent(_component);
 
-		calledMethods = component.calledMethods;
+		_calledMethods = _component.CalledMethods;
 	}
 
-	private readonly IKernel kernel;
-	private readonly StartableDisposableAndInitializableComponent component;
-	private readonly IList<SdiComponentMethods> calledMethods;
+	private readonly IKernel _kernel;
+	private readonly StartableDisposableAndInitializableComponent _component;
+	private readonly IList<SdiComponentMethods> _calledMethods;
 
 	[Fact]
 	public void Should_call_DoSomething_between_start_and_stop()
 	{
-		Assert.Equal(SdiComponentMethods.DoSomething, calledMethods[2]);
+		Assert.Equal(SdiComponentMethods.DoSomething, _calledMethods[2]);
 	}
 
 	[Fact]
 	public void Should_call_all_methods_once()
 	{
-		Assert.Equal(5, component.calledMethods.Count);
+		Assert.Equal(5, _component.CalledMethods.Count);
 	}
 
 	[Fact]
 	public void Should_call_initialize_before_start()
 	{
-		Assert.Equal(SdiComponentMethods.Initialize, calledMethods[0]);
-		Assert.Equal(SdiComponentMethods.Start, calledMethods[1]);
+		Assert.Equal(SdiComponentMethods.Initialize, _calledMethods[0]);
+		Assert.Equal(SdiComponentMethods.Start, _calledMethods[1]);
 	}
 
 	[Fact]
 	public void Should_call_stop_before_dispose()
 	{
-		Assert.Equal(SdiComponentMethods.Stop, calledMethods[3]);
-		Assert.Equal(SdiComponentMethods.Dispose, calledMethods[4]);
+		Assert.Equal(SdiComponentMethods.Stop, _calledMethods[3]);
+		Assert.Equal(SdiComponentMethods.Dispose, _calledMethods[4]);
 	}
 }

@@ -21,17 +21,17 @@ using System;
 /// </summary>
 internal class ForcedScope : IDisposable
 {
-	private readonly ExtensionContainerScopeBase scope;
-	private readonly ExtensionContainerScopeBase previousScope;
+	private readonly ExtensionContainerScopeBase _scope;
+	private readonly ExtensionContainerScopeBase _previousScope;
 	internal ForcedScope(ExtensionContainerScopeBase scope)
 	{
-		previousScope = ExtensionContainerScopeCache.Current;
-		this.scope = scope;
+		_previousScope = ExtensionContainerScopeCache.Current;
+		this._scope = scope;
 		ExtensionContainerScopeCache.Current = scope;
 	}
 	public void Dispose()
 	{
-		if(ExtensionContainerScopeCache.Current != scope) return;
-		ExtensionContainerScopeCache.Current = previousScope;
+		if(ExtensionContainerScopeCache.Current != _scope) return;
+		ExtensionContainerScopeCache.Current = _previousScope;
 	}
 }

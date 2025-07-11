@@ -23,17 +23,17 @@ using Castle.MicroKernel.Registration;
 
 public class ExtendedPropertiesDescriptor : IComponentModelDescriptor
 {
-	private readonly IDictionary dictionary;
-	private readonly Property[] properties;
+	private readonly IDictionary _dictionary;
+	private readonly Property[] _properties;
 
 	public ExtendedPropertiesDescriptor(params Property[] properties)
 	{
-		this.properties = properties;
+		this._properties = properties;
 	}
 
 	public ExtendedPropertiesDescriptor(IDictionary dictionary)
 	{
-		this.dictionary = dictionary;
+		this._dictionary = dictionary;
 	}
 
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
@@ -42,16 +42,16 @@ public class ExtendedPropertiesDescriptor : IComponentModelDescriptor
 
 	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
 	{
-		if (dictionary != null)
+		if (_dictionary != null)
 		{
-			foreach (DictionaryEntry property in dictionary)
+			foreach (DictionaryEntry property in _dictionary)
 			{
 				model.ExtendedProperties[property.Key] = property.Value;
 			}
 		}
-		if (properties != null)
+		if (_properties != null)
 		{
-			properties.ForEach(p => model.ExtendedProperties[p.Key] = p.Value);
+			_properties.ForEach(p => model.ExtendedProperties[p.Key] = p.Value);
 		}
 	}
 }

@@ -27,9 +27,9 @@ public class ChangeResultInterceptor : IInterceptor
 
 		var result = invocation.ReturnValue;
 
-		if (result is int)
+		if (result is int i)
 		{
-			result = ((int)result) + 10;
+			result = i + 10;
 		}
 
 		invocation.ReturnValue = result;

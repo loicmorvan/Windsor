@@ -27,22 +27,22 @@ using Castle.MicroKernel.Facilities;
 [Transient]
 public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryComponentSelector componentSelector) : IInterceptor, IOnBehalfAware, IDisposable
 {
-	private readonly IReleasePolicy scope = kernel.ReleasePolicy.CreateSubPolicy();
+	private readonly IReleasePolicy _scope = kernel.ReleasePolicy.CreateSubPolicy();
 
-	private bool disposed;
-	private IDictionary<MethodInfo, FactoryMethod> methods;
+	private bool _disposed;
+	private IDictionary<MethodInfo, FactoryMethod> _methods;
 
 	public ITypedFactoryComponentSelector ComponentSelector { get; private set; } = componentSelector;
 
 	public void Dispose()
 	{
-		if (disposed)
+		if (_disposed)
 		{
 			return;
 		}
 
-		disposed = true;
-		scope.Dispose();
+		_disposed = true;
+		_scope.Dispose();
 	}
 
 	public void Intercept(IInvocation invocation)
@@ -72,8 +72,8 @@ public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryCompon
 
 	public void SetInterceptedComponentModel(ComponentModel target)
 	{
-		methods = (IDictionary<MethodInfo, FactoryMethod>)target.ExtendedProperties[TypedFactoryFacility.FactoryMapCacheKey];
-		if (methods == null)
+		_methods = (IDictionary<MethodInfo, FactoryMethod>)target.ExtendedProperties[TypedFactoryFacility.FactoryMapCacheKey];
+		if (_methods == null)
 		{
 			throw new ArgumentException(
 				string.Format("Component {0} is not a typed factory. {1} only works with typed factories.", target.Name, GetType().Name));
@@ -82,20 +82,20 @@ public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryCompon
 
 	private void Release(IInvocation invocation)
 	{
-		if (disposed)
+		if (_disposed)
 		{
 			return;
 		}
 
 		for (var i = 0; i < invocation.Arguments.Length; i++)
 		{
-			scope.Release(invocation.Arguments[i]);
+			_scope.Release(invocation.Arguments[i]);
 		}
 	}
 
 	private void Resolve(IInvocation invocation)
 	{
-		if (disposed)
+		if (_disposed)
 		{
 			throw new ObjectDisposedException("this", "The factory was disposed and can no longer be used.");
 		}
@@ -109,12 +109,12 @@ public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryCompon
 					ComponentSelector,
 					invocation.Method));
 		}
-		invocation.ReturnValue = component(kernel, scope);
+		invocation.ReturnValue = component(kernel, _scope);
 	}
 
 	private bool TryGetMethod(IInvocation invocation, out FactoryMethod method)
 	{
-		if (methods.TryGetValue(invocation.Method, out method))
+		if (_methods.TryGetValue(invocation.Method, out method))
 		{
 			return true;
 		}
@@ -122,6 +122,6 @@ public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryCompon
 		{
 			return false;
 		}
-		return methods.TryGetValue(invocation.Method.GetGenericMethodDefinition(), out method);
+		return _methods.TryGetValue(invocation.Method.GetGenericMethodDefinition(), out method);
 	}
 }

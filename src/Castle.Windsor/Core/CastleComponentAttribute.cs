@@ -64,7 +64,7 @@ public class CastleComponentAttribute : LifestyleAttribute
 		{
 			if (attribute.ServicesSpecifiedExplicitly == false)
 			{
-				attribute.Services = new[] { type };
+				attribute.Services = [type];
 			}
 			return attribute;
 		}

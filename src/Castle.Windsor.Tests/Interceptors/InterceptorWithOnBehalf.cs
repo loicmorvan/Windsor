@@ -20,7 +20,7 @@ using Castle.DynamicProxy;
 
 public class InterceptorWithOnBehalf : IInterceptor, IOnBehalfAware
 {
-	private static ComponentModel model;
+	private static ComponentModel _model;
 
 	#region IMethodInterceptor Members
 
@@ -33,11 +33,11 @@ public class InterceptorWithOnBehalf : IInterceptor, IOnBehalfAware
 
 	public void SetInterceptedComponentModel(ComponentModel target)
 	{
-		model = target;
+		_model = target;
 	}
 
 	public static ComponentModel Model
 	{
-		get { return model; }
+		get { return _model; }
 	}
 }

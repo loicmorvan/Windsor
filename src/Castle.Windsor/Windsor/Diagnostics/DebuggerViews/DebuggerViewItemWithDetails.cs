@@ -16,19 +16,19 @@ namespace Castle.Windsor.Diagnostics.DebuggerViews;
 
 using System.Diagnostics;
 
-[DebuggerDisplay("{description,nq}", Name = "{name,nq}")]
+[DebuggerDisplay("{_description,nq}", Name = "{name,nq}")]
 public class DebuggerViewItemWithDetails(string name, string description, string details, params object[] items)
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly object description = description;
+	private readonly object _description = description;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly string name = name;
+	private readonly string _name = name;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public object Description
 	{
-		get { return description; }
+		get { return _description; }
 	}
 
 	public string Details { get; private set; } = details;
@@ -39,6 +39,6 @@ public class DebuggerViewItemWithDetails(string name, string description, string
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public string Name
 	{
-		get { return name; }
+		get { return _name; }
 	}
 }

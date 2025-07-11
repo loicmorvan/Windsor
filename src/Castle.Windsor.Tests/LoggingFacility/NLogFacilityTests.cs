@@ -31,24 +31,24 @@ public class NLogFacilityTests : BaseTest, IDisposable
 {
 	public NLogFacilityTests()
 	{
-		container = base.CreateConfiguredContainer<NLogFactory>();
+		_container = base.CreateConfiguredContainer<NLogFactory>();
 	}
 
 	public void Dispose()
 	{
-		if (container != null)
+		if (_container != null)
 		{
-			container.Dispose();
+			_container.Dispose();
 		}
 	}
 
-	private readonly IWindsorContainer container;
+	private readonly IWindsorContainer _container;
 
 	[Fact]
 	public void SimpleTest()
 	{
-		container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
-		var test = container.Resolve<SimpleLoggingComponent>("component");
+		_container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
+		var test = _container.Resolve<SimpleLoggingComponent>("component");
 
 		test.DoSomething();
 

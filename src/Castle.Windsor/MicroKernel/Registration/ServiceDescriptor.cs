@@ -26,12 +26,12 @@ using Castle.DynamicProxy.Internal;
 /// </summary>
 public class ServiceDescriptor
 {
-	private readonly BasedOnDescriptor basedOnDescriptor;
-	private ServiceSelector serviceSelector;
+	private readonly BasedOnDescriptor _basedOnDescriptor;
+	private ServiceSelector _serviceSelector;
 
 	internal ServiceDescriptor(BasedOnDescriptor basedOnDescriptor)
 	{
-		this.basedOnDescriptor = basedOnDescriptor;
+		this._basedOnDescriptor = basedOnDescriptor;
 	}
 
 	/// <summary>
@@ -40,7 +40,7 @@ public class ServiceDescriptor
 	/// <returns></returns>
 	public BasedOnDescriptor AllInterfaces()
 	{
-		return Select((t, b) => t.GetAllInterfaces());
+		return Select((t, _) => t.GetAllInterfaces());
 	}
 
 	/// <summary>
@@ -49,7 +49,7 @@ public class ServiceDescriptor
 	/// <returns></returns>
 	public BasedOnDescriptor Base()
 	{
-		return Select((t, b) => b);
+		return Select((_, b) => b);
 	}
 
 	/// <summary>
@@ -59,7 +59,7 @@ public class ServiceDescriptor
 	/// <returns></returns>
 	public BasedOnDescriptor DefaultInterfaces()
 	{
-		return Select((type, @base) =>
+		return Select((type, _) =>
 			type.GetAllInterfaces()
 				.Where(i => type.Name.Contains(GetInterfaceName(i))));
 	}
@@ -70,7 +70,7 @@ public class ServiceDescriptor
 	/// <returns></returns>
 	public BasedOnDescriptor FirstInterface()
 	{
-		return Select((type, @base) =>
+		return Select((type, _) =>
 		{
 			var first = type.GetInterfaces().FirstOrDefault();
 			if (first == null)
@@ -78,7 +78,7 @@ public class ServiceDescriptor
 				return null;
 			}
 
-			return new[] { first };
+			return [first];
 		});
 	}
 
@@ -141,8 +141,8 @@ public class ServiceDescriptor
 	/// <returns></returns>
 	public BasedOnDescriptor Select(ServiceSelector selector)
 	{
-		serviceSelector += selector;
-		return basedOnDescriptor;
+		_serviceSelector += selector;
+		return _basedOnDescriptor;
 	}
 
 	/// <summary>
@@ -161,20 +161,20 @@ public class ServiceDescriptor
 	/// <returns></returns>
 	public BasedOnDescriptor Self()
 	{
-		return Select((t, b) => new[] { t });
+		return Select((t, _) => [t]);
 	}
 
 	internal ICollection<Type> GetServices(Type type, Type[] baseType)
 	{
 		var services = new HashSet<Type>();
-		if (serviceSelector != null)
+		if (_serviceSelector != null)
 		{
-			foreach (ServiceSelector selector in serviceSelector.GetInvocationList())
+			foreach (ServiceSelector selector in _serviceSelector.GetInvocationList())
 			{
 				var selected = selector(type, baseType);
 				if (selected != null)
 				{
-					foreach (var service in selected.Select(WorkaroundCLRBug))
+					foreach (var service in selected.Select(WorkaroundClrBug))
 					{
 						services.Add(service);
 					}
@@ -228,7 +228,7 @@ public class ServiceDescriptor
 	/// </summary>
 	/// <param name = "serviceType">Type of the service.</param>
 	/// <returns></returns>
-	private static Type WorkaroundCLRBug(Type serviceType)
+	private static Type WorkaroundClrBug(Type serviceType)
 	{
 		if (!serviceType.GetTypeInfo().IsInterface)
 		{

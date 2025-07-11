@@ -25,8 +25,8 @@ public class CalculatorServiceWithLifecycle :
 #endif
 	ICalcService, IInitializable, IDisposable
 {
-	private bool initialized;
-	private bool disposed;
+	private bool _initialized;
+	private bool _disposed;
 
 	public int Sum(int x, int y)
 	{
@@ -35,21 +35,21 @@ public class CalculatorServiceWithLifecycle :
 
 	public void Initialize()
 	{
-		initialized = true;
+		_initialized = true;
 	}
 
 	public void Dispose()
 	{
-		disposed = true;
+		_disposed = true;
 	}
 
 	public bool Initialized
 	{
-		get { return initialized; }
+		get { return _initialized; }
 	}
 
 	public bool Disposed
 	{
-		get { return disposed; }
+		get { return _disposed; }
 	}
 }

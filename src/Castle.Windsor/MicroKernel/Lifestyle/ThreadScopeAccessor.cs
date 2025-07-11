@@ -25,11 +25,11 @@ using Castle.MicroKernel.Lifestyle.Scoped;
 [Serializable]
 public class ThreadScopeAccessor : IScopeAccessor
 {
-	private readonly SimpleThreadSafeDictionary<int, ILifetimeScope> items = new SimpleThreadSafeDictionary<int, ILifetimeScope>();
+	private readonly SimpleThreadSafeDictionary<int, ILifetimeScope> _items = new();
 
 	public void Dispose()
 	{
-		var values = items.EjectAllValues();
+		var values = _items.EjectAllValues();
 		foreach (var item in values.Reverse())
 		{
 			item.Dispose();
@@ -39,7 +39,7 @@ public class ThreadScopeAccessor : IScopeAccessor
 	public ILifetimeScope GetScope(CreationContext context)
 	{
 		var currentThreadId = GetCurrentThreadId();
-		return items.GetOrAdd(currentThreadId, id => new DefaultLifetimeScope());
+		return _items.GetOrAdd(currentThreadId, _ => new DefaultLifetimeScope());
 	}
 
 	protected virtual int GetCurrentThreadId()

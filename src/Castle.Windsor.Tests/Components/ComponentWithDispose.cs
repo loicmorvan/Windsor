@@ -20,7 +20,7 @@ public class ComponentWithDispose : IComponent, IDisposable
 {
 	public bool Disposed { get; private set; }
 
-	public int ID
+	public int Id
 	{
 		get { return 42; }
 	}

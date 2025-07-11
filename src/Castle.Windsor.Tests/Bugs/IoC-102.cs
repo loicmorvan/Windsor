@@ -17,7 +17,7 @@ namespace Castle.Windsor.Tests.Bugs;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 
-public class IoC_102
+public class IoC102
 {
 	[Fact]
 	public void ComponentResolutionOrderForKernelAndDpendencyResolverIsTheSame()
@@ -59,6 +59,6 @@ public class IoC_102
 
 	public class Consumer(IReader reader)
 	{
-		public IReader Reader = reader;
+		public readonly IReader Reader = reader;
 	}
 }

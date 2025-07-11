@@ -28,16 +28,16 @@ using Castle.Windsor;
 public sealed class Arguments
 	: IEnumerable<KeyValuePair<object, object>> // Required for collection initializers
 {
-	private static readonly ArgumentsComparer Comparer = new ArgumentsComparer();
+	private static readonly ArgumentsComparer Comparer = new();
 
-	private readonly Dictionary<object, object> dictionary;
+	private readonly Dictionary<object, object> _dictionary;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Arguments"/> class that is empty.
 	/// </summary>
 	public Arguments()
 	{
-		dictionary = new Dictionary<object, object>(Comparer);
+		_dictionary = new Dictionary<object, object>(Comparer);
 	}
 
 	/// <summary>
@@ -45,29 +45,29 @@ public sealed class Arguments
 	/// </summary>
 	public Arguments(Arguments arguments)
 	{
-		dictionary = new Dictionary<object, object>(arguments.dictionary, Comparer);
+		_dictionary = new Dictionary<object, object>(arguments._dictionary, Comparer);
 	}
 
 	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-	public IEnumerator<KeyValuePair<object, object>> GetEnumerator() => dictionary.GetEnumerator();
-	public int Count => dictionary.Count;
+	public IEnumerator<KeyValuePair<object, object>> GetEnumerator() => _dictionary.GetEnumerator();
+	public int Count => _dictionary.Count;
 
 	public void Add(object key, object value)
 	{
 		CheckKeyType(key);
-		dictionary.Add(key, value);
+		_dictionary.Add(key, value);
 	}
 
 	public bool Contains(object key)
 	{
 		CheckKeyType(key);
-		return dictionary.ContainsKey(key);
+		return _dictionary.ContainsKey(key);
 	}
 
 	public void Remove(object key)
 	{
 		CheckKeyType(key);
-		dictionary.Remove(key);
+		_dictionary.Remove(key);
 	}
 
 	public object this[object key]
@@ -75,7 +75,7 @@ public sealed class Arguments
 		get
 		{
 			CheckKeyType(key);
-			if (dictionary.TryGetValue(key, out object value))
+			if (_dictionary.TryGetValue(key, out object value))
 			{
 				return value;
 			}
@@ -84,7 +84,7 @@ public sealed class Arguments
 		set
 		{
 			CheckKeyType(key);
-			dictionary[key] = value;
+			_dictionary[key] = value;
 		}
 	}
 

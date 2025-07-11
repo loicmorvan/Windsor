@@ -33,7 +33,7 @@ internal static class AspNetCoreMvcExtensions
 		if (services == null) throw new ArgumentNullException(nameof(services));
 		if (activator == null) throw new ArgumentNullException(nameof(activator));
 
-		services.AddSingleton<IControllerActivator>(new DelegatingControllerActivator(context => activator(context.ActionDescriptor.ControllerTypeInfo.AsType()), (context, instance) => releaser(instance)));
+		services.AddSingleton<IControllerActivator>(new DelegatingControllerActivator(context => activator(context.ActionDescriptor.ControllerTypeInfo.AsType()), (_, instance) => releaser(instance)));
 	}
 
 	public static void AddCustomViewComponentActivation(this IServiceCollection services, Func<Type, object> activator, Action<object> releaser)
@@ -49,8 +49,8 @@ internal static class AspNetCoreMvcExtensions
 		if (services == null) throw new ArgumentNullException(nameof(services));
 		if (activator == null) throw new ArgumentNullException(nameof(activator));
 
-		applicationTypeSelector = applicationTypeSelector ?? (type => !type.GetTypeInfo().Namespace.StartsWith("Microsoft") &&
-		                                                              !type.GetTypeInfo().Name.Contains("__Generated__"));
+		applicationTypeSelector ??= (type => !type.GetTypeInfo().Namespace.StartsWith("Microsoft") &&
+		                                     !type.GetTypeInfo().Name.Contains("__Generated__"));
 
 		services.AddSingleton<ITagHelperActivator>(provider =>
 			new DelegatingTagHelperActivator(

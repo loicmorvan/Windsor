@@ -41,7 +41,7 @@ using Castle.MicroKernel.Proxy;
 public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactory, IDeserializationCallback
 {
 	[NonSerialized]
-	protected ProxyGenerator generator = generator;
+	protected ProxyGenerator Generator = generator;
 
 	/// <summary>
 	///   Constructs a DefaultProxyFactory
@@ -63,7 +63,7 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
 		var proxyGenOptions = CreateProxyGenerationOptionsFrom(proxyOptions, kernel, context, model);
 
 		CustomizeOptions(proxyGenOptions, kernel, model, constructorArguments);
-		var builder = generator.ProxyBuilder;
+		var builder = Generator.ProxyBuilder;
 		var proxy = customFactory.Generate(builder, proxyGenOptions, interceptors, model, context);
 
 		CustomizeProxy(proxy, proxyGenOptions, kernel, model);
@@ -106,15 +106,15 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
 			var additionalInterfaces = model.Services.Skip(1).Concat(interfaces).ToArray();
 			if (proxyOptions.OmitTarget)
 			{
-				proxy = generator.CreateInterfaceProxyWithoutTarget(firstService, additionalInterfaces, proxyGenOptions, interceptors);
+				proxy = Generator.CreateInterfaceProxyWithoutTarget(firstService, additionalInterfaces, proxyGenOptions, interceptors);
 			}
 			else if (proxyOptions.AllowChangeTarget)
 			{
-				proxy = generator.CreateInterfaceProxyWithTargetInterface(firstService, additionalInterfaces, target, proxyGenOptions, interceptors);
+				proxy = Generator.CreateInterfaceProxyWithTargetInterface(firstService, additionalInterfaces, target, proxyGenOptions, interceptors);
 			}
 			else
 			{
-				proxy = generator.CreateInterfaceProxyWithTarget(firstService, additionalInterfaces, target, proxyGenOptions, interceptors);
+				proxy = Generator.CreateInterfaceProxyWithTarget(firstService, additionalInterfaces, target, proxyGenOptions, interceptors);
 			}
 		}
 		else
@@ -132,7 +132,7 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
 				.SkipWhile(s => s.GetTypeInfo().IsClass)
 				.Concat(interfaces)
 				.ToArray();
-			proxy = generator.CreateClassProxy(classToProxy, additionalInterfaces, proxyGenOptions, constructorArguments, interceptors);
+			proxy = Generator.CreateClassProxy(classToProxy, additionalInterfaces, proxyGenOptions, constructorArguments, interceptors);
 		}
 
 		CustomizeProxy(proxy, proxyGenOptions, kernel, model);
@@ -146,9 +146,9 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
 		if (proxyOptions.Hook != null)
 		{
 			var hook = proxyOptions.Hook.Resolve(kernel, context);
-			if (hook != null && hook is IOnBehalfAware)
+			if (hook is IOnBehalfAware aware)
 			{
-				((IOnBehalfAware) hook).SetInterceptedComponentModel(model);
+				aware.SetInterceptedComponentModel(model);
 			}
 			proxyGenOptions.Hook = hook;
 		}
@@ -156,9 +156,9 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
 		if (proxyOptions.Selector != null)
 		{
 			var selector = proxyOptions.Selector.Resolve(kernel, context);
-			if (selector != null && selector is IOnBehalfAware)
+			if (selector is IOnBehalfAware aware)
 			{
-				((IOnBehalfAware) selector).SetInterceptedComponentModel(model);
+				aware.SetInterceptedComponentModel(model);
 			}
 			proxyGenOptions.Selector = selector;
 		}
@@ -201,6 +201,6 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
 
 	public void OnDeserialization(object sender)
 	{
-		generator = new ProxyGenerator();
+		Generator = new ProxyGenerator();
 	}
 }

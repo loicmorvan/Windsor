@@ -30,23 +30,23 @@ using log4net.Repository.Hierarchy;
 /// <summary>Summary description for ExtendedLog4NetFacilityTests.</summary>
 public class ExtendedLog4NetFacilityTestCase : BaseTest, IDisposable
 {
-	private readonly IWindsorContainer container;
+	private readonly IWindsorContainer _container;
 
 	public ExtendedLog4NetFacilityTestCase()
 	{
-		container = base.CreateConfiguredContainer<ExtendedLog4netFactory>();
+		_container = base.CreateConfiguredContainer<ExtendedLog4netFactory>();
 	}
 
 	public void Dispose()
 	{
-		container.Dispose();
+		_container.Dispose();
 	}
 
 	[Fact]
 	public void SimpleTest()
 	{
-		container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component1"));
-		var test = container.Resolve<SimpleLoggingComponent>("component1");
+		_container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component1"));
+		var test = _container.Resolve<SimpleLoggingComponent>("component1");
 
 		test.DoSomething();
 
@@ -58,8 +58,8 @@ public class ExtendedLog4NetFacilityTestCase : BaseTest, IDisposable
 
 		Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
 
-		container.Register(Component.For(typeof(SmtpServer)).Named("component2"));
-		var smtpServer = container.Resolve<ISmtpServer>("component2");
+		_container.Register(Component.For(typeof(SmtpServer)).Named("component2"));
+		var smtpServer = _container.Resolve<ISmtpServer>("component2");
 
 		smtpServer.Start();
 		smtpServer.InternalSend("rbellamy@pteradigm.com", "jobs@castlestronghold.com", "We're looking for a few good porgrammars.");
@@ -80,8 +80,8 @@ public class ExtendedLog4NetFacilityTestCase : BaseTest, IDisposable
 	[Fact]
 	public void ContextTest()
 	{
-		container.Register(Component.For<ComplexLoggingComponent>().Named("component1"));
-		var complexLoggingComponent = container.Resolve<ComplexLoggingComponent>("component1");
+		_container.Register(Component.For<ComplexLoggingComponent>().Named("component1"));
+		var complexLoggingComponent = _container.Resolve<ComplexLoggingComponent>("component1");
 
 		complexLoggingComponent.DoSomeContextual();
 

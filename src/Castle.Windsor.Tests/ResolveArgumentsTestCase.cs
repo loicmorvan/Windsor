@@ -168,18 +168,18 @@ public class ResolveArgumentsTestCase : AbstractContainerTestCase
 
 	private class Service(Dependency dependency)
 	{
-		private readonly Dependency dependency = dependency ?? throw new ArgumentNullException(nameof(dependency));
+		private readonly Dependency _dependency = dependency ?? throw new ArgumentNullException(nameof(dependency));
 	}
 
 	private interface IDependencyWithManyImplementations { }
 
 	private class DependencyImplementationA(Dependency dependency) : IDependencyWithManyImplementations
 	{
-		private readonly Dependency dependency = dependency ?? throw new ArgumentNullException(nameof(dependency));
+		private readonly Dependency _dependency = dependency ?? throw new ArgumentNullException(nameof(dependency));
 	}
 
 	private class DependencyImplementationB(Dependency dependency) : IDependencyWithManyImplementations
 	{
-		private readonly Dependency dependency = dependency ?? throw new ArgumentNullException(nameof(dependency));
+		private readonly Dependency _dependency = dependency ?? throw new ArgumentNullException(nameof(dependency));
 	}
 }

@@ -39,12 +39,11 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 		private static int instanceId;
 #endif
 
-	private readonly Dictionary<object, Burden> instance2Burden =
-		new Dictionary<object, Burden>(ReferenceEqualityComparer<object>.Instance);
+	private readonly Dictionary<object, Burden> _instance2Burden = new(ReferenceEqualityComparer<object>.Instance);
 
-	private readonly Lock @lock = Lock.Create();
-	private readonly ITrackedComponentsPerformanceCounter perfCounter;
-	private ITrackedComponentsDiagnostic trackedComponentsDiagnostic;
+	private readonly Lock _lock = Lock.Create();
+	private readonly ITrackedComponentsPerformanceCounter _perfCounter;
+	private ITrackedComponentsDiagnostic _trackedComponentsDiagnostic;
 
 	/// <param name = "kernel">
 	///     Used to obtain <see cref = "ITrackedComponentsDiagnostic" /> if present.
@@ -68,8 +67,8 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 	public LifecycledComponentsReleasePolicy(ITrackedComponentsDiagnostic trackedComponentsDiagnostic,
 		ITrackedComponentsPerformanceCounter trackedComponentsPerformanceCounter)
 	{
-		this.trackedComponentsDiagnostic = trackedComponentsDiagnostic;
-		perfCounter = trackedComponentsPerformanceCounter ?? NullPerformanceCounter.Instance;
+		this._trackedComponentsDiagnostic = trackedComponentsDiagnostic;
+		_perfCounter = trackedComponentsPerformanceCounter ?? NullPerformanceCounter.Instance;
 
 		if (trackedComponentsDiagnostic != null)
 		{
@@ -78,7 +77,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 	}
 
 	private LifecycledComponentsReleasePolicy(LifecycledComponentsReleasePolicy parent)
-		: this(parent.trackedComponentsDiagnostic, parent.perfCounter)
+		: this(parent._trackedComponentsDiagnostic, parent._perfCounter)
 	{
 	}
 
@@ -86,14 +85,14 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 	{
 		get
 		{
-			using var holder = @lock.ForReading(false);
+			using var holder = _lock.ForReading(false);
 			if (holder.LockAcquired == false)
 			{
 				// TODO: that's sad... perhaps we should have waited...? But what do we do now? We're in the debugger. If some thread is keeping the lock
 				// we could wait indefinatelly. I guess the best way to proceed is to add a 200ms timepout to accquire the lock, and if not succeeded
 				// assume that the other thread just waits and is not going anywhere and go ahead and read this anyway...
 			}
-			var array = instance2Burden.Values.ToArray();
+			var array = _instance2Burden.Values.ToArray();
 			return array;
 		}
 	}
@@ -101,21 +100,21 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 	public void Dispose()
 	{
 		KeyValuePair<object, Burden>[] burdens;
-		using (@lock.ForWriting())
+		using (_lock.ForWriting())
 		{
-			if (trackedComponentsDiagnostic != null)
+			if (_trackedComponentsDiagnostic != null)
 			{
-				trackedComponentsDiagnostic.TrackedInstancesRequested -= trackedComponentsDiagnostic_TrackedInstancesRequested;
-				trackedComponentsDiagnostic = null;
+				_trackedComponentsDiagnostic.TrackedInstancesRequested -= trackedComponentsDiagnostic_TrackedInstancesRequested;
+				_trackedComponentsDiagnostic = null;
 			}
-			burdens = instance2Burden.ToArray();
-			instance2Burden.Clear();
+			burdens = _instance2Burden.ToArray();
+			_instance2Burden.Clear();
 		}
 		// NOTE: This is relying on a undocumented behavior that order of items when enumerating Dictionary<> will be oldest --> latest
 		foreach (var burden in burdens.Reverse())
 		{
 			burden.Value.Released -= OnInstanceReleased;
-			perfCounter.DecrementTrackedInstancesCount();
+			_perfCounter.DecrementTrackedInstancesCount();
 			burden.Value.Release();
 		}
 	}
@@ -133,9 +132,9 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 			return false;
 		}
 
-		using (@lock.ForReading())
+		using (_lock.ForReading())
 		{
-			return instance2Burden.ContainsKey(instance);
+			return _instance2Burden.ContainsKey(instance);
 		}
 	}
 
@@ -147,11 +146,11 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 		}
 
 		Burden burden;
-		using (@lock.ForWriting())
+		using (_lock.ForWriting())
 		{
 			// NOTE: we don't physically remove the instance from the instance2Burden collection here.
 			// we do it in OnInstanceReleased event handler
-			if (instance2Burden.TryGetValue(instance, out burden) == false)
+			if (_instance2Burden.TryGetValue(instance, out burden) == false)
 			{
 				return;
 			}
@@ -171,9 +170,9 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 		}
 		try
 		{
-			using (@lock.ForWriting())
+			using (_lock.ForWriting())
 			{
-				instance2Burden.Add(instance, burden);
+				_instance2Burden.Add(instance, burden);
 			}
 		}
 		catch (ArgumentNullException)
@@ -186,20 +185,20 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 			throw HelpfulExceptionsUtil.TrackInstanceCalledMultipleTimes(instance, burden);
 		}
 		burden.Released += OnInstanceReleased;
-		perfCounter.IncrementTrackedInstancesCount();
+		_perfCounter.IncrementTrackedInstancesCount();
 	}
 
 	private void OnInstanceReleased(Burden burden)
 	{
-		using (@lock.ForWriting())
+		using (_lock.ForWriting())
 		{
-			if (instance2Burden.Remove(burden.Instance) == false)
+			if (_instance2Burden.Remove(burden.Instance) == false)
 			{
 				return;
 			}
 		}
 		burden.Released -= OnInstanceReleased;
-		perfCounter.DecrementTrackedInstancesCount();
+		_perfCounter.DecrementTrackedInstancesCount();
 	}
 
 	private void trackedComponentsDiagnostic_TrackedInstancesRequested(object sender, TrackedInstancesEventArgs e)

@@ -22,15 +22,15 @@ using System.Collections.Generic;
 /// </summary>
 public class FromTypesDescriptor : FromDescriptor
 {
-	private readonly IEnumerable<Type> types;
+	private readonly IEnumerable<Type> _types;
 
 	internal FromTypesDescriptor(IEnumerable<Type> types, Predicate<Type> additionalFilters) : base(additionalFilters)
 	{
-		this.types = types;
+		this._types = types;
 	}
 
 	protected override IEnumerable<Type> SelectedTypes(IKernel kernel)
 	{
-		return types;
+		return _types;
 	}
 }

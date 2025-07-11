@@ -21,12 +21,12 @@ using Castle.MicroKernel;
 
 public class TypedFactoryConfiguration
 {
-	private readonly string defaultComponentSelectorKey;
-	private IReference<ITypedFactoryComponentSelector> selectorReference;
+	private readonly string _defaultComponentSelectorKey;
+	private IReference<ITypedFactoryComponentSelector> _selectorReference;
 
 	public TypedFactoryConfiguration(string defaultComponentSelectorKey, Type factoryType)
 	{
-		this.defaultComponentSelectorKey = defaultComponentSelectorKey;
+		this._defaultComponentSelectorKey = defaultComponentSelectorKey;
 		var attributes = factoryType.GetAttributes<FactoryAttribute>(true);
 		if (attributes.Length > 0)
 		{
@@ -50,18 +50,18 @@ public class TypedFactoryConfiguration
 	{
 		get
 		{
-			if (selectorReference == null)
+			if (_selectorReference == null)
 			{
-				SelectedWith(defaultComponentSelectorKey);
+				SelectedWith(_defaultComponentSelectorKey);
 			}
 
-			return selectorReference;
+			return _selectorReference;
 		}
 	}
 
 	public void SelectedWith(string selectorComponentName)
 	{
-		selectorReference = new ComponentReference<ITypedFactoryComponentSelector>(selectorComponentName);
+		_selectorReference = new ComponentReference<ITypedFactoryComponentSelector>(selectorComponentName);
 	}
 
 	public void SelectedWith<TSelectorComponent>() where TSelectorComponent : ITypedFactoryComponentSelector
@@ -71,7 +71,7 @@ public class TypedFactoryConfiguration
 
 	public void SelectedWith(Type selectorComponentType)
 	{
-		selectorReference = new ComponentReference<ITypedFactoryComponentSelector>(selectorComponentType);
+		_selectorReference = new ComponentReference<ITypedFactoryComponentSelector>(selectorComponentType);
 	}
 
 	public void SelectedWith(ITypedFactoryComponentSelector selector)
@@ -81,6 +81,6 @@ public class TypedFactoryConfiguration
 			throw new ArgumentNullException(nameof(selector));
 		}
 
-		selectorReference = new InstanceReference<ITypedFactoryComponentSelector>(selector);
+		_selectorReference = new InstanceReference<ITypedFactoryComponentSelector>(selector);
 	}
 }

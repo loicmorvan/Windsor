@@ -21,9 +21,9 @@ using Castle.MicroKernel.Context;
 
 public class ParentHandlerWrapper : IHandler, IDisposable
 {
-	private readonly ISubDependencyResolver childResolver;
-	private readonly IReleasePolicy parentReleasePolicy;
-	private readonly IHandler parentHandler;
+	private readonly ISubDependencyResolver _childResolver;
+	private readonly IReleasePolicy _parentReleasePolicy;
+	private readonly IHandler _parentHandler;
 
 	/// <summary>
 	///   Initializes a new instance of the <see cref = "ParentHandlerWrapper" /> class.
@@ -42,19 +42,19 @@ public class ParentHandlerWrapper : IHandler, IDisposable
 			throw new ArgumentNullException(nameof(childResolver));
 		}
 
-		this.parentHandler = parentHandler;
-		this.childResolver = childResolver;
-		this.parentReleasePolicy = parentReleasePolicy;
+		this._parentHandler = parentHandler;
+		this._childResolver = childResolver;
+		this._parentReleasePolicy = parentReleasePolicy;
 	}
 
 	public virtual ComponentModel ComponentModel
 	{
-		get { return parentHandler.ComponentModel; }
+		get { return _parentHandler.ComponentModel; }
 	}
 
 	public virtual HandlerState CurrentState
 	{
-		get { return parentHandler.CurrentState; }
+		get { return _parentHandler.CurrentState; }
 	}
 
 	public void Dispose()
@@ -68,12 +68,12 @@ public class ParentHandlerWrapper : IHandler, IDisposable
 
 	public bool IsBeingResolvedInContext(CreationContext context)
 	{
-		return (context != null && context.IsInResolutionContext(this)) || parentHandler.IsBeingResolvedInContext(context);
+		return (context != null && context.IsInResolutionContext(this)) || _parentHandler.IsBeingResolvedInContext(context);
 	}
 
 	public virtual bool Release(Burden burden)
 	{
-		return parentHandler.Release(burden);
+		return _parentHandler.Release(burden);
 	}
 
 	public virtual object Resolve(CreationContext context)
@@ -82,8 +82,8 @@ public class ParentHandlerWrapper : IHandler, IDisposable
 		try
 		{
 			releasePolicy = context.ReleasePolicy;
-			context.ReleasePolicy = parentReleasePolicy;
-			return parentHandler.Resolve(context);
+			context.ReleasePolicy = _parentReleasePolicy;
+			return _parentHandler.Resolve(context);
 		}
 		finally
 		{
@@ -93,12 +93,12 @@ public class ParentHandlerWrapper : IHandler, IDisposable
 
 	public bool Supports(Type service)
 	{
-		return parentHandler.Supports(service);
+		return _parentHandler.Supports(service);
 	}
 
 	public bool SupportsAssignable(Type service)
 	{
-		return parentHandler.SupportsAssignable(service);
+		return _parentHandler.SupportsAssignable(service);
 	}
 
 	public object TryResolve(CreationContext context)
@@ -107,8 +107,8 @@ public class ParentHandlerWrapper : IHandler, IDisposable
 		try
 		{
 			releasePolicy = context.ReleasePolicy;
-			context.ReleasePolicy = parentReleasePolicy;
-			return parentHandler.TryResolve(context);
+			context.ReleasePolicy = _parentReleasePolicy;
+			return _parentHandler.TryResolve(context);
 		}
 		finally
 		{
@@ -123,12 +123,12 @@ public class ParentHandlerWrapper : IHandler, IDisposable
 
 		if (contextHandlerResolver != null)
 		{
-			canResolve = childResolver.CanResolve(context, null, model, dependency);
+			canResolve = _childResolver.CanResolve(context, null, model, dependency);
 		}
 
 		if (!canResolve)
 		{
-			canResolve = parentHandler.CanResolve(context, contextHandlerResolver, model, dependency);
+			canResolve = _parentHandler.CanResolve(context, contextHandlerResolver, model, dependency);
 		}
 
 		return canResolve;
@@ -137,11 +137,11 @@ public class ParentHandlerWrapper : IHandler, IDisposable
 	public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
 		ComponentModel model, DependencyModel dependency)
 	{
-		var value = childResolver.Resolve(context, null, model, dependency);
+		var value = _childResolver.Resolve(context, null, model, dependency);
 
 		if (value == null)
 		{
-			value = parentHandler.Resolve(context, contextHandlerResolver, model, dependency);
+			value = _parentHandler.Resolve(context, contextHandlerResolver, model, dependency);
 		}
 
 		return value;
@@ -151,7 +151,7 @@ public class ParentHandlerWrapper : IHandler, IDisposable
 	{
 		if (disposing)
 		{
-			if (parentHandler != null)
+			if (_parentHandler != null)
 			{
 			}
 		}

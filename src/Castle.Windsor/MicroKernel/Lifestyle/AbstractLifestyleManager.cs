@@ -26,23 +26,23 @@ using Castle.MicroKernel.Context;
 [Serializable]
 public abstract class AbstractLifestyleManager : ILifestyleManager
 {
-	private IComponentActivator componentActivator;
-	private IKernel kernel;
-	private ComponentModel model;
+	private IComponentActivator _componentActivator;
+	private IKernel _kernel;
+	private ComponentModel _model;
 
 	protected IComponentActivator ComponentActivator
 	{
-		get { return componentActivator; }
+		get { return _componentActivator; }
 	}
 
 	protected IKernel Kernel
 	{
-		get { return kernel; }
+		get { return _kernel; }
 	}
 
 	protected ComponentModel Model
 	{
-		get { return model; }
+		get { return _model; }
 	}
 
 	/// <summary>
@@ -54,14 +54,14 @@ public abstract class AbstractLifestyleManager : ILifestyleManager
 
 	public virtual void Init(IComponentActivator componentActivator, IKernel kernel, ComponentModel model)
 	{
-		this.componentActivator = componentActivator;
-		this.kernel = kernel;
-		this.model = model;
+		this._componentActivator = componentActivator;
+		this._kernel = kernel;
+		this._model = model;
 	}
 
 	public virtual bool Release(object instance)
 	{
-		componentActivator.Destroy(instance);
+		_componentActivator.Destroy(instance);
 		return true;
 	}
 
@@ -76,7 +76,7 @@ public abstract class AbstractLifestyleManager : ILifestyleManager
 	{
 		var burden = context.CreateBurden(ComponentActivator, trackedExternally);
 
-		var instance = componentActivator.Create(context, burden);
+		var instance = _componentActivator.Create(context, burden);
 		Debug.Assert(ReferenceEquals(instance, burden.Instance));
 		return burden;
 	}

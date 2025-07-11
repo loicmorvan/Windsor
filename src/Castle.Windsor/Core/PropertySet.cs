@@ -24,8 +24,8 @@ using System.Reflection;
 [Serializable]
 public class PropertySet
 {
-	private readonly DependencyModel dependency;
-	private readonly PropertyInfo propertyInfo;
+	private readonly DependencyModel _dependency;
+	private readonly PropertyInfo _propertyInfo;
 
 	/// <summary>
 	/// 	Initializes a new instance of the <see cref = "PropertySet" /> class.
@@ -34,8 +34,8 @@ public class PropertySet
 	/// <param name = "dependency"> The dependency. </param>
 	public PropertySet(PropertyInfo propertyInfo, DependencyModel dependency)
 	{
-		this.propertyInfo = propertyInfo;
-		this.dependency = dependency;
+		this._propertyInfo = propertyInfo;
+		this._dependency = dependency;
 	}
 
 	/// <summary>
@@ -44,7 +44,7 @@ public class PropertySet
 	/// <value> The dependency. </value>
 	public DependencyModel Dependency
 	{
-		get { return dependency; }
+		get { return _dependency; }
 	}
 
 	/// <summary>
@@ -53,11 +53,11 @@ public class PropertySet
 	/// <value> The property. </value>
 	public PropertyInfo Property
 	{
-		get { return propertyInfo; }
+		get { return _propertyInfo; }
 	}
 
 	public override string ToString()
 	{
-		return dependency.ToString();
+		return _dependency.ToString();
 	}
 }

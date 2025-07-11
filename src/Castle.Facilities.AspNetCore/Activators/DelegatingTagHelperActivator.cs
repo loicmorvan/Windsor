@@ -26,14 +26,14 @@ internal sealed class DelegatingTagHelperActivator(
 	ITagHelperActivator defaultTagHelperActivator)
 	: ITagHelperActivator
 {
-	private readonly Predicate<Type> customCreatorSelector = customCreatorSelector ?? throw new ArgumentNullException(nameof(customCreatorSelector));
-	private readonly Func<Type, object> customTagHelperCreator = customTagHelperCreator ?? throw new ArgumentNullException(nameof(customTagHelperCreator));
-	private readonly ITagHelperActivator defaultTagHelperActivator = defaultTagHelperActivator ?? throw new ArgumentNullException(nameof(defaultTagHelperActivator));
+	private readonly Predicate<Type> _customCreatorSelector = customCreatorSelector ?? throw new ArgumentNullException(nameof(customCreatorSelector));
+	private readonly Func<Type, object> _customTagHelperCreator = customTagHelperCreator ?? throw new ArgumentNullException(nameof(customTagHelperCreator));
+	private readonly ITagHelperActivator _defaultTagHelperActivator = defaultTagHelperActivator ?? throw new ArgumentNullException(nameof(defaultTagHelperActivator));
 
 	public TTagHelper Create<TTagHelper>(ViewContext context) where TTagHelper : ITagHelper
 	{
-		return customCreatorSelector(typeof(TTagHelper))
-			? (TTagHelper) customTagHelperCreator(typeof(TTagHelper))
-			: defaultTagHelperActivator.Create<TTagHelper>(context);
+		return _customCreatorSelector(typeof(TTagHelper))
+			? (TTagHelper) _customTagHelperCreator(typeof(TTagHelper))
+			: _defaultTagHelperActivator.Create<TTagHelper>(context);
 	}
 }

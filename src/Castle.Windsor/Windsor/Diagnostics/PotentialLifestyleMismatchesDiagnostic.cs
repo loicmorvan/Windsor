@@ -85,7 +85,7 @@ public class PotentialLifestyleMismatchesDiagnostic(IKernel kernel) : IPotential
 
 	private class MismatchedLifestyleDependency
 	{
-		private readonly HashSet<ComponentModel> checkedComponents;
+		private readonly HashSet<ComponentModel> _checkedComponents;
 
 		public MismatchedLifestyleDependency(IHandler handler, MismatchedLifestyleDependency parent = null)
 		{
@@ -94,11 +94,11 @@ public class PotentialLifestyleMismatchesDiagnostic(IKernel kernel) : IPotential
 
 			if (parent == null)
 			{
-				checkedComponents = new HashSet<ComponentModel> { handler.ComponentModel };
+				_checkedComponents = [handler.ComponentModel];
 			}
 			else
 			{
-				checkedComponents = new HashSet<ComponentModel> { parent.Handler.ComponentModel };
+				_checkedComponents = [parent.Handler.ComponentModel];
 			}
 		}
 
@@ -108,7 +108,7 @@ public class PotentialLifestyleMismatchesDiagnostic(IKernel kernel) : IPotential
 
 		public bool Checked(ComponentModel component)
 		{
-			return checkedComponents.Add(component) == false;
+			return _checkedComponents.Add(component) == false;
 		}
 
 		public IHandler[] GetHandlers()

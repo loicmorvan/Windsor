@@ -16,7 +16,7 @@ namespace Castle.Windsor.Diagnostics;
 
 using System.Collections.Generic;
 
-public class ComponentDebuggerExtension(object[] items) : IComponentDebuggerExtension
+public class ComponentDebuggerExtension(IEnumerable<object> items) : IComponentDebuggerExtension
 {
 	public IEnumerable<object> Attach()
 	{

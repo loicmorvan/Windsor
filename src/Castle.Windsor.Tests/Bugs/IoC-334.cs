@@ -19,7 +19,7 @@ using Castle.Core.Configuration;
 using Castle.MicroKernel;
 using Castle.Windsor.Tests.ClassComponents;
 
-public class IoC_334
+public class IoC334
 {
 	[Fact]
 	public void FacilityConfig_is_not_null()

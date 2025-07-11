@@ -22,7 +22,7 @@ using Castle.Windsor.Diagnostics.Extensions;
 
 public partial class DefaultDiagnosticsSubSystem : IDiagnosticsHost, IContainerDebuggerExtensionHost
 {
-	private readonly IList<IContainerDebuggerExtension> extensions = new List<IContainerDebuggerExtension>();
+	private readonly IList<IContainerDebuggerExtension> _extensions = new List<IContainerDebuggerExtension>();
 
 	public override void Init(IKernelInternal kernel)
 	{
@@ -33,12 +33,12 @@ public partial class DefaultDiagnosticsSubSystem : IDiagnosticsHost, IContainerD
 	public void Add(IContainerDebuggerExtension item)
 	{
 		item.Init(Kernel, this);
-		extensions.Add(item);
+		_extensions.Add(item);
 	}
 
 	public IEnumerator<IContainerDebuggerExtension> GetEnumerator()
 	{
-		return extensions.GetEnumerator();
+		return _extensions.GetEnumerator();
 	}
 
 	protected virtual void InitStandardExtensions()

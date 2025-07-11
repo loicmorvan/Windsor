@@ -42,14 +42,14 @@ public interface IWeakReferenceObservable
 
 public partial class ServiceProviderOnlyTransient : IWeakReferenceObservable 
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public ServiceProviderOnlyTransient()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public partial class ServiceProviderOnlyTransientGeneric<T> : ServiceProviderOnlyTransient { }
@@ -63,14 +63,14 @@ public partial class ServiceProviderOnlyTransientDisposable : ServiceProviderOnl
 
 public partial class ServiceProviderOnlyScoped : IWeakReferenceObservable 
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public ServiceProviderOnlyScoped()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public partial class ServiceProviderOnlyScopedGeneric<T> : ServiceProviderOnlyScoped { }
@@ -84,14 +84,14 @@ public partial class ServiceProviderOnlyScopedDisposable : ServiceProviderOnlySc
 
 public partial class ServiceProviderOnlySingleton : IWeakReferenceObservable 
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public ServiceProviderOnlySingleton()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public partial class ServiceProviderOnlySingletonGeneric<T> : ServiceProviderOnlySingleton { }
@@ -105,14 +105,14 @@ public partial class ServiceProviderOnlySingletonDisposable : ServiceProviderOnl
 
 public partial class WindsorOnlyTransient : IWeakReferenceObservable 
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public WindsorOnlyTransient()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public partial class WindsorOnlyTransientGeneric<T> : WindsorOnlyTransient { }
@@ -126,14 +126,14 @@ public partial class WindsorOnlyTransientDisposable : WindsorOnlyTransient, IDis
 
 public partial class WindsorOnlyScoped : IWeakReferenceObservable 
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public WindsorOnlyScoped()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public partial class WindsorOnlyScopedGeneric<T> : WindsorOnlyScoped { }
@@ -147,14 +147,14 @@ public partial class WindsorOnlyScopedDisposable : WindsorOnlyScoped, IDisposabl
 
 public partial class WindsorOnlySingleton : IWeakReferenceObservable 
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public WindsorOnlySingleton()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public partial class WindsorOnlySingletonGeneric<T> : WindsorOnlySingleton { }
@@ -168,14 +168,14 @@ public partial class WindsorOnlySingletonDisposable : WindsorOnlySingleton, IDis
 
 public partial class CrossWiredTransient : IWeakReferenceObservable 
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public CrossWiredTransient()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public partial class CrossWiredTransientGeneric<T> : CrossWiredTransient { }
@@ -189,14 +189,14 @@ public partial class CrossWiredTransientDisposable : CrossWiredTransient, IDispo
 
 public partial class CrossWiredScoped : IWeakReferenceObservable 
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public CrossWiredScoped()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public partial class CrossWiredScopedGeneric<T> : CrossWiredScoped { }
@@ -210,14 +210,14 @@ public partial class CrossWiredScopedDisposable : CrossWiredScoped, IDisposable,
 
 public partial class CrossWiredSingleton : IWeakReferenceObservable 
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public CrossWiredSingleton()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public partial class CrossWiredSingletonGeneric<T> : CrossWiredSingleton { }
@@ -308,31 +308,31 @@ public partial class ControllerWindsorOnly : Controller
 {
 	public ControllerWindsorOnly
 	(
-		WindsorOnlyTransient WindsorOnlyTransient1, 
-		WindsorOnlyTransientGeneric<OpenOptions> WindsorOnlyTransient2, 
-		WindsorOnlyTransientGeneric<ClosedOptions> WindsorOnlyTransient3, 
-		WindsorOnlyTransientDisposable WindsorOnlyTransient4 ,
-		WindsorOnlyScoped WindsorOnlyScoped1, 
-		WindsorOnlyScopedGeneric<OpenOptions> WindsorOnlyScoped2, 
-		WindsorOnlyScopedGeneric<ClosedOptions> WindsorOnlyScoped3, 
-		WindsorOnlyScopedDisposable WindsorOnlyScoped4 ,
-		WindsorOnlySingleton WindsorOnlySingleton1, 
-		WindsorOnlySingletonGeneric<OpenOptions> WindsorOnlySingleton2, 
-		WindsorOnlySingletonGeneric<ClosedOptions> WindsorOnlySingleton3, 
-		WindsorOnlySingletonDisposable WindsorOnlySingleton4 )
+		WindsorOnlyTransient windsorOnlyTransient1, 
+		WindsorOnlyTransientGeneric<OpenOptions> windsorOnlyTransient2, 
+		WindsorOnlyTransientGeneric<ClosedOptions> windsorOnlyTransient3, 
+		WindsorOnlyTransientDisposable windsorOnlyTransient4 ,
+		WindsorOnlyScoped windsorOnlyScoped1, 
+		WindsorOnlyScopedGeneric<OpenOptions> windsorOnlyScoped2, 
+		WindsorOnlyScopedGeneric<ClosedOptions> windsorOnlyScoped3, 
+		WindsorOnlyScopedDisposable windsorOnlyScoped4 ,
+		WindsorOnlySingleton windsorOnlySingleton1, 
+		WindsorOnlySingletonGeneric<OpenOptions> windsorOnlySingleton2, 
+		WindsorOnlySingletonGeneric<ClosedOptions> windsorOnlySingleton3, 
+		WindsorOnlySingletonDisposable windsorOnlySingleton4 )
 	{
-		if (WindsorOnlyTransient1 == null) throw new ArgumentException(nameof(WindsorOnlyTransient1)); 
-		if (WindsorOnlyTransient2 == null) throw new ArgumentException(nameof(WindsorOnlyTransient2)); 
-		if (WindsorOnlyTransient3 == null) throw new ArgumentException(nameof(WindsorOnlyTransient3)); 
-		if (WindsorOnlyTransient4 == null) throw new ArgumentException(nameof(WindsorOnlyTransient4)); 
-		if (WindsorOnlyScoped1 == null) throw new ArgumentException(nameof(WindsorOnlyScoped1)); 
-		if (WindsorOnlyScoped2 == null) throw new ArgumentException(nameof(WindsorOnlyScoped2)); 
-		if (WindsorOnlyScoped3 == null) throw new ArgumentException(nameof(WindsorOnlyScoped3)); 
-		if (WindsorOnlyScoped4 == null) throw new ArgumentException(nameof(WindsorOnlyScoped4)); 
-		if (WindsorOnlySingleton1 == null) throw new ArgumentException(nameof(WindsorOnlySingleton1)); 
-		if (WindsorOnlySingleton2 == null) throw new ArgumentException(nameof(WindsorOnlySingleton2)); 
-		if (WindsorOnlySingleton3 == null) throw new ArgumentException(nameof(WindsorOnlySingleton3)); 
-		if (WindsorOnlySingleton4 == null) throw new ArgumentException(nameof(WindsorOnlySingleton4)); 
+		if (windsorOnlyTransient1 == null) throw new ArgumentException(nameof(windsorOnlyTransient1)); 
+		if (windsorOnlyTransient2 == null) throw new ArgumentException(nameof(windsorOnlyTransient2)); 
+		if (windsorOnlyTransient3 == null) throw new ArgumentException(nameof(windsorOnlyTransient3)); 
+		if (windsorOnlyTransient4 == null) throw new ArgumentException(nameof(windsorOnlyTransient4)); 
+		if (windsorOnlyScoped1 == null) throw new ArgumentException(nameof(windsorOnlyScoped1)); 
+		if (windsorOnlyScoped2 == null) throw new ArgumentException(nameof(windsorOnlyScoped2)); 
+		if (windsorOnlyScoped3 == null) throw new ArgumentException(nameof(windsorOnlyScoped3)); 
+		if (windsorOnlyScoped4 == null) throw new ArgumentException(nameof(windsorOnlyScoped4)); 
+		if (windsorOnlySingleton1 == null) throw new ArgumentException(nameof(windsorOnlySingleton1)); 
+		if (windsorOnlySingleton2 == null) throw new ArgumentException(nameof(windsorOnlySingleton2)); 
+		if (windsorOnlySingleton3 == null) throw new ArgumentException(nameof(windsorOnlySingleton3)); 
+		if (windsorOnlySingleton4 == null) throw new ArgumentException(nameof(windsorOnlySingleton4)); 
 	}
 }
 
@@ -340,31 +340,31 @@ public partial class TagHelperWindsorOnly : TagHelper
 {
 	public TagHelperWindsorOnly
 	(
-		WindsorOnlyTransient WindsorOnlyTransient1, 
-		WindsorOnlyTransientGeneric<OpenOptions> WindsorOnlyTransient2, 
-		WindsorOnlyTransientGeneric<ClosedOptions> WindsorOnlyTransient3, 
-		WindsorOnlyTransientDisposable WindsorOnlyTransient4 ,
-		WindsorOnlyScoped WindsorOnlyScoped1, 
-		WindsorOnlyScopedGeneric<OpenOptions> WindsorOnlyScoped2, 
-		WindsorOnlyScopedGeneric<ClosedOptions> WindsorOnlyScoped3, 
-		WindsorOnlyScopedDisposable WindsorOnlyScoped4 ,
-		WindsorOnlySingleton WindsorOnlySingleton1, 
-		WindsorOnlySingletonGeneric<OpenOptions> WindsorOnlySingleton2, 
-		WindsorOnlySingletonGeneric<ClosedOptions> WindsorOnlySingleton3, 
-		WindsorOnlySingletonDisposable WindsorOnlySingleton4 )
+		WindsorOnlyTransient windsorOnlyTransient1, 
+		WindsorOnlyTransientGeneric<OpenOptions> windsorOnlyTransient2, 
+		WindsorOnlyTransientGeneric<ClosedOptions> windsorOnlyTransient3, 
+		WindsorOnlyTransientDisposable windsorOnlyTransient4 ,
+		WindsorOnlyScoped windsorOnlyScoped1, 
+		WindsorOnlyScopedGeneric<OpenOptions> windsorOnlyScoped2, 
+		WindsorOnlyScopedGeneric<ClosedOptions> windsorOnlyScoped3, 
+		WindsorOnlyScopedDisposable windsorOnlyScoped4 ,
+		WindsorOnlySingleton windsorOnlySingleton1, 
+		WindsorOnlySingletonGeneric<OpenOptions> windsorOnlySingleton2, 
+		WindsorOnlySingletonGeneric<ClosedOptions> windsorOnlySingleton3, 
+		WindsorOnlySingletonDisposable windsorOnlySingleton4 )
 	{
-		if (WindsorOnlyTransient1 == null) throw new ArgumentException(nameof(WindsorOnlyTransient1)); 
-		if (WindsorOnlyTransient2 == null) throw new ArgumentException(nameof(WindsorOnlyTransient2)); 
-		if (WindsorOnlyTransient3 == null) throw new ArgumentException(nameof(WindsorOnlyTransient3)); 
-		if (WindsorOnlyTransient4 == null) throw new ArgumentException(nameof(WindsorOnlyTransient4)); 
-		if (WindsorOnlyScoped1 == null) throw new ArgumentException(nameof(WindsorOnlyScoped1)); 
-		if (WindsorOnlyScoped2 == null) throw new ArgumentException(nameof(WindsorOnlyScoped2)); 
-		if (WindsorOnlyScoped3 == null) throw new ArgumentException(nameof(WindsorOnlyScoped3)); 
-		if (WindsorOnlyScoped4 == null) throw new ArgumentException(nameof(WindsorOnlyScoped4)); 
-		if (WindsorOnlySingleton1 == null) throw new ArgumentException(nameof(WindsorOnlySingleton1)); 
-		if (WindsorOnlySingleton2 == null) throw new ArgumentException(nameof(WindsorOnlySingleton2)); 
-		if (WindsorOnlySingleton3 == null) throw new ArgumentException(nameof(WindsorOnlySingleton3)); 
-		if (WindsorOnlySingleton4 == null) throw new ArgumentException(nameof(WindsorOnlySingleton4)); 
+		if (windsorOnlyTransient1 == null) throw new ArgumentException(nameof(windsorOnlyTransient1)); 
+		if (windsorOnlyTransient2 == null) throw new ArgumentException(nameof(windsorOnlyTransient2)); 
+		if (windsorOnlyTransient3 == null) throw new ArgumentException(nameof(windsorOnlyTransient3)); 
+		if (windsorOnlyTransient4 == null) throw new ArgumentException(nameof(windsorOnlyTransient4)); 
+		if (windsorOnlyScoped1 == null) throw new ArgumentException(nameof(windsorOnlyScoped1)); 
+		if (windsorOnlyScoped2 == null) throw new ArgumentException(nameof(windsorOnlyScoped2)); 
+		if (windsorOnlyScoped3 == null) throw new ArgumentException(nameof(windsorOnlyScoped3)); 
+		if (windsorOnlyScoped4 == null) throw new ArgumentException(nameof(windsorOnlyScoped4)); 
+		if (windsorOnlySingleton1 == null) throw new ArgumentException(nameof(windsorOnlySingleton1)); 
+		if (windsorOnlySingleton2 == null) throw new ArgumentException(nameof(windsorOnlySingleton2)); 
+		if (windsorOnlySingleton3 == null) throw new ArgumentException(nameof(windsorOnlySingleton3)); 
+		if (windsorOnlySingleton4 == null) throw new ArgumentException(nameof(windsorOnlySingleton4)); 
 	}
 }
 
@@ -372,31 +372,31 @@ public class ViewComponentWindsorOnly : ViewComponent
 {
 	public ViewComponentWindsorOnly
 	(
-		WindsorOnlyTransient WindsorOnlyTransient1, 
-		WindsorOnlyTransientGeneric<OpenOptions> WindsorOnlyTransient2, 
-		WindsorOnlyTransientGeneric<ClosedOptions> WindsorOnlyTransient3, 
-		WindsorOnlyTransientDisposable WindsorOnlyTransient4 ,
-		WindsorOnlyScoped WindsorOnlyScoped1, 
-		WindsorOnlyScopedGeneric<OpenOptions> WindsorOnlyScoped2, 
-		WindsorOnlyScopedGeneric<ClosedOptions> WindsorOnlyScoped3, 
-		WindsorOnlyScopedDisposable WindsorOnlyScoped4 ,
-		WindsorOnlySingleton WindsorOnlySingleton1, 
-		WindsorOnlySingletonGeneric<OpenOptions> WindsorOnlySingleton2, 
-		WindsorOnlySingletonGeneric<ClosedOptions> WindsorOnlySingleton3, 
-		WindsorOnlySingletonDisposable WindsorOnlySingleton4 )
+		WindsorOnlyTransient windsorOnlyTransient1, 
+		WindsorOnlyTransientGeneric<OpenOptions> windsorOnlyTransient2, 
+		WindsorOnlyTransientGeneric<ClosedOptions> windsorOnlyTransient3, 
+		WindsorOnlyTransientDisposable windsorOnlyTransient4 ,
+		WindsorOnlyScoped windsorOnlyScoped1, 
+		WindsorOnlyScopedGeneric<OpenOptions> windsorOnlyScoped2, 
+		WindsorOnlyScopedGeneric<ClosedOptions> windsorOnlyScoped3, 
+		WindsorOnlyScopedDisposable windsorOnlyScoped4 ,
+		WindsorOnlySingleton windsorOnlySingleton1, 
+		WindsorOnlySingletonGeneric<OpenOptions> windsorOnlySingleton2, 
+		WindsorOnlySingletonGeneric<ClosedOptions> windsorOnlySingleton3, 
+		WindsorOnlySingletonDisposable windsorOnlySingleton4 )
 	{
-		if (WindsorOnlyTransient1 == null) throw new ArgumentException(nameof(WindsorOnlyTransient1)); 
-		if (WindsorOnlyTransient2 == null) throw new ArgumentException(nameof(WindsorOnlyTransient2)); 
-		if (WindsorOnlyTransient3 == null) throw new ArgumentException(nameof(WindsorOnlyTransient3)); 
-		if (WindsorOnlyTransient4 == null) throw new ArgumentException(nameof(WindsorOnlyTransient4)); 
-		if (WindsorOnlyScoped1 == null) throw new ArgumentException(nameof(WindsorOnlyScoped1)); 
-		if (WindsorOnlyScoped2 == null) throw new ArgumentException(nameof(WindsorOnlyScoped2)); 
-		if (WindsorOnlyScoped3 == null) throw new ArgumentException(nameof(WindsorOnlyScoped3)); 
-		if (WindsorOnlyScoped4 == null) throw new ArgumentException(nameof(WindsorOnlyScoped4)); 
-		if (WindsorOnlySingleton1 == null) throw new ArgumentException(nameof(WindsorOnlySingleton1)); 
-		if (WindsorOnlySingleton2 == null) throw new ArgumentException(nameof(WindsorOnlySingleton2)); 
-		if (WindsorOnlySingleton3 == null) throw new ArgumentException(nameof(WindsorOnlySingleton3)); 
-		if (WindsorOnlySingleton4 == null) throw new ArgumentException(nameof(WindsorOnlySingleton4)); 
+		if (windsorOnlyTransient1 == null) throw new ArgumentException(nameof(windsorOnlyTransient1)); 
+		if (windsorOnlyTransient2 == null) throw new ArgumentException(nameof(windsorOnlyTransient2)); 
+		if (windsorOnlyTransient3 == null) throw new ArgumentException(nameof(windsorOnlyTransient3)); 
+		if (windsorOnlyTransient4 == null) throw new ArgumentException(nameof(windsorOnlyTransient4)); 
+		if (windsorOnlyScoped1 == null) throw new ArgumentException(nameof(windsorOnlyScoped1)); 
+		if (windsorOnlyScoped2 == null) throw new ArgumentException(nameof(windsorOnlyScoped2)); 
+		if (windsorOnlyScoped3 == null) throw new ArgumentException(nameof(windsorOnlyScoped3)); 
+		if (windsorOnlyScoped4 == null) throw new ArgumentException(nameof(windsorOnlyScoped4)); 
+		if (windsorOnlySingleton1 == null) throw new ArgumentException(nameof(windsorOnlySingleton1)); 
+		if (windsorOnlySingleton2 == null) throw new ArgumentException(nameof(windsorOnlySingleton2)); 
+		if (windsorOnlySingleton3 == null) throw new ArgumentException(nameof(windsorOnlySingleton3)); 
+		if (windsorOnlySingleton4 == null) throw new ArgumentException(nameof(windsorOnlySingleton4)); 
 	}
 }
 
@@ -419,31 +419,31 @@ public partial class TagHelperServiceProviderOnly : TagHelper
 {
 	public TagHelperServiceProviderOnly
 	(
-		ServiceProviderOnlyTransient ServiceProviderOnlyTransient1, 
-		ServiceProviderOnlyTransientGeneric<OpenOptions> ServiceProviderOnlyTransient2, 
-		ServiceProviderOnlyTransientGeneric<ClosedOptions> ServiceProviderOnlyTransient3, 
-		ServiceProviderOnlyTransientDisposable ServiceProviderOnlyTransient4 ,
-		ServiceProviderOnlyScoped ServiceProviderOnlyScoped1, 
-		ServiceProviderOnlyScopedGeneric<OpenOptions> ServiceProviderOnlyScoped2, 
-		ServiceProviderOnlyScopedGeneric<ClosedOptions> ServiceProviderOnlyScoped3, 
-		ServiceProviderOnlyScopedDisposable ServiceProviderOnlyScoped4 ,
-		ServiceProviderOnlySingleton ServiceProviderOnlySingleton1, 
-		ServiceProviderOnlySingletonGeneric<OpenOptions> ServiceProviderOnlySingleton2, 
-		ServiceProviderOnlySingletonGeneric<ClosedOptions> ServiceProviderOnlySingleton3, 
-		ServiceProviderOnlySingletonDisposable ServiceProviderOnlySingleton4 )
+		ServiceProviderOnlyTransient serviceProviderOnlyTransient1, 
+		ServiceProviderOnlyTransientGeneric<OpenOptions> serviceProviderOnlyTransient2, 
+		ServiceProviderOnlyTransientGeneric<ClosedOptions> serviceProviderOnlyTransient3, 
+		ServiceProviderOnlyTransientDisposable serviceProviderOnlyTransient4 ,
+		ServiceProviderOnlyScoped serviceProviderOnlyScoped1, 
+		ServiceProviderOnlyScopedGeneric<OpenOptions> serviceProviderOnlyScoped2, 
+		ServiceProviderOnlyScopedGeneric<ClosedOptions> serviceProviderOnlyScoped3, 
+		ServiceProviderOnlyScopedDisposable serviceProviderOnlyScoped4 ,
+		ServiceProviderOnlySingleton serviceProviderOnlySingleton1, 
+		ServiceProviderOnlySingletonGeneric<OpenOptions> serviceProviderOnlySingleton2, 
+		ServiceProviderOnlySingletonGeneric<ClosedOptions> serviceProviderOnlySingleton3, 
+		ServiceProviderOnlySingletonDisposable serviceProviderOnlySingleton4 )
 	{
-		if (ServiceProviderOnlyTransient1 == null) throw new ArgumentException(nameof(ServiceProviderOnlyTransient1)); 
-		if (ServiceProviderOnlyTransient2 == null) throw new ArgumentException(nameof(ServiceProviderOnlyTransient2)); 
-		if (ServiceProviderOnlyTransient3 == null) throw new ArgumentException(nameof(ServiceProviderOnlyTransient3)); 
-		if (ServiceProviderOnlyTransient4 == null) throw new ArgumentException(nameof(ServiceProviderOnlyTransient4)); 
-		if (ServiceProviderOnlyScoped1 == null) throw new ArgumentException(nameof(ServiceProviderOnlyScoped1)); 
-		if (ServiceProviderOnlyScoped2 == null) throw new ArgumentException(nameof(ServiceProviderOnlyScoped2)); 
-		if (ServiceProviderOnlyScoped3 == null) throw new ArgumentException(nameof(ServiceProviderOnlyScoped3)); 
-		if (ServiceProviderOnlyScoped4 == null) throw new ArgumentException(nameof(ServiceProviderOnlyScoped4)); 
-		if (ServiceProviderOnlySingleton1 == null) throw new ArgumentException(nameof(ServiceProviderOnlySingleton1)); 
-		if (ServiceProviderOnlySingleton2 == null) throw new ArgumentException(nameof(ServiceProviderOnlySingleton2)); 
-		if (ServiceProviderOnlySingleton3 == null) throw new ArgumentException(nameof(ServiceProviderOnlySingleton3)); 
-		if (ServiceProviderOnlySingleton4 == null) throw new ArgumentException(nameof(ServiceProviderOnlySingleton4)); 
+		if (serviceProviderOnlyTransient1 == null) throw new ArgumentException(nameof(serviceProviderOnlyTransient1)); 
+		if (serviceProviderOnlyTransient2 == null) throw new ArgumentException(nameof(serviceProviderOnlyTransient2)); 
+		if (serviceProviderOnlyTransient3 == null) throw new ArgumentException(nameof(serviceProviderOnlyTransient3)); 
+		if (serviceProviderOnlyTransient4 == null) throw new ArgumentException(nameof(serviceProviderOnlyTransient4)); 
+		if (serviceProviderOnlyScoped1 == null) throw new ArgumentException(nameof(serviceProviderOnlyScoped1)); 
+		if (serviceProviderOnlyScoped2 == null) throw new ArgumentException(nameof(serviceProviderOnlyScoped2)); 
+		if (serviceProviderOnlyScoped3 == null) throw new ArgumentException(nameof(serviceProviderOnlyScoped3)); 
+		if (serviceProviderOnlyScoped4 == null) throw new ArgumentException(nameof(serviceProviderOnlyScoped4)); 
+		if (serviceProviderOnlySingleton1 == null) throw new ArgumentException(nameof(serviceProviderOnlySingleton1)); 
+		if (serviceProviderOnlySingleton2 == null) throw new ArgumentException(nameof(serviceProviderOnlySingleton2)); 
+		if (serviceProviderOnlySingleton3 == null) throw new ArgumentException(nameof(serviceProviderOnlySingleton3)); 
+		if (serviceProviderOnlySingleton4 == null) throw new ArgumentException(nameof(serviceProviderOnlySingleton4)); 
 	}
 }
 
@@ -451,31 +451,31 @@ public partial class ViewComponentServiceProviderOnly : ViewComponent
 {
 	public ViewComponentServiceProviderOnly
 	(
-		ServiceProviderOnlyTransient ServiceProviderOnlyTransient1, 
-		ServiceProviderOnlyTransientGeneric<OpenOptions> ServiceProviderOnlyTransient2, 
-		ServiceProviderOnlyTransientGeneric<ClosedOptions> ServiceProviderOnlyTransient3, 
-		ServiceProviderOnlyTransientDisposable ServiceProviderOnlyTransient4 ,
-		ServiceProviderOnlyScoped ServiceProviderOnlyScoped1, 
-		ServiceProviderOnlyScopedGeneric<OpenOptions> ServiceProviderOnlyScoped2, 
-		ServiceProviderOnlyScopedGeneric<ClosedOptions> ServiceProviderOnlyScoped3, 
-		ServiceProviderOnlyScopedDisposable ServiceProviderOnlyScoped4 ,
-		ServiceProviderOnlySingleton ServiceProviderOnlySingleton1, 
-		ServiceProviderOnlySingletonGeneric<OpenOptions> ServiceProviderOnlySingleton2, 
-		ServiceProviderOnlySingletonGeneric<ClosedOptions> ServiceProviderOnlySingleton3, 
-		ServiceProviderOnlySingletonDisposable ServiceProviderOnlySingleton4 )
+		ServiceProviderOnlyTransient serviceProviderOnlyTransient1, 
+		ServiceProviderOnlyTransientGeneric<OpenOptions> serviceProviderOnlyTransient2, 
+		ServiceProviderOnlyTransientGeneric<ClosedOptions> serviceProviderOnlyTransient3, 
+		ServiceProviderOnlyTransientDisposable serviceProviderOnlyTransient4 ,
+		ServiceProviderOnlyScoped serviceProviderOnlyScoped1, 
+		ServiceProviderOnlyScopedGeneric<OpenOptions> serviceProviderOnlyScoped2, 
+		ServiceProviderOnlyScopedGeneric<ClosedOptions> serviceProviderOnlyScoped3, 
+		ServiceProviderOnlyScopedDisposable serviceProviderOnlyScoped4 ,
+		ServiceProviderOnlySingleton serviceProviderOnlySingleton1, 
+		ServiceProviderOnlySingletonGeneric<OpenOptions> serviceProviderOnlySingleton2, 
+		ServiceProviderOnlySingletonGeneric<ClosedOptions> serviceProviderOnlySingleton3, 
+		ServiceProviderOnlySingletonDisposable serviceProviderOnlySingleton4 )
 	{
-		if (ServiceProviderOnlyTransient1 == null) throw new ArgumentException(nameof(ServiceProviderOnlyTransient1)); 
-		if (ServiceProviderOnlyTransient2 == null) throw new ArgumentException(nameof(ServiceProviderOnlyTransient2)); 
-		if (ServiceProviderOnlyTransient3 == null) throw new ArgumentException(nameof(ServiceProviderOnlyTransient3)); 
-		if (ServiceProviderOnlyTransient4 == null) throw new ArgumentException(nameof(ServiceProviderOnlyTransient4)); 
-		if (ServiceProviderOnlyScoped1 == null) throw new ArgumentException(nameof(ServiceProviderOnlyScoped1)); 
-		if (ServiceProviderOnlyScoped2 == null) throw new ArgumentException(nameof(ServiceProviderOnlyScoped2)); 
-		if (ServiceProviderOnlyScoped3 == null) throw new ArgumentException(nameof(ServiceProviderOnlyScoped3)); 
-		if (ServiceProviderOnlyScoped4 == null) throw new ArgumentException(nameof(ServiceProviderOnlyScoped4)); 
-		if (ServiceProviderOnlySingleton1 == null) throw new ArgumentException(nameof(ServiceProviderOnlySingleton1)); 
-		if (ServiceProviderOnlySingleton2 == null) throw new ArgumentException(nameof(ServiceProviderOnlySingleton2)); 
-		if (ServiceProviderOnlySingleton3 == null) throw new ArgumentException(nameof(ServiceProviderOnlySingleton3)); 
-		if (ServiceProviderOnlySingleton4 == null) throw new ArgumentException(nameof(ServiceProviderOnlySingleton4)); 
+		if (serviceProviderOnlyTransient1 == null) throw new ArgumentException(nameof(serviceProviderOnlyTransient1)); 
+		if (serviceProviderOnlyTransient2 == null) throw new ArgumentException(nameof(serviceProviderOnlyTransient2)); 
+		if (serviceProviderOnlyTransient3 == null) throw new ArgumentException(nameof(serviceProviderOnlyTransient3)); 
+		if (serviceProviderOnlyTransient4 == null) throw new ArgumentException(nameof(serviceProviderOnlyTransient4)); 
+		if (serviceProviderOnlyScoped1 == null) throw new ArgumentException(nameof(serviceProviderOnlyScoped1)); 
+		if (serviceProviderOnlyScoped2 == null) throw new ArgumentException(nameof(serviceProviderOnlyScoped2)); 
+		if (serviceProviderOnlyScoped3 == null) throw new ArgumentException(nameof(serviceProviderOnlyScoped3)); 
+		if (serviceProviderOnlyScoped4 == null) throw new ArgumentException(nameof(serviceProviderOnlyScoped4)); 
+		if (serviceProviderOnlySingleton1 == null) throw new ArgumentException(nameof(serviceProviderOnlySingleton1)); 
+		if (serviceProviderOnlySingleton2 == null) throw new ArgumentException(nameof(serviceProviderOnlySingleton2)); 
+		if (serviceProviderOnlySingleton3 == null) throw new ArgumentException(nameof(serviceProviderOnlySingleton3)); 
+		if (serviceProviderOnlySingleton4 == null) throw new ArgumentException(nameof(serviceProviderOnlySingleton4)); 
 	}
 }
 
@@ -483,31 +483,31 @@ public partial class ControllerCrossWired : Controller
 {
 	public ControllerCrossWired
 	(
-		CrossWiredTransient CrossWiredTransient1, 
-		CrossWiredTransientGeneric<OpenOptions> CrossWiredTransient2, 
-		CrossWiredTransientGeneric<ClosedOptions> CrossWiredTransient3, 
-		CrossWiredTransientDisposable CrossWiredTransient4 ,
-		CrossWiredScoped CrossWiredScoped1, 
-		CrossWiredScopedGeneric<OpenOptions> CrossWiredScoped2, 
-		CrossWiredScopedGeneric<ClosedOptions> CrossWiredScoped3, 
-		CrossWiredScopedDisposable CrossWiredScoped4 ,
-		CrossWiredSingleton CrossWiredSingleton1, 
-		CrossWiredSingletonGeneric<OpenOptions> CrossWiredSingleton2, 
-		CrossWiredSingletonGeneric<ClosedOptions> CrossWiredSingleton3, 
-		CrossWiredSingletonDisposable CrossWiredSingleton4 )
+		CrossWiredTransient crossWiredTransient1, 
+		CrossWiredTransientGeneric<OpenOptions> crossWiredTransient2, 
+		CrossWiredTransientGeneric<ClosedOptions> crossWiredTransient3, 
+		CrossWiredTransientDisposable crossWiredTransient4 ,
+		CrossWiredScoped crossWiredScoped1, 
+		CrossWiredScopedGeneric<OpenOptions> crossWiredScoped2, 
+		CrossWiredScopedGeneric<ClosedOptions> crossWiredScoped3, 
+		CrossWiredScopedDisposable crossWiredScoped4 ,
+		CrossWiredSingleton crossWiredSingleton1, 
+		CrossWiredSingletonGeneric<OpenOptions> crossWiredSingleton2, 
+		CrossWiredSingletonGeneric<ClosedOptions> crossWiredSingleton3, 
+		CrossWiredSingletonDisposable crossWiredSingleton4 )
 	{
-		if (CrossWiredTransient1 == null) throw new ArgumentException(nameof(CrossWiredTransient1)); 
-		if (CrossWiredTransient2 == null) throw new ArgumentException(nameof(CrossWiredTransient2)); 
-		if (CrossWiredTransient3 == null) throw new ArgumentException(nameof(CrossWiredTransient3)); 
-		if (CrossWiredTransient4 == null) throw new ArgumentException(nameof(CrossWiredTransient4)); 
-		if (CrossWiredScoped1 == null) throw new ArgumentException(nameof(CrossWiredScoped1)); 
-		if (CrossWiredScoped2 == null) throw new ArgumentException(nameof(CrossWiredScoped2)); 
-		if (CrossWiredScoped3 == null) throw new ArgumentException(nameof(CrossWiredScoped3)); 
-		if (CrossWiredScoped4 == null) throw new ArgumentException(nameof(CrossWiredScoped4)); 
-		if (CrossWiredSingleton1 == null) throw new ArgumentException(nameof(CrossWiredSingleton1)); 
-		if (CrossWiredSingleton2 == null) throw new ArgumentException(nameof(CrossWiredSingleton2)); 
-		if (CrossWiredSingleton3 == null) throw new ArgumentException(nameof(CrossWiredSingleton3)); 
-		if (CrossWiredSingleton4 == null) throw new ArgumentException(nameof(CrossWiredSingleton4)); 
+		if (crossWiredTransient1 == null) throw new ArgumentException(nameof(crossWiredTransient1)); 
+		if (crossWiredTransient2 == null) throw new ArgumentException(nameof(crossWiredTransient2)); 
+		if (crossWiredTransient3 == null) throw new ArgumentException(nameof(crossWiredTransient3)); 
+		if (crossWiredTransient4 == null) throw new ArgumentException(nameof(crossWiredTransient4)); 
+		if (crossWiredScoped1 == null) throw new ArgumentException(nameof(crossWiredScoped1)); 
+		if (crossWiredScoped2 == null) throw new ArgumentException(nameof(crossWiredScoped2)); 
+		if (crossWiredScoped3 == null) throw new ArgumentException(nameof(crossWiredScoped3)); 
+		if (crossWiredScoped4 == null) throw new ArgumentException(nameof(crossWiredScoped4)); 
+		if (crossWiredSingleton1 == null) throw new ArgumentException(nameof(crossWiredSingleton1)); 
+		if (crossWiredSingleton2 == null) throw new ArgumentException(nameof(crossWiredSingleton2)); 
+		if (crossWiredSingleton3 == null) throw new ArgumentException(nameof(crossWiredSingleton3)); 
+		if (crossWiredSingleton4 == null) throw new ArgumentException(nameof(crossWiredSingleton4)); 
 	}
 }
 
@@ -515,31 +515,31 @@ public partial class TagHelperCrossWired : TagHelper
 {
 	public TagHelperCrossWired
 	(
-		CrossWiredTransient CrossWiredTransient1, 
-		CrossWiredTransientGeneric<OpenOptions> CrossWiredTransient2, 
-		CrossWiredTransientGeneric<ClosedOptions> CrossWiredTransient3, 
-		CrossWiredTransientDisposable CrossWiredTransient4 ,
-		CrossWiredScoped CrossWiredScoped1, 
-		CrossWiredScopedGeneric<OpenOptions> CrossWiredScoped2, 
-		CrossWiredScopedGeneric<ClosedOptions> CrossWiredScoped3, 
-		CrossWiredScopedDisposable CrossWiredScoped4 ,
-		CrossWiredSingleton CrossWiredSingleton1, 
-		CrossWiredSingletonGeneric<OpenOptions> CrossWiredSingleton2, 
-		CrossWiredSingletonGeneric<ClosedOptions> CrossWiredSingleton3, 
-		CrossWiredSingletonDisposable CrossWiredSingleton4 )
+		CrossWiredTransient crossWiredTransient1, 
+		CrossWiredTransientGeneric<OpenOptions> crossWiredTransient2, 
+		CrossWiredTransientGeneric<ClosedOptions> crossWiredTransient3, 
+		CrossWiredTransientDisposable crossWiredTransient4 ,
+		CrossWiredScoped crossWiredScoped1, 
+		CrossWiredScopedGeneric<OpenOptions> crossWiredScoped2, 
+		CrossWiredScopedGeneric<ClosedOptions> crossWiredScoped3, 
+		CrossWiredScopedDisposable crossWiredScoped4 ,
+		CrossWiredSingleton crossWiredSingleton1, 
+		CrossWiredSingletonGeneric<OpenOptions> crossWiredSingleton2, 
+		CrossWiredSingletonGeneric<ClosedOptions> crossWiredSingleton3, 
+		CrossWiredSingletonDisposable crossWiredSingleton4 )
 	{
-		if (CrossWiredTransient1 == null) throw new ArgumentException(nameof(CrossWiredTransient1)); 
-		if (CrossWiredTransient2 == null) throw new ArgumentException(nameof(CrossWiredTransient2)); 
-		if (CrossWiredTransient3 == null) throw new ArgumentException(nameof(CrossWiredTransient3)); 
-		if (CrossWiredTransient4 == null) throw new ArgumentException(nameof(CrossWiredTransient4)); 
-		if (CrossWiredScoped1 == null) throw new ArgumentException(nameof(CrossWiredScoped1)); 
-		if (CrossWiredScoped2 == null) throw new ArgumentException(nameof(CrossWiredScoped2)); 
-		if (CrossWiredScoped3 == null) throw new ArgumentException(nameof(CrossWiredScoped3)); 
-		if (CrossWiredScoped4 == null) throw new ArgumentException(nameof(CrossWiredScoped4)); 
-		if (CrossWiredSingleton1 == null) throw new ArgumentException(nameof(CrossWiredSingleton1)); 
-		if (CrossWiredSingleton2 == null) throw new ArgumentException(nameof(CrossWiredSingleton2)); 
-		if (CrossWiredSingleton3 == null) throw new ArgumentException(nameof(CrossWiredSingleton3)); 
-		if (CrossWiredSingleton4 == null) throw new ArgumentException(nameof(CrossWiredSingleton4)); 
+		if (crossWiredTransient1 == null) throw new ArgumentException(nameof(crossWiredTransient1)); 
+		if (crossWiredTransient2 == null) throw new ArgumentException(nameof(crossWiredTransient2)); 
+		if (crossWiredTransient3 == null) throw new ArgumentException(nameof(crossWiredTransient3)); 
+		if (crossWiredTransient4 == null) throw new ArgumentException(nameof(crossWiredTransient4)); 
+		if (crossWiredScoped1 == null) throw new ArgumentException(nameof(crossWiredScoped1)); 
+		if (crossWiredScoped2 == null) throw new ArgumentException(nameof(crossWiredScoped2)); 
+		if (crossWiredScoped3 == null) throw new ArgumentException(nameof(crossWiredScoped3)); 
+		if (crossWiredScoped4 == null) throw new ArgumentException(nameof(crossWiredScoped4)); 
+		if (crossWiredSingleton1 == null) throw new ArgumentException(nameof(crossWiredSingleton1)); 
+		if (crossWiredSingleton2 == null) throw new ArgumentException(nameof(crossWiredSingleton2)); 
+		if (crossWiredSingleton3 == null) throw new ArgumentException(nameof(crossWiredSingleton3)); 
+		if (crossWiredSingleton4 == null) throw new ArgumentException(nameof(crossWiredSingleton4)); 
 	}
 }
 
@@ -547,31 +547,31 @@ public partial class ViewComponentCrossWired : ViewComponent
 {
 	public ViewComponentCrossWired
 	(
-		CrossWiredTransient CrossWiredTransient1, 
-		CrossWiredTransientGeneric<OpenOptions> CrossWiredTransient2, 
-		CrossWiredTransientGeneric<ClosedOptions> CrossWiredTransient3, 
-		CrossWiredTransientDisposable CrossWiredTransient4 ,
-		CrossWiredScoped CrossWiredScoped1, 
-		CrossWiredScopedGeneric<OpenOptions> CrossWiredScoped2, 
-		CrossWiredScopedGeneric<ClosedOptions> CrossWiredScoped3, 
-		CrossWiredScopedDisposable CrossWiredScoped4 ,
-		CrossWiredSingleton CrossWiredSingleton1, 
-		CrossWiredSingletonGeneric<OpenOptions> CrossWiredSingleton2, 
-		CrossWiredSingletonGeneric<ClosedOptions> CrossWiredSingleton3, 
-		CrossWiredSingletonDisposable CrossWiredSingleton4 )
+		CrossWiredTransient crossWiredTransient1, 
+		CrossWiredTransientGeneric<OpenOptions> crossWiredTransient2, 
+		CrossWiredTransientGeneric<ClosedOptions> crossWiredTransient3, 
+		CrossWiredTransientDisposable crossWiredTransient4 ,
+		CrossWiredScoped crossWiredScoped1, 
+		CrossWiredScopedGeneric<OpenOptions> crossWiredScoped2, 
+		CrossWiredScopedGeneric<ClosedOptions> crossWiredScoped3, 
+		CrossWiredScopedDisposable crossWiredScoped4 ,
+		CrossWiredSingleton crossWiredSingleton1, 
+		CrossWiredSingletonGeneric<OpenOptions> crossWiredSingleton2, 
+		CrossWiredSingletonGeneric<ClosedOptions> crossWiredSingleton3, 
+		CrossWiredSingletonDisposable crossWiredSingleton4 )
 
 	{
-		if (CrossWiredTransient1 == null) throw new ArgumentException(nameof(CrossWiredTransient1)); 
-		if (CrossWiredTransient2 == null) throw new ArgumentException(nameof(CrossWiredTransient2)); 
-		if (CrossWiredTransient3 == null) throw new ArgumentException(nameof(CrossWiredTransient3)); 
-		if (CrossWiredTransient4 == null) throw new ArgumentException(nameof(CrossWiredTransient4)); 
-		if (CrossWiredScoped1 == null) throw new ArgumentException(nameof(CrossWiredScoped1)); 
-		if (CrossWiredScoped2 == null) throw new ArgumentException(nameof(CrossWiredScoped2)); 
-		if (CrossWiredScoped3 == null) throw new ArgumentException(nameof(CrossWiredScoped3)); 
-		if (CrossWiredScoped4 == null) throw new ArgumentException(nameof(CrossWiredScoped4)); 
-		if (CrossWiredSingleton1 == null) throw new ArgumentException(nameof(CrossWiredSingleton1)); 
-		if (CrossWiredSingleton2 == null) throw new ArgumentException(nameof(CrossWiredSingleton2)); 
-		if (CrossWiredSingleton3 == null) throw new ArgumentException(nameof(CrossWiredSingleton3)); 
-		if (CrossWiredSingleton4 == null) throw new ArgumentException(nameof(CrossWiredSingleton4)); 
+		if (crossWiredTransient1 == null) throw new ArgumentException(nameof(crossWiredTransient1)); 
+		if (crossWiredTransient2 == null) throw new ArgumentException(nameof(crossWiredTransient2)); 
+		if (crossWiredTransient3 == null) throw new ArgumentException(nameof(crossWiredTransient3)); 
+		if (crossWiredTransient4 == null) throw new ArgumentException(nameof(crossWiredTransient4)); 
+		if (crossWiredScoped1 == null) throw new ArgumentException(nameof(crossWiredScoped1)); 
+		if (crossWiredScoped2 == null) throw new ArgumentException(nameof(crossWiredScoped2)); 
+		if (crossWiredScoped3 == null) throw new ArgumentException(nameof(crossWiredScoped3)); 
+		if (crossWiredScoped4 == null) throw new ArgumentException(nameof(crossWiredScoped4)); 
+		if (crossWiredSingleton1 == null) throw new ArgumentException(nameof(crossWiredSingleton1)); 
+		if (crossWiredSingleton2 == null) throw new ArgumentException(nameof(crossWiredSingleton2)); 
+		if (crossWiredSingleton3 == null) throw new ArgumentException(nameof(crossWiredSingleton3)); 
+		if (crossWiredSingleton4 == null) throw new ArgumentException(nameof(crossWiredSingleton4)); 
 	}
 }

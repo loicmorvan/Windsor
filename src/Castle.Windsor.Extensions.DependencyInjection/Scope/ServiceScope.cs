@@ -20,12 +20,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 internal class ServiceScope(IDisposable windsorScope, IServiceProvider serviceProvider) : IServiceScope
 {
-	private readonly IDisposable scope = windsorScope ?? throw new ArgumentNullException(nameof(scope));
+	private readonly IDisposable _scope = windsorScope ?? throw new ArgumentNullException(nameof(_scope));
 
 	public IServiceProvider ServiceProvider { get; } = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
 
 	public void Dispose()
 	{
-		scope.Dispose();
+		_scope.Dispose();
 	}
 }

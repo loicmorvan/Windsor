@@ -28,7 +28,7 @@ using Castle.MicroKernel.Resolvers;
 
 public abstract class AbstractProxyFactory : IProxyFactory
 {
-	private List<IModelInterceptorsSelector> selectors;
+	private List<IModelInterceptorsSelector> _selectors;
 
 	public abstract object Create(IKernel kernel, object instance, ComponentModel model, CreationContext context,
 		params object[] constructorArguments);
@@ -40,11 +40,11 @@ public abstract class AbstractProxyFactory : IProxyFactory
 
 	public void AddInterceptorSelector(IModelInterceptorsSelector selector)
 	{
-		if (selectors == null)
+		if (_selectors == null)
 		{
-			selectors = new List<IModelInterceptorsSelector>();
+			_selectors = [];
 		}
-		selectors.Add(selector);
+		_selectors.Add(selector);
 	}
 
 	public bool ShouldCreateProxy(ComponentModel model)
@@ -55,11 +55,11 @@ public abstract class AbstractProxyFactory : IProxyFactory
 		}
 
 		var options = model.ObtainProxyOptions(false);
-		if (options != null && options.RequiresProxy)
+		if (options is { RequiresProxy: true })
 		{
 			return true;
 		}
-		if (selectors != null && selectors.Any(s => s.HasInterceptors(model)))
+		if (_selectors != null && _selectors.Any(s => s.HasInterceptors(model)))
 		{
 			return true;
 		}
@@ -70,9 +70,9 @@ public abstract class AbstractProxyFactory : IProxyFactory
 	protected IEnumerable<InterceptorReference> GetInterceptorsFor(ComponentModel model)
 	{
 		var interceptors = model.Interceptors.ToArray();
-		if (selectors != null)
+		if (_selectors != null)
 		{
-			foreach (var selector in selectors)
+			foreach (var selector in _selectors)
 			{
 				if (selector.HasInterceptors(model) == false)
 				{
@@ -82,7 +82,7 @@ public abstract class AbstractProxyFactory : IProxyFactory
 				interceptors = selector.SelectInterceptors(model, interceptors);
 				if (interceptors == null)
 				{
-					interceptors = new InterceptorReference[0];
+					interceptors = [];
 				}
 			}
 		}

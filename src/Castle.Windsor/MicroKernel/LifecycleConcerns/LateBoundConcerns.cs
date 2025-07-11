@@ -27,30 +27,30 @@ using System.Collections.Concurrent;
 [Serializable]
 public abstract class LateBoundConcerns<TConcern>
 {
-	private IDictionary<Type, TConcern> concerns;
-	private ConcurrentDictionary<Type, List<TConcern>> concernsCache;
+	private IDictionary<Type, TConcern> _concerns;
+	private ConcurrentDictionary<Type, List<TConcern>> _concernsCache;
 
 	public bool HasConcerns
 	{
-		get { return concerns != null; }
+		get { return _concerns != null; }
 	}
 
 	public void AddConcern<TForType>(TConcern lifecycleConcern)
 	{
-		if (concerns == null)
+		if (_concerns == null)
 		{
-			concerns = new Dictionary<Type, TConcern>(2);
-			concernsCache = new ConcurrentDictionary<Type, List<TConcern>>(2, 2);
+			_concerns = new Dictionary<Type, TConcern>(2);
+			_concernsCache = new ConcurrentDictionary<Type, List<TConcern>>(2, 2);
 		}
-		concerns.Add(typeof(TForType), lifecycleConcern);
+		_concerns.Add(typeof(TForType), lifecycleConcern);
 	}
 
 	public abstract void Apply(ComponentModel model, object component);
 
 	private List<TConcern> BuildConcernCache(Type type)
 	{
-		var componentConcerns = new List<TConcern>(concerns.Count);
-		foreach (var concern in concerns)
+		var componentConcerns = new List<TConcern>(_concerns.Count);
+		foreach (var concern in _concerns)
 		{
 			if (concern.Key.GetTypeInfo().IsAssignableFrom(type))
 			{
@@ -62,6 +62,6 @@ public abstract class LateBoundConcerns<TConcern>
 
 	protected List<TConcern> GetComponentConcerns(Type type)
 	{
-		return concernsCache.GetOrAdd(type, BuildConcernCache);
+		return _concernsCache.GetOrAdd(type, BuildConcernCache);
 	}
 }

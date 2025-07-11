@@ -14,7 +14,7 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class CBA(A a, B b)
+public class Cba(A a, B b)
 {
 	public A A { get; private set; } = a;
 	public B B { get; private set; } = b;

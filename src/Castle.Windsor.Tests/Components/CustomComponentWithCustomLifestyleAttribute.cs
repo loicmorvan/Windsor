@@ -20,7 +20,7 @@ namespace Castle.Windsor.Tests.Components;
 [CustomTestLifestyle]
 public class CustomComponentWithCustomLifestyleAttribute : IComponent
 {
-	public int ID
+	public int Id
 	{
 		get { return GetHashCode(); }
 	}

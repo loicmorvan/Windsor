@@ -22,7 +22,7 @@ using Castle.Windsor.Tests.Interceptors;
 
 public class InterceptorTypesInSingleCall : InterceptorsTestCaseHelper
 {
-	public override IRegistration RegisterInterceptors<S>(ComponentRegistration<S> registration)
+	public override IRegistration RegisterInterceptors<TS>(ComponentRegistration<TS> registration)
 	{
 		return registration.Interceptors(typeof(TestInterceptor1), typeof(TestInterceptor2));
 	}

@@ -28,40 +28,40 @@ using Castle.MicroKernel.Context;
 [Serializable]
 public abstract class AbstractComponentActivator : IComponentActivator
 {
-	private readonly IKernelInternal kernel;
-	private readonly ComponentModel model;
-	private readonly ComponentInstanceDelegate onCreation;
-	private readonly ComponentInstanceDelegate onDestruction;
+	private readonly IKernelInternal _kernel;
+	private readonly ComponentModel _model;
+	private readonly ComponentInstanceDelegate _onCreation;
+	private readonly ComponentInstanceDelegate _onDestruction;
 
 	/// <summary>
 	/// Constructs an AbstractComponentActivator
 	/// </summary>
 	protected AbstractComponentActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
 	{
-		this.model = model;
-		this.kernel = kernel;
-		this.onCreation = onCreation;
-		this.onDestruction = onDestruction;
+		this._model = model;
+		this._kernel = kernel;
+		this._onCreation = onCreation;
+		this._onDestruction = onDestruction;
 	}
 
 	public IKernelInternal Kernel
 	{
-		get { return kernel; }
+		get { return _kernel; }
 	}
 
 	public ComponentModel Model
 	{
-		get { return model; }
+		get { return _model; }
 	}
 
 	public ComponentInstanceDelegate OnCreation
 	{
-		get { return onCreation; }
+		get { return _onCreation; }
 	}
 
 	public ComponentInstanceDelegate OnDestruction
 	{
-		get { return onDestruction; }
+		get { return _onDestruction; }
 	}
 
 	protected abstract object InternalCreate(CreationContext context);
@@ -73,7 +73,7 @@ public abstract class AbstractComponentActivator : IComponentActivator
 		var instance = InternalCreate(context);
 		burden.SetRootInstance(instance);
 
-		onCreation(model, instance);
+		_onCreation(_model, instance);
 
 		return instance;
 	}
@@ -82,7 +82,7 @@ public abstract class AbstractComponentActivator : IComponentActivator
 	{
 		InternalDestroy(instance);
 
-		onDestruction(model, instance);
+		_onDestruction(_model, instance);
 	}
 
 	protected virtual void ApplyCommissionConcerns(object instance)

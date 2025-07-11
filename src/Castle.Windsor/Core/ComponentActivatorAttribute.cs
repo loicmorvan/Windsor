@@ -22,7 +22,7 @@ using System;
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 public sealed class ComponentActivatorAttribute : Attribute
 {
-	private readonly Type componentActivatorType;
+	private readonly Type _componentActivatorType;
 
 	/// <summary>
 	///   Initializes a new instance of the <see cref = "ComponentActivatorAttribute" /> class.
@@ -30,7 +30,7 @@ public sealed class ComponentActivatorAttribute : Attribute
 	/// <param name = "componentActivatorType">Type of the component activator.</param>
 	public ComponentActivatorAttribute(Type componentActivatorType)
 	{
-		this.componentActivatorType = componentActivatorType;
+		this._componentActivatorType = componentActivatorType;
 	}
 
 	/// <summary>
@@ -39,6 +39,6 @@ public sealed class ComponentActivatorAttribute : Attribute
 	/// <value>The type of the component activator.</value>
 	public Type ComponentActivatorType
 	{
-		get { return componentActivatorType; }
+		get { return _componentActivatorType; }
 	}
 }

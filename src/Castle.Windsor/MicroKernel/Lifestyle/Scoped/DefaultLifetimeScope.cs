@@ -23,14 +23,13 @@ using Castle.Core;
 /// </remarks>
 public class DefaultLifetimeScope(IScopeCache scopeCache = null, Action<Burden> onAfterCreated = null) : ILifetimeScope
 {
-	private static readonly Action<Burden> emptyOnAfterCreated = delegate { };
-	private readonly Action<Burden> onAfterCreated = onAfterCreated ?? emptyOnAfterCreated;
-	private readonly IScopeCache scopeCache = scopeCache ?? new ScopeCache();
+	private static readonly Action<Burden> EmptyOnAfterCreated = delegate { };
+	private readonly Action<Burden> _onAfterCreated = onAfterCreated ?? EmptyOnAfterCreated;
+	private readonly IScopeCache _scopeCache = scopeCache ?? new ScopeCache();
 
 	public void Dispose()
 	{
-		var disposableCache = scopeCache as IDisposable;
-		if (disposableCache != null)
+		if (_scopeCache is IDisposable disposableCache)
 		{
 			disposableCache.Dispose();
 		}
@@ -38,10 +37,10 @@ public class DefaultLifetimeScope(IScopeCache scopeCache = null, Action<Burden> 
 
 	public Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance)
 	{
-		var burden = scopeCache[model];
+		var burden = _scopeCache[model];
 		if (burden == null)
 		{
-			scopeCache[model] = burden = createInstance(onAfterCreated);
+			_scopeCache[model] = burden = createInstance(_onAfterCreated);
 		}
 		return burden;
 	}

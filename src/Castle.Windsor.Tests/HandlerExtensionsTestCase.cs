@@ -130,23 +130,23 @@ public class ReturnAExtension(A a, bool proceed = false) : IResolveExtension
 
 public class CollectItemsExtension : IResolveExtension, IReleaseExtension
 {
-	private readonly IList<object> releasedItems = new List<object>();
-	private readonly IList<object> resolvedItems = new List<object>();
+	private readonly IList<object> _releasedItems = new List<object>();
+	private readonly IList<object> _resolvedItems = new List<object>();
 
 	public IList<object> ReleasedItems
 	{
-		get { return releasedItems; }
+		get { return _releasedItems; }
 	}
 
 	public IList<object> ResolvedItems
 	{
-		get { return resolvedItems; }
+		get { return _resolvedItems; }
 	}
 
 	public void Intercept(ReleaseInvocation invocation)
 	{
 		invocation.Proceed();
-		releasedItems.Add(invocation.Instance);
+		_releasedItems.Add(invocation.Instance);
 	}
 
 	public void Init(IKernel kernel, IHandler handler)
@@ -156,6 +156,6 @@ public class CollectItemsExtension : IResolveExtension, IReleaseExtension
 	public void Intercept(ResolveInvocation invocation)
 	{
 		invocation.Proceed();
-		resolvedItems.Add(invocation.ResolvedInstance);
+		_resolvedItems.Add(invocation.ResolvedInstance);
 	}
 }

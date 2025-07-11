@@ -21,15 +21,15 @@ public class GraphNode :
 #endif
 	IVertex
 {
-	private SimpleThreadSafeCollection<GraphNode> outgoing;
+	private SimpleThreadSafeCollection<GraphNode> _outgoing;
 
 	public void AddDependent(GraphNode node)
 	{
-		var collection = outgoing;
+		var collection = _outgoing;
 		if (collection == null)
 		{
 			var @new = new SimpleThreadSafeCollection<GraphNode>();
-			collection = Interlocked.CompareExchange(ref outgoing, @new, null) ?? @new;
+			collection = Interlocked.CompareExchange(ref _outgoing, @new, null) ?? @new;
 		}
 		collection.Add(node);
 	}
@@ -39,10 +39,10 @@ public class GraphNode :
 	{
 		get
 		{
-			var collection = outgoing;
+			var collection = _outgoing;
 			if (collection == null)
 			{
-				return new GraphNode[0];
+				return [];
 			}
 			return collection.ToArray();
 		}

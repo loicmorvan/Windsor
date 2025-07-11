@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
 public class Bar(Baz baz, string name)
 {
-	private readonly Baz baz = baz;
+	private readonly Baz _baz = baz;
 
 	public string Description { get; set; }
 

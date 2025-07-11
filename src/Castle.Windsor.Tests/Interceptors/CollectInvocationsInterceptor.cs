@@ -20,16 +20,16 @@ using Castle.DynamicProxy;
 
 public class CollectInvocationsInterceptor : IInterceptor
 {
-	private readonly IList<IInvocation> invocations = new List<IInvocation>();
+	private readonly IList<IInvocation> _invocations = new List<IInvocation>();
 
 	public IList<IInvocation> Invocations
 	{
-		get { return invocations; }
+		get { return _invocations; }
 	}
 
 	public void Intercept(IInvocation invocation)
 	{
-		invocations.Add(invocation);
+		_invocations.Add(invocation);
 		invocation.Proceed();
 	}
 }

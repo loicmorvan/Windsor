@@ -18,5 +18,5 @@ public interface IGenericComponentsFactory
 {
 	T CreateGeneric<T>();
 
-	T CreateGeneric<T, A>(A arg);
+	T CreateGeneric<T, TA>(TA arg);
 }

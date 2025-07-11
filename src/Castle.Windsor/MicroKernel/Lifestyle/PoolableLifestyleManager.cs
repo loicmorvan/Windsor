@@ -27,36 +27,36 @@ using Castle.MicroKernel.Registration;
 [Serializable]
 public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLifestyleManager
 {
-	private static readonly object poolFactoryLock = new object();
-	private readonly ThreadSafeInit init = new ThreadSafeInit();
-	private readonly int initialSize = initialSize;
-	private readonly int maxSize = maxSize;
-	private IPool pool;
+	private static readonly object PoolFactoryLock = new();
+	private readonly ThreadSafeInit _init = new();
+	private readonly int _initialSize = initialSize;
+	private readonly int _maxSize = maxSize;
+	private IPool _pool;
 
 	protected IPool Pool
 	{
 		get
 		{
-			if (pool != null)
+			if (_pool != null)
 			{
-				return pool;
+				return _pool;
 			}
 			var initializing = false;
 			try
 			{
-				initializing = init.ExecuteThreadSafeOnce();
+				initializing = _init.ExecuteThreadSafeOnce();
 
-				if (pool == null)
+				if (_pool == null)
 				{
-					pool = CreatePool(initialSize, maxSize);
+					_pool = CreatePool(_initialSize, _maxSize);
 				}
-				return pool;
+				return _pool;
 			}
 			finally
 			{
 				if (initializing)
 				{
-					init.EndThreadSafeOnceSection();
+					_init.EndThreadSafeOnceSection();
 				}
 			}
 		}
@@ -64,17 +64,17 @@ public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLi
 
 	public override void Dispose()
 	{
-		if (pool != null)
+		if (_pool != null)
 		{
-			pool.Dispose();
+			_pool.Dispose();
 		}
 	}
 
 	public override bool Release(object instance)
 	{
-		if (pool != null)
+		if (_pool != null)
 		{
-			return pool.Release(instance);
+			return _pool.Release(instance);
 		}
 		return false;
 	}
@@ -88,7 +88,7 @@ public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLi
 	{
 		if (!Kernel.HasComponent(typeof(IPoolFactory)))
 		{
-			lock (poolFactoryLock)
+			lock (PoolFactoryLock)
 			{
 				if (!Kernel.HasComponent(typeof(IPoolFactory)))
 				{

@@ -19,7 +19,7 @@ using Castle.Core;
 [Singleton]
 public class SingletonComponent : IComponent
 {
-	public int ID
+	public int Id
 	{
 		get { return GetHashCode(); }
 	}

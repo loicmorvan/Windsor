@@ -26,15 +26,15 @@ public abstract class WindsorRegistrationOptionsControllerTestCase:IDisposable
 {
 	public void Dispose()
 	{
-		testContext.Dispose();
+		TestContext.Dispose();
 	}
 
-	protected TestContext testContext;
+	protected TestContext TestContext;
 
 	[InlineData(typeof(OverrideController))]
 	public void Should_resolve_overidden_Controllers_using_WindsorRegistrationOptions(Type optionsResolvableType)
 	{
-		testContext.WindsorContainer.Resolve(optionsResolvableType); 
+		TestContext.WindsorContainer.Resolve(optionsResolvableType); 
 	}
 
 	public class OverrideController : Controller
@@ -47,7 +47,7 @@ public class WindsorRegistrationOptionsForAssembliesControllerTestCase : Windsor
 {
 	public WindsorRegistrationOptionsForAssembliesControllerTestCase()
 	{
-		testContext = TestContextFactory.Get(opts => opts
+		TestContext = TestContextFactory.Get(opts => opts
 			.UseEntryAssembly(typeof(Uri).Assembly)
 			.RegisterControllers(typeof(OverrideController).Assembly));
 	}
@@ -58,7 +58,7 @@ public class WindsorRegistrationOptionsForComponentsControllerTestCase : Windsor
 {
 	public WindsorRegistrationOptionsForComponentsControllerTestCase()
 	{
-		testContext = TestContextFactory.Get(opts => opts
+		TestContext = TestContextFactory.Get(opts => opts
 			.UseEntryAssembly(typeof(Uri).Assembly)
 			.RegisterControllers(Component.For<OverrideController>().LifestyleScoped().Named("controllers")));
 	}

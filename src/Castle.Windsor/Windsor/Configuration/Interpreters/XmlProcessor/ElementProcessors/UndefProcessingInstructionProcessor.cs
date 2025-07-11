@@ -21,7 +21,7 @@ public class UndefProcessingInstructionProcessor : AbstractStatementElementProce
 {
 	public override XmlNodeType[] AcceptNodeTypes
 	{
-		get { return new[] { XmlNodeType.ProcessingInstruction }; }
+		get { return [XmlNodeType.ProcessingInstruction]; }
 	}
 
 	public override String Name

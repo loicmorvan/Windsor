@@ -190,7 +190,7 @@ public partial class DefaultKernel
 		var resolved = new List<object>();
 		foreach (var handler in GetHandlers(service))
 		{
-			if (handler.IsBeingResolvedInContext(currentCreationContext))
+			if (handler.IsBeingResolvedInContext(_currentCreationContext))
 			{
 				continue;
 			}

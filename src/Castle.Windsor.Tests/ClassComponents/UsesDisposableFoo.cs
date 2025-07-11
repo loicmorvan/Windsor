@@ -18,5 +18,5 @@ using Castle.Windsor.Tests.Components;
 
 public class UsesDisposableFoo(DisposableFoo foo)
 {
-	private DisposableFoo foo = foo;
+	private DisposableFoo _foo = foo;
 }

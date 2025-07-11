@@ -64,7 +64,7 @@ public interface IServiceWithoutImplementation
 }
 
 	
-public class IoC_169
+public class IoC169
 {
 	[Fact]
 	public void BulkRegistrations_WhenRegistrationMatchesNoInstancesOfService_StopsStartableFacilityFromWorking()

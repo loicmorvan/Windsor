@@ -18,32 +18,32 @@ using System.Collections.Generic;
 
 public class ComponentLifecycleExtension : IResolveExtension
 {
-	private readonly List<ComponentResolvingDelegate> resolvers = new List<ComponentResolvingDelegate>(4);
-	private IKernel kernel;
+	private readonly List<ComponentResolvingDelegate> _resolvers = new(4);
+	private IKernel _kernel;
 
 	public void AddHandler(ComponentResolvingDelegate handler)
 	{
-		resolvers.Add(handler);
+		_resolvers.Add(handler);
 	}
 
 	public void Init(IKernel kernel, IHandler handler)
 	{
-		this.kernel = kernel;
+		this._kernel = kernel;
 	}
 
 	public void Intercept(ResolveInvocation invocation)
 	{
 		Releasing releasing = null;
-		if (resolvers.Count > 0)
+		if (_resolvers.Count > 0)
 		{
-			foreach (var resolver in resolvers)
+			foreach (var resolver in _resolvers)
 			{
-				var releaser = resolver(kernel, invocation.Context);
+				var releaser = resolver(_kernel, invocation.Context);
 				if (releaser != null)
 				{
 					if (releasing == null)
 					{
-						releasing = new Releasing(resolvers.Count, kernel);
+						releasing = new Releasing(_resolvers.Count, _kernel);
 						invocation.RequireDecommission();
 					}
 					releasing.Add(releaser);
@@ -67,18 +67,18 @@ public class ComponentLifecycleExtension : IResolveExtension
 
 	private class Releasing(int count, IKernel kernel)
 	{
-		private readonly List<ComponentReleasingDelegate> releasers = new(count);
+		private readonly List<ComponentReleasingDelegate> _releasers = new(count);
 
 		public void Add(ComponentReleasingDelegate releaser)
 		{
-			releasers.Add(releaser);
+			_releasers.Add(releaser);
 		}
 
 		public void Invoked(Burden burden)
 		{
 			burden.Releasing -= Invoked;
 
-			releasers.ForEach(r => r.Invoke(kernel));
+			_releasers.ForEach(r => r.Invoke(kernel));
 		}
 	}
 }

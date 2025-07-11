@@ -44,7 +44,7 @@ public class SubResolverTestCase
 
 	public class Foo(int bar)
 	{
-		private int bar = bar;
+		private int _bar = bar;
 	}
 
 	public class FooBarResolver : ISubDependencyResolver

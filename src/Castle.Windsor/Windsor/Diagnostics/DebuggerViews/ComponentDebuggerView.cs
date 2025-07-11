@@ -21,34 +21,34 @@ using System.Linq;
 using Castle.MicroKernel;
 using Castle.Windsor.Diagnostics.Helpers;
 
-[DebuggerDisplay("{description,nq}", Name = "{name,nq}")]
+[DebuggerDisplay("{_description,nq}", Name = "{name,nq}")]
 public class ComponentDebuggerView(IHandler handler, string description, params IComponentDebuggerExtension[] defaultExtension)
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly string description = description;
+	private readonly string _description = description;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly IComponentDebuggerExtension[] extension = defaultExtension.Concat(GetExtensions(handler)).ToArray();
+	private readonly IComponentDebuggerExtension[] _extension = defaultExtension.Concat(GetExtensions(handler)).ToArray();
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly string name = handler.GetComponentName();
+	private readonly string _name = handler.GetComponentName();
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public string Description
 	{
-		get { return description; }
+		get { return _description; }
 	}
 
 	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
 	public object[] Extensions
 	{
-		get { return extension.SelectMany(e => e.Attach()).ToArray(); }
+		get { return _extension.SelectMany(e => e.Attach()).ToArray(); }
 	}
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public string Name
 	{
-		get { return name; }
+		get { return _name; }
 	}
 
 	public static ComponentDebuggerView BuildFor(IHandler handler, string description = null)
@@ -63,7 +63,7 @@ public class ComponentDebuggerView(IHandler handler, string description, params 
 		return new ComponentDebuggerView(handler, description, extensions);
 	}
 
-	public static ComponentDebuggerView BuildRawFor(IHandler handler, string description, object[] items)
+	public static ComponentDebuggerView BuildRawFor(IHandler handler, string description, IEnumerable<object> items)
 	{
 		return new ComponentDebuggerView(handler, description, new ComponentDebuggerExtension(items));
 	}
@@ -72,6 +72,6 @@ public class ComponentDebuggerView(IHandler handler, string description, params 
 	{
 		var handlerExtensions = handler.ComponentModel.ExtendedProperties["DebuggerExtensions"];
 		return (IEnumerable<IComponentDebuggerExtension>)handlerExtensions ??
-		       Enumerable.Empty<IComponentDebuggerExtension>();
+		       [];
 	}
 }

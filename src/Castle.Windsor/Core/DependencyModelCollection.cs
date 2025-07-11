@@ -25,22 +25,22 @@ using Castle.Core.Internal;
 ///     Collection of <see cref = "DependencyModel" />.
 /// </summary>
 [Serializable]
-[DebuggerDisplay("Count = {dependencies.Count}")]
+[DebuggerDisplay("Count = {_dependencies.Count}")]
 public class DependencyModelCollection : IMutableCollection<DependencyModel>
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-	private readonly List<DependencyModel> dependencies = new List<DependencyModel>();
+	private readonly List<DependencyModel> _dependencies = [];
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public int Count
 	{
-		get { return dependencies.Count; }
+		get { return _dependencies.Count; }
 	}
 
 	[DebuggerStepThrough]
 	public IEnumerator<DependencyModel> GetEnumerator()
 	{
-		return dependencies.GetEnumerator();
+		return _dependencies.GetEnumerator();
 	}
 
 	public void Add(DependencyModel dependencyModel)
@@ -49,12 +49,12 @@ public class DependencyModelCollection : IMutableCollection<DependencyModel>
 		{
 			throw new ArgumentNullException(nameof(dependencyModel));
 		}
-		dependencies.Add(dependencyModel);
+		_dependencies.Add(dependencyModel);
 	}
 
 	public bool Remove(DependencyModel dependencyModel)
 	{
-		return dependencies.Remove(dependencyModel);
+		return _dependencies.Remove(dependencyModel);
 	}
 
 	[DebuggerStepThrough]

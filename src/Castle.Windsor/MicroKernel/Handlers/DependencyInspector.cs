@@ -24,7 +24,7 @@ using Castle.Core;
 
 public class DependencyInspector(StringBuilder message) : IDependencyInspector
 {
-	private readonly HashSet<IHandler> handlersChecked = new HashSet<IHandler>();
+	private readonly HashSet<IHandler> _handlersChecked = [];
 
 	public string Message
 	{
@@ -33,11 +33,11 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
 
 	public void Inspect(IHandler handler, DependencyModel[] missingDependencies, IKernel kernel)
 	{
-		if (handlersChecked.Add(handler) == false)
+		if (_handlersChecked.Add(handler) == false)
 		{
 			return;
 		}
-		Debug.Assert(missingDependencies.Length > 0, "missingDependencies.Length > 0");
+		Debug.Assert(missingDependencies.Length > 0);
 		var uniqueOverrides = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 		message.AppendLine();
 		message.AppendFormat("'{0}' is waiting for the following dependencies:", handler.ComponentModel.Name);
@@ -97,8 +97,7 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
 				message.Append("The following components also expose the service, but none of them can be resolved:");
 				foreach (var maybeDecoratedHandler in alternatives.Where(maybeDecoratedHandler => maybeDecoratedHandler != inspectingHandler))
 				{
-					var info = maybeDecoratedHandler as IExposeDependencyInfo;
-					if (info != null)
+					if (maybeDecoratedHandler is IExposeDependencyInfo info)
 					{
 						info.ObtainDependencyDetails(this);
 					}
@@ -114,8 +113,7 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
 		else
 		{
 			message.AppendFormat("- Service '{0}' which was registered but is also waiting for dependencies.", handler.ComponentModel.Name);
-			var info = handler as IExposeDependencyInfo;
-			if (info != null)
+			if (handler is IExposeDependencyInfo info)
 			{
 				info.ObtainDependencyDetails(this);
 			}
@@ -139,8 +137,7 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
 			message.AppendFormat("- Component '{0}' (via override) which was registered but is also waiting for dependencies.", referenceName);
 			message.AppendLine();
 
-			var info = handler as IExposeDependencyInfo;
-			if (info != null)
+			if (handler is IExposeDependencyInfo info)
 			{
 				info.ObtainDependencyDetails(this);
 			}

@@ -38,5 +38,5 @@ public class SupportInitializeConcern : ICommissionConcern
 		}
 	}
 
-	public static SupportInitializeConcern Instance { get; } = new SupportInitializeConcern();
+	public static SupportInitializeConcern Instance { get; } = new();
 }

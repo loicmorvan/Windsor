@@ -18,7 +18,7 @@ using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 
-public class IoC_138
+public class IoC138
 {
 	[Fact]
 	public void TestResolveSubComponentInConstructorWithParameters()
@@ -48,16 +48,16 @@ public class IoC_138
 
 	public class UsesServiceLocator
 	{
-		private readonly DependsOnStringTest2 other;
+		private readonly DependsOnStringTest2 _other;
 
 		public UsesServiceLocator(string test)
 		{
-			other = ServiceLocator.Container.Resolve<DependsOnStringTest2>(new Arguments { { "test2", "bla" } });
+			_other = ServiceLocator.Container.Resolve<DependsOnStringTest2>(new Arguments { { "test2", "bla" } });
 		}
 
 		public DependsOnStringTest2 Other
 		{
-			get { return other; }
+			get { return _other; }
 		}
 	}
 }

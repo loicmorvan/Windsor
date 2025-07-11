@@ -31,7 +31,7 @@ public partial class StartableFacility
 		protected override void Init()
 		{
 			base.Init();
-			events.Kernel.RegistrationCompleted += delegate { Signal(); };
+			Events.Kernel.RegistrationCompleted += delegate { Signal(); };
 		}
 	}
 
@@ -54,7 +54,7 @@ public partial class StartableFacility
 	private class LegacyStartFlag : StartFlag
 	{
 		/// <remarks>Don't check the waiting list while this flag is set as this could result in duplicate singletons.</remarks>
-		private bool inStart;
+		private bool _inStart;
 
 		public override void Signal()
 		{
@@ -64,9 +64,9 @@ public partial class StartableFacility
 		protected override void Init()
 		{
 			base.Init();
-			events.Kernel.ComponentRegistered += delegate
+			Events.Kernel.ComponentRegistered += delegate
 			{
-				if (inStart == false)
+				if (_inStart == false)
 				{
 					Signal();
 				}
@@ -87,12 +87,12 @@ public partial class StartableFacility
 		{
 			try
 			{
-				inStart = true;
+				_inStart = true;
 				return handler.TryResolve(CreationContext.CreateEmpty()) != null;
 			}
 			finally
 			{
-				inStart = false;
+				_inStart = false;
 			}
 		}
 	}
@@ -102,7 +102,7 @@ public partial class StartableFacility
 		public StartableEvents(IKernelEvents kernel)
 		{
 			Kernel = kernel;
-			kernel.ComponentRegistered += (key, handler) =>
+			kernel.ComponentRegistered += (_, handler) =>
 			{
 				if (IsStartable(handler))
 				{

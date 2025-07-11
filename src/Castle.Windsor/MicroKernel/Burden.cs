@@ -24,56 +24,56 @@ using Castle.MicroKernel.LifecycleConcerns;
 
 public class Burden
 {
-	private readonly IHandler handler;
-	private Decommission decommission = Decommission.No;
+	private readonly IHandler _handler;
+	private Decommission _decommission = Decommission.No;
 
-	private List<Burden> dependencies;
+	private List<Burden> _dependencies;
 
 	internal Burden(IHandler handler, bool requiresDecommission, bool trackedExternally)
 	{
-		this.handler = handler;
+		this._handler = handler;
 		TrackedExternally = trackedExternally;
 		if (requiresDecommission)
 		{
-			decommission = Decommission.Yes;
+			_decommission = Decommission.Yes;
 		}
 		else if (Model.Lifecycle.HasDecommissionConcerns)
 		{
 			if (Model.Implementation == typeof(LateBoundComponent) && Model.Lifecycle.DecommissionConcerns.All(IsLateBound))
 			{
-				decommission = Decommission.LateBound;
+				_decommission = Decommission.LateBound;
 			}
 			else
 			{
-				decommission = Decommission.Yes;
+				_decommission = Decommission.Yes;
 			}
 		}
 	}
 
 	public IHandler Handler
 	{
-		get { return handler; }
+		get { return _handler; }
 	}
 
 	public object Instance { get; private set; }
 
 	public ComponentModel Model
 	{
-		get { return handler.ComponentModel; }
+		get { return _handler.ComponentModel; }
 	}
 
 	public bool RequiresDecommission
 	{
-		get { return decommission != Decommission.No; }
+		get { return _decommission != Decommission.No; }
 		set
 		{
 			if (value)
 			{
-				decommission = Decommission.Yes;
+				_decommission = Decommission.Yes;
 			}
 			else
 			{
-				decommission = Decommission.No;
+				_decommission = Decommission.No;
 			}
 		}
 	}
@@ -96,15 +96,15 @@ public class Burden
 
 	public void AddChild(Burden child)
 	{
-		if (dependencies == null)
+		if (_dependencies == null)
 		{
-			dependencies = new List<Burden>(Model.Dependents.Length);
+			_dependencies = new List<Burden>(Model.Dependents.Length);
 		}
-		dependencies.Add(child);
+		_dependencies.Add(child);
 
 		if (child.RequiresDecommission)
 		{
-			decommission = Decommission.Yes;
+			_decommission = Decommission.Yes;
 		}
 	}
 
@@ -116,7 +116,7 @@ public class Burden
 			releasing(this);
 		}
 
-		if (handler.Release(this) == false)
+		if (_handler.Release(this) == false)
 		{
 			return false;
 		}
@@ -127,9 +127,9 @@ public class Burden
 			released(this);
 		}
 
-		if (dependencies != null)
+		if (_dependencies != null)
 		{
-			dependencies.ForEach(c => c.Release());
+			_dependencies.ForEach(c => c.Release());
 		}
 		var graphReleased = GraphReleased;
 		if (graphReleased != null)
@@ -146,7 +146,7 @@ public class Burden
 			throw new ArgumentNullException(nameof(instance));
 		}
 		Instance = instance;
-		if (decommission == Decommission.LateBound)
+		if (_decommission == Decommission.LateBound)
 		{
 			// TODO: this may need to be extended if we lazily provide any other decimmission concerns
 			RequiresDecommission = instance is IDisposable;

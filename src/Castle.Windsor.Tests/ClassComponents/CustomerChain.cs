@@ -18,7 +18,7 @@ using System;
 
 public class CustomerChain1(ICustomer customer) : CustomerImpl
 {
-	public ICustomer CustomerBase = customer;
+	public readonly ICustomer CustomerBase = customer;
 }
 
 public class CustomerChain2(ICustomer customer) : CustomerChain1(customer);

@@ -21,26 +21,26 @@ using Castle.Core;
 [Transient]
 public class InitializableDisposableComponent : IInitializable, IDisposable
 {
-	private bool isDisposed;
-	private bool isInitialized;
+	private bool _isDisposed;
+	private bool _isInitialized;
 
 	public bool IsDisposed
 	{
-		get { return isDisposed; }
+		get { return _isDisposed; }
 	}
 
 	public bool IsInitialized
 	{
-		get { return isInitialized; }
+		get { return _isInitialized; }
 	}
 
 	public void Dispose()
 	{
-		isDisposed = true;
+		_isDisposed = true;
 	}
 
 	public void Initialize()
 	{
-		isInitialized = true;
+		_isInitialized = true;
 	}
 }

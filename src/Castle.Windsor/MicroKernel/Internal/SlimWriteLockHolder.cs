@@ -18,28 +18,28 @@ using System.Threading;
 
 internal class SlimWriteLockHolder : ILockHolder
 {
-	private readonly ReaderWriterLockSlim locker;
+	private readonly ReaderWriterLockSlim _locker;
 
-	private bool lockAcquired;
+	private bool _lockAcquired;
 
 	public SlimWriteLockHolder(ReaderWriterLockSlim locker, bool waitForLock)
 	{
-		this.locker = locker;
+		this._locker = locker;
 		if(waitForLock)
 		{
 			locker.EnterWriteLock();
-			lockAcquired = true;
+			_lockAcquired = true;
 			return;
 		}
-		lockAcquired = locker.TryEnterWriteLock(0);
+		_lockAcquired = locker.TryEnterWriteLock(0);
 	}
 
 	public void Dispose()
 	{
 		if(!LockAcquired) return;
-		locker.ExitWriteLock();
-		lockAcquired = false;
+		_locker.ExitWriteLock();
+		_lockAcquired = false;
 	}
 
-	public bool LockAcquired => lockAcquired;
+	public bool LockAcquired => _lockAcquired;
 }

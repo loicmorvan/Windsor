@@ -22,8 +22,8 @@ using Castle.MicroKernel.Context;
 
 public class ExtendedHandler : DefaultHandler
 {
-	private readonly IReleaseExtension[] releaseExtensions;
-	private readonly IResolveExtension[] resolveExtensions;
+	private readonly IReleaseExtension[] _releaseExtensions;
+	private readonly IResolveExtension[] _resolveExtensions;
 
 	public ExtendedHandler(ComponentModel model, ICollection<IResolveExtension> resolveExtensions,
 		ICollection<IReleaseExtension> releaseExtensions)
@@ -31,11 +31,11 @@ public class ExtendedHandler : DefaultHandler
 	{
 		if (resolveExtensions != null)
 		{
-			this.resolveExtensions = resolveExtensions.ToArray();
+			this._resolveExtensions = resolveExtensions.ToArray();
 		}
 		if (releaseExtensions != null)
 		{
-			this.releaseExtensions = releaseExtensions.ToArray();
+			this._releaseExtensions = releaseExtensions.ToArray();
 		}
 	}
 
@@ -43,16 +43,16 @@ public class ExtendedHandler : DefaultHandler
 	{
 		base.Init(kernel);
 
-		if (resolveExtensions != null)
+		if (_resolveExtensions != null)
 		{
-			foreach (var extension in resolveExtensions)
+			foreach (var extension in _resolveExtensions)
 			{
 				extension.Init(kernel, this);
 			}
 		}
-		if (releaseExtensions != null)
+		if (_releaseExtensions != null)
 		{
-			foreach (var extension in releaseExtensions)
+			foreach (var extension in _releaseExtensions)
 			{
 				extension.Init(kernel, this);
 			}
@@ -61,7 +61,7 @@ public class ExtendedHandler : DefaultHandler
 
 	public override bool Release(Burden burden)
 	{
-		if (releaseExtensions == null)
+		if (_releaseExtensions == null)
 		{
 			return base.Release(burden);
 		}
@@ -73,7 +73,7 @@ public class ExtendedHandler : DefaultHandler
 
 	protected override object Resolve(CreationContext context, bool instanceRequired)
 	{
-		if (resolveExtensions == null)
+		if (_resolveExtensions == null)
 		{
 			return base.Resolve(context, instanceRequired);
 		}
@@ -84,19 +84,19 @@ public class ExtendedHandler : DefaultHandler
 
 	private void InvokeReleasePipeline(int extensionIndex, ReleaseInvocation invocation)
 	{
-		if (extensionIndex >= releaseExtensions.Length)
+		if (extensionIndex >= _releaseExtensions.Length)
 		{
 			invocation.ReturnValue = base.Release(invocation.Burden);
 			return;
 		}
 		var nextIndex = extensionIndex + 1;
 		invocation.SetProceedDelegate(() => InvokeReleasePipeline(nextIndex, invocation));
-		releaseExtensions[extensionIndex].Intercept(invocation);
+		_releaseExtensions[extensionIndex].Intercept(invocation);
 	}
 
 	private void InvokeResolvePipeline(int extensionIndex, ResolveInvocation invocation)
 	{
-		if (extensionIndex >= resolveExtensions.Length)
+		if (extensionIndex >= _resolveExtensions.Length)
 		{
 			Burden burden;
 			invocation.ResolvedInstance = ResolveCore(invocation.Context,
@@ -108,6 +108,6 @@ public class ExtendedHandler : DefaultHandler
 		}
 		var nextIndex = extensionIndex + 1;
 		invocation.SetProceedDelegate(() => InvokeResolvePipeline(nextIndex, invocation));
-		resolveExtensions[extensionIndex].Intercept(invocation);
+		_resolveExtensions[extensionIndex].Intercept(invocation);
 	}
 }

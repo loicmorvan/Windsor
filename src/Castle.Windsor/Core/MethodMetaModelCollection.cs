@@ -25,7 +25,7 @@ using System.Collections.ObjectModel;
 [Serializable]
 public class MethodMetaModelCollection : Collection<MethodMetaModel>
 {
-	private IDictionary methodInfo2Model;
+	private IDictionary _methodInfo2Model;
 
 	/// <summary>
 	///   Gets the method info2 model.
@@ -35,12 +35,12 @@ public class MethodMetaModelCollection : Collection<MethodMetaModel>
 	{
 		get
 		{
-			if (methodInfo2Model == null)
+			if (_methodInfo2Model == null)
 			{
-				methodInfo2Model = new Dictionary<object, object>();
+				_methodInfo2Model = new Dictionary<object, object>();
 			}
 
-			return methodInfo2Model;
+			return _methodInfo2Model;
 		}
 	}
 }

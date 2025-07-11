@@ -143,11 +143,11 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 		Kernel.Register(
 			Component.For<ICarProvider>()
 				.UsingFactoryMethod(
-					k => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.MrMoneyBags }))
+					_ => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.MrMoneyBags }))
 				.Named("ferrariProvider"),
 			Component.For<ICarProvider>()
 				.UsingFactoryMethod(
-					k => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
+					_ => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
 				.Named("hondaProvider")
 		);
 
@@ -192,8 +192,6 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 				.Interceptors<StandardInterceptor>());
 		var component = Kernel.Resolve<IComponent>();
 
-		var id = component.ID;
-
 		Assert.IsType<IProxyTargetAccessor>(component, exactMatch: false);
 	}
 
@@ -207,8 +205,6 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 				.UsingFactoryMethod(() => new TrivialComponent())
 				.Interceptors<StandardInterceptor>());
 		var component = Kernel.Resolve<IComponent>();
-
-		var id = component.ID;
 
 		Assert.IsType<IProxyTargetAccessor>(component, exactMatch: false);
 	}

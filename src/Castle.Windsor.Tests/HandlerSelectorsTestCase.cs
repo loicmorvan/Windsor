@@ -92,12 +92,12 @@ public class HandlerSelectorsTestCase
 
 	public class PeopleWatcher(Person p)
 	{
-		private Person p = p;
+		private Person _p = p;
 	}
 
 	public class Person(IWatcher watcher)
 	{
-		public IWatcher Watcher = watcher;
+		public readonly IWatcher Watcher = watcher;
 	}
 
 	public class SatiWatcher : IWatcher

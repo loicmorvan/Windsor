@@ -30,7 +30,7 @@ public class RegisteredCollectionResolver(IKernel kernel, bool allowEmptyCollect
 	public override bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
 		DependencyModel dependency)
 	{
-		if (kernel.HasComponent(dependency.TargetItemType))
+		if (Kernel.HasComponent(dependency.TargetItemType))
 		{
 			return false;
 		}

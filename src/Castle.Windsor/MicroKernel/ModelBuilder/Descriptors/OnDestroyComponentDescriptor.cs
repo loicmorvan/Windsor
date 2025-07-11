@@ -17,8 +17,8 @@ namespace Castle.MicroKernel.ModelBuilder.Descriptors;
 using Castle.Core;
 using Castle.MicroKernel.LifecycleConcerns;
 
-public class OnDestroyComponentDescriptor<S>(LifecycleActionDelegate<S> action) : IComponentModelDescriptor, IMetaComponentModelDescriptor
-	where S : class
+public class OnDestroyComponentDescriptor<TS>(LifecycleActionDelegate<TS> action) : IComponentModelDescriptor, IMetaComponentModelDescriptor
+	where TS : class
 {
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
@@ -26,6 +26,6 @@ public class OnDestroyComponentDescriptor<S>(LifecycleActionDelegate<S> action) 
 
 	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
 	{
-		model.Lifecycle.AddFirst(new OnDestroyConcern<S>(action, kernel));
+		model.Lifecycle.AddFirst(new OnDestroyConcern<TS>(action, kernel));
 	}
 }

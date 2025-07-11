@@ -30,11 +30,11 @@ using Castle.MicroKernel;
 public class InterceptorReferenceCollection(ComponentModel component) : IMutableCollection<InterceptorReference>
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly ComponentModel component = component;
+	private readonly ComponentModel _component = component;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
 	[DebuggerDisplay("Count = {list.Count}", Name = "")]
-	private readonly List<InterceptorReference> list = new List<InterceptorReference>();
+	private readonly List<InterceptorReference> _list = [];
 
 	/// <summary>Gets a value indicating whether this instance has interceptors.</summary>
 	/// <value>
@@ -43,13 +43,13 @@ public class InterceptorReferenceCollection(ComponentModel component) : IMutable
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public bool HasInterceptors
 	{
-		get { return list.Count != 0; }
+		get { return _list.Count != 0; }
 	}
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public int Count
 	{
-		get { return list.Count; }
+		get { return _list.Count; }
 	}
 
 	/// <summary>Adds the specified interceptor as the first.</summary>
@@ -63,7 +63,7 @@ public class InterceptorReferenceCollection(ComponentModel component) : IMutable
 	/// <param name = "interceptorReference">The interceptor reference.</param>
 	public void AddIfNotInCollection(InterceptorReference interceptorReference)
 	{
-		if (list.Contains(interceptorReference) == false)
+		if (_list.Contains(interceptorReference) == false)
 		{
 			AddLast(interceptorReference);
 		}
@@ -73,7 +73,7 @@ public class InterceptorReferenceCollection(ComponentModel component) : IMutable
 	/// <param name = "item">The interceptor.</param>
 	public void AddLast(InterceptorReference item)
 	{
-		list.Add(item);
+		_list.Add(item);
 		Attach(item);
 	}
 
@@ -82,13 +82,13 @@ public class InterceptorReferenceCollection(ComponentModel component) : IMutable
 	/// <param name = "item">The interceptor.</param>
 	public void Insert(int index, InterceptorReference item)
 	{
-		list.Insert(index, item);
+		_list.Insert(index, item);
 		Attach(item);
 	}
 
 	public InterceptorReference[] ToArray()
 	{
-		return list.ToArray();
+		return _list.ToArray();
 	}
 
 	/// <summary>Returns an enumerator that can iterate through a collection.</summary>
@@ -98,7 +98,7 @@ public class InterceptorReferenceCollection(ComponentModel component) : IMutable
 	/// </returns>
 	public IEnumerator GetEnumerator()
 	{
-		return list.GetEnumerator();
+		return _list.GetEnumerator();
 	}
 
 	/// <summary>Adds the specified item.</summary>
@@ -110,16 +110,16 @@ public class InterceptorReferenceCollection(ComponentModel component) : IMutable
 
 	private void Attach(IReference<IInterceptor> interceptor)
 	{
-		interceptor.Attach(component);
+		interceptor.Attach(_component);
 	}
 
 	IEnumerator<InterceptorReference> IEnumerable<InterceptorReference>.GetEnumerator()
 	{
-		return list.GetEnumerator();
+		return _list.GetEnumerator();
 	}
 
 	bool IMutableCollection<InterceptorReference>.Remove(InterceptorReference item)
 	{
-		return list.Remove(item);
+		return _list.Remove(item);
 	}
 }

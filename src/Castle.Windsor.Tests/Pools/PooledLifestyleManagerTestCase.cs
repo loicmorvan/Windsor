@@ -162,7 +162,7 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 	{
 		var count = 0;
 		Kernel.Register(Component.For<RecyclableComponent>().LifeStyle.PooledWithSize(1, null)
-			.DynamicParameters((k, d) =>
+			.DynamicParameters((_, _) =>
 			{
 				count++;
 				return delegate { count--; };
@@ -211,14 +211,14 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 		manager1.Init(null, kernel, null);
 		manager2.Init(null, kernel, null);
 
-		ThreadPool.QueueUserWorkItem(o => { manager1.CreatePool(); });
-		ThreadPool.QueueUserWorkItem(o => { manager2.CreatePool(); });
+		ThreadPool.QueueUserWorkItem(_ => { manager1.CreatePool(); });
+		ThreadPool.QueueUserWorkItem(_ => { manager2.CreatePool(); });
 
 		Thread.Sleep(TimeSpan.FromSeconds(1));
 		evt.Set();
 		Thread.Sleep(TimeSpan.FromSeconds(1));
 
-		Assert.Equal(0, kernel.parallelCount);
+		Assert.Equal(0, kernel.ParallelCount);
 	}
 
 	private sealed class MyPoolableLifestyleManager() : PoolableLifestyleManager(1, 2)
@@ -443,20 +443,20 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 			throw new NotImplementedException();
 		}
 
-		public int parallelCount = 0;
-		private bool registered;
+		public int ParallelCount;
+		private bool _registered;
 
 		public bool HasComponent(Type service)
 		{
-			return registered;
+			return _registered;
 		}
 
 		public IKernel Register(params IRegistration[] registrations)
 		{
-			Interlocked.Increment(ref parallelCount);
+			Interlocked.Increment(ref ParallelCount);
 			evt.WaitOne();
-			registered = true;
-			Interlocked.CompareExchange(ref parallelCount, 0, 1);
+			_registered = true;
+			Interlocked.CompareExchange(ref ParallelCount, 0, 1);
 			return null;
 		}
 

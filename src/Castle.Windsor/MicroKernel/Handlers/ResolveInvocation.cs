@@ -20,8 +20,8 @@ using Castle.MicroKernel.Context;
 
 public class ResolveInvocation(CreationContext context, bool instanceRequired)
 {
-	private bool decommissionRequired;
-	private Action proceed;
+	private bool _decommissionRequired;
+	private Action _proceed;
 
 	public Burden Burden { get; set; }
 
@@ -32,21 +32,21 @@ public class ResolveInvocation(CreationContext context, bool instanceRequired)
 
 	internal bool DecommissionRequired
 	{
-		get { return decommissionRequired; }
+		get { return _decommissionRequired; }
 	}
 
 	public void Proceed()
 	{
-		proceed.Invoke();
+		_proceed.Invoke();
 	}
 
 	public void RequireDecommission()
 	{
-		decommissionRequired = true;
+		_decommissionRequired = true;
 	}
 
 	internal void SetProceedDelegate(Action value)
 	{
-		proceed = value;
+		_proceed = value;
 	}
 }

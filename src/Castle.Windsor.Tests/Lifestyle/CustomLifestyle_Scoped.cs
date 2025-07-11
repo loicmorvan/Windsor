@@ -20,7 +20,7 @@ using Castle.MicroKernel;
 using Castle.MicroKernel.Context;
 using Castle.MicroKernel.Lifestyle;
 
-public class CustomLifestyle_Scoped : AbstractLifestyleManager
+public class CustomLifestyleScoped : AbstractLifestyleManager
 {
 	public override void Dispose()
 	{
@@ -28,7 +28,7 @@ public class CustomLifestyle_Scoped : AbstractLifestyleManager
 
 	protected override Burden CreateInstance(CreationContext context, bool trackedExternally)
 	{
-		var scope = CustomLifestyle_InstanceScope.Current;
+		var scope = CustomLifestyleInstanceScope.Current;
 		if (scope == null)
 		{
 			throw new InvalidOperationException("Scope is null");

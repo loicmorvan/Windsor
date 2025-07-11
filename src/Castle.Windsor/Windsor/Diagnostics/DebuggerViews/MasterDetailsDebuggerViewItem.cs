@@ -19,16 +19,16 @@ using System.Diagnostics;
 public class MasterDetailsDebuggerViewItem(object master, string masterDescription, string masterName, object[] details)
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly object[] details = details;
+	private readonly object[] _details = details;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly object master = master;
+	private readonly object _master = master;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly string masterDescription = masterDescription;
+	private readonly string _masterDescription = masterDescription;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly string masterName = masterName;
+	private readonly string _masterName = masterName;
 
 	/// <summary>
 	///   Stupid name, but debugger views in Visual Studio display items in alphabetical order so if we want
@@ -37,12 +37,12 @@ public class MasterDetailsDebuggerViewItem(object master, string masterDescripti
 	[DebuggerDisplay("{masterDescription,nq}", Name = "{masterName,nq}")]
 	public object AMaster
 	{
-		get { return master; }
+		get { return _master; }
 	}
 
 	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
 	public object[] Details
 	{
-		get { return details; }
+		get { return _details; }
 	}
 }

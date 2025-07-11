@@ -22,7 +22,7 @@ using Castle.Core;
 [Transient]
 public class TransientComponent : IComponent
 {
-	public int ID
+	public int Id
 	{
 		get { return GetHashCode(); }
 	}

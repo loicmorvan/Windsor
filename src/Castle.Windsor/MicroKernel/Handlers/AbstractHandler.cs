@@ -36,19 +36,19 @@ public abstract class AbstractHandler :
 	IHandler, IExposeDependencyInfo, IDisposable
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly ComponentModel model;
+	private readonly ComponentModel _model;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private IKernelInternal kernel;
+	private IKernelInternal _kernel;
 
 	/// <summary>
 	///   Dictionary of key (string) to <see cref = "DependencyModel" />
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private SimpleThreadSafeSet<DependencyModel> missingDependencies;
+	private SimpleThreadSafeSet<DependencyModel> _missingDependencies;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private HandlerState state = HandlerState.Valid;
+	private HandlerState _state = HandlerState.Valid;
 
 	/// <summary>
 	///   Constructs and initializes the handler
@@ -56,7 +56,7 @@ public abstract class AbstractHandler :
 	/// <param name = "model"> </param>
 	protected AbstractHandler(ComponentModel model)
 	{
-		this.model = model;
+		this._model = model;
 	}
 
 	/// <summary>
@@ -65,7 +65,7 @@ public abstract class AbstractHandler :
 	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
 	public ComponentModel ComponentModel
 	{
-		get { return model; }
+		get { return _model; }
 	}
 
 	/// <summary>
@@ -73,13 +73,13 @@ public abstract class AbstractHandler :
 	/// </summary>
 	public HandlerState CurrentState
 	{
-		get { return state; }
+		get { return _state; }
 	}
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	protected IKernelInternal Kernel
 	{
-		get { return kernel; }
+		get { return _kernel; }
 	}
 
 	/// <summary>
@@ -99,7 +99,7 @@ public abstract class AbstractHandler :
 
 	public override string ToString()
 	{
-		return string.Format("Model: {0}", model);
+		return string.Format("Model: {0}", _model);
 	}
 
 	public virtual void Dispose()
@@ -112,8 +112,8 @@ public abstract class AbstractHandler :
 		{
 			return;
 		}
-		var missing = missingDependencies;
-		inspector.Inspect(this, missing != null ? missing.ToArray() : new DependencyModel[0], Kernel);
+		var missing = _missingDependencies;
+		inspector.Inspect(this, missing != null ? missing.ToArray() : [], Kernel);
 	}
 
 	private bool HasCustomParameter(object key)
@@ -123,7 +123,7 @@ public abstract class AbstractHandler :
 			return false;
 		}
 
-		return model.CustomDependencies.Contains(key);
+		return _model.CustomDependencies.Contains(key);
 	}
 
 	/// <summary>
@@ -136,15 +136,15 @@ public abstract class AbstractHandler :
 		{
 			throw new ArgumentNullException(nameof(kernel));
 		}
-		this.kernel = kernel;
-		this.kernel.AddedAsChildKernel += OnAddedAsChildKernel;
+		this._kernel = kernel;
+		this._kernel.AddedAsChildKernel += OnAddedAsChildKernel;
 
 		InitDependencies();
 		if (AllRequiredDependenciesResolvable())
 		{
 			SetNewState(HandlerState.Valid);
 			DisconnectEvents();
-			missingDependencies = null;
+			_missingDependencies = null;
 		}
 	}
 
@@ -216,7 +216,7 @@ public abstract class AbstractHandler :
 
 	public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
 	{
-		if (this.model.HasCustomDependencies == false)
+		if (this._model.HasCustomDependencies == false)
 		{
 			return false;
 		}
@@ -226,7 +226,7 @@ public abstract class AbstractHandler :
 	public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
 		DependencyModel dependency)
 	{
-		Debug.Assert(CanResolve(context, contextHandlerResolver, model, dependency), "CanResolve(context, contextHandlerResolver, model, dependency)");
+		Debug.Assert(CanResolve(context, contextHandlerResolver, model, dependency));
 		if (HasCustomParameter(dependency.DependencyKey))
 		{
 			return model.CustomDependencies[dependency.DependencyKey];
@@ -244,7 +244,7 @@ public abstract class AbstractHandler :
 	/// <param name = "dependency"> </param>
 	protected void AddDependency(DependencyModel dependency)
 	{
-		dependency.Init(model.ParametersInternal);
+		dependency.Init(_model.ParametersInternal);
 		if (AddOptionalDependency(dependency))
 		{
 			return;
@@ -258,14 +258,14 @@ public abstract class AbstractHandler :
 
 	protected void AddMissingDependency(DependencyModel dependency)
 	{
-		var missing = missingDependencies;
+		var missing = _missingDependencies;
 		if (missing == null)
 		{
 			var @new = new SimpleThreadSafeSet<DependencyModel>();
-			missing = Interlocked.CompareExchange(ref missingDependencies, @new, null) ?? @new;
+			missing = Interlocked.CompareExchange(ref _missingDependencies, @new, null) ?? @new;
 		}
 		missing.Add(dependency);
-		if (state != HandlerState.WaitingDependency)
+		if (_state != HandlerState.WaitingDependency)
 		{
 			// This handler is considered invalid
 			// until dependencies are satisfied
@@ -283,7 +283,7 @@ public abstract class AbstractHandler :
 
 	protected bool CanResolvePendingDependencies(CreationContext context)
 	{
-		var missing = missingDependencies;
+		var missing = _missingDependencies;
 		if (CurrentState == HandlerState.Valid || missing == null)
 		{
 			return true;
@@ -306,7 +306,7 @@ public abstract class AbstractHandler :
 
 	private bool CanProvideDependenciesDynamically(CreationContext context)
 	{
-		return context.HasAdditionalArguments || kernel.HasComponent(typeof(ILazyComponentLoader));
+		return context.HasAdditionalArguments || _kernel.HasComponent(typeof(ILazyComponentLoader));
 	}
 
 	/// <summary>
@@ -318,7 +318,7 @@ public abstract class AbstractHandler :
 	/// <param name = "stateChanged"> </param>
 	protected void DependencySatisfied(ref bool stateChanged)
 	{
-		var missing = missingDependencies;
+		var missing = _missingDependencies;
 		if (missing == null)
 		{
 			// handled on another thread?
@@ -341,7 +341,7 @@ public abstract class AbstractHandler :
 			DisconnectEvents();
 
 			// We don't need these anymore
-			missingDependencies = null;
+			_missingDependencies = null;
 		}
 	}
 
@@ -361,7 +361,7 @@ public abstract class AbstractHandler :
 
 	protected void SetNewState(HandlerState newState)
 	{
-		state = newState;
+		_state = newState;
 	}
 
 	private void AddGraphDependency(DependencyModel dependency)
@@ -408,7 +408,7 @@ public abstract class AbstractHandler :
 
 	private bool AllRequiredDependenciesResolvable()
 	{
-		var missing = missingDependencies;
+		var missing = _missingDependencies;
 		if (missing == null)
 		{
 			return true;
@@ -425,7 +425,7 @@ public abstract class AbstractHandler :
 		}
 
 		var ctorsWithMissingDependenciesCount = constructorDependencies.Select(d => d.Constructor).Distinct().Count();
-		return model.Constructors.Count > ctorsWithMissingDependenciesCount;
+		return _model.Constructors.Count > ctorsWithMissingDependenciesCount;
 	}
 
 	private void DisconnectEvents()
@@ -436,6 +436,6 @@ public abstract class AbstractHandler :
 
 	private bool HasValidComponentFromResolver(DependencyModel dependency)
 	{
-		return Kernel.Resolver.CanResolve(CreationContext.ForDependencyInspection(this), this, model, dependency);
+		return Kernel.Resolver.CanResolve(CreationContext.ForDependencyInspection(this), this, _model, dependency);
 	}
 }

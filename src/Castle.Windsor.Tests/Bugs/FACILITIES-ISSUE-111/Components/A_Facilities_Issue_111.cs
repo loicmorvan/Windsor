@@ -4,9 +4,9 @@ using System;
 
 using Castle.Core;
 
-public class A_Facilities_Issue_111(IB_Facilities_Issue_111[] ibs) : IA_Facilities_Issue_111, IStartable
+public class AFacilitiesIssue111(IBFacilitiesIssue111[] ibs) : IAFacilitiesIssue111, IStartable
 {
-	IB_Facilities_Issue_111[] ibs = ibs;
+	IBFacilitiesIssue111[] _ibs = ibs;
 
 	public void Method()
 	{

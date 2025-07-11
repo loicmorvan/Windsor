@@ -50,10 +50,10 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 	[Bug("IOC-141")]
 	public void No_resolvable_constructor_open_generic_component()
 	{
-		Container.Register(Component.For(typeof(IoC_141.IProcessor<>)).ImplementedBy(typeof(IoC_141.DefaultProcessor<>)).Named("processor"),
-			Component.For<IoC_141.IAssembler<object>>().ImplementedBy<IoC_141.ObjectAssembler>());
+		Container.Register(Component.For(typeof(IoC141.IProcessor<>)).ImplementedBy(typeof(IoC141.DefaultProcessor<>)).Named("processor"),
+			Component.For<IoC141.IAssembler<object>>().ImplementedBy<IoC141.ObjectAssembler>());
 
-		var exception = Assert.Throws<HandlerException>(() => Container.Resolve<IoC_141.IProcessor<int>>());
+		var exception = Assert.Throws<HandlerException>(() => Container.Resolve<IoC141.IProcessor<int>>());
 
 		var message = string.Format(
 			"Can't create component 'processor' as it has dependencies to be satisfied.{0}{0}" +

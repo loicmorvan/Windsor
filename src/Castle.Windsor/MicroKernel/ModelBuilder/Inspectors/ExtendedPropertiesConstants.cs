@@ -22,9 +22,9 @@ using System;
 /// </summary>
 internal abstract class ExtendedPropertiesConstants
 {
-	public static readonly int Pool_Default_InitialPoolSize = 5;
-	public static readonly int Pool_Default_MaxPoolSize = 15;
+	public static readonly int PoolDefaultInitialPoolSize = 5;
+	public static readonly int PoolDefaultMaxPoolSize = 15;
 
-	public static readonly String Pool_InitialPoolSize = "pool.initial.pool.size";
-	public static readonly String Pool_MaxPoolSize = "pool.max.pool.size";
+	public static readonly String PoolInitialPoolSize = "pool.initial.pool.size";
+	public static readonly String PoolMaxPoolSize = "pool.max.pool.size";
 }

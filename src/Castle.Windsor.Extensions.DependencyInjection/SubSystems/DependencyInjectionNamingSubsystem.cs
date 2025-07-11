@@ -30,7 +30,7 @@ public class DependencyInjectionNamingSubsystem :  DefaultNamingSubSystem
 	private IHandler[] GetHandlersInRegisterOrderNoLock(Type service)
 	{
 		var handlers = new List<IHandler>();
-		foreach (var handler in name2Handler.Values)
+		foreach (var handler in Name2Handler.Values)
 		{
 			if (handler.Supports(service) == false)
 			{
@@ -48,7 +48,7 @@ public class DependencyInjectionNamingSubsystem :  DefaultNamingSubSystem
 		{
 			throw new ArgumentNullException(nameof(service));
 		}
-		if (filters != null)
+		if (Filters != null)
 		{
 			var filtersOpinion = GetFiltersOpinion(service);
 			if (filtersOpinion != null)
@@ -58,15 +58,15 @@ public class DependencyInjectionNamingSubsystem :  DefaultNamingSubSystem
 		}
 
 		IHandler[] result;
-		using var locker = @lock.ForReadingUpgradeable();
-		if (handlerListsByTypeCache.TryGetValue(service, out result))
+		using var locker = Lock.ForReadingUpgradeable();
+		if (HandlerListsByTypeCache.TryGetValue(service, out result))
 		{
 			return result;
 		}
 		result = GetHandlersInRegisterOrderNoLock(service);
 
 		locker.Upgrade();
-		handlerListsByTypeCache[service] = result;
+		HandlerListsByTypeCache[service] = result;
 
 		return result;
 	}
@@ -77,7 +77,7 @@ public class DependencyInjectionNamingSubsystem :  DefaultNamingSubSystem
 		{
 			throw new ArgumentNullException(nameof(service));
 		}
-		if (selectors != null)
+		if (Selectors != null)
 		{
 			var selectorsOpinion = GetSelectorsOpinion(null, service);
 			if (selectorsOpinion != null)

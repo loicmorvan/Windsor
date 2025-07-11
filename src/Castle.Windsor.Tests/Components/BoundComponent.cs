@@ -22,7 +22,7 @@ using Castle.MicroKernel;
 [BoundTo(typeof(Binder))]
 public class BoundComponent : IComponent
 {
-	public int ID
+	public int Id
 	{
 		get { return GetHashCode(); }
 	}

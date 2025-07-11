@@ -84,9 +84,9 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 			Component.For<IDummyComponent>()
 				.ImplementedBy<Component2>()
 				.LifeStyle.Transient,
-			Component.For<DummyComponentListFactory>()
+			Component.For<IDummyComponentListFactory>()
 				.AsFactory());
-		var factory = Container.Resolve<DummyComponentListFactory>();
+		var factory = Container.Resolve<IDummyComponentListFactory>();
 
 		var all = factory.All();
 		Assert.NotNull(all);
@@ -102,11 +102,11 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 			Component.For<IDummyComponent>()
 				.ImplementedBy<Component2>()
 				.LifeStyle.Transient,
-			Component.For<DummyComponentArrayFactory>()
+			Component.For<IDummyComponentArrayFactory>()
 				.AsFactory(),
 			Component.For<ITypedFactoryComponentSelector>()
 				.ImplementedBy<MultipleSelector>());
-		var factory = Container.Resolve<DummyComponentArrayFactory>();
+		var factory = Container.Resolve<IDummyComponentArrayFactory>();
 
 		var all = factory.All();
 		Assert.NotNull(all);
@@ -122,11 +122,11 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 			Component.For<IDummyComponent>()
 				.ImplementedBy<Component2>()
 				.LifeStyle.Transient,
-			Component.For<DummyComponentCollectionFactory>()
+			Component.For<IDummyComponentCollectionFactory>()
 				.AsFactory(),
 			Component.For<ITypedFactoryComponentSelector>()
 				.ImplementedBy<MultipleSelector>());
-		var factory = Container.Resolve<DummyComponentCollectionFactory>();
+		var factory = Container.Resolve<IDummyComponentCollectionFactory>();
 
 		var all = factory.All().ToArray();
 		Assert.NotNull(all);
@@ -142,11 +142,11 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 			Component.For<IDummyComponent>()
 				.ImplementedBy<Component2>()
 				.LifeStyle.Transient,
-			Component.For<DummyComponentEnumerableFactory>()
+			Component.For<IDummyComponentEnumerableFactory>()
 				.AsFactory(),
 			Component.For<ITypedFactoryComponentSelector>()
 				.ImplementedBy<MultipleSelector>());
-		var factory = Container.Resolve<DummyComponentEnumerableFactory>();
+		var factory = Container.Resolve<IDummyComponentEnumerableFactory>();
 
 		var all = factory.All().ToArray();
 		Assert.NotNull(all);
@@ -162,11 +162,11 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 			Component.For<IDummyComponent>()
 				.ImplementedBy<Component2>()
 				.LifeStyle.Transient,
-			Component.For<DummyComponentListFactory>()
+			Component.For<IDummyComponentListFactory>()
 				.AsFactory(),
 			Component.For<ITypedFactoryComponentSelector>()
 				.ImplementedBy<MultipleSelector>());
-		var factory = Container.Resolve<DummyComponentListFactory>();
+		var factory = Container.Resolve<IDummyComponentListFactory>();
 
 		var all = factory.All();
 		Assert.NotNull(all);
@@ -536,9 +536,9 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 			Component.For<IDummyComponent>()
 				.ImplementedBy<Component2>()
 				.LifeStyle.Transient,
-			Component.For<InvalidDummyComponentListFactory>()
+			Component.For<INvalidDummyComponentListFactory>()
 				.AsFactory());
-		var factory = Container.Resolve<InvalidDummyComponentListFactory>();
+		var factory = Container.Resolve<INvalidDummyComponentListFactory>();
 
 		Assert.Throws<ComponentNotFoundException>(() => factory.All());
 	}
@@ -643,10 +643,10 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 		Container.Register(
 			Component.For<IDummyComponent>().ImplementedBy<Component1>().Named("one").LifeStyle.Transient,
 			Component.For<IDummyComponent>().ImplementedBy<Component2>().Named("two").LifeStyle.Transient,
-			Component.For<IDummyComponentFactoryWithAttribute_implementingType>().AsFactory(c => c.SelectedWith<Component1Selector>()),
+			Component.For<IDummyComponentFactoryWithAttributeImplementingType>().AsFactory(c => c.SelectedWith<Component1Selector>()),
 			Component.For<ITypedFactoryComponentSelector>().ImplementedBy<Component1Selector>());
 
-		var factory = Container.Resolve<IDummyComponentFactoryWithAttribute_implementingType>();
+		var factory = Container.Resolve<IDummyComponentFactoryWithAttributeImplementingType>();
 		var component = factory.CreateDummyComponent();
 
 		Assert.IsType<Component1>(component);
@@ -658,9 +658,9 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 		Container.Register(
 			Component.For<IDummyComponent>().ImplementedBy<Component1>().Named("one").LifeStyle.Transient,
 			Component.For<IDummyComponent>().ImplementedBy<Component2>().Named("two").LifeStyle.Transient,
-			Component.For<IDummyComponentFactoryWithAttribute_implementingType>().AsFactory());
+			Component.For<IDummyComponentFactoryWithAttributeImplementingType>().AsFactory());
 
-		var factory = Container.Resolve<IDummyComponentFactoryWithAttribute_implementingType>();
+		var factory = Container.Resolve<IDummyComponentFactoryWithAttributeImplementingType>();
 		var component = factory.CreateDummyComponent();
 
 		Assert.IsType<Component2>(component);
@@ -673,9 +673,9 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 			Component.For<IDummyComponent>().ImplementedBy<Component1>().Named("one").LifeStyle.Transient,
 			Component.For<IDummyComponent>().ImplementedBy<Component2>().Named("two").LifeStyle.Transient,
 			Component.For<ITypedFactoryComponentSelector>().ImplementedBy<Component2Selector>().Named("selector"),
-			Component.For<IDummyComponentFactoryWithAttribute_serviceName>().AsFactory());
+			Component.For<IDummyComponentFactoryWithAttributeServiceName>().AsFactory());
 
-		var factory = Container.Resolve<IDummyComponentFactoryWithAttribute_serviceName>();
+		var factory = Container.Resolve<IDummyComponentFactoryWithAttributeServiceName>();
 		var component = factory.CreateDummyComponent();
 
 		Assert.IsType<Component2>(component);
@@ -688,9 +688,9 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 			Component.For<IDummyComponent>().ImplementedBy<Component1>().Named("one").LifeStyle.Transient,
 			Component.For<IDummyComponent>().ImplementedBy<Component2>().Named("two").LifeStyle.Transient,
 			Component.For<ITypedFactoryComponentSelector>().ImplementedBy<Component2Selector>(),
-			Component.For<IDummyComponentFactoryWithAttribute_serviceType>().AsFactory());
+			Component.For<IDummyComponentFactoryWithAttributeServiceType>().AsFactory());
 
-		var factory = Container.Resolve<IDummyComponentFactoryWithAttribute_serviceType>();
+		var factory = Container.Resolve<IDummyComponentFactoryWithAttributeServiceType>();
 		var component = factory.CreateDummyComponent();
 
 		Assert.IsType<Component2>(component);

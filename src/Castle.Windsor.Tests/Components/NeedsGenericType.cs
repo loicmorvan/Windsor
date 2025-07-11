@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class NeedsGenericType(ICache<string> cache)
 {
-	private ICache<string> cache = cache;
+	private ICache<string> _cache = cache;
 }

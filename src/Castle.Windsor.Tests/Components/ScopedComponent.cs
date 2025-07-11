@@ -19,7 +19,7 @@ using Castle.Core;
 [Scoped]
 public class ScopedComponent : IComponent
 {
-	public int ID
+	public int Id
 	{
 		get { return GetHashCode(); }
 	}

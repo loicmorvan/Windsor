@@ -19,7 +19,7 @@ using Castle.Windsor;
 
 public class ConfigWithStatementsTestCase
 {
-	private IWindsorContainer container;
+	private IWindsorContainer _container;
 
 	[Theory]
 	[InlineData("debug")]
@@ -30,9 +30,9 @@ public class ConfigWithStatementsTestCase
 	{
 		var file = ConfigHelper.ResolveConfigPath("Configuration2/config_with_define_{0}.xml", flag);
 
-		container = new WindsorContainer(file);
+		_container = new WindsorContainer(file);
 
-		var store = container.Kernel.ConfigurationStore;
+		var store = _container.Kernel.ConfigurationStore;
 
 		Assert.Single(store.GetComponents());
 
@@ -44,8 +44,8 @@ public class ConfigWithStatementsTestCase
 	[Fact]
 	public void SimpleIf()
 	{
-		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_if_stmt.xml"));
-		var store = container.Kernel.ConfigurationStore;
+		_container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_if_stmt.xml"));
+		var store = _container.Kernel.ConfigurationStore;
 
 		Assert.Equal(4, store.GetComponents().Length);
 

@@ -20,7 +20,7 @@ namespace Castle.Windsor.Tests.Components;
 public interface IEmployee
 {
 	string Email { get; set; }
-	string EmployeeID { get; set; }
+	string EmployeeId { get; set; }
 
 	string FirstName { get; set; }
 
@@ -30,7 +30,7 @@ public interface IEmployee
 	bool IsSupervisor { get; set; }
 	string LastName { get; set; }
 	string MiddleName { get; set; }
-	string NTLogin { get; }
+	string NtLogin { get; }
 
-	void SetNTLogin(string ntLogin);
+	void SetNtLogin(string ntLogin);
 }

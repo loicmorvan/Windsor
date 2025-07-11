@@ -14,14 +14,14 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class D_DB
+public class DDb
 {
-	public D_DB(B b)
+	public DDb(B b)
 	{
 		B = b;
 	}
 
-	public D_DB()
+	public DDb()
 	{
 	}
 

@@ -63,7 +63,7 @@ public abstract class BaseDevice : IDevice
 
 public class TestDevice : BaseDevice
 {
-	private readonly List<IDevice> children;
+	private readonly List<IDevice> _children;
 
 	public TestDevice()
 	{
@@ -71,11 +71,11 @@ public class TestDevice : BaseDevice
 
 	public TestDevice(IEnumerable<IDevice> theChildren)
 	{
-		children = new List<IDevice>(theChildren);
+		_children = new List<IDevice>(theChildren);
 	}
 
 	public override IEnumerable<IDevice> Children
 	{
-		get { return children; }
+		get { return _children; }
 	}
 }

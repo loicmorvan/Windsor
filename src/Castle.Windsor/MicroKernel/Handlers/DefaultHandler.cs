@@ -30,7 +30,7 @@ public class DefaultHandler : AbstractHandler
 	/// <summary>
 	///   Lifestyle manager instance
 	/// </summary>
-	private ILifestyleManager lifestyleManager;
+	private ILifestyleManager _lifestyleManager;
 
 	/// <summary>
 	///   Initializes a new instance of the
@@ -47,12 +47,12 @@ public class DefaultHandler : AbstractHandler
 	/// </summary>
 	protected ILifestyleManager LifestyleManager
 	{
-		get { return lifestyleManager; }
+		get { return _lifestyleManager; }
 	}
 
 	public override void Dispose()
 	{
-		lifestyleManager.Dispose();
+		_lifestyleManager.Dispose();
 	}
 
 	/// <summary>
@@ -62,7 +62,7 @@ public class DefaultHandler : AbstractHandler
 	/// <returns> true if destroyed </returns>
 	public override bool ReleaseCore(Burden burden)
 	{
-		return lifestyleManager.Release(burden.Instance);
+		return _lifestyleManager.Release(burden.Instance);
 	}
 
 	protected void AssertNotWaitingForDependency()
@@ -76,10 +76,9 @@ public class DefaultHandler : AbstractHandler
 	protected override void InitDependencies()
 	{
 		var activator = Kernel.CreateComponentActivator(ComponentModel);
-		lifestyleManager = Kernel.CreateLifestyleManager(ComponentModel, activator);
+		_lifestyleManager = Kernel.CreateLifestyleManager(ComponentModel, activator);
 
-		var awareActivator = activator as IDependencyAwareActivator;
-		if (awareActivator != null && awareActivator.CanProvideRequiredDependencies(ComponentModel))
+		if (activator is IDependencyAwareActivator awareActivator && awareActivator.CanProvideRequiredDependencies(ComponentModel))
 		{
 			foreach (var dependency in ComponentModel.Dependencies)
 			{
@@ -110,8 +109,7 @@ public class DefaultHandler : AbstractHandler
 	{
 		if (IsBeingResolvedInContext(context))
 		{
-			var cache = lifestyleManager as IContextLifestyleManager;
-			if (cache != null)
+			if (_lifestyleManager is IContextLifestyleManager cache)
 			{
 				var instance = cache.GetContextInstance(context);
 				if (instance != null)
@@ -148,7 +146,7 @@ public class DefaultHandler : AbstractHandler
 		try
 		{
 			using var ctx = context.EnterResolutionContext(this, requiresDecommission);
-			var instance = lifestyleManager.Resolve(context, context.ReleasePolicy);
+			var instance = _lifestyleManager.Resolve(context, context.ReleasePolicy);
 			burden = ctx.Burden;
 			return instance;
 		}

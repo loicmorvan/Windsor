@@ -20,10 +20,10 @@ using Castle.Windsor.Tests.Components;
 
 public class UsesDisposableFooDelegate(Func<int, DisposableFoo> myFooFactory)
 {
-	private int counter = 0;
+	private int _counter;
 
 	public DisposableFoo GetFoo()
 	{
-		return myFooFactory(++counter);
+		return myFooFactory(++_counter);
 	}
 }

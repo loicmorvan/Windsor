@@ -28,7 +28,7 @@ using Castle.Windsor.Tests.Generics;
 
 public class LifestyleManagerTestCase : AbstractContainerTestCase
 {
-	private IComponent instance3;
+	private IComponent _instance3;
 
 	private void TestLifestyleAndSameness(Type componentType, LifestyleType lifestyle, bool overwrite, bool areSame)
 	{
@@ -77,13 +77,13 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
 
 	private Property ScopeRoot()
 	{
-		return Property.ForKey(HandlerExtensionsUtil.ResolveExtensionsKey).Eq(new IResolveExtension[] { new CustomLifestyle_Scope() });
+		return Property.ForKey(HandlerExtensionsUtil.ResolveExtensionsKey).Eq(new IResolveExtension[] { new CustomLifestyleScope() });
 	}
 
 	private void OtherThread()
 	{
 		var handler = Kernel.GetHandler("a");
-		instance3 = handler.Resolve(CreationContext.CreateEmpty()) as IComponent;
+		_instance3 = handler.Resolve(CreationContext.CreateEmpty()) as IComponent;
 	}
 
 	[Fact]
@@ -203,7 +203,7 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
 		Kernel.Register(
 			Component.For<Root>().ExtendedProperties(ScopeRoot()),
 			Component.For<Branch>(),
-			Component.For<Leaf>().LifestyleCustom<CustomLifestyle_Scoped>()
+			Component.For<Leaf>().LifestyleCustom<CustomLifestyleScoped>()
 		);
 		var root = Kernel.Resolve<Root>();
 		Assert.Same(root.Leaf, root.Branch.Leaf);
@@ -223,15 +223,15 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
 		Assert.NotNull(instance2);
 
 		Assert.True(instance1.Equals(instance2));
-		Assert.True(instance1.ID == instance2.ID);
+		Assert.True(instance1.Id == instance2.Id);
 
 		var thread = new Thread(OtherThread);
 		thread.Start();
 		thread.Join();
 
-		Assert.NotNull(instance3);
-		Assert.True(!instance1.Equals(instance3));
-		Assert.True(instance1.ID != instance3.ID);
+		Assert.NotNull(_instance3);
+		Assert.True(!instance1.Equals(_instance3));
+		Assert.True(instance1.Id != _instance3.Id);
 	}
 
 	[Fact]
@@ -248,7 +248,7 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
 		Assert.NotNull(instance2);
 
 		Assert.True(instance1.Equals(instance2));
-		Assert.True(instance1.ID == instance2.ID);
+		Assert.True(instance1.Id == instance2.Id);
 	}
 
 	[Fact]
@@ -282,6 +282,6 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
 		Assert.NotNull(instance2);
 
 		Assert.True(!instance1.Equals(instance2));
-		Assert.True(instance1.ID != instance2.ID);
+		Assert.True(instance1.Id != instance2.Id);
 	}
 }

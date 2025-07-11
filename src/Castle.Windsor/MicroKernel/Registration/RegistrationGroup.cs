@@ -17,20 +17,20 @@ namespace Castle.MicroKernel.Registration;
 using Castle.MicroKernel.ModelBuilder;
 using Castle.MicroKernel.ModelBuilder.Descriptors;
 
-public abstract class RegistrationGroup<S>(ComponentRegistration<S> registration)
-	where S : class
+public abstract class RegistrationGroup<TS>(ComponentRegistration<TS> registration)
+	where TS : class
 {
-	public ComponentRegistration<S> Registration
+	public ComponentRegistration<TS> Registration
 	{
 		get { return registration; }
 	}
 
-	protected ComponentRegistration<S> AddAttributeDescriptor(string name, string value)
+	protected ComponentRegistration<TS> AddAttributeDescriptor(string name, string value)
 	{
-		return registration.AddDescriptor(new AttributeDescriptor<S>(name, value));
+		return registration.AddDescriptor(new AttributeDescriptor<TS>(name, value));
 	}
 
-	protected ComponentRegistration<S> AddDescriptor(IComponentModelDescriptor descriptor)
+	protected ComponentRegistration<TS> AddDescriptor(IComponentModelDescriptor descriptor)
 	{
 		return registration.AddDescriptor(descriptor);
 	}

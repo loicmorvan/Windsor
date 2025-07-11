@@ -24,7 +24,7 @@ using Castle.Core.Internal;
 [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Struct, Inherited = false, AllowMultiple = false)]
 public class ConvertibleAttribute : Attribute
 {
-	private readonly Type converterType;
+	private readonly Type _converterType;
 
 	/// <summary>
 	///   Defines the <see cref = "DefaultComplexConverter " /> to be used to convert the type
@@ -46,11 +46,11 @@ public class ConvertibleAttribute : Attribute
 					typeof(ITypeConverter).FullName), nameof(converterType));
 		}
 
-		this.converterType = converterType;
+		this._converterType = converterType;
 	}
 
 	public Type ConverterType
 	{
-		get { return converterType; }
+		get { return _converterType; }
 	}
 }

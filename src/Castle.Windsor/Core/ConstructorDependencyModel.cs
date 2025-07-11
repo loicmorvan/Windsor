@@ -22,15 +22,15 @@ using Castle.Core.Internal;
 [Serializable]
 public class ConstructorDependencyModel(ParameterInfo parameter) : DependencyModel(parameter.Name, parameter.ParameterType, false, parameter.HasDefaultValue(), parameter.DefaultValue)
 {
-	private ConstructorCandidate constructor;
+	private ConstructorCandidate _constructor;
 
 	public ConstructorCandidate Constructor
 	{
-		get { return constructor; }
+		get { return _constructor; }
 	}
 
 	internal void SetParentConstructor(ConstructorCandidate ctor)
 	{
-		constructor = ctor;
+		_constructor = ctor;
 	}
 }

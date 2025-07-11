@@ -26,26 +26,26 @@ using Castle.Windsor.Tests.LoggingFacility.Classes;
 /// </summary>
 public class NullFacilityTest : BaseTest, IDisposable
 {
-	private readonly IWindsorContainer container;
+	private readonly IWindsorContainer _container;
 
 	public NullFacilityTest()
 	{
-		container = base.CreateConfiguredContainer<NullLogFactory>();
+		_container = base.CreateConfiguredContainer<NullLogFactory>();
 	}
 
 	public void Dispose()
 	{
-		if (container != null)
+		if (_container != null)
 		{
-			container.Dispose();
+			_container.Dispose();
 		}
 	}
 
 	[Fact]
 	public void SimpleTest()
 	{
-		container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
-		SimpleLoggingComponent test = container.Resolve<SimpleLoggingComponent>("component");
+		_container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
+		SimpleLoggingComponent test = _container.Resolve<SimpleLoggingComponent>("component");
 
 		test.DoSomething();
 	}

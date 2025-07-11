@@ -40,9 +40,9 @@ public class CreationContext :
 #endif
 	ISubDependencyResolver
 {
-	private readonly ITypeConverter converter;
+	private readonly ITypeConverter _converter;
 
-	private readonly IHandler handler;
+	private readonly IHandler _handler;
 
 	/// <summary>
 	///   The list of handlers that are used to resolve
@@ -50,15 +50,15 @@ public class CreationContext :
 	///   We track that in order to try to avoid attempts to resolve a service
 	///   with itself.
 	/// </summary>
-	private readonly Stack<IHandler> handlerStack;
+	private readonly Stack<IHandler> _handlerStack;
 
-	private readonly Type requestedType;
+	private readonly Type _requestedType;
 
-	private readonly Stack<ResolutionContext> resolutionStack;
-	private Arguments additionalArguments;
-	private Arguments extendedProperties;
-	private Type[] genericArguments;
-	private bool isResolving = true;
+	private readonly Stack<ResolutionContext> _resolutionStack;
+	private Arguments _additionalArguments;
+	private Arguments _extendedProperties;
+	private Type[] _genericArguments;
+	private bool _isResolving = true;
 
 	/// <summary>
 	///   Initializes a new instance of the <see cref = "CreationContext" /> class.
@@ -74,14 +74,14 @@ public class CreationContext :
 			throw new ArgumentNullException(nameof(parentContext));
 		}
 
-		if (parentContext.extendedProperties != null)
+		if (parentContext._extendedProperties != null)
 		{
-			extendedProperties = new Arguments(parentContext.extendedProperties);
+			_extendedProperties = new Arguments(parentContext._extendedProperties);
 		}
 
 		if (propagateInlineDependencies && parentContext.HasAdditionalArguments)
 		{
-			additionalArguments = new Arguments(parentContext.additionalArguments);
+			_additionalArguments = new Arguments(parentContext._additionalArguments);
 		}
 	}
 
@@ -98,20 +98,20 @@ public class CreationContext :
 		Arguments additionalArguments, ITypeConverter converter,
 		CreationContext parent)
 	{
-		this.requestedType = requestedType;
-		this.handler = handler;
+		this._requestedType = requestedType;
+		this._handler = handler;
 		ReleasePolicy = releasePolicy;
-		this.additionalArguments = additionalArguments;
-		this.converter = converter;
+		this._additionalArguments = additionalArguments;
+		this._converter = converter;
 
 		if (parent != null)
 		{
-			resolutionStack = parent.resolutionStack;
-			handlerStack = parent.handlerStack;
+			_resolutionStack = parent._resolutionStack;
+			_handlerStack = parent._handlerStack;
 			return;
 		}
-		handlerStack = new Stack<IHandler>(4);
-		resolutionStack = new Stack<ResolutionContext>(4);
+		_handlerStack = new Stack<IHandler>(4);
+		_resolutionStack = new Stack<ResolutionContext>(4);
 	}
 
 	/// <summary>
@@ -122,19 +122,19 @@ public class CreationContext :
 #pragma warning disable 612,618
 		ReleasePolicy = new NoTrackingReleasePolicy();
 #pragma warning restore 612,618
-		handlerStack = new Stack<IHandler>(4);
-		resolutionStack = new Stack<ResolutionContext>(4);
+		_handlerStack = new Stack<IHandler>(4);
+		_resolutionStack = new Stack<ResolutionContext>(4);
 	}
 
 	public Arguments AdditionalArguments
 	{
 		get
 		{
-			if (additionalArguments == null)
+			if (_additionalArguments == null)
 			{
-				additionalArguments = new Arguments();
+				_additionalArguments = new Arguments();
 			}
-			return additionalArguments;
+			return _additionalArguments;
 		}
 	}
 
@@ -142,34 +142,34 @@ public class CreationContext :
 	{
 		get
 		{
-			if (genericArguments == null)
+			if (_genericArguments == null)
 			{
-				genericArguments = ExtractGenericArguments(requestedType);
+				_genericArguments = ExtractGenericArguments(_requestedType);
 			}
-			return genericArguments;
+			return _genericArguments;
 		}
 	}
 
 	public IHandler Handler
 	{
-		get { return handler; }
+		get { return _handler; }
 	}
 
 	public bool HasAdditionalArguments
 	{
-		get { return additionalArguments != null && additionalArguments.Count != 0; }
+		get { return _additionalArguments != null && _additionalArguments.Count != 0; }
 	}
 
 	public virtual bool IsResolving
 	{
-		get { return isResolving; }
+		get { return _isResolving; }
 	}
 
 	public IReleasePolicy ReleasePolicy { get; set; }
 
 	public Type RequestedType
 	{
-		get { return requestedType; }
+		get { return _requestedType; }
 	}
 
 	public void AttachExistingBurden(Burden burden)
@@ -177,7 +177,7 @@ public class CreationContext :
 		ResolutionContext resolutionContext;
 		try
 		{
-			resolutionContext = resolutionStack.Peek();
+			resolutionContext = _resolutionStack.Peek();
 		}
 		catch (InvalidOperationException)
 		{
@@ -192,7 +192,7 @@ public class CreationContext :
 	{
 		message.AppendFormat("Component '{0}'", duplicateHandler.ComponentModel.Name);
 
-		foreach (var handlerOnTheStack in handlerStack)
+		foreach (var handlerOnTheStack in _handlerStack)
 		{
 			message.AppendFormat(" resolved as dependency of");
 			message.AppendLine();
@@ -206,7 +206,7 @@ public class CreationContext :
 		ResolutionContext resolutionContext;
 		try
 		{
-			resolutionContext = resolutionStack.Peek();
+			resolutionContext = _resolutionStack.Peek();
 		}
 		catch (InvalidOperationException)
 		{
@@ -215,8 +215,7 @@ public class CreationContext :
 				null);
 		}
 
-		var activator = componentActivator as IDependencyAwareActivator;
-		if (activator != null)
+		if (componentActivator is IDependencyAwareActivator activator)
 		{
 			trackedExternally |= activator.IsManagedExternally(resolutionContext.Handler.ComponentModel);
 		}
@@ -233,21 +232,21 @@ public class CreationContext :
 		bool requiresDecommission)
 	{
 		var resolutionContext = new ResolutionContext(this, handlerBeingResolved, requiresDecommission, trackContext);
-		handlerStack.Push(handlerBeingResolved);
+		_handlerStack.Push(handlerBeingResolved);
 		if (trackContext)
 		{
-			resolutionStack.Push(resolutionContext);
+			_resolutionStack.Push(resolutionContext);
 		}
 		return resolutionContext;
 	}
 
 	public object GetContextualProperty(object key)
 	{
-		if (extendedProperties == null)
+		if (_extendedProperties == null)
 		{
 			return null;
 		}
-		return extendedProperties[key];
+		return _extendedProperties[key];
 	}
 
 	/// <summary>
@@ -261,16 +260,16 @@ public class CreationContext :
 	/// </remarks>
 	public bool IsInResolutionContext(IHandler handler)
 	{
-		return handlerStack.Contains(handler);
+		return _handlerStack.Contains(handler);
 	}
 
 	public ResolutionContext SelectScopeRoot(Func<IHandler[], IHandler> scopeRootSelector)
 	{
-		var scopes = resolutionStack.Select(c => c.Handler).Reverse().ToArray();
+		var scopes = _resolutionStack.Select(c => c.Handler).Reverse().ToArray();
 		var selected = scopeRootSelector(scopes);
 		if (selected != null)
 		{
-			var resolutionContext = resolutionStack.SingleOrDefault(s => s.Handler == selected);
+			var resolutionContext = _resolutionStack.SingleOrDefault(s => s.Handler == selected);
 			if (resolutionContext != null)
 			{
 				return resolutionContext;
@@ -285,11 +284,11 @@ public class CreationContext :
 		{
 			throw new ArgumentNullException(nameof(key));
 		}
-		if (extendedProperties == null)
+		if (_extendedProperties == null)
 		{
-			extendedProperties = new Arguments();
+			_extendedProperties = new Arguments();
 		}
-		extendedProperties[key] = value;
+		_extendedProperties[key] = value;
 	}
 
 	public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
@@ -303,19 +302,18 @@ public class CreationContext :
 		ComponentModel model,
 		DependencyModel dependency)
 	{
-		Debug.Assert(CanResolve(context, contextHandlerResolver, model, dependency),
-			"CanResolve(context, contextHandlerResolver, model, dependency)");
+		Debug.Assert(CanResolve(context, contextHandlerResolver, model, dependency));
 		object result = null;
 		if (dependency.DependencyKey != null)
 		{
-			result = Resolve(dependency, additionalArguments[dependency.DependencyKey]);
+			result = Resolve(dependency, _additionalArguments[dependency.DependencyKey]);
 		}
-		return result ?? Resolve(dependency, additionalArguments[dependency.TargetType]);
+		return result ?? Resolve(dependency, _additionalArguments[dependency.TargetType]);
 	}
 
 	private bool CanConvertParameter(Type type)
 	{
-		return converter != null && converter.CanHandleType(type);
+		return _converter != null && _converter.CanHandleType(type);
 	}
 
 	private bool CanResolve(DependencyModel dependency, object inlineArgument)
@@ -338,8 +336,8 @@ public class CreationContext :
 		{
 			return false;
 		}
-		Debug.Assert(additionalArguments != null, "additionalArguments != null");
-		return CanResolve(dependency, additionalArguments[dependency.DependencyKey]);
+		Debug.Assert(_additionalArguments != null);
+		return CanResolve(dependency, _additionalArguments[dependency.DependencyKey]);
 	}
 
 	private bool CanResolveByType(DependencyModel dependency)
@@ -349,17 +347,17 @@ public class CreationContext :
 		{
 			return false;
 		}
-		Debug.Assert(additionalArguments != null, "additionalArguments != null");
-		return CanResolve(dependency, additionalArguments[type]);
+		Debug.Assert(_additionalArguments != null);
+		return CanResolve(dependency, _additionalArguments[type]);
 	}
 
 	private void ExitResolutionContext(Burden burden, bool trackContext)
 	{
-		handlerStack.Pop();
+		_handlerStack.Pop();
 
 		if (trackContext)
 		{
-			resolutionStack.Pop();
+			_resolutionStack.Pop();
 		}
 		if (burden == null)
 		{
@@ -373,9 +371,9 @@ public class CreationContext :
 		{
 			return;
 		}
-		if (resolutionStack.Count != 0)
+		if (_resolutionStack.Count != 0)
 		{
-			var parent = resolutionStack.Peek().Burden;
+			var parent = _resolutionStack.Peek().Burden;
 			if (parent == null)
 			{
 				return;
@@ -395,7 +393,7 @@ public class CreationContext :
 			}
 			if (CanConvertParameter(targetType))
 			{
-				return converter.PerformConversion(inlineArgument.ToString(), targetType);
+				return _converter.PerformConversion(inlineArgument.ToString(), targetType);
 			}
 		}
 		return null;
@@ -415,7 +413,7 @@ public class CreationContext :
 	public static CreationContext ForDependencyInspection(IHandler handler)
 	{
 		var context = CreateEmpty();
-		context.isResolving = false;
+		context._isResolving = false;
 		context.EnterResolutionContext(handler, false);
 		return context;
 	}
@@ -432,12 +430,12 @@ public class CreationContext :
 	public class ResolutionContext(CreationContext context, IHandler handler, bool requiresDecommission, bool trackContext)
 		: IDisposable
 	{
-		private Burden burden;
-		private Arguments extendedProperties;
+		private Burden _burden;
+		private Arguments _extendedProperties;
 
 		public Burden Burden
 		{
-			get { return burden; }
+			get { return _burden; }
 		}
 
 		public CreationContext Context
@@ -452,25 +450,25 @@ public class CreationContext :
 
 		public void AttachBurden(Burden burden)
 		{
-			this.burden = burden;
+			this._burden = burden;
 		}
 
 		public Burden CreateBurden(bool trackedExternally)
 		{
 			// NOTE: not sure we should allow crreating burden again, when it was already created...
 			// this is currently employed by pooled lifestyle
-			burden = new Burden(handler, requiresDecommission, trackedExternally);
-			return burden;
+			_burden = new Burden(handler, requiresDecommission, trackedExternally);
+			return _burden;
 		}
 
 		public object GetContextualProperty(object key)
 		{
-			if (extendedProperties == null)
+			if (_extendedProperties == null)
 			{
 				return null;
 			}
 
-			var value = extendedProperties[key];
+			var value = _extendedProperties[key];
 			return value;
 		}
 
@@ -480,16 +478,16 @@ public class CreationContext :
 			{
 				throw new ArgumentNullException(nameof(key));
 			}
-			if (extendedProperties == null)
+			if (_extendedProperties == null)
 			{
-				extendedProperties = new Arguments();
+				_extendedProperties = new Arguments();
 			}
-			extendedProperties[key] = value;
+			_extendedProperties[key] = value;
 		}
 
 		public void Dispose()
 		{
-			context.ExitResolutionContext(burden, trackContext);
+			context.ExitResolutionContext(_burden, trackContext);
 		}
 	}
 }

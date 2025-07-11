@@ -81,7 +81,7 @@ public class StandardPropertyFilters
 	public static PropertySet[] IgnoreAll(ComponentModel model, ICollection<PropertyInfo> properties, PropertySetBuilder propertySetBuilder)
 	{
 		properties.Clear();
-		return new PropertySet[0];
+		return [];
 	}
 
 	public static PropertySet[] IgnoreBase(ComponentModel model, ICollection<PropertyInfo> properties, PropertySetBuilder propertySetBuilder)
@@ -91,12 +91,12 @@ public class StandardPropertyFilters
 		{
 			properties.Remove(baseProperty);
 		}
-		return new PropertySet[0];
+		return [];
 	}
 
 	public static PropertyDependencyFilter IgnoreSelected(Func<ComponentModel, PropertyInfo, bool> selector)
 	{
-		return (model, properties, callback) =>
+		return (model, properties, _) =>
 		{
 			foreach (var property in properties.ToArray())
 			{
@@ -105,7 +105,7 @@ public class StandardPropertyFilters
 					properties.Remove(property);
 				}
 			}
-			return new PropertySet[0];
+			return [];
 		};
 	}
 

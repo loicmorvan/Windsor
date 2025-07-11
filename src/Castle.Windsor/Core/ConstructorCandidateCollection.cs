@@ -27,22 +27,22 @@ using Castle.Core.Internal;
 [Serializable]
 public class ConstructorCandidateCollection : IMutableCollection<ConstructorCandidate>
 {
-	private readonly SimpleSortedSet<ConstructorCandidate> ctors = new SimpleSortedSet<ConstructorCandidate>();
+	private readonly SimpleSortedSet<ConstructorCandidate> _ctors = [];
 
 	public int Count
 	{
-		get { return ctors.Count; }
+		get { return _ctors.Count; }
 	}
 
 	public ConstructorCandidate this[int index]
 	{
-		get { return ctors[index]; }
+		get { return _ctors[index]; }
 	}
 
 	[DebuggerStepThrough]
 	public IEnumerator<ConstructorCandidate> GetEnumerator()
 	{
-		return ctors.GetEnumerator();
+		return _ctors.GetEnumerator();
 	}
 
 	[DebuggerStepThrough]
@@ -53,11 +53,11 @@ public class ConstructorCandidateCollection : IMutableCollection<ConstructorCand
 
 	void IMutableCollection<ConstructorCandidate>.Add(ConstructorCandidate item)
 	{
-		ctors.Add(item);
+		_ctors.Add(item);
 	}
 
 	bool IMutableCollection<ConstructorCandidate>.Remove(ConstructorCandidate item)
 	{
-		return ctors.Remove(item);
+		return _ctors.Remove(item);
 	}
 }

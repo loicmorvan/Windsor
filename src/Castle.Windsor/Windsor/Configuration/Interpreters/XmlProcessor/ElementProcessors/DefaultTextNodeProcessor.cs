@@ -28,13 +28,13 @@ public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 	///   i.e. #!{ my_node_name } || #{ my.node.name }
 	///   spaces are trimmed
 	/// </summary>
-	private static readonly Regex PropertyValidationRegExp = new Regex(@"(\#!?\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled);
+	private static readonly Regex PropertyValidationRegExp = new(@"(\#!?\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled);
 
-	private static readonly XmlNodeType[] acceptNodes = new[] { XmlNodeType.CDATA, XmlNodeType.Text };
+	private static readonly XmlNodeType[] AcceptNodes = [XmlNodeType.CDATA, XmlNodeType.Text];
 
 	public override XmlNodeType[] AcceptNodeTypes
 	{
-		get { return acceptNodes; }
+		get { return AcceptNodes; }
 	}
 
 	public override String Name

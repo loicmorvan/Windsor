@@ -88,7 +88,7 @@ public class OpenGenericsTestCase : AbstractContainerTestCase
 				.UsingFactoryMethod((k, c) =>
 				{
 					System.Type openType = typeof(DoubleRepository<,>);
-					System.Type[] genericArgs = new[] { c.GenericArguments[0], typeof(int) };
+					System.Type[] genericArgs = [c.GenericArguments[0], typeof(int)];
 					System.Type closedType = openType.MakeGenericType(genericArgs);
 					return k.Resolve(closedType);
 				}));

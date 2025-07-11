@@ -18,10 +18,10 @@ using System;
 
 public class Employee : IEmployee
 {
-	private string ntLogin;
+	private string _ntLogin;
 	public string Email { get; set; }
 
-	public string EmployeeID { get; set; }
+	public string EmployeeId { get; set; }
 
 	public string FirstName { get; set; }
 
@@ -38,20 +38,20 @@ public class Employee : IEmployee
 
 	public string MiddleName { get; set; }
 
-	public string NTLogin
+	public string NtLogin
 	{
 		get
 		{
-			if (ntLogin.Length > 0)
+			if (_ntLogin.Length > 0)
 			{
-				return ntLogin;
+				return _ntLogin;
 			}
-			return ntLogin;
+			return _ntLogin;
 		}
 	}
 
-	public void SetNTLogin(string ntLogin)
+	public void SetNtLogin(string ntLogin)
 	{
-		this.ntLogin = ntLogin;
+		this._ntLogin = ntLogin;
 	}
 }

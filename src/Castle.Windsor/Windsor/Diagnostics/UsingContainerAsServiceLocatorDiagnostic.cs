@@ -24,22 +24,22 @@ using Castle.MicroKernel.Resolvers;
 
 public class UsingContainerAsServiceLocatorDiagnostic(IKernel kernel) : IUsingContainerAsServiceLocatorDiagnostic
 {
-	public static Type[] ContainerTypes =
-	{
+	public static readonly Type[] ContainerTypes =
+	[
 		typeof(IKernel),
 		typeof(IWindsorContainer),
 		typeof(IKernelEvents),
 		typeof(IKernelInternal),
 		typeof(DefaultKernel),
-		typeof(WindsorContainer),
-	};
+		typeof(WindsorContainer)
+	];
 
-	public static Predicate<IHandler>[] ExceptionsToTheRule =
-	{
+	public static readonly Predicate<IHandler>[] ExceptionsToTheRule =
+	[
 		h => h.ComponentModel.Implementation.Is<IInterceptor>(),
 		h => h.ComponentModel.Services.Any(s => s.Is<ILazyComponentLoader>()),
-		h => h.ComponentModel.Implementation == typeof(MicroKernel.Internal.LazyEx<>),
-	};
+		h => h.ComponentModel.Implementation == typeof(MicroKernel.Internal.LazyEx<>)
+	];
 
 	public IHandler[] Inspect()
 	{

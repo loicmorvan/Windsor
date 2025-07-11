@@ -24,7 +24,7 @@ using Castle.Core.Resource;
 /// </summary>
 public class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 {
-	private readonly List<IResourceFactory> resourceFactories = new List<IResourceFactory>();
+	private readonly List<IResourceFactory> _resourceFactories = [];
 
 	public DefaultResourceSubSystem()
 	{
@@ -58,7 +58,7 @@ public class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 			throw new ArgumentNullException(nameof(uri));
 		}
 
-		foreach (var resFactory in resourceFactories)
+		foreach (var resFactory in _resourceFactories)
 		{
 			if (resFactory.Accept(uri))
 			{
@@ -81,7 +81,7 @@ public class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 			throw new ArgumentNullException(nameof(basePath));
 		}
 
-		foreach (var resFactory in resourceFactories)
+		foreach (var resFactory in _resourceFactories)
 		{
 			if (resFactory.Accept(uri))
 			{
@@ -100,7 +100,7 @@ public class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 			throw new ArgumentNullException(nameof(resourceFactory));
 		}
 
-		resourceFactories.Add(resourceFactory);
+		_resourceFactories.Add(resourceFactory);
 	}
 
 	protected virtual void InitDefaultResourceFactories()

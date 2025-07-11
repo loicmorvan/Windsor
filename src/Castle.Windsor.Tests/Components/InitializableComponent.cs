@@ -19,15 +19,15 @@ using Castle.Core;
 [Transient]
 public class InitializableComponent : IInitializable
 {
-	private bool isInitialized;
+	private bool _isInitialized;
 
 	public bool IsInitialized
 	{
-		get { return isInitialized; }
+		get { return _isInitialized; }
 	}
 
 	public void Initialize()
 	{
-		isInitialized = true;
+		_isInitialized = true;
 	}
 }

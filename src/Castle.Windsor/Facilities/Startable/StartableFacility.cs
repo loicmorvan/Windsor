@@ -22,8 +22,8 @@ using Castle.Windsor;
 
 public partial class StartableFacility : AbstractFacility
 {
-	private ITypeConverter converter;
-	private StartFlag flag;
+	private ITypeConverter _converter;
+	private StartFlag _flag;
 
 	/// <summary>
 	///     This method changes behavior of the facility. Deferred mode should be used when you have single call to <see cref = "IWindsorContainer.Install" /> and register all your components there. Enabling
@@ -43,7 +43,7 @@ public partial class StartableFacility : AbstractFacility
 	/// </summary>
 	public void DeferredStart(StartFlag flag)
 	{
-		this.flag = flag;
+		this._flag = flag;
 	}
 
 	/// <summary>
@@ -60,10 +60,10 @@ public partial class StartableFacility : AbstractFacility
 
 	protected override void Init()
 	{
-		converter = Kernel.GetConversionManager();
-		Kernel.ComponentModelBuilder.AddContributor(new StartableContributor(converter));
+		_converter = Kernel.GetConversionManager();
+		Kernel.ComponentModelBuilder.AddContributor(new StartableContributor(_converter));
 
-		InitFlag(flag ?? new LegacyStartFlag(), new StartableEvents(Kernel));
+		InitFlag(_flag ?? new LegacyStartFlag(), new StartableEvents(Kernel));
 	}
 
 	private void InitFlag(IStartFlagInternal startFlag, StartableEvents events)

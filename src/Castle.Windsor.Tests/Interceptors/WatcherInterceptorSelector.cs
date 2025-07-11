@@ -38,6 +38,6 @@ public class WatcherInterceptorSelector : IModelInterceptorsSelector
 		{
 			return null;
 		}
-		return new[] { new InterceptorReference(typeof(WasCalledInterceptor)), };
+		return [new InterceptorReference(typeof(WasCalledInterceptor))];
 	}
 }

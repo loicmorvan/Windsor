@@ -31,21 +31,21 @@ public class Log4NetFacilityLognameOverrideTests : OverrideLoggerTest, IDisposab
 {
 	public Log4NetFacilityLognameOverrideTests()
 	{
-		container = base.CreateConfiguredContainer<ExtendedLog4netFactory>("Override");
+		_container = base.CreateConfiguredContainer<ExtendedLog4netFactory>("Override");
 	}
 
 	public void Dispose()
 	{
-		container.Dispose();
+		_container.Dispose();
 	}
 
-	private readonly IWindsorContainer container;
+	private readonly IWindsorContainer _container;
 
 	[Fact]
 	public void OverrideTest()
 	{
-		container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
-		var test = container.Resolve<SimpleLoggingComponent>("component");
+		_container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
+		var test = _container.Resolve<SimpleLoggingComponent>("component");
 
 		test.DoSomething();
 

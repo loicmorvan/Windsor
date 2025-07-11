@@ -20,12 +20,12 @@ using Castle.Core.Logging;
 
 public class SmtpServer : ISmtpServer
 {
-	private IExtendedLogger logger;
+	private IExtendedLogger _logger;
 
 	public IExtendedLogger Logger
 	{
-		get { return logger; }
-		set { logger = value; }
+		get { return _logger; }
+		set { _logger = value; }
 	}
 
 	public void Start()

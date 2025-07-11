@@ -82,12 +82,12 @@ public class AnyClass
 
 public class Tester1(string bar)
 {
-	public string bar = bar;
+	public string Bar = bar;
 }
 
 public class Tester2(int foo)
 {
-	public int foo = foo;
+	public int Foo = foo;
 }
 
 [Transient]

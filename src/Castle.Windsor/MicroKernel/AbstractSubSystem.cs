@@ -24,7 +24,7 @@ public abstract class AbstractSubSystem :
 #endif
 	ISubSystem
 {
-	private IKernelInternal kernel;
+	private IKernelInternal _kernel;
 
 #if FEATURE_REMOTING
 		[SecurityCritical]
@@ -36,7 +36,7 @@ public abstract class AbstractSubSystem :
 
 	public virtual void Init(IKernelInternal kernel)
 	{
-		this.kernel = kernel;
+		this._kernel = kernel;
 	}
 
 	public virtual void Terminate()
@@ -45,6 +45,6 @@ public abstract class AbstractSubSystem :
 
 	protected IKernelInternal Kernel
 	{
-		get { return kernel; }
+		get { return _kernel; }
 	}
 }

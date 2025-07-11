@@ -12,40 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Extensions;
-
 using System;
 using System.Collections.Generic;
-using System.Linq;
-
 using Castle.Core;
 using Castle.Core.Internal;
 using Castle.MicroKernel;
 using Castle.Windsor.Diagnostics.DebuggerViews;
 
+namespace Castle.Windsor.Diagnostics.Extensions;
+
 public class DuplicatedDependenciesDebuggerExtension : AbstractContainerDebuggerExtension
 {
-	private const string name = "Components with potentially duplicated dependencies";
-	private DuplicatedDependenciesDiagnostic diagnostic;
+	private const string Name = "Components with potentially duplicated dependencies";
+	private DuplicatedDependenciesDiagnostic _diagnostic;
 
 	public override IEnumerable<DebuggerViewItem> Attach()
 	{
-		var result = diagnostic.Inspect();
-		if (result.Length == 0)
-		{
-			return Enumerable.Empty<DebuggerViewItem>();
-		}
+		var result = _diagnostic.Inspect();
+		if (result.Length == 0) return [];
 		var items = BuildItems(result);
-		return new[]
-		{
-			new DebuggerViewItem(name, "Count = " + items.Length, items)
-		};
+		return
+		[
+			new DebuggerViewItem(Name, "Count = " + items.Length, items)
+		];
 	}
 
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
 	{
-		diagnostic = new DuplicatedDependenciesDiagnostic(kernel);
-		diagnosticsHost.AddDiagnostic<IDuplicatedDependenciesDiagnostic>(diagnostic);
+		_diagnostic = new DuplicatedDependenciesDiagnostic(kernel);
+		diagnosticsHost.AddDiagnostic<IDuplicatedDependenciesDiagnostic>(_diagnostic);
 	}
 
 	private ComponentDebuggerView[] BuildItems(Tuple<IHandler, DependencyDuplicate[]>[] results)
@@ -58,18 +53,14 @@ public class DuplicatedDependenciesDebuggerExtension : AbstractContainerDebugger
 		var handler = input.Item1;
 		var mismatches = input.Item2;
 		var items = mismatches.ConvertAll(MismatchView);
-		Array.Sort(items, (c1, c2) => c1.Name.CompareTo(c2.Name));
+		Array.Sort(items, (c1, c2) => string.Compare(c1.Name, c2.Name, StringComparison.Ordinal));
 		return ComponentDebuggerView.BuildRawFor(handler, "Count = " + mismatches.Length, items);
 	}
 
 	private DebuggerViewItemWithDetails MismatchView(DependencyDuplicate input)
 	{
-		return new DebuggerViewItemWithDetails(Description(input.Dependency1), Description(input.Dependency2), diagnostic.GetDetails(input));
-	}
-
-	public static string Name
-	{
-		get { return name; }
+		return new DebuggerViewItemWithDetails(Description(input.Dependency1), Description(input.Dependency2),
+			_diagnostic.GetDetails(input));
 	}
 
 	private static string Description(DependencyModel dependencyModel)

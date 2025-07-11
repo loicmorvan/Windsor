@@ -26,12 +26,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 internal class WindsorScopedServiceProvider(IWindsorContainer container) : IServiceProvider, ISupportRequiredService, IDisposable
 {
-	private readonly ExtensionContainerScopeBase scope = ExtensionContainerScopeCache.Current;
-	private bool disposing;
+	private readonly ExtensionContainerScopeBase _scope = ExtensionContainerScopeCache.Current;
+	private bool _disposing;
 
 	public object GetService(Type serviceType)
 	{
-		using(_ = new ForcedScope(scope))
+		using(_ = new ForcedScope(_scope))
 		{
 			return ResolveInstanceOrNull(serviceType, true);	
 		}
@@ -39,7 +39,7 @@ internal class WindsorScopedServiceProvider(IWindsorContainer container) : IServ
 
 	public object GetRequiredService(Type serviceType)
 	{
-		using(_ = new ForcedScope(scope))
+		using(_ = new ForcedScope(_scope))
 		{
 			return ResolveInstanceOrNull(serviceType, false);	
 		}
@@ -47,10 +47,10 @@ internal class WindsorScopedServiceProvider(IWindsorContainer container) : IServ
 
 	public void Dispose()
 	{
-		if (!(scope is ExtensionContainerRootScope)) return;
-		if (disposing) return;
-		disposing = true;
-		var disposableScope = scope as IDisposable;
+		if (!(_scope is ExtensionContainerRootScope)) return;
+		if (_disposing) return;
+		_disposing = true;
+		var disposableScope = _scope as IDisposable;
 		disposableScope?.Dispose();
 		container.Dispose();
 	}

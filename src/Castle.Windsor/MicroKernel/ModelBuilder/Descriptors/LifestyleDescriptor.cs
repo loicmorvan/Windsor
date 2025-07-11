@@ -17,8 +17,8 @@ namespace Castle.MicroKernel.ModelBuilder.Descriptors;
 using Castle.Core;
 using Castle.Core.Configuration;
 
-public class LifestyleDescriptor<S>(LifestyleType lifestyle) : AbstractOverwriteableDescriptor<S>
-	where S : class
+public class LifestyleDescriptor<TS>(LifestyleType lifestyle) : AbstractOverwriteableDescriptor<TS>
+	where TS : class
 {
 	protected override void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
 	{

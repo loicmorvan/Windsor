@@ -25,11 +25,11 @@ using Microsoft.Extensions.Logging;
 
 public class LoggerDependencyResolver : ISubDependencyResolver, IAcceptServiceProvider
 {
-	private IServiceProvider serviceProvider;
+	private IServiceProvider _serviceProvider;
 
 	public void AcceptServiceProvider(IServiceProvider serviceProvider)
 	{
-		this.serviceProvider = serviceProvider;
+		this._serviceProvider = serviceProvider;
 	}
 
 	public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
@@ -40,12 +40,12 @@ public class LoggerDependencyResolver : ISubDependencyResolver, IAcceptServicePr
 	public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
 	{
 		ThrowIfServiceProviderIsNull();
-		return serviceProvider.GetService<ILoggerFactory>().CreateLogger(model.Name);
+		return _serviceProvider.GetService<ILoggerFactory>().CreateLogger(model.Name);
 	}
 
 	private void ThrowIfServiceProviderIsNull()
 	{
-		if (serviceProvider == null)
+		if (_serviceProvider == null)
 		{
 			throw new InvalidOperationException($"The serviceProvider for this resolver is null. Please call AcceptServiceProvider first.");
 		}

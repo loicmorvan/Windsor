@@ -18,7 +18,7 @@ using System.Collections.Generic;
 
 using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
-public interface InvalidDummyComponentListFactory
+public interface INvalidDummyComponentListFactory
 {
 	List<IDummyComponent> All();
 }

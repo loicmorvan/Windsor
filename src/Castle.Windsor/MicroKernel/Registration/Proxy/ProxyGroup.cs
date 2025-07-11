@@ -19,29 +19,29 @@ using System;
 using Castle.DynamicProxy;
 using Castle.MicroKernel.ModelBuilder.Descriptors;
 
-public class ProxyGroup<S>(ComponentRegistration<S> registration) : RegistrationGroup<S>(registration)
-	where S : class
+public class ProxyGroup<TS>(ComponentRegistration<TS> registration) : RegistrationGroup<TS>(registration)
+	where TS : class
 {
-	public ComponentRegistration<S> AsMarshalByRefClass
+	public ComponentRegistration<TS> AsMarshalByRefClass
 	{
 		get { return AddAttributeDescriptor("marshalByRefProxy", bool.TrueString); }
 	}
 
-	public ComponentRegistration<S> AdditionalInterfaces(params Type[] interfaces)
+	public ComponentRegistration<TS> AdditionalInterfaces(params Type[] interfaces)
 	{
-		if (interfaces != null && interfaces.Length > 0)
+		if (interfaces is { Length: > 0 })
 		{
 			AddDescriptor(new ProxyInterfacesDescriptor(interfaces));
 		}
 		return Registration;
 	}
 
-	public ComponentRegistration<S> Hook(IProxyGenerationHook hook)
+	public ComponentRegistration<TS> Hook(IProxyGenerationHook hook)
 	{
 		return Hook(r => r.Instance(hook));
 	}
 
-	public ComponentRegistration<S> Hook(Action<ItemRegistration<IProxyGenerationHook>> hookRegistration)
+	public ComponentRegistration<TS> Hook(Action<ItemRegistration<IProxyGenerationHook>> hookRegistration)
 	{
 		var hook = new ItemRegistration<IProxyGenerationHook>();
 		hookRegistration.Invoke(hook);
@@ -50,12 +50,12 @@ public class ProxyGroup<S>(ComponentRegistration<S> registration) : Registration
 		return Registration;
 	}
 
-	public ComponentRegistration<S> MixIns(params object[] mixIns)
+	public ComponentRegistration<TS> MixIns(params object[] mixIns)
 	{
 		return MixIns(r => r.Objects(mixIns));
 	}
 
-	public ComponentRegistration<S> MixIns(Action<MixinRegistration> mixinRegistration)
+	public ComponentRegistration<TS> MixIns(Action<MixinRegistration> mixinRegistration)
 	{
 		var mixins = new MixinRegistration();
 		mixinRegistration.Invoke(mixins);

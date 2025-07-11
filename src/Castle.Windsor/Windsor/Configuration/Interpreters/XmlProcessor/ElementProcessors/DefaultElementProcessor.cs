@@ -20,8 +20,8 @@ using System.Xml;
 public class DefaultElementProcessor : AbstractXmlNodeProcessor
 {
 	private const string IncludeAttrName = "includeUri";
-	private static readonly IncludeElementProcessor includeProcessor = new IncludeElementProcessor();
-	private static readonly DefaultTextNodeProcessor textProcessor = new DefaultTextNodeProcessor();
+	private static readonly IncludeElementProcessor IncludeProcessor = new();
+	private static readonly DefaultTextNodeProcessor TextProcessor = new();
 
 	public override String Name
 	{
@@ -57,7 +57,7 @@ public class DefaultElementProcessor : AbstractXmlNodeProcessor
 
 		foreach (XmlAttribute att in element.Attributes)
 		{
-			textProcessor.ProcessString(att, att.Value, engine);
+			TextProcessor.ProcessString(att, att.Value, engine);
 		}
 	}
 
@@ -72,7 +72,7 @@ public class DefaultElementProcessor : AbstractXmlNodeProcessor
 		// removing the include attribute from the element
 		element.Attributes.RemoveNamedItem(IncludeAttrName);
 
-		var includeContent = includeProcessor.ProcessInclude(element, include.Value, engine);
+		var includeContent = IncludeProcessor.ProcessInclude(element, include.Value, engine);
 
 		if (includeContent != null)
 		{

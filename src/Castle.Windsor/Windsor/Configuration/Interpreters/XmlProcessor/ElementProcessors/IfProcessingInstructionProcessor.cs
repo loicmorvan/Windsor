@@ -31,11 +31,11 @@ public class IfProcessingInstructionProcessor : AbstractXmlNodeProcessor
 	private static readonly String ElsifPiName = "elsif";
 	private static readonly String EndPiName = "end";
 	private static readonly String IfPiName = "if";
-	private static readonly XmlNodeType[] acceptNodes = new[] { XmlNodeType.ProcessingInstruction };
+	private static readonly XmlNodeType[] AcceptNodes = [XmlNodeType.ProcessingInstruction];
 
 	public override XmlNodeType[] AcceptNodeTypes
 	{
-		get { return acceptNodes; }
+		get { return AcceptNodes; }
 	}
 
 	public override String Name

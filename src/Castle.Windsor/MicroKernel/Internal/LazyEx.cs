@@ -20,37 +20,37 @@ using System.Collections;
 
 public class LazyEx<T> : Lazy<T>, IDisposable
 {
-	private readonly IKernel kernel;
+	private readonly IKernel _kernel;
 
 	public LazyEx(IKernel kernel, Arguments arguments)
 		: base(() => kernel.Resolve<T>(arguments))
 	{
-		this.kernel = kernel;
+		this._kernel = kernel;
 	}
 
 	public LazyEx(IKernel kernel, string overrideComponentName)
 		: base(() => kernel.Resolve<T>(overrideComponentName))
 	{
-		this.kernel = kernel;
+		this._kernel = kernel;
 	}
 
 	public LazyEx(IKernel kernel, string overrideComponentName, Arguments arguments)
 		: base(() => kernel.Resolve<T>(overrideComponentName, arguments))
 	{
-		this.kernel = kernel;
+		this._kernel = kernel;
 	}
 
 	public LazyEx(IKernel kernel)
 		: base(kernel.Resolve<T>)
 	{
-		this.kernel = kernel;
+		this._kernel = kernel;
 	}
 
 	public void Dispose()
 	{
 		if (IsValueCreated)
 		{
-			kernel.ReleaseComponent(Value);
+			_kernel.ReleaseComponent(Value);
 		}
 	}
 }

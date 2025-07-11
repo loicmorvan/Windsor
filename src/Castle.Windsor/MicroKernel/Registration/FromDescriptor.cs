@@ -22,8 +22,8 @@ using System.Collections.Generic;
 /// </summary>
 public abstract class FromDescriptor(Predicate<Type> additionalFilters) : IRegistration
 {
-	private readonly IList<BasedOnDescriptor> criterias = new List<BasedOnDescriptor>();
-	private bool allowMultipleMatches = false;
+	private readonly IList<BasedOnDescriptor> _criterias = new List<BasedOnDescriptor>();
+	private bool _allowMultipleMatches;
 
 	protected abstract IEnumerable<Type> SelectedTypes(IKernel kernel);
 
@@ -32,7 +32,7 @@ public abstract class FromDescriptor(Predicate<Type> additionalFilters) : IRegis
 	/// </summary>
 	public FromDescriptor AllowMultipleMatches()
 	{
-		allowMultipleMatches = true;
+		_allowMultipleMatches = true;
 		return this;
 	}
 
@@ -53,7 +53,7 @@ public abstract class FromDescriptor(Predicate<Type> additionalFilters) : IRegis
 	/// <returns> The descriptor for the type. </returns>
 	public BasedOnDescriptor BasedOn(Type basedOn)
 	{
-		return BasedOn((IEnumerable<Type>)new[] { basedOn });
+		return BasedOn((IEnumerable<Type>) [basedOn]);
 	}
 
 	/// <summary>
@@ -74,7 +74,7 @@ public abstract class FromDescriptor(Predicate<Type> additionalFilters) : IRegis
 	public BasedOnDescriptor BasedOn(IEnumerable<Type> basedOn)
 	{
 		var descriptor = new BasedOnDescriptor(basedOn, this, additionalFilters);
-		criterias.Add(descriptor);
+		_criterias.Add(descriptor);
 		return descriptor;
 	}
 
@@ -157,23 +157,23 @@ public abstract class FromDescriptor(Predicate<Type> additionalFilters) : IRegis
 	/// <returns> The descriptor for the type. </returns>
 	public BasedOnDescriptor Where(Predicate<Type> accepted)
 	{
-		var descriptor = new BasedOnDescriptor(new[] { typeof(object) }, this, additionalFilters).If(accepted);
-		criterias.Add(descriptor);
+		var descriptor = new BasedOnDescriptor([typeof(object)], this, additionalFilters).If(accepted);
+		_criterias.Add(descriptor);
 		return descriptor;
 	}
 
 	void IRegistration.Register(IKernelInternal kernel)
 	{
-		if (criterias.Count == 0)
+		if (_criterias.Count == 0)
 		{
 			return;
 		}
 
 		foreach (var type in SelectedTypes(kernel))
 		{
-			foreach (var criteria in criterias)
+			foreach (var criteria in _criterias)
 			{
-				if (criteria.TryRegister(type, kernel) && !allowMultipleMatches)
+				if (criteria.TryRegister(type, kernel) && !_allowMultipleMatches)
 				{
 					break;
 				}

@@ -21,6 +21,6 @@ public interface IReviewableEmployee : IEmployee
 {
 	IReviewer Reviewer { get; set; }
 
-	string ReviewerID { get; }
+	string ReviewerId { get; }
 	int SalaryThird { get; set; }
 }

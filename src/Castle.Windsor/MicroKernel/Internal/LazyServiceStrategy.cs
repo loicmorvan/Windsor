@@ -25,7 +25,7 @@ using Castle.MicroKernel.Handlers;
 
 public class LazyServiceStrategy : IGenericServiceStrategy
 {
-	public static readonly LazyServiceStrategy Instance = new LazyServiceStrategy();
+	public static readonly LazyServiceStrategy Instance = new();
 
 	private LazyServiceStrategy()
 	{

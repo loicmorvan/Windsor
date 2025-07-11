@@ -23,12 +23,12 @@ using Castle.MicroKernel.ModelBuilder;
 [Serializable]
 public class DefaultHandlerFactory(IKernelInternal kernel) : IHandlerFactory
 {
-	private readonly IKernelInternal kernel = kernel;
+	private readonly IKernelInternal _kernel = kernel;
 
 	public virtual IHandler Create(ComponentModel model)
 	{
 		var handler = CreateHandler(model);
-		handler.Init(kernel);
+		handler.Init(_kernel);
 		return handler;
 	}
 

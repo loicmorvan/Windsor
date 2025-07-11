@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Components;
 
 public class WebServiceResultFinder<T> : IResultFinder<T>
 {
-	private readonly IResultFinder<T> finder;
+	private readonly IResultFinder<T> _finder;
 
 	public WebServiceResultFinder()
 	{
@@ -24,12 +24,12 @@ public class WebServiceResultFinder<T> : IResultFinder<T>
 
 	public WebServiceResultFinder(IResultFinder<T> finder)
 	{
-		this.finder = finder;
+		this._finder = finder;
 	}
 
 	public IResultFinder<T> Finder
 	{
-		get { return finder; }
+		get { return _finder; }
 	}
 
 	public T Process(ISpecification specification)

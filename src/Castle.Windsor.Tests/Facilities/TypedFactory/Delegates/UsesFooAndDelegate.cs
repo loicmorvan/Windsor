@@ -18,12 +18,12 @@ using System;
 
 public class UsesFooAndDelegate(Func<int, Foo> myFooFactory, Foo foo)
 {
-	private int counter = 0;
+	private int _counter;
 
 	public Foo Foo { get; private set; } = foo;
 
 	public Foo GetFoo()
 	{
-		return myFooFactory(++counter);
+		return myFooFactory(++_counter);
 	}
 }

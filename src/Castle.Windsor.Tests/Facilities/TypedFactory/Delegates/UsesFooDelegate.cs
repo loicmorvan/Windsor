@@ -18,7 +18,7 @@ using System;
 
 public class UsesFooDelegate(Func<int, Foo> myFooFactory)
 {
-	private int counter = 0;
+	private int _counter;
 
 	public Func<int, Foo> Factory
 	{
@@ -27,6 +27,6 @@ public class UsesFooDelegate(Func<int, Foo> myFooFactory)
 
 	public Foo GetFoo()
 	{
-		return myFooFactory(++counter);
+		return myFooFactory(++_counter);
 	}
 }

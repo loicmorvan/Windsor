@@ -18,7 +18,7 @@ using System;
 
 public class UsesTwoFooDelegates(Func<int, Foo> one, Func<int, Foo> two)
 {
-	private int counter = 0;
+	private int _counter;
 
 	public Func<int, Foo> One
 	{
@@ -32,11 +32,11 @@ public class UsesTwoFooDelegates(Func<int, Foo> one, Func<int, Foo> two)
 
 	public Foo GetFooOne()
 	{
-		return one(++counter);
+		return one(++_counter);
 	}
 
 	public Foo GetFooTwo()
 	{
-		return two(++counter);
+		return two(++_counter);
 	}
 }

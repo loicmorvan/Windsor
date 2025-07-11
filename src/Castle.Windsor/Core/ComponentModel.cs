@@ -12,84 +12,77 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-
 using Castle.Core.Configuration;
 using Castle.Core.Internal;
 using Castle.MicroKernel;
 
+namespace Castle.Core;
+
 /// <summary>
-///   Represents the collection of information and meta information collected about a component.
+///     Represents the collection of information and meta information collected about a component.
 /// </summary>
 [Serializable]
 public sealed class ComponentModel : GraphNode
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly ConstructorCandidateCollection constructors = new ConstructorCandidateCollection();
+	private readonly ConstructorCandidateCollection _constructors = [];
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly LifecycleConcernsCollection lifecycle = new LifecycleConcernsCollection();
+	private readonly LifecycleConcernsCollection _lifecycle = new();
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly List<Type> services = new List<Type>(4);
-	private readonly HashSet<Type> servicesLookup = new HashSet<Type>();
+	private readonly List<Type> _services = new(4);
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private ComponentName componentName;
+	private ComponentName _componentName;
 
-	[NonSerialized]
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private Arguments customDependencies;
+	[NonSerialized] [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	private Arguments _customDependencies;
 
 	/// <summary>
-	///   Dependencies the kernel must resolve
+	///     Dependencies the kernel must resolve
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private DependencyModelCollection dependencies;
+	private DependencyModelCollection _dependencies;
 
-	[NonSerialized]
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private Arguments extendedProperties;
-
-	/// <summary>
-	///   Interceptors associated
-	/// </summary>
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private InterceptorReferenceCollection interceptors;
+	[NonSerialized] [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	private Arguments _extendedProperties;
 
 	/// <summary>
-	///   External parameters
+	///     Interceptors associated
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private ParameterModelCollection parameters;
+	private InterceptorReferenceCollection _interceptors;
 
 	/// <summary>
-	///   All potential properties that can be setted by the kernel
+	///     External parameters
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private PropertySetCollection properties;
+	private ParameterModelCollection _parameters;
 
 	/// <summary>
-	///   Constructs a ComponentModel
+	///     All potential properties that can be setted by the kernel
 	/// </summary>
-	public ComponentModel(ComponentName name, ICollection<Type> services, Type implementation, Arguments extendedProperties)
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	private PropertySetCollection _properties;
+
+	/// <summary>
+	///     Constructs a ComponentModel
+	/// </summary>
+	public ComponentModel(ComponentName name, ICollection<Type> services, Type implementation,
+		Arguments extendedProperties)
 	{
-		componentName = Must.NotBeNull(name, "name");
+		_componentName = Must.NotBeNull(name, "name");
 		Implementation = Must.NotBeNull(implementation, "implementation");
-		this.extendedProperties = extendedProperties;
+		_extendedProperties = extendedProperties;
 		services = Must.NotBeEmpty(services, "services");
-		foreach (var type in services)
-		{
-			AddService(type);
-		}
+		foreach (var type in services) AddService(type);
 	}
 
 	public ComponentModel()
@@ -98,34 +91,31 @@ public sealed class ComponentModel : GraphNode
 
 	public ComponentName ComponentName
 	{
-		get { return componentName; }
-		internal set { componentName = Must.NotBeNull(value, "value"); }
+		get => _componentName;
+		internal set => _componentName = Must.NotBeNull(value, "value");
 	}
 
 	/// <summary>
-	///   Gets or sets the configuration.
+	///     Gets or sets the configuration.
 	/// </summary>
 	/// <value> The configuration. </value>
 	public IConfiguration Configuration { get; set; }
 
 	/// <summary>
-	///   Gets the constructors candidates.
+	///     Gets the constructors candidates.
 	/// </summary>
 	/// <value> The constructors. </value>
 	[DebuggerDisplay("Count = {constructors.Count}")]
-	public ConstructorCandidateCollection Constructors
-	{
-		get { return constructors; }
-	}
+	public ConstructorCandidateCollection Constructors => _constructors;
 
 	/// <summary>
-	///   Gets or sets the custom component activator.
+	///     Gets or sets the custom component activator.
 	/// </summary>
 	/// <value> The custom component activator. </value>
 	public Type CustomComponentActivator { get; set; }
 
 	/// <summary>
-	///   Gets the custom dependencies.
+	///     Gets the custom dependencies.
 	/// </summary>
 	/// <value> The custom dependencies. </value>
 	[DebuggerDisplay("Count = {customDependencies.Count}")]
@@ -133,44 +123,39 @@ public sealed class ComponentModel : GraphNode
 	{
 		get
 		{
-			var value = customDependencies;
-			if (value != null)
-			{
-				return value;
-			}
+			var value = _customDependencies;
+			if (value != null) return value;
 			value = new Arguments();
-			var originalValue = Interlocked.CompareExchange(ref customDependencies, value, null);
+			var originalValue = Interlocked.CompareExchange(ref _customDependencies, value, null);
 			return originalValue ?? value;
 		}
 	}
 
 	/// <summary>
-	///   Gets or sets the custom lifestyle.
+	///     Gets or sets the custom lifestyle.
 	/// </summary>
 	/// <value> The custom lifestyle. </value>
 	public Type CustomLifestyle { get; set; }
 
 	/// <summary>
-	///   Dependencies are kept within constructors and properties. Others dependencies must be registered here, so the kernel (as a matter of fact the handler) can check them
+	///     Dependencies are kept within constructors and properties. Others dependencies must be registered here, so the
+	///     kernel (as a matter of fact the handler) can check them
 	/// </summary>
 	[DebuggerDisplay("Count = {dependencies.dependencies.Count}")]
 	public DependencyModelCollection Dependencies
 	{
 		get
 		{
-			var value = dependencies;
-			if (value != null)
-			{
-				return value;
-			}
-			value = new DependencyModelCollection();
-			var originalValue = Interlocked.CompareExchange(ref dependencies, value, null);
+			var value = _dependencies;
+			if (value != null) return value;
+			value = [];
+			var originalValue = Interlocked.CompareExchange(ref _dependencies, value, null);
 			return originalValue ?? value;
 		}
 	}
 
 	/// <summary>
-	///   Gets or sets the extended properties.
+	///     Gets or sets the extended properties.
 	/// </summary>
 	/// <value> The extended properties. </value>
 	[DebuggerDisplay("Count = {extendedProperties.Count}")]
@@ -178,29 +163,23 @@ public sealed class ComponentModel : GraphNode
 	{
 		get
 		{
-			var value = extendedProperties;
-			if (value != null)
-			{
-				return value;
-			}
+			var value = _extendedProperties;
+			if (value != null) return value;
 			value = new Arguments();
-			var originalValue = Interlocked.CompareExchange(ref extendedProperties, value, null);
+			var originalValue = Interlocked.CompareExchange(ref _extendedProperties, value, null);
 			return originalValue ?? value;
 		}
 	}
 
-	public bool HasClassServices
-	{
-		get { return services.First().GetTypeInfo().IsClass; }
-	}
+	public bool HasClassServices => _services.First().GetTypeInfo().IsClass;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public bool HasCustomDependencies
 	{
 		get
 		{
-			var value = customDependencies;
-			return value != null && value.Count > 0;
+			var value = _customDependencies;
+			return value is { Count: > 0 };
 		}
 	}
 
@@ -209,8 +188,8 @@ public sealed class ComponentModel : GraphNode
 	{
 		get
 		{
-			var value = interceptors;
-			return value != null && value.HasInterceptors;
+			var value = _interceptors;
+			return value is { HasInterceptors: true };
 		}
 	}
 
@@ -219,24 +198,24 @@ public sealed class ComponentModel : GraphNode
 	{
 		get
 		{
-			var value = parameters;
-			return value != null && value.Count > 0;
+			var value = _parameters;
+			return value is { Count: > 0 };
 		}
 	}
 
 	/// <summary>
-	///   Gets or sets the component implementation.
+	///     Gets or sets the component implementation.
 	/// </summary>
 	/// <value> The implementation. </value>
 	public Type Implementation { get; set; }
 
 	/// <summary>
-	///   Gets or sets the strategy for inspecting public properties on the components
+	///     Gets or sets the strategy for inspecting public properties on the components
 	/// </summary>
 	public PropertiesInspectionBehavior InspectionBehavior { get; set; }
 
 	/// <summary>
-	///   Gets the interceptors.
+	///     Gets the interceptors.
 	/// </summary>
 	/// <value> The interceptors. </value>
 	[DebuggerDisplay("Count = {interceptors.list.Count}")]
@@ -244,65 +223,56 @@ public sealed class ComponentModel : GraphNode
 	{
 		get
 		{
-			var value = interceptors;
-			if (value != null)
-			{
-				return value;
-			}
+			var value = _interceptors;
+			if (value != null) return value;
 			value = new InterceptorReferenceCollection(this);
-			var originalValue = Interlocked.CompareExchange(ref interceptors, value, null);
+			var originalValue = Interlocked.CompareExchange(ref _interceptors, value, null);
 			return originalValue ?? value;
 		}
 	}
 
 	/// <summary>
-	///   Gets the lifecycle steps.
+	///     Gets the lifecycle steps.
 	/// </summary>
 	/// <value> The lifecycle steps. </value>
 	[DebuggerDisplay(
 		"Count = {(lifecycle.commission != null ? lifecycle.commission.Count : 0) + (lifecycle.decommission != null ? lifecycle.decommission.Count : 0)}"
 	)]
-	public LifecycleConcernsCollection Lifecycle
-	{
-		get { return lifecycle; }
-	}
+	public LifecycleConcernsCollection Lifecycle => _lifecycle;
 
 	/// <summary>
-	///   Gets or sets the lifestyle type.
+	///     Gets or sets the lifestyle type.
 	/// </summary>
 	/// <value> The type of the lifestyle. </value>
 	public LifestyleType LifestyleType { get; set; }
 
 	/// <summary>
-	///   Sets or returns the component key
+	///     Sets or returns the component key
 	/// </summary>
 	public string Name
 	{
-		get { return componentName.Name; }
-		set { componentName.SetName(value); }
+		get => _componentName.Name;
+		set => _componentName.SetName(value);
 	}
 
 	/// <summary>
-	///   Gets the parameter collection.
+	///     Gets the parameter collection.
 	/// </summary>
 	/// <value> The parameters. </value>
 	public ParameterModelCollection Parameters
 	{
 		get
 		{
-			var value = parameters;
-			if (value != null)
-			{
-				return value;
-			}
-			value = new ParameterModelCollection();
-			var originalValue = Interlocked.CompareExchange(ref parameters, value, null);
+			var value = _parameters;
+			if (value != null) return value;
+			value = [];
+			var originalValue = Interlocked.CompareExchange(ref _parameters, value, null);
 			return originalValue ?? value;
 		}
 	}
 
 	/// <summary>
-	///   Gets the properties set.
+	///     Gets the properties set.
 	/// </summary>
 	/// <value> The properties. </value>
 	[DebuggerDisplay("Count = {properties.Count}")]
@@ -310,55 +280,40 @@ public sealed class ComponentModel : GraphNode
 	{
 		get
 		{
-			var value = properties;
-			if (value != null)
-			{
-				return value;
-			}
-			value = new PropertySetCollection();
-			var originalValue = Interlocked.CompareExchange(ref properties, value, null);
+			var value = _properties;
+			if (value != null) return value;
+			value = [];
+			var originalValue = Interlocked.CompareExchange(ref _properties, value, null);
 			return originalValue ?? value;
 		}
 	}
 
 	/// <summary>
-	///   Gets or sets a value indicating whether the component requires generic arguments.
+	///     Gets or sets a value indicating whether the component requires generic arguments.
 	/// </summary>
 	/// <value> <c>true</c> if generic arguments are required; otherwise, <c>false</c> . </value>
 	public bool RequiresGenericArguments { get; set; }
 
 	[DebuggerDisplay("Count = {services.Count}")]
-	public IEnumerable<Type> Services
-	{
-		get { return services; }
-	}
-		
-	internal HashSet<Type> ServicesLookup
-	{
-		get { return servicesLookup; }
-	}
+	public IEnumerable<Type> Services => _services;
+
+	internal HashSet<Type> ServicesLookup { get; } = [];
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	internal ParameterModelCollection ParametersInternal
-	{
-		get { return parameters; }
-	}
+	internal ParameterModelCollection ParametersInternal => _parameters;
 
 	/// <summary>
-	///   Adds constructor dependency to this <see cref="ComponentModel" />
+	///     Adds constructor dependency to this <see cref="ComponentModel" />
 	/// </summary>
 	/// <param name="constructor"> </param>
 	public void AddConstructor(ConstructorCandidate constructor)
 	{
 		(Constructors as IMutableCollection<ConstructorCandidate>).Add(constructor);
-		foreach (var ctorDependency in constructor.Dependencies)
-		{
-			Dependencies.Add(ctorDependency);
-		}
+		foreach (var ctorDependency in constructor.Dependencies) Dependencies.Add(ctorDependency);
 	}
 
 	/// <summary>
-	///   Adds property dependency to this <see cref="ComponentModel" />
+	///     Adds property dependency to this <see cref="ComponentModel" />
 	/// </summary>
 	/// <param name="property"> </param>
 	public void AddProperty(PropertySet property)
@@ -368,74 +323,52 @@ public sealed class ComponentModel : GraphNode
 	}
 
 	/// <summary>
-	///   Add service to be exposed by this <see cref="ComponentModel" />
+	///     Add service to be exposed by this <see cref="ComponentModel" />
 	/// </summary>
 	/// <param name="type"> </param>
 	public void AddService(Type type)
 	{
-		if (type == null)
-		{
-			return;
-		}
+		if (type == null) return;
 		if (type.IsPrimitiveType())
-		{
 			throw new ArgumentException(
-				string.Format("Type {0} can not be used as a service. only classes, and interfaces can be exposed as a service.",
-					type));
-		}
+				$"Type {type} can not be used as a service. only classes, and interfaces can be exposed as a service.");
 
-		ComponentServicesUtil.AddService(services, servicesLookup, type);
+		ComponentServicesUtil.AddService(_services, ServicesLookup, type);
 	}
 
 	/// <summary>
-	///   Requires the selected property dependencies.
+	///     Requires the selected property dependencies.
 	/// </summary>
 	/// <param name="selectors"> The property selector. </param>
 	public void Requires(params Predicate<PropertySet>[] selectors)
 	{
 		foreach (var property in Properties)
-		{
 			if (selectors.Any(s => s(property)))
-			{
 				property.Dependency.IsOptional = false;
-			}
-		}
 	}
 
 	/// <summary>
-	///   Requires the property dependencies of type <typeparamref name="D" /> .
+	///     Requires the property dependencies of type <typeparamref name="TD" /> .
 	/// </summary>
-	/// <typeparam name="D"> The dependency type. </typeparam>
-	public void Requires<D>() where D : class
+	/// <typeparam name="TD"> The dependency type. </typeparam>
+	public void Requires<TD>() where TD : class
 	{
-		Requires(p => p.Dependency.TargetItemType == typeof (D));
+		Requires(p => p.Dependency.TargetItemType == typeof(TD));
 	}
 
 	public override string ToString()
 	{
 		var services = Services.ToArray();
-		if (services.Length == 1 && services[0] == Implementation)
-		{
-			return Implementation.ToCSharpString();
-		}
+		if (services.Length == 1 && services[0] == Implementation) return Implementation.ToCSharpString();
 
 		string value;
-		if (Implementation == typeof (LateBoundComponent))
-		{
-			value = string.Format("late bound {0}", services[0].ToCSharpString());
-		}
+		if (Implementation == typeof(LateBoundComponent))
+			value = $"late bound {services[0].ToCSharpString()}";
 		else if (Implementation == null)
-		{
 			value = "no impl / " + services[0].ToCSharpString();
-		}
 		else
-		{
-			value = string.Format("{0} / {1}", Implementation.ToCSharpString(), services[0].ToCSharpString());
-		}
-		if (services.Length > 1)
-		{
-			value += string.Format(" and {0} other services", services.Length - 1);
-		}
+			value = $"{Implementation.ToCSharpString()} / {services[0].ToCSharpString()}";
+		if (services.Length > 1) value += $" and {services.Length - 1} other services";
 		return value;
 	}
 }

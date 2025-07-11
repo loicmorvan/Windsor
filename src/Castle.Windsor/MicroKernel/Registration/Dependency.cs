@@ -27,11 +27,11 @@ using Castle.Core.Configuration;
 
 public sealed class Dependency
 {
-	private readonly object item;
+	private readonly object _item;
 
 	internal Dependency(object item)
 	{
-		this.item = item;
+		this._item = item;
 	}
 
 	/// <summary>
@@ -200,8 +200,7 @@ public sealed class Dependency
 
 	internal bool Accept<TItem>(ICollection<TItem> items) where TItem : class
 	{
-		var castItem = item as TItem;
-		if (castItem != null)
+		if (_item is TItem castItem)
 		{
 			items.Add(castItem);
 			return true;

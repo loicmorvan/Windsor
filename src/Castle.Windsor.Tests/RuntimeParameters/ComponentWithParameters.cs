@@ -25,39 +25,39 @@ public class CompA
 
 public class HasCustomDependency(CompA name)
 {
-	private CompA name = name;
+	private CompA _name = name;
 }
 
 public class NeedClassWithCustomerDependency(HasCustomDependency dependency)
 {
-	private HasCustomDependency dependency = dependency;
+	private HasCustomDependency _dependency = dependency;
 }
 
 [Transient]
 public class CompB
 {
-	private readonly string myArgument = string.Empty;
-	private CompC compc = null;
+	private readonly string _myArgument = string.Empty;
+	private CompC _compc;
 
 	public CompB(CompA ca, CompC cc, string myArgument)
 	{
-		compc = cc;
-		this.myArgument = myArgument;
+		_compc = cc;
+		this._myArgument = myArgument;
 	}
 
 	public CompC Compc
 	{
-		get { return compc; }
-		set { compc = value; }
+		get { return _compc; }
+		set { _compc = value; }
 	}
 
 	public string MyArgument
 	{
-		get { return myArgument; }
+		get { return _myArgument; }
 	}
 }
 
 public class CompC(int test)
 {
-	public readonly int test = test;
+	public readonly int Test = test;
 }

@@ -28,17 +28,17 @@ public abstract class WindsorRegistrationOptionsTestCase: IDisposable
 {
 	public void Dispose()
 	{
-		testContext.Dispose();
+		TestContext.Dispose();
 	}
 
-	protected TestContext testContext;
+	protected TestContext TestContext;
 
 	[InlineData(typeof(OverrideTagHelper))]
 	[InlineData(typeof(OverrideController))]
 	[InlineData(typeof(OverrideViewComponent))]
 	public void Should_resolve_overidden_Controllers_TagHelpers_and_ViewComponents_using_WindsorRegistrationOptions(Type optionsResolvableType)
 	{
-		testContext.WindsorContainer.Resolve(optionsResolvableType); 
+		TestContext.WindsorContainer.Resolve(optionsResolvableType); 
 	}
 
 	public class OverrideTagHelper : TagHelper
@@ -59,7 +59,7 @@ public class WindsorRegistrationOptionsForAssembliesTestCase : WindsorRegistrati
 {
 	public WindsorRegistrationOptionsForAssembliesTestCase()
 	{
-		testContext = TestContextFactory.Get(opts => opts
+		TestContext = TestContextFactory.Get(opts => opts
 			.UseEntryAssembly(typeof(WindsorRegistrationOptionsTestCase).Assembly)
 			.RegisterTagHelpers(typeof(OverrideTagHelper).Assembly)
 			.RegisterControllers(typeof(OverrideController).Assembly)
@@ -72,7 +72,7 @@ public class WindsorRegistrationOptionsForComponentsTestCase : WindsorRegistrati
 {
 	public WindsorRegistrationOptionsForComponentsTestCase()
 	{
-		testContext = TestContextFactory.Get(opts => opts
+		TestContext = TestContextFactory.Get(opts => opts
 			.UseEntryAssembly(typeof(WindsorRegistrationOptionsTestCase).Assembly)
 			.RegisterTagHelpers(Component.For<OverrideTagHelper>().LifestyleScoped().Named("tag-helpers"))
 			.RegisterControllers(Component.For<OverrideController>().LifestyleScoped().Named("controllers"))

@@ -211,7 +211,6 @@ public class LazyComponentsTestCase : AbstractContainerTestCase
 
 		Assert.Throws<ComponentNotFoundException>(() =>
 		{
-			var ignoreMe = lazy.Value;
 		});
 	}
 
@@ -231,7 +230,6 @@ public class LazyComponentsTestCase : AbstractContainerTestCase
 		var lazy = Container.Resolve<Lazy<DisposableFoo>>();
 
 		Assert.Equal(0, DisposableFoo.DisposedCount);
-		var value = lazy.Value;
 
 		Container.Release(lazy);
 		Assert.Equal(1, DisposableFoo.DisposedCount);
@@ -248,8 +246,6 @@ public class LazyComponentsTestCase : AbstractContainerTestCase
 
 		Assert.Equal(0, HasInstanceCount.InstancesCreated);
 		Assert.False(lazy.IsValueCreated);
-
-		var value = lazy.Value;
 
 		Assert.Equal(1, HasInstanceCount.InstancesCreated);
 	}

@@ -31,9 +31,9 @@ public class ByTypeInterceptorSelector(Type interceptorType) : IModelInterceptor
 
 	public InterceptorReference[] SelectInterceptors(ComponentModel model, InterceptorReference[] interceptors)
 	{
-		return new[]
-		{
-			new InterceptorReference(interceptorType),
-		};
+		return
+		[
+			new InterceptorReference(interceptorType)
+		];
 	}
 }

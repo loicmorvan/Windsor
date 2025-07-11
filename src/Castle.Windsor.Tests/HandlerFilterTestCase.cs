@@ -52,12 +52,12 @@ public class HandlerFilterTestCase : AbstractContainerTestCase
 
 	private class DelegatingFilter(Type typeToFilter, Func<IHandler, bool> filter = null) : IHandlersFilter
 	{
-		private readonly Func<IHandler, bool> filter = filter ?? (t => true);
-		private IHandler[] handlersAsked;
+		private readonly Func<IHandler, bool> _filter = filter ?? (_ => true);
+		private IHandler[] _handlersAsked;
 
 		public IHandler[] HandlersAsked
 		{
-			get { return handlersAsked; }
+			get { return _handlersAsked; }
 		}
 
 		public bool HasOpinionAbout(Type service)
@@ -67,8 +67,8 @@ public class HandlerFilterTestCase : AbstractContainerTestCase
 
 		public IHandler[] SelectHandlers(Type service, IHandler[] handlers)
 		{
-			handlersAsked = handlers;
-			return handlers.Where(filter).ToArray();
+			_handlersAsked = handlers;
+			return handlers.Where(_filter).ToArray();
 		}
 	}
 
@@ -196,7 +196,7 @@ public class HandlerFilterTestCase : AbstractContainerTestCase
 			Component.For<ISomeTask>().ImplementedBy<Task2>(),
 			Component.For<ISomeTask>().ImplementedBy<Task1>());
 
-		Container.Kernel.AddHandlersFilter(new DelegatingFilter(typeof(ISomeTask), h => false));
+		Container.Kernel.AddHandlersFilter(new DelegatingFilter(typeof(ISomeTask), _ => false));
 
 		var instances = Container.ResolveAll(typeof(ISomeTask));
 

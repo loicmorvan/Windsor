@@ -21,16 +21,16 @@ using Castle.MicroKernel.SubSystems.Configuration;
 
 public class CompositeInstaller : IWindsorInstaller
 {
-	private readonly HashSet<IWindsorInstaller> installers = new HashSet<IWindsorInstaller>();
+	private readonly HashSet<IWindsorInstaller> _installers = [];
 
 	public void Add(IWindsorInstaller instance)
 	{
-		installers.Add(instance);
+		_installers.Add(instance);
 	}
 
 	public void Install(IWindsorContainer container, IConfigurationStore store)
 	{
-		foreach (var installer in installers)
+		foreach (var installer in _installers)
 		{
 			installer.Install(container, store);
 		}

@@ -36,7 +36,7 @@ using Castle.MicroKernel.SubSystems.Conversion;
 [Serializable]
 public class ComponentProxyInspector(IConversionManager converter) : IContributeComponentModelConstruction
 {
-	private readonly IConversionManager converter = converter;
+	private readonly IConversionManager _converter = converter;
 
 	/// <summary>
 	///   Searches for proxy behavior in the configuration and, if unsuccessful
@@ -102,7 +102,7 @@ public class ComponentProxyInspector(IConversionManager converter) : IContribute
 		foreach (var node in interfaces.Children)
 		{
 			var interfaceTypeName = node.Attributes["interface"];
-			var @interface = converter.PerformConversion<Type>(interfaceTypeName);
+			var @interface = _converter.PerformConversion<Type>(interfaceTypeName);
 			list.Add(@interface);
 		}
 		behavior.AdditionalInterfaces = list.ToArray();

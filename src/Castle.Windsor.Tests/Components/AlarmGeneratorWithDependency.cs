@@ -16,15 +16,15 @@ namespace Castle.Windsor.Tests.Components;
 
 public class AlarmGeneratorWithDependency
 {
-	private readonly IAlarmSender sender;
+	private readonly IAlarmSender _sender;
 
 	public AlarmGeneratorWithDependency(IAlarmSender sender, A dependency)
 	{
-		this.sender = sender;
+		this._sender = sender;
 	}
 
 	public IAlarmSender Sender
 	{
-		get { return sender; }
+		get { return _sender; }
 	}
 }

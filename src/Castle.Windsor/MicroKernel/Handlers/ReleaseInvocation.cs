@@ -18,7 +18,7 @@ using System;
 
 public class ReleaseInvocation(Burden burden)
 {
-	private Action proceed;
+	private Action _proceed;
 
 	public Burden Burden { get; private set; } = burden;
 
@@ -31,11 +31,11 @@ public class ReleaseInvocation(Burden burden)
 
 	public void Proceed()
 	{
-		proceed.Invoke();
+		_proceed.Invoke();
 	}
 
 	internal void SetProceedDelegate(Action value)
 	{
-		proceed = value;
+		_proceed = value;
 	}
 }

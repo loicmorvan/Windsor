@@ -31,13 +31,13 @@ using Castle.MicroKernel.Resolvers;
 public class ComponentReference<T> : IReference<T>
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	protected readonly string referencedComponentName;
+	protected readonly string ReferencedComponentName;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	protected readonly Type referencedComponentType;
+	protected readonly Type ReferencedComponentType;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	protected DependencyModel dependencyModel;
+	protected DependencyModel DependencyModel;
 
 	/// <summary>
 	///   Creates a new instance of <see cref = "ComponentReference{T}" /> referencing default component implemented by <paramref
@@ -46,8 +46,8 @@ public class ComponentReference<T> : IReference<T>
 	/// <param name = "componentType"></param>
 	public ComponentReference(Type componentType)
 	{
-		referencedComponentName = ComponentName.DefaultNameFor(componentType);
-		referencedComponentType = componentType;
+		ReferencedComponentName = ComponentName.DefaultNameFor(componentType);
+		ReferencedComponentType = componentType;
 	}
 
 	/// <summary>
@@ -61,12 +61,12 @@ public class ComponentReference<T> : IReference<T>
 		{
 			throw new ArgumentNullException(nameof(referencedComponentName));
 		}
-		this.referencedComponentName = referencedComponentName;
+		this.ReferencedComponentName = referencedComponentName;
 	}
 
 	protected virtual Type ComponentType
 	{
-		get { return referencedComponentType ?? typeof(T); }
+		get { return ReferencedComponentType ?? typeof(T); }
 	}
 
 	public T Resolve(IKernel kernel, CreationContext context)
@@ -77,7 +77,7 @@ public class ComponentReference<T> : IReference<T>
 			throw new DependencyResolverException(
 				string.Format(
 					"The referenced component {0} could not be resolved. Make sure you didn't misspell the name, and that component is registered.",
-					referencedComponentName));
+					ReferencedComponentName));
 		}
 
 		if (handler.IsBeingResolvedInContext(context))
@@ -97,13 +97,13 @@ public class ComponentReference<T> : IReference<T>
 		catch (InvalidCastException e)
 		{
 			throw new ComponentResolutionException(
-				string.Format("Component {0} is not compatible with type {1}.", referencedComponentName, typeof(T)), e);
+				string.Format("Component {0} is not compatible with type {1}.", ReferencedComponentName, typeof(T)), e);
 		}
 	}
 
 	private IHandler GetHandler(IKernel kernel)
 	{
-		var handler = kernel.GetHandler(referencedComponentName);
+		var handler = kernel.GetHandler(ReferencedComponentName);
 		return handler;
 	}
 
@@ -120,16 +120,16 @@ public class ComponentReference<T> : IReference<T>
 
 	void IReference<T>.Attach(ComponentModel component)
 	{
-		dependencyModel = new ComponentDependencyModel(referencedComponentName, ComponentType);
-		component.Dependencies.Add(dependencyModel);
+		DependencyModel = new ComponentDependencyModel(ReferencedComponentName, ComponentType);
+		component.Dependencies.Add(DependencyModel);
 	}
 
 	void IReference<T>.Detach(ComponentModel component)
 	{
-		if (dependencyModel == null)
+		if (DependencyModel == null)
 		{
 			return;
 		}
-		component.Dependencies.Remove(dependencyModel);
+		component.Dependencies.Remove(DependencyModel);
 	}
 }

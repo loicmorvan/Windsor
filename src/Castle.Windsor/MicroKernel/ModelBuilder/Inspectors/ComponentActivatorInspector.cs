@@ -33,7 +33,7 @@ using Castle.MicroKernel.SubSystems.Conversion;
 [Serializable]
 public class ComponentActivatorInspector(IConversionManager converter) : IContributeComponentModelConstruction
 {
-	private readonly IConversionManager converter = converter;
+	private readonly IConversionManager _converter = converter;
 
 	/// <summary>
 	///   Searches for the component activator in the configuration and, if unsuccessful
@@ -69,7 +69,7 @@ public class ComponentActivatorInspector(IConversionManager converter) : IContri
 				return false;
 			}
 
-			var customComponentActivator = converter.PerformConversion<Type>(componentActivatorType);
+			var customComponentActivator = _converter.PerformConversion<Type>(componentActivatorType);
 			ValidateComponentActivator(customComponentActivator);
 
 			model.CustomComponentActivator = customComponentActivator;

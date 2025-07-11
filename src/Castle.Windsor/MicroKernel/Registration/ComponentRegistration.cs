@@ -45,16 +45,16 @@ using Castle.MicroKernel.Registration.Proxy;
 public class ComponentRegistration<TService> : IRegistration
 	where TService : class
 {
-	private readonly List<IComponentModelDescriptor> descriptors = new List<IComponentModelDescriptor>();
-	private readonly List<Type> potentialServices = new List<Type>();
-	private readonly HashSet<Type> potentialServicesLookup = new HashSet<Type>();
+	private readonly List<IComponentModelDescriptor> _descriptors = [];
+	private readonly List<Type> _potentialServices = [];
+	private readonly HashSet<Type> _potentialServicesLookup = [];
 
-	private bool ifComponentRegisteredIgnore;
-	private Type implementation;
-	private ComponentName name;
-	private bool overwrite;
-	private bool registerNewServicesOnly;
-	private bool registered;
+	private bool _ifComponentRegisteredIgnore;
+	private Type _implementation;
+	private ComponentName _name;
+	private bool _overwrite;
+	private bool _registerNewServicesOnly;
+	private bool _registered;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref = "ComponentRegistration{TService}" /> class.
@@ -79,7 +79,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <value> The implementation of the service. </value>
 	public Type Implementation
 	{
-		get { return implementation; }
+		get { return _implementation; }
 	}
 
 	/// <summary>
@@ -104,11 +104,11 @@ public class ComponentRegistration<TService> : IRegistration
 	{
 		get
 		{
-			if (name == null)
+			if (_name == null)
 			{
 				return null;
 			}
-			return name.Name;
+			return _name.Name;
 		}
 	}
 
@@ -123,17 +123,17 @@ public class ComponentRegistration<TService> : IRegistration
 
 	protected internal IList<Type> Services
 	{
-		get { return potentialServices; }
+		get { return _potentialServices; }
 	}
 
 	protected internal int ServicesCount
 	{
-		get { return potentialServices.Count; }
+		get { return _potentialServices.Count; }
 	}
 
 	internal bool IsOverWrite
 	{
-		get { return overwrite; }
+		get { return _overwrite; }
 	}
 
 	/// <summary>
@@ -164,9 +164,8 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> AddDescriptor(IComponentModelDescriptor descriptor)
 	{
-		descriptors.Add(descriptor);
-		var componentDescriptor = descriptor as AbstractOverwriteableDescriptor<TService>;
-		if (componentDescriptor != null)
+		_descriptors.Add(descriptor);
+		if (descriptor is AbstractOverwriteableDescriptor<TService> componentDescriptor)
 		{
 			componentDescriptor.Registration = this;
 		}
@@ -215,7 +214,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// </example>
 	public ComponentRegistration<TService> DependsOn(Dependency dependency)
 	{
-		return DependsOn(new[] { dependency });
+		return DependsOn([dependency]);
 	}
 
 	/// <summary>
@@ -307,7 +306,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> DependsOn(DynamicParametersDelegate resolve)
 	{
-		return DynamicParameters((k, c, d) =>
+		return DynamicParameters((k, _, d) =>
 		{
 			resolve(k, d);
 			return null;
@@ -322,7 +321,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> DependsOn(DynamicParametersResolveDelegate resolve)
 	{
-		return DynamicParameters((k, c, d) => resolve(k, d));
+		return DynamicParameters((k, _, d) => resolve(k, d));
 	}
 
 	/// <summary>
@@ -347,7 +346,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> DynamicParameters(DynamicParametersDelegate resolve)
 	{
-		return DynamicParameters((k, c, d) =>
+		return DynamicParameters((k, _, d) =>
 		{
 			resolve(k, d);
 			return null;
@@ -361,7 +360,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> DynamicParameters(DynamicParametersResolveDelegate resolve)
 	{
-		return DynamicParameters((k, c, d) => resolve(k, d));
+		return DynamicParameters((k, _, d) => resolve(k, d));
 	}
 
 	/// <summary>
@@ -395,7 +394,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> ExtendedProperties(Property property)
 	{
-		return ExtendedProperties(new[] { property });
+		return ExtendedProperties([property]);
 	}
 
 	/// <summary>
@@ -474,7 +473,7 @@ public class ComponentRegistration<TService> : IRegistration
 	{
 		foreach (var type in types)
 		{
-			ComponentServicesUtil.AddService(potentialServices, potentialServicesLookup, type);
+			ComponentServicesUtil.AddService(_potentialServices, _potentialServicesLookup, type);
 		}
 		return this;
 	}
@@ -540,14 +539,14 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> ImplementedBy(Type type, IGenericImplementationMatchingStrategy genericImplementationMatchingStrategy, IGenericServiceStrategy genericServiceStrategy)
 	{
-		if (implementation != null && implementation != typeof(LateBoundComponent))
+		if (_implementation != null && _implementation != typeof(LateBoundComponent))
 		{
 			var message = String.Format("This component has already been assigned implementation {0}",
-				implementation.FullName);
+				_implementation.FullName);
 			throw new ComponentRegistrationException(message);
 		}
 
-		implementation = type;
+		_implementation = type;
 		if (genericImplementationMatchingStrategy != null)
 		{
 			ExtendedProperties(Property.ForKey(Constants.GenericImplementationMatchingStrategy).Eq(genericImplementationMatchingStrategy));
@@ -602,7 +601,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> Interceptors<TInterceptor>() where TInterceptor : IInterceptor
 	{
-		return AddDescriptor(new InterceptorDescriptor(new[] { new InterceptorReference(typeof(TInterceptor)) }));
+		return AddDescriptor(new InterceptorDescriptor([new InterceptorReference(typeof(TInterceptor))]));
 	}
 
 	/// <summary>
@@ -743,9 +742,9 @@ public class ComponentRegistration<TService> : IRegistration
 	/// </remarks>
 	public ComponentRegistration<TService> Named(String name)
 	{
-		if (this.name != null)
+		if (this._name != null)
 		{
-			var message = String.Format("This component has already been assigned name '{0}'", this.name.Name);
+			var message = String.Format("This component has already been assigned name '{0}'", this._name.Name);
 			throw new ComponentRegistrationException(message);
 		}
 		if (name == null)
@@ -753,7 +752,7 @@ public class ComponentRegistration<TService> : IRegistration
 			return this;
 		}
 
-		this.name = new ComponentName(name, true);
+		this._name = new ComponentName(name, true);
 		return this;
 	}
 
@@ -771,13 +770,13 @@ public class ComponentRegistration<TService> : IRegistration
 	/// </remarks>
 	public ComponentRegistration<TService> NamedAutomatically(String name)
 	{
-		if (this.name != null)
+		if (this._name != null)
 		{
-			var message = String.Format("This component has already been assigned name '{0}'", this.name);
+			var message = String.Format("This component has already been assigned name '{0}'", this._name);
 			throw new ComponentRegistrationException(message);
 		}
 
-		this.name = new ComponentName(name, false);
+		this._name = new ComponentName(name, false);
 		return this;
 	}
 
@@ -842,7 +841,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> OnlyNewServices()
 	{
-		registerNewServicesOnly = true;
+		_registerNewServicesOnly = true;
 		return this;
 	}
 
@@ -853,7 +852,7 @@ public class ComponentRegistration<TService> : IRegistration
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public ComponentRegistration<TService> OverWrite()
 	{
-		overwrite = true;
+		_overwrite = true;
 		return this;
 	}
 
@@ -903,7 +902,7 @@ public class ComponentRegistration<TService> : IRegistration
 		bool managedExternally = false)
 		where TImpl : TService
 	{
-		return UsingFactoryMethod((k, m, c) => factoryMethod(), managedExternally);
+		return UsingFactoryMethod((_, _, _) => factoryMethod(), managedExternally);
 	}
 
 	/// <summary>
@@ -917,7 +916,7 @@ public class ComponentRegistration<TService> : IRegistration
 		bool managedExternally = false)
 		where TImpl : TService
 	{
-		return UsingFactoryMethod((k, m, c) => factoryMethod(k), managedExternally);
+		return UsingFactoryMethod((k, _, _) => factoryMethod(k), managedExternally);
 	}
 
 	/// <summary>
@@ -940,10 +939,10 @@ public class ComponentRegistration<TService> : IRegistration
 			ExtendedProperties(Property.ForKey("factory.managedExternally").Eq(managedExternally));
 		}
 
-		if (implementation == null &&
-		    (potentialServices.First().GetTypeInfo().IsClass == false || potentialServices.First().GetTypeInfo().IsSealed == false))
+		if (_implementation == null &&
+		    (_potentialServices.First().GetTypeInfo().IsClass == false || _potentialServices.First().GetTypeInfo().IsSealed == false))
 		{
-			implementation = typeof(LateBoundComponent);
+			_implementation = typeof(LateBoundComponent);
 		}
 		return this;
 	}
@@ -957,18 +956,18 @@ public class ComponentRegistration<TService> : IRegistration
 	public ComponentRegistration<TService> UsingFactoryMethod<TImpl>(Func<IKernel, CreationContext, TImpl> factoryMethod)
 		where TImpl : TService
 	{
-		return UsingFactoryMethod((k, m, c) => factoryMethod(k, c));
+		return UsingFactoryMethod((k, _, c) => factoryMethod(k, c));
 	}
 
 	internal void RegisterOptionally()
 	{
-		ifComponentRegisteredIgnore = true;
+		_ifComponentRegisteredIgnore = true;
 	}
 
 	private Type[] FilterServices(IKernel kernel)
 	{
-		var services = new List<Type>(potentialServices);
-		if (registerNewServicesOnly)
+		var services = new List<Type>(_potentialServices);
+		if (_registerNewServicesOnly)
 		{
 			services.RemoveAll(kernel.HasComponent);
 		}
@@ -980,15 +979,15 @@ public class ComponentRegistration<TService> : IRegistration
 		var list = new List<IComponentModelDescriptor>
 		{
 			new ServicesDescriptor(services),
-			new DefaultsDescriptor(name, implementation),
+			new DefaultsDescriptor(_name, _implementation),
 		};
-		list.AddRange(descriptors);
+		list.AddRange(_descriptors);
 		return list.ToArray();
 	}
 
 	private bool SkipRegistration(IKernelInternal internalKernel, ComponentModel componentModel)
 	{
-		return ifComponentRegisteredIgnore && internalKernel.HasComponent(componentModel.Name);
+		return _ifComponentRegisteredIgnore && internalKernel.HasComponent(componentModel.Name);
 	}
 
 	/// <summary>
@@ -997,11 +996,11 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <param name = "kernel"> The kernel. </param>
 	void IRegistration.Register(IKernelInternal kernel)
 	{
-		if (registered)
+		if (_registered)
 		{
 			return;
 		}
-		registered = true;
+		_registered = true;
 		var services = FilterServices(kernel);
 		if (services.Length == 0)
 		{
@@ -1101,7 +1100,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// will never try to set it. </param>
 	public ComponentRegistration<TService> PropertiesIgnore(Func<ComponentModel, PropertyInfo, bool> propertySelector)
 	{
-		return AddDescriptor(new DelegatingModelDescriptor(builder: (k, c) =>
+		return AddDescriptor(new DelegatingModelDescriptor(builder: (_, c) =>
 		{
 			var filters = StandardPropertyFilters.GetPropertyFilters(c, createIfMissing: true);
 			filters.Add(StandardPropertyFilters.IgnoreSelected(propertySelector));
@@ -1115,7 +1114,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// a mandatory dependency. </param>
 	public ComponentRegistration<TService> PropertiesRequire(Func<ComponentModel, PropertyInfo, bool> propertySelector)
 	{
-		return AddDescriptor(new DelegatingModelDescriptor(builder: (k, c) =>
+		return AddDescriptor(new DelegatingModelDescriptor(builder: (_, c) =>
 		{
 			var filters = StandardPropertyFilters.GetPropertyFilters(c, createIfMissing: true);
 			filters.Add(StandardPropertyFilters.RequireSelected(propertySelector));
@@ -1130,7 +1129,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> Properties(PropertyFilter filter)
 	{
-		return AddDescriptor(new DelegatingModelDescriptor(builder: (k, c) =>
+		return AddDescriptor(new DelegatingModelDescriptor(builder: (_, c) =>
 		{
 			var filters = StandardPropertyFilters.GetPropertyFilters(c, createIfMissing: true);
 			filters.Add(StandardPropertyFilters.Create(filter));

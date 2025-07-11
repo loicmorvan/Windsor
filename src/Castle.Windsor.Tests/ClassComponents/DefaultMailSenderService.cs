@@ -18,7 +18,7 @@ using System;
 
 public class DefaultMailSenderService : IDisposable
 {
-	private bool isDisposed = false;
+	private bool _isDisposed;
 
 	public DefaultMailSenderService()
 	{
@@ -26,11 +26,11 @@ public class DefaultMailSenderService : IDisposable
 
 	public bool IsDisposed
 	{
-		get { return isDisposed; }
+		get { return _isDisposed; }
 	}
 
 	public void Dispose()
 	{
-		isDisposed = true;
+		_isDisposed = true;
 	}
 }

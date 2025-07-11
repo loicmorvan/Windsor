@@ -17,7 +17,7 @@ namespace Castle.Windsor.Tests.Lifestyle;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Handlers;
 
-public class CustomLifestyle_Scope : IResolveExtension
+public class CustomLifestyleScope : IResolveExtension
 {
 	public void Init(IKernel kernel, IHandler handler)
 	{
@@ -25,7 +25,7 @@ public class CustomLifestyle_Scope : IResolveExtension
 
 	public void Intercept(ResolveInvocation invocation)
 	{
-		using (new CustomLifestyle_InstanceScope())
+		using (new CustomLifestyleInstanceScope())
 		{
 			invocation.Proceed();
 		}

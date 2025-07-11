@@ -21,23 +21,23 @@ using Castle.MicroKernel.Context;
 
 public class StartFlag : IStartFlagInternal
 {
-	protected readonly List<IHandler> waitList = new List<IHandler>();
-	protected StartableFacility.StartableEvents events;
+	protected readonly List<IHandler> WaitList = [];
+	protected StartableFacility.StartableEvents Events;
 
 	public virtual void Signal()
 	{
-		events.StartableComponentRegistered -= CacheHandler;
+		Events.StartableComponentRegistered -= CacheHandler;
 		StartAll();
 	}
 
 	protected void CacheHandler(IHandler handler)
 	{
-		waitList.Add(handler);
+		WaitList.Add(handler);
 	}
 
 	protected virtual void Init()
 	{
-		events.StartableComponentRegistered += CacheHandler;
+		Events.StartableComponentRegistered += CacheHandler;
 	}
 
 	protected virtual void Start(IHandler handler)
@@ -47,8 +47,8 @@ public class StartFlag : IStartFlagInternal
 
 	protected void StartAll()
 	{
-		var array = waitList.ToArray();
-		waitList.Clear();
+		var array = WaitList.ToArray();
+		WaitList.Clear();
 		foreach (var handler in array)
 		{
 			Start(handler);
@@ -57,7 +57,7 @@ public class StartFlag : IStartFlagInternal
 
 	void IStartFlagInternal.Init(StartableFacility.StartableEvents events)
 	{
-		this.events = events;
+		this.Events = events;
 		Init();
 	}
 }

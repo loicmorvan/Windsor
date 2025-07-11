@@ -21,26 +21,26 @@ using System;
 /// </summary>
 public class ClassWithConstructors
 {
-	private readonly String host;
-	private readonly String[] hosts;
+	private readonly String _host;
+	private readonly String[] _hosts;
 
 	public ClassWithConstructors(String host)
 	{
-		this.host = host;
+		this._host = host;
 	}
 
 	public ClassWithConstructors(String[] hosts)
 	{
-		this.hosts = hosts;
+		this._hosts = hosts;
 	}
 
 	public String Host
 	{
-		get { return host; }
+		get { return _host; }
 	}
 
 	public String[] Hosts
 	{
-		get { return hosts; }
+		get { return _hosts; }
 	}
 }

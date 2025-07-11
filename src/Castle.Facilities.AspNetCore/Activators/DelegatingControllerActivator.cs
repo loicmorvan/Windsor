@@ -23,16 +23,16 @@ internal sealed class DelegatingControllerActivator(
 	Func<ControllerContext, object> controllerCreator,
 	Action<ControllerContext, object> controllerReleaser) : IControllerActivator
 {
-	private readonly Func<ControllerContext, object> controllerCreator = controllerCreator ?? throw new ArgumentNullException(nameof(controllerCreator));
-	private readonly Action<ControllerContext, object> controllerReleaser = controllerReleaser ?? throw new ArgumentNullException(nameof(controllerReleaser));
+	private readonly Func<ControllerContext, object> _controllerCreator = controllerCreator ?? throw new ArgumentNullException(nameof(controllerCreator));
+	private readonly Action<ControllerContext, object> _controllerReleaser = controllerReleaser ?? throw new ArgumentNullException(nameof(controllerReleaser));
 
 	public object Create(ControllerContext context)
 	{
-		return controllerCreator(context);
+		return _controllerCreator(context);
 	}
 
 	public void Release(ControllerContext context, object controller)
 	{
-		controllerReleaser(context, controller);
+		_controllerReleaser(context, controller);
 	}
 }

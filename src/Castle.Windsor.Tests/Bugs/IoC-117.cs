@@ -19,7 +19,7 @@ using System;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 
-public class IoC_117
+public class IoC117
 {
 	[Fact]
 	public void Public_property_with_Protected_setter_causes_Object_Reference_exception()
@@ -43,12 +43,12 @@ public class IoC_117
 
 public class Presenter
 {
-	private View view;
+	private View _view;
 
 	public virtual View View
 	{
-		get { return view;  }
-		protected set { view = value;}
+		get { return _view;  }
+		protected set { _view = value;}
 	}
 }
 

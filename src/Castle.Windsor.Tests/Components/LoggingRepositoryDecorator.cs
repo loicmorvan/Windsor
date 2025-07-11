@@ -18,7 +18,7 @@ using System;
 
 public class LoggingRepositoryDecorator<T> : IRepository<T>
 {
-	public IRepository<T> inner;
+	public readonly IRepository<T> Inner;
 
 	public LoggingRepositoryDecorator()
 	{
@@ -26,12 +26,12 @@ public class LoggingRepositoryDecorator<T> : IRepository<T>
 
 	public LoggingRepositoryDecorator(IRepository<T> inner)
 	{
-		this.inner = inner;
+		this.Inner = inner;
 	}
 
 	public T Get(int id)
 	{
 		Console.WriteLine("Getting {0}", id);
-		return inner.Get(id);
+		return Inner.Get(id);
 	}
 }

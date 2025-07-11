@@ -24,7 +24,7 @@ using System;
 [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
 public class InterceptorAttribute : Attribute
 {
-	private readonly InterceptorReference interceptorRef;
+	private readonly InterceptorReference _interceptorRef;
 
 	/// <summary>
 	///   Constructs the InterceptorAttribute pointing to a key to a interceptor
@@ -32,7 +32,7 @@ public class InterceptorAttribute : Attribute
 	/// <param name="componentKey"> </param>
 	public InterceptorAttribute(string componentKey)
 	{
-		interceptorRef = new InterceptorReference(componentKey);
+		_interceptorRef = new InterceptorReference(componentKey);
 	}
 
 	/// <summary>
@@ -41,11 +41,11 @@ public class InterceptorAttribute : Attribute
 	/// <param name="interceptorType"> </param>
 	public InterceptorAttribute(Type interceptorType)
 	{
-		interceptorRef = new InterceptorReference(interceptorType);
+		_interceptorRef = new InterceptorReference(interceptorType);
 	}
 
 	public virtual InterceptorReference Interceptor
 	{
-		get { return interceptorRef; }
+		get { return _interceptorRef; }
 	}
 }

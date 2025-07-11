@@ -24,14 +24,14 @@ using Castle.Windsor.Tests.Components;
 
 public class TypeNameConverterTestCase
 {
-	private readonly TypeNameConverter converter = new(new TypeNameParser());
+	private readonly TypeNameConverter _converter = new(new TypeNameParser());
 
 	[Fact]
 	public void Can_handle_generic_of_generics_properly()
 	{
 		var type = typeof(IGeneric<IGeneric<ICustomer>>);
 		var name = type.FullName;
-		var result = converter.PerformConversion(name, typeof(Type));
+		var result = _converter.PerformConversion(name, typeof(Type));
 		Assert.Equal(type, result);
 	}
 
@@ -43,7 +43,7 @@ public class TypeNameConverterTestCase
 		           typeof(ICustomer).Name + "],[" +
 		           typeof(IGeneric<>).Name + "[[" + typeof(ICustomer).Name + "]]"
 		           + "]]";
-		var result = converter.PerformConversion(name, typeof(Type));
+		var result = _converter.PerformConversion(name, typeof(Type));
 		Assert.Equal(type, result);
 	}
 
@@ -61,7 +61,7 @@ public class TypeNameConverterTestCase
 		           + "],[" +
 		           typeof(ICustomer).Name +
 		           "]]";
-		var result = converter.PerformConversion(name, typeof(Type));
+		var result = _converter.PerformConversion(name, typeof(Type));
 		Assert.Equal(type, result);
 	}
 
@@ -78,7 +78,7 @@ public class TypeNameConverterTestCase
 		           typeof(IEmptyService).Name
 		           + "]]"
 		           + "]]";
-		var result = converter.PerformConversion(name, typeof(Type));
+		var result = _converter.PerformConversion(name, typeof(Type));
 		Assert.Equal(type, result);
 	}
 
@@ -87,7 +87,7 @@ public class TypeNameConverterTestCase
 	{
 		var type = typeof(IGeneric<ICustomer>);
 		var name = type.Name + "[[" + typeof(ICustomer).Name + "]]";
-		var result = converter.PerformConversion(name, typeof(Type));
+		var result = _converter.PerformConversion(name, typeof(Type));
 		Assert.Equal(result, type);
 	}
 
@@ -96,7 +96,7 @@ public class TypeNameConverterTestCase
 	{
 		var type = typeof(IDoubleGeneric<ICustomer, ISpecification>);
 		var name = type.Name + "[[" + typeof(ICustomer).Name + "],[" + typeof(ISpecification) + "]]";
-		var result = converter.PerformConversion(name, typeof(Type));
+		var result = _converter.PerformConversion(name, typeof(Type));
 		Assert.Equal(result, type);
 	}
 
@@ -105,7 +105,7 @@ public class TypeNameConverterTestCase
 	{
 		var type = typeof(IGeneric<>);
 		var name = type.Name;
-		var result = converter.PerformConversion(name, typeof(Type));
+		var result = _converter.PerformConversion(name, typeof(Type));
 		Assert.Equal(type, result);
 	}
 
@@ -114,7 +114,7 @@ public class TypeNameConverterTestCase
 	{
 		var type = typeof(ICustomer);
 		var name = type.Name;
-		var result = converter.PerformConversion(name, typeof(Type));
+		var result = _converter.PerformConversion(name, typeof(Type));
 		Assert.Equal(type, result);
 	}
 
@@ -123,7 +123,7 @@ public class TypeNameConverterTestCase
 	{
 		var type = typeof(IService); // notice we have multiple types 'IService in various namespaces'
 		var name = type.FullName;
-		var result = converter.PerformConversion(name, typeof(Type));
+		var result = _converter.PerformConversion(name, typeof(Type));
 		Assert.Equal(type, result);
 	}
 
@@ -135,7 +135,7 @@ public class TypeNameConverterTestCase
 
 		var exception =
 			Assert.Throws<ConverterException>(() =>
-				converter.PerformConversion(name, typeof(Type)));
+				_converter.PerformConversion(name, typeof(Type)));
 		Assert.StartsWith("Could not uniquely identify type for 'IService2'.", exception.Message);
 	}
 
@@ -147,7 +147,7 @@ public class TypeNameConverterTestCase
 
 		var exception =
 			Assert.Throws<ConverterException>(() =>
-				converter.PerformConversion(name, typeof(Type)));
+				_converter.PerformConversion(name, typeof(Type)));
 		Assert.StartsWith("Could not uniquely identify type for 'IService2'.", exception.Message);
 	}
 
@@ -157,7 +157,7 @@ public class TypeNameConverterTestCase
 		var assemblyName = typeof(IInterceptor).GetTypeInfo().Assembly.FullName;
 		var type = typeof(IService2).FullName + ", " + assemblyName;
 
-		var exception = Assert.Throws<ConverterException>(() => converter.PerformConversion(type, typeof(Type)));
+		var exception = Assert.Throws<ConverterException>(() => _converter.PerformConversion(type, typeof(Type)));
 
 		var message = string.Format(
 			"Could not convert string '{0}' to a type. Assembly {1} was matched, but it doesn't contain the type. Make sure that the type name was not mistyped.",
@@ -172,7 +172,7 @@ public class TypeNameConverterTestCase
 		var assemblyName = typeof(IInterceptor).GetTypeInfo().Assembly.FullName.Replace("Castle.Core", "Castle.Core42");
 		var type = typeof(IService2).FullName + ", " + assemblyName;
 
-		var exception = Assert.Throws<ConverterException>(() => converter.PerformConversion(type, typeof(Type)));
+		var exception = Assert.Throws<ConverterException>(() => _converter.PerformConversion(type, typeof(Type)));
 
 		var message = string.Format(
 			"Could not convert string '{0}' to a type. Assembly was not found. Make sure it was deployed and the name was not mistyped.",
@@ -186,7 +186,7 @@ public class TypeNameConverterTestCase
 	{
 		var type = "Some.Assembly.AndThen.Type+NestedEven";
 
-		var exception = Assert.Throws<ConverterException>(() => converter.PerformConversion(type, typeof(Type)));
+		var exception = Assert.Throws<ConverterException>(() => _converter.PerformConversion(type, typeof(Type)));
 
 		var message = string.Format(
 			"Could not convert string '{0}' to a type. Make sure assembly containing the type has been loaded into the process, or consider specifying assembly qualified name of the type.",
@@ -199,7 +199,7 @@ public class TypeNameConverterTestCase
 	{
 	}
 
-	class TESTCASESENSITIVITY
+	class Testcasesensitivity
 	{
 	}
 
@@ -208,12 +208,12 @@ public class TypeNameConverterTestCase
 	{
 		var type = typeof(IGeneric<TestCaseSensitivity>);
 		var name = type.AssemblyQualifiedName;
-		var result = converter.PerformConversion(name, typeof(Type));
+		var result = _converter.PerformConversion(name, typeof(Type));
 		Assert.Equal(type, result);
 
-		var type2 = typeof(IGeneric<TESTCASESENSITIVITY>);
+		var type2 = typeof(IGeneric<Testcasesensitivity>);
 		var name2 = type2.AssemblyQualifiedName;
-		var result2 = converter.PerformConversion(name2, typeof(Type));
+		var result2 = _converter.PerformConversion(name2, typeof(Type));
 		Assert.Equal(type2, result2);
 	}
 }

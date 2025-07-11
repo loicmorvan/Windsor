@@ -20,16 +20,16 @@ using Castle.DynamicProxy;
 [Singleton]
 public class CountingInterceptor : IInterceptor
 {
-	private int interceptedCallsCount;
+	private int _interceptedCallsCount;
 
 	public void Intercept(IInvocation invocation)
 	{
-		interceptedCallsCount++;
+		_interceptedCallsCount++;
 		invocation.Proceed();
 	}
 
 	public int InterceptedCallsCount
 	{
-		get { return interceptedCallsCount; }
+		get { return _interceptedCallsCount; }
 	}
 }

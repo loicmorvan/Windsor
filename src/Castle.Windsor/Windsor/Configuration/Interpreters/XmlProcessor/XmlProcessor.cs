@@ -24,7 +24,7 @@ using Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 /// <summary>Pendent</summary>
 public class XmlProcessor
 {
-	private readonly IXmlProcessorEngine engine;
+	private readonly IXmlProcessorEngine _engine;
 
 	/// <summary>Initializes a new instance of the <see cref = "XmlProcessor" /> class.</summary>
 	public XmlProcessor() : this(null)
@@ -36,14 +36,14 @@ public class XmlProcessor
 	/// <param name = "resourceSubSystem">The resource sub system.</param>
 	public XmlProcessor(string environmentName, IResourceSubSystem resourceSubSystem)
 	{
-		engine = new DefaultXmlProcessorEngine(environmentName, resourceSubSystem);
+		_engine = new DefaultXmlProcessorEngine(environmentName, resourceSubSystem);
 		RegisterProcessors();
 	}
 
 	/// <summary>Initializes a new instance of the <see cref = "XmlProcessor" /> class.</summary>
 	public XmlProcessor(string environmentName)
 	{
-		engine = new DefaultXmlProcessorEngine(environmentName);
+		_engine = new DefaultXmlProcessorEngine(environmentName);
 		RegisterProcessors();
 	}
 
@@ -53,7 +53,7 @@ public class XmlProcessor
 		{
 			if (node.NodeType == XmlNodeType.Document) node = (node as XmlDocument).DocumentElement;
 
-			engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(node));
+			_engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(node));
 
 			return node;
 		}
@@ -81,11 +81,11 @@ public class XmlProcessor
 					doc.Load(stream);
 				}
 
-				engine.PushResource(resource);
+				_engine.PushResource(resource);
 
 				var element = Process(doc.DocumentElement);
 
-				engine.PopResource();
+				_engine.PopResource();
 
 				return element;
 			}
@@ -104,7 +104,7 @@ public class XmlProcessor
 
 	protected void AddElementProcessor(Type t)
 	{
-		engine.AddNodeProcessor(t);
+		_engine.AddNodeProcessor(t);
 	}
 
 	protected virtual void RegisterProcessors()

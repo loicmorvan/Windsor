@@ -34,19 +34,18 @@ public static class ReflectionUtil
 		.Select(i => i.GetGenericTypeDefinition())
 		.ToArray();
 
-	private static readonly ConcurrentDictionary<ConstructorInfo, Func<object[], object>> factories =
-		new ConcurrentDictionary<ConstructorInfo, Func<object[], object>>();
+	private static readonly ConcurrentDictionary<ConstructorInfo, Func<object[], object>> Factories = new();
 
 	public static TBase CreateInstance<TBase>(this Type subtypeofTBase, params object[] ctorArgs)
 	{
 		EnsureIsAssignable<TBase>(subtypeofTBase);
 
-		return Instantiate<TBase>(subtypeofTBase, ctorArgs ?? new object[0]);
+		return Instantiate<TBase>(subtypeofTBase, ctorArgs ?? []);
 	}
 
 	public static IEnumerable<Assembly> GetApplicationAssemblies(Assembly rootAssembly)
 	{
-		var index = rootAssembly.FullName.IndexOfAny(new[] { '.', ',' });
+		var index = rootAssembly.FullName.IndexOfAny(['.', ',']);
 		if (index < 0)
 		{
 			throw new ArgumentException(
@@ -298,7 +297,7 @@ public static class ReflectionUtil
 
 	private static TBase Instantiate<TBase>(Type subtypeofTBase, object[] ctorArgs)
 	{
-		ctorArgs = ctorArgs ?? new object[0];
+		ctorArgs ??= [];
 		var types = ctorArgs.ConvertAll(a => a == null ? typeof(object) : a.GetType());
 		var constructor = subtypeofTBase.GetConstructor(BindingFlags.Instance | BindingFlags.Public, null, types, null);
 		if (constructor != null)
@@ -341,7 +340,7 @@ public static class ReflectionUtil
 	public static object Instantiate(this ConstructorInfo ctor, object[] ctorArgs)
 	{
 		Func<object[], object> factory;
-		factory = factories.GetOrAdd(ctor, BuildFactory);
+		factory = Factories.GetOrAdd(ctor, BuildFactory);
 
 		return factory.Invoke(ctorArgs);
 	}

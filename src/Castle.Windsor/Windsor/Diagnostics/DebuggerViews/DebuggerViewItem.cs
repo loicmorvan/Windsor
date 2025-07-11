@@ -16,47 +16,47 @@ namespace Castle.Windsor.Diagnostics.DebuggerViews;
 
 using System.Diagnostics;
 
-[DebuggerDisplay("{description,nq}", Name = "{name,nq}")]
+[DebuggerDisplay("{_description,nq}", Name = "{name,nq}")]
 public class DebuggerViewItem
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly object description;
+	private readonly object _description;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly string name;
+	private readonly string _name;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-	private readonly object value;
+	private readonly object _value;
 
 	public DebuggerViewItem(string name, string description, object value)
 	{
-		this.name = name;
-		this.description = description;
-		this.value = value;
+		this._name = name;
+		this._description = description;
+		this._value = value;
 	}
 
 	public DebuggerViewItem(string name, object value)
 	{
-		this.name = name;
-		description = value;
-		this.value = value;
+		this._name = name;
+		_description = value;
+		this._value = value;
 	}
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public object Description
 	{
-		get { return description; }
+		get { return _description; }
 	}
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public string Name
 	{
-		get { return name; }
+		get { return _name; }
 	}
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public object Value
 	{
-		get { return value; }
+		get { return _value; }
 	}
 }

@@ -38,16 +38,16 @@ public sealed class TypedFactoryDisposeOrderTestCase : AbstractContainerTestCase
 
 	public sealed class Dependency : IDisposable
 	{
-		private bool isDisposed;
+		private bool _isDisposed;
 
 		public void Use()
 		{
-			if (isDisposed) throw new ObjectDisposedException(nameof(Dependency));
+			if (_isDisposed) throw new ObjectDisposedException(nameof(Dependency));
 		}
 
 		public void Dispose()
 		{
-			isDisposed = true;
+			_isDisposed = true;
 		}
 	}
 

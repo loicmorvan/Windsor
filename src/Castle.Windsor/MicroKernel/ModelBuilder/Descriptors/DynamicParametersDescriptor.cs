@@ -20,7 +20,7 @@ using Castle.MicroKernel.Registration;
 
 public class DynamicParametersDescriptor(DynamicParametersWithContextResolveDelegate resolve) : IComponentModelDescriptor
 {
-	private static readonly string key = "component_resolving_handler";
+	private static readonly string Key = "component_resolving_handler";
 
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
@@ -34,13 +34,13 @@ public class DynamicParametersDescriptor(DynamicParametersWithContextResolveDele
 
 	private ComponentLifecycleExtension GetDynamicParametersExtension(ComponentModel model)
 	{
-		if (model.ExtendedProperties.Contains(key))
+		if (model.ExtendedProperties.Contains(Key))
 		{
-			return (ComponentLifecycleExtension)model.ExtendedProperties[key];
+			return (ComponentLifecycleExtension)model.ExtendedProperties[Key];
 		}
 
 		var dynamicParameters = new ComponentLifecycleExtension();
-		model.ExtendedProperties[key] = dynamicParameters;
+		model.ExtendedProperties[Key] = dynamicParameters;
 		model.ResolveExtensions(true).Add(dynamicParameters);
 		return dynamicParameters;
 	}

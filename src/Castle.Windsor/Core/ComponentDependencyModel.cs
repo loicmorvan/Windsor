@@ -26,8 +26,8 @@ public class ComponentDependencyModel(string referencedComponentName, Type servi
 	public override void Init(ParameterModelCollection parameters)
 	{
 #if DEBUG
-		initialized = true;
+		Initialized = true;
 #endif
-		reference = DependencyKey;
+		Reference = DependencyKey;
 	}
 }

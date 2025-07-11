@@ -12,42 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Extensions;
-
+using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Castle.MicroKernel;
 using Castle.Windsor.Diagnostics.DebuggerViews;
 using Castle.Windsor.Diagnostics.Helpers;
 
+namespace Castle.Windsor.Diagnostics.Extensions;
+
 public class ReleasePolicyTrackedObjects : AbstractContainerDebuggerExtension
 {
-	private const string name = "Objects tracked by release policy";
-	private TrackedComponentsDiagnostic diagnostic;
+	public const string Name = "Objects tracked by release policy";
+	private TrackedComponentsDiagnostic _diagnostic;
 
 	public override IEnumerable<DebuggerViewItem> Attach()
 	{
-		var result = diagnostic.Inspect();
-		if (result == null)
-		{
-			return new DebuggerViewItem[0];
-		}
+		var result = _diagnostic.Inspect();
+		if (result == null) return [];
 		var item = BuildItem(result);
-		if (item != null)
-		{
-			return new[] { item };
-		}
-		return new DebuggerViewItem[0];
+		if (item != null) return [item];
+		return [];
 	}
 
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
 	{
-		diagnostic = new TrackedComponentsDiagnostic();
-		diagnosticsHost.AddDiagnostic<ITrackedComponentsDiagnostic>(diagnostic);
+		_diagnostic = new TrackedComponentsDiagnostic();
+		diagnosticsHost.AddDiagnostic<ITrackedComponentsDiagnostic>(_diagnostic);
 	}
 
-	private DebuggerViewItem BuildItem(ILookup<IHandler, object> results)
+	private static DebuggerViewItem BuildItem(ILookup<IHandler, object> results)
 	{
 		var totalCount = 0;
 		var items = new List<DebuggerViewItem>();
@@ -62,12 +56,8 @@ public class ReleasePolicyTrackedObjects : AbstractContainerDebuggerExtension
 				new MasterDetailsDebuggerViewItem(view, view.Description, "Component", objects));
 			items.Add(item);
 		}
-		items.Sort((f, s) => f.Name.CompareTo(s.Name));
-		return new DebuggerViewItem(name, "Count = " + totalCount, items.ToArray());
-	}
 
-	public static string Name
-	{
-		get { return name; }
+		items.Sort((f, s) => string.Compare(f.Name, s.Name, StringComparison.Ordinal));
+		return new DebuggerViewItem(Name, "Count = " + totalCount, items.ToArray());
 	}
 }

@@ -20,17 +20,17 @@ using Castle.Windsor.Tests.Components;
 
 public class ReportedProblemTestCase
 {
-	private readonly IWindsorContainer container = new WindsorContainer();
+	private readonly IWindsorContainer _container = new WindsorContainer();
 
 	[Fact]
 	public void StackOverflowProblem()
 	{
-		container.Register(Component.For<Employee>());
-		container.Register(Component.For<Reviewer>());
-		container.Register(Component.For<ReviewableEmployee>());
+		_container.Register(Component.For<Employee>());
+		_container.Register(Component.For<Reviewer>());
+		_container.Register(Component.For<ReviewableEmployee>());
 
-		Assert.NotNull(container.Resolve<ReviewableEmployee>());
-		Assert.NotNull(container.Resolve<Reviewer>());
-		Assert.NotNull(container.Resolve<Employee>());
+		Assert.NotNull(_container.Resolve<ReviewableEmployee>());
+		Assert.NotNull(_container.Resolve<Reviewer>());
+		Assert.NotNull(_container.Resolve<Employee>());
 	}
 }

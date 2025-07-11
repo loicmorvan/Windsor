@@ -37,8 +37,8 @@ public abstract class AbstractInterpreter : IConfigurationInterpreter
 	protected static readonly string InstallersNodeName = "installers";
 	protected static readonly string InstallNodeName = "install";
 
-	private readonly IResource source;
-	private readonly Stack<IResource> resourceStack = new Stack<IResource>();
+	private readonly IResource _source;
+	private readonly Stack<IResource> _resourceStack = new();
 
 	protected AbstractInterpreter(IResource source)
 	{
@@ -47,7 +47,7 @@ public abstract class AbstractInterpreter : IConfigurationInterpreter
 			throw new ArgumentNullException(nameof(source), "IResource is null");
 		}
 
-		this.source = source;
+		this._source = source;
 
 		PushResource(source);
 	}
@@ -74,24 +74,24 @@ public abstract class AbstractInterpreter : IConfigurationInterpreter
 
 	protected void PushResource(IResource resource)
 	{
-		resourceStack.Push(resource);
+		_resourceStack.Push(resource);
 	}
 
 	protected void PopResource()
 	{
-		resourceStack.Pop();
+		_resourceStack.Pop();
 	}
 
 	protected IResource CurrentResource
 	{
 		get
 		{
-			if (resourceStack.Count == 0)
+			if (_resourceStack.Count == 0)
 			{
 				return null;
 			}
 
-			return resourceStack.Peek();
+			return _resourceStack.Peek();
 		}
 	}
 
@@ -102,7 +102,7 @@ public abstract class AbstractInterpreter : IConfigurationInterpreter
 	/// <value></value>
 	public IResource Source
 	{
-		get { return source; }
+		get { return _source; }
 	}
 
 	/// <summary>

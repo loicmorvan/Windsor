@@ -27,9 +27,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 public class MiddlewareComponentModelContributor(IServiceCollection services, IApplicationBuilder applicationBuilder) : IContributeComponentModelConstruction
 {
-	private IServiceProvider provider;
-	private readonly IServiceCollection services = services ?? throw new ArgumentNullException(nameof(services));
-	private readonly IApplicationBuilder applicationBuilder = applicationBuilder ?? throw new InvalidOperationException("Please call `Container.GetFacility<AspNetCoreFacility>(f => f.RegistersMiddlewareInto(applicationBuilder));` first. This should happen before any middleware registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md");
+	private IServiceProvider _provider;
+	private readonly IServiceCollection _services = services ?? throw new ArgumentNullException(nameof(services));
+	private readonly IApplicationBuilder _applicationBuilder = applicationBuilder ?? throw new InvalidOperationException("Please call `Container.GetFacility<AspNetCoreFacility>(f => f.RegistersMiddlewareInto(applicationBuilder));` first. This should happen before any middleware registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md");
 
 	public void ProcessModel(IKernel kernel, ComponentModel model)
 	{
@@ -37,14 +37,14 @@ public class MiddlewareComponentModelContributor(IServiceCollection services, IA
 		{
 			foreach (var service in model.Services)
 			{
-				applicationBuilder.Use(async (context, next) =>
+				_applicationBuilder.Use(async (context, next) =>
 				{
 					var windsorScope = kernel.BeginScope();
-					var serviceProviderScope = (provider = provider ?? services.BuildServiceProvider()).CreateScope();
+					var serviceProviderScope = (_provider ??= _services.BuildServiceProvider()).CreateScope();
 					try
 					{
 						var middleware = (IMiddleware) kernel.Resolve(service); 
-						await middleware.InvokeAsync(context, async (ctx) => await next());
+						await middleware.InvokeAsync(context, async (_) => await next());
 					}
 					finally
 					{

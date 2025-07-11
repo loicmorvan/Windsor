@@ -36,7 +36,7 @@ using Castle.Windsor.Proxy;
 ///   which delegates to <see cref = "IKernel" /> implementation.
 /// </summary>
 [Serializable]
-[DebuggerDisplay("{name,nq}")]
+[DebuggerDisplay("{_name,nq}")]
 [DebuggerTypeProxy(typeof(KernelDebuggerProxy))]
 public class WindsorContainer :
 #if FEATURE_REMOTING
@@ -46,14 +46,14 @@ public class WindsorContainer :
 {
 	private const string CastleUnicode = "\uD83C\uDFF0";
 
-	private static int instanceCount = 0;
+	private static int _instanceCount;
 
-	private readonly IKernel kernel;
-	private readonly string name;
-	private readonly IComponentsInstaller installer;
-	private IWindsorContainer parent;
-	private readonly Dictionary<string, IWindsorContainer> childContainers = new Dictionary<string, IWindsorContainer>(StringComparer.OrdinalIgnoreCase);
-	private readonly object childContainersLocker = new object();
+	private readonly IKernel _kernel;
+	private readonly string _name;
+	private readonly IComponentsInstaller _installer;
+	private IWindsorContainer _parent;
+	private readonly Dictionary<string, IWindsorContainer> _childContainers = new(StringComparer.OrdinalIgnoreCase);
+	private readonly object _childContainersLocker = new();
 
 	/// <summary>
 	///   Constructs a container without any external 
@@ -70,7 +70,7 @@ public class WindsorContainer :
 	/// <param name = "store">The instance of an <see cref = "IConfigurationStore" /> implementation.</param>
 	public WindsorContainer(IConfigurationStore store) : this()
 	{
-		kernel.ConfigurationStore = store;
+		_kernel.ConfigurationStore = store;
 
 		RunInstaller();
 	}
@@ -86,7 +86,7 @@ public class WindsorContainer :
 		{
 			throw new ArgumentNullException(nameof(interpreter));
 		}
-		interpreter.ProcessResource(interpreter.Source, kernel.ConfigurationStore, kernel);
+		interpreter.ProcessResource(interpreter.Source, _kernel.ConfigurationStore, _kernel);
 
 		RunInstaller();
 	}
@@ -108,7 +108,7 @@ public class WindsorContainer :
 		}
 
 		interpreter.EnvironmentName = environmentInfo.GetEnvironmentName();
-		interpreter.ProcessResource(interpreter.Source, kernel.ConfigurationStore, kernel);
+		interpreter.ProcessResource(interpreter.Source, _kernel.ConfigurationStore, _kernel);
 
 		RunInstaller();
 	}
@@ -129,7 +129,7 @@ public class WindsorContainer :
 		}
 
 		var interpreter = GetInterpreter(configurationUri);
-		interpreter.ProcessResource(interpreter.Source, kernel.ConfigurationStore, kernel);
+		interpreter.ProcessResource(interpreter.Source, _kernel.ConfigurationStore, _kernel);
 
 		RunInstaller();
 	}
@@ -174,10 +174,10 @@ public class WindsorContainer :
 			throw new ArgumentNullException(nameof(installer));
 		}
 
-		this.name = name;
-		this.kernel = kernel;
-		this.kernel.ProxyFactory = new DefaultProxyFactory();
-		this.installer = installer;
+		this._name = name;
+		this._kernel = kernel;
+		this._kernel.ProxyFactory = new DefaultProxyFactory();
+		this._installer = installer;
 	}
 
 	/// <summary>
@@ -191,9 +191,9 @@ public class WindsorContainer :
 			throw new ArgumentNullException(nameof(proxyFactory));
 		}
 
-		kernel = new DefaultKernel(proxyFactory);
+		_kernel = new DefaultKernel(proxyFactory);
 
-		installer = new DefaultComponentInstaller();
+		_installer = new DefaultComponentInstaller();
 	}
 
 	/// <summary>
@@ -215,7 +215,7 @@ public class WindsorContainer :
 
 		parent.AddChildContainer(this);
 
-		interpreter.ProcessResource(interpreter.Source, kernel.ConfigurationStore, kernel);
+		interpreter.ProcessResource(interpreter.Source, _kernel.ConfigurationStore, _kernel);
 
 		RunInstaller();
 	}
@@ -241,18 +241,18 @@ public class WindsorContainer :
 			throw new ArgumentNullException(nameof(interpreter));
 		}
 
-		this.name = name;
+		this._name = name;
 
 		parent.AddChildContainer(this);
 
-		interpreter.ProcessResource(interpreter.Source, kernel.ConfigurationStore, kernel);
+		interpreter.ProcessResource(interpreter.Source, _kernel.ConfigurationStore, _kernel);
 
 		RunInstaller();
 	}
 
 	public IComponentsInstaller Installer
 	{
-		get { return installer; }
+		get { return _installer; }
 	}
 
 	/// <summary>
@@ -260,7 +260,7 @@ public class WindsorContainer :
 	/// </summary>
 	public virtual IKernel Kernel
 	{
-		get { return kernel; }
+		get { return _kernel; }
 	}
 
 	/// <summary>
@@ -272,7 +272,7 @@ public class WindsorContainer :
 	/// <value>The container's name.</value>
 	public string Name
 	{
-		get { return name; }
+		get { return _name; }
 	}
 
 	/// <summary>
@@ -281,23 +281,23 @@ public class WindsorContainer :
 	/// </summary>
 	public virtual IWindsorContainer Parent
 	{
-		get { return parent; }
+		get { return _parent; }
 		set
 		{
 			if (value == null)
 			{
-				if (parent != null)
+				if (_parent != null)
 				{
-					parent.RemoveChildContainer(this);
-					parent = null;
+					_parent.RemoveChildContainer(this);
+					_parent = null;
 				}
 			}
 			else
 			{
-				if (value != parent)
+				if (value != _parent)
 				{
-					parent = value;
-					parent.AddChildContainer(this);
+					_parent = value;
+					_parent.AddChildContainer(this);
 				}
 			}
 		}
@@ -305,15 +305,15 @@ public class WindsorContainer :
 
 	protected virtual void RunInstaller()
 	{
-		if (installer != null)
+		if (_installer != null)
 		{
-			installer.SetUp(this, kernel.ConfigurationStore);
+			_installer.SetUp(this, _kernel.ConfigurationStore);
 		}
 	}
 
 	private void Install(IWindsorInstaller[] installers, DefaultComponentInstaller scope)
 	{
-		using var store = new PartialConfigurationStore((IKernelInternal)kernel);
+		using var store = new PartialConfigurationStore((IKernelInternal)_kernel);
 		foreach (var windsorInstaller in installers)
 		{
 			windsorInstaller.Install(this, store);
@@ -328,8 +328,8 @@ public class WindsorContainer :
 	public virtual void Dispose()
 	{
 		Parent = null;
-		childContainers.Clear();
-		kernel.Dispose();
+		_childContainers.Clear();
+		_kernel.Dispose();
 	}
 
 	/// <summary>
@@ -344,14 +344,14 @@ public class WindsorContainer :
 			throw new ArgumentNullException(nameof(childContainer));
 		}
 
-		if (!childContainers.ContainsKey(childContainer.Name))
+		if (!_childContainers.ContainsKey(childContainer.Name))
 		{
-			lock (childContainersLocker)
+			lock (_childContainersLocker)
 			{
-				if (!childContainers.ContainsKey(childContainer.Name))
+				if (!_childContainers.ContainsKey(childContainer.Name))
 				{
-					kernel.AddChildKernel(childContainer.Kernel);
-					childContainers.Add(childContainer.Name, childContainer);
+					_kernel.AddChildKernel(childContainer.Kernel);
+					_childContainers.Add(childContainer.Name, childContainer);
 					childContainer.Parent = this;
 				}
 			}
@@ -364,7 +364,7 @@ public class WindsorContainer :
 	/// <param name = "facility"></param>
 	public IWindsorContainer AddFacility(IFacility facility)
 	{
-		kernel.AddFacility(facility);
+		_kernel.AddFacility(facility);
 		return this;
 	}
 
@@ -375,7 +375,7 @@ public class WindsorContainer :
 	/// <returns></returns>
 	public IWindsorContainer AddFacility<T>() where T : IFacility, new()
 	{
-		kernel.AddFacility<T>();
+		_kernel.AddFacility<T>();
 		return this;
 	}
 
@@ -388,7 +388,7 @@ public class WindsorContainer :
 	public IWindsorContainer AddFacility<T>(Action<T> onCreate)
 		where T : IFacility, new()
 	{
-		kernel.AddFacility(onCreate);
+		_kernel.AddFacility(onCreate);
 		return this;
 	}
 
@@ -399,10 +399,10 @@ public class WindsorContainer :
 	/// <returns>The child container instance or null</returns>
 	public IWindsorContainer GetChildContainer(string name)
 	{
-		lock (childContainersLocker)
+		lock (_childContainersLocker)
 		{
 			IWindsorContainer windsorContainer;
-			childContainers.TryGetValue(name, out windsorContainer);
+			_childContainers.TryGetValue(name, out windsorContainer);
 			return windsorContainer;
 		}
 	}
@@ -440,8 +440,7 @@ public class WindsorContainer :
 
 		var scope = new DefaultComponentInstaller();
 
-		var internalKernel = kernel as IKernelInternal;
-		if (internalKernel == null)
+		if (_kernel is not IKernelInternal internalKernel)
 		{
 			Install(installers, scope);
 		}
@@ -489,7 +488,7 @@ public class WindsorContainer :
 	/// <param name = "instance"></param>
 	public virtual void Release(object instance)
 	{
-		kernel.ReleaseComponent(instance);
+		_kernel.ReleaseComponent(instance);
 	}
 
 	/// <summary>
@@ -504,14 +503,14 @@ public class WindsorContainer :
 			throw new ArgumentNullException(nameof(childContainer));
 		}
 
-		if (childContainers.ContainsKey(childContainer.Name))
+		if (_childContainers.ContainsKey(childContainer.Name))
 		{
-			lock (childContainersLocker)
+			lock (_childContainersLocker)
 			{
-				if (childContainers.ContainsKey(childContainer.Name))
+				if (_childContainers.ContainsKey(childContainer.Name))
 				{
-					kernel.RemoveChildKernel(childContainer.Kernel);
-					childContainers.Remove(childContainer.Name);
+					_kernel.RemoveChildKernel(childContainer.Kernel);
+					_childContainers.Remove(childContainer.Name);
 					childContainer.Parent = null;
 				}
 			}
@@ -526,7 +525,7 @@ public class WindsorContainer :
 	/// <returns></returns>
 	public virtual object Resolve(Type service, Arguments arguments)
 	{
-		return kernel.Resolve(service, arguments);
+		return _kernel.Resolve(service, arguments);
 	}
 
 	/// <summary>
@@ -536,7 +535,7 @@ public class WindsorContainer :
 	/// <returns></returns>
 	public virtual object Resolve(Type service)
 	{
-		return kernel.Resolve(service, arguments: null);
+		return _kernel.Resolve(service, arguments: null);
 	}
 
 	/// <summary>
@@ -547,7 +546,7 @@ public class WindsorContainer :
 	/// <returns></returns>
 	public virtual object Resolve(String key, Type service)
 	{
-		return kernel.Resolve(key, service, arguments: null);
+		return _kernel.Resolve(key, service, arguments: null);
 	}
 
 	/// <summary>
@@ -559,7 +558,7 @@ public class WindsorContainer :
 	/// <returns></returns>
 	public virtual object Resolve(string key, Type service, Arguments arguments)
 	{
-		return kernel.Resolve(key, service, arguments);
+		return _kernel.Resolve(key, service, arguments);
 	}
 
 	/// <summary>
@@ -570,7 +569,7 @@ public class WindsorContainer :
 	/// <returns></returns>
 	public T Resolve<T>(Arguments arguments)
 	{
-		return (T)kernel.Resolve(typeof(T), arguments);
+		return (T)_kernel.Resolve(typeof(T), arguments);
 	}
 
 	/// <summary>
@@ -581,7 +580,7 @@ public class WindsorContainer :
 	/// <returns></returns>
 	public virtual T Resolve<T>(string key, Arguments arguments)
 	{
-		return (T)kernel.Resolve(key, typeof(T), arguments);
+		return (T)_kernel.Resolve(key, typeof(T), arguments);
 	}
 
 	/// <summary>
@@ -591,7 +590,7 @@ public class WindsorContainer :
 	/// <returns></returns>
 	public T Resolve<T>()
 	{
-		return (T)kernel.Resolve(typeof(T), arguments: null);
+		return (T)_kernel.Resolve(typeof(T), arguments: null);
 	}
 
 	/// <summary>
@@ -601,7 +600,7 @@ public class WindsorContainer :
 	/// <returns></returns>
 	public virtual T Resolve<T>(String key)
 	{
-		return (T)kernel.Resolve(key, typeof(T), arguments: null);
+		return (T)_kernel.Resolve(key, typeof(T), arguments: null);
 	}
 
 	/// <summary>
@@ -620,7 +619,7 @@ public class WindsorContainer :
 	/// <returns></returns>
 	public Array ResolveAll(Type service)
 	{
-		return kernel.ResolveAll(service);
+		return _kernel.ResolveAll(service);
 	}
 
 	///  <summary>
@@ -631,7 +630,7 @@ public class WindsorContainer :
 	/// <returns></returns>
 	public Array ResolveAll(Type service, Arguments arguments)
 	{
-		return kernel.ResolveAll(service, arguments);
+		return _kernel.ResolveAll(service, arguments);
 	}
 
 	/// <summary>
@@ -668,7 +667,7 @@ public class WindsorContainer :
 #endif
 		sb.Append(CastleUnicode);
 		sb.Append(" ");
-		sb.Append(Interlocked.Increment(ref instanceCount));
+		sb.Append(Interlocked.Increment(ref _instanceCount));
 		return sb.ToString();
 	}
 }

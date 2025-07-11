@@ -24,10 +24,10 @@ using System.Reflection;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class FactoryEntry
 {
-	private readonly String creationMethod;
-	private readonly String destructionMethod;
-	private readonly Type factoryInterface;
-	private readonly String id;
+	private readonly String _creationMethod;
+	private readonly String _destructionMethod;
+	private readonly Type _factoryInterface;
+	private readonly String _id;
 
 	public FactoryEntry(String id, Type factoryInterface, String creationMethod, String destructionMethod)
 	{
@@ -48,29 +48,29 @@ public class FactoryEntry
 			throw new ArgumentNullException(nameof(creationMethod));
 		}
 
-		this.id = id;
-		this.factoryInterface = factoryInterface;
-		this.creationMethod = creationMethod;
-		this.destructionMethod = destructionMethod;
+		this._id = id;
+		this._factoryInterface = factoryInterface;
+		this._creationMethod = creationMethod;
+		this._destructionMethod = destructionMethod;
 	}
 
 	public String CreationMethod
 	{
-		get { return creationMethod; }
+		get { return _creationMethod; }
 	}
 
 	public String DestructionMethod
 	{
-		get { return destructionMethod; }
+		get { return _destructionMethod; }
 	}
 
 	public Type FactoryInterface
 	{
-		get { return factoryInterface; }
+		get { return _factoryInterface; }
 	}
 
 	public String Id
 	{
-		get { return id; }
+		get { return _id; }
 	}
 }

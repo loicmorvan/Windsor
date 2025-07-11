@@ -20,7 +20,7 @@ using System.Collections.Generic;
 
 public class MixinRegistration : IEnumerable<IReference<object>>
 {
-	private readonly IList<IReference<object>> items = new List<IReference<object>>();
+	private readonly IList<IReference<object>> _items = new List<IReference<object>>();
 
 	public MixinRegistration Component<TService>()
 	{
@@ -33,7 +33,7 @@ public class MixinRegistration : IEnumerable<IReference<object>>
 		{
 			throw new ArgumentNullException(nameof(serviceType));
 		}
-		items.Add(new ComponentReference<object>(serviceType));
+		_items.Add(new ComponentReference<object>(serviceType));
 		return this;
 	}
 
@@ -43,7 +43,7 @@ public class MixinRegistration : IEnumerable<IReference<object>>
 		{
 			throw new ArgumentNullException(nameof(name));
 		}
-		items.Add(new ComponentReference<object>(name));
+		_items.Add(new ComponentReference<object>(name));
 		return this;
 	}
 
@@ -51,18 +51,18 @@ public class MixinRegistration : IEnumerable<IReference<object>>
 	{
 		foreach (var item in objects)
 		{
-			items.Add(new InstanceReference<object>(item));
+			_items.Add(new InstanceReference<object>(item));
 		}
 		return this;
 	}
 
 	IEnumerator IEnumerable.GetEnumerator()
 	{
-		return items.GetEnumerator();
+		return _items.GetEnumerator();
 	}
 
 	IEnumerator<IReference<object>> IEnumerable<IReference<object>>.GetEnumerator()
 	{
-		return items.GetEnumerator();
+		return _items.GetEnumerator();
 	}
 }

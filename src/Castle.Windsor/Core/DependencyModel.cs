@@ -27,13 +27,13 @@ using Castle.MicroKernel.Util;
 [Serializable]
 public class DependencyModel
 {
-	private readonly Type targetItemType;
-	private readonly Type targetType;
-	protected ParameterModel parameterModel;
-	protected string reference;
+	private readonly Type _targetItemType;
+	private readonly Type _targetType;
+	protected ParameterModel ParameterModel;
+	protected string Reference;
 
 #if DEBUG
-	protected bool initialized;
+	protected bool Initialized;
 #endif
 
 	/// <summary>
@@ -50,14 +50,14 @@ public class DependencyModel
 	// TODO: add configuration so that information about override is attached to the dependency
 	public DependencyModel(string dependencyKey, Type targetType, bool isOptional, bool hasDefaultValue, object defaultValue)
 	{
-		this.targetType = targetType;
-		if (targetType != null && targetType.IsByRef)
+		this._targetType = targetType;
+		if (targetType is { IsByRef: true })
 		{
-			targetItemType = targetType.GetElementType();
+			_targetItemType = targetType.GetElementType();
 		}
 		else
 		{
-			targetItemType = targetType;
+			_targetItemType = targetType;
 		}
 		DependencyKey = dependencyKey;
 		IsOptional = isOptional;
@@ -89,7 +89,7 @@ public class DependencyModel
 
 	public bool IsPrimitiveTypeDependency
 	{
-		get { return targetItemType.IsPrimitiveTypeOrCollection(); }
+		get { return _targetItemType.IsPrimitiveTypeOrCollection(); }
 	}
 
 	public ParameterModel Parameter
@@ -97,19 +97,19 @@ public class DependencyModel
 		get
 		{
 #if DEBUG
-			if (!initialized)
+			if (!Initialized)
 			{
 				throw new InvalidOperationException("Not initialized!");
 			}
 #endif
-			return parameterModel;
+			return ParameterModel;
 		}
 		set
 		{
-			parameterModel = value;
-			if (parameterModel != null)
+			ParameterModel = value;
+			if (ParameterModel != null)
 			{
-				reference = ReferenceExpressionUtil.ExtractComponentName(parameterModel.Value);
+				Reference = ReferenceExpressionUtil.ExtractComponentName(ParameterModel.Value);
 			}
 		}
 	}
@@ -119,12 +119,12 @@ public class DependencyModel
 		get
 		{
 #if DEBUG
-			if (!initialized)
+			if (!Initialized)
 			{
 				throw new InvalidOperationException("Not initialized!");
 			}
 #endif
-			return reference;
+			return Reference;
 		}
 	}
 
@@ -136,7 +136,7 @@ public class DependencyModel
 	/// </summary>
 	public Type TargetItemType
 	{
-		get { return targetItemType; }
+		get { return _targetItemType; }
 	}
 
 	/// <summary>
@@ -145,7 +145,7 @@ public class DependencyModel
 	/// <value> The type of the target. </value>
 	public Type TargetType
 	{
-		get { return targetType; }
+		get { return _targetType; }
 	}
 
 	public override bool Equals(object obj)
@@ -158,12 +158,12 @@ public class DependencyModel
 		{
 			return true;
 		}
-		var other = obj as DependencyModel;
-		if (other == null)
+
+		if (obj is not DependencyModel other)
 		{
 			return false;
 		}
-		return other.targetType == targetType &&
+		return other._targetType == _targetType &&
 		       Equals(other.DependencyKey, DependencyKey);
 	}
 
@@ -171,7 +171,7 @@ public class DependencyModel
 	{
 		unchecked
 		{
-			var result = (targetType != null ? targetType.GetHashCode() : 0);
+			var result = (_targetType != null ? _targetType.GetHashCode() : 0);
 			result = (result*397) ^ (DependencyKey != null ? DependencyKey.GetHashCode() : 0);
 			return result;
 		}
@@ -180,7 +180,7 @@ public class DependencyModel
 	public virtual void Init(ParameterModelCollection parameters)
 	{
 #if DEBUG
-		initialized = true;
+		Initialized = true;
 #endif
 		if (parameters == null)
 		{

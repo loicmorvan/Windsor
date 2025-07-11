@@ -80,11 +80,11 @@ public class Property(object key, object value)
 /// </summary>
 public class PropertyKey
 {
-	private readonly object key;
+	private readonly object _key;
 
 	internal PropertyKey(object key)
 	{
-		this.key = key;
+		this._key = key;
 	}
 
 	/// <summary>
@@ -92,7 +92,7 @@ public class PropertyKey
 	/// </summary>
 	public object Key
 	{
-		get { return key; }
+		get { return _key; }
 	}
 
 	/// <summary>
@@ -102,7 +102,7 @@ public class PropertyKey
 	/// <returns>The new <see cref = "Property" /></returns>
 	public Property Eq(Object value)
 	{
-		return new Property(key, value);
+		return new Property(_key, value);
 	}
 
 	/// <summary>
@@ -142,10 +142,10 @@ public class PropertyKey
 
 	private ServiceOverrideKey GetServiceOverrideKey()
 	{
-		if (key is Type)
+		if (_key is Type key)
 		{
-			return ServiceOverride.ForKey((Type)key);
+			return ServiceOverride.ForKey(key);
 		}
-		return ServiceOverride.ForKey((string)key);
+		return ServiceOverride.ForKey((string)_key);
 	}
 }

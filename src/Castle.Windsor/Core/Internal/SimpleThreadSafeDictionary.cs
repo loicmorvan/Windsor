@@ -25,14 +25,14 @@ using System.Linq;
 /// <typeparam name="TValue"> </typeparam>
 public class SimpleThreadSafeDictionary<TKey, TValue>
 {
-	private readonly Dictionary<TKey, TValue> inner = new Dictionary<TKey, TValue>();
-	private readonly MicroKernel.Internal.Lock @lock = MicroKernel.Internal.Lock.Create();
+	private readonly Dictionary<TKey, TValue> _inner = new();
+	private readonly MicroKernel.Internal.Lock _lock = MicroKernel.Internal.Lock.Create();
 
 	public bool Contains(TKey key)
 	{
-		using (@lock.ForReading())
+		using (_lock.ForReading())
 		{
-			return inner.ContainsKey(key);
+			return _inner.ContainsKey(key);
 		}
 	}
 
@@ -42,19 +42,19 @@ public class SimpleThreadSafeDictionary<TKey, TValue>
 	/// <returns> </returns>
 	public TValue[] EjectAllValues()
 	{
-		using (@lock.ForWriting())
+		using (_lock.ForWriting())
 		{
-			var values = inner.Values.ToArray();
-			inner.Clear();
+			var values = _inner.Values.ToArray();
+			_inner.Clear();
 			return values;
 		}
 	}
 
 	public TValue GetOrAdd(TKey key, Func<TKey, TValue> factory)
 	{
-		using var token = @lock.ForReadingUpgradeable();
+		using var token = _lock.ForReadingUpgradeable();
 		TValue value;
-		if (inner.TryGetValue(key, out value))
+		if (_inner.TryGetValue(key, out value))
 		{
 			return value;
 		}
@@ -63,21 +63,21 @@ public class SimpleThreadSafeDictionary<TKey, TValue>
 		// Also this helps to prevent downstream deadlocks due to factory method call
 		var newValue = factory(key);
 		token.Upgrade();
-		if (inner.TryGetValue(key, out value))
+		if (_inner.TryGetValue(key, out value))
 		{
 			return value;
 		}
 		value = newValue;
-		inner.Add(key, value);
+		_inner.Add(key, value);
 		return value;
 	}
 
 	public TValue GetOrThrow(TKey key)
 	{
-		using (@lock.ForReading())
+		using (_lock.ForReading())
 		{
 			TValue value;
-			if (inner.TryGetValue(key, out value))
+			if (_inner.TryGetValue(key, out value))
 			{
 				return value;
 			}

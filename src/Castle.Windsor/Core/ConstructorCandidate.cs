@@ -26,8 +26,8 @@ using Castle.Core.Internal;
 [Serializable]
 public class ConstructorCandidate : IComparable<ConstructorCandidate>
 {
-	private readonly ConstructorInfo constructorInfo;
-	private readonly ConstructorDependencyModel[] dependencies;
+	private readonly ConstructorInfo _constructorInfo;
+	private readonly ConstructorDependencyModel[] _dependencies;
 
 	/// <summary>
 	///   Initializes a new instance of the <see cref = "ConstructorCandidate" /> class.
@@ -36,8 +36,8 @@ public class ConstructorCandidate : IComparable<ConstructorCandidate>
 	/// <param name = "dependencies">The dependencies.</param>
 	public ConstructorCandidate(ConstructorInfo constructorInfo, ConstructorDependencyModel[] dependencies)
 	{
-		this.constructorInfo = constructorInfo;
-		this.dependencies = dependencies;
+		this._constructorInfo = constructorInfo;
+		this._dependencies = dependencies;
 		dependencies.ForEach(InitParameter);
 	}
 
@@ -47,7 +47,7 @@ public class ConstructorCandidate : IComparable<ConstructorCandidate>
 	/// <value>The constructor.</value>
 	public ConstructorInfo Constructor
 	{
-		get { return constructorInfo; }
+		get { return _constructorInfo; }
 	}
 
 	/// <summary>
@@ -56,7 +56,7 @@ public class ConstructorCandidate : IComparable<ConstructorCandidate>
 	/// <value>The dependencies.</value>
 	public ConstructorDependencyModel[] Dependencies
 	{
-		get { return dependencies; }
+		get { return _dependencies; }
 	}
 
 	private void InitParameter(ConstructorDependencyModel parameter)

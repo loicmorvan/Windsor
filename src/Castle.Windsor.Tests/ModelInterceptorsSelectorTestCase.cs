@@ -132,7 +132,7 @@ public class BirdWatcher : IWatcher
 
 public class Person(IWatcher watcher)
 {
-	public IWatcher Watcher = watcher;
+	public readonly IWatcher Watcher = watcher;
 }
 
 public enum InterceptorKind

@@ -58,10 +58,10 @@ public interface IMyObject
 
 public class MyObject(IDictionary<int, IList<string>> stuff) : IMyObject
 {
-	protected readonly IDictionary<int, IList<string>> stuff = stuff;
+	protected readonly IDictionary<int, IList<string>> Stuff = stuff;
 
 	public virtual int Count
 	{
-		get { return stuff.Count; }
+		get { return Stuff.Count; }
 	}
 }

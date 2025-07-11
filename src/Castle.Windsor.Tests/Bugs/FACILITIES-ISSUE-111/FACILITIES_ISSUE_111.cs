@@ -18,9 +18,9 @@ using Castle.Core.Resource;
 using Castle.Windsor;
 using Castle.Windsor.Configuration.Interpreters;
 
-public class FACILITIES_ISSUE_111
+public class FacilitiesIssue111
 {
-	private readonly IResource setupResource = new StaticContentResource(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+	private readonly IResource _setupResource = new StaticContentResource(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
 
 <configuration>
 
@@ -53,7 +53,7 @@ public class FACILITIES_ISSUE_111
 	[Fact]
 	public void Registering_IStartable_Out_Of_Order_On_Array_Should_Not_Throw_Exception()
 	{
-		new WindsorContainer(new XmlInterpreter(setupResource));
+		new WindsorContainer(new XmlInterpreter(_setupResource));
 	}
 
 }

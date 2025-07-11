@@ -22,25 +22,25 @@ using Castle.MicroKernel.Lifestyle.Scoped;
 [Description("statically")]
 public class StaticScopeAccessor : IScopeAccessor
 {
-	private static DefaultLifetimeScope scope = new DefaultLifetimeScope();
+	private static DefaultLifetimeScope _scope = new();
 
 	public void Dispose()
 	{
-		scope.Dispose();
+		_scope.Dispose();
 	}
 
 	public ILifetimeScope GetScope(CreationContext context)
 	{
-		return scope;
+		return _scope;
 	}
 
 	public static DefaultLifetimeScope Scope
 	{
-		get { return scope; }
+		get { return _scope; }
 	}
 
 	public static void ResetScope()
 	{
-		scope = new DefaultLifetimeScope();
+		_scope = new DefaultLifetimeScope();
 	}
 }

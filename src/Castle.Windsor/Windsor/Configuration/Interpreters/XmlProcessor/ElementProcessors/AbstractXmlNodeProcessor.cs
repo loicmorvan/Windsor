@@ -19,13 +19,13 @@ using System.Xml;
 
 public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
 {
-	private static readonly XmlNodeType[] acceptNodes = new[] { XmlNodeType.Element };
+	private static readonly XmlNodeType[] AcceptNodes = [XmlNodeType.Element];
 
 	public abstract String Name { get; }
 
 	public virtual XmlNodeType[] AcceptNodeTypes
 	{
-		get { return acceptNodes; }
+		get { return AcceptNodes; }
 	}
 
 	public abstract void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine);
@@ -81,9 +81,7 @@ public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
 	/// <returns>child node as XmlElement</returns>
 	protected XmlElement GetNodeAsElement(XmlElement element, XmlNode child)
 	{
-		var result = child as XmlElement;
-
-		if (result == null)
+		if (child is not XmlElement result)
 		{
 			throw new XmlProcessorException("{0} expects XmlElement found {1}", element.Name, child.NodeType);
 		}

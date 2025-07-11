@@ -26,17 +26,17 @@ using Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
 public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 {
-	private readonly IXmlNodeProcessor defaultElementProcessor;
-	private readonly Regex flagPattern = new Regex(@"^(\w|_)+$");
-	private readonly IDictionary<string, bool> flags = new Dictionary<string, bool>();
+	private readonly IXmlNodeProcessor _defaultElementProcessor;
+	private readonly Regex _flagPattern = new(@"^(\w|_)+$");
+	private readonly IDictionary<string, bool> _flags = new Dictionary<string, bool>();
 
-	private readonly IDictionary<XmlNodeType, IDictionary<string, IXmlNodeProcessor>> nodeProcessors =
+	private readonly IDictionary<XmlNodeType, IDictionary<string, IXmlNodeProcessor>> _nodeProcessors =
 		new Dictionary<XmlNodeType, IDictionary<string, IXmlNodeProcessor>>();
 
-	private readonly IDictionary<string, XmlElement> properties = new Dictionary<string, XmlElement>();
-	private readonly Stack<IResource> resourceStack = new Stack<IResource>();
+	private readonly IDictionary<string, XmlElement> _properties = new Dictionary<string, XmlElement>();
+	private readonly Stack<IResource> _resourceStack = new();
 
-	private readonly IResourceSubSystem resourceSubSystem;
+	private readonly IResourceSubSystem _resourceSubSystem;
 
 	/// <summary>
 	///   Initializes a new instance of the <see cref = "DefaultXmlProcessorEngine" /> class.
@@ -54,13 +54,13 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 	public DefaultXmlProcessorEngine(string environmentName, IResourceSubSystem resourceSubSystem)
 	{
 		AddEnvNameAsFlag(environmentName);
-		this.resourceSubSystem = resourceSubSystem;
-		defaultElementProcessor = new DefaultElementProcessor();
+		this._resourceSubSystem = resourceSubSystem;
+		_defaultElementProcessor = new DefaultElementProcessor();
 	}
 
 	public void AddFlag(string flag)
 	{
-		flags[GetCanonicalFlagName(flag)] = true;
+		_flags[GetCanonicalFlagName(flag)] = true;
 	}
 
 	public void AddNodeProcessor(Type type)
@@ -81,7 +81,7 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 
 	public void AddProperty(XmlElement content)
 	{
-		properties[content.Name] = content;
+		_properties[content.Name] = content;
 	}
 
 	/// <summary>
@@ -115,7 +115,7 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 	public XmlElement GetProperty(string key)
 	{
 		XmlElement property;
-		if (!properties.TryGetValue(key, out property))
+		if (!_properties.TryGetValue(key, out property))
 		{
 			return null;
 		}
@@ -126,9 +126,9 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 	public IResource GetResource(String uri)
 	{
 		IResource resource;
-		if (resourceStack.Count > 0)
+		if (_resourceStack.Count > 0)
 		{
-			resource = resourceStack.Peek();
+			resource = _resourceStack.Peek();
 		}
 		else
 		{
@@ -139,14 +139,14 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 		{
 			if (resource == null)
 			{
-				return resourceSubSystem.CreateResource(uri);
+				return _resourceSubSystem.CreateResource(uri);
 			}
 
-			return resourceSubSystem.CreateResource(uri, resource.FileBasePath);
+			return _resourceSubSystem.CreateResource(uri, resource.FileBasePath);
 		}
 
 		// NOTE: what if resource is null at this point?
-		if (resourceStack.Count > 0)
+		if (_resourceStack.Count > 0)
 		{
 			return resource.CreateRelative(uri);
 		}
@@ -156,32 +156,32 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 
 	public bool HasFlag(string flag)
 	{
-		return flags.ContainsKey(GetCanonicalFlagName(flag));
+		return _flags.ContainsKey(GetCanonicalFlagName(flag));
 	}
 
 	public bool HasProperty(String name)
 	{
-		return properties.ContainsKey(name);
+		return _properties.ContainsKey(name);
 	}
 
 	public bool HasSpecialProcessor(XmlNode node)
 	{
-		return GetProcessor(node) != defaultElementProcessor;
+		return GetProcessor(node) != _defaultElementProcessor;
 	}
 
 	public void PopResource()
 	{
-		resourceStack.Pop();
+		_resourceStack.Pop();
 	}
 
 	public void PushResource(IResource resource)
 	{
-		resourceStack.Push(resource);
+		_resourceStack.Push(resource);
 	}
 
 	public void RemoveFlag(string flag)
 	{
-		flags.Remove(GetCanonicalFlagName(flag));
+		_flags.Remove(GetCanonicalFlagName(flag));
 	}
 
 	private void AddEnvNameAsFlag(string environmentName)
@@ -196,7 +196,7 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 	{
 		flag = flag.Trim().ToLower();
 
-		if (!flagPattern.IsMatch(flag))
+		if (!_flagPattern.IsMatch(flag))
 		{
 			throw new XmlProcessorException("Invalid flag name '{0}'", flag);
 		}
@@ -207,7 +207,7 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 	private IXmlNodeProcessor GetProcessor(XmlNode node)
 	{
 		IDictionary<string, IXmlNodeProcessor> processors;
-		if (!nodeProcessors.TryGetValue(node.NodeType, out processors))
+		if (!_nodeProcessors.TryGetValue(node.NodeType, out processors))
 		{
 			return null;
 		}
@@ -218,7 +218,7 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 		{
 			if (node.NodeType == XmlNodeType.Element)
 			{
-				processor = defaultElementProcessor;
+				processor = _defaultElementProcessor;
 			}
 		}
 
@@ -228,10 +228,10 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 	private void RegisterProcessor(XmlNodeType type, IXmlNodeProcessor processor)
 	{
 		IDictionary<string, IXmlNodeProcessor> typeProcessors;
-		if (!nodeProcessors.TryGetValue(type, out typeProcessors))
+		if (!_nodeProcessors.TryGetValue(type, out typeProcessors))
 		{
 			typeProcessors = new Dictionary<string, IXmlNodeProcessor>();
-			nodeProcessors[type] = typeProcessors;
+			_nodeProcessors[type] = typeProcessors;
 		}
 
 		if (typeProcessors.ContainsKey(processor.Name))

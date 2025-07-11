@@ -25,14 +25,14 @@ using Castle.Core;
 [Serializable]
 public class NoResolvableConstructorFoundException : ComponentActivatorException
 {
-	private readonly Type type;
+	private readonly Type _type;
 
 	public NoResolvableConstructorFoundException(Type type, ComponentModel componentModel)
 		: base(
 			string.Format("Could not find resolvable constructor for {0}. Make sure all required dependencies are provided.",
 				type.FullName), componentModel)
 	{
-		this.type = type;
+		this._type = type;
 	}
 
 	public NoResolvableConstructorFoundException(string message, Exception innerException, ComponentModel componentModel)
@@ -49,6 +49,6 @@ public class NoResolvableConstructorFoundException : ComponentActivatorException
 
 	public Type Type
 	{
-		get { return type; }
+		get { return _type; }
 	}
 }

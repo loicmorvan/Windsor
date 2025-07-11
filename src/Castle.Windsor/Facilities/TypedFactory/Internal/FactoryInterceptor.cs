@@ -27,13 +27,13 @@ using Castle.MicroKernel;
 [Transient]
 public class FactoryInterceptor(IKernel kernel) : IInterceptor, IOnBehalfAware
 {
-	private FactoryEntry entry;
+	private FactoryEntry _entry;
 
 	public void Intercept(IInvocation invocation)
 	{
 		var name = invocation.Method.Name;
 		var args = invocation.Arguments;
-		if (name.Equals(entry.CreationMethod))
+		if (name.Equals(_entry.CreationMethod))
 		{
 			if (args.Length == 0 || args[0] == null)
 			{
@@ -45,7 +45,7 @@ public class FactoryInterceptor(IKernel kernel) : IInterceptor, IOnBehalfAware
 			return;
 		}
 
-		if (name.Equals(entry.DestructionMethod))
+		if (name.Equals(_entry.DestructionMethod))
 		{
 			if (args.Length == 1)
 			{
@@ -60,6 +60,6 @@ public class FactoryInterceptor(IKernel kernel) : IInterceptor, IOnBehalfAware
 
 	public void SetInterceptedComponentModel(ComponentModel target)
 	{
-		entry = (FactoryEntry)target.ExtendedProperties["typed.fac.entry"];
+		_entry = (FactoryEntry)target.ExtendedProperties["typed.fac.entry"];
 	}
 }

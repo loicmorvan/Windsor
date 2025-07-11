@@ -30,8 +30,8 @@ using Castle.MicroKernel.Context;
 /// </remarks>
 public class CollectionResolver(IKernel kernel, bool allowEmptyCollections = false) : ISubDependencyResolver
 {
-	protected readonly bool allowEmptyCollections = allowEmptyCollections;
-	protected readonly IKernel kernel = kernel;
+	protected readonly bool AllowEmptyCollections = allowEmptyCollections;
+	protected readonly IKernel Kernel = kernel;
 
 	public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
 		ComponentModel model,
@@ -51,12 +51,12 @@ public class CollectionResolver(IKernel kernel, bool allowEmptyCollections = fal
 	public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
 		DependencyModel dependency)
 	{
-		return kernel.ResolveAll(GetItemType(dependency.TargetItemType), context.AdditionalArguments);
+		return Kernel.ResolveAll(GetItemType(dependency.TargetItemType), context.AdditionalArguments);
 	}
 
 	protected virtual bool CanSatisfy(Type itemType)
 	{
-		return allowEmptyCollections || kernel.HasComponent(itemType);
+		return AllowEmptyCollections || Kernel.HasComponent(itemType);
 	}
 
 	protected virtual Type GetItemType(Type targetItemType)

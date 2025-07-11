@@ -26,18 +26,18 @@ using Castle.Core.Internal;
 /// </summary>
 public class FromAssemblyDescriptor : FromDescriptor
 {
-	protected readonly IEnumerable<Assembly> assemblies;
-	protected bool nonPublicTypes;
+	protected readonly IEnumerable<Assembly> Assemblies;
+	protected bool NonPublicTypes;
 
 	protected internal FromAssemblyDescriptor(Assembly assembly, Predicate<Type> additionalFilters) : base(additionalFilters)
 	{
-		assemblies = new[] { assembly };
+		Assemblies = [assembly];
 	}
 
 	protected internal FromAssemblyDescriptor(IEnumerable<Assembly> assemblies, Predicate<Type> additionalFilters)
 		: base(additionalFilters)
 	{
-		this.assemblies = assemblies;
+		this.Assemblies = assemblies;
 	}
 
 	/// <summary>
@@ -48,12 +48,12 @@ public class FromAssemblyDescriptor : FromDescriptor
 	/// </remarks>
 	public FromAssemblyDescriptor IncludeNonPublicTypes()
 	{
-		nonPublicTypes = true;
+		NonPublicTypes = true;
 		return this;
 	}
 
 	protected override IEnumerable<Type> SelectedTypes(IKernel kernel)
 	{
-		return assemblies.SelectMany(a => a.GetAvailableTypesOrdered(nonPublicTypes));
+		return Assemblies.SelectMany(a => a.GetAvailableTypesOrdered(NonPublicTypes));
 	}
 }

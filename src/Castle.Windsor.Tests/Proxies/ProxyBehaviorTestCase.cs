@@ -42,7 +42,7 @@ public class ProxyBehaviorTestCase : AbstractContainerTestCase
 	[Fact]
 	public void ProxyGenarationHook_can_be_OnBehalfAware()
 	{
-		OnBehalfAwareProxyGenerationHook.target = null;
+		OnBehalfAwareProxyGenerationHook.Target = null;
 		Container.Register(Component.For<OnBehalfAwareProxyGenerationHook>().LifeStyle.Transient,
 			Component.For<StandardInterceptor>().LifeStyle.Transient,
 			Component.For<ISimpleService>()
@@ -54,14 +54,14 @@ public class ProxyBehaviorTestCase : AbstractContainerTestCase
 		var service = Container.Resolve<ISimpleService>();
 
 		Assert.True(ProxyServices.IsDynamicProxy(service.GetType()));
-		Assert.NotNull(OnBehalfAwareProxyGenerationHook.target);
-		Assert.Equal(typeof(ISimpleService), OnBehalfAwareProxyGenerationHook.target.Services.Single());
+		Assert.NotNull(OnBehalfAwareProxyGenerationHook.Target);
+		Assert.Equal(typeof(ISimpleService), OnBehalfAwareProxyGenerationHook.Target.Services.Single());
 	}
 
 	[Fact]
 	public void OnBehalfAware_ProxyGenarationHook_works_on_dependencies()
 	{
-		OnBehalfAwareProxyGenerationHook.target = null;
+		OnBehalfAwareProxyGenerationHook.Target = null;
 		Container.Register(Component.For<OnBehalfAwareProxyGenerationHook>().LifeStyle.Transient,
 			Component.For<StandardInterceptor>().LifeStyle.Transient,
 			Component.For<UsesSimpleComponent1>().LifeStyle.Transient,
@@ -72,14 +72,14 @@ public class ProxyBehaviorTestCase : AbstractContainerTestCase
 		var service = Container.Resolve<UsesSimpleComponent1>();
 
 		Assert.True(ProxyServices.IsDynamicProxy(service.Dependency.GetType()));
-		Assert.NotNull(OnBehalfAwareProxyGenerationHook.target);
-		Assert.Equal(typeof(SimpleComponent1), OnBehalfAwareProxyGenerationHook.target.Services.Single());
+		Assert.NotNull(OnBehalfAwareProxyGenerationHook.Target);
+		Assert.Equal(typeof(SimpleComponent1), OnBehalfAwareProxyGenerationHook.Target.Services.Single());
 	}
 
 	[Fact]
 	public void InterceptorSelector_can_be_OnBehalfAware()
 	{
-		OnBehalfAwareInterceptorSelector.target = null;
+		OnBehalfAwareInterceptorSelector.Target = null;
 		Container.Register(Component.For<OnBehalfAwareInterceptorSelector>().LifeStyle.Transient,
 			Component.For<StandardInterceptor>().LifeStyle.Transient,
 			Component.For<ISimpleService>()
@@ -91,14 +91,14 @@ public class ProxyBehaviorTestCase : AbstractContainerTestCase
 		var service = Container.Resolve<ISimpleService>();
 
 		Assert.True(ProxyServices.IsDynamicProxy(service.GetType()));
-		Assert.NotNull(OnBehalfAwareInterceptorSelector.target);
-		Assert.Equal(typeof(ISimpleService), OnBehalfAwareInterceptorSelector.target.Services.Single());
+		Assert.NotNull(OnBehalfAwareInterceptorSelector.Target);
+		Assert.Equal(typeof(ISimpleService), OnBehalfAwareInterceptorSelector.Target.Services.Single());
 	}
 
 	[Fact]
 	public void OnBehalfAware_InterceptorSelector_works_on_dependencies()
 	{
-		OnBehalfAwareInterceptorSelector.target = null;
+		OnBehalfAwareInterceptorSelector.Target = null;
 		Container.Register(Component.For<OnBehalfAwareInterceptorSelector>().LifeStyle.Transient,
 			Component.For<StandardInterceptor>().LifeStyle.Transient,
 			Component.For<UsesSimpleComponent1>().LifeStyle.Transient,
@@ -109,8 +109,8 @@ public class ProxyBehaviorTestCase : AbstractContainerTestCase
 		var service = Container.Resolve<UsesSimpleComponent1>();
 
 		Assert.True(ProxyServices.IsDynamicProxy(service.Dependency.GetType()));
-		Assert.NotNull(OnBehalfAwareInterceptorSelector.target);
-		Assert.Equal(typeof(SimpleComponent1), OnBehalfAwareInterceptorSelector.target.Services.Single());
+		Assert.NotNull(OnBehalfAwareInterceptorSelector.Target);
+		Assert.Equal(typeof(SimpleComponent1), OnBehalfAwareInterceptorSelector.Target.Services.Single());
 	}
 
 	[Fact]

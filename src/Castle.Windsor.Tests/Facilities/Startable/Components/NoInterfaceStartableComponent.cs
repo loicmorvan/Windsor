@@ -19,26 +19,26 @@ using Castle.Core;
 [Transient]
 public class NoInterfaceStartableComponent
 {
-	private bool started;
-	private bool stopped;
+	private bool _started;
+	private bool _stopped;
 
 	public bool Started
 	{
-		get { return started; }
+		get { return _started; }
 	}
 
 	public bool Stopped
 	{
-		get { return stopped; }
+		get { return _stopped; }
 	}
 
 	public void Start()
 	{
-		started = true;
+		_started = true;
 	}
 
 	public void Stop()
 	{
-		stopped = true;
+		_stopped = true;
 	}
 }

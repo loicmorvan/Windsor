@@ -26,9 +26,9 @@ using Castle.Core;
 /// </summary>
 public partial class DefaultKernel
 {
-	private readonly object handlersChangedLock = new object();
-	private bool handlersChanged;
-	private volatile bool handlersChangedDeferred;
+	private readonly object _handlersChangedLock = new();
+	private bool _handlersChanged;
+	private volatile bool _handlersChangedDeferred;
 
 #if FEATURE_REMOTING
 		[SecurityCritical]
@@ -40,12 +40,12 @@ public partial class DefaultKernel
 
 	public IDisposable OptimizeDependencyResolution()
 	{
-		if (handlersChangedDeferred)
+		if (_handlersChangedDeferred)
 		{
 			return null;
 		}
 
-		handlersChangedDeferred = true;
+		_handlersChangedDeferred = true;
 
 		return new OptimizeDependencyResolutionDisposable(this);
 	}
@@ -92,11 +92,11 @@ public partial class DefaultKernel
 
 	protected virtual void RaiseHandlersChanged()
 	{
-		if (handlersChangedDeferred)
+		if (_handlersChangedDeferred)
 		{
-			lock (handlersChangedLock)
+			lock (_handlersChangedLock)
 			{
-				handlersChanged = true;
+				_handlersChanged = true;
 			}
 
 			return;
@@ -151,22 +151,22 @@ public partial class DefaultKernel
 	{
 		public void Dispose()
 		{
-			lock (kernel.handlersChangedLock)
+			lock (kernel._handlersChangedLock)
 			{
 				try
 				{
-					if (kernel.handlersChanged == false)
+					if (kernel._handlersChanged == false)
 					{
 						return;
 					}
 
 					kernel.DoActualRaisingOfHandlersChanged();
 					kernel.RaiseRegistrationCompleted();
-					kernel.handlersChanged = false;
+					kernel._handlersChanged = false;
 				}
 				finally
 				{
-					kernel.handlersChangedDeferred = false;
+					kernel._handlersChangedDeferred = false;
 				}
 			}
 		}

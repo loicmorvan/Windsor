@@ -26,19 +26,19 @@ using Castle.DynamicProxy;
 /// </summary>
 public class ProxyOptions
 {
-	private IReference<IProxyGenerationHook> hook;
-	private List<Type> interfaceList;
-	private List<IReference<object>> mixInList;
+	private IReference<IProxyGenerationHook> _hook;
+	private List<Type> _interfaceList;
+	private List<IReference<object>> _mixInList;
 
-	private IReference<IInterceptorSelector> selector;
-	private readonly ComponentModel component;
+	private IReference<IInterceptorSelector> _selector;
+	private readonly ComponentModel _component;
 
 	/// <summary>
 	/// 	Initializes a new instance of the <see cref="ProxyOptions" /> class.
 	/// </summary>
 	public ProxyOptions(ComponentModel component)
 	{
-		this.component = component;
+		this._component = component;
 	}
 
 	/// <summary>
@@ -49,9 +49,9 @@ public class ProxyOptions
 	{
 		get
 		{
-			if (interfaceList != null)
+			if (_interfaceList != null)
 			{
-				return interfaceList.ToArray();
+				return _interfaceList.ToArray();
 			}
 
 			return Type.EmptyTypes;
@@ -76,8 +76,8 @@ public class ProxyOptions
 	/// </summary>
 	public IReference<IProxyGenerationHook> Hook
 	{
-		get { return hook; }
-		set { SetReferenceValue(ref hook, value); }
+		get { return _hook; }
+		set { SetReferenceValue(ref _hook, value); }
 	}
 
 	/// <summary>
@@ -88,11 +88,11 @@ public class ProxyOptions
 	{
 		get
 		{
-			if (mixInList != null)
+			if (_mixInList != null)
 			{
-				return mixInList;
+				return _mixInList;
 			}
-			return new IReference<object>[] { };
+			return [];
 		}
 	}
 
@@ -106,8 +106,8 @@ public class ProxyOptions
 	/// </summary>
 	public IReference<IInterceptorSelector> Selector
 	{
-		get { return selector; }
-		set { SetReferenceValue(ref selector, value); }
+		get { return _selector; }
+		set { SetReferenceValue(ref _selector, value); }
 	}
 
 	/// <summary>
@@ -121,12 +121,12 @@ public class ProxyOptions
 			return;
 		}
 
-		if (interfaceList == null)
+		if (_interfaceList == null)
 		{
-			interfaceList = new List<Type>();
+			_interfaceList = [];
 		}
 
-		interfaceList.AddRange(interfaces);
+		_interfaceList.AddRange(interfaces);
 	}
 
 	/// <summary>
@@ -140,16 +140,16 @@ public class ProxyOptions
 			return;
 		}
 
-		if (mixInList == null)
+		if (_mixInList == null)
 		{
-			mixInList = new List<IReference<object>>();
+			_mixInList = [];
 		}
 
 		foreach (var mixIn in mixIns)
 		{
 			var reference = new InstanceReference<object>(mixIn);
-			mixInList.Add(reference);
-			reference.Attach(component);
+			_mixInList.Add(reference);
+			reference.Attach(_component);
 		}
 	}
 
@@ -164,12 +164,12 @@ public class ProxyOptions
 			throw new ArgumentNullException(nameof(mixIn));
 		}
 
-		if (mixInList == null)
+		if (_mixInList == null)
 		{
-			mixInList = new List<IReference<object>>();
+			_mixInList = [];
 		}
-		mixInList.Add(mixIn);
-		mixIn.Attach(component);
+		_mixInList.Add(mixIn);
+		mixIn.Attach(_component);
 	}
 
 	/// <summary>
@@ -183,8 +183,8 @@ public class ProxyOptions
 		{
 			return true;
 		}
-		var proxyOptions = obj as ProxyOptions;
-		if (proxyOptions == null)
+
+		if (obj is not ProxyOptions proxyOptions)
 		{
 			return false;
 		}
@@ -214,27 +214,27 @@ public class ProxyOptions
 	public override int GetHashCode()
 	{
 		return 29*base.GetHashCode()
-		       + GetCollectionHashCode(interfaceList)
-		       + GetCollectionHashCode(mixInList);
+		       + GetCollectionHashCode(_interfaceList)
+		       + GetCollectionHashCode(_mixInList);
 	}
 
 	private bool AdditionalInterfacesAreEquals(ProxyOptions proxyOptions)
 	{
-		if (!Equals(interfaceList == null, proxyOptions.interfaceList == null))
+		if (!Equals(_interfaceList == null, proxyOptions._interfaceList == null))
 		{
 			return false;
 		}
-		if (interfaceList == null)
+		if (_interfaceList == null)
 		{
 			return true; //both are null, nothing more to check
 		}
-		if (interfaceList.Count != proxyOptions.interfaceList.Count)
+		if (_interfaceList.Count != proxyOptions._interfaceList.Count)
 		{
 			return false;
 		}
-		for (var i = 0; i < interfaceList.Count; ++i)
+		for (var i = 0; i < _interfaceList.Count; ++i)
 		{
-			if (!proxyOptions.interfaceList.Contains(interfaceList[i]))
+			if (!proxyOptions._interfaceList.Contains(_interfaceList[i]))
 			{
 				return false;
 			}
@@ -244,7 +244,7 @@ public class ProxyOptions
 
 	public bool RequiresProxy
 	{
-		get { return interfaceList != null || mixInList != null || hook != null; }
+		get { return _interfaceList != null || _mixInList != null || _hook != null; }
 	}
 
 	private int GetCollectionHashCode(IEnumerable items)
@@ -266,21 +266,21 @@ public class ProxyOptions
 
 	private bool MixInsAreEquals(ProxyOptions proxyOptions)
 	{
-		if (!Equals(mixInList == null, proxyOptions.mixInList == null))
+		if (!Equals(_mixInList == null, proxyOptions._mixInList == null))
 		{
 			return false;
 		}
-		if (mixInList == null)
+		if (_mixInList == null)
 		{
 			return true; //both are null, nothing more to check
 		}
-		if (mixInList.Count != proxyOptions.mixInList.Count)
+		if (_mixInList.Count != proxyOptions._mixInList.Count)
 		{
 			return false;
 		}
-		for (var i = 0; i < mixInList.Count; ++i)
+		for (var i = 0; i < _mixInList.Count; ++i)
 		{
-			if (!proxyOptions.mixInList.Contains(mixInList[i]))
+			if (!proxyOptions._mixInList.Contains(_mixInList[i]))
 			{
 				return false;
 			}
@@ -292,11 +292,11 @@ public class ProxyOptions
 	{
 		if (reference != null)
 		{
-			reference.Detach(component);
+			reference.Detach(_component);
 		}
 		if (value != null)
 		{
-			value.Attach(component);
+			value.Attach(_component);
 		}
 		reference = value;
 	}

@@ -46,12 +46,12 @@ public abstract class Node(String name)
 /// </summary>
 public class Attrib : Node
 {
-	private readonly String value;
+	private readonly String _value;
 
 	internal Attrib(String name, String value)
 		: base(name)
 	{
-		this.value = value;
+		this._value = value;
 	}
 
 	/// <summary>
@@ -60,7 +60,7 @@ public class Attrib : Node
 	/// <param name = "configuration">The configuration.</param>
 	public override void ApplyTo(IConfiguration configuration)
 	{
-		configuration.Attributes.Add(Name, value);
+		configuration.Attributes.Add(Name, _value);
 	}
 
 	/// <summary>
@@ -83,11 +83,11 @@ public class Attrib : Node
 /// </summary>
 public class NamedAttribute
 {
-	private readonly String name;
+	private readonly String _name;
 
 	internal NamedAttribute(String name)
 	{
-		this.name = name;
+		this._name = name;
 	}
 
 	/// <summary>
@@ -97,7 +97,7 @@ public class NamedAttribute
 	/// <returns>The new <see cref = "SimpleChild" /></returns>
 	public Attrib Eq(String value)
 	{
-		return new Attrib(name, value);
+		return new Attrib(_name, value);
 	}
 
 	/// <summary>
@@ -108,7 +108,7 @@ public class NamedAttribute
 	public Attrib Eq(object value)
 	{
 		var valueStr = (value != null) ? value.ToString() : String.Empty;
-		return new Attrib(name, valueStr);
+		return new Attrib(_name, valueStr);
 	}
 }
 
@@ -207,12 +207,12 @@ public class NamedChild : Node
 /// </summary>
 public class SimpleChild : Node
 {
-	private readonly String value;
+	private readonly String _value;
 
 	internal SimpleChild(String name, String value)
 		: base(name)
 	{
-		this.value = value;
+		this._value = value;
 	}
 
 	/// <summary>
@@ -221,7 +221,7 @@ public class SimpleChild : Node
 	/// <param name = "configuration">The configuration.</param>
 	public override void ApplyTo(IConfiguration configuration)
 	{
-		var node = new MutableConfiguration(Name, value);
+		var node = new MutableConfiguration(Name, _value);
 		configuration.Children.Add(node);
 	}
 }
@@ -235,12 +235,12 @@ public class SimpleChild : Node
 /// </summary>
 public class ComplexChild : Node
 {
-	private readonly IConfiguration configNode;
+	private readonly IConfiguration _configNode;
 
 	internal ComplexChild(String name, IConfiguration configNode)
 		: base(name)
 	{
-		this.configNode = configNode;
+		this._configNode = configNode;
 	}
 
 	/// <summary>
@@ -250,7 +250,7 @@ public class ComplexChild : Node
 	public override void ApplyTo(IConfiguration configuration)
 	{
 		var node = new MutableConfiguration(Name);
-		node.Children.Add(configNode);
+		node.Children.Add(_configNode);
 		configuration.Children.Add(node);
 	}
 }
@@ -264,12 +264,12 @@ public class ComplexChild : Node
 /// </summary>
 public class CompoundChild : Node
 {
-	private readonly Node[] childNodes;
+	private readonly Node[] _childNodes;
 
 	internal CompoundChild(String name, Node[] childNodes)
 		: base(name)
 	{
-		this.childNodes = childNodes;
+		this._childNodes = childNodes;
 	}
 
 	/// <summary>
@@ -279,7 +279,7 @@ public class CompoundChild : Node
 	public override void ApplyTo(IConfiguration configuration)
 	{
 		var node = new MutableConfiguration(Name);
-		foreach (var childNode in childNodes)
+		foreach (var childNode in _childNodes)
 		{
 			childNode.ApplyTo(node);
 		}

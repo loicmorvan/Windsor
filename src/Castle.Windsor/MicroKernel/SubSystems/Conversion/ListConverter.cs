@@ -36,7 +36,7 @@ public class ListConverter : AbstractTypeConverter
 
 	public override object PerformConversion(IConfiguration configuration, Type targetType)
 	{
-		Debug.Assert(CanHandleType(targetType), "CanHandleType(targetType)");
+		Debug.Assert(CanHandleType(targetType));
 
 		var list = new List<object>();
 		var convertTo = GetConvertToType(configuration);

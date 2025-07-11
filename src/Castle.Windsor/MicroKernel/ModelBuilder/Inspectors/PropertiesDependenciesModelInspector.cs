@@ -35,7 +35,7 @@ using Castle.MicroKernel.SubSystems.Conversion;
 public class PropertiesDependenciesModelInspector(IConversionManager converter) : IContributeComponentModelConstruction
 {
 	[NonSerialized]
-	private readonly IConversionManager converter = converter;
+	private readonly IConversionManager _converter = converter;
 
 	/// <summary>
 	///   Adds the properties as optional dependencies of this component.
@@ -74,7 +74,7 @@ public class PropertiesDependenciesModelInspector(IConversionManager converter) 
 		}
 		else
 		{
-			foreach (var filter in filters.Concat(new[] { StandardPropertyFilters.Create(PropertyFilter.Default) }))
+			foreach (var filter in filters.Concat([StandardPropertyFilters.Create(PropertyFilter.Default)]))
 			{
 				var dependencies = filter.Invoke(model, properties, BuildDependency);
 				if (dependencies != null)
@@ -110,7 +110,7 @@ public class PropertiesDependenciesModelInspector(IConversionManager converter) 
 
 		try
 		{
-			return converter.PerformConversion<PropertiesInspectionBehavior>(enumStringVal);
+			return _converter.PerformConversion<PropertiesInspectionBehavior>(enumStringVal);
 		}
 		catch (Exception)
 		{

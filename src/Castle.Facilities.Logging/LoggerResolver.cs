@@ -29,9 +29,9 @@ using Castle.MicroKernel.Context;
 /// </summary>
 public class LoggerResolver : ISubDependencyResolver
 {
-	private readonly IExtendedLoggerFactory extendedLoggerFactory;
-	private readonly ILoggerFactory loggerFactory;
-	private readonly string logName;
+	private readonly IExtendedLoggerFactory _extendedLoggerFactory;
+	private readonly ILoggerFactory _loggerFactory;
+	private readonly string _logName;
 
 	public LoggerResolver(ILoggerFactory loggerFactory)
 	{
@@ -40,7 +40,7 @@ public class LoggerResolver : ISubDependencyResolver
 			throw new ArgumentNullException(nameof(loggerFactory));
 		}
 
-		this.loggerFactory = loggerFactory;
+		this._loggerFactory = loggerFactory;
 	}
 
 	public LoggerResolver(IExtendedLoggerFactory extendedLoggerFactory)
@@ -50,17 +50,17 @@ public class LoggerResolver : ISubDependencyResolver
 			throw new ArgumentNullException(nameof(extendedLoggerFactory));
 		}
 
-		this.extendedLoggerFactory = extendedLoggerFactory;
+		this._extendedLoggerFactory = extendedLoggerFactory;
 	}
 
 	public LoggerResolver(ILoggerFactory loggerFactory, string name) : this(loggerFactory)
 	{
-		logName = name;
+		_logName = name;
 	}
 
 	public LoggerResolver(IExtendedLoggerFactory extendedLoggerFactory, string name) : this (extendedLoggerFactory)
 	{
-		logName = name;
+		_logName = name;
 	}
 
 	public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
@@ -71,16 +71,16 @@ public class LoggerResolver : ISubDependencyResolver
 	public object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
 	{
 		Debug.Assert(CanResolve(context, parentResolver, model, dependency));
-		if (extendedLoggerFactory != null)
+		if (_extendedLoggerFactory != null)
 		{
-			return string.IsNullOrEmpty(logName) 
-				? extendedLoggerFactory.Create(model.Implementation) 
-				: extendedLoggerFactory.Create(logName).CreateChildLogger(model.Implementation.FullName);
+			return string.IsNullOrEmpty(_logName) 
+				? _extendedLoggerFactory.Create(model.Implementation) 
+				: _extendedLoggerFactory.Create(_logName).CreateChildLogger(model.Implementation.FullName);
 		}
 
-		Debug.Assert(loggerFactory != null);
-		return string.IsNullOrEmpty(logName) 
-			? loggerFactory.Create(model.Implementation)
-			: loggerFactory.Create(logName).CreateChildLogger(model.Implementation.FullName);
+		Debug.Assert(_loggerFactory != null);
+		return string.IsNullOrEmpty(_logName) 
+			? _loggerFactory.Create(model.Implementation)
+			: _loggerFactory.Create(_logName).CreateChildLogger(model.Implementation.FullName);
 	}
 }

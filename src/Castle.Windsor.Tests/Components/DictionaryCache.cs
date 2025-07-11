@@ -18,15 +18,15 @@ using System.Collections.Generic;
 
 public class DictionaryCache<T> : ICache<T>
 {
-	private readonly Dictionary<string, object> hash = new Dictionary<string, object>();
+	private readonly Dictionary<string, object> _hash = new();
 
 	public T Get(string key)
 	{
-		return (T)hash[key];
+		return (T)_hash[key];
 	}
 
 	public void Put(string key, T item)
 	{
-		hash[key] = item;
+		_hash[key] = item;
 	}
 }

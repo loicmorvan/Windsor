@@ -27,15 +27,15 @@ public abstract class WindsorRegistrationOptionsViewComponentTestCase: IDisposab
 {
 	public void Dispose()
 	{
-		testContext.Dispose();
+		TestContext.Dispose();
 	}
 
-	protected TestContext testContext;
+	protected TestContext TestContext;
 
 	[InlineData(typeof(OverrideViewComponent))]
 	public void Should_resolve_overidden_ViewComponents_using_WindsorRegistrationOptions(Type optionsResolvableType)
 	{
-		testContext.WindsorContainer.Resolve(optionsResolvableType); 
+		TestContext.WindsorContainer.Resolve(optionsResolvableType); 
 	}
 
 	public class OverrideViewComponent : ViewComponent
@@ -48,7 +48,7 @@ public class WindsorRegistrationOptionsForAssembliesViewComponentTestCase : Wind
 {
 	public WindsorRegistrationOptionsForAssembliesViewComponentTestCase()
 	{
-		testContext = TestContextFactory.Get(opts => opts
+		TestContext = TestContextFactory.Get(opts => opts
 			.UseEntryAssembly(typeof(Uri).Assembly)
 			.RegisterViewComponents(typeof(OverrideViewComponent).Assembly));
 	}
@@ -59,7 +59,7 @@ public class WindsorRegistrationOptionsForComponentsViewComponentTestCase : Wind
 {
 	public WindsorRegistrationOptionsForComponentsViewComponentTestCase()
 	{
-		testContext = TestContextFactory.Get(opts => opts
+		TestContext = TestContextFactory.Get(opts => opts
 			.UseEntryAssembly(typeof(Uri).Assembly)
 			.RegisterViewComponents(Component.For<OverrideViewComponent>().LifestyleScoped().Named("view-components")));
 	}

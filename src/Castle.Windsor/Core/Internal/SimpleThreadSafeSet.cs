@@ -18,42 +18,42 @@ using System.Collections.Generic;
 	
 public class SimpleThreadSafeSet<T>
 {
-	private readonly HashSet<T> implementation = new HashSet<T>();
-	private readonly MicroKernel.Internal.Lock @lock = MicroKernel.Internal.Lock.Create();
+	private readonly HashSet<T> _implementation = [];
+	private readonly MicroKernel.Internal.Lock _lock = MicroKernel.Internal.Lock.Create();
 
 	public int Count
 	{
 		get
 		{
-			using (@lock.ForReading())
+			using (_lock.ForReading())
 			{
-				return implementation.Count;
+				return _implementation.Count;
 			}
 		}
 	}
 
 	public bool Add(T item)
 	{
-		using (@lock.ForWriting())
+		using (_lock.ForWriting())
 		{
-			return implementation.Add(item);
+			return _implementation.Add(item);
 		}
 	}
 
 	public bool Remove(T item)
 	{
-		using (@lock.ForWriting())
+		using (_lock.ForWriting())
 		{
-			return implementation.Remove(item);
+			return _implementation.Remove(item);
 		}
 	}
 
 	public T[] ToArray()
 	{
 		List<T> hashSetCopy;
-		using (@lock.ForReading())
+		using (_lock.ForReading())
 		{
-			hashSetCopy = new List<T>(implementation);
+			hashSetCopy = new List<T>(_implementation);
 		}
 		return hashSetCopy.ToArray();
 	}

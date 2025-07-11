@@ -19,49 +19,49 @@ using System.Xml;
 
 public class DefaultXmlProcessorNodeList : IXmlProcessorNodeList
 {
-	private readonly IList<XmlNode> nodes;
-	private int index = -1;
+	private readonly IList<XmlNode> _nodes;
+	private int _index = -1;
 
 	public DefaultXmlProcessorNodeList(XmlNode node)
 	{
-		nodes = new List<XmlNode>();
-		nodes.Add(node);
+		_nodes = new List<XmlNode>();
+		_nodes.Add(node);
 	}
 
 	public DefaultXmlProcessorNodeList(IList<XmlNode> nodes)
 	{
-		this.nodes = nodes;
+		this._nodes = nodes;
 	}
 
 	public DefaultXmlProcessorNodeList(XmlNodeList nodes)
 	{
-		this.nodes = CloneNodeList(nodes);
+		this._nodes = CloneNodeList(nodes);
 	}
 
 	public int Count
 	{
-		get { return nodes.Count; }
+		get { return _nodes.Count; }
 	}
 
 	public XmlNode Current
 	{
-		get { return nodes[index]; }
+		get { return _nodes[_index]; }
 	}
 
 	public int CurrentPosition
 	{
-		get { return index; }
-		set { index = value; }
+		get { return _index; }
+		set { _index = value; }
 	}
 
 	public bool HasCurrent
 	{
-		get { return index < nodes.Count; }
+		get { return _index < _nodes.Count; }
 	}
 
 	public bool MoveNext()
 	{
-		return ++index < nodes.Count;
+		return ++_index < _nodes.Count;
 	}
 
 	/// <summary>

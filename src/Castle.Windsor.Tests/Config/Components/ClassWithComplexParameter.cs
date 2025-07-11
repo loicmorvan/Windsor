@@ -18,17 +18,17 @@ using Castle.MicroKernel.SubSystems.Conversion;
 
 public class ClassWithComplexParameter
 {
-	private ComplexParameterType param1;
+	private ComplexParameterType _param1;
 
 	[Convertible]
 	public class ComplexParameterType(string mandatoryValue)
 	{
-		private string optionalValue;
+		private string _optionalValue;
 
 		public ComplexParameterType() : this("default1")
 		{
 			// sets default values
-			optionalValue = "default2";
+			_optionalValue = "default2";
 		}
 
 		public string MandatoryValue
@@ -38,14 +38,14 @@ public class ClassWithComplexParameter
 
 		public string OptionalValue
 		{
-			get { return optionalValue; }
-			set { optionalValue = value; }
+			get { return _optionalValue; }
+			set { _optionalValue = value; }
 		}
 	}
 
 	public ComplexParameterType ComplexParam
 	{
-		get { return param1; }
-		set { param1 = value; }
+		get { return _param1; }
+		set { _param1 = value; }
 	}
 }

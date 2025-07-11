@@ -21,18 +21,18 @@ using System;
 /// </summary>
 public class DefaultCustomer
 {
-	private String name;
-	private String address;
+	private String _name;
+	private String _address;
 
 	public String Name
 	{
-		get { return name; }
-		set { name = value; }
+		get { return _name; }
+		set { _name = value; }
 	}
 
 	public String Address
 	{
-		get { return address; }
-		set { address = value; }
+		get { return _address; }
+		set { _address = value; }
 	}
 }

@@ -23,7 +23,7 @@ using Castle.MicroKernel.Context;
 public class DelegateFactoryActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
 	: AbstractComponentActivator(model, kernel, onCreation, onDestruction), IDependencyAwareActivator
 {
-	private readonly IProxyFactoryExtension proxyFactory = new DelegateProxyFactory();
+	private readonly IProxyFactoryExtension _proxyFactory = new DelegateProxyFactory();
 
 	public bool CanProvideRequiredDependencies(ComponentModel component)
 	{
@@ -37,7 +37,7 @@ public class DelegateFactoryActivator(ComponentModel model, IKernelInternal kern
 
 	protected override object InternalCreate(CreationContext context)
 	{
-		var instance = Kernel.ProxyFactory.Create(proxyFactory, Kernel, Model, context);
+		var instance = Kernel.ProxyFactory.Create(_proxyFactory, Kernel, Model, context);
 		ApplyCommissionConcerns(instance);
 		return instance;
 	}

@@ -22,51 +22,51 @@ using Castle.Windsor.Tests.Components;
 
 public class CustomActivatorTestCase:IDisposable
 {
-	private readonly IKernel kernel = new DefaultKernel();
+	private readonly IKernel _kernel = new DefaultKernel();
 
 	[Fact]
 	public void Can_resolve_component_with_primitive_dependency_via_factory()
 	{
-		kernel.Register(
+		_kernel.Register(
 			Component.For<ClassWithPrimitiveDependency>()
 				.UsingFactoryMethod(() => new ClassWithPrimitiveDependency(2)));
 
-		kernel.Resolve<ClassWithPrimitiveDependency>();
+		_kernel.Resolve<ClassWithPrimitiveDependency>();
 	}
 
 	[Fact]
 	public void Can_resolve_component_with_primitive_dependency_via_instance()
 	{
-		kernel.Register(
+		_kernel.Register(
 			Component.For<ClassWithPrimitiveDependency>()
 				.Instance(new ClassWithPrimitiveDependency(2)));
 
-		kernel.Resolve<ClassWithPrimitiveDependency>();
+		_kernel.Resolve<ClassWithPrimitiveDependency>();
 	}
 
 	[Fact]
 	public void Can_resolve_component_with_service_dependency_via_factory()
 	{
-		kernel.Register(
+		_kernel.Register(
 			Component.For<ClassWithServiceDependency>()
 				.UsingFactoryMethod(() => new ClassWithServiceDependency(null)));
 
-		kernel.Resolve<ClassWithServiceDependency>();
+		_kernel.Resolve<ClassWithServiceDependency>();
 	}
 
 	[Fact]
 	public void Can_resolve_component_with_service_dependency_via_instance()
 	{
-		kernel.Register(
+		_kernel.Register(
 			Component.For<ClassWithServiceDependency>()
 				.Instance(new ClassWithServiceDependency(null)));
 
-		kernel.Resolve<ClassWithServiceDependency>();
+		_kernel.Resolve<ClassWithServiceDependency>();
 	}
 
 	public void Dispose()
 	{
-		kernel.Dispose();
+		_kernel.Dispose();
 	}
 }
 
@@ -80,10 +80,10 @@ public class ClassWithPrimitiveDependencyFactory
 
 public class ClassWithPrimitiveDependency(int dependency)
 {
-	private int dependency = dependency;
+	private int _dependency = dependency;
 }
 
 public class ClassWithServiceDependency(IService dependency)
 {
-	private IService dependency = dependency;
+	private IService _dependency = dependency;
 }

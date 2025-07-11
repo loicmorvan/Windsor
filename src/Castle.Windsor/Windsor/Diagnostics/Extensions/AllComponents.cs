@@ -12,41 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Extensions;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.Core.Internal;
 using Castle.MicroKernel;
 using Castle.Windsor.Diagnostics.DebuggerViews;
 
+namespace Castle.Windsor.Diagnostics.Extensions;
+
 public class AllComponents : AbstractContainerDebuggerExtension
 {
-	private const string name = "All components";
+	private const string Name = "All components";
 
-	private IAllComponentsDiagnostic diagnostic;
+	private AllComponentsDiagnostic _diagnostic;
 
 	public override IEnumerable<DebuggerViewItem> Attach()
 	{
-		var handlers = diagnostic.Inspect();
+		var handlers = _diagnostic.Inspect();
 
 		var items = handlers.ConvertAll(DefaultComponentView);
-		Array.Sort(items, (c1, c2) => c1.Name.CompareTo(c2.Name));
-		return new[]
-		{
-			new DebuggerViewItem(name, "Count = " + items.Length, items)
-		};
+		Array.Sort(items, (c1, c2) => string.Compare(c1.Name, c2.Name, StringComparison.Ordinal));
+		return
+		[
+			new DebuggerViewItem(Name, "Count = " + items.Length, items)
+		];
 	}
 
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
 	{
-		diagnostic = new AllComponentsDiagnostic(kernel);
-		diagnosticsHost.AddDiagnostic(diagnostic);
-	}
-
-	public static string Name
-	{
-		get { return name; }
+		_diagnostic = new AllComponentsDiagnostic(kernel);
+		diagnosticsHost.AddDiagnostic(_diagnostic);
 	}
 }

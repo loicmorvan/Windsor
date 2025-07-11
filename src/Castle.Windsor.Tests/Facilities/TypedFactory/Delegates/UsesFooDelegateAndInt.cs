@@ -18,12 +18,12 @@ using System;
 
 public class UsesFooDelegateAndInt(Func<int, Foo> myFooFactory, int additionalArgument)
 {
-	private int counter = 0;
+	private int _counter;
 
 	public int AdditionalArgument { get; set; } = additionalArgument;
 
 	public Foo GetFoo()
 	{
-		return myFooFactory(++counter);
+		return myFooFactory(++_counter);
 	}
 }

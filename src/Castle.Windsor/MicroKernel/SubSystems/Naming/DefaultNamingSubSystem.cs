@@ -27,31 +27,29 @@ using Lock = Castle.MicroKernel.Internal.Lock;
 [Serializable]
 public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 {
-	protected readonly Lock @lock = Lock.Create();
+	protected readonly Lock Lock = Lock.Create();
 
 	/// <summary>
 	///   Map(String, IHandler) to map component names to <see cref="IHandler" /> Items in this dictionary are sorted in insertion order.
 	/// </summary>
-	protected readonly Dictionary<string, IHandler> name2Handler =
-		new Dictionary<string, IHandler>(StringComparer.OrdinalIgnoreCase);
+	protected readonly Dictionary<string, IHandler> Name2Handler = new(StringComparer.OrdinalIgnoreCase);
 
 	/// <summary>
 	///   Map(Type, IHandler) to map a service to <see cref="IHandler" /> . If there is more than a single service of the type, only the first registered services is stored in this dictionary. It serve as a fast lookup for the common case of having a single handler for a type.
 	/// </summary>
-	protected readonly Dictionary<Type, HandlerWithPriority> service2Handler =
-		new Dictionary<Type, HandlerWithPriority>(SimpleTypeEqualityComparer.Instance);
+	protected readonly Dictionary<Type, HandlerWithPriority> Service2Handler = new(SimpleTypeEqualityComparer.Instance);
 
-	protected IList<IHandlersFilter> filters;
-	protected IList<IHandlerSelector> selectors;
+	protected IList<IHandlersFilter> Filters;
+	protected IList<IHandlerSelector> Selectors;
 
-	private readonly IDictionary<Type, IHandler[]> assignableHandlerListsByTypeCache =
+	private readonly IDictionary<Type, IHandler[]> _assignableHandlerListsByTypeCache =
 		new Dictionary<Type, IHandler[]>(SimpleTypeEqualityComparer.Instance);
 
-	protected readonly IDictionary<Type, IHandler[]> handlerListsByTypeCache =
+	protected readonly IDictionary<Type, IHandler[]> HandlerListsByTypeCache =
 		new Dictionary<Type, IHandler[]>(SimpleTypeEqualityComparer.Instance);
 
-	private Dictionary<string, IHandler> handlerByNameCache;
-	private Dictionary<Type, IHandler> handlerByServiceCache;
+	private Dictionary<string, IHandler> _handlerByNameCache;
+	private Dictionary<Type, IHandler> _handlerByServiceCache;
 
 	public virtual int ComponentCount
 	{
@@ -62,15 +60,15 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 	{
 		get
 		{
-			var cache = handlerByNameCache;
+			var cache = _handlerByNameCache;
 			if (cache != null)
 			{
 				return cache;
 			}
-			using (@lock.ForWriting())
+			using (Lock.ForWriting())
 			{
-				cache = new Dictionary<string, IHandler>(name2Handler, name2Handler.Comparer);
-				handlerByNameCache = cache;
+				cache = new Dictionary<string, IHandler>(Name2Handler, Name2Handler.Comparer);
+				_handlerByNameCache = cache;
 				return cache;
 			}
 		}
@@ -80,19 +78,19 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 	{
 		get
 		{
-			var cache = handlerByServiceCache;
+			var cache = _handlerByServiceCache;
 			if (cache != null)
 			{
 				return cache;
 			}
-			using (@lock.ForWriting())
+			using (Lock.ForWriting())
 			{
-				cache = new Dictionary<Type, IHandler>(service2Handler.Count, service2Handler.Comparer);
-				foreach (var item in service2Handler)
+				cache = new Dictionary<Type, IHandler>(Service2Handler.Count, Service2Handler.Comparer);
+				foreach (var item in Service2Handler)
 				{
 					cache.Add(item.Key, item.Value.Handler);
 				}
-				handlerByServiceCache = cache;
+				_handlerByServiceCache = cache;
 				return cache;
 			}
 		}
@@ -100,20 +98,20 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 
 	public void AddHandlerSelector(IHandlerSelector selector)
 	{
-		if (selectors == null)
+		if (Selectors == null)
 		{
-			selectors = new List<IHandlerSelector>();
+			Selectors = new List<IHandlerSelector>();
 		}
-		selectors.Add(selector);
+		Selectors.Add(selector);
 	}
 
 	public void AddHandlersFilter(IHandlersFilter filter)
 	{
-		if (filters == null)
+		if (Filters == null)
 		{
-			filters = new List<IHandlersFilter>();
+			Filters = new List<IHandlersFilter>();
 		}
-		filters.Add(filter);
+		Filters.Add(filter);
 	}
 
 	public virtual bool Contains(String name)
@@ -154,7 +152,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 			throw new ArgumentNullException(nameof(name));
 		}
 
-		if (selectors != null)
+		if (Selectors != null)
 		{
 			var selectorsOpinion = GetSelectorsOpinion(name, null);
 			if (selectorsOpinion != null)
@@ -174,7 +172,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 		{
 			throw new ArgumentNullException(nameof(service));
 		}
-		if (selectors != null)
+		if (Selectors != null)
 		{
 			var selectorsOpinion = GetSelectorsOpinion(null, service);
 			if (selectorsOpinion != null)
@@ -215,7 +213,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 		{
 			throw new ArgumentNullException(nameof(service));
 		}
-		if (filters != null)
+		if (Filters != null)
 		{
 			var filtersOpinion = GetFiltersOpinion(service);
 			if (filtersOpinion != null)
@@ -225,15 +223,15 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 		}
 
 		IHandler[] result;
-		using var locker = @lock.ForReadingUpgradeable();
-		if (handlerListsByTypeCache.TryGetValue(service, out result))
+		using var locker = Lock.ForReadingUpgradeable();
+		if (HandlerListsByTypeCache.TryGetValue(service, out result))
 		{
 			return result;
 		}
 		result = GetHandlersNoLock(service);
 
 		locker.Upgrade();
-		handlerListsByTypeCache[service] = result;
+		HandlerListsByTypeCache[service] = result;
 
 		return result;
 	}
@@ -242,11 +240,11 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 	public virtual void Register(IHandler handler)
 	{
 		var name = handler.ComponentModel.Name;
-		using (@lock.ForWriting())
+		using (Lock.ForWriting())
 		{
 			try
 			{
-				name2Handler.Add(name, handler);
+				Name2Handler.Add(name, handler);
 			}
 			catch (ArgumentException)
 			{
@@ -260,9 +258,9 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 			{
 				var handlerForService = serviceSelector(service);
 				HandlerWithPriority previous;
-				if (service2Handler.TryGetValue(service, out previous) == false || handlerForService.Triumphs(previous))
+				if (Service2Handler.TryGetValue(service, out previous) == false || handlerForService.Triumphs(previous))
 				{
-					service2Handler[service] = handlerForService;
+					Service2Handler[service] = handlerForService;
 				}
 			}
 			InvalidateCache();
@@ -272,32 +270,32 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 	protected IHandler[] GetAssignableHandlersNoFiltering(Type service)
 	{
 		IHandler[] result;
-		using var locker = @lock.ForReadingUpgradeable();
-		if (assignableHandlerListsByTypeCache.TryGetValue(service, out result))
+		using var locker = Lock.ForReadingUpgradeable();
+		if (_assignableHandlerListsByTypeCache.TryGetValue(service, out result))
 		{
 			return result;
 		}
 
 		locker.Upgrade();
-		if (assignableHandlerListsByTypeCache.TryGetValue(service, out result))
+		if (_assignableHandlerListsByTypeCache.TryGetValue(service, out result))
 		{
 			return result;
 		}
-		result = name2Handler.Values.Where(h => h.SupportsAssignable(service)).ToArray();
-		assignableHandlerListsByTypeCache[service] = result;
+		result = Name2Handler.Values.Where(h => h.SupportsAssignable(service)).ToArray();
+		_assignableHandlerListsByTypeCache[service] = result;
 
 		return result;
 	}
 
 	protected virtual IHandler[] GetFiltersOpinion(Type service)
 	{
-		if (filters == null)
+		if (Filters == null)
 		{
 			return null;
 		}
 
 		IHandler[] handlers = null;
-		foreach (var filter in filters)
+		foreach (var filter in Filters)
 		{
 			if (filter.HasOpinionAbout(service) == false)
 			{
@@ -318,13 +316,13 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 
 	protected virtual IHandler GetSelectorsOpinion(string name, Type type)
 	{
-		if (selectors == null)
+		if (Selectors == null)
 		{
 			return null;
 		}
-		type = type ?? typeof(object); // if type is null, we want everything, so object does well for that
+		type ??= typeof(object); // if type is null, we want everything, so object does well for that
 		IHandler[] handlers = null; //only init if we have a selector with an opinion about this type
-		foreach (var selector in selectors)
+		foreach (var selector in Selectors)
 		{
 			if (selector.HasOpinionAbout(name, type) == false)
 			{
@@ -345,10 +343,10 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 
 	protected void InvalidateCache()
 	{
-		handlerListsByTypeCache.Clear();
-		assignableHandlerListsByTypeCache.Clear();
-		handlerByNameCache = null;
-		handlerByServiceCache = null;
+		HandlerListsByTypeCache.Clear();
+		_assignableHandlerListsByTypeCache.Clear();
+		_handlerByNameCache = null;
+		_handlerByServiceCache = null;
 	}
 
 	private IHandler[] GetHandlersNoLock(Type service)
@@ -358,7 +356,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 		const int regulars = 1;
 		const int fallbacks = 2;
 		var handlers = new SegmentedList<IHandler>(3);
-		foreach (var handler in name2Handler.Values)
+		foreach (var handler in Name2Handler.Values)
 		{
 			if (handler.Supports(service) == false)
 			{
@@ -387,7 +385,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 		{
 			if (fallbackFilter == null)
 			{
-				return service => new HandlerWithPriority(0, handler);
+				return _ => new HandlerWithPriority(0, handler);
 			}
 			return service => new HandlerWithPriority(fallbackFilter(service) ? -1 : 0, handler);
 		}
@@ -420,7 +418,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 
 	protected struct HandlerWithPriority(int priority, IHandler handler)
 	{
-		private readonly int priority = priority;
+		private readonly int _priority = priority;
 
 		public IHandler Handler
 		{
@@ -429,11 +427,11 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 
 		public bool Triumphs(HandlerWithPriority other)
 		{
-			if (priority > other.priority)
+			if (_priority > other._priority)
 			{
 				return true;
 			}
-			if (priority == other.priority && priority > 0)
+			if (_priority == other._priority && _priority > 0)
 			{
 				return true;
 			}

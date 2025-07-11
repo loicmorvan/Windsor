@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Bugs;
 
 using Castle.MicroKernel.Registration;
 
-public class IoC_141 : AbstractContainerTestCase
+public class IoC141 : AbstractContainerTestCase
 {
 	public interface IService
 	{

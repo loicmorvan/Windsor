@@ -20,9 +20,9 @@ using Castle.Windsor.Tests.Components;
 
 public class ServiceUser
 {
-	private readonly A a;
-	private readonly B b;
-	private readonly C c;
+	private readonly A _a;
+	private readonly B _b;
+	private readonly C _c;
 
 	public ServiceUser(A a)
 	{
@@ -30,7 +30,7 @@ public class ServiceUser
 		{
 			throw new ArgumentNullException();
 		}
-		this.a = a;
+		this._a = a;
 	}
 
 	public ServiceUser(A a, B b) : this(a)
@@ -39,7 +39,7 @@ public class ServiceUser
 		{
 			throw new ArgumentNullException();
 		}
-		this.b = b;
+		this._b = b;
 	}
 
 	public ServiceUser(A a, B b, C c) : this(a, b)
@@ -48,21 +48,21 @@ public class ServiceUser
 		{
 			throw new ArgumentNullException();
 		}
-		this.c = c;
+		this._c = c;
 	}
 
 	public A AComponent
 	{
-		get { return a; }
+		get { return _a; }
 	}
 
 	public B BComponent
 	{
-		get { return b; }
+		get { return _b; }
 	}
 
 	public C CComponent
 	{
-		get { return c; }
+		get { return _c; }
 	}
 }

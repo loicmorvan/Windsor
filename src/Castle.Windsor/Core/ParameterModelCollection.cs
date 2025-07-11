@@ -25,11 +25,11 @@ using Castle.Core.Configuration;
 ///   Collection of <see cref = "ParameterModel" />
 /// </summary>
 [Serializable]
-[DebuggerDisplay("Count = {dictionary.Count}")]
+[DebuggerDisplay("Count = {_dictionary.Count}")]
 public class ParameterModelCollection : IEnumerable<ParameterModel>
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-	private readonly IDictionary<string, ParameterModel> dictionary =
+	private readonly IDictionary<string, ParameterModel> _dictionary =
 		new Dictionary<string, ParameterModel>(StringComparer.OrdinalIgnoreCase);
 
 	/// <summary>
@@ -39,7 +39,7 @@ public class ParameterModelCollection : IEnumerable<ParameterModel>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public int Count
 	{
-		get { return dictionary.Count; }
+		get { return _dictionary.Count; }
 	}
 
 	/// <summary>
@@ -51,7 +51,7 @@ public class ParameterModelCollection : IEnumerable<ParameterModel>
 		get
 		{
 			ParameterModel result;
-			dictionary.TryGetValue(key, out result);
+			_dictionary.TryGetValue(key, out result);
 			return result;
 		}
 	}
@@ -88,7 +88,7 @@ public class ParameterModelCollection : IEnumerable<ParameterModel>
 	{
 		try
 		{
-			dictionary.Add(key, value);
+			_dictionary.Add(key, value);
 		}
 		catch (ArgumentException e)
 		{
@@ -106,12 +106,12 @@ public class ParameterModelCollection : IEnumerable<ParameterModel>
 	[DebuggerStepThrough]
 	IEnumerator IEnumerable.GetEnumerator()
 	{
-		return dictionary.Values.GetEnumerator();
+		return _dictionary.Values.GetEnumerator();
 	}
 
 	[DebuggerStepThrough]
 	IEnumerator<ParameterModel> IEnumerable<ParameterModel>.GetEnumerator()
 	{
-		return dictionary.Values.GetEnumerator();
+		return _dictionary.Values.GetEnumerator();
 	}
 }

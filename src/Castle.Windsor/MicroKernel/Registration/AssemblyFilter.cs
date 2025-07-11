@@ -27,10 +27,10 @@ public class AssemblyFilter : IAssemblyProvider
 {
 	private static readonly Assembly CastleWindsorDll = typeof(AssemblyFilter).GetTypeInfo().Assembly;
 
-	private readonly string directoryName;
-	private readonly string mask;
-	private Predicate<Assembly> assemblyFilter;
-	private Predicate<AssemblyName> nameFilter;
+	private readonly string _directoryName;
+	private readonly string _mask;
+	private Predicate<Assembly> _assemblyFilter;
+	private Predicate<AssemblyName> _nameFilter;
 
 	public AssemblyFilter(string directoryName, string mask = null)
 	{
@@ -39,9 +39,9 @@ public class AssemblyFilter : IAssemblyProvider
 			throw new ArgumentNullException(nameof(directoryName));
 		}
 
-		this.directoryName = GetFullPath(directoryName);
-		this.mask = mask;
-		assemblyFilter += a => a != CastleWindsorDll;
+		this._directoryName = GetFullPath(directoryName);
+		this._mask = mask;
+		_assemblyFilter += a => a != CastleWindsorDll;
 	}
 
 	public AssemblyFilter FilterByAssembly(Predicate<Assembly> filter)
@@ -51,7 +51,7 @@ public class AssemblyFilter : IAssemblyProvider
 			throw new ArgumentNullException(nameof(filter));
 		}
 
-		assemblyFilter += filter;
+		_assemblyFilter += filter;
 		return this;
 	}
 
@@ -62,7 +62,7 @@ public class AssemblyFilter : IAssemblyProvider
 			throw new ArgumentNullException(nameof(filter));
 		}
 
-		nameFilter += filter;
+		_nameFilter += filter;
 		return this;
 	}
 
@@ -129,15 +129,15 @@ public class AssemblyFilter : IAssemblyProvider
 	{
 		try
 		{
-			if (Directory.Exists(directoryName) == false)
+			if (Directory.Exists(_directoryName) == false)
 			{
-				return Enumerable.Empty<string>();
+				return [];
 			}
-			if (string.IsNullOrEmpty(mask))
+			if (string.IsNullOrEmpty(_mask))
 			{
-				return Directory.EnumerateFiles(directoryName);
+				return Directory.EnumerateFiles(_directoryName);
 			}
-			return Directory.EnumerateFiles(directoryName, mask);
+			return Directory.EnumerateFiles(_directoryName, _mask);
 		}
 		catch (IOException e)
 		{
@@ -150,7 +150,7 @@ public class AssemblyFilter : IAssemblyProvider
 		// based on MEF DirectoryCatalog
 		try
 		{
-			return ReflectionUtil.GetAssemblyNamed(file, nameFilter, assemblyFilter);
+			return ReflectionUtil.GetAssemblyNamed(file, _nameFilter, _assemblyFilter);
 		}
 		catch (FileNotFoundException)
 		{

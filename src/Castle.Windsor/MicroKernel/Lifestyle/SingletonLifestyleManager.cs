@@ -26,36 +26,36 @@ using Castle.MicroKernel.Context;
 [Serializable]
 public class SingletonLifestyleManager : AbstractLifestyleManager, IContextLifestyleManager
 {
-	private readonly ThreadSafeInit init = new ThreadSafeInit();
-	private Burden cachedBurden;
+	private readonly ThreadSafeInit _init = new();
+	private Burden _cachedBurden;
 
 	public override void Dispose()
 	{
-		var localInstance = cachedBurden;
+		var localInstance = _cachedBurden;
 		if (localInstance != null)
 		{
 			localInstance.Release();
-			cachedBurden = null;
+			_cachedBurden = null;
 		}
 	}
 
 	public override object Resolve(CreationContext context, IReleasePolicy releasePolicy)
 	{
 		// 1. read from cache
-		if (cachedBurden != null)
+		if (_cachedBurden != null)
 		{
-			return cachedBurden.Instance;
+			return _cachedBurden.Instance;
 		}
 		var initializing = false;
 		try
 		{
-			initializing = init.ExecuteThreadSafeOnce();
-			if (cachedBurden != null)
+			initializing = _init.ExecuteThreadSafeOnce();
+			if (_cachedBurden != null)
 			{
-				return cachedBurden.Instance;
+				return _cachedBurden.Instance;
 			}
 			var burden = CreateInstance(context, true);
-			cachedBurden = burden;
+			_cachedBurden = burden;
 			Track(burden, releasePolicy);
 			return burden.Instance;
 		}
@@ -63,7 +63,7 @@ public class SingletonLifestyleManager : AbstractLifestyleManager, IContextLifes
 		{
 			if (initializing)
 			{
-				init.EndThreadSafeOnceSection();
+				_init.EndThreadSafeOnceSection();
 			}
 		}
 	}

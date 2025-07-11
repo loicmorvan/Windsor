@@ -18,7 +18,7 @@ using System.Collections.Generic;
 
 using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
-public interface DummyComponentListFactory
+public interface IDummyComponentListFactory
 {
 	IList<IDummyComponent> All();
 }

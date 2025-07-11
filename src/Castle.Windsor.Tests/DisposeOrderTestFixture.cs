@@ -84,7 +84,7 @@ public class DisposeOrderTestFixture
 
 	private class MyService : IMyService
 	{
-		private bool inUse;
+		private bool _inUse;
 
 		public bool IsInUse
 		{
@@ -94,7 +94,7 @@ public class DisposeOrderTestFixture
 				{
 					throw new Exception("Service must be initialized !!!");
 				}
-				return inUse;
+				return _inUse;
 			}
 			set
 			{
@@ -102,7 +102,7 @@ public class DisposeOrderTestFixture
 				{
 					throw new Exception("Service must be initialized !!!");
 				}
-				inUse = value;
+				_inUse = value;
 			}
 		}
 

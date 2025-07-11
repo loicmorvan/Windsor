@@ -25,9 +25,9 @@ using Castle.Core.Configuration;
 [Serializable]
 public class ParameterModel
 {
-	private readonly IConfiguration configValue;
-	private readonly String name;
-	private readonly String value;
+	private readonly IConfiguration _configValue;
+	private readonly String _name;
+	private readonly String _value;
 
 	/// <summary>
 	///   Initializes a new instance of the <see cref = "ParameterModel" /> class.
@@ -36,8 +36,8 @@ public class ParameterModel
 	/// <param name = "value">The value.</param>
 	public ParameterModel(String name, String value)
 	{
-		this.name = name;
-		this.value = value;
+		this._name = name;
+		this._value = value;
 	}
 
 	/// <summary>
@@ -47,8 +47,8 @@ public class ParameterModel
 	/// <param name = "value">The value.</param>
 	public ParameterModel(String name, IConfiguration value)
 	{
-		this.name = name;
-		configValue = value;
+		this._name = name;
+		_configValue = value;
 	}
 
 	/// <summary>
@@ -57,7 +57,7 @@ public class ParameterModel
 	/// <value>The config value.</value>
 	public IConfiguration ConfigValue
 	{
-		get { return configValue; }
+		get { return _configValue; }
 	}
 
 	/// <summary>
@@ -66,7 +66,7 @@ public class ParameterModel
 	/// <value>The name.</value>
 	public String Name
 	{
-		get { return name; }
+		get { return _name; }
 	}
 
 	/// <summary>
@@ -75,6 +75,6 @@ public class ParameterModel
 	/// <value>The value.</value>
 	public String Value
 	{
-		get { return value; }
+		get { return _value; }
 	}
 }

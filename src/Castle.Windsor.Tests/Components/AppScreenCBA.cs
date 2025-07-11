@@ -14,7 +14,7 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class AppScreenCBA : IAppScreen
+public class AppScreenCba : IAppScreen
 {
-	public CBA Dependency { get; set; }
+	public Cba Dependency { get; set; }
 }

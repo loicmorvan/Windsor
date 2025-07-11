@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Components;
 
 public class Robot(IArm left, IArm right)
 {
-	public IArm Left = left;
+	public readonly IArm Left = left;
 
-	public IArm Right = right;
+	public readonly IArm Right = right;
 }

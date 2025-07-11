@@ -23,8 +23,8 @@ using Castle.Core.Configuration;
 /// </summary>
 public abstract class AbstractFacility : IFacility, IDisposable
 {
-	private IConfiguration facilityConfig;
-	private IKernel kernel;
+	private IConfiguration _facilityConfig;
+	private IKernel _kernel;
 
 	/// <summary>
 	///   Gets the facility configuration.
@@ -33,7 +33,7 @@ public abstract class AbstractFacility : IFacility, IDisposable
 	///   the facility configuration.</value>
 	protected IConfiguration FacilityConfig
 	{
-		get { return facilityConfig; }
+		get { return _facilityConfig; }
 	}
 
 	/// <summary>
@@ -42,7 +42,7 @@ public abstract class AbstractFacility : IFacility, IDisposable
 	/// <value>The <see cref = "IKernel" />.</value>
 	protected IKernel Kernel
 	{
-		get { return kernel; }
+		get { return _kernel; }
 	}
 
 	/// <summary>
@@ -79,8 +79,8 @@ public abstract class AbstractFacility : IFacility, IDisposable
 	/// <param name = "facilityConfig"></param>
 	void IFacility.Init(IKernel kernel, IConfiguration facilityConfig)
 	{
-		this.kernel = kernel;
-		this.facilityConfig = facilityConfig;
+		this._kernel = kernel;
+		this._facilityConfig = facilityConfig;
 
 		Init();
 	}
@@ -93,6 +93,6 @@ public abstract class AbstractFacility : IFacility, IDisposable
 	{
 		Dispose();
 
-		kernel = null;
+		_kernel = null;
 	}
 }

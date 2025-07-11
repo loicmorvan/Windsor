@@ -27,9 +27,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 public class CrossWiringComponentModelContributor(IServiceCollection services) : IContributeComponentModelConstruction
 {
-	private readonly IServiceCollection services = services ?? throw new InvalidOperationException("Please call `Container.AddFacility<AspNetCoreFacility>(f => f.CrossWiresInto(services));` first. This should happen before any cross wiring registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md");
+	private readonly IServiceCollection _services = services ?? throw new InvalidOperationException("Please call `Container.AddFacility<AspNetCoreFacility>(f => f.CrossWiresInto(services));` first. This should happen before any cross wiring registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md");
 
-	public IServiceCollection Services => services;
+	public IServiceCollection Services => _services;
 
 	public void ProcessModel(IKernel kernel, ComponentModel model)
 	{
@@ -50,11 +50,11 @@ public class CrossWiringComponentModelContributor(IServiceCollection services) :
 			{
 				if (model.LifestyleType == LifestyleType.Transient)
 				{
-					services.AddTransient(serviceType, p => kernel.Resolve(key, serviceType));
+					_services.AddTransient(serviceType, _ => kernel.Resolve(key, serviceType));
 				}
 				else if (model.LifestyleType == LifestyleType.Scoped)
 				{
-					services.AddScoped(serviceType, p =>
+					_services.AddScoped(serviceType, _ =>
 					{
 						kernel.RequireScope();
 						return kernel.Resolve(key, serviceType);
@@ -62,7 +62,7 @@ public class CrossWiringComponentModelContributor(IServiceCollection services) :
 				}
 				else if (model.LifestyleType == LifestyleType.Singleton)
 				{
-					services.AddSingleton(serviceType, p => kernel.Resolve(key, serviceType));
+					_services.AddSingleton(serviceType, _ => kernel.Resolve(key, serviceType));
 				}
 				else
 				{

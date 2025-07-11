@@ -21,15 +21,15 @@ using Castle.MicroKernel;
 
 public class TrackedInstancesEventArgs : EventArgs
 {
-	private readonly List<Burden> burdens = new List<Burden>();
+	private readonly List<Burden> _burdens = [];
 
 	public Burden[] Items
 	{
-		get { return burdens.ToArray(); }
+		get { return _burdens.ToArray(); }
 	}
 
 	public void AddRange(IEnumerable<Burden> burden)
 	{
-		burdens.AddRange(burden);
+		_burdens.AddRange(burden);
 	}
 }

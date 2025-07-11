@@ -24,7 +24,7 @@ public class Facilities77 : BaseTest
 {
 	public class TestLoggerFactory : AbstractLoggerFactory
 	{
-		public bool NoArgsConstructorWasCalled;
+		public readonly bool NoArgsConstructorWasCalled;
 
 		public TestLoggerFactory() : this("someconfigfile")
 		{

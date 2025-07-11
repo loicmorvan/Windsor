@@ -31,7 +31,7 @@ using Castle.MicroKernel.SubSystems.Conversion;
 [Serializable]
 public class LifestyleModelInspector(IConversionManager converter) : IContributeComponentModelConstruction
 {
-	private readonly IConversionManager converter = converter;
+	private readonly IConversionManager _converter = converter;
 
 	/// <summary>Searches for the lifestyle in the configuration and, if unsuccessful look for the lifestyle attribute in the implementation type.</summary>
 	public virtual void ProcessModel(IKernel kernel, ComponentModel model)
@@ -56,7 +56,7 @@ public class LifestyleModelInspector(IConversionManager converter) : IContribute
 		var lifestyleRaw = model.Configuration.Attributes["lifestyle"];
 		if (lifestyleRaw != null)
 		{
-			var lifestyleType = converter.PerformConversion<LifestyleType>(lifestyleRaw);
+			var lifestyleType = _converter.PerformConversion<LifestyleType>(lifestyleRaw);
 			model.LifestyleType = lifestyleType;
 			switch (lifestyleType)
 			{
@@ -144,8 +144,8 @@ public class LifestyleModelInspector(IConversionManager converter) : IContribute
 		else if (model.LifestyleType == LifestyleType.Pooled)
 		{
 			var pooled = (PooledAttribute)attribute;
-			model.ExtendedProperties[ExtendedPropertiesConstants.Pool_InitialPoolSize] = pooled.InitialPoolSize;
-			model.ExtendedProperties[ExtendedPropertiesConstants.Pool_MaxPoolSize] = pooled.MaxPoolSize;
+			model.ExtendedProperties[ExtendedPropertiesConstants.PoolInitialPoolSize] = pooled.InitialPoolSize;
+			model.ExtendedProperties[ExtendedPropertiesConstants.PoolMaxPoolSize] = pooled.MaxPoolSize;
 		}
 		else if (model.LifestyleType == LifestyleType.Bound)
 		{
@@ -197,13 +197,13 @@ public class LifestyleModelInspector(IConversionManager converter) : IContribute
 
 		if (initialRaw != null)
 		{
-			var initial = converter.PerformConversion<int>(initialRaw);
-			model.ExtendedProperties[ExtendedPropertiesConstants.Pool_InitialPoolSize] = initial;
+			var initial = _converter.PerformConversion<int>(initialRaw);
+			model.ExtendedProperties[ExtendedPropertiesConstants.PoolInitialPoolSize] = initial;
 		}
 		if (maxRaw != null)
 		{
-			var max = converter.PerformConversion<int>(maxRaw);
-			model.ExtendedProperties[ExtendedPropertiesConstants.Pool_MaxPoolSize] = max;
+			var max = _converter.PerformConversion<int>(maxRaw);
+			model.ExtendedProperties[ExtendedPropertiesConstants.PoolMaxPoolSize] = max;
 		}
 	}
 
@@ -214,7 +214,7 @@ public class LifestyleModelInspector(IConversionManager converter) : IContribute
 		{
 			throw new InvalidOperationException(string.Format("Component {0} has {1} lifestyle, but its configuration doesn't have mandatory '{2}' attribute.", model.Name, lifestyleType, attribute));
 		}
-		return converter.PerformConversion<Type>(rawAttribute);
+		return _converter.PerformConversion<Type>(rawAttribute);
 	}
 
 	private Type GetTypeFromAttribute(ComponentModel model, string attribute)
@@ -224,7 +224,7 @@ public class LifestyleModelInspector(IConversionManager converter) : IContribute
 		{
 			return null;
 		}
-		return converter.PerformConversion<Type>(rawAttribute);
+		return _converter.PerformConversion<Type>(rawAttribute);
 	}
 
 	private bool IsBindMethod(MemberInfo methodMember, object _)

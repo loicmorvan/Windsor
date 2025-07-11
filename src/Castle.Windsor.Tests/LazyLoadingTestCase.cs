@@ -55,7 +55,7 @@ public class LazyLoadingTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Component_loaded_lazily_can_have_lazy_dependencies()
 	{
-		Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<ABLoader>());
+		Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<AbLoader>());
 		Container.Resolve<B>();
 	}
 
@@ -64,11 +64,11 @@ public class LazyLoadingTestCase : AbstractContainerTestCase
 	{
 		Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<SlowLoader>());
 		var @event = new ManualResetEvent(false);
-		int[] count = { 10 };
+		int[] count = [10];
 		Exception exception = null;
 		for (var i = 0; i < count[0]; i++)
 		{
-			ThreadPool.QueueUserWorkItem(o =>
+			ThreadPool.QueueUserWorkItem(_ =>
 				{
 					try
 					{
@@ -97,7 +97,7 @@ public class LazyLoadingTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Loaders_only_triggered_when_resolving()
 	{
-		var loader = new ABLoaderWithGuardClause();
+		var loader = new AbLoaderWithGuardClause();
 		Container.Register(Component.For<ILazyComponentLoader>().Instance(loader),
 			Component.For<B>());
 
@@ -116,7 +116,7 @@ public class LazyLoadingTestCase : AbstractContainerTestCase
 	}
 }
 
-public class ABLoaderWithGuardClause : ILazyComponentLoader
+public class AbLoaderWithGuardClause : ILazyComponentLoader
 {
 	public bool CanLoadNow { get; set; }
 
@@ -133,7 +133,7 @@ public class ABLoaderWithGuardClause : ILazyComponentLoader
 	}
 }
 
-public class ABLoader : ILazyComponentLoader
+public class AbLoader : ILazyComponentLoader
 {
 	public IRegistration Load(string name, Type service, Arguments arguments)
 	{
@@ -148,7 +148,7 @@ public class ABLoader : ILazyComponentLoader
 
 public class LoaderWithDependency(IEmployee employee) : ILazyComponentLoader
 {
-	private IEmployee employee = employee;
+	private IEmployee _employee = employee;
 
 	public IRegistration Load(string name, Type service, Arguments arguments)
 	{

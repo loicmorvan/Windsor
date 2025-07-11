@@ -18,16 +18,16 @@ using System;
 
 public class ItemRegistration<TItem>
 {
-	private IReference<TItem> item;
+	private IReference<TItem> _item;
 
 	internal IReference<TItem> Item
 	{
-		get { return item; }
+		get { return _item; }
 	}
 
 	public ItemRegistration<TItem> Instance(TItem instance)
 	{
-		item = new InstanceReference<TItem>(instance);
+		_item = new InstanceReference<TItem>(instance);
 		return this;
 	}
 
@@ -38,13 +38,13 @@ public class ItemRegistration<TItem>
 
 	public ItemRegistration<TItem> Service(Type serviceType)
 	{
-		item = new ComponentReference<TItem>(serviceType);
+		_item = new ComponentReference<TItem>(serviceType);
 		return this;
 	}
 
 	public ItemRegistration<TItem> Service(string name)
 	{
-		item = new ComponentReference<TItem>(name);
+		_item = new ComponentReference<TItem>(name);
 		return this;
 	}
 }

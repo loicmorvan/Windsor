@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
 using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
-public interface DummyComponentArrayFactory
+public interface IDummyComponentArrayFactory
 {
 	IDummyComponent[] All();
 }

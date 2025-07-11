@@ -23,19 +23,19 @@ using Castle.Core.Configuration;
 /// </summary>
 public class Parameter
 {
-	private readonly String key;
-	private readonly object value;
+	private readonly String _key;
+	private readonly object _value;
 
 	internal Parameter(String key, String value)
 	{
-		this.key = key;
-		this.value = value;
+		this._key = key;
+		this._value = value;
 	}
 
 	internal Parameter(String key, IConfiguration configNode)
 	{
-		this.key = key;
-		value = configNode;
+		this._key = key;
+		_value = configNode;
 	}
 
 	/// <summary>
@@ -43,7 +43,7 @@ public class Parameter
 	/// </summary>
 	public IConfiguration ConfigNode
 	{
-		get { return value as IConfiguration; }
+		get { return _value as IConfiguration; }
 	}
 
 	/// <summary>
@@ -51,7 +51,7 @@ public class Parameter
 	/// </summary>
 	public string Key
 	{
-		get { return key; }
+		get { return _key; }
 	}
 
 	/// <summary>
@@ -59,7 +59,7 @@ public class Parameter
 	/// </summary>
 	public String Value
 	{
-		get { return value as string; }
+		get { return _value as string; }
 	}
 
 	/// <summary>
@@ -83,11 +83,11 @@ public class Parameter
 /// </summary>
 public class ParameterKey
 {
-	private readonly String name;
+	private readonly String _name;
 
 	internal ParameterKey(String name)
 	{
-		this.name = name;
+		this._name = name;
 	}
 
 	/// <summary>
@@ -95,7 +95,7 @@ public class ParameterKey
 	/// </summary>
 	public string Name
 	{
-		get { return name; }
+		get { return _name; }
 	}
 
 	/// <summary>
@@ -105,7 +105,7 @@ public class ParameterKey
 	/// <returns>The new <see cref = "Parameter" /></returns>
 	public Parameter Eq(String value)
 	{
-		return new Parameter(name, value);
+		return new Parameter(_name, value);
 	}
 
 	/// <summary>
@@ -115,6 +115,6 @@ public class ParameterKey
 	/// <returns>The new <see cref = "Parameter" /></returns>
 	public Parameter Eq(IConfiguration configNode)
 	{
-		return new Parameter(name, configNode);
+		return new Parameter(_name, configNode);
 	}
 }

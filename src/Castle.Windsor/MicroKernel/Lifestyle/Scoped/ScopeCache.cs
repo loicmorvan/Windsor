@@ -24,7 +24,7 @@ using Castle.Core.Internal;
 public class ScopeCache : IScopeCache, IDisposable
 {
 	// NOTE: does that need to be thread safe?
-	private IDictionary<object, Burden> cache = new Dictionary<object, Burden>();
+	private IDictionary<object, Burden> _cache = new Dictionary<object, Burden>();
 
 	public Burden this[object id]
 	{
@@ -32,7 +32,7 @@ public class ScopeCache : IScopeCache, IDisposable
 		{
 			try
 			{
-				cache.Add(id, value);
+				_cache.Add(id, value);
 			}
 			catch (NullReferenceException)
 			{
@@ -44,7 +44,7 @@ public class ScopeCache : IScopeCache, IDisposable
 			try
 			{
 				Burden burden;
-				cache.TryGetValue(id, out burden);
+				_cache.TryGetValue(id, out burden);
 				return burden;
 			}
 			catch (NullReferenceException)
@@ -56,7 +56,7 @@ public class ScopeCache : IScopeCache, IDisposable
 
 	public void Dispose()
 	{
-		var localCache = Interlocked.Exchange(ref cache, null);
+		var localCache = Interlocked.Exchange(ref _cache, null);
 		if (localCache == null)
 		{
 			// that should never happen but Dispose in general is expected to be safe to call so... let's obey the rules

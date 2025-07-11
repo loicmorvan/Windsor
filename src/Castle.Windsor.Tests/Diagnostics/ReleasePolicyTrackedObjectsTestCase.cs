@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Diagnostics;
-
 using System;
 using System.Collections;
 using System.Linq;
-
 using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
@@ -28,11 +25,13 @@ using Castle.Windsor.Diagnostics.Extensions;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.ContainerExtensions;
 
+namespace Castle.Windsor.Tests.Diagnostics;
+
 public class ReleasePolicyTrackedObjectsTestCase : AbstractContainerTestCase
 {
 	private DebuggerViewItem GetTrackedObjects()
 	{
-		var subSystem = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IContainerDebuggerExtensionHost;
+		var subSystem = (IContainerDebuggerExtensionHost)Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
 		return subSystem.SelectMany(e => e.Attach()).SingleOrDefault(i => i.Name == ReleasePolicyTrackedObjects.Name);
 	}
 
@@ -46,8 +45,8 @@ public class ReleasePolicyTrackedObjectsTestCase : AbstractContainerTestCase
 	public void List_tracked_alive_instances()
 	{
 		Register<DisposableFoo>();
-		var foo1 = Container.Resolve<DisposableFoo>();
-		var foo2 = Container.Resolve<DisposableFoo>();
+		Container.Resolve<DisposableFoo>();
+		Container.Resolve<DisposableFoo>();
 
 		var objects = GetTrackedObjects();
 		var values = (DebuggerViewItem[])objects.Value;
@@ -61,9 +60,9 @@ public class ReleasePolicyTrackedObjectsTestCase : AbstractContainerTestCase
 	{
 		Register<DisposableFoo>();
 		Container.AddFacility<TypedFactoryFacility>();
-		var foo1 = Container.Resolve<DisposableFoo>();
+		Container.Resolve<DisposableFoo>();
 		var fooFactory = Container.Resolve<Func<DisposableFoo>>();
-		var foo2 = fooFactory.Invoke();
+		fooFactory.Invoke();
 
 		var objects = GetTrackedObjects();
 		var values = (DebuggerViewItem[])objects.Value;
@@ -77,7 +76,7 @@ public class ReleasePolicyTrackedObjectsTestCase : AbstractContainerTestCase
 	{
 		Register<DisposableFoo>();
 		var foo1 = Container.Resolve<DisposableFoo>();
-		var foo2 = Container.Resolve<DisposableFoo>();
+		Container.Resolve<DisposableFoo>();
 		Container.Release(foo1);
 
 		var objects = GetTrackedObjects();
@@ -112,7 +111,7 @@ public class ReleasePolicyTrackedObjectsTestCase : AbstractContainerTestCase
 	{
 		Kernel.ReleasePolicy = new MyCustomReleasePolicy();
 		Register<DisposableFoo>();
-		var foo1 = Container.Resolve<DisposableFoo>();
+		Container.Resolve<DisposableFoo>();
 		var objects = GetTrackedObjects();
 		Assert.Empty((ICollection)objects.Value);
 	}

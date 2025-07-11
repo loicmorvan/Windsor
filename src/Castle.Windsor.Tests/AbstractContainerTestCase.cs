@@ -29,25 +29,25 @@ public abstract class AbstractContainerTestCase : IDisposable
 
 	public void CleanUp()
 	{
-		container.Dispose();
+		_container.Dispose();
 	}
 
 	public void Init()
 	{
-		container = BuildContainer();
+		_container = BuildContainer();
 		AfterContainerCreated();
 	}
 
-	private WindsorContainer container;
+	private WindsorContainer _container;
 
 	protected IWindsorContainer Container
 	{
-		get { return container; }
+		get { return _container; }
 	}
 
 	protected IKernel Kernel
 	{
-		get { return container.Kernel; }
+		get { return _container.Kernel; }
 	}
 
 	protected virtual void AfterContainerCreated()

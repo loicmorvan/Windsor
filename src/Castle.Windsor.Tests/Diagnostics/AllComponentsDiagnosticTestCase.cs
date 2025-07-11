@@ -25,12 +25,12 @@ using Castle.Windsor.Tests.Components;
 
 public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 {
-	private IAllComponentsDiagnostic diagnostic;
+	private IAllComponentsDiagnostic _diagnostic;
 
 	protected override void AfterContainerCreated()
 	{
 		var host = (IDiagnosticsHost)Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
-		diagnostic = host.GetDiagnostic<IAllComponentsDiagnostic>();
+		_diagnostic = host.GetDiagnostic<IAllComponentsDiagnostic>();
 	}
 
 	[Fact]
@@ -40,7 +40,7 @@ public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 		Container.Resolve<GenericImpl1<A>>();
 		Container.Resolve<GenericImpl1<B>>();
 
-		var handlers = diagnostic.Inspect();
+		var handlers = _diagnostic.Inspect();
 
 		Assert.Single(handlers);
 	}
@@ -56,7 +56,7 @@ public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 
 		parent.AddChildContainer(Container);
 
-		var handlers = diagnostic.Inspect();
+		var handlers = _diagnostic.Inspect();
 
 		Assert.Equal(4, handlers.Length);
 	}
@@ -64,7 +64,7 @@ public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Works_with_empty_container()
 	{
-		var handlers = diagnostic.Inspect();
+		var handlers = _diagnostic.Inspect();
 
 		Assert.Empty(handlers);
 	}
@@ -74,7 +74,7 @@ public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 	{
 		Container.Register(Component.For(typeof(GenericImpl1<>)));
 
-		var handlers = diagnostic.Inspect();
+		var handlers = _diagnostic.Inspect();
 
 		Assert.Single(handlers);
 	}
@@ -85,7 +85,7 @@ public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 		Container.Register(Component.For<IEmptyService, EmptyServiceA>()
 			.ImplementedBy<EmptyServiceA>());
 
-		var handlers = diagnostic.Inspect();
+		var handlers = _diagnostic.Inspect();
 
 		Assert.Single(handlers);
 		Assert.Equal(2, handlers[0].ComponentModel.Services.Count());
@@ -97,7 +97,7 @@ public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 		Container.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)),
 			Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)));
 
-		var handlers = diagnostic.Inspect();
+		var handlers = _diagnostic.Inspect();
 
 		Assert.Equal(2, handlers.Length);
 	}

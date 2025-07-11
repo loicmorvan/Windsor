@@ -22,7 +22,7 @@ using System;
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 public sealed class ComponentProxyBehaviorAttribute : Attribute
 {
-	private Type[] additionalInterfaces;
+	private Type[] _additionalInterfaces;
 
 #if FEATURE_REMOTING
 		/// <summary>
@@ -39,13 +39,13 @@ public sealed class ComponentProxyBehaviorAttribute : Attribute
 	{
 		get
 		{
-			if (additionalInterfaces != null)
+			if (_additionalInterfaces != null)
 			{
-				return additionalInterfaces;
+				return _additionalInterfaces;
 			}
 
 			return Type.EmptyTypes;
 		}
-		set { additionalInterfaces = value; }
+		set { _additionalInterfaces = value; }
 	}
 }

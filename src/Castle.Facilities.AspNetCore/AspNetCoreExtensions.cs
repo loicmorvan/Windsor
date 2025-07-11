@@ -34,7 +34,7 @@ internal static class AspNetCoreExtensions
 
 	private sealed class RequestScopingStartupFilter(Func<IEnumerable<IDisposable>> requestScopeProvider) : IStartupFilter
 	{
-		private readonly Func<IEnumerable<IDisposable>> requestScopeProvider = requestScopeProvider ?? throw new ArgumentNullException(nameof(requestScopeProvider));
+		private readonly Func<IEnumerable<IDisposable>> _requestScopeProvider = requestScopeProvider ?? throw new ArgumentNullException(nameof(requestScopeProvider));
 
 		public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> nextFilter)
 		{
@@ -48,9 +48,9 @@ internal static class AspNetCoreExtensions
 
 		private void ConfigureRequestScoping(IApplicationBuilder builder)
 		{
-			builder.Use(async (context, next) =>
+			builder.Use(async (_, next) =>
 			{
-				var scopes = requestScopeProvider();
+				var scopes = _requestScopeProvider();
 				try
 				{
 					await next();

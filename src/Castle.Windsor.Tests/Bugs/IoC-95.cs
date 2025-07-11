@@ -19,7 +19,7 @@ using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
 
-public class IoC_95
+public class IoC95
 {
 	[Fact]
 	public void AddingComponentToRootKernelWhenChildKernelHasStartableFacility()

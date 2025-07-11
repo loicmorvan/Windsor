@@ -24,41 +24,41 @@ using Castle.Windsor.Tests.LoggingFacility.Classes;
 
 public class ConsoleFacilityTestCase : BaseTest, IDisposable
 {
-	private readonly IWindsorContainer container;
-	private readonly StringWriter outWriter = new StringWriter();
-	private readonly StringWriter errorWriter = new StringWriter();
+	private readonly IWindsorContainer _container;
+	private readonly StringWriter _outWriter = new();
+	private readonly StringWriter _errorWriter = new();
 
 	public ConsoleFacilityTestCase()
 	{
-		container = base.CreateConfiguredContainer<ConsoleFactory>();
+		_container = base.CreateConfiguredContainer<ConsoleFactory>();
 
-		outWriter.GetStringBuilder().Length = 0;
-		errorWriter.GetStringBuilder().Length = 0;
+		_outWriter.GetStringBuilder().Length = 0;
+		_errorWriter.GetStringBuilder().Length = 0;
 
-		Console.SetOut(outWriter);
-		Console.SetError(errorWriter);
+		Console.SetOut(_outWriter);
+		Console.SetError(_errorWriter);
 	}
 
 	public void Dispose()
 	{
-		if (container != null)
+		if (_container != null)
 		{
-			container.Dispose();
+			_container.Dispose();
 		}
 	}
 
 	[Fact]
 	public void SimpleTest()
 	{
-		container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
-		SimpleLoggingComponent test = container.Resolve<SimpleLoggingComponent>("component");
+		_container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
+		SimpleLoggingComponent test = _container.Resolve<SimpleLoggingComponent>("component");
 
 		String expectedLogOutput = String.Format("[Info] '{0}' Hello world" + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
 		String actualLogOutput = "";
 
 		test.DoSomething();
 
-		actualLogOutput = outWriter.GetStringBuilder().ToString();
+		actualLogOutput = _outWriter.GetStringBuilder().ToString();
 		Assert.Equal(expectedLogOutput, actualLogOutput);
 	}
 }

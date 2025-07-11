@@ -40,23 +40,23 @@ public class SubContainersTestCase : AbstractContainerTestCase
 		public const string Added = "added";
 		public const string Removed = "removed";
 
-		private readonly List<string> events = new();
+		private readonly List<string> _events = new();
 
 		public List<string> Events
 		{
-			get { return events; }
+			get { return _events; }
 		}
 
 		public void AddedAsChildKernel(object sender, EventArgs e)
 		{
 			Assert.Equal(expectedSender, sender);
-			events.Add(Added);
+			_events.Add(Added);
 		}
 
 		public void RemovedAsChildKernel(object sender, EventArgs e)
 		{
 			Assert.Equal(expectedSender, sender);
-			events.Add(Removed);
+			_events.Add(Removed);
 		}
 	}
 
@@ -287,12 +287,12 @@ public class SubContainersTestCase : AbstractContainerTestCase
 			.LifeStyle.Is(LifestyleType.Transient));
 		Kernel.AddChildKernel(subkernel2);
 
-		var templateengine1 = subkernel1.Resolve<DefaultTemplateEngine>("templateengine");
+		subkernel1.Resolve<DefaultTemplateEngine>("templateengine");
 		var spamservice1 = subkernel1.Resolve<DefaultSpamService>("spamservice");
 
 		Assert.Null(spamservice1.TemplateEngine);
 
-		var templateengine2 = subkernel2.Resolve<DefaultTemplateEngine>("templateengine");
+		subkernel2.Resolve<DefaultTemplateEngine>("templateengine");
 		var spamservice2 = subkernel2.Resolve<DefaultSpamService>("spamservice");
 
 		Assert.Same(spamservice1, spamservice2);
@@ -312,14 +312,14 @@ public class SubContainersTestCase : AbstractContainerTestCase
 		subkernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
 
 		var templateengine = Kernel.Resolve<DefaultTemplateEngine>("templateengine");
-		var sub_templateengine = subkernel.Resolve<DefaultTemplateEngine>("templateengine");
+		var subTemplateengine = subkernel.Resolve<DefaultTemplateEngine>("templateengine");
 
 		var spamservice = subkernel.Resolve<DefaultSpamService>("spamservice");
-		Assert.NotEqual(spamservice.TemplateEngine, sub_templateengine);
+		Assert.NotEqual(spamservice.TemplateEngine, subTemplateengine);
 		Assert.Equal(spamservice.TemplateEngine, templateengine);
 
 		spamservice = Kernel.Resolve<DefaultSpamService>("spamservice");
-		Assert.NotEqual(spamservice.TemplateEngine, sub_templateengine);
+		Assert.NotEqual(spamservice.TemplateEngine, subTemplateengine);
 		Assert.Equal(spamservice.TemplateEngine, templateengine);
 	}
 

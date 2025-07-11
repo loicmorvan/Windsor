@@ -39,6 +39,6 @@ public abstract class ReferenceExpressionUtil
 
 	public static bool IsReference(String value)
 	{
-		return value != null && value.Length > 3 && value.StartsWith("${") && value.EndsWith("}");
+		return value is { Length: > 3 } && value.StartsWith("${") && value.EndsWith("}");
 	}
 }

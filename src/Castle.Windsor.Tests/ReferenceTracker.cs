@@ -39,11 +39,11 @@ public static class ReferenceTracker
 /// </summary>
 public struct ReferenceTracker<T> where T : class
 {
-	private readonly WeakReference weakReference;
+	private readonly WeakReference _weakReference;
 
 	private ReferenceTracker(WeakReference weakReference)
 	{
-		this.weakReference = weakReference;
+		this._weakReference = weakReference;
 	}
 
 	/// <summary>
@@ -70,7 +70,7 @@ public struct ReferenceTracker<T> where T : class
 	public void AssertStillReferenced()
 	{
 		GC.Collect();
-		if (!weakReference.IsAlive)
+		if (!_weakReference.IsAlive)
 			Assert.Fail("The tracked instance is not longer referenced.");
 	}
 
@@ -80,7 +80,7 @@ public struct ReferenceTracker<T> where T : class
 	public void AssertNoLongerReferenced()
 	{
 		GC.Collect();
-		if (weakReference.IsAlive)
+		if (_weakReference.IsAlive)
 			Assert.Fail("The tracked instance is still referenced.");
 	}
 
@@ -101,7 +101,7 @@ public struct ReferenceTracker<T> where T : class
 			throw new ArgumentNullException(nameof(action));
 
 		GC.Collect();
-		var target = weakReference.Target;
+		var target = _weakReference.Target;
 		if (target is null)
 			Assert.Fail("The tracked instance is not longer referenced.");
 
@@ -125,7 +125,7 @@ public struct ReferenceTracker<T> where T : class
 			throw new ArgumentNullException(nameof(func));
 
 		GC.Collect();
-		var target = weakReference.Target;
+		var target = _weakReference.Target;
 		if (target is null)
 			Assert.Fail("The tracked instance is not longer referenced.");
 

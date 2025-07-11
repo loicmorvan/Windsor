@@ -21,11 +21,11 @@ using Castle.Windsor.Diagnostics.DebuggerViews;
 
 public class Facilities : IContainerDebuggerExtension
 {
-	private IKernel kernel;
+	private IKernel _kernel;
 
 	public IEnumerable<DebuggerViewItem> Attach()
 	{
-		var facilities = kernel.GetFacilities();
+		var facilities = _kernel.GetFacilities();
 		if (facilities.Length == 0)
 		{
 			yield break;
@@ -35,6 +35,6 @@ public class Facilities : IContainerDebuggerExtension
 
 	public void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
 	{
-		this.kernel = kernel;
+		this._kernel = kernel;
 	}
 }

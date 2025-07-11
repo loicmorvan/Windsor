@@ -20,41 +20,41 @@ using System.Collections.Generic;
 using Castle.Core;
 using Castle.MicroKernel;
 
-public class CustomLifestyle_InstanceScope : IDisposable
+public class CustomLifestyleInstanceScope : IDisposable
 {
 	[ThreadStatic]
-	private static Stack<CustomLifestyle_InstanceScope> localScopes;
+	private static Stack<CustomLifestyleInstanceScope> _localScopes;
 
-	private readonly IDictionary<ComponentModel, Burden> cache = new Dictionary<ComponentModel, Burden>();
+	private readonly IDictionary<ComponentModel, Burden> _cache = new Dictionary<ComponentModel, Burden>();
 
-	public CustomLifestyle_InstanceScope()
+	public CustomLifestyleInstanceScope()
 	{
-		if (localScopes == null)
+		if (_localScopes == null)
 		{
-			localScopes = new Stack<CustomLifestyle_InstanceScope>();
+			_localScopes = new Stack<CustomLifestyleInstanceScope>();
 		}
-		localScopes.Push(this);
+		_localScopes.Push(this);
 	}
 
 	public IDictionary<ComponentModel, Burden> Cache
 	{
-		get { return cache; }
+		get { return _cache; }
 	}
 
 	public void Dispose()
 	{
-		localScopes.Pop();
+		_localScopes.Pop();
 	}
 
-	public static CustomLifestyle_InstanceScope Current
+	public static CustomLifestyleInstanceScope Current
 	{
 		get
 		{
-			if (localScopes == null || localScopes.Count == 0)
+			if (_localScopes == null || _localScopes.Count == 0)
 			{
 				return null;
 			}
-			return localScopes.Peek();
+			return _localScopes.Peek();
 		}
 	}
 }

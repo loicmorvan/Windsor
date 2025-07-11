@@ -25,23 +25,23 @@ using NLog.Targets;
 
 public class ExtendedNLogFacilityTests : BaseTest, IDisposable
 {
-	private readonly IWindsorContainer container;
+	private readonly IWindsorContainer _container;
 
 	public ExtendedNLogFacilityTests()
 	{
-		container = base.CreateConfiguredContainer<ExtendedNLogFactory>();
+		_container = base.CreateConfiguredContainer<ExtendedNLogFactory>();
 	}
 
 	public void Dispose()
 	{
-		container.Dispose();
+		_container.Dispose();
 	}
 
 	[Fact]
 	public void SimpleTest()
 	{
-		container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component1"));
-		SimpleLoggingComponent test = container.Resolve<SimpleLoggingComponent>("component1");
+		_container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component1"));
+		SimpleLoggingComponent test = _container.Resolve<SimpleLoggingComponent>("component1");
 
 		test.DoSomething();
 
@@ -51,8 +51,8 @@ public class ExtendedNLogFacilityTests : BaseTest, IDisposable
 
 		Assert.Equal(expectedLogOutput, actualLogOutput);
 
-		container.Register(Component.For(typeof(SmtpServer)).Named("component2"));
-		ISmtpServer smtpServer = container.Resolve<ISmtpServer>("component2");
+		_container.Register(Component.For(typeof(SmtpServer)).Named("component2"));
+		ISmtpServer smtpServer = _container.Resolve<ISmtpServer>("component2");
 
 		smtpServer.Start();
 		smtpServer.InternalSend("rbellamy@pteradigm.com", "jobs@castlestronghold.com", "We're looking for a few good porgrammars.");
@@ -68,8 +68,8 @@ public class ExtendedNLogFacilityTests : BaseTest, IDisposable
 	[Fact]
 	public void ContextTest()
 	{
-		container.Register(Component.For(typeof(ComplexLoggingComponent)).Named("component1"));
-		ComplexLoggingComponent complexLoggingComponent = container.Resolve<ComplexLoggingComponent>("component1");
+		_container.Register(Component.For(typeof(ComplexLoggingComponent)).Named("component1"));
+		ComplexLoggingComponent complexLoggingComponent = _container.Resolve<ComplexLoggingComponent>("component1");
 
 		complexLoggingComponent.DoSomeContextual();
 

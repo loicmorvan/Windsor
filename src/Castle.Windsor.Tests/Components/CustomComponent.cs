@@ -23,7 +23,7 @@ using Castle.Windsor.Tests.ClassComponents;
 [CustomLifestyle(typeof(CustomLifestyleManager))]
 public class CustomComponent : IComponent
 {
-	public int ID
+	public int Id
 	{
 		get { return GetHashCode(); }
 	}

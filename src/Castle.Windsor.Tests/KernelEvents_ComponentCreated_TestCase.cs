@@ -21,19 +21,19 @@ using Castle.DynamicProxy;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
 
-public class KernelEvents_ComponentCreated_TestCase : AbstractContainerTestCase
+public class KernelEventsComponentCreatedTestCase : AbstractContainerTestCase
 {
-	readonly IList<KeyValuePair<ComponentModel, object>> list = new List<KeyValuePair<ComponentModel, object>>();
+	readonly IList<KeyValuePair<ComponentModel, object>> _list = new List<KeyValuePair<ComponentModel, object>>();
 
 	protected override void AfterContainerCreated()
 	{
-		list.Clear();
+		_list.Clear();
 		Container.Kernel.ComponentCreated += Kernel_ComponentCreated;
 	}
 
 	void Kernel_ComponentCreated(ComponentModel model, object instance)
 	{
-		list.Add(new KeyValuePair<ComponentModel, object>(model, instance));
+		_list.Add(new KeyValuePair<ComponentModel, object>(model, instance));
 	}
 
 
@@ -46,7 +46,7 @@ public class KernelEvents_ComponentCreated_TestCase : AbstractContainerTestCase
 			Component.For<IService>().ImplementedBy<MyService>().Interceptors<StandardInterceptor>().LifestyleTransient());
 
 		var service = Container.Resolve<IService>();
-		Assert.NotEmpty(list);
-		Assert.Contains(list, t => t.Value == service);
+		Assert.NotEmpty(_list);
+		Assert.Contains(_list, t => t.Value == service);
 	}
 }

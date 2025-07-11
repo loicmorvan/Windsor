@@ -92,7 +92,7 @@ public class DelegateFactory : ILazyComponentLoader
 	protected static MethodInfo GetInvokeMethod(Type @delegate)
 	{
 		var invoke = @delegate.GetMethod("Invoke");
-		Debug.Assert(invoke != null, "invoke != null");
+		Debug.Assert(invoke != null);
 		return invoke;
 	}
 

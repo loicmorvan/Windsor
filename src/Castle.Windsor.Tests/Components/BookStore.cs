@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class BookStore(IItemService itemService) : IBookStore
 {
-	private IItemService itemService = itemService;
+	private IItemService _itemService = itemService;
 }

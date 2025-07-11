@@ -134,7 +134,7 @@ public static class TypedFactoryRegistrationExtensions
 		var classServices = registration.Services.TakeWhile(s => s.GetTypeInfo().IsClass).ToArray();
 		if (classServices.Any() == false)
 		{
-			Debug.Assert(registration.Services.Any(), "registration.Services.Any()");
+			Debug.Assert(registration.Services.Any());
 			return RegisterInterfaceBasedFactory(registration, configuration);
 		}
 		if (classServices.Length != 1)

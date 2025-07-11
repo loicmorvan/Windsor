@@ -71,7 +71,7 @@ public class TypedParametersTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Typed_arguments_work_for_DynamicParameters()
 	{
-		Kernel.Register(Component.For<ClassWithArguments>().DynamicParameters((k, d) => d.AddTyped("typed").AddTyped(2)));
+		Kernel.Register(Component.For<ClassWithArguments>().DynamicParameters((_, d) => d.AddTyped("typed").AddTyped(2)));
 
 		var item = Kernel.Resolve<ClassWithArguments>();
 
@@ -82,7 +82,7 @@ public class TypedParametersTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Typed_arguments_work_for_DynamicParameters_mixed()
 	{
-		Kernel.Register(Component.For<ClassWithArguments>().DynamicParameters((k, d) => d.AddTyped("typed")));
+		Kernel.Register(Component.For<ClassWithArguments>().DynamicParameters((_, d) => d.AddTyped("typed")));
 		var arguments = new Arguments {
 			{ typeof(int), 2 }
 		};

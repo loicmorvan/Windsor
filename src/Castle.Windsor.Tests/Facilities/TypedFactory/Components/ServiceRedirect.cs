@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
 public class ServiceRedirect(ServiceWithMultipleCtors serviceWithMultipleCtors)
 {
-	private readonly ServiceWithMultipleCtors serviceWithMultipleCtors = serviceWithMultipleCtors;
+	private readonly ServiceWithMultipleCtors _serviceWithMultipleCtors = serviceWithMultipleCtors;
 }

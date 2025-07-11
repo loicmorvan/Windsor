@@ -21,11 +21,11 @@ using Castle.Core.Internal;
 
 public class EvalProcessingInstructionProcessor : AbstractXmlNodeProcessor
 {
-	private static readonly XmlNodeType[] acceptNodes = new[] { XmlNodeType.ProcessingInstruction };
+	private static readonly XmlNodeType[] AcceptNodes = [XmlNodeType.ProcessingInstruction];
 
 	public override XmlNodeType[] AcceptNodeTypes
 	{
-		get { return acceptNodes; }
+		get { return AcceptNodes; }
 	}
 
 	public override string Name

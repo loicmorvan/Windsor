@@ -18,10 +18,10 @@ using Castle.Core;
 using Castle.DynamicProxy;
 using Castle.MicroKernel.ModelBuilder.Descriptors;
 
-public class InterceptorGroup<S>(ComponentRegistration<S> registration, InterceptorReference[] interceptors) : RegistrationGroup<S>(registration)
-	where S : class
+public class InterceptorGroup<TS>(ComponentRegistration<TS> registration, InterceptorReference[] interceptors) : RegistrationGroup<TS>(registration)
+	where TS : class
 {
-	public ComponentRegistration<S> Anywhere
+	public ComponentRegistration<TS> Anywhere
 	{
 		get
 		{
@@ -30,7 +30,7 @@ public class InterceptorGroup<S>(ComponentRegistration<S> registration, Intercep
 		}
 	}
 
-	public ComponentRegistration<S> First
+	public ComponentRegistration<TS> First
 	{
 		get
 		{
@@ -39,7 +39,7 @@ public class InterceptorGroup<S>(ComponentRegistration<S> registration, Intercep
 		}
 	}
 
-	public ComponentRegistration<S> Last
+	public ComponentRegistration<TS> Last
 	{
 		get
 		{
@@ -48,13 +48,13 @@ public class InterceptorGroup<S>(ComponentRegistration<S> registration, Intercep
 		}
 	}
 
-	public ComponentRegistration<S> AtIndex(int index)
+	public ComponentRegistration<TS> AtIndex(int index)
 	{
 		AddDescriptor(new InterceptorDescriptor(interceptors, index));
 		return Registration;
 	}
 
-	public InterceptorGroup<S> SelectedWith(IInterceptorSelector selector)
+	public InterceptorGroup<TS> SelectedWith(IInterceptorSelector selector)
 	{
 		Registration.SelectInterceptorsWith(selector);
 		return this;

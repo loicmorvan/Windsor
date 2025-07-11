@@ -48,7 +48,7 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
 #endif
 		BindingFlags.IgnoreCase;
 
-	private ITypeConverter converter;
+	private ITypeConverter _converter;
 
 	protected virtual bool ShouldUseMetaModel
 	{
@@ -151,7 +151,7 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
 		{
 			try
 			{
-				types.Add(converter.PerformConversion<Type>(param));
+				types.Add(_converter.PerformConversion<Type>(param));
 			}
 			catch (Exception)
 			{
@@ -168,12 +168,12 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
 
 	private void EnsureHasReferenceToConverter(IKernel kernel)
 	{
-		if (converter != null)
+		if (_converter != null)
 		{
 			return;
 		}
 
-		converter = (ITypeConverter)
+		_converter = (ITypeConverter)
 			kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
 	}
 

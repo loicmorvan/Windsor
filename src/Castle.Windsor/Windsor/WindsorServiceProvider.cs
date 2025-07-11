@@ -25,12 +25,12 @@ using Castle.MicroKernel;
 /// </summary>
 public class WindsorServiceProvider : IServiceProviderEx
 {
-	private readonly IKernelInternal kernel;
+	private readonly IKernelInternal _kernel;
 
 	public WindsorServiceProvider(IWindsorContainer container)
 	{
-		kernel = container.Kernel as IKernelInternal;
-		if (kernel == null)
+		_kernel = container.Kernel as IKernelInternal;
+		if (_kernel == null)
 		{
 			throw new ArgumentException(string.Format("The kernel must implement {0}", typeof(IKernelInternal)));
 		}
@@ -38,14 +38,14 @@ public class WindsorServiceProvider : IServiceProviderEx
 
 	public IKernel Kernel
 	{
-		get { return kernel; }
+		get { return _kernel; }
 	}
 
 	public object GetService(Type serviceType)
 	{
-		if (kernel.LoadHandlerByType(null, serviceType, null) != null)
+		if (_kernel.LoadHandlerByType(null, serviceType, null) != null)
 		{
-			return kernel.Resolve(serviceType);
+			return _kernel.Resolve(serviceType);
 		}
 		return null;
 	}

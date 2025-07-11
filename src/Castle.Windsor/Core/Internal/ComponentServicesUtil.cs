@@ -20,7 +20,7 @@ using System.Reflection;
 
 public class ComponentServicesUtil
 {
-	private static readonly TypeByInheritanceDepthMostSpecificFirstComparer comparer = new TypeByInheritanceDepthMostSpecificFirstComparer();
+	private static readonly TypeByInheritanceDepthMostSpecificFirstComparer Comparer = new();
 
 	public static void AddService(IList<Type> existingServices, HashSet<Type> lookup, Type newService)
 	{
@@ -47,7 +47,7 @@ public class ComponentServicesUtil
 				existingServices.Insert(i, newService);
 				lookup.Add(newService);
 			}
-			var result = comparer.Compare(newService, existingServices[i]);
+			var result = Comparer.Compare(newService, existingServices[i]);
 			if (result < 0)
 			{
 				existingServices.Insert(i, newService);

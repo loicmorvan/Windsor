@@ -25,8 +25,8 @@ using Castle.MicroKernel.SubSystems.Configuration;
 
 public class AssemblyInstaller : IWindsorInstaller
 {
-	private readonly Assembly assembly;
-	private readonly InstallerFactory factory;
+	private readonly Assembly _assembly;
+	private readonly InstallerFactory _factory;
 
 	public AssemblyInstaller(Assembly assembly, InstallerFactory factory)
 	{
@@ -38,13 +38,13 @@ public class AssemblyInstaller : IWindsorInstaller
 		{
 			throw new ArgumentNullException(nameof(factory));
 		}
-		this.assembly = assembly;
-		this.factory = factory;
+		this._assembly = assembly;
+		this._factory = factory;
 	}
 
 	public void Install(IWindsorContainer container, IConfigurationStore store)
 	{
-		var installerTypes = factory.Select(FilterInstallerTypes(assembly.GetAvailableTypes()));
+		var installerTypes = _factory.Select(FilterInstallerTypes(_assembly.GetAvailableTypes()));
 		if (installerTypes == null)
 		{
 			return;
@@ -52,7 +52,7 @@ public class AssemblyInstaller : IWindsorInstaller
 
 		foreach (var installerType in installerTypes)
 		{
-			var installer = factory.CreateInstance(installerType);
+			var installer = _factory.CreateInstance(installerType);
 			installer.Install(container, store);
 		}
 	}

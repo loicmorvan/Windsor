@@ -25,8 +25,8 @@ using Castle.Core.Configuration;
 [Serializable]
 public class PrimitiveConverter : AbstractTypeConverter
 {
-	private readonly Type[] types = new[]
-	{
+	private readonly Type[] _types =
+	[
 		typeof(Char),
 		typeof(DateTime),
 		typeof(Decimal),
@@ -42,11 +42,11 @@ public class PrimitiveConverter : AbstractTypeConverter
 		typeof(Single),
 		typeof(Double),
 		typeof(String)
-	};
+	];
 
 	public override bool CanHandleType(Type type)
 	{
-		return Array.IndexOf(types, type) != -1;
+		return Array.IndexOf(_types, type) != -1;
 	}
 
 	public override object PerformConversion(String value, Type targetType)

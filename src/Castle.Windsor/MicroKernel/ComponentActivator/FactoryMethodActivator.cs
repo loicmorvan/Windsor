@@ -22,15 +22,15 @@ using Castle.MicroKernel.Context;
 
 public class FactoryMethodActivator<T> : DefaultComponentActivator, IDependencyAwareActivator
 {
-	protected readonly Func<IKernel, ComponentModel, CreationContext, T> creator;
-	protected readonly bool managedExternally;
+	protected readonly Func<IKernel, ComponentModel, CreationContext, T> Creator;
+	protected readonly bool ManagedExternally;
 
 	public FactoryMethodActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
 		: base(model, kernel, onCreation, onDestruction)
 	{
-		creator = Model.ExtendedProperties["factoryMethodDelegate"] as Func<IKernel, ComponentModel, CreationContext, T>;
-		managedExternally = (Model.ExtendedProperties["factory.managedExternally"] as bool?).GetValueOrDefault();
-		if (creator == null)
+		Creator = Model.ExtendedProperties["factoryMethodDelegate"] as Func<IKernel, ComponentModel, CreationContext, T>;
+		ManagedExternally = (Model.ExtendedProperties["factory.managedExternally"] as bool?).GetValueOrDefault();
+		if (Creator == null)
 		{
 			throw new ComponentActivatorException(
 				string.Format(
@@ -47,12 +47,12 @@ public class FactoryMethodActivator<T> : DefaultComponentActivator, IDependencyA
 
 	public bool IsManagedExternally(ComponentModel component)
 	{
-		return managedExternally;
+		return ManagedExternally;
 	}
 
 	protected override void ApplyCommissionConcerns(object instance)
 	{
-		if (managedExternally)
+		if (ManagedExternally)
 		{
 			return;
 		}
@@ -61,7 +61,7 @@ public class FactoryMethodActivator<T> : DefaultComponentActivator, IDependencyA
 
 	protected override void ApplyDecommissionConcerns(object instance)
 	{
-		if (managedExternally)
+		if (ManagedExternally)
 		{
 			return;
 		}
@@ -70,7 +70,7 @@ public class FactoryMethodActivator<T> : DefaultComponentActivator, IDependencyA
 
 	protected override object Instantiate(CreationContext context)
 	{
-		object instance = creator(Kernel, Model, context);
+		object instance = Creator(Kernel, Model, context);
 		if (ShouldCreateProxy(instance))
 		{
 			instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, context);

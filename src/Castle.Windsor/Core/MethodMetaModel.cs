@@ -25,7 +25,7 @@ using Castle.Core.Configuration;
 [Serializable]
 public class MethodMetaModel
 {
-	private readonly IConfiguration configNode;
+	private readonly IConfiguration _configNode;
 
 	/// <summary>
 	///   Initializes a new instance of the <see cref = "MethodMetaModel" /> class.
@@ -33,7 +33,7 @@ public class MethodMetaModel
 	/// <param name = "configNode">The config node.</param>
 	public MethodMetaModel(IConfiguration configNode)
 	{
-		this.configNode = configNode;
+		this._configNode = configNode;
 	}
 
 	/// <summary>
@@ -42,6 +42,6 @@ public class MethodMetaModel
 	/// <value>The config node.</value>
 	public IConfiguration ConfigNode
 	{
-		get { return configNode; }
+		get { return _configNode; }
 	}
 }

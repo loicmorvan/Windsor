@@ -32,25 +32,25 @@ public class AnyComponentWithLifestyleManager : AbstractLifestyleManager
 
 public sealed class AnyMiddleware : IMiddleware
 {
-	private readonly AnyComponent anyComponent;
-	private readonly ServiceProviderOnlyScopedDisposable serviceProviderOnlyScopedDisposable;
-	private readonly WindsorOnlyScopedDisposable windsorOnlyScopedDisposable;
-	private readonly CrossWiredScopedDisposable crossWiredScopedDisposable;
+	private readonly AnyComponent _anyComponent;
+	private readonly ServiceProviderOnlyScopedDisposable _serviceProviderOnlyScopedDisposable;
+	private readonly WindsorOnlyScopedDisposable _windsorOnlyScopedDisposable;
+	private readonly CrossWiredScopedDisposable _crossWiredScopedDisposable;
 
 	public AnyMiddleware(
 		ServiceProviderOnlyScopedDisposable serviceProviderOnlyScopedDisposable,
 		WindsorOnlyScopedDisposable windsorOnlyScopedDisposable,
 		CrossWiredScopedDisposable crossWiredScopedDisposable)
 	{
-		this.serviceProviderOnlyScopedDisposable = serviceProviderOnlyScopedDisposable ?? throw new ArgumentNullException(nameof(serviceProviderOnlyScopedDisposable));
-		this.windsorOnlyScopedDisposable = windsorOnlyScopedDisposable ?? throw new ArgumentNullException(nameof(windsorOnlyScopedDisposable));
-		this.crossWiredScopedDisposable = crossWiredScopedDisposable ?? throw new ArgumentNullException(nameof(crossWiredScopedDisposable));
+		this._serviceProviderOnlyScopedDisposable = serviceProviderOnlyScopedDisposable ?? throw new ArgumentNullException(nameof(serviceProviderOnlyScopedDisposable));
+		this._windsorOnlyScopedDisposable = windsorOnlyScopedDisposable ?? throw new ArgumentNullException(nameof(windsorOnlyScopedDisposable));
+		this._crossWiredScopedDisposable = crossWiredScopedDisposable ?? throw new ArgumentNullException(nameof(crossWiredScopedDisposable));
 	}
 
 	public AnyMiddleware(AnyComponent anyComponent)
 	{
 		// This will never get called because Windsor picks the most greedy constructor
-		this.anyComponent = anyComponent ?? throw new ArgumentNullException(nameof(anyComponent));
+		this._anyComponent = anyComponent ?? throw new ArgumentNullException(nameof(anyComponent));
 	}
 
 	public async Task InvokeAsync(HttpContext context, RequestDelegate next)

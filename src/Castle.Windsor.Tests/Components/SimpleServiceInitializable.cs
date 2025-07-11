@@ -18,16 +18,16 @@ using Castle.Core;
 
 public class SimpleServiceInitializable : ISimpleService, IInitializable
 {
-	private bool isInitialized;
+	private bool _isInitialized;
 
 	public bool IsInitialized
 	{
-		get { return isInitialized; }
+		get { return _isInitialized; }
 	}
 
 	public void Initialize()
 	{
-		isInitialized = true;
+		_isInitialized = true;
 	}
 
 	public void Operation()

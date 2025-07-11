@@ -28,21 +28,21 @@ using Castle.MicroKernel.Lifestyle.Scoped;
 /// </summary>
 public class BasedOnDescriptor : IRegistration
 {
-	private readonly List<Type> potentialBases;
-	private Action<ComponentRegistration> configuration;
-	private readonly FromDescriptor from;
-	private readonly ServiceDescriptor service;
-	private Predicate<Type> ifFilter;
-	private Predicate<Type> unlessFilter;
+	private readonly List<Type> _potentialBases;
+	private Action<ComponentRegistration> _configuration;
+	private readonly FromDescriptor _from;
+	private readonly ServiceDescriptor _service;
+	private Predicate<Type> _ifFilter;
+	private Predicate<Type> _unlessFilter;
 
 	/// <summary>
 	///   Initializes a new instance of the BasedOnDescriptor.
 	/// </summary>
 	internal BasedOnDescriptor(IEnumerable<Type> basedOn, FromDescriptor from, Predicate<Type> additionalFilters)
 	{
-		potentialBases = basedOn.ToList();
-		this.from = from;
-		service = new ServiceDescriptor(this);
+		_potentialBases = basedOn.ToList();
+		this._from = from;
+		_service = new ServiceDescriptor(this);
 		If(additionalFilters);
 	}
 
@@ -51,7 +51,7 @@ public class BasedOnDescriptor : IRegistration
 	/// </summary>
 	public ServiceDescriptor WithService
 	{
-		get { return service; }
+		get { return _service; }
 	}
 
 	/// <summary>
@@ -59,7 +59,7 @@ public class BasedOnDescriptor : IRegistration
 	/// </summary>
 	public FromDescriptor AllowMultipleMatches()
 	{
-		return from.AllowMultipleMatches();
+		return _from.AllowMultipleMatches();
 	}
 
 	/// <summary>
@@ -69,7 +69,7 @@ public class BasedOnDescriptor : IRegistration
 	/// <returns> The descriptor for the type. </returns>
 	public BasedOnDescriptor OrBasedOn(Type basedOn)
 	{
-		potentialBases.Add(basedOn);
+		_potentialBases.Add(basedOn);
 		return this;
 	}
 
@@ -80,7 +80,7 @@ public class BasedOnDescriptor : IRegistration
 	/// <returns> </returns>
 	public BasedOnDescriptor Configure(Action<ComponentRegistration> configurer)
 	{
-		configuration += configurer;
+		_configuration += configurer;
 		return this;
 	}
 
@@ -107,7 +107,7 @@ public class BasedOnDescriptor : IRegistration
 	public BasedOnDescriptor ConfigureIf(Predicate<ComponentRegistration> condition,
 		Action<ComponentRegistration> configurer)
 	{
-		configuration += r =>
+		_configuration += r =>
 		{
 			if (condition(r))
 			{
@@ -128,7 +128,7 @@ public class BasedOnDescriptor : IRegistration
 		Action<ComponentRegistration> configurerWhenTrue,
 		Action<ComponentRegistration> configurerWhenFalse)
 	{
-		configuration += r =>
+		_configuration += r =>
 		{
 			if (condition(r))
 			{
@@ -149,7 +149,7 @@ public class BasedOnDescriptor : IRegistration
 	/// <returns> </returns>
 	public BasedOnDescriptor If(Predicate<Type> ifFilter)
 	{
-		this.ifFilter += ifFilter;
+		this._ifFilter += ifFilter;
 		return this;
 	}
 
@@ -160,7 +160,7 @@ public class BasedOnDescriptor : IRegistration
 	/// <returns> </returns>
 	public BasedOnDescriptor Unless(Predicate<Type> unlessFilter)
 	{
-		this.unlessFilter += unlessFilter;
+		this._unlessFilter += unlessFilter;
 		return this;
 	}
 
@@ -372,12 +372,12 @@ public class BasedOnDescriptor : IRegistration
 
 	protected bool ExecuteIfCondition(Type type)
 	{
-		if (ifFilter == null)
+		if (_ifFilter == null)
 		{
 			return true;
 		}
 
-		foreach (Predicate<Type> filter in ifFilter.GetInvocationList())
+		foreach (Predicate<Type> filter in _ifFilter.GetInvocationList())
 		{
 			if (filter(type) == false)
 			{
@@ -390,11 +390,11 @@ public class BasedOnDescriptor : IRegistration
 
 	protected bool ExecuteUnlessCondition(Type type)
 	{
-		if (unlessFilter == null)
+		if (_unlessFilter == null)
 		{
 			return false;
 		}
-		foreach (Predicate<Type> filter in unlessFilter.GetInvocationList())
+		foreach (Predicate<Type> filter in _unlessFilter.GetInvocationList())
 		{
 			if (filter(type))
 			{
@@ -407,7 +407,7 @@ public class BasedOnDescriptor : IRegistration
 	protected bool IsBasedOn(Type type, out Type[] baseTypes)
 	{
 		var actuallyBasedOn = new List<Type>();
-		foreach (var potentialBase in potentialBases)
+		foreach (var potentialBase in _potentialBases)
 		{
 			if (potentialBase.GetTypeInfo().IsAssignableFrom(type))
 			{
@@ -442,7 +442,7 @@ public class BasedOnDescriptor : IRegistration
 			return false;
 		}
 		var defaults = CastleComponentAttribute.GetDefaultsFor(type);
-		var serviceTypes = service.GetServices(type, baseTypes);
+		var serviceTypes = _service.GetServices(type, baseTypes);
 		if (serviceTypes.Count == 0 && defaults.Services.Length > 0)
 		{
 			serviceTypes = defaults.Services;
@@ -450,9 +450,9 @@ public class BasedOnDescriptor : IRegistration
 		var registration = Component.For(serviceTypes);
 		registration.ImplementedBy(type);
 
-		if (configuration != null)
+		if (_configuration != null)
 		{
-			configuration(registration);
+			_configuration(registration);
 		}
 		if (String.IsNullOrEmpty(registration.Name) && !String.IsNullOrEmpty(defaults.Name))
 		{
@@ -473,7 +473,7 @@ public class BasedOnDescriptor : IRegistration
 			if (type.GetTypeInfo().IsGenericType &&
 			    type.GetGenericTypeDefinition() == basedOn)
 			{
-				baseTypes = new[] { type };
+				baseTypes = [type];
 				return true;
 			}
 
@@ -508,6 +508,6 @@ public class BasedOnDescriptor : IRegistration
 
 	void IRegistration.Register(IKernelInternal kernel)
 	{
-		((IRegistration)from).Register(kernel);
+		((IRegistration)_from).Register(kernel);
 	}
 }

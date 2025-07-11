@@ -55,17 +55,17 @@ public class LifestyleTests
 
 	public class InterfaceImpl : IInterface, IDisposable
 	{
-		bool disposed;
+		bool _disposed;
 
 		public void Dispose()
 		{
-			disposed = true;
+			_disposed = true;
 			Console.WriteLine(Environment.StackTrace);
 		}
 
 		public void Do()
 		{
-			if (disposed)
+			if (_disposed)
 			{
 				throw new NotSupportedException();
 			}

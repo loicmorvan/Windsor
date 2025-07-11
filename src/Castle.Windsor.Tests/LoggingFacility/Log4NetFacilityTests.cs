@@ -32,23 +32,23 @@ using log4net.Repository.Hierarchy;
 /// </summary>
 public class Log4NetFacilityTests : BaseTest, IDisposable
 {
-	private readonly IWindsorContainer container;
+	private readonly IWindsorContainer _container;
 
 	public Log4NetFacilityTests()
 	{
-		container = base.CreateConfiguredContainer<ExtendedLog4netFactory>();
+		_container = base.CreateConfiguredContainer<ExtendedLog4netFactory>();
 	}
 
 	public void Dispose()
 	{
-		container.Dispose();
+		_container.Dispose();
 	}
 
 	[Fact]
 	public void SimpleTest()
 	{
-		container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
-		SimpleLoggingComponent test = container.Resolve<SimpleLoggingComponent>("component");
+		_container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
+		SimpleLoggingComponent test = _container.Resolve<SimpleLoggingComponent>("component");
 
 		test.DoSomething();
 

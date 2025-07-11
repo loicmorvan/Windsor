@@ -19,7 +19,7 @@ using System.Collections.Generic;
 
 public class SimpleSortedSet<T>(IComparer<T> comparer) : ICollection<T>
 {
-	private readonly List<T> items = new List<T>();
+	private readonly List<T> _items = new();
 
 	public SimpleSortedSet() : this(Comparer<T>.Default)
 	{
@@ -35,12 +35,12 @@ public class SimpleSortedSet<T>(IComparer<T> comparer) : ICollection<T>
 
 	public T this[int index]
 	{
-		get { return items[index]; }
+		get { return _items[index]; }
 	}
 
 	public int Count
 	{
-		get { return items.Count; }
+		get { return _items.Count; }
 	}
 
 	bool ICollection<T>.IsReadOnly
@@ -53,10 +53,10 @@ public class SimpleSortedSet<T>(IComparer<T> comparer) : ICollection<T>
 		var count = Count;
 		for (var i = 0; i < count; i++)
 		{
-			var result = comparer.Compare(item, items[i]);
+			var result = comparer.Compare(item, _items[i]);
 			if (result < 0)
 			{
-				items.Insert(i, item);
+				_items.Insert(i, item);
 				return;
 			}
 			if (result == 0)
@@ -64,32 +64,32 @@ public class SimpleSortedSet<T>(IComparer<T> comparer) : ICollection<T>
 				return;
 			}
 		}
-		items.Add(item);
+		_items.Add(item);
 	}
 
 	public void Clear()
 	{
-		items.Clear();
+		_items.Clear();
 	}
 
 	public bool Contains(T item)
 	{
-		return items.Contains(item);
+		return _items.Contains(item);
 	}
 
 	public void CopyTo(T[] array, int arrayIndex)
 	{
-		items.CopyTo(array, arrayIndex);
+		_items.CopyTo(array, arrayIndex);
 	}
 
 	public bool Remove(T item)
 	{
-		return items.Remove(item);
+		return _items.Remove(item);
 	}
 
 	public IEnumerator<T> GetEnumerator()
 	{
-		return items.GetEnumerator();
+		return _items.GetEnumerator();
 	}
 
 	IEnumerator IEnumerable.GetEnumerator()

@@ -22,7 +22,7 @@ using Castle.MicroKernel.Handlers;
 
 public class DelegateServiceStrategy : IGenericServiceStrategy
 {
-	public static readonly DelegateServiceStrategy Instance = new DelegateServiceStrategy();
+	public static readonly DelegateServiceStrategy Instance = new();
 
 	private DelegateServiceStrategy()
 	{

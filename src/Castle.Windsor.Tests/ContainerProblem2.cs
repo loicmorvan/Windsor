@@ -30,11 +30,11 @@ public interface IC
 
 public class CImpl : IC
 {
-	private R r = null;
+	private R _r;
 
 	public R R
 	{
-		set { r = value; }
+		set { _r = value; }
 	}
 
 	public IN N { get; set; } = null;
@@ -42,24 +42,24 @@ public class CImpl : IC
 
 public interface IN
 {
-	IS CS { get; }
+	IS Cs { get; }
 }
 
 [Transient]
-public class DN(IWM vm, ISP sp) : IN
+public class Dn(IWm vm, ISp sp) : IN
 {
-	private IWM vm = vm;
-	private ISP sp = sp;
+	private IWm _vm = vm;
+	private ISp _sp = sp;
 
-	public IS CS { get; private set; } = new BS();
+	public IS Cs { get; private set; } = new Bs();
 }
 
-public interface IWM
+public interface IWm
 {
 	void A(IN n);
 }
 
-public class WM : IWM
+public class Wm : IWm
 {
 	public void A(IN n)
 	{
@@ -69,27 +69,27 @@ public class WM : IWM
 
 public interface IS
 {
-	ISP SP { get; set; }
+	ISp Sp { get; set; }
 }
 
 [Transient]
-public class BS : IS
+public class Bs : IS
 {
-	private ISP _sp = null;
+	private ISp _sp;
 
-	public ISP SP
+	public ISp Sp
 	{
 		get { return _sp; }
 		set { _sp = value; }
 	}
 }
 
-public interface ISP
+public interface ISp
 {
 	void Save(IS s);
 }
 
-public class SP : ISP
+public class Sp : ISp
 {
 	public void Save(IS s)
 	{
@@ -104,10 +104,10 @@ public class ContainerProblem2
 	{
 		IWindsorContainer container = new WindsorContainer();
 
-		container.Register(Component.For(typeof(IS)).ImplementedBy(typeof(BS)).Named("BS"));
+		container.Register(Component.For(typeof(IS)).ImplementedBy(typeof(Bs)).Named("BS"));
 		container.Register(Component.For(typeof(IC)).ImplementedBy(typeof(CImpl)).Named("C"));
-		container.Register(Component.For(typeof(IWM)).ImplementedBy(typeof(WM)).Named("WM"));
-		container.Register(Component.For(typeof(ISP)).ImplementedBy(typeof(SP)).Named("SP"));
+		container.Register(Component.For(typeof(IWm)).ImplementedBy(typeof(Wm)).Named("WM"));
+		container.Register(Component.For(typeof(ISp)).ImplementedBy(typeof(Sp)).Named("SP"));
 
 		//TODO: dead code - why is it here?
 		// ComponentModel model = new ComponentModel("R", typeof(R), typeof(R));

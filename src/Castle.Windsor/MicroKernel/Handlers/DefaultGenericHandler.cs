@@ -31,28 +31,27 @@ using Castle.MicroKernel.ModelBuilder;
 public class DefaultGenericHandler(ComponentModel model, IGenericImplementationMatchingStrategy implementationMatchingStrategy, IGenericServiceStrategy serviceStrategy)
 	: AbstractHandler(model)
 {
-	private readonly IGenericImplementationMatchingStrategy implementationMatchingStrategy = implementationMatchingStrategy;
-	private readonly IGenericServiceStrategy serviceStrategy = serviceStrategy;
+	private readonly IGenericImplementationMatchingStrategy _implementationMatchingStrategy = implementationMatchingStrategy;
+	private readonly IGenericServiceStrategy _serviceStrategy = serviceStrategy;
 
-	private readonly SimpleThreadSafeDictionary<Type, IHandler> type2SubHandler = new SimpleThreadSafeDictionary<Type, IHandler>();
+	private readonly SimpleThreadSafeDictionary<Type, IHandler> _type2SubHandler = new();
 
 	public IGenericImplementationMatchingStrategy ImplementationMatchingStrategy
 	{
-		get { return implementationMatchingStrategy; }
+		get { return _implementationMatchingStrategy; }
 	}
 
 	public IGenericServiceStrategy ServiceStrategy
 	{
-		get { return serviceStrategy; }
+		get { return _serviceStrategy; }
 	}
 
 	public override void Dispose()
 	{
-		var innerHandlers = type2SubHandler.EjectAllValues();
+		var innerHandlers = _type2SubHandler.EjectAllValues();
 		foreach (var handler in innerHandlers)
 		{
-			var disposable = handler as IDisposable;
-			if (disposable != null)
+			if (handler is IDisposable disposable)
 			{
 				disposable.Dispose();
 			}
@@ -62,7 +61,7 @@ public class DefaultGenericHandler(ComponentModel model, IGenericImplementationM
 	public override bool ReleaseCore(Burden burden)
 	{
 		var genericType = ProxyUtil.GetUnproxiedType(burden.Instance);
-		var handler = type2SubHandler.GetOrThrow(genericType);
+		var handler = _type2SubHandler.GetOrThrow(genericType);
 
 		return handler.Release(burden);
 	}
@@ -73,7 +72,7 @@ public class DefaultGenericHandler(ComponentModel model, IGenericImplementationM
 		{
 			return true;
 		}
-		if (type2SubHandler.Contains(service))
+		if (_type2SubHandler.Contains(service))
 		{
 			return true;
 		}
@@ -84,7 +83,7 @@ public class DefaultGenericHandler(ComponentModel model, IGenericImplementationM
 			{
 				return false;
 			}
-			return serviceStrategy == null || serviceStrategy.Supports(service, ComponentModel);
+			return _serviceStrategy == null || _serviceStrategy.Supports(service, ComponentModel);
 		}
 		return false;
 	}
@@ -109,7 +108,7 @@ public class DefaultGenericHandler(ComponentModel model, IGenericImplementationM
 		if (openServices.Length == 1 && requestedType.GetTypeInfo().IsGenericType && openServices[0] == requestedType.GetGenericTypeDefinition())
 		{
 			// shortcut for the most common case
-			return new[] { requestedType };
+			return [requestedType];
 		}
 		var closedServices = new List<Type>(openServices.Length);
 		var index = AdaptClassServices(closedImplementationType, closedServices, openServices);
@@ -121,7 +120,7 @@ public class DefaultGenericHandler(ComponentModel model, IGenericImplementationM
 		if (closedServices.Count == 0)
 		{
 			// we obviously have either a bug or an uncovered case. I suppose the best we can do at this point is to fallback to the old behaviour
-			return new[] { requestedType };
+			return [requestedType];
 		}
 		return closedServices.ToArray();
 	}
@@ -144,7 +143,7 @@ public class DefaultGenericHandler(ComponentModel model, IGenericImplementationM
 	protected IHandler GetSubHandler(Type genericType, Type requestedType)
 	{
 		var added = false;
-		var handler = type2SubHandler.GetOrAdd(genericType, t =>
+		var handler = _type2SubHandler.GetOrAdd(genericType, t =>
 		{
 			added = true;
 			return BuildSubHandler(t, requestedType);
@@ -160,8 +159,7 @@ public class DefaultGenericHandler(ComponentModel model, IGenericImplementationM
 	protected override void InitDependencies()
 	{
 		// not too convinved we need to support that in here but let's be safe...
-		var activator = Kernel.CreateComponentActivator(ComponentModel) as IDependencyAwareActivator;
-		if (activator != null && activator.CanProvideRequiredDependencies(ComponentModel))
+		if (Kernel.CreateComponentActivator(ComponentModel) is IDependencyAwareActivator activator && activator.CanProvideRequiredDependencies(ComponentModel))
 		{
 			foreach (var dependency in ComponentModel.Dependencies)
 			{
@@ -179,7 +177,7 @@ public class DefaultGenericHandler(ComponentModel model, IGenericImplementationM
 		var implType = GetClosedImplementationType(context, instanceRequired);
 		if (implType == null)
 		{
-			Debug.Assert(instanceRequired == false, "instanceRequired == false");
+			Debug.Assert(instanceRequired == false);
 			return null;
 		}
 
@@ -293,7 +291,7 @@ public class DefaultGenericHandler(ComponentModel model, IGenericImplementationM
 		}
 		catch (ArgumentNullException)
 		{
-			if (implementationMatchingStrategy == null)
+			if (_implementationMatchingStrategy == null)
 			{
 				// NOTE: if we're here something is badly screwed...
 				throw;
@@ -301,7 +299,7 @@ public class DefaultGenericHandler(ComponentModel model, IGenericImplementationM
 			throw new HandlerException(
 				string.Format(
 					"Custom {0} ({1}) didn't select any generic parameters for implementation type of component '{2}'. This usually signifies bug in the {0}.",
-					typeof(IGenericImplementationMatchingStrategy).Name, implementationMatchingStrategy, ComponentModel.Name), ComponentModel.ComponentName);
+					typeof(IGenericImplementationMatchingStrategy).Name, _implementationMatchingStrategy, ComponentModel.Name), ComponentModel.ComponentName);
 		}
 		catch (ArgumentException e)
 		{
@@ -328,7 +326,7 @@ public class DefaultGenericHandler(ComponentModel model, IGenericImplementationM
 					arguments.Length,
 					Environment.NewLine);
 
-				if (implementationMatchingStrategy == null)
+				if (_implementationMatchingStrategy == null)
 				{
 					message += string.Format("{0}You can instruct Windsor which types it should use to close this generic component by supplying an implementation of {1}.{0}" +
 					                         "Please consult the documentation for examples of how to do that.",
@@ -341,7 +339,7 @@ public class DefaultGenericHandler(ComponentModel model, IGenericImplementationM
 					                         "Please consult the documentation for examples of how to implement it properly.",
 						Environment.NewLine,
 						typeof(IGenericImplementationMatchingStrategy).Name,
-						implementationMatchingStrategy);
+						_implementationMatchingStrategy);
 				}
 				//"This is most likely a bug in your registration code."
 				throw new HandlerException(message, ComponentModel.ComponentName, e);
@@ -363,7 +361,7 @@ public class DefaultGenericHandler(ComponentModel model, IGenericImplementationM
 	private Arguments GetExtendedProperties()
 	{
 		var extendedProperties = ComponentModel.ExtendedProperties;
-		if (extendedProperties != null && extendedProperties.Count > 0)
+		if (extendedProperties is { Count: > 0 })
 		{
 			extendedProperties = new Arguments(extendedProperties);
 		}
@@ -372,11 +370,11 @@ public class DefaultGenericHandler(ComponentModel model, IGenericImplementationM
 
 	private Type[] GetGenericArguments(CreationContext context)
 	{
-		if (implementationMatchingStrategy == null)
+		if (_implementationMatchingStrategy == null)
 		{
 			return context.GenericArguments;
 		}
-		return implementationMatchingStrategy.GetGenericArguments(ComponentModel, context) ?? context.GenericArguments;
+		return _implementationMatchingStrategy.GetGenericArguments(ComponentModel, context) ?? context.GenericArguments;
 	}
 
 	private static int AdaptClassServices(Type closedImplementationType, List<Type> closedServices, Type[] openServices)

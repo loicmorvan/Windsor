@@ -28,8 +28,8 @@ using Castle.MicroKernel.SubSystems.Conversion;
 [Serializable]
 public class DefaultComponentModelBuilder : IComponentModelBuilder
 {
-	private readonly List<IContributeComponentModelConstruction> contributors = new List<IContributeComponentModelConstruction>();
-	private readonly IKernel kernel;
+	private readonly List<IContributeComponentModelConstruction> _contributors = [];
+	private readonly IKernel _kernel;
 
 	/// <summary>
 	///   Initializes a new instance of the <see cref = "DefaultComponentModelBuilder" /> class.
@@ -37,7 +37,7 @@ public class DefaultComponentModelBuilder : IComponentModelBuilder
 	/// <param name = "kernel">The kernel.</param>
 	public DefaultComponentModelBuilder(IKernel kernel)
 	{
-		this.kernel = kernel;
+		this._kernel = kernel;
 		InitializeContributors();
 	}
 
@@ -47,7 +47,7 @@ public class DefaultComponentModelBuilder : IComponentModelBuilder
 	/// <value>The contributors.</value>
 	public IContributeComponentModelConstruction[] Contributors
 	{
-		get { return contributors.ToArray(); }
+		get { return _contributors.ToArray(); }
 	}
 
 	/// <summary>
@@ -60,7 +60,7 @@ public class DefaultComponentModelBuilder : IComponentModelBuilder
 	/// <param name = "contributor"></param>
 	public void AddContributor(IContributeComponentModelConstruction contributor)
 	{
-		contributors.Add(contributor);
+		_contributors.Add(contributor);
 	}
 
 	/// <summary>
@@ -70,7 +70,7 @@ public class DefaultComponentModelBuilder : IComponentModelBuilder
 	public ComponentModel BuildModel(ComponentName name, Type[] services, Type classType, Arguments extendedProperties)
 	{
 		var model = new ComponentModel(name, services, classType, extendedProperties);
-		contributors.ForEach(c => c.ProcessModel(kernel, model));
+		_contributors.ForEach(c => c.ProcessModel(_kernel, model));
 
 		return model;
 	}
@@ -78,16 +78,15 @@ public class DefaultComponentModelBuilder : IComponentModelBuilder
 	public ComponentModel BuildModel(IComponentModelDescriptor[] customContributors)
 	{
 		var model = new ComponentModel();
-		customContributors.ForEach(c => c.BuildComponentModel(kernel, model));
+		customContributors.ForEach(c => c.BuildComponentModel(_kernel, model));
 
-		contributors.ForEach(c => c.ProcessModel(kernel, model));
+		_contributors.ForEach(c => c.ProcessModel(_kernel, model));
 
 		var metaDescriptors = default(ICollection<IMetaComponentModelDescriptor>);
 		customContributors.ForEach(c =>
 		{
-			c.ConfigureComponentModel(kernel, model);
-			var meta = c as IMetaComponentModelDescriptor;
-			if (meta != null)
+			c.ConfigureComponentModel(_kernel, model);
+			if (c is IMetaComponentModelDescriptor meta)
 			{
 				if (metaDescriptors == null)
 				{
@@ -105,7 +104,7 @@ public class DefaultComponentModelBuilder : IComponentModelBuilder
 	/// <param name = "contributor"></param>
 	public void RemoveContributor(IContributeComponentModelConstruction contributor)
 	{
-		contributors.Remove(contributor);
+		_contributors.Remove(contributor);
 	}
 
 	/// <summary>
@@ -113,7 +112,7 @@ public class DefaultComponentModelBuilder : IComponentModelBuilder
 	/// </summary>
 	protected virtual void InitializeContributors()
 	{
-		var conversionManager = kernel.GetConversionManager();
+		var conversionManager = _kernel.GetConversionManager();
 		AddContributor(new GenericInspector());
 		AddContributor(new ConfigurationModelInspector());
 		AddContributor(new ConfigurationParametersInspector());

@@ -20,16 +20,16 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 
 internal sealed class DelegatingViewComponentActivator(Func<Type, object> viewComponentCreator, Action<object> viewComponentReleaser) : IViewComponentActivator
 {
-	private readonly Func<Type, object> viewComponentCreator = viewComponentCreator ?? throw new ArgumentNullException(nameof(viewComponentCreator));
-	private readonly Action<object> viewComponentReleaser = viewComponentReleaser ?? throw new ArgumentNullException(nameof(viewComponentReleaser));
+	private readonly Func<Type, object> _viewComponentCreator = viewComponentCreator ?? throw new ArgumentNullException(nameof(viewComponentCreator));
+	private readonly Action<object> _viewComponentReleaser = viewComponentReleaser ?? throw new ArgumentNullException(nameof(viewComponentReleaser));
 
 	public object Create(ViewComponentContext context)
 	{
-		return viewComponentCreator(context.ViewComponentDescriptor.TypeInfo.AsType());
+		return _viewComponentCreator(context.ViewComponentDescriptor.TypeInfo.AsType());
 	}
 
 	public void Release(ViewComponentContext context, object viewComponent)
 	{
-		viewComponentReleaser(viewComponent);
+		_viewComponentReleaser(viewComponent);
 	}
 }

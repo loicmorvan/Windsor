@@ -18,17 +18,17 @@ using System.Threading;
 
 internal class SlimUpgradeableReadLockHolder : IUpgradeableLockHolder
 {
-	private readonly ReaderWriterLockSlim locker;
-	private SlimWriteLockHolder writerLock;
-	private readonly bool wasLockAlreadySelf;
+	private readonly ReaderWriterLockSlim _locker;
+	private SlimWriteLockHolder _writerLock;
+	private readonly bool _wasLockAlreadySelf;
 
 	public SlimUpgradeableReadLockHolder(ReaderWriterLockSlim locker, bool waitForLock, bool wasLockAlreadySelf)
 	{
-		this.locker = locker;
+		this._locker = locker;
 		if (wasLockAlreadySelf)
 		{
 			LockAcquired = true;
-			this.wasLockAlreadySelf = true;
+			this._wasLockAlreadySelf = true;
 			return;
 		}
 
@@ -44,15 +44,15 @@ internal class SlimUpgradeableReadLockHolder : IUpgradeableLockHolder
 
 	public void Dispose()
 	{
-		if (writerLock != null && writerLock.LockAcquired)
+		if (_writerLock is { LockAcquired: true })
 		{
-			writerLock.Dispose();
-			writerLock = null;
+			_writerLock.Dispose();
+			_writerLock = null;
 		}
 		if (!LockAcquired) return;
-		if (!wasLockAlreadySelf)
+		if (!_wasLockAlreadySelf)
 		{
-			locker.ExitUpgradeableReadLock();
+			_locker.ExitUpgradeableReadLock();
 		}
 		LockAcquired = false;
 			
@@ -65,13 +65,13 @@ internal class SlimUpgradeableReadLockHolder : IUpgradeableLockHolder
 
 	public ILockHolder Upgrade(bool waitForLock)
 	{
-		if(locker.IsWriteLockHeld)
+		if(_locker.IsWriteLockHeld)
 		{
 			return NoOpLock.Lock;
 		}
 
-		writerLock = new SlimWriteLockHolder(locker, waitForLock);
-		return writerLock;
+		_writerLock = new SlimWriteLockHolder(_locker, waitForLock);
+		return _writerLock;
 	}
 
 	public bool LockAcquired { get; private set; }

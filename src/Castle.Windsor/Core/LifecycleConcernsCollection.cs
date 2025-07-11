@@ -25,10 +25,10 @@ using System.Diagnostics;
 public class LifecycleConcernsCollection
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private List<ICommissionConcern> commission;
+	private List<ICommissionConcern> _commission;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private List<IDecommissionConcern> decommission;
+	private List<IDecommissionConcern> _decommission;
 
 	/// <summary>
 	///   Returns all concerns for the commission phase
@@ -42,7 +42,7 @@ public class LifecycleConcernsCollection
 			{
 				return new ICommissionConcern[0];
 			}
-			return commission;
+			return _commission;
 		}
 	}
 
@@ -58,7 +58,7 @@ public class LifecycleConcernsCollection
 			{
 				return new IDecommissionConcern[0];
 			}
-			return decommission;
+			return _decommission;
 		}
 	}
 
@@ -71,7 +71,7 @@ public class LifecycleConcernsCollection
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public bool HasCommissionConcerns
 	{
-		get { return commission != null && commission.Count != 0; }
+		get { return _commission != null && _commission.Count != 0; }
 	}
 
 	/// <summary>
@@ -83,7 +83,7 @@ public class LifecycleConcernsCollection
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public bool HasDecommissionConcerns
 	{
-		get { return decommission != null && decommission.Count != 0; }
+		get { return _decommission != null && _decommission.Count != 0; }
 	}
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -91,11 +91,11 @@ public class LifecycleConcernsCollection
 	{
 		get
 		{
-			if (commission == null)
+			if (_commission == null)
 			{
-				commission = new List<ICommissionConcern>();
+				_commission = new List<ICommissionConcern>();
 			}
-			return commission;
+			return _commission;
 		}
 	}
 
@@ -104,11 +104,11 @@ public class LifecycleConcernsCollection
 	{
 		get
 		{
-			if (decommission == null)
+			if (_decommission == null)
 			{
-				decommission = new List<IDecommissionConcern>();
+				_decommission = new List<IDecommissionConcern>();
 			}
-			return decommission;
+			return _decommission;
 		}
 	}
 

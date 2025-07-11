@@ -43,7 +43,7 @@ internal enum VertexColor
 /// </summary>
 internal class ColorsSet
 {
-	private readonly IDictionary<IVertex, VertexColor> items = new Dictionary<IVertex, VertexColor>();
+	private readonly IDictionary<IVertex, VertexColor> _items = new Dictionary<IVertex, VertexColor>();
 
 	public ColorsSet(IVertex[] items)
 	{
@@ -55,16 +55,16 @@ internal class ColorsSet
 
 	public VertexColor ColorOf(IVertex item)
 	{
-		if (!items.ContainsKey(item))
+		if (!_items.ContainsKey(item))
 		{
 			return VertexColor.NotInThisSet;
 		}
-		return items[item];
+		return _items[item];
 	}
 
 	public void Set(IVertex item, VertexColor color)
 	{
-		items[item] = color;
+		_items[item] = color;
 	}
 }
 
@@ -74,15 +74,15 @@ internal class ColorsSet
 /// </summary>
 internal class TimestampSet
 {
-	private readonly IDictionary<IVertex, int> items = new Dictionary<IVertex, int>();
+	private readonly IDictionary<IVertex, int> _items = new Dictionary<IVertex, int>();
 
 	public void Register(IVertex item, int time)
 	{
-		items[item] = time;
+		_items[item] = time;
 	}
 
 	public int TimeOf(IVertex item)
 	{
-		return items[item];
+		return _items[item];
 	}
 }

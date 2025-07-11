@@ -19,7 +19,7 @@ using System.Linq;
 
 public class SegmentedList<T>(int segmentCount)
 {
-	private readonly List<T>[] segments = new List<T>[segmentCount];
+	private readonly List<T>[] _segments = new List<T>[segmentCount];
 
 	public void AddFirst(int segmentIndex, T item)
 	{
@@ -33,17 +33,17 @@ public class SegmentedList<T>(int segmentCount)
 
 	public T[] ToArray()
 	{
-		return segments.Where(l => l != null)
+		return _segments.Where(l => l != null)
 			.SelectMany(l => l)
 			.ToArray();
 	}
 
 	private List<T> GetSegment(int segmentIndex)
 	{
-		var group = segments[segmentIndex];
+		var group = _segments[segmentIndex];
 		if (group == null)
 		{
-			group = segments[segmentIndex] = new List<T>(4);
+			group = _segments[segmentIndex] = new List<T>(4);
 		}
 		return @group;
 	}

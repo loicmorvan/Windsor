@@ -30,7 +30,7 @@ using Microsoft.Extensions.DependencyInjection.Specification;
 
 public abstract class SkippableDependencyInjectionSpecificationTests : DependencyInjectionSpecificationTests
 {
-	public string[] SkippedTests => new[] { "SingletonServiceCanBeResolvedFromScope" };
+	public string[] SkippedTests => ["SingletonServiceCanBeResolvedFromScope"];
 
 #if NET6_0_OR_GREATER
 	public override bool SupportsIServiceProviderIsService => false;

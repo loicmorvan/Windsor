@@ -25,7 +25,7 @@ using Castle.MicroKernel.Registration;
 /// </summary>
 public class WindsorRegistrationOptions
 {
-	private Assembly entryAssembly = null;
+	private Assembly _entryAssembly;
 
 	internal Assembly EntryAssembly
 	{
@@ -33,24 +33,24 @@ public class WindsorRegistrationOptions
 		{
 			try
 			{
-				entryAssembly = entryAssembly ?? Assembly.GetEntryAssembly();
+				_entryAssembly ??= Assembly.GetEntryAssembly();
 			}
 			catch
 			{
-				entryAssembly = entryAssembly ?? Assembly.GetCallingAssembly();
+				_entryAssembly ??= Assembly.GetCallingAssembly();
 			}
 
-			return entryAssembly;
+			return _entryAssembly;
 		}
 	}
 
-	internal List<(Assembly, LifestyleType)> ControllerAssemblyRegistrations = new List<(Assembly, LifestyleType)>();
-	internal List<(Assembly, LifestyleType)> TagHelperAssemblyRegistrations = new List<(Assembly, LifestyleType)>();
-	internal List<(Assembly, LifestyleType)> ViewComponentAssemblyRegistrations = new List<(Assembly, LifestyleType)>();
+	internal readonly List<(Assembly, LifestyleType)> ControllerAssemblyRegistrations = [];
+	internal readonly List<(Assembly, LifestyleType)> TagHelperAssemblyRegistrations = [];
+	internal readonly List<(Assembly, LifestyleType)> ViewComponentAssemblyRegistrations = [];
 
-	internal List<IRegistration> ControllerComponentRegistrations = new List<IRegistration>();
-	internal List<IRegistration> TagHelperComponentRegistrations = new List<IRegistration>();
-	internal List<IRegistration> ViewComponentComponentRegistrations = new List<IRegistration>();
+	internal readonly List<IRegistration> ControllerComponentRegistrations = [];
+	internal readonly List<IRegistration> TagHelperComponentRegistrations = [];
+	internal readonly List<IRegistration> ViewComponentComponentRegistrations = [];
 
 	/// <summary>
 	/// Use this method to specify where controllers, tagHelpers and viewComponents are registered from. Use this method
@@ -62,7 +62,7 @@ public class WindsorRegistrationOptions
 	/// <returns><see cref="WindsorRegistrationOptions"/></returns>
 	public WindsorRegistrationOptions UseEntryAssembly(Assembly entryAssembly)
 	{
-		this.entryAssembly = entryAssembly;
+		this._entryAssembly = entryAssembly;
 		return this;
 	}
 

@@ -36,7 +36,7 @@ public class DictionaryConverter : AbstractTypeConverter
 
 	public override object PerformConversion(IConfiguration configuration, Type targetType)
 	{
-		Debug.Assert(CanHandleType(targetType), "CanHandleType(targetType)");
+		Debug.Assert(CanHandleType(targetType));
 
 		var dict = new Dictionary<object, object>();
 

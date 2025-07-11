@@ -10,6 +10,6 @@ public class UseStringGenericStrategy : IGenericImplementationMatchingStrategy
 {
 	public Type[] GetGenericArguments(ComponentModel model, CreationContext context)
 	{
-		return new[] { typeof(string) };
+		return [typeof(string)];
 	}
 }

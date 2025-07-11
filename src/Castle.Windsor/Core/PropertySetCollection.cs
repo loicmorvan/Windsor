@@ -28,11 +28,11 @@ using Castle.Core.Internal;
 [Serializable]
 public class PropertySetCollection : IMutableCollection<PropertySet>
 {
-	private readonly HashSet<PropertySet> properties = new HashSet<PropertySet>();
+	private readonly HashSet<PropertySet> _properties = [];
 
 	public int Count
 	{
-		get { return properties.Count; }
+		get { return _properties.Count; }
 	}
 
 	/// <summary>Finds a PropertySet the by PropertyInfo.</summary>
@@ -45,12 +45,12 @@ public class PropertySetCollection : IMutableCollection<PropertySet>
 
 	public IEnumerator<PropertySet> GetEnumerator()
 	{
-		return properties.GetEnumerator();
+		return _properties.GetEnumerator();
 	}
 
 	IEnumerator IEnumerable.GetEnumerator()
 	{
-		return properties.GetEnumerator();
+		return _properties.GetEnumerator();
 	}
 
 	void IMutableCollection<PropertySet>.Add(PropertySet property)
@@ -59,11 +59,11 @@ public class PropertySetCollection : IMutableCollection<PropertySet>
 		{
 			throw new ArgumentNullException(nameof(property));
 		}
-		properties.Add(property);
+		_properties.Add(property);
 	}
 
 	bool IMutableCollection<PropertySet>.Remove(PropertySet item)
 	{
-		return properties.Remove(item);
+		return _properties.Remove(item);
 	}
 }

@@ -22,7 +22,7 @@ using Castle.Core;
 [PerThread]
 public class PerThreadComponent : IComponent
 {
-	public int ID
+	public int Id
 	{
 		get { return GetHashCode(); }
 	}

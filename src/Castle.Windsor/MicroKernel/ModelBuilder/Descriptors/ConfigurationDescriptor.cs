@@ -20,28 +20,28 @@ using Castle.MicroKernel.Registration;
 
 public class ConfigurationDescriptor : IComponentModelDescriptor
 {
-	private readonly Node[] configNodes;
-	private readonly IConfiguration configuration;
+	private readonly Node[] _configNodes;
+	private readonly IConfiguration _configuration;
 
 	public ConfigurationDescriptor(params Node[] configNodes)
 	{
-		this.configNodes = configNodes;
+		this._configNodes = configNodes;
 	}
 
 	public ConfigurationDescriptor(IConfiguration configuration)
 	{
-		this.configuration = configuration;
+		this._configuration = configuration;
 	}
 
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
-		if (configuration != null)
+		if (_configuration != null)
 		{
-			model.Configuration.Children.Add(configuration);
+			model.Configuration.Children.Add(_configuration);
 		}
 		else
 		{
-			foreach (var configNode in configNodes)
+			foreach (var configNode in _configNodes)
 			{
 				configNode.ApplyTo(model.Configuration);
 			}

@@ -25,7 +25,7 @@ using Castle.Windsor.Tests.LoggingFacility.Classes;
 public class CustomFacilityTests
 {
 	[Fact]
-	public void ReadCustomFacilityConfigFromXML()
+	public void ReadCustomFacilityConfigFromXml()
 	{
 		using var container = new WindsorContainer();
 		container.Install(
