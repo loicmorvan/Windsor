@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public interface IAppScreen
-{
-}
+public interface IAppScreen;

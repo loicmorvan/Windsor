@@ -34,14 +34,14 @@ public class LoggerResolver : ISubDependencyResolver
 
 	public LoggerResolver(ILoggerFactory loggerFactory)
 	{
-		if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+		ArgumentNullException.ThrowIfNull(loggerFactory);
 
 		_loggerFactory = loggerFactory;
 	}
 
 	public LoggerResolver(IExtendedLoggerFactory extendedLoggerFactory)
 	{
-		if (extendedLoggerFactory == null) throw new ArgumentNullException(nameof(extendedLoggerFactory));
+		ArgumentNullException.ThrowIfNull(extendedLoggerFactory);
 
 		_extendedLoggerFactory = extendedLoggerFactory;
 	}

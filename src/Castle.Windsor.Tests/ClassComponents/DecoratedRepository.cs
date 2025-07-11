@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class DecoratedRepository : IRepository
-{
-}
+public class DecoratedRepository : IRepository;

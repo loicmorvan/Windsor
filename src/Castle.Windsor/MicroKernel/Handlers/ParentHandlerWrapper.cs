@@ -33,8 +33,8 @@ public class ParentHandlerWrapper : IHandler, IDisposable
 	public ParentHandlerWrapper(IHandler parentHandler, ISubDependencyResolver childResolver,
 		IReleasePolicy parentReleasePolicy)
 	{
-		if (parentHandler == null) throw new ArgumentNullException(nameof(parentHandler));
-		if (childResolver == null) throw new ArgumentNullException(nameof(childResolver));
+		ArgumentNullException.ThrowIfNull(parentHandler);
+		ArgumentNullException.ThrowIfNull(childResolver);
 
 		_parentHandler = parentHandler;
 		_childResolver = childResolver;

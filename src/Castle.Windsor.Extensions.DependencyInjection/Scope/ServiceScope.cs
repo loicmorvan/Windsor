@@ -19,7 +19,7 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Scope;
 
 internal class ServiceScope(IDisposable windsorScope, IServiceProvider serviceProvider) : IServiceScope
 {
-	private readonly IDisposable _scope = windsorScope ?? throw new ArgumentNullException(nameof(_scope));
+	private readonly IDisposable _scope = windsorScope ?? throw new ArgumentNullException(nameof(windsorScope));
 
 	public IServiceProvider ServiceProvider { get; } =
 		serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));

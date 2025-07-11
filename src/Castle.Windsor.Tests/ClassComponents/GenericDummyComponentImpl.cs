@@ -16,6 +16,4 @@ using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class GenericDummyComponentImpl<T> : IGeneric<T>, IDummyComponent<T>
-{
-}
+public class GenericDummyComponentImpl<T> : IGeneric<T>, IDummyComponent<T>;

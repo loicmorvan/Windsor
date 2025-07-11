@@ -16,6 +16,4 @@ using Castle.MicroKernel;
 
 namespace Castle.Windsor.Diagnostics;
 
-public interface IPotentiallyMisconfiguredComponentsDiagnostic : IDiagnostic<IHandler[]>
-{
-}
+public interface IPotentiallyMisconfiguredComponentsDiagnostic : IDiagnostic<IHandler[]>;

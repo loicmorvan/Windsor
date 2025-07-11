@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class GenericDummyComponentImplEx<T> : GenericDummyComponentImpl<T>
-{
-}
+public class GenericDummyComponentImplEx<T> : GenericDummyComponentImpl<T>;

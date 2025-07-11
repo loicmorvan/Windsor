@@ -79,7 +79,7 @@ public class WindsorContainer :
 	/// <param name="interpreter">The instance of an <see cref="IConfigurationInterpreter" /> implementation.</param>
 	public WindsorContainer(IConfigurationInterpreter interpreter) : this()
 	{
-		if (interpreter == null) throw new ArgumentNullException(nameof(interpreter));
+		ArgumentNullException.ThrowIfNull(interpreter);
 		interpreter.ProcessResource(interpreter.Source, _kernel.ConfigurationStore, _kernel);
 
 		RunInstaller();
@@ -92,8 +92,8 @@ public class WindsorContainer :
 	/// <param name="environmentInfo">The environment info.</param>
 	public WindsorContainer(IConfigurationInterpreter interpreter, IEnvironmentInfo environmentInfo) : this()
 	{
-		if (interpreter == null) throw new ArgumentNullException(nameof(interpreter));
-		if (environmentInfo == null) throw new ArgumentNullException(nameof(environmentInfo));
+		ArgumentNullException.ThrowIfNull(interpreter);
+		ArgumentNullException.ThrowIfNull(environmentInfo);
 
 		interpreter.EnvironmentName = environmentInfo.GetEnvironmentName();
 		interpreter.ProcessResource(interpreter.Source, _kernel.ConfigurationStore, _kernel);
@@ -112,7 +112,7 @@ public class WindsorContainer :
 	/// <param name="configurationUri">The XML file.</param>
 	public WindsorContainer(string configurationUri) : this()
 	{
-		if (configurationUri == null) throw new ArgumentNullException(nameof(configurationUri));
+		ArgumentNullException.ThrowIfNull(configurationUri);
 
 		var interpreter = GetInterpreter(configurationUri);
 		interpreter.ProcessResource(interpreter.Source, _kernel.ConfigurationStore, _kernel);
@@ -147,9 +147,9 @@ public class WindsorContainer :
 	/// <param name="installer">Installer instance</param>
 	public WindsorContainer(string name, IKernel kernel, IComponentsInstaller installer)
 	{
-		if (name == null) throw new ArgumentNullException(nameof(name));
-		if (kernel == null) throw new ArgumentNullException(nameof(kernel));
-		if (installer == null) throw new ArgumentNullException(nameof(installer));
+		ArgumentNullException.ThrowIfNull(name);
+		ArgumentNullException.ThrowIfNull(kernel);
+		ArgumentNullException.ThrowIfNull(installer);
 
 		Name = name;
 		_kernel = kernel;
@@ -163,7 +163,7 @@ public class WindsorContainer :
 	/// <param name="proxyFactory">A instance of an <see cref="IProxyFactory" />.</param>
 	public WindsorContainer(IProxyFactory proxyFactory)
 	{
-		if (proxyFactory == null) throw new ArgumentNullException(nameof(proxyFactory));
+		ArgumentNullException.ThrowIfNull(proxyFactory);
 
 		_kernel = new DefaultKernel(proxyFactory);
 
@@ -178,8 +178,8 @@ public class WindsorContainer :
 	/// <param name="interpreter">The instance of an <see cref="IConfigurationInterpreter" /> implementation</param>
 	public WindsorContainer(IWindsorContainer parent, IConfigurationInterpreter interpreter) : this()
 	{
-		if (parent == null) throw new ArgumentNullException(nameof(parent));
-		if (interpreter == null) throw new ArgumentNullException(nameof(interpreter));
+		ArgumentNullException.ThrowIfNull(parent);
+		ArgumentNullException.ThrowIfNull(interpreter);
 
 		parent.AddChildContainer(this);
 
@@ -196,9 +196,9 @@ public class WindsorContainer :
 	/// <param name="interpreter">The interpreter.</param>
 	public WindsorContainer(string name, IWindsorContainer parent, IConfigurationInterpreter interpreter) : this()
 	{
-		if (name == null) throw new ArgumentNullException(nameof(name));
-		if (parent == null) throw new ArgumentNullException(nameof(parent));
-		if (interpreter == null) throw new ArgumentNullException(nameof(interpreter));
+		ArgumentNullException.ThrowIfNull(name);
+		ArgumentNullException.ThrowIfNull(parent);
+		ArgumentNullException.ThrowIfNull(interpreter);
 
 		Name = name;
 
@@ -283,7 +283,7 @@ public class WindsorContainer :
 	/// <param name="childContainer"></param>
 	public virtual void AddChildContainer(IWindsorContainer childContainer)
 	{
-		if (childContainer == null) throw new ArgumentNullException(nameof(childContainer));
+		ArgumentNullException.ThrowIfNull(childContainer);
 
 		if (!_childContainers.ContainsKey(childContainer.Name))
 			lock (_childContainersLocker)
@@ -370,7 +370,7 @@ public class WindsorContainer :
 	/// </example>
 	public IWindsorContainer Install(params IWindsorInstaller[] installers)
 	{
-		if (installers == null) throw new ArgumentNullException(nameof(installers));
+		ArgumentNullException.ThrowIfNull(installers);
 
 		if (installers.Length == 0) return this;
 
@@ -437,7 +437,7 @@ public class WindsorContainer :
 	/// <param name="childContainer"></param>
 	public virtual void RemoveChildContainer(IWindsorContainer childContainer)
 	{
-		if (childContainer == null) throw new ArgumentNullException(nameof(childContainer));
+		ArgumentNullException.ThrowIfNull(childContainer);
 
 		if (_childContainers.ContainsKey(childContainer.Name))
 			lock (_childContainersLocker)

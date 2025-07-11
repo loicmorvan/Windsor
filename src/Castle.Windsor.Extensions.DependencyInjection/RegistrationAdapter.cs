@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Diagnostics;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,7 @@ using ServiceDescriptor = Microsoft.Extensions.DependencyInjection.ServiceDescri
 
 namespace Castle.Windsor.Extensions.DependencyInjection;
 
+// ReSharper disable once ClassNeverInstantiated.Global
 internal class RegistrationAdapter
 {
 	public static IRegistration FromOpenGenericServiceDescriptor(ServiceDescriptor service)
@@ -58,15 +60,23 @@ internal class RegistrationAdapter
 		return uniqueComponentName.Split('@')[0];
 	}
 
-	internal static string UniqueComponentName(ServiceDescriptor service)
+	private static string UniqueComponentName(ServiceDescriptor service)
 	{
-		var result = "";
+		string result;
 		if (service.ImplementationType != null)
+		{
 			result = service.ImplementationType.FullName;
+		}
 		else if (service.ImplementationInstance != null)
+		{
 			result = service.ImplementationInstance.GetType().FullName;
+		}
 		else
+		{
+			Debug.Assert(service.ImplementationFactory != null);
 			result = service.ImplementationFactory.GetType().FullName;
+		}
+
 		result = result + "@" + Guid.NewGuid();
 
 		return result;
@@ -78,6 +88,7 @@ internal class RegistrationAdapter
 		return registration.UsingFactoryMethod(kernel =>
 		{
 			var serviceProvider = kernel.Resolve<IServiceProvider>();
+			Debug.Assert(service.ImplementationFactory != null);
 			return service.ImplementationFactory(serviceProvider) as TService;
 		});
 	}

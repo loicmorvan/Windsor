@@ -180,17 +180,11 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 		public B B => b;
 	}
 
-	public class A : DisposableBase
-	{
-	}
+	public class A : DisposableBase;
 
-	public class B : DisposableBase
-	{
-	}
+	public class B : DisposableBase;
 
-	public class C : DisposableBase
-	{
-	}
+	public class C : DisposableBase;
 
 	public class GenA<T> : DisposableBase
 	{
@@ -199,9 +193,7 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 		public GenB<T> GenBField { get; set; }
 	}
 
-	public class GenB<T> : DisposableBase
-	{
-	}
+	public class GenB<T> : DisposableBase;
 
 	public class DisposableSpamService(
 		DisposableTemplateEngine templateEngine,
@@ -218,7 +210,5 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 		public DisposableTemplateEngine TemplateEngine => templateEngine;
 	}
 
-	public class DisposableTemplateEngine : DisposableBase
-	{
-	}
+	public class DisposableTemplateEngine : DisposableBase;
 }

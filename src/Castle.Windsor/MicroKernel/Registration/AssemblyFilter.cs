@@ -32,7 +32,7 @@ public class AssemblyFilter : IAssemblyProvider
 
 	public AssemblyFilter(string directoryName, string mask = null)
 	{
-		if (directoryName == null) throw new ArgumentNullException(nameof(directoryName));
+		ArgumentNullException.ThrowIfNull(directoryName);
 
 		_directoryName = GetFullPath(directoryName);
 		_mask = mask;
@@ -52,7 +52,7 @@ public class AssemblyFilter : IAssemblyProvider
 
 	public AssemblyFilter FilterByAssembly(Predicate<Assembly> filter)
 	{
-		if (filter == null) throw new ArgumentNullException(nameof(filter));
+		ArgumentNullException.ThrowIfNull(filter);
 
 		_assemblyFilter += filter;
 		return this;
@@ -60,7 +60,7 @@ public class AssemblyFilter : IAssemblyProvider
 
 	public AssemblyFilter FilterByName(Predicate<AssemblyName> filter)
 	{
-		if (filter == null) throw new ArgumentNullException(nameof(filter));
+		ArgumentNullException.ThrowIfNull(filter);
 
 		_nameFilter += filter;
 		return this;
@@ -73,7 +73,7 @@ public class AssemblyFilter : IAssemblyProvider
 
 	public AssemblyFilter WithKeyToken(byte[] publicKeyToken)
 	{
-		if (publicKeyToken == null) throw new ArgumentNullException(nameof(publicKeyToken));
+		ArgumentNullException.ThrowIfNull(publicKeyToken);
 		return FilterByName(n => IsTokenEqual(n.GetPublicKeyToken(), publicKeyToken));
 	}
 
@@ -94,7 +94,7 @@ public class AssemblyFilter : IAssemblyProvider
 
 	private byte[] ExtractKeyToken(string keyToken)
 	{
-		if (keyToken == null) throw new ArgumentNullException(nameof(keyToken));
+		ArgumentNullException.ThrowIfNull(keyToken);
 		if (keyToken.Length != 16)
 			throw new ArgumentException(
 				string.Format(

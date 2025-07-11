@@ -21,6 +21,4 @@ namespace Castle.Core;
 ///     by the IoC container during new component activation
 /// </summary>
 [AttributeUsage(AttributeTargets.Constructor)]
-public sealed class DoNotSelectAttribute : Attribute
-{
-}
+public sealed class DoNotSelectAttribute : Attribute;

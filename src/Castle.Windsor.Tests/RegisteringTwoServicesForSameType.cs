@@ -38,15 +38,9 @@ public class RegisteringTwoServicesForSameType
 		Assert.IsType<Srv1>(windsor.Resolve<IService>());
 	}
 
-	public interface IService
-	{
-	}
+	public interface IService;
 
-	public class Srv1 : IService
-	{
-	}
+	public class Srv1 : IService;
 
-	public class Srv2 : IService
-	{
-	}
+	public class Srv2 : IService;
 }

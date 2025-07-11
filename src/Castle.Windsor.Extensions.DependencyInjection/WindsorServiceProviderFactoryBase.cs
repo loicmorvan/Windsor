@@ -14,6 +14,7 @@
 
 
 using System;
+using System.Diagnostics;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Extensions.DependencyInjection.Extensions;
@@ -69,7 +70,7 @@ public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactor
 		IWindsorContainer windsorContainer)
 	{
 		if (RootContainer == null) CreateRootContainer();
-		if (RootContainer == null) throw new ArgumentNullException("Could not initialize container");
+		Debug.Assert(RootContainer != null);
 
 		if (serviceCollection == null) return RootContainer;
 

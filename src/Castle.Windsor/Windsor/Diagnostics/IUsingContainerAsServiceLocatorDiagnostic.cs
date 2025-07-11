@@ -21,6 +21,4 @@ namespace Castle.Windsor.Diagnostics;
 ///     they use the container as service locator
 ///     which is a bad practice and should be avoided.
 /// </summary>
-public interface IUsingContainerAsServiceLocatorDiagnostic : IDiagnostic<IHandler[]>
-{
-}
+public interface IUsingContainerAsServiceLocatorDiagnostic : IDiagnostic<IHandler[]>;

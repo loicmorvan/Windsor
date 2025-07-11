@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class A2
-{
-}
+public class A2;

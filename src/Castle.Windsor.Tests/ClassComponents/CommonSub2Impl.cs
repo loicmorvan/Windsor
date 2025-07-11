@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class CommonSub2Impl : ICommonSub2
-{
-}
+public class CommonSub2Impl : ICommonSub2;

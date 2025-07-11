@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.Generics;
 
-public interface IRepository
-{
-}
+public interface IRepository;

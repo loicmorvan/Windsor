@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public interface IRepository
-{
-}
+public interface IRepository;

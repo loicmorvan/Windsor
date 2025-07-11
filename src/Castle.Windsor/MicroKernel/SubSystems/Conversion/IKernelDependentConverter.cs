@@ -19,6 +19,4 @@ namespace Castle.MicroKernel.SubSystems.Conversion;
 ///     depends on IKernel to be able to perform
 ///     the conversion.
 /// </summary>
-public interface IKernelDependentConverter
-{
-}
+public interface IKernelDependentConverter;

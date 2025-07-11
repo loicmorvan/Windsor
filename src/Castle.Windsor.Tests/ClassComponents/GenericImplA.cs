@@ -16,6 +16,4 @@ using Castle.Windsor.Tests.Components;
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class GenericImplA : A, IGeneric<A>
-{
-}
+public class GenericImplA : A, IGeneric<A>;

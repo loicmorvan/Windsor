@@ -119,14 +119,14 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 
 	public virtual IHandler[] GetAssignableHandlers(Type service)
 	{
-		if (service == null) throw new ArgumentNullException(nameof(service));
+		ArgumentNullException.ThrowIfNull(service);
 		if (service == typeof(object)) return GetAllHandlers();
 		return GetAssignableHandlersNoFiltering(service);
 	}
 
 	public virtual IHandler GetHandler(string name)
 	{
-		if (name == null) throw new ArgumentNullException(nameof(name));
+		ArgumentNullException.ThrowIfNull(name);
 
 		if (Selectors != null)
 		{
@@ -141,7 +141,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 
 	public virtual IHandler GetHandler(Type service)
 	{
-		if (service == null) throw new ArgumentNullException(nameof(service));
+		ArgumentNullException.ThrowIfNull(service);
 		if (Selectors != null)
 		{
 			var selectorsOpinion = GetSelectorsOpinion(null, service);
@@ -168,7 +168,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 
 	public virtual IHandler[] GetHandlers(Type service)
 	{
-		if (service == null) throw new ArgumentNullException(nameof(service));
+		ArgumentNullException.ThrowIfNull(service);
 		if (Filters != null)
 		{
 			var filtersOpinion = GetFiltersOpinion(service);

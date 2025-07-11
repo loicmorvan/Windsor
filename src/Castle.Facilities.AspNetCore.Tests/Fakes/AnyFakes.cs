@@ -18,11 +18,13 @@ using System.Threading.Tasks;
 using Castle.MicroKernel.Lifestyle;
 using Microsoft.AspNetCore.Http;
 
+// ReSharper disable NotAccessedField.Local
+// ReSharper disable UnusedMember.Global
+// ReSharper disable ClassNeverInstantiated.Global
+
 namespace Castle.Facilities.AspNetCore.Tests.Fakes;
 
-public class AnyComponent
-{
-}
+public class AnyComponent;
 
 public class AnyComponentWithLifestyleManager : AbstractLifestyleManager
 {

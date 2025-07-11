@@ -55,7 +55,7 @@ public static class Classes
 	/// </returns>
 	public static FromAssemblyDescriptor FromAssembly(Assembly assembly)
 	{
-		if (assembly == null) throw new ArgumentNullException(nameof(assembly));
+		ArgumentNullException.ThrowIfNull(assembly);
 		return new FromAssemblyDescriptor(assembly, Filter);
 	}
 
@@ -66,7 +66,7 @@ public static class Classes
 	/// </returns>
 	public static FromAssemblyDescriptor FromAssemblyContaining(Type type)
 	{
-		if (type == null) throw new ArgumentNullException(nameof(type));
+		ArgumentNullException.ThrowIfNull(type);
 		return new FromAssemblyDescriptor(type.GetTypeInfo().Assembly, Filter);
 	}
 
@@ -88,7 +88,7 @@ public static class Classes
 	/// <returns> </returns>
 	public static FromAssemblyDescriptor FromAssemblyInDirectory(AssemblyFilter filter)
 	{
-		if (filter == null) throw new ArgumentNullException(nameof(filter));
+		ArgumentNullException.ThrowIfNull(filter);
 		var assemblies = ReflectionUtil.GetAssemblies(filter);
 		return new FromAssemblyDescriptor(assemblies, Filter);
 	}

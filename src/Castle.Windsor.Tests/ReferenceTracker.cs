@@ -58,8 +58,7 @@ public struct ReferenceTracker<T> where T : class
 	/// </summary>
 	public static ReferenceTracker<T> Track(Func<T> getInstanceToTrack)
 	{
-		if (getInstanceToTrack == null)
-			throw new ArgumentNullException(nameof(getInstanceToTrack));
+		ArgumentNullException.ThrowIfNull(getInstanceToTrack);
 
 		return new ReferenceTracker<T>(new WeakReference(getInstanceToTrack.Invoke()));
 	}
@@ -97,8 +96,7 @@ public struct ReferenceTracker<T> where T : class
 	/// </summary>
 	public void AssertStillReferencedAndDo(Action<T> action)
 	{
-		if (action == null)
-			throw new ArgumentNullException(nameof(action));
+		ArgumentNullException.ThrowIfNull(action);
 
 		GC.Collect();
 		var target = _weakReference.Target;
@@ -121,8 +119,7 @@ public struct ReferenceTracker<T> where T : class
 	/// </summary>
 	public TReturn AssertStillReferencedAndDo<TReturn>(Func<T, TReturn> func)
 	{
-		if (func == null)
-			throw new ArgumentNullException(nameof(func));
+		ArgumentNullException.ThrowIfNull(func);
 
 		GC.Collect();
 		var target = _weakReference.Target;

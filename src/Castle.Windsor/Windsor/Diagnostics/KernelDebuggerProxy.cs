@@ -32,7 +32,7 @@ internal class KernelDebuggerProxy
 
 	public KernelDebuggerProxy(IKernel kernel)
 	{
-		if (kernel == null) throw new ArgumentNullException(nameof(kernel));
+		ArgumentNullException.ThrowIfNull(kernel);
 		_extensions =
 			(IEnumerable<IContainerDebuggerExtension>)(kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as
 				IContainerDebuggerExtensionHost) ??

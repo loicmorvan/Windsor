@@ -29,8 +29,8 @@ internal static class AspNetCoreMvcExtensions
 	public static void AddCustomControllerActivation(this IServiceCollection services, Func<Type, object> activator,
 		Action<object> releaser)
 	{
-		if (services == null) throw new ArgumentNullException(nameof(services));
-		if (activator == null) throw new ArgumentNullException(nameof(activator));
+		ArgumentNullException.ThrowIfNull(services);
+		ArgumentNullException.ThrowIfNull(activator);
 
 		services.AddSingleton<IControllerActivator>(new DelegatingControllerActivator(
 			context => activator(context.ActionDescriptor.ControllerTypeInfo.AsType()),
@@ -40,8 +40,8 @@ internal static class AspNetCoreMvcExtensions
 	public static void AddCustomViewComponentActivation(this IServiceCollection services, Func<Type, object> activator,
 		Action<object> releaser)
 	{
-		if (services == null) throw new ArgumentNullException(nameof(services));
-		if (activator == null) throw new ArgumentNullException(nameof(activator));
+		ArgumentNullException.ThrowIfNull(services);
+		ArgumentNullException.ThrowIfNull(activator);
 
 		services.AddSingleton<IViewComponentActivator>(new DelegatingViewComponentActivator(activator, releaser));
 	}
@@ -49,8 +49,8 @@ internal static class AspNetCoreMvcExtensions
 	public static void AddCustomTagHelperActivation(this IServiceCollection services, Func<Type, object> activator,
 		Predicate<Type> applicationTypeSelector = null)
 	{
-		if (services == null) throw new ArgumentNullException(nameof(services));
-		if (activator == null) throw new ArgumentNullException(nameof(activator));
+		ArgumentNullException.ThrowIfNull(services);
+		ArgumentNullException.ThrowIfNull(activator);
 
 		applicationTypeSelector ??= type => !type.GetTypeInfo().Namespace.StartsWith("Microsoft") &&
 		                                    !type.GetTypeInfo().Name.Contains("__Generated__");

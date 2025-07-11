@@ -80,9 +80,7 @@ public class SubResolverTestCase
 		public DependencyNotInContainer DependencyNotInContainer { get; } = dependencyNotInContainer;
 	}
 
-	public sealed class DependencyNotInContainer
-	{
-	}
+	public sealed class DependencyNotInContainer;
 
 	private sealed class NullResolver : ISubDependencyResolver
 	{

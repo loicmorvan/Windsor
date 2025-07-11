@@ -16,6 +16,4 @@ using Castle.MicroKernel;
 
 namespace Castle.Windsor.Diagnostics;
 
-public interface IPotentialLifestyleMismatchesDiagnostic : IDiagnostic<IHandler[][]>
-{
-}
+public interface IPotentialLifestyleMismatchesDiagnostic : IDiagnostic<IHandler[][]>;

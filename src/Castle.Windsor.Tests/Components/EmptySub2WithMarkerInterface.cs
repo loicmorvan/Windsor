@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class EmptySub2WithMarkerInterface : EmptyBase, IMarkerInterface
-{
-}
+public class EmptySub2WithMarkerInterface : EmptyBase, IMarkerInterface;

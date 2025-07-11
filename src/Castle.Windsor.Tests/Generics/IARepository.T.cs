@@ -16,6 +16,4 @@ using Castle.Windsor.Tests.Components;
 
 namespace Castle.Windsor.Tests.Generics;
 
-public interface IARepository : IRepository<A>
-{
-}
+public interface IARepository : IRepository<A>;

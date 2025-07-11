@@ -18,9 +18,7 @@ using Castle.MicroKernel.Registration;
 namespace Castle.Windsor.Tests;
 
 [PerThread]
-public class R
-{
-}
+public class R;
 
 public interface IC
 {

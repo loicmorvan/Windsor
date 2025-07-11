@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
-public interface IDummyComponent<T>
-{
-}
+public interface IDummyComponent<T>;

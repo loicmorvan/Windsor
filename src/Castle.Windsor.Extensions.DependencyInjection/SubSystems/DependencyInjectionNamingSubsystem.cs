@@ -41,7 +41,7 @@ public class DependencyInjectionNamingSubsystem : DefaultNamingSubSystem
 
 	public override IHandler[] GetHandlers(Type service)
 	{
-		if (service == null) throw new ArgumentNullException(nameof(service));
+		ArgumentNullException.ThrowIfNull(service);
 		if (Filters != null)
 		{
 			var filtersOpinion = GetFiltersOpinion(service);
@@ -61,7 +61,7 @@ public class DependencyInjectionNamingSubsystem : DefaultNamingSubSystem
 
 	public override IHandler GetHandler(Type service)
 	{
-		if (service == null) throw new ArgumentNullException(nameof(service));
+		ArgumentNullException.ThrowIfNull(service);
 		if (Selectors != null)
 		{
 			var selectorsOpinion = GetSelectorsOpinion(null, service);

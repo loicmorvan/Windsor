@@ -36,13 +36,9 @@ public class ContainerProblem
 	}
 }
 
-public interface IParent : IList<IChild>
-{
-}
+public interface IParent : IList<IChild>;
 
-public interface IChild
-{
-}
+public interface IChild;
 
 public class Child : IChild
 {

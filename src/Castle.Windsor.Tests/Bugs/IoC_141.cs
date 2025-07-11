@@ -39,17 +39,11 @@ public class IoC141 : AbstractContainerTestCase
 		Assert.IsType<Service1>(Kernel.Resolve<IService>());
 	}
 
-	public interface IService
-	{
-	}
+	public interface IService;
 
-	public interface IProcessor<T>
-	{
-	}
+	public interface IProcessor<T>;
 
-	public interface IAssembler<T>
-	{
-	}
+	public interface IAssembler<T>;
 
 	public class Service1 : IService
 	{
@@ -65,7 +59,5 @@ public class IoC141 : AbstractContainerTestCase
 		}
 	}
 
-	public class ObjectAssembler : IAssembler<object>
-	{
-	}
+	public class ObjectAssembler : IAssembler<object>;
 }

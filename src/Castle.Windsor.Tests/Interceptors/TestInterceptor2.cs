@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.Interceptors;
 
-public class TestInterceptor2 : CountingInterceptor
-{
-}
+public class TestInterceptor2 : CountingInterceptor;

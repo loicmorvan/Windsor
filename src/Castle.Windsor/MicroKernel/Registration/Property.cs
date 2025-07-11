@@ -117,7 +117,7 @@ public class PropertyKey
 	/// <returns></returns>
 	public ServiceOverride Is(Type componentImplementation)
 	{
-		if (componentImplementation == null) throw new ArgumentNullException(nameof(componentImplementation));
+		ArgumentNullException.ThrowIfNull(componentImplementation);
 		return GetServiceOverrideKey().Eq(ComponentName.DefaultNameFor(componentImplementation));
 	}
 

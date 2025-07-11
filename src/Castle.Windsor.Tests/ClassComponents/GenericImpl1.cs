@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class GenericImpl1<T> : IGeneric<T>
-{
-}
+public class GenericImpl1<T> : IGeneric<T>;

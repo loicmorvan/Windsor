@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public interface IDoubleGeneric<TOne, TTwo>
-{
-}
+public interface IDoubleGeneric<TOne, TTwo>;

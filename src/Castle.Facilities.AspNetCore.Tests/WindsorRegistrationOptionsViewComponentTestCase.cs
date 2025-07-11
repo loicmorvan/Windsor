@@ -17,6 +17,8 @@ using Castle.Facilities.AspNetCore.Tests.Framework;
 using Castle.MicroKernel.Registration;
 using Microsoft.AspNetCore.Mvc;
 
+// ReSharper disable UnusedType.Global
+
 namespace Castle.Facilities.AspNetCore.Tests;
 
 public abstract class WindsorRegistrationOptionsViewComponentTestCase : IDisposable
@@ -28,15 +30,15 @@ public abstract class WindsorRegistrationOptionsViewComponentTestCase : IDisposa
 		TestContext.Dispose();
 	}
 
+	[Theory]
 	[InlineData(typeof(OverrideViewComponent))]
 	public void Should_resolve_overidden_ViewComponents_using_WindsorRegistrationOptions(Type optionsResolvableType)
 	{
 		TestContext.WindsorContainer.Resolve(optionsResolvableType);
 	}
 
-	public class OverrideViewComponent : ViewComponent
-	{
-	}
+	// ReSharper disable once MemberCanBeProtected.Global
+	public class OverrideViewComponent : ViewComponent;
 }
 
 public class

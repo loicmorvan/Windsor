@@ -18,6 +18,4 @@ using Castle.DynamicProxy;
 namespace Castle.Windsor.Tests.Components;
 
 [Interceptor(typeof(StandardInterceptor))]
-public class CalculatorServiceWithStandartInterceptorTyped : CalculatorService
-{
-}
+public class CalculatorServiceWithStandartInterceptorTyped : CalculatorService;

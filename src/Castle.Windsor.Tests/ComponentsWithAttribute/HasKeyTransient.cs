@@ -17,6 +17,4 @@ using Castle.Core;
 namespace Castle.Windsor.Tests.ComponentsWithAttribute;
 
 [CastleComponent("keyTransient", Lifestyle = LifestyleType.Transient)]
-public class HasKeyTransient
-{
-}
+public class HasKeyTransient;

@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class SimpleComponent3
-{
-}
+public class SimpleComponent3;

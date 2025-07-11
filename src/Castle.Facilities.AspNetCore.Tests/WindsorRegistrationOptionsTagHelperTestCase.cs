@@ -17,6 +17,8 @@ using Castle.Facilities.AspNetCore.Tests.Framework;
 using Castle.MicroKernel.Registration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
+// ReSharper disable UnusedType.Global
+
 namespace Castle.Facilities.AspNetCore.Tests;
 
 public abstract class WindsorRegistrationOptionsTagHelperTestCase : IDisposable
@@ -28,15 +30,15 @@ public abstract class WindsorRegistrationOptionsTagHelperTestCase : IDisposable
 		TestContext.Dispose();
 	}
 
+	[Theory]
 	[InlineData(typeof(OverrideTagHelper))]
 	public void Should_resolve_overidden_TagHelpers_using_WindsorRegistrationOptions(Type optionsResolvableType)
 	{
 		TestContext.WindsorContainer.Resolve(optionsResolvableType);
 	}
 
-	public class OverrideTagHelper : TagHelper
-	{
-	}
+	// ReSharper disable once MemberCanBeProtected.Global
+	public class OverrideTagHelper : TagHelper;
 }
 
 public class WindsorRegistrationOptionsForAssembliesTagHelperTestCase : WindsorRegistrationOptionsTagHelperTestCase

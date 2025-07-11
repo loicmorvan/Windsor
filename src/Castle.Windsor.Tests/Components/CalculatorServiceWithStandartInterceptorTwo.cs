@@ -19,6 +19,4 @@ namespace Castle.Windsor.Tests.Components;
 
 [Interceptor("fooInterceptor")]
 [Interceptor(typeof(StandardInterceptor))]
-public class CalculatorServiceWithStandartInterceptorTwo : CalculatorService
-{
-}
+public class CalculatorServiceWithStandartInterceptorTwo : CalculatorService;

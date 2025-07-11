@@ -23,6 +23,4 @@ namespace Castle.Windsor.Diagnostics;
 ///     Within the service group, first one would be the default (the one obtained when callling
 ///     <see cref="IKernel.Resolve(System.Type)" /> for the service type)
 /// </summary>
-public interface IAllServicesDiagnostic : IDiagnostic<ILookup<Type, IHandler>>
-{
-}
+public interface IAllServicesDiagnostic : IDiagnostic<ILookup<Type, IHandler>>;

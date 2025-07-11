@@ -19,6 +19,4 @@ namespace Castle.Windsor.Diagnostics;
 /// <summary>
 ///     Collects all handlers for components in hosting container.
 /// </summary>
-public interface IAllComponentsDiagnostic : IDiagnostic<IHandler[]>
-{
-}
+public interface IAllComponentsDiagnostic : IDiagnostic<IHandler[]>;

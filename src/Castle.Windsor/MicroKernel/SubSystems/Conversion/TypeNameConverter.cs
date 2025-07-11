@@ -20,11 +20,12 @@ using System.Reflection;
 using System.Text;
 using Castle.Core.Configuration;
 using Castle.Core.Internal;
+using Microsoft.Extensions.DependencyModel;
 
 namespace Castle.MicroKernel.SubSystems.Conversion;
 
 #if !FEATURE_APPDOMAIN
-using Microsoft.Extensions.DependencyModel;
+
 #endif
 
 /// <summary>
@@ -47,7 +48,7 @@ public class TypeNameConverter : AbstractTypeConverter
 
 	public TypeNameConverter(ITypeNameParser parser)
 	{
-		if (parser == null) throw new ArgumentNullException(nameof(parser));
+		ArgumentNullException.ThrowIfNull(parser);
 
 		_parser = parser;
 	}

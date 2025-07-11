@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public interface IEmptyService2
-{
-}
+public interface IEmptyService2;

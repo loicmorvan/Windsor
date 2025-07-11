@@ -120,7 +120,7 @@ public abstract class AbstractHandler :
 	/// <param name="kernel"> </param>
 	public virtual void Init(IKernelInternal kernel)
 	{
-		if (kernel == null) throw new ArgumentNullException(nameof(kernel));
+		ArgumentNullException.ThrowIfNull(kernel);
 		_kernel = kernel;
 		_kernel.AddedAsChildKernel += OnAddedAsChildKernel;
 

@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class FerrariProvider : ICarProvider
-{
-}
+public class FerrariProvider : ICarProvider;

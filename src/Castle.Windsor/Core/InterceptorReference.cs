@@ -42,7 +42,7 @@ public class InterceptorReference : IReference<IInterceptor>, IEquatable<Interce
 	/// <param name="referencedComponentName">The component key.</param>
 	public InterceptorReference(string referencedComponentName)
 	{
-		if (referencedComponentName == null) throw new ArgumentNullException(nameof(referencedComponentName));
+		ArgumentNullException.ThrowIfNull(referencedComponentName);
 		_referencedComponentName = referencedComponentName;
 	}
 
@@ -55,7 +55,7 @@ public class InterceptorReference : IReference<IInterceptor>, IEquatable<Interce
 	/// </param>
 	public InterceptorReference(Type componentType)
 	{
-		if (componentType == null) throw new ArgumentNullException(nameof(componentType));
+		ArgumentNullException.ThrowIfNull(componentType);
 		_referencedComponentName = ComponentName.DefaultNameFor(componentType);
 		_referencedComponentType = componentType;
 	}

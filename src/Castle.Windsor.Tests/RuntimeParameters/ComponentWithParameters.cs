@@ -16,9 +16,7 @@ using Castle.Core;
 
 namespace Castle.Windsor.Tests.RuntimeParameters;
 
-public class CompA
-{
-}
+public class CompA;
 
 public class HasCustomDependency(CompA name)
 {

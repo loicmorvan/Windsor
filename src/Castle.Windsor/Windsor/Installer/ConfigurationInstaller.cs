@@ -35,7 +35,7 @@ public class ConfigurationInstaller : IWindsorInstaller
 	/// </summary>
 	public ConfigurationInstaller(IConfigurationInterpreter interpreter)
 	{
-		if (interpreter == null) throw new ArgumentNullException(nameof(interpreter));
+		ArgumentNullException.ThrowIfNull(interpreter);
 		_interpreter = interpreter;
 	}
 

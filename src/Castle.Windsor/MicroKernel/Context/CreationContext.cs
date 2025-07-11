@@ -67,7 +67,7 @@ public class CreationContext :
 	public CreationContext(Type requestedType, CreationContext parentContext, bool propagateInlineDependencies)
 		: this(parentContext.Handler, parentContext.ReleasePolicy, requestedType, null, null, parentContext)
 	{
-		if (parentContext == null) throw new ArgumentNullException(nameof(parentContext));
+		ArgumentNullException.ThrowIfNull(parentContext);
 
 		if (parentContext._extendedProperties != null)
 			_extendedProperties = new Arguments(parentContext._extendedProperties);
@@ -246,7 +246,7 @@ public class CreationContext :
 
 	public void SetContextualProperty(object key, object value)
 	{
-		if (key == null) throw new ArgumentNullException(nameof(key));
+		ArgumentNullException.ThrowIfNull(key);
 		if (_extendedProperties == null) _extendedProperties = new Arguments();
 		_extendedProperties[key] = value;
 	}
@@ -396,7 +396,7 @@ public class CreationContext :
 
 		public void SetContextualProperty(object key, object value)
 		{
-			if (key == null) throw new ArgumentNullException(nameof(key));
+			ArgumentNullException.ThrowIfNull(key);
 			if (_extendedProperties == null) _extendedProperties = new Arguments();
 			_extendedProperties[key] = value;
 		}

@@ -564,7 +564,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> Instance(TService instance)
 	{
-		if (instance == null) throw new ArgumentNullException(nameof(instance));
+		ArgumentNullException.ThrowIfNull(instance);
 		return ImplementedBy(instance.GetType())
 			.Activator<ExternalInstanceActivator>()
 			.ExtendedProperties(Property.ForKey("instance").Eq(instance));
@@ -1030,7 +1030,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// </remarks>
 	public ComponentRegistration<TService> IsDefault(Predicate<Type> serviceFilter)
 	{
-		if (serviceFilter == null) throw new ArgumentNullException(nameof(serviceFilter));
+		ArgumentNullException.ThrowIfNull(serviceFilter);
 		var properties = new Property(Constants.DefaultComponentForServiceFilter, serviceFilter);
 		return ExtendedProperties(properties);
 	}
@@ -1061,7 +1061,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// </param>
 	public ComponentRegistration<TService> IsFallback(Predicate<Type> serviceFilter)
 	{
-		if (serviceFilter == null) throw new ArgumentNullException(nameof(serviceFilter));
+		ArgumentNullException.ThrowIfNull(serviceFilter);
 		var properties = new Property(Constants.FallbackComponentForServiceFilter, serviceFilter);
 		return ExtendedProperties(properties);
 	}

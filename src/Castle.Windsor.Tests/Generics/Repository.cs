@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.Generics;
 
-public class Repository<T> : IRepository<T>
-{
-}
+public class Repository<T> : IRepository<T>;

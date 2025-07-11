@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class ResolvableDependency : IDependency
-{
-}
+public class ResolvableDependency : IDependency;

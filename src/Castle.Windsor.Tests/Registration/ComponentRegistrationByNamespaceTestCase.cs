@@ -110,14 +110,8 @@ public class ComponentRegistrationByNamespaceTestCase : AbstractContainerTestCas
 	}
 }
 
-public class RootComponent
-{
-}
+public class RootComponent;
 
-public class RootComponentEx
-{
-}
+public class RootComponentEx;
 
-public class SubComponent
-{
-}
+public class SubComponent;

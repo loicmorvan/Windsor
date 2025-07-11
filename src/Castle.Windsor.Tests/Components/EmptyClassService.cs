@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class EmptyClassService
-{
-}
+public class EmptyClassService;

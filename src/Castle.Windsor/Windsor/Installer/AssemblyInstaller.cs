@@ -29,8 +29,8 @@ public class AssemblyInstaller : IWindsorInstaller
 
 	public AssemblyInstaller(Assembly assembly, InstallerFactory factory)
 	{
-		if (assembly == null) throw new ArgumentNullException(nameof(assembly));
-		if (factory == null) throw new ArgumentNullException(nameof(factory));
+		ArgumentNullException.ThrowIfNull(assembly);
+		ArgumentNullException.ThrowIfNull(factory);
 		_assembly = assembly;
 		_factory = factory;
 	}

@@ -21,15 +21,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 
+// ReSharper disable UnusedTypeParameter
+// ReSharper disable ParameterOnlyUsedForPreconditionCheck.Local
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable MemberCanBeProtected.Global
+
 namespace Castle.Facilities.AspNetCore.Tests.Fakes;
 
-public class OpenOptions
-{
-}
+public class OpenOptions;
 
-public class ClosedOptions
-{
-}
+public class ClosedOptions;
 
 public interface IDisposableObservable
 {
@@ -54,12 +55,9 @@ public class ServiceProviderOnlyTransient : IWeakReferenceObservable
 	public bool HasReference => _reference.IsAlive;
 }
 
-public class ServiceProviderOnlyTransientGeneric<T> : ServiceProviderOnlyTransient
-{
-}
+public class ServiceProviderOnlyTransientGeneric<T> : ServiceProviderOnlyTransient;
 
-public class ServiceProviderOnlyTransientDisposable : ServiceProviderOnlyTransient, IDisposable, IDisposableObservable,
-	IWeakReferenceObservable
+public class ServiceProviderOnlyTransientDisposable : ServiceProviderOnlyTransient, IDisposable, IDisposableObservable
 {
 	public void Dispose()
 	{
@@ -83,12 +81,9 @@ public class ServiceProviderOnlyScoped : IWeakReferenceObservable
 	public bool HasReference => _reference.IsAlive;
 }
 
-public class ServiceProviderOnlyScopedGeneric<T> : ServiceProviderOnlyScoped
-{
-}
+public class ServiceProviderOnlyScopedGeneric<T> : ServiceProviderOnlyScoped;
 
-public class ServiceProviderOnlyScopedDisposable : ServiceProviderOnlyScoped, IDisposable, IDisposableObservable,
-	IWeakReferenceObservable
+public class ServiceProviderOnlyScopedDisposable : ServiceProviderOnlyScoped, IDisposable, IDisposableObservable
 {
 	public void Dispose()
 	{
@@ -112,12 +107,9 @@ public class ServiceProviderOnlySingleton : IWeakReferenceObservable
 	public bool HasReference => _reference.IsAlive;
 }
 
-public class ServiceProviderOnlySingletonGeneric<T> : ServiceProviderOnlySingleton
-{
-}
+public class ServiceProviderOnlySingletonGeneric<T> : ServiceProviderOnlySingleton;
 
-public class ServiceProviderOnlySingletonDisposable : ServiceProviderOnlySingleton, IDisposable, IDisposableObservable,
-	IWeakReferenceObservable
+public class ServiceProviderOnlySingletonDisposable : ServiceProviderOnlySingleton, IDisposable, IDisposableObservable
 {
 	public void Dispose()
 	{
@@ -141,12 +133,9 @@ public class WindsorOnlyTransient : IWeakReferenceObservable
 	public bool HasReference => _reference.IsAlive;
 }
 
-public class WindsorOnlyTransientGeneric<T> : WindsorOnlyTransient
-{
-}
+public class WindsorOnlyTransientGeneric<T> : WindsorOnlyTransient;
 
-public class WindsorOnlyTransientDisposable : WindsorOnlyTransient, IDisposable, IDisposableObservable,
-	IWeakReferenceObservable
+public class WindsorOnlyTransientDisposable : WindsorOnlyTransient, IDisposable, IDisposableObservable
 {
 	public void Dispose()
 	{
@@ -170,12 +159,9 @@ public class WindsorOnlyScoped : IWeakReferenceObservable
 	public bool HasReference => _reference.IsAlive;
 }
 
-public class WindsorOnlyScopedGeneric<T> : WindsorOnlyScoped
-{
-}
+public class WindsorOnlyScopedGeneric<T> : WindsorOnlyScoped;
 
-public class WindsorOnlyScopedDisposable : WindsorOnlyScoped, IDisposable, IDisposableObservable,
-	IWeakReferenceObservable
+public class WindsorOnlyScopedDisposable : WindsorOnlyScoped, IDisposable, IDisposableObservable
 {
 	public void Dispose()
 	{
@@ -199,12 +185,9 @@ public class WindsorOnlySingleton : IWeakReferenceObservable
 	public bool HasReference => _reference.IsAlive;
 }
 
-public class WindsorOnlySingletonGeneric<T> : WindsorOnlySingleton
-{
-}
+public class WindsorOnlySingletonGeneric<T> : WindsorOnlySingleton;
 
-public class WindsorOnlySingletonDisposable : WindsorOnlySingleton, IDisposable, IDisposableObservable,
-	IWeakReferenceObservable
+public class WindsorOnlySingletonDisposable : WindsorOnlySingleton, IDisposable, IDisposableObservable
 {
 	public void Dispose()
 	{
@@ -228,12 +211,9 @@ public class CrossWiredTransient : IWeakReferenceObservable
 	public bool HasReference => _reference.IsAlive;
 }
 
-public class CrossWiredTransientGeneric<T> : CrossWiredTransient
-{
-}
+public class CrossWiredTransientGeneric<T> : CrossWiredTransient;
 
-public class CrossWiredTransientDisposable : CrossWiredTransient, IDisposable, IDisposableObservable,
-	IWeakReferenceObservable
+public class CrossWiredTransientDisposable : CrossWiredTransient, IDisposable, IDisposableObservable
 {
 	public void Dispose()
 	{
@@ -257,11 +237,9 @@ public class CrossWiredScoped : IWeakReferenceObservable
 	public bool HasReference => _reference.IsAlive;
 }
 
-public class CrossWiredScopedGeneric<T> : CrossWiredScoped
-{
-}
+public class CrossWiredScopedGeneric<T> : CrossWiredScoped;
 
-public class CrossWiredScopedDisposable : CrossWiredScoped, IDisposable, IDisposableObservable, IWeakReferenceObservable
+public class CrossWiredScopedDisposable : CrossWiredScoped, IDisposable, IDisposableObservable
 {
 	public void Dispose()
 	{
@@ -285,12 +263,9 @@ public class CrossWiredSingleton : IWeakReferenceObservable
 	public bool HasReference => _reference.IsAlive;
 }
 
-public class CrossWiredSingletonGeneric<T> : CrossWiredSingleton
-{
-}
+public class CrossWiredSingletonGeneric<T> : CrossWiredSingleton;
 
-public class CrossWiredSingletonDisposable : CrossWiredSingleton, IDisposable, IDisposableObservable,
-	IWeakReferenceObservable
+public class CrossWiredSingletonDisposable : CrossWiredSingleton, IDisposable, IDisposableObservable
 {
 	public void Dispose()
 	{

@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public interface IGeneric<T>
-{
-}
+public interface IGeneric<T>;

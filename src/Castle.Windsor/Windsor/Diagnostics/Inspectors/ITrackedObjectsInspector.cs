@@ -17,6 +17,4 @@ using Castle.MicroKernel;
 
 namespace Castle.Windsor.Diagnostics.Inspectors;
 
-public interface ITrackedObjectsInspector : IDiagnosticsSource<IEnumerable<KeyValuePair<IHandler, object[]>>>
-{
-}
+public interface ITrackedObjectsInspector : IDiagnosticsSource<IEnumerable<KeyValuePair<IHandler, object[]>>>;

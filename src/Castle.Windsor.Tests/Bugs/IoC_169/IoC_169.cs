@@ -19,17 +19,11 @@ using Castle.MicroKernel.Registration;
 
 namespace Castle.Windsor.Tests.Bugs.IoC_169;
 
-public interface IBlackboard
-{
-}
+public interface IBlackboard;
 
-public interface IChalk
-{
-}
+public interface IChalk;
 
-public class Chalk : IChalk
-{
-}
+public class Chalk : IChalk;
 
 public abstract class AbstractBlackboard : IBlackboard, IStartable
 {
@@ -57,9 +51,7 @@ public class Blackboard : AbstractBlackboard
 	}
 }
 
-public interface IServiceWithoutImplementation
-{
-}
+public interface IServiceWithoutImplementation;
 
 public class IoC169
 {

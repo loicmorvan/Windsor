@@ -20,12 +20,13 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.Loader;
 using System.Text;
 
 namespace Castle.Core.Internal;
 
 #if !FEATURE_ASSEMBLIES
-using System.Runtime.Loader;
+
 #endif
 
 public static class ReflectionUtil
@@ -196,7 +197,7 @@ public static class ReflectionUtil
 
 	public static bool IsAssemblyFile(string filePath)
 	{
-		if (filePath == null) throw new ArgumentNullException(nameof(filePath));
+		ArgumentNullException.ThrowIfNull(filePath);
 
 		string extension;
 		try
