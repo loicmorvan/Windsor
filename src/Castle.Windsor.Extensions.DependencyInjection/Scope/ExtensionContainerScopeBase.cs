@@ -12,55 +12,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Scope
-{
-	using System;
+namespace Castle.Windsor.Extensions.DependencyInjection.Scope;
+
+using System;
 	
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Lifestyle.Scoped;
+using Castle.Core;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Lifestyle.Scoped;
 
-	internal  abstract class ExtensionContainerScopeBase : ILifetimeScope
+internal  abstract class ExtensionContainerScopeBase : ILifetimeScope
+{
+	public static readonly string TransientMarker = "Transient";
+	private readonly IScopeCache scopeCache = new ScopeCache();
+
+	internal virtual ExtensionContainerScopeBase RootScope { get; set; }
+
+	public virtual void Dispose()
 	{
-		public static readonly string TransientMarker = "Transient";
-		private readonly IScopeCache scopeCache;
-
-		protected ExtensionContainerScopeBase()
+		if (scopeCache is IDisposable disposableCache)
 		{
-			scopeCache = new ScopeCache();
+			disposableCache.Dispose();
 		}
+	}
 
-		internal virtual ExtensionContainerScopeBase RootScope { get; set; }
-
-		public virtual void Dispose()
+	public Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance)
+	{
+		lock (scopeCache)
 		{
-			if (scopeCache is IDisposable disposableCache)
+			// Add transient's burden to scope so it gets released
+			if (model.Configuration.Attributes.Get(TransientMarker) == bool.TrueString)
 			{
-				disposableCache.Dispose();
+				var transientBurden = createInstance(_ => {});
+				scopeCache[transientBurden] = transientBurden;
+				return transientBurden;
 			}
-		}
 
-		public Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance)
-		{
-			lock (scopeCache)
+			var scopedBurden = scopeCache[model];
+			if (scopedBurden != null)
 			{
-				// Add transient's burden to scope so it gets released
-				if (model.Configuration.Attributes.Get(TransientMarker) == bool.TrueString)
-				{
-					var transientBurden = createInstance(_ => {});
-					scopeCache[transientBurden] = transientBurden;
-					return transientBurden;
-				}
-
-				var scopedBurden = scopeCache[model];
-				if (scopedBurden != null)
-				{
-					return scopedBurden;
-				}
-				scopedBurden = createInstance((_) => {});
-				scopeCache[model] = scopedBurden;
 				return scopedBurden;
 			}
+			scopedBurden = createInstance((_) => {});
+			scopeCache[model] = scopedBurden;
+			return scopedBurden;
 		}
 	}
 }

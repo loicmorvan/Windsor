@@ -12,25 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
+namespace Castle.Core;
+
+using System;
+
+/// <summary>
+///   Indicates that the target components wants a
+///   scoped lifestyle.
+/// </summary>
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+public class ScopedAttribute : LifestyleAttribute
 {
-	using System;
-
 	/// <summary>
-	///   Indicates that the target components wants a
-	///   scoped lifestyle.
+	///   Initializes a new instance of the <see cref = "ScopedAttribute" /> class.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-	public class ScopedAttribute : LifestyleAttribute
+	public ScopedAttribute()
+		: base(LifestyleType.Scoped)
 	{
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "ScopedAttribute" /> class.
-		/// </summary>
-		public ScopedAttribute()
-			: base(LifestyleType.Scoped)
-		{
-		}
-
-		public Type ScopeAccessorType { get; set; }
 	}
+
+	public Type ScopeAccessorType { get; set; }
 }

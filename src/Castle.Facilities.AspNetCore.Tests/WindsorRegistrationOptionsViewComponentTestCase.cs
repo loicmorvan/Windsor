@@ -12,56 +12,55 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests
+namespace Castle.Facilities.AspNetCore.Tests;
+
+using System;
+
+using Castle.Facilities.AspNetCore.Tests.Framework;
+using Castle.MicroKernel.Registration;
+
+using Microsoft.AspNetCore.Mvc;
+
+	
+
+public abstract class WindsorRegistrationOptionsViewComponentTestCase: IDisposable
 {
-	using System;
-
-	using Castle.Facilities.AspNetCore.Tests.Framework;
-	using Castle.MicroKernel.Registration;
-
-	using Microsoft.AspNetCore.Mvc;
-
-	
-
-	public abstract class WindsorRegistrationOptionsViewComponentTestCase: IDisposable
+	public void Dispose()
 	{
-		public void Dispose()
-		{
-			testContext.Dispose();
-		}
-
-		protected Framework.TestContext testContext;
-
-		[InlineData(typeof(OverrideViewComponent))]
-		public void Should_resolve_overidden_ViewComponents_using_WindsorRegistrationOptions(Type optionsResolvableType)
-		{
-			testContext.WindsorContainer.Resolve(optionsResolvableType); 
-		}
-
-		public class OverrideViewComponent : ViewComponent
-		{
-		}
+		testContext.Dispose();
 	}
 
-	
-	public class WindsorRegistrationOptionsForAssembliesViewComponentTestCase : WindsorRegistrationOptionsViewComponentTestCase
+	protected TestContext testContext;
+
+	[InlineData(typeof(OverrideViewComponent))]
+	public void Should_resolve_overidden_ViewComponents_using_WindsorRegistrationOptions(Type optionsResolvableType)
 	{
-		public WindsorRegistrationOptionsForAssembliesViewComponentTestCase()
-		{
-			testContext = TestContextFactory.Get(opts => opts
-				.UseEntryAssembly(typeof(Uri).Assembly)
-				.RegisterViewComponents(typeof(OverrideViewComponent).Assembly));
-		}
+		testContext.WindsorContainer.Resolve(optionsResolvableType); 
 	}
 
-	
-	public class WindsorRegistrationOptionsForComponentsViewComponentTestCase : WindsorRegistrationOptionsViewComponentTestCase
+	public class OverrideViewComponent : ViewComponent
 	{
-		public WindsorRegistrationOptionsForComponentsViewComponentTestCase()
-		{
-			testContext = TestContextFactory.Get(opts => opts
-				.UseEntryAssembly(typeof(Uri).Assembly)
-				.RegisterViewComponents(Component.For<OverrideViewComponent>().LifestyleScoped().Named("view-components")));
-		}
+	}
+}
+
+	
+public class WindsorRegistrationOptionsForAssembliesViewComponentTestCase : WindsorRegistrationOptionsViewComponentTestCase
+{
+	public WindsorRegistrationOptionsForAssembliesViewComponentTestCase()
+	{
+		testContext = TestContextFactory.Get(opts => opts
+			.UseEntryAssembly(typeof(Uri).Assembly)
+			.RegisterViewComponents(typeof(OverrideViewComponent).Assembly));
+	}
+}
+
+	
+public class WindsorRegistrationOptionsForComponentsViewComponentTestCase : WindsorRegistrationOptionsViewComponentTestCase
+{
+	public WindsorRegistrationOptionsForComponentsViewComponentTestCase()
+	{
+		testContext = TestContextFactory.Get(opts => opts
+			.UseEntryAssembly(typeof(Uri).Assembly)
+			.RegisterViewComponents(Component.For<OverrideViewComponent>().LifestyleScoped().Named("view-components")));
 	}
 }

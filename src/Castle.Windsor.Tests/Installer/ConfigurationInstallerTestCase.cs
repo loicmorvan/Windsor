@@ -12,24 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Installer
+namespace Castle.Windsor.Tests.Installer;
+
+using System;
+
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.SubSystems.Configuration;
+using Castle.Windsor;
+using Castle.Windsor.Installer;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.XmlFiles;
+
+public class ConfigurationInstallerTestCase : AbstractContainerTestCase
 {
-	using System;
-
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.SubSystems.Configuration;
-	using Castle.Windsor;
-	using Castle.Windsor.Installer;
-	using Castle.Windsor.Tests;
-	using Castle.XmlFiles;
-
-	using CastleTests.Components;
-
-	
-
-	
-	public class ConfigurationInstallerTestCase : AbstractContainerTestCase
-	{
 #if FEATURE_SYSTEM_CONFIGURATION
 		[Fact]
 		public void Can_reference_components_from_app_config_in_component_node()
@@ -68,56 +63,48 @@ namespace CastleTests.Installer
 		}
 #endif
 
-		[Fact]
-		public void InstallComponents_FromXmlFileWithEnvironment_ComponentsInstalled()
-		{
-			Container.Install(
-				Configuration.FromXmlFile(
+	[Fact]
+	public void InstallComponents_FromXmlFileWithEnvironment_ComponentsInstalled()
+	{
+		Container.Install(
+			Configuration.FromXmlFile(
 					ConfigHelper.ResolveConfigPath("Configuration2/env_config.xml"))
-					.Environment("devel")
-				);
+				.Environment("devel")
+		);
 
-			var prop = Container.Resolve<ComponentWithStringProperty>("component");
+		var prop = Container.Resolve<ComponentWithStringProperty>("component");
 
-			Assert.Equal("John Doe", prop.Name);
-		}
-
-		[Fact]
-		public void InstallComponents_FromXmlFile_ComponentsInstalled()
-		{
-			Container.Install(
-				Configuration.FromXml(Xml.Embedded("installerconfig.xml")));
-
-			Assert.True(Container.Kernel.HasComponent(typeof(ICalcService)));
-			Assert.True(Container.Kernel.HasComponent("calcservice"));
-		}
-
-		[Fact]
-		public void InstallComponents_FromXmlFile_first_and_from_code()
-		{
-			Container.Install(
-				Configuration.FromXml(Xml.Embedded("justConfiguration.xml")),
-				new Installer(c => c.Register(Component.For<ICamera>()
-				                              	.ImplementedBy<Camera>()
-				                              	.Named("camera"))));
-
-			var camera = Container.Resolve<ICamera>();
-			Assert.Equal("from configuration", camera.Name);
-		}
+		Assert.Equal("John Doe", prop.Name);
 	}
 
-	internal class Installer : IWindsorInstaller
+	[Fact]
+	public void InstallComponents_FromXmlFile_ComponentsInstalled()
 	{
-		private readonly Action<IWindsorContainer> install;
+		Container.Install(
+			Configuration.FromXml(Xml.Embedded("installerconfig.xml")));
 
-		public Installer(Action<IWindsorContainer> install)
-		{
-			this.install = install;
-		}
+		Assert.True(Container.Kernel.HasComponent(typeof(ICalcService)));
+		Assert.True(Container.Kernel.HasComponent("calcservice"));
+	}
 
-		public void Install(IWindsorContainer container, IConfigurationStore store)
-		{
-			install(container);
-		}
+	[Fact]
+	public void InstallComponents_FromXmlFile_first_and_from_code()
+	{
+		Container.Install(
+			Configuration.FromXml(Xml.Embedded("justConfiguration.xml")),
+			new Installer(c => c.Register(Component.For<ICamera>()
+				.ImplementedBy<Camera>()
+				.Named("camera"))));
+
+		var camera = Container.Resolve<ICamera>();
+		Assert.Equal("from configuration", camera.Name);
+	}
+}
+
+internal class Installer(Action<IWindsorContainer> install) : IWindsorInstaller
+{
+	public void Install(IWindsorContainer container, IConfigurationStore store)
+	{
+		install(container);
 	}
 }

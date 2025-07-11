@@ -12,15 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class NeedsGenericType
-	{
-		private ICache<string> cache;
+namespace Castle.Windsor.Tests.Components;
 
-		public NeedsGenericType(ICache<string> cache)
-		{
-			this.cache = cache;
-		}
-	}
+public class NeedsGenericType(ICache<string> cache)
+{
+	private ICache<string> cache = cache;
 }

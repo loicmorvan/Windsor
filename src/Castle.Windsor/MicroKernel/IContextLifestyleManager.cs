@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
-{
-	using Castle.MicroKernel.Context;
+namespace Castle.MicroKernel;
 
-	public interface IContextLifestyleManager
-	{
-		object GetContextInstance(CreationContext context);
-	}
+using Castle.MicroKernel.Context;
+
+public interface IContextLifestyleManager
+{
+	object GetContextInstance(CreationContext context);
 }

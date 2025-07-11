@@ -12,24 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class Controller(IView view) : IController
 {
-	public class Controller : IController
+	public IView View
 	{
-		private IView view;
+		get { return view; }
+	}
 
-		public Controller(IView view)
-		{
-			this.view = view;
-		}
-
-		public IView View
-		{
-			get { return view; }
-		}
-
-		public void Process()
-		{
-		}
+	public void Process()
+	{
 	}
 }

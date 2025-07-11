@@ -12,34 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests;
+
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+using Castle.Windsor.Tests.Components;
+
+public class ReportedProblemTestCase
 {
-	using Castle.MicroKernel.Registration;
+	private readonly IWindsorContainer container = new WindsorContainer();
 
-	using CastleTests.Components;
-
-	
-
-	
-	public class ReportedProblemTestCase
+	[Fact]
+	public void StackOverflowProblem()
 	{
-		private IWindsorContainer container;
+		container.Register(Component.For<Employee>());
+		container.Register(Component.For<Reviewer>());
+		container.Register(Component.For<ReviewableEmployee>());
 
-		public ReportedProblemTestCase()
-		{
-			container = new WindsorContainer();
-		}
-
-		[Fact]
-		public void StackOverflowProblem()
-		{
-			container.Register(Component.For<Employee>());
-			container.Register(Component.For<Reviewer>());
-			container.Register(Component.For<ReviewableEmployee>());
-
-			Assert.NotNull(container.Resolve<ReviewableEmployee>());
-			Assert.NotNull(container.Resolve<Reviewer>());
-			Assert.NotNull(container.Resolve<Employee>());
-		}
+		Assert.NotNull(container.Resolve<ReviewableEmployee>());
+		Assert.NotNull(container.Resolve<Reviewer>());
+		Assert.NotNull(container.Resolve<Employee>());
 	}
 }

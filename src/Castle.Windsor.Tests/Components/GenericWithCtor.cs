@@ -12,15 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class GenericWithCtor<T>
-	{
-		public GenericWithCtor(T dependency)
-		{
-			Dependency = dependency;
-		}
+namespace Castle.Windsor.Tests.Components;
 
-		public T Dependency { get; private set; }
-	}
+public class GenericWithCtor<T>(T dependency)
+{
+	public T Dependency { get; private set; } = dependency;
 }

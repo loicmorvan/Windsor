@@ -12,28 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
+namespace Castle.Core;
+
+using System;
+
+[Serializable]
+public class ComponentDependencyModel(string referencedComponentName, Type serviceType) : DependencyModel(referencedComponentName, serviceType, false)
 {
-	using System;
-
-	[Serializable]
-	public class ComponentDependencyModel : DependencyModel
+	public ComponentDependencyModel(string referencedComponentName) : this(referencedComponentName, null)
 	{
-		public ComponentDependencyModel(string referencedComponentName) : this(referencedComponentName, null)
-		{
-		}
+	}
 
-		public ComponentDependencyModel(string referencedComponentName, Type serviceType)
-			: base(referencedComponentName, serviceType, false)
-		{
-		}
-
-		public override void Init(ParameterModelCollection parameters)
-		{
+	public override void Init(ParameterModelCollection parameters)
+	{
 #if DEBUG
-			initialized = true;
+		initialized = true;
 #endif
-			reference = DependencyKey;
-		}
+		reference = DependencyKey;
 	}
 }

@@ -12,36 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.LifecycleConcerns
+namespace Castle.MicroKernel.LifecycleConcerns;
+
+using System;
+
+using Castle.Core;
+
+/// <summary>
+/// Summary description for InitializationConcern.
+/// </summary>
+[Serializable]
+public class InitializationConcern : ICommissionConcern
 {
-	using System;
+	private static readonly InitializationConcern instance = new InitializationConcern();
 
-	using Castle.Core;
-
-	/// <summary>
-	/// Summary description for InitializationConcern.
-	/// </summary>
-	[Serializable]
-	public class InitializationConcern : ICommissionConcern
+	public static InitializationConcern Instance
 	{
-		private static readonly InitializationConcern instance = new InitializationConcern();
+		get { return instance; }
+	}
 
-		public static InitializationConcern Instance
-		{
-			get { return instance; }
-		}
+	protected InitializationConcern()
+	{
+	}
 
-		protected InitializationConcern()
+	public void Apply(ComponentModel model, object component)
+	{
+		var initable = component as IInitializable;
+		if (initable != null)
 		{
-		}
-
-		public void Apply(ComponentModel model, object component)
-		{
-			var initable = component as IInitializable;
-			if (initable != null)
-			{
-				initable.Initialize();
-			}
+			initable.Initialize();
 		}
 	}
 }

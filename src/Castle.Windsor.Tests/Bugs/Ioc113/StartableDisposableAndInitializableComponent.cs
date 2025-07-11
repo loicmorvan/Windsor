@@ -1,41 +1,36 @@
+namespace Castle.Windsor.Tests.Bugs.Ioc113;
+
 using System;
 using System.Collections.Generic;
+
 using Castle.Core;
 
-namespace Castle.MicroKernel.Tests.Bugs.Ioc113
+public class StartableDisposableAndInitializableComponent : IInitializable, IDisposable, IStartable
 {
-	public class StartableDisposableAndInitializableComponent : IInitializable, IDisposable, IStartable
+	public IList<SdiComponentMethods> calledMethods = new List<SdiComponentMethods>();
+
+	public void Initialize()
 	{
-		public IList<SdiComponentMethods> calledMethods;
+		calledMethods.Add(SdiComponentMethods.Initialize);
+	}
 
-		public StartableDisposableAndInitializableComponent()
-		{
-			calledMethods = new List<SdiComponentMethods>();
-		}
+	public void Start()
+	{
+		calledMethods.Add(SdiComponentMethods.Start);
+	}
 
-		public void Initialize()
-		{
-			calledMethods.Add(SdiComponentMethods.Initialize);
-		}
+	public void DoSomething()
+	{
+		calledMethods.Add(SdiComponentMethods.DoSomething);
+	}
 
-		public void Start()
-		{
-			calledMethods.Add(SdiComponentMethods.Start);
-		}
+	public void Stop()
+	{
+		calledMethods.Add(SdiComponentMethods.Stop);
+	}
 
-		public void DoSomething()
-		{
-			calledMethods.Add(SdiComponentMethods.DoSomething);
-		}
-
-		public void Stop()
-		{
-			calledMethods.Add(SdiComponentMethods.Stop);
-		}
-
-		public void Dispose()
-		{
-			calledMethods.Add(SdiComponentMethods.Dispose);
-		}
+	public void Dispose()
+	{
+		calledMethods.Add(SdiComponentMethods.Dispose);
 	}
 }

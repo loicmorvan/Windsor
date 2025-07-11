@@ -12,34 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.Startable.Components
+namespace Castle.Windsor.Tests.Facilities.Startable.Components;
+
+using Castle.Core;
+
+[Transient]
+public class StartableComponent : IStartable
 {
-	using Castle.Core;
+	private bool _Started = false;
+	private bool _Stopped = false;
 
-	[Transient]
-	public class StartableComponent : IStartable
+	public void Start()
 	{
-		private bool _Started = false;
-		private bool _Stopped = false;
+		_Started = true;
+	}
 
-		public void Start()
-		{
-			_Started = true;
-		}
+	public void Stop()
+	{
+		_Stopped = true;
+	}
 
-		public void Stop()
-		{
-			_Stopped = true;
-		}
+	public bool Started
+	{
+		get { return _Started; }
+	}
 
-		public bool Started
-		{
-			get { return _Started; }
-		}
-
-		public bool Stopped
-		{
-			get { return _Stopped; }
-		}
+	public bool Stopped
+	{
+		get { return _Stopped; }
 	}
 }

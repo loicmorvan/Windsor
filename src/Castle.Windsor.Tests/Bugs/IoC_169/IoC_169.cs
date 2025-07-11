@@ -12,83 +12,80 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs.IoC_169
+namespace Castle.Windsor.Tests.Bugs.IoC_169;
+
+using System.Reflection;
+
+using Castle.Core;
+using Castle.Facilities.Startable;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+
+public interface IBlackboard
 {
-	using System.Reflection;
+}
 
-	using Castle.Core;
-	using Castle.Facilities.Startable;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor;
+public interface IChalk
+{
+}
+
+public class Chalk : IChalk
+{
+}
+
+public abstract class AbstractBlackboard : IBlackboard, IStartable
+{
+	public static bool Started;
+
+	public void Start()
+	{
+		Started = true;
+	}
+
+	public void Stop()
+	{
+	}
+
+	public static void PrepareForTest()
+	{
+		Started = false;
+	}
+}
+
+public class Blackboard : AbstractBlackboard
+{
+	public Blackboard(IChalk chalk)
+	{
+	}
+}
+
+public interface IServiceWithoutImplementation
+{
+}
 
 	
-
-	public interface IBlackboard
+public class IoC_169
+{
+	[Fact]
+	public void BulkRegistrations_WhenRegistrationMatchesNoInstancesOfService_StopsStartableFacilityFromWorking()
 	{
-	}
+		AbstractBlackboard.PrepareForTest();
 
-	public interface IChalk
-	{
-	}
+		var container = new WindsorContainer();
 
-	public class Chalk : IChalk
-	{
-	}
+		container.AddFacility(new StartableFacility());
 
-	public abstract class AbstractBlackboard : IBlackboard, IStartable
-	{
-		public static bool Started;
+		container.Register(Component.For(typeof(IBlackboard)).ImplementedBy(typeof(Blackboard)).Named("blackboard"));
 
-		public void Start()
-		{
-			Started = true;
-		}
+		var registrations = Classes.
+			FromAssembly(GetType().GetTypeInfo().Assembly)
+			.BasedOn<IServiceWithoutImplementation>()
+			.Unless(t => container.Kernel.HasComponent(t));
 
-		public void Stop()
-		{
-		}
+		container.Register(registrations);
 
-		public static void PrepareForTest()
-		{
-			Started = false;
-		}
-	}
+		container.Kernel.Register(Component.For<IChalk>().Named("chalk").Instance(new Chalk()));
 
-	public class Blackboard : AbstractBlackboard
-	{
-		public Blackboard(IChalk chalk)
-		{
-		}
-	}
-
-	public interface IServiceWithoutImplementation
-	{
-	}
-
-	
-	public class IoC_169
-	{
-		[Fact]
-		public void BulkRegistrations_WhenRegistrationMatchesNoInstancesOfService_StopsStartableFacilityFromWorking()
-		{
-			AbstractBlackboard.PrepareForTest();
-
-			var container = new WindsorContainer();
-
-			container.AddFacility(new StartableFacility());
-
-			container.Register(Component.For(typeof(IBlackboard)).ImplementedBy(typeof(Blackboard)).Named("blackboard"));
-
-			var registrations = Classes.
-				FromAssembly(GetType().GetTypeInfo().Assembly)
-				.BasedOn<IServiceWithoutImplementation>()
-				.Unless(t => container.Kernel.HasComponent(t));
-
-			container.Register(registrations);
-
-			container.Kernel.Register(Component.For<IChalk>().Named("chalk").Instance(new Chalk()));
-
-			Assert.True(AbstractBlackboard.Started); // fails here, service is never started
-		}
+		Assert.True(AbstractBlackboard.Started); // fails here, service is never started
 	}
 }

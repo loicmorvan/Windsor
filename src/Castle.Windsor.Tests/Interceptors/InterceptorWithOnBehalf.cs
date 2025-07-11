@@ -12,33 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Interceptors
+namespace Castle.Windsor.Tests.Interceptors;
+
+using Castle.Core;
+using Castle.Core.Interceptor;
+using Castle.DynamicProxy;
+
+public class InterceptorWithOnBehalf : IInterceptor, IOnBehalfAware
 {
-	using Castle.Core;
-	using Castle.Core.Interceptor;
-	using Castle.DynamicProxy;
+	private static ComponentModel model;
 
-	public class InterceptorWithOnBehalf : IInterceptor, IOnBehalfAware
+	#region IMethodInterceptor Members
+
+	public void Intercept(IInvocation invocation)
 	{
-		private static ComponentModel model;
+		invocation.Proceed();
+	}
 
-		#region IMethodInterceptor Members
+	#endregion
 
-		public void Intercept(IInvocation invocation)
-		{
-			invocation.Proceed();
-		}
+	public void SetInterceptedComponentModel(ComponentModel target)
+	{
+		model = target;
+	}
 
-		#endregion
-
-		public void SetInterceptedComponentModel(ComponentModel target)
-		{
-			model = target;
-		}
-
-		public static ComponentModel Model
-		{
-			get { return model; }
-		}
+	public static ComponentModel Model
+	{
+		get { return model; }
 	}
 }

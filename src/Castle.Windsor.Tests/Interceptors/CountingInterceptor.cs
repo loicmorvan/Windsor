@@ -12,25 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Interceptors
+namespace Castle.Windsor.Tests.Interceptors;
+
+using Castle.Core;
+using Castle.DynamicProxy;
+
+[Singleton]
+public class CountingInterceptor : IInterceptor
 {
-	using Castle.Core;
-	using Castle.DynamicProxy;
+	private int interceptedCallsCount;
 
-	[Singleton]
-	public class CountingInterceptor : IInterceptor
+	public void Intercept(IInvocation invocation)
 	{
-		private int interceptedCallsCount;
+		interceptedCallsCount++;
+		invocation.Proceed();
+	}
 
-		public void Intercept(IInvocation invocation)
-		{
-			interceptedCallsCount++;
-			invocation.Proceed();
-		}
-
-		public int InterceptedCallsCount
-		{
-			get { return interceptedCallsCount; }
-		}
+	public int InterceptedCallsCount
+	{
+		get { return interceptedCallsCount; }
 	}
 }

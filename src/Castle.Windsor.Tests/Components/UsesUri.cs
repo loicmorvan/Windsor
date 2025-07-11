@@ -12,22 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+using System;
+
+public class UsesUri(Uri uri)
 {
-	using System;
-
-	public class UsesUri
+	public Uri Uri
 	{
-		private readonly Uri uri;
-
-		public UsesUri(Uri uri)
-		{
-			this.uri = uri;
-		}
-
-		public Uri Uri
-		{
-			get { return uri; }
-		}
+		get { return uri; }
 	}
 }

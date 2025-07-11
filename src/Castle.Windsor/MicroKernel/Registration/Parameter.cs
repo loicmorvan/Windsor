@@ -12,110 +12,109 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration
+namespace Castle.MicroKernel.Registration;
+
+using System;
+
+using Castle.Core.Configuration;
+
+/// <summary>
+///   Represents a configuration parameter.
+/// </summary>
+public class Parameter
 {
-	using System;
+	private readonly String key;
+	private readonly object value;
 
-	using Castle.Core.Configuration;
-
-	/// <summary>
-	///   Represents a configuration parameter.
-	/// </summary>
-	public class Parameter
+	internal Parameter(String key, String value)
 	{
-		private readonly String key;
-		private readonly object value;
+		this.key = key;
+		this.value = value;
+	}
 
-		internal Parameter(String key, String value)
-		{
-			this.key = key;
-			this.value = value;
-		}
-
-		internal Parameter(String key, IConfiguration configNode)
-		{
-			this.key = key;
-			value = configNode;
-		}
-
-		/// <summary>
-		///   Gets the parameter configuration.
-		/// </summary>
-		public IConfiguration ConfigNode
-		{
-			get { return value as IConfiguration; }
-		}
-
-		/// <summary>
-		///   Gets the parameter key.
-		/// </summary>
-		public string Key
-		{
-			get { return key; }
-		}
-
-		/// <summary>
-		///   Gets the parameter value.
-		/// </summary>
-		public String Value
-		{
-			get { return value as string; }
-		}
-
-		/// <summary>
-		///   Create a <see cref = "ParameterKey" /> with key.
-		/// </summary>
-		/// <param name = "key">The parameter key.</param>
-		/// <returns>The new <see cref = "ParameterKey" /></returns>
-		public static ParameterKey ForKey(String key)
-		{
-			return new ParameterKey(key);
-		}
-
-		public static implicit operator Dependency(Parameter parameter)
-		{
-			return parameter == null ? null : new Dependency(parameter);
-		}
+	internal Parameter(String key, IConfiguration configNode)
+	{
+		this.key = key;
+		value = configNode;
 	}
 
 	/// <summary>
-	///   Represents a parameter key.
+	///   Gets the parameter configuration.
 	/// </summary>
-	public class ParameterKey
+	public IConfiguration ConfigNode
 	{
-		private readonly String name;
+		get { return value as IConfiguration; }
+	}
 
-		internal ParameterKey(String name)
-		{
-			this.name = name;
-		}
+	/// <summary>
+	///   Gets the parameter key.
+	/// </summary>
+	public string Key
+	{
+		get { return key; }
+	}
 
-		/// <summary>
-		///   The parameter key name.
-		/// </summary>
-		public string Name
-		{
-			get { return name; }
-		}
+	/// <summary>
+	///   Gets the parameter value.
+	/// </summary>
+	public String Value
+	{
+		get { return value as string; }
+	}
 
-		/// <summary>
-		///   Builds the <see cref = "Parameter" /> with key/value.
-		/// </summary>
-		/// <param name = "value">The parameter value.</param>
-		/// <returns>The new <see cref = "Parameter" /></returns>
-		public Parameter Eq(String value)
-		{
-			return new Parameter(name, value);
-		}
+	/// <summary>
+	///   Create a <see cref = "ParameterKey" /> with key.
+	/// </summary>
+	/// <param name = "key">The parameter key.</param>
+	/// <returns>The new <see cref = "ParameterKey" /></returns>
+	public static ParameterKey ForKey(String key)
+	{
+		return new ParameterKey(key);
+	}
 
-		/// <summary>
-		///   Builds the <see cref = "Parameter" /> with key/config.
-		/// </summary>
-		/// <param name = "configNode">The parameter configuration.</param>
-		/// <returns>The new <see cref = "Parameter" /></returns>
-		public Parameter Eq(IConfiguration configNode)
-		{
-			return new Parameter(name, configNode);
-		}
+	public static implicit operator Dependency(Parameter parameter)
+	{
+		return parameter == null ? null : new Dependency(parameter);
+	}
+}
+
+/// <summary>
+///   Represents a parameter key.
+/// </summary>
+public class ParameterKey
+{
+	private readonly String name;
+
+	internal ParameterKey(String name)
+	{
+		this.name = name;
+	}
+
+	/// <summary>
+	///   The parameter key name.
+	/// </summary>
+	public string Name
+	{
+		get { return name; }
+	}
+
+	/// <summary>
+	///   Builds the <see cref = "Parameter" /> with key/value.
+	/// </summary>
+	/// <param name = "value">The parameter value.</param>
+	/// <returns>The new <see cref = "Parameter" /></returns>
+	public Parameter Eq(String value)
+	{
+		return new Parameter(name, value);
+	}
+
+	/// <summary>
+	///   Builds the <see cref = "Parameter" /> with key/config.
+	/// </summary>
+	/// <param name = "configNode">The parameter configuration.</param>
+	/// <returns>The new <see cref = "Parameter" /></returns>
+	public Parameter Eq(IConfiguration configNode)
+	{
+		return new Parameter(name, configNode);
 	}
 }

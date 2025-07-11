@@ -12,20 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class UsesComponentWithDispose(ComponentWithDispose cwd)
 {
-	public class UsesComponentWithDispose
+	public ComponentWithDispose Disposable
 	{
-		private readonly ComponentWithDispose cwd;
-
-		public UsesComponentWithDispose(ComponentWithDispose cwd)
-		{
-			this.cwd = cwd;
-		}
-
-		public ComponentWithDispose Disposable
-		{
-			get { return cwd; }
-		}
+		get { return cwd; }
 	}
 }

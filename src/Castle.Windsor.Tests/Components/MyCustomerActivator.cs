@@ -12,33 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+using Castle.Core;
+using Castle.MicroKernel;
+using Castle.MicroKernel.ComponentActivator;
+using Castle.MicroKernel.Context;
+using Castle.Windsor.Tests.ClassComponents;
+
+/// <summary>
+/// Summary description for MyCustomerActivator.
+/// </summary>
+public class MyCustomerActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
+	: AbstractComponentActivator(model, kernel, onCreation, onDestruction)
 {
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.ComponentActivator;
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Tests.ClassComponents;
-
-	/// <summary>
-	/// Summary description for MyCustomerActivator.
-	/// </summary>
-	public class MyCustomerActivator : AbstractComponentActivator
+	protected override object InternalCreate(CreationContext context)
 	{
-		public MyCustomerActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
-			: base(model, kernel, onCreation, onDestruction)
-		{
-		}
+		var customer = new CustomerImpl();
+		customer.Name = "James Bond";
+		return customer;
+	}
 
-		protected override object InternalCreate(CreationContext context)
-		{
-			var customer = new CustomerImpl();
-			customer.Name = "James Bond";
-			return customer;
-		}
-
-		protected override void InternalDestroy(object instance)
-		{
-		}
+	protected override void InternalDestroy(object instance)
+	{
 	}
 }

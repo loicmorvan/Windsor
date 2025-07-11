@@ -12,26 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class HasInstanceCount
 {
-	public class HasInstanceCount
+	private static int instancesCreated;
+
+	public HasInstanceCount()
 	{
-		private static int instancesCreated;
+		// doesn't need to be thread safe
+		instancesCreated++;
+	}
 
-		public HasInstanceCount()
-		{
-			// doesn't need to be thread safe
-			instancesCreated++;
-		}
+	public static int InstancesCreated
+	{
+		get { return instancesCreated; }
+	}
 
-		public static int InstancesCreated
-		{
-			get { return instancesCreated; }
-		}
-
-		public static void ResetInstancesCreated()
-		{
-			instancesCreated = 0;
-		}
+	public static void ResetInstancesCreated()
+	{
+		instancesCreated = 0;
 	}
 }

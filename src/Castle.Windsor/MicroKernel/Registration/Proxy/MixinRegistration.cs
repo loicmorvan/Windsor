@@ -12,58 +12,57 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration.Proxy
+namespace Castle.MicroKernel.Registration.Proxy;
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class MixinRegistration : IEnumerable<IReference<object>>
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
+	private readonly IList<IReference<object>> items = new List<IReference<object>>();
 
-	public class MixinRegistration : IEnumerable<IReference<object>>
+	public MixinRegistration Component<TService>()
 	{
-		private readonly IList<IReference<object>> items = new List<IReference<object>>();
+		return Component(typeof(TService));
+	}
 
-		public MixinRegistration Component<TService>()
+	public MixinRegistration Component(Type serviceType)
+	{
+		if (serviceType == null)
 		{
-			return Component(typeof(TService));
+			throw new ArgumentNullException(nameof(serviceType));
 		}
+		items.Add(new ComponentReference<object>(serviceType));
+		return this;
+	}
 
-		public MixinRegistration Component(Type serviceType)
+	public MixinRegistration Component(string name)
+	{
+		if (name == null)
 		{
-			if (serviceType == null)
-			{
-				throw new ArgumentNullException(nameof(serviceType));
-			}
-			items.Add(new ComponentReference<object>(serviceType));
-			return this;
+			throw new ArgumentNullException(nameof(name));
 		}
+		items.Add(new ComponentReference<object>(name));
+		return this;
+	}
 
-		public MixinRegistration Component(string name)
+	public MixinRegistration Objects(params object[] objects)
+	{
+		foreach (var item in objects)
 		{
-			if (name == null)
-			{
-				throw new ArgumentNullException(nameof(name));
-			}
-			items.Add(new ComponentReference<object>(name));
-			return this;
+			items.Add(new InstanceReference<object>(item));
 		}
+		return this;
+	}
 
-		public MixinRegistration Objects(params object[] objects)
-		{
-			foreach (var item in objects)
-			{
-				items.Add(new InstanceReference<object>(item));
-			}
-			return this;
-		}
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return items.GetEnumerator();
+	}
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return items.GetEnumerator();
-		}
-
-		IEnumerator<IReference<object>> IEnumerable<IReference<object>>.GetEnumerator()
-		{
-			return items.GetEnumerator();
-		}
+	IEnumerator<IReference<object>> IEnumerable<IReference<object>>.GetEnumerator()
+	{
+		return items.GetEnumerator();
 	}
 }

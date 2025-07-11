@@ -12,186 +12,181 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests;
+
+using Castle.MicroKernel;
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.Releasers;
+using Castle.Windsor;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
+
+public class LifecycledComponentsReleasePolicyTestCase
 {
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Releasers;
-	using Castle.Windsor.Tests.ClassComponents;
+	private readonly IWindsorContainer container;
+	private readonly IReleasePolicy releasePolicy;
 
-	using CastleTests;
-	using CastleTests.Components;
-
-	
-
-	
-	public class LifecycledComponentsReleasePolicyTestCase
+	[Fact]
+	public void AllComponentsReleasePolicy_is_the_default_release_policy_in_Windsor()
 	{
-		private IWindsorContainer container;
-		private IReleasePolicy releasePolicy;
+		Assert.IsType<LifecycledComponentsReleasePolicy>(releasePolicy);
+	}
 
-		[Fact]
-		public void AllComponentsReleasePolicy_is_the_default_release_policy_in_Windsor()
-		{
-			Assert.IsType<LifecycledComponentsReleasePolicy>(releasePolicy);
-		}
+	[Fact]
+	public void Doesnt_track_simple_components_transient()
+	{
+		container.Register(Transient<A>());
 
-		[Fact]
-		public void Doesnt_track_simple_components_transient()
-		{
-			container.Register(Transient<A>());
+		var a = container.Resolve<A>();
 
-			var a = container.Resolve<A>();
+		Assert.False(releasePolicy.HasTrack(a));
+	}
 
-			Assert.False(releasePolicy.HasTrack(a));
-		}
+	[Fact]
+	public void Doesnt_track_simple_components_with_simple_DynamicDependencies()
+	{
+		container.Register(Transient<A>().DynamicParameters(delegate { }));
 
-		[Fact]
-		public void Doesnt_track_simple_components_with_simple_DynamicDependencies()
-		{
-			container.Register(Transient<A>().DynamicParameters(delegate { }));
+		var a = container.Resolve<A>();
 
-			var a = container.Resolve<A>();
+		Assert.False(releasePolicy.HasTrack(a));
+	}
 
-			Assert.False(releasePolicy.HasTrack(a));
-		}
+	[Fact]
+	public void Doesnt_track_simple_components_with_simple_dependencies()
+	{
+		container.Register(Transient<B>(),
+			Transient<A>());
 
-		[Fact]
-		public void Doesnt_track_simple_components_with_simple_dependencies()
-		{
-			container.Register(Transient<B>(),
-			                   Transient<A>());
+		var b = container.Resolve<B>();
 
-			var b = container.Resolve<B>();
+		Assert.False(releasePolicy.HasTrack(b));
+	}
 
-			Assert.False(releasePolicy.HasTrack(b));
-		}
+	[Fact]
+	public void Doesnt_track_simple_components_with_simple_dependencies_having_simple_DynamicDependencies()
+	{
+		container.Register(Transient<B>(),
+			Transient<A>().DynamicParameters(delegate { }));
 
-		[Fact]
-		public void Doesnt_track_simple_components_with_simple_dependencies_having_simple_DynamicDependencies()
-		{
-			container.Register(Transient<B>(),
-			                   Transient<A>().DynamicParameters(delegate { }));
+		var b = container.Resolve<B>();
 
-			var b = container.Resolve<B>();
+		Assert.False(releasePolicy.HasTrack(b));
+	}
 
-			Assert.False(releasePolicy.HasTrack(b));
-		}
+	[Fact]
+	public void Doesnt_track_singleton()
+	{
+		container.Register(Singleton<A>());
 
-		[Fact]
-		public void Doesnt_track_singleton()
-		{
-			container.Register(Singleton<A>());
+		var a = container.Resolve<A>();
 
-			var a = container.Resolve<A>();
+		Assert.False(releasePolicy.HasTrack(a));
+	}
 
-			Assert.False(releasePolicy.HasTrack(a));
-		}
+	[Fact]
+	public void Release_doesnt_stop_tracking_component_singleton_until_container_is_disposed()
+	{
+		DisposableFoo.ResetDisposedCount();
+		container.Register(Singleton<DisposableFoo>());
 
-		[Fact]
-		public void Release_doesnt_stop_tracking_component_singleton_until_container_is_disposed()
-		{
-			DisposableFoo.ResetDisposedCount();
-			container.Register(Singleton<DisposableFoo>());
+		var tracker = ReferenceTracker.Track(() => container.Resolve<DisposableFoo>());
 
-			var tracker = ReferenceTracker.Track(() => container.Resolve<DisposableFoo>());
+		tracker.AssertStillReferencedAndDo(foo => container.Release(foo));
 
-			tracker.AssertStillReferencedAndDo(foo => container.Release(foo));
+		tracker.AssertStillReferenced();
+		Assert.Equal(0, DisposableFoo.DisposedCount);
 
-			tracker.AssertStillReferenced();
-			Assert.Equal(0, DisposableFoo.DisposedCount);
+		container.Dispose();
 
-			container.Dispose();
+		tracker.AssertNoLongerReferenced();
+		Assert.Equal(1, DisposableFoo.DisposedCount);
+	}
 
-			tracker.AssertNoLongerReferenced();
-			Assert.Equal(1, DisposableFoo.DisposedCount);
-		}
+	[Fact]
+	public void Release_stops_tracking_component_transient()
+	{
+		container.Register(Transient<DisposableFoo>());
+		var foo = container.Resolve<DisposableFoo>();
 
-		[Fact]
-		public void Release_stops_tracking_component_transient()
-		{
-			container.Register(Transient<DisposableFoo>());
-			var foo = container.Resolve<DisposableFoo>();
+		container.Release(foo);
 
-			container.Release(foo);
+		Assert.False(releasePolicy.HasTrack(foo));
+	}
 
-			Assert.False(releasePolicy.HasTrack(foo));
-		}
+	public LifecycledComponentsReleasePolicyTestCase()
+	{
+		container = new WindsorContainer();
+		releasePolicy = container.Kernel.ReleasePolicy;
+	}
 
-		public LifecycledComponentsReleasePolicyTestCase()
-		{
-			container = new WindsorContainer();
-			releasePolicy = container.Kernel.ReleasePolicy;
-		}
+	[Fact]
+	public void Tracks_disposable_components()
+	{
+		container.Register(Transient<DisposableFoo>());
 
-		[Fact]
-		public void Tracks_disposable_components()
-		{
-			container.Register(Transient<DisposableFoo>());
+		var foo = container.Resolve<DisposableFoo>();
 
-			var foo = container.Resolve<DisposableFoo>();
+		Assert.True(releasePolicy.HasTrack(foo));
+	}
 
-			Assert.True(releasePolicy.HasTrack(foo));
-		}
+	[Fact]
+	public void Tracks_simple_components_pooled()
+	{
+		container.Register(Pooled<A>());
 
-		[Fact]
-		public void Tracks_simple_components_pooled()
-		{
-			container.Register(Pooled<A>());
+		var a = container.Resolve<A>();
 
-			var a = container.Resolve<A>();
+		Assert.True(releasePolicy.HasTrack(a));
+	}
 
-			Assert.True(releasePolicy.HasTrack(a));
-		}
+	[Fact]
+	public void Tracks_simple_components_with_DynamicDependencies_requiring_decommission()
+	{
+		container.Register(Transient<A>().DynamicParameters((kernel, parameters) => delegate { }));
 
-		[Fact]
-		public void Tracks_simple_components_with_DynamicDependencies_requiring_decommission()
-		{
-			container.Register(Transient<A>().DynamicParameters((kernel, parameters) => delegate { }));
+		var a = container.Resolve<A>();
 
-			var a = container.Resolve<A>();
+		Assert.True(releasePolicy.HasTrack(a));
+	}
 
-			Assert.True(releasePolicy.HasTrack(a));
-		}
+	[Fact]
+	public void Tracks_simple_components_with_disposable_dependencies()
+	{
+		container.Register(Transient<DisposableFoo>(),
+			Transient<UsesDisposableFoo>());
 
-		[Fact]
-		public void Tracks_simple_components_with_disposable_dependencies()
-		{
-			container.Register(Transient<DisposableFoo>(),
-			                   Transient<UsesDisposableFoo>());
+		var hasFoo = container.Resolve<UsesDisposableFoo>();
 
-			var hasFoo = container.Resolve<UsesDisposableFoo>();
+		Assert.True(releasePolicy.HasTrack(hasFoo));
+	}
 
-			Assert.True(releasePolicy.HasTrack(hasFoo));
-		}
+	[Fact]
+	public void Tracks_simple_components_with_simple_dependencies_havingDynamicDependencies_requiring_decommission()
+	{
+		container.Register(Transient<B>(),
+			Transient<A>().DynamicParameters((kernel, parameters) => delegate { }));
 
-		[Fact]
-		public void Tracks_simple_components_with_simple_dependencies_havingDynamicDependencies_requiring_decommission()
-		{
-			container.Register(Transient<B>(),
-			                   Transient<A>().DynamicParameters((kernel, parameters) => delegate { }));
+		var b = container.Resolve<B>();
 
-			var b = container.Resolve<B>();
+		Assert.True(releasePolicy.HasTrack(b));
+	}
 
-			Assert.True(releasePolicy.HasTrack(b));
-		}
+	private ComponentRegistration<T> Pooled<T>()
+		where T : class
+	{
+		return Component.For<T>().LifeStyle.Pooled;
+	}
 
-		private ComponentRegistration<T> Pooled<T>()
-			where T : class
-		{
-			return Component.For<T>().LifeStyle.Pooled;
-		}
+	private ComponentRegistration<T> Singleton<T>()
+		where T : class
+	{
+		return Component.For<T>().LifeStyle.Singleton;
+	}
 
-		private ComponentRegistration<T> Singleton<T>()
-			where T : class
-		{
-			return Component.For<T>().LifeStyle.Singleton;
-		}
-
-		private ComponentRegistration<T> Transient<T>()
-			where T : class
-		{
-			return Component.For<T>().LifeStyle.Transient;
-		}
+	private ComponentRegistration<T> Transient<T>()
+		where T : class
+	{
+		return Component.For<T>().LifeStyle.Transient;
 	}
 }

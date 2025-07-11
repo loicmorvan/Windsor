@@ -12,63 +12,51 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.TypedFactory
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
+
+using System;
+
+using Castle.Facilities.TypedFactory;
+using Castle.MicroKernel.Registration;
+
+public sealed class TypedFactoryDisposeOrderTestCase : AbstractContainerTestCase
 {
-	using System;
-
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel.Registration;
-
-	
-
-	public sealed class TypedFactoryDisposeOrderTestCase : AbstractContainerTestCase
+	protected override void AfterContainerCreated()
 	{
-		protected override void AfterContainerCreated()
+		Container.AddFacility<TypedFactoryFacility>();
+	}
+
+	[Fact]
+	public void Typed_factories_are_not_disposed_before_their_dependents()
+	{
+		Container.Register(
+			Component.For<Dependency>(),
+			Component.For<Dependent>());
+
+		Container.Resolve<Dependent>();
+	}
+
+	public sealed class Dependency : IDisposable
+	{
+		private bool isDisposed;
+
+		public void Use()
 		{
-			Container.AddFacility<TypedFactoryFacility>();
+			if (isDisposed) throw new ObjectDisposedException(nameof(Dependency));
 		}
 
-		[Fact]
-		public void Typed_factories_are_not_disposed_before_their_dependents()
+		public void Dispose()
 		{
-			Container.Register(
-				Component.For<Dependency>(),
-				Component.For<Dependent>());
-
-			Container.Resolve<Dependent>();
+			isDisposed = true;
 		}
+	}
 
-		public sealed class Dependency : IDisposable
+	public sealed class Dependent(Func<Dependency> factory) : IDisposable
+	{
+		public void Dispose()
 		{
-			private bool isDisposed;
-
-			public void Use()
-			{
-				if (isDisposed) throw new ObjectDisposedException(nameof(Dependency));
-			}
-
-			public void Dispose()
-			{
-				isDisposed = true;
-			}
-		}
-
-		public sealed class Dependent : IDisposable
-		{
-			private readonly Func<Dependency> factory;
-
-			public Dependent(Func<Dependency> factory)
-			{
-				this.factory = factory;
-			}
-
-			public void Dispose()
-			{
-				using (var needed = factory.Invoke())
-				{
-					needed.Use();
-				}
-			}
+			using var needed = factory.Invoke();
+			needed.Use();
 		}
 	}
 }

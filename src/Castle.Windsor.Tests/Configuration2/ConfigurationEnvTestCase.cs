@@ -12,47 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Configuration2
+namespace Castle.Windsor.Tests.Configuration2;
+
+using Castle.Windsor;
+using Castle.Windsor.Configuration.Interpreters;
+using Castle.Windsor.Tests.Components;
+
+public class ConfigurationEnvTestCase
 {
-	using Castle.Windsor.Configuration.Interpreters;
-
-	using CastleTests.Components;
-
-	
-
-	
-	public class ConfigurationEnvTestCase
+	[Fact]
+	public void AssertDefineIsSetBasedOnEnvironmentInformation()
 	{
-		[Fact]
-		public void AssertDefineIsSetBasedOnEnvironmentInformation()
-		{
-			var configPath = ConfigHelper.ResolveConfigPath("Configuration2/env_config.xml");
-			var container = new WindsorContainer(new XmlInterpreter(configPath), new CustomEnv(true));
+		var configPath = ConfigHelper.ResolveConfigPath("Configuration2/env_config.xml");
+		var container = new WindsorContainer(new XmlInterpreter(configPath), new CustomEnv(true));
 
-			var prop = container.Resolve<ComponentWithStringProperty>("component");
+		var prop = container.Resolve<ComponentWithStringProperty>("component");
 
-			Assert.Equal("John Doe", prop.Name);
+		Assert.Equal("John Doe", prop.Name);
 
-			container = new WindsorContainer(new XmlInterpreter(configPath), new CustomEnv(false));
+		container = new WindsorContainer(new XmlInterpreter(configPath), new CustomEnv(false));
 
-			prop = container.Resolve<ComponentWithStringProperty>("component");
+		prop = container.Resolve<ComponentWithStringProperty>("component");
 
-			Assert.Equal("Hammett", prop.Name);
-		}
+		Assert.Equal("Hammett", prop.Name);
 	}
+}
 
-	internal class CustomEnv : IEnvironmentInfo
+internal class CustomEnv(bool isDevelopment) : IEnvironmentInfo
+{
+	public string GetEnvironmentName()
 	{
-		private readonly bool isDevelopment;
-
-		public CustomEnv(bool isDevelopment)
-		{
-			this.isDevelopment = isDevelopment;
-		}
-
-		public string GetEnvironmentName()
-		{
-			return isDevelopment ? "devel" : "test";
-		}
+		return isDevelopment ? "devel" : "test";
 	}
 }

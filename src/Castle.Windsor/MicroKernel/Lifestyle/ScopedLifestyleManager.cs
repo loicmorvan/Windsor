@@ -12,70 +12,64 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle
+namespace Castle.MicroKernel.Lifestyle;
+
+using System;
+using System.Threading;
+
+using Castle.Core.Internal;
+
+using Castle.MicroKernel.Context;
+using Castle.MicroKernel.Lifestyle.Scoped;
+
+public class ScopedLifestyleManager(IScopeAccessor accessor) : AbstractLifestyleManager
 {
-	using System;
-	using System.Threading;
+	private IScopeAccessor accessor = accessor;
 
-	using Castle.Core.Internal;
-
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Lifestyle.Scoped;
-
-	public class ScopedLifestyleManager : AbstractLifestyleManager
+	public ScopedLifestyleManager()
+		: this(new LifetimeScopeAccessor())
 	{
-		private IScopeAccessor accessor;
+	}
 
-		public ScopedLifestyleManager()
-			: this(new LifetimeScopeAccessor())
+	public override void Dispose()
+	{
+		var scope = Interlocked.Exchange(ref accessor, null);
+		if (scope != null)
 		{
+			scope.Dispose();
 		}
+	}
 
-		public ScopedLifestyleManager(IScopeAccessor accessor)
+	public override object Resolve(CreationContext context, IReleasePolicy releasePolicy)
+	{
+		var scope = GetScope(context);
+		var burden = scope.GetCachedInstance(Model, afterCreated =>
 		{
-			this.accessor = accessor;
-		}
+			var localBurden = base.CreateInstance(context, trackedExternally: true);
+			afterCreated(localBurden);
+			Track(localBurden, releasePolicy);
+			return localBurden;
+		});
+		return burden.Instance;
+	}
 
-		public override void Dispose()
+	private ILifetimeScope GetScope(CreationContext context)
+	{
+		var localScope = accessor;
+		if (localScope == null)
 		{
-			var scope = Interlocked.Exchange(ref accessor, null);
-			if (scope != null)
-			{
-				scope.Dispose();
-			}
+			throw new ObjectDisposedException("Scope was already disposed. This is most likely a bug in the calling code.");
 		}
-
-		public override object Resolve(CreationContext context, IReleasePolicy releasePolicy)
+		var scope = localScope.GetScope(context);
+		if(scope == null)
 		{
-			var scope = GetScope(context);
-			var burden = scope.GetCachedInstance(Model, afterCreated =>
-			{
-				var localBurden = base.CreateInstance(context, trackedExternally: true);
-				afterCreated(localBurden);
-				Track(localBurden, releasePolicy);
-				return localBurden;
-			});
-			return burden.Instance;
+			throw new ComponentResolutionException(
+				string.Format(
+					"Could not obtain scope for component {0}. This is most likely either a bug in custom {1} or you're trying to access scoped component outside of the scope (like a per-web-request component outside of web request etc)",
+					Model.Name,
+					typeof(IScopeAccessor).ToCSharpString()),
+				Model);
 		}
-
-		private ILifetimeScope GetScope(CreationContext context)
-		{
-			var localScope = accessor;
-			if (localScope == null)
-			{
-				throw new ObjectDisposedException("Scope was already disposed. This is most likely a bug in the calling code.");
-			}
-			var scope = localScope.GetScope(context);
-			if(scope == null)
-			{
-				throw new ComponentResolutionException(
-					string.Format(
-						"Could not obtain scope for component {0}. This is most likely either a bug in custom {1} or you're trying to access scoped component outside of the scope (like a per-web-request component outside of web request etc)",
-						Model.Name,
-						typeof(IScopeAccessor).ToCSharpString()),
-					Model);
-			}
-			return scope;
-		}
+		return scope;
 	}
 }

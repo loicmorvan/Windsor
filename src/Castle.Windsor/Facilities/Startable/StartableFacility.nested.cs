@@ -12,108 +12,107 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Startable
+namespace Castle.Facilities.Startable;
+
+using System;
+
+using Castle.MicroKernel;
+using Castle.MicroKernel.Context;
+
+public partial class StartableFacility
 {
-	using System;
-
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Context;
-
-	public partial class StartableFacility
+	private class DeferredStartFlag : StartFlag
 	{
-		private class DeferredStartFlag : StartFlag
+		public override void Signal()
 		{
-			public override void Signal()
-			{
-				StartAll();
-			}
+			StartAll();
+		}
 
-			protected override void Init()
+		protected override void Init()
+		{
+			base.Init();
+			events.Kernel.RegistrationCompleted += delegate { Signal(); };
+		}
+	}
+
+	private class DeferredTryStartFlag : DeferredStartFlag
+	{
+		protected override void Start(IHandler handler)
+		{
+			if (TryStart(handler) == false)
 			{
-				base.Init();
-				events.Kernel.RegistrationCompleted += delegate { Signal(); };
+				CacheHandler(handler);
 			}
 		}
 
-		private class DeferredTryStartFlag : DeferredStartFlag
+		private bool TryStart(IHandler handler)
 		{
-			protected override void Start(IHandler handler)
-			{
-				if (TryStart(handler) == false)
-				{
-					CacheHandler(handler);
-				}
-			}
+			return handler.TryResolve(CreationContext.CreateEmpty()) != null;
+		}
+	}
 
-			private bool TryStart(IHandler handler)
+	private class LegacyStartFlag : StartFlag
+	{
+		/// <remarks>Don't check the waiting list while this flag is set as this could result in duplicate singletons.</remarks>
+		private bool inStart;
+
+		public override void Signal()
+		{
+			StartAll();
+		}
+
+		protected override void Init()
+		{
+			base.Init();
+			events.Kernel.ComponentRegistered += delegate
 			{
+				if (inStart == false)
+				{
+					Signal();
+				}
+			};
+		}
+
+		protected override void Start(IHandler handler)
+		{
+			if (TryStart(handler) == false)
+			{
+				CacheHandler(handler);
+			}
+		}
+
+		/// <summary>Request the component instance</summary>
+		/// <param name = "handler"></param>
+		private bool TryStart(IHandler handler)
+		{
+			try
+			{
+				inStart = true;
 				return handler.TryResolve(CreationContext.CreateEmpty()) != null;
 			}
+			finally
+			{
+				inStart = false;
+			}
 		}
+	}
 
-		private class LegacyStartFlag : StartFlag
+	public class StartableEvents
+	{
+		public StartableEvents(IKernelEvents kernel)
 		{
-			/// <remarks>Don't check the waiting list while this flag is set as this could result in duplicate singletons.</remarks>
-			private bool inStart;
-
-			public override void Signal()
+			Kernel = kernel;
+			kernel.ComponentRegistered += (key, handler) =>
 			{
-				StartAll();
-			}
-
-			protected override void Init()
-			{
-				base.Init();
-				events.Kernel.ComponentRegistered += delegate
+				if (IsStartable(handler))
 				{
-					if (inStart == false)
-					{
-						Signal();
-					}
-				};
-			}
-
-			protected override void Start(IHandler handler)
-			{
-				if (TryStart(handler) == false)
-				{
-					CacheHandler(handler);
+					StartableComponentRegistered(handler);
 				}
-			}
-
-			/// <summary>Request the component instance</summary>
-			/// <param name = "handler"></param>
-			private bool TryStart(IHandler handler)
-			{
-				try
-				{
-					inStart = true;
-					return handler.TryResolve(CreationContext.CreateEmpty()) != null;
-				}
-				finally
-				{
-					inStart = false;
-				}
-			}
+			};
 		}
 
-		public class StartableEvents
-		{
-			public StartableEvents(IKernelEvents kernel)
-			{
-				Kernel = kernel;
-				kernel.ComponentRegistered += (key, handler) =>
-				{
-					if (IsStartable(handler))
-					{
-						StartableComponentRegistered(handler);
-					}
-				};
-			}
+		public IKernelEvents Kernel { get; private set; }
 
-			public IKernelEvents Kernel { get; private set; }
-
-			public event Action<IHandler> StartableComponentRegistered = delegate { };
-		}
+		public event Action<IHandler> StartableComponentRegistered = delegate { };
 	}
 }

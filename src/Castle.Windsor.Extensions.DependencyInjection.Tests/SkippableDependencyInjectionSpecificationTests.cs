@@ -19,34 +19,36 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+namespace Castle.Windsor.Extensions.DependencyInjection.Tests;
+
 using System;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Microsoft.Extensions.DependencyInjection.Specification
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Specification;
+
+public abstract class SkippableDependencyInjectionSpecificationTests : DependencyInjectionSpecificationTests
 {
-	public abstract class SkippableDependencyInjectionSpecificationTests : DependencyInjectionSpecificationTests
-	{
-		public string[] SkippedTests => new[] { "SingletonServiceCanBeResolvedFromScope" };
+	public string[] SkippedTests => new[] { "SingletonServiceCanBeResolvedFromScope" };
 
 #if NET6_0_OR_GREATER
-		public override bool SupportsIServiceProviderIsService => false;
+	public override bool SupportsIServiceProviderIsService => false;
 #endif
 
-		protected sealed override IServiceProvider CreateServiceProvider(IServiceCollection serviceCollection)
+	protected sealed override IServiceProvider CreateServiceProvider(IServiceCollection serviceCollection)
+	{
+		foreach (var stackFrame in new StackTrace(1).GetFrames().Take(2))
 		{
-			foreach (var stackFrame in new StackTrace(1).GetFrames().Take(2))
+			if (SkippedTests.Contains(stackFrame.GetMethod().Name))
 			{
-				if (SkippedTests.Contains(stackFrame.GetMethod().Name))
-				{
-					// We skip tests by returning MEDI service provider that we know passes the test
-					return serviceCollection.BuildServiceProvider();
-				}
+				// We skip tests by returning MEDI service provider that we know passes the test
+				return serviceCollection.BuildServiceProvider();
 			}
-
-			return CreateServiceProviderImpl(serviceCollection);
 		}
 
-		protected abstract IServiceProvider CreateServiceProviderImpl(IServiceCollection serviceCollection);
+		return CreateServiceProviderImpl(serviceCollection);
 	}
+
+	protected abstract IServiceProvider CreateServiceProviderImpl(IServiceCollection serviceCollection);
 }

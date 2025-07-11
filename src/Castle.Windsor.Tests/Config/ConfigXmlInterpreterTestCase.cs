@@ -12,176 +12,170 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests.Config;
+
+using System.Linq;
+
+using Castle.Core;
+using Castle.Core.Configuration;
+using Castle.Core.Resource;
+using Castle.MicroKernel;
+using Castle.MicroKernel.SubSystems.Configuration;
+using Castle.Windsor.Configuration.Interpreters;
+using Castle.Windsor.Installer;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.XmlFiles;
+
+public class ConfigXmlInterpreterTestCase
 {
-	using System.Linq;
-
-	using Castle.Core.Configuration;
-	using Castle.Core.Resource;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.SubSystems.Configuration;
-	using Castle.MicroKernel.Tests.ClassComponents;
-	using Castle.Windsor.Configuration.Interpreters;
-	using Castle.XmlFiles;
-
-	using CastleTests.Components;
-
-	
-
-	
-	public class ConfigXmlInterpreterTestCase
+	[Fact]
+	public void ComponentIdGetsLoadedFromTheParsedConfiguration()
 	{
-		[Fact]
-		public void ComponentIdGetsLoadedFromTheParsedConfiguration()
-		{
-			var store = new DefaultConfigurationStore();
-			var interpreter = new XmlInterpreter(Xml.Embedded("sample_config_with_spaces.xml"));
-			IKernel kernel = new DefaultKernel();
-			interpreter.ProcessResource(interpreter.Source, store, kernel);
+		var store = new DefaultConfigurationStore();
+		var interpreter = new XmlInterpreter(Xml.Embedded("sample_config_with_spaces.xml"));
+		IKernel kernel = new DefaultKernel();
+		interpreter.ProcessResource(interpreter.Source, store, kernel);
 
-			var container = new WindsorContainer(store);
+		var container = new WindsorContainer(store);
 
-			var handler = container.Kernel.GetHandler(typeof(ICalcService));
-			Assert.Equal(Core.LifestyleType.Transient, handler.ComponentModel.LifestyleType);
-		}
+		var handler = container.Kernel.GetHandler(typeof(ICalcService));
+		Assert.Equal(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
+	}
 
-		[Fact]
-		public void CorrectConfigurationMapping()
-		{
-			var store = new DefaultConfigurationStore();
-			var interpreter = new XmlInterpreter(Xml.Embedded("sample_config.xml"));
-			IKernel kernel = new DefaultKernel();
-			interpreter.ProcessResource(interpreter.Source, store, kernel);
+	[Fact]
+	public void CorrectConfigurationMapping()
+	{
+		var store = new DefaultConfigurationStore();
+		var interpreter = new XmlInterpreter(Xml.Embedded("sample_config.xml"));
+		IKernel kernel = new DefaultKernel();
+		interpreter.ProcessResource(interpreter.Source, store, kernel);
 
-			var container = new WindsorContainer(store);
-			var facility = container.Kernel.GetFacilities().OfType<HiperFacility>().Single();
-			Assert.True(facility.Initialized);
-		}
+		var container = new WindsorContainer(store);
+		var facility = container.Kernel.GetFacilities().OfType<HiperFacility>().Single();
+		Assert.True(facility.Initialized);
+	}
 
-		[Fact]
-		public void MissingManifestResourceConfiguration()
-		{
-			var store = new DefaultConfigurationStore();
-			var source = new AssemblyResource("assembly://Castle.Windsor.Tests/missing_config.xml");
-			IKernel kernel = new DefaultKernel();
-			Assert.Throws<ConfigurationProcessingException>(() => new XmlInterpreter(source).ProcessResource(source, store, kernel));
-		}
+	[Fact]
+	public void MissingManifestResourceConfiguration()
+	{
+		var store = new DefaultConfigurationStore();
+		var source = new AssemblyResource("assembly://Castle.Windsor.Tests/missing_config.xml");
+		IKernel kernel = new DefaultKernel();
+		Assert.Throws<ConfigurationProcessingException>(() => new XmlInterpreter(source).ProcessResource(source, store, kernel));
+	}
 
-		[Fact]
-		public void ProperDeserialization()
-		{
-			var store = new DefaultConfigurationStore();
+	[Fact]
+	public void ProperDeserialization()
+	{
+		var store = new DefaultConfigurationStore();
 
-			var interpreter = new XmlInterpreter(Xml.Embedded("sample_config_complex.xml"));
-			IKernel kernel = new DefaultKernel();
-			interpreter.ProcessResource(interpreter.Source, store, kernel);
+		var interpreter = new XmlInterpreter(Xml.Embedded("sample_config_complex.xml"));
+		IKernel kernel = new DefaultKernel();
+		interpreter.ProcessResource(interpreter.Source, store, kernel);
 
-			Assert.Equal(2, store.GetFacilities().Length);
-			Assert.Equal(2, store.GetComponents().Length);
-			Assert.Equal(2, store.GetConfigurationForChildContainers().Length);
+		Assert.Equal(2, store.GetFacilities().Length);
+		Assert.Equal(2, store.GetComponents().Length);
+		Assert.Equal(2, store.GetConfigurationForChildContainers().Length);
 
-			var config = store.GetFacilityConfiguration(typeof(DummyFacility).FullName);
-			var childItem = config.Children["item"];
-			Assert.NotNull(childItem);
-			Assert.Equal("value", childItem.Value);
+		var config = store.GetFacilityConfiguration(typeof(DummyFacility).FullName);
+		var childItem = config.Children["item"];
+		Assert.NotNull(childItem);
+		Assert.Equal("value", childItem.Value);
 
-			config = store.GetFacilityConfiguration(typeof(HiperFacility).FullName);
-			Assert.NotNull(config);
-			Assert.Equal("value within CDATA section", config.Value);
+		config = store.GetFacilityConfiguration(typeof(HiperFacility).FullName);
+		Assert.NotNull(config);
+		Assert.Equal("value within CDATA section", config.Value);
 
-			config = store.GetComponentConfiguration("testidcomponent1");
-			childItem = config.Children["item"];
-			Assert.NotNull(childItem);
-			Assert.Equal("value1", childItem.Value);
+		config = store.GetComponentConfiguration("testidcomponent1");
+		childItem = config.Children["item"];
+		Assert.NotNull(childItem);
+		Assert.Equal("value1", childItem.Value);
 
-			config = store.GetComponentConfiguration("testidcomponent2");
-			childItem = config.Children["item"];
-			Assert.NotNull(childItem);
-			Assert.Equal("value2", childItem.Value);
+		config = store.GetComponentConfiguration("testidcomponent2");
+		childItem = config.Children["item"];
+		Assert.NotNull(childItem);
+		Assert.Equal("value2", childItem.Value);
 
-			config = store.GetChildContainerConfiguration("child1");
-			Assert.NotNull(config);
-			Assert.Equal("child1", config.Attributes["name"]);
-			Assert.Equal("<configuration />", config.Value);
+		config = store.GetChildContainerConfiguration("child1");
+		Assert.NotNull(config);
+		Assert.Equal("child1", config.Attributes["name"]);
+		Assert.Equal("<configuration />", config.Value);
 
-			config = store.GetChildContainerConfiguration("child2");
-			Assert.NotNull(config);
-			Assert.Equal("child2", config.Attributes["name"]);
-			Assert.Equal("<configuration />", config.Value);
-		}
+		config = store.GetChildContainerConfiguration("child2");
+		Assert.NotNull(config);
+		Assert.Equal("child2", config.Attributes["name"]);
+		Assert.Equal("<configuration />", config.Value);
+	}
 
-		[Fact]
-		public void ProperManifestDeserialization()
-		{
-			var store = new DefaultConfigurationStore();
-			var interpreter = new XmlInterpreter(Xml.File("sample_config_complex.xml"));
-			IKernel kernel = new DefaultKernel();
-			interpreter.ProcessResource(interpreter.Source, store, kernel);
+	[Fact]
+	public void ProperManifestDeserialization()
+	{
+		var store = new DefaultConfigurationStore();
+		var interpreter = new XmlInterpreter(Xml.File("sample_config_complex.xml"));
+		IKernel kernel = new DefaultKernel();
+		interpreter.ProcessResource(interpreter.Source, store, kernel);
 
-			Assert.Equal(2, store.GetFacilities().Length);
-			Assert.Equal(2, store.GetComponents().Length);
-			Assert.Equal(2, store.GetConfigurationForChildContainers().Length);
+		Assert.Equal(2, store.GetFacilities().Length);
+		Assert.Equal(2, store.GetComponents().Length);
+		Assert.Equal(2, store.GetConfigurationForChildContainers().Length);
 
-			var config = store.GetFacilityConfiguration(typeof(DummyFacility).FullName);
-			var childItem = config.Children["item"];
-			Assert.NotNull(childItem);
-			Assert.Equal("value", childItem.Value);
+		var config = store.GetFacilityConfiguration(typeof(DummyFacility).FullName);
+		var childItem = config.Children["item"];
+		Assert.NotNull(childItem);
+		Assert.Equal("value", childItem.Value);
 
-			config = store.GetFacilityConfiguration(typeof(HiperFacility).FullName);
-			Assert.NotNull(config);
-			Assert.Equal("value within CDATA section", config.Value);
+		config = store.GetFacilityConfiguration(typeof(HiperFacility).FullName);
+		Assert.NotNull(config);
+		Assert.Equal("value within CDATA section", config.Value);
 
-			config = store.GetComponentConfiguration("testidcomponent1");
-			childItem = config.Children["item"];
-			Assert.NotNull(childItem);
-			Assert.Equal("value1", childItem.Value);
+		config = store.GetComponentConfiguration("testidcomponent1");
+		childItem = config.Children["item"];
+		Assert.NotNull(childItem);
+		Assert.Equal("value1", childItem.Value);
 
-			config = store.GetComponentConfiguration("testidcomponent2");
-			childItem = config.Children["item"];
-			Assert.NotNull(childItem);
-			Assert.Equal("value2", childItem.Value);
+		config = store.GetComponentConfiguration("testidcomponent2");
+		childItem = config.Children["item"];
+		Assert.NotNull(childItem);
+		Assert.Equal("value2", childItem.Value);
 
-			config = store.GetChildContainerConfiguration("child1");
-			Assert.NotNull(config);
-			Assert.Equal("child1", config.Attributes["name"]);
-			Assert.Equal("<configuration />", config.Value);
+		config = store.GetChildContainerConfiguration("child1");
+		Assert.NotNull(config);
+		Assert.Equal("child1", config.Attributes["name"]);
+		Assert.Equal("<configuration />", config.Value);
 
-			config = store.GetChildContainerConfiguration("child2");
-			Assert.NotNull(config);
-			Assert.Equal("child2", config.Attributes["name"]);
-			Assert.Equal("<configuration />", config.Value);
-		}
+		config = store.GetChildContainerConfiguration("child2");
+		Assert.NotNull(config);
+		Assert.Equal("child2", config.Attributes["name"]);
+		Assert.Equal("<configuration />", config.Value);
+	}
 
-		[Fact]
-		public void ShouldThrowIfIdAttributeIsPresentInFacilityConfig()
-		{
-			var facilityConfig = Installer.Configuration.FromXml(
-				new StaticContentResource(
-					@"<castle>
+	[Fact]
+	public void ShouldThrowIfIdAttributeIsPresentInFacilityConfig()
+	{
+		var facilityConfig = Configuration.FromXml(
+			new StaticContentResource(
+				@"<castle>
 <facilities>
 <facility id='IAmGone' loggingApi='custom' />
 </facilities>
 </castle>"));
 
-			Assert.Throws<ConfigurationProcessingException>(() =>
-			{
-				new WindsorContainer().Install(facilityConfig);
-			});
-		}
+		Assert.Throws<ConfigurationProcessingException>(() => { new WindsorContainer().Install(facilityConfig); });
+	}
+}
+
+public class DummyFacility : IFacility
+{
+	public void Init(IKernel kernel, IConfiguration facilityConfig)
+	{
+		Assert.NotNull(facilityConfig);
+		var childItem = facilityConfig.Children["item"];
+		Assert.NotNull(childItem);
+		Assert.Equal("value", childItem.Value);
 	}
 
-	public class DummyFacility : IFacility
+	public void Terminate()
 	{
-		public void Init(IKernel kernel, IConfiguration facilityConfig)
-		{
-			Assert.NotNull(facilityConfig);
-			var childItem = facilityConfig.Children["item"];
-			Assert.NotNull(childItem);
-			Assert.Equal("value", childItem.Value);
-		}
-
-		public void Terminate()
-		{
-		}
 	}
 }

@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class ReviewableEmployee : Employee, IReviewableEmployee
 {
-	public class ReviewableEmployee : Employee, IReviewableEmployee
+	public IReviewer Reviewer { get; set; }
+
+	public string ReviewerID
 	{
-		public IReviewer Reviewer { get; set; }
-
-		public string ReviewerID
-		{
-			get { return Reviewer.EmployeeID; }
-		}
-
-		public int SalaryThird { get; set; }
+		get { return Reviewer.EmployeeID; }
 	}
+
+	public int SalaryThird { get; set; }
 }

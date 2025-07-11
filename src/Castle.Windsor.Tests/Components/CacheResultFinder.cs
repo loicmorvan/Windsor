@@ -12,29 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class CacheResultFinder<T> : IResultFinder<T>
 {
-	public class CacheResultFinder<T> : IResultFinder<T>
+	private readonly IResultFinder<T> finder;
+
+	public CacheResultFinder()
 	{
-		private IResultFinder<T> finder;
+	}
 
-		public CacheResultFinder()
-		{
-		}
+	public CacheResultFinder(IResultFinder<T> finder)
+	{
+		this.finder = finder;
+	}
 
-		public CacheResultFinder(IResultFinder<T> finder)
-		{
-			this.finder = finder;
-		}
+	public IResultFinder<T> Finder
+	{
+		get { return finder; }
+	}
 
-		public IResultFinder<T> Finder
-		{
-			get { return finder; }
-		}
-
-		public T Process(ISpecification specification)
-		{
-			return default(T);
-		}
+	public T Process(ISpecification specification)
+	{
+		return default(T);
 	}
 }

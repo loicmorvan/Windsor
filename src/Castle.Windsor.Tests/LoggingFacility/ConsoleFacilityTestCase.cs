@@ -12,55 +12,53 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Logging.Tests
+namespace Castle.Windsor.Tests.LoggingFacility;
+
+using System;
+using System.IO;
+
+using Castle.Core.Logging;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+using Castle.Windsor.Tests.LoggingFacility.Classes;
+
+public class ConsoleFacilityTestCase : BaseTest, IDisposable
 {
-	using System;
-	using System.IO;
+	private readonly IWindsorContainer container;
+	private readonly StringWriter outWriter = new StringWriter();
+	private readonly StringWriter errorWriter = new StringWriter();
 
-	using Castle.Core.Logging;
-	using Castle.Facilities.Logging.Tests.Classes;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor;
-
-
-	public class ConsoleFacilityTestCase : BaseTest, IDisposable
+	public ConsoleFacilityTestCase()
 	{
-		private IWindsorContainer container;
-		private StringWriter outWriter = new StringWriter();
-		private StringWriter errorWriter = new StringWriter();
+		container = base.CreateConfiguredContainer<ConsoleFactory>();
 
-		public ConsoleFacilityTestCase()
+		outWriter.GetStringBuilder().Length = 0;
+		errorWriter.GetStringBuilder().Length = 0;
+
+		Console.SetOut(outWriter);
+		Console.SetError(errorWriter);
+	}
+
+	public void Dispose()
+	{
+		if (container != null)
 		{
-			container = base.CreateConfiguredContainer<ConsoleFactory>();
-
-			outWriter.GetStringBuilder().Length = 0;
-			errorWriter.GetStringBuilder().Length = 0;
-
-			Console.SetOut(outWriter);
-			Console.SetError(errorWriter);
+			container.Dispose();
 		}
+	}
 
-		public void Dispose()
-		{
-			if (container != null)
-			{
-				container.Dispose();
-			}
-		}
+	[Fact]
+	public void SimpleTest()
+	{
+		container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
+		SimpleLoggingComponent test = container.Resolve<SimpleLoggingComponent>("component");
 
-		[Fact]
-		public void SimpleTest()
-		{
-			container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
-			SimpleLoggingComponent test = container.Resolve<SimpleLoggingComponent>("component");
+		String expectedLogOutput = String.Format("[Info] '{0}' Hello world" + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
+		String actualLogOutput = "";
 
-			String expectedLogOutput = String.Format("[Info] '{0}' Hello world" + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
-			String actualLogOutput = "";
+		test.DoSomething();
 
-			test.DoSomething();
-
-			actualLogOutput = outWriter.GetStringBuilder().ToString();
-			Assert.Equal(expectedLogOutput, actualLogOutput);
-		}
+		actualLogOutput = outWriter.GetStringBuilder().ToString();
+		Assert.Equal(expectedLogOutput, actualLogOutput);
 	}
 }

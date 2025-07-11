@@ -12,25 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests;
+
+using Castle.Windsor;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.XmlFiles;
+
+public class IgnoreSelectTestCase
 {
-    using Castle.XmlFiles;
+	[Fact]
+	public void TestIngoreAttribute()
+	{
+		var container = new WindsorContainer();
+		container.Install(Castle.Windsor.Installer.Configuration.FromXml(Xml.Embedded("ignorector.xml")));
 
-    using CastleTests.Components;
-
-    
-
-    
-    public class IgnoreSelectTestCase
-    {
-        [Fact]
-        public void TestIngoreAttribute()
-        {
-            var container = new WindsorContainer();
-            container.Install(Castle.Windsor.Installer.Configuration.FromXml(Xml.Embedded("ignorector.xml")));
-
-            var server = container.Resolve<ClassWithDoNotSelectConstructors>();
-            Assert.Null(server.Dependency);
-        }
-    }
+		var server = container.Resolve<ClassWithDoNotSelectConstructors>();
+		Assert.Null(server.Dependency);
+	}
 }

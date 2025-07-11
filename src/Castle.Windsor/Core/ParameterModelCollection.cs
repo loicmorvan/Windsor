@@ -12,107 +12,106 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
-{
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.Diagnostics;
+namespace Castle.Core;
 
-	using Castle.Core.Configuration;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+
+using Castle.Core.Configuration;
+
+/// <summary>
+///   Collection of <see cref = "ParameterModel" />
+/// </summary>
+[Serializable]
+[DebuggerDisplay("Count = {dictionary.Count}")]
+public class ParameterModelCollection : IEnumerable<ParameterModel>
+{
+	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+	private readonly IDictionary<string, ParameterModel> dictionary =
+		new Dictionary<string, ParameterModel>(StringComparer.OrdinalIgnoreCase);
 
 	/// <summary>
-	///   Collection of <see cref = "ParameterModel" />
+	///   Gets the count.
 	/// </summary>
-	[Serializable]
-	[DebuggerDisplay("Count = {dictionary.Count}")]
-	public class ParameterModelCollection : IEnumerable<ParameterModel>
+	/// <value>The count.</value>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	public int Count
 	{
-		[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-		private readonly IDictionary<string, ParameterModel> dictionary =
-			new Dictionary<string, ParameterModel>(StringComparer.OrdinalIgnoreCase);
+		get { return dictionary.Count; }
+	}
 
-		/// <summary>
-		///   Gets the count.
-		/// </summary>
-		/// <value>The count.</value>
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		public int Count
+	/// <summary>
+	///   Gets the <see cref = "ParameterModel" /> with the specified key.
+	/// </summary>
+	/// <value></value>
+	public ParameterModel this[string key]
+	{
+		get
 		{
-			get { return dictionary.Count; }
+			ParameterModel result;
+			dictionary.TryGetValue(key, out result);
+			return result;
 		}
+	}
 
-		/// <summary>
-		///   Gets the <see cref = "ParameterModel" /> with the specified key.
-		/// </summary>
-		/// <value></value>
-		public ParameterModel this[string key]
-		{
-			get
-			{
-				ParameterModel result;
-				dictionary.TryGetValue(key, out result);
-				return result;
-			}
-		}
+	/// <summary>
+	///   Adds the specified name.
+	/// </summary>
+	/// <param name = "name">The name.</param>
+	/// <param name = "value">The value.</param>
+	public void Add(string name, string value)
+	{
+		Add(name, new ParameterModel(name, value));
+	}
 
-		/// <summary>
-		///   Adds the specified name.
-		/// </summary>
-		/// <param name = "name">The name.</param>
-		/// <param name = "value">The value.</param>
-		public void Add(string name, string value)
-		{
-			Add(name, new ParameterModel(name, value));
-		}
+	/// <summary>
+	///   Adds the specified name.
+	/// </summary>
+	/// <param name = "name">The name.</param>
+	/// <param name = "configNode">The config node.</param>
+	public void Add(string name, IConfiguration configNode)
+	{
+		Add(name, new ParameterModel(name, configNode));
+	}
 
-		/// <summary>
-		///   Adds the specified name.
-		/// </summary>
-		/// <param name = "name">The name.</param>
-		/// <param name = "configNode">The config node.</param>
-		public void Add(string name, IConfiguration configNode)
+	/// <summary>
+	///   Adds the specified key.
+	/// </summary>
+	/// <remarks>
+	///   Not implemented
+	/// </remarks>
+	/// <param name = "key">The key.</param>
+	/// <param name = "value">The value.</param>
+	private void Add(string key, ParameterModel value)
+	{
+		try
 		{
-			Add(name, new ParameterModel(name, configNode));
+			dictionary.Add(key, value);
 		}
+		catch (ArgumentException e)
+		{
+			throw new ArgumentException(string.Format("Parameter '{0}' already exists.", key), e);
+		}
+	}
 
-		/// <summary>
-		///   Adds the specified key.
-		/// </summary>
-		/// <remarks>
-		///   Not implemented
-		/// </remarks>
-		/// <param name = "key">The key.</param>
-		/// <param name = "value">The value.</param>
-		private void Add(string key, ParameterModel value)
-		{
-			try
-			{
-				dictionary.Add(key, value);
-			}
-			catch (ArgumentException e)
-			{
-				throw new ArgumentException(string.Format("Parameter '{0}' already exists.", key), e);
-			}
-		}
+	/// <summary>
+	///   Returns an enumerator that can iterate through a collection.
+	/// </summary>
+	/// <returns>
+	///   An <see cref = "T:System.Collections.IEnumerator" />
+	///   that can be used to iterate through the collection.
+	/// </returns>
+	[DebuggerStepThrough]
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return dictionary.Values.GetEnumerator();
+	}
 
-		/// <summary>
-		///   Returns an enumerator that can iterate through a collection.
-		/// </summary>
-		/// <returns>
-		///   An <see cref = "T:System.Collections.IEnumerator" />
-		///   that can be used to iterate through the collection.
-		/// </returns>
-		[DebuggerStepThrough]
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return dictionary.Values.GetEnumerator();
-		}
-
-		[DebuggerStepThrough]
-		IEnumerator<ParameterModel> IEnumerable<ParameterModel>.GetEnumerator()
-		{
-			return dictionary.Values.GetEnumerator();
-		}
+	[DebuggerStepThrough]
+	IEnumerator<ParameterModel> IEnumerable<ParameterModel>.GetEnumerator()
+	{
+		return dictionary.Values.GetEnumerator();
 	}
 }

@@ -12,28 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.LoggingFacility
+namespace Castle.Windsor.Tests.LoggingFacility;
+
+using Castle.Core.Logging;
+using Castle.Facilities.Logging;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.LoggingFacility.Classes;
+
+public class ConsoleLoggerTestCase : AbstractContainerTestCase
 {
-	using Castle.Core.Logging;
-	using Castle.Facilities.Logging;
-	using Castle.Facilities.Logging.Tests.Classes;
-	using Castle.MicroKernel.Registration;
-
-	
-
-	
-	public class ConsoleLoggerTestCase : AbstractContainerTestCase
+	[Fact]
+	[Bug("FACILITIES-153")]
+	public void Can_specify_level_at_registration_time()
 	{
-		[Fact]
-		[Bug("FACILITIES-153")]
-		public void Can_specify_level_at_registration_time()
-		{
-			Container.AddFacility<LoggingFacility>(f => f.LogUsing<ConsoleFactory>().WithLevel(LoggerLevel.Fatal));
-			Container.Register(Component.For<SimpleLoggingComponent>());
+		Container.AddFacility<LoggingFacility>(f => f.LogUsing<ConsoleFactory>().WithLevel(LoggerLevel.Fatal));
+		Container.Register(Component.For<SimpleLoggingComponent>());
 
-			var item = Container.Resolve<SimpleLoggingComponent>();
-			Assert.True(item.Logger.IsFatalEnabled);
-			Assert.False(item.Logger.IsErrorEnabled);
-		}
+		var item = Container.Resolve<SimpleLoggingComponent>();
+		Assert.True(item.Logger.IsFatalEnabled);
+		Assert.False(item.Logger.IsErrorEnabled);
 	}
 }

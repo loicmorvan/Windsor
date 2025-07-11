@@ -12,39 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Startable
+namespace Castle.Facilities.Startable;
+
+using System.Reflection;
+
+using Castle.Core;
+
+public class StopConcern : IDecommissionConcern
 {
-	using System.Reflection;
+	private static readonly StopConcern instance = new StopConcern();
 
-	using Castle.Core;
-
-	public class StopConcern : IDecommissionConcern
+	protected StopConcern()
 	{
-		private static readonly StopConcern instance = new StopConcern();
+	}
 
-		protected StopConcern()
+	public void Apply(ComponentModel model, object component)
+	{
+		if (component is IStartable)
 		{
+			(component as IStartable).Stop();
 		}
-
-		public void Apply(ComponentModel model, object component)
+		else if (model.Configuration != null)
 		{
-			if (component is IStartable)
+			var stopMethod = model.ExtendedProperties["Castle.StartableFacility.StopMethod"] as MethodInfo;
+			if (stopMethod != null)
 			{
-				(component as IStartable).Stop();
-			}
-			else if (model.Configuration != null)
-			{
-				var stopMethod = model.ExtendedProperties["Castle.StartableFacility.StopMethod"] as MethodInfo;
-				if (stopMethod != null)
-				{
-					stopMethod.Invoke(component, null);
-				}
+				stopMethod.Invoke(component, null);
 			}
 		}
+	}
 
-		public static StopConcern Instance
-		{
-			get { return instance; }
-		}
+	public static StopConcern Instance
+	{
+		get { return instance; }
 	}
 }

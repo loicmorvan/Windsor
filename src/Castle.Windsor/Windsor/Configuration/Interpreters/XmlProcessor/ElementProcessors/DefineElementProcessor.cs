@@ -12,33 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
+
+using System;
+using System.Xml;
+
+public class DefineElementProcessor : AbstractXmlNodeProcessor
 {
-	using System;
-	using System.Xml;
+	private static readonly String FlagAttrName = "flag";
 
-	public class DefineElementProcessor : AbstractXmlNodeProcessor
+	public override String Name
 	{
-		private static readonly String FlagAttrName = "flag";
+		get { return "define"; }
+	}
 
-		public override String Name
-		{
-			get { return "define"; }
-		}
+	public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
+	{
+		var element = nodeList.Current as XmlElement;
 
-		public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
-		{
-			var element = nodeList.Current as XmlElement;
+		var flag = GetRequiredAttribute(element, FlagAttrName);
 
-			var flag = GetRequiredAttribute(element, FlagAttrName);
+		Process(flag, engine);
+		RemoveItSelf(element);
+	}
 
-			Process(flag, engine);
-			RemoveItSelf(element);
-		}
-
-		protected virtual void Process(string flag, IXmlProcessorEngine engine)
-		{
-			engine.AddFlag(flag);
-		}
+	protected virtual void Process(string flag, IXmlProcessorEngine engine)
+	{
+		engine.AddFlag(flag);
 	}
 }

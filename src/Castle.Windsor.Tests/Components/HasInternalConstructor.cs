@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class HasInternalConstructor
 {
-	public class HasInternalConstructor
+	internal HasInternalConstructor(EmptyClass empty)
 	{
-		internal HasInternalConstructor(EmptyClass empty)
-		{
-		}
 	}
 }

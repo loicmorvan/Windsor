@@ -12,53 +12,46 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Contributors
+namespace Castle.Facilities.AspNetCore.Contributors;
+
+using System;
+
+using Castle.MicroKernel.Lifestyle;
+using Castle.Core;
+using Castle.MicroKernel;
+using Castle.MicroKernel.ModelBuilder;
+
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+
+public class MiddlewareComponentModelContributor(IServiceCollection services, IApplicationBuilder applicationBuilder) : IContributeComponentModelConstruction
 {
-	using System;
+	private IServiceProvider provider;
+	private readonly IServiceCollection services = services ?? throw new ArgumentNullException(nameof(services));
+	private readonly IApplicationBuilder applicationBuilder = applicationBuilder ?? throw new InvalidOperationException("Please call `Container.GetFacility<AspNetCoreFacility>(f => f.RegistersMiddlewareInto(applicationBuilder));` first. This should happen before any middleware registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md");
 
-	using Castle.MicroKernel.Lifestyle;
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.ModelBuilder;
-
-	using Microsoft.AspNetCore.Builder;
-	using Microsoft.AspNetCore.Http;
-	using Microsoft.Extensions.DependencyInjection;
-
-	public class MiddlewareComponentModelContributor : IContributeComponentModelConstruction
+	public void ProcessModel(IKernel kernel, ComponentModel model)
 	{
-		private IServiceProvider provider;
-		private readonly IServiceCollection services;
-		private readonly IApplicationBuilder applicationBuilder;
-
-		public MiddlewareComponentModelContributor(IServiceCollection services, IApplicationBuilder applicationBuilder)
+		if (model.Configuration.Attributes.Get(AspNetCoreFacility.IsRegisteredAsMiddlewareIntoApplicationBuilderKey) == Boolean.TrueString)
 		{
-			this.services = services ?? throw new ArgumentNullException(nameof(services));
-			this.applicationBuilder = applicationBuilder ?? throw new InvalidOperationException("Please call `Container.GetFacility<AspNetCoreFacility>(f => f.RegistersMiddlewareInto(applicationBuilder));` first. This should happen before any middleware registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md");
-		}
-
-		public void ProcessModel(IKernel kernel, ComponentModel model)
-		{
-			if (model.Configuration.Attributes.Get(AspNetCoreFacility.IsRegisteredAsMiddlewareIntoApplicationBuilderKey) == Boolean.TrueString)
+			foreach (var service in model.Services)
 			{
-				foreach (var service in model.Services)
+				applicationBuilder.Use(async (context, next) =>
 				{
-					applicationBuilder.Use(async (context, next) =>
+					var windsorScope = kernel.BeginScope();
+					var serviceProviderScope = (provider = provider ?? services.BuildServiceProvider()).CreateScope();
+					try
 					{
-						var windsorScope = kernel.BeginScope();
-						var serviceProviderScope = (provider = provider ?? services.BuildServiceProvider()).CreateScope();
-						try
-						{
-							var middleware = (IMiddleware) kernel.Resolve(service); 
-							await middleware.InvokeAsync(context, async (ctx) => await next());
-						}
-						finally
-						{
-							serviceProviderScope.Dispose();
-							windsorScope.Dispose();
-						}
-					});
-				}
+						var middleware = (IMiddleware) kernel.Resolve(service); 
+						await middleware.InvokeAsync(context, async (ctx) => await next());
+					}
+					finally
+					{
+						serviceProviderScope.Dispose();
+						windsorScope.Dispose();
+					}
+				});
 			}
 		}
 	}

@@ -12,27 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
+
+using System.Xml;
+
+using Castle.Core.Internal;
+
+public class UsingElementProcessor : AbstractXmlNodeProcessor
 {
-	using System.Xml;
-
-	using Castle.Core.Internal;
-
-	public class UsingElementProcessor : AbstractXmlNodeProcessor
+	public override string Name
 	{
-		public override string Name
-		{
-			get { return "using"; }
-		}
+		get { return "using"; }
+	}
 
-		public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
-		{
-			var assemblyName = GetRequiredAttribute((XmlElement)nodeList.Current, "assembly");
+	public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
+	{
+		var assemblyName = GetRequiredAttribute((XmlElement)nodeList.Current, "assembly");
 
-			// that's it, at this point we just load the assembly into the appdomain so that it becomes
-			// available to type matching system.
-			var assembly = ReflectionUtil.GetAssemblyNamed(assemblyName);
-			RemoveItSelf(nodeList.Current);
-		}
+		// that's it, at this point we just load the assembly into the appdomain so that it becomes
+		// available to type matching system.
+		var assembly = ReflectionUtil.GetAssemblyNamed(assemblyName);
+		RemoveItSelf(nodeList.Current);
 	}
 }

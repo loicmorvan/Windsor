@@ -12,113 +12,108 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Diagnostics
+namespace Castle.Windsor.Tests.Diagnostics;
+
+using System;
+using System.Collections;
+using System.Linq;
+
+using Castle.Facilities.TypedFactory;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.Releasers;
+using Castle.Windsor.Diagnostics;
+using Castle.Windsor.Diagnostics.DebuggerViews;
+using Castle.Windsor.Diagnostics.Extensions;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.ContainerExtensions;
+
+public class ReleasePolicyTrackedObjectsTestCase : AbstractContainerTestCase
 {
-	using System;
-	using System.Collections;
-	using System.Linq;
-
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Releasers;
-	using Castle.Windsor.Diagnostics;
-	using Castle.Windsor.Diagnostics.DebuggerViews;
-	using Castle.Windsor.Diagnostics.Extensions;
-
-	using CastleTests.Components;
-	using CastleTests.ContainerExtensions;
-
-	
-
-	
-	public class ReleasePolicyTrackedObjectsTestCase : AbstractContainerTestCase
+	private DebuggerViewItem GetTrackedObjects()
 	{
-		private DebuggerViewItem GetTrackedObjects()
-		{
-			var subSystem = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IContainerDebuggerExtensionHost;
-			return subSystem.SelectMany(e => e.Attach()).SingleOrDefault(i => i.Name == ReleasePolicyTrackedObjects.Name);
-		}
+		var subSystem = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IContainerDebuggerExtensionHost;
+		return subSystem.SelectMany(e => e.Attach()).SingleOrDefault(i => i.Name == ReleasePolicyTrackedObjects.Name);
+	}
 
-		private void Register<T>()
-			where T : class
-		{
-			Container.Register(Component.For<T>().LifeStyle.Transient);
-		}
+	private void Register<T>()
+		where T : class
+	{
+		Container.Register(Component.For<T>().LifeStyle.Transient);
+	}
 
-		[Fact]
-		public void List_tracked_alive_instances()
-		{
-			Register<DisposableFoo>();
-			var foo1 = Container.Resolve<DisposableFoo>();
-			var foo2 = Container.Resolve<DisposableFoo>();
+	[Fact]
+	public void List_tracked_alive_instances()
+	{
+		Register<DisposableFoo>();
+		var foo1 = Container.Resolve<DisposableFoo>();
+		var foo2 = Container.Resolve<DisposableFoo>();
 
-			var objects = GetTrackedObjects();
-			var values = (DebuggerViewItem[])objects.Value;
-			Assert.Single(values);
-			var viewItem = (MasterDetailsDebuggerViewItem)values.Single().Value;
-			Assert.Equal(2, viewItem.Details.Length);
-		}
+		var objects = GetTrackedObjects();
+		var values = (DebuggerViewItem[])objects.Value;
+		Assert.Single(values);
+		var viewItem = (MasterDetailsDebuggerViewItem)values.Single().Value;
+		Assert.Equal(2, viewItem.Details.Length);
+	}
 
-		[Fact]
-		public void List_tracked_alive_instances_in_subscopes()
-		{
-			Register<DisposableFoo>();
-			Container.AddFacility<TypedFactoryFacility>();
-			var foo1 = Container.Resolve<DisposableFoo>();
-			var fooFactory = Container.Resolve<Func<DisposableFoo>>();
-			var foo2 = fooFactory.Invoke();
+	[Fact]
+	public void List_tracked_alive_instances_in_subscopes()
+	{
+		Register<DisposableFoo>();
+		Container.AddFacility<TypedFactoryFacility>();
+		var foo1 = Container.Resolve<DisposableFoo>();
+		var fooFactory = Container.Resolve<Func<DisposableFoo>>();
+		var foo2 = fooFactory.Invoke();
 
-			var objects = GetTrackedObjects();
-			var values = (DebuggerViewItem[])objects.Value;
-			Assert.Equal(3, values.Length);
-			var instances = values.SelectMany(v => ((MasterDetailsDebuggerViewItem)v.Value).Details).ToArray();
-			Assert.Equal(4, instances.Length);
-		}
+		var objects = GetTrackedObjects();
+		var values = (DebuggerViewItem[])objects.Value;
+		Assert.Equal(3, values.Length);
+		var instances = values.SelectMany(v => ((MasterDetailsDebuggerViewItem)v.Value).Details).ToArray();
+		Assert.Equal(4, instances.Length);
+	}
 
-		[Fact]
-		public void List_tracked_alive_instances_only()
-		{
-			Register<DisposableFoo>();
-			var foo1 = Container.Resolve<DisposableFoo>();
-			var foo2 = Container.Resolve<DisposableFoo>();
-			Container.Release(foo1);
+	[Fact]
+	public void List_tracked_alive_instances_only()
+	{
+		Register<DisposableFoo>();
+		var foo1 = Container.Resolve<DisposableFoo>();
+		var foo2 = Container.Resolve<DisposableFoo>();
+		Container.Release(foo1);
 
-			var objects = GetTrackedObjects();
-			var values = (DebuggerViewItem[])objects.Value;
-			Assert.Single(values);
-			var viewItem = (MasterDetailsDebuggerViewItem)values.Single().Value;
-			Assert.Single(viewItem.Details);
-		}
+		var objects = GetTrackedObjects();
+		var values = (DebuggerViewItem[])objects.Value;
+		Assert.Single(values);
+		var viewItem = (MasterDetailsDebuggerViewItem)values.Single().Value;
+		Assert.Single(viewItem.Details);
+	}
 
-		[Fact]
-		public void NoTrackingReleasePolicy_does_not_appear()
-		{
+	[Fact]
+	public void NoTrackingReleasePolicy_does_not_appear()
+	{
 #pragma warning disable 612,618
-			Kernel.ReleasePolicy = new NoTrackingReleasePolicy();
+		Kernel.ReleasePolicy = new NoTrackingReleasePolicy();
 #pragma warning restore 612,618
-			Register<DisposableFoo>();
+		Register<DisposableFoo>();
 
-			Container.Resolve<DisposableFoo>();
-			var objects = GetTrackedObjects();
-			Assert.Empty((ICollection)objects.Value);
-		}
+		Container.Resolve<DisposableFoo>();
+		var objects = GetTrackedObjects();
+		Assert.Empty((ICollection)objects.Value);
+	}
 
-		[Fact]
-		public void Present_even_when_no_objects_were_created()
-		{
-			var objects = GetTrackedObjects();
-			Assert.NotNull(objects);
-		}
+	[Fact]
+	public void Present_even_when_no_objects_were_created()
+	{
+		var objects = GetTrackedObjects();
+		Assert.NotNull(objects);
+	}
 
-		[Fact]
-		public void custom_ReleasePolicy_is_not_shown_if_not_implement_the_interface()
-		{
-			Kernel.ReleasePolicy = new MyCustomReleasePolicy();
-			Register<DisposableFoo>();
-			var foo1 = Container.Resolve<DisposableFoo>();
-			var objects = GetTrackedObjects();
-			Assert.Empty((ICollection)objects.Value);
-		}
+	[Fact]
+	public void custom_ReleasePolicy_is_not_shown_if_not_implement_the_interface()
+	{
+		Kernel.ReleasePolicy = new MyCustomReleasePolicy();
+		Register<DisposableFoo>();
+		var foo1 = Container.Resolve<DisposableFoo>();
+		var objects = GetTrackedObjects();
+		Assert.Empty((ICollection)objects.Value);
 	}
 }

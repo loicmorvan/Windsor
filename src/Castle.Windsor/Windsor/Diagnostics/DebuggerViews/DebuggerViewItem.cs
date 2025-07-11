@@ -12,52 +12,51 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.DebuggerViews
+namespace Castle.Windsor.Diagnostics.DebuggerViews;
+
+using System.Diagnostics;
+
+[DebuggerDisplay("{description,nq}", Name = "{name,nq}")]
+public class DebuggerViewItem
 {
-	using System.Diagnostics;
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	private readonly object description;
 
-	[DebuggerDisplay("{description,nq}", Name = "{name,nq}")]
-	public class DebuggerViewItem
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	private readonly string name;
+
+	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+	private readonly object value;
+
+	public DebuggerViewItem(string name, string description, object value)
 	{
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		private readonly object description;
+		this.name = name;
+		this.description = description;
+		this.value = value;
+	}
 
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		private readonly string name;
+	public DebuggerViewItem(string name, object value)
+	{
+		this.name = name;
+		description = value;
+		this.value = value;
+	}
 
-		[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-		private readonly object value;
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	public object Description
+	{
+		get { return description; }
+	}
 
-		public DebuggerViewItem(string name, string description, object value)
-		{
-			this.name = name;
-			this.description = description;
-			this.value = value;
-		}
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	public string Name
+	{
+		get { return name; }
+	}
 
-		public DebuggerViewItem(string name, object value)
-		{
-			this.name = name;
-			description = value;
-			this.value = value;
-		}
-
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		public object Description
-		{
-			get { return description; }
-		}
-
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		public string Name
-		{
-			get { return name; }
-		}
-
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		public object Value
-		{
-			get { return value; }
-		}
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	public object Value
+	{
+		get { return value; }
 	}
 }

@@ -12,68 +12,66 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace Castle.Windsor.Tests;
+
+using System;
+using System.Reflection;
+
+using Castle.MicroKernel;
+using Castle.Windsor;
+
+public abstract class AbstractContainerTestCase : IDisposable
 {
-	using System;
-	using System.Reflection;
-
-	using Castle.MicroKernel;
-	using Castle.Windsor;
-
-
-	public abstract class AbstractContainerTestCase : IDisposable
+	public AbstractContainerTestCase()
 	{
-		public AbstractContainerTestCase()
-		{
-			Init();
-		}
+		Init();
+	}
 
-		public void CleanUp()
-		{
-			container.Dispose();
-		}
+	public void CleanUp()
+	{
+		container.Dispose();
+	}
 
-		public void Init()
-		{
-			container = BuildContainer();
-			AfterContainerCreated();
-		}
+	public void Init()
+	{
+		container = BuildContainer();
+		AfterContainerCreated();
+	}
 
-		private WindsorContainer container;
+	private WindsorContainer container;
 
-		protected IWindsorContainer Container
-		{
-			get { return container; }
-		}
+	protected IWindsorContainer Container
+	{
+		get { return container; }
+	}
 
-		protected IKernel Kernel
-		{
-			get { return container.Kernel; }
-		}
+	protected IKernel Kernel
+	{
+		get { return container.Kernel; }
+	}
 
-		protected virtual void AfterContainerCreated()
-		{
-		}
+	protected virtual void AfterContainerCreated()
+	{
+	}
 
-		protected virtual WindsorContainer BuildContainer()
-		{
-			return new WindsorContainer();
-		}
+	protected virtual WindsorContainer BuildContainer()
+	{
+		return new WindsorContainer();
+	}
 
-		protected void ResetContainer()
-		{
-			CleanUp();
-			Init();
-		}
+	protected void ResetContainer()
+	{
+		CleanUp();
+		Init();
+	}
 
-		protected Assembly GetCurrentAssembly()
-		{
-			return typeof(AbstractContainerTestCase).GetTypeInfo().Assembly;
-		}
+	protected Assembly GetCurrentAssembly()
+	{
+		return typeof(AbstractContainerTestCase).GetTypeInfo().Assembly;
+	}
 
-		public void Dispose()
-		{
-			CleanUp();
-		}
+	public void Dispose()
+	{
+		CleanUp();
 	}
 }

@@ -12,32 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
+namespace Castle.Core.Internal;
+
+using System;
+using System.Collections.Generic;
+
+internal static class EnumerableExtensions
 {
-	using System;
-	using System.Collections.Generic;
-
-	internal static class EnumerableExtensions
+	public static TResult[] ConvertAll<T, TResult>(this T[] items, Func<T, TResult> converter)
 	{
-		public static TResult[] ConvertAll<T, TResult>(this T[] items, Func<T, TResult> converter)
+		var count = items.Length;
+		var results = new TResult[count];
+
+		for (int i = 0; i < count; i++)
 		{
-			var count = items.Length;
-			var results = new TResult[count];
-
-			for (int i = 0; i < count; i++)
-			{
-				results[i] = converter(items[i]);
-			}
-
-			return results;
+			results[i] = converter(items[i]);
 		}
 
-		public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
+		return results;
+	}
+
+	public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
+	{
+		foreach (var item in items)
 		{
-			foreach (var item in items)
-			{
-				action(item);
-			}
+			action(item);
 		}
 	}
 }

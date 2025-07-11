@@ -12,51 +12,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Logging.Tests
+namespace Castle.Windsor.Tests.LoggingFacility;
+
+using System;
+using System.IO;
+
+using Castle.MicroKernel.Registration;
+using Castle.Services.Logging.Log4netIntegration;
+using Castle.Windsor;
+using Castle.Windsor.Tests.LoggingFacility.Classes;
+
+using log4net;
+using log4net.Appender;
+using log4net.Layout;
+using log4net.Repository.Hierarchy;
+
+public class Log4NetFacilityLognameOverrideTests : OverrideLoggerTest, IDisposable
 {
-	using System;
-	using System.IO;
-
-	using Castle.Facilities.Logging.Tests.Classes;
-	using Castle.MicroKernel.Registration;
-	using Castle.Services.Logging.Log4netIntegration;
-	using Castle.Windsor;
-
-	using log4net;
-	using log4net.Appender;
-	using log4net.Layout;
-	using log4net.Repository.Hierarchy;
-
-
-	public class Log4NetFacilityLognameOverrideTests : OverrideLoggerTest, IDisposable
+	public Log4NetFacilityLognameOverrideTests()
 	{
-		public Log4NetFacilityLognameOverrideTests()
-		{
-			container = base.CreateConfiguredContainer<ExtendedLog4netFactory>("Override");
-		}
+		container = base.CreateConfiguredContainer<ExtendedLog4netFactory>("Override");
+	}
 
-		public void Dispose()
-		{
-			container.Dispose();
-		}
+	public void Dispose()
+	{
+		container.Dispose();
+	}
 
-		private IWindsorContainer container;
+	private readonly IWindsorContainer container;
 
-		[Fact]
-		public void OverrideTest()
-		{
-			container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
-			var test = container.Resolve<SimpleLoggingComponent>("component");
+	[Fact]
+	public void OverrideTest()
+	{
+		container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
+		var test = container.Resolve<SimpleLoggingComponent>("component");
 
-			test.DoSomething();
+		test.DoSomething();
 
-			String expectedLogOutput = String.Format("[INFO ] [Override.{0}] - Hello world" + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
-			var memoryAppender = ((Hierarchy)LogManager.GetRepository()).Root.GetAppender("memory") as MemoryAppender;
-			TextWriter actualLogOutput = new StringWriter();
-			var patternLayout = new PatternLayout("[%-5level] [%logger] - %message%newline");
-			patternLayout.Format(actualLogOutput, memoryAppender.GetEvents()[0]);
+		String expectedLogOutput = String.Format("[INFO ] [Override.{0}] - Hello world" + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
+		var memoryAppender = ((Hierarchy)LogManager.GetRepository()).Root.GetAppender("memory") as MemoryAppender;
+		TextWriter actualLogOutput = new StringWriter();
+		var patternLayout = new PatternLayout("[%-5level] [%logger] - %message%newline");
+		patternLayout.Format(actualLogOutput, memoryAppender.GetEvents()[0]);
 
-			Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
-		}
+		Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
 	}
 }

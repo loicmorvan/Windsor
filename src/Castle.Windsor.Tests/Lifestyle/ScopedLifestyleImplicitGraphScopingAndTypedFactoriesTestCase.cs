@@ -12,16 +12,4 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Lifestyle
-{
-	using System;
-
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
-
-	using CastleTests.Components;
-
-	
-
-}
+namespace Castle.Windsor.Tests.Lifestyle;

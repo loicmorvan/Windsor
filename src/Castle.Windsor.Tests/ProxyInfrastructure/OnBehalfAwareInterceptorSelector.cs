@@ -12,30 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ProxyInfrastructure
+namespace Castle.Windsor.Tests.ProxyInfrastructure;
+
+using System;
+using System.Reflection;
+
+using Castle.Core;
+using Castle.Core.Interceptor;
+using Castle.DynamicProxy;
+
+public class OnBehalfAwareInterceptorSelector : IInterceptorSelector, IOnBehalfAware
 {
-	using System;
-	using System.Reflection;
+	public static ComponentModel target;
 
-	using Castle.Core;
-	using Castle.Core.Interceptor;
-	using Castle.DynamicProxy;
-
-	
-
-	public class OnBehalfAwareInterceptorSelector : IInterceptorSelector, IOnBehalfAware
+	public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
 	{
-		public static ComponentModel target;
+		Assert.NotNull(target);
+		return interceptors;
+	}
 
-		public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
-		{
-			Assert.NotNull(target);
-			return interceptors;
-		}
-
-		public void SetInterceptedComponentModel(ComponentModel target)
-		{
-			OnBehalfAwareInterceptorSelector.target = target;
-		}
+	public void SetInterceptedComponentModel(ComponentModel target)
+	{
+		OnBehalfAwareInterceptorSelector.target = target;
 	}
 }

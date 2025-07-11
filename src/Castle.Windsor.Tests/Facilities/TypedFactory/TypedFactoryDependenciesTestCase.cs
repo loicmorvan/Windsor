@@ -12,63 +12,57 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.TypedFactory
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
+
+using System;
+using System.Linq;
+
+using Castle.Facilities.TypedFactory;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
+
+public class TypedFactoryDependenciesTestCase : AbstractContainerTestCase
 {
-	using System;
-	using System.Linq;
-
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-
-	using CastleTests;
-	using CastleTests.Components;
-	using CastleTests.Facilities.TypedFactory.Factories;
-
-	
-
-	
-	public class TypedFactoryDependenciesTestCase : AbstractContainerTestCase
+	private void AssertHasDependency<TComponent>(string name)
 	{
-		private void AssertHasDependency<TComponent>(string name)
-		{
-			var handler = GetHandler<TComponent>();
-			var dependency = handler.ComponentModel.Dependencies.SingleOrDefault(d => d.DependencyKey == name);
-			Assert.NotNull(dependency);
-		}
+		var handler = GetHandler<TComponent>();
+		var dependency = handler.ComponentModel.Dependencies.SingleOrDefault(d => d.DependencyKey == name);
+		Assert.NotNull(dependency);
+	}
 
-		private IHandler GetHandler<T>()
-		{
-			var handler = Container.Kernel.GetHandler(typeof(T));
-			Assert.NotNull(handler);
-			return handler;
-		}
+	private IHandler GetHandler<T>()
+	{
+		var handler = Container.Kernel.GetHandler(typeof(T));
+		Assert.NotNull(handler);
+		return handler;
+	}
 
-		[Fact]
-		public void Delegate_factory_depends_on_default_interceptor()
-		{
-			Container.AddFacility<TypedFactoryFacility>()
-				.Register(Component.For<Func<A>>().AsFactory());
+	[Fact]
+	public void Delegate_factory_depends_on_default_interceptor()
+	{
+		Container.AddFacility<TypedFactoryFacility>()
+			.Register(Component.For<Func<A>>().AsFactory());
 
-			AssertHasDependency<Func<A>>(TypedFactoryFacility.InterceptorKey);
-		}
+		AssertHasDependency<Func<A>>(TypedFactoryFacility.InterceptorKey);
+	}
 
-		[Fact]
-		public void Interface_factory_depends_on_default_interceptor()
-		{
-			Container.AddFacility<TypedFactoryFacility>()
-				.Register(Component.For<IDummyComponentFactory>().AsFactory());
+	[Fact]
+	public void Interface_factory_depends_on_default_interceptor()
+	{
+		Container.AddFacility<TypedFactoryFacility>()
+			.Register(Component.For<IDummyComponentFactory>().AsFactory());
 
-			AssertHasDependency<IDummyComponentFactory>(TypedFactoryFacility.InterceptorKey);
-		}
+		AssertHasDependency<IDummyComponentFactory>(TypedFactoryFacility.InterceptorKey);
+	}
 
-		[Fact]
-		public void Interface_factory_depends_on_default_selector_by_default()
-		{
-			Container.AddFacility<TypedFactoryFacility>()
-				.Register(Component.For<IDummyComponentFactory>().AsFactory());
+	[Fact]
+	public void Interface_factory_depends_on_default_selector_by_default()
+	{
+		Container.AddFacility<TypedFactoryFacility>()
+			.Register(Component.For<IDummyComponentFactory>().AsFactory());
 
-			AssertHasDependency<IDummyComponentFactory>("Castle.TypedFactory.DefaultInterfaceFactoryComponentSelector");
-		}
+		AssertHasDependency<IDummyComponentFactory>("Castle.TypedFactory.DefaultInterfaceFactoryComponentSelector");
 	}
 }

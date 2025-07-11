@@ -12,20 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Registration
+namespace Castle.Windsor.Tests.Registration;
+
+using System.Collections.Generic;
+using System.Linq;
+
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Properties;
+
+public class DependsOnTestCase : AbstractContainerTestCase
 {
-	using System.Collections.Generic;
-	using System.Linq;
-
-	using Castle.MicroKernel.Registration;
-
-	using CastleTests.Components;
-	using CastleTests.Properties;
-
-	
-
-	public class DependsOnTestCase : AbstractContainerTestCase
-	{
 #if FEATURE_SYSTEM_CONFIGURATION
 		[Fact]
 		public void Can_register_configuration_parameters_from_appSettings_inline()
@@ -42,260 +39,259 @@ namespace CastleTests.Registration
 		}
 #endif
 
-		[Fact]
-		public void can_register_value_from_a_resource_file_with_type()
-		{
-			Container.Register(Component.For<ClassWithArguments>()
-				                   .DependsOn(Dependency.OnResource<Resources>("arg1", "SomeResource"),
-				                              Dependency.OnValue("arg2", 2)));
-			var obj = Container.Resolve<ClassWithArguments>();
+	[Fact]
+	public void can_register_value_from_a_resource_file_with_type()
+	{
+		Container.Register(Component.For<ClassWithArguments>()
+			.DependsOn(Dependency.OnResource<Resources>("arg1", "SomeResource"),
+				Dependency.OnValue("arg2", 2)));
+		var obj = Container.Resolve<ClassWithArguments>();
 
-			Assert.Equal("Some resource value", obj.Arg1);
-		}
+		Assert.Equal("Some resource value", obj.Arg1);
+	}
 
-		[Fact]
-		public void can_register_value_from_a_resource_file_with_resourceManager()
-		{
-			Container.Register(Component.For<ClassWithArguments>()
-				                   .DependsOn(Dependency.OnResource("arg1", Resources.ResourceManager, "SomeResource"),
-				                              Dependency.OnValue("arg2", 2)));
-			var obj = Container.Resolve<ClassWithArguments>();
+	[Fact]
+	public void can_register_value_from_a_resource_file_with_resourceManager()
+	{
+		Container.Register(Component.For<ClassWithArguments>()
+			.DependsOn(Dependency.OnResource("arg1", Resources.ResourceManager, "SomeResource"),
+				Dependency.OnValue("arg2", 2)));
+		var obj = Container.Resolve<ClassWithArguments>();
 
-			Assert.Equal("Some resource value", obj.Arg1);
-		}
+		Assert.Equal("Some resource value", obj.Arg1);
+	}
 
-		[Fact]
-		public void Can_register_configuration_parameters_from_dynamic_parameters_inline()
-		{
-			Container.Register(Component.For<ClassWithArguments>()
-				                   .DependsOn((k, d) => d.AddProperties(new { arg1 = "a string", arg2 = 42 })));
+	[Fact]
+	public void Can_register_configuration_parameters_from_dynamic_parameters_inline()
+	{
+		Container.Register(Component.For<ClassWithArguments>()
+			.DependsOn((k, d) => d.AddProperties(new { arg1 = "a string", arg2 = 42 })));
 
-			var obj = Container.Resolve<ClassWithArguments>();
+		var obj = Container.Resolve<ClassWithArguments>();
 
-			Assert.Equal("a string", obj.Arg1);
-			Assert.Equal(42, obj.Arg2);
-		}
+		Assert.Equal("a string", obj.Arg1);
+		Assert.Equal(42, obj.Arg2);
+	}
 
-		[Fact]
-		public void Can_register_configuration_parameters_inline()
-		{
-			Container.Register(Component.For<ClassWithArguments>()
-				                   .DependsOn(
-					                   Dependency.OnConfigValue("arg1", "a string"),
-					                   Dependency.OnConfigValue("arg2", "42")));
+	[Fact]
+	public void Can_register_configuration_parameters_inline()
+	{
+		Container.Register(Component.For<ClassWithArguments>()
+			.DependsOn(
+				Dependency.OnConfigValue("arg1", "a string"),
+				Dependency.OnConfigValue("arg2", "42")));
 
-			var obj = Container.Resolve<ClassWithArguments>();
+		var obj = Container.Resolve<ClassWithArguments>();
 
-			Assert.Equal("a string", obj.Arg1);
-			Assert.Equal(42, obj.Arg2);
-		}
+		Assert.Equal("a string", obj.Arg1);
+		Assert.Equal(42, obj.Arg2);
+	}
 
-		[Fact]
-		public void Can_register_named_inline_dependency()
-		{
-			Container.Register(Component.For<ClassWithArguments>()
-				                   .DependsOn(
-					                   Dependency.OnValue("arg1", "a string"),
-					                   Dependency.OnValue("arg2", 42)));
+	[Fact]
+	public void Can_register_named_inline_dependency()
+	{
+		Container.Register(Component.For<ClassWithArguments>()
+			.DependsOn(
+				Dependency.OnValue("arg1", "a string"),
+				Dependency.OnValue("arg2", 42)));
 
-			var obj = Container.Resolve<ClassWithArguments>();
+		var obj = Container.Resolve<ClassWithArguments>();
 
-			Assert.Equal("a string", obj.Arg1);
-			Assert.Equal(42, obj.Arg2);
-		}
+		Assert.Equal("a string", obj.Arg1);
+		Assert.Equal(42, obj.Arg2);
+	}
 
-		[Fact]
-		public void Can_register_service_override_collection_named_via_names()
-		{
-			Container.Register(
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().Named("a"),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>().Named("c"),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().Named("b"),
-				Component.For<CollectionDepAsConstructor>()
-					.DependsOn(Dependency.OnComponentCollection("services", "b", "a")));
+	[Fact]
+	public void Can_register_service_override_collection_named_via_names()
+	{
+		Container.Register(
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().Named("a"),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>().Named("c"),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().Named("b"),
+			Component.For<CollectionDepAsConstructor>()
+				.DependsOn(Dependency.OnComponentCollection("services", "b", "a")));
 
-			var obj = Container.Resolve<CollectionDepAsConstructor>();
-			Assert.Equal(2, obj.Services.Count);
-			Assert.IsType<EmptyServiceB>(obj.Services.First());
-			Assert.IsType<EmptyServiceA>(obj.Services.Last());
-		}
+		var obj = Container.Resolve<CollectionDepAsConstructor>();
+		Assert.Equal(2, obj.Services.Count);
+		Assert.IsType<EmptyServiceB>(obj.Services.First());
+		Assert.IsType<EmptyServiceA>(obj.Services.Last());
+	}
 
-		[Fact]
-		public void Can_register_service_override_collection_named_via_types()
-		{
-			Container.Register(
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>(),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
-				Component.For<CollectionDepAsConstructor>()
-					.DependsOn(Dependency.OnComponentCollection("services", typeof(EmptyServiceB), typeof(EmptyServiceA))));
+	[Fact]
+	public void Can_register_service_override_collection_named_via_types()
+	{
+		Container.Register(
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>(),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
+			Component.For<CollectionDepAsConstructor>()
+				.DependsOn(Dependency.OnComponentCollection("services", typeof(EmptyServiceB), typeof(EmptyServiceA))));
 
-			var obj = Container.Resolve<CollectionDepAsConstructor>();
-			Assert.Equal(2, obj.Services.Count);
-			Assert.IsType<EmptyServiceB>(obj.Services.First());
-			Assert.IsType<EmptyServiceA>(obj.Services.Last());
-		}
+		var obj = Container.Resolve<CollectionDepAsConstructor>();
+		Assert.Equal(2, obj.Services.Count);
+		Assert.IsType<EmptyServiceB>(obj.Services.First());
+		Assert.IsType<EmptyServiceA>(obj.Services.Last());
+	}
 
-		[Fact]
-		public void Can_register_service_override_collection_typed_via_names()
-		{
-			Container.Register(
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().Named("a"),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>().Named("c"),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().Named("b"),
-				Component.For<CollectionDepAsConstructor>()
-					.DependsOn(Dependency.OnComponentCollection(typeof(ICollection<IEmptyService>), "b", "a")));
+	[Fact]
+	public void Can_register_service_override_collection_typed_via_names()
+	{
+		Container.Register(
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().Named("a"),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>().Named("c"),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().Named("b"),
+			Component.For<CollectionDepAsConstructor>()
+				.DependsOn(Dependency.OnComponentCollection(typeof(ICollection<IEmptyService>), "b", "a")));
 
-			var obj = Container.Resolve<CollectionDepAsConstructor>();
-			Assert.Equal(2, obj.Services.Count);
-			Assert.IsType<EmptyServiceB>(obj.Services.First());
-			Assert.IsType<EmptyServiceA>(obj.Services.Last());
-		}
+		var obj = Container.Resolve<CollectionDepAsConstructor>();
+		Assert.Equal(2, obj.Services.Count);
+		Assert.IsType<EmptyServiceB>(obj.Services.First());
+		Assert.IsType<EmptyServiceA>(obj.Services.Last());
+	}
 
-		[Fact]
-		public void Can_register_service_override_collection_typed_via_names_generic()
-		{
-			Container.Register(
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().Named("a"),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>().Named("c"),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().Named("b"),
-				Component.For<CollectionDepAsConstructor>()
-					.DependsOn(Dependency.OnComponentCollection<ICollection<IEmptyService>>("b", "a")));
+	[Fact]
+	public void Can_register_service_override_collection_typed_via_names_generic()
+	{
+		Container.Register(
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().Named("a"),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>().Named("c"),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().Named("b"),
+			Component.For<CollectionDepAsConstructor>()
+				.DependsOn(Dependency.OnComponentCollection<ICollection<IEmptyService>>("b", "a")));
 
-			var obj = Container.Resolve<CollectionDepAsConstructor>();
-			Assert.Equal(2, obj.Services.Count);
-			Assert.IsType<EmptyServiceB>(obj.Services.First());
-			Assert.IsType<EmptyServiceA>(obj.Services.Last());
-		}
+		var obj = Container.Resolve<CollectionDepAsConstructor>();
+		Assert.Equal(2, obj.Services.Count);
+		Assert.IsType<EmptyServiceB>(obj.Services.First());
+		Assert.IsType<EmptyServiceA>(obj.Services.Last());
+	}
 
-		[Fact]
-		public void Can_register_service_override_collection_typed_via_types()
-		{
-			Container.Register(
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>(),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
-				Component.For<CollectionDepAsConstructor>()
-					.DependsOn(Dependency.OnComponentCollection(typeof(ICollection<IEmptyService>), typeof(EmptyServiceB), typeof(EmptyServiceA))));
+	[Fact]
+	public void Can_register_service_override_collection_typed_via_types()
+	{
+		Container.Register(
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>(),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
+			Component.For<CollectionDepAsConstructor>()
+				.DependsOn(Dependency.OnComponentCollection(typeof(ICollection<IEmptyService>), typeof(EmptyServiceB), typeof(EmptyServiceA))));
 
-			var obj = Container.Resolve<CollectionDepAsConstructor>();
-			Assert.Equal(2, obj.Services.Count);
-			Assert.IsType<EmptyServiceB>(obj.Services.First());
-			Assert.IsType<EmptyServiceA>(obj.Services.Last());
-		}
+		var obj = Container.Resolve<CollectionDepAsConstructor>();
+		Assert.Equal(2, obj.Services.Count);
+		Assert.IsType<EmptyServiceB>(obj.Services.First());
+		Assert.IsType<EmptyServiceA>(obj.Services.Last());
+	}
 
-		[Fact]
-		public void Can_register_service_override_collection_typed_via_types_generic()
-		{
-			Container.Register(
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>(),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
-				Component.For<CollectionDepAsConstructor>()
-					.DependsOn(Dependency.OnComponentCollection<ICollection<IEmptyService>>(typeof(EmptyServiceB), typeof(EmptyServiceA))));
+	[Fact]
+	public void Can_register_service_override_collection_typed_via_types_generic()
+	{
+		Container.Register(
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>(),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
+			Component.For<CollectionDepAsConstructor>()
+				.DependsOn(Dependency.OnComponentCollection<ICollection<IEmptyService>>(typeof(EmptyServiceB), typeof(EmptyServiceA))));
 
-			var obj = Container.Resolve<CollectionDepAsConstructor>();
-			Assert.Equal(2, obj.Services.Count);
-			Assert.IsType<EmptyServiceB>(obj.Services.First());
-			Assert.IsType<EmptyServiceA>(obj.Services.Last());
-		}
+		var obj = Container.Resolve<CollectionDepAsConstructor>();
+		Assert.Equal(2, obj.Services.Count);
+		Assert.IsType<EmptyServiceB>(obj.Services.First());
+		Assert.IsType<EmptyServiceA>(obj.Services.Last());
+	}
 
-		[Fact]
-		public void Can_register_service_override_named_via_name()
-		{
-			Container.Register(
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().Named("a"),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().Named("b"),
-				Component.For<UsesIEmptyService>()
-					.DependsOn(Dependency.OnComponent("emptyService", "b")));
+	[Fact]
+	public void Can_register_service_override_named_via_name()
+	{
+		Container.Register(
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().Named("a"),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().Named("b"),
+			Component.For<UsesIEmptyService>()
+				.DependsOn(Dependency.OnComponent("emptyService", "b")));
 
-			var obj = Container.Resolve<UsesIEmptyService>();
+		var obj = Container.Resolve<UsesIEmptyService>();
 
-			Assert.IsType<EmptyServiceB>(obj.EmptyService);
-		}
+		Assert.IsType<EmptyServiceB>(obj.EmptyService);
+	}
 
-		[Fact]
-		public void Can_register_service_override_named_via_type()
-		{
-			Container.Register(
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
-				Component.For<UsesIEmptyService>()
-					.DependsOn(Dependency.OnComponent("emptyService", typeof(EmptyServiceB))));
+	[Fact]
+	public void Can_register_service_override_named_via_type()
+	{
+		Container.Register(
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
+			Component.For<UsesIEmptyService>()
+				.DependsOn(Dependency.OnComponent("emptyService", typeof(EmptyServiceB))));
 
-			var obj = Container.Resolve<UsesIEmptyService>();
+		var obj = Container.Resolve<UsesIEmptyService>();
 
-			Assert.IsType<EmptyServiceB>(obj.EmptyService);
-		}
+		Assert.IsType<EmptyServiceB>(obj.EmptyService);
+	}
 
-		[Fact]
-		public void Can_register_service_override_typed_via_name()
-		{
-			Container.Register(
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().Named("a"),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().Named("b"),
-				Component.For<UsesIEmptyService>()
-					.DependsOn(Dependency.OnComponent(typeof(IEmptyService), "b")));
+	[Fact]
+	public void Can_register_service_override_typed_via_name()
+	{
+		Container.Register(
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().Named("a"),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().Named("b"),
+			Component.For<UsesIEmptyService>()
+				.DependsOn(Dependency.OnComponent(typeof(IEmptyService), "b")));
 
-			var obj = Container.Resolve<UsesIEmptyService>();
+		var obj = Container.Resolve<UsesIEmptyService>();
 
-			Assert.IsType<EmptyServiceB>(obj.EmptyService);
-		}
+		Assert.IsType<EmptyServiceB>(obj.EmptyService);
+	}
 
-		[Fact]
-		public void Can_register_service_override_typed_via_type()
-		{
-			Container.Register(
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
-				Component.For<UsesIEmptyService>()
-					.DependsOn(Dependency.OnComponent(typeof(IEmptyService), typeof(EmptyServiceB))));
+	[Fact]
+	public void Can_register_service_override_typed_via_type()
+	{
+		Container.Register(
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
+			Component.For<UsesIEmptyService>()
+				.DependsOn(Dependency.OnComponent(typeof(IEmptyService), typeof(EmptyServiceB))));
 
-			var obj = Container.Resolve<UsesIEmptyService>();
+		var obj = Container.Resolve<UsesIEmptyService>();
 
-			Assert.IsType<EmptyServiceB>(obj.EmptyService);
-		}
+		Assert.IsType<EmptyServiceB>(obj.EmptyService);
+	}
 
-		[Fact]
-		public void Can_register_service_override_typed_via_type_generic()
-		{
-			Container.Register(
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
-				Component.For<UsesIEmptyService>()
-					.DependsOn(Dependency.OnComponent<IEmptyService, EmptyServiceB>()));
+	[Fact]
+	public void Can_register_service_override_typed_via_type_generic()
+	{
+		Container.Register(
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
+			Component.For<UsesIEmptyService>()
+				.DependsOn(Dependency.OnComponent<IEmptyService, EmptyServiceB>()));
 
-			var obj = Container.Resolve<UsesIEmptyService>();
+		var obj = Container.Resolve<UsesIEmptyService>();
 
-			Assert.IsType<EmptyServiceB>(obj.EmptyService);
-		}
+		Assert.IsType<EmptyServiceB>(obj.EmptyService);
+	}
 
-		[Fact]
-		public void Can_register_typed_inline_dependency()
-		{
-			Container.Register(Component.For<ClassWithArguments>()
-				                   .DependsOn(
-					                   Dependency.OnValue(typeof(string), "a string"),
-					                   Dependency.OnValue(typeof(int), 42)));
+	[Fact]
+	public void Can_register_typed_inline_dependency()
+	{
+		Container.Register(Component.For<ClassWithArguments>()
+			.DependsOn(
+				Dependency.OnValue(typeof(string), "a string"),
+				Dependency.OnValue(typeof(int), 42)));
 
-			var obj = Container.Resolve<ClassWithArguments>();
+		var obj = Container.Resolve<ClassWithArguments>();
 
-			Assert.Equal("a string", obj.Arg1);
-			Assert.Equal(42, obj.Arg2);
-		}
+		Assert.Equal("a string", obj.Arg1);
+		Assert.Equal(42, obj.Arg2);
+	}
 
-		[Fact]
-		public void Can_register_typed_inline_dependency_generic()
-		{
-			Container.Register(Component.For<ClassWithArguments>()
-				                   .DependsOn(
-					                   Dependency.OnValue<string>("a string"),
-					                   Dependency.OnValue<int>(42)));
+	[Fact]
+	public void Can_register_typed_inline_dependency_generic()
+	{
+		Container.Register(Component.For<ClassWithArguments>()
+			.DependsOn(
+				Dependency.OnValue<string>("a string"),
+				Dependency.OnValue<int>(42)));
 
-			var obj = Container.Resolve<ClassWithArguments>();
+		var obj = Container.Resolve<ClassWithArguments>();
 
-			Assert.Equal("a string", obj.Arg1);
-			Assert.Equal(42, obj.Arg2);
-		}
+		Assert.Equal("a string", obj.Arg1);
+		Assert.Equal(42, obj.Arg2);
 	}
 }

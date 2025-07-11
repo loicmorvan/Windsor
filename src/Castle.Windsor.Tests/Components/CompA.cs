@@ -12,15 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class CompA
-	{
-		public CompA(CompB compb)
-		{
-			Compb = compb;
-		}
+namespace Castle.Windsor.Tests.Components;
 
-		public CompB Compb { get; private set; }
-	}
+public class CompA(CompB compb)
+{
+	public CompB Compb { get; private set; } = compb;
 }

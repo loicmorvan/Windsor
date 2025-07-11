@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Logging.Tests.Classes
+namespace Castle.Windsor.Tests.LoggingFacility.Classes;
+
+using System;
+
+public interface ISmtpServer
 {
-	using System;
+	void Start();
 
-	public interface ISmtpServer
-	{
-		void Start();
+	void Stop();
 
-		void Stop();
-
-		void InternalSend(String from, String to, String contents);
-	}
+	void InternalSend(String from, String to, String contents);
 }

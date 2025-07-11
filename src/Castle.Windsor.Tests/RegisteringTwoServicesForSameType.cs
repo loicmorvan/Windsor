@@ -12,45 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests;
+
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+
+public class RegisteringTwoServicesForSameType
 {
-	using Castle.MicroKernel.Registration;
-
-	
-
-	
-	public class RegisteringTwoServicesForSameType
+	[Fact]
+	public void ResolvingComponentIsDoneOnFirstComeBasis()
 	{
-		[Fact]
-		public void ResolvingComponentIsDoneOnFirstComeBasis()
-		{
-			IWindsorContainer windsor = new WindsorContainer();
-			windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("1"));
-			windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("2"));
+		IWindsorContainer windsor = new WindsorContainer();
+		windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("1"));
+		windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("2"));
 
-			Assert.IsType<Srv1>(windsor.Resolve<IService>());
-		}
+		Assert.IsType<Srv1>(windsor.Resolve<IService>());
+	}
 
-		[Fact]
-		public void ResolvingComponentIsDoneOnFirstComeBasisWhenNamesAreNotOrdered()
-		{
-			IWindsorContainer windsor = new WindsorContainer();
-			windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("3"));
-			windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("2"));
+	[Fact]
+	public void ResolvingComponentIsDoneOnFirstComeBasisWhenNamesAreNotOrdered()
+	{
+		IWindsorContainer windsor = new WindsorContainer();
+		windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("3"));
+		windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("2"));
 
-			Assert.IsType<Srv1>(windsor.Resolve<IService>());
-		}
+		Assert.IsType<Srv1>(windsor.Resolve<IService>());
+	}
 
-		public interface IService
-		{
-		}
+	public interface IService
+	{
+	}
 
-		public class Srv1 : IService
-		{
-		}
+	public class Srv1 : IService
+	{
+	}
 
-		public class Srv2 : IService
-		{
-		}
+	public class Srv2 : IService
+	{
 	}
 }

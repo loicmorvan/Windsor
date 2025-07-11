@@ -12,69 +12,58 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests;
+
+using Castle.MicroKernel.ComponentActivator;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Interceptors;
+
+public class FailureCleanUpTestCase
 {
-	using System;
+	private readonly IWindsorContainer container = new WindsorContainer();
 
-	using Castle.MicroKernel.ComponentActivator;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.ClassComponents;
-	using Castle.Windsor.Tests.Interceptors;
-
-	using CastleTests.Components;
-
-	
-
-	
-	public class FailureCleanUpTestCase
+	[Fact]
+	public void When_constructor_throws_ctor_dependencies_get_released()
 	{
-		public FailureCleanUpTestCase()
-		{
-			container = new WindsorContainer();
-		}
+		SimpleServiceDisposable.DisposedCount = 0;
+		container.Register(
+			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>().LifeStyle.Transient,
+			Component.For<ThrowsInCtorWithDisposableDependency>()
+		);
 
-		private IWindsorContainer container;
+		Assert.Throws<ComponentActivatorException>(() => container.Resolve<ThrowsInCtorWithDisposableDependency>());
+		Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
+	}
 
-		[Fact]
-		public void When_constructor_throws_ctor_dependencies_get_released()
-		{
-			SimpleServiceDisposable.DisposedCount = 0;
-			container.Register(
-				Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>().LifeStyle.Transient,
-				Component.For<ThrowsInCtorWithDisposableDependency>()
-				);
+	[Fact]
+	public void When_constructor_dependency_throws_previous_dependencies_get_released()
+	{
+		SimpleServiceDisposable.DisposedCount = 0;
+		container.Register(
+			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>().LifeStyle.Transient,
+			Component.For<ThrowsInCtor>().LifeStyle.Transient,
+			Component.For<DependsOnThrowingComponent>()
+		);
 
-			Assert.Throws<ComponentActivatorException>(() => container.Resolve<ThrowsInCtorWithDisposableDependency>());
-			Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
-		}
+		Assert.Throws<ComponentActivatorException>(() => container.Resolve<DependsOnThrowingComponent>());
+		Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
+	}
 
-		[Fact]
-		public void When_constructor_dependency_throws_previous_dependencies_get_released()
-		{
-			SimpleServiceDisposable.DisposedCount = 0;
-			container.Register(
-				Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>().LifeStyle.Transient,
-				Component.For<ThrowsInCtor>().LifeStyle.Transient,
-				Component.For<DependsOnThrowingComponent>()
-				);
+	[Fact]
+	public void When_interceptor_throws_previous_dependencies_get_released()
+	{
+		DisposableFoo.ResetDisposedCount();
+		container.Register(
+			Component.For<ThrowInCtorInterceptor>().LifeStyle.Transient,
+			Component.For<DisposableFoo>().LifeStyle.Transient,
+			Component.For<UsesDisposableFoo>().LifeStyle.Transient
+				.Interceptors<ThrowInCtorInterceptor>()
+		);
 
-			Assert.Throws<ComponentActivatorException>(() => container.Resolve<DependsOnThrowingComponent>());
-			Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
-		}
-
-		[Fact]
-		public void When_interceptor_throws_previous_dependencies_get_released()
-		{
-			DisposableFoo.ResetDisposedCount();
-			container.Register(
-				Component.For<ThrowInCtorInterceptor>().LifeStyle.Transient,
-				Component.For<DisposableFoo>().LifeStyle.Transient,
-				Component.For<UsesDisposableFoo>().LifeStyle.Transient
-					.Interceptors<ThrowInCtorInterceptor>()
-				);
-
-			Assert.Throws<ComponentActivatorException>(() => container.Resolve<UsesDisposableFoo>());
-			Assert.Equal(1, DisposableFoo.DisposedCount);
-		}
+		Assert.Throws<ComponentActivatorException>(() => container.Resolve<UsesDisposableFoo>());
+		Assert.Equal(1, DisposableFoo.DisposedCount);
 	}
 }

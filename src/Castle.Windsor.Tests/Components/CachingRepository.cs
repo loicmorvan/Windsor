@@ -12,22 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+using System;
+
+public class CachingRepository<T>(ICache<T> cache) : IRepository<T>
 {
-	using System;
+	public ICache<T> Cache { get; private set; } = cache;
 
-	public class CachingRepository<T> : IRepository<T>
+	public T Get(int id)
 	{
-		public CachingRepository(ICache<T> cache)
-		{
-			Cache = cache;
-		}
-
-		public ICache<T> Cache { get; private set; }
-
-		public T Get(int id)
-		{
-			return Activator.CreateInstance<T>();
-		}
+		return Activator.CreateInstance<T>();
 	}
 }

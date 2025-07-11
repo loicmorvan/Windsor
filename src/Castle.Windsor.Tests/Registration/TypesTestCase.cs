@@ -12,47 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Registration
+namespace Castle.Windsor.Tests.Registration;
+
+using System.Reflection;
+
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Interceptors;
+
+public class TypesTestCase : AbstractContainerTestCase
 {
-	using System.Reflection;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Tests.ClassComponents;
-	using Castle.Windsor.Tests.Interceptors;
-
-	using CastleTests.Components;
-
-	
-
-	
-	public class TypesTestCase : AbstractContainerTestCase
+	[Fact]
+	public void Based_on_interface_types_registered()
 	{
-		[Fact]
-		public void Based_on_interface_types_registered()
-		{
-			Container.Register(Types.FromAssembly(GetCurrentAssembly())
-			                   	.BasedOn(typeof(ICommon))
-				);
+		Container.Register(Types.FromAssembly(GetCurrentAssembly())
+			.BasedOn(typeof(ICommon))
+		);
 
-			var handlers = Kernel.GetHandlers(typeof(ICommon));
-			Assert.Single(handlers);
+		var handlers = Kernel.GetHandlers(typeof(ICommon));
+		Assert.Single(handlers);
 
-			handlers = Kernel.GetAssignableHandlers(typeof(ICommon));
-			Assert.True(handlers.Length > 1);
-		}
+		handlers = Kernel.GetAssignableHandlers(typeof(ICommon));
+		Assert.True(handlers.Length > 1);
+	}
 
-		[Fact]
-		public void Interface_registered_with_no_implementation_with_interceptor_can_be_used()
-		{
-			Container.Register(
-				Component.For<ReturnDefaultInterceptor>(),
-				Types.FromAssembly(GetCurrentAssembly())
-					.BasedOn(typeof(ISimpleService))
-					.If(t => t.GetTypeInfo().IsInterface)
-					.Configure(t => t.Interceptors<ReturnDefaultInterceptor>())
-				);
+	[Fact]
+	public void Interface_registered_with_no_implementation_with_interceptor_can_be_used()
+	{
+		Container.Register(
+			Component.For<ReturnDefaultInterceptor>(),
+			Types.FromAssembly(GetCurrentAssembly())
+				.BasedOn(typeof(ISimpleService))
+				.If(t => t.GetTypeInfo().IsInterface)
+				.Configure(t => t.Interceptors<ReturnDefaultInterceptor>())
+		);
 
-			var common = Container.Resolve<ISimpleService>();
-			common.Operation();
-		}
+		var common = Container.Resolve<ISimpleService>();
+		common.Operation();
 	}
 }

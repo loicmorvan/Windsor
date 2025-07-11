@@ -12,75 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+using System;
+
+public class CustomerChain1(ICustomer customer) : CustomerImpl
 {
-	using System;
-	
-	public class CustomerChain1 : CustomerImpl
-	{
-		public ICustomer CustomerBase;
-
-		public CustomerChain1(ICustomer customer)
-		{
-			CustomerBase = customer;
-		}
-	}
-
-	public class CustomerChain2 : CustomerChain1
-	{
-		public CustomerChain2(ICustomer customer) : base(customer)
-		{
-		}
-	}
-
-	public class CustomerChain3 : CustomerChain1
-	{
-		public CustomerChain3(ICustomer customer) : base(customer)
-		{
-		}
-	}
-
-	public class CustomerChain4 : CustomerChain1
-	{
-		public CustomerChain4(ICustomer customer) : base(customer)
-		{
-		}
-	}
-
-	public class CustomerChain5 : CustomerChain1
-	{
-		public CustomerChain5(ICustomer customer) : base(customer)
-		{
-		}
-	}
-
-	public class CustomerChain6 : CustomerChain1
-	{
-		public CustomerChain6(ICustomer customer) : base(customer)
-		{
-		}
-	}
-
-	public class CustomerChain7 : CustomerChain1
-	{
-		public CustomerChain7(ICustomer customer) : base(customer)
-		{
-		}
-	}
-
-	[Serializable]
-	public class CustomerChain8 : CustomerChain1
-	{
-		public CustomerChain8(ICustomer customer) : base(customer)
-		{
-		}
-	}
-
-	[Serializable]
-	public class CustomerChain9 : CustomerChain1
-	{
-		public CustomerChain9(ICustomer customer) : base(customer)
-		{
-		}
-	}
+	public ICustomer CustomerBase = customer;
 }
+
+public class CustomerChain2(ICustomer customer) : CustomerChain1(customer);
+
+public class CustomerChain3(ICustomer customer) : CustomerChain1(customer);
+
+public class CustomerChain4(ICustomer customer) : CustomerChain1(customer);
+
+public class CustomerChain5(ICustomer customer) : CustomerChain1(customer);
+
+public class CustomerChain6(ICustomer customer) : CustomerChain1(customer);
+
+public class CustomerChain7(ICustomer customer) : CustomerChain1(customer);
+
+[Serializable]
+public class CustomerChain8(ICustomer customer) : CustomerChain1(customer);
+
+[Serializable]
+public class CustomerChain9(ICustomer customer) : CustomerChain1(customer);

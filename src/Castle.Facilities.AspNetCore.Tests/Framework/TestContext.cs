@@ -12,56 +12,47 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests.Framework
+namespace Castle.Facilities.AspNetCore.Tests.Framework;
+
+using System;
+
+using Castle.Windsor;
+
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+
+public class TestContext(IServiceCollection serviceCollection, IServiceProvider serviceProvider, IApplicationBuilder applicationBuilder, IWindsorContainer container, IDisposable windsorScope)
+	: IDisposable
 {
-	using System;
+	public IApplicationBuilder ApplicationBuilder { get; } = applicationBuilder;
+	public IServiceCollection ServiceCollection { get; } = serviceCollection;
+	public IServiceProvider ServiceProvider { get; private set; } = serviceProvider;
 
-	using Castle.Windsor;
+	public IDisposable WindsorScope { get; private set; } = windsorScope;
+	public IWindsorContainer WindsorContainer { get; private set; } = container;
 
-	using Microsoft.AspNetCore.Builder;
-	using Microsoft.Extensions.DependencyInjection;
-
-	public class TestContext : IDisposable
+	public void DisposeServiceProvider()
 	{
-		public TestContext(IServiceCollection serviceCollection, IServiceProvider serviceProvider, IApplicationBuilder applicationBuilder, IWindsorContainer container, IDisposable windsorScope)
-		{
-			ServiceCollection = serviceCollection;
-			ServiceProvider = serviceProvider;
-			ApplicationBuilder = applicationBuilder;
-			WindsorContainer = container;
-			WindsorScope = windsorScope;
-		}
+		(ServiceProvider as IDisposable)?.Dispose();
+		ServiceProvider = null;
+	}
 
-		public IApplicationBuilder ApplicationBuilder { get; }
-		public IServiceCollection ServiceCollection { get; }
-		public IServiceProvider ServiceProvider { get; private set; }
+	public void DisposeWindsorContainer()
+	{
+		WindsorContainer.Dispose();
+		WindsorContainer = null;
+	}
 
-		public IDisposable WindsorScope { get; private set; }
-		public IWindsorContainer WindsorContainer { get; private set; }
+	public void DisposeWindsorScope()
+	{
+		WindsorScope.Dispose();
+		WindsorScope = null;
+	}
 
-		public void DisposeServiceProvider()
-		{
-			(ServiceProvider as IDisposable)?.Dispose();
-			ServiceProvider = null;
-		}
-
-		public void DisposeWindsorContainer()
-		{
-			WindsorContainer.Dispose();
-			WindsorContainer = null;
-		}
-
-		public void DisposeWindsorScope()
-		{
-			WindsorScope.Dispose();
-			WindsorScope = null;
-		}
-
-		public void Dispose()
-		{
-			WindsorScope?.Dispose();
-			WindsorContainer?.Dispose();
-			(ServiceProvider as IDisposable)?.Dispose();
-		}
+	public void Dispose()
+	{
+		WindsorScope?.Dispose();
+		WindsorContainer?.Dispose();
+		(ServiceProvider as IDisposable)?.Dispose();
 	}
 }

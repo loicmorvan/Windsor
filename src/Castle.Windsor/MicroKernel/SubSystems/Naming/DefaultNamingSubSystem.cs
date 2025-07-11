@@ -12,444 +12,432 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Naming
+namespace Castle.MicroKernel.SubSystems.Naming;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+
+using Castle.Core.Internal;
+using Castle.MicroKernel.Util;
+
+using Lock = Castle.MicroKernel.Internal.Lock;
+
+[Serializable]
+public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Reflection;
+	protected readonly Lock @lock = Lock.Create();
 
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Util;
+	/// <summary>
+	///   Map(String, IHandler) to map component names to <see cref="IHandler" /> Items in this dictionary are sorted in insertion order.
+	/// </summary>
+	protected readonly Dictionary<string, IHandler> name2Handler =
+		new Dictionary<string, IHandler>(StringComparer.OrdinalIgnoreCase);
 
-	using Lock = Castle.MicroKernel.Internal.Lock;
+	/// <summary>
+	///   Map(Type, IHandler) to map a service to <see cref="IHandler" /> . If there is more than a single service of the type, only the first registered services is stored in this dictionary. It serve as a fast lookup for the common case of having a single handler for a type.
+	/// </summary>
+	protected readonly Dictionary<Type, HandlerWithPriority> service2Handler =
+		new Dictionary<Type, HandlerWithPriority>(SimpleTypeEqualityComparer.Instance);
 
-	[Serializable]
-	public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
+	protected IList<IHandlersFilter> filters;
+	protected IList<IHandlerSelector> selectors;
+
+	private readonly IDictionary<Type, IHandler[]> assignableHandlerListsByTypeCache =
+		new Dictionary<Type, IHandler[]>(SimpleTypeEqualityComparer.Instance);
+
+	protected readonly IDictionary<Type, IHandler[]> handlerListsByTypeCache =
+		new Dictionary<Type, IHandler[]>(SimpleTypeEqualityComparer.Instance);
+
+	private Dictionary<string, IHandler> handlerByNameCache;
+	private Dictionary<Type, IHandler> handlerByServiceCache;
+
+	public virtual int ComponentCount
 	{
-		protected readonly Lock @lock = Lock.Create();
+		get { return HandlerByNameCache.Count; }
+	}
 
-		/// <summary>
-		///   Map(String, IHandler) to map component names to <see cref="IHandler" /> Items in this dictionary are sorted in insertion order.
-		/// </summary>
-		protected readonly Dictionary<string, IHandler> name2Handler =
-			new Dictionary<string, IHandler>(StringComparer.OrdinalIgnoreCase);
-
-		/// <summary>
-		///   Map(Type, IHandler) to map a service to <see cref="IHandler" /> . If there is more than a single service of the type, only the first registered services is stored in this dictionary. It serve as a fast lookup for the common case of having a single handler for a type.
-		/// </summary>
-		protected readonly Dictionary<Type, HandlerWithPriority> service2Handler =
-			new Dictionary<Type, HandlerWithPriority>(SimpleTypeEqualityComparer.Instance);
-
-		protected IList<IHandlersFilter> filters;
-		protected IList<IHandlerSelector> selectors;
-
-		private readonly IDictionary<Type, IHandler[]> assignableHandlerListsByTypeCache =
-			new Dictionary<Type, IHandler[]>(SimpleTypeEqualityComparer.Instance);
-
-		protected readonly IDictionary<Type, IHandler[]> handlerListsByTypeCache =
-			new Dictionary<Type, IHandler[]>(SimpleTypeEqualityComparer.Instance);
-
-		private Dictionary<string, IHandler> handlerByNameCache;
-		private Dictionary<Type, IHandler> handlerByServiceCache;
-
-		public virtual int ComponentCount
+	protected IDictionary<string, IHandler> HandlerByNameCache
+	{
+		get
 		{
-			get { return HandlerByNameCache.Count; }
-		}
-
-		protected IDictionary<string, IHandler> HandlerByNameCache
-		{
-			get
+			var cache = handlerByNameCache;
+			if (cache != null)
 			{
-				var cache = handlerByNameCache;
-				if (cache != null)
+				return cache;
+			}
+			using (@lock.ForWriting())
+			{
+				cache = new Dictionary<string, IHandler>(name2Handler, name2Handler.Comparer);
+				handlerByNameCache = cache;
+				return cache;
+			}
+		}
+	}
+
+	protected IDictionary<Type, IHandler> HandlerByServiceCache
+	{
+		get
+		{
+			var cache = handlerByServiceCache;
+			if (cache != null)
+			{
+				return cache;
+			}
+			using (@lock.ForWriting())
+			{
+				cache = new Dictionary<Type, IHandler>(service2Handler.Count, service2Handler.Comparer);
+				foreach (var item in service2Handler)
 				{
-					return cache;
+					cache.Add(item.Key, item.Value.Handler);
 				}
-				using (@lock.ForWriting())
-				{
-					cache = new Dictionary<string, IHandler>(name2Handler, name2Handler.Comparer);
-					handlerByNameCache = cache;
-					return cache;
-				}
+				handlerByServiceCache = cache;
+				return cache;
+			}
+		}
+	}
+
+	public void AddHandlerSelector(IHandlerSelector selector)
+	{
+		if (selectors == null)
+		{
+			selectors = new List<IHandlerSelector>();
+		}
+		selectors.Add(selector);
+	}
+
+	public void AddHandlersFilter(IHandlersFilter filter)
+	{
+		if (filters == null)
+		{
+			filters = new List<IHandlersFilter>();
+		}
+		filters.Add(filter);
+	}
+
+	public virtual bool Contains(String name)
+	{
+		return HandlerByNameCache.ContainsKey(name);
+	}
+
+	public virtual bool Contains(Type service)
+	{
+		return GetHandler(service) != null;
+	}
+
+	public virtual IHandler[] GetAllHandlers()
+	{
+		var cache = HandlerByNameCache;
+		var list = new IHandler[cache.Values.Count];
+		cache.Values.CopyTo(list, 0);
+		return list;
+	}
+
+	public virtual IHandler[] GetAssignableHandlers(Type service)
+	{
+		if (service == null)
+		{
+			throw new ArgumentNullException(nameof(service));
+		}
+		if (service == typeof(object))
+		{
+			return GetAllHandlers();
+		}
+		return GetAssignableHandlersNoFiltering(service);
+	}
+
+	public virtual IHandler GetHandler(String name)
+	{
+		if (name == null)
+		{
+			throw new ArgumentNullException(nameof(name));
+		}
+
+		if (selectors != null)
+		{
+			var selectorsOpinion = GetSelectorsOpinion(name, null);
+			if (selectorsOpinion != null)
+			{
+				return selectorsOpinion;
 			}
 		}
 
-		protected IDictionary<Type, IHandler> HandlerByServiceCache
+		IHandler value;
+		HandlerByNameCache.TryGetValue(name, out value);
+		return value;
+	}
+
+	public virtual IHandler GetHandler(Type service)
+	{
+		if (service == null)
 		{
-			get
+			throw new ArgumentNullException(nameof(service));
+		}
+		if (selectors != null)
+		{
+			var selectorsOpinion = GetSelectorsOpinion(null, service);
+			if (selectorsOpinion != null)
 			{
-				var cache = handlerByServiceCache;
-				if (cache != null)
-				{
-					return cache;
-				}
-				using (@lock.ForWriting())
-				{
-					cache = new Dictionary<Type, IHandler>(service2Handler.Count, service2Handler.Comparer);
-					foreach (var item in service2Handler)
-					{
-						cache.Add(item.Key, item.Value.Handler);
-					}
-					handlerByServiceCache = cache;
-					return cache;
-				}
+				return selectorsOpinion;
 			}
 		}
-
-		public void AddHandlerSelector(IHandlerSelector selector)
+		IHandler handler;
+		if (HandlerByServiceCache.TryGetValue(service, out handler))
 		{
-			if (selectors == null)
-			{
-				selectors = new List<IHandlerSelector>();
-			}
-			selectors.Add(selector);
+			return handler;
 		}
 
-		public void AddHandlersFilter(IHandlersFilter filter)
+		if (service.GetTypeInfo().IsGenericType && service.GetTypeInfo().IsGenericTypeDefinition == false)
 		{
-			if (filters == null)
-			{
-				filters = new List<IHandlersFilter>();
-			}
-			filters.Add(filter);
-		}
-
-		public virtual bool Contains(String name)
-		{
-			return HandlerByNameCache.ContainsKey(name);
-		}
-
-		public virtual bool Contains(Type service)
-		{
-			return GetHandler(service) != null;
-		}
-
-		public virtual IHandler[] GetAllHandlers()
-		{
-			var cache = HandlerByNameCache;
-			var list = new IHandler[cache.Values.Count];
-			cache.Values.CopyTo(list, 0);
-			return list;
-		}
-
-		public virtual IHandler[] GetAssignableHandlers(Type service)
-		{
-			if (service == null)
-			{
-				throw new ArgumentNullException(nameof(service));
-			}
-			if (service == typeof(object))
-			{
-				return GetAllHandlers();
-			}
-			return GetAssignableHandlersNoFiltering(service);
-		}
-
-		public virtual IHandler GetHandler(String name)
-		{
-			if (name == null)
-			{
-				throw new ArgumentNullException(nameof(name));
-			}
-
-			if (selectors != null)
-			{
-				var selectorsOpinion = GetSelectorsOpinion(name, null);
-				if (selectorsOpinion != null)
-				{
-					return selectorsOpinion;
-				}
-			}
-
-			IHandler value;
-			HandlerByNameCache.TryGetValue(name, out value);
-			return value;
-		}
-
-		public virtual IHandler GetHandler(Type service)
-		{
-			if (service == null)
-			{
-				throw new ArgumentNullException(nameof(service));
-			}
-			if (selectors != null)
-			{
-				var selectorsOpinion = GetSelectorsOpinion(null, service);
-				if (selectorsOpinion != null)
-				{
-					return selectorsOpinion;
-				}
-			}
-			IHandler handler;
-			if (HandlerByServiceCache.TryGetValue(service, out handler))
+			var openService = service.GetGenericTypeDefinition();
+			if (HandlerByServiceCache.TryGetValue(openService, out handler) && handler.Supports(service))
 			{
 				return handler;
 			}
 
-			if (service.GetTypeInfo().IsGenericType && service.GetTypeInfo().IsGenericTypeDefinition == false)
+			var handlerCandidates = GetHandlers(openService);
+			foreach (var handlerCandidate in handlerCandidates)
 			{
-				var openService = service.GetGenericTypeDefinition();
-				if (HandlerByServiceCache.TryGetValue(openService, out handler) && handler.Supports(service))
+				if (handlerCandidate.Supports(service))
 				{
-					return handler;
-				}
-
-				var handlerCandidates = GetHandlers(openService);
-				foreach (var handlerCandidate in handlerCandidates)
-				{
-					if (handlerCandidate.Supports(service))
-					{
-						return handlerCandidate;
-					}
+					return handlerCandidate;
 				}
 			}
-
-			return null;
 		}
 
-		public virtual IHandler[] GetHandlers(Type service)
+		return null;
+	}
+
+	public virtual IHandler[] GetHandlers(Type service)
+	{
+		if (service == null)
 		{
-			if (service == null)
+			throw new ArgumentNullException(nameof(service));
+		}
+		if (filters != null)
+		{
+			var filtersOpinion = GetFiltersOpinion(service);
+			if (filtersOpinion != null)
 			{
-				throw new ArgumentNullException(nameof(service));
+				return filtersOpinion;
 			}
-			if (filters != null)
+		}
+
+		IHandler[] result;
+		using var locker = @lock.ForReadingUpgradeable();
+		if (handlerListsByTypeCache.TryGetValue(service, out result))
+		{
+			return result;
+		}
+		result = GetHandlersNoLock(service);
+
+		locker.Upgrade();
+		handlerListsByTypeCache[service] = result;
+
+		return result;
+	}
+
+
+	public virtual void Register(IHandler handler)
+	{
+		var name = handler.ComponentModel.Name;
+		using (@lock.ForWriting())
+		{
+			try
 			{
-				var filtersOpinion = GetFiltersOpinion(service);
-				if (filtersOpinion != null)
+				name2Handler.Add(name, handler);
+			}
+			catch (ArgumentException)
+			{
+				throw new ComponentRegistrationException(
+					String.Format(
+						"Component {0} could not be registered. There is already a component with that name. Did you want to modify the existing component instead? If not, make sure you specify a unique name.",
+						name));
+			}
+			var serviceSelector = GetServiceSelector(handler);
+			foreach (var service in handler.ComponentModel.Services)
+			{
+				var handlerForService = serviceSelector(service);
+				HandlerWithPriority previous;
+				if (service2Handler.TryGetValue(service, out previous) == false || handlerForService.Triumphs(previous))
 				{
-					return filtersOpinion;
+					service2Handler[service] = handlerForService;
 				}
 			}
+			InvalidateCache();
+		}
+	}
 
-			IHandler[] result;
-			using (var locker = @lock.ForReadingUpgradeable())
-			{
-				if (handlerListsByTypeCache.TryGetValue(service, out result))
-				{
-					return result;
-				}
-				result = GetHandlersNoLock(service);
-
-				locker.Upgrade();
-				handlerListsByTypeCache[service] = result;
-			}
-
+	protected IHandler[] GetAssignableHandlersNoFiltering(Type service)
+	{
+		IHandler[] result;
+		using var locker = @lock.ForReadingUpgradeable();
+		if (assignableHandlerListsByTypeCache.TryGetValue(service, out result))
+		{
 			return result;
 		}
 
-
-		public virtual void Register(IHandler handler)
+		locker.Upgrade();
+		if (assignableHandlerListsByTypeCache.TryGetValue(service, out result))
 		{
-			var name = handler.ComponentModel.Name;
-			using (@lock.ForWriting())
-			{
-				try
-				{
-					name2Handler.Add(name, handler);
-				}
-				catch (ArgumentException)
-				{
-					throw new ComponentRegistrationException(
-						String.Format(
-							"Component {0} could not be registered. There is already a component with that name. Did you want to modify the existing component instead? If not, make sure you specify a unique name.",
-							name));
-				}
-				var serviceSelector = GetServiceSelector(handler);
-				foreach (var service in handler.ComponentModel.Services)
-				{
-					var handlerForService = serviceSelector(service);
-					HandlerWithPriority previous;
-					if (service2Handler.TryGetValue(service, out previous) == false || handlerForService.Triumphs(previous))
-					{
-						service2Handler[service] = handlerForService;
-					}
-				}
-				InvalidateCache();
-			}
-		}
-
-		protected IHandler[] GetAssignableHandlersNoFiltering(Type service)
-		{
-			IHandler[] result;
-			using (var locker = @lock.ForReadingUpgradeable())
-			{
-				if (assignableHandlerListsByTypeCache.TryGetValue(service, out result))
-				{
-					return result;
-				}
-
-				locker.Upgrade();
-				if (assignableHandlerListsByTypeCache.TryGetValue(service, out result))
-				{
-					return result;
-				}
-				result = name2Handler.Values.Where(h => h.SupportsAssignable(service)).ToArray();
-				assignableHandlerListsByTypeCache[service] = result;
-			}
-
 			return result;
 		}
+		result = name2Handler.Values.Where(h => h.SupportsAssignable(service)).ToArray();
+		assignableHandlerListsByTypeCache[service] = result;
 
-		protected virtual IHandler[] GetFiltersOpinion(Type service)
+		return result;
+	}
+
+	protected virtual IHandler[] GetFiltersOpinion(Type service)
+	{
+		if (filters == null)
 		{
-			if (filters == null)
-			{
-				return null;
-			}
-
-			IHandler[] handlers = null;
-			foreach (var filter in filters)
-			{
-				if (filter.HasOpinionAbout(service) == false)
-				{
-					continue;
-				}
-				if (handlers == null)
-				{
-					handlers = GetAssignableHandlersNoFiltering(service);
-				}
-				handlers = filter.SelectHandlers(service, handlers);
-				if (handlers != null)
-				{
-					return handlers;
-				}
-			}
 			return null;
 		}
 
-		protected virtual IHandler GetSelectorsOpinion(string name, Type type)
+		IHandler[] handlers = null;
+		foreach (var filter in filters)
 		{
-			if (selectors == null)
+			if (filter.HasOpinionAbout(service) == false)
 			{
-				return null;
+				continue;
 			}
-			type = type ?? typeof(object); // if type is null, we want everything, so object does well for that
-			IHandler[] handlers = null; //only init if we have a selector with an opinion about this type
-			foreach (var selector in selectors)
+			if (handlers == null)
 			{
-				if (selector.HasOpinionAbout(name, type) == false)
-				{
-					continue;
-				}
-				if (handlers == null)
-				{
-					handlers = GetAssignableHandlersNoFiltering(type);
-				}
-				var handler = selector.SelectHandler(name, type, handlers);
-				if (handler != null)
-				{
-					return handler;
-				}
+				handlers = GetAssignableHandlersNoFiltering(service);
 			}
+			handlers = filter.SelectHandlers(service, handlers);
+			if (handlers != null)
+			{
+				return handlers;
+			}
+		}
+		return null;
+	}
+
+	protected virtual IHandler GetSelectorsOpinion(string name, Type type)
+	{
+		if (selectors == null)
+		{
 			return null;
 		}
-
-		protected void InvalidateCache()
+		type = type ?? typeof(object); // if type is null, we want everything, so object does well for that
+		IHandler[] handlers = null; //only init if we have a selector with an opinion about this type
+		foreach (var selector in selectors)
 		{
-			handlerListsByTypeCache.Clear();
-			assignableHandlerListsByTypeCache.Clear();
-			handlerByNameCache = null;
-			handlerByServiceCache = null;
-		}
-
-		private IHandler[] GetHandlersNoLock(Type service)
-		{
-			//we have 3 segments
-			const int defaults = 0;
-			const int regulars = 1;
-			const int fallbacks = 2;
-			var handlers = new SegmentedList<IHandler>(3);
-			foreach (var handler in name2Handler.Values)
+			if (selector.HasOpinionAbout(name, type) == false)
 			{
-				if (handler.Supports(service) == false)
-				{
-					continue;
-				}
-				if (IsDefault(handler, service))
-				{
-					handlers.AddFirst(defaults, handler);
-					continue;
-				}
-				if (IsFallback(handler, service))
-				{
-					handlers.AddLast(fallbacks, handler);
-					continue;
-				}
-				handlers.AddLast(regulars, handler);
+				continue;
 			}
-			return handlers.ToArray();
-		}
-
-		private Func<Type, HandlerWithPriority> GetServiceSelector(IHandler handler)
-		{
-			var defaultsFilter = handler.ComponentModel.GetDefaultComponentForServiceFilter();
-			var fallbackFilter = handler.ComponentModel.GetFallbackComponentForServiceFilter();
-			if (defaultsFilter == null)
+			if (handlers == null)
 			{
-				if (fallbackFilter == null)
-				{
-					return service => new HandlerWithPriority(0, handler);
-				}
-				return service => new HandlerWithPriority(fallbackFilter(service) ? -1 : 0, handler);
+				handlers = GetAssignableHandlersNoFiltering(type);
 			}
+			var handler = selector.SelectHandler(name, type, handlers);
+			if (handler != null)
+			{
+				return handler;
+			}
+		}
+		return null;
+	}
+
+	protected void InvalidateCache()
+	{
+		handlerListsByTypeCache.Clear();
+		assignableHandlerListsByTypeCache.Clear();
+		handlerByNameCache = null;
+		handlerByServiceCache = null;
+	}
+
+	private IHandler[] GetHandlersNoLock(Type service)
+	{
+		//we have 3 segments
+		const int defaults = 0;
+		const int regulars = 1;
+		const int fallbacks = 2;
+		var handlers = new SegmentedList<IHandler>(3);
+		foreach (var handler in name2Handler.Values)
+		{
+			if (handler.Supports(service) == false)
+			{
+				continue;
+			}
+			if (IsDefault(handler, service))
+			{
+				handlers.AddFirst(defaults, handler);
+				continue;
+			}
+			if (IsFallback(handler, service))
+			{
+				handlers.AddLast(fallbacks, handler);
+				continue;
+			}
+			handlers.AddLast(regulars, handler);
+		}
+		return handlers.ToArray();
+	}
+
+	private Func<Type, HandlerWithPriority> GetServiceSelector(IHandler handler)
+	{
+		var defaultsFilter = handler.ComponentModel.GetDefaultComponentForServiceFilter();
+		var fallbackFilter = handler.ComponentModel.GetFallbackComponentForServiceFilter();
+		if (defaultsFilter == null)
+		{
 			if (fallbackFilter == null)
 			{
-				return service => new HandlerWithPriority(defaultsFilter(service) ? 1 : 0, handler);
+				return service => new HandlerWithPriority(0, handler);
 			}
-			return service => new HandlerWithPriority(defaultsFilter(service) ? 1 : (fallbackFilter(service) ? -1 : 0), handler);
+			return service => new HandlerWithPriority(fallbackFilter(service) ? -1 : 0, handler);
+		}
+		if (fallbackFilter == null)
+		{
+			return service => new HandlerWithPriority(defaultsFilter(service) ? 1 : 0, handler);
+		}
+		return service => new HandlerWithPriority(defaultsFilter(service) ? 1 : (fallbackFilter(service) ? -1 : 0), handler);
+	}
+
+	private bool IsDefault(IHandler handler, Type service)
+	{
+		var filter = handler.ComponentModel.GetDefaultComponentForServiceFilter();
+		if (filter == null)
+		{
+			return false;
+		}
+		return filter(service);
+	}
+
+	private bool IsFallback(IHandler handler, Type service)
+	{
+		var filter = handler.ComponentModel.GetFallbackComponentForServiceFilter();
+		if (filter == null)
+		{
+			return false;
+		}
+		return filter(service);
+	}
+
+	protected struct HandlerWithPriority(int priority, IHandler handler)
+	{
+		private readonly int priority = priority;
+
+		public IHandler Handler
+		{
+			get { return handler; }
 		}
 
-		private bool IsDefault(IHandler handler, Type service)
+		public bool Triumphs(HandlerWithPriority other)
 		{
-			var filter = handler.ComponentModel.GetDefaultComponentForServiceFilter();
-			if (filter == null)
+			if (priority > other.priority)
 			{
-				return false;
+				return true;
 			}
-			return filter(service);
-		}
-
-		private bool IsFallback(IHandler handler, Type service)
-		{
-			var filter = handler.ComponentModel.GetFallbackComponentForServiceFilter();
-			if (filter == null)
+			if (priority == other.priority && priority > 0)
 			{
-				return false;
+				return true;
 			}
-			return filter(service);
-		}
-
-		protected struct HandlerWithPriority
-		{
-			private readonly IHandler handler;
-			private readonly int priority;
-
-			public HandlerWithPriority(int priority, IHandler handler)
-			{
-				this.priority = priority;
-				this.handler = handler;
-			}
-
-			public IHandler Handler
-			{
-				get { return handler; }
-			}
-
-			public bool Triumphs(HandlerWithPriority other)
-			{
-				if (priority > other.priority)
-				{
-					return true;
-				}
-				if (priority == other.priority && priority > 0)
-				{
-					return true;
-				}
-				return false;
-			}
+			return false;
 		}
 	}
 }

@@ -12,20 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class MySpecification(IRepository<int> repository) : ISpecification
 {
-	public class MySpecification : ISpecification
+	public IRepository<int> Repository
 	{
-		private readonly IRepository<int> repository;
-
-		public MySpecification(IRepository<int> repository)
-		{
-			this.repository = repository;
-		}
-
-		public IRepository<int> Repository
-		{
-			get { return repository; }
-		}
+		get { return repository; }
 	}
 }

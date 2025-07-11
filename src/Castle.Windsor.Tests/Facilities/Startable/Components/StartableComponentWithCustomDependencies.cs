@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.Startable.Components
+namespace Castle.Windsor.Tests.Facilities.Startable.Components;
+
+public class StartableComponentCustomDependencies : StartableComponent
 {
-	public class StartableComponentCustomDependencies : StartableComponent
+	public StartableComponentCustomDependencies(int config)
 	{
-		public StartableComponentCustomDependencies(int config)
-		{
-		}
 	}
 }

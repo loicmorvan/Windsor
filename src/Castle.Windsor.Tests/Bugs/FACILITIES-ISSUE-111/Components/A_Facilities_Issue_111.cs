@@ -1,31 +1,25 @@
-namespace Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111.Components
+namespace Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111.Components;
+
+using System;
+
+using Castle.Core;
+
+public class A_Facilities_Issue_111(IB_Facilities_Issue_111[] ibs) : IA_Facilities_Issue_111, IStartable
 {
-	using System;
+	IB_Facilities_Issue_111[] ibs = ibs;
 
-	using Castle.Core;
-
-	public class A_Facilities_Issue_111 : IA_Facilities_Issue_111, IStartable
+	public void Method()
 	{
-		public A_Facilities_Issue_111(IB_Facilities_Issue_111[] ibs)
-		{
-			this.ibs = ibs;
-		}
+		Console.WriteLine("A: Method");
+	}
 
-		IB_Facilities_Issue_111[] ibs;
+	public void Start()
+	{
+		Console.WriteLine("Started A");
+	}
 
-		public void Method()
-		{
-			Console.WriteLine("A: Method");
-		}
-
-		public void Start()
-		{
-			Console.WriteLine("Started A");
-		}
-
-		public void Stop()
-		{
-			Console.WriteLine("Stopped A");
-		}
+	public void Stop()
+	{
+		Console.WriteLine("Stopped A");
 	}
 }

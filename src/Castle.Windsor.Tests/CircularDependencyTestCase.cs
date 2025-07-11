@@ -15,19 +15,16 @@
 namespace Castle.Windsor.Tests
 {
 	using System;
+	using System.Reflection;
 
 	using Castle.Core;
-
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Registration;
+	using Castle.Windsor;
 	using Castle.Windsor.Configuration.Interpreters;
-	using Castle.XmlFiles;
-	using CastleTests;
-	using CastleTests.Components;
+	using Castle.Windsor.Tests.Components;
+	using Castle.Windsor.Tests.XmlFiles;
 
-	
-
-	
 	public class CircularDependencyTestCase : AbstractContainerTestCase
 	{
 		[Fact]
@@ -57,19 +54,6 @@ namespace Castle.Windsor.Tests
 			var component = Container.Resolve<SingletonComponent>();
 			Assert.NotNull(component.Dependency);
 			Assert.Equal(1, SingletonComponent.CtorCallsCount);
-		}
-
-		[Fact(Skip="This is not supported. Should be?")]
-		public void Should_not_try_to_instantiate_singletons_twice_when_circular_property_dependency()
-		{
-			SingletonPropertyComponent.CtorCallsCount = 0;
-			Container.Register(Component.For<SingletonPropertyComponent>(),
-			                   Component.For<SingletonPropertyDependency>());
-
-			var component = Container.Resolve<SingletonPropertyComponent>();
-			Assert.NotNull(component.Dependency);
-			Assert.Same(component, component.Dependency.Component);
-			Assert.Equal(1, SingletonPropertyComponent.CtorCallsCount);
 		}
 
 		[Fact]
@@ -132,8 +116,6 @@ namespace Castle.Windsor.Tests
 
 	namespace IOC51
 	{
-		using System.Reflection;
-
 		public interface IPathProvider
 		{
 			string Path { get; }
@@ -151,14 +133,9 @@ namespace Castle.Windsor.Tests
 			}
 		}
 
-		public class RelativeFilePath : IPathProvider
+		public class RelativeFilePath(IPathProvider basePathProvider, string extensionsPath) : IPathProvider
 		{
-			private readonly string _path;
-
-			public RelativeFilePath(IPathProvider basePathProvider, string extensionsPath)
-			{
-				_path = System.IO.Path.Combine(basePathProvider.Path + "\\", extensionsPath);
-			}
+			private readonly string _path = System.IO.Path.Combine(basePathProvider.Path + "\\", extensionsPath);
 
 			public string Path
 			{

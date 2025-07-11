@@ -12,38 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+
+using System.Collections.Generic;
+using System.Linq;
+
+using Castle.Core;
+using Castle.MicroKernel.Proxy;
+
+public class ProxyMixInsDescriptor(IEnumerable<IReference<object>> mixIns) : IComponentModelDescriptor
 {
-	using System.Collections.Generic;
-	using System.Linq;
-
-	using Castle.Core;
-	using Castle.MicroKernel.Proxy;
-
-	public class ProxyMixInsDescriptor : IComponentModelDescriptor
+	public void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
-		private readonly IEnumerable<IReference<object>> mixIns;
-
-		public ProxyMixInsDescriptor(IEnumerable<IReference<object>> mixIns)
+		if (!mixIns.Any())
 		{
-			this.mixIns = mixIns;
+			return;
 		}
-
-		public void BuildComponentModel(IKernel kernel, ComponentModel model)
+		var options = model.ObtainProxyOptions();
+		foreach (var mixIn in mixIns)
 		{
-			if (!mixIns.Any())
-			{
-				return;
-			}
-			var options = model.ObtainProxyOptions();
-			foreach (var mixIn in mixIns)
-			{
-				options.AddMixinReference(mixIn);
-			}
+			options.AddMixinReference(mixIn);
 		}
+	}
 
-		public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-		{
-		}
+	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+	{
 	}
 }

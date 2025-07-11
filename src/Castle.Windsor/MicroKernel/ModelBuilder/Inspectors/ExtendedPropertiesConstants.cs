@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors
+namespace Castle.MicroKernel.ModelBuilder.Inspectors;
+
+using System;
+
+/// <summary>
+///   Only to hold internal constants and get rid of 
+///   magic numbers and hardcode names.
+/// </summary>
+internal abstract class ExtendedPropertiesConstants
 {
-	using System;
+	public static readonly int Pool_Default_InitialPoolSize = 5;
+	public static readonly int Pool_Default_MaxPoolSize = 15;
 
-	/// <summary>
-	///   Only to hold internal constants and get rid of 
-	///   magic numbers and hardcode names.
-	/// </summary>
-	internal abstract class ExtendedPropertiesConstants
-	{
-		public static readonly int Pool_Default_InitialPoolSize = 5;
-		public static readonly int Pool_Default_MaxPoolSize = 15;
-
-		public static readonly String Pool_InitialPoolSize = "pool.initial.pool.size";
-		public static readonly String Pool_MaxPoolSize = "pool.max.pool.size";
-	}
+	public static readonly String Pool_InitialPoolSize = "pool.initial.pool.size";
+	public static readonly String Pool_MaxPoolSize = "pool.max.pool.size";
 }

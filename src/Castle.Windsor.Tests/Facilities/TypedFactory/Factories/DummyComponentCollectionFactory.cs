@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
+
+using System.Collections.Generic;
+
+using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+
+public interface DummyComponentCollectionFactory
 {
-	using System.Collections.Generic;
-
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
-
-	public interface DummyComponentCollectionFactory
-	{
-		ICollection<IDummyComponent> All();
-	}
+	ICollection<IDummyComponent> All();
 }

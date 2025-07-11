@@ -12,22 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+
+using System;
+
+/// <summary>
+/// Summary description for MessengerProtocolHandler.
+/// </summary>
+public class MessengerProtocolHandler : IProtocolHandler
 {
-	using System;
+	#region IProtocolHandler Members
 
-	/// <summary>
-	/// Summary description for MessengerProtocolHandler.
-	/// </summary>
-	public class MessengerProtocolHandler : IProtocolHandler
+	public void Handle(String content)
 	{
-		#region IProtocolHandler Members
-
-		public void Handle(String content)
-		{
-			// TODO:  Add MessengerProtocolHandler.Handle implementation
-		}
-
-		#endregion
+		// TODO:  Add MessengerProtocolHandler.Handle implementation
 	}
+
+	#endregion
 }

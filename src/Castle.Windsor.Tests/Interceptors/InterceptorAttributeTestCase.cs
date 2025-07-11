@@ -12,67 +12,63 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Interceptors
+namespace Castle.Windsor.Tests.Interceptors;
+
+using Castle.DynamicProxy;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+
+public class InterceptorAttributeTestCase : AbstractContainerTestCase
 {
-	using Castle.DynamicProxy;
-	using Castle.MicroKernel.Registration;
-
-	using CastleTests.Components;
-
-	
-
-	public class InterceptorAttributeTestCase : AbstractContainerTestCase
+	private bool IsProxy(object instance)
 	{
-		private bool IsProxy(object instance)
-		{
-			return instance is IProxyTargetAccessor;
-		}
+		return instance is IProxyTargetAccessor;
+	}
 
-		private IInterceptor[] GetInterceptors(object proxy)
-		{
-			return ((IProxyTargetAccessor) proxy).GetInterceptors();
-		}
+	private IInterceptor[] GetInterceptors(object proxy)
+	{
+		return ((IProxyTargetAccessor) proxy).GetInterceptors();
+	}
 
-		[Fact]
-		public void Can_set_interceptor_via_attribute_many()
-		{
-			Container.Register(
-				Component.For<StandardInterceptor>(),
-				Component.For<StandardInterceptor>().Named("FooInterceptor"),
-				Component.For<ICalcService>().ImplementedBy<CalculatorServiceWithStandartInterceptorTwo>());
-			var calcService = Container.Resolve<ICalcService>();
-			Assert.True(IsProxy(calcService));
-			Assert.Equal(2, GetInterceptors(calcService).Length);
-		}
+	[Fact]
+	public void Can_set_interceptor_via_attribute_many()
+	{
+		Container.Register(
+			Component.For<StandardInterceptor>(),
+			Component.For<StandardInterceptor>().Named("FooInterceptor"),
+			Component.For<ICalcService>().ImplementedBy<CalculatorServiceWithStandartInterceptorTwo>());
+		var calcService = Container.Resolve<ICalcService>();
+		Assert.True(IsProxy(calcService));
+		Assert.Equal(2, GetInterceptors(calcService).Length);
+	}
 
-		[Fact]
-		public void Can_set_interceptor_via_attribute_named()
-		{
-			Container.Register(
-				Component.For<StandardInterceptor>().Named("FooInterceptor"),
-				Component.For<ICalcService>().ImplementedBy<CalculatorServiceWithFooInterceptorNamed>());
-			var calcService = Container.Resolve<ICalcService>();
-			Assert.True(IsProxy(calcService));
-		}
+	[Fact]
+	public void Can_set_interceptor_via_attribute_named()
+	{
+		Container.Register(
+			Component.For<StandardInterceptor>().Named("FooInterceptor"),
+			Component.For<ICalcService>().ImplementedBy<CalculatorServiceWithFooInterceptorNamed>());
+		var calcService = Container.Resolve<ICalcService>();
+		Assert.True(IsProxy(calcService));
+	}
 
-		[Fact]
-		public void Can_set_interceptor_via_attribute_typed()
-		{
-			Container.Register(
-				Component.For<StandardInterceptor>(),
-				Component.For<ICalcService>().ImplementedBy<CalculatorServiceWithStandartInterceptorTyped>());
-			var calcService = Container.Resolve<ICalcService>();
-			Assert.True(IsProxy(calcService));
-		}
+	[Fact]
+	public void Can_set_interceptor_via_attribute_typed()
+	{
+		Container.Register(
+			Component.For<StandardInterceptor>(),
+			Component.For<ICalcService>().ImplementedBy<CalculatorServiceWithStandartInterceptorTyped>());
+		var calcService = Container.Resolve<ICalcService>();
+		Assert.True(IsProxy(calcService));
+	}
 
-		[Fact]
-		public void Can_set_interceptor_via_inherited_attribute()
-		{
-			Container.Register(
-				Component.For<StandardInterceptor>(),
-				Component.For<CalculatorServiceWithStandardInterceptor>());
-			var calcService = Container.Resolve<CalculatorServiceWithStandardInterceptor>();
-			Assert.True(IsProxy(calcService));
-		}
+	[Fact]
+	public void Can_set_interceptor_via_inherited_attribute()
+	{
+		Container.Register(
+			Component.For<StandardInterceptor>(),
+			Component.For<CalculatorServiceWithStandardInterceptor>());
+		var calcService = Container.Resolve<CalculatorServiceWithStandardInterceptor>();
+		Assert.True(IsProxy(calcService));
 	}
 }

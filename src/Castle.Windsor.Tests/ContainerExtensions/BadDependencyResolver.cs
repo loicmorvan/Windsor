@@ -12,32 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.ContainerExtensions
+namespace Castle.Windsor.Tests.ContainerExtensions;
+
+using Castle.Core;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Context;
+using Castle.Windsor.Tests.Components;
+
+public class BadDependencyResolver(IKernel kernel) : ISubDependencyResolver
 {
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Context;
-	using Castle.Windsor.Tests.Components;
-
-	public class BadDependencyResolver : ISubDependencyResolver
+	public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+		DependencyModel dependency)
 	{
-		private readonly IKernel kernel;
+		return dependency.TargetType == typeof(IBookStore);
+	}
 
-		public BadDependencyResolver(IKernel kernel)
-		{
-			this.kernel = kernel;
-		}
-
-		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
-		                       DependencyModel dependency)
-		{
-			return dependency.TargetType == typeof(IBookStore);
-		}
-
-		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
-		                      DependencyModel dependency)
-		{
-			return kernel.Resolve<IBookStore>();
-		}
+	public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+		DependencyModel dependency)
+	{
+		return kernel.Resolve<IBookStore>();
 	}
 }

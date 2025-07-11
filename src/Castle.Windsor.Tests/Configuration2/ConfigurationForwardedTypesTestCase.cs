@@ -12,30 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Configuration2
+namespace Castle.Windsor.Tests.Configuration2;
+
+using Castle.Windsor;
+using Castle.Windsor.Tests.ClassComponents;
+
+public class ConfigurationForwardedTypesTestCase
 {
+	private readonly IWindsorContainer container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_forwarded_types.xml"));
 
-	using Castle.MicroKernel.Tests.ClassComponents;
-
-	
-
-	
-	public class ConfigurationForwardedTypesTestCase
+	[Fact]
+	public void Component_with_forwarded_types()
 	{
-
-		public ConfigurationForwardedTypesTestCase()
-		{
-			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_forwarded_types.xml"));
-		}
-
-		private IWindsorContainer container;
-
-		[Fact]
-		public void Component_with_forwarded_types()
-		{
-			var first = container.Resolve<ICommon>("hasForwards");
-			var second = container.Resolve<ICommon2>();
-			Assert.Same(first, second);
-		}
+		var first = container.Resolve<ICommon>("hasForwards");
+		var second = container.Resolve<ICommon2>();
+		Assert.Same(first, second);
 	}
 }

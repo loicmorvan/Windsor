@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Startable
+namespace Castle.Facilities.Startable;
+
+public interface IStartFlagInternal
 {
-	public interface IStartFlagInternal
-	{
-		void Init(StartableFacility.StartableEvents events);
-	}
+	void Init(StartableFacility.StartableEvents events);
 }

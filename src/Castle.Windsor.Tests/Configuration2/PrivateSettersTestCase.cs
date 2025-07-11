@@ -12,39 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Configuration2
-{
-	using Config = Castle.Windsor.Installer.Configuration;
+namespace Castle.Windsor.Tests.Configuration2;
+
+using Castle.Windsor;
+
+using Config = Castle.Windsor.Installer.Configuration;
 	
 
-	public class PrivateSettersTestCase
+public class PrivateSettersTestCase
+{
+	[Fact]
+	public void Private_setter_does_not_get_called_when_using_config()
 	{
-		[Fact]
-		public void Private_setter_does_not_get_called_when_using_config()
-		{
-			var container = new WindsorContainer();
-			container.Install(
-				Config.FromXmlFile(
-					ConfigHelper.ResolveConfigPath("Configuration2/class_with_private_setter.xml")));
+		var container = new WindsorContainer();
+		container.Install(
+			Config.FromXmlFile(
+				ConfigHelper.ResolveConfigPath("Configuration2/class_with_private_setter.xml")));
 
-			var item = container.Resolve<IMyConfiguration>();
-			Assert.Equal(1234, item.Port);
+		var item = container.Resolve<IMyConfiguration>();
+		Assert.Equal(1234, item.Port);
 
-		}
 	}
+}
 
-	public interface IMyConfiguration
-	{
-		int Port { get; }
-	}
+public interface IMyConfiguration
+{
+	int Port { get; }
+}
 
-	public class MyConfiguration : IMyConfiguration
-	{
-		public MyConfiguration(int port)
-		{
-			Port = port;
-		}
-
-		public int Port { get; private set; }
-	}
+public class MyConfiguration(int port) : IMyConfiguration
+{
+	public int Port { get; private set; } = port;
 }

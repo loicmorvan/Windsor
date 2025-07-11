@@ -12,36 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Configuration.Components
+namespace Castle.Windsor.Tests.Config.Components;
+
+using System;
+
+/// <summary>
+///   Summary description for ClassWithConstructors.
+/// </summary>
+public class ClassWithConstructors
 {
-	using System;
+	private readonly String host;
+	private readonly String[] hosts;
 
-	/// <summary>
-	///   Summary description for ClassWithConstructors.
-	/// </summary>
-	public class ClassWithConstructors
+	public ClassWithConstructors(String host)
 	{
-		private readonly String host;
-		private readonly String[] hosts;
+		this.host = host;
+	}
 
-		public ClassWithConstructors(String host)
-		{
-			this.host = host;
-		}
+	public ClassWithConstructors(String[] hosts)
+	{
+		this.hosts = hosts;
+	}
 
-		public ClassWithConstructors(String[] hosts)
-		{
-			this.hosts = hosts;
-		}
+	public String Host
+	{
+		get { return host; }
+	}
 
-		public String Host
-		{
-			get { return host; }
-		}
-
-		public String[] Hosts
-		{
-			get { return hosts; }
-		}
+	public String[] Hosts
+	{
+		get { return hosts; }
 	}
 }

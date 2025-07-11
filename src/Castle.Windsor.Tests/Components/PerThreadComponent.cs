@@ -12,19 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using Castle.Core;
+namespace Castle.Windsor.Tests.Components;
 
-	/// <summary>
-	///   Summary description for PerThreadComponent.
-	/// </summary>
-	[PerThread]
-	public class PerThreadComponent : IComponent
+using Castle.Core;
+
+/// <summary>
+///   Summary description for PerThreadComponent.
+/// </summary>
+[PerThread]
+public class PerThreadComponent : IComponent
+{
+	public int ID
 	{
-		public int ID
-		{
-			get { return GetHashCode(); }
-		}
+		get { return GetHashCode(); }
 	}
 }

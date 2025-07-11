@@ -12,15 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class HasNullDefaultForServiceDependency
-	{
-		public HasNullDefaultForServiceDependency(IEmptyService empty = null)
-		{
-			Dependency = empty;
-		}
+namespace Castle.Windsor.Tests.Components;
 
-		public IEmptyService Dependency { get; private set; }
-	}
+public class HasNullDefaultForServiceDependency(IEmptyService empty = null)
+{
+	public IEmptyService Dependency { get; private set; } = empty;
 }

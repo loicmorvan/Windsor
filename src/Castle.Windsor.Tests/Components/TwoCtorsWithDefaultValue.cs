@@ -12,31 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class TwoCtorsWithDefaultValue
 {
-	public class TwoCtorsWithDefaultValue
+	private readonly int age;
+	private readonly string name;
+
+	public TwoCtorsWithDefaultValue(string name = "Stefan Mucha")
 	{
-		private readonly int age;
-		private readonly string name;
+		this.name = name;
+	}
 
-		public TwoCtorsWithDefaultValue(string name = "Stefan Mucha")
-		{
-			this.name = name;
-		}
+	public TwoCtorsWithDefaultValue(int age = 100)
+	{
+		this.age = age;
+	}
 
-		public TwoCtorsWithDefaultValue(int age = 100)
-		{
-			this.age = age;
-		}
+	public int Age
+	{
+		get { return age; }
+	}
 
-		public int Age
-		{
-			get { return age; }
-		}
-
-		public string Name
-		{
-			get { return name; }
-		}
+	public string Name
+	{
+		get { return name; }
 	}
 }

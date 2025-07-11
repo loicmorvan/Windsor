@@ -12,57 +12,56 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
+namespace Castle.Core.Internal;
+
+public static class Constants
 {
-	public static class Constants
+	private const string defaultComponentForServiceFilter = "castle.default-component-for-service-filter";
+	private const string fallbackComponentForServiceFilter = "castle.fallback-component-for-service-filter";
+	private const string genericImplementationMatchingStrategy = "castle.generic-matching-strategy";
+	private const string genericServiceStrategy = "castle.generic-service-strategy";
+
+	private const string propertyFilters = "castle.property-filters";
+	private const string scopeAccessorType = "castle.scope-accessor-type";
+	private const string scopeRootSelector = "castle.scope-root";
+
+	public static string DefaultComponentForServiceFilter
 	{
-		private const string defaultComponentForServiceFilter = "castle.default-component-for-service-filter";
-		private const string fallbackComponentForServiceFilter = "castle.fallback-component-for-service-filter";
-		private const string genericImplementationMatchingStrategy = "castle.generic-matching-strategy";
-		private const string genericServiceStrategy = "castle.generic-service-strategy";
+		get { return defaultComponentForServiceFilter; }
+	}
 
-		private const string propertyFilters = "castle.property-filters";
-		private const string scopeAccessorType = "castle.scope-accessor-type";
-		private const string scopeRootSelector = "castle.scope-root";
+	public static string ExceptionHelpLink
+	{
+		get { return "http://www.castleproject.org/"; }
+	}
 
-		public static string DefaultComponentForServiceFilter
-		{
-			get { return defaultComponentForServiceFilter; }
-		}
+	public static string FallbackComponentForServiceFilter
+	{
+		get { return fallbackComponentForServiceFilter; }
+	}
 
-		public static string ExceptionHelpLink
-		{
-			get { return "http://www.castleproject.org/"; }
-		}
+	public static string GenericImplementationMatchingStrategy
+	{
+		get { return genericImplementationMatchingStrategy; }
+	}
 
-		public static string FallbackComponentForServiceFilter
-		{
-			get { return fallbackComponentForServiceFilter; }
-		}
+	public static string GenericServiceStrategy
+	{
+		get { return genericServiceStrategy; }
+	}
 
-		public static string GenericImplementationMatchingStrategy
-		{
-			get { return genericImplementationMatchingStrategy; }
-		}
+	public static string PropertyFilters
+	{
+		get { return propertyFilters; }
+	}
 
-		public static string GenericServiceStrategy
-		{
-			get { return genericServiceStrategy; }
-		}
+	public static string ScopeAccessorType
+	{
+		get { return scopeAccessorType; }
+	}
 
-		public static string PropertyFilters
-		{
-			get { return propertyFilters; }
-		}
-
-		public static string ScopeAccessorType
-		{
-			get { return scopeAccessorType; }
-		}
-
-		public static string ScopeRootSelector
-		{
-			get { return scopeRootSelector; }
-		}
+	public static string ScopeRootSelector
+	{
+		get { return scopeRootSelector; }
 	}
 }

@@ -12,57 +12,56 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.LifecycleConcerns
+namespace Castle.MicroKernel.LifecycleConcerns;
+
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+
+using Castle.Core;
+using System.Collections.Concurrent;
+
+/// <summary>
+///   Lifetime concern that works for components that don't have their actual type determined upfront
+/// </summary>
+[Serializable]
+public abstract class LateBoundConcerns<TConcern>
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Reflection;
+	private IDictionary<Type, TConcern> concerns;
+	private ConcurrentDictionary<Type, List<TConcern>> concernsCache;
 
-	using Castle.Core;
-	using System.Collections.Concurrent;
-
-	/// <summary>
-	///   Lifetime concern that works for components that don't have their actual type determined upfront
-	/// </summary>
-	[Serializable]
-	public abstract class LateBoundConcerns<TConcern>
+	public bool HasConcerns
 	{
-		private IDictionary<Type, TConcern> concerns;
-		private ConcurrentDictionary<Type, List<TConcern>> concernsCache;
+		get { return concerns != null; }
+	}
 
-		public bool HasConcerns
+	public void AddConcern<TForType>(TConcern lifecycleConcern)
+	{
+		if (concerns == null)
 		{
-			get { return concerns != null; }
+			concerns = new Dictionary<Type, TConcern>(2);
+			concernsCache = new ConcurrentDictionary<Type, List<TConcern>>(2, 2);
 		}
+		concerns.Add(typeof(TForType), lifecycleConcern);
+	}
 
-		public void AddConcern<TForType>(TConcern lifecycleConcern)
+	public abstract void Apply(ComponentModel model, object component);
+
+	private List<TConcern> BuildConcernCache(Type type)
+	{
+		var componentConcerns = new List<TConcern>(concerns.Count);
+		foreach (var concern in concerns)
 		{
-			if (concerns == null)
+			if (concern.Key.GetTypeInfo().IsAssignableFrom(type))
 			{
-				concerns = new Dictionary<Type, TConcern>(2);
-				concernsCache = new ConcurrentDictionary<Type, List<TConcern>>(2, 2);
+				componentConcerns.Add(concern.Value);
 			}
-			concerns.Add(typeof(TForType), lifecycleConcern);
 		}
+		return componentConcerns;
+	}
 
-		public abstract void Apply(ComponentModel model, object component);
-
-		private List<TConcern> BuildConcernCache(Type type)
-		{
-			var componentConcerns = new List<TConcern>(concerns.Count);
-			foreach (var concern in concerns)
-			{
-				if (concern.Key.GetTypeInfo().IsAssignableFrom(type))
-				{
-					componentConcerns.Add(concern.Value);
-				}
-			}
-			return componentConcerns;
-		}
-
-		protected List<TConcern> GetComponentConcerns(Type type)
-		{
-			return concernsCache.GetOrAdd(type, BuildConcernCache);
-		}
+	protected List<TConcern> GetComponentConcerns(Type type)
+	{
+		return concernsCache.GetOrAdd(type, BuildConcernCache);
 	}
 }

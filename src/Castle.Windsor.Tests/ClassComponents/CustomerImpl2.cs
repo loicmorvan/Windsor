@@ -12,26 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
-{
-	using System;
+namespace Castle.Windsor.Tests.ClassComponents;
 
+using System;
+
+/// <summary>
+/// 
+/// </summary>
+public class CustomerImpl2 : CustomerImpl
+{
 	/// <summary>
 	/// 
 	/// </summary>
-	public class CustomerImpl2 : CustomerImpl
+	/// <param name="name"></param>
+	/// <param name="address"></param>
+	/// <param name="age"></param>
+	public CustomerImpl2(String name, String address, int age)
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="address"></param>
-		/// <param name="age"></param>
-		public CustomerImpl2(String name, String address, int age)
-		{
-			Name = name;
-			Address = address;
-			Age = age;
-		}
+		Name = name;
+		Address = address;
+		Age = age;
 	}
 }

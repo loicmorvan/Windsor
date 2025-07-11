@@ -12,34 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Util
+namespace Castle.MicroKernel.Util;
+
+using System;
+
+public abstract class ReferenceExpressionUtil
 {
-	using System;
-
-	public abstract class ReferenceExpressionUtil
+	public static string BuildReference(string value)
 	{
-		public static string BuildReference(string value)
+		if (IsReference(value))
 		{
-			if (IsReference(value))
-			{
-				return value;
-			}
-			return String.Format("${{{0}}}", value);
+			return value;
+		}
+		return String.Format("${{{0}}}", value);
+	}
+
+	public static String ExtractComponentName(String value)
+	{
+		if (IsReference(value))
+		{
+			return value.Substring(2, value.Length - 3);
 		}
 
-		public static String ExtractComponentName(String value)
-		{
-			if (IsReference(value))
-			{
-				return value.Substring(2, value.Length - 3);
-			}
+		return null;
+	}
 
-			return null;
-		}
-
-		public static bool IsReference(String value)
-		{
-			return value != null && value.Length > 3 && value.StartsWith("${") && value.EndsWith("}");
-		}
+	public static bool IsReference(String value)
+	{
+		return value != null && value.Length > 3 && value.StartsWith("${") && value.EndsWith("}");
 	}
 }

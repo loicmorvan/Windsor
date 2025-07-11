@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Selectors
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
+
+using Castle.Facilities.TypedFactory;
+
+public class SimpleSelector : DefaultTypedFactoryComponentSelector
 {
-	using Castle.Facilities.TypedFactory;
+	public static int InstancesCreated;
 
-	public class SimpleSelector : DefaultTypedFactoryComponentSelector
+	public SimpleSelector()
 	{
-		public static int InstancesCreated;
-
-		public SimpleSelector()
-		{
-			InstancesCreated++;
-		}
+		InstancesCreated++;
 	}
 }

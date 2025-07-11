@@ -12,25 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class CtorWithNullDefaultValueAndDefault(string name = null)
 {
-	public class CtorWithNullDefaultValueAndDefault
+	public CtorWithNullDefaultValueAndDefault() : this("Stefan Mucha")
 	{
-		private readonly string name;
+	}
 
-		public CtorWithNullDefaultValueAndDefault(string name = null)
-		{
-			this.name = name;
-		}
-
-		public CtorWithNullDefaultValueAndDefault()
-		{
-			name = "Stefan Mucha";
-		}
-
-		public string Name
-		{
-			get { return name; }
-		}
+	public string Name
+	{
+		get { return name; }
 	}
 }

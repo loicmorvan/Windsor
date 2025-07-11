@@ -12,23 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+/// <summary>
+/// Summary description for CommonServiceUser.
+/// </summary>
+public class CommonServiceUser(ICommon common)
 {
-	/// <summary>
-	/// Summary description for CommonServiceUser.
-	/// </summary>
-	public class CommonServiceUser
+	public ICommon CommonService
 	{
-		private readonly ICommon common;
-
-		public CommonServiceUser(ICommon common)
-		{
-			this.common = common;
-		}
-
-		public ICommon CommonService
-		{
-			get { return common; }
-		}
+		get { return common; }
 	}
 }

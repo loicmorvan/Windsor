@@ -12,27 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+public class Root(Branch branch, Leaf leaf)
 {
-	public class Root
+	public Branch Branch
 	{
-		private readonly Branch branch;
-		private readonly Leaf leaf;
+		get { return branch; }
+	}
 
-		public Root(Branch branch, Leaf leaf)
-		{
-			this.branch = branch;
-			this.leaf = leaf;
-		}
-
-		public Branch Branch
-		{
-			get { return branch; }
-		}
-
-		public Leaf Leaf
-		{
-			get { return leaf; }
-		}
+	public Leaf Leaf
+	{
+		get { return leaf; }
 	}
 }

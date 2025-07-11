@@ -12,25 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Registration
+namespace Castle.Windsor.Tests.Registration;
+
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
+
+public class AssignableHandlersTestCase : AbstractContainerTestCase
 {
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Tests.ClassComponents;
-
-	
-
-	
-	public class AssignableHandlersTestCase : AbstractContainerTestCase
+	[Fact]
+	public void Ignores_generic_components_where_generic_constrants_are_violated()
 	{
-		[Fact]
-		public void Ignores_generic_components_where_generic_constrants_are_violated()
-		{
-			Kernel.Register(Component.For<CustomerValidator>(),
-			                Component.For(typeof(CustomerChainValidator<>)));
+		Kernel.Register(Component.For<CustomerValidator>(),
+			Component.For(typeof(CustomerChainValidator<>)));
 
-			var handlers = Kernel.GetAssignableHandlers(typeof(IValidator<CustomerImpl>));
+		var handlers = Kernel.GetAssignableHandlers(typeof(IValidator<CustomerImpl>));
 
-			Assert.Single(handlers);
-		}
+		Assert.Single(handlers);
 	}
 }

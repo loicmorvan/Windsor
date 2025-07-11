@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class UsesIEmptyService
 {
-	public class UsesIEmptyService
+	public static int instancesCreated ;
+
+
+
+	public UsesIEmptyService(IEmptyService emptyService)
 	{
-		public static int instancesCreated ;
-
-
-
-		public UsesIEmptyService(IEmptyService emptyService)
-		{
-			instancesCreated++;
-			EmptyService = emptyService;
-		}
-
-		public IEmptyService EmptyService { get; private set; }
+		instancesCreated++;
+		EmptyService = emptyService;
 	}
+
+	public IEmptyService EmptyService { get; private set; }
 }

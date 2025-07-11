@@ -12,25 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.LifecycleConcerns
+namespace Castle.MicroKernel.LifecycleConcerns;
+
+using Castle.Core;
+
+public class OnDestroyConcern<TComponent>(LifecycleActionDelegate<TComponent> action, IKernel kernel) : IDecommissionConcern
 {
-	using Castle.Core;
-
-	public class OnDestroyConcern<TComponent> : IDecommissionConcern
+	public void Apply(ComponentModel model, object component)
 	{
-		private readonly LifecycleActionDelegate<TComponent> action;
-		private readonly IKernel kernel;
-
-		public OnDestroyConcern(LifecycleActionDelegate<TComponent> action, IKernel kernel)
-		{
-			this.action = action;
-			this.kernel = kernel;
-		}
-
-		public void Apply(ComponentModel model, object component)
-		{
-			var item = (TComponent)component;
-			action(kernel, item);
-		}
+		var item = (TComponent)component;
+		action(kernel, item);
 	}
 }

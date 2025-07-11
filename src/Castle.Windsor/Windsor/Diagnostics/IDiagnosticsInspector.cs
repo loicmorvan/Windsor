@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
+namespace Castle.Windsor.Diagnostics;
+
+public interface IDiagnosticsInspector<in TData, TContext>
 {
-	public interface IDiagnosticsInspector<in TData, TContext>
-	{
-		void Inspect(TData data, TContext context);
-	}
+	void Inspect(TData data, TContext context);
 }

@@ -12,22 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+using System.Collections.Generic;
+
+public class AppHost(IEnumerable<IAppScreen> screens)
 {
-	using System.Collections.Generic;
-
-	public class AppHost
+	public IEnumerable<IAppScreen> Screens
 	{
-		private readonly IEnumerable<IAppScreen> screens;
-
-		public AppHost(IEnumerable<IAppScreen> screens)
-		{
-			this.screens = screens;
-		}
-
-		public IEnumerable<IAppScreen> Screens
-		{
-			get { return screens; }
-		}
+		get { return screens; }
 	}
 }

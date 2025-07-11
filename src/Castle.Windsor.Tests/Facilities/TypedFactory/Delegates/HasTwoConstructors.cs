@@ -12,32 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
+
+public class HasTwoConstructors(Baz baz, string name)
 {
-	public class HasTwoConstructors
+	public HasTwoConstructors(Baz baz) : this(baz, null)
 	{
-		private readonly Baz baz;
-		private readonly string name;
+	}
 
-		public HasTwoConstructors(Baz baz)
-		{
-			this.baz = baz;
-		}
+	public Baz Baz
+	{
+		get { return baz; }
+	}
 
-		public HasTwoConstructors(Baz baz, string name)
-		{
-			this.baz = baz;
-			this.name = name;
-		}
-
-		public Baz Baz
-		{
-			get { return baz; }
-		}
-
-		public string Name
-		{
-			get { return name; }
-		}
+	public string Name
+	{
+		get { return name; }
 	}
 }

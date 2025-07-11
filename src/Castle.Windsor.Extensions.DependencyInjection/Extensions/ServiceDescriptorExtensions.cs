@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Extensions
+namespace Castle.Windsor.Extensions.DependencyInjection.Extensions;
+
+using Castle.MicroKernel.Registration;
+
+public static class ServiceDescriptorExtensions
 {
-	using Castle.MicroKernel.Registration;
-
-	public static class ServiceDescriptorExtensions
+	public static IRegistration CreateWindsorRegistration(this Microsoft.Extensions.DependencyInjection.ServiceDescriptor service)
 	{
-		public static IRegistration CreateWindsorRegistration(this Microsoft.Extensions.DependencyInjection.ServiceDescriptor service)
+		if (service.ServiceType.ContainsGenericParameters)
 		{
-			if (service.ServiceType.ContainsGenericParameters)
-			{
-				return RegistrationAdapter.FromOpenGenericServiceDescriptor(service);
-			}
-
-			return RegistrationAdapter.FromServiceDescriptor(service);
+			return RegistrationAdapter.FromOpenGenericServiceDescriptor(service);
 		}
+
+		return RegistrationAdapter.FromServiceDescriptor(service);
 	}
 }

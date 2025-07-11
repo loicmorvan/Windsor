@@ -12,38 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+
+using System;
+
+using Castle.Core;
+using Castle.Core.Internal;
+using Castle.MicroKernel.Registration;
+
+public class ParametersDescriptor(params Parameter[] parameters) : AbstractPropertyDescriptor
 {
-	using System;
-
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Registration;
-
-	public class ParametersDescriptor : AbstractPropertyDescriptor
+	public override void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
-		private readonly Parameter[] parameters;
+		parameters.ForEach(p => Apply(model, p));
+	}
 
-		public ParametersDescriptor(params Parameter[] parameters)
+	private void Apply(ComponentModel model, Parameter parameter)
+	{
+		if (parameter.Value != null)
 		{
-			this.parameters = parameters;
+			AddParameter(model, parameter.Key, parameter.Value);
 		}
-
-		public override void BuildComponentModel(IKernel kernel, ComponentModel model)
+		else if (parameter.ConfigNode != null)
 		{
-			parameters.ForEach(p => Apply(model, p));
-		}
-
-		private void Apply(ComponentModel model, Parameter parameter)
-		{
-			if (parameter.Value != null)
-			{
-				AddParameter(model, parameter.Key, parameter.Value);
-			}
-			else if (parameter.ConfigNode != null)
-			{
-				AddParameter(model, parameter.Key, parameter.ConfigNode);
-			}
+			AddParameter(model, parameter.Key, parameter.ConfigNode);
 		}
 	}
 }

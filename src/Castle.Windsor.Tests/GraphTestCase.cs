@@ -12,49 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests
+namespace Castle.Windsor.Tests;
+
+using System;
+
+using Castle.Core;
+using Castle.Core.Internal;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+
+public class GraphTestCase : IDisposable
 {
-	using System;
+	private readonly IKernel kernel = new DefaultKernel();
 
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests;
-
-	using CastleTests.Components;
-
-
-	public class GraphTestCase : IDisposable
+	public void Dispose()
 	{
-		private IKernel kernel;
+		kernel.Dispose();
+	}
 
-		public void Dispose()
-		{
-			kernel.Dispose();
-		}
+	[Fact]
+	public void TopologicalSortOnComponents()
+	{
+		kernel.Register(Component.For(typeof(A)).Named("a"));
+		kernel.Register(Component.For(typeof(B)).Named("b"));
+		kernel.Register(Component.For(typeof(C)).Named("c"));
 
-		public GraphTestCase()
-		{
-			kernel = new DefaultKernel();
-		}
+		var nodes = kernel.GraphNodes;
 
-		[Fact]
-		public void TopologicalSortOnComponents()
-		{
-			kernel.Register(Component.For(typeof(A)).Named("a"));
-			kernel.Register(Component.For(typeof(B)).Named("b"));
-			kernel.Register(Component.For(typeof(C)).Named("c"));
+		Assert.NotNull(nodes);
+		Assert.Equal(3, nodes.Length);
 
-			var nodes = kernel.GraphNodes;
+		var vertices = TopologicalSortAlgo.Sort(nodes);
 
-			Assert.NotNull(nodes);
-			Assert.Equal(3, nodes.Length);
-
-			var vertices = TopologicalSortAlgo.Sort(nodes);
-
-			Assert.Equal("c", (vertices[0] as ComponentModel).Name);
-			Assert.Equal("b", (vertices[1] as ComponentModel).Name);
-			Assert.Equal("a", (vertices[2] as ComponentModel).Name);
-		}
+		Assert.Equal("c", (vertices[0] as ComponentModel).Name);
+		Assert.Equal("b", (vertices[1] as ComponentModel).Name);
+		Assert.Equal("a", (vertices[2] as ComponentModel).Name);
 	}
 }

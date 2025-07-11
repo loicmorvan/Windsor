@@ -12,51 +12,47 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.TypedFactory
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
+
+using Castle.Facilities.TypedFactory;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
+
+public class TypedFactorySelectorsTestCase : AbstractContainerTestCase
 {
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
-
-	using CastleTests.Components;
-	using CastleTests.Facilities.TypedFactory.Selectors;
-	
-
-	
-	public class TypedFactorySelectorsTestCase : AbstractContainerTestCase
+	protected override void AfterContainerCreated()
 	{
-		protected override void AfterContainerCreated()
-		{
-			Container.AddFacility<TypedFactoryFacility>();
-		}
+		Container.AddFacility<TypedFactoryFacility>();
+	}
 
-		[Fact]
-		public void Explicitly_specified_name_fails_if_not_present()
-		{
+	[Fact]
+	public void Explicitly_specified_name_fails_if_not_present()
+	{
 
-			Container.Register(Component.For<A>(),
-			                   Component.For<A>().Named("name"),
-			                   Component.For<IGenericFactory<A>>().AsFactory(x => x.SelectedWith(new WithNameSelector("non existing name"))));
+		Container.Register(Component.For<A>(),
+			Component.For<A>().Named("name"),
+			Component.For<IGenericFactory<A>>().AsFactory(x => x.SelectedWith(new WithNameSelector("non existing name"))));
 
-			var factory = Container.Resolve<IGenericFactory<A>>();
+		var factory = Container.Resolve<IGenericFactory<A>>();
 
-			Assert.Throws<ComponentNotFoundException>(() => factory.Create());
+		Assert.Throws<ComponentNotFoundException>(() => factory.Create());
 
-		}
+	}
 
-		[Fact]
-		public void Implicitly_specified_name_falls_back_if_not_present()
-		{
+	[Fact]
+	public void Implicitly_specified_name_falls_back_if_not_present()
+	{
 
-			Container.Register(Component.For<A>(),
-							   Component.For<A>().Named("name"),
-							   Component.For<IGenericFactory<A>>().AsFactory(x => x.SelectedWith(new WithNameSelector("non existing name"))));
+		Container.Register(Component.For<A>(),
+			Component.For<A>().Named("name"),
+			Component.For<IGenericFactory<A>>().AsFactory(x => x.SelectedWith(new WithNameSelector("non existing name"))));
 
-			var factory = Container.Resolve<IGenericFactory<A>>();
+		var factory = Container.Resolve<IGenericFactory<A>>();
 
-			Assert.Throws<ComponentNotFoundException>(() => factory.Create());
+		Assert.Throws<ComponentNotFoundException>(() => factory.Create());
 
-		}
 	}
 }

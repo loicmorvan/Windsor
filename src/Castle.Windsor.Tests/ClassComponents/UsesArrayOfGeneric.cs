@@ -12,17 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+public class UsesArrayOfGeneric<T>(IGeneric<T> items)
 {
-	using CastleTests.ClassComponents;
-
-	public class UsesArrayOfGeneric<T>
-	{
-		public UsesArrayOfGeneric(IGeneric<T> items)
-		{
-			Items = items;
-		}
-
-		public IGeneric<T> Items { get; private set; }
-	}
+	public IGeneric<T> Items { get; private set; } = items;
 }

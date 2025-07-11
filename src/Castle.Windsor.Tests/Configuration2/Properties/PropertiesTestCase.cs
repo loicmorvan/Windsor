@@ -12,140 +12,136 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Configuration2.Properties
+namespace Castle.Windsor.Tests.Configuration2.Properties;
+
+using Castle.Windsor;
+using Castle.Windsor.Configuration.Interpreters;
+using Castle.Windsor.Tests.ClassComponents;
+
+public class PropertiesTestCase
 {
-	using Castle.MicroKernel.Tests.ClassComponents;
-	using Castle.Windsor.Configuration.Interpreters;
-	using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
+	private IWindsorContainer container;
 
-	
-
-	
-	public class PropertiesTestCase
+	[Fact]
+	public void CorrectEval()
 	{
-		private IWindsorContainer container;
+		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_properties.xml"));
 
-		[Fact]
-		public void CorrectEval()
-		{
-			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_properties.xml"));
+		AssertConfiguration();
+	}
 
-			AssertConfiguration();
-		}
+	[Fact]
+	public void MissingProperties()
+	{
+		Assert.Throws<ConfigurationProcessingException>(() =>
+			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_missing_properties.xml")));
+	}
 
-		[Fact]
-		public void MissingProperties()
-		{
-			Assert.Throws<ConfigurationProcessingException>(() =>
-				container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_missing_properties.xml")));
-		}
+	[Fact]
+	public void PropertiesAndDefines()
+	{
+		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_properties_and_defines.xml"));
 
-		[Fact]
-		public void PropertiesAndDefines()
-		{
-			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_properties_and_defines.xml"));
+		AssertConfiguration();
+	}
 
-			AssertConfiguration();
-		}
+	[Fact]
+	public void PropertiesAndDefines2()
+	{
+		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_properties_and_defines2.xml"));
 
-		[Fact]
-		public void PropertiesAndDefines2()
-		{
-			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_properties_and_defines2.xml"));
+		AssertConfiguration();
+	}
 
-			AssertConfiguration();
-		}
+	[Fact]
+	public void PropertiesAndIncludes()
+	{
+		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_properties_and_includes.xml"));
 
-		[Fact]
-		public void PropertiesAndIncludes()
-		{
-			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_properties_and_includes.xml"));
+		AssertConfiguration();
+	}
 
-			AssertConfiguration();
-		}
+	[Fact]
+	public void PropertiesWithinProperties()
+	{
+		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/properties_using_properties.xml"));
 
-		[Fact]
-		public void PropertiesWithinProperties()
-		{
-			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/properties_using_properties.xml"));
+		AssertConfiguration();
+	}
 
-			AssertConfiguration();
-		}
+	[Fact]
+	public void SilentProperties()
+	{
+		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_silent_properties.xml"));
 
-		[Fact]
-		public void SilentProperties()
-		{
-			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_silent_properties.xml"));
+		var store = container.Kernel.ConfigurationStore;
 
-			var store = container.Kernel.ConfigurationStore;
+		Assert.Single(store.GetFacilities());
+		Assert.Single(store.GetComponents());
 
-			Assert.Single(store.GetFacilities());
-			Assert.Single(store.GetComponents());
+		var config = store.GetFacilityConfiguration(typeof(NoopFacility).FullName);
+		var childItem = config.Children["param1"];
+		Assert.NotNull(childItem);
+		Assert.Equal("prop1 value", childItem.Value);
+		Assert.Equal("", childItem.Attributes["attr"]);
 
-			var config = store.GetFacilityConfiguration(typeof(NoopFacility).FullName);
-			var childItem = config.Children["param1"];
-			Assert.NotNull(childItem);
-			Assert.Equal("prop1 value", childItem.Value);
-			Assert.Equal("", childItem.Attributes["attr"]);
+		config = store.GetComponentConfiguration("component1");
+		childItem = config.Children["param1"];
+		Assert.NotNull(childItem);
+		Assert.Null(childItem.Value);
+		Assert.Equal("prop1 value", childItem.Attributes["attr"]);
+	}
 
-			config = store.GetComponentConfiguration("component1");
-			childItem = config.Children["param1"];
-			Assert.NotNull(childItem);
-			Assert.Null(childItem.Value);
-			Assert.Equal("prop1 value", childItem.Attributes["attr"]);
-		}
+	private void AssertConfiguration()
+	{
+		var store = container.Kernel.ConfigurationStore;
 
-		private void AssertConfiguration()
-		{
-			var store = container.Kernel.ConfigurationStore;
+		Assert.Equal(3, store.GetFacilities().Length);
+		Assert.Equal(2, store.GetComponents().Length);
 
-			Assert.Equal(3, store.GetFacilities().Length);
-			Assert.Equal(2, store.GetComponents().Length);
+		var config = store.GetFacilityConfiguration(typeof(NoopFacility).FullName);
+		var childItem = config.Children["item"];
+		Assert.NotNull(childItem);
+		Assert.Equal("prop1 value", childItem.Value);
 
-			var config = store.GetFacilityConfiguration(typeof(NoopFacility).FullName);
-			var childItem = config.Children["item"];
-			Assert.NotNull(childItem);
-			Assert.Equal("prop1 value", childItem.Value);
+		config = store.GetFacilityConfiguration(typeof(Noop2Facility).FullName);
+		Assert.NotNull(config);
+		childItem = config.Children["item"];
+		Assert.NotNull(childItem);
+		Assert.Equal("prop2 value", childItem.Attributes["value"]);
+		Assert.Null(childItem.Value);
 
-			config = store.GetFacilityConfiguration(typeof(Noop2Facility).FullName);
-			Assert.NotNull(config);
-			childItem = config.Children["item"];
-			Assert.NotNull(childItem);
-			Assert.Equal("prop2 value", childItem.Attributes["value"]);
-			Assert.Null(childItem.Value);
+		config = store.GetFacilityConfiguration(typeof(HiperFacility).FullName);
+		Assert.NotNull(config);
+		Assert.Equal(3, config.Children.Count);
 
-			config = store.GetFacilityConfiguration(typeof(HiperFacility).FullName);
-			Assert.NotNull(config);
-			Assert.Equal(3, config.Children.Count);
+		childItem = config.Children["param1"];
+		Assert.NotNull(childItem);
+		Assert.Equal("prop2 value", childItem.Value);
+		Assert.Equal("prop1 value", childItem.Attributes["attr"]);
 
-			childItem = config.Children["param1"];
-			Assert.NotNull(childItem);
-			Assert.Equal("prop2 value", childItem.Value);
-			Assert.Equal("prop1 value", childItem.Attributes["attr"]);
+		childItem = config.Children["param2"];
+		Assert.NotNull(childItem);
+		Assert.Equal("prop1 value", childItem.Value);
+		Assert.Equal("prop2 value", childItem.Attributes["attr"]);
 
-			childItem = config.Children["param2"];
-			Assert.NotNull(childItem);
-			Assert.Equal("prop1 value", childItem.Value);
-			Assert.Equal("prop2 value", childItem.Attributes["attr"]);
+		childItem = config.Children["param3"];
+		Assert.NotNull(childItem);
+		Assert.Equal("param3 attr", childItem.Attributes["attr"]);
 
-			childItem = config.Children["param3"];
-			Assert.NotNull(childItem);
-			Assert.Equal("param3 attr", childItem.Attributes["attr"]);
+		childItem = childItem.Children["value"];
+		Assert.NotNull(childItem);
+		Assert.Equal("param3 value", childItem.Value);
+		Assert.Equal("param3 value attr", childItem.Attributes["attr"]);
 
-			childItem = childItem.Children["value"];
-			Assert.NotNull(childItem);
-			Assert.Equal("param3 value", childItem.Value);
-			Assert.Equal("param3 value attr", childItem.Attributes["attr"]);
+		config = store.GetComponentConfiguration("component1");
+		childItem = config.Children["item"];
+		Assert.NotNull(childItem);
+		Assert.Equal("prop1 value", childItem.Value);
 
-			config = store.GetComponentConfiguration("component1");
-			childItem = config.Children["item"];
-			Assert.NotNull(childItem);
-			Assert.Equal("prop1 value", childItem.Value);
-
-			config = store.GetComponentConfiguration("component2");
-			childItem = config.Children["item"];
-			Assert.NotNull(childItem);
-			Assert.Equal("prop2 value", childItem.Attributes["value"]);
-		}
+		config = store.GetComponentConfiguration("component2");
+		childItem = config.Children["item"];
+		Assert.NotNull(childItem);
+		Assert.Equal("prop2 value", childItem.Attributes["value"]);
 	}
 }

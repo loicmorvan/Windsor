@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
-{
-	using System;
+namespace Castle.MicroKernel;
 
-	public delegate void HandlerStateDelegate(object source, EventArgs args);
-}
+using System;
+
+public delegate void HandlerStateDelegate(object source, EventArgs args);

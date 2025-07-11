@@ -12,37 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ComponentActivator
+namespace Castle.MicroKernel.ComponentActivator;
+
+using Castle.Core;
+using Castle.MicroKernel.Context;
+
+public class ExternalInstanceActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
+	: AbstractComponentActivator(model, kernel, onCreation, onDestruction), IDependencyAwareActivator
 {
-	using Castle.Core;
-	using Castle.MicroKernel.Context;
-
-	public class ExternalInstanceActivator : AbstractComponentActivator, IDependencyAwareActivator
+	public bool CanProvideRequiredDependencies(ComponentModel component)
 	{
-		public ExternalInstanceActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
-			: base(model, kernel, onCreation, onDestruction)
-		{
-		}
+		//we already have an instance so we don't need to provide any dependencies at all
+		return true;
+	}
 
-		public bool CanProvideRequiredDependencies(ComponentModel component)
-		{
-			//we already have an instance so we don't need to provide any dependencies at all
-			return true;
-		}
+	public bool IsManagedExternally(ComponentModel component)
+	{
+		return true;
+	}
 
-		public bool IsManagedExternally(ComponentModel component)
-		{
-			return true;
-		}
+	protected override object InternalCreate(CreationContext context)
+	{
+		return Model.ExtendedProperties["instance"];
+	}
 
-		protected override object InternalCreate(CreationContext context)
-		{
-			return Model.ExtendedProperties["instance"];
-		}
-
-		protected override void InternalDestroy(object instance)
-		{
-			// Nothing to do
-		}
+	protected override void InternalDestroy(object instance)
+	{
+		// Nothing to do
 	}
 }

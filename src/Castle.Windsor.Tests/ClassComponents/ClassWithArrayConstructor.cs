@@ -12,27 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+public class ClassWithArrayConstructor(ICommon first, ICommon[] services)
 {
-	public class ClassWithArrayConstructor
+	public ICommon First
 	{
-		private readonly ICommon[] services;
-		private readonly ICommon first;
+		get { return first; }
+	}
 
-		public ICommon First
-		{
-			get { return first; }
-		}
-
-		public ClassWithArrayConstructor(ICommon first, ICommon[] services)
-		{
-			this.first = first;
-			this.services = services;
-		}
-
-		public ICommon[] Services
-		{
-			get { return services; }
-		}
+	public ICommon[] Services
+	{
+		get { return services; }
 	}
 }

@@ -12,344 +12,329 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.SubContainers
+namespace Castle.Windsor.Tests.SubContainers;
+
+using System;
+using System.Collections.Generic;
+
+using Castle.Core;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Context;
+using Castle.MicroKernel.Handlers;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
+
+/// <summary>
+///   Summary description for SubContainersTestCase.
+/// </summary>
+	
+public class SubContainersTestCase : AbstractContainerTestCase
 {
-	using System;
-	using System.Collections.Generic;
-
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Handlers;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Tests.ClassComponents;
-	using Castle.Windsor.Tests.Components;
-
-	using CastleTests;
-	using CastleTests.Components;
-
-	
-
 	/// <summary>
-	///   Summary description for SubContainersTestCase.
+	///   collects events in an array list, used for ensuring we are cleaning up the parent kernel
+	///   event subscriptions correctly.
 	/// </summary>
-	
-	public class SubContainersTestCase : AbstractContainerTestCase
+	private class EventsCollector(object expectedSender)
 	{
-		/// <summary>
-		///   collects events in an array list, used for ensuring we are cleaning up the parent kernel
-		///   event subscriptions correctly.
-		/// </summary>
-		private class EventsCollector
+		public const string Added = "added";
+		public const string Removed = "removed";
+
+		private readonly List<string> events = new();
+
+		public List<string> Events
 		{
-			public const string Added = "added";
-			public const string Removed = "removed";
-
-			private readonly List<string> events;
-			private readonly object expectedSender;
-
-			public EventsCollector(object expectedSender)
-			{
-				this.expectedSender = expectedSender;
-				events = new List<string>();
-			}
-
-			public List<string> Events
-			{
-				get { return events; }
-			}
-
-			public void AddedAsChildKernel(object sender, EventArgs e)
-			{
-				Assert.Equal(expectedSender, sender);
-				events.Add(Added);
-			}
-
-			public void RemovedAsChildKernel(object sender, EventArgs e)
-			{
-				Assert.Equal(expectedSender, sender);
-				events.Add(Removed);
-			}
+			get { return events; }
 		}
 
-		[Fact]
-		public void AddChildKernelToTwoParentsThrowsException()
+		public void AddedAsChildKernel(object sender, EventArgs e)
 		{
-			var expectedMessage = "You can not change the kernel parent once set, use the RemoveChildKernel and AddChildKernel methods together to achieve this.";
-
-			IKernel kernel2 = new DefaultKernel();
-
-			IKernel subkernel = new DefaultKernel();
-
-			Kernel.AddChildKernel(subkernel);
-			Assert.Equal(Kernel, subkernel.Parent);
-
-			var exception = Assert.Throws<KernelException>(() => kernel2.AddChildKernel(subkernel));
-			Assert.Equal(exception.Message, expectedMessage);
+			Assert.Equal(expectedSender, sender);
+			events.Add(Added);
 		}
 
-		[Fact]
-		public void ChildDependenciesIsSatisfiedEvenWhenComponentTakesLongToBeAddedToParentContainer()
+		public void RemovedAsChildKernel(object sender, EventArgs e)
 		{
-			var container = new DefaultKernel();
-			var childContainer = new DefaultKernel();
-
-			container.AddChildKernel(childContainer);
-			childContainer.Register(Component.For(typeof(UsesIEmptyService)).Named("component"));
-
-			container.Register(
-				Component.For(typeof(IEmptyService)).ImplementedBy(typeof(EmptyServiceA)).Named("service1"));
-
-			childContainer.Resolve<UsesIEmptyService>();
+			Assert.Equal(expectedSender, sender);
+			events.Add(Removed);
 		}
+	}
 
-		[Fact]
-		public void ChildDependenciesSatisfiedAmongContainers()
-		{
-			IKernel subkernel = new DefaultKernel();
+	[Fact]
+	public void AddChildKernelToTwoParentsThrowsException()
+	{
+		var expectedMessage = "You can not change the kernel parent once set, use the RemoveChildKernel and AddChildKernel methods together to achieve this.";
 
-			Kernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
-			Kernel.Register(Component.For(typeof(DefaultMailSenderService)).Named("mailsender"));
+		IKernel kernel2 = new DefaultKernel();
 
-			Kernel.AddChildKernel(subkernel);
-			subkernel.Register(Component.For(typeof(DefaultSpamService)).Named("spamservice"));
+		IKernel subkernel = new DefaultKernel();
 
-			var spamservice = subkernel.Resolve<DefaultSpamService>("spamservice");
+		Kernel.AddChildKernel(subkernel);
+		Assert.Equal(Kernel, subkernel.Parent);
 
-			Assert.NotNull(spamservice);
-			Assert.NotNull(spamservice.MailSender);
-			Assert.NotNull(spamservice.TemplateEngine);
-		}
+		var exception = Assert.Throws<KernelException>(() => kernel2.AddChildKernel(subkernel));
+		Assert.Equal(exception.Message, expectedMessage);
+	}
 
-		[Fact]
-		public void ChildKernelFindsAndCreateParentComponent()
-		{
-			IKernel subkernel = new DefaultKernel();
+	[Fact]
+	public void ChildDependenciesIsSatisfiedEvenWhenComponentTakesLongToBeAddedToParentContainer()
+	{
+		var container = new DefaultKernel();
+		var childContainer = new DefaultKernel();
 
-			Kernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
+		container.AddChildKernel(childContainer);
+		childContainer.Register(Component.For(typeof(UsesIEmptyService)).Named("component"));
 
-			Kernel.AddChildKernel(subkernel);
+		container.Register(
+			Component.For(typeof(IEmptyService)).ImplementedBy(typeof(EmptyServiceA)).Named("service1"));
 
-			Assert.True(subkernel.HasComponent(typeof(DefaultTemplateEngine)));
-			Assert.NotNull(subkernel.Resolve<DefaultTemplateEngine>());
-		}
+		childContainer.Resolve<UsesIEmptyService>();
+	}
 
-		[Fact]
-		public void ChildKernelOverloadsParentKernel1()
-		{
-			var instance1 = new DefaultTemplateEngine();
-			var instance2 = new DefaultTemplateEngine();
+	[Fact]
+	public void ChildDependenciesSatisfiedAmongContainers()
+	{
+		IKernel subkernel = new DefaultKernel();
 
-			// subkernel added with already registered components that overload parent components.
+		Kernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
+		Kernel.Register(Component.For(typeof(DefaultMailSenderService)).Named("mailsender"));
 
-			IKernel subkernel = new DefaultKernel();
-			subkernel.Register(Component.For<DefaultTemplateEngine>().Named("engine").Instance(instance1));
-			Assert.Equal(instance1, subkernel.Resolve<DefaultTemplateEngine>("engine"));
+		Kernel.AddChildKernel(subkernel);
+		subkernel.Register(Component.For(typeof(DefaultSpamService)).Named("spamservice"));
 
-			Kernel.Register(Component.For<DefaultTemplateEngine>().Named("engine").Instance(instance2));
-			Assert.Equal(instance2, Kernel.Resolve<DefaultTemplateEngine>("engine"));
+		var spamservice = subkernel.Resolve<DefaultSpamService>("spamservice");
 
-			Kernel.AddChildKernel(subkernel);
-			Assert.Equal(instance1, subkernel.Resolve<DefaultTemplateEngine>("engine"));
-			Assert.Equal(instance2, Kernel.Resolve<DefaultTemplateEngine>("engine"));
-		}
+		Assert.NotNull(spamservice);
+		Assert.NotNull(spamservice.MailSender);
+		Assert.NotNull(spamservice.TemplateEngine);
+	}
 
-		[Fact]
-		public void ChildKernelOverloadsParentKernel2()
-		{
-			var instance1 = new DefaultTemplateEngine();
-			var instance2 = new DefaultTemplateEngine();
+	[Fact]
+	public void ChildKernelFindsAndCreateParentComponent()
+	{
+		IKernel subkernel = new DefaultKernel();
 
-			IKernel subkernel = new DefaultKernel();
-			Kernel.AddChildKernel(subkernel);
+		Kernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
 
-			// subkernel added first, then populated with overloaded components after
+		Kernel.AddChildKernel(subkernel);
 
-			Kernel.Register(Component.For<DefaultTemplateEngine>().Named("engine").Instance(instance2));
-			Assert.Equal(instance2, Kernel.Resolve<DefaultTemplateEngine>("engine"));
-			Assert.Equal(instance2, subkernel.Resolve<DefaultTemplateEngine>("engine"));
+		Assert.True(subkernel.HasComponent(typeof(DefaultTemplateEngine)));
+		Assert.NotNull(subkernel.Resolve<DefaultTemplateEngine>());
+	}
 
-			subkernel.Register(Component.For<DefaultTemplateEngine>().Named("engine").Instance(instance1));
-			Assert.Equal(instance1, subkernel.Resolve<DefaultTemplateEngine>("engine"));
-			Assert.Equal(instance2, Kernel.Resolve<DefaultTemplateEngine>("engine"));
-		}
+	[Fact]
+	public void ChildKernelOverloadsParentKernel1()
+	{
+		var instance1 = new DefaultTemplateEngine();
+		var instance2 = new DefaultTemplateEngine();
 
-		[Fact]
-		public void DependenciesSatisfiedAmongContainers()
-		{
-			IKernel subkernel = new DefaultKernel();
+		// subkernel added with already registered components that overload parent components.
 
-			Kernel.Register(Component.For(typeof(DefaultMailSenderService)).Named("mailsender"));
-			Kernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
+		IKernel subkernel = new DefaultKernel();
+		subkernel.Register(Component.For<DefaultTemplateEngine>().Named("engine").Instance(instance1));
+		Assert.Equal(instance1, subkernel.Resolve<DefaultTemplateEngine>("engine"));
 
-			Kernel.AddChildKernel(subkernel);
+		Kernel.Register(Component.For<DefaultTemplateEngine>().Named("engine").Instance(instance2));
+		Assert.Equal(instance2, Kernel.Resolve<DefaultTemplateEngine>("engine"));
 
-			subkernel.Register(Component.For(typeof(DefaultSpamService)).Named("spamservice"));
+		Kernel.AddChildKernel(subkernel);
+		Assert.Equal(instance1, subkernel.Resolve<DefaultTemplateEngine>("engine"));
+		Assert.Equal(instance2, Kernel.Resolve<DefaultTemplateEngine>("engine"));
+	}
 
-			var spamservice = subkernel.Resolve<DefaultSpamService>("spamservice");
+	[Fact]
+	public void ChildKernelOverloadsParentKernel2()
+	{
+		var instance1 = new DefaultTemplateEngine();
+		var instance2 = new DefaultTemplateEngine();
 
-			Assert.NotNull(spamservice);
-			Assert.NotNull(spamservice.MailSender);
-			Assert.NotNull(spamservice.TemplateEngine);
-		}
+		IKernel subkernel = new DefaultKernel();
+		Kernel.AddChildKernel(subkernel);
 
-		[Fact]
-		public void DependenciesSatisfiedAmongContainersUsingEvents()
-		{
-			IKernel subkernel = new DefaultKernel();
+		// subkernel added first, then populated with overloaded components after
 
-			subkernel.Register(Component.For(typeof(DefaultSpamServiceWithConstructor)).Named("spamservice"));
+		Kernel.Register(Component.For<DefaultTemplateEngine>().Named("engine").Instance(instance2));
+		Assert.Equal(instance2, Kernel.Resolve<DefaultTemplateEngine>("engine"));
+		Assert.Equal(instance2, subkernel.Resolve<DefaultTemplateEngine>("engine"));
 
-			Kernel.Register(Component.For(typeof(DefaultMailSenderService)).Named("mailsender"));
-			Kernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
+		subkernel.Register(Component.For<DefaultTemplateEngine>().Named("engine").Instance(instance1));
+		Assert.Equal(instance1, subkernel.Resolve<DefaultTemplateEngine>("engine"));
+		Assert.Equal(instance2, Kernel.Resolve<DefaultTemplateEngine>("engine"));
+	}
 
-			Kernel.AddChildKernel(subkernel);
+	[Fact]
+	public void DependenciesSatisfiedAmongContainers()
+	{
+		IKernel subkernel = new DefaultKernel();
 
-			var spamservice =
-				subkernel.Resolve<DefaultSpamServiceWithConstructor>("spamservice");
+		Kernel.Register(Component.For(typeof(DefaultMailSenderService)).Named("mailsender"));
+		Kernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
 
-			Assert.NotNull(spamservice);
-			Assert.NotNull(spamservice.MailSender);
-			Assert.NotNull(spamservice.TemplateEngine);
-		}
+		Kernel.AddChildKernel(subkernel);
 
-		[Fact]
-		public void ParentKernelFindsAndCreateChildComponent()
-		{
-			IKernel subkernel = new DefaultKernel();
+		subkernel.Register(Component.For(typeof(DefaultSpamService)).Named("spamservice"));
 
-			subkernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
+		var spamservice = subkernel.Resolve<DefaultSpamService>("spamservice");
 
-			Kernel.AddChildKernel(subkernel);
+		Assert.NotNull(spamservice);
+		Assert.NotNull(spamservice.MailSender);
+		Assert.NotNull(spamservice.TemplateEngine);
+	}
 
-			Assert.False(Kernel.HasComponent(typeof(DefaultTemplateEngine)));
+	[Fact]
+	public void DependenciesSatisfiedAmongContainersUsingEvents()
+	{
+		IKernel subkernel = new DefaultKernel();
 
-			Assert.Throws<ComponentNotFoundException>(() => Kernel.Resolve<DefaultTemplateEngine>());
-		}
+		subkernel.Register(Component.For(typeof(DefaultSpamServiceWithConstructor)).Named("spamservice"));
 
-		[Fact]
-		public void RemoveChildKernelCleansUp()
-		{
-			IKernel subkernel = new DefaultKernel();
-			var eventCollector = new EventsCollector(subkernel);
-			subkernel.RemovedAsChildKernel += eventCollector.RemovedAsChildKernel;
-			subkernel.AddedAsChildKernel += eventCollector.AddedAsChildKernel;
+		Kernel.Register(Component.For(typeof(DefaultMailSenderService)).Named("mailsender"));
+		Kernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
 
-			Kernel.AddChildKernel(subkernel);
-			Assert.Equal(Kernel, subkernel.Parent);
-			Assert.Single(eventCollector.Events);
-			Assert.Equal(EventsCollector.Added, eventCollector.Events[0]);
+		Kernel.AddChildKernel(subkernel);
 
-			Kernel.RemoveChildKernel(subkernel);
-			Assert.Null(subkernel.Parent);
-			Assert.Equal(2, eventCollector.Events.Count);
-			Assert.Equal(EventsCollector.Removed, eventCollector.Events[1]);
-		}
+		var spamservice =
+			subkernel.Resolve<DefaultSpamServiceWithConstructor>("spamservice");
 
-		[Fact]
-		public void RemovingChildKernelUnsubscribesFromParentEvents()
-		{
-			IKernel subkernel = new DefaultKernel();
-			var eventCollector = new EventsCollector(subkernel);
-			subkernel.RemovedAsChildKernel += eventCollector.RemovedAsChildKernel;
-			subkernel.AddedAsChildKernel += eventCollector.AddedAsChildKernel;
+		Assert.NotNull(spamservice);
+		Assert.NotNull(spamservice.MailSender);
+		Assert.NotNull(spamservice.TemplateEngine);
+	}
 
-			Kernel.AddChildKernel(subkernel);
-			Kernel.RemoveChildKernel(subkernel);
-			Kernel.AddChildKernel(subkernel);
-			Kernel.RemoveChildKernel(subkernel);
+	[Fact]
+	public void ParentKernelFindsAndCreateChildComponent()
+	{
+		IKernel subkernel = new DefaultKernel();
 
-			Assert.Equal(4, eventCollector.Events.Count);
-			Assert.Equal(EventsCollector.Added, eventCollector.Events[0]);
-			Assert.Equal(EventsCollector.Removed, eventCollector.Events[1]);
-			Assert.Equal(EventsCollector.Added, eventCollector.Events[2]);
-			Assert.Equal(EventsCollector.Removed, eventCollector.Events[3]);
-		}
+		subkernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
 
-		[Fact]
-		public void Parent_component_will_NOT_have_dependencies_from_child()
-		{
-			Kernel.Register(Component.For<DefaultTemplateEngine>(),
-			                Component.For<DefaultSpamService>());
+		Kernel.AddChildKernel(subkernel);
 
-			var child = new DefaultKernel();
-			Kernel.AddChildKernel(child);
+		Assert.False(Kernel.HasComponent(typeof(DefaultTemplateEngine)));
 
-			child.Register(Component.For<DefaultMailSenderService>());
+		Assert.Throws<ComponentNotFoundException>(() => Kernel.Resolve<DefaultTemplateEngine>());
+	}
 
-			var spamservice = child.Resolve<DefaultSpamService>();
+	[Fact]
+	public void RemoveChildKernelCleansUp()
+	{
+		IKernel subkernel = new DefaultKernel();
+		var eventCollector = new EventsCollector(subkernel);
+		subkernel.RemovedAsChildKernel += eventCollector.RemovedAsChildKernel;
+		subkernel.AddedAsChildKernel += eventCollector.AddedAsChildKernel;
 
-			Assert.NotNull(spamservice);
-			Assert.NotNull(spamservice.TemplateEngine);
-			Assert.Null(spamservice.MailSender);
-		}
+		Kernel.AddChildKernel(subkernel);
+		Assert.Equal(Kernel, subkernel.Parent);
+		Assert.Single(eventCollector.Events);
+		Assert.Equal(EventsCollector.Added, eventCollector.Events[0]);
 
-		[Fact]
-		public void Singleton_withNonSingletonDependencies_doesNotReResolveDependencies()
-		{
-			Kernel.Register(Component.For(typeof(DefaultSpamService)).Named("spamservice"));
-			Kernel.Register(Component.For(typeof(DefaultMailSenderService)).Named("mailsender"));
+		Kernel.RemoveChildKernel(subkernel);
+		Assert.Null(subkernel.Parent);
+		Assert.Equal(2, eventCollector.Events.Count);
+		Assert.Equal(EventsCollector.Removed, eventCollector.Events[1]);
+	}
 
-			var subkernel1 = new DefaultKernel();
-			subkernel1.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
-			Kernel.AddChildKernel(subkernel1);
+	[Fact]
+	public void RemovingChildKernelUnsubscribesFromParentEvents()
+	{
+		IKernel subkernel = new DefaultKernel();
+		var eventCollector = new EventsCollector(subkernel);
+		subkernel.RemovedAsChildKernel += eventCollector.RemovedAsChildKernel;
+		subkernel.AddedAsChildKernel += eventCollector.AddedAsChildKernel;
 
-			var subkernel2 = new DefaultKernel();
-			subkernel2.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine")
-				                    .LifeStyle.Is(LifestyleType.Transient));
-			Kernel.AddChildKernel(subkernel2);
+		Kernel.AddChildKernel(subkernel);
+		Kernel.RemoveChildKernel(subkernel);
+		Kernel.AddChildKernel(subkernel);
+		Kernel.RemoveChildKernel(subkernel);
 
-			var templateengine1 = subkernel1.Resolve<DefaultTemplateEngine>("templateengine");
-			var spamservice1 = subkernel1.Resolve<DefaultSpamService>("spamservice");
+		Assert.Equal(4, eventCollector.Events.Count);
+		Assert.Equal(EventsCollector.Added, eventCollector.Events[0]);
+		Assert.Equal(EventsCollector.Removed, eventCollector.Events[1]);
+		Assert.Equal(EventsCollector.Added, eventCollector.Events[2]);
+		Assert.Equal(EventsCollector.Removed, eventCollector.Events[3]);
+	}
 
-			Assert.Null(spamservice1.TemplateEngine);
+	[Fact]
+	public void Parent_component_will_NOT_have_dependencies_from_child()
+	{
+		Kernel.Register(Component.For<DefaultTemplateEngine>(),
+			Component.For<DefaultSpamService>());
 
-			var templateengine2 = subkernel2.Resolve<DefaultTemplateEngine>("templateengine");
-			var spamservice2 = subkernel2.Resolve<DefaultSpamService>("spamservice");
+		var child = new DefaultKernel();
+		Kernel.AddChildKernel(child);
 
-			Assert.Same(spamservice1, spamservice2);
-		}
+		child.Register(Component.For<DefaultMailSenderService>());
 
-		[Fact]
-		[Bug("IOC-345")]
-		public void Do_NOT_UseChildComponentsForParentDependenciesWhenRequestedFromChild()
-		{
-			IKernel subkernel = new DefaultKernel();
+		var spamservice = child.Resolve<DefaultSpamService>();
 
-			Kernel.Register(Component.For(typeof(DefaultSpamService)).Named("spamservice").LifeStyle.Is(LifestyleType.Transient));
-			Kernel.Register(Component.For(typeof(DefaultMailSenderService)).Named("mailsender"));
-			Kernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
+		Assert.NotNull(spamservice);
+		Assert.NotNull(spamservice.TemplateEngine);
+		Assert.Null(spamservice.MailSender);
+	}
 
-			Kernel.AddChildKernel(subkernel);
-			subkernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
+	[Fact]
+	public void Singleton_withNonSingletonDependencies_doesNotReResolveDependencies()
+	{
+		Kernel.Register(Component.For(typeof(DefaultSpamService)).Named("spamservice"));
+		Kernel.Register(Component.For(typeof(DefaultMailSenderService)).Named("mailsender"));
 
-			var templateengine = Kernel.Resolve<DefaultTemplateEngine>("templateengine");
-			var sub_templateengine = subkernel.Resolve<DefaultTemplateEngine>("templateengine");
+		var subkernel1 = new DefaultKernel();
+		subkernel1.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
+		Kernel.AddChildKernel(subkernel1);
 
-			var spamservice = subkernel.Resolve<DefaultSpamService>("spamservice");
-			Assert.NotEqual(spamservice.TemplateEngine, sub_templateengine);
-			Assert.Equal(spamservice.TemplateEngine, templateengine);
+		var subkernel2 = new DefaultKernel();
+		subkernel2.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine")
+			.LifeStyle.Is(LifestyleType.Transient));
+		Kernel.AddChildKernel(subkernel2);
 
-			spamservice = Kernel.Resolve<DefaultSpamService>("spamservice");
-			Assert.NotEqual(spamservice.TemplateEngine, sub_templateengine);
-			Assert.Equal(spamservice.TemplateEngine, templateengine);
-		}
+		var templateengine1 = subkernel1.Resolve<DefaultTemplateEngine>("templateengine");
+		var spamservice1 = subkernel1.Resolve<DefaultSpamService>("spamservice");
 
-		[Fact]
-		[Bug("IOC-325")]
-		public void TryResolvingViaChildKernelShouldNotThrowException()
-		{
-			using (var childKernel = new DefaultKernel())
-			{
-				Kernel.Register(Component.For<BookStore>());
-				Kernel.AddChildKernel(childKernel);
-				var handler = childKernel.GetHandler(typeof(BookStore));
+		Assert.Null(spamservice1.TemplateEngine);
 
-				// Assert setup invariant
-				Assert.IsType<ParentHandlerWrapper>(handler);
+		var templateengine2 = subkernel2.Resolve<DefaultTemplateEngine>("templateengine");
+		var spamservice2 = subkernel2.Resolve<DefaultSpamService>("spamservice");
 
-				handler.TryResolve(CreationContext.CreateEmpty());
-			}
-		}
+		Assert.Same(spamservice1, spamservice2);
+	}
+
+	[Fact]
+	[Bug("IOC-345")]
+	public void Do_NOT_UseChildComponentsForParentDependenciesWhenRequestedFromChild()
+	{
+		IKernel subkernel = new DefaultKernel();
+
+		Kernel.Register(Component.For(typeof(DefaultSpamService)).Named("spamservice").LifeStyle.Is(LifestyleType.Transient));
+		Kernel.Register(Component.For(typeof(DefaultMailSenderService)).Named("mailsender"));
+		Kernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
+
+		Kernel.AddChildKernel(subkernel);
+		subkernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
+
+		var templateengine = Kernel.Resolve<DefaultTemplateEngine>("templateengine");
+		var sub_templateengine = subkernel.Resolve<DefaultTemplateEngine>("templateengine");
+
+		var spamservice = subkernel.Resolve<DefaultSpamService>("spamservice");
+		Assert.NotEqual(spamservice.TemplateEngine, sub_templateengine);
+		Assert.Equal(spamservice.TemplateEngine, templateengine);
+
+		spamservice = Kernel.Resolve<DefaultSpamService>("spamservice");
+		Assert.NotEqual(spamservice.TemplateEngine, sub_templateengine);
+		Assert.Equal(spamservice.TemplateEngine, templateengine);
+	}
+
+	[Fact]
+	[Bug("IOC-325")]
+	public void TryResolvingViaChildKernelShouldNotThrowException()
+	{
+		using var childKernel = new DefaultKernel();
+		Kernel.Register(Component.For<BookStore>());
+		Kernel.AddChildKernel(childKernel);
+		var handler = childKernel.GetHandler(typeof(BookStore));
+
+		// Assert setup invariant
+		Assert.IsType<ParentHandlerWrapper>(handler);
+
+		handler.TryResolve(CreationContext.CreateEmpty());
 	}
 }

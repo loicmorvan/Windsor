@@ -12,20 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class TrivialComponentWithDependency(ISimpleService dependency) : IComponent
 {
-	public class TrivialComponentWithDependency : IComponent
+	public ISimpleService Dependency { get; private set; } = dependency;
+
+	public int ID
 	{
-		public TrivialComponentWithDependency(ISimpleService dependency)
-		{
-			Dependency = dependency;
-		}
-
-		public ISimpleService Dependency { get; private set; }
-
-		public int ID
-		{
-			get { return 0; }
-		}
+		get { return 0; }
 	}
 }

@@ -12,127 +12,113 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests;
+
+using Castle.Core;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+
+[PerThread]
+public class R
 {
-	using Castle.Core;
-	using Castle.MicroKernel.Registration;
+}
+
+public interface IC
+{
+	IN N { get; set; }
+}
+
+public class CImpl : IC
+{
+	private R r = null;
+
+	public R R
+	{
+		set { r = value; }
+	}
+
+	public IN N { get; set; } = null;
+}
+
+public interface IN
+{
+	IS CS { get; }
+}
+
+[Transient]
+public class DN(IWM vm, ISP sp) : IN
+{
+	private IWM vm = vm;
+	private ISP sp = sp;
+
+	public IS CS { get; private set; } = new BS();
+}
+
+public interface IWM
+{
+	void A(IN n);
+}
+
+public class WM : IWM
+{
+	public void A(IN n)
+	{
+		//...
+	}
+}
+
+public interface IS
+{
+	ISP SP { get; set; }
+}
+
+[Transient]
+public class BS : IS
+{
+	private ISP _sp = null;
+
+	public ISP SP
+	{
+		get { return _sp; }
+		set { _sp = value; }
+	}
+}
+
+public interface ISP
+{
+	void Save(IS s);
+}
+
+public class SP : ISP
+{
+	public void Save(IS s)
+	{
+	}
+}
 
 	
-
-	[PerThread]
-	public class R
+public class ContainerProblem2
+{
+	[Fact]
+	public void CausesStackOverflow()
 	{
-	}
+		IWindsorContainer container = new WindsorContainer();
 
-	public interface IC
-	{
-		IN N { get; set; }
-	}
+		container.Register(Component.For(typeof(IS)).ImplementedBy(typeof(BS)).Named("BS"));
+		container.Register(Component.For(typeof(IC)).ImplementedBy(typeof(CImpl)).Named("C"));
+		container.Register(Component.For(typeof(IWM)).ImplementedBy(typeof(WM)).Named("WM"));
+		container.Register(Component.For(typeof(ISP)).ImplementedBy(typeof(SP)).Named("SP"));
 
-	public class CImpl : IC
-	{
-		private R r = null;
+		//TODO: dead code - why is it here?
+		// ComponentModel model = new ComponentModel("R", typeof(R), typeof(R));
+		// model.LifestyleType = LifestyleType.Custom;
+		// model.CustomLifestyle = typeof(PerThreadLifestyleManager);
 
-		public R R
-		{
-			set { r = value; }
-		}
+		// container.Kernel.AddCustomComponent(model);
+		// container.Kernel.AddComponent("R", typeof(R), LifestyleType.Thread);
+		container.Kernel.Register(Component.For(typeof(R)).Named("R"));
 
-		public CImpl()
-		{
-			N = null;
-		}
-
-		public IN N { get; set; }
-	}
-
-	public interface IN
-	{
-		IS CS { get; }
-	}
-
-	[Transient]
-	public class DN : IN
-	{
-		private IWM vm;
-		private ISP sp;
-
-		public IS CS { get; private set; }
-
-		public DN(IWM vm, ISP sp)
-		{
-			this.vm = vm;
-			this.sp = sp;
-			CS = new BS();
-		}
-	}
-
-	public interface IWM
-	{
-		void A(IN n);
-	}
-
-	public class WM : IWM
-	{
-		public void A(IN n)
-		{
-			//...
-		}
-	}
-
-	public interface IS
-	{
-		ISP SP { get; set; }
-	}
-
-	[Transient]
-	public class BS : IS
-	{
-		private ISP _sp = null;
-
-		public ISP SP
-		{
-			get { return _sp; }
-			set { _sp = value; }
-		}
-	}
-
-	public interface ISP
-	{
-		void Save(IS s);
-	}
-
-	public class SP : ISP
-	{
-		public void Save(IS s)
-		{
-		}
-	}
-
-	
-	public class ContainerProblem2
-	{
-		[Fact]
-		public void CausesStackOverflow()
-		{
-			IWindsorContainer container = new WindsorContainer();
-
-			container.Register(Component.For(typeof(IS)).ImplementedBy(typeof(BS)).Named("BS"));
-			container.Register(Component.For(typeof(IC)).ImplementedBy(typeof(CImpl)).Named("C"));
-			container.Register(Component.For(typeof(IWM)).ImplementedBy(typeof(WM)).Named("WM"));
-			container.Register(Component.For(typeof(ISP)).ImplementedBy(typeof(SP)).Named("SP"));
-
-			//TODO: dead code - why is it here?
-			// ComponentModel model = new ComponentModel("R", typeof(R), typeof(R));
-			// model.LifestyleType = LifestyleType.Custom;
-			// model.CustomLifestyle = typeof(PerThreadLifestyleManager);
-
-			// container.Kernel.AddCustomComponent(model);
-			// container.Kernel.AddComponent("R", typeof(R), LifestyleType.Thread);
-			container.Kernel.Register(Component.For(typeof(R)).Named("R"));
-
-			IC c = container.Resolve<IC>("C");
-			Assert.NotNull(c);
-		}
+		IC c = container.Resolve<IC>("C");
+		Assert.NotNull(c);
 	}
 }

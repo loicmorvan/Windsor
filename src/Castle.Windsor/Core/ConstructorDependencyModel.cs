@@ -12,31 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
+namespace Castle.Core;
+
+using System;
+using System.Reflection;
+
+using Castle.Core.Internal;
+
+[Serializable]
+public class ConstructorDependencyModel(ParameterInfo parameter) : DependencyModel(parameter.Name, parameter.ParameterType, false, parameter.HasDefaultValue(), parameter.DefaultValue)
 {
-	using System;
-	using System.Reflection;
+	private ConstructorCandidate constructor;
 
-	using Castle.Core.Internal;
-
-	[Serializable]
-	public class ConstructorDependencyModel : DependencyModel
+	public ConstructorCandidate Constructor
 	{
-		private ConstructorCandidate constructor;
+		get { return constructor; }
+	}
 
-		public ConstructorDependencyModel(ParameterInfo parameter)
-			: base(parameter.Name, parameter.ParameterType, false, parameter.HasDefaultValue(), parameter.DefaultValue)
-		{
-		}
-
-		public ConstructorCandidate Constructor
-		{
-			get { return constructor; }
-		}
-
-		internal void SetParentConstructor(ConstructorCandidate ctor)
-		{
-			constructor = ctor;
-		}
+	internal void SetParentConstructor(ConstructorCandidate ctor)
+	{
+		constructor = ctor;
 	}
 }

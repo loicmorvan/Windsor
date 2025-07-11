@@ -12,26 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Installer
+namespace Castle.Windsor.Tests.Installer;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Castle.Windsor.Installer;
+
+public class FilterAssembliesInstallerFactory(Predicate<Type> filter) : InstallerFactory
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-
-	using Castle.Windsor.Installer;
-
-	public class FilterAssembliesInstallerFactory : InstallerFactory
+	public override IEnumerable<Type> Select(IEnumerable<Type> installerTypes)
 	{
-		private readonly Predicate<Type> filter;
-
-		public FilterAssembliesInstallerFactory(Predicate<Type> filter)
-		{
-			this.filter = filter;
-		}
-
-		public override IEnumerable<Type> Select(IEnumerable<Type> installerTypes)
-		{
-			return installerTypes.Where(filter.Invoke);
-		}
+		return installerTypes.Where(filter.Invoke);
 	}
 }

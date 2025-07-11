@@ -12,95 +12,88 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
+namespace Castle.Core.Internal;
+
+using System.Collections;
+using System.Collections.Generic;
+
+public class SimpleSortedSet<T>(IComparer<T> comparer) : ICollection<T>
 {
-	using System.Collections;
-	using System.Collections.Generic;
+	private readonly List<T> items = new List<T>();
 
-	public class SimpleSortedSet<T> : ICollection<T>
+	public SimpleSortedSet() : this(Comparer<T>.Default)
 	{
-		private readonly IComparer<T> comparer;
-		private readonly List<T> items = new List<T>();
+	}
 
-		public SimpleSortedSet() : this(Comparer<T>.Default)
+	public SimpleSortedSet(IEnumerable<T> other, IComparer<T> comparer) : this(comparer)
+	{
+		foreach (var item in other)
 		{
+			Add(item);
 		}
+	}
 
-		public SimpleSortedSet(IComparer<T> comparer)
-		{
-			this.comparer = comparer;
-		}
+	public T this[int index]
+	{
+		get { return items[index]; }
+	}
 
-		public SimpleSortedSet(IEnumerable<T> other, IComparer<T> comparer) : this(comparer)
+	public int Count
+	{
+		get { return items.Count; }
+	}
+
+	bool ICollection<T>.IsReadOnly
+	{
+		get { return false; }
+	}
+
+	public void Add(T item)
+	{
+		var count = Count;
+		for (var i = 0; i < count; i++)
 		{
-			foreach (var item in other)
+			var result = comparer.Compare(item, items[i]);
+			if (result < 0)
 			{
-				Add(item);
+				items.Insert(i, item);
+				return;
+			}
+			if (result == 0)
+			{
+				return;
 			}
 		}
+		items.Add(item);
+	}
 
-		public T this[int index]
-		{
-			get { return items[index]; }
-		}
+	public void Clear()
+	{
+		items.Clear();
+	}
 
-		public int Count
-		{
-			get { return items.Count; }
-		}
+	public bool Contains(T item)
+	{
+		return items.Contains(item);
+	}
 
-		bool ICollection<T>.IsReadOnly
-		{
-			get { return false; }
-		}
+	public void CopyTo(T[] array, int arrayIndex)
+	{
+		items.CopyTo(array, arrayIndex);
+	}
 
-		public void Add(T item)
-		{
-			var count = Count;
-			for (var i = 0; i < count; i++)
-			{
-				var result = comparer.Compare(item, items[i]);
-				if (result < 0)
-				{
-					items.Insert(i, item);
-					return;
-				}
-				if (result == 0)
-				{
-					return;
-				}
-			}
-			items.Add(item);
-		}
+	public bool Remove(T item)
+	{
+		return items.Remove(item);
+	}
 
-		public void Clear()
-		{
-			items.Clear();
-		}
+	public IEnumerator<T> GetEnumerator()
+	{
+		return items.GetEnumerator();
+	}
 
-		public bool Contains(T item)
-		{
-			return items.Contains(item);
-		}
-
-		public void CopyTo(T[] array, int arrayIndex)
-		{
-			items.CopyTo(array, arrayIndex);
-		}
-
-		public bool Remove(T item)
-		{
-			return items.Remove(item);
-		}
-
-		public IEnumerator<T> GetEnumerator()
-		{
-			return items.GetEnumerator();
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return GetEnumerator();
 	}
 }

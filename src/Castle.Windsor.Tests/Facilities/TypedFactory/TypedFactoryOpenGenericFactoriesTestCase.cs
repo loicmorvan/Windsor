@@ -12,35 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.TypedFactory
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
+
+using Castle.Facilities.TypedFactory;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
+
+public class TypedFactoryOpenGenericFactoriesTestCase : AbstractContainerTestCase
 {
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
-
-	using CastleTests.Components;
-
-	
-
-	public class TypedFactoryOpenGenericFactoriesTestCase : AbstractContainerTestCase
+	protected override void AfterContainerCreated()
 	{
-		protected override void AfterContainerCreated()
-		{
-			Container.AddFacility<TypedFactoryFacility>();
-		}
+		Container.AddFacility<TypedFactoryFacility>();
+	}
 
-		[Fact]
-		public void Can_use_open_generic_service_as_typed_factory()
-		{
-			Container.Register(Component.For(typeof(IGenericFactory<>)).AsFactory(),
-			                   Component.For<A>(),
-			                   Component.For<B>());
+	[Fact]
+	public void Can_use_open_generic_service_as_typed_factory()
+	{
+		Container.Register(Component.For(typeof(IGenericFactory<>)).AsFactory(),
+			Component.For<A>(),
+			Component.For<B>());
 
-			var aFactory = Container.Resolve<IGenericFactory<A>>();
-			var bFactory = Container.Resolve<IGenericFactory<B>>();
+		var aFactory = Container.Resolve<IGenericFactory<A>>();
+		var bFactory = Container.Resolve<IGenericFactory<B>>();
 
-			Assert.NotNull(aFactory.Create());
-			Assert.NotNull(bFactory.Create());
-		}
+		Assert.NotNull(aFactory.Create());
+		Assert.NotNull(bFactory.Create());
 	}
 }

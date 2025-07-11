@@ -12,44 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+
+using Castle.Core;
+using Castle.Core.Configuration;
+using Castle.MicroKernel.Registration;
+
+public class ConfigurationDescriptor : IComponentModelDescriptor
 {
-	using Castle.Core;
-	using Castle.Core.Configuration;
-	using Castle.MicroKernel.Registration;
+	private readonly Node[] configNodes;
+	private readonly IConfiguration configuration;
 
-	public class ConfigurationDescriptor : IComponentModelDescriptor
+	public ConfigurationDescriptor(params Node[] configNodes)
 	{
-		private readonly Node[] configNodes;
-		private readonly IConfiguration configuration;
+		this.configNodes = configNodes;
+	}
 
-		public ConfigurationDescriptor(params Node[] configNodes)
+	public ConfigurationDescriptor(IConfiguration configuration)
+	{
+		this.configuration = configuration;
+	}
+
+	public void BuildComponentModel(IKernel kernel, ComponentModel model)
+	{
+		if (configuration != null)
 		{
-			this.configNodes = configNodes;
+			model.Configuration.Children.Add(configuration);
 		}
-
-		public ConfigurationDescriptor(IConfiguration configuration)
+		else
 		{
-			this.configuration = configuration;
-		}
-
-		public void BuildComponentModel(IKernel kernel, ComponentModel model)
-		{
-			if (configuration != null)
+			foreach (var configNode in configNodes)
 			{
-				model.Configuration.Children.Add(configuration);
-			}
-			else
-			{
-				foreach (var configNode in configNodes)
-				{
-					configNode.ApplyTo(model.Configuration);
-				}
+				configNode.ApplyTo(model.Configuration);
 			}
 		}
+	}
 
-		public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-		{
-		}
+	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+	{
 	}
 }

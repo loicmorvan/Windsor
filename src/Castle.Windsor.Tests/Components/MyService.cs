@@ -12,15 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class MyService : IService
-	{
-		public MyService()
-		{
-			Name = string.Empty;
-		}
+namespace Castle.Windsor.Tests.Components;
 
-		public string Name { get; set; }
-	}
+public class MyService : IService
+{
+	public string Name { get; set; } = string.Empty;
 }

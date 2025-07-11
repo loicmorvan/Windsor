@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
-{
-	using Castle.MicroKernel;
+namespace Castle.Windsor.Diagnostics;
 
-	public interface IPotentiallyMisconfiguredComponentsDiagnostic : IDiagnostic<IHandler[]>
-	{
-	}
+using Castle.MicroKernel;
+
+public interface IPotentiallyMisconfiguredComponentsDiagnostic : IDiagnostic<IHandler[]>
+{
 }

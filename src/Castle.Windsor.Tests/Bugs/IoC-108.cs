@@ -12,43 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Bugs
+namespace Castle.Windsor.Tests.Bugs;
+
+using Castle.MicroKernel.Registration;
+
+public class IoC_108 : AbstractContainerTestCase
 {
-	using Castle.MicroKernel.Registration;
-
-	
-
-	
-	public class IoC_108 : AbstractContainerTestCase
+	public class Service1
 	{
-		public class Service1
+		public void OpA()
 		{
-			public void OpA()
-			{
-			}
-
-			public void OpB()
-			{
-			}
 		}
 
-		public class Service2
+		public void OpB()
 		{
-			public Service2(Service1 service1)
-			{
-				Service1 = service1;
-			}
-
-			public Service1 Service1 { get; private set; }
 		}
+	}
 
-		[Fact]
-		public void Should_not_fail_when_constructor_parameter_and_public_property_with_private_setter_have_same_name()
-		{
-			Container.Register(Component.For<Service2>(),
-			                   Component.For<Service1>());
+	public class Service2(Service1 service1)
+	{
+		public Service1 Service1 { get; private set; } = service1;
+	}
 
-			Container.Resolve<Service2>();
-		}
+	[Fact]
+	public void Should_not_fail_when_constructor_parameter_and_public_property_with_private_setter_have_same_name()
+	{
+		Container.Register(Component.For<Service2>(),
+			Component.For<Service1>());
+
+		Container.Resolve<Service2>();
 	}
 }

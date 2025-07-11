@@ -12,53 +12,52 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
+namespace Castle.Core;
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+
+using Castle.Core.Internal;
+
+/// <summary>
+///     Collection of <see cref = "ConstructorCandidate" />
+/// </summary>
+[Serializable]
+public class ConstructorCandidateCollection : IMutableCollection<ConstructorCandidate>
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.Diagnostics;
+	private readonly SimpleSortedSet<ConstructorCandidate> ctors = new SimpleSortedSet<ConstructorCandidate>();
 
-	using Castle.Core.Internal;
-
-	/// <summary>
-	///     Collection of <see cref = "ConstructorCandidate" />
-	/// </summary>
-	[Serializable]
-	public class ConstructorCandidateCollection : IMutableCollection<ConstructorCandidate>
+	public int Count
 	{
-		private readonly SimpleSortedSet<ConstructorCandidate> ctors = new SimpleSortedSet<ConstructorCandidate>();
+		get { return ctors.Count; }
+	}
 
-		public int Count
-		{
-			get { return ctors.Count; }
-		}
+	public ConstructorCandidate this[int index]
+	{
+		get { return ctors[index]; }
+	}
 
-		public ConstructorCandidate this[int index]
-		{
-			get { return ctors[index]; }
-		}
+	[DebuggerStepThrough]
+	public IEnumerator<ConstructorCandidate> GetEnumerator()
+	{
+		return ctors.GetEnumerator();
+	}
 
-		[DebuggerStepThrough]
-		public IEnumerator<ConstructorCandidate> GetEnumerator()
-		{
-			return ctors.GetEnumerator();
-		}
+	[DebuggerStepThrough]
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return GetEnumerator();
+	}
 
-		[DebuggerStepThrough]
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+	void IMutableCollection<ConstructorCandidate>.Add(ConstructorCandidate item)
+	{
+		ctors.Add(item);
+	}
 
-		void IMutableCollection<ConstructorCandidate>.Add(ConstructorCandidate item)
-		{
-			ctors.Add(item);
-		}
-
-		bool IMutableCollection<ConstructorCandidate>.Remove(ConstructorCandidate item)
-		{
-			return ctors.Remove(item);
-		}
+	bool IMutableCollection<ConstructorCandidate>.Remove(ConstructorCandidate item)
+	{
+		return ctors.Remove(item);
 	}
 }

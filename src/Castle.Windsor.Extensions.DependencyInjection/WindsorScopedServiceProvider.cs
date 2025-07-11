@@ -13,74 +13,65 @@
 // limitations under the License.
 
 
-namespace Castle.Windsor.Extensions.DependencyInjection
-{
-	using System;
-	using System.Collections.Generic;
-	using System.Reflection;
+namespace Castle.Windsor.Extensions.DependencyInjection;
+
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 	
-	using Castle.Windsor;
-	using Castle.Windsor.Extensions.DependencyInjection.Scope;
+using Castle.Windsor;
+using Castle.Windsor.Extensions.DependencyInjection.Scope;
 
-	using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
-	internal class WindsorScopedServiceProvider : IServiceProvider, ISupportRequiredService, IDisposable
+internal class WindsorScopedServiceProvider(IWindsorContainer container) : IServiceProvider, ISupportRequiredService, IDisposable
+{
+	private readonly ExtensionContainerScopeBase scope = ExtensionContainerScopeCache.Current;
+	private bool disposing;
+
+	public object GetService(Type serviceType)
 	{
-		private readonly ExtensionContainerScopeBase scope;
-		private bool disposing;
-
-		private readonly IWindsorContainer container;
-		
-		public WindsorScopedServiceProvider(IWindsorContainer container)
+		using(_ = new ForcedScope(scope))
 		{
-			this.container = container;
-			scope = ExtensionContainerScopeCache.Current;
+			return ResolveInstanceOrNull(serviceType, true);	
 		}
+	}
 
-		public object GetService(Type serviceType)
+	public object GetRequiredService(Type serviceType)
+	{
+		using(_ = new ForcedScope(scope))
 		{
-			using(_ = new ForcedScope(scope))
-			{
-				return ResolveInstanceOrNull(serviceType, true);	
-			}
+			return ResolveInstanceOrNull(serviceType, false);	
 		}
+	}
 
-		public object GetRequiredService(Type serviceType)
+	public void Dispose()
+	{
+		if (!(scope is ExtensionContainerRootScope)) return;
+		if (disposing) return;
+		disposing = true;
+		var disposableScope = scope as IDisposable;
+		disposableScope?.Dispose();
+		container.Dispose();
+	}
+	private object ResolveInstanceOrNull(Type serviceType, bool isOptional)
+	{
+		if (container.Kernel.HasComponent(serviceType))
 		{
-			using(_ = new ForcedScope(scope))
-			{
-				return ResolveInstanceOrNull(serviceType, false);	
-			}
-		}
-
-		public void Dispose()
-		{
-			if (!(scope is ExtensionContainerRootScope)) return;
-			if (disposing) return;
-			disposing = true;
-			var disposableScope = scope as IDisposable;
-			disposableScope?.Dispose();
-			container.Dispose();
-		}
-		private object ResolveInstanceOrNull(Type serviceType, bool isOptional)
-		{
-			if (container.Kernel.HasComponent(serviceType))
-			{
-				return container.Resolve(serviceType);
-			}
-
-			if (serviceType.GetTypeInfo().IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
-			{
-				var allObjects = container.ResolveAll(serviceType.GenericTypeArguments[0]);
-				return allObjects;
-			}
-
-			if (isOptional)
-			{
-				return null;
-			}
-
 			return container.Resolve(serviceType);
 		}
+
+		if (serviceType.GetTypeInfo().IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+		{
+			var allObjects = container.ResolveAll(serviceType.GenericTypeArguments[0]);
+			return allObjects;
+		}
+
+		if (isOptional)
+		{
+			return null;
+		}
+
+		return container.Resolve(serviceType);
 	}
 }

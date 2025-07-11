@@ -12,48 +12,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.using System;
 
-namespace Castle.MicroKernel.Tests.Configuration.Components
+namespace Castle.Windsor.Tests.Config.Components;
+
+using Castle.MicroKernel.SubSystems.Conversion;
+
+public class ClassWithComplexParameter
 {
-	using Castle.MicroKernel.SubSystems.Conversion;
+	private ComplexParameterType param1;
 
-	public class ClassWithComplexParameter
+	[Convertible]
+	public class ComplexParameterType(string mandatoryValue)
 	{
-		private ComplexParameterType param1;
+		private string optionalValue;
 
-		[Convertible]
-		public class ComplexParameterType
+		public ComplexParameterType() : this("default1")
 		{
-			private string mandatoryValue;
-			private string optionalValue;
-
-			public ComplexParameterType()
-			{
-				// sets default values
-				mandatoryValue = "default1";
-				optionalValue = "default2";
-			}
-
-			public ComplexParameterType(string mandatoryValue)
-			{
-				this.mandatoryValue = mandatoryValue;
-			}
-
-			public string MandatoryValue
-			{
-				get { return mandatoryValue; }
-			}
-
-			public string OptionalValue
-			{
-				get { return optionalValue; }
-				set { optionalValue = value; }
-			}
+			// sets default values
+			optionalValue = "default2";
 		}
 
-		public ComplexParameterType ComplexParam
+		public string MandatoryValue
 		{
-			get { return param1; }
-			set { param1 = value; }
+			get { return mandatoryValue; }
 		}
+
+		public string OptionalValue
+		{
+			get { return optionalValue; }
+			set { optionalValue = value; }
+		}
+	}
+
+	public ComplexParameterType ComplexParam
+	{
+		get { return param1; }
+		set { param1 = value; }
 	}
 }

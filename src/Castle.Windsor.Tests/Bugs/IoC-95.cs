@@ -12,26 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Bugs
+namespace Castle.Windsor.Tests.Bugs;
+
+using Castle.Facilities.Startable;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+
+public class IoC_95
 {
-	using Castle.Facilities.Startable;
-	using Castle.MicroKernel.Registration;
-
-	using CastleTests.Components;
-
-	
-
-	
-	public class IoC_95
+	[Fact]
+	public void AddingComponentToRootKernelWhenChildKernelHasStartableFacility()
 	{
-		[Fact]
-		public void AddingComponentToRootKernelWhenChildKernelHasStartableFacility()
-		{
-			IKernel kernel = new DefaultKernel();
-			IKernel childKernel = new DefaultKernel();
-			kernel.AddChildKernel(childKernel);
-			childKernel.AddFacility(new StartableFacility());
-			kernel.Register(Component.For(typeof (A)).Named("string")); // exception here
-		}
+		IKernel kernel = new DefaultKernel();
+		IKernel childKernel = new DefaultKernel();
+		kernel.AddChildKernel(childKernel);
+		childKernel.AddFacility(new StartableFacility());
+		kernel.Register(Component.For(typeof (A)).Named("string")); // exception here
 	}
 }

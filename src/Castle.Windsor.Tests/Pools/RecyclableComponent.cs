@@ -12,20 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Pools
+namespace Castle.Windsor.Tests.Pools;
+
+using Castle.Core;
+using Castle.Windsor.Tests.Components;
+
+public class RecyclableComponent : IRecyclable
 {
-	using Castle.Core;
+	public ISimpleService Dependency { get; set; }
+	public int RecycledCount { get; private set; }
 
-	using CastleTests.Components;
-
-	public class RecyclableComponent : IRecyclable
+	public void Recycle()
 	{
-		public ISimpleService Dependency { get; set; }
-		public int RecycledCount { get; private set; }
-
-		public void Recycle()
-		{
-			RecycledCount++;
-		}
+		RecycledCount++;
 	}
 }

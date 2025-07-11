@@ -12,41 +12,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
+namespace Castle.Core;
+
+using System;
+
+/// <summary>
+///   Used to declare that a component wants interceptors acting on it.
+///   Out of the box recognized only if applied on component's implementation class.
+/// </summary>
+[Serializable]
+[AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
+public class InterceptorAttribute : Attribute
 {
-	using System;
+	private readonly InterceptorReference interceptorRef;
 
 	/// <summary>
-	///   Used to declare that a component wants interceptors acting on it.
-	///   Out of the box recognized only if applied on component's implementation class.
+	///   Constructs the InterceptorAttribute pointing to a key to a interceptor
 	/// </summary>
-	[Serializable]
-	[AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
-	public class InterceptorAttribute : Attribute
+	/// <param name="componentKey"> </param>
+	public InterceptorAttribute(string componentKey)
 	{
-		private readonly InterceptorReference interceptorRef;
+		interceptorRef = new InterceptorReference(componentKey);
+	}
 
-		/// <summary>
-		///   Constructs the InterceptorAttribute pointing to a key to a interceptor
-		/// </summary>
-		/// <param name="componentKey"> </param>
-		public InterceptorAttribute(string componentKey)
-		{
-			interceptorRef = new InterceptorReference(componentKey);
-		}
+	/// <summary>
+	///   Constructs the InterceptorAttribute pointing to a service
+	/// </summary>
+	/// <param name="interceptorType"> </param>
+	public InterceptorAttribute(Type interceptorType)
+	{
+		interceptorRef = new InterceptorReference(interceptorType);
+	}
 
-		/// <summary>
-		///   Constructs the InterceptorAttribute pointing to a service
-		/// </summary>
-		/// <param name="interceptorType"> </param>
-		public InterceptorAttribute(Type interceptorType)
-		{
-			interceptorRef = new InterceptorReference(interceptorType);
-		}
-
-		public virtual InterceptorReference Interceptor
-		{
-			get { return interceptorRef; }
-		}
+	public virtual InterceptorReference Interceptor
+	{
+		get { return interceptorRef; }
 	}
 }

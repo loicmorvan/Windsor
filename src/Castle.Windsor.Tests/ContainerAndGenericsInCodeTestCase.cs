@@ -12,179 +12,160 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace Castle.Windsor.Tests;
+
+using Castle.DynamicProxy;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.Resolvers.SpecializedResolvers;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Interceptors;
+
+public class ContainerAndGenericsInCodeTestCase : AbstractContainerTestCase
 {
-	using Castle.DynamicProxy;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Resolvers.SpecializedResolvers;
-	using Castle.MicroKernel.Tests.ClassComponents;
-	using Castle.Windsor.Tests;
-	using Castle.Windsor.Tests.Interceptors;
-
-	using CastleTests.ClassComponents;
-	using CastleTests.Components;
-
-	
-
-	
-	public class ContainerAndGenericsInCodeTestCase : AbstractContainerTestCase
+	[Fact]
+	public void Can_create_generic_with_ctor_dependency_on_array_of_generics()
 	{
-		[Fact]
-		public void Can_create_generic_with_ctor_dependency_on_array_of_generics()
-		{
-			Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, allowEmptyCollections: false));
-			Container.Register(Component.For(typeof(UsesArrayOfGeneric<>)),
-			                   Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)));
+		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, allowEmptyCollections: false));
+		Container.Register(Component.For(typeof(UsesArrayOfGeneric<>)),
+			Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)));
 
-			Container.Resolve<UsesArrayOfGeneric<int>>();
-		}
+		Container.Resolve<UsesArrayOfGeneric<int>>();
+	}
 
-		[Fact]
-		public void Can_create_nonGeneric_with_ctor_dependency_on_generic()
-		{
-			Container.Register(Component.For<NeedsGenericType>(),
-			                   Component.For(typeof(ICache<>)).ImplementedBy(typeof(NullCache<>)));
+	[Fact]
+	public void Can_create_nonGeneric_with_ctor_dependency_on_generic()
+	{
+		Container.Register(Component.For<NeedsGenericType>(),
+			Component.For(typeof(ICache<>)).ImplementedBy(typeof(NullCache<>)));
 
-			var needsGenericType = Container.Resolve<NeedsGenericType>();
+		var needsGenericType = Container.Resolve<NeedsGenericType>();
 
-			Assert.NotNull(needsGenericType);
-		}
+		Assert.NotNull(needsGenericType);
+	}
 
-		[Fact]
-		public void Can_intercept_open_generic_components()
-		{
-			Container.Register(Component.For<CollectInterceptedIdInterceptor>(),
-			                   Component.For(typeof(Components.IRepository<>)).ImplementedBy(typeof(DemoRepository<>))
-				                   .Interceptors<CollectInterceptedIdInterceptor>());
+	[Fact]
+	public void Can_intercept_open_generic_components()
+	{
+		Container.Register(Component.For<CollectInterceptedIdInterceptor>(),
+			Component.For(typeof(Components.IRepository<>)).ImplementedBy(typeof(DemoRepository<>))
+				.Interceptors<CollectInterceptedIdInterceptor>());
 
-			var demoRepository = Container.Resolve<Components.IRepository<object>>();
-			demoRepository.Get(12);
+		var demoRepository = Container.Resolve<Components.IRepository<object>>();
+		demoRepository.Get(12);
 
-			Assert.Equal(12, CollectInterceptedIdInterceptor.InterceptedId);
-		}
+		Assert.Equal(12, CollectInterceptedIdInterceptor.InterceptedId);
+	}
 
-		[Fact]
-		public void Can_proxy_closed_generic_components()
-		{
-			Container.AddFacility<MyInterceptorGreedyFacility>();
-			Container.Register(Component.For<StandardInterceptor>().Named("interceptor"),
-			                   Component.For<Components.IRepository<Employee>>()
-				                   .ImplementedBy<DemoRepository<Employee>>()
-				                   .Named("key"));
+	[Fact]
+	public void Can_proxy_closed_generic_components()
+	{
+		Container.AddFacility<MyInterceptorGreedyFacility>();
+		Container.Register(Component.For<StandardInterceptor>().Named("interceptor"),
+			Component.For<Components.IRepository<Employee>>()
+				.ImplementedBy<DemoRepository<Employee>>()
+				.Named("key"));
 
-			var store = Container.Resolve<Components.IRepository<Employee>>();
+		var store = Container.Resolve<Components.IRepository<Employee>>();
 
-			Assert.IsNotType<DemoRepository<Employee>>(store);
-		}
+		Assert.IsNotType<DemoRepository<Employee>>(store);
+	}
 
-		[Fact]
-		public void Can_proxy_open_generic_components()
-		{
-			Container.AddFacility<MyInterceptorGreedyFacility2>();
-			Container.Register(Component.For<StandardInterceptor>().Named("interceptor"),
-			                   Component.For(typeof(Components.IRepository<>)).ImplementedBy(typeof(DemoRepository<>)));
+	[Fact]
+	public void Can_proxy_open_generic_components()
+	{
+		Container.AddFacility<MyInterceptorGreedyFacility2>();
+		Container.Register(Component.For<StandardInterceptor>().Named("interceptor"),
+			Component.For(typeof(Components.IRepository<>)).ImplementedBy(typeof(DemoRepository<>)));
 
-			var store = Container.Resolve<Components.IRepository<Employee>>();
+		var store = Container.Resolve<Components.IRepository<Employee>>();
 
-			Assert.IsNotType<DemoRepository<Employee>>(store);
-		}
+		Assert.IsNotType<DemoRepository<Employee>>(store);
+	}
 
-		[Fact(Skip="Currently due to how we obtain open-generic handlers that can't be fixed easily.")]
-		public void Open_generic_as_dependency_does_not_block_resolvability_of_parent()
-		{
-			Container.Register(Component.For(typeof(IGeneric<>))
-				                   .ImplementedBy(typeof(GenericWithTDependency<>)),
-			                   Component.For<UsesIGeneric<A>>(),
-			                   Component.For<A>().UsingFactoryMethod(() => new A()));
+	[Fact]
+	public void Open_generic_singleton_produces_unique_instances_per_closed_type()
+	{
+		Container.Register(
+			Component.For(typeof(Components.IRepository<>))
+				.ImplementedBy(typeof(RepositoryNotMarkedAsTransient<>))
+				.LifeStyle.Singleton);
 
-			var handler = Kernel.GetHandler(typeof(UsesIGeneric<A>));
-			Assert.Equal(HandlerState.Valid, handler.CurrentState);
-		}
+		var o1 = Container.Resolve<Components.IRepository<Employee>>();
+		var o2 = Container.Resolve<Components.IRepository<Employee>>();
+		var o3 = Container.Resolve<Components.IRepository<Reviewer>>();
+		var o4 = Container.Resolve<Components.IRepository<Reviewer>>();
 
-		[Fact]
-		public void Open_generic_singleton_produces_unique_instances_per_closed_type()
-		{
-			Container.Register(
-				Component.For(typeof(Components.IRepository<>))
-					.ImplementedBy(typeof(RepositoryNotMarkedAsTransient<>))
-					.LifeStyle.Singleton);
+		Assert.Same(o1, o2);
+		Assert.Same(o3, o4);
+		Assert.NotSame(o1, o4);
+	}
 
-			var o1 = Container.Resolve<Components.IRepository<Employee>>();
-			var o2 = Container.Resolve<Components.IRepository<Employee>>();
-			var o3 = Container.Resolve<Components.IRepository<Reviewer>>();
-			var o4 = Container.Resolve<Components.IRepository<Reviewer>>();
+	[Fact]
+	public void Open_generic_trasient_via_attribute_produces_unique_instances()
+	{
+		Container.Register(Component.For(typeof(Components.IRepository<>))
+			.ImplementedBy(typeof(TransientRepository<>)));
 
-			Assert.Same(o1, o2);
-			Assert.Same(o3, o4);
-			Assert.NotSame(o1, o4);
-		}
+		var o1 = Container.Resolve<Components.IRepository<Employee>>();
+		var o2 = Container.Resolve<Components.IRepository<Employee>>();
+		var o3 = Container.Resolve<Components.IRepository<Reviewer>>();
+		var o4 = Container.Resolve<Components.IRepository<Reviewer>>();
 
-		[Fact]
-		public void Open_generic_trasient_via_attribute_produces_unique_instances()
-		{
-			Container.Register(Component.For(typeof(Components.IRepository<>))
-				                   .ImplementedBy(typeof(TransientRepository<>)));
+		Assert.NotSame(o1, o2);
+		Assert.NotSame(o1, o3);
+		Assert.NotSame(o1, o4);
+	}
 
-			var o1 = Container.Resolve<Components.IRepository<Employee>>();
-			var o2 = Container.Resolve<Components.IRepository<Employee>>();
-			var o3 = Container.Resolve<Components.IRepository<Reviewer>>();
-			var o4 = Container.Resolve<Components.IRepository<Reviewer>>();
+	[Fact]
+	public void Open_generic_trasient_via_registration_produces_unique_instances()
+	{
+		Container.Register(
+			Component.For(typeof(Components.IRepository<>))
+				.ImplementedBy(typeof(RepositoryNotMarkedAsTransient<>))
+				.LifeStyle.Transient);
 
-			Assert.NotSame(o1, o2);
-			Assert.NotSame(o1, o3);
-			Assert.NotSame(o1, o4);
-		}
+		var o1 = Container.Resolve<Components.IRepository<Employee>>();
+		var o2 = Container.Resolve<Components.IRepository<Employee>>();
+		var o3 = Container.Resolve<Components.IRepository<Reviewer>>();
+		var o4 = Container.Resolve<Components.IRepository<Reviewer>>();
 
-		[Fact]
-		public void Open_generic_trasient_via_registration_produces_unique_instances()
-		{
-			Container.Register(
-				Component.For(typeof(Components.IRepository<>))
-					.ImplementedBy(typeof(RepositoryNotMarkedAsTransient<>))
-					.LifeStyle.Transient);
+		Assert.NotSame(o1, o2);
+		Assert.NotSame(o1, o3);
+		Assert.NotSame(o1, o4);
+	}
 
-			var o1 = Container.Resolve<Components.IRepository<Employee>>();
-			var o2 = Container.Resolve<Components.IRepository<Employee>>();
-			var o3 = Container.Resolve<Components.IRepository<Reviewer>>();
-			var o4 = Container.Resolve<Components.IRepository<Reviewer>>();
+	[Fact]
+	public void Proxy_for_generic_component_does_not_affect_lifestyle()
+	{
+		Container.AddFacility<MyInterceptorGreedyFacility2>();
+		Container.Register(Component.For<StandardInterceptor>().Named("interceptor"),
+			Component.For(typeof(Components.IRepository<>))
+				.ImplementedBy(typeof(DemoRepository<>))
+				.LifeStyle.Transient);
 
-			Assert.NotSame(o1, o2);
-			Assert.NotSame(o1, o3);
-			Assert.NotSame(o1, o4);
-		}
+		var store = Container.Resolve<Components.IRepository<Employee>>();
+		var anotherStore = Container.Resolve<Components.IRepository<Employee>>();
 
-		[Fact]
-		public void Proxy_for_generic_component_does_not_affect_lifestyle()
-		{
-			Container.AddFacility<MyInterceptorGreedyFacility2>();
-			Container.Register(Component.For<StandardInterceptor>().Named("interceptor"),
-			                   Component.For(typeof(Components.IRepository<>))
-				                   .ImplementedBy(typeof(DemoRepository<>))
-				                   .LifeStyle.Transient);
+		Assert.IsNotType<DemoRepository<Employee>>(store);
+		Assert.IsNotType<DemoRepository<Employee>>(anotherStore);
+		Assert.NotSame(store, anotherStore);
+	}
 
-			var store = Container.Resolve<Components.IRepository<Employee>>();
-			var anotherStore = Container.Resolve<Components.IRepository<Employee>>();
+	[Fact]
+	public void Proxy_parent_does_not_make_generic_child_a_proxy()
+	{
+		Container.Register(Component.For<CollectInterceptedIdInterceptor>(),
+			Component.For<ISpecification>()
+				.ImplementedBy<MySpecification>()
+				.Interceptors<CollectInterceptedIdInterceptor>(),
+			Component.For(typeof(Components.IRepository<>))
+				.ImplementedBy(typeof(TransientRepository<>))
+				.Named("repos"));
 
-			Assert.IsNotType<DemoRepository<Employee>>(store);
-			Assert.IsNotType<DemoRepository<Employee>>(anotherStore);
-			Assert.NotSame(store, anotherStore);
-		}
+		var specification = Container.Resolve<ISpecification>();
 
-		[Fact]
-		public void Proxy_parent_does_not_make_generic_child_a_proxy()
-		{
-			Container.Register(Component.For<CollectInterceptedIdInterceptor>(),
-			                   Component.For<ISpecification>()
-				                   .ImplementedBy<MySpecification>()
-				                   .Interceptors<CollectInterceptedIdInterceptor>(),
-			                   Component.For(typeof(Components.IRepository<>))
-				                   .ImplementedBy(typeof(TransientRepository<>))
-				                   .Named("repos"));
-
-			var specification = Container.Resolve<ISpecification>();
-
-			Assert.IsType<TransientRepository<int>>(specification.Repository);
-		}
+		Assert.IsType<TransientRepository<int>>(specification.Repository);
 	}
 }

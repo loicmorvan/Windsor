@@ -12,28 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.TestImplementationsOfExtensionPoints
+namespace Castle.Windsor.Tests.TestImplementationsOfExtensionPoints;
+
+using System;
+using System.Linq;
+using System.Reflection;
+
+using Castle.Core;
+using Castle.MicroKernel.Context;
+using Castle.MicroKernel.Handlers;
+
+public class DuplicateGenerics : IGenericImplementationMatchingStrategy
 {
-	using System;
-	using System.Linq;
-	using System.Reflection;
-
-	using Castle.Core;
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Handlers;
-
-	public class DuplicateGenerics : IGenericImplementationMatchingStrategy
+	public Type[] GetGenericArguments(ComponentModel model, CreationContext context)
 	{
-		public Type[] GetGenericArguments(ComponentModel model, CreationContext context)
+		var first = context.RequestedType.GetTypeInfo().GetGenericArguments().First();
+		var length = model.Implementation.GetTypeInfo().GetGenericArguments().Length;
+		var types = new Type[length];
+		for (var i = 0; i < length; i++)
 		{
-			var first = context.RequestedType.GetTypeInfo().GetGenericArguments().First();
-			var length = model.Implementation.GetTypeInfo().GetGenericArguments().Length;
-			var types = new Type[length];
-			for (var i = 0; i < length; i++)
-			{
-				types[i] = first;
-			}
-			return types;
+			types[i] = first;
 		}
+		return types;
 	}
 }

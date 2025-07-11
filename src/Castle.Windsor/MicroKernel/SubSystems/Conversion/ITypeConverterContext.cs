@@ -12,21 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+namespace Castle.MicroKernel.SubSystems.Conversion;
+
+using Castle.Core;
+using Castle.MicroKernel.Context;
+
+public interface ITypeConverterContext
 {
-	using Castle.Core;
-	using Castle.MicroKernel.Context;
+	ITypeConverter Composition { get; }
 
-	public interface ITypeConverterContext
-	{
-		ITypeConverter Composition { get; }
+	CreationContext CurrentCreationContext { get; }
+	ComponentModel CurrentModel { get; }
+	IKernelInternal Kernel { get; }
 
-		CreationContext CurrentCreationContext { get; }
-		ComponentModel CurrentModel { get; }
-		IKernelInternal Kernel { get; }
+	void Pop();
 
-		void Pop();
-
-		void Push(ComponentModel model, CreationContext context);
-	}
+	void Push(ComponentModel model, CreationContext context);
 }

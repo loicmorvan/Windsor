@@ -12,60 +12,57 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+using System;
+
+using Castle.Windsor.Tests.Components;
+
+public class ServiceUser
 {
-	using System;
+	private readonly A a;
+	private readonly B b;
+	private readonly C c;
 
-	using Castle.Windsor.Tests;
-
-	using CastleTests.Components;
-
-	public class ServiceUser
+	public ServiceUser(A a)
 	{
-		private readonly A a;
-		private readonly B b;
-		private readonly C c;
-
-		public ServiceUser(A a)
+		if (a == null)
 		{
-			if (a == null)
-			{
-				throw new ArgumentNullException();
-			}
-			this.a = a;
+			throw new ArgumentNullException();
 		}
+		this.a = a;
+	}
 
-		public ServiceUser(A a, B b) : this(a)
+	public ServiceUser(A a, B b) : this(a)
+	{
+		if (b == null)
 		{
-			if (b == null)
-			{
-				throw new ArgumentNullException();
-			}
-			this.b = b;
+			throw new ArgumentNullException();
 		}
+		this.b = b;
+	}
 
-		public ServiceUser(A a, B b, C c) : this(a, b)
+	public ServiceUser(A a, B b, C c) : this(a, b)
+	{
+		if (c == null)
 		{
-			if (c == null)
-			{
-				throw new ArgumentNullException();
-			}
-			this.c = c;
+			throw new ArgumentNullException();
 		}
+		this.c = c;
+	}
 
-		public A AComponent
-		{
-			get { return a; }
-		}
+	public A AComponent
+	{
+		get { return a; }
+	}
 
-		public B BComponent
-		{
-			get { return b; }
-		}
+	public B BComponent
+	{
+		get { return b; }
+	}
 
-		public C CComponent
-		{
-			get { return c; }
-		}
+	public C CComponent
+	{
+		get { return c; }
 	}
 }

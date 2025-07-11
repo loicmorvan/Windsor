@@ -12,15 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class EmptyServiceDecorator : IEmptyService
-	{
-		public EmptyServiceDecorator(IEmptyService other)
-		{
-			Other = other;
-		}
+namespace Castle.Windsor.Tests.Components;
 
-		public IEmptyService Other { get; private set; }
-	}
+public class EmptyServiceDecorator(IEmptyService other) : IEmptyService
+{
+	public IEmptyService Other { get; private set; } = other;
 }

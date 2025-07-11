@@ -12,18 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace Castle.Windsor.Tests;
+
+using System;
+
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+public class BugAttribute(string bugId) : Attribute
 {
-	using System;
-
-	[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-	public class BugAttribute : Attribute
-	{
-		public BugAttribute(string bugId)
-		{
-			BugId = bugId;
-		}
-
-		public string BugId { get; set; }
-	}
+	public string BugId { get; set; } = bugId;
 }

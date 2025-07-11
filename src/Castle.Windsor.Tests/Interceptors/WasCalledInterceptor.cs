@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Interceptors
+namespace Castle.Windsor.Tests.Interceptors;
+
+using Castle.DynamicProxy;
+
+public class WasCalledInterceptor : StandardInterceptor
 {
-	using Castle.DynamicProxy;
+	public static bool WasCalled;
 
-	public class WasCalledInterceptor : StandardInterceptor
+	protected override void PreProceed(IInvocation invocation)
 	{
-		public static bool WasCalled;
-
-		protected override void PreProceed(IInvocation invocation)
-		{
-			WasCalled = true;
-		}
+		WasCalled = true;
 	}
 }

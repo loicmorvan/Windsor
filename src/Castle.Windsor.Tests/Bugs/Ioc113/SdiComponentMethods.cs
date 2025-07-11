@@ -1,17 +1,16 @@
 #region Header
 
-// Copyright © 2006-2008 F&L methode® software www.fenlsoftware.nl
+// Copyright ï¿½ 2006-2008 F&L methodeï¿½ software www.fenlsoftware.nl
 
 #endregion
 
-namespace Castle.MicroKernel.Tests.Bugs.Ioc113
+namespace Castle.Windsor.Tests.Bugs.Ioc113;
+
+public enum SdiComponentMethods
 {
-	public enum SdiComponentMethods
-	{
-		Initialize,
-		Start,
-		DoSomething,
-		Stop,
-		Dispose,
-	}
+	Initialize,
+	Start,
+	DoSomething,
+	Stop,
+	Dispose,
 }

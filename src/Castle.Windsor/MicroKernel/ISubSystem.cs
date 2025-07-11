@@ -12,24 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.MicroKernel;
+
+/// <summary>
+///   A subsystem is used by the MicroKernel to deal 
+///   with a specific concern.
+/// </summary>
+public interface ISubSystem
 {
 	/// <summary>
-	///   A subsystem is used by the MicroKernel to deal 
-	///   with a specific concern.
+	///   Initializes the subsystem
 	/// </summary>
-	public interface ISubSystem
-	{
-		/// <summary>
-		///   Initializes the subsystem
-		/// </summary>
-		/// <param name = "kernel"></param>
-		void Init(IKernelInternal kernel);
+	/// <param name = "kernel"></param>
+	void Init(IKernelInternal kernel);
 
-		/// <summary>
-		///   Should perform the termination
-		///   of the subsystem instance.
-		/// </summary>
-		void Terminate();
-	}
+	/// <summary>
+	///   Should perform the termination
+	///   of the subsystem instance.
+	/// </summary>
+	void Terminate();
 }

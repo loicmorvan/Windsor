@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
-{
-	using System.Collections.Generic;
-	using System.Reflection;
+namespace Castle.Core;
 
-	public delegate PropertySet PropertySetBuilder(PropertyInfo property, bool isOptional);
+using System.Collections.Generic;
+using System.Reflection;
 
-	public delegate PropertySet[] PropertyDependencyFilter(ComponentModel model, ICollection<PropertyInfo> properties, PropertySetBuilder buildDependencyCallback);
-}
+public delegate PropertySet PropertySetBuilder(PropertyInfo property, bool isOptional);
+
+public delegate PropertySet[] PropertyDependencyFilter(ComponentModel model, ICollection<PropertyInfo> properties, PropertySetBuilder buildDependencyCallback);

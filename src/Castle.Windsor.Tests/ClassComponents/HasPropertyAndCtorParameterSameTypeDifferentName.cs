@@ -12,17 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+using Castle.Windsor.Tests.Components;
+
+public class HasPropertyAndCtorParameterSameTypeDifferentName(IEmptyService emptyService)
 {
-	using CastleTests.Components;
-
-	public class HasPropertyAndCtorParameterSameTypeDifferentName
-	{
-		public HasPropertyAndCtorParameterSameTypeDifferentName(IEmptyService emptyService)
-		{
-			SomeService = emptyService;
-		}
-
-		public IEmptyService SomeService { get; set; }
-	}
+	public IEmptyService SomeService { get; set; } = emptyService;
 }

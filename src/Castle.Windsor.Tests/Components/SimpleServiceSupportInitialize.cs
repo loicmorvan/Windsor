@@ -12,36 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+using System;
+using System.ComponentModel;
+
+public class SimpleServiceSupportInitialize : ISimpleService, ISupportInitialize
 {
-	using System;
-	using System.ComponentModel;
+	public bool InitBegun { get; private set; }
+	public bool InitEnded { get; private set; }
 
-	public class SimpleServiceSupportInitialize : ISimpleService, ISupportInitialize
+	public void Operation()
 	{
-		public bool InitBegun { get; private set; }
-		public bool InitEnded { get; private set; }
+	}
 
-		public void Operation()
+	public void BeginInit()
+	{
+		if (InitEnded)
 		{
+			throw new InvalidOperationException("Can't Begin init after it ended");
 		}
+		InitBegun = true;
+	}
 
-		public void BeginInit()
+	public void EndInit()
+	{
+		if (InitBegun == false)
 		{
-			if (InitEnded)
-			{
-				throw new InvalidOperationException("Can't Begin init after it ended");
-			}
-			InitBegun = true;
+			throw new InvalidOperationException("Can't End init before it begins");
 		}
-
-		public void EndInit()
-		{
-			if (InitBegun == false)
-			{
-				throw new InvalidOperationException("Can't End init before it begins");
-			}
-			InitEnded = true;
-		}
+		InitEnded = true;
 	}
 }

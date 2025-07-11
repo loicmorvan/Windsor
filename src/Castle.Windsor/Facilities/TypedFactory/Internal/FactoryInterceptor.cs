@@ -12,61 +12,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory.Internal
+namespace Castle.Facilities.TypedFactory.Internal;
+
+using System;
+
+using Castle.Core;
+using Castle.Core.Interceptor;
+using Castle.DynamicProxy;
+using Castle.MicroKernel;
+
+/// <summary>
+///   Legacy interceptor for old impl. of the facility.
+/// </summary>
+[Transient]
+public class FactoryInterceptor(IKernel kernel) : IInterceptor, IOnBehalfAware
 {
-	using System;
+	private FactoryEntry entry;
 
-	using Castle.Core;
-	using Castle.Core.Interceptor;
-	using Castle.DynamicProxy;
-	using Castle.MicroKernel;
-
-	/// <summary>
-	///   Legacy interceptor for old impl. of the facility.
-	/// </summary>
-	[Transient]
-	public class FactoryInterceptor : IInterceptor, IOnBehalfAware
+	public void Intercept(IInvocation invocation)
 	{
-		private readonly IKernel kernel;
-		private FactoryEntry entry;
-
-		public FactoryInterceptor(IKernel kernel)
+		var name = invocation.Method.Name;
+		var args = invocation.Arguments;
+		if (name.Equals(entry.CreationMethod))
 		{
-			this.kernel = kernel;
-		}
-
-		public void Intercept(IInvocation invocation)
-		{
-			var name = invocation.Method.Name;
-			var args = invocation.Arguments;
-			if (name.Equals(entry.CreationMethod))
+			if (args.Length == 0 || args[0] == null)
 			{
-				if (args.Length == 0 || args[0] == null)
-				{
-					invocation.ReturnValue = kernel.Resolve(invocation.Method.ReturnType);
-					return;
-				}
-				var key = (String)args[0];
-				invocation.ReturnValue = kernel.Resolve<object>(key);
+				invocation.ReturnValue = kernel.Resolve(invocation.Method.ReturnType);
 				return;
 			}
-
-			if (name.Equals(entry.DestructionMethod))
-			{
-				if (args.Length == 1)
-				{
-					kernel.ReleaseComponent(args[0]);
-					invocation.ReturnValue = null;
-					return;
-				}
-			}
-
-			invocation.Proceed();
+			var key = (String)args[0];
+			invocation.ReturnValue = kernel.Resolve<object>(key);
+			return;
 		}
 
-		public void SetInterceptedComponentModel(ComponentModel target)
+		if (name.Equals(entry.DestructionMethod))
 		{
-			entry = (FactoryEntry)target.ExtendedProperties["typed.fac.entry"];
+			if (args.Length == 1)
+			{
+				kernel.ReleaseComponent(args[0]);
+				invocation.ReturnValue = null;
+				return;
+			}
 		}
+
+		invocation.Proceed();
+	}
+
+	public void SetInterceptedComponentModel(ComponentModel target)
+	{
+		entry = (FactoryEntry)target.ExtendedProperties["typed.fac.entry"];
 	}
 }

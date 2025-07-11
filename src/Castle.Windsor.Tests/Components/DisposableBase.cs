@@ -12,21 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+using System;
+
+public abstract class DisposableBase : IDisposable
 {
-	using System;
+	public bool IsDisposed { get; private set; }
 
-	public abstract class DisposableBase : IDisposable
+	public void Dispose()
 	{
-		public bool IsDisposed { get; private set; }
-
-		public void Dispose()
+		if (IsDisposed)
 		{
-			if (IsDisposed)
-			{
-				throw new Exception("Already disposed");
-			}
-			IsDisposed = true;
+			throw new Exception("Already disposed");
 		}
+		IsDisposed = true;
 	}
 }

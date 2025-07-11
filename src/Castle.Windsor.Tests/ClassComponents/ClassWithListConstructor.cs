@@ -12,22 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+using System.Collections;
+
+public class ClassWithListConstructor(IList services)
 {
-	using System.Collections;
-
-	public class ClassWithListConstructor
+	public IList Services
 	{
-		private readonly IList services;
-
-		public ClassWithListConstructor(IList services)
-		{
-			this.services = services;
-		}
-
-		public IList Services
-		{
-			get { return services; }
-		}
+		get { return services; }
 	}
 }

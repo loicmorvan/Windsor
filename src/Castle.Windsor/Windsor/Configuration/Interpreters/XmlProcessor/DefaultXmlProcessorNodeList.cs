@@ -12,73 +12,72 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor;
+
+using System.Collections.Generic;
+using System.Xml;
+
+public class DefaultXmlProcessorNodeList : IXmlProcessorNodeList
 {
-	using System.Collections.Generic;
-	using System.Xml;
+	private readonly IList<XmlNode> nodes;
+	private int index = -1;
 
-	public class DefaultXmlProcessorNodeList : IXmlProcessorNodeList
+	public DefaultXmlProcessorNodeList(XmlNode node)
 	{
-		private readonly IList<XmlNode> nodes;
-		private int index = -1;
+		nodes = new List<XmlNode>();
+		nodes.Add(node);
+	}
 
-		public DefaultXmlProcessorNodeList(XmlNode node)
+	public DefaultXmlProcessorNodeList(IList<XmlNode> nodes)
+	{
+		this.nodes = nodes;
+	}
+
+	public DefaultXmlProcessorNodeList(XmlNodeList nodes)
+	{
+		this.nodes = CloneNodeList(nodes);
+	}
+
+	public int Count
+	{
+		get { return nodes.Count; }
+	}
+
+	public XmlNode Current
+	{
+		get { return nodes[index]; }
+	}
+
+	public int CurrentPosition
+	{
+		get { return index; }
+		set { index = value; }
+	}
+
+	public bool HasCurrent
+	{
+		get { return index < nodes.Count; }
+	}
+
+	public bool MoveNext()
+	{
+		return ++index < nodes.Count;
+	}
+
+	/// <summary>
+	///   Make a shallow copy of the nodeList.
+	/// </summary>
+	/// <param name = "nodeList">The nodeList to be copied.</param>
+	/// <returns></returns>
+	protected IList<XmlNode> CloneNodeList(XmlNodeList nodeList)
+	{
+		IList<XmlNode> nodes = new List<XmlNode>(nodeList.Count);
+
+		foreach (XmlNode node in nodeList)
 		{
-			nodes = new List<XmlNode>();
 			nodes.Add(node);
 		}
 
-		public DefaultXmlProcessorNodeList(IList<XmlNode> nodes)
-		{
-			this.nodes = nodes;
-		}
-
-		public DefaultXmlProcessorNodeList(XmlNodeList nodes)
-		{
-			this.nodes = CloneNodeList(nodes);
-		}
-
-		public int Count
-		{
-			get { return nodes.Count; }
-		}
-
-		public XmlNode Current
-		{
-			get { return nodes[index]; }
-		}
-
-		public int CurrentPosition
-		{
-			get { return index; }
-			set { index = value; }
-		}
-
-		public bool HasCurrent
-		{
-			get { return index < nodes.Count; }
-		}
-
-		public bool MoveNext()
-		{
-			return ++index < nodes.Count;
-		}
-
-		/// <summary>
-		///   Make a shallow copy of the nodeList.
-		/// </summary>
-		/// <param name = "nodeList">The nodeList to be copied.</param>
-		/// <returns></returns>
-		protected IList<XmlNode> CloneNodeList(XmlNodeList nodeList)
-		{
-			IList<XmlNode> nodes = new List<XmlNode>(nodeList.Count);
-
-			foreach (XmlNode node in nodeList)
-			{
-				nodes.Add(node);
-			}
-
-			return nodes;
-		}
+		return nodes;
 	}
 }

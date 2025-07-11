@@ -12,43 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory
+namespace Castle.Facilities.TypedFactory;
+
+using Castle.Core;
+using Castle.Facilities.TypedFactory.Internal;
+using Castle.MicroKernel;
+using Castle.MicroKernel.ComponentActivator;
+using Castle.MicroKernel.Context;
+
+public class DelegateFactoryActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
+	: AbstractComponentActivator(model, kernel, onCreation, onDestruction), IDependencyAwareActivator
 {
-	using Castle.Core;
-	using Castle.Facilities.TypedFactory.Internal;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.ComponentActivator;
-	using Castle.MicroKernel.Context;
+	private readonly IProxyFactoryExtension proxyFactory = new DelegateProxyFactory();
 
-	public class DelegateFactoryActivator : AbstractComponentActivator, IDependencyAwareActivator
+	public bool CanProvideRequiredDependencies(ComponentModel component)
 	{
-		private readonly IProxyFactoryExtension proxyFactory = new DelegateProxyFactory();
+		return true;
+	}
 
-		public DelegateFactoryActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
-			: base(model, kernel, onCreation, onDestruction)
-		{
-		}
+	public bool IsManagedExternally(ComponentModel component)
+	{
+		return false;
+	}
 
-		public bool CanProvideRequiredDependencies(ComponentModel component)
-		{
-			return true;
-		}
+	protected override object InternalCreate(CreationContext context)
+	{
+		var instance = Kernel.ProxyFactory.Create(proxyFactory, Kernel, Model, context);
+		ApplyCommissionConcerns(instance);
+		return instance;
+	}
 
-		public bool IsManagedExternally(ComponentModel component)
-		{
-			return false;
-		}
-
-		protected override object InternalCreate(CreationContext context)
-		{
-			var instance = Kernel.ProxyFactory.Create(proxyFactory, Kernel, Model, context);
-			ApplyCommissionConcerns(instance);
-			return instance;
-		}
-
-		protected override void InternalDestroy(object instance)
-		{
-			ApplyDecommissionConcerns(instance);
-		}
+	protected override void InternalDestroy(object instance)
+	{
+		ApplyDecommissionConcerns(instance);
 	}
 }

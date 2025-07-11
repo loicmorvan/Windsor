@@ -12,23 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Extensions.DependencyInjection
+namespace Castle.Windsor.Extensions.DependencyInjection;
+
+using Microsoft.Extensions.DependencyInjection;
+
+public sealed class WindsorServiceProviderFactory : WindsorServiceProviderFactoryBase
 {
-	using Microsoft.Extensions.DependencyInjection;
 
-	public sealed class WindsorServiceProviderFactory : WindsorServiceProviderFactoryBase
+	public WindsorServiceProviderFactory()
 	{
+		CreateRootScope();
+		CreateRootContainer();
+	}
 
-		public WindsorServiceProviderFactory()
-		{
-			CreateRootScope();
-			CreateRootContainer();
-		}
-
-		public WindsorServiceProviderFactory(IWindsorContainer container)
-		{
-			CreateRootScope();
-			SetRootContainer(container);
-		}
+	public WindsorServiceProviderFactory(IWindsorContainer container)
+	{
+		CreateRootScope();
+		SetRootContainer(container);
 	}
 }

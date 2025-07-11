@@ -12,65 +12,58 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Resolvers
+namespace Castle.Facilities.AspNetCore.Resolvers;
+
+using System;
+using System.Linq;
+
+using Castle.Core;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Context;
+
+using Microsoft.Extensions.DependencyInjection;
+
+public class FrameworkDependencyResolver(IServiceCollection serviceCollection) : ISubDependencyResolver, IAcceptServiceProvider
 {
-	using System;
-	using System.Linq;
+	private IServiceProvider serviceProvider;
 
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Context;
-
-	using Microsoft.Extensions.DependencyInjection;
-
-	public class FrameworkDependencyResolver : ISubDependencyResolver, IAcceptServiceProvider
+	public void AcceptServiceProvider(IServiceProvider serviceProvider)
 	{
-		private IServiceProvider serviceProvider;
-		private readonly IServiceCollection serviceCollection;
-
-		public FrameworkDependencyResolver(IServiceCollection serviceCollection)
-		{
-			this.serviceCollection = serviceCollection;
-		}
-
-		public void AcceptServiceProvider(IServiceProvider serviceProvider)
-		{
-			this.serviceProvider = serviceProvider;
-		}
-
-		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
-		{
-			return HasMatchingType(dependency.TargetType);
-		}
-
-		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
-		{
-			ThrowIfServiceProviderIsNull();
-			return serviceProvider.GetService(dependency.TargetType);
-		}
-
-		public bool HasMatchingType(Type dependencyType)
-		{
-			return dependencyType != null &&
-				serviceCollection.Any(x => x.ServiceType.MatchesType(dependencyType));
-		}
-
-		private void ThrowIfServiceProviderIsNull()
-		{
-			if (serviceProvider == null)
-			{
-				throw new InvalidOperationException($"The serviceProvider for this resolver is null. Please call AcceptServiceProvider first.");
-			}
-		}
+		this.serviceProvider = serviceProvider;
 	}
 
-	internal static class GenericTypeExtensions
+	public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
 	{
-		public static bool MatchesType(this Type type, Type otherType)
+		return HasMatchingType(dependency.TargetType);
+	}
+
+	public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+	{
+		ThrowIfServiceProviderIsNull();
+		return serviceProvider.GetService(dependency.TargetType);
+	}
+
+	public bool HasMatchingType(Type dependencyType)
+	{
+		return dependencyType != null &&
+		       serviceCollection.Any(x => x.ServiceType.MatchesType(dependencyType));
+	}
+
+	private void ThrowIfServiceProviderIsNull()
+	{
+		if (serviceProvider == null)
 		{
-			var genericType = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
-			var genericOtherType = otherType.IsGenericType ? otherType.GetGenericTypeDefinition() : otherType;
-			return genericType == genericOtherType;
+			throw new InvalidOperationException($"The serviceProvider for this resolver is null. Please call AcceptServiceProvider first.");
 		}
+	}
+}
+
+internal static class GenericTypeExtensions
+{
+	public static bool MatchesType(this Type type, Type otherType)
+	{
+		var genericType = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
+		var genericOtherType = otherType.IsGenericType ? otherType.GetGenericTypeDefinition() : otherType;
+		return genericType == genericOtherType;
 	}
 }

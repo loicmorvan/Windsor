@@ -12,116 +12,112 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Diagnostics
+namespace Castle.Windsor.Tests.Diagnostics;
+
+using System.Linq;
+
+using Castle.MicroKernel;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Diagnostics;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Interceptors;
+
+public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerTestCase
 {
-	using System.Linq;
+	private IPotentialLifestyleMismatchesDiagnostic diagnostic;
 
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Tests.ClassComponents;
-	using Castle.Windsor.Diagnostics;
-	using Castle.Windsor.Tests.Interceptors;
-
-	using CastleTests.Components;
-
-	
-
-	public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerTestCase
+	protected override void AfterContainerCreated()
 	{
-		private IPotentialLifestyleMismatchesDiagnostic diagnostic;
+		var host = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IDiagnosticsHost;
+		diagnostic = host.GetDiagnostic<IPotentialLifestyleMismatchesDiagnostic>();
+	}
 
-		protected override void AfterContainerCreated()
-		{
-			var host = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IDiagnosticsHost;
-			diagnostic = host.GetDiagnostic<IPotentialLifestyleMismatchesDiagnostic>();
-		}
+	[Fact]
+	public void Can_detect_singleton_depending_on_transient()
+	{
+		Container.Register(Component.For<B>().LifeStyle.Singleton,
+			Component.For<A>().LifeStyle.Transient);
 
-		[Fact]
-		public void Can_detect_singleton_depending_on_transient()
-		{
-			Container.Register(Component.For<B>().LifeStyle.Singleton,
-			                   Component.For<A>().LifeStyle.Transient);
+		var mismatches = diagnostic.Inspect();
+		Assert.Single(mismatches);
+	}
 
-			var mismatches = diagnostic.Inspect();
-			Assert.Single(mismatches);
-		}
+	[Fact]
+	public void Can_detect_singleton_depending_on_transient_directly_and_indirectly()
+	{
+		Container.Register(Component.For<CBA>().LifeStyle.Singleton,
+			Component.For<B>().LifeStyle.Singleton,
+			Component.For<A>().LifeStyle.Transient);
 
-		[Fact]
-		public void Can_detect_singleton_depending_on_transient_directly_and_indirectly()
-		{
-			Container.Register(Component.For<CBA>().LifeStyle.Singleton,
-			                   Component.For<B>().LifeStyle.Singleton,
-			                   Component.For<A>().LifeStyle.Transient);
+		var items = diagnostic.Inspect();
+		Assert.Equal(3, items.Length);
+		var cbaMismatches = items.Where(i => i.First().ComponentModel.Services.Single() == typeof(CBA)).ToArray();
+		Assert.Equal(2, cbaMismatches.Length);
+	}
 
-			var items = diagnostic.Inspect();
-			Assert.Equal(3, items.Length);
-			var cbaMismatches = items.Where(i => i.First().ComponentModel.Services.Single() == typeof(CBA)).ToArray();
-			Assert.Equal(2, cbaMismatches.Length);
-		}
+	[Fact]
+	public void Can_detect_singleton_depending_on_transient_indirectly()
+	{
+		Container.Register(Component.For<C>().LifeStyle.Singleton,
+			Component.For<B>().LifeStyle.Singleton,
+			Component.For<A>().LifeStyle.Transient);
 
-		[Fact]
-		public void Can_detect_singleton_depending_on_transient_indirectly()
-		{
-			Container.Register(Component.For<C>().LifeStyle.Singleton,
-			                   Component.For<B>().LifeStyle.Singleton,
-			                   Component.For<A>().LifeStyle.Transient);
+		var mismatches = diagnostic.Inspect();
+		Assert.Equal(2, mismatches.Length);
+	}
 
-			var mismatches = diagnostic.Inspect();
-			Assert.Equal(2, mismatches.Length);
-		}
+	[Fact]
+	public void Can_detect_singleton_depending_on_transient_indirectly_via_custom_lifestyle()
+	{
+		Container.Register(Component.For<C>().LifeStyle.Singleton,
+			Component.For<B>().LifeStyle.Custom<CustomLifestyleManager>(),
+			Component.For<A>().LifeStyle.Transient);
 
-		[Fact]
-		public void Can_detect_singleton_depending_on_transient_indirectly_via_custom_lifestyle()
-		{
-			Container.Register(Component.For<C>().LifeStyle.Singleton,
-			                   Component.For<B>().LifeStyle.Custom<CustomLifestyleManager>(),
-			                   Component.For<A>().LifeStyle.Transient);
+		var mismatches = diagnostic.Inspect();
+		Assert.Single(mismatches);
+	}
 
-			var mismatches = diagnostic.Inspect();
-			Assert.Single(mismatches);
-		}
+	[Fact]
+	public void Can_detect_singleton_depending_on_two_transients_directly_and_indirectly()
+	{
+		Container.Register(Component.For<CBA>().LifeStyle.Singleton,
+			Component.For<B>().LifeStyle.Transient,
+			Component.For<A>().LifeStyle.Transient);
 
-		[Fact]
-		public void Can_detect_singleton_depending_on_two_transients_directly_and_indirectly()
-		{
-			Container.Register(Component.For<CBA>().LifeStyle.Singleton,
-			                   Component.For<B>().LifeStyle.Transient,
-			                   Component.For<A>().LifeStyle.Transient);
+		var items = diagnostic.Inspect();
+		Assert.Equal(2, items.Length);
+		var cbaMismatches = items.Where(i => i.First().ComponentModel.Services.Single() == typeof(CBA)).ToArray();
+		Assert.Equal(2, cbaMismatches.Length);
+	}
 
-			var items = diagnostic.Inspect();
-			Assert.Equal(2, items.Length);
-			var cbaMismatches = items.Where(i => i.First().ComponentModel.Services.Single() == typeof(CBA)).ToArray();
-			Assert.Equal(2, cbaMismatches.Length);
-		}
+	[Fact]
+	public void Can_handle_dependency_cycles()
+	{
+		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>());
 
-		[Fact]
-		public void Can_handle_dependency_cycles()
-		{
-			Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
-			                   Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>());
+		var mismatches = diagnostic.Inspect();
+		Assert.Empty(mismatches);
+	}
 
-			var mismatches = diagnostic.Inspect();
-			Assert.Empty(mismatches);
-		}
+	[Fact]
+	public void Decorators_dont_trigger_stack_overflow()
+	{
+		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
+			Component.For<UsesIEmptyService>());
+		var items = diagnostic.Inspect();
+		Assert.Empty(items);
+	}
 
-		[Fact]
-		public void Decorators_dont_trigger_stack_overflow()
-		{
-			Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
-			                   Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
-			                   Component.For<UsesIEmptyService>());
-			var items = diagnostic.Inspect();
-			Assert.Empty(items);
-		}
-
-		[Fact]
-		public void Does_not_crash_on_dependency_cycles()
-		{
-			Container.Register(Component.For<InterceptorThatCauseStackOverflow>().Named("interceptor"),
-			                   Component.For<ICameraService>().ImplementedBy<CameraService>().Interceptors<InterceptorThatCauseStackOverflow>(),
-			                   Component.For<ICameraService>().ImplementedBy<CameraService>().Named("ok to resolve - has no interceptors"));
-			var items = diagnostic.Inspect();
-			Assert.Empty(items);
-		}
+	[Fact]
+	public void Does_not_crash_on_dependency_cycles()
+	{
+		Container.Register(Component.For<InterceptorThatCauseStackOverflow>().Named("interceptor"),
+			Component.For<ICameraService>().ImplementedBy<CameraService>().Interceptors<InterceptorThatCauseStackOverflow>(),
+			Component.For<ICameraService>().ImplementedBy<CameraService>().Named("ok to resolve - has no interceptors"));
+		var items = diagnostic.Inspect();
+		Assert.Empty(items);
 	}
 }

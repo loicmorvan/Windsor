@@ -12,43 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers
-{
-	using System;
-	using System.Runtime.Serialization;
+namespace Castle.MicroKernel.Handlers;
 
-	using Castle.Core;
-	using Castle.Core.Internal;
+using System;
+using System.Runtime.Serialization;
+
+using Castle.Core;
+using Castle.Core.Internal;
+
+/// <summary>
+///   Summary description for HandlerException.
+/// </summary>
+[Serializable]
+public class HandlerException : Exception
+{
+	/// <summary>
+	///   Initializes a new instance of the <see cref = "HandlerException" /> class.
+	/// </summary>
+	/// <param name = "message">The message.</param>
+	/// <param name = "name"></param>
+	public HandlerException(string message, ComponentName name) : base(message)
+	{
+		ExceptionHelper.SetUp(this);
+		Name = name;
+	}
 
 	/// <summary>
-	///   Summary description for HandlerException.
+	///   Initializes a new instance of the <see cref = "HandlerException" /> class.
 	/// </summary>
-	[Serializable]
-	public class HandlerException : Exception
+	/// <param name = "message">The message.</param>
+	/// <param name = "name"></param>
+	/// <param name = "innerException"></param>
+	public HandlerException(string message, ComponentName name, Exception innerException)
+		: base(message, innerException)
 	{
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "HandlerException" /> class.
-		/// </summary>
-		/// <param name = "message">The message.</param>
-		/// <param name = "name"></param>
-		public HandlerException(string message, ComponentName name) : base(message)
-		{
-			ExceptionHelper.SetUp(this);
-			Name = name;
-		}
-
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "HandlerException" /> class.
-		/// </summary>
-		/// <param name = "message">The message.</param>
-		/// <param name = "name"></param>
-		/// <param name = "innerException"></param>
-		public HandlerException(string message, ComponentName name, Exception innerException)
-			: base(message, innerException)
-		{
-			ExceptionHelper.SetUp(this);
-			Name = name;
-		}
+		ExceptionHelper.SetUp(this);
+		Name = name;
+	}
 
 #if FEATURE_SERIALIZATION
 		/// <summary>
@@ -62,6 +62,5 @@ namespace Castle.MicroKernel.Handlers
 		}
 #endif
 
-		public ComponentName Name { get; private set; }
-	}
+	public ComponentName Name { get; private set; }
 }

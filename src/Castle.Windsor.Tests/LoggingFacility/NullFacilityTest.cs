@@ -12,43 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Logging.Tests
+namespace Castle.Windsor.Tests.LoggingFacility;
+
+using System;
+
+using Castle.Core.Logging;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+using Castle.Windsor.Tests.LoggingFacility.Classes;
+
+/// <summary>
+/// Summary description for ConsoleFacitlyTest.
+/// </summary>
+public class NullFacilityTest : BaseTest, IDisposable
 {
-	using System;
+	private readonly IWindsorContainer container;
 
-	using Castle.Core.Logging;
-	using Castle.Facilities.Logging.Tests.Classes;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor;
-
-
-	/// <summary>
-	/// Summary description for ConsoleFacitlyTest.
-	/// </summary>
-	public class NullFacilityTest : BaseTest, IDisposable
+	public NullFacilityTest()
 	{
-		private IWindsorContainer container;
+		container = base.CreateConfiguredContainer<NullLogFactory>();
+	}
 
-		public NullFacilityTest()
+	public void Dispose()
+	{
+		if (container != null)
 		{
-			container = base.CreateConfiguredContainer<NullLogFactory>();
+			container.Dispose();
 		}
+	}
 
-		public void Dispose()
-		{
-			if (container != null)
-			{
-				container.Dispose();
-			}
-		}
+	[Fact]
+	public void SimpleTest()
+	{
+		container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
+		SimpleLoggingComponent test = container.Resolve<SimpleLoggingComponent>("component");
 
-		[Fact]
-		public void SimpleTest()
-		{
-			container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
-			SimpleLoggingComponent test = container.Resolve<SimpleLoggingComponent>("component");
-
-			test.DoSomething();
-		}
+		test.DoSomething();
 	}
 }

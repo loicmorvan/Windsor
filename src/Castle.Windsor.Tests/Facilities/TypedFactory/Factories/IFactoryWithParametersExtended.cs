@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories
-{
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
-	public interface IFactoryWithParametersExtended : IFactoryWithParameters
-	{
-		ComponentWithOptionalParameter BuildComponent2(string parameter);
-	}
+using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+
+public interface IFactoryWithParametersExtended : IFactoryWithParameters
+{
+	ComponentWithOptionalParameter BuildComponent2(string parameter);
 }

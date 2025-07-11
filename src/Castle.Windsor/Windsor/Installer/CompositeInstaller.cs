@@ -12,28 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Installer
+namespace Castle.Windsor.Installer;
+
+using System.Collections.Generic;
+
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.SubSystems.Configuration;
+
+public class CompositeInstaller : IWindsorInstaller
 {
-	using System.Collections.Generic;
+	private readonly HashSet<IWindsorInstaller> installers = new HashSet<IWindsorInstaller>();
 
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.SubSystems.Configuration;
-
-	public class CompositeInstaller : IWindsorInstaller
+	public void Add(IWindsorInstaller instance)
 	{
-		private readonly HashSet<IWindsorInstaller> installers = new HashSet<IWindsorInstaller>();
+		installers.Add(instance);
+	}
 
-		public void Add(IWindsorInstaller instance)
+	public void Install(IWindsorContainer container, IConfigurationStore store)
+	{
+		foreach (var installer in installers)
 		{
-			installers.Add(instance);
-		}
-
-		public void Install(IWindsorContainer container, IConfigurationStore store)
-		{
-			foreach (var installer in installers)
-			{
-				installer.Install(container, store);
-			}
+			installer.Install(container, store);
 		}
 	}
 }

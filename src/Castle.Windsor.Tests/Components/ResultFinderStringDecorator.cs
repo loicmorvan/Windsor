@@ -12,27 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+using System;
+
+public class ResultFinderStringDecorator(IResultFinder<string> finder) : IResultFinder<string>
 {
-	using System;
-
-	public class ResultFinderStringDecorator : IResultFinder<string>
+	public IResultFinder<string> Finder
 	{
-		private IResultFinder<string> finder;
+		get { return finder; }
+	}
 
-		public ResultFinderStringDecorator(IResultFinder<string> finder)
-		{
-			this.finder = finder;
-		}
-
-		public IResultFinder<string> Finder
-		{
-			get { return finder; }
-		}
-
-		public String Process(ISpecification specification)
-		{
-			return String.Empty;
-		}
+	public String Process(ISpecification specification)
+	{
+		return String.Empty;
 	}
 }

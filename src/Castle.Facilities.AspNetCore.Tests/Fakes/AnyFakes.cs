@@ -13,52 +13,50 @@
 // limitations under the License.
 
 
-namespace Castle.Facilities.AspNetCore.Tests.Fakes
+namespace Castle.Facilities.AspNetCore.Tests.Fakes;
+
+using System;
+using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Http;
+
+using Castle.MicroKernel.Lifestyle;
+
+public class AnyComponent { }
+public class AnyComponentWithLifestyleManager : AbstractLifestyleManager
 {
-	using System;
-	using System.Threading.Tasks;
-
-	using Microsoft.AspNetCore.Http;
-
-	using Castle.MicroKernel.Lifestyle;
-
-	public class AnyComponent { }
-	public class AnyComponentWithLifestyleManager : AbstractLifestyleManager
+	public override void Dispose()
 	{
-		public override void Dispose()
-		{
-		}
+	}
+}
+
+public sealed class AnyMiddleware : IMiddleware
+{
+	private readonly AnyComponent anyComponent;
+	private readonly ServiceProviderOnlyScopedDisposable serviceProviderOnlyScopedDisposable;
+	private readonly WindsorOnlyScopedDisposable windsorOnlyScopedDisposable;
+	private readonly CrossWiredScopedDisposable crossWiredScopedDisposable;
+
+	public AnyMiddleware(
+		ServiceProviderOnlyScopedDisposable serviceProviderOnlyScopedDisposable,
+		WindsorOnlyScopedDisposable windsorOnlyScopedDisposable,
+		CrossWiredScopedDisposable crossWiredScopedDisposable)
+	{
+		this.serviceProviderOnlyScopedDisposable = serviceProviderOnlyScopedDisposable ?? throw new ArgumentNullException(nameof(serviceProviderOnlyScopedDisposable));
+		this.windsorOnlyScopedDisposable = windsorOnlyScopedDisposable ?? throw new ArgumentNullException(nameof(windsorOnlyScopedDisposable));
+		this.crossWiredScopedDisposable = crossWiredScopedDisposable ?? throw new ArgumentNullException(nameof(crossWiredScopedDisposable));
 	}
 
-	public sealed class AnyMiddleware : IMiddleware
+	public AnyMiddleware(AnyComponent anyComponent)
 	{
-		private readonly AnyComponent anyComponent;
-		private readonly ServiceProviderOnlyScopedDisposable serviceProviderOnlyScopedDisposable;
-		private readonly WindsorOnlyScopedDisposable windsorOnlyScopedDisposable;
-		private readonly CrossWiredScopedDisposable crossWiredScopedDisposable;
-
-		public AnyMiddleware(
-			ServiceProviderOnlyScopedDisposable serviceProviderOnlyScopedDisposable,
-			WindsorOnlyScopedDisposable windsorOnlyScopedDisposable,
-			CrossWiredScopedDisposable crossWiredScopedDisposable)
-		{
-			this.serviceProviderOnlyScopedDisposable = serviceProviderOnlyScopedDisposable ?? throw new ArgumentNullException(nameof(serviceProviderOnlyScopedDisposable));
-			this.windsorOnlyScopedDisposable = windsorOnlyScopedDisposable ?? throw new ArgumentNullException(nameof(windsorOnlyScopedDisposable));
-			this.crossWiredScopedDisposable = crossWiredScopedDisposable ?? throw new ArgumentNullException(nameof(crossWiredScopedDisposable));
-		}
-
-		public AnyMiddleware(AnyComponent anyComponent)
-		{
-			// This will never get called because Windsor picks the most greedy constructor
-			this.anyComponent = anyComponent ?? throw new ArgumentNullException(nameof(anyComponent));
-		}
-
-		public async Task InvokeAsync(HttpContext context, RequestDelegate next)
-		{
-			// Do something before
-			await next(context);
-			// Do something after
-		}
+		// This will never get called because Windsor picks the most greedy constructor
+		this.anyComponent = anyComponent ?? throw new ArgumentNullException(nameof(anyComponent));
 	}
 
+	public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+	{
+		// Do something before
+		await next(context);
+		// Do something after
+	}
 }

@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+
+public class DummyComponent<T> : IDummyComponent<T>
 {
-	public class DummyComponent<T> : IDummyComponent<T>
-	{
-	}
 }

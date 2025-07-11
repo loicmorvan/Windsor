@@ -12,23 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.MicroKernel;
+
+/// <summary>
+///   Possible states for a IHandler instance
+/// </summary>
+public enum HandlerState
 {
 	/// <summary>
-	///   Possible states for a IHandler instance
+	///   The component can be requested
 	/// </summary>
-	public enum HandlerState
-	{
-		/// <summary>
-		///   The component can be requested
-		/// </summary>
-		Valid,
+	Valid,
 
-		/// <summary>
-		///   The component can not be requested 
-		///   as it still depending on a external 
-		///   dependency not yet available
-		/// </summary>
-		WaitingDependency
-	}
+	/// <summary>
+	///   The component can not be requested 
+	///   as it still depending on a external 
+	///   dependency not yet available
+	/// </summary>
+	WaitingDependency
 }

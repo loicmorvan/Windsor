@@ -13,29 +13,23 @@
 // limitations under the License.
 
 #pragma warning disable 618
-namespace CastleTests.Bugs
+namespace Castle.Windsor.Tests.Bugs;
+
+using Castle.Core.Configuration;
+using Castle.MicroKernel;
+using Castle.Windsor.Tests.ClassComponents;
+
+public class IoC_334
 {
-	using Castle.Core.Configuration;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Tests.ClassComponents;
-
-	
-
-	
-	public class IoC_334
+	[Fact]
+	public void FacilityConfig_is_not_null()
 	{
-		[Fact]
-		public void FacilityConfig_is_not_null()
-		{
-			using (var c = new DefaultKernel())
-			{
-				var facilityKey = typeof(HiperFacility).FullName;
-				var config = new MutableConfiguration("facility");
-				c.ConfigurationStore.AddFacilityConfiguration(facilityKey, config);
-				var facility = new HiperFacility();
-				c.AddFacility(facility);
-				Assert.True(facility.Initialized);
-			}
-		}
+		using var c = new DefaultKernel();
+		var facilityKey = typeof(HiperFacility).FullName;
+		var config = new MutableConfiguration("facility");
+		c.ConfigurationStore.AddFacilityConfiguration(facilityKey, config);
+		var facility = new HiperFacility();
+		c.AddFacility(facility);
+		Assert.True(facility.Initialized);
 	}
 }

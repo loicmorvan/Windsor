@@ -13,62 +13,60 @@
 // limitations under the License.
 
 // we do not support xml config on SL
-namespace Castle.Windsor.Tests.Configuration2
+namespace Castle.Windsor.Tests.Configuration2;
+
+using Castle.Windsor;
+
+public class ConfigWithStatementsTestCase
 {
-	
+	private IWindsorContainer container;
 
-	
-	public class ConfigWithStatementsTestCase
+	[Theory]
+	[InlineData("debug")]
+	[InlineData("prod")]
+	[InlineData("qa")]
+	[InlineData("default")]
+	public void SimpleChoose(string flag)
 	{
-		private IWindsorContainer container;
+		var file = ConfigHelper.ResolveConfigPath("Configuration2/config_with_define_{0}.xml", flag);
 
-		[Theory]
-		[InlineData("debug")]
-		[InlineData("prod")]
-		[InlineData("qa")]
-		[InlineData("default")]
-		public void SimpleChoose(string flag)
-		{
-			var file = ConfigHelper.ResolveConfigPath("Configuration2/config_with_define_{0}.xml", flag);
+		container = new WindsorContainer(file);
 
-			container = new WindsorContainer(file);
+		var store = container.Kernel.ConfigurationStore;
 
-			var store = container.Kernel.ConfigurationStore;
+		Assert.Single(store.GetComponents());
 
-			Assert.Single(store.GetComponents());
+		var config = store.GetComponentConfiguration(flag);
 
-			var config = store.GetComponentConfiguration(flag);
+		Assert.NotNull(config);
+	}
 
-			Assert.NotNull(config);
-		}
+	[Fact]
+	public void SimpleIf()
+	{
+		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_if_stmt.xml"));
+		var store = container.Kernel.ConfigurationStore;
 
-		[Fact]
-		public void SimpleIf()
-		{
-			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_if_stmt.xml"));
-			var store = container.Kernel.ConfigurationStore;
+		Assert.Equal(4, store.GetComponents().Length);
 
-			Assert.Equal(4, store.GetComponents().Length);
+		var config = store.GetComponentConfiguration("debug");
+		Assert.NotNull(config);
 
-			var config = store.GetComponentConfiguration("debug");
-			Assert.NotNull(config);
+		var childItem = config.Children["item"];
+		Assert.NotNull(childItem);
+		Assert.Equal("some value", childItem.Value);
 
-			var childItem = config.Children["item"];
-			Assert.NotNull(childItem);
-			Assert.Equal("some value", childItem.Value);
+		childItem = config.Children["item2"];
+		Assert.NotNull(childItem);
+		Assert.Equal("some <&> value2", childItem.Value);
 
-			childItem = config.Children["item2"];
-			Assert.NotNull(childItem);
-			Assert.Equal("some <&> value2", childItem.Value);
+		config = store.GetComponentConfiguration("qa");
+		Assert.NotNull(config);
 
-			config = store.GetComponentConfiguration("qa");
-			Assert.NotNull(config);
+		config = store.GetComponentConfiguration("default");
+		Assert.NotNull(config);
 
-			config = store.GetComponentConfiguration("default");
-			Assert.NotNull(config);
-
-			config = store.GetComponentConfiguration("notprod");
-			Assert.NotNull(config);
-		}
+		config = store.GetComponentConfiguration("notprod");
+		Assert.NotNull(config);
 	}
 }

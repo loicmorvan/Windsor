@@ -12,55 +12,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests
+namespace Castle.Facilities.AspNetCore.Tests;
+
+using System;
+
+using Castle.Facilities.AspNetCore.Tests.Framework;
+using Castle.MicroKernel.Registration;
+
+using Microsoft.AspNetCore.Mvc;
+
+
+public abstract class WindsorRegistrationOptionsControllerTestCase:IDisposable
 {
-	using System;
-
-	using Castle.Facilities.AspNetCore.Tests.Framework;
-	using Castle.MicroKernel.Registration;
-
-	using Microsoft.AspNetCore.Mvc;
-
-
-	public abstract class WindsorRegistrationOptionsControllerTestCase:IDisposable
+	public void Dispose()
 	{
-		public void Dispose()
-		{
-			testContext.Dispose();
-		}
-
-		protected Framework.TestContext testContext;
-
-		[InlineData(typeof(OverrideController))]
-		public void Should_resolve_overidden_Controllers_using_WindsorRegistrationOptions(Type optionsResolvableType)
-		{
-			testContext.WindsorContainer.Resolve(optionsResolvableType); 
-		}
-
-		public class OverrideController : Controller
-		{
-		}
+		testContext.Dispose();
 	}
 
-	
-	public class WindsorRegistrationOptionsForAssembliesControllerTestCase : WindsorRegistrationOptionsControllerTestCase
+	protected TestContext testContext;
+
+	[InlineData(typeof(OverrideController))]
+	public void Should_resolve_overidden_Controllers_using_WindsorRegistrationOptions(Type optionsResolvableType)
 	{
-		public WindsorRegistrationOptionsForAssembliesControllerTestCase()
-		{
-			testContext = TestContextFactory.Get(opts => opts
-				.UseEntryAssembly(typeof(Uri).Assembly)
-				.RegisterControllers(typeof(OverrideController).Assembly));
-		}
+		testContext.WindsorContainer.Resolve(optionsResolvableType); 
 	}
 
-	
-	public class WindsorRegistrationOptionsForComponentsControllerTestCase : WindsorRegistrationOptionsControllerTestCase
+	public class OverrideController : Controller
 	{
-		public WindsorRegistrationOptionsForComponentsControllerTestCase()
-		{
-			testContext = TestContextFactory.Get(opts => opts
-				.UseEntryAssembly(typeof(Uri).Assembly)
-				.RegisterControllers(Component.For<OverrideController>().LifestyleScoped().Named("controllers")));
-		}
+	}
+}
+
+	
+public class WindsorRegistrationOptionsForAssembliesControllerTestCase : WindsorRegistrationOptionsControllerTestCase
+{
+	public WindsorRegistrationOptionsForAssembliesControllerTestCase()
+	{
+		testContext = TestContextFactory.Get(opts => opts
+			.UseEntryAssembly(typeof(Uri).Assembly)
+			.RegisterControllers(typeof(OverrideController).Assembly));
+	}
+}
+
+	
+public class WindsorRegistrationOptionsForComponentsControllerTestCase : WindsorRegistrationOptionsControllerTestCase
+{
+	public WindsorRegistrationOptionsForComponentsControllerTestCase()
+	{
+		testContext = TestContextFactory.Get(opts => opts
+			.UseEntryAssembly(typeof(Uri).Assembly)
+			.RegisterControllers(Component.For<OverrideController>().LifestyleScoped().Named("controllers")));
 	}
 }

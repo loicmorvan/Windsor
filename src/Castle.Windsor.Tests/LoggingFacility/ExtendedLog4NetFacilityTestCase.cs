@@ -12,90 +12,86 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Logging.Tests
+namespace Castle.Windsor.Tests.LoggingFacility;
+
+using System;
+using System.IO;
+
+using Castle.MicroKernel.Registration;
+using Castle.Services.Logging.Log4netIntegration;
+using Castle.Windsor;
+using Castle.Windsor.Tests.LoggingFacility.Classes;
+
+using log4net;
+using log4net.Appender;
+using log4net.Layout;
+using log4net.Repository.Hierarchy;
+
+/// <summary>Summary description for ExtendedLog4NetFacilityTests.</summary>
+public class ExtendedLog4NetFacilityTestCase : BaseTest, IDisposable
 {
-	using System;
-	using System.IO;
+	private readonly IWindsorContainer container;
 
-	using Castle.Facilities.Logging.Tests.Classes;
-	using Castle.MicroKernel.Registration;
-	using Castle.Services.Logging.Log4netIntegration;
-	using Castle.Windsor;
-
-	using log4net;
-	using log4net.Appender;
-	using log4net.Layout;
-	using log4net.Repository.Hierarchy;
-
-
-	/// <summary>
-	/// Summary description for ExtendedLog4NetFacilityTests.
-	/// </summary>
-	public class ExtendedLog4NetFacilityTestCase : BaseTest, IDisposable
+	public ExtendedLog4NetFacilityTestCase()
 	{
-		private IWindsorContainer container;
+		container = base.CreateConfiguredContainer<ExtendedLog4netFactory>();
+	}
 
-		public ExtendedLog4NetFacilityTestCase()
-		{
-			container = base.CreateConfiguredContainer<ExtendedLog4netFactory>();
-		}
+	public void Dispose()
+	{
+		container.Dispose();
+	}
 
-		public void Dispose()
-		{
-			container.Dispose();
-		}
+	[Fact]
+	public void SimpleTest()
+	{
+		container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component1"));
+		var test = container.Resolve<SimpleLoggingComponent>("component1");
 
-		[Fact]
-		public void SimpleTest()
-		{
-			container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component1"));
-			SimpleLoggingComponent test = container.Resolve<SimpleLoggingComponent>("component1");
+		test.DoSomething();
 
-			test.DoSomething();
+		var expectedLogOutput = string.Format("[INFO ] [{0}] - Hello world" + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
+		var memoryAppender = Assert.IsType<MemoryAppender>(((Hierarchy)LogManager.GetRepository()).Root.GetAppender("memory"));
+		TextWriter actualLogOutput = new StringWriter();
+		var patternLayout = new PatternLayout("[%-5level] [%logger] - %message%newline");
+		patternLayout.Format(actualLogOutput, memoryAppender.GetEvents()[0]);
 
-			String expectedLogOutput = String.Format("[INFO ] [{0}] - Hello world" + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
-			MemoryAppender memoryAppender = ((Hierarchy)LogManager.GetRepository()).Root.GetAppender("memory") as MemoryAppender;
-			TextWriter actualLogOutput = new StringWriter();
-			PatternLayout patternLayout = new PatternLayout("[%-5level] [%logger] - %message%newline");
-			patternLayout.Format(actualLogOutput, memoryAppender.GetEvents()[0]);
+		Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
 
-			Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
+		container.Register(Component.For(typeof(SmtpServer)).Named("component2"));
+		var smtpServer = container.Resolve<ISmtpServer>("component2");
 
-			container.Register(Component.For(typeof(SmtpServer)).Named("component2"));
-			ISmtpServer smtpServer = container.Resolve<ISmtpServer>("component2");
+		smtpServer.Start();
+		smtpServer.InternalSend("rbellamy@pteradigm.com", "jobs@castlestronghold.com", "We're looking for a few good porgrammars.");
+		smtpServer.Stop();
 
-			smtpServer.Start();
-			smtpServer.InternalSend("rbellamy@pteradigm.com", "jobs@castlestronghold.com", "We're looking for a few good porgrammars.");
-			smtpServer.Stop();
+		expectedLogOutput = string.Format("[DEBUG] [Castle.Facilities.Logging.Tests.Classes.SmtpServer] - Stopped" + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
+		memoryAppender = Assert.IsType<MemoryAppender>(((Hierarchy)LogManager.GetRepository()).Root.GetAppender("memory"));
+		actualLogOutput = new StringWriter();
+		patternLayout = new PatternLayout("[%-5level] [%logger] - %message%newline");
 
-			expectedLogOutput = String.Format("[DEBUG] [Castle.Facilities.Logging.Tests.Classes.SmtpServer] - Stopped" + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
-			memoryAppender = ((Hierarchy)LogManager.GetRepository()).Root.GetAppender("memory") as MemoryAppender;
-			actualLogOutput = new StringWriter();
-			patternLayout = new PatternLayout("[%-5level] [%logger] - %message%newline");
+		Assert.Equal(4, memoryAppender.GetEvents().Length);
 
-			Assert.Equal(4, memoryAppender.GetEvents().Length);
+		patternLayout.Format(actualLogOutput, memoryAppender.GetEvents()[3]);
 
-			patternLayout.Format(actualLogOutput, memoryAppender.GetEvents()[3]);
+		Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
+	}
 
-			Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
-		}
+	[Fact]
+	public void ContextTest()
+	{
+		container.Register(Component.For<ComplexLoggingComponent>().Named("component1"));
+		var complexLoggingComponent = container.Resolve<ComplexLoggingComponent>("component1");
 
-		[Fact]
-		public void ContextTest()
-		{
-			container.Register(Component.For<ComplexLoggingComponent>().Named("component1"));
-			var complexLoggingComponent = container.Resolve<ComplexLoggingComponent>("component1");
+		complexLoggingComponent.DoSomeContextual();
 
-			complexLoggingComponent.DoSomeContextual();
+		var expectedLogOutput = string.Format("[DEBUG] [Castle.Facilities.Logging.Tests.Classes.ComplexLoggingComponent] [Outside Inside0] [bar] [flam] - Bim, bam boom." + Environment.NewLine,
+			typeof(SimpleLoggingComponent).FullName);
+		var memoryAppender = Assert.IsType<MemoryAppender>(((Hierarchy)LogManager.GetRepository()).Root.GetAppender("memory"));
+		var actualLogOutput = new StringWriter();
+		var patternLayout = new PatternLayout("[%-5level] [%logger] [%properties{NDC}] [%properties{foo}] [%properties{flim}] - %message%newline");
+		patternLayout.Format(actualLogOutput, memoryAppender.GetEvents()[0]);
 
-			var expectedLogOutput = String.Format("[DEBUG] [Castle.Facilities.Logging.Tests.Classes.ComplexLoggingComponent] [Outside Inside0] [bar] [flam] - Bim, bam boom." + Environment.NewLine,
-				typeof(SimpleLoggingComponent).FullName);
-			var memoryAppender = ((Hierarchy)LogManager.GetRepository()).Root.GetAppender("memory") as MemoryAppender;
-			var actualLogOutput = new StringWriter();
-			var patternLayout = new PatternLayout("[%-5level] [%logger] [%properties{NDC}] [%properties{foo}] [%properties{flim}] - %message%newline");
-			patternLayout.Format(actualLogOutput, memoryAppender.GetEvents()[0]);
-
-			Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
-		}
+		Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
 	}
 }

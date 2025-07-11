@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
-{
-	using System;
-	using System.Security;
+namespace Castle.MicroKernel;
 
-	[Serializable]
-	public abstract class AbstractSubSystem :
+using System;
+using System.Security;
+
+[Serializable]
+public abstract class AbstractSubSystem :
 #if FEATURE_REMOTING
 		MarshalByRefObject,
 #endif
-		ISubSystem
-	{
-		private IKernelInternal kernel;
+	ISubSystem
+{
+	private IKernelInternal kernel;
 
 #if FEATURE_REMOTING
 		[SecurityCritical]
@@ -34,18 +34,17 @@ namespace Castle.MicroKernel
 		}
 #endif
 
-		public virtual void Init(IKernelInternal kernel)
-		{
-			this.kernel = kernel;
-		}
+	public virtual void Init(IKernelInternal kernel)
+	{
+		this.kernel = kernel;
+	}
 
-		public virtual void Terminate()
-		{
-		}
+	public virtual void Terminate()
+	{
+	}
 
-		protected IKernelInternal Kernel
-		{
-			get { return kernel; }
-		}
+	protected IKernelInternal Kernel
+	{
+		get { return kernel; }
 	}
 }

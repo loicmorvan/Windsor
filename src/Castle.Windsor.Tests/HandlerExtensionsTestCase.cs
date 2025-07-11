@@ -12,165 +12,150 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests;
+
+using System.Collections.Generic;
+using System.Linq;
+
+using Castle.MicroKernel;
+using Castle.MicroKernel.Handlers;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+
+public class HandlerExtensionsTestCase : AbstractContainerTestCase
 {
-	using System.Collections.Generic;
-	using System.Linq;
-
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Handlers;
-	using Castle.MicroKernel.Registration;
-
-	using CastleTests;
-	using CastleTests.Components;
-
-	
-
-	
-	public class HandlerExtensionsTestCase : AbstractContainerTestCase
+	private ComponentRegistration<A> AddResolveExtensions(ComponentRegistration<A> componentRegistration,
+		params IResolveExtension[] items)
 	{
-		private ComponentRegistration<A> AddResolveExtensions(ComponentRegistration<A> componentRegistration,
-		                                                      params IResolveExtension[] items)
+		var resolveExtensions = new List<IResolveExtension>();
+		foreach (var item in items.Distinct())
 		{
-			var resolveExtensions = new List<IResolveExtension>();
-			foreach (var item in items.Distinct())
-			{
-				resolveExtensions.Add(item);
-			}
-			return componentRegistration.ExtendedProperties(Property.ForKey("Castle.ResolveExtensions").Eq(resolveExtensions));
+			resolveExtensions.Add(item);
 		}
-
-		private ComponentRegistration<TComponent> WithReleaseExtensions<TComponent>(
-			ComponentRegistration<TComponent> componentRegistration, params IReleaseExtension[] items)
-			where TComponent : class
-		{
-			var releaseExtensions = new List<IReleaseExtension>();
-			foreach (var item in items.Distinct())
-			{
-				releaseExtensions.Add(item);
-			}
-			return componentRegistration.ExtendedProperties(Property.ForKey("Castle.ReleaseExtensions").Eq(releaseExtensions));
-		}
-
-		[Fact]
-		public void Can_chain_extensions()
-		{
-			var a = new A();
-			var collector = new CollectItemsExtension();
-			Kernel.Register(AddResolveExtensions(Component.For<A>(), collector, new ReturnAExtension(a)));
-			Kernel.Resolve<A>();
-			Assert.Same(a, collector.ResolvedItems.Single());
-		}
-
-		[Fact]
-		public void Can_intercept_entire_resolution()
-		{
-			var a = new A();
-			var componentRegistration = Component.For<A>();
-			Kernel.Register(AddResolveExtensions(componentRegistration, new ReturnAExtension(a)));
-			var resolvedA = Kernel.Resolve<A>();
-			Assert.Same(a, resolvedA);
-		}
-
-		[Fact]
-		public void Can_proceed_and_inspect_released_value_on_singleton()
-		{
-			var collector = new CollectItemsExtension();
-			Kernel.Register(WithReleaseExtensions(Component.For<DisposableFoo>(), collector));
-			var a = Kernel.Resolve<DisposableFoo>();
-			Kernel.Dispose();
-			Assert.Single(collector.ReleasedItems);
-			Assert.Same(a, collector.ReleasedItems[0]);
-		}
-
-		[Fact]
-		public void Can_proceed_and_inspect_released_value_on_transinet()
-		{
-			var collector = new CollectItemsExtension();
-			Kernel.Register(WithReleaseExtensions(Component.For<DisposableFoo>().LifeStyle.Transient, collector));
-			var a = Kernel.Resolve<DisposableFoo>();
-			Kernel.ReleaseComponent(a);
-			Assert.Single(collector.ReleasedItems);
-			Assert.Same(a, collector.ReleasedItems[0]);
-		}
-
-		[Fact]
-		public void Can_proceed_and_inspect_returned_value()
-		{
-			var collector = new CollectItemsExtension();
-			Kernel.Register(AddResolveExtensions(Component.For<A>(), collector));
-			Kernel.Resolve<A>();
-			var resolved = Kernel.Resolve<A>();
-			Assert.Equal(2, collector.ResolvedItems.Count);
-			Assert.Same(resolved, collector.ResolvedItems[0]);
-			Assert.Same(resolved, collector.ResolvedItems[1]);
-		}
-
-		[Fact]
-		public void Can_replace_returned_value()
-		{
-			var a = new A();
-			var componentRegistration = Component.For<A>();
-			Kernel.Register(AddResolveExtensions(componentRegistration, new ReturnAExtension(a, proceed: true)));
-			var resolvedA = Kernel.Resolve<A>();
-			Assert.Same(a, resolvedA);
-		}
+		return componentRegistration.ExtendedProperties(Property.ForKey("Castle.ResolveExtensions").Eq(resolveExtensions));
 	}
 
-	public class ReturnAExtension : IResolveExtension
+	private ComponentRegistration<TComponent> WithReleaseExtensions<TComponent>(
+		ComponentRegistration<TComponent> componentRegistration, params IReleaseExtension[] items)
+		where TComponent : class
 	{
-		private readonly A a;
-		private readonly bool proceed;
-
-		public ReturnAExtension(A a, bool proceed = false)
+		var releaseExtensions = new List<IReleaseExtension>();
+		foreach (var item in items.Distinct())
 		{
-			this.a = a;
-			this.proceed = proceed;
+			releaseExtensions.Add(item);
 		}
-
-		public void Init(IKernel kernel, IHandler handler)
-		{
-		}
-
-		public void Intercept(ResolveInvocation invocation)
-		{
-			if (proceed)
-			{
-				invocation.Proceed();
-			}
-			invocation.ResolvedInstance = a;
-		}
+		return componentRegistration.ExtendedProperties(Property.ForKey("Castle.ReleaseExtensions").Eq(releaseExtensions));
 	}
 
-	public class CollectItemsExtension : IResolveExtension, IReleaseExtension
+	[Fact]
+	public void Can_chain_extensions()
 	{
-		private readonly IList<object> releasedItems = new List<object>();
-		private readonly IList<object> resolvedItems = new List<object>();
+		var a = new A();
+		var collector = new CollectItemsExtension();
+		Kernel.Register(AddResolveExtensions(Component.For<A>(), collector, new ReturnAExtension(a)));
+		Kernel.Resolve<A>();
+		Assert.Same(a, collector.ResolvedItems.Single());
+	}
 
-		public IList<object> ReleasedItems
-		{
-			get { return releasedItems; }
-		}
+	[Fact]
+	public void Can_intercept_entire_resolution()
+	{
+		var a = new A();
+		var componentRegistration = Component.For<A>();
+		Kernel.Register(AddResolveExtensions(componentRegistration, new ReturnAExtension(a)));
+		var resolvedA = Kernel.Resolve<A>();
+		Assert.Same(a, resolvedA);
+	}
 
-		public IList<object> ResolvedItems
-		{
-			get { return resolvedItems; }
-		}
+	[Fact]
+	public void Can_proceed_and_inspect_released_value_on_singleton()
+	{
+		var collector = new CollectItemsExtension();
+		Kernel.Register(WithReleaseExtensions(Component.For<DisposableFoo>(), collector));
+		var a = Kernel.Resolve<DisposableFoo>();
+		Kernel.Dispose();
+		Assert.Single(collector.ReleasedItems);
+		Assert.Same(a, collector.ReleasedItems[0]);
+	}
 
-		public void Intercept(ReleaseInvocation invocation)
+	[Fact]
+	public void Can_proceed_and_inspect_released_value_on_transinet()
+	{
+		var collector = new CollectItemsExtension();
+		Kernel.Register(WithReleaseExtensions(Component.For<DisposableFoo>().LifeStyle.Transient, collector));
+		var a = Kernel.Resolve<DisposableFoo>();
+		Kernel.ReleaseComponent(a);
+		Assert.Single(collector.ReleasedItems);
+		Assert.Same(a, collector.ReleasedItems[0]);
+	}
+
+	[Fact]
+	public void Can_proceed_and_inspect_returned_value()
+	{
+		var collector = new CollectItemsExtension();
+		Kernel.Register(AddResolveExtensions(Component.For<A>(), collector));
+		Kernel.Resolve<A>();
+		var resolved = Kernel.Resolve<A>();
+		Assert.Equal(2, collector.ResolvedItems.Count);
+		Assert.Same(resolved, collector.ResolvedItems[0]);
+		Assert.Same(resolved, collector.ResolvedItems[1]);
+	}
+
+	[Fact]
+	public void Can_replace_returned_value()
+	{
+		var a = new A();
+		var componentRegistration = Component.For<A>();
+		Kernel.Register(AddResolveExtensions(componentRegistration, new ReturnAExtension(a, proceed: true)));
+		var resolvedA = Kernel.Resolve<A>();
+		Assert.Same(a, resolvedA);
+	}
+}
+
+public class ReturnAExtension(A a, bool proceed = false) : IResolveExtension
+{
+	public void Init(IKernel kernel, IHandler handler)
+	{
+	}
+
+	public void Intercept(ResolveInvocation invocation)
+	{
+		if (proceed)
 		{
 			invocation.Proceed();
-			releasedItems.Add(invocation.Instance);
 		}
+		invocation.ResolvedInstance = a;
+	}
+}
 
-		public void Init(IKernel kernel, IHandler handler)
-		{
-		}
+public class CollectItemsExtension : IResolveExtension, IReleaseExtension
+{
+	private readonly IList<object> releasedItems = new List<object>();
+	private readonly IList<object> resolvedItems = new List<object>();
 
-		public void Intercept(ResolveInvocation invocation)
-		{
-			invocation.Proceed();
-			resolvedItems.Add(invocation.ResolvedInstance);
-		}
+	public IList<object> ReleasedItems
+	{
+		get { return releasedItems; }
+	}
+
+	public IList<object> ResolvedItems
+	{
+		get { return resolvedItems; }
+	}
+
+	public void Intercept(ReleaseInvocation invocation)
+	{
+		invocation.Proceed();
+		releasedItems.Add(invocation.Instance);
+	}
+
+	public void Init(IKernel kernel, IHandler handler)
+	{
+	}
+
+	public void Intercept(ResolveInvocation invocation)
+	{
+		invocation.Proceed();
+		resolvedItems.Add(invocation.ResolvedInstance);
 	}
 }

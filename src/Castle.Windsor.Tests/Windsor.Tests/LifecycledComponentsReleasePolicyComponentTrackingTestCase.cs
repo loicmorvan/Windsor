@@ -12,42 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests.Windsor.Tests;
+
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
+
+public class LifecycledComponentsReleasePolicyComponentTrackingTestCase : AbstractContainerTestCase
 {
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.ClassComponents;
-
-	using CastleTests;
-	using CastleTests.Components;
-
-	
-
-	public class LifecycledComponentsReleasePolicyComponentTrackingTestCase : AbstractContainerTestCase
+	[Fact]
+	public void Disposable_singleton_as_dependency_of_non_disposable_transient_is_decommissionsed_with_container()
 	{
-		[Fact]
-		public void Disposable_singleton_as_dependency_of_non_disposable_transient_is_decommissionsed_with_container()
-		{
-			SimpleServiceDisposable.DisposedCount = 0;
-			Container.Register(Component.For<HasCtorDependency>().LifeStyle.Transient,
-			                   Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>());
+		SimpleServiceDisposable.DisposedCount = 0;
+		Container.Register(Component.For<HasCtorDependency>().LifeStyle.Transient,
+			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>());
 
-			Container.Resolve<HasCtorDependency>();
-			CleanUp();
+		Container.Resolve<HasCtorDependency>();
+		CleanUp();
 
-			Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
-			;
-		}
+		Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
+		;
+	}
 
-		[Fact]
-		public void Non_disposable_transient_with_disposable_singleton_as_dependency_is_not_tracked()
-		{
-			SimpleServiceDisposable.DisposedCount = 0;
-			Container.Register(Component.For<HasCtorDependency>().LifeStyle.Transient,
-			                   Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>());
+	[Fact]
+	public void Non_disposable_transient_with_disposable_singleton_as_dependency_is_not_tracked()
+	{
+		SimpleServiceDisposable.DisposedCount = 0;
+		Container.Register(Component.For<HasCtorDependency>().LifeStyle.Transient,
+			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>());
 
-			var root = Container.Resolve<HasCtorDependency>();
+		var root = Container.Resolve<HasCtorDependency>();
 
-			Assert.False(Kernel.ReleasePolicy.HasTrack(root));
-		}
+		Assert.False(Kernel.ReleasePolicy.HasTrack(root));
 	}
 }

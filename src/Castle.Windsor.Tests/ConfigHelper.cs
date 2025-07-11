@@ -12,23 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests;
+
+using System;
+using System.IO;
+
+internal sealed class ConfigHelper
 {
-	using System;
-	using System.IO;
-
-	using Castle.Core.Internal;
-
-	internal sealed class ConfigHelper
+	public static string ResolveConfigPath(string configFilePath)
 	{
-		public static string ResolveConfigPath(string configFilePath)
-		{
-			return Path.Combine(AppContext.BaseDirectory, configFilePath);
-		}
+		return Path.Combine(AppContext.BaseDirectory, configFilePath);
+	}
 
-		public static string ResolveConfigPath(string configFilePath, params object[] parameters)
-		{
-			return Path.Combine(AppContext.BaseDirectory, string.Format(configFilePath, parameters));
-		}
+	public static string ResolveConfigPath(string configFilePath, params object[] parameters)
+	{
+		return Path.Combine(AppContext.BaseDirectory, string.Format(configFilePath, parameters));
 	}
 }

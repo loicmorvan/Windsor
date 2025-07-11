@@ -12,57 +12,52 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs
+namespace Castle.Windsor.Tests.Bugs;
+
+using Castle.MicroKernel;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+
+public class IoC_138
 {
-	using System.Collections.Generic;
-
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-
-	
-
-	
-	public class IoC_138
+	[Fact]
+	public void TestResolveSubComponentInConstructorWithParameters()
 	{
-		[Fact]
-		public void TestResolveSubComponentInConstructorWithParameters()
+		var container = new WindsorContainer();
+		ServiceLocator.Container = container;
+		container.Register(Component.For<UsesServiceLocator>().Named("A"),
+			Component.For<DependsOnStringTest2>().Named("B"));
+
+		var component = container.Resolve<UsesServiceLocator>(
+			new Arguments { { "test", "bla" } });
+
+		Assert.NotNull(component.Other);
+	}
+
+	public class DependsOnStringTest2
+	{
+		public DependsOnStringTest2(string test2)
 		{
-			var container = new WindsorContainer();
-			ServiceLocator.Container = container;
-			container.Register(Component.For<UsesServiceLocator>().Named("A"),
-			                   Component.For<DependsOnStringTest2>().Named("B"));
+		}
+	}
 
-			var component = container.Resolve<UsesServiceLocator>(
-				new Arguments { { "test", "bla" } });
+	public static class ServiceLocator
+	{
+		public static IWindsorContainer Container { get; set; }
+	}
 
-			Assert.NotNull(component.Other);
+	public class UsesServiceLocator
+	{
+		private readonly DependsOnStringTest2 other;
+
+		public UsesServiceLocator(string test)
+		{
+			other = ServiceLocator.Container.Resolve<DependsOnStringTest2>(new Arguments { { "test2", "bla" } });
 		}
 
-		public class DependsOnStringTest2
+		public DependsOnStringTest2 Other
 		{
-			public DependsOnStringTest2(string test2)
-			{
-			}
-		}
-
-		public static class ServiceLocator
-		{
-			public static IWindsorContainer Container { get; set; }
-		}
-
-		public class UsesServiceLocator
-		{
-			private readonly DependsOnStringTest2 other;
-
-			public UsesServiceLocator(string test)
-			{
-				other = ServiceLocator.Container.Resolve<DependsOnStringTest2>(new Arguments { { "test2", "bla" } });
-			}
-
-			public DependsOnStringTest2 Other
-			{
-				get { return other; }
-			}
+			get { return other; }
 		}
 	}
 }

@@ -12,51 +12,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Logging.Tests
+namespace Castle.Windsor.Tests.LoggingFacility;
+
+using System;
+
+using Castle.MicroKernel.Registration;
+using Castle.Services.Logging.NLogIntegration;
+using Castle.Windsor;
+using Castle.Windsor.Tests.LoggingFacility.Classes;
+
+using NLog;
+using NLog.Targets;
+
+/// <summary>
+/// Summary description for NLogFacilityTestts.
+/// </summary>
+public class NLogFacilityTests : BaseTest, IDisposable
 {
-	using System;
-
-	using Castle.Facilities.Logging.Tests.Classes;
-	using Castle.MicroKernel.Registration;
-	using Castle.Services.Logging.NLogIntegration;
-	using Castle.Windsor;
-
-	using NLog;
-	using NLog.Targets;
-
-
-	/// <summary>
-	/// Summary description for NLogFacilityTestts.
-	/// </summary>
-	public class NLogFacilityTests : BaseTest, IDisposable
+	public NLogFacilityTests()
 	{
-		public NLogFacilityTests()
+		container = base.CreateConfiguredContainer<NLogFactory>();
+	}
+
+	public void Dispose()
+	{
+		if (container != null)
 		{
-			container = base.CreateConfiguredContainer<NLogFactory>();
+			container.Dispose();
 		}
+	}
 
-		public void Dispose()
-		{
-			if (container != null)
-			{
-				container.Dispose();
-			}
-		}
+	private readonly IWindsorContainer container;
 
-		private IWindsorContainer container;
+	[Fact]
+	public void SimpleTest()
+	{
+		container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
+		var test = container.Resolve<SimpleLoggingComponent>("component");
 
-		[Fact]
-		public void SimpleTest()
-		{
-			container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
-			var test = container.Resolve<SimpleLoggingComponent>("component");
+		test.DoSomething();
 
-			test.DoSomething();
-
-			var expectedLogOutput = String.Format("|INFO|{0}|Hello world", typeof(SimpleLoggingComponent).FullName);
-			var actualLogOutput = (LogManager.Configuration.FindTargetByName("memory") as MemoryTarget).Logs[0].ToString();
-			actualLogOutput = actualLogOutput.Substring(actualLogOutput.IndexOf('|'));
-			Assert.Equal(expectedLogOutput, actualLogOutput);
-		}
+		var expectedLogOutput = String.Format("|INFO|{0}|Hello world", typeof(SimpleLoggingComponent).FullName);
+		var actualLogOutput = (LogManager.Configuration.FindTargetByName("memory") as MemoryTarget).Logs[0].ToString();
+		actualLogOutput = actualLogOutput.Substring(actualLogOutput.IndexOf('|'));
+		Assert.Equal(expectedLogOutput, actualLogOutput);
 	}
 }

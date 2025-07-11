@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents
-{
-	using System;
+namespace Castle.Windsor.Tests.ClassComponents;
 
-	public class ThrowsInCtor
+using System;
+
+public class ThrowsInCtor
+{
+	public ThrowsInCtor()
 	{
-		public ThrowsInCtor()
-		{
-			throw new Exception("booo!");
-		}
+		throw new Exception("booo!");
 	}
 }

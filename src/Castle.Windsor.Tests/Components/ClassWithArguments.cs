@@ -12,27 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class ClassWithArguments(string arg1, int arg2)
 {
-	public class ClassWithArguments
+	public string Arg1
 	{
-		private readonly string arg1;
-		private readonly int arg2;
+		get { return arg1; }
+	}
 
-		public ClassWithArguments(string arg1, int arg2)
-		{
-			this.arg1 = arg1;
-			this.arg2 = arg2;
-		}
-
-		public string Arg1
-		{
-			get { return arg1; }
-		}
-
-		public int Arg2
-		{
-			get { return arg2; }
-		}
+	public int Arg2
+	{
+		get { return arg2; }
 	}
 }

@@ -12,20 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace Castle.Windsor.Tests;
+
+using System;
+
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true)]
+public class RelatedTestCaseAttribute(Type relatedTestCaseType, string descriptoin = null) : Attribute
 {
-	using System;
-
-	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true)]
-	public class RelatedTestCaseAttribute : Attribute
-	{
-		public RelatedTestCaseAttribute(Type relatedTestCaseType, string descriptoin = null)
-		{
-			RelatedTestCaseType = relatedTestCaseType;
-			Descriptoin = descriptoin;
-		}
-
-		public string Descriptoin { get; set; }
-		public Type RelatedTestCaseType { get; set; }
-	}
+	public string Descriptoin { get; set; } = descriptoin;
+	public Type RelatedTestCaseType { get; set; } = relatedTestCaseType;
 }

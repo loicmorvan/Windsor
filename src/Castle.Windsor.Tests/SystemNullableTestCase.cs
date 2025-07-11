@@ -12,54 +12,52 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace Castle.Windsor.Tests;
+
+using Castle.MicroKernel;
+using Castle.MicroKernel.Handlers;
+using Castle.MicroKernel.Registration;
+
+public class SystemNullableTestCase : AbstractContainerTestCase
 {
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Handlers;
-	using Castle.MicroKernel.Registration;
-
-
-	public class SystemNullableTestCase : AbstractContainerTestCase
+	[Fact]
+	public void Null_may_be_specified_for_non_optional_System_Nullable_constructor_parameter()
 	{
-		[Fact]
-		public void Null_may_be_specified_for_non_optional_System_Nullable_constructor_parameter()
+		Container.Register(
+			Component.For<DependencyFromContainer>(),
+			Component.For<ComponentWithNonOptionalNullableParameter>());
+
+		Container.Resolve<ComponentWithNonOptionalNullableParameter>(
+			Arguments.FromProperties(new { nonOptionalNullableParameter = (int?)null }));
+	}
+
+	[Fact]
+	public void Non_optional_System_Nullable_constructor_parameter_is_still_required()
+	{
+		Container.Register(
+			Component.For<DependencyFromContainer>(),
+			Component.For<ComponentWithNonOptionalNullableParameter>());
+
+		var exception = Assert.Throws<HandlerException>(() => Container.Resolve<ComponentWithNonOptionalNullableParameter>());
+		var expectedMessage = $"""
+		                       Can't create component '{typeof(ComponentWithNonOptionalNullableParameter)}' as it has dependencies to be satisfied.
+
+		                       '{typeof(ComponentWithNonOptionalNullableParameter)}' is waiting for the following dependencies:
+		                       - Parameter 'nonOptionalNullableParameter' which was not provided. Did you forget to set the dependency?
+
+		                       """.ConvertToEnvironmentLineEndings();
+		Assert.Equal(expectedMessage, exception.Message);
+		;
+	}
+
+	public sealed class DependencyFromContainer
+	{
+	}
+
+	public sealed class ComponentWithNonOptionalNullableParameter
+	{
+		public ComponentWithNonOptionalNullableParameter(int? nonOptionalNullableParameter, DependencyFromContainer dependencyFromContainer)
 		{
-			Container.Register(
-				Component.For<DependencyFromContainer>(),
-				Component.For<ComponentWithNonOptionalNullableParameter>());
-
-			Container.Resolve<ComponentWithNonOptionalNullableParameter>(
-				Arguments.FromProperties(new { nonOptionalNullableParameter = (int?)null }));
-		}
-
-		[Fact]
-		public void Non_optional_System_Nullable_constructor_parameter_is_still_required()
-		{
-			Container.Register(
-				Component.For<DependencyFromContainer>(),
-				Component.For<ComponentWithNonOptionalNullableParameter>());
-
-			var exception = Assert.Throws<HandlerException>(() => Container.Resolve<ComponentWithNonOptionalNullableParameter>());
-			var expectedMessage = $"""
-			                       Can't create component '{typeof(ComponentWithNonOptionalNullableParameter)}' as it has dependencies to be satisfied.
-
-			                       '{typeof(ComponentWithNonOptionalNullableParameter)}' is waiting for the following dependencies:
-			                       - Parameter 'nonOptionalNullableParameter' which was not provided. Did you forget to set the dependency?
-
-			                       """.ConvertToEnvironmentLineEndings();
-			Assert.Equal(expectedMessage, exception.Message);
-			;
-		}
-
-		public sealed class DependencyFromContainer
-		{
-		}
-
-		public sealed class ComponentWithNonOptionalNullableParameter
-		{
-			public ComponentWithNonOptionalNullableParameter(int? nonOptionalNullableParameter, DependencyFromContainer dependencyFromContainer)
-			{
-			}
 		}
 	}
 }

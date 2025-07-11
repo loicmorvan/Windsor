@@ -12,28 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+using System;
+
+/// <summary>
+///   Summary description for CalculatorService.
+/// </summary>
+public class CalculatorService : ICalcService
 {
-	using System;
-
-	/// <summary>
-	///   Summary description for CalculatorService.
-	/// </summary>
-	public class CalculatorService : ICalcService
+	public bool Disposed
 	{
-		public bool Disposed
-		{
-			get { throw new NotImplementedException(); }
-		}
+		get { throw new NotImplementedException(); }
+	}
 
-		public bool Initialized
-		{
-			get { throw new NotImplementedException(); }
-		}
+	public bool Initialized
+	{
+		get { throw new NotImplementedException(); }
+	}
 
-		public virtual int Sum(int x, int y)
-		{
-			return x + y;
-		}
+	public virtual int Sum(int x, int y)
+	{
+		return x + y;
 	}
 }

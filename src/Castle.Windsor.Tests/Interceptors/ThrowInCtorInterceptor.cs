@@ -12,23 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Interceptors
+namespace Castle.Windsor.Tests.Interceptors;
+
+using System;
+
+using Castle.Core;
+using Castle.DynamicProxy;
+
+[Transient]
+public class ThrowInCtorInterceptor : IInterceptor
 {
-	using System;
-
-	using Castle.Core;
-	using Castle.DynamicProxy;
-
-	[Transient]
-	public class ThrowInCtorInterceptor : IInterceptor
+	public ThrowInCtorInterceptor()
 	{
-		public ThrowInCtorInterceptor()
-		{
-			throw new Exception("Booo!");
-		}
+		throw new Exception("Booo!");
+	}
 
-		public void Intercept(IInvocation invocation)
-		{
-		}
+	public void Intercept(IInvocation invocation)
+	{
 	}
 }

@@ -12,56 +12,55 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests
+namespace Castle.Facilities.AspNetCore.Tests;
+
+using System;
+
+using Castle.Facilities.AspNetCore.Tests.Framework;
+using Castle.MicroKernel.Registration;
+
+using Microsoft.AspNetCore.Razor.TagHelpers;
+
+	
+
+public abstract class WindsorRegistrationOptionsTagHelperTestCase: IDisposable
 {
-	using System;
-
-	using Castle.Facilities.AspNetCore.Tests.Framework;
-	using Castle.MicroKernel.Registration;
-
-	using Microsoft.AspNetCore.Razor.TagHelpers;
-
-	
-
-	public abstract class WindsorRegistrationOptionsTagHelperTestCase: IDisposable
+	public void Dispose()
 	{
-		public void Dispose()
-		{
-			testContext.Dispose();
-		}
-
-		protected Framework.TestContext testContext;
-
-		[InlineData(typeof(OverrideTagHelper))]
-		public void Should_resolve_overidden_TagHelpers_using_WindsorRegistrationOptions(Type optionsResolvableType)
-		{
-			testContext.WindsorContainer.Resolve(optionsResolvableType); 
-		}
-
-		public class OverrideTagHelper : TagHelper
-		{
-		}
+		testContext.Dispose();
 	}
 
-	
-	public class WindsorRegistrationOptionsForAssembliesTagHelperTestCase : WindsorRegistrationOptionsTagHelperTestCase
+	protected TestContext testContext;
+
+	[InlineData(typeof(OverrideTagHelper))]
+	public void Should_resolve_overidden_TagHelpers_using_WindsorRegistrationOptions(Type optionsResolvableType)
 	{
-		public WindsorRegistrationOptionsForAssembliesTagHelperTestCase()
-		{
-			testContext = TestContextFactory.Get(opts => opts
-				.UseEntryAssembly(typeof(Uri).Assembly)
-				.RegisterTagHelpers(typeof(OverrideTagHelper).Assembly));
-		}
+		testContext.WindsorContainer.Resolve(optionsResolvableType); 
 	}
 
-	
-	public class WindsorRegistrationOptionsForComponentsTagHelperTestCase : WindsorRegistrationOptionsTagHelperTestCase
+	public class OverrideTagHelper : TagHelper
 	{
-		public WindsorRegistrationOptionsForComponentsTagHelperTestCase()
-		{
-			testContext = TestContextFactory.Get(opts => opts
-				.UseEntryAssembly(typeof(Uri).Assembly)
-				.RegisterTagHelpers(Component.For<OverrideTagHelper>().LifestyleScoped().Named("tag-helpers")));
-		}
+	}
+}
+
+	
+public class WindsorRegistrationOptionsForAssembliesTagHelperTestCase : WindsorRegistrationOptionsTagHelperTestCase
+{
+	public WindsorRegistrationOptionsForAssembliesTagHelperTestCase()
+	{
+		testContext = TestContextFactory.Get(opts => opts
+			.UseEntryAssembly(typeof(Uri).Assembly)
+			.RegisterTagHelpers(typeof(OverrideTagHelper).Assembly));
+	}
+}
+
+	
+public class WindsorRegistrationOptionsForComponentsTagHelperTestCase : WindsorRegistrationOptionsTagHelperTestCase
+{
+	public WindsorRegistrationOptionsForComponentsTagHelperTestCase()
+	{
+		testContext = TestContextFactory.Get(opts => opts
+			.UseEntryAssembly(typeof(Uri).Assembly)
+			.RegisterTagHelpers(Component.For<OverrideTagHelper>().LifestyleScoped().Named("tag-helpers")));
 	}
 }

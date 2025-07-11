@@ -13,39 +13,34 @@
 // limitations under the License.
 
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers
-{
-	using System;
+namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers;
+
+using System;
 	
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Resolvers.SpecializedResolvers;
+using Castle.Core;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Context;
+using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 
-	/// <summary>
-	/// Use <see name="IKernel.ResolveAll" /> if there is no specific handler for IEnumerable service
-	/// </summary>
-	public class RegisteredCollectionResolver : CollectionResolver
+/// <summary>
+/// Use <see name="IKernel.ResolveAll" /> if there is no specific handler for IEnumerable service
+/// </summary>
+public class RegisteredCollectionResolver(IKernel kernel, bool allowEmptyCollections = true) : CollectionResolver(kernel, allowEmptyCollections)
+{
+	public override bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+		DependencyModel dependency)
 	{
-		public RegisteredCollectionResolver(IKernel kernel, bool allowEmptyCollections = true) : base(kernel, allowEmptyCollections)
+		if (kernel.HasComponent(dependency.TargetItemType))
 		{
+			return false;
 		}
 
-		public override bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
-			DependencyModel dependency)
-		{
-			if (kernel.HasComponent(dependency.TargetItemType))
-			{
-				return false;
-			}
+		return base.CanResolve(context, contextHandlerResolver, model, dependency);
+	}
 
-			return base.CanResolve(context, contextHandlerResolver, model, dependency);
-		}
-
-		public override object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
-			DependencyModel dependency)
-		{
-			return base.Resolve(context, contextHandlerResolver, model, dependency) as Array;
-		}
+	public override object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+		DependencyModel dependency)
+	{
+		return base.Resolve(context, contextHandlerResolver, model, dependency) as Array;
 	}
 }

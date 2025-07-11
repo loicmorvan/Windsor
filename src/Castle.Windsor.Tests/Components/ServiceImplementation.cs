@@ -12,19 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class ServiceImplementation(int someValue) : ISomeService
 {
-	public class ServiceImplementation : ISomeService
+	public int SomeValue { get; set; } = someValue;
+
+	public void SomeOperation()
 	{
-		public ServiceImplementation(int someValue)
-		{
-			SomeValue = someValue;
-		}
-
-		public int SomeValue { get; set; }
-
-		public void SomeOperation()
-		{
-		}
 	}
 }

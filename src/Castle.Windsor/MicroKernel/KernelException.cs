@@ -12,38 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
-{
-	using System;
-	using System.Runtime.Serialization;
+namespace Castle.MicroKernel;
 
-	using Castle.Core.Internal;
+using System;
+using System.Runtime.Serialization;
+
+using Castle.Core.Internal;
+
+/// <summary>
+///   Exception threw by Kernel operations that failed
+///   for some reason.
+/// </summary>
+[Serializable]
+public class KernelException : Exception
+{
+	/// <summary>
+	///   Initializes a new instance of the <see cref = "KernelException" /> class.
+	/// </summary>
+	/// <param name = "message">The message.</param>
+	public KernelException(string message) : base(message)
+	{
+		ExceptionHelper.SetUp(this);
+	}
 
 	/// <summary>
-	///   Exception threw by Kernel operations that failed
-	///   for some reason.
+	///   Initializes a new instance of the <see cref = "KernelException" /> class.
 	/// </summary>
-	[Serializable]
-	public class KernelException : Exception
+	/// <param name = "message">The message.</param>
+	/// <param name = "innerException">The inner exception.</param>
+	public KernelException(string message, Exception innerException) : base(message, innerException)
 	{
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "KernelException" /> class.
-		/// </summary>
-		/// <param name = "message">The message.</param>
-		public KernelException(string message) : base(message)
-		{
-			ExceptionHelper.SetUp(this);
-		}
-
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "KernelException" /> class.
-		/// </summary>
-		/// <param name = "message">The message.</param>
-		/// <param name = "innerException">The inner exception.</param>
-		public KernelException(string message, Exception innerException) : base(message, innerException)
-		{
-			ExceptionHelper.SetUp(this);
-		}
+		ExceptionHelper.SetUp(this);
+	}
 
 #if FEATURE_SERIALIZATION
 		/// <summary>
@@ -56,5 +56,4 @@ namespace Castle.MicroKernel
 			ExceptionHelper.SetUp(this);
 		}
 #endif
-	}
 }

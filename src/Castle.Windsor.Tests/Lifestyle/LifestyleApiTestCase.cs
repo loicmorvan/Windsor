@@ -12,131 +12,126 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Lifestyle
+namespace Castle.Windsor.Tests.Lifestyle;
+
+using System;
+
+using Castle.Core;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
+
+public class LifestyleApiTestCase : AbstractContainerTestCase
 {
-	using System;
-
-	using Castle.Core;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Tests.ClassComponents;
-
-	using CastleTests.Components;
-
-	
-
-	
-	public class LifestyleApiTestCase : AbstractContainerTestCase
+	private void LifestyleSingle(Func<ComponentRegistration<A>, IRegistration> assingLifestyle, LifestyleType expectedLifestyle)
 	{
-		private void LifestyleSingle(Func<ComponentRegistration<A>, IRegistration> assingLifestyle, LifestyleType expectedLifestyle)
-		{
-			var registration = Component.For<A>();
-			Kernel.Register(assingLifestyle(registration));
-			var handler = Kernel.GetHandler(typeof(A));
-			Assert.Equal(expectedLifestyle, handler.ComponentModel.LifestyleType);
-		}
+		var registration = Component.For<A>();
+		Kernel.Register(assingLifestyle(registration));
+		var handler = Kernel.GetHandler(typeof(A));
+		Assert.Equal(expectedLifestyle, handler.ComponentModel.LifestyleType);
+	}
 
-		private void LifestyleMany(Func<BasedOnDescriptor, IRegistration> assingLifestyle, LifestyleType expectedLifestyle)
-		{
-			var registration = Classes.FromAssembly(GetCurrentAssembly()).BasedOn<A>();
-			Kernel.Register(assingLifestyle(registration));
-			var handler = Kernel.GetHandler(typeof(A));
-			Assert.Equal(expectedLifestyle, handler.ComponentModel.LifestyleType);
-		}
+	private void LifestyleMany(Func<BasedOnDescriptor, IRegistration> assingLifestyle, LifestyleType expectedLifestyle)
+	{
+		var registration = Classes.FromAssembly(GetCurrentAssembly()).BasedOn<A>();
+		Kernel.Register(assingLifestyle(registration));
+		var handler = Kernel.GetHandler(typeof(A));
+		Assert.Equal(expectedLifestyle, handler.ComponentModel.LifestyleType);
+	}
 
-		[Fact]
-		public void Many_component_custom()
-		{
-			LifestyleMany(c => c.LifestyleCustom(typeof(CustomLifestyleManager)), LifestyleType.Custom);
-		}
+	[Fact]
+	public void Many_component_custom()
+	{
+		LifestyleMany(c => c.LifestyleCustom(typeof(CustomLifestyleManager)), LifestyleType.Custom);
+	}
 
-		[Fact]
-		public void Many_component_custom_generic()
-		{
-			LifestyleMany(c => c.LifestyleCustom<CustomLifestyleManager>(), LifestyleType.Custom);
-		}
+	[Fact]
+	public void Many_component_custom_generic()
+	{
+		LifestyleMany(c => c.LifestyleCustom<CustomLifestyleManager>(), LifestyleType.Custom);
+	}
 
-		[Fact]
-		public void Many_component_per_thread()
-		{
-			LifestyleMany(c => c.LifestylePerThread(), LifestyleType.Thread);
-		}
+	[Fact]
+	public void Many_component_per_thread()
+	{
+		LifestyleMany(c => c.LifestylePerThread(), LifestyleType.Thread);
+	}
 
-		[Fact]
-		public void Many_component_pooled()
-		{
-			LifestyleMany(c => c.LifestylePooled(), LifestyleType.Pooled);
-		}
+	[Fact]
+	public void Many_component_pooled()
+	{
+		LifestyleMany(c => c.LifestylePooled(), LifestyleType.Pooled);
+	}
 
-		[Fact]
-		public void Many_component_scoped()
-		{
-			LifestyleMany(c => c.LifestyleScoped(), LifestyleType.Scoped);
-		}
+	[Fact]
+	public void Many_component_scoped()
+	{
+		LifestyleMany(c => c.LifestyleScoped(), LifestyleType.Scoped);
+	}
 
-		[Fact]
-		public void Many_component_bound_to_object()
-		{
-			LifestyleMany(c => c.LifestyleBoundTo<object>(), LifestyleType.Bound);
-		}
+	[Fact]
+	public void Many_component_bound_to_object()
+	{
+		LifestyleMany(c => c.LifestyleBoundTo<object>(), LifestyleType.Bound);
+	}
 
-		[Fact]
-		public void Many_component_singleton()
-		{
-			LifestyleMany(c => c.LifestyleSingleton(), LifestyleType.Singleton);
-		}
+	[Fact]
+	public void Many_component_singleton()
+	{
+		LifestyleMany(c => c.LifestyleSingleton(), LifestyleType.Singleton);
+	}
 
-		[Fact]
-		public void Many_component_transient()
-		{
-			LifestyleMany(c => c.LifestyleTransient(), LifestyleType.Transient);
-		}
+	[Fact]
+	public void Many_component_transient()
+	{
+		LifestyleMany(c => c.LifestyleTransient(), LifestyleType.Transient);
+	}
 
-		[Fact]
-		public void Single_component_custom()
-		{
-			LifestyleSingle(c => c.LifestyleCustom(typeof(CustomLifestyleManager)), LifestyleType.Custom);
-		}
+	[Fact]
+	public void Single_component_custom()
+	{
+		LifestyleSingle(c => c.LifestyleCustom(typeof(CustomLifestyleManager)), LifestyleType.Custom);
+	}
 
-		[Fact]
-		public void Single_component_custom_generic()
-		{
-			LifestyleSingle(c => c.LifestyleCustom<CustomLifestyleManager>(), LifestyleType.Custom);
-		}
+	[Fact]
+	public void Single_component_custom_generic()
+	{
+		LifestyleSingle(c => c.LifestyleCustom<CustomLifestyleManager>(), LifestyleType.Custom);
+	}
 
-		[Fact]
-		public void Single_component_per_thread()
-		{
-			LifestyleSingle(c => c.LifestylePerThread(), LifestyleType.Thread);
-		}
+	[Fact]
+	public void Single_component_per_thread()
+	{
+		LifestyleSingle(c => c.LifestylePerThread(), LifestyleType.Thread);
+	}
 
-		[Fact]
-		public void Single_component_pooled()
-		{
-			LifestyleSingle(c => c.LifestylePooled(), LifestyleType.Pooled);
-		}
+	[Fact]
+	public void Single_component_pooled()
+	{
+		LifestyleSingle(c => c.LifestylePooled(), LifestyleType.Pooled);
+	}
 
-		[Fact]
-		public void Single_component_scoped()
-		{
-			LifestyleSingle(c => c.LifestyleScoped(), LifestyleType.Scoped);
-		}
+	[Fact]
+	public void Single_component_scoped()
+	{
+		LifestyleSingle(c => c.LifestyleScoped(), LifestyleType.Scoped);
+	}
 
-		[Fact]
-		public void Single_component_bound_to_object()
-		{
-			LifestyleSingle(c => c.LifestyleBoundTo<object>(), LifestyleType.Bound);
-		}
+	[Fact]
+	public void Single_component_bound_to_object()
+	{
+		LifestyleSingle(c => c.LifestyleBoundTo<object>(), LifestyleType.Bound);
+	}
 
-		[Fact]
-		public void Single_component_singleton()
-		{
-			LifestyleSingle(c => c.LifestyleSingleton(), LifestyleType.Singleton);
-		}
+	[Fact]
+	public void Single_component_singleton()
+	{
+		LifestyleSingle(c => c.LifestyleSingleton(), LifestyleType.Singleton);
+	}
 
-		[Fact]
-		public void Single_component_transient()
-		{
-			LifestyleSingle(c => c.LifestyleTransient(), LifestyleType.Transient);
-		}
+	[Fact]
+	public void Single_component_transient()
+	{
+		LifestyleSingle(c => c.LifestyleTransient(), LifestyleType.Transient);
 	}
 }

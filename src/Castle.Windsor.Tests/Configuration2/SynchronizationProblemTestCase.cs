@@ -12,74 +12,70 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Configuration2
+namespace Castle.Windsor.Tests.Configuration2;
+
+using System;
+using System.Threading;
+
+using Castle.Windsor;
+using Castle.Windsor.Configuration.Interpreters;
+using Castle.Windsor.Tests.Components;
+
+public class SynchronizationProblemTestCase:IDisposable
 {
-	using System;
-	using System.Threading;
+	private readonly WindsorContainer container;
+	private readonly ManualResetEvent startEvent = new ManualResetEvent(false);
+	private readonly ManualResetEvent stopEvent = new ManualResetEvent(false);
 
-	using Castle.Core.Internal;
-	using Castle.Windsor.Configuration.Interpreters;
-
-	using CastleTests.Components;
-
-	
-
-	public class SynchronizationProblemTestCase:IDisposable
+	public SynchronizationProblemTestCase()
 	{
-		private WindsorContainer container;
-		private ManualResetEvent startEvent = new ManualResetEvent(false);
-		private ManualResetEvent stopEvent = new ManualResetEvent(false);
+		container = new WindsorContainer(new XmlInterpreter(ConfigHelper.ResolveConfigPath("Configuration2/synchtest_config.xml")));
 
-		public SynchronizationProblemTestCase()
+		container.Resolve(typeof(ComponentWithConfigs));
+	}
+
+	public void Dispose()
+	{
+		container.Dispose();
+	}
+
+	[Fact]
+	public void ResolveWithConfigTest()
+	{
+		const int threadCount = 50;
+
+		var threads = new Thread[threadCount];
+
+		for (int i = 0; i < threadCount; i++)
 		{
-			container = new WindsorContainer(new XmlInterpreter(ConfigHelper.ResolveConfigPath("Configuration2/synchtest_config.xml")));
-
-			container.Resolve(typeof(ComponentWithConfigs));
+			threads[i] = new Thread(ExecuteMethodUntilSignal);
+			threads[i].Start();
 		}
 
-		public void Dispose()
+		startEvent.Set();
+
+		Thread.CurrentThread.Join(10 * 2000);
+
+		stopEvent.Set();
+	}
+
+	private void ExecuteMethodUntilSignal()
+	{
+		startEvent.WaitOne(int.MaxValue);
+
+		while (!stopEvent.WaitOne(1))
 		{
-			container.Dispose();
-		}
-
-		[Fact]
-		public void ResolveWithConfigTest()
-		{
-			const int threadCount = 50;
-
-			var threads = new Thread[threadCount];
-
-			for (int i = 0; i < threadCount; i++)
+			try
 			{
-				threads[i] = new Thread(ExecuteMethodUntilSignal);
-				threads[i].Start();
+				ComponentWithConfigs comp = (ComponentWithConfigs) container.Resolve(typeof(ComponentWithConfigs));
+
+				Assert.Equal(AppContext.BaseDirectory, comp.Name);
+				Assert.Equal(90, comp.Port);
+				Assert.Single(comp.Dict);
 			}
-
-			startEvent.Set();
-
-			Thread.CurrentThread.Join(10 * 2000);
-
-			stopEvent.Set();
-		}
-
-		private void ExecuteMethodUntilSignal()
-		{
-			startEvent.WaitOne(int.MaxValue);
-
-			while (!stopEvent.WaitOne(1))
+			catch(Exception ex)
 			{
-				try
-				{
-					ComponentWithConfigs comp = (ComponentWithConfigs) container.Resolve(typeof(ComponentWithConfigs));
-
-					Assert.Equal(AppContext.BaseDirectory, comp.Name);
-					Assert.Equal(90, comp.Port);
-					Assert.Single(comp.Dict);
-				}
-				catch(Exception ex)
-				{
-					Console.WriteLine(DateTime.Now.Ticks + " ---------------------------" + Environment.NewLine + ex);
-				}
+				Console.WriteLine(DateTime.Now.Ticks + " ---------------------------" + Environment.NewLine + ex);
 			}
 		}
 	}

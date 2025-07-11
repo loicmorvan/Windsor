@@ -12,47 +12,46 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor
+namespace Castle.Windsor;
+
+using System;
+
+using Castle.Core;
+using Castle.MicroKernel;
+
+/// <summary>
+///   Implementation of <see cref = "IServiceProvider" /> and <see cref = "IServiceProviderEx" /> that uses a <see
+///    cref = "IWindsorContainer" /> or <see cref = "IKernel" /> as its component's source.
+/// </summary>
+public class WindsorServiceProvider : IServiceProviderEx
 {
-	using System;
+	private readonly IKernelInternal kernel;
 
-	using Castle.Core;
-	using Castle.MicroKernel;
-
-	/// <summary>
-	///   Implementation of <see cref = "IServiceProvider" /> and <see cref = "IServiceProviderEx" /> that uses a <see
-	///    cref = "IWindsorContainer" /> or <see cref = "IKernel" /> as its component's source.
-	/// </summary>
-	public class WindsorServiceProvider : IServiceProviderEx
+	public WindsorServiceProvider(IWindsorContainer container)
 	{
-		private readonly IKernelInternal kernel;
-
-		public WindsorServiceProvider(IWindsorContainer container)
+		kernel = container.Kernel as IKernelInternal;
+		if (kernel == null)
 		{
-			kernel = container.Kernel as IKernelInternal;
-			if (kernel == null)
-			{
-				throw new ArgumentException(string.Format("The kernel must implement {0}", typeof(IKernelInternal)));
-			}
+			throw new ArgumentException(string.Format("The kernel must implement {0}", typeof(IKernelInternal)));
 		}
+	}
 
-		public IKernel Kernel
-		{
-			get { return kernel; }
-		}
+	public IKernel Kernel
+	{
+		get { return kernel; }
+	}
 
-		public object GetService(Type serviceType)
+	public object GetService(Type serviceType)
+	{
+		if (kernel.LoadHandlerByType(null, serviceType, null) != null)
 		{
-			if (kernel.LoadHandlerByType(null, serviceType, null) != null)
-			{
-				return kernel.Resolve(serviceType);
-			}
-			return null;
+			return kernel.Resolve(serviceType);
 		}
+		return null;
+	}
 
-		public T GetService<T>() where T : class
-		{
-			return (T)GetService(typeof(T));
-		}
+	public T GetService<T>() where T : class
+	{
+		return (T)GetService(typeof(T));
 	}
 }
