@@ -12,65 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory;
-
 using System;
 using System.ComponentModel;
 using System.Reflection;
 
+namespace Castle.Facilities.TypedFactory;
+
 /// <summary>
-///   Legacy class from old impl. of the facility. Do not use it.
+///     Legacy class from old impl. of the facility. Do not use it.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class FactoryEntry
 {
-	private readonly String _creationMethod;
-	private readonly String _destructionMethod;
-	private readonly Type _factoryInterface;
-	private readonly String _id;
-
-	public FactoryEntry(String id, Type factoryInterface, String creationMethod, String destructionMethod)
+	public FactoryEntry(string id, Type factoryInterface, string creationMethod, string destructionMethod)
 	{
-		if (string.IsNullOrEmpty(id))
-		{
-			throw new ArgumentNullException(nameof(id));
-		}
-		if (factoryInterface == null)
-		{
-			throw new ArgumentNullException(nameof(factoryInterface));
-		}
+		if (string.IsNullOrEmpty(id)) throw new ArgumentNullException(nameof(id));
+		if (factoryInterface == null) throw new ArgumentNullException(nameof(factoryInterface));
 		if (!factoryInterface.GetTypeInfo().IsInterface)
-		{
 			throw new ArgumentException("factoryInterface must be an interface");
-		}
-		if (string.IsNullOrEmpty(creationMethod))
-		{
-			throw new ArgumentNullException(nameof(creationMethod));
-		}
+		if (string.IsNullOrEmpty(creationMethod)) throw new ArgumentNullException(nameof(creationMethod));
 
-		this._id = id;
-		this._factoryInterface = factoryInterface;
-		this._creationMethod = creationMethod;
-		this._destructionMethod = destructionMethod;
+		Id = id;
+		FactoryInterface = factoryInterface;
+		CreationMethod = creationMethod;
+		DestructionMethod = destructionMethod;
 	}
 
-	public String CreationMethod
-	{
-		get { return _creationMethod; }
-	}
+	public string CreationMethod { get; }
 
-	public String DestructionMethod
-	{
-		get { return _destructionMethod; }
-	}
+	public string DestructionMethod { get; }
 
-	public Type FactoryInterface
-	{
-		get { return _factoryInterface; }
-	}
+	public Type FactoryInterface { get; }
 
-	public String Id
-	{
-		get { return _id; }
-	}
+	public string Id { get; }
 }

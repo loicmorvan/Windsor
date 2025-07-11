@@ -12,33 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents;
-
-using System;
-
 using Castle.Windsor.Tests.Components;
 
-public class ServiceUser2(A a, String name, int port) : ServiceUser(a)
+namespace Castle.Windsor.Tests.ClassComponents;
+
+public class ServiceUser2(A a, string name, int port) : ServiceUser(a)
 {
-	private readonly int _scheduleinterval;
-
-	public ServiceUser2(A a, String name, int port, int scheduleinterval) : this(a, name, port)
+	public ServiceUser2(A a, string name, int port, int scheduleinterval) : this(a, name, port)
 	{
-		_scheduleinterval = scheduleinterval;
+		ScheduleInterval = scheduleinterval;
 	}
 
-	public String Name
-	{
-		get { return name; }
-	}
+	public string Name => name;
 
-	public int Port
-	{
-		get { return port; }
-	}
+	public int Port => port;
 
-	public int ScheduleInterval
-	{
-		get { return _scheduleinterval; }
-	}
+	public int ScheduleInterval { get; }
 }

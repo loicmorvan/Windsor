@@ -12,26 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
 using System;
 using System.Xml;
 
-using Castle.Core.Internal;
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
 public class EvalProcessingInstructionProcessor : AbstractXmlNodeProcessor
 {
 	private static readonly XmlNodeType[] AcceptNodes = [XmlNodeType.ProcessingInstruction];
 
-	public override XmlNodeType[] AcceptNodeTypes
-	{
-		get { return AcceptNodes; }
-	}
+	public override XmlNodeType[] AcceptNodeTypes => AcceptNodes;
 
-	public override string Name
-	{
-		get { return "eval"; }
-	}
+	public override string Name => "eval";
 
 	public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
 	{
@@ -46,10 +38,7 @@ public class EvalProcessingInstructionProcessor : AbstractXmlNodeProcessor
 
 		object evaluated = "";
 
-		if (string.Compare(expression, "$basedirectory", true) == 0)
-		{
-			evaluated = AppContext.BaseDirectory;
-		}
+		if (string.Compare(expression, "$basedirectory", true) == 0) evaluated = AppContext.BaseDirectory;
 
 		fragment.AppendChild(node.OwnerDocument.CreateTextNode(evaluated.ToString()));
 

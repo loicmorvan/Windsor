@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Proxies;
-
 using System.Linq;
-
 using Castle.DynamicProxy;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Interceptors;
+
+namespace Castle.Windsor.Tests.Proxies;
 
 public class MixinDependencyTestCase : AbstractContainerTestCase
 {
@@ -47,8 +46,10 @@ public class MixinDependencyTestCase : AbstractContainerTestCase
 		var id = (outerProxy as IComponent).Id; // to trigger interception;
 		id = (innerProxy as IComponent).Id; // to trigger interception;
 
-		var outerMixin = ((outerProxy as IProxyTargetAccessor).GetInterceptors()[0] as CollectInvocationsInterceptor).Invocations[0].InvocationTarget;
-		var innerMixin = ((innerProxy as IProxyTargetAccessor).GetInterceptors()[0] as CollectInvocationsInterceptor).Invocations[0].InvocationTarget;
+		var outerMixin = ((outerProxy as IProxyTargetAccessor).GetInterceptors()[0] as CollectInvocationsInterceptor)
+			.Invocations[0].InvocationTarget;
+		var innerMixin = ((innerProxy as IProxyTargetAccessor).GetInterceptors()[0] as CollectInvocationsInterceptor)
+			.Invocations[0].InvocationTarget;
 
 		Assert.NotSame(innerMixin, outerMixin);
 		Assert.Same(outerMixin, outerProxy.Dependency);

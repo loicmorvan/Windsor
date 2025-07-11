@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
-
 using Castle.Core;
 using Castle.DynamicProxy;
 using Castle.MicroKernel.Context;
 
+namespace Castle.MicroKernel;
+
 public interface IProxyFactoryExtension
 {
-	object Generate(IProxyBuilder builder, ProxyGenerationOptions options, IInterceptor[] interceptors, ComponentModel model, CreationContext context);
+	object Generate(IProxyBuilder builder, ProxyGenerationOptions options, IInterceptor[] interceptors,
+		ComponentModel model, CreationContext context);
 }

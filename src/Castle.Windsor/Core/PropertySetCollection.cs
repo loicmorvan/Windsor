@@ -12,36 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Core.Internal;
 
+namespace Castle.Core;
+
 /// <summary>
-///     Collection of <see cref = "PropertySet" />
+///     Collection of <see cref="PropertySet" />
 /// </summary>
 [Serializable]
 public class PropertySetCollection : IMutableCollection<PropertySet>
 {
 	private readonly HashSet<PropertySet> _properties = [];
 
-	public int Count
-	{
-		get { return _properties.Count; }
-	}
-
-	/// <summary>Finds a PropertySet the by PropertyInfo.</summary>
-	/// <param name = "info">The info.</param>
-	/// <returns></returns>
-	public PropertySet FindByPropertyInfo(PropertyInfo info)
-	{
-		return this.FirstOrDefault(prop => info == prop.Property);
-	}
+	public int Count => _properties.Count;
 
 	public IEnumerator<PropertySet> GetEnumerator()
 	{
@@ -55,15 +43,20 @@ public class PropertySetCollection : IMutableCollection<PropertySet>
 
 	void IMutableCollection<PropertySet>.Add(PropertySet property)
 	{
-		if (property == null)
-		{
-			throw new ArgumentNullException(nameof(property));
-		}
+		if (property == null) throw new ArgumentNullException(nameof(property));
 		_properties.Add(property);
 	}
 
 	bool IMutableCollection<PropertySet>.Remove(PropertySet item)
 	{
 		return _properties.Remove(item);
+	}
+
+	/// <summary>Finds a PropertySet the by PropertyInfo.</summary>
+	/// <param name="info">The info.</param>
+	/// <returns></returns>
+	public PropertySet FindByPropertyInfo(PropertyInfo info)
+	{
+		return this.FirstOrDefault(prop => info == prop.Property);
 	}
 }

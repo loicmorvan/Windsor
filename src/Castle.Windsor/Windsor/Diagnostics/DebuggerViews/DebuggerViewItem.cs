@@ -12,51 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.DebuggerViews;
-
 using System.Diagnostics;
 
-[DebuggerDisplay("{_description,nq}", Name = "{name,nq}")]
+namespace Castle.Windsor.Diagnostics.DebuggerViews;
+
+[DebuggerDisplay("{Description,nq}", Name = "{name,nq}")]
 public class DebuggerViewItem
 {
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly object _description;
-
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly string _name;
-
-	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-	private readonly object _value;
-
 	public DebuggerViewItem(string name, string description, object value)
 	{
-		this._name = name;
-		this._description = description;
-		this._value = value;
+		Name = name;
+		Description = description;
+		Value = value;
 	}
 
 	public DebuggerViewItem(string name, object value)
 	{
-		this._name = name;
-		_description = value;
-		this._value = value;
+		Name = name;
+		Description = value;
+		Value = value;
 	}
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public object Description
-	{
-		get { return _description; }
-	}
+	public object Description { get; }
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public string Name
-	{
-		get { return _name; }
-	}
+	public string Name { get; }
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public object Value
-	{
-		get { return _value; }
-	}
+	[field: DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+	public object Value { get; }
 }

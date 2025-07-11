@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers;
-
 using System.Collections.Generic;
 using System.Linq;
-
 using Castle.Core;
 using Castle.MicroKernel.Context;
+
+namespace Castle.MicroKernel.Handlers;
 
 public class ExtendedHandler : DefaultHandler
 {
@@ -29,14 +28,8 @@ public class ExtendedHandler : DefaultHandler
 		ICollection<IReleaseExtension> releaseExtensions)
 		: base(model)
 	{
-		if (resolveExtensions != null)
-		{
-			this._resolveExtensions = resolveExtensions.ToArray();
-		}
-		if (releaseExtensions != null)
-		{
-			this._releaseExtensions = releaseExtensions.ToArray();
-		}
+		if (resolveExtensions != null) _resolveExtensions = resolveExtensions.ToArray();
+		if (releaseExtensions != null) _releaseExtensions = releaseExtensions.ToArray();
 	}
 
 	public override void Init(IKernelInternal kernel)
@@ -44,27 +37,17 @@ public class ExtendedHandler : DefaultHandler
 		base.Init(kernel);
 
 		if (_resolveExtensions != null)
-		{
 			foreach (var extension in _resolveExtensions)
-			{
 				extension.Init(kernel, this);
-			}
-		}
+
 		if (_releaseExtensions != null)
-		{
 			foreach (var extension in _releaseExtensions)
-			{
 				extension.Init(kernel, this);
-			}
-		}
 	}
 
 	public override bool Release(Burden burden)
 	{
-		if (_releaseExtensions == null)
-		{
-			return base.Release(burden);
-		}
+		if (_releaseExtensions == null) return base.Release(burden);
 
 		var invocation = new ReleaseInvocation(burden);
 		InvokeReleasePipeline(0, invocation);
@@ -73,10 +56,7 @@ public class ExtendedHandler : DefaultHandler
 
 	protected override object Resolve(CreationContext context, bool instanceRequired)
 	{
-		if (_resolveExtensions == null)
-		{
-			return base.Resolve(context, instanceRequired);
-		}
+		if (_resolveExtensions == null) return base.Resolve(context, instanceRequired);
 		var invocation = new ResolveInvocation(context, instanceRequired);
 		InvokeResolvePipeline(0, invocation);
 		return invocation.ResolvedInstance;
@@ -89,6 +69,7 @@ public class ExtendedHandler : DefaultHandler
 			invocation.ReturnValue = base.Release(invocation.Burden);
 			return;
 		}
+
 		var nextIndex = extensionIndex + 1;
 		invocation.SetProceedDelegate(() => InvokeReleasePipeline(nextIndex, invocation));
 		_releaseExtensions[extensionIndex].Intercept(invocation);
@@ -106,6 +87,7 @@ public class ExtendedHandler : DefaultHandler
 			invocation.Burden = burden;
 			return;
 		}
+
 		var nextIndex = extensionIndex + 1;
 		invocation.SetProceedDelegate(() => InvokeResolvePipeline(nextIndex, invocation));
 		_resolveExtensions[extensionIndex].Intercept(invocation);

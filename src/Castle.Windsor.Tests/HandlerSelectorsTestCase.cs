@@ -12,18 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
-
 using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Context;
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
+
+namespace Castle.Windsor.Tests;
 
 public class HandlerSelectorsTestCase
 {
+	public enum Interest
+	{
+		None,
+		Biology,
+		Astronomy
+	}
+
 	[Fact]
 	public void SelectUsingBusinessLogic_DirectSelection()
 	{
@@ -73,13 +78,6 @@ public class HandlerSelectorsTestCase
 		Assert.IsType<BirdWatcher>(container.Resolve<IWatcher>("root dependency should resolve bird"));
 	}
 
-	public enum Interest
-	{
-		None,
-		Biology,
-		Astronomy
-	}
-
 	public class BirdWatcher : IWatcher
 	{
 		public event Action<string> OnSomethingInterestingToWatch = delegate { };
@@ -107,13 +105,15 @@ public class HandlerSelectorsTestCase
 
 	public class WatchSubDependencySelector : ISubDependencyResolver
 	{
-		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+			ComponentModel model,
 			DependencyModel dependency)
 		{
 			return dependency.TargetType == typeof(IWatcher);
 		}
 
-		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+			ComponentModel model,
 			DependencyModel dependency)
 		{
 			return new SatiWatcher();
@@ -132,12 +132,8 @@ public class HandlerSelectorsTestCase
 		public IHandler SelectHandler(string key, Type service, IHandler[] handlers)
 		{
 			foreach (var handler in handlers)
-			{
 				if (handler.ComponentModel.Name.ToUpper().Contains(Interest.ToString().ToUpper()))
-				{
 					return handler;
-				}
-			}
 
 			return null;
 		}

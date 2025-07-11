@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
+using System;
 using System.Collections.ObjectModel;
-
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests;
 
 public class OpenGenericsTestCase : AbstractContainerTestCase
 {
@@ -31,7 +31,7 @@ public class OpenGenericsTestCase : AbstractContainerTestCase
 
 		var proxy = Container.Resolve<Collection<int>>();
 
-		Assert.IsType<ISimpleService>(proxy, exactMatch: false);
+		Assert.IsType<ISimpleService>(proxy, false);
 	}
 
 	[Fact]
@@ -79,6 +79,7 @@ public class OpenGenericsTestCase : AbstractContainerTestCase
 
 		Assert.Single(valid);
 	}
+
 	[Fact]
 	public void Can_use_open_generic_with_LateBoundComponent_implementing_partial_closure()
 	{
@@ -87,13 +88,13 @@ public class OpenGenericsTestCase : AbstractContainerTestCase
 			Component.For(typeof(ClassComponents.IRepository<>))
 				.UsingFactoryMethod((k, c) =>
 				{
-					System.Type openType = typeof(DoubleRepository<,>);
-					System.Type[] genericArgs = [c.GenericArguments[0], typeof(int)];
-					System.Type closedType = openType.MakeGenericType(genericArgs);
+					var openType = typeof(DoubleRepository<,>);
+					Type[] genericArgs = [c.GenericArguments[0], typeof(int)];
+					var closedType = openType.MakeGenericType(genericArgs);
 					return k.Resolve(closedType);
 				}));
 		var repo = Container.Resolve<ClassComponents.IRepository<string>>();
-		Assert.Equal(default(string), repo.Find());
-		Assert.IsType<DoubleRepository<string, int>>( repo);
+		Assert.Equal(default, repo.Find());
+		Assert.IsType<DoubleRepository<string, int>>(repo);
 	}
 }

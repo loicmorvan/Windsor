@@ -12,19 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Reflection;
+using Castle.Core;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Configuration.Interpreters;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.XmlFiles;
+
 namespace Castle.Windsor.Tests
 {
-	using System;
-	using System.Reflection;
-
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor;
-	using Castle.Windsor.Configuration.Interpreters;
-	using Castle.Windsor.Tests.Components;
-	using Castle.Windsor.Tests.XmlFiles;
-
 	public class CircularDependencyTestCase : AbstractContainerTestCase
 	{
 		[Fact]
@@ -38,7 +36,7 @@ namespace Castle.Windsor.Tests
 		public void ShouldNotSetTheViewControllerProperty()
 		{
 			Container.Register(Component.For<IController>().ImplementedBy<Controller>().Named("controller"),
-			                   Component.For<IView>().ImplementedBy<View>().Named("view"));
+				Component.For<IView>().ImplementedBy<View>().Named("view"));
 			var controller = Container.Resolve<Controller>("controller");
 			Assert.NotNull(controller.View);
 			Assert.Null(controller.View.Controller);
@@ -49,7 +47,7 @@ namespace Castle.Windsor.Tests
 		{
 			SingletonComponent.CtorCallsCount = 0;
 			Container.Register(Component.For<SingletonComponent>(),
-			                   Component.For<SingletonDependency>());
+				Component.For<SingletonDependency>());
 
 			var component = Container.Resolve<SingletonComponent>();
 			Assert.NotNull(component.Dependency);
@@ -60,9 +58,9 @@ namespace Castle.Windsor.Tests
 		public void ThrowsACircularDependencyException2()
 		{
 			Container.Register(Component.For<CompA>().Named("compA"),
-			                   Component.For<CompB>().Named("compB"),
-			                   Component.For<CompC>().Named("compC"),
-			                   Component.For<CompD>().Named("compD"));
+				Component.For<CompB>().Named("compB"),
+				Component.For<CompC>().Named("compC"),
+				Component.For<CompD>().Named("compD"));
 
 			var exception =
 				Assert.Throws<CircularDependencyException>(() => Container.Resolve<CompA>("compA"));
@@ -120,7 +118,7 @@ namespace Castle.Windsor.Tests
 		{
 			string Path { get; }
 		}
-		
+
 		public class AssemblyPath : IPathProvider
 		{
 			public string Path
@@ -135,12 +133,7 @@ namespace Castle.Windsor.Tests
 
 		public class RelativeFilePath(IPathProvider basePathProvider, string extensionsPath) : IPathProvider
 		{
-			private readonly string _path = System.IO.Path.Combine(basePathProvider.Path + "\\", extensionsPath);
-
-			public string Path
-			{
-				get { return _path; }
-			}
+			public string Path { get; } = System.IO.Path.Combine(basePathProvider.Path + "\\", extensionsPath);
 		}
 	}
 }

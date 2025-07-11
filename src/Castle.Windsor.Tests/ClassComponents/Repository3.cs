@@ -16,8 +16,5 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class Repository3(IRepository inner) : IRepository
 {
-	public IRepository InnerRepository
-	{
-		get { return inner; }
-	}
+	public IRepository InnerRepository => inner;
 }

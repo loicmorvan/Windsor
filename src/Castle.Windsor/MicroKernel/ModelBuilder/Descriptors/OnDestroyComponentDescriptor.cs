@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors;
-
 using Castle.Core;
 using Castle.MicroKernel.LifecycleConcerns;
 
-public class OnDestroyComponentDescriptor<TS>(LifecycleActionDelegate<TS> action) : IComponentModelDescriptor, IMetaComponentModelDescriptor
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+
+public class OnDestroyComponentDescriptor<TS>(LifecycleActionDelegate<TS> action)
+	: IComponentModelDescriptor, IMetaComponentModelDescriptor
 	where TS : class
 {
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)

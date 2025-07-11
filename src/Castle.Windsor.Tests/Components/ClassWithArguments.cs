@@ -16,13 +16,7 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ClassWithArguments(string arg1, int arg2)
 {
-	public string Arg1
-	{
-		get { return arg1; }
-	}
+	public string Arg1 => arg1;
 
-	public int Arg2
-	{
-		get { return arg2; }
-	}
+	public int Arg2 => arg2;
 }

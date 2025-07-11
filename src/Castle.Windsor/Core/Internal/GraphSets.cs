@@ -12,34 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal;
-
 using System.Collections.Generic;
+
+namespace Castle.Core.Internal;
 
 internal enum VertexColor
 {
 	NotInThisSet,
 
 	/// <summary>
-	///   The node has not been visited yet
+	///     The node has not been visited yet
 	/// </summary>
 	White,
 
 	/// <summary>
-	///   This node is in the process of being visited
+	///     This node is in the process of being visited
 	/// </summary>
 	Gray,
 
 	/// <summary>
-	///   This now was visited
+	///     This now was visited
 	/// </summary>
 	Black
 }
 
 /// <summary>
-///   Represents a collection of objects
-///   which are guaranteed to be unique 
-///   and holds a color for them
+///     Represents a collection of objects
+///     which are guaranteed to be unique
+///     and holds a color for them
 /// </summary>
 internal class ColorsSet
 {
@@ -47,18 +47,12 @@ internal class ColorsSet
 
 	public ColorsSet(IVertex[] items)
 	{
-		foreach (var item in items)
-		{
-			Set(item, VertexColor.White);
-		}
+		foreach (var item in items) Set(item, VertexColor.White);
 	}
 
 	public VertexColor ColorOf(IVertex item)
 	{
-		if (!_items.ContainsKey(item))
-		{
-			return VertexColor.NotInThisSet;
-		}
+		if (!_items.ContainsKey(item)) return VertexColor.NotInThisSet;
 		return _items[item];
 	}
 
@@ -69,8 +63,8 @@ internal class ColorsSet
 }
 
 /// <summary>
-///   Holds a timestamp (integer) 
-///   for a given item
+///     Holds a timestamp (integer)
+///     for a given item
 /// </summary>
 internal class TimestampSet
 {

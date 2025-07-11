@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System.Collections.Generic;
-
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests;
 
 public class DefaultValueTestCase : AbstractContainerTestCase
 {
@@ -63,7 +61,8 @@ public class DefaultValueTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Uses_ctor_with_explicit_dependency_when_equally_greedy_as_default_1()
 	{
-		Container.Register(Component.For<TwoCtorsWithDefaultValue>().DependsOn(Property.ForKey("name").Eq("Adam Mickiewicz")));
+		Container.Register(Component.For<TwoCtorsWithDefaultValue>()
+			.DependsOn(Property.ForKey("name").Eq("Adam Mickiewicz")));
 
 		var value = Container.Resolve<TwoCtorsWithDefaultValue>();
 
@@ -83,7 +82,8 @@ public class DefaultValueTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Uses_explicit_value_over_default()
 	{
-		Container.Register(Component.For<CtorWithDefaultValue>().DependsOn(Property.ForKey("name").Eq("Adam Mickiewicz")));
+		Container.Register(Component.For<CtorWithDefaultValue>()
+			.DependsOn(Property.ForKey("name").Eq("Adam Mickiewicz")));
 
 		var value = Container.Resolve<CtorWithDefaultValue>();
 

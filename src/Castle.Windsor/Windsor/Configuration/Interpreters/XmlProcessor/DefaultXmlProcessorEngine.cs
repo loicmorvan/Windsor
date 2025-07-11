@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor;
-
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Xml;
-
 using Castle.Core.Internal;
 using Castle.Core.Resource;
 using Castle.MicroKernel.SubSystems.Resource;
 using Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
+
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor;
 
 public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 {
@@ -39,22 +38,22 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 	private readonly IResourceSubSystem _resourceSubSystem;
 
 	/// <summary>
-	///   Initializes a new instance of the <see cref = "DefaultXmlProcessorEngine" /> class.
+	///     Initializes a new instance of the <see cref="DefaultXmlProcessorEngine" /> class.
 	/// </summary>
-	/// <param name = "environmentName">Name of the environment.</param>
+	/// <param name="environmentName">Name of the environment.</param>
 	public DefaultXmlProcessorEngine(string environmentName) : this(environmentName, new DefaultResourceSubSystem())
 	{
 	}
 
 	/// <summary>
-	///   Initializes a new instance of the <see cref = "DefaultXmlProcessorEngine" /> class.
+	///     Initializes a new instance of the <see cref="DefaultXmlProcessorEngine" /> class.
 	/// </summary>
-	/// <param name = "environmentName">Name of the environment.</param>
-	/// <param name = "resourceSubSystem">The resource sub system.</param>
+	/// <param name="environmentName">Name of the environment.</param>
+	/// <param name="resourceSubSystem">The resource sub system.</param>
 	public DefaultXmlProcessorEngine(string environmentName, IResourceSubSystem resourceSubSystem)
 	{
 		AddEnvNameAsFlag(environmentName);
-		this._resourceSubSystem = resourceSubSystem;
+		_resourceSubSystem = resourceSubSystem;
 		_defaultElementProcessor = new DefaultElementProcessor();
 	}
 
@@ -68,14 +67,12 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 		if (type.Is<IXmlNodeProcessor>())
 		{
 			var processor = type.CreateInstance<IXmlNodeProcessor>();
-			foreach (var nodeType in processor.AcceptNodeTypes)
-			{
-				RegisterProcessor(nodeType, processor);
-			}
+			foreach (var nodeType in processor.AcceptNodeTypes) RegisterProcessor(nodeType, processor);
 		}
 		else
 		{
-			throw new XmlProcessorException("{0} does not implement {1} interface", type.FullName, typeof(IXmlNodeProcessor).FullName);
+			throw new XmlProcessorException("{0} does not implement {1} interface", type.FullName,
+				typeof(IXmlNodeProcessor).FullName);
 		}
 	}
 
@@ -85,71 +82,52 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 	}
 
 	/// <summary>
-	///   Processes the element.
+	///     Processes the element.
 	/// </summary>
-	/// <param name = "nodeList">The element.</param>
+	/// <param name="nodeList">The element.</param>
 	/// <returns></returns>
 	public void DispatchProcessAll(IXmlProcessorNodeList nodeList)
 	{
-		while (nodeList.MoveNext())
-		{
-			DispatchProcessCurrent(nodeList);
-		}
+		while (nodeList.MoveNext()) DispatchProcessCurrent(nodeList);
 	}
 
 	/// <summary>
-	///   Processes the element.
+	///     Processes the element.
 	/// </summary>
-	/// <param name = "nodeList">The element.</param>
+	/// <param name="nodeList">The element.</param>
 	/// <returns></returns>
 	public void DispatchProcessCurrent(IXmlProcessorNodeList nodeList)
 	{
 		var processor = GetProcessor(nodeList.Current);
 
-		if (processor != null)
-		{
-			processor.Process(nodeList, this);
-		}
+		if (processor != null) processor.Process(nodeList, this);
 	}
 
 	public XmlElement GetProperty(string key)
 	{
 		XmlElement property;
-		if (!_properties.TryGetValue(key, out property))
-		{
-			return null;
-		}
+		if (!_properties.TryGetValue(key, out property)) return null;
 
 		return property.CloneNode(true) as XmlElement;
 	}
 
-	public IResource GetResource(String uri)
+	public IResource GetResource(string uri)
 	{
 		IResource resource;
 		if (_resourceStack.Count > 0)
-		{
 			resource = _resourceStack.Peek();
-		}
 		else
-		{
 			resource = null;
-		}
 
 		if (uri.IndexOf(Uri.SchemeDelimiter) != -1)
 		{
-			if (resource == null)
-			{
-				return _resourceSubSystem.CreateResource(uri);
-			}
+			if (resource == null) return _resourceSubSystem.CreateResource(uri);
 
 			return _resourceSubSystem.CreateResource(uri, resource.FileBasePath);
 		}
 
 		// NOTE: what if resource is null at this point?
-		if (_resourceStack.Count > 0)
-		{
-			return resource.CreateRelative(uri);
-		}
+		if (_resourceStack.Count > 0) return resource.CreateRelative(uri);
 
 		throw new XmlProcessorException("Cannot get relative resource '" + uri + "', resource stack is empty");
 	}
@@ -159,7 +137,7 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 		return _flags.ContainsKey(GetCanonicalFlagName(flag));
 	}
 
-	public bool HasProperty(String name)
+	public bool HasProperty(string name)
 	{
 		return _properties.ContainsKey(name);
 	}
@@ -186,20 +164,14 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 
 	private void AddEnvNameAsFlag(string environmentName)
 	{
-		if (environmentName != null)
-		{
-			AddFlag(environmentName);
-		}
+		if (environmentName != null) AddFlag(environmentName);
 	}
 
 	private string GetCanonicalFlagName(string flag)
 	{
 		flag = flag.Trim().ToLower();
 
-		if (!_flagPattern.IsMatch(flag))
-		{
-			throw new XmlProcessorException("Invalid flag name '{0}'", flag);
-		}
+		if (!_flagPattern.IsMatch(flag)) throw new XmlProcessorException("Invalid flag name '{0}'", flag);
 
 		return flag;
 	}
@@ -207,20 +179,13 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 	private IXmlNodeProcessor GetProcessor(XmlNode node)
 	{
 		IDictionary<string, IXmlNodeProcessor> processors;
-		if (!_nodeProcessors.TryGetValue(node.NodeType, out processors))
-		{
-			return null;
-		}
+		if (!_nodeProcessors.TryGetValue(node.NodeType, out processors)) return null;
 
 		// sometimes nodes with the same name will not accept a processor
 		IXmlNodeProcessor processor;
 		if (!processors.TryGetValue(node.Name, out processor) || !processor.Accept(node))
-		{
 			if (node.NodeType == XmlNodeType.Element)
-			{
 				processor = _defaultElementProcessor;
-			}
-		}
 
 		return processor;
 	}
@@ -235,9 +200,8 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 		}
 
 		if (typeProcessors.ContainsKey(processor.Name))
-		{
-			throw new XmlProcessorException("There is already a processor register for {0} with name {1} ", type, processor.Name);
-		}
+			throw new XmlProcessorException("There is already a processor register for {0} with name {1} ", type,
+				processor.Name);
 
 		typeProcessors.Add(processor.Name, processor);
 	}

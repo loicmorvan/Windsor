@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Installer;
-
 using System;
-
 using Castle.Core.Configuration;
 using Castle.Core.Resource;
 using Castle.MicroKernel;
 using Castle.MicroKernel.SubSystems.Configuration;
+
+namespace Castle.Windsor.Installer;
 
 internal class PartialConfigurationStore : IConfigurationStore, IDisposable
 {
@@ -33,19 +32,19 @@ internal class PartialConfigurationStore : IConfigurationStore, IDisposable
 		_partial.Init(kernel);
 	}
 
-	public void AddChildContainerConfiguration(String name, IConfiguration config)
+	public void AddChildContainerConfiguration(string name, IConfiguration config)
 	{
 		_inner.AddChildContainerConfiguration(name, config);
 		_partial.AddChildContainerConfiguration(name, config);
 	}
 
-	public void AddComponentConfiguration(String key, IConfiguration config)
+	public void AddComponentConfiguration(string key, IConfiguration config)
 	{
 		_inner.AddComponentConfiguration(key, config);
 		_partial.AddComponentConfiguration(key, config);
 	}
 
-	public void AddFacilityConfiguration(String key, IConfiguration config)
+	public void AddFacilityConfiguration(string key, IConfiguration config)
 	{
 		_inner.AddFacilityConfiguration(key, config);
 		_partial.AddFacilityConfiguration(key, config);
@@ -57,12 +56,12 @@ internal class PartialConfigurationStore : IConfigurationStore, IDisposable
 		_partial.AddInstallerConfiguration(config);
 	}
 
-	public IConfiguration GetChildContainerConfiguration(String key)
+	public IConfiguration GetChildContainerConfiguration(string key)
 	{
 		return _partial.GetChildContainerConfiguration(key);
 	}
 
-	public IConfiguration GetComponentConfiguration(String key)
+	public IConfiguration GetComponentConfiguration(string key)
 	{
 		return _partial.GetComponentConfiguration(key);
 	}
@@ -82,7 +81,7 @@ internal class PartialConfigurationStore : IConfigurationStore, IDisposable
 		return _partial.GetFacilities();
 	}
 
-	public IConfiguration GetFacilityConfiguration(String key)
+	public IConfiguration GetFacilityConfiguration(string key)
 	{
 		return _partial.GetFacilityConfiguration(key);
 	}
@@ -92,14 +91,9 @@ internal class PartialConfigurationStore : IConfigurationStore, IDisposable
 		return _partial.GetInstallers();
 	}
 
-	public IResource GetResource(String resourceUri, IResource resource)
+	public IResource GetResource(string resourceUri, IResource resource)
 	{
 		return _inner.GetResource(resourceUri, resource);
-	}
-
-	public void Dispose()
-	{
-		Terminate();
 	}
 
 	public void Init(IKernelInternal kernel)
@@ -110,5 +104,10 @@ internal class PartialConfigurationStore : IConfigurationStore, IDisposable
 	public void Terminate()
 	{
 		_partial.Terminate();
+	}
+
+	public void Dispose()
+	{
+		Terminate();
 	}
 }

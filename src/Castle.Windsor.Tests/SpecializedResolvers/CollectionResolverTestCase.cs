@@ -12,16 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.SpecializedResolvers;
-
 using System;
 using System.Linq;
-
 using Castle.MicroKernel.Handlers;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
-using Castle.Windsor;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.SpecializedResolvers;
 
 public class CollectionResolverTestCase : AbstractContainerTestCase
 {
@@ -43,7 +41,8 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 	}
 
 	[Fact]
-	public void Composite_service_can_be_resolved_without_triggering_circular_dependency_detection_fuse_composite_registered_first()
+	public void
+		Composite_service_can_be_resolved_without_triggering_circular_dependency_detection_fuse_composite_registered_first()
 	{
 		Container.Register(
 			Component.For<IEmptyService, EmptyServiceComposite>().ImplementedBy<EmptyServiceComposite>(),
@@ -68,10 +67,7 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		Assert.NotNull(component.Services);
 		Assert.Equal(2, component.Services.Length);
-		foreach (var service in component.Services)
-		{
-			Assert.NotNull(service);
-		}
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
 	[Fact]
@@ -85,10 +81,7 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		Assert.NotNull(component.Services);
 		Assert.Equal(2, component.Services.Count);
-		foreach (var service in component.Services)
-		{
-			Assert.NotNull(service);
-		}
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
 
@@ -103,16 +96,13 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		Assert.NotNull(component.Services);
 		Assert.Equal(2, component.Services.Count);
-		foreach (var service in component.Services)
-		{
-			Assert.NotNull(service);
-		}
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
 	[Fact]
 	public void DependencyOnArrayOfServices_OnConstructor_empty_allowed_empty_provided()
 	{
-		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, allowEmptyCollections: true));
+		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, true));
 		Container.Register(Component.For<ArrayDepAsConstructor>());
 
 		var component = Container.Resolve<ArrayDepAsConstructor>();
@@ -140,16 +130,13 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		Assert.NotNull(component.Services);
 		Assert.Equal(2, component.Services.Length);
-		foreach (var service in component.Services)
-		{
-			Assert.NotNull(service);
-		}
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
 	[Fact]
 	public void DependencyOnArrayOfServices_OnProperty_empty()
 	{
-		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, allowEmptyCollections: true));
+		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, true));
 		Container.Register(Component.For<ArrayDepAsProperty>());
 
 		var component = Container.Resolve<ArrayDepAsProperty>();
@@ -178,16 +165,13 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		Assert.NotNull(component.Services);
 		Assert.Equal(2, component.Services.Count);
-		foreach (var service in component.Services)
-		{
-			Assert.NotNull(service);
-		}
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
 	[Fact]
 	public void DependencyOnCollectionOfServices_OnConstructor_empty()
 	{
-		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, allowEmptyCollections: true));
+		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, true));
 		Container.Register(Component.For<CollectionDepAsConstructor>());
 
 		var component = Container.Resolve<CollectionDepAsConstructor>();
@@ -215,16 +199,13 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		Assert.NotNull(component.Services);
 		Assert.Equal(2, component.Services.Count);
-		foreach (var service in component.Services)
-		{
-			Assert.NotNull(service);
-		}
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
 	[Fact]
 	public void DependencyOnCollectionOfServices_OnProperty_empty()
 	{
-		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, allowEmptyCollections: true));
+		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, true));
 		Container.Register(Component.For<CollectionDepAsProperty>());
 
 		var component = Container.Resolve<CollectionDepAsProperty>();
@@ -252,16 +233,13 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		Assert.NotNull(component.Services);
 		Assert.Equal(2, component.Services.Count());
-		foreach (var service in component.Services)
-		{
-			Assert.NotNull(service);
-		}
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
 	[Fact]
 	public void DependencyOnEnumerableOfServices_OnConstructor_empty()
 	{
-		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, allowEmptyCollections: true));
+		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, true));
 		Container.Register(Component.For<EnumerableDepAsProperty>());
 
 		var component = Container.Resolve<EnumerableDepAsProperty>();
@@ -289,16 +267,13 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		Assert.NotNull(component.Services);
 		Assert.Equal(2, component.Services.Count());
-		foreach (var service in component.Services)
-		{
-			Assert.NotNull(service);
-		}
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
 	[Fact]
 	public void DependencyOnEnumerableOfServices_OnProperty_empty()
 	{
-		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, allowEmptyCollections: true));
+		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, true));
 		Container.Register(Component.For<EnumerableDepAsProperty>());
 
 		var component = Container.Resolve<EnumerableDepAsProperty>();
@@ -327,16 +302,13 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		Assert.NotNull(component.Services);
 		Assert.Equal(2, component.Services.Count);
-		foreach (var service in component.Services)
-		{
-			Assert.NotNull(service);
-		}
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
 	[Fact]
 	public void DependencyOnListOfServices_OnConstructor_empty()
 	{
-		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, allowEmptyCollections: true));
+		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, true));
 		Container.Register(Component.For<ListDepAsConstructor>());
 
 		var component = Container.Resolve<ListDepAsConstructor>();
@@ -364,16 +336,13 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		Assert.NotNull(component.Services);
 		Assert.Equal(2, component.Services.Count);
-		foreach (var service in component.Services)
-		{
-			Assert.NotNull(service);
-		}
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
 	[Fact]
 	public void DependencyOnListOfServices_OnProperty_empty()
 	{
-		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, allowEmptyCollections: true));
+		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, true));
 		Container.Register(Component.For<ListDepAsProperty>());
 
 		var component = Container.Resolve<ListDepAsProperty>();
@@ -402,10 +371,7 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		Assert.NotNull(component.Services);
 		Assert.Equal(2, component.Services.Length);
-		foreach (var service in component.Services)
-		{
-			Assert.NotNull(service);
-		}
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
 	[Fact]

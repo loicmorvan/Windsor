@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors;
-
 using System;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Core;
 using Castle.Core.Internal;
 
+namespace Castle.MicroKernel.ModelBuilder.Inspectors;
+
 /// <summary>
-///   This implementation of <see cref = "IContributeComponentModelConstruction" />
-///   collects all available constructors and populates them in the model
-///   as candidates. The Kernel will pick up one of the candidates
-///   according to a heuristic.
+///     This implementation of <see cref="IContributeComponentModelConstruction" />
+///     collects all available constructors and populates them in the model
+///     as candidates. The Kernel will pick up one of the candidates
+///     according to a heuristic.
 /// </summary>
 [Serializable]
 public class ConstructorDependenciesModelInspector : IContributeComponentModelConstruction
@@ -37,12 +36,10 @@ public class ConstructorDependenciesModelInspector : IContributeComponentModelCo
 			.Where(IsVisibleToContainer);
 
 		foreach (var constructor in constructors)
-		{
 			// We register each public constructor
 			// and let the ComponentFactory select an 
 			// eligible amongst the candidates later
 			model.AddConstructor(CreateConstructorCandidate(model, constructor));
-		}
 	}
 
 	protected virtual ConstructorCandidate CreateConstructorCandidate(ComponentModel model, ConstructorInfo constructor)

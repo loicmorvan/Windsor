@@ -12,49 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers;
-
 using System;
-
 using Castle.Core;
 using Castle.MicroKernel.Context;
+
+namespace Castle.MicroKernel.Handlers;
 
 public class ParentHandlerWrapper : IHandler, IDisposable
 {
 	private readonly ISubDependencyResolver _childResolver;
-	private readonly IReleasePolicy _parentReleasePolicy;
 	private readonly IHandler _parentHandler;
+	private readonly IReleasePolicy _parentReleasePolicy;
 
 	/// <summary>
-	///   Initializes a new instance of the <see cref = "ParentHandlerWrapper" /> class.
+	///     Initializes a new instance of the <see cref="ParentHandlerWrapper" /> class.
 	/// </summary>
-	/// <param name = "parentHandler">The parent handler.</param>
-	/// <param name = "childResolver">The child resolver.</param>
+	/// <param name="parentHandler">The parent handler.</param>
+	/// <param name="childResolver">The child resolver.</param>
 	/// <param name="parentReleasePolicy">Release policy of the parent container.</param>
-	public ParentHandlerWrapper(IHandler parentHandler, ISubDependencyResolver childResolver, IReleasePolicy parentReleasePolicy)
+	public ParentHandlerWrapper(IHandler parentHandler, ISubDependencyResolver childResolver,
+		IReleasePolicy parentReleasePolicy)
 	{
-		if (parentHandler == null)
-		{
-			throw new ArgumentNullException(nameof(parentHandler));
-		}
-		if (childResolver == null)
-		{
-			throw new ArgumentNullException(nameof(childResolver));
-		}
+		if (parentHandler == null) throw new ArgumentNullException(nameof(parentHandler));
+		if (childResolver == null) throw new ArgumentNullException(nameof(childResolver));
 
-		this._parentHandler = parentHandler;
-		this._childResolver = childResolver;
-		this._parentReleasePolicy = parentReleasePolicy;
-	}
-
-	public virtual ComponentModel ComponentModel
-	{
-		get { return _parentHandler.ComponentModel; }
-	}
-
-	public virtual HandlerState CurrentState
-	{
-		get { return _parentHandler.CurrentState; }
+		_parentHandler = parentHandler;
+		_childResolver = childResolver;
+		_parentReleasePolicy = parentReleasePolicy;
 	}
 
 	public void Dispose()
@@ -62,13 +46,18 @@ public class ParentHandlerWrapper : IHandler, IDisposable
 		Dispose(true);
 	}
 
+	public virtual ComponentModel ComponentModel => _parentHandler.ComponentModel;
+
+	public virtual HandlerState CurrentState => _parentHandler.CurrentState;
+
 	public virtual void Init(IKernelInternal kernel)
 	{
 	}
 
 	public bool IsBeingResolvedInContext(CreationContext context)
 	{
-		return (context != null && context.IsInResolutionContext(this)) || _parentHandler.IsBeingResolvedInContext(context);
+		return (context != null && context.IsInResolutionContext(this)) ||
+		       _parentHandler.IsBeingResolvedInContext(context);
 	}
 
 	public virtual bool Release(Burden burden)
@@ -121,15 +110,9 @@ public class ParentHandlerWrapper : IHandler, IDisposable
 	{
 		var canResolve = false;
 
-		if (contextHandlerResolver != null)
-		{
-			canResolve = _childResolver.CanResolve(context, null, model, dependency);
-		}
+		if (contextHandlerResolver != null) canResolve = _childResolver.CanResolve(context, null, model, dependency);
 
-		if (!canResolve)
-		{
-			canResolve = _parentHandler.CanResolve(context, contextHandlerResolver, model, dependency);
-		}
+		if (!canResolve) canResolve = _parentHandler.CanResolve(context, contextHandlerResolver, model, dependency);
 
 		return canResolve;
 	}
@@ -139,10 +122,7 @@ public class ParentHandlerWrapper : IHandler, IDisposable
 	{
 		var value = _childResolver.Resolve(context, null, model, dependency);
 
-		if (value == null)
-		{
-			value = _parentHandler.Resolve(context, contextHandlerResolver, model, dependency);
-		}
+		if (value == null) value = _parentHandler.Resolve(context, contextHandlerResolver, model, dependency);
 
 		return value;
 	}
@@ -150,10 +130,8 @@ public class ParentHandlerWrapper : IHandler, IDisposable
 	protected virtual void Dispose(bool disposing)
 	{
 		if (disposing)
-		{
 			if (_parentHandler != null)
 			{
 			}
-		}
 	}
 }

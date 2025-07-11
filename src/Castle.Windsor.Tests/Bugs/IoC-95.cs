@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs;
-
 using Castle.Facilities.Startable;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.Bugs;
 
 public class IoC95
 {
@@ -28,6 +28,6 @@ public class IoC95
 		IKernel childKernel = new DefaultKernel();
 		kernel.AddChildKernel(childKernel);
 		childKernel.AddFacility(new StartableFacility());
-		kernel.Register(Component.For(typeof (A)).Named("string")); // exception here
+		kernel.Register(Component.For(typeof(A)).Named("string")); // exception here
 	}
 }

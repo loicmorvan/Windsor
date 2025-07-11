@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System.Reflection;
-
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests;
 
 public class IsDefaultTestCase : AbstractContainerTestCase
 {
@@ -62,7 +61,8 @@ public class IsDefaultTestCase : AbstractContainerTestCase
 	public void Can_make_non_first_component_default_with_filter()
 	{
 		Container.Register(Component.For<IEmptyService, EmptyServiceA, object>().ImplementedBy<EmptyServiceA>(),
-			Component.For<IEmptyService, EmptyServiceB, object>().ImplementedBy<EmptyServiceB>().IsDefault(t => t.GetTypeInfo().IsInterface));
+			Component.For<IEmptyService, EmptyServiceB, object>().ImplementedBy<EmptyServiceB>()
+				.IsDefault(t => t.GetTypeInfo().IsInterface));
 
 		var obj = Container.Resolve<IEmptyService>();
 
@@ -87,7 +87,8 @@ public class IsDefaultTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Later_default_overrides_earlier_one()
 	{
-		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().IsDefault(t => t.GetTypeInfo().IsInterface),
+		Container.Register(
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().IsDefault(t => t.GetTypeInfo().IsInterface),
 			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().IsDefault(t => t.GetTypeInfo().IsInterface));
 
 		var obj = Container.Resolve<IEmptyService>();

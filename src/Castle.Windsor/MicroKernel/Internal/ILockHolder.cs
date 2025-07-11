@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Internal;
-
 using System;
+
+namespace Castle.MicroKernel.Internal;
 
 public interface ILockHolder : IDisposable
 {

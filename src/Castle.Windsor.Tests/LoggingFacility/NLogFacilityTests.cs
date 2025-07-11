@@ -12,23 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.LoggingFacility;
-
 using System;
-
 using Castle.MicroKernel.Registration;
 using Castle.Services.Logging.NLogIntegration;
-using Castle.Windsor;
 using Castle.Windsor.Tests.LoggingFacility.Classes;
-
 using NLog;
 using NLog.Targets;
 
+namespace Castle.Windsor.Tests.LoggingFacility;
+
 /// <summary>
-/// Summary description for NLogFacilityTestts.
+///     Summary description for NLogFacilityTestts.
 /// </summary>
 public class NLogFacilityTests : BaseTest, IDisposable
 {
+	private readonly IWindsorContainer _container;
+
 	public NLogFacilityTests()
 	{
 		_container = base.CreateConfiguredContainer<NLogFactory>();
@@ -36,13 +35,8 @@ public class NLogFacilityTests : BaseTest, IDisposable
 
 	public void Dispose()
 	{
-		if (_container != null)
-		{
-			_container.Dispose();
-		}
+		if (_container != null) _container.Dispose();
 	}
-
-	private readonly IWindsorContainer _container;
 
 	[Fact]
 	public void SimpleTest()
@@ -52,8 +46,8 @@ public class NLogFacilityTests : BaseTest, IDisposable
 
 		test.DoSomething();
 
-		var expectedLogOutput = String.Format("|INFO|{0}|Hello world", typeof(SimpleLoggingComponent).FullName);
-		var actualLogOutput = (LogManager.Configuration.FindTargetByName("memory") as MemoryTarget).Logs[0].ToString();
+		var expectedLogOutput = string.Format("|INFO|{0}|Hello world", typeof(SimpleLoggingComponent).FullName);
+		var actualLogOutput = (LogManager.Configuration.FindTargetByName("memory") as MemoryTarget).Logs[0];
 		actualLogOutput = actualLogOutput.Substring(actualLogOutput.IndexOf('|'));
 		Assert.Equal(expectedLogOutput, actualLogOutput);
 	}

@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Registration;
-
 using System;
-
 using Castle.DynamicProxy;
 using Castle.MicroKernel;
 using Castle.MicroKernel.ComponentActivator;
@@ -23,6 +20,8 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Config.Components;
+
+namespace Castle.Windsor.Tests.Registration;
 
 public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 {
@@ -74,7 +73,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 	{
 		Kernel.Register(Component.For<DisposableComponent>()
 			.LifeStyle.Transient
-			.UsingFactoryMethod(() => new DisposableComponent(), managedExternally: true));
+			.UsingFactoryMethod(() => new DisposableComponent(), true));
 		var component = Kernel.Resolve<DisposableComponent>();
 		Assert.False(component.Disposed);
 
@@ -101,8 +100,8 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 	{
 		Kernel.Register(
 			Component.For<ICarProvider>()
-				.UsingFactoryMethod(
-					() => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
+				.UsingFactoryMethod(() =>
+					new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
 		);
 
 		Assert.IsType<HondaProvider>(Kernel.Resolve<ICarProvider>());
@@ -113,12 +112,12 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 	{
 		Kernel.Register(
 			Component.For<ICarProvider>()
-				.UsingFactoryMethod(
-					() => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.MrMoneyBags }))
+				.UsingFactoryMethod(() =>
+					new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.MrMoneyBags }))
 				.Named("ferrariProvider"),
 			Component.For<ICarProvider>()
-				.UsingFactoryMethod(
-					() => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
+				.UsingFactoryMethod(() =>
+					new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
 				.Named("hondaProvider")
 		);
 
@@ -142,12 +141,12 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 	{
 		Kernel.Register(
 			Component.For<ICarProvider>()
-				.UsingFactoryMethod(
-					_ => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.MrMoneyBags }))
+				.UsingFactoryMethod(_ =>
+					new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.MrMoneyBags }))
 				.Named("ferrariProvider"),
 			Component.For<ICarProvider>()
-				.UsingFactoryMethod(
-					_ => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
+				.UsingFactoryMethod(_ =>
+					new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
 				.Named("hondaProvider")
 		);
 
@@ -166,7 +165,8 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 					new AbstractCarProviderFactory()
 						.Create(k.Resolve<User>(ctx.AdditionalArguments)))
 		);
-		var carProvider = Kernel.Resolve<ICarProvider>(new Arguments().AddNamed("FiscalStability", FiscalStability.MrMoneyBags));
+		var carProvider =
+			Kernel.Resolve<ICarProvider>(new Arguments().AddNamed("FiscalStability", FiscalStability.MrMoneyBags));
 		Assert.IsType<FerrariProvider>(carProvider);
 	}
 
@@ -178,7 +178,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 			.UsingFactoryMethod(() => new TrivialComponent())
 			.Proxy.AdditionalInterfaces(typeof(IEmptyService)));
 		var component = Kernel.Resolve<IComponent>();
-		Assert.IsType<IEmptyService>(component, exactMatch: false);
+		Assert.IsType<IEmptyService>(component, false);
 	}
 
 	[Fact]
@@ -192,7 +192,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 				.Interceptors<StandardInterceptor>());
 		var component = Kernel.Resolve<IComponent>();
 
-		Assert.IsType<IProxyTargetAccessor>(component, exactMatch: false);
+		Assert.IsType<IProxyTargetAccessor>(component, false);
 	}
 
 	[Fact]
@@ -206,7 +206,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 				.Interceptors<StandardInterceptor>());
 		var component = Kernel.Resolve<IComponent>();
 
-		Assert.IsType<IProxyTargetAccessor>(component, exactMatch: false);
+		Assert.IsType<IProxyTargetAccessor>(component, false);
 	}
 
 	[Fact]
@@ -217,7 +217,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 			.UsingFactoryMethod(() => new TrivialComponent())
 			.Proxy.MixIns(new CameraService()));
 		var component = Kernel.Resolve<IComponent>();
-		Assert.IsType<ICameraService>(component, exactMatch: false);
+		Assert.IsType<ICameraService>(component, false);
 	}
 
 	[Fact]
@@ -256,11 +256,13 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 	public void Factories_returning_proxies_with_no_target_are_not_supported()
 	{
 		var generator = new ProxyGenerator();
-		Container.Register(Component.For<ICameraService>().UsingFactoryMethod(() => generator.CreateInterfaceProxyWithoutTarget<ICameraService>()));
+		Container.Register(Component.For<ICameraService>()
+			.UsingFactoryMethod(() => generator.CreateInterfaceProxyWithoutTarget<ICameraService>()));
 
 		var exception = Assert.Throws<NotSupportedException>(() => Container.Resolve<ICameraService>());
 
-		Assert.Equal(@"Can not apply commission concerns to component Late bound CastleTests.Components.ICameraService because it appears to be a target-less proxy. Currently those are not supported.",
+		Assert.Equal(
+			@"Can not apply commission concerns to component Late bound CastleTests.Components.ICameraService because it appears to be a target-less proxy. Currently those are not supported.",
 			exception.Message);
 	}
 
@@ -409,7 +411,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 	{
 		Kernel.Register(Component.For<DisposableComponent>()
 			.LifeStyle.Transient
-			.UsingFactoryMethod(() => new DisposableComponent(), managedExternally: true));
+			.UsingFactoryMethod(() => new DisposableComponent(), true));
 
 		var component = Kernel.Resolve<DisposableComponent>();
 
@@ -421,7 +423,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 	{
 		Kernel.Register(Component.For<DisposableComponent>()
 			.LifeStyle.Transient
-			.UsingFactoryMethod(() => new DisposableComponent(), managedExternally: true));
+			.UsingFactoryMethod(() => new DisposableComponent(), true));
 
 		ReferenceTracker
 			.Track(() => Kernel.Resolve<DisposableComponent>())
@@ -448,7 +450,8 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 				"Parameter name: constructorArguments";
 #else
 		var expected =
-			"Can not instantiate proxy of class: Castle.MicroKernel.Tests.Configuration.Components.ClassWithConstructors." + Environment.NewLine +
+			"Can not instantiate proxy of class: Castle.MicroKernel.Tests.Configuration.Components.ClassWithConstructors." +
+			Environment.NewLine +
 			"Could not find a parameterless constructor. (Parameter 'constructorArguments')";
 #endif
 

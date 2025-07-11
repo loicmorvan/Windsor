@@ -12,25 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors;
-
 using System;
-
 using Castle.Core;
 
-public class InterceptorDescriptor(InterceptorReference[] interceptors, InterceptorDescriptor.Where where) : IComponentModelDescriptor
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+
+public class InterceptorDescriptor(InterceptorReference[] interceptors, InterceptorDescriptor.Where where)
+	: IComponentModelDescriptor
 {
+	public enum Where
+	{
+		First,
+		Last,
+		Insert,
+		Default
+	}
+
 	private readonly int _insertIndex;
 
 	public InterceptorDescriptor(InterceptorReference[] interceptors, int insertIndex)
 		: this(interceptors, Where.Insert)
 	{
-		if (insertIndex < 0)
-		{
-			throw new ArgumentOutOfRangeException(nameof(insertIndex), "insertIndex must be >= 0");
-		}
+		if (insertIndex < 0) throw new ArgumentOutOfRangeException(nameof(insertIndex), "insertIndex must be >= 0");
 
-		this._insertIndex = insertIndex;
+		_insertIndex = insertIndex;
 	}
 
 	public InterceptorDescriptor(InterceptorReference[] interceptors) : this(interceptors, Where.Default)
@@ -44,7 +49,6 @@ public class InterceptorDescriptor(InterceptorReference[] interceptors, Intercep
 	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
 	{
 		foreach (var interceptor in interceptors)
-		{
 			switch (where)
 			{
 				case Where.First:
@@ -63,14 +67,5 @@ public class InterceptorDescriptor(InterceptorReference[] interceptors, Intercep
 					model.Interceptors.Add(interceptor);
 					break;
 			}
-		}
-	}
-
-	public enum Where
-	{
-		First,
-		Last,
-		Insert,
-		Default
 	}
 }

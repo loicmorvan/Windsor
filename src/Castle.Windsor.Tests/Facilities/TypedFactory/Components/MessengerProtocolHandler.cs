@@ -14,16 +14,14 @@
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
-using System;
-
 /// <summary>
-/// Summary description for MessengerProtocolHandler.
+///     Summary description for MessengerProtocolHandler.
 /// </summary>
 public class MessengerProtocolHandler : IProtocolHandler
 {
 	#region IProtocolHandler Members
 
-	public void Handle(String content)
+	public void Handle(string content)
 	{
 		// TODO:  Add MessengerProtocolHandler.Handle implementation
 	}

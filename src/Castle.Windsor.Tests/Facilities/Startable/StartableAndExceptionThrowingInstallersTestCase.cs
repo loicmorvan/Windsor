@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.Startable;
-
 using System;
-
 using Castle.Facilities.Startable;
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.Facilities.Startable;
 
 public class StartableAndExceptionThrowingInstallersTestCase
 {
@@ -42,11 +40,11 @@ public class StartableAndExceptionThrowingInstallersTestCase
 		// IDependencyOfStartableComponent is not registered
 
 		// expected :
-		Assert.Throws<NotImplementedException>(
-			() =>
-				container.Install(new ActionBasedInstaller(c => c.Register(Component.For<UsesIEmptyService>().Start())),
-					new ActionBasedInstaller(_ => { throw new NotImplementedException(); }),
-					new ActionBasedInstaller(c => c.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>()))));
+		Assert.Throws<NotImplementedException>(() =>
+			container.Install(new ActionBasedInstaller(c => c.Register(Component.For<UsesIEmptyService>().Start())),
+				new ActionBasedInstaller(_ => { throw new NotImplementedException(); }),
+				new ActionBasedInstaller(c =>
+					c.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>()))));
 	}
 
 	[Fact]
@@ -56,11 +54,11 @@ public class StartableAndExceptionThrowingInstallersTestCase
 		UsesIEmptyService.InstancesCreated = 0;
 		using var container = new WindsorContainer();
 		container.AddFacility<StartableFacility>(f => f.DeferredStart());
-		Assert.Throws<NotImplementedException>(
-			() =>
-				container.Install(new ActionBasedInstaller(c => c.Register(Component.For<UsesIEmptyService>().Start())),
-					new ActionBasedInstaller(c => c.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>())),
-					new ActionBasedInstaller(_ => { throw new NotImplementedException(); })));
+		Assert.Throws<NotImplementedException>(() =>
+			container.Install(new ActionBasedInstaller(c => c.Register(Component.For<UsesIEmptyService>().Start())),
+				new ActionBasedInstaller(c =>
+					c.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>())),
+				new ActionBasedInstaller(_ => { throw new NotImplementedException(); })));
 
 		// In this scenario, I've registered IDependencyOfStartableComponent
 		// before the ExceptionThrowingInstaller gets a chance to gum up the works

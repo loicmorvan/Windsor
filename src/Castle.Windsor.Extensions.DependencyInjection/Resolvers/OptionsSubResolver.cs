@@ -12,27 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers;
-
-using System;
 using System.Reflection;
-
 using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Context;
-	
 using Microsoft.Extensions.Options;
+
+namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers;
 
 internal class OptionsSubResolver(IKernel kernel) : ISubDependencyResolver
 {
-	public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+	public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+		DependencyModel dependency)
 	{
-		return dependency.TargetType != null && 
-		       dependency.TargetType.GetTypeInfo().IsGenericType && 
+		return dependency.TargetType != null &&
+		       dependency.TargetType.GetTypeInfo().IsGenericType &&
 		       dependency.TargetType.GetGenericTypeDefinition() == typeof(IOptions<>);
 	}
 
-	public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+	public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+		DependencyModel dependency)
 	{
 		return kernel.Resolve(dependency.TargetType);
 	}

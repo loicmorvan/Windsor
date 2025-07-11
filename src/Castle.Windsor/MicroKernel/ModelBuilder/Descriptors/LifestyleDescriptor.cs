@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors;
-
 using Castle.Core;
 using Castle.Core.Configuration;
+
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
 
 public class LifestyleDescriptor<TS>(LifestyleType lifestyle) : AbstractOverwriteableDescriptor<TS>
 	where TS : class
@@ -23,8 +23,6 @@ public class LifestyleDescriptor<TS>(LifestyleType lifestyle) : AbstractOverwrit
 	protected override void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
 	{
 		if (configuration.Attributes["lifestyle"] == null || IsOverWrite)
-		{
 			configuration.Attributes["lifestyle"] = lifestyle.ToString();
-		}
 	}
 }

@@ -16,9 +16,6 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class HasTwoConstructors2
 {
-	public string Param { get; set; }
-	public ICommon Common { get; set; }
-
 	public HasTwoConstructors2(ICommon common)
 	{
 		Common = common;
@@ -28,4 +25,7 @@ public class HasTwoConstructors2
 	{
 		Param = param;
 	}
+
+	public string Param { get; set; }
+	public ICommon Common { get; set; }
 }

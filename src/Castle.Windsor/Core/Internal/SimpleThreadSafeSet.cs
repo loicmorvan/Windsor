@@ -12,14 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using Castle.MicroKernel.Internal;
+
 namespace Castle.Core.Internal;
 
-using System.Collections.Generic;
-	
 public class SimpleThreadSafeSet<T>
 {
 	private readonly HashSet<T> _implementation = [];
-	private readonly MicroKernel.Internal.Lock _lock = MicroKernel.Internal.Lock.Create();
+	private readonly Lock _lock = Lock.Create();
 
 	public int Count
 	{
@@ -55,6 +56,7 @@ public class SimpleThreadSafeSet<T>
 		{
 			hashSetCopy = new List<T>(_implementation);
 		}
+
 		return hashSetCopy.ToArray();
 	}
 }

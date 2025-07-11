@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal;
-
 using System.Collections.Generic;
 using System.Linq;
+
+namespace Castle.Core.Internal;
 
 public class SegmentedList<T>(int segmentCount)
 {
@@ -41,10 +41,7 @@ public class SegmentedList<T>(int segmentCount)
 	private List<T> GetSegment(int segmentIndex)
 	{
 		var group = _segments[segmentIndex];
-		if (group == null)
-		{
-			group = _segments[segmentIndex] = new List<T>(4);
-		}
-		return @group;
+		if (group == null) group = _segments[segmentIndex] = new List<T>(4);
+		return group;
 	}
 }

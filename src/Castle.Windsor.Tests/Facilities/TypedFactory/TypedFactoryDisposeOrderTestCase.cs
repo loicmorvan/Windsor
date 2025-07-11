@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory;
-
 using System;
-
 using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel.Registration;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public sealed class TypedFactoryDisposeOrderTestCase : AbstractContainerTestCase
 {
@@ -40,14 +39,14 @@ public sealed class TypedFactoryDisposeOrderTestCase : AbstractContainerTestCase
 	{
 		private bool _isDisposed;
 
-		public void Use()
-		{
-			if (_isDisposed) throw new ObjectDisposedException(nameof(Dependency));
-		}
-
 		public void Dispose()
 		{
 			_isDisposed = true;
+		}
+
+		public void Use()
+		{
+			if (_isDisposed) throw new ObjectDisposedException(nameof(Dependency));
 		}
 	}
 

@@ -12,28 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration;
-
 using System;
-
 using Castle.Core.Configuration;
+
+namespace Castle.MicroKernel.Registration;
 
 #region Node
 
 /// <summary>
-///   Represents a configuration child.
+///     Represents a configuration child.
 /// </summary>
-public abstract class Node(String name)
+public abstract class Node(string name)
 {
-	protected string Name
-	{
-		get { return name; }
-	}
+	protected string Name => name;
 
 	/// <summary>
-	///   Applies the configuration node.
+	///     Applies the configuration node.
 	/// </summary>
-	/// <param name = "configuration">The configuration.</param>
+	/// <param name="configuration">The configuration.</param>
 	public abstract void ApplyTo(IConfiguration configuration);
 }
 
@@ -42,33 +38,33 @@ public abstract class Node(String name)
 #region Attribute
 
 /// <summary>
-///   Represents a configuration attribute.
+///     Represents a configuration attribute.
 /// </summary>
 public class Attrib : Node
 {
-	private readonly String _value;
+	private readonly string _value;
 
-	internal Attrib(String name, String value)
+	internal Attrib(string name, string value)
 		: base(name)
 	{
-		this._value = value;
+		_value = value;
 	}
 
 	/// <summary>
-	///   Applies the configuration node.
+	///     Applies the configuration node.
 	/// </summary>
-	/// <param name = "configuration">The configuration.</param>
+	/// <param name="configuration">The configuration.</param>
 	public override void ApplyTo(IConfiguration configuration)
 	{
 		configuration.Attributes.Add(Name, _value);
 	}
 
 	/// <summary>
-	///   Create a <see cref = "NamedAttribute" /> with name.
+	///     Create a <see cref="NamedAttribute" /> with name.
 	/// </summary>
-	/// <param name = "name">The attribute name.</param>
-	/// <returns>The new <see cref = "NamedAttribute" /></returns>
-	public static NamedAttribute ForName(String name)
+	/// <param name="name">The attribute name.</param>
+	/// <returns>The new <see cref="NamedAttribute" /></returns>
+	public static NamedAttribute ForName(string name)
 	{
 		return new NamedAttribute(name);
 	}
@@ -79,54 +75,54 @@ public class Attrib : Node
 #region NamedChild
 
 /// <summary>
-///   Represents a named attribute.
+///     Represents a named attribute.
 /// </summary>
 public class NamedAttribute
 {
-	private readonly String _name;
+	private readonly string _name;
 
-	internal NamedAttribute(String name)
+	internal NamedAttribute(string name)
 	{
-		this._name = name;
+		_name = name;
 	}
 
 	/// <summary>
-	///   Builds the <see cref = "Attribute" /> with name/value.
+	///     Builds the <see cref="Attribute" /> with name/value.
 	/// </summary>
-	/// <param name = "value">The attribute value.</param>
-	/// <returns>The new <see cref = "SimpleChild" /></returns>
-	public Attrib Eq(String value)
+	/// <param name="value">The attribute value.</param>
+	/// <returns>The new <see cref="SimpleChild" /></returns>
+	public Attrib Eq(string value)
 	{
 		return new Attrib(_name, value);
 	}
 
 	/// <summary>
-	///   Builds the <see cref = "Attribute" /> with name/value.
+	///     Builds the <see cref="Attribute" /> with name/value.
 	/// </summary>
-	/// <param name = "value">The attribute value.</param>
-	/// <returns>The new <see cref = "SimpleChild" /></returns>
+	/// <param name="value">The attribute value.</param>
+	/// <returns>The new <see cref="SimpleChild" /></returns>
 	public Attrib Eq(object value)
 	{
-		var valueStr = (value != null) ? value.ToString() : String.Empty;
+		var valueStr = value != null ? value.ToString() : string.Empty;
 		return new Attrib(_name, valueStr);
 	}
 }
 
 #endregion
 
-#region Child 
+#region Child
 
 /// <summary>
-///   Represents a configuration child.
+///     Represents a configuration child.
 /// </summary>
 public abstract class Child
 {
 	/// <summary>
-	///   Create a <see cref = "NamedChild" /> with name.
+	///     Create a <see cref="NamedChild" /> with name.
 	/// </summary>
-	/// <param name = "name">The child name.</param>
-	/// <returns>The new <see cref = "NamedChild" /></returns>
-	public static NamedChild ForName(String name)
+	/// <param name="name">The child name.</param>
+	/// <returns>The new <see cref="NamedChild" /></returns>
+	public static NamedChild ForName(string name)
 	{
 		return new NamedChild(name);
 	}
@@ -137,19 +133,19 @@ public abstract class Child
 #region NamedChild
 
 /// <summary>
-///   Represents a named child.
+///     Represents a named child.
 /// </summary>
 public class NamedChild : Node
 {
-	internal NamedChild(String name)
+	internal NamedChild(string name)
 		: base(name)
 	{
 	}
 
 	/// <summary>
-	///   Applies the configuration node.
+	///     Applies the configuration node.
 	/// </summary>
-	/// <param name = "configuration">The configuration.</param>
+	/// <param name="configuration">The configuration.</param>
 	public override void ApplyTo(IConfiguration configuration)
 	{
 		var node = new MutableConfiguration(Name);
@@ -157,41 +153,41 @@ public class NamedChild : Node
 	}
 
 	/// <summary>
-	///   Builds the <see cref = "SimpleChild" /> with name/value.
+	///     Builds the <see cref="SimpleChild" /> with name/value.
 	/// </summary>
-	/// <param name = "value">The child value.</param>
-	/// <returns>The new <see cref = "SimpleChild" /></returns>
-	public SimpleChild Eq(String value)
+	/// <param name="value">The child value.</param>
+	/// <returns>The new <see cref="SimpleChild" /></returns>
+	public SimpleChild Eq(string value)
 	{
 		return new SimpleChild(Name, value);
 	}
 
 	/// <summary>
-	///   Builds the <see cref = "SimpleChild" /> with name/value.
+	///     Builds the <see cref="SimpleChild" /> with name/value.
 	/// </summary>
-	/// <param name = "value">The child value.</param>
-	/// <returns>The new <see cref = "SimpleChild" /></returns>
+	/// <param name="value">The child value.</param>
+	/// <returns>The new <see cref="SimpleChild" /></returns>
 	public SimpleChild Eq(object value)
 	{
-		var valueStr = (value != null) ? value.ToString() : String.Empty;
+		var valueStr = value != null ? value.ToString() : string.Empty;
 		return new SimpleChild(Name, valueStr);
 	}
 
 	/// <summary>
-	///   Builds the <see cref = "ComplexChild" /> with name/config.
+	///     Builds the <see cref="ComplexChild" /> with name/config.
 	/// </summary>
-	/// <param name = "configNode">The child configuration.</param>
-	/// <returns>The new <see cref = "ComplexChild" /></returns>
+	/// <param name="configNode">The child configuration.</param>
+	/// <returns>The new <see cref="ComplexChild" /></returns>
 	public ComplexChild Eq(IConfiguration configNode)
 	{
 		return new ComplexChild(Name, configNode);
 	}
 
 	/// <summary>
-	///   Builds the <see cref = "Child" /> with name/config.
+	///     Builds the <see cref="Child" /> with name/config.
 	/// </summary>
-	/// <param name = "childNodes">The child nodes.</param>
-	/// <returns>The new <see cref = "CompoundChild" /></returns>
+	/// <param name="childNodes">The child nodes.</param>
+	/// <returns>The new <see cref="CompoundChild" /></returns>
 	public CompoundChild Eq(params Node[] childNodes)
 	{
 		return new CompoundChild(Name, childNodes);
@@ -203,22 +199,22 @@ public class NamedChild : Node
 #region SimpleChild
 
 /// <summary>
-///   Represents a simple child node.
+///     Represents a simple child node.
 /// </summary>
 public class SimpleChild : Node
 {
-	private readonly String _value;
+	private readonly string _value;
 
-	internal SimpleChild(String name, String value)
+	internal SimpleChild(string name, string value)
 		: base(name)
 	{
-		this._value = value;
+		_value = value;
 	}
 
 	/// <summary>
-	///   Applies the configuration node.
+	///     Applies the configuration node.
 	/// </summary>
-	/// <param name = "configuration">The configuration.</param>
+	/// <param name="configuration">The configuration.</param>
 	public override void ApplyTo(IConfiguration configuration)
 	{
 		var node = new MutableConfiguration(Name, _value);
@@ -231,22 +227,22 @@ public class SimpleChild : Node
 #region ComplexChild
 
 /// <summary>
-///   Represents a complex child node.
+///     Represents a complex child node.
 /// </summary>
 public class ComplexChild : Node
 {
 	private readonly IConfiguration _configNode;
 
-	internal ComplexChild(String name, IConfiguration configNode)
+	internal ComplexChild(string name, IConfiguration configNode)
 		: base(name)
 	{
-		this._configNode = configNode;
+		_configNode = configNode;
 	}
 
 	/// <summary>
-	///   Applies the configuration node.
+	///     Applies the configuration node.
 	/// </summary>
-	/// <param name = "configuration">The configuration.</param>
+	/// <param name="configuration">The configuration.</param>
 	public override void ApplyTo(IConfiguration configuration)
 	{
 		var node = new MutableConfiguration(Name);
@@ -260,29 +256,26 @@ public class ComplexChild : Node
 #region CompoundChild
 
 /// <summary>
-///   Represents a compound child node.
+///     Represents a compound child node.
 /// </summary>
 public class CompoundChild : Node
 {
 	private readonly Node[] _childNodes;
 
-	internal CompoundChild(String name, Node[] childNodes)
+	internal CompoundChild(string name, Node[] childNodes)
 		: base(name)
 	{
-		this._childNodes = childNodes;
+		_childNodes = childNodes;
 	}
 
 	/// <summary>
-	///   Applies the configuration node.
+	///     Applies the configuration node.
 	/// </summary>
-	/// <param name = "configuration">The configuration.</param>
+	/// <param name="configuration">The configuration.</param>
 	public override void ApplyTo(IConfiguration configuration)
 	{
 		var node = new MutableConfiguration(Name);
-		foreach (var childNode in _childNodes)
-		{
-			childNode.ApplyTo(node);
-		}
+		foreach (var childNode in _childNodes) childNode.ApplyTo(node);
 		configuration.Children.Add(node);
 	}
 }

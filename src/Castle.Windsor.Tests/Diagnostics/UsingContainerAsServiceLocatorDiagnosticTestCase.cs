@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Diagnostics;
-
 using System;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers;
-using Castle.Windsor;
 using Castle.Windsor.Diagnostics;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Interceptors;
+
+namespace Castle.Windsor.Tests.Diagnostics;
 
 public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContainerTestCase
 {
@@ -80,7 +78,7 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContaine
 		var serviceLocators = _diagnostic.Inspect();
 		Assert.Empty(serviceLocators);
 	}
-		
+
 	[Fact]
 	public void Ignores_lazy()
 	{

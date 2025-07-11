@@ -12,57 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Facilities;
-
 using System;
-
 using Castle.Core.Configuration;
 
+namespace Castle.MicroKernel.Facilities;
+
 /// <summary>
-///   Base class for facilities.
+///     Base class for facilities.
 /// </summary>
 public abstract class AbstractFacility : IFacility, IDisposable
 {
-	private IConfiguration _facilityConfig;
-	private IKernel _kernel;
+	/// <summary>
+	///     Gets the facility configuration.
+	/// </summary>
+	/// <value>
+	///     The <see cref="IConfiguration" /> representing
+	///     the facility configuration.
+	/// </value>
+	protected IConfiguration FacilityConfig { get; private set; }
 
 	/// <summary>
-	///   Gets the facility configuration.
+	///     Gets the <see cref="IKernel" /> where the facility is registered.
 	/// </summary>
-	/// <value>The <see cref = "IConfiguration" /> representing 
-	///   the facility configuration.</value>
-	protected IConfiguration FacilityConfig
-	{
-		get { return _facilityConfig; }
-	}
-
-	/// <summary>
-	///   Gets the <see cref = "IKernel" /> where the facility is registered.
-	/// </summary>
-	/// <value>The <see cref = "IKernel" />.</value>
-	protected IKernel Kernel
-	{
-		get { return _kernel; }
-	}
-
-	/// <summary>
-	///   The custom initialization for the Facility.
-	/// </summary>
-	/// <remarks>
-	///   It must be overridden.
-	/// </remarks>
-	protected abstract void Init();
-
-	/// <summary>
-	///   Performs the tasks associated with freeing, releasing, or resetting 
-	///   the facility resources.
-	/// </summary>
-	/// <remarks>
-	///   It can be overriden.
-	/// </remarks>
-	protected virtual void Dispose()
-	{
-	}
+	/// <value>The <see cref="IKernel" />.</value>
+	protected IKernel Kernel { get; private set; }
 
 	void IDisposable.Dispose()
 	{
@@ -70,29 +43,48 @@ public abstract class AbstractFacility : IFacility, IDisposable
 	}
 
 	/// <summary>
-	///   Initializes the facility. First it performs the initialization common for all 
-	///   facilities, setting the <see cref = "Kernel" /> and the 
-	///   <see cref = "FacilityConfig" />. After it, the <c>Init</c> method is invoked
-	///   and the custom initilization is perfomed.
+	///     Initializes the facility. First it performs the initialization common for all
+	///     facilities, setting the <see cref="Kernel" /> and the
+	///     <see cref="FacilityConfig" />. After it, the <c>Init</c> method is invoked
+	///     and the custom initilization is perfomed.
 	/// </summary>
-	/// <param name = "kernel"></param>
-	/// <param name = "facilityConfig"></param>
+	/// <param name="kernel"></param>
+	/// <param name="facilityConfig"></param>
 	void IFacility.Init(IKernel kernel, IConfiguration facilityConfig)
 	{
-		this._kernel = kernel;
-		this._facilityConfig = facilityConfig;
+		Kernel = kernel;
+		FacilityConfig = facilityConfig;
 
 		Init();
 	}
 
 	/// <summary>
-	///   Terminates the Facility, invokes the <see cref = "Dispose" /> method and sets 
-	///   the Kernel to a null reference.
+	///     Terminates the Facility, invokes the <see cref="Dispose" /> method and sets
+	///     the Kernel to a null reference.
 	/// </summary>
 	void IFacility.Terminate()
 	{
 		Dispose();
 
-		_kernel = null;
+		Kernel = null;
+	}
+
+	/// <summary>
+	///     The custom initialization for the Facility.
+	/// </summary>
+	/// <remarks>
+	///     It must be overridden.
+	/// </remarks>
+	protected abstract void Init();
+
+	/// <summary>
+	///     Performs the tasks associated with freeing, releasing, or resetting
+	///     the facility resources.
+	/// </summary>
+	/// <remarks>
+	///     It can be overriden.
+	/// </remarks>
+	protected virtual void Dispose()
+	{
 	}
 }

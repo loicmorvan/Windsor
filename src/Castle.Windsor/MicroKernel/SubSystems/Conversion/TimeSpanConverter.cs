@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion;
-
 using System;
-
 using Castle.Core.Configuration;
+
+namespace Castle.MicroKernel.SubSystems.Conversion;
 
 [Serializable]
 public class TimeSpanConverter : AbstractTypeConverter
@@ -34,7 +33,7 @@ public class TimeSpanConverter : AbstractTypeConverter
 		}
 		catch (Exception ex)
 		{
-			var message = String.Format(
+			var message = string.Format(
 				"Could not convert from '{0}' to {1}",
 				value, targetType.FullName);
 

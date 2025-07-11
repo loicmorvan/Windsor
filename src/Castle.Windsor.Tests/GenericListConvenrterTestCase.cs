@@ -12,12 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System.Collections.Generic;
-
 using Castle.Core.Resource;
-using Castle.Windsor.Installer;
+
+namespace Castle.Windsor.Tests;
 
 public class GenericListConvenrterTestCase : AbstractContainerTestCase
 {
@@ -44,7 +42,7 @@ public class GenericListConvenrterTestCase : AbstractContainerTestCase
 	</components>
 </configuration>";
 
-		Container.Install(Configuration.FromXml(new StaticContentResource(xml)));
+		Container.Install(Castle.Windsor.Installer.Configuration.FromXml(new StaticContentResource(xml)));
 		var item = Container.Resolve<IMyObject>();
 
 		Assert.Equal(1, item.Count);
@@ -60,8 +58,5 @@ public class MyObject(IDictionary<int, IList<string>> stuff) : IMyObject
 {
 	protected readonly IDictionary<int, IList<string>> Stuff = stuff;
 
-	public virtual int Count
-	{
-		get { return Stuff.Count; }
-	}
+	public virtual int Count => Stuff.Count;
 }

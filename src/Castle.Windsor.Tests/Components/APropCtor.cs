@@ -16,10 +16,7 @@ namespace Castle.Windsor.Tests.Components;
 
 public class APropCtor(A2 a)
 {
-	public A2 A
-	{
-		get { return a; }
-	}
+	public A2 A => a;
 
 	public A Prop { get; set; }
 }

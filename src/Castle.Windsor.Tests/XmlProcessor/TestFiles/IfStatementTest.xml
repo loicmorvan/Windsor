@@ -1,8 +1,8 @@
 <?pi instruction will also be removed ?>
 <!-- some comments here, this should be removed by the xsl -->
 <configuration>
-	<define flag="debug" />
-	<define flag="qa" />
+	<define flag="debug"/>
+	<define flag="qa"/>
 	<properties>
 		<prop1>prop1value</prop1>
 	</properties>
@@ -10,7 +10,7 @@
 	<components>
 		<if defined="DEBUG">
 			<component id="debug" att="#{prop1}">
-				<item> some value </item>
+				<item>some value</item>
 				<item2><![CDATA[ some <&> value2 ]]></item2>
 			</component>
 		</if>
@@ -33,6 +33,6 @@
 		</if>
 
 		<component id="default" att="#{prop1}"/>
-	</components>		
+	</components>
 
 </configuration>

@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Registration;
-
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.Registration;
 
 public class ServiceOverridesTestCase : AbstractContainerTestCase
 {
@@ -234,7 +234,8 @@ public class ServiceOverridesTestCase : AbstractContainerTestCase
 		Kernel.Register(
 			Component.For<IEmptyService>().UsingFactoryMethod(() => new EmptyServiceA()).Named("a"),
 			Component.For<IEmptyService>().UsingFactoryMethod(() => new EmptyServiceB()).Named("b"),
-			Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl3<>)).DependsOn(Property.ForKey<IEmptyService>().Is("B")));
+			Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl3<>))
+				.DependsOn(Property.ForKey<IEmptyService>().Is("B")));
 
 		var root = (GenericImpl3<int>)Kernel.Resolve<IGeneric<int>>();
 

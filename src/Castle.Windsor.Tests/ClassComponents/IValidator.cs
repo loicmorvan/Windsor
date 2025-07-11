@@ -15,7 +15,7 @@
 namespace Castle.Windsor.Tests.ClassComponents;
 
 /// <summary>
-/// Summary description for IValidator.
+///     Summary description for IValidator.
 /// </summary>
 public interface IValidator<in T>
 {

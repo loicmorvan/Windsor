@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle;
-
 using System;
-
 using Castle.Core.Internal;
 using Castle.MicroKernel.Context;
 using Castle.MicroKernel.Lifestyle.Pool;
 using Castle.MicroKernel.Registration;
 
+namespace Castle.MicroKernel.Lifestyle;
+
 /// <summary>
-///   Manages a pool of objects.
+///     Manages a pool of objects.
 /// </summary>
 [Serializable]
 public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLifestyleManager
@@ -37,45 +36,30 @@ public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLi
 	{
 		get
 		{
-			if (_pool != null)
-			{
-				return _pool;
-			}
+			if (_pool != null) return _pool;
 			var initializing = false;
 			try
 			{
 				initializing = _init.ExecuteThreadSafeOnce();
 
-				if (_pool == null)
-				{
-					_pool = CreatePool(_initialSize, _maxSize);
-				}
+				if (_pool == null) _pool = CreatePool(_initialSize, _maxSize);
 				return _pool;
 			}
 			finally
 			{
-				if (initializing)
-				{
-					_init.EndThreadSafeOnceSection();
-				}
+				if (initializing) _init.EndThreadSafeOnceSection();
 			}
 		}
 	}
 
 	public override void Dispose()
 	{
-		if (_pool != null)
-		{
-			_pool.Dispose();
-		}
+		if (_pool != null) _pool.Dispose();
 	}
 
 	public override bool Release(object instance)
 	{
-		if (_pool != null)
-		{
-			return _pool.Release(instance);
-		}
+		if (_pool != null) return _pool.Release(instance);
 		return false;
 	}
 
@@ -87,17 +71,13 @@ public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLi
 	protected IPool CreatePool(int initialSize, int maxSize)
 	{
 		if (!Kernel.HasComponent(typeof(IPoolFactory)))
-		{
 			lock (PoolFactoryLock)
 			{
 				if (!Kernel.HasComponent(typeof(IPoolFactory)))
-				{
 					Kernel.Register(Component.For<IPoolFactory>()
 						.ImplementedBy<DefaultPoolFactory>()
 						.NamedAutomatically("castle.internal-pool-factory"));
-				}
 			}
-		}
 
 		var factory = Kernel.Resolve<IPoolFactory>();
 		return factory.Create(initialSize, maxSize, ComponentActivator);

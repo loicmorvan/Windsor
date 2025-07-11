@@ -12,16 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration;
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-
 using Castle.Core.Internal;
+
+namespace Castle.MicroKernel.Registration;
 
 public class AssemblyFilter : IAssemblyProvider
 {
@@ -34,22 +32,27 @@ public class AssemblyFilter : IAssemblyProvider
 
 	public AssemblyFilter(string directoryName, string mask = null)
 	{
-		if (directoryName == null)
-		{
-			throw new ArgumentNullException(nameof(directoryName));
-		}
+		if (directoryName == null) throw new ArgumentNullException(nameof(directoryName));
 
-		this._directoryName = GetFullPath(directoryName);
-		this._mask = mask;
+		_directoryName = GetFullPath(directoryName);
+		_mask = mask;
 		_assemblyFilter += a => a != CastleWindsorDll;
+	}
+
+	IEnumerable<Assembly> IAssemblyProvider.GetAssemblies()
+	{
+		foreach (var file in GetFiles())
+		{
+			if (!ReflectionUtil.IsAssemblyFile(file)) continue;
+
+			var assembly = LoadAssemblyIgnoringErrors(file);
+			if (assembly != null) yield return assembly;
+		}
 	}
 
 	public AssemblyFilter FilterByAssembly(Predicate<Assembly> filter)
 	{
-		if (filter == null)
-		{
-			throw new ArgumentNullException(nameof(filter));
-		}
+		if (filter == null) throw new ArgumentNullException(nameof(filter));
 
 		_assemblyFilter += filter;
 		return this;
@@ -57,10 +60,7 @@ public class AssemblyFilter : IAssemblyProvider
 
 	public AssemblyFilter FilterByName(Predicate<AssemblyName> filter)
 	{
-		if (filter == null)
-		{
-			throw new ArgumentNullException(nameof(filter));
-		}
+		if (filter == null) throw new ArgumentNullException(nameof(filter));
 
 		_nameFilter += filter;
 		return this;
@@ -73,10 +73,7 @@ public class AssemblyFilter : IAssemblyProvider
 
 	public AssemblyFilter WithKeyToken(byte[] publicKeyToken)
 	{
-		if (publicKeyToken == null)
-		{
-			throw new ArgumentNullException(nameof(publicKeyToken));
-		}
+		if (publicKeyToken == null) throw new ArgumentNullException(nameof(publicKeyToken));
 		return FilterByName(n => IsTokenEqual(n.GetPublicKeyToken(), publicKeyToken));
 	}
 
@@ -97,30 +94,24 @@ public class AssemblyFilter : IAssemblyProvider
 
 	private byte[] ExtractKeyToken(string keyToken)
 	{
-		if (keyToken == null)
-		{
-			throw new ArgumentNullException(nameof(keyToken));
-		}
+		if (keyToken == null) throw new ArgumentNullException(nameof(keyToken));
 		if (keyToken.Length != 16)
-		{
 			throw new ArgumentException(
 				string.Format(
 					"The string '{1}' does not appear to be a valid public key token. It should have 16 characters, has {0}.",
 					keyToken.Length, keyToken));
-		}
 		try
 		{
 			var tokenBytes = new byte[8];
 			for (var i = 0; i < 8; i++)
-			{
-				tokenBytes[i] = byte.Parse(keyToken.Substring(2*i, 2), NumberStyles.HexNumber);
-			}
+				tokenBytes[i] = byte.Parse(keyToken.Substring(2 * i, 2), NumberStyles.HexNumber);
 			return tokenBytes;
 		}
 		catch (Exception e)
 		{
 			throw new ArgumentException(
-				string.Format("The string '{0}' does not appear to be a valid public key token. It could not be processed.",
+				string.Format(
+					"The string '{0}' does not appear to be a valid public key token. It could not be processed.",
 					keyToken), e);
 		}
 	}
@@ -129,14 +120,8 @@ public class AssemblyFilter : IAssemblyProvider
 	{
 		try
 		{
-			if (Directory.Exists(_directoryName) == false)
-			{
-				return [];
-			}
-			if (string.IsNullOrEmpty(_mask))
-			{
-				return Directory.EnumerateFiles(_directoryName);
-			}
+			if (Directory.Exists(_directoryName) == false) return [];
+			if (string.IsNullOrEmpty(_mask)) return Directory.EnumerateFiles(_directoryName);
 			return Directory.EnumerateFiles(_directoryName, _mask);
 		}
 		catch (IOException e)
@@ -167,53 +152,26 @@ public class AssemblyFilter : IAssemblyProvider
 		{
 			// Dlls that have missing Managed dependencies are not loaded, but do not invalidate the Directory 
 		}
+
 		// TODO: log
 		return null;
-	}
-
-	IEnumerable<Assembly> IAssemblyProvider.GetAssemblies()
-	{
-		foreach (var file in GetFiles())
-		{
-			if (!ReflectionUtil.IsAssemblyFile(file))
-			{
-				continue;
-			}
-
-			var assembly = LoadAssemblyIgnoringErrors(file);
-			if (assembly != null)
-			{
-				yield return assembly;
-			}
-		}
 	}
 
 	private static string GetFullPath(string path)
 	{
 		if (Path.IsPathRooted(path) == false && AppContext.BaseDirectory != null)
-		{
 			path = Path.Combine(AppContext.BaseDirectory, path);
-		}
 		return Path.GetFullPath(path);
 	}
 
 	private static bool IsTokenEqual(byte[] actualToken, byte[] expectedToken)
 	{
-		if (actualToken == null)
-		{
-			return false;
-		}
-		if (actualToken.Length != expectedToken.Length)
-		{
-			return false;
-		}
+		if (actualToken == null) return false;
+		if (actualToken.Length != expectedToken.Length) return false;
 		for (var i = 0; i < actualToken.Length; i++)
-		{
 			if (actualToken[i] != expectedToken[i])
-			{
 				return false;
-			}
-		}
+
 		return true;
 	}
 }

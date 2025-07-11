@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.SpecializedResolvers;
-
 using System;
 using System.Linq;
-
 using Castle.MicroKernel.Handlers;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.SpecializedResolvers;
 
 public class ArrayResolverTestCase : AbstractContainerTestCase
 {
@@ -34,8 +33,7 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 			Component.For<IDependOnArray>().ImplementedBy<DependsOnArray>()
 		);
 
-		var exception = 
-
+		var exception =
 			Assert.Throws<HandlerException>(() => Container.Resolve<IDependOnArray>());
 
 		var message =
@@ -59,7 +57,6 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 		);
 
 		var exception =
-
 			Assert.Throws<HandlerException>(() => Container.Resolve<IDependOnArray>());
 
 		var message =
@@ -84,7 +81,6 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 		);
 
 		var exception =
-
 			Assert.Throws<HandlerException>(() => Container.Resolve<IDependOnArray>());
 
 		var message =
@@ -111,7 +107,8 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 	}
 
 	[Fact]
-	public void Composite_service_can_be_resolved_without_triggering_circular_dependency_detection_fuse_composite_registered_first()
+	public void
+		Composite_service_can_be_resolved_without_triggering_circular_dependency_detection_fuse_composite_registered_first()
 	{
 		Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
 		Container.Register(
@@ -139,10 +136,7 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 		Assert.NotNull(comp);
 		Assert.NotNull(comp.Services);
 		Assert.Equal(2, comp.Services.Length);
-		foreach (var service in comp.Services)
-		{
-			Assert.NotNull(service);
-		}
+		foreach (var service in comp.Services) Assert.NotNull(service);
 	}
 
 	[Fact]
@@ -158,10 +152,7 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 		Assert.NotNull(comp);
 		Assert.NotNull(comp.Services);
 		Assert.Equal(2, comp.Services.Length);
-		foreach (var service in comp.Services)
-		{
-			Assert.NotNull(service);
-		}
+		foreach (var service in comp.Services) Assert.NotNull(service);
 	}
 
 	[Fact]
@@ -191,10 +182,7 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 		Assert.NotNull(comp);
 		Assert.NotNull(comp.Services);
 		Assert.Equal(2, comp.Services.Length);
-		foreach (var service in comp.Services)
-		{
-			Assert.NotNull(service);
-		}
+		foreach (var service in comp.Services) Assert.NotNull(service);
 	}
 
 	[Fact]

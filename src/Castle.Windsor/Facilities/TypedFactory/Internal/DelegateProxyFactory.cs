@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory.Internal;
-
 using System;
-
 using Castle.Core;
 using Castle.Core.Internal;
 using Castle.DynamicProxy;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Context;
 
+namespace Castle.Facilities.TypedFactory.Internal;
+
 public class DelegateProxyFactory : IProxyFactoryExtension
 {
-	public object Generate(IProxyBuilder builder, ProxyGenerationOptions options, IInterceptor[] interceptors, ComponentModel model,
+	public object Generate(IProxyBuilder builder, ProxyGenerationOptions options, IInterceptor[] interceptors,
+		ComponentModel model,
 		CreationContext context)
 	{
 		var targetDelegateType = context.RequestedType;

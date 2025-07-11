@@ -14,22 +14,18 @@
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
-using System;
-
 /// <summary>
-/// Summary description for Component2.
+///     Summary description for Component2.
 /// </summary>
 public class Component2 : IDummyComponent
 {
 	#region IDummyComponent Members
 
-	public String Name
+	public string Name
 	{
-		get
-		{
+		get =>
 			// TODO:  Add Component2.Name getter implementation
-			return null;
-		}
+			null;
 		set
 		{
 			// TODO:  Add Component2.Name setter implementation

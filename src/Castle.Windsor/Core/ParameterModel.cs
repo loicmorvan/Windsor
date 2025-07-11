@@ -12,69 +12,55 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
-
 using Castle.Core.Configuration;
 
+namespace Castle.Core;
+
 /// <summary>
-///   Represents a parameter. Usually the parameter
-///   comes from the external world, ie, an external configuration.
+///     Represents a parameter. Usually the parameter
+///     comes from the external world, ie, an external configuration.
 /// </summary>
 [Serializable]
 public class ParameterModel
 {
-	private readonly IConfiguration _configValue;
-	private readonly String _name;
-	private readonly String _value;
-
 	/// <summary>
-	///   Initializes a new instance of the <see cref = "ParameterModel" /> class.
+	///     Initializes a new instance of the <see cref="ParameterModel" /> class.
 	/// </summary>
-	/// <param name = "name">The name.</param>
-	/// <param name = "value">The value.</param>
-	public ParameterModel(String name, String value)
+	/// <param name="name">The name.</param>
+	/// <param name="value">The value.</param>
+	public ParameterModel(string name, string value)
 	{
-		this._name = name;
-		this._value = value;
+		Name = name;
+		Value = value;
 	}
 
 	/// <summary>
-	///   Initializes a new instance of the <see cref = "ParameterModel" /> class.
+	///     Initializes a new instance of the <see cref="ParameterModel" /> class.
 	/// </summary>
-	/// <param name = "name">The name.</param>
-	/// <param name = "value">The value.</param>
-	public ParameterModel(String name, IConfiguration value)
+	/// <param name="name">The name.</param>
+	/// <param name="value">The value.</param>
+	public ParameterModel(string name, IConfiguration value)
 	{
-		this._name = name;
-		_configValue = value;
+		Name = name;
+		ConfigValue = value;
 	}
 
 	/// <summary>
-	///   Gets the config value.
+	///     Gets the config value.
 	/// </summary>
 	/// <value>The config value.</value>
-	public IConfiguration ConfigValue
-	{
-		get { return _configValue; }
-	}
+	public IConfiguration ConfigValue { get; }
 
 	/// <summary>
-	///   Gets the name.
+	///     Gets the name.
 	/// </summary>
 	/// <value>The name.</value>
-	public String Name
-	{
-		get { return _name; }
-	}
+	public string Name { get; }
 
 	/// <summary>
-	///   Gets the value.
+	///     Gets the value.
 	/// </summary>
 	/// <value>The value.</value>
-	public String Value
-	{
-		get { return _value; }
-	}
+	public string Value { get; }
 }

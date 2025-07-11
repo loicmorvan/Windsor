@@ -9,10 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal;
-
 using System;
 using System.Threading;
+
+namespace Castle.Core.Internal;
 
 [Serializable]
 public class GraphNode :
@@ -31,6 +31,7 @@ public class GraphNode :
 			var @new = new SimpleThreadSafeCollection<GraphNode>();
 			collection = Interlocked.CompareExchange(ref _outgoing, @new, null) ?? @new;
 		}
+
 		collection.Add(node);
 	}
 
@@ -40,16 +41,10 @@ public class GraphNode :
 		get
 		{
 			var collection = _outgoing;
-			if (collection == null)
-			{
-				return [];
-			}
+			if (collection == null) return [];
 			return collection.ToArray();
 		}
 	}
 
-	IVertex[] IVertex.Adjacencies
-	{
-		get { return Dependents; }
-	}
+	IVertex[] IVertex.Adjacencies => Dependents;
 }

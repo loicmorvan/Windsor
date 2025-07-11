@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Windsor.Tests;
-
 using System;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Handlers;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Generics;
+
+namespace Castle.Windsor.Tests.Windsor.Tests;
 
 public class MultiServiceGenericComponentsTestCase : AbstractContainerTestCase
 {
@@ -145,7 +144,8 @@ public class MultiServiceGenericComponentsTestCase : AbstractContainerTestCase
 	}
 
 	[Fact]
-	public void Open_generic_component_with_generic_and_non_generic_service__generic_first_resolve_by_key_Object_throws_friendly_message()
+	public void
+		Open_generic_component_with_generic_and_non_generic_service__generic_first_resolve_by_key_Object_throws_friendly_message()
 	{
 		Container.Register(
 			Component.For(typeof(Generics.IRepository<>)).Forward<IRepository>()
@@ -163,7 +163,8 @@ public class MultiServiceGenericComponentsTestCase : AbstractContainerTestCase
 	}
 
 	[Fact]
-	public void Open_generic_component_with_generic_and_non_generic_service__generic_first_resolve_by_key_non_generic_throws_friendly_message()
+	public void
+		Open_generic_component_with_generic_and_non_generic_service__generic_first_resolve_by_key_non_generic_throws_friendly_message()
 	{
 		Container.Register(
 			Component.For(typeof(Generics.IRepository<>)).Forward<IRepository>()

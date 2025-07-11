@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
 using System.Reflection;
 
+namespace Castle.Core;
+
 /// <summary>
-///   This attribute is useful only when you want to register all components
-///   on an assembly as a batch process. 
-///   By doing so, the batch register will look 
-///   for this attribute to distinguish components from other classes.
+///     This attribute is useful only when you want to register all components
+///     on an assembly as a batch process.
+///     By doing so, the batch register will look
+///     for this attribute to distinguish components from other classes.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class CastleComponentAttribute : LifestyleAttribute
 {
-	public CastleComponentAttribute(String name) : this(name, null)
+	public CastleComponentAttribute(string name) : this(name, null)
 	{
 	}
 
@@ -35,39 +35,35 @@ public class CastleComponentAttribute : LifestyleAttribute
 	{
 	}
 
-	public CastleComponentAttribute(String name, params Type[] services)
+	public CastleComponentAttribute(string name, params Type[] services)
 		: this(name, LifestyleType.Undefined, services)
 	{
 	}
 
-	public CastleComponentAttribute(String name, LifestyleType lifestyle, params Type[] services) : base(lifestyle)
+	public CastleComponentAttribute(string name, LifestyleType lifestyle, params Type[] services) : base(lifestyle)
 	{
 		Name = name;
 		Services = services ?? Type.EmptyTypes;
 		ServicesSpecifiedExplicitly = Services.Length > 0;
 	}
 
-	public bool HasName
-	{
-		get { return string.IsNullOrEmpty(Name) == false; }
-	}
+	public bool HasName => string.IsNullOrEmpty(Name) == false;
 
-	public String Name { get; private set; }
+	public string Name { get; }
 
 	public Type[] Services { get; private set; }
-	public bool ServicesSpecifiedExplicitly { get; private set; }
+	public bool ServicesSpecifiedExplicitly { get; }
 
 	public static CastleComponentAttribute GetDefaultsFor(Type type)
 	{
-		var attribute = (CastleComponentAttribute)type.GetTypeInfo().GetCustomAttribute(typeof(CastleComponentAttribute));
+		var attribute =
+			(CastleComponentAttribute)type.GetTypeInfo().GetCustomAttribute(typeof(CastleComponentAttribute));
 		if (attribute != null)
 		{
-			if (attribute.ServicesSpecifiedExplicitly == false)
-			{
-				attribute.Services = [type];
-			}
+			if (attribute.ServicesSpecifiedExplicitly == false) attribute.Services = [type];
 			return attribute;
 		}
+
 		return new CastleComponentAttribute(type);
 	}
 }

@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal;
-
 using System.Diagnostics;
 
+namespace Castle.Core.Internal;
+
 /// <summary>
-///   Marker class used to denote components that have late bound type
-///   That is the actual type is not known exactly at the time when <see cref = "ComponentModel" />
-///   is created. Those are for example components instantiated via abstract factory.
+///     Marker class used to denote components that have late bound type
+///     That is the actual type is not known exactly at the time when <see cref="ComponentModel" />
+///     is created. Those are for example components instantiated via abstract factory.
 /// </summary>
 public sealed class LateBoundComponent
 {

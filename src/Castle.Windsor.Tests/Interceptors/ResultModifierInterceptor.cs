@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Interceptors;
-
 using Castle.DynamicProxy;
+
+namespace Castle.Windsor.Tests.Interceptors;
 
 public class ResultModifierInterceptor : IInterceptor
 {
@@ -26,7 +26,7 @@ public class ResultModifierInterceptor : IInterceptor
 
 	public ResultModifierInterceptor(int returnValue)
 	{
-		this._returnValue = returnValue;
+		_returnValue = returnValue;
 	}
 
 	public void Intercept(IInvocation invocation)
@@ -37,9 +37,10 @@ public class ResultModifierInterceptor : IInterceptor
 			var result = invocation.ReturnValue;
 			if (!_returnValue.HasValue)
 			{
-				invocation.ReturnValue = ((int)result) + 1;
+				invocation.ReturnValue = (int)result + 1;
 				return;
 			}
+
 			invocation.ReturnValue = _returnValue.Value;
 			return;
 		}

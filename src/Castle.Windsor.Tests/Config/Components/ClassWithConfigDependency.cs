@@ -1,47 +1,47 @@
-﻿namespace Castle.Windsor.Tests.Config.Components;
+﻿using System.Linq;
 
-using System.Linq;
+namespace Castle.Windsor.Tests.Config.Components;
 
 /// <summary>
-/// The ClassWithConfigDependency interface.
+///     The ClassWithConfigDependency interface.
 /// </summary>
 public interface IClassWithConfigDependency
 {
 	/// <summary>
-	/// Gets the name of the current configuration.
+	///     Gets the name of the current configuration.
 	/// </summary>
 	/// <returns>
-	/// Returns the configuration name.
+	///     Returns the configuration name.
 	/// </returns>
 	string GetName();
 
 	/// <summary>
-	/// Gets the IP of a given server.
+	///     Gets the IP of a given server.
 	/// </summary>
 	/// <param name="name">
-	/// The name.
+	///     The name.
 	/// </param>
 	/// <returns>
-	/// Returns the IP address of a server.
+	///     Returns the IP address of a server.
 	/// </returns>
 	string GetServerIp(string name);
 }
 
 /// <summary>
-/// The class with config dependency.
+///     The class with config dependency.
 /// </summary>
 public class ClassWithConfigDependency : IClassWithConfigDependency
 {
 	/// <summary>
-	/// The _config.
+	///     The _config.
 	/// </summary>
 	private readonly IConfig _config;
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="ClassWithConfigDependency"/> class.
+	///     Initializes a new instance of the <see cref="ClassWithConfigDependency" /> class.
 	/// </summary>
 	/// <param name="config">
-	/// The config.
+	///     The config.
 	/// </param>
 	public ClassWithConfigDependency(IConfig config)
 	{
@@ -49,10 +49,10 @@ public class ClassWithConfigDependency : IClassWithConfigDependency
 	}
 
 	/// <summary>
-	/// The get name.
+	///     The get name.
 	/// </summary>
 	/// <returns>
-	/// The <see cref="string"/>.
+	///     The <see cref="string" />.
 	/// </returns>
 	public string GetName()
 	{
@@ -60,13 +60,13 @@ public class ClassWithConfigDependency : IClassWithConfigDependency
 	}
 
 	/// <summary>
-	/// The get server ip.
+	///     The get server ip.
 	/// </summary>
 	/// <param name="name">
-	/// The name.
+	///     The name.
 	/// </param>
 	/// <returns>
-	/// The <see cref="string"/>.
+	///     The <see cref="string" />.
 	/// </returns>
 	public string GetServerIp(string name)
 	{

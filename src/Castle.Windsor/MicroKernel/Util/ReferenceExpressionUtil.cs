@@ -14,30 +14,22 @@
 
 namespace Castle.MicroKernel.Util;
 
-using System;
-
 public abstract class ReferenceExpressionUtil
 {
 	public static string BuildReference(string value)
 	{
-		if (IsReference(value))
-		{
-			return value;
-		}
-		return String.Format("${{{0}}}", value);
+		if (IsReference(value)) return value;
+		return string.Format("${{{0}}}", value);
 	}
 
-	public static String ExtractComponentName(String value)
+	public static string ExtractComponentName(string value)
 	{
-		if (IsReference(value))
-		{
-			return value.Substring(2, value.Length - 3);
-		}
+		if (IsReference(value)) return value.Substring(2, value.Length - 3);
 
 		return null;
 	}
 
-	public static bool IsReference(String value)
+	public static bool IsReference(string value)
 	{
 		return value is { Length: > 3 } && value.StartsWith("${") && value.EndsWith("}");
 	}

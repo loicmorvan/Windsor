@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Interceptors;
+
+namespace Castle.Windsor.Tests;
 
 public class InterceptorLifecycleTestCase : AbstractContainerTestCase
 {
@@ -30,7 +30,7 @@ public class InterceptorLifecycleTestCase : AbstractContainerTestCase
 
 		var a = Container.Resolve<A>();
 
-		Assert.Equal(1,DisposableInterceptor.InstancesCreated);
+		Assert.Equal(1, DisposableInterceptor.InstancesCreated);
 
 		Container.Release(a);
 

@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle;
-
 using System;
 using System.Threading;
-
 using Castle.Core.Internal;
-
 using Castle.MicroKernel.Context;
 using Castle.MicroKernel.Lifestyle.Scoped;
+
+namespace Castle.MicroKernel.Lifestyle;
 
 public class ScopedLifestyleManager(IScopeAccessor accessor) : AbstractLifestyleManager
 {
@@ -34,10 +32,7 @@ public class ScopedLifestyleManager(IScopeAccessor accessor) : AbstractLifestyle
 	public override void Dispose()
 	{
 		var scope = Interlocked.Exchange(ref _accessor, null);
-		if (scope != null)
-		{
-			scope.Dispose();
-		}
+		if (scope != null) scope.Dispose();
 	}
 
 	public override object Resolve(CreationContext context, IReleasePolicy releasePolicy)
@@ -45,7 +40,7 @@ public class ScopedLifestyleManager(IScopeAccessor accessor) : AbstractLifestyle
 		var scope = GetScope(context);
 		var burden = scope.GetCachedInstance(Model, afterCreated =>
 		{
-			var localBurden = base.CreateInstance(context, trackedExternally: true);
+			var localBurden = base.CreateInstance(context, true);
 			afterCreated(localBurden);
 			Track(localBurden, releasePolicy);
 			return localBurden;
@@ -57,19 +52,16 @@ public class ScopedLifestyleManager(IScopeAccessor accessor) : AbstractLifestyle
 	{
 		var localScope = _accessor;
 		if (localScope == null)
-		{
-			throw new ObjectDisposedException("Scope was already disposed. This is most likely a bug in the calling code.");
-		}
+			throw new ObjectDisposedException(
+				"Scope was already disposed. This is most likely a bug in the calling code.");
 		var scope = localScope.GetScope(context);
-		if(scope == null)
-		{
+		if (scope == null)
 			throw new ComponentResolutionException(
 				string.Format(
 					"Could not obtain scope for component {0}. This is most likely either a bug in custom {1} or you're trying to access scoped component outside of the scope (like a per-web-request component outside of web request etc)",
 					Model.Name,
 					typeof(IScopeAccessor).ToCSharpString()),
 				Model);
-		}
 		return scope;
 	}
 }

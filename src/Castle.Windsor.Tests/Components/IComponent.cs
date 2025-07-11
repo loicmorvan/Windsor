@@ -15,7 +15,7 @@
 namespace Castle.Windsor.Tests.Components;
 
 /// <summary>
-///   Summary description for IComponent.
+///     Summary description for IComponent.
 /// </summary>
 public interface IComponent
 {

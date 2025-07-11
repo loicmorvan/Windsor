@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion;
-
 using System;
 using System.Reflection;
-
 using Castle.Core.Configuration;
 using Castle.Core.Internal;
 
+namespace Castle.MicroKernel.SubSystems.Conversion;
+
 /// <summary>
-///   Looks for a <see cref = "ConvertibleAttribute" /> on the type to be converted. 
-///   If found, the TypeConverter defined by the attribute is used to perform the conversion.
+///     Looks for a <see cref="ConvertibleAttribute" /> on the type to be converted.
+///     If found, the TypeConverter defined by the attribute is used to perform the conversion.
 /// </summary>
 public class AttributeAwareConverter : AbstractTypeConverter
 {
@@ -30,14 +29,9 @@ public class AttributeAwareConverter : AbstractTypeConverter
 	{
 		var converter = TryGetConverterInstance(type);
 
-		if (converter != null)
-		{
-			return converter.CanHandleType(type);
-		}
-		else
-		{
-			return false;
-		}
+		if (converter != null) return converter.CanHandleType(type);
+
+		return false;
 	}
 
 	public override object PerformConversion(string value, Type targetType)
@@ -57,9 +51,7 @@ public class AttributeAwareConverter : AbstractTypeConverter
 		var converter = TryGetConverterInstance(type);
 
 		if (converter == null)
-		{
 			throw new InvalidOperationException("Type " + type.Name + " does not have a Convertible attribute.");
-		}
 
 		return converter;
 	}

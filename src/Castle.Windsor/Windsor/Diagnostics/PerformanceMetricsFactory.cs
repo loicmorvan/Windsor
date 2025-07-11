@@ -89,7 +89,8 @@ namespace Castle.Windsor.Diagnostics
 			                                  	{
 			                                  		CounterType = PerformanceCounterType.NumberOfItems32,
 			                                  		CounterName = InstanesTrackedByTheReleasePolicyCounterName,
-			                                  		CounterHelp = "List of instances tracked by the release policy in the container. " +
+			                                  		CounterHelp =
+ "List of instances tracked by the release policy in the container. " +
 			                                  		              "Notice that does not include all alive objects tracked by the container, just the ones tracked by the policy."
 			                                  	}
 			                                  });

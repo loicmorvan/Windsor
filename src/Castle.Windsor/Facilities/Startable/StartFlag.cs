@@ -12,17 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Startable;
-
 using System.Collections.Generic;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Context;
+
+namespace Castle.Facilities.Startable;
 
 public class StartFlag : IStartFlagInternal
 {
 	protected readonly List<IHandler> WaitList = [];
 	protected StartableFacility.StartableEvents Events;
+
+	void IStartFlagInternal.Init(StartableFacility.StartableEvents events)
+	{
+		Events = events;
+		Init();
+	}
 
 	public virtual void Signal()
 	{
@@ -49,15 +54,6 @@ public class StartFlag : IStartFlagInternal
 	{
 		var array = WaitList.ToArray();
 		WaitList.Clear();
-		foreach (var handler in array)
-		{
-			Start(handler);
-		}
-	}
-
-	void IStartFlagInternal.Init(StartableFacility.StartableEvents events)
-	{
-		this.Events = events;
-		Init();
+		foreach (var handler in array) Start(handler);
 	}
 }

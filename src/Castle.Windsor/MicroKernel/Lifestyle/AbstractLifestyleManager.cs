@@ -12,56 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle;
-
 using System;
 using System.Diagnostics;
-
 using Castle.Core;
 using Castle.MicroKernel.Context;
 
+namespace Castle.MicroKernel.Lifestyle;
+
 /// <summary>
-///   Base implementation of <see cref="ILifestyleManager"/>
+///     Base implementation of <see cref="ILifestyleManager" />
 /// </summary>
 [Serializable]
 public abstract class AbstractLifestyleManager : ILifestyleManager
 {
-	private IComponentActivator _componentActivator;
-	private IKernel _kernel;
-	private ComponentModel _model;
+	protected IComponentActivator ComponentActivator { get; private set; }
 
-	protected IComponentActivator ComponentActivator
-	{
-		get { return _componentActivator; }
-	}
+	protected IKernel Kernel { get; private set; }
 
-	protected IKernel Kernel
-	{
-		get { return _kernel; }
-	}
-
-	protected ComponentModel Model
-	{
-		get { return _model; }
-	}
+	protected ComponentModel Model { get; private set; }
 
 	/// <summary>
-	///   Invoked when the container gets disposed. The container will not call it multiple times in multithreaded environments.
-	///   However it may be called at the same time when some out of band release mechanism is in progress. Resolving those potential
-	///   issues is the task of implementors
+	///     Invoked when the container gets disposed. The container will not call it multiple times in multithreaded
+	///     environments.
+	///     However it may be called at the same time when some out of band release mechanism is in progress. Resolving those
+	///     potential
+	///     issues is the task of implementors
 	/// </summary>
 	public abstract void Dispose();
 
 	public virtual void Init(IComponentActivator componentActivator, IKernel kernel, ComponentModel model)
 	{
-		this._componentActivator = componentActivator;
-		this._kernel = kernel;
-		this._model = model;
+		ComponentActivator = componentActivator;
+		Kernel = kernel;
+		Model = model;
 	}
 
 	public virtual bool Release(object instance)
 	{
-		_componentActivator.Destroy(instance);
+		ComponentActivator.Destroy(instance);
 		return true;
 	}
 
@@ -76,16 +64,13 @@ public abstract class AbstractLifestyleManager : ILifestyleManager
 	{
 		var burden = context.CreateBurden(ComponentActivator, trackedExternally);
 
-		var instance = _componentActivator.Create(context, burden);
+		var instance = ComponentActivator.Create(context, burden);
 		Debug.Assert(ReferenceEquals(instance, burden.Instance));
 		return burden;
 	}
 
 	protected virtual void Track(Burden burden, IReleasePolicy releasePolicy)
 	{
-		if (burden.RequiresPolicyRelease)
-		{
-			releasePolicy.Track(burden.Instance, burden);
-		}
+		if (burden.RequiresPolicyRelease) releasePolicy.Track(burden.Instance, burden);
 	}
 }

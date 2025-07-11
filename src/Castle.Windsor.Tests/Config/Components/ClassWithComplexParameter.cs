@@ -12,40 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.using System;
 
-namespace Castle.Windsor.Tests.Config.Components;
-
 using Castle.MicroKernel.SubSystems.Conversion;
+
+namespace Castle.Windsor.Tests.Config.Components;
 
 public class ClassWithComplexParameter
 {
-	private ComplexParameterType _param1;
+	public ComplexParameterType ComplexParam { get; set; }
 
 	[Convertible]
 	public class ComplexParameterType(string mandatoryValue)
 	{
-		private string _optionalValue;
-
 		public ComplexParameterType() : this("default1")
 		{
 			// sets default values
-			_optionalValue = "default2";
+			OptionalValue = "default2";
 		}
 
-		public string MandatoryValue
-		{
-			get { return mandatoryValue; }
-		}
+		public string MandatoryValue => mandatoryValue;
 
-		public string OptionalValue
-		{
-			get { return _optionalValue; }
-			set { _optionalValue = value; }
-		}
-	}
-
-	public ComplexParameterType ComplexParam
-	{
-		get { return _param1; }
-		set { _param1 = value; }
+		public string OptionalValue { get; set; }
 	}
 }

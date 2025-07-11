@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Installer;
-
 using System;
 using System.IO;
 using System.Reflection;
-
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Installer;
+
+namespace Castle.Windsor.Tests.Installer;
 
 public class FromAssemblyInstallersTestCase : AbstractContainerTestCase
 {
@@ -53,7 +52,9 @@ public class FromAssemblyInstallersTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Can_install_from_assembly_by_application()
 	{
-		Container.Install(FromAssembly.InThisApplication(GetCurrentAssembly(), new FilterAssembliesInstallerFactory(t => t.GetTypeInfo().Assembly != typeof(IWindsorInstaller).GetTypeInfo().Assembly)));
+		Container.Install(FromAssembly.InThisApplication(GetCurrentAssembly(),
+			new FilterAssembliesInstallerFactory(t =>
+				t.GetTypeInfo().Assembly != typeof(IWindsorInstaller).GetTypeInfo().Assembly)));
 	}
 
 	[Fact]
@@ -174,10 +175,7 @@ public class FromAssemblyInstallersTestCase : AbstractContainerTestCase
 
 		var fullName = GetType().GetTypeInfo().Assembly.FullName;
 		var index = fullName.IndexOf("PublicKeyToken=");
-		if (index == -1)
-		{
-			throw new NotSupportedException("Assembly is not signed so no way to test this.");
-		}
+		if (index == -1) throw new NotSupportedException("Assembly is not signed so no way to test this.");
 		var publicKeyToken = fullName.Substring(index + "PublicKeyToken=".Length, 16);
 		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).WithKeyToken(publicKeyToken)));
 		Assert.True(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
@@ -190,9 +188,7 @@ public class FromAssemblyInstallersTestCase : AbstractContainerTestCase
 
 		var publicKeyToken = GetType().GetTypeInfo().Assembly.GetName().GetPublicKeyToken();
 		if (publicKeyToken == null || publicKeyToken.Length == 0)
-		{
 			throw new NotSupportedException("Assembly is not signed so no way to test this.");
-		}
 
 		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).WithKeyToken(GetType())));
 		Assert.True(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
@@ -205,9 +201,7 @@ public class FromAssemblyInstallersTestCase : AbstractContainerTestCase
 
 		var publicKeyToken = GetType().GetTypeInfo().Assembly.GetName().GetPublicKeyToken();
 		if (publicKeyToken == null || publicKeyToken.Length == 0)
-		{
 			throw new NotSupportedException("Assembly is not signed so no way to test this.");
-		}
 
 		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).WithKeyToken<object>()));
 		Assert.False(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));

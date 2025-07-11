@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
+
+namespace Castle.Windsor.Tests;
 
 public static class ReferenceTracker
 {
 	/// <summary>
-	/// <para>
-	/// Use a lambda method to evaluate an expression returning an object instance to track.
-	/// </para>
-	/// <para>
-	/// (If the expression is evaluated directly inside the test method, the runtime will keep it alive
-	/// until the test method returns if the runtime is in debug mode. ReSharper’s test runner runs in
-	/// debug mode when the active solution configuration is Debug.)
-	/// </para>
+	///     <para>
+	///         Use a lambda method to evaluate an expression returning an object instance to track.
+	///     </para>
+	///     <para>
+	///         (If the expression is evaluated directly inside the test method, the runtime will keep it alive
+	///         until the test method returns if the runtime is in debug mode. ReSharper’s test runner runs in
+	///         debug mode when the active solution configuration is Debug.)
+	///     </para>
 	/// </summary>
 	public static ReferenceTracker<T> Track<T>(Func<T> getInstanceToTrack) where T : class
 	{
@@ -35,7 +35,7 @@ public static class ReferenceTracker
 }
 
 /// <summary>
-/// A test helper encapsulating correct reference tracking.
+///     A test helper encapsulating correct reference tracking.
 /// </summary>
 public struct ReferenceTracker<T> where T : class
 {
@@ -43,18 +43,18 @@ public struct ReferenceTracker<T> where T : class
 
 	private ReferenceTracker(WeakReference weakReference)
 	{
-		this._weakReference = weakReference;
+		_weakReference = weakReference;
 	}
 
 	/// <summary>
-	/// <para>
-	/// Use a lambda method to evaluate an expression returning an object instance to track.
-	/// </para>
-	/// <para>
-	/// (If the expression is evaluated directly inside the test method, the runtime will keep it alive
-	/// until the test method returns if the runtime is in debug mode. ReSharper’s test runner runs in
-	/// debug mode when the active solution configuration is Debug.)
-	/// </para>
+	///     <para>
+	///         Use a lambda method to evaluate an expression returning an object instance to track.
+	///     </para>
+	///     <para>
+	///         (If the expression is evaluated directly inside the test method, the runtime will keep it alive
+	///         until the test method returns if the runtime is in debug mode. ReSharper’s test runner runs in
+	///         debug mode when the active solution configuration is Debug.)
+	///     </para>
 	/// </summary>
 	public static ReferenceTracker<T> Track(Func<T> getInstanceToTrack)
 	{
@@ -65,7 +65,7 @@ public struct ReferenceTracker<T> where T : class
 	}
 
 	/// <summary>
-	/// Calls <see cref="GC.Collect()"/> and asserts that the tracked instance is still alive.
+	///     Calls <see cref="GC.Collect()" /> and asserts that the tracked instance is still alive.
 	/// </summary>
 	public void AssertStillReferenced()
 	{
@@ -75,7 +75,7 @@ public struct ReferenceTracker<T> where T : class
 	}
 
 	/// <summary>
-	/// Calls <see cref="GC.Collect()"/> and asserts that the tracked instance is no longer alive.
+	///     Calls <see cref="GC.Collect()" /> and asserts that the tracked instance is no longer alive.
 	/// </summary>
 	public void AssertNoLongerReferenced()
 	{
@@ -85,15 +85,15 @@ public struct ReferenceTracker<T> where T : class
 	}
 
 	/// <summary>
-	/// <para>
-	/// Calls <see cref="GC.Collect()"/> and asserts that the tracked instance is still alive and
-	/// passes it to the specified action.
-	/// </para>
-	/// <para>
-	/// Be careful not to let the tracked instance become reachable via a local variable in the test method
-	/// or it will be kept alive until the end of the test method if the runtime is in debug mode.
-	/// (See <see cref="Track"/>.)
-	/// </para>
+	///     <para>
+	///         Calls <see cref="GC.Collect()" /> and asserts that the tracked instance is still alive and
+	///         passes it to the specified action.
+	///     </para>
+	///     <para>
+	///         Be careful not to let the tracked instance become reachable via a local variable in the test method
+	///         or it will be kept alive until the end of the test method if the runtime is in debug mode.
+	///         (See <see cref="Track" />.)
+	///     </para>
 	/// </summary>
 	public void AssertStillReferencedAndDo(Action<T> action)
 	{
@@ -109,15 +109,15 @@ public struct ReferenceTracker<T> where T : class
 	}
 
 	/// <summary>
-	/// <para>
-	/// Calls <see cref="GC.Collect()"/> and asserts that the tracked instance is still alive,
-	/// passes it to the specified function, and returns the value returned by the specified function.
-	/// </para>
-	/// <para>
-	/// Be careful not to let the tracked instance become reachable via a local variable in the test method
-	/// or it will be kept alive until the end of the test method if the runtime is in debug mode.
-	/// (See <see cref="Track"/>.)
-	/// </para>
+	///     <para>
+	///         Calls <see cref="GC.Collect()" /> and asserts that the tracked instance is still alive,
+	///         passes it to the specified function, and returns the value returned by the specified function.
+	///     </para>
+	///     <para>
+	///         Be careful not to let the tracked instance become reachable via a local variable in the test method
+	///         or it will be kept alive until the end of the test method if the runtime is in debug mode.
+	///         (See <see cref="Track" />.)
+	///     </para>
 	/// </summary>
 	public TReturn AssertStillReferencedAndDo<TReturn>(Func<T, TReturn> func)
 	{

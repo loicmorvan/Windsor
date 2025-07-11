@@ -17,5 +17,5 @@ namespace Castle.Windsor.Tests.Components;
 public class UseChain<T>(T dependency) : IUse<T>
 {
 	public IUse<T> Next { get; set; }
-	public T Dependency { get; private set; } = dependency;
+	public T Dependency { get; } = dependency;
 }

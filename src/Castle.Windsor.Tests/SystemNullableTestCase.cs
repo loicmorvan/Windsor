@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Handlers;
 using Castle.MicroKernel.Registration;
+
+namespace Castle.Windsor.Tests;
 
 public class SystemNullableTestCase : AbstractContainerTestCase
 {
@@ -38,7 +38,8 @@ public class SystemNullableTestCase : AbstractContainerTestCase
 			Component.For<DependencyFromContainer>(),
 			Component.For<ComponentWithNonOptionalNullableParameter>());
 
-		var exception = Assert.Throws<HandlerException>(() => Container.Resolve<ComponentWithNonOptionalNullableParameter>());
+		var exception =
+			Assert.Throws<HandlerException>(() => Container.Resolve<ComponentWithNonOptionalNullableParameter>());
 		var expectedMessage = $"""
 		                       Can't create component '{typeof(ComponentWithNonOptionalNullableParameter)}' as it has dependencies to be satisfied.
 
@@ -56,7 +57,8 @@ public class SystemNullableTestCase : AbstractContainerTestCase
 
 	public sealed class ComponentWithNonOptionalNullableParameter
 	{
-		public ComponentWithNonOptionalNullableParameter(int? nonOptionalNullableParameter, DependencyFromContainer dependencyFromContainer)
+		public ComponentWithNonOptionalNullableParameter(int? nonOptionalNullableParameter,
+			DependencyFromContainer dependencyFromContainer)
 		{
 		}
 	}

@@ -12,16 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.LoggingFacility;
-
 using System;
-
 using Castle.MicroKernel.Registration;
 using Castle.Services.Logging.NLogIntegration;
-using Castle.Windsor;
 using Castle.Windsor.Tests.LoggingFacility.Classes;
-
+using NLog;
 using NLog.Targets;
+
+namespace Castle.Windsor.Tests.LoggingFacility;
 
 public class ExtendedNLogFacilityTests : BaseTest, IDisposable
 {
@@ -41,42 +39,47 @@ public class ExtendedNLogFacilityTests : BaseTest, IDisposable
 	public void SimpleTest()
 	{
 		_container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component1"));
-		SimpleLoggingComponent test = _container.Resolve<SimpleLoggingComponent>("component1");
+		var test = _container.Resolve<SimpleLoggingComponent>("component1");
 
 		test.DoSomething();
 
-		String expectedLogOutput = String.Format("|INFO|{0}|Hello world", typeof(SimpleLoggingComponent).FullName);
-		String actualLogOutput = (NLog.LogManager.Configuration.FindTargetByName("memory") as MemoryTarget).Logs[0].ToString();
+		var expectedLogOutput = string.Format("|INFO|{0}|Hello world", typeof(SimpleLoggingComponent).FullName);
+		var actualLogOutput = (LogManager.Configuration.FindTargetByName("memory") as MemoryTarget).Logs[0];
 		actualLogOutput = actualLogOutput.Substring(actualLogOutput.IndexOf('|'));
 
 		Assert.Equal(expectedLogOutput, actualLogOutput);
 
 		_container.Register(Component.For(typeof(SmtpServer)).Named("component2"));
-		ISmtpServer smtpServer = _container.Resolve<ISmtpServer>("component2");
+		var smtpServer = _container.Resolve<ISmtpServer>("component2");
 
 		smtpServer.Start();
-		smtpServer.InternalSend("rbellamy@pteradigm.com", "jobs@castlestronghold.com", "We're looking for a few good porgrammars.");
+		smtpServer.InternalSend("rbellamy@pteradigm.com", "jobs@castlestronghold.com",
+			"We're looking for a few good porgrammars.");
 		smtpServer.Stop();
 
-		expectedLogOutput = String.Format("|INFO|{0}|InternalSend rbellamy@pteradigm.com jobs@castlestronghold.com We're looking for a few good porgrammars.", typeof(SmtpServer).FullName);
-		actualLogOutput = (NLog.LogManager.Configuration.FindTargetByName("memory") as MemoryTarget).Logs[1].ToString();
+		expectedLogOutput =
+			string.Format(
+				"|INFO|{0}|InternalSend rbellamy@pteradigm.com jobs@castlestronghold.com We're looking for a few good porgrammars.",
+				typeof(SmtpServer).FullName);
+		actualLogOutput = (LogManager.Configuration.FindTargetByName("memory") as MemoryTarget).Logs[1];
 		actualLogOutput = actualLogOutput.Substring(actualLogOutput.IndexOf('|'));
 
-		Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
+		Assert.Equal(expectedLogOutput, actualLogOutput);
 	}
 
 	[Fact]
 	public void ContextTest()
 	{
 		_container.Register(Component.For(typeof(ComplexLoggingComponent)).Named("component1"));
-		ComplexLoggingComponent complexLoggingComponent = _container.Resolve<ComplexLoggingComponent>("component1");
+		var complexLoggingComponent = _container.Resolve<ComplexLoggingComponent>("component1");
 
 		complexLoggingComponent.DoSomeContextual();
 
-		String expectedLogOutput = String.Format("|DEBUG|{0}|flam|bar|Outside Inside0|Bim, bam boom.", typeof(ComplexLoggingComponent).FullName);
-		String actualLogOutput = (NLog.LogManager.Configuration.FindTargetByName("memory1") as MemoryTarget).Logs[0].ToString();
+		var expectedLogOutput = string.Format("|DEBUG|{0}|flam|bar|Outside Inside0|Bim, bam boom.",
+			typeof(ComplexLoggingComponent).FullName);
+		var actualLogOutput = (LogManager.Configuration.FindTargetByName("memory1") as MemoryTarget).Logs[0];
 		actualLogOutput = actualLogOutput.Substring(actualLogOutput.IndexOf('|'));
 
-		Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
+		Assert.Equal(expectedLogOutput, actualLogOutput);
 	}
 }

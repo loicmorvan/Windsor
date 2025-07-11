@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal;
-
 using System.Collections;
 using System.Collections.Generic;
+
+namespace Castle.Core.Internal;
 
 public class SimpleSortedSet<T>(IComparer<T> comparer) : ICollection<T>
 {
@@ -27,26 +27,14 @@ public class SimpleSortedSet<T>(IComparer<T> comparer) : ICollection<T>
 
 	public SimpleSortedSet(IEnumerable<T> other, IComparer<T> comparer) : this(comparer)
 	{
-		foreach (var item in other)
-		{
-			Add(item);
-		}
+		foreach (var item in other) Add(item);
 	}
 
-	public T this[int index]
-	{
-		get { return _items[index]; }
-	}
+	public T this[int index] => _items[index];
 
-	public int Count
-	{
-		get { return _items.Count; }
-	}
+	public int Count => _items.Count;
 
-	bool ICollection<T>.IsReadOnly
-	{
-		get { return false; }
-	}
+	bool ICollection<T>.IsReadOnly => false;
 
 	public void Add(T item)
 	{
@@ -59,11 +47,10 @@ public class SimpleSortedSet<T>(IComparer<T> comparer) : ICollection<T>
 				_items.Insert(i, item);
 				return;
 			}
-			if (result == 0)
-			{
-				return;
-			}
+
+			if (result == 0) return;
 		}
+
 		_items.Add(item);
 	}
 

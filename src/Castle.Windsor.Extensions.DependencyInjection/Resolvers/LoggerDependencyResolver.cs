@@ -13,22 +13,23 @@
 // limitations under the License.
 
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers;
-
 using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Context;
-	
 using Microsoft.Extensions.Logging;
+
+namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers;
 
 public class LoggerDependencyResolver(IKernel kernel) : ISubDependencyResolver
 {
-	public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+	public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+		DependencyModel dependency)
 	{
 		return dependency.TargetType == typeof(ILogger);
 	}
 
-	public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+	public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+		DependencyModel dependency)
 	{
 		var factory = kernel.Resolve<ILoggerFactory>();
 		return factory.CreateLogger(RegistrationAdapter.OriginalComponentName(model.Name));

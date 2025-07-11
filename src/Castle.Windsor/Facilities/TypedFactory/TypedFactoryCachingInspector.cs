@@ -12,38 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Core;
 using Castle.Facilities.TypedFactory.Internal;
 using Castle.MicroKernel;
 using Castle.MicroKernel.ModelBuilder;
 using Castle.MicroKernel.Util;
 
+namespace Castle.Facilities.TypedFactory;
+
 public class TypedFactoryCachingInspector : IContributeComponentModelConstruction
 {
+	void IContributeComponentModelConstruction.ProcessModel(IKernel kernel, ComponentModel model)
+	{
+		if (model.Configuration == null) return;
+		if (model.Configuration.Attributes[TypedFactoryFacility.IsFactoryKey] == null) return;
+		if (model.Services.Any(s => s.GetTypeInfo().IsGenericTypeDefinition)) return;
+		BuildCache(model);
+	}
+
 	public virtual void BuildCache(ComponentModel model)
 	{
 		var map = new Dictionary<MethodInfo, FactoryMethod>(new SimpleMethodEqualityComparer());
-		foreach (var service in model.Services)
-		{
-			BuildHandlersMap(service, map);
-		}
+		foreach (var service in model.Services) BuildHandlersMap(service, map);
 
 		model.ExtendedProperties[TypedFactoryFacility.FactoryMapCacheKey] = map;
 	}
 
 	private void BuildHandlersMap(Type service, Dictionary<MethodInfo, FactoryMethod> map)
 	{
-		if (service == null)
-		{
-			return;
-		}
+		if (service == null) return;
 
 		if (service.Equals(typeof(IDisposable)))
 		{
@@ -60,34 +61,15 @@ public class TypedFactoryCachingInspector : IContributeComponentModelConstructio
 				map[method] = FactoryMethod.Release;
 				continue;
 			}
+
 			map[method] = FactoryMethod.Resolve;
 		}
 
-		foreach (var @interface in service.GetInterfaces())
-		{
-			BuildHandlersMap(@interface, map);
-		}
+		foreach (var @interface in service.GetInterfaces()) BuildHandlersMap(@interface, map);
 	}
 
 	private bool IsReleaseMethod(MethodInfo methodInfo)
 	{
 		return methodInfo.ReturnType == typeof(void);
-	}
-
-	void IContributeComponentModelConstruction.ProcessModel(IKernel kernel, ComponentModel model)
-	{
-		if (model.Configuration == null)
-		{
-			return;
-		}
-		if (model.Configuration.Attributes[TypedFactoryFacility.IsFactoryKey] == null)
-		{
-			return;
-		}
-		if (model.Services.Any(s => s.GetTypeInfo().IsGenericTypeDefinition))
-		{
-			return;
-		}
-		BuildCache(model);
 	}
 }

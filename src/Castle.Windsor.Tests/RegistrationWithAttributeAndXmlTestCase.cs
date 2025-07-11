@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using Castle.Core.Resource;
-using Castle.Windsor.Installer;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests;
 
 public class RegistrationWithAttributeAndXmlTestCase : AbstractContainerTestCase
 {
@@ -30,7 +29,7 @@ public class RegistrationWithAttributeAndXmlTestCase : AbstractContainerTestCase
   </components>
 </configuration>";
 
-		Container.Install(Configuration.FromXml(new StaticContentResource(xml)));
+		Container.Install(Castle.Windsor.Installer.Configuration.FromXml(new StaticContentResource(xml)));
 		Assert.True(Kernel.HasComponent(typeof(ISimpleService)));
 	}
 }

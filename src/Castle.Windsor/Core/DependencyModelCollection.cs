@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-
 using Castle.Core.Internal;
 
+namespace Castle.Core;
+
 /// <summary>
-///     Collection of <see cref = "DependencyModel" />.
+///     Collection of <see cref="DependencyModel" />.
 /// </summary>
 [Serializable]
 [DebuggerDisplay("Count = {_dependencies.Count}")]
@@ -32,10 +31,7 @@ public class DependencyModelCollection : IMutableCollection<DependencyModel>
 	private readonly List<DependencyModel> _dependencies = [];
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public int Count
-	{
-		get { return _dependencies.Count; }
-	}
+	public int Count => _dependencies.Count;
 
 	[DebuggerStepThrough]
 	public IEnumerator<DependencyModel> GetEnumerator()
@@ -45,10 +41,7 @@ public class DependencyModelCollection : IMutableCollection<DependencyModel>
 
 	public void Add(DependencyModel dependencyModel)
 	{
-		if (dependencyModel == null)
-		{
-			throw new ArgumentNullException(nameof(dependencyModel));
-		}
+		if (dependencyModel == null) throw new ArgumentNullException(nameof(dependencyModel));
 		_dependencies.Add(dependencyModel);
 	}
 

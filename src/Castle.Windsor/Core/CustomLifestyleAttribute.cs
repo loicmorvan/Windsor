@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
 
+namespace Castle.Core;
+
 /// <summary>Indicates that the target components wants a custom lifestyle.</summary>
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+[AttributeUsage(AttributeTargets.Class)]
 public class CustomLifestyleAttribute : LifestyleAttribute
 {
 	/// <summary>
-	///     Initializes a new instance of the <see cref = "CustomLifestyleAttribute" /> class.
+	///     Initializes a new instance of the <see cref="CustomLifestyleAttribute" /> class.
 	/// </summary>
-	/// <param name = "customLifestyleType">The custom lifestyle type.</param>
+	/// <param name="customLifestyleType">The custom lifestyle type.</param>
 	public CustomLifestyleAttribute(Type customLifestyleType)
 		: base(LifestyleType.Custom)
 	{

@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion;
-
 using System;
 using System.Diagnostics;
-
 using Castle.Core.Configuration;
+
+namespace Castle.MicroKernel.SubSystems.Conversion;
 
 [Serializable]
 public class ArrayConverter : AbstractTypeConverter
@@ -27,7 +26,7 @@ public class ArrayConverter : AbstractTypeConverter
 		return type.IsArray;
 	}
 
-	public override object PerformConversion(String value, Type targetType)
+	public override object PerformConversion(string value, Type targetType)
 	{
 		throw new NotImplementedException();
 	}

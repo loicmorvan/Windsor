@@ -12,19 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors;
-
 using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.MicroKernel.Registration;
 
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+
 public abstract class AbstractOverwriteableDescriptor<TService> : IComponentModelDescriptor
 	where TService : class
 {
-	protected bool IsOverWrite
-	{
-		get { return Registration.IsOverWrite; }
-	}
+	protected bool IsOverWrite => Registration.IsOverWrite;
 
 	internal ComponentRegistration<TService> Registration { private get; set; }
 

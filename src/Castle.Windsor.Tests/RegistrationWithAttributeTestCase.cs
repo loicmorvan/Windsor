@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System.Linq;
 using System.Reflection;
-
 using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.ComponentsWithAttribute;
+
+namespace Castle.Windsor.Tests;
 
 public class RegistrationWithAttributeTestCase : AbstractContainerTestCase
 {
@@ -113,9 +112,8 @@ public class RegistrationWithAttributeTestCase : AbstractContainerTestCase
 
 		Assert.True(handlers.Length > 0);
 		foreach (var handler in handlers)
-		{
-			Assert.True(handler.ComponentModel.Implementation.GetTypeInfo().IsDefined(typeof(CastleComponentAttribute)));
-		}
+			Assert.True(handler.ComponentModel.Implementation.GetTypeInfo()
+				.IsDefined(typeof(CastleComponentAttribute)));
 	}
 
 	[Fact]
@@ -130,7 +128,8 @@ public class RegistrationWithAttributeTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Can_filter_types_based_on_custom_attribute_properties()
 	{
-		Container.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(Component.HasAttribute<UserAttribute>(u => u.Register)));
+		Container.Register(Classes.FromAssembly(GetCurrentAssembly())
+			.Where(Component.HasAttribute<UserAttribute>(u => u.Register)));
 		Container.Resolve<HasUserAttributeRegister>();
 		Assert.Throws<ComponentNotFoundException>(() => Container.Resolve<HasUserAttributeNonRegister>());
 	}

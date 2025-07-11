@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters;
-
 using System;
 using System.Xml;
-
 using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.Core.Configuration.Xml;
@@ -27,9 +24,11 @@ using Castle.MicroKernel.SubSystems.Conversion;
 using Castle.MicroKernel.SubSystems.Resource;
 using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
 
+namespace Castle.Windsor.Configuration.Interpreters;
+
 /// <summary>
-///   Reads the configuration from a XmlFile. Sample structure:
-///   <code>
+///     Reads the configuration from a XmlFile. Sample structure:
+///     <code>
 ///     &lt;configuration&gt;
 ///     &lt;facilities&gt;
 ///     &lt;facility&gt;
@@ -57,17 +56,17 @@ public class XmlInterpreter : AbstractInterpreter
 #endif
 
 	/// <summary>
-	///   Initializes a new instance of the <see cref = "XmlInterpreter" /> class.
+	///     Initializes a new instance of the <see cref="XmlInterpreter" /> class.
 	/// </summary>
-	/// <param name = "filename">The filename.</param>
-	public XmlInterpreter(String filename) : base(filename)
+	/// <param name="filename">The filename.</param>
+	public XmlInterpreter(string filename) : base(filename)
 	{
 	}
 
 	/// <summary>
-	///   Initializes a new instance of the <see cref = "XmlInterpreter" /> class.
+	///     Initializes a new instance of the <see cref="XmlInterpreter" /> class.
 	/// </summary>
-	/// <param name = "source">The source.</param>
+	/// <param name="source">The source.</param>
 	public XmlInterpreter(IResource source) : base(source)
 	{
 	}
@@ -94,24 +93,16 @@ public class XmlInterpreter : AbstractInterpreter
 		foreach (XmlNode node in section)
 		{
 			if (XmlConfigurationDeserializer.IsTextNode(node))
-			{
-				throw new ConfigurationProcessingException(String.Format("{0} cannot contain text nodes", node.Name));
-			}
-			if (node.NodeType == XmlNodeType.Element)
-			{
-				DeserializeElement(node, store, converter);
-			}
+				throw new ConfigurationProcessingException(string.Format("{0} cannot contain text nodes", node.Name));
+			if (node.NodeType == XmlNodeType.Element) DeserializeElement(node, store, converter);
 		}
 	}
 
 	private static void AssertNodeName(XmlNode node, IEquatable<string> expectedName)
 	{
-		if (expectedName.Equals(node.Name))
-		{
-			return;
-		}
+		if (expectedName.Equals(node.Name)) return;
 
-		var message = String.Format("Unexpected node under '{0}': Expected '{1}' but found '{2}'", expectedName,
+		var message = string.Format("Unexpected node under '{0}': Expected '{1}' but found '{2}'", expectedName,
 			expectedName, node.Name);
 
 		throw new ConfigurationProcessingException(message);
@@ -128,17 +119,16 @@ public class XmlInterpreter : AbstractInterpreter
 			config.Attributes["id"] = id;
 			config.Attributes.Add("id-automatic", bool.TrueString);
 		}
+
 		AddComponentConfig(id, config, store);
 	}
 
-	private static void DeserializeComponents(XmlNodeList nodes, IConfigurationStore store, IConversionManager converter)
+	private static void DeserializeComponents(XmlNodeList nodes, IConfigurationStore store,
+		IConversionManager converter)
 	{
 		foreach (XmlNode node in nodes)
 		{
-			if (node.NodeType != XmlNodeType.Element)
-			{
-				continue;
-			}
+			if (node.NodeType != XmlNodeType.Element) continue;
 
 			AssertNodeName(node, ComponentNodeName);
 			DeserializeComponent(node, store, converter);
@@ -153,10 +143,7 @@ public class XmlInterpreter : AbstractInterpreter
 		// Copy all attributes
 		var allKeys = config.Attributes.AllKeys;
 
-		foreach (var key in allKeys)
-		{
-			newConfig.Attributes.Add(key, config.Attributes[key]);
-		}
+		foreach (var key in allKeys) newConfig.Attributes.Add(key, config.Attributes[key]);
 
 		// Copy all children
 		newConfig.Children.AddRange(config.Children);
@@ -169,10 +156,7 @@ public class XmlInterpreter : AbstractInterpreter
 	{
 		foreach (XmlNode node in nodes)
 		{
-			if (node.NodeType != XmlNodeType.Element)
-			{
-				continue;
-			}
+			if (node.NodeType != XmlNodeType.Element) continue;
 
 			AssertNodeName(node, ContainerNodeName);
 			DeserializeContainer(node, store);
@@ -208,14 +192,12 @@ public class XmlInterpreter : AbstractInterpreter
 		}
 	}
 
-	private static void DeserializeFacilities(XmlNodeList nodes, IConfigurationStore store, IConversionManager converter)
+	private static void DeserializeFacilities(XmlNodeList nodes, IConfigurationStore store,
+		IConversionManager converter)
 	{
 		foreach (XmlNode node in nodes)
 		{
-			if (node.NodeType != XmlNodeType.Element)
-			{
-				continue;
-			}
+			if (node.NodeType != XmlNodeType.Element) continue;
 
 			AssertNodeName(node, FacilityNodeName);
 			DeserializeFacility(node, store, converter);
@@ -238,23 +220,12 @@ public class XmlInterpreter : AbstractInterpreter
 		var assembly = config.Attributes["assembly"];
 		var directory = config.Attributes["directory"];
 		var attributesCount = 0;
-		if ((string.IsNullOrEmpty(type)) == false)
-		{
-			attributesCount++;
-		}
-		if (string.IsNullOrEmpty(assembly) == false)
-		{
-			attributesCount++;
-		}
-		if (string.IsNullOrEmpty(directory) == false)
-		{
-			attributesCount++;
-		}
+		if (string.IsNullOrEmpty(type) == false) attributesCount++;
+		if (string.IsNullOrEmpty(assembly) == false) attributesCount++;
+		if (string.IsNullOrEmpty(directory) == false) attributesCount++;
 		if (attributesCount != 1)
-		{
 			throw new ConfigurationProcessingException(
 				"install must have exactly one of the following attributes defined: 'type', 'assembly' or 'directory'.");
-		}
 		AddInstallerConfig(config, store);
 	}
 
@@ -262,10 +233,7 @@ public class XmlInterpreter : AbstractInterpreter
 	{
 		foreach (XmlNode node in nodes)
 		{
-			if (node.NodeType != XmlNodeType.Element)
-			{
-				continue;
-			}
+			if (node.NodeType != XmlNodeType.Element) continue;
 
 			AssertNodeName(node, InstallNodeName);
 			DeserializeInstaller(node, store);
@@ -278,7 +246,7 @@ public class XmlInterpreter : AbstractInterpreter
 
 		if (string.IsNullOrEmpty(value))
 		{
-			var message = String.Format("{0} elements expects required non blank attribute {1}",
+			var message = string.Format("{0} elements expects required non blank attribute {1}",
 				configuration.Name, attributeName);
 
 			throw new ConfigurationProcessingException(message);
@@ -290,8 +258,7 @@ public class XmlInterpreter : AbstractInterpreter
 	private static void ThrowIfFacilityConfigurationHasIdAttribute(IConfiguration config)
 	{
 		if (config.Attributes["id"] != null)
-		{
-			throw new ConfigurationProcessingException("The 'id' attribute has been removed from facility configurations, please remove it from your configuration.");
-		}
+			throw new ConfigurationProcessingException(
+				"The 'id' attribute has been removed from facility configurations, please remove it from your configuration.");
 	}
 }

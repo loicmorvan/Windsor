@@ -12,32 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion;
-
 using System;
 using System.ComponentModel;
 using System.Reflection;
-
 using Castle.Core.Configuration;
 
+namespace Castle.MicroKernel.SubSystems.Conversion;
+
 /// <summary>
-/// Attempts to utilize an existing <see cref="TypeConverter"/> for conversion
+///     Attempts to utilize an existing <see cref="TypeConverter" /> for conversion
 /// </summary>
 [Serializable]
 public class ComponentModelConverter : AbstractTypeConverter
 {
 	public override bool CanHandleType(Type type)
 	{
-		if (type.GetTypeInfo().IsInterface)
-		{
-			return false;
-		}
+		if (type.GetTypeInfo().IsInterface) return false;
 
 		var converter = TypeDescriptor.GetConverter(type);
-		return (converter != null && converter.CanConvertFrom(typeof(String)));
+		return converter != null && converter.CanConvertFrom(typeof(string));
 	}
 
-	public override object PerformConversion(String value, Type targetType)
+	public override object PerformConversion(string value, Type targetType)
 	{
 		var converter = TypeDescriptor.GetConverter(targetType);
 
@@ -47,7 +43,7 @@ public class ComponentModelConverter : AbstractTypeConverter
 		}
 		catch (Exception ex)
 		{
-			var message = String.Format(
+			var message = string.Format(
 				"Could not convert from '{0}' to {1}",
 				value, targetType.FullName);
 

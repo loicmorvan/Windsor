@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
 using System.Linq;
-
 using Castle.DynamicProxy;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Interceptors;
+
+namespace Castle.Windsor.Tests;
 
 public class ClassInheritanceTestCase : AbstractContainerTestCase
 {
@@ -40,7 +39,8 @@ public class ClassInheritanceTestCase : AbstractContainerTestCase
 	public void Can_proxy_class_service_impl_explicitly()
 	{
 		RegisterInterceptor();
-		Container.Register(Component.For<JohnChild>().ImplementedBy<JohnChild>().LifeStyle.Transient.Interceptors<CountingInterceptor>());
+		Container.Register(Component.For<JohnChild>().ImplementedBy<JohnChild>().LifeStyle.Transient
+			.Interceptors<CountingInterceptor>());
 
 		var child = Container.Resolve<JohnChild>();
 
@@ -62,7 +62,8 @@ public class ClassInheritanceTestCase : AbstractContainerTestCase
 	public void Can_proxy_class_service_with_inherited_implementation()
 	{
 		RegisterInterceptor();
-		Container.Register(Component.For<JohnParent>().ImplementedBy<JohnChild>().LifeStyle.Transient.Interceptors<CountingInterceptor>());
+		Container.Register(Component.For<JohnParent>().ImplementedBy<JohnChild>().LifeStyle.Transient
+			.Interceptors<CountingInterceptor>());
 
 		var obj = Container.Resolve<JohnParent>();
 
@@ -81,29 +82,31 @@ public class ClassInheritanceTestCase : AbstractContainerTestCase
 
 		Assert.True(IsProxy(obj));
 		Assert.IsType<JohnChild>(obj);
-		Assert.IsType<IEmptyService>(obj, exactMatch:false);
+		Assert.IsType<IEmptyService>(obj, false);
 	}
 
 	[Fact]
 	public void Can_proxy_multiple_class_services_and_interfaces_incl_generic_with_inherited_implementation()
 	{
 		RegisterInterceptor();
-		Container.Register(Component.For<IGeneric<IEmployee>, JohnParent, IEmptyService, JohnGrandparent>().ImplementedBy(typeof(JohnChild))
+		Container.Register(Component.For<IGeneric<IEmployee>, JohnParent, IEmptyService, JohnGrandparent>()
+			.ImplementedBy(typeof(JohnChild))
 			.LifeStyle.Transient.Interceptors<CountingInterceptor>());
 
 		var obj = Container.Resolve<JohnParent>();
 
 		Assert.True(IsProxy(obj));
 		Assert.IsType<JohnChild>(obj);
-		Assert.IsType<IEmptyService>(obj, exactMatch: false);
-		Assert.IsType<IGeneric<IEmployee>>(obj, exactMatch: false);
+		Assert.IsType<IEmptyService>(obj, false);
+		Assert.IsType<IGeneric<IEmployee>>(obj, false);
 	}
 
 	[Fact]
 	public void Can_proxy_multiple_class_services_with_inherited_implementation()
 	{
 		RegisterInterceptor();
-		Container.Register(Component.For<JohnParent, JohnGrandparent>().ImplementedBy<JohnChild>().LifeStyle.Transient.Interceptors<CountingInterceptor>());
+		Container.Register(Component.For<JohnParent, JohnGrandparent>().ImplementedBy<JohnChild>().LifeStyle.Transient
+			.Interceptors<CountingInterceptor>());
 
 		var obj = Container.Resolve<JohnParent>();
 

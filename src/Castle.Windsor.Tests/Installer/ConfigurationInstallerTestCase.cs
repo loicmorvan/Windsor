@@ -12,16 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Installer;
-
 using System;
-
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor;
-using Castle.Windsor.Installer;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.XmlFiles;
+
+namespace Castle.Windsor.Tests.Installer;
 
 public class ConfigurationInstallerTestCase : AbstractContainerTestCase
 {
@@ -67,7 +64,7 @@ public class ConfigurationInstallerTestCase : AbstractContainerTestCase
 	public void InstallComponents_FromXmlFileWithEnvironment_ComponentsInstalled()
 	{
 		Container.Install(
-			Configuration.FromXmlFile(
+			Castle.Windsor.Installer.Configuration.FromXmlFile(
 					ConfigHelper.ResolveConfigPath("Configuration2/env_config.xml"))
 				.Environment("devel")
 		);
@@ -81,7 +78,7 @@ public class ConfigurationInstallerTestCase : AbstractContainerTestCase
 	public void InstallComponents_FromXmlFile_ComponentsInstalled()
 	{
 		Container.Install(
-			Configuration.FromXml(Xml.Embedded("installerconfig.xml")));
+			Castle.Windsor.Installer.Configuration.FromXml(Xml.Embedded("installerconfig.xml")));
 
 		Assert.True(Container.Kernel.HasComponent(typeof(ICalcService)));
 		Assert.True(Container.Kernel.HasComponent("calcservice"));
@@ -91,7 +88,7 @@ public class ConfigurationInstallerTestCase : AbstractContainerTestCase
 	public void InstallComponents_FromXmlFile_first_and_from_code()
 	{
 		Container.Install(
-			Configuration.FromXml(Xml.Embedded("justConfiguration.xml")),
+			Castle.Windsor.Installer.Configuration.FromXml(Xml.Embedded("justConfiguration.xml")),
 			new Installer(c => c.Register(Component.For<ICamera>()
 				.ImplementedBy<Camera>()
 				.Named("camera"))));

@@ -12,26 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Castle.Core;
 using Castle.Core.Internal;
 using Castle.MicroKernel.LifecycleConcerns;
 
+namespace Castle.MicroKernel;
+
 public class Burden
 {
-	private readonly IHandler _handler;
 	private Decommission _decommission = Decommission.No;
 
 	private List<Burden> _dependencies;
 
 	internal Burden(IHandler handler, bool requiresDecommission, bool trackedExternally)
 	{
-		this._handler = handler;
+		Handler = handler;
 		TrackedExternally = trackedExternally;
 		if (requiresDecommission)
 		{
@@ -39,118 +37,77 @@ public class Burden
 		}
 		else if (Model.Lifecycle.HasDecommissionConcerns)
 		{
-			if (Model.Implementation == typeof(LateBoundComponent) && Model.Lifecycle.DecommissionConcerns.All(IsLateBound))
-			{
+			if (Model.Implementation == typeof(LateBoundComponent) &&
+			    Model.Lifecycle.DecommissionConcerns.All(IsLateBound))
 				_decommission = Decommission.LateBound;
-			}
 			else
-			{
 				_decommission = Decommission.Yes;
-			}
 		}
 	}
 
-	public IHandler Handler
-	{
-		get { return _handler; }
-	}
+	public IHandler Handler { get; }
 
 	public object Instance { get; private set; }
 
-	public ComponentModel Model
-	{
-		get { return _handler.ComponentModel; }
-	}
+	public ComponentModel Model => Handler.ComponentModel;
 
 	public bool RequiresDecommission
 	{
-		get { return _decommission != Decommission.No; }
+		get => _decommission != Decommission.No;
 		set
 		{
 			if (value)
-			{
 				_decommission = Decommission.Yes;
-			}
 			else
-			{
 				_decommission = Decommission.No;
-			}
 		}
 	}
 
 	/// <summary>
-	///   If
-	///   <c>true</c>
-	///   requires release by
-	///   <see cref="IReleasePolicy" />
-	///   . If
-	///   <c>false</c>
-	///   , the object has a well defined, detectable end of life (web-request end, disposal of the container etc), and will be released externally.
+	///     If
+	///     <c>true</c>
+	///     requires release by
+	///     <see cref="IReleasePolicy" />
+	///     . If
+	///     <c>false</c>
+	///     , the object has a well defined, detectable end of life (web-request end, disposal of the container etc), and will
+	///     be released externally.
 	/// </summary>
-	public bool RequiresPolicyRelease
-	{
-		get { return TrackedExternally == false && RequiresDecommission; }
-	}
+	public bool RequiresPolicyRelease => TrackedExternally == false && RequiresDecommission;
 
 	public bool TrackedExternally { get; set; }
 
 	public void AddChild(Burden child)
 	{
-		if (_dependencies == null)
-		{
-			_dependencies = new List<Burden>(Model.Dependents.Length);
-		}
+		if (_dependencies == null) _dependencies = new List<Burden>(Model.Dependents.Length);
 		_dependencies.Add(child);
 
-		if (child.RequiresDecommission)
-		{
-			_decommission = Decommission.Yes;
-		}
+		if (child.RequiresDecommission) _decommission = Decommission.Yes;
 	}
 
 	public bool Release()
 	{
 		var releasing = Releasing;
-		if (releasing != null)
-		{
-			releasing(this);
-		}
+		if (releasing != null) releasing(this);
 
-		if (_handler.Release(this) == false)
-		{
-			return false;
-		}
+		if (Handler.Release(this) == false) return false;
 
 		var released = Released;
-		if (released != null)
-		{
-			released(this);
-		}
+		if (released != null) released(this);
 
-		if (_dependencies != null)
-		{
-			_dependencies.ForEach(c => c.Release());
-		}
+		if (_dependencies != null) _dependencies.ForEach(c => c.Release());
 		var graphReleased = GraphReleased;
-		if (graphReleased != null)
-		{
-			graphReleased(this);
-		}
+		if (graphReleased != null) graphReleased(this);
 		return true;
 	}
 
 	public void SetRootInstance(object instance)
 	{
-		if (instance == null)
-		{
-			throw new ArgumentNullException(nameof(instance));
-		}
+		if (instance == null) throw new ArgumentNullException(nameof(instance));
 		Instance = instance;
 		if (_decommission == Decommission.LateBound)
-		{
 			// TODO: this may need to be extended if we lazily provide any other decimmission concerns
 			RequiresDecommission = instance is IDisposable;
-		}
 	}
 
 	private bool IsLateBound(IDecommissionConcern arg)

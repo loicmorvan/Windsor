@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Configuration2;
-
-using Castle.Windsor;
 using Castle.Windsor.Configuration.Interpreters;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.XmlFiles;
+
+namespace Castle.Windsor.Tests.Configuration2;
 
 public class IncludesTestCase
 {
@@ -42,7 +41,8 @@ public class IncludesTestCase
 	[Fact]
 	public void FileResourceAndRelativeIncludes()
 	{
-		_container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_include_relative.xml"));
+		_container =
+			new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_include_relative.xml"));
 
 		AssertConfiguration();
 	}
@@ -50,7 +50,8 @@ public class IncludesTestCase
 	[Fact]
 	public void FileResourceAndRelativeIncludes2()
 	{
-		_container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_include_relative2.xml"));
+		_container =
+			new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_include_relative2.xml"));
 
 		AssertConfiguration();
 	}

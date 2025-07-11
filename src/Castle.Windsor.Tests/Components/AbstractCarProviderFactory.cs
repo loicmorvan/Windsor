@@ -18,13 +18,8 @@ public class AbstractCarProviderFactory
 {
 	public ICarProvider Create(User currentUser)
 	{
-		if (currentUser.FiscalStability == FiscalStability.MrMoneyBags)
-		{
-			return new FerrariProvider();
-		}
-		else
-		{
-			return new HondaProvider();
-		}
+		if (currentUser.FiscalStability == FiscalStability.MrMoneyBags) return new FerrariProvider();
+
+		return new HondaProvider();
 	}
 }

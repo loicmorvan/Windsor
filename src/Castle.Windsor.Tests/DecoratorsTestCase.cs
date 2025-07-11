@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
-
 using Castle.MicroKernel.Handlers;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
+
+namespace Castle.Windsor.Tests;
 
 public class DecoratorsTestCase : AbstractContainerTestCase
 {
@@ -30,7 +29,7 @@ public class DecoratorsTestCase : AbstractContainerTestCase
 			Component.For<IRepository>().ImplementedBy<DecoratedRepository>()
 		);
 		var repos = (Repository1)Kernel.Resolve<IRepository>();
-		Assert.IsType<DecoratedRepository>( repos.InnerRepository);
+		Assert.IsType<DecoratedRepository>(repos.InnerRepository);
 	}
 
 	[Fact]
@@ -41,7 +40,7 @@ public class DecoratorsTestCase : AbstractContainerTestCase
 			Component.For<IRepository>().ImplementedBy<DecoratedRepository2>()
 		);
 		var exception =
-			Assert.Throws<HandlerException>( () => Kernel.Resolve<IRepository>());
+			Assert.Throws<HandlerException>(() => Kernel.Resolve<IRepository>());
 
 		var expectedMessage =
 			string.Format(
@@ -51,7 +50,8 @@ public class DecoratorsTestCase : AbstractContainerTestCase
 	}
 
 	[Fact]
-	public void Will_give_good_error_message_if_cannot_resolve_service_that_is_likely_decorated_when_there_are_multiple_service()
+	public void
+		Will_give_good_error_message_if_cannot_resolve_service_that_is_likely_decorated_when_there_are_multiple_service()
 	{
 		Kernel.Register(
 			Component.For<IRepository>().ImplementedBy<Repository1>(),

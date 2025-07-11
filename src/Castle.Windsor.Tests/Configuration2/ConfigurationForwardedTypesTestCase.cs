@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Configuration2;
-
-using Castle.Windsor;
 using Castle.Windsor.Tests.ClassComponents;
+
+namespace Castle.Windsor.Tests.Configuration2;
 
 public class ConfigurationForwardedTypesTestCase
 {
-	private readonly IWindsorContainer _container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_forwarded_types.xml"));
+	private readonly IWindsorContainer _container =
+		new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_forwarded_types.xml"));
 
 	[Fact]
 	public void Component_with_forwarded_types()

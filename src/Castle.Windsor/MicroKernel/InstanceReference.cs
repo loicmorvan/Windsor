@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
-
 using Castle.Core;
 using Castle.MicroKernel.Context;
 
+namespace Castle.MicroKernel;
+
 /// <summary>
-///   Represents a reference to an existing object.
+///     Represents a reference to an existing object.
 /// </summary>
-/// <typeparam name = "T"></typeparam>
+/// <typeparam name="T"></typeparam>
 public class InstanceReference<T>(T instance) : IReference<T>
 {
 	public void Attach(ComponentModel component)

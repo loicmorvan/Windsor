@@ -25,7 +25,7 @@ public class MyService2 : IService2
 
 	public string Name
 	{
-		get { return Staticname; }
-		set { Staticname = value; }
+		get => Staticname;
+		set => Staticname = value;
 	}
 }

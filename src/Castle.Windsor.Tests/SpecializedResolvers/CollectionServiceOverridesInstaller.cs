@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.SpecializedResolvers;
-
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.SpecializedResolvers;
 
 internal class CollectionServiceOverridesInstaller : IWindsorInstaller
 {
@@ -31,11 +30,11 @@ internal class CollectionServiceOverridesInstaller : IWindsorInstaller
 			Component.For<ArrayDepAsConstructor>().Named("InjectFooOnly")
 				.DependsOn(ServiceOverride.ForKey("services").Eq(["foo"])),
 			Component.For<ArrayDepAsConstructor>().Named("InjectFooAndBarOnly")
-				.DependsOn(ServiceOverride.ForKey("services").Eq(new[] { "foo", "bar" })),
+				.DependsOn(ServiceOverride.ForKey("services").Eq("foo", "bar")),
 			Component.For<ListDepAsConstructor>().Named("InjectAllList"),
 			Component.For<ListDepAsConstructor>().Named("InjectFooOnlyList")
 				.DependsOn(ServiceOverride.ForKey("services").Eq(["foo"])),
 			Component.For<ListDepAsConstructor>().Named("InjectFooAndBarOnlyList")
-				.DependsOn(ServiceOverride.ForKey("services").Eq(new[] { "foo", "bar" })));
+				.DependsOn(ServiceOverride.ForKey("services").Eq("foo", "bar")));
 	}
 }

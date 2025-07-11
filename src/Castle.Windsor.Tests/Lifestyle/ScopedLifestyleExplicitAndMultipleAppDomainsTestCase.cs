@@ -30,7 +30,8 @@ namespace CastleTests.Lifestyle
 
 		private static AppDomain CreateAnotherAppDomain()
 		{
-			return AppDomain.CreateDomain("Another", null, new AppDomainSetup {ApplicationBase = AppDomain.CurrentDomain.BaseDirectory});
+			return AppDomain.CreateDomain("Another", null, new AppDomainSetup {ApplicationBase =
+ AppDomain.CurrentDomain.BaseDirectory});
 		}
 
 		[Fact]

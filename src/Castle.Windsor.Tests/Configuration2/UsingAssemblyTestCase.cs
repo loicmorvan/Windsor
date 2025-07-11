@@ -13,7 +13,6 @@
 // limitations under the License.
 
 #if FEATURE_WPF //This test requires PresentationCore.dll (specified in Configuration2/config_with_using_assembly.xml)
-
 namespace Castle.Windsor.Tests.Configuration2
 {
 	using System;
@@ -29,7 +28,8 @@ namespace Castle.Windsor.Tests.Configuration2
 		[Fact]
 		public void Installers_by_type()
 		{
-			var container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_using_assembly.xml"));
+			var container =
+ new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_using_assembly.xml"));
 			var manager = container.Kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey) as IConversionManager;
 			var type = manager.PerformConversion<Type>("BrushMappingMode");
 			Assert.NotNull(type);

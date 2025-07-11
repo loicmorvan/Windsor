@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Interceptors;
-
 using System.Linq;
-
 using Castle.Core;
 using Castle.MicroKernel.Proxy;
+
+namespace Castle.Windsor.Tests.Interceptors;
 
 public class AnotherInterceptorSelector : IModelInterceptorsSelector
 {

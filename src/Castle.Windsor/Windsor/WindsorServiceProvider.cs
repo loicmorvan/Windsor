@@ -12,16 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor;
-
 using System;
-
 using Castle.Core;
 using Castle.MicroKernel;
 
+namespace Castle.Windsor;
+
 /// <summary>
-///   Implementation of <see cref = "IServiceProvider" /> and <see cref = "IServiceProviderEx" /> that uses a <see
-///    cref = "IWindsorContainer" /> or <see cref = "IKernel" /> as its component's source.
+///     Implementation of <see cref="IServiceProvider" /> and <see cref="IServiceProviderEx" /> that uses a
+///     <see
+///         cref="IWindsorContainer" />
+///     or <see cref="IKernel" /> as its component's source.
 /// </summary>
 public class WindsorServiceProvider : IServiceProviderEx
 {
@@ -31,22 +32,14 @@ public class WindsorServiceProvider : IServiceProviderEx
 	{
 		_kernel = container.Kernel as IKernelInternal;
 		if (_kernel == null)
-		{
 			throw new ArgumentException(string.Format("The kernel must implement {0}", typeof(IKernelInternal)));
-		}
 	}
 
-	public IKernel Kernel
-	{
-		get { return _kernel; }
-	}
+	public IKernel Kernel => _kernel;
 
 	public object GetService(Type serviceType)
 	{
-		if (_kernel.LoadHandlerByType(null, serviceType, null) != null)
-		{
-			return _kernel.Resolve(serviceType);
-		}
+		if (_kernel.LoadHandlerByType(null, serviceType, null) != null) return _kernel.Resolve(serviceType);
 		return null;
 	}
 

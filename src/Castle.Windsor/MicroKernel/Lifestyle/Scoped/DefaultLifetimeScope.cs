@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Scoped;
-
 using System;
-
 using Castle.Core;
 
+namespace Castle.MicroKernel.Lifestyle.Scoped;
+
 /// <remarks>
-/// This class is not thread safe like CallContextLifetimeScope.
+///     This class is not thread safe like CallContextLifetimeScope.
 /// </remarks>
 public class DefaultLifetimeScope(IScopeCache scopeCache = null, Action<Burden> onAfterCreated = null) : ILifetimeScope
 {
@@ -29,19 +28,13 @@ public class DefaultLifetimeScope(IScopeCache scopeCache = null, Action<Burden> 
 
 	public void Dispose()
 	{
-		if (_scopeCache is IDisposable disposableCache)
-		{
-			disposableCache.Dispose();
-		}
+		if (_scopeCache is IDisposable disposableCache) disposableCache.Dispose();
 	}
 
 	public Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance)
 	{
 		var burden = _scopeCache[model];
-		if (burden == null)
-		{
-			_scopeCache[model] = burden = createInstance(_onAfterCreated);
-		}
+		if (burden == null) _scopeCache[model] = burden = createInstance(_onAfterCreated);
 		return burden;
 	}
 }

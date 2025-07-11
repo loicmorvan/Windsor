@@ -12,39 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Scoped;
-
-using System.Diagnostics;
-using System.Globalization;
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Security;
+using Castle.Core;
+using Castle.MicroKernel.Internal;
+
+namespace Castle.MicroKernel.Lifestyle.Scoped;
+
 #if FEATURE_REMOTING
 	using System.Runtime.Remoting.Messaging;
 #endif
-using System.Security;
 #if !FEATURE_REMOTING
 using System.Threading;
 #endif
 
-using Castle.Core;
-using Castle.Core.Internal;
-
-using Lock = Castle.MicroKernel.Internal.Lock;
+using Lock = Lock;
 
 /// <summary>
-/// Provides explicit lifetime scoping within logical path of execution. Used for types with <see cref="LifestyleType.Scoped" />.
+///     Provides explicit lifetime scoping within logical path of execution. Used for types with
+///     <see cref="LifestyleType.Scoped" />.
 /// </summary>
 /// <remarks>
-/// The scope is passed on to child threads, including ThreadPool threads. The capability is limited to a single AppDomain
-/// and should be used cautiously as calls to <see cref="Dispose" /> may occur while the child thread is still executing,
-/// which in turn may lead to subtle threading bugs.
+///     The scope is passed on to child threads, including ThreadPool threads. The capability is limited to a single
+///     AppDomain
+///     and should be used cautiously as calls to <see cref="Dispose" /> may occur while the child thread is still
+///     executing,
+///     which in turn may lead to subtle threading bugs.
 /// </remarks>
 public class CallContextLifetimeScope : ILifetimeScope
 {
 	private static readonly ConcurrentDictionary<Guid, CallContextLifetimeScope> AllScopes = new();
 
 #if FEATURE_REMOTING
-		private static readonly string callContextKey = "castle.lifetime-scope-" + AppDomain.CurrentDomain.Id.ToString(CultureInfo.InvariantCulture);
+		private static readonly string callContextKey =
+ "castle.lifetime-scope-" + AppDomain.CurrentDomain.Id.ToString(CultureInfo.InvariantCulture);
 #else
 	private static readonly AsyncLocal<Guid> AsyncLocal = new();
 #endif
@@ -103,6 +106,7 @@ public class CallContextLifetimeScope : ILifetimeScope
 			burden = createInstance(delegate { });
 			_cache[model] = burden;
 		}
+
 		return burden;
 	}
 
@@ -125,10 +129,7 @@ public class CallContextLifetimeScope : ILifetimeScope
 #else
 		scopeKey = AsyncLocal.Value;
 #endif
-		if (!(scopeKey is Guid key))
-		{
-			return null;
-		}
+		if (!(scopeKey is Guid key)) return null;
 		AllScopes.TryGetValue(key, out var scope);
 		return scope;
 	}

@@ -12,25 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System.Collections.Generic;
 using System.Linq;
-
 using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 
+namespace Castle.Windsor.Tests;
+
 public class KernelEventsDependencyResolvingTestCase : AbstractContainerTestCase
 {
+	private ComponentModel _expectedClient;
+	private List<DependencyModel> _expectedModels;
+
 	protected override void AfterContainerCreated()
 	{
 		Kernel.DependencyResolving += AssertEvent;
 	}
-
-	private ComponentModel _expectedClient;
-	private List<DependencyModel> _expectedModels;
 
 	private void AssertEvent(ComponentModel client, DependencyModel model, object dependency)
 	{
@@ -79,9 +78,7 @@ public class KernelEventsDependencyResolvingTestCase : AbstractContainerTestCase
 		_expectedClient = Kernel.GetHandler("spamservice").ComponentModel;
 		_expectedModels = new List<DependencyModel>();
 		foreach (var prop in Kernel.GetHandler("spamservice").ComponentModel.Properties)
-		{
 			_expectedModels.Add(prop.Dependency);
-		}
 
 		var spamservice = Kernel.Resolve<DefaultSpamService>("spamservice");
 
@@ -107,9 +104,7 @@ public class KernelEventsDependencyResolvingTestCase : AbstractContainerTestCase
 		_expectedClient = Kernel.GetHandler("customer").ComponentModel;
 		_expectedModels = new List<DependencyModel>();
 		foreach (var prop in Kernel.GetHandler("customer").ComponentModel.Properties)
-		{
 			_expectedModels.Add(prop.Dependency);
-		}
 
 		var customer = Kernel.Resolve<ICustomer>("customer");
 

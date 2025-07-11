@@ -12,16 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs.Ioc113;
-
 using System.Collections.Generic;
-
 using Castle.Facilities.Startable;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 
+namespace Castle.Windsor.Tests.Bugs.Ioc113;
+
 public class IoC113WhenResolvingInitializableDisposableAndStartableComponent
 {
+	private readonly IList<SdiComponentMethods> _calledMethods;
+	private readonly StartableDisposableAndInitializableComponent _component;
+
+	private readonly IKernel _kernel;
+
 	public IoC113WhenResolvingInitializableDisposableAndStartableComponent()
 	{
 		_kernel = new DefaultKernel();
@@ -39,10 +43,6 @@ public class IoC113WhenResolvingInitializableDisposableAndStartableComponent
 
 		_calledMethods = _component.CalledMethods;
 	}
-
-	private readonly IKernel _kernel;
-	private readonly StartableDisposableAndInitializableComponent _component;
-	private readonly IList<SdiComponentMethods> _calledMethods;
 
 	[Fact]
 	public void Should_call_DoSomething_between_start_and_stop()

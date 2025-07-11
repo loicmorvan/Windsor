@@ -14,16 +14,14 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-using System;
-
 /// <summary>
-/// Summary description for ICustomer.
+///     Summary description for ICustomer.
 /// </summary>
 public interface ICustomer
 {
-	String Name { get; set; }
+	string Name { get; set; }
 
-	String Address { get; set; }
+	string Address { get; set; }
 
 	int Age { get; set; }
 }

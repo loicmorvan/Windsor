@@ -12,18 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.DebuggerViews;
-
 using System.Diagnostics;
+
+namespace Castle.Windsor.Diagnostics.DebuggerViews;
 
 public class MasterDetailsDebuggerViewItem(object master, string masterDescription, string masterName, object[] details)
 {
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly object[] _details = details;
-
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly object _master = master;
-
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private readonly string _masterDescription = masterDescription;
 
@@ -31,18 +25,12 @@ public class MasterDetailsDebuggerViewItem(object master, string masterDescripti
 	private readonly string _masterName = masterName;
 
 	/// <summary>
-	///   Stupid name, but debugger views in Visual Studio display items in alphabetical order so if we want
-	///   to have that item on top its name must be alphabetically before <see cref = "Details" />
+	///     Stupid name, but debugger views in Visual Studio display items in alphabetical order so if we want
+	///     to have that item on top its name must be alphabetically before <see cref="Details" />
 	/// </summary>
 	[DebuggerDisplay("{masterDescription,nq}", Name = "{masterName,nq}")]
-	public object AMaster
-	{
-		get { return _master; }
-	}
+	public object AMaster { get; } = master;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-	public object[] Details
-	{
-		get { return _details; }
-	}
+	public object[] Details { get; } = details;
 }

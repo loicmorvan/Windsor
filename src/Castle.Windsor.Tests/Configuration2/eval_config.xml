@@ -1,11 +1,11 @@
 <configuration>
 	<components>
-		<component 
-			id="component" 
+		<component
+			id="component"
 			type="ComponentWithStringProperty">
 			<parameters>
 				<name><?eval $BaseDirectory?></name>
 			</parameters>
 		</component>
-	</components>		
+	</components>
 </configuration>

@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs.IoC_169;
-
 using System.Reflection;
-
 using Castle.Core;
 using Castle.Facilities.Startable;
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
+
+namespace Castle.Windsor.Tests.Bugs.IoC_169;
 
 public interface IBlackboard
 {
@@ -63,7 +61,6 @@ public interface IServiceWithoutImplementation
 {
 }
 
-	
 public class IoC169
 {
 	[Fact]
@@ -77,8 +74,7 @@ public class IoC169
 
 		container.Register(Component.For(typeof(IBlackboard)).ImplementedBy(typeof(Blackboard)).Named("blackboard"));
 
-		var registrations = Classes.
-			FromAssembly(GetType().GetTypeInfo().Assembly)
+		var registrations = Classes.FromAssembly(GetType().GetTypeInfo().Assembly)
 			.BasedOn<IServiceWithoutImplementation>()
 			.Unless(t => container.Kernel.HasComponent(t));
 

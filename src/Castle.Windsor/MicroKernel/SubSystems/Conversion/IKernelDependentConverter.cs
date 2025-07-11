@@ -15,9 +15,9 @@
 namespace Castle.MicroKernel.SubSystems.Conversion;
 
 /// <summary>
-///   Marker interface that signals that a converter
-///   depends on IKernel to be able to perform 
-///   the conversion.
+///     Marker interface that signals that a converter
+///     depends on IKernel to be able to perform
+///     the conversion.
 /// </summary>
 public interface IKernelDependentConverter
 {

@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.LoggingFacility.Classes;
-
 using System;
-
 using Castle.Core.Logging;
 using Castle.Services.Logging.Log4netIntegration;
-
 using log4net;
 using log4net.Config;
+
+namespace Castle.Windsor.Tests.LoggingFacility.Classes;
 
 public class CustomLog4NetFactory : Log4netFactory
 {
@@ -29,14 +27,15 @@ public class CustomLog4NetFactory : Log4netFactory
 		BasicConfigurator.Configure();
 	}
 
-	public override ILogger Create(String name)
+	public override ILogger Create(string name)
 	{
 		var log = LogManager.GetLogger(name);
 		return new Log4netLogger(log.Logger, this);
 	}
 
-	public override ILogger Create(String name, LoggerLevel level)
+	public override ILogger Create(string name, LoggerLevel level)
 	{
-		throw new NotSupportedException("Logger levels cannot be set at runtime. Please review your configuration file.");
+		throw new NotSupportedException(
+			"Logger levels cannot be set at runtime. Please review your configuration file.");
 	}
 }

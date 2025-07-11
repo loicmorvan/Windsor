@@ -15,7 +15,6 @@
 namespace Castle.Windsor.Tests.ClassComponents;
 
 /// <summary>
-/// 
 /// </summary>
 public interface ICommonSub2 : ICommonSub1
 {

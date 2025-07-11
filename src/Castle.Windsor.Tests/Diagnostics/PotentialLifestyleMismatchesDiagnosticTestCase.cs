@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Diagnostics;
-
 using System.Linq;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Diagnostics;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Interceptors;
+
+namespace Castle.Windsor.Tests.Diagnostics;
 
 public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerTestCase
 {
@@ -115,8 +114,10 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerT
 	public void Does_not_crash_on_dependency_cycles()
 	{
 		Container.Register(Component.For<InterceptorThatCauseStackOverflow>().Named("interceptor"),
-			Component.For<ICameraService>().ImplementedBy<CameraService>().Interceptors<InterceptorThatCauseStackOverflow>(),
-			Component.For<ICameraService>().ImplementedBy<CameraService>().Named("ok to resolve - has no interceptors"));
+			Component.For<ICameraService>().ImplementedBy<CameraService>()
+				.Interceptors<InterceptorThatCauseStackOverflow>(),
+			Component.For<ICameraService>().ImplementedBy<CameraService>()
+				.Named("ok to resolve - has no interceptors"));
 		var items = _diagnostic.Inspect();
 		Assert.Empty(items);
 	}

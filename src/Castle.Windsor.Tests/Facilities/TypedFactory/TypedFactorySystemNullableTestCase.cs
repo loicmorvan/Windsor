@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory;
-
 using System;
-
 using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public class TypedFactorySystemNullableTestCase : AbstractContainerTestCase
 {
@@ -36,7 +35,7 @@ public class TypedFactorySystemNullableTestCase : AbstractContainerTestCase
 			Component.For<ComponentWithNonOptionalNullableParameter.Factory>().AsFactory());
 
 		var factory = Container.Resolve<ComponentWithNonOptionalNullableParameter.Factory>();
-		factory.Invoke(nonOptionalNullableParameter: null);
+		factory.Invoke(null);
 	}
 
 	[Fact]
@@ -63,7 +62,8 @@ public class TypedFactorySystemNullableTestCase : AbstractContainerTestCase
 	{
 		public delegate ComponentWithNonOptionalNullableParameter Factory(int? nonOptionalNullableParameter);
 
-		public ComponentWithNonOptionalNullableParameter(int? nonOptionalNullableParameter, DependencyFromContainer dependencyFromContainer)
+		public ComponentWithNonOptionalNullableParameter(int? nonOptionalNullableParameter,
+			DependencyFromContainer dependencyFromContainer)
 		{
 		}
 	}

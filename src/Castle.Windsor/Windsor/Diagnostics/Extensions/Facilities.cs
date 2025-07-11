@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Extensions;
-
 using System.Collections.Generic;
-
 using Castle.MicroKernel;
 using Castle.Windsor.Diagnostics.DebuggerViews;
+
+namespace Castle.Windsor.Diagnostics.Extensions;
 
 public class Facilities : IContainerDebuggerExtension
 {
@@ -26,15 +25,12 @@ public class Facilities : IContainerDebuggerExtension
 	public IEnumerable<DebuggerViewItem> Attach()
 	{
 		var facilities = _kernel.GetFacilities();
-		if (facilities.Length == 0)
-		{
-			yield break;
-		}
+		if (facilities.Length == 0) yield break;
 		yield return new DebuggerViewItem("Facilities", "Count = " + facilities.Length, facilities);
 	}
 
 	public void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
 	{
-		this._kernel = kernel;
+		_kernel = kernel;
 	}
 }

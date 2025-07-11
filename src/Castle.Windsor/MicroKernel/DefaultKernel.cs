@@ -12,19 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Reflection;
-using System.Security;
-#if FEATURE_SECURITY_PERMISSIONS
-	using System.Security.Permissions;
-#endif
-
 using Castle.Core;
 using Castle.Core.Internal;
 using Castle.Core.Logging;
@@ -45,8 +37,15 @@ using Castle.MicroKernel.SubSystems.Naming;
 using Castle.MicroKernel.SubSystems.Resource;
 using Castle.Windsor.Diagnostics;
 
+namespace Castle.MicroKernel;
+
+#if FEATURE_SECURITY_PERMISSIONS
+	using System.Security.Permissions;
+#endif
+
 /// <summary>
-///   Default implementation of <see cref = "IKernel" />. This implementation is complete and also support a kernel hierarchy (sub containers).
+///     Default implementation of <see cref="IKernel" />. This implementation is complete and also support a kernel
+///     hierarchy (sub containers).
 /// </summary>
 [Serializable]
 [DebuggerTypeProxy(typeof(KernelDebuggerProxy))]
@@ -56,49 +55,48 @@ public partial class DefaultKernel :
 #endif
 	IKernel, IKernelEvents, IKernelInternal
 {
-	[ThreadStatic]
-	private static CreationContext _currentCreationContext;
+	[ThreadStatic] private static CreationContext _currentCreationContext;
 
-	[ThreadStatic]
-	private static bool _isCheckingLazyLoaders;
+	[ThreadStatic] private static bool _isCheckingLazyLoaders;
 
 	// ReSharper disable once UnassignedField.Compiler
 	private ThreadSafeFlag _disposed;
 
 	/// <summary>
-	///   List of sub containers.
+	///     List of sub containers.
 	/// </summary>
 	private readonly List<IKernel> _childKernels = [];
 
 	/// <summary>
-	///   List of <see cref = "IFacility" /> registered.
+	///     List of <see cref="IFacility" /> registered.
 	/// </summary>
 	private readonly List<IFacility> _facilities = [];
 
 	/// <summary>
-	///   Map of subsystems registered.
+	///     Map of subsystems registered.
 	/// </summary>
 	private readonly Dictionary<string, ISubSystem> _subsystems = new(StringComparer.OrdinalIgnoreCase);
 
 	/// <summary>
-	///   The parent kernel, if exists.
+	///     The parent kernel, if exists.
 	/// </summary>
 	private IKernel _parentKernel;
 
 	private readonly object _lazyLoadingLock = new();
 
 	/// <summary>
-	///   Constructs a DefaultKernel with no component proxy support.
+	///     Constructs a DefaultKernel with no component proxy support.
 	/// </summary>
 	public DefaultKernel() : this(new NotSupportedProxyFactory())
 	{
 	}
 
 	/// <summary>
-	///   Constructs a DefaultKernel with the specified implementation of <see cref = "IProxyFactory" /> and <see cref = "IDependencyResolver" />
+	///     Constructs a DefaultKernel with the specified implementation of <see cref="IProxyFactory" /> and
+	///     <see cref="IDependencyResolver" />
 	/// </summary>
-	/// <param name = "resolver"> </param>
-	/// <param name = "proxyFactory"> </param>
+	/// <param name="resolver"> </param>
+	/// <param name="proxyFactory"> </param>
 	public DefaultKernel(IDependencyResolver resolver, IProxyFactory proxyFactory)
 	{
 		RegisterSubSystems();
@@ -122,7 +120,7 @@ public partial class DefaultKernel :
 	}
 
 	/// <summary>
-	///   Constructs a DefaultKernel with the specified implementation of <see cref = "IProxyFactory" />
+	///     Constructs a DefaultKernel with the specified implementation of <see cref="IProxyFactory" />
 	/// </summary>
 	public DefaultKernel(IProxyFactory proxyFactory)
 		: this(new DefaultDependencyResolver(), proxyFactory)
@@ -146,12 +144,12 @@ public partial class DefaultKernel :
 
 	public virtual IConfigurationStore ConfigurationStore
 	{
-		get { return GetSubSystem(SubSystemConstants.ConfigurationStoreKey) as IConfigurationStore; }
-		set { AddSubSystem(SubSystemConstants.ConfigurationStoreKey, value); }
+		get => GetSubSystem(SubSystemConstants.ConfigurationStoreKey) as IConfigurationStore;
+		set => AddSubSystem(SubSystemConstants.ConfigurationStoreKey, value);
 	}
 
 	/// <summary>
-	///   Graph of components and interactions.
+	///     Graph of components and interactions.
 	/// </summary>
 	public GraphNode[] GraphNodes
 	{
@@ -161,10 +159,7 @@ public partial class DefaultKernel :
 			var index = 0;
 
 			var handlers = NamingSubSystem.GetAllHandlers();
-			foreach (var handler in handlers)
-			{
-				nodes[index++] = handler.ComponentModel;
-			}
+			foreach (var handler in handlers) nodes[index++] = handler.ComponentModel;
 
 			return nodes;
 		}
@@ -174,7 +169,7 @@ public partial class DefaultKernel :
 
 	public virtual IKernel Parent
 	{
-		get { return _parentKernel; }
+		get => _parentKernel;
 		set
 		{
 			// TODO: should the raise add/removed as child kernel methods be invoked from within the subscriber/unsubscribe methods?
@@ -191,11 +186,9 @@ public partial class DefaultKernel :
 			}
 			else
 			{
-				if ((_parentKernel != value) && (_parentKernel != null))
-				{
+				if (_parentKernel != value && _parentKernel != null)
 					throw new KernelException(
 						"You can not change the kernel parent once set, use the RemoveChildKernel and AddChildKernel methods together to achieve this.");
-				}
 				_parentKernel = value;
 				SubscribeToParentKernel();
 				RaiseAddedAsChildKernel();
@@ -228,14 +221,11 @@ public partial class DefaultKernel :
 #endif
 
 	/// <summary>
-	///   Starts the process of component disposal.
+	///     Starts the process of component disposal.
 	/// </summary>
 	public virtual void Dispose()
 	{
-		if (!_disposed.Signal())
-		{
-			return;
-		}
+		if (!_disposed.Signal()) return;
 
 		DisposeSubKernels();
 		TerminateFacilities();
@@ -246,10 +236,7 @@ public partial class DefaultKernel :
 
 	public virtual void AddChildKernel(IKernel childKernel)
 	{
-		if (childKernel == null)
-		{
-			throw new ArgumentNullException(nameof(childKernel));
-		}
+		if (childKernel == null) throw new ArgumentNullException(nameof(childKernel));
 
 		childKernel.Parent = this;
 		_childKernels.Add(childKernel);
@@ -265,10 +252,7 @@ public partial class DefaultKernel :
 
 	IHandler IKernelInternal.CreateHandler(ComponentModel model)
 	{
-		if (model == null)
-		{
-			throw new ArgumentNullException(nameof(model));
-		}
+		if (model == null) throw new ArgumentNullException(nameof(model));
 
 		RaiseComponentModelCreated(model);
 		return HandlerFactory.Create(model);
@@ -278,18 +262,13 @@ public partial class DefaultKernel :
 
 	public virtual IKernel AddFacility(IFacility facility)
 	{
-		if (facility == null)
-		{
-			throw new ArgumentNullException(nameof(facility));
-		}
+		if (facility == null) throw new ArgumentNullException(nameof(facility));
 		var facilityType = facility.GetType();
 		if (_facilities.Any(f => f.GetType() == facilityType))
-		{
 			throw new ArgumentException(
 				string.Format(
 					"Facility of type '{0}' has already been registered with the container. Only one facility of a given type can exist in the container.",
 					facilityType.FullName));
-		}
 		_facilities.Add(facility);
 		facility.Init(this, ConfigurationStore.GetFacilityConfiguration(facility.GetType().FullName));
 
@@ -305,10 +284,7 @@ public partial class DefaultKernel :
 		where T : IFacility, new()
 	{
 		var facility = new T();
-		if (onCreate != null)
-		{
-			onCreate(facility);
-		}
+		if (onCreate != null) onCreate(facility);
 		return AddFacility(facility);
 	}
 
@@ -322,33 +298,22 @@ public partial class DefaultKernel :
 		NamingSubSystem.AddHandlersFilter(filter);
 	}
 
-	public virtual void AddSubSystem(String name, ISubSystem subsystem)
+	public virtual void AddSubSystem(string name, ISubSystem subsystem)
 	{
-		if (name == null)
-		{
-			throw new ArgumentNullException(nameof(name));
-		}
-		if (subsystem == null)
-		{
-			throw new ArgumentNullException(nameof(subsystem));
-		}
+		if (name == null) throw new ArgumentNullException(nameof(name));
+		if (subsystem == null) throw new ArgumentNullException(nameof(subsystem));
 
 		subsystem.Init(this);
 		_subsystems[name] = subsystem;
 		if (name == SubSystemConstants.ConversionManagerKey)
-		{
 			ConversionSubSystem = (IConversionManager)subsystem;
-		}
-		else if (name == SubSystemConstants.NamingKey)
-		{
-			NamingSubSystem = (INamingSubSystem)subsystem;
-		}
+		else if (name == SubSystemConstants.NamingKey) NamingSubSystem = (INamingSubSystem)subsystem;
 	}
 
 	/// <summary>
-	///   Return handlers for components that implements the specified service. The check is made using IsAssignableFrom
+	///     Return handlers for components that implements the specified service. The check is made using IsAssignableFrom
 	/// </summary>
-	/// <param name = "service"> </param>
+	/// <param name="service"> </param>
 	/// <returns> </returns>
 	public virtual IHandler[] GetAssignableHandlers(Type service)
 	{
@@ -372,7 +337,7 @@ public partial class DefaultKernel :
 	}
 
 	/// <summary>
-	///   Returns the facilities registered on the kernel.
+	///     Returns the facilities registered on the kernel.
 	/// </summary>
 	/// <returns> </returns>
 	public virtual IFacility[] GetFacilities()
@@ -380,43 +345,31 @@ public partial class DefaultKernel :
 		return _facilities.ToArray();
 	}
 
-	public virtual IHandler GetHandler(String name)
+	public virtual IHandler GetHandler(string name)
 	{
-		if (name == null)
-		{
-			throw new ArgumentNullException(nameof(name));
-		}
+		if (name == null) throw new ArgumentNullException(nameof(name));
 
 		var handler = NamingSubSystem.GetHandler(name);
 
-		if (handler == null && Parent != null)
-		{
-			handler = WrapParentHandler(Parent.GetHandler(name));
-		}
+		if (handler == null && Parent != null) handler = WrapParentHandler(Parent.GetHandler(name));
 
 		return handler;
 	}
 
 	public virtual IHandler GetHandler(Type service)
 	{
-		if (service == null)
-		{
-			throw new ArgumentNullException(nameof(service));
-		}
+		if (service == null) throw new ArgumentNullException(nameof(service));
 
 		var handler = NamingSubSystem.GetHandler(service);
-		if (handler == null && Parent != null)
-		{
-			handler = WrapParentHandler(Parent.GetHandler(service));
-		}
+		if (handler == null && Parent != null) handler = WrapParentHandler(Parent.GetHandler(service));
 
 		return handler;
 	}
 
 	/// <summary>
-	///   Return handlers for components that implements the specified service.
+	///     Return handlers for components that implements the specified service.
 	/// </summary>
-	/// <param name = "service"> </param>
+	/// <param name="service"> </param>
 	/// <returns> </returns>
 	public virtual IHandler[] GetHandlers(Type service)
 	{
@@ -440,7 +393,7 @@ public partial class DefaultKernel :
 	}
 
 	/// <summary>
-	///   Returns all handlers for all components
+	///     Returns all handlers for all components
 	/// </summary>
 	/// <returns>Handler which is a sub dependency resolver for a component</returns>
 	public virtual IHandler[] GetHandlers()
@@ -464,91 +417,70 @@ public partial class DefaultKernel :
 		return result;
 	}
 
-	public virtual ISubSystem GetSubSystem(String name)
+	public virtual ISubSystem GetSubSystem(string name)
 	{
 		ISubSystem subsystem;
 		_subsystems.TryGetValue(name, out subsystem);
 		return subsystem;
 	}
 
-	public virtual bool HasComponent(String name)
+	public virtual bool HasComponent(string name)
 	{
-		if (name == null)
-		{
-			return false;
-		}
+		if (name == null) return false;
 
-		if (NamingSubSystem.Contains(name))
-		{
-			return true;
-		}
+		if (NamingSubSystem.Contains(name)) return true;
 
-		if (Parent != null)
-		{
-			return Parent.HasComponent(name);
-		}
+		if (Parent != null) return Parent.HasComponent(name);
 
 		return false;
 	}
 
 	public virtual bool HasComponent(Type serviceType)
 	{
-		if (serviceType == null)
-		{
-			return false;
-		}
+		if (serviceType == null) return false;
 
-		if (NamingSubSystem.Contains(serviceType))
-		{
-			return true;
-		}
+		if (NamingSubSystem.Contains(serviceType)) return true;
 
-		if (Parent != null)
-		{
-			return Parent.HasComponent(serviceType);
-		}
+		if (Parent != null) return Parent.HasComponent(serviceType);
 
 		return false;
 	}
 
 	/// <summary>
-	///   Registers the components with the <see cref = "IKernel" />. The instances of <see cref = "IRegistration" /> are produced by fluent registration API. Most common entry points are
-	///   <see cref = "Component.For{TService}" /> method to register a single type or (recommended in most cases) <see cref = "Classes.FromAssembly(Assembly)" />. Let the Intellisense drive you through the
-	///   fluent
-	///   API past those entry points.
+	///     Registers the components with the <see cref="IKernel" />. The instances of <see cref="IRegistration" /> are
+	///     produced by fluent registration API. Most common entry points are
+	///     <see cref="Component.For{TService}" /> method to register a single type or (recommended in most cases)
+	///     <see cref="Classes.FromAssembly(Assembly)" />. Let the Intellisense drive you through the
+	///     fluent
+	///     API past those entry points.
 	/// </summary>
 	/// <example>
-	///   <code>kernel.Register(Component.For&lt;IService&gt;().ImplementedBy&lt;DefaultService&gt;().LifestyleTransient());</code>
+	///     <code>kernel.Register(Component.For&lt;IService&gt;().ImplementedBy&lt;DefaultService&gt;().LifestyleTransient());</code>
 	/// </example>
 	/// <example>
-	///   <code>kernel.Register(Classes.FromThisAssembly().BasedOn&lt;IService&gt;().WithServiceDefaultInterfaces().Configure(c => c.LifestyleTransient()));</code>
+	///     <code>kernel.Register(Classes.FromThisAssembly().BasedOn&lt;IService&gt;().WithServiceDefaultInterfaces().Configure(c => c.LifestyleTransient()));</code>
 	/// </example>
-	/// <param name = "registrations"> The component registrations created by <see cref = "Component.For{TService}" /> , <see cref = "Classes.FromAssembly(Assembly)" /> or different entry method to the fluent
-	/// API. </param>
+	/// <param name="registrations">
+	///     The component registrations created by <see cref="Component.For{TService}" /> ,
+	///     <see cref="Classes.FromAssembly(Assembly)" /> or different entry method to the fluent
+	///     API.
+	/// </param>
 	/// <returns> The kernel. </returns>
 	public IKernel Register(params IRegistration[] registrations)
 	{
-		if (registrations == null)
-		{
-			throw new ArgumentNullException(nameof(registrations));
-		}
+		if (registrations == null) throw new ArgumentNullException(nameof(registrations));
 
 		var token = OptimizeDependencyResolution();
-		foreach (var registration in registrations)
-		{
-			registration.Register(this);
-		}
-		if (token != null)
-		{
-			token.Dispose();
-		}
+		foreach (var registration in registrations) registration.Register(this);
+		if (token != null) token.Dispose();
 		return this;
 	}
 
 	/// <summary>
-	///   Releases a component instance. This allows the kernel to execute the proper decommission lifecycles on the component instance.
+	///     Releases a component instance. This allows the kernel to execute the proper decommission lifecycles on the
+	///     component instance.
 	/// </summary>
-	/// <param name = "instance"> </param>
+	/// <param name="instance"> </param>
 	public virtual void ReleaseComponent(object instance)
 	{
 		if (ReleasePolicy.HasTrack(instance))
@@ -557,29 +489,24 @@ public partial class DefaultKernel :
 		}
 		else
 		{
-			if (Parent != null)
-			{
-				Parent.ReleaseComponent(instance);
-			}
+			if (Parent != null) Parent.ReleaseComponent(instance);
 		}
 	}
 
 	public virtual void RemoveChildKernel(IKernel childKernel)
 	{
-		if (childKernel == null)
-		{
-			throw new ArgumentNullException(nameof(childKernel));
-		}
+		if (childKernel == null) throw new ArgumentNullException(nameof(childKernel));
 
 		childKernel.Parent = null;
 		_childKernels.Remove(childKernel);
 	}
 
 	/// <summary>
-	///   Creates an implementation of <see cref = "ILifestyleManager" /> based on <see cref = "LifestyleType" /> and invokes <see cref = "ILifestyleManager.Init" /> to initialize the newly created manager.
+	///     Creates an implementation of <see cref="ILifestyleManager" /> based on <see cref="LifestyleType" /> and invokes
+	///     <see cref="ILifestyleManager.Init" /> to initialize the newly created manager.
 	/// </summary>
-	/// <param name = "model"> </param>
-	/// <param name = "activator"> </param>
+	/// <param name="model"> </param>
+	/// <param name="activator"> </param>
 	/// <returns> </returns>
 	public virtual ILifestyleManager CreateLifestyleManager(ComponentModel model, IComponentActivator activator)
 	{
@@ -608,13 +535,9 @@ public partial class DefaultKernel :
 				var maxSize = ExtendedPropertiesConstants.PoolDefaultMaxPoolSize;
 
 				if (model.ExtendedProperties.Contains(ExtendedPropertiesConstants.PoolInitialPoolSize))
-				{
 					initial = (int)model.ExtendedProperties[ExtendedPropertiesConstants.PoolInitialPoolSize];
-				}
 				if (model.ExtendedProperties.Contains(ExtendedPropertiesConstants.PoolMaxPoolSize))
-				{
 					maxSize = (int)model.ExtendedProperties[ExtendedPropertiesConstants.PoolMaxPoolSize];
-				}
 
 				manager = new PoolableLifestyleManager(initial, maxSize);
 				break;
@@ -632,10 +555,7 @@ public partial class DefaultKernel :
 	private static IScopeAccessor CreateScopeAccessor(ComponentModel model)
 	{
 		var scopeAccessorType = model.GetScopeAccessorType();
-		if (scopeAccessorType == null)
-		{
-			return new LifetimeScopeAccessor();
-		}
+		if (scopeAccessorType == null) return new LifetimeScopeAccessor();
 		return scopeAccessorType.CreateInstance<IScopeAccessor>();
 	}
 
@@ -643,66 +563,51 @@ public partial class DefaultKernel :
 	{
 		var selector = (Func<IHandler[], IHandler>)model.ExtendedProperties[Constants.ScopeRootSelector];
 		if (selector == null)
-		{
 			throw new ComponentRegistrationException(
 				string.Format("Component {0} has lifestyle {1} but it does not specify mandatory 'scopeRootSelector'.",
 					model.Name, LifestyleType.Bound));
-		}
 
 		return new CreationContextScopeAccessor(model, selector);
 	}
 
 	public virtual IComponentActivator CreateComponentActivator(ComponentModel model)
 	{
-		if (model == null)
-		{
-			throw new ArgumentNullException(nameof(model));
-		}
+		if (model == null) throw new ArgumentNullException(nameof(model));
 
 		IComponentActivator activator;
 
 		if (model.CustomComponentActivator == null)
-		{
 			activator = new DefaultComponentActivator(model, this,
 				RaiseComponentCreated,
 				RaiseComponentDestroyed);
-		}
 		else
-		{
 			try
 			{
-				activator = model.CustomComponentActivator.CreateInstance<IComponentActivator>(new object[]
-				{
-					model,
-					this,
+				activator = model.CustomComponentActivator.CreateInstance<IComponentActivator>(model, this,
 					new ComponentInstanceDelegate(RaiseComponentCreated),
-					new ComponentInstanceDelegate(RaiseComponentDestroyed)
-				});
+					new ComponentInstanceDelegate(RaiseComponentDestroyed));
 			}
 			catch (Exception e)
 			{
 				throw new KernelException("Could not instantiate custom activator", e);
 			}
-		}
 
 		return activator;
 	}
 
-	protected CreationContext CreateCreationContext(IHandler handler, Type requestedType, Arguments additionalArguments, CreationContext parent,
+	protected CreationContext CreateCreationContext(IHandler handler, Type requestedType, Arguments additionalArguments,
+		CreationContext parent,
 		IReleasePolicy policy)
 	{
 		return new CreationContext(handler, policy, requestedType, additionalArguments, ConversionSubSystem, parent);
 	}
 
 	/// <remarks>
-	///   It is the responsibility of the kernel to ensure that handler is only ever disposed once.
+	///     It is the responsibility of the kernel to ensure that handler is only ever disposed once.
 	/// </remarks>
 	protected void DisposeHandler(IHandler handler)
 	{
-		if (handler is not IDisposable disposable)
-		{
-			return;
-		}
+		if (handler is not IDisposable disposable) return;
 
 		disposable.Dispose();
 	}
@@ -732,16 +637,19 @@ public partial class DefaultKernel :
 			new DefaultDiagnosticsSubSystem());
 	}
 
-	protected object ResolveComponent(IHandler handler, Type service, Arguments additionalArguments, IReleasePolicy policy)
+	protected object ResolveComponent(IHandler handler, Type service, Arguments additionalArguments,
+		IReleasePolicy policy)
 	{
-		return ResolveComponent(handler, service, additionalArguments, policy, ignoreParentContext: false);
+		return ResolveComponent(handler, service, additionalArguments, policy, false);
 	}
 
-	private object ResolveComponent(IHandler handler, Type service, Arguments additionalArguments, IReleasePolicy policy, bool ignoreParentContext)
+	private object ResolveComponent(IHandler handler, Type service, Arguments additionalArguments,
+		IReleasePolicy policy, bool ignoreParentContext)
 	{
 		Debug.Assert(handler != null);
 		var parent = _currentCreationContext;
-		var context = CreateCreationContext(handler, service, additionalArguments, ignoreParentContext ? null : parent, policy);
+		var context = CreateCreationContext(handler, service, additionalArguments, ignoreParentContext ? null : parent,
+			policy);
 
 		_currentCreationContext = context;
 		try
@@ -756,10 +664,7 @@ public partial class DefaultKernel :
 
 	protected virtual IHandler WrapParentHandler(IHandler parentHandler)
 	{
-		if (parentHandler == null)
-		{
-			return null;
-		}
+		if (parentHandler == null) return null;
 
 		var handler = new ParentHandlerWrapper(parentHandler, Parent.Resolver, Parent.ReleasePolicy);
 		handler.Init(this);
@@ -785,10 +690,7 @@ public partial class DefaultKernel :
 
 	private void DisposeSubKernels()
 	{
-		foreach (var childKernel in _childKernels)
-		{
-			childKernel.Dispose();
-		}
+		foreach (var childKernel in _childKernels) childKernel.Dispose();
 	}
 
 	private void HandlerRegisteredOnParentKernel(IHandler handler, ref bool stateChanged)
@@ -803,10 +705,7 @@ public partial class DefaultKernel :
 
 	private void SubscribeToParentKernel()
 	{
-		if (_parentKernel == null)
-		{
-			return;
-		}
+		if (_parentKernel == null) return;
 
 		_parentKernel.HandlerRegistered += HandlerRegisteredOnParentKernel;
 		_parentKernel.HandlersChanged += HandlersChangedOnParentKernel;
@@ -815,18 +714,12 @@ public partial class DefaultKernel :
 
 	private void TerminateFacilities()
 	{
-		foreach (var facility in _facilities)
-		{
-			facility.Terminate();
-		}
+		foreach (var facility in _facilities) facility.Terminate();
 	}
 
 	private void UnsubscribeFromParentKernel()
 	{
-		if (_parentKernel == null)
-		{
-			return;
-		}
+		if (_parentKernel == null) return;
 
 		_parentKernel.HandlerRegistered -= HandlerRegisteredOnParentKernel;
 		_parentKernel.HandlersChanged -= HandlersChangedOnParentKernel;
@@ -835,28 +728,16 @@ public partial class DefaultKernel :
 
 	IHandler IKernelInternal.LoadHandlerByName(string name, Type service, Arguments arguments)
 	{
-		if (name == null)
-		{
-			throw new ArgumentNullException(nameof(name));
-		}
+		if (name == null) throw new ArgumentNullException(nameof(name));
 
 		var handler = GetHandler(name);
-		if (handler != null)
-		{
-			return handler;
-		}
+		if (handler != null) return handler;
 		lock (_lazyLoadingLock)
 		{
 			handler = GetHandler(name);
-			if (handler != null)
-			{
-				return handler;
-			}
+			if (handler != null) return handler;
 
-			if (_isCheckingLazyLoaders)
-			{
-				return null;
-			}
+			if (_isCheckingLazyLoaders) return null;
 
 			_isCheckingLazyLoaders = true;
 			try
@@ -870,6 +751,7 @@ public partial class DefaultKernel :
 						return GetHandler(name);
 					}
 				}
+
 				return null;
 			}
 			finally
@@ -881,29 +763,17 @@ public partial class DefaultKernel :
 
 	IHandler IKernelInternal.LoadHandlerByType(string name, Type service, Arguments arguments)
 	{
-		if (service == null)
-		{
-			throw new ArgumentNullException(nameof(service));
-		}
+		if (service == null) throw new ArgumentNullException(nameof(service));
 
 		var handler = GetHandler(service);
-		if (handler != null)
-		{
-			return handler;
-		}
+		if (handler != null) return handler;
 
 		lock (_lazyLoadingLock)
 		{
 			handler = GetHandler(service);
-			if (handler != null)
-			{
-				return handler;
-			}
+			if (handler != null) return handler;
 
-			if (_isCheckingLazyLoaders)
-			{
-				return null;
-			}
+			if (_isCheckingLazyLoaders) return null;
 
 			_isCheckingLazyLoaders = true;
 			try
@@ -917,6 +787,7 @@ public partial class DefaultKernel :
 						return GetHandler(service);
 					}
 				}
+
 				return null;
 			}
 			finally

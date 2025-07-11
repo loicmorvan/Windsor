@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
-
 using Castle.Core.Internal;
 using Castle.MicroKernel.Handlers;
 using Castle.MicroKernel.Registration;
@@ -24,12 +21,15 @@ using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Generics;
 using Castle.Windsor.Tests.TestImplementationsOfExtensionPoints;
 
+namespace Castle.Windsor.Tests;
+
 public class GenericImplementationWithGreaterArityThanServiceTestCase : AbstractContainerTestCase
 {
 	[Fact]
 	public void Can_create_component_with_generic_impl_for_non_generic_services()
 	{
-		Container.Register(Component.For<IService>().ImplementedBy(typeof(ServiceImplGeneric<>), new UseStringGenericStrategy()));
+		Container.Register(Component.For<IService>()
+			.ImplementedBy(typeof(ServiceImplGeneric<>), new UseStringGenericStrategy()));
 
 		var item = Container.Resolve<IService>();
 
@@ -43,10 +43,9 @@ public class GenericImplementationWithGreaterArityThanServiceTestCase : Abstract
 			Classes.FromAssembly(GetCurrentAssembly()).BasedOn(typeof(Generics.IRepository<>))
 				.If(t => t == typeof(DoubleGenericRepository<,>))
 				.WithServiceBase()
-				.Configure(
-					c => c.ExtendedProperties(
-						Property.ForKey(Constants.GenericImplementationMatchingStrategy)
-							.Eq(new DuplicateGenerics()))));
+				.Configure(c => c.ExtendedProperties(
+					Property.ForKey(Constants.GenericImplementationMatchingStrategy)
+						.Eq(new DuplicateGenerics()))));
 
 		var repository = Container.Resolve<Generics.IRepository<A>>();
 
@@ -56,8 +55,10 @@ public class GenericImplementationWithGreaterArityThanServiceTestCase : Abstract
 	[Fact]
 	public void Can_create_component_with_simple_double_generic_impl_for_single_generic_service()
 	{
-		Container.Register(Component.For(typeof(Generics.IRepository<>)).ImplementedBy(typeof(DoubleGenericRepository<,>))
-			.ExtendedProperties(Property.ForKey(Constants.GenericImplementationMatchingStrategy).Eq(new DuplicateGenerics())));
+		Container.Register(Component.For(typeof(Generics.IRepository<>))
+			.ImplementedBy(typeof(DoubleGenericRepository<,>))
+			.ExtendedProperties(Property.ForKey(Constants.GenericImplementationMatchingStrategy)
+				.Eq(new DuplicateGenerics())));
 
 		var repository = Container.Resolve<Generics.IRepository<A>>();
 
@@ -67,7 +68,8 @@ public class GenericImplementationWithGreaterArityThanServiceTestCase : Abstract
 	[Fact]
 	public void Can_create_component_with_simple_double_generic_impl_for_single_generic_service_via_ImplementedBy()
 	{
-		Container.Register(Component.For(typeof(Generics.IRepository<>)).ImplementedBy(typeof(DoubleGenericRepository<,>), new DuplicateGenerics()));
+		Container.Register(Component.For(typeof(Generics.IRepository<>))
+			.ImplementedBy(typeof(DoubleGenericRepository<,>), new DuplicateGenerics()));
 
 		var repository = Container.Resolve<Generics.IRepository<A>>();
 
@@ -77,7 +79,8 @@ public class GenericImplementationWithGreaterArityThanServiceTestCase : Abstract
 	[Fact]
 	public void Null_strategy_is_ignored()
 	{
-		Container.Register(Component.For(typeof(Generics.IRepository<>)).ImplementedBy(typeof(DoubleGenericRepository<,>))
+		Container.Register(Component.For(typeof(Generics.IRepository<>))
+			.ImplementedBy(typeof(DoubleGenericRepository<,>))
 			.ExtendedProperties(Property.ForKey(Constants.GenericImplementationMatchingStrategy).Eq(null)));
 
 		var exception = Assert.Throws<HandlerException>(() =>
@@ -94,7 +97,8 @@ public class GenericImplementationWithGreaterArityThanServiceTestCase : Abstract
 	public void Throws_helpful_message_when_generic_matching_strategy_returns_null()
 	{
 		Container.Register(Component.For(typeof(Generics.IRepository<>))
-			.ImplementedBy(typeof(DoubleGenericRepository<,>), new StubGenericImplementationMatchingStrategy(default(Type[]))));
+			.ImplementedBy(typeof(DoubleGenericRepository<,>),
+				new StubGenericImplementationMatchingStrategy(default(Type[]))));
 
 		var exception = Assert.Throws<HandlerException>(() =>
 			Container.Resolve<Generics.IRepository<A>>());
@@ -126,7 +130,8 @@ public class GenericImplementationWithGreaterArityThanServiceTestCase : Abstract
 	public void Throws_helpful_message_when_generic_matching_strategy_returns_types_that_wont_work_with_the_type()
 	{
 		Container.Register(Component.For(typeof(ClassComponents.IRepository<>))
-			.ImplementedBy(typeof(DoubleRepository<,>), new StubGenericImplementationMatchingStrategy(typeof(string), typeof(IEmployee))));
+			.ImplementedBy(typeof(DoubleRepository<,>),
+				new StubGenericImplementationMatchingStrategy(typeof(string), typeof(IEmployee))));
 
 		var exception = Assert.Throws<GenericHandlerTypeMismatchException>(() =>
 			Container.Resolve<ClassComponents.IRepository<string>>());

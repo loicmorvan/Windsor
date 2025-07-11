@@ -17,7 +17,6 @@ namespace Castle.Windsor.Tests.ClassComponents;
 public class CustomerValidator : IValidator<ICustomer>
 {
 	/// <summary>
-	/// 
 	/// </summary>
 	/// <param name="customer"></param>
 	/// <returns></returns>
@@ -31,7 +30,6 @@ public class CustomerChainValidator<T> : IValidator<T>
 	where T : CustomerChain1
 {
 	/// <summary>
-	/// 
 	/// </summary>
 	/// <param name="customerChain"></param>
 	/// <returns></returns>

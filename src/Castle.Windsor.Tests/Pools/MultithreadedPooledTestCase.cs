@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Pools;
-
 using System.Threading;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
+
+namespace Castle.Windsor.Tests.Pools;
 
 public class MultithreadedPooledTestCase
 {
@@ -35,7 +34,7 @@ public class MultithreadedPooledTestCase
 
 			Assert.NotNull(instance);
 
-			Thread.Sleep(1*500);
+			Thread.Sleep(1 * 500);
 
 			_kernel.ReleaseComponent(instance);
 		}
@@ -59,7 +58,7 @@ public class MultithreadedPooledTestCase
 
 		_startEvent.Set();
 
-		Thread.CurrentThread.Join(3*1000);
+		Thread.CurrentThread.Join(3 * 1000);
 
 		_stopEvent.Set();
 	}

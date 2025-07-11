@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics;
-
 using System.Collections.Generic;
 using System.Linq;
-
 using Castle.Core;
 using Castle.MicroKernel;
+
+namespace Castle.Windsor.Diagnostics;
 
 public class PotentialLifestyleMismatchesDiagnostic(IKernel kernel) : IPotentialLifestyleMismatchesDiagnostic
 {
@@ -28,53 +27,34 @@ public class PotentialLifestyleMismatchesDiagnostic(IKernel kernel) : IPotential
 		var handlersByComponentModel = allHandlers.ToDictionary(h => h.ComponentModel);
 
 		var items = new List<MismatchedLifestyleDependency>();
-		foreach (var handler in allHandlers)
-		{
-			items.AddRange(GetMismatches(handler, handlersByComponentModel));
-		}
+		foreach (var handler in allHandlers) items.AddRange(GetMismatches(handler, handlersByComponentModel));
 		return items.Select(m => m.GetHandlers()).ToArray();
 	}
 
-	private IEnumerable<MismatchedLifestyleDependency> GetMismatch(MismatchedLifestyleDependency parent, ComponentModel component,
+	private IEnumerable<MismatchedLifestyleDependency> GetMismatch(MismatchedLifestyleDependency parent,
+		ComponentModel component,
 		IDictionary<ComponentModel, IHandler> model2Handler)
 	{
-		if (parent.Checked(component))
-		{
-			yield break;
-		}
+		if (parent.Checked(component)) yield break;
 
 		var handler = model2Handler[component];
 		var item = new MismatchedLifestyleDependency(handler, parent);
 		if (item.Mismatched())
-		{
 			yield return item;
-		}
 		else
-		{
 			foreach (ComponentModel dependent in handler.ComponentModel.Dependents)
-			{
-				foreach (var mismatch in GetMismatch(item, dependent, model2Handler))
-				{
-					yield return mismatch;
-				}
-			}
-		}
+			foreach (var mismatch in GetMismatch(item, dependent, model2Handler))
+				yield return mismatch;
 	}
 
-	private IEnumerable<MismatchedLifestyleDependency> GetMismatches(IHandler handler, IDictionary<ComponentModel, IHandler> model2Handler)
+	private IEnumerable<MismatchedLifestyleDependency> GetMismatches(IHandler handler,
+		IDictionary<ComponentModel, IHandler> model2Handler)
 	{
-		if (IsSingleton(handler) == false)
-		{
-			yield break;
-		}
+		if (IsSingleton(handler) == false) yield break;
 		var root = new MismatchedLifestyleDependency(handler);
 		foreach (ComponentModel dependent in handler.ComponentModel.Dependents)
-		{
-			foreach (var mismatch in GetMismatch(root, dependent, model2Handler))
-			{
-				yield return mismatch;
-			}
-		}
+		foreach (var mismatch in GetMismatch(root, dependent, model2Handler))
+			yield return mismatch;
 	}
 
 	private bool IsSingleton(IHandler component)
@@ -93,18 +73,14 @@ public class PotentialLifestyleMismatchesDiagnostic(IKernel kernel) : IPotential
 			Parent = parent;
 
 			if (parent == null)
-			{
 				_checkedComponents = [handler.ComponentModel];
-			}
 			else
-			{
 				_checkedComponents = [parent.Handler.ComponentModel];
-			}
 		}
 
-		public IHandler Handler { get; private set; }
+		public IHandler Handler { get; }
 
-		public MismatchedLifestyleDependency Parent { get; private set; }
+		public MismatchedLifestyleDependency Parent { get; }
 
 		public bool Checked(ComponentModel component)
 		{
@@ -125,10 +101,7 @@ public class PotentialLifestyleMismatchesDiagnostic(IKernel kernel) : IPotential
 
 		private void BuildHandlersList(List<IHandler> handlers)
 		{
-			if (Parent != null)
-			{
-				Parent.BuildHandlersList(handlers);
-			}
+			if (Parent != null) Parent.BuildHandlersList(handlers);
 			handlers.Add(Handler);
 		}
 	}

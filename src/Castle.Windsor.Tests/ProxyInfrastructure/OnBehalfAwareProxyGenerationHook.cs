@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ProxyInfrastructure;
-
 using System;
 using System.Reflection;
-
 using Castle.Core;
 using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
+
+namespace Castle.Windsor.Tests.ProxyInfrastructure;
 
 public class OnBehalfAwareProxyGenerationHook : IProxyGenerationHook, IOnBehalfAware
 {
@@ -27,7 +26,7 @@ public class OnBehalfAwareProxyGenerationHook : IProxyGenerationHook, IOnBehalfA
 
 	public void SetInterceptedComponentModel(ComponentModel target)
 	{
-		OnBehalfAwareProxyGenerationHook.Target = target;
+		Target = target;
 	}
 
 	public void MethodsInspected()

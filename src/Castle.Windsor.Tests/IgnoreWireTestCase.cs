@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
-using Castle.Windsor;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.XmlFiles;
+
+namespace Castle.Windsor.Tests;
 
 public class IgnoreWireTestCase
 {

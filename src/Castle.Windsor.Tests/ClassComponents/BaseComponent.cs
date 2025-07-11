@@ -16,5 +16,4 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public abstract class BaseCommonComponent : ICommon
 {
-
 }

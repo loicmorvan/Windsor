@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors;
-
-using System;
-
 using Castle.Core;
 using Castle.Core.Internal;
 using Castle.MicroKernel.Registration;
+
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
 
 public class ParametersDescriptor(params Parameter[] parameters) : AbstractPropertyDescriptor
 {
@@ -30,12 +28,7 @@ public class ParametersDescriptor(params Parameter[] parameters) : AbstractPrope
 	private void Apply(ComponentModel model, Parameter parameter)
 	{
 		if (parameter.Value != null)
-		{
 			AddParameter(model, parameter.Key, parameter.Value);
-		}
-		else if (parameter.ConfigNode != null)
-		{
-			AddParameter(model, parameter.Key, parameter.ConfigNode);
-		}
+		else if (parameter.ConfigNode != null) AddParameter(model, parameter.Key, parameter.ConfigNode);
 	}
 }

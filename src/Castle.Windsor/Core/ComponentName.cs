@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
-
 using Castle.Core.Internal;
+
+namespace Castle.Core;
 
 public class ComponentName(string name, bool setByUser)
 {
@@ -35,9 +34,10 @@ public class ComponentName(string name, bool setByUser)
 	}
 
 	/// <summary>
-	///   Gets the default name for component implemented by <paramref name = "componentType" /> which will be used in case when user does not provide one explicitly.
+	///     Gets the default name for component implemented by <paramref name="componentType" /> which will be used in case
+	///     when user does not provide one explicitly.
 	/// </summary>
-	/// <param name = "componentType"></param>
+	/// <param name="componentType"></param>
 	/// <returns></returns>
 	public static ComponentName DefaultFor(Type componentType)
 	{
@@ -45,9 +45,10 @@ public class ComponentName(string name, bool setByUser)
 	}
 
 	/// <summary>
-	///   Gets the default name for component implemented by <paramref name = "componentType" /> which will be used in case when user does not provide one explicitly.
+	///     Gets the default name for component implemented by <paramref name="componentType" /> which will be used in case
+	///     when user does not provide one explicitly.
 	/// </summary>
-	/// <param name = "componentType"></param>
+	/// <param name="componentType"></param>
 	/// <returns></returns>
 	public static string DefaultNameFor(Type componentType)
 	{

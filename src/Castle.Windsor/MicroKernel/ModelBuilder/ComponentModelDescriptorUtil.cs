@@ -12,32 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder;
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-
 using Castle.Core;
+
+namespace Castle.MicroKernel.ModelBuilder;
 
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class ComponentModelDescriptorUtil
 {
 	public static readonly string MetaDescriptorsKey = "Castle.meta-descriptors";
 
-	public static ICollection<IMetaComponentModelDescriptor> GetMetaDescriptors(this ComponentModel model, bool ensureExists)
+	public static ICollection<IMetaComponentModelDescriptor> GetMetaDescriptors(this ComponentModel model,
+		bool ensureExists)
 	{
-		if (model == null)
-		{
-			throw new ArgumentNullException(nameof(model));
-		}
+		if (model == null) throw new ArgumentNullException(nameof(model));
 
-		var metaDescriptors = model.ExtendedProperties[MetaDescriptorsKey] as ICollection<IMetaComponentModelDescriptor>;
+		var metaDescriptors =
+			model.ExtendedProperties[MetaDescriptorsKey] as ICollection<IMetaComponentModelDescriptor>;
 		if (metaDescriptors == null && ensureExists)
 		{
 			metaDescriptors = new List<IMetaComponentModelDescriptor>();
 			model.ExtendedProperties[MetaDescriptorsKey] = metaDescriptors;
 		}
+
 		return metaDescriptors;
 	}
 

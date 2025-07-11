@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Windsor.Tests;
-
 using System;
 using System.Collections;
-
 using Castle.MicroKernel.Registration;
+
+namespace Castle.Windsor.Tests.Windsor.Tests;
 
 // Please see DefaultDependencyResolver -> HasAnyComponentInValidState -> RebuildOpenGenericHandlersWithClosedGenericSubHandlers
 // 
@@ -28,15 +27,16 @@ using Castle.MicroKernel.Registration;
 // In this case the DefaultGenericHandler of type IOpenGeneric<> should create a sub DefaultGenericHandler which is bound to IOpenGeneric<ArrayList>
 // and submit whether it is resolvable or not during the DefaultDependencyResolver -> HasAnyComponentInValidState logic.
 
-	
 public class OpenGenericConstructorSelectionTestCase : AbstractContainerTestCase
 {
 	[Fact]
 	[Bug("https://github.com/castleproject/Windsor/issues/136")]
-	public void Resolves_using_most_greedy_constructor_when_having_open_generic_container_registrations_with_inferred_generic_parameters()
+	public void
+		Resolves_using_most_greedy_constructor_when_having_open_generic_container_registrations_with_inferred_generic_parameters()
 	{
 		Container.Register(Component.For(typeof(IOpenGeneric<>)).ImplementedBy(typeof(OpenGeneric<>)));
-		Container.Register(Component.For(typeof(IClosedGenericArrayList<ArrayList>)).ImplementedBy(typeof(ClosedGenericArrayList)));
+		Container.Register(Component.For(typeof(IClosedGenericArrayList<ArrayList>))
+			.ImplementedBy(typeof(ClosedGenericArrayList)));
 		Container.Register(Component.For(typeof(Control)));
 		Container.Resolve<Control>();
 	}
@@ -44,18 +44,33 @@ public class OpenGenericConstructorSelectionTestCase : AbstractContainerTestCase
 	public class Control
 	{
 		// Least Greedy has no parameters, should NOT be chosen.
-		public Control() { throw new Exception("The default constructor should not be chosen!"); }
+		public Control()
+		{
+			throw new Exception("The default constructor should not be chosen!");
+		}
 
 		// Most greedy has parameter, should be chosen.
-		public Control(IOpenGeneric<ArrayList> param) { }
+		public Control(IOpenGeneric<ArrayList> param)
+		{
+		}
 	}
 
 	public class OpenGeneric<T> : IOpenGeneric<T>
 	{
-		public OpenGeneric(IClosedGenericArrayList<T> param) { }
+		public OpenGeneric(IClosedGenericArrayList<T> param)
+		{
+		}
 	}
 
-	public class ClosedGenericArrayList : IClosedGenericArrayList<ArrayList> { }
-	public interface IOpenGeneric<T> { }
-	public interface IClosedGenericArrayList<T> { }
+	public class ClosedGenericArrayList : IClosedGenericArrayList<ArrayList>
+	{
+	}
+
+	public interface IOpenGeneric<T>
+	{
+	}
+
+	public interface IClosedGenericArrayList<T>
+	{
+	}
 }

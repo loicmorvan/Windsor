@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal;
-
 using System;
 using System.Collections;
 using System.Diagnostics;
+
+namespace Castle.Core.Internal;
 
 [DebuggerStepThrough]
 [DebuggerNonUserCode]
@@ -24,19 +24,13 @@ public static class Must
 {
 	public static T NotBeEmpty<T>(T arg, string name) where T : class, IEnumerable
 	{
-		if (NotBeNull(arg, name).GetEnumerator().MoveNext() == false)
-		{
-			throw new ArgumentException(name);
-		}
+		if (NotBeNull(arg, name).GetEnumerator().MoveNext() == false) throw new ArgumentException(name);
 		return arg;
 	}
 
 	public static T NotBeNull<T>(T arg, string name) where T : class
 	{
-		if (arg == null)
-		{
-			throw new ArgumentNullException(name);
-		}
+		if (arg == null) throw new ArgumentNullException(name);
 		return arg;
 	}
 }

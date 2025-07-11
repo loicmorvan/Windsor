@@ -5,20 +5,20 @@
 			<prop1>prop1value</prop1>
 		</properties>
 		<?if DEBUG?>
-			<component id="debug" att="#{prop1}=#{prop1}"/>
-			<?if debug?>
-				<component id="debug" att="#{prop1}=#{prop1}"/>
-			<?end?>
-
-			<?if debug?>
-				<?if debug?>
-					<component id="debug" att="#{prop1}=#{prop1}"/>
-				<?end?>
-
-				<?if debug?>
-					<component id="debug" att="#{prop1}=#{prop1}"/>
-				<?end?>
-			<?end?>
+		<component id="debug" att="#{prop1}=#{prop1}"/>
+		<?if debug?>
+		<component id="debug" att="#{prop1}=#{prop1}"/>
 		<?end?>
-	</components>		
+
+		<?if debug?>
+		<?if debug?>
+		<component id="debug" att="#{prop1}=#{prop1}"/>
+		<?end?>
+
+		<?if debug?>
+		<component id="debug" att="#{prop1}=#{prop1}"/>
+		<?end?>
+		<?end?>
+		<?end?>
+	</components>
 </configuration>

@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Lifestyle;
-
 using System;
-
 using Castle.Core;
 using Castle.MicroKernel.Lifestyle;
 using Castle.MicroKernel.Lifestyle.Scoped;
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.Lifestyle;
 
 public class ScopedLifestyleTestCase : AbstractContainerTestCase
 {
@@ -34,7 +32,7 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
 		var handler = Kernel.GetHandler(typeof(ScopedComponent));
 		Assert.Equal(LifestyleType.Scoped, handler.ComponentModel.LifestyleType);
 	}
-		
+
 	[Fact]
 	public void Can_create_scope_without_using_container_or_kernel()
 	{
@@ -120,8 +118,10 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
 				Container.Resolve<DisposableFoo>();
 				Assert.Equal(0, DisposableFoo.DisposedCount);
 			}
+
 			Assert.Equal(1, DisposableFoo.DisposedCount);
 		}
+
 		Assert.Equal(1, DisposableFoo.DisposedCount);
 	}
 

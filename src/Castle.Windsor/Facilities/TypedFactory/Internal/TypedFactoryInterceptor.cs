@@ -12,34 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory.Internal;
-
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-
 using Castle.Core;
 using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Facilities;
 
+namespace Castle.Facilities.TypedFactory.Internal;
+
 [Transient]
-public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryComponentSelector componentSelector) : IInterceptor, IOnBehalfAware, IDisposable
+public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryComponentSelector componentSelector)
+	: IInterceptor, IOnBehalfAware, IDisposable
 {
 	private readonly IReleasePolicy _scope = kernel.ReleasePolicy.CreateSubPolicy();
 
 	private bool _disposed;
 	private IDictionary<MethodInfo, FactoryMethod> _methods;
 
-	public ITypedFactoryComponentSelector ComponentSelector { get; private set; } = componentSelector;
+	public ITypedFactoryComponentSelector ComponentSelector { get; } = componentSelector;
 
 	public void Dispose()
 	{
-		if (_disposed)
-		{
-			return;
-		}
+		if (_disposed) return;
 
 		_disposed = true;
 		_scope.Dispose();
@@ -51,11 +48,10 @@ public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryCompon
 		// Release methods, which must remain functional after dispose as well
 		FactoryMethod method;
 		if (TryGetMethod(invocation, out method) == false)
-		{
 			throw new InvalidOperationException(
-				string.Format("Can't find information about factory method {0}. This is most likely a bug. Please report it.",
+				string.Format(
+					"Can't find information about factory method {0}. This is most likely a bug. Please report it.",
 					invocation.Method));
-		}
 		switch (method)
 		{
 			case FactoryMethod.Resolve:
@@ -72,56 +68,40 @@ public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryCompon
 
 	public void SetInterceptedComponentModel(ComponentModel target)
 	{
-		_methods = (IDictionary<MethodInfo, FactoryMethod>)target.ExtendedProperties[TypedFactoryFacility.FactoryMapCacheKey];
+		_methods =
+			(IDictionary<MethodInfo, FactoryMethod>)target.ExtendedProperties[TypedFactoryFacility.FactoryMapCacheKey];
 		if (_methods == null)
-		{
 			throw new ArgumentException(
-				string.Format("Component {0} is not a typed factory. {1} only works with typed factories.", target.Name, GetType().Name));
-		}
+				string.Format("Component {0} is not a typed factory. {1} only works with typed factories.", target.Name,
+					GetType().Name));
 	}
 
 	private void Release(IInvocation invocation)
 	{
-		if (_disposed)
-		{
-			return;
-		}
+		if (_disposed) return;
 
-		for (var i = 0; i < invocation.Arguments.Length; i++)
-		{
-			_scope.Release(invocation.Arguments[i]);
-		}
+		for (var i = 0; i < invocation.Arguments.Length; i++) _scope.Release(invocation.Arguments[i]);
 	}
 
 	private void Resolve(IInvocation invocation)
 	{
-		if (_disposed)
-		{
-			throw new ObjectDisposedException("this", "The factory was disposed and can no longer be used.");
-		}
+		if (_disposed) throw new ObjectDisposedException("this", "The factory was disposed and can no longer be used.");
 
-		var component = ComponentSelector.SelectComponent(invocation.Method, invocation.TargetType, invocation.Arguments);
+		var component =
+			ComponentSelector.SelectComponent(invocation.Method, invocation.TargetType, invocation.Arguments);
 		if (component == null)
-		{
 			throw new FacilityException(
 				string.Format(
 					"Selector {0} didn't select any component for method {1}. This usually signifies a bug in the selector.",
 					ComponentSelector,
 					invocation.Method));
-		}
 		invocation.ReturnValue = component(kernel, _scope);
 	}
 
 	private bool TryGetMethod(IInvocation invocation, out FactoryMethod method)
 	{
-		if (_methods.TryGetValue(invocation.Method, out method))
-		{
-			return true;
-		}
-		if (invocation.Method.IsGenericMethod == false)
-		{
-			return false;
-		}
+		if (_methods.TryGetValue(invocation.Method, out method)) return true;
+		if (invocation.Method.IsGenericMethod == false) return false;
 		return _methods.TryGetValue(invocation.Method.GetGenericMethodDefinition(), out method);
 	}
 }

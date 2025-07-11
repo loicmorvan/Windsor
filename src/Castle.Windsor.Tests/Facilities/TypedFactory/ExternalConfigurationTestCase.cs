@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory;
-
 using Castle.MicroKernel.Registration;
-using Castle.Windsor.Installer;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public class ExternalConfigurationTestCase : AbstractContainerTestCase
 {
@@ -25,7 +24,7 @@ public class ExternalConfigurationTestCase : AbstractContainerTestCase
 	{
 		var path = ConfigHelper.ResolveConfigPath("Facilities/TypedFactory/typedFactory_castle_config.xml");
 
-		Container.Install(Configuration.FromXmlFile(path));
+		Container.Install(Castle.Windsor.Installer.Configuration.FromXmlFile(path));
 
 		Container.Register(
 			Component.For<IProtocolHandler>().ImplementedBy<MirandaProtocolHandler>().Named("miranda"),
@@ -35,7 +34,6 @@ public class ExternalConfigurationTestCase : AbstractContainerTestCase
 	}
 
 	[Fact]
-
 	public void Factory1()
 	{
 		var factory = Container.Resolve<IProtocolHandlerFactory1>("protocolFac1");

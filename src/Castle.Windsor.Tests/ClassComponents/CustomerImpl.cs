@@ -14,24 +14,21 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-using System;
-
 public class CustomerImpl : ICustomer
 {
-	public virtual String Name { get; set; }
+	public virtual ExtendedCustomer ExtendedCustomer { get; set; }
+	public virtual string Name { get; set; }
 
-	public virtual String Address { get; set; }
+	public virtual string Address { get; set; }
 
 	public virtual int Age { get; set; }
-
-	public virtual ExtendedCustomer ExtendedCustomer { get; set; }
 }
 
 public class ExtendedCustomer
 {
-	public String Name { get; set; }
+	public string Name { get; set; }
 
-	public String Address { get; set; }
+	public string Address { get; set; }
 
 	public int Age { get; set; }
 }

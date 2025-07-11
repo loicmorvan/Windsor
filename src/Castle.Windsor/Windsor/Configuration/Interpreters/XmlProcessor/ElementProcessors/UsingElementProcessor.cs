@@ -12,18 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
 using System.Xml;
-
 using Castle.Core.Internal;
+
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
 public class UsingElementProcessor : AbstractXmlNodeProcessor
 {
-	public override string Name
-	{
-		get { return "using"; }
-	}
+	public override string Name => "using";
 
 	public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
 	{

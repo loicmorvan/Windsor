@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Pools;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-
 using Castle.Core;
 using Castle.Core.Internal;
 using Castle.MicroKernel;
@@ -27,19 +24,12 @@ using Castle.MicroKernel.Lifestyle;
 using Castle.MicroKernel.Lifestyle.Pool;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.Pools;
 
 public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 {
-	public class DisposableMockObject(Action disposeAction) : IDisposable
-	{
-		public void Dispose()
-		{
-			disposeAction();
-		}
-	}
-
 	[Fact]
 	public void DisposePoolDisposesTrackedComponents()
 	{
@@ -77,10 +67,7 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 
 		Assert.DoesNotContain(other1, instances);
 
-		foreach (var inst in instances)
-		{
-			Kernel.ReleaseComponent(inst);
-		}
+		foreach (var inst in instances) Kernel.ReleaseComponent(inst);
 
 		Kernel.ReleaseComponent(other1);
 
@@ -174,6 +161,7 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 			component = Kernel.Resolve<RecyclableComponent>();
 			Container.Release(component);
 		}
+
 		Assert.Equal(10, component.RecycledCount);
 		Assert.Equal(0, count);
 	}
@@ -202,8 +190,8 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Parallel_usage_only_registers_single_factory()
 	{
-		using AutoResetEvent evt = new AutoResetEvent(false);
-		ParallelAccessAwareKernel kernel = new ParallelAccessAwareKernel(evt);
+		using var evt = new AutoResetEvent(false);
+		var kernel = new ParallelAccessAwareKernel(evt);
 
 		var manager1 = new MyPoolableLifestyleManager();
 		var manager2 = new MyPoolableLifestyleManager();
@@ -221,6 +209,14 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 		Assert.Equal(0, kernel.ParallelCount);
 	}
 
+	public class DisposableMockObject(Action disposeAction) : IDisposable
+	{
+		public void Dispose()
+		{
+			disposeAction();
+		}
+	}
+
 	private sealed class MyPoolableLifestyleManager() : PoolableLifestyleManager(1, 2)
 	{
 		public void CreatePool()
@@ -231,132 +227,12 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 
 	private sealed class ParallelAccessAwareKernel(AutoResetEvent evt) : IKernel
 	{
-#pragma warning disable 0067
-		public event ComponentDataDelegate ComponentRegistered;
-		public event ComponentModelDelegate ComponentModelCreated;
-		public event EventHandler AddedAsChildKernel;
-		public event EventHandler RemovedAsChildKernel;
-		public event ComponentInstanceDelegate ComponentCreated;
-		public event ComponentInstanceDelegate ComponentDestroyed;
-		public event HandlerDelegate HandlerRegistered;
-		public event HandlersChangedDelegate HandlersChanged;
-		public event DependencyDelegate DependencyResolving;
-		public event EventHandler RegistrationCompleted;
-		public event ServiceDelegate EmptyCollectionResolving;
-#pragma warning restore 0067
+		private bool _registered;
+
+		public int ParallelCount;
 
 		public void Dispose()
 		{
-		}
-
-		public void AddComponent(string key, Type classType)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponent(string key, Type classType, LifestyleType lifestyle)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponent(string key, Type classType, LifestyleType lifestyle, bool overwriteLifestyle)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponent(string key, Type serviceType, Type classType)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponent(string key, Type serviceType, Type classType, LifestyleType lifestyle)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponent(string key, Type serviceType, Type classType, LifestyleType lifestyle, bool overwriteLifestyle)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponent<T>()
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponent<T>(LifestyleType lifestyle)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponent<T>(LifestyleType lifestyle, bool overwriteLifestyle)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponent<T>(Type serviceType)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponent<T>(Type serviceType, LifestyleType lifestyle)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponent<T>(Type serviceType, LifestyleType lifestyle, bool overwriteLifestyle)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponentInstance<T>(object instance)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponentInstance<T>(Type serviceType, object instance)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponentInstance(string key, object instance)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponentInstance(string key, Type serviceType, object instance)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponentInstance(string key, Type serviceType, Type classType, object instance)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponentWithExtendedProperties(string key, Type classType, IDictionary extendedProperties)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddComponentWithExtendedProperties(string key, Type serviceType, Type classType, IDictionary extendedProperties)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IKernel AddFacility(string key, IFacility facility)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IKernel AddFacility<T>(string key) where T : IFacility, new()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IKernel AddFacility<T>(string key, Action<T> onCreate) where T : IFacility, new()
-		{
-			throw new NotImplementedException();
 		}
 
 		public IComponentModelBuilder ComponentModelBuilder { get; private set; }
@@ -443,9 +319,6 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 			throw new NotImplementedException();
 		}
 
-		public int ParallelCount;
-		private bool _registered;
-
 		public bool HasComponent(Type service)
 		{
 			return _registered;
@@ -529,6 +402,131 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 		{
 			throw new NotImplementedException();
 		}
+
+		public void AddComponent(string key, Type classType)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponent(string key, Type classType, LifestyleType lifestyle)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponent(string key, Type classType, LifestyleType lifestyle, bool overwriteLifestyle)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponent(string key, Type serviceType, Type classType)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponent(string key, Type serviceType, Type classType, LifestyleType lifestyle)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponent(string key, Type serviceType, Type classType, LifestyleType lifestyle,
+			bool overwriteLifestyle)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponent<T>()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponent<T>(LifestyleType lifestyle)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponent<T>(LifestyleType lifestyle, bool overwriteLifestyle)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponent<T>(Type serviceType)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponent<T>(Type serviceType, LifestyleType lifestyle)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponent<T>(Type serviceType, LifestyleType lifestyle, bool overwriteLifestyle)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponentInstance<T>(object instance)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponentInstance<T>(Type serviceType, object instance)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponentInstance(string key, object instance)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponentInstance(string key, Type serviceType, object instance)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponentInstance(string key, Type serviceType, Type classType, object instance)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponentWithExtendedProperties(string key, Type classType, IDictionary extendedProperties)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddComponentWithExtendedProperties(string key, Type serviceType, Type classType,
+			IDictionary extendedProperties)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IKernel AddFacility(string key, IFacility facility)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IKernel AddFacility<T>(string key) where T : IFacility, new()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IKernel AddFacility<T>(string key, Action<T> onCreate) where T : IFacility, new()
+		{
+			throw new NotImplementedException();
+		}
+#pragma warning disable 0067
+		public event ComponentDataDelegate ComponentRegistered;
+		public event ComponentModelDelegate ComponentModelCreated;
+		public event EventHandler AddedAsChildKernel;
+		public event EventHandler RemovedAsChildKernel;
+		public event ComponentInstanceDelegate ComponentCreated;
+		public event ComponentInstanceDelegate ComponentDestroyed;
+		public event HandlerDelegate HandlerRegistered;
+		public event HandlersChangedDelegate HandlersChanged;
+		public event DependencyDelegate DependencyResolving;
+		public event EventHandler RegistrationCompleted;
+		public event ServiceDelegate EmptyCollectionResolving;
+#pragma warning restore 0067
 	}
 
 	private sealed class EmptyPoolFactory : IPoolFactory
@@ -542,7 +540,8 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 	private sealed class EmptyPool : IPool
 	{
 		public void Dispose()
-		{ }
+		{
+		}
 
 		public bool Release(object instance)
 		{

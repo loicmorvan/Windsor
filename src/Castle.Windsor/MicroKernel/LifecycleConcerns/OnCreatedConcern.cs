@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.LifecycleConcerns;
-
 using Castle.Core;
 
-public class OnCreatedConcern<TComponent>(LifecycleActionDelegate<TComponent> action, IKernel kernel) : ICommissionConcern
+namespace Castle.MicroKernel.LifecycleConcerns;
+
+public class OnCreatedConcern<TComponent>(LifecycleActionDelegate<TComponent> action, IKernel kernel)
+	: ICommissionConcern
 {
 	public void Apply(ComponentModel model, object component)
 	{

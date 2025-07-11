@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
@@ -21,13 +19,15 @@ using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 using Castle.Windsor.Tests.Interceptors;
 using Castle.Windsor.Tests.TestImplementationsOfExtensionPoints;
 
+namespace Castle.Windsor.Tests;
+
 public class GenericMultipleServicesComponentResolutionTestCase : AbstractContainerTestCase
 {
 	protected override void AfterContainerCreated()
 	{
 		Container.Register(
 			Component.For<CountingInterceptor>().LifeStyle.Transient,
-			Component.For(new[] { typeof(IGeneric<>), typeof(IGenericExtended<>) })
+			Component.For(typeof(IGeneric<>), typeof(IGenericExtended<>))
 				.ImplementedBy(typeof(GenericExtendedImpl<>))
 				.Interceptors<CountingInterceptor>(),
 			Component.For<UseGenericExtended1>(),
@@ -81,7 +81,8 @@ public class GenericMultipleServicesComponentResolutionTestCase : AbstractContai
 	}
 
 	[Fact]
-	public void Can_resolve_generic_component_exposing_two_unrelated_implemented_services_each_closed_over_different_generic_argument()
+	public void
+		Can_resolve_generic_component_exposing_two_unrelated_implemented_services_each_closed_over_different_generic_argument()
 	{
 		Container.Register(
 			Component.For(typeof(IGeneric<>), typeof(IDummyComponent<>))

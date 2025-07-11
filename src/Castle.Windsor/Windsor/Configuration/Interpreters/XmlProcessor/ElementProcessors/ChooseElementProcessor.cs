@@ -12,20 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
-using System;
 using System.Xml;
+
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
 public class ChooseElementProcessor : AbstractStatementElementProcessor
 {
-	private static readonly String OtherwiseElemName = "otherwise";
-	private static readonly String WhenElemName = "when";
+	private static readonly string OtherwiseElemName = "otherwise";
+	private static readonly string WhenElemName = "when";
 
-	public override String Name
-	{
-		get { return "choose"; }
-	}
+	public override string Name => "choose";
 
 	public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
 	{
@@ -35,27 +31,19 @@ public class ChooseElementProcessor : AbstractStatementElementProcessor
 
 		foreach (XmlNode child in element.ChildNodes)
 		{
-			if (IgnoreNode(child))
-			{
-				continue;
-			}
+			if (IgnoreNode(child)) continue;
 
 			var elem = GetNodeAsElement(element, child);
 
 			var found = false;
 
 			if (elem.Name == WhenElemName)
-			{
 				found = ProcessStatement(elem, engine);
-			}
 			else if (elem.Name == OtherwiseElemName)
-			{
 				found = true;
-			}
 			else
-			{
-				throw new XmlProcessorException("'{0} can not contain only 'when' and 'otherwise' elements found '{1}'", element.Name, elem.Name);
-			}
+				throw new XmlProcessorException("'{0} can not contain only 'when' and 'otherwise' elements found '{1}'",
+					element.Name, elem.Name);
 
 			if (found)
 			{
@@ -64,6 +52,7 @@ public class ChooseElementProcessor : AbstractStatementElementProcessor
 					MoveChildNodes(fragment, elem);
 					engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(fragment.ChildNodes));
 				}
+
 				break;
 			}
 		}

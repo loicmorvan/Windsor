@@ -15,15 +15,15 @@
 namespace Castle.Core;
 
 /// <summary>
-///   Only called for components that 
-///   belongs to a pool when the component
-///   comes back to the pool.
+///     Only called for components that
+///     belongs to a pool when the component
+///     comes back to the pool.
 /// </summary>
 public interface IRecyclable
 {
 	/// <summary>
-	///   Implementors should perform any 
-	///   initialization/clean up.
+	///     Implementors should perform any
+	///     initialization/clean up.
 	/// </summary>
 	void Recycle();
 }

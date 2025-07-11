@@ -20,8 +20,5 @@ public class CtorWithNullDefaultValueAndDefault(string name = null)
 	{
 	}
 
-	public string Name
-	{
-		get { return name; }
-	}
+	public string Name => name;
 }

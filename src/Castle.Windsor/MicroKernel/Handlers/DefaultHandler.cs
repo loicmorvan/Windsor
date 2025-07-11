@@ -12,43 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers;
-
 using System;
 using System.Text;
-
 using Castle.Core;
 using Castle.MicroKernel.ComponentActivator;
 using Castle.MicroKernel.Context;
 
+namespace Castle.MicroKernel.Handlers;
+
 /// <summary>
-///   Summary description for DefaultHandler.
+///     Summary description for DefaultHandler.
 /// </summary>
 [Serializable]
 public class DefaultHandler : AbstractHandler
 {
 	/// <summary>
-	///   Lifestyle manager instance
+	///     Lifestyle manager instance
 	/// </summary>
 	private ILifestyleManager _lifestyleManager;
 
 	/// <summary>
-	///   Initializes a new instance of the
-	///   <see cref = "DefaultHandler" />
-	///   class.
+	///     Initializes a new instance of the
+	///     <see cref="DefaultHandler" />
+	///     class.
 	/// </summary>
-	/// <param name = "model"> </param>
+	/// <param name="model"> </param>
 	public DefaultHandler(ComponentModel model) : base(model)
 	{
 	}
 
 	/// <summary>
-	///   Lifestyle manager instance
+	///     Lifestyle manager instance
 	/// </summary>
-	protected ILifestyleManager LifestyleManager
-	{
-		get { return _lifestyleManager; }
-	}
+	protected ILifestyleManager LifestyleManager => _lifestyleManager;
 
 	public override void Dispose()
 	{
@@ -56,9 +52,9 @@ public class DefaultHandler : AbstractHandler
 	}
 
 	/// <summary>
-	///   disposes the component instance (or recycle it)
+	///     disposes the component instance (or recycle it)
 	/// </summary>
-	/// <param name = "burden"> </param>
+	/// <param name="burden"> </param>
 	/// <returns> true if destroyed </returns>
 	public override bool ReleaseCore(Burden burden)
 	{
@@ -67,10 +63,7 @@ public class DefaultHandler : AbstractHandler
 
 	protected void AssertNotWaitingForDependency()
 	{
-		if (CurrentState == HandlerState.WaitingDependency)
-		{
-			throw UnresolvableHandlerException();
-		}
+		if (CurrentState == HandlerState.WaitingDependency) throw UnresolvableHandlerException();
 	}
 
 	protected override void InitDependencies()
@@ -78,12 +71,10 @@ public class DefaultHandler : AbstractHandler
 		var activator = Kernel.CreateComponentActivator(ComponentModel);
 		_lifestyleManager = Kernel.CreateLifestyleManager(ComponentModel, activator);
 
-		if (activator is IDependencyAwareActivator awareActivator && awareActivator.CanProvideRequiredDependencies(ComponentModel))
+		if (activator is IDependencyAwareActivator awareActivator &&
+		    awareActivator.CanProvideRequiredDependencies(ComponentModel))
 		{
-			foreach (var dependency in ComponentModel.Dependencies)
-			{
-				dependency.Init(ComponentModel.ParametersInternal);
-			}
+			foreach (var dependency in ComponentModel.Dependencies) dependency.Init(ComponentModel.ParametersInternal);
 			return;
 		}
 
@@ -97,15 +88,16 @@ public class DefaultHandler : AbstractHandler
 	}
 
 	/// <summary>
-	///   Returns an instance of the component this handler
-	///   is responsible for
+	///     Returns an instance of the component this handler
+	///     is responsible for
 	/// </summary>
-	/// <param name = "context"> </param>
-	/// <param name = "requiresDecommission"> </param>
-	/// <param name = "instanceRequired"> </param>
-	/// <param name = "burden"> </param>
+	/// <param name="context"> </param>
+	/// <param name="requiresDecommission"> </param>
+	/// <param name="instanceRequired"> </param>
+	/// <param name="burden"> </param>
 	/// <returns> </returns>
-	protected object ResolveCore(CreationContext context, bool requiresDecommission, bool instanceRequired, out Burden burden)
+	protected object ResolveCore(CreationContext context, bool requiresDecommission, bool instanceRequired,
+		out Burden burden)
 	{
 		if (IsBeingResolvedInContext(context))
 		{
@@ -124,6 +116,7 @@ public class DefaultHandler : AbstractHandler
 				burden = null;
 				return null;
 			}
+
 			var message = new StringBuilder();
 			message.AppendFormat("Dependency cycle has been detected when trying to resolve component '{0}'.",
 				ComponentModel.Name);
@@ -133,6 +126,7 @@ public class DefaultHandler : AbstractHandler
 
 			throw new CircularDependencyException(message.ToString(), ComponentModel);
 		}
+
 		if (CanResolvePendingDependencies(context) == false)
 		{
 			if (instanceRequired == false)
@@ -143,6 +137,7 @@ public class DefaultHandler : AbstractHandler
 
 			AssertNotWaitingForDependency();
 		}
+
 		try
 		{
 			using var ctx = context.EnterResolutionContext(this, requiresDecommission);

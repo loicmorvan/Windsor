@@ -12,24 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-
 using Castle.Core.Configuration;
+
+namespace Castle.MicroKernel.SubSystems.Conversion;
 
 [Serializable]
 public class ListConverter : AbstractTypeConverter
 {
 	public override bool CanHandleType(Type type)
 	{
-		return (type == typeof(IList) || type == typeof(ArrayList));
+		return type == typeof(IList) || type == typeof(ArrayList);
 	}
 
-	public override object PerformConversion(String value, Type targetType)
+	public override object PerformConversion(string value, Type targetType)
 	{
 		throw new NotImplementedException();
 	}
@@ -41,9 +40,7 @@ public class ListConverter : AbstractTypeConverter
 		var list = new List<object>();
 		var convertTo = GetConvertToType(configuration);
 		foreach (var itemConfig in configuration.Children)
-		{
 			list.Add(Context.Composition.PerformConversion(itemConfig.Value, convertTo));
-		}
 
 		return list;
 	}
@@ -51,11 +48,8 @@ public class ListConverter : AbstractTypeConverter
 	private Type GetConvertToType(IConfiguration configuration)
 	{
 		var itemType = configuration.Attributes["type"];
-		var convertTo = typeof(String);
-		if (itemType != null)
-		{
-			convertTo = Context.Composition.PerformConversion<Type>(itemType);
-		}
+		var convertTo = typeof(string);
+		if (itemType != null) convertTo = Context.Composition.PerformConversion<Type>(itemType);
 		return convertTo;
 	}
 }

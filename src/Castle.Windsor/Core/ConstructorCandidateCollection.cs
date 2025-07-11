@@ -12,32 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-
 using Castle.Core.Internal;
 
+namespace Castle.Core;
+
 /// <summary>
-///     Collection of <see cref = "ConstructorCandidate" />
+///     Collection of <see cref="ConstructorCandidate" />
 /// </summary>
 [Serializable]
 public class ConstructorCandidateCollection : IMutableCollection<ConstructorCandidate>
 {
 	private readonly SimpleSortedSet<ConstructorCandidate> _ctors = [];
 
-	public int Count
-	{
-		get { return _ctors.Count; }
-	}
+	public ConstructorCandidate this[int index] => _ctors[index];
 
-	public ConstructorCandidate this[int index]
-	{
-		get { return _ctors[index]; }
-	}
+	public int Count => _ctors.Count;
 
 	[DebuggerStepThrough]
 	public IEnumerator<ConstructorCandidate> GetEnumerator()

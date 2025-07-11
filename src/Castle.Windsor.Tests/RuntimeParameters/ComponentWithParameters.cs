@@ -12,15 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.RuntimeParameters;
-
 using Castle.Core;
+
+namespace Castle.Windsor.Tests.RuntimeParameters;
 
 public class CompA
 {
-	public CompA()
-	{
-	}
 }
 
 public class HasCustomDependency(CompA name)
@@ -36,25 +33,15 @@ public class NeedClassWithCustomerDependency(HasCustomDependency dependency)
 [Transient]
 public class CompB
 {
-	private readonly string _myArgument = string.Empty;
-	private CompC _compc;
-
 	public CompB(CompA ca, CompC cc, string myArgument)
 	{
-		_compc = cc;
-		this._myArgument = myArgument;
+		Compc = cc;
+		MyArgument = myArgument;
 	}
 
-	public CompC Compc
-	{
-		get { return _compc; }
-		set { _compc = value; }
-	}
+	public CompC Compc { get; set; }
 
-	public string MyArgument
-	{
-		get { return _myArgument; }
-	}
+	public string MyArgument { get; } = string.Empty;
 }
 
 public class CompC(int test)

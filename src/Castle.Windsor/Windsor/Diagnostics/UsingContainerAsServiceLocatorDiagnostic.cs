@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics;
-
 using System;
 using System.Linq;
-
 using Castle.Core.Internal;
 using Castle.DynamicProxy;
 using Castle.MicroKernel;
+using Castle.MicroKernel.Internal;
 using Castle.MicroKernel.Resolvers;
+
+namespace Castle.Windsor.Diagnostics;
 
 public class UsingContainerAsServiceLocatorDiagnostic(IKernel kernel) : IUsingContainerAsServiceLocatorDiagnostic
 {
@@ -38,7 +38,7 @@ public class UsingContainerAsServiceLocatorDiagnostic(IKernel kernel) : IUsingCo
 	[
 		h => h.ComponentModel.Implementation.Is<IInterceptor>(),
 		h => h.ComponentModel.Services.Any(s => s.Is<ILazyComponentLoader>()),
-		h => h.ComponentModel.Implementation == typeof(MicroKernel.Internal.LazyEx<>)
+		h => h.ComponentModel.Implementation == typeof(LazyEx<>)
 	];
 
 	public IHandler[] Inspect()

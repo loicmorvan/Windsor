@@ -12,21 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Registration.Interceptors.Multiple;
-
 using System.Collections.Generic;
-
 using Castle.Core;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Interceptors;
+
+namespace Castle.Windsor.Tests.Registration.Interceptors.Multiple;
 
 public class InterceptorReferenceWithPositionMultipleCall3 : InterceptorsTestCaseHelper
 {
 	public override IRegistration RegisterInterceptors<TS>(ComponentRegistration<TS> registration)
 	{
-		return registration.Interceptors(new InterceptorReference(typeof (TestInterceptor3))).Last
-			.Interceptors(new InterceptorReference(typeof (TestInterceptor1))).First
-			.Interceptors(new InterceptorReference(typeof (TestInterceptor2))).AtIndex(1);
+		return registration.Interceptors(new InterceptorReference(typeof(TestInterceptor3))).Last
+			.Interceptors(new InterceptorReference(typeof(TestInterceptor1))).First
+			.Interceptors(new InterceptorReference(typeof(TestInterceptor2))).AtIndex(1);
 	}
 
 	public override IEnumerable<InterceptorReference> GetExpectedInterceptorsInCorrectOrder()

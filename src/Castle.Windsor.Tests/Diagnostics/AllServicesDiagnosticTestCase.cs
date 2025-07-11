@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Diagnostics;
-
 using System.Linq;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Diagnostics;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.Diagnostics;
 
 public class AllServicesDiagnosticTestCase : AbstractContainerTestCase
 {

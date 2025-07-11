@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle;
-
 using System;
 using System.Linq;
 using System.Threading;
-
 using Castle.Core.Internal;
 using Castle.MicroKernel.Context;
 using Castle.MicroKernel.Lifestyle.Scoped;
+
+namespace Castle.MicroKernel.Lifestyle;
 
 [Serializable]
 public class ThreadScopeAccessor : IScopeAccessor
@@ -30,10 +29,7 @@ public class ThreadScopeAccessor : IScopeAccessor
 	public void Dispose()
 	{
 		var values = _items.EjectAllValues();
-		foreach (var item in values.Reverse())
-		{
-			item.Dispose();
-		}
+		foreach (var item in values.Reverse()) item.Dispose();
 	}
 
 	public ILifetimeScope GetScope(CreationContext context)

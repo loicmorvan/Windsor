@@ -25,7 +25,7 @@ public abstract class Lock
 	public abstract ILockHolder ForWriting(bool waitForLock);
 
 	/// <summary>
-	/// Creates a new lock.
+	///     Creates a new lock.
 	/// </summary>
 	/// <returns></returns>
 	public static Lock Create()

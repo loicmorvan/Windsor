@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
+
+namespace Castle.Windsor.Tests.Bugs;
 
 public class IoC138
 {
@@ -48,16 +47,11 @@ public class IoC138
 
 	public class UsesServiceLocator
 	{
-		private readonly DependsOnStringTest2 _other;
-
 		public UsesServiceLocator(string test)
 		{
-			_other = ServiceLocator.Container.Resolve<DependsOnStringTest2>(new Arguments { { "test2", "bla" } });
+			Other = ServiceLocator.Container.Resolve<DependsOnStringTest2>(new Arguments { { "test2", "bla" } });
 		}
 
-		public DependsOnStringTest2 Other
-		{
-			get { return _other; }
-		}
+		public DependsOnStringTest2 Other { get; }
 	}
 }

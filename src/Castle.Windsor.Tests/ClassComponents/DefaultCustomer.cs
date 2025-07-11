@@ -14,25 +14,12 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-using System;
-
 /// <summary>
-/// Summary description for DefaultCustomer.
+///     Summary description for DefaultCustomer.
 /// </summary>
 public class DefaultCustomer
 {
-	private String _name;
-	private String _address;
+	public string Name { get; set; }
 
-	public String Name
-	{
-		get { return _name; }
-		set { _name = value; }
-	}
-
-	public String Address
-	{
-		get { return _address; }
-		set { _address = value; }
-	}
+	public string Address { get; set; }
 }

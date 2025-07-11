@@ -13,37 +13,19 @@
 // limitations under the License.
 
 
-namespace Castle.Windsor.Extensions.DependencyInjection;
-
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-	
-using Castle.Windsor;
 using Castle.Windsor.Extensions.DependencyInjection.Scope;
-
 using Microsoft.Extensions.DependencyInjection;
 
-internal class WindsorScopedServiceProvider(IWindsorContainer container) : IServiceProvider, ISupportRequiredService, IDisposable
+namespace Castle.Windsor.Extensions.DependencyInjection;
+
+internal class WindsorScopedServiceProvider(IWindsorContainer container)
+	: IServiceProvider, ISupportRequiredService, IDisposable
 {
 	private readonly ExtensionContainerScopeBase _scope = ExtensionContainerScopeCache.Current;
 	private bool _disposing;
-
-	public object GetService(Type serviceType)
-	{
-		using(_ = new ForcedScope(_scope))
-		{
-			return ResolveInstanceOrNull(serviceType, true);	
-		}
-	}
-
-	public object GetRequiredService(Type serviceType)
-	{
-		using(_ = new ForcedScope(_scope))
-		{
-			return ResolveInstanceOrNull(serviceType, false);	
-		}
-	}
 
 	public void Dispose()
 	{
@@ -54,12 +36,26 @@ internal class WindsorScopedServiceProvider(IWindsorContainer container) : IServ
 		disposableScope?.Dispose();
 		container.Dispose();
 	}
+
+	public object GetService(Type serviceType)
+	{
+		using (_ = new ForcedScope(_scope))
+		{
+			return ResolveInstanceOrNull(serviceType, true);
+		}
+	}
+
+	public object GetRequiredService(Type serviceType)
+	{
+		using (_ = new ForcedScope(_scope))
+		{
+			return ResolveInstanceOrNull(serviceType, false);
+		}
+	}
+
 	private object ResolveInstanceOrNull(Type serviceType, bool isOptional)
 	{
-		if (container.Kernel.HasComponent(serviceType))
-		{
-			return container.Resolve(serviceType);
-		}
+		if (container.Kernel.HasComponent(serviceType)) return container.Resolve(serviceType);
 
 		if (serviceType.GetTypeInfo().IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
 		{
@@ -67,10 +63,7 @@ internal class WindsorScopedServiceProvider(IWindsorContainer container) : IServ
 			return allObjects;
 		}
 
-		if (isOptional)
-		{
-			return null;
-		}
+		if (isOptional) return null;
 
 		return container.Resolve(serviceType);
 	}

@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.Core;
+
+namespace Castle.MicroKernel.Handlers;
 
 public static class HandlerExtensionsUtil
 {
@@ -26,10 +25,7 @@ public static class HandlerExtensionsUtil
 
 	public static ICollection<IReleaseExtension> ReleaseExtensions(this ComponentModel model, bool ensureExists)
 	{
-		if (model == null)
-		{
-			throw new ArgumentNullException(nameof(model));
-		}
+		if (model == null) throw new ArgumentNullException(nameof(model));
 
 		var releaseExtensions = model.ExtendedProperties[ReleaseExtensionsKey] as ICollection<IReleaseExtension>;
 		if (releaseExtensions == null && ensureExists)
@@ -37,15 +33,13 @@ public static class HandlerExtensionsUtil
 			releaseExtensions = new HashSet<IReleaseExtension>();
 			model.ExtendedProperties[ReleaseExtensionsKey] = releaseExtensions;
 		}
+
 		return releaseExtensions;
 	}
 
 	public static ICollection<IResolveExtension> ResolveExtensions(this ComponentModel model, bool ensureExists)
 	{
-		if (model == null)
-		{
-			throw new ArgumentNullException(nameof(model));
-		}
+		if (model == null) throw new ArgumentNullException(nameof(model));
 
 		var resolveExtensions = model.ExtendedProperties[ResolveExtensionsKey] as ICollection<IResolveExtension>;
 		if (resolveExtensions == null && ensureExists)
@@ -53,6 +47,7 @@ public static class HandlerExtensionsUtil
 			resolveExtensions = new HashSet<IResolveExtension>();
 			model.ExtendedProperties[ResolveExtensionsKey] = resolveExtensions;
 		}
+
 		return resolveExtensions;
 	}
 }

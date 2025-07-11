@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.SpecializedResolvers;
-
 using System.Linq;
-
 using Castle.DynamicProxy;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
-using Castle.Windsor;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.SpecializedResolvers;
 
 public class ListResolverTestCase : AbstractContainerTestCase
 {
@@ -71,10 +69,7 @@ public class ListResolverTestCase : AbstractContainerTestCase
 		Assert.NotNull(comp);
 		Assert.NotNull(comp.Services);
 		Assert.Equal(2, comp.Services.Count);
-		foreach (var service in comp.Services.AsEnumerable())
-		{
-			Assert.NotNull(service);
-		}
+		foreach (var service in comp.Services.AsEnumerable()) Assert.NotNull(service);
 	}
 
 	[Fact]
@@ -89,10 +84,7 @@ public class ListResolverTestCase : AbstractContainerTestCase
 		Assert.NotNull(comp);
 		Assert.NotNull(comp.Services);
 		Assert.Equal(2, comp.Services.Count);
-		foreach (var service in comp.Services.AsEnumerable())
-		{
-			Assert.NotNull(service);
-		}
+		foreach (var service in comp.Services.AsEnumerable()) Assert.NotNull(service);
 	}
 
 	[Fact]

@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Lifestyle;
-
 using Castle.Core.Internal;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.TestInfrastructure;
+
+namespace Castle.Windsor.Tests.Lifestyle;
 
 public class ScopedLifetyleCustomScopesTestCase : AbstractContainerTestCase
 {
@@ -25,7 +25,7 @@ public class ScopedLifetyleCustomScopesTestCase : AbstractContainerTestCase
 	public void Can_use_custom_scope_accessor_with_scoped_lifestyle()
 	{
 		StaticScopeAccessor.ResetScope();
-		Container.Register(Component.For<A>().LifestyleScoped(scopeAccessorType: typeof(StaticScopeAccessor)));
+		Container.Register(Component.For<A>().LifestyleScoped(typeof(StaticScopeAccessor)));
 
 		var a1 = Container.Resolve<A>();
 		var a2 = Container.Resolve<A>();

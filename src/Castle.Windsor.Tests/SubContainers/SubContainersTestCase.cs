@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.SubContainers;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Context;
@@ -25,45 +22,18 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 
+namespace Castle.Windsor.Tests.SubContainers;
+
 /// <summary>
-///   Summary description for SubContainersTestCase.
+///     Summary description for SubContainersTestCase.
 /// </summary>
-	
 public class SubContainersTestCase : AbstractContainerTestCase
 {
-	/// <summary>
-	///   collects events in an array list, used for ensuring we are cleaning up the parent kernel
-	///   event subscriptions correctly.
-	/// </summary>
-	private class EventsCollector(object expectedSender)
-	{
-		public const string Added = "added";
-		public const string Removed = "removed";
-
-		private readonly List<string> _events = new();
-
-		public List<string> Events
-		{
-			get { return _events; }
-		}
-
-		public void AddedAsChildKernel(object sender, EventArgs e)
-		{
-			Assert.Equal(expectedSender, sender);
-			_events.Add(Added);
-		}
-
-		public void RemovedAsChildKernel(object sender, EventArgs e)
-		{
-			Assert.Equal(expectedSender, sender);
-			_events.Add(Removed);
-		}
-	}
-
 	[Fact]
 	public void AddChildKernelToTwoParentsThrowsException()
 	{
-		var expectedMessage = "You can not change the kernel parent once set, use the RemoveChildKernel and AddChildKernel methods together to achieve this.";
+		var expectedMessage =
+			"You can not change the kernel parent once set, use the RemoveChildKernel and AddChildKernel methods together to achieve this.";
 
 		IKernel kernel2 = new DefaultKernel();
 
@@ -304,7 +274,8 @@ public class SubContainersTestCase : AbstractContainerTestCase
 	{
 		IKernel subkernel = new DefaultKernel();
 
-		Kernel.Register(Component.For(typeof(DefaultSpamService)).Named("spamservice").LifeStyle.Is(LifestyleType.Transient));
+		Kernel.Register(Component.For(typeof(DefaultSpamService)).Named("spamservice").LifeStyle
+			.Is(LifestyleType.Transient));
 		Kernel.Register(Component.For(typeof(DefaultMailSenderService)).Named("mailsender"));
 		Kernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
 
@@ -336,5 +307,29 @@ public class SubContainersTestCase : AbstractContainerTestCase
 		Assert.IsType<ParentHandlerWrapper>(handler);
 
 		handler.TryResolve(CreationContext.CreateEmpty());
+	}
+
+	/// <summary>
+	///     collects events in an array list, used for ensuring we are cleaning up the parent kernel
+	///     event subscriptions correctly.
+	/// </summary>
+	private class EventsCollector(object expectedSender)
+	{
+		public const string Added = "added";
+		public const string Removed = "removed";
+
+		public List<string> Events { get; } = new();
+
+		public void AddedAsChildKernel(object sender, EventArgs e)
+		{
+			Assert.Equal(expectedSender, sender);
+			Events.Add(Added);
+		}
+
+		public void RemovedAsChildKernel(object sender, EventArgs e)
+		{
+			Assert.Equal(expectedSender, sender);
+			Events.Add(Removed);
+		}
 	}
 }

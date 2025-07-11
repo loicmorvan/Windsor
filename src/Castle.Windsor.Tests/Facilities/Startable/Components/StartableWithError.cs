@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.Startable.Components;
-
 using System;
-
 using Castle.Core;
+
+namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 
 public class StartableWithError : IStartable
 {

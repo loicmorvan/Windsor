@@ -12,57 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents;
-
 using System;
-
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.ClassComponents;
 
 public class ServiceUser
 {
-	private readonly A _a;
-	private readonly B _b;
-	private readonly C _c;
-
 	public ServiceUser(A a)
 	{
-		if (a == null)
-		{
-			throw new ArgumentNullException();
-		}
-		this._a = a;
+		if (a == null) throw new ArgumentNullException();
+		AComponent = a;
 	}
 
 	public ServiceUser(A a, B b) : this(a)
 	{
-		if (b == null)
-		{
-			throw new ArgumentNullException();
-		}
-		this._b = b;
+		if (b == null) throw new ArgumentNullException();
+		BComponent = b;
 	}
 
 	public ServiceUser(A a, B b, C c) : this(a, b)
 	{
-		if (c == null)
-		{
-			throw new ArgumentNullException();
-		}
-		this._c = c;
+		if (c == null) throw new ArgumentNullException();
+		CComponent = c;
 	}
 
-	public A AComponent
-	{
-		get { return _a; }
-	}
+	public A AComponent { get; }
 
-	public B BComponent
-	{
-		get { return _b; }
-	}
+	public B BComponent { get; }
 
-	public C CComponent
-	{
-		get { return _c; }
-	}
+	public C CComponent { get; }
 }

@@ -1,17 +1,17 @@
 <configuration>
 	<components>
-		<component 
-			id="component" 
+		<component
+			id="component"
 			type="ComponentWithStringProperty">
 
 			<parameters>
-<?if devel?>
+				<?if devel?>
 				<name>John Doe</name>
-<?else?>
+				<?else?>
 				<name>Hammett</name>
-<?end?>
+				<?end?>
 			</parameters>
-			
+
 		</component>
-	</components>		
+	</components>
 </configuration>

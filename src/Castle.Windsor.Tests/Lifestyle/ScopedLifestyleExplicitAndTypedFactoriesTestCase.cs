@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Lifestyle;
-
 using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel.Lifestyle;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
+
+namespace Castle.Windsor.Tests.Lifestyle;
 
 public class ScopedLifestyleExplicitAndTypedFactoriesTestCase : AbstractContainerTestCase
 {

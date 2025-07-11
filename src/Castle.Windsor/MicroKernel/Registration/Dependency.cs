@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Resources;
+using Castle.Core.Configuration;
+
+namespace Castle.MicroKernel.Registration;
+
 #if FEATURE_SYSTEM_CONFIGURATION
 	using System.Configuration;
 #endif
-using System.Reflection;
-using System.Resources;
-
-using Castle.Core.Configuration;
 
 public sealed class Dependency
 {
@@ -31,15 +31,16 @@ public sealed class Dependency
 
 	internal Dependency(object item)
 	{
-		this._item = item;
+		_item = item;
 	}
 
 	/// <summary>
-	/// Specifies that value <paramref name = "valueAsString" /> should be used to satisfy dependencies matched by <paramref name = "dependencyName" />. The value is provided as a string and will be
-	/// converted to appropriate type when resolving.
+	///     Specifies that value <paramref name="valueAsString" /> should be used to satisfy dependencies matched by
+	///     <paramref name="dependencyName" />. The value is provided as a string and will be
+	///     converted to appropriate type when resolving.
 	/// </summary>
-	/// <param name = "dependencyName"> </param>
-	/// <param name = "valueAsString"> </param>
+	/// <param name="dependencyName"> </param>
+	/// <param name="valueAsString"> </param>
 	/// <returns> </returns>
 	public static Parameter OnConfigValue(string dependencyName, string valueAsString)
 	{
@@ -47,11 +48,12 @@ public sealed class Dependency
 	}
 
 	/// <summary>
-	/// Specifies that value <paramref name = "value" /> should be used to satisfy dependencies matched by <paramref name = "dependencyName" />. The value is provided as a string and will be converted to
-	/// appropriate type when resolving.
+	///     Specifies that value <paramref name="value" /> should be used to satisfy dependencies matched by
+	///     <paramref name="dependencyName" />. The value is provided as a string and will be converted to
+	///     appropriate type when resolving.
 	/// </summary>
-	/// <param name = "dependencyName"> </param>
-	/// <param name = "value"> </param>
+	/// <param name="dependencyName"> </param>
+	/// <param name="value"> </param>
 	/// <returns> </returns>
 	public static Parameter OnConfigValue(string dependencyName, IConfiguration value)
 	{
@@ -85,7 +87,8 @@ public sealed class Dependency
 #endif
 
 	/// <summary>
-	/// Specifies that component registered with <paramref name = "componentName" /> should be used to satisfy dependencies matched by <paramref name = "dependencyName" />
+	///     Specifies that component registered with <paramref name="componentName" /> should be used to satisfy dependencies
+	///     matched by <paramref name="dependencyName" />
 	/// </summary>
 	public static ServiceOverride OnComponent(string dependencyName, string componentName)
 	{
@@ -93,7 +96,8 @@ public sealed class Dependency
 	}
 
 	/// <summary>
-	/// Specifies that component registered with <paramref name = "componentName" /> should be used to satisfy dependencies matched by <paramref name = "dependencyType" />
+	///     Specifies that component registered with <paramref name="componentName" /> should be used to satisfy dependencies
+	///     matched by <paramref name="dependencyType" />
 	/// </summary>
 	public static ServiceOverride OnComponent(Type dependencyType, string componentName)
 	{
@@ -101,7 +105,8 @@ public sealed class Dependency
 	}
 
 	/// <summary>
-	/// Specifies that component registered with <paramref name = "componentType" /> should be used to satisfy dependencies matched by <paramref name = "dependencyName" />
+	///     Specifies that component registered with <paramref name="componentType" /> should be used to satisfy dependencies
+	///     matched by <paramref name="dependencyName" />
 	/// </summary>
 	public static ServiceOverride OnComponent(string dependencyName, Type componentType)
 	{
@@ -109,7 +114,8 @@ public sealed class Dependency
 	}
 
 	/// <summary>
-	/// Specifies that component registered with <paramref name = "componentType" /> should be used to satisfy dependencies matched by <paramref name = "dependencyType" />
+	///     Specifies that component registered with <paramref name="componentType" /> should be used to satisfy dependencies
+	///     matched by <paramref name="dependencyType" />
 	/// </summary>
 	public static ServiceOverride OnComponent(Type dependencyType, Type componentType)
 	{
@@ -117,7 +123,8 @@ public sealed class Dependency
 	}
 
 	/// <summary>
-	/// Specifies that component registered with <typeparamref name = "TComponentType" /> should be used to satisfy dependencies matched by <typeparamref name = "TDependencyType" />
+	///     Specifies that component registered with <typeparamref name="TComponentType" /> should be used to satisfy
+	///     dependencies matched by <typeparamref name="TDependencyType" />
 	/// </summary>
 	public static ServiceOverride OnComponent<TDependencyType, TComponentType>()
 	{
@@ -125,7 +132,8 @@ public sealed class Dependency
 	}
 
 	/// <summary>
-	/// Specifies that components registered with <paramref name = "componentNames" /> should be used to satisfy collection dependencies matched by <paramref name = "collectionDependencyName" />
+	///     Specifies that components registered with <paramref name="componentNames" /> should be used to satisfy collection
+	///     dependencies matched by <paramref name="collectionDependencyName" />
 	/// </summary>
 	public static ServiceOverride OnComponentCollection(string collectionDependencyName, params string[] componentNames)
 	{
@@ -133,7 +141,8 @@ public sealed class Dependency
 	}
 
 	/// <summary>
-	/// Specifies that components registered with <paramref name = "componentNames" /> should be used to satisfy collection dependencies matched by <paramref name = "collectionDependencyType" />
+	///     Specifies that components registered with <paramref name="componentNames" /> should be used to satisfy collection
+	///     dependencies matched by <paramref name="collectionDependencyType" />
 	/// </summary>
 	public static ServiceOverride OnComponentCollection(Type collectionDependencyType, params string[] componentNames)
 	{
@@ -141,7 +150,8 @@ public sealed class Dependency
 	}
 
 	/// <summary>
-	/// Specifies that components registered with <paramref name = "componentNames" /> should be used to satisfy collection dependencies matched by <typeparamref name = "TCollectionDependencyType" />
+	///     Specifies that components registered with <paramref name="componentNames" /> should be used to satisfy collection
+	///     dependencies matched by <typeparamref name="TCollectionDependencyType" />
 	/// </summary>
 	public static ServiceOverride OnComponentCollection<TCollectionDependencyType>(params string[] componentNames)
 		where TCollectionDependencyType : IEnumerable
@@ -150,7 +160,8 @@ public sealed class Dependency
 	}
 
 	/// <summary>
-	/// Specifies that components registered with <paramref name = "componentTypes" /> should be used to satisfy collection dependencies matched by <paramref name = "collectionDependencyName" />
+	///     Specifies that components registered with <paramref name="componentTypes" /> should be used to satisfy collection
+	///     dependencies matched by <paramref name="collectionDependencyName" />
 	/// </summary>
 	public static ServiceOverride OnComponentCollection(string collectionDependencyName, params Type[] componentTypes)
 	{
@@ -158,7 +169,8 @@ public sealed class Dependency
 	}
 
 	/// <summary>
-	/// Specifies that components registered with <paramref name = "componentTypes" /> should be used to satisfy collection dependencies matched by <paramref name = "collectionDependencyType" />
+	///     Specifies that components registered with <paramref name="componentTypes" /> should be used to satisfy collection
+	///     dependencies matched by <paramref name="collectionDependencyType" />
 	/// </summary>
 	public static ServiceOverride OnComponentCollection(Type collectionDependencyType, params Type[] componentTypes)
 	{
@@ -166,7 +178,8 @@ public sealed class Dependency
 	}
 
 	/// <summary>
-	/// Specifies that components registered with <paramref name = "componentTypes" /> should be used to satisfy collection dependencies matched by <typeparamref name = "TCollectionDependencyType" />
+	///     Specifies that components registered with <paramref name="componentTypes" /> should be used to satisfy collection
+	///     dependencies matched by <typeparamref name="TCollectionDependencyType" />
 	/// </summary>
 	public static ServiceOverride OnComponentCollection<TCollectionDependencyType>(params Type[] componentTypes)
 		where TCollectionDependencyType : IEnumerable
@@ -175,7 +188,8 @@ public sealed class Dependency
 	}
 
 	/// <summary>
-	/// Specifies that value <paramref name = "value" /> should be used to satisfy dependencies matched by <paramref name = "dependencyName" />
+	///     Specifies that value <paramref name="value" /> should be used to satisfy dependencies matched by
+	///     <paramref name="dependencyName" />
 	/// </summary>
 	public static Property OnValue(string dependencyName, object value)
 	{
@@ -183,7 +197,8 @@ public sealed class Dependency
 	}
 
 	/// <summary>
-	/// Specifies that value <paramref name = "value" /> should be used to satisfy dependencies matched by <paramref name = "dependencyType" />
+	///     Specifies that value <paramref name="value" /> should be used to satisfy dependencies matched by
+	///     <paramref name="dependencyType" />
 	/// </summary>
 	public static Property OnValue(Type dependencyType, object value)
 	{
@@ -191,7 +206,8 @@ public sealed class Dependency
 	}
 
 	/// <summary>
-	/// Specifies that value <paramref name = "value" /> should be used to satisfy dependencies matched by <typeparamref name = "TDependencyType" />
+	///     Specifies that value <paramref name="value" /> should be used to satisfy dependencies matched by
+	///     <typeparamref name="TDependencyType" />
 	/// </summary>
 	public static Property OnValue<TDependencyType>(object value)
 	{
@@ -205,17 +221,20 @@ public sealed class Dependency
 			items.Add(castItem);
 			return true;
 		}
+
 		return false;
 	}
 
 	public static Property OnResource<TResources>(string dependencyName, string resourceName)
 	{
-		var resourceManagerProperty = typeof(TResources).GetProperty("ResourceManager", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic, null, typeof(ResourceManager), Type.EmptyTypes,
+		var resourceManagerProperty = typeof(TResources).GetProperty("ResourceManager",
+			BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic, null, typeof(ResourceManager),
+			Type.EmptyTypes,
 			null);
 		if (resourceManagerProperty == null)
-		{
-			throw new ArgumentException(string.Format("Type {0} does not appear to be a correct 'resources' type. It doesn't have 'ResourceManager' property.", typeof(TResources)));
-		}
+			throw new ArgumentException(string.Format(
+				"Type {0} does not appear to be a correct 'resources' type. It doesn't have 'ResourceManager' property.",
+				typeof(TResources)));
 		ResourceManager resourceManager;
 		try
 		{
@@ -223,8 +242,11 @@ public sealed class Dependency
 		}
 		catch (Exception e)
 		{
-			throw new ArgumentException(string.Format("Could not read property {1} on type {0}", typeof(TResources), resourceManagerProperty), e);
+			throw new ArgumentException(
+				string.Format("Could not read property {1} on type {0}", typeof(TResources), resourceManagerProperty),
+				e);
 		}
+
 		return OnResource(dependencyName, resourceManager, resourceName);
 	}
 

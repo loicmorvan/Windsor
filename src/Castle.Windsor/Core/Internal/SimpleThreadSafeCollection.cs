@@ -9,14 +9,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal;
-
 using System.Collections.Generic;
+using Castle.MicroKernel.Internal;
+
+namespace Castle.Core.Internal;
 
 public class SimpleThreadSafeCollection<T>
 {
 	private readonly List<T> _implementation = new();
-	private readonly MicroKernel.Internal.Lock _lock =MicroKernel.Internal.Lock.Create();
+	private readonly Lock _lock = Lock.Create();
 
 	public int Count
 	{

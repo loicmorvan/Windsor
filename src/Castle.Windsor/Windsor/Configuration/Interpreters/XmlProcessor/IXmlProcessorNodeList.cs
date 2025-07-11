@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor;
-
 using System.Xml;
+
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor;
 
 public interface IXmlProcessorNodeList
 {

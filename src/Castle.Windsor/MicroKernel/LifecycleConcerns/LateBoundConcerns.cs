@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.LifecycleConcerns;
-
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
-
 using Castle.Core;
-using System.Collections.Concurrent;
+
+namespace Castle.MicroKernel.LifecycleConcerns;
 
 /// <summary>
-///   Lifetime concern that works for components that don't have their actual type determined upfront
+///     Lifetime concern that works for components that don't have their actual type determined upfront
 /// </summary>
 [Serializable]
 public abstract class LateBoundConcerns<TConcern>
@@ -30,10 +29,7 @@ public abstract class LateBoundConcerns<TConcern>
 	private IDictionary<Type, TConcern> _concerns;
 	private ConcurrentDictionary<Type, List<TConcern>> _concernsCache;
 
-	public bool HasConcerns
-	{
-		get { return _concerns != null; }
-	}
+	public bool HasConcerns => _concerns != null;
 
 	public void AddConcern<TForType>(TConcern lifecycleConcern)
 	{
@@ -42,6 +38,7 @@ public abstract class LateBoundConcerns<TConcern>
 			_concerns = new Dictionary<Type, TConcern>(2);
 			_concernsCache = new ConcurrentDictionary<Type, List<TConcern>>(2, 2);
 		}
+
 		_concerns.Add(typeof(TForType), lifecycleConcern);
 	}
 
@@ -51,12 +48,9 @@ public abstract class LateBoundConcerns<TConcern>
 	{
 		var componentConcerns = new List<TConcern>(_concerns.Count);
 		foreach (var concern in _concerns)
-		{
 			if (concern.Key.GetTypeInfo().IsAssignableFrom(type))
-			{
 				componentConcerns.Add(concern.Value);
-			}
-		}
+
 		return componentConcerns;
 	}
 

@@ -12,21 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Resolvers.SpecializedResolvers;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.Core;
 using Castle.Core.Internal;
 using Castle.MicroKernel.Context;
 
+namespace Castle.MicroKernel.Resolvers.SpecializedResolvers;
+
 /// <summary>
-///   More generic alternative to <see cref = "ArrayResolver" /> and <see cref = "ListResolver" />.
-///   It supports arrays as well as any generic interface type assignable from arrays.
+///     More generic alternative to <see cref="ArrayResolver" /> and <see cref="ListResolver" />.
+///     It supports arrays as well as any generic interface type assignable from arrays.
 /// </summary>
 /// <remarks>
-///   The collection instance that is provided is read only, even for interfaces like <see cref = "IList{T}" />
+///     The collection instance that is provided is read only, even for interfaces like <see cref="IList{T}" />
 /// </remarks>
 public class CollectionResolver(IKernel kernel, bool allowEmptyCollections = false) : ISubDependencyResolver
 {
@@ -37,10 +36,7 @@ public class CollectionResolver(IKernel kernel, bool allowEmptyCollections = fal
 		ComponentModel model,
 		DependencyModel dependency)
 	{
-		if (dependency.TargetItemType == null)
-		{
-			return false;
-		}
+		if (dependency.TargetItemType == null) return false;
 
 		var itemType = GetItemType(dependency.TargetItemType);
 		return itemType != null &&
@@ -48,7 +44,8 @@ public class CollectionResolver(IKernel kernel, bool allowEmptyCollections = fal
 		       CanSatisfy(itemType);
 	}
 
-	public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+	public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+		ComponentModel model,
 		DependencyModel dependency)
 	{
 		return Kernel.ResolveAll(GetItemType(dependency.TargetItemType), context.AdditionalArguments);

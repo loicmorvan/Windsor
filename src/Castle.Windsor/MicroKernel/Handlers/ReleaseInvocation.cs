@@ -12,20 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers;
-
 using System;
+
+namespace Castle.MicroKernel.Handlers;
 
 public class ReleaseInvocation(Burden burden)
 {
 	private Action _proceed;
 
-	public Burden Burden { get; private set; } = burden;
+	public Burden Burden { get; } = burden;
 
-	public object Instance
-	{
-		get { return Burden.Instance; }
-	}
+	public object Instance => Burden.Instance;
 
 	public bool ReturnValue { get; set; }
 

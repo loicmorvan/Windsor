@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs;
-
 using System;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
+
+namespace Castle.Windsor.Tests.Bugs;
 
 public class IoC117
 {
@@ -31,7 +30,7 @@ public class IoC117
 
 		try
 		{
-			Presenter p = (Presenter)kernel.Resolve(typeof(Presenter));
+			var p = (Presenter)kernel.Resolve(typeof(Presenter));
 			Assert.NotNull(p);
 		}
 		catch (NullReferenceException)
@@ -43,13 +42,7 @@ public class IoC117
 
 public class Presenter
 {
-	private View _view;
-
-	public virtual View View
-	{
-		get { return _view;  }
-		protected set { _view = value;}
-	}
+	public virtual View View { get; protected set; }
 }
 
 public class View

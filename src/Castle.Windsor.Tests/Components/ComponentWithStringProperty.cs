@@ -16,23 +16,18 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ComponentWithStringProperty
 {
-	private readonly string _name;
-
 	/// <summary>
-	///   Initializes a new instance of the <see cref = "ComponentWithStringProperty" /> class.
+	///     Initializes a new instance of the <see cref="ComponentWithStringProperty" /> class.
 	/// </summary>
-	/// <param name = "name">The name.</param>
+	/// <param name="name">The name.</param>
 	public ComponentWithStringProperty(string name)
 	{
-		this._name = name;
+		Name = name;
 	}
 
 	/// <summary>
-	///   Gets the name.
+	///     Gets the name.
 	/// </summary>
 	/// <value>The name.</value>
-	public string Name
-	{
-		get { return _name; }
-	}
+	public string Name { get; }
 }

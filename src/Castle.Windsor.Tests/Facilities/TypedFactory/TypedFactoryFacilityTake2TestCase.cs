@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory;
-
 using System;
 using System.Linq;
-
 using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
@@ -27,6 +24,8 @@ using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
 using Castle.Windsor.Tests.Interceptors;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 {
@@ -91,8 +90,8 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 		var all = factory.All();
 		Assert.NotNull(all);
 		Assert.Equal(2, all.Count);
-		Assert.Contains(all,c => c is Component1);
-		Assert.Contains(all,c => c is Component2);
+		Assert.Contains(all, c => c is Component1);
+		Assert.Contains(all, c => c is Component2);
 	}
 
 	[Fact]
@@ -466,7 +465,7 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 				.Named("SecondComponent")
 				.LifeStyle.Transient,
 			Component.For<IDummyComponentFactory>()
-				.AsFactory(new DefaultTypedFactoryComponentSelector(getMethodsResolveByName: false)));
+				.AsFactory(new DefaultTypedFactoryComponentSelector(false)));
 		var factory = Container.Resolve<IDummyComponentFactory>();
 
 		var component = factory.GetSecondComponent();
@@ -496,7 +495,8 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 		DisposableSelector.InstancesCreated = 0;
 		DisposableSelector.InstancesDisposed = 0;
 		Container.Register(
-			Component.For<IDummyComponentFactory>().AsFactory(f => f.SelectedWith<DisposableSelector>()).LifestyleTransient(),
+			Component.For<IDummyComponentFactory>().AsFactory(f => f.SelectedWith<DisposableSelector>())
+				.LifestyleTransient(),
 			Component.For<DisposableSelector>().LifeStyle.Transient);
 		var factory = Container.Resolve<IDummyComponentFactory>();
 
@@ -643,7 +643,8 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 		Container.Register(
 			Component.For<IDummyComponent>().ImplementedBy<Component1>().Named("one").LifeStyle.Transient,
 			Component.For<IDummyComponent>().ImplementedBy<Component2>().Named("two").LifeStyle.Transient,
-			Component.For<IDummyComponentFactoryWithAttributeImplementingType>().AsFactory(c => c.SelectedWith<Component1Selector>()),
+			Component.For<IDummyComponentFactoryWithAttributeImplementingType>()
+				.AsFactory(c => c.SelectedWith<Component1Selector>()),
 			Component.For<ITypedFactoryComponentSelector>().ImplementedBy<Component1Selector>());
 
 		var factory = Container.Resolve<IDummyComponentFactoryWithAttributeImplementingType>();

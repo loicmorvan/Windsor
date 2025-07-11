@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Context;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests;
 
 public class SubResolverTestCase
 {
@@ -42,26 +42,6 @@ public class SubResolverTestCase
 		Assert.Equal(HandlerState.Valid, handler.CurrentState);
 	}
 
-	public class Foo(int bar)
-	{
-		private int _bar = bar;
-	}
-
-	public class FooBarResolver : ISubDependencyResolver
-	{
-		public int? Result;
-
-		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
-		{
-			return Result != null;
-		}
-
-		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
-		{
-			return Result.Value;
-		}
-	}
-
 	[Fact]
 	public void Sub_resolver_can_provide_null_as_the_value_to_use()
 	{
@@ -71,6 +51,28 @@ public class SubResolverTestCase
 		kernel.Register(Component.For<ComponentWithDependencyNotInContainer>());
 
 		Assert.Null(kernel.Resolve<ComponentWithDependencyNotInContainer>().DependencyNotInContainer);
+	}
+
+	public class Foo(int bar)
+	{
+		private int _bar = bar;
+	}
+
+	public class FooBarResolver : ISubDependencyResolver
+	{
+		public int? Result;
+
+		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+			ComponentModel model, DependencyModel dependency)
+		{
+			return Result != null;
+		}
+
+		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+			ComponentModel model, DependencyModel dependency)
+		{
+			return Result.Value;
+		}
 	}
 
 	public sealed class ComponentWithDependencyNotInContainer(DependencyNotInContainer dependencyNotInContainer)
@@ -84,12 +86,14 @@ public class SubResolverTestCase
 
 	private sealed class NullResolver : ISubDependencyResolver
 	{
-		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+			ComponentModel model, DependencyModel dependency)
 		{
 			return true;
 		}
 
-		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+			ComponentModel model, DependencyModel dependency)
 		{
 			return null;
 		}

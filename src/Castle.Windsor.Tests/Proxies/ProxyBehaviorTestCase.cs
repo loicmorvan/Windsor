@@ -12,20 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Proxies;
-
 using System;
 using System.Linq;
-
 using Castle.Core;
 using Castle.DynamicProxy;
 using Castle.MicroKernel.Registration;
-using Castle.Windsor.Installer;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Interceptors;
 using Castle.Windsor.Tests.ProxyInfrastructure;
 using Castle.Windsor.Tests.XmlFiles;
+
+namespace Castle.Windsor.Tests.Proxies;
 
 public class ProxyBehaviorTestCase : AbstractContainerTestCase
 {
@@ -33,10 +31,10 @@ public class ProxyBehaviorTestCase : AbstractContainerTestCase
 	public void Proxy_exposes_only_service_interfaces_from_configuration()
 	{
 		Container.Install(
-			Configuration.FromXml(Xml.Embedded("proxyBehavior.xml")));
+			Castle.Windsor.Installer.Configuration.FromXml(Xml.Embedded("proxyBehavior.xml")));
 		var calcService = Container.Resolve<ICalcService>("default");
 		Assert.NotNull(calcService);
-		Assert.IsNotType<IDisposable>(calcService, exactMatch: false);
+		Assert.IsNotType<IDisposable>(calcService, false);
 	}
 
 	[Fact]
@@ -180,7 +178,7 @@ public class ProxyBehaviorTestCase : AbstractContainerTestCase
 
 		var common = Container.Resolve<ICommon>();
 
-		Assert.IsNotType<ICommon2>(common, exactMatch: false);
+		Assert.IsNotType<ICommon2>(common, false);
 	}
 
 	[Fact]
@@ -196,7 +194,7 @@ public class ProxyBehaviorTestCase : AbstractContainerTestCase
 
 		var common = Container.Resolve<ICommon>();
 
-		Assert.IsType<ICommon2>(common, exactMatch: false);
+		Assert.IsType<ICommon2>(common, false);
 	}
 
 #if FEATURE_REMOTING

@@ -12,22 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using Castle.DynamicProxy;
-using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Interceptors;
 
+namespace Castle.Windsor.Tests;
+
 public class ContainerAndGenericsInCodeTestCase : AbstractContainerTestCase
 {
 	[Fact]
 	public void Can_create_generic_with_ctor_dependency_on_array_of_generics()
 	{
-		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, allowEmptyCollections: false));
+		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, false));
 		Container.Register(Component.For(typeof(UsesArrayOfGeneric<>)),
 			Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)));
 

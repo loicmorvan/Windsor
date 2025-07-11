@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics;
-
 using System;
 using System.Linq;
-
 using Castle.MicroKernel;
 
+namespace Castle.Windsor.Diagnostics;
+
 /// <summary>
-/// 	Collects all handlers for components in hosting container grouped by services they expose.
-/// 	Within the service group, first one would be the default (the one obtained when callling <see cref = "IKernel.Resolve(System.Type)" /> for the service type)
+///     Collects all handlers for components in hosting container grouped by services they expose.
+///     Within the service group, first one would be the default (the one obtained when callling
+///     <see cref="IKernel.Resolve(System.Type)" /> for the service type)
 /// </summary>
 public interface IAllServicesDiagnostic : IDiagnostic<ILookup<Type, IHandler>>
 {

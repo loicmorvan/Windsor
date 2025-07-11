@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.Startable;
-
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-
 using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.Facilities.Startable;
@@ -26,6 +23,8 @@ using Castle.MicroKernel.ModelBuilder;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Facilities.Startable.Components;
+
+namespace Castle.Windsor.Tests.Facilities.Startable;
 
 public class StartableFacilityTestCase
 {
@@ -159,9 +158,9 @@ public class StartableFacilityTestCase
 	}
 
 	/// <summary>
-	///   This test has one startable component dependent on another, and both are dependent
-	///   on a third generic component - all are singletons. We need to make sure we only get
-	///   one instance of each component created.
+	///     This test has one startable component dependent on another, and both are dependent
+	///     on a third generic component - all are singletons. We need to make sure we only get
+	///     one instance of each component created.
 	/// </summary>
 	[Fact]
 	public void TestStartableChainWithGenerics()

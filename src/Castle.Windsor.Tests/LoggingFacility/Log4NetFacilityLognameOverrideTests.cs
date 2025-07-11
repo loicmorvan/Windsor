@@ -12,23 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.LoggingFacility;
-
 using System;
 using System.IO;
-
 using Castle.MicroKernel.Registration;
 using Castle.Services.Logging.Log4netIntegration;
-using Castle.Windsor;
 using Castle.Windsor.Tests.LoggingFacility.Classes;
-
 using log4net;
 using log4net.Appender;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
 
+namespace Castle.Windsor.Tests.LoggingFacility;
+
 public class Log4NetFacilityLognameOverrideTests : OverrideLoggerTest, IDisposable
 {
+	private readonly IWindsorContainer _container;
+
 	public Log4NetFacilityLognameOverrideTests()
 	{
 		_container = base.CreateConfiguredContainer<ExtendedLog4netFactory>("Override");
@@ -39,8 +38,6 @@ public class Log4NetFacilityLognameOverrideTests : OverrideLoggerTest, IDisposab
 		_container.Dispose();
 	}
 
-	private readonly IWindsorContainer _container;
-
 	[Fact]
 	public void OverrideTest()
 	{
@@ -49,7 +46,8 @@ public class Log4NetFacilityLognameOverrideTests : OverrideLoggerTest, IDisposab
 
 		test.DoSomething();
 
-		String expectedLogOutput = String.Format("[INFO ] [Override.{0}] - Hello world" + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
+		var expectedLogOutput = string.Format("[INFO ] [Override.{0}] - Hello world" + Environment.NewLine,
+			typeof(SimpleLoggingComponent).FullName);
 		var memoryAppender = ((Hierarchy)LogManager.GetRepository()).Root.GetAppender("memory") as MemoryAppender;
 		TextWriter actualLogOutput = new StringWriter();
 		var patternLayout = new PatternLayout("[%-5level] [%logger] - %message%newline");

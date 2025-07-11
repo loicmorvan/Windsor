@@ -14,13 +14,11 @@
 
 namespace Castle.Windsor.Tests.LoggingFacility.Classes;
 
-using System;
-
 public interface ISmtpServer
 {
 	void Start();
 
 	void Stop();
 
-	void InternalSend(String from, String to, String contents);
+	void InternalSend(string from, string to, string contents);
 }

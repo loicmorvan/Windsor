@@ -12,19 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests.Fakes;
-
 using System;
+
+namespace Castle.Facilities.AspNetCore.Tests.Fakes;
 
 public class CompositeController
 {
 	public CompositeController(
-		ControllerCrossWired crossWiredController, 
-		ControllerServiceProviderOnly serviceProviderOnlyController, 
+		ControllerCrossWired crossWiredController,
+		ControllerServiceProviderOnly serviceProviderOnlyController,
 		ControllerWindsorOnly windsorOnlyController)
 	{
 		if (crossWiredController == null) throw new ArgumentNullException(nameof(crossWiredController));
-		if (serviceProviderOnlyController == null) throw new ArgumentNullException(nameof(serviceProviderOnlyController));
+		if (serviceProviderOnlyController == null)
+			throw new ArgumentNullException(nameof(serviceProviderOnlyController));
 		if (windsorOnlyController == null) throw new ArgumentNullException(nameof(windsorOnlyController));
 	}
 }
@@ -32,8 +33,8 @@ public class CompositeController
 public class CompositeTagHelper
 {
 	public CompositeTagHelper(
-		TagHelperCrossWired crossWiredTagHelper, 
-		TagHelperServiceProviderOnly serviceProviderOnlyTagHelper, 
+		TagHelperCrossWired crossWiredTagHelper,
+		TagHelperServiceProviderOnly serviceProviderOnlyTagHelper,
 		TagHelperWindsorOnly windsorOnlyTagHelper)
 	{
 		if (crossWiredTagHelper == null) throw new ArgumentNullException(nameof(crossWiredTagHelper));
@@ -45,12 +46,13 @@ public class CompositeTagHelper
 public class CompositeViewComponent
 {
 	public CompositeViewComponent(
-		ViewComponentCrossWired crossWiredViewComponent, 
-		ViewComponentServiceProviderOnly serviceProviderOnlyViewComponent, 
+		ViewComponentCrossWired crossWiredViewComponent,
+		ViewComponentServiceProviderOnly serviceProviderOnlyViewComponent,
 		ViewComponentWindsorOnly windsorOnlyViewComponent)
 	{
 		if (crossWiredViewComponent == null) throw new ArgumentNullException(nameof(crossWiredViewComponent));
-		if (serviceProviderOnlyViewComponent == null) throw new ArgumentNullException(nameof(serviceProviderOnlyViewComponent));
+		if (serviceProviderOnlyViewComponent == null)
+			throw new ArgumentNullException(nameof(serviceProviderOnlyViewComponent));
 		if (windsorOnlyViewComponent == null) throw new ArgumentNullException(nameof(windsorOnlyViewComponent));
 	}
 }

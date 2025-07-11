@@ -12,29 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests;
-
 using System;
-
 using Castle.Facilities.AspNetCore.Tests.Framework;
 using Castle.MicroKernel.Registration;
-
 using Microsoft.AspNetCore.Mvc;
 
+namespace Castle.Facilities.AspNetCore.Tests;
 
-public abstract class WindsorRegistrationOptionsControllerTestCase:IDisposable
+public abstract class WindsorRegistrationOptionsControllerTestCase : IDisposable
 {
+	protected TestContext TestContext;
+
 	public void Dispose()
 	{
 		TestContext.Dispose();
 	}
 
-	protected TestContext TestContext;
-
 	[InlineData(typeof(OverrideController))]
 	public void Should_resolve_overidden_Controllers_using_WindsorRegistrationOptions(Type optionsResolvableType)
 	{
-		TestContext.WindsorContainer.Resolve(optionsResolvableType); 
+		TestContext.WindsorContainer.Resolve(optionsResolvableType);
 	}
 
 	public class OverrideController : Controller
@@ -42,7 +39,6 @@ public abstract class WindsorRegistrationOptionsControllerTestCase:IDisposable
 	}
 }
 
-	
 public class WindsorRegistrationOptionsForAssembliesControllerTestCase : WindsorRegistrationOptionsControllerTestCase
 {
 	public WindsorRegistrationOptionsForAssembliesControllerTestCase()
@@ -53,7 +49,6 @@ public class WindsorRegistrationOptionsForAssembliesControllerTestCase : Windsor
 	}
 }
 
-	
 public class WindsorRegistrationOptionsForComponentsControllerTestCase : WindsorRegistrationOptionsControllerTestCase
 {
 	public WindsorRegistrationOptionsForComponentsControllerTestCase()

@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers;
-
 using System;
-
 using Castle.Core;
+
+namespace Castle.MicroKernel.Handlers;
 
 public interface IGenericServiceStrategy
 {

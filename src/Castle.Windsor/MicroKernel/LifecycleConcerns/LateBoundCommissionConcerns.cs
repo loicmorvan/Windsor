@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.LifecycleConcerns;
-
 using System;
-
 using Castle.Core;
 
+namespace Castle.MicroKernel.LifecycleConcerns;
+
 /// <summary>
-///   Lifetime concern that works for components that don't have their actual type determined upfront
+///     Lifetime concern that works for components that don't have their actual type determined upfront
 /// </summary>
 [Serializable]
 public class LateBoundCommissionConcerns : LateBoundConcerns<ICommissionConcern>, ICommissionConcern

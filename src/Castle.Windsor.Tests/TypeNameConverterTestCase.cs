@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
 using System.Reflection;
-
 using Castle.DynamicProxy;
 using Castle.MicroKernel.SubSystems.Conversion;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests;
 
 public class TypeNameConverterTestCase
 {
@@ -195,14 +194,6 @@ public class TypeNameConverterTestCase
 		Assert.Equal(message, exception.Message);
 	}
 
-	class TestCaseSensitivity
-	{
-	}
-
-	class Testcasesensitivity
-	{
-	}
-
 	[Fact]
 	public void Can_resolve_exact_match_if_two_classes_exist_that_differ_only_by_case()
 	{
@@ -215,5 +206,13 @@ public class TypeNameConverterTestCase
 		var name2 = type2.AssemblyQualifiedName;
 		var result2 = _converter.PerformConversion(name2, typeof(Type));
 		Assert.Equal(type2, result2);
+	}
+
+	private class TestCaseSensitivity
+	{
+	}
+
+	private class Testcasesensitivity
+	{
 	}
 }

@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
 
+namespace Castle.Core;
+
 /// <summary>
-///   Specifies the proxying behavior for a component.
+///     Specifies the proxying behavior for a component.
 /// </summary>
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+[AttributeUsage(AttributeTargets.Class)]
 public sealed class ComponentProxyBehaviorAttribute : Attribute
 {
 	private Type[] _additionalInterfaces;
@@ -33,19 +33,16 @@ public sealed class ComponentProxyBehaviorAttribute : Attribute
 #endif
 
 	/// <summary>
-	///   Gets or sets the additional interfaces used during proxy generation.
+	///     Gets or sets the additional interfaces used during proxy generation.
 	/// </summary>
 	public Type[] AdditionalInterfaces
 	{
 		get
 		{
-			if (_additionalInterfaces != null)
-			{
-				return _additionalInterfaces;
-			}
+			if (_additionalInterfaces != null) return _additionalInterfaces;
 
 			return Type.EmptyTypes;
 		}
-		set { _additionalInterfaces = value; }
+		set => _additionalInterfaces = value;
 	}
 }

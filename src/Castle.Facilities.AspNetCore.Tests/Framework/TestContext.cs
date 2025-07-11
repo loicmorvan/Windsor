@@ -12,16 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests.Framework;
-
 using System;
-
 using Castle.Windsor;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-public class TestContext(IServiceCollection serviceCollection, IServiceProvider serviceProvider, IApplicationBuilder applicationBuilder, IWindsorContainer container, IDisposable windsorScope)
+namespace Castle.Facilities.AspNetCore.Tests.Framework;
+
+public class TestContext(
+	IServiceCollection serviceCollection,
+	IServiceProvider serviceProvider,
+	IApplicationBuilder applicationBuilder,
+	IWindsorContainer container,
+	IDisposable windsorScope)
 	: IDisposable
 {
 	public IApplicationBuilder ApplicationBuilder { get; } = applicationBuilder;
@@ -30,6 +33,13 @@ public class TestContext(IServiceCollection serviceCollection, IServiceProvider 
 
 	public IDisposable WindsorScope { get; private set; } = windsorScope;
 	public IWindsorContainer WindsorContainer { get; private set; } = container;
+
+	public void Dispose()
+	{
+		WindsorScope?.Dispose();
+		WindsorContainer?.Dispose();
+		(ServiceProvider as IDisposable)?.Dispose();
+	}
 
 	public void DisposeServiceProvider()
 	{
@@ -47,12 +57,5 @@ public class TestContext(IServiceCollection serviceCollection, IServiceProvider 
 	{
 		WindsorScope.Dispose();
 		WindsorScope = null;
-	}
-
-	public void Dispose()
-	{
-		WindsorScope?.Dispose();
-		WindsorContainer?.Dispose();
-		(ServiceProvider as IDisposable)?.Dispose();
 	}
 }

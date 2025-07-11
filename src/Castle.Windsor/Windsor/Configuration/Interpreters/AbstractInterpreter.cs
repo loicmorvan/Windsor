@@ -12,19 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.Core.Configuration;
 using Castle.Core.Resource;
 using Castle.MicroKernel;
 using Castle.MicroKernel.SubSystems.Configuration;
 
+namespace Castle.Windsor.Configuration.Interpreters;
+
 /// <summary>
-///   Provides common methods for those who wants 
-///   to implement <see cref = "IConfigurationInterpreter" />
+///     Provides common methods for those who wants
+///     to implement <see cref="IConfigurationInterpreter" />
 /// </summary>
 public abstract class AbstractInterpreter : IConfigurationInterpreter
 {
@@ -37,17 +36,13 @@ public abstract class AbstractInterpreter : IConfigurationInterpreter
 	protected static readonly string InstallersNodeName = "installers";
 	protected static readonly string InstallNodeName = "install";
 
-	private readonly IResource _source;
 	private readonly Stack<IResource> _resourceStack = new();
 
 	protected AbstractInterpreter(IResource source)
 	{
-		if (source == null)
-		{
-			throw new ArgumentNullException(nameof(source), "IResource is null");
-		}
+		if (source == null) throw new ArgumentNullException(nameof(source), "IResource is null");
 
-		this._source = source;
+		Source = source;
 
 		PushResource(source);
 	}
@@ -63,13 +58,13 @@ public abstract class AbstractInterpreter : IConfigurationInterpreter
 #endif
 
 	/// <summary>
-	///   Should obtain the contents from the resource,
-	///   interpret it and populate the <see cref = "IConfigurationStore" />
-	///   accordingly.
+	///     Should obtain the contents from the resource,
+	///     interpret it and populate the <see cref="IConfigurationStore" />
+	///     accordingly.
 	/// </summary>
-	/// <param name = "resource"></param>
-	/// <param name = "store"></param>
-	/// <param name = "kernel"></param>
+	/// <param name="resource"></param>
+	/// <param name="store"></param>
+	/// <param name="kernel"></param>
 	public abstract void ProcessResource(IResource resource, IConfigurationStore store, IKernel kernel);
 
 	protected void PushResource(IResource resource)
@@ -86,27 +81,21 @@ public abstract class AbstractInterpreter : IConfigurationInterpreter
 	{
 		get
 		{
-			if (_resourceStack.Count == 0)
-			{
-				return null;
-			}
+			if (_resourceStack.Count == 0) return null;
 
 			return _resourceStack.Peek();
 		}
 	}
 
 	/// <summary>
-	///   Exposes the reference to <see cref = "IResource" />
-	///   which the interpreter is likely to hold
+	///     Exposes the reference to <see cref="IResource" />
+	///     which the interpreter is likely to hold
 	/// </summary>
 	/// <value></value>
-	public IResource Source
-	{
-		get { return _source; }
-	}
+	public IResource Source { get; }
 
 	/// <summary>
-	///   Gets or sets the name of the environment.
+	///     Gets or sets the name of the environment.
 	/// </summary>
 	/// <value>The name of the environment.</value>
 	public string EnvironmentName { get; set; }

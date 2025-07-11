@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors;
-
 using System;
-
 using Castle.Core;
 using Castle.MicroKernel.Proxy;
+
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
 
 public class ProxyInterfacesDescriptor(Type[] interfaces) : IComponentModelDescriptor
 {

@@ -12,30 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests;
-
 using System;
-
 using Castle.Facilities.AspNetCore.Tests.Framework;
 using Castle.MicroKernel.Registration;
-
 using Microsoft.AspNetCore.Mvc;
 
-	
+namespace Castle.Facilities.AspNetCore.Tests;
 
-public abstract class WindsorRegistrationOptionsViewComponentTestCase: IDisposable
+public abstract class WindsorRegistrationOptionsViewComponentTestCase : IDisposable
 {
+	protected TestContext TestContext;
+
 	public void Dispose()
 	{
 		TestContext.Dispose();
 	}
 
-	protected TestContext TestContext;
-
 	[InlineData(typeof(OverrideViewComponent))]
 	public void Should_resolve_overidden_ViewComponents_using_WindsorRegistrationOptions(Type optionsResolvableType)
 	{
-		TestContext.WindsorContainer.Resolve(optionsResolvableType); 
+		TestContext.WindsorContainer.Resolve(optionsResolvableType);
 	}
 
 	public class OverrideViewComponent : ViewComponent
@@ -43,8 +39,8 @@ public abstract class WindsorRegistrationOptionsViewComponentTestCase: IDisposab
 	}
 }
 
-	
-public class WindsorRegistrationOptionsForAssembliesViewComponentTestCase : WindsorRegistrationOptionsViewComponentTestCase
+public class
+	WindsorRegistrationOptionsForAssembliesViewComponentTestCase : WindsorRegistrationOptionsViewComponentTestCase
 {
 	public WindsorRegistrationOptionsForAssembliesViewComponentTestCase()
 	{
@@ -54,8 +50,8 @@ public class WindsorRegistrationOptionsForAssembliesViewComponentTestCase : Wind
 	}
 }
 
-	
-public class WindsorRegistrationOptionsForComponentsViewComponentTestCase : WindsorRegistrationOptionsViewComponentTestCase
+public class
+	WindsorRegistrationOptionsForComponentsViewComponentTestCase : WindsorRegistrationOptionsViewComponentTestCase
 {
 	public WindsorRegistrationOptionsForComponentsViewComponentTestCase()
 	{

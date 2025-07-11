@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
-
 using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.ComponentActivator;
@@ -25,6 +22,8 @@ using Castle.Windsor.Tests.Bugs;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Config.Components;
+
+namespace Castle.Windsor.Tests;
 
 public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 {
@@ -50,7 +49,9 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 	[Bug("IOC-141")]
 	public void No_resolvable_constructor_open_generic_component()
 	{
-		Container.Register(Component.For(typeof(IoC141.IProcessor<>)).ImplementedBy(typeof(IoC141.DefaultProcessor<>)).Named("processor"),
+		Container.Register(
+			Component.For(typeof(IoC141.IProcessor<>)).ImplementedBy(typeof(IoC141.DefaultProcessor<>))
+				.Named("processor"),
 			Component.For<IoC141.IAssembler<object>>().ImplementedBy<IoC141.ObjectAssembler>());
 
 		var exception = Assert.Throws<HandlerException>(() => Container.Resolve<IoC141.IProcessor<int>>());
@@ -84,7 +85,8 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 	}
 
 	[Fact]
-	public void ReleasePolicy_tracking_the_same_instance_twice_with_transient_lifestyle_and_factory_method_suggests_different_lifestyle()
+	public void
+		ReleasePolicy_tracking_the_same_instance_twice_with_transient_lifestyle_and_factory_method_suggests_different_lifestyle()
 	{
 		var a = new ADisposable();
 		Container.Register(Component.For<A>()
@@ -193,7 +195,8 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 	{
 		Container.Register(Component.For<HasProtectedConstructor>());
 
-		Exception exception = Assert.Throws<ComponentActivatorException>(() => Container.Resolve<HasProtectedConstructor>());
+		Exception exception =
+			Assert.Throws<ComponentActivatorException>(() => Container.Resolve<HasProtectedConstructor>());
 		var message =
 #if !FEATURE_REMOTING
 			string.Format("Type {0} does not have a public default constructor and could not be instantiated.",
@@ -219,9 +222,10 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 
 		var exception = Assert.Throws<ComponentActivatorException>(() => Container.Resolve<PropertySetterThrows>());
 
-		var message = string.Format("Error setting property PropertySetterThrows.CommonService in component {1}. See inner exception for more information.{0}" +
-		                            "If you don't want Windsor to set this property you can do it by either decorating it with {2} or via registration API.{0}" +
-		                            "Alternatively consider making the setter non-public.",
+		var message = string.Format(
+			"Error setting property PropertySetterThrows.CommonService in component {1}. See inner exception for more information.{0}" +
+			"If you don't want Windsor to set this property you can do it by either decorating it with {2} or via registration API.{0}" +
+			"Alternatively consider making the setter non-public.",
 			Environment.NewLine,
 			typeof(PropertySetterThrows),
 			typeof(DoNotWireAttribute).Name);

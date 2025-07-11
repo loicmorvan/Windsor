@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration.Interceptor;
-
 using Castle.Core;
 using Castle.DynamicProxy;
 using Castle.MicroKernel.ModelBuilder.Descriptors;
 
-public class InterceptorGroup<TS>(ComponentRegistration<TS> registration, InterceptorReference[] interceptors) : RegistrationGroup<TS>(registration)
+namespace Castle.MicroKernel.Registration.Interceptor;
+
+public class InterceptorGroup<TS>(ComponentRegistration<TS> registration, InterceptorReference[] interceptors)
+	: RegistrationGroup<TS>(registration)
 	where TS : class
 {
 	public ComponentRegistration<TS> Anywhere

@@ -14,20 +14,16 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-using System;
-
 /// <summary>
-/// 
 /// </summary>
 public class CustomerImpl2 : CustomerImpl
 {
 	/// <summary>
-	/// 
 	/// </summary>
 	/// <param name="name"></param>
 	/// <param name="address"></param>
 	/// <param name="age"></param>
-	public CustomerImpl2(String name, String address, int age)
+	public CustomerImpl2(string name, string address, int age)
 	{
 		Name = name;
 		Address = address;

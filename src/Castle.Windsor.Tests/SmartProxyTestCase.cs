@@ -12,23 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using Castle.DynamicProxy;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Interceptors;
+
 namespace Castle.Windsor.Tests;
 
 #if FEATURE_REMOTING
 	using System.Runtime.Remoting;
 #endif
 
-using System;
 
-using Castle.DynamicProxy;
-using Castle.MicroKernel.Registration;
-using Castle.Windsor;
-using Castle.Windsor.Tests.Components;
-using Castle.Windsor.Tests.Interceptors;
 
-public class SmartProxyTestCase:IDisposable
+public class SmartProxyTestCase : IDisposable
 {
 	private readonly IWindsorContainer _container;
+
+	public SmartProxyTestCase()
+	{
+		_container = new WindsorContainer();
+
+		_container.AddFacility<MyInterceptorGreedyFacility>();
+	}
+
+	public void Dispose()
+	{
+		_container.Dispose();
+	}
 
 	[Fact]
 	public void ConcreteClassProxy()
@@ -43,13 +55,6 @@ public class SmartProxyTestCase:IDisposable
 			Assert.False(RemotingServices.IsTransparentProxy(service));
 #endif
 		Assert.Equal(5, service.Sum(2, 2));
-	}
-
-	public SmartProxyTestCase()
-	{
-		_container = new WindsorContainer();
-
-		_container.AddFacility<MyInterceptorGreedyFacility>();
 	}
 
 	[Fact]
@@ -76,10 +81,5 @@ public class SmartProxyTestCase:IDisposable
 			Assert.False(RemotingServices.IsTransparentProxy(service));
 #endif
 		Assert.Equal(5, service.Sum(2, 2));
-	}
-
-	public void Dispose()
-	{
-		_container.Dispose();
 	}
 }

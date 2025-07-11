@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory;
-
 using System;
-
 using Castle.Core.Internal;
 using Castle.MicroKernel;
+
+namespace Castle.Facilities.TypedFactory;
 
 public class TypedFactoryConfiguration
 {
@@ -26,23 +25,17 @@ public class TypedFactoryConfiguration
 
 	public TypedFactoryConfiguration(string defaultComponentSelectorKey, Type factoryType)
 	{
-		this._defaultComponentSelectorKey = defaultComponentSelectorKey;
+		_defaultComponentSelectorKey = defaultComponentSelectorKey;
 		var attributes = factoryType.GetAttributes<FactoryAttribute>(true);
 		if (attributes.Length > 0)
 		{
 			var defaults = attributes[0];
 			if (defaults.SelectorComponentName != null)
-			{
 				SelectedWith(defaults.SelectorComponentName);
-			}
 			else if (defaults.SelectorComponentType != null)
-			{
 				SelectedWith(defaults.SelectorComponentType);
-			}
 			else if (defaults.SelectorType != null)
-			{
 				SelectedWith(defaults.SelectorType.CreateInstance<ITypedFactoryComponentSelector>());
-			}
 		}
 	}
 
@@ -50,10 +43,7 @@ public class TypedFactoryConfiguration
 	{
 		get
 		{
-			if (_selectorReference == null)
-			{
-				SelectedWith(_defaultComponentSelectorKey);
-			}
+			if (_selectorReference == null) SelectedWith(_defaultComponentSelectorKey);
 
 			return _selectorReference;
 		}
@@ -76,10 +66,7 @@ public class TypedFactoryConfiguration
 
 	public void SelectedWith(ITypedFactoryComponentSelector selector)
 	{
-		if (selector == null)
-		{
-			throw new ArgumentNullException(nameof(selector));
-		}
+		if (selector == null) throw new ArgumentNullException(nameof(selector));
 
 		_selectorReference = new InstanceReference<ITypedFactoryComponentSelector>(selector);
 	}

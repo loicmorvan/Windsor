@@ -12,36 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors;
-
-using System;
-
 using Castle.Core.Configuration;
 using Castle.MicroKernel.Registration;
+
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
 
 public class AttributeDescriptor<TS> : AbstractOverwriteableDescriptor<TS>
 	where TS : class
 {
-	private readonly String _name;
-	private readonly String _value;
+	private readonly string _name;
+	private readonly string _value;
 
 	/// <summary>
-	///   Constructs the <see cref = "AttributeDescriptor{S}" /> descriptor with name and value.
+	///     Constructs the <see cref="AttributeDescriptor{S}" /> descriptor with name and value.
 	/// </summary>
-	/// <param name = "name">The attribute name.</param>
-	/// <param name = "value">The attribute value.</param>
-	public AttributeDescriptor(String name, String value)
+	/// <param name="name">The attribute name.</param>
+	/// <param name="value">The attribute value.</param>
+	public AttributeDescriptor(string name, string value)
 	{
-		this._name = name;
-		this._value = value;
+		_name = name;
+		_value = value;
 	}
 
 	protected override void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
 	{
-		if (configuration.Attributes[_name] == null || IsOverWrite)
-		{
-			configuration.Attributes[_name] = _value;
-		}
+		if (configuration.Attributes[_name] == null || IsOverWrite) configuration.Attributes[_name] = _value;
 	}
 }
 
@@ -49,27 +44,27 @@ public class AttributeKeyDescriptor<TS>
 	where TS : class
 {
 	private readonly ComponentRegistration<TS> _component;
-	private readonly String _name;
+	private readonly string _name;
 
 	/// <summary>
-	///   Constructs the <see cref = "AttributeKeyDescriptor{S}" /> descriptor with name.
+	///     Constructs the <see cref="AttributeKeyDescriptor{S}" /> descriptor with name.
 	/// </summary>
-	/// <param name = "component">The component.</param>
-	/// <param name = "name">The attribute name.</param>
-	public AttributeKeyDescriptor(ComponentRegistration<TS> component, String name)
+	/// <param name="component">The component.</param>
+	/// <param name="name">The attribute name.</param>
+	public AttributeKeyDescriptor(ComponentRegistration<TS> component, string name)
 	{
-		this._component = component;
-		this._name = name;
+		_component = component;
+		_name = name;
 	}
 
 	/// <summary>
-	///   Builds the <see cref = "AttributeKeyDescriptor{S}" /> with value.
+	///     Builds the <see cref="AttributeKeyDescriptor{S}" /> with value.
 	/// </summary>
-	/// <param name = "value">The attribute value.</param>
-	/// <returns>The <see cref = "ComponentRegistration{S}" /></returns>
-	public ComponentRegistration<TS> Eq(Object value)
+	/// <param name="value">The attribute value.</param>
+	/// <returns>The <see cref="ComponentRegistration{S}" /></returns>
+	public ComponentRegistration<TS> Eq(object value)
 	{
-		var attribValue = (value != null) ? value.ToString() : "";
+		var attribValue = value != null ? value.ToString() : "";
 		return _component.AddAttributeDescriptor(_name, attribValue);
 	}
 }

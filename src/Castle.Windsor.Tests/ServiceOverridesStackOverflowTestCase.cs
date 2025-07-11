@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System.Collections.Generic;
 using System.Linq;
-
-using Castle.Windsor;
 using Castle.Windsor.Tests.XmlFiles;
+
+namespace Castle.Windsor.Tests;
 
 public class ServiceOverridesStackOverflowTestCase
 {
@@ -40,17 +38,13 @@ public class ServiceOverridesStackOverflowTestCase
 
 public class MessageChannel(IDevice root)
 {
-	public IDevice RootDevice
-	{
-		get { return root; }
-	}
+	public IDevice RootDevice => root;
 }
 
 public interface IDevice
 {
 	MessageChannel Channel { get; }
 	IEnumerable<IDevice> Children { get; }
-
 }
 
 public abstract class BaseDevice : IDevice
@@ -58,7 +52,6 @@ public abstract class BaseDevice : IDevice
 	public abstract IEnumerable<IDevice> Children { get; }
 
 	public MessageChannel Channel { get; set; }
-
 }
 
 public class TestDevice : BaseDevice
@@ -74,8 +67,5 @@ public class TestDevice : BaseDevice
 		_children = new List<IDevice>(theChildren);
 	}
 
-	public override IEnumerable<IDevice> Children
-	{
-		get { return _children; }
-	}
+	public override IEnumerable<IDevice> Children => _children;
 }

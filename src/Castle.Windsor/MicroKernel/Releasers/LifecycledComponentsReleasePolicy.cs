@@ -12,25 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Releasers;
-
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security;
+using Castle.Core;
+using Castle.Core.Internal;
+using Castle.MicroKernel.Internal;
+using Castle.Windsor.Diagnostics;
+
+namespace Castle.MicroKernel.Releasers;
+
 #if FEATURE_PERFCOUNTERS
 	using System.Diagnostics;
 #endif
-using System.Linq;
-using System.Security;
-using System.Threading;
 
-using Castle.Core;
-using Castle.Core.Internal;
-using Castle.Windsor.Diagnostics;
-
-using Lock = Castle.MicroKernel.Internal.Lock;
+using Lock = Lock;
 
 /// <summary>
-///     Tracks all components requiring decomission (<see cref = "Burden.RequiresPolicyRelease" />)
+///     Tracks all components requiring decomission (<see cref="Burden.RequiresPolicyRelease" />)
 /// </summary>
 [Serializable]
 public class LifecycledComponentsReleasePolicy : IReleasePolicy
@@ -45,8 +45,8 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 	private readonly ITrackedComponentsPerformanceCounter _perfCounter;
 	private ITrackedComponentsDiagnostic _trackedComponentsDiagnostic;
 
-	/// <param name = "kernel">
-	///     Used to obtain <see cref = "ITrackedComponentsDiagnostic" /> if present.
+	/// <param name="kernel">
+	///     Used to obtain <see cref="ITrackedComponentsDiagnostic" /> if present.
 	/// </param>
 	public LifecycledComponentsReleasePolicy(IKernel kernel)
 		: this(GetTrackedComponentsDiagnostic(kernel), null)
@@ -56,24 +56,23 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 	/// <summary>
 	///     Creates new policy which publishes its tracking components count to
 	///     <paramref
-	///         name = "trackedComponentsPerformanceCounter" />
+	///         name="trackedComponentsPerformanceCounter" />
 	///     and exposes diagnostics into
 	///     <paramref
-	///         name = "trackedComponentsDiagnostic" />
+	///         name="trackedComponentsDiagnostic" />
 	///     .
 	/// </summary>
-	/// <param name = "trackedComponentsDiagnostic"></param>
-	/// <param name = "trackedComponentsPerformanceCounter"></param>
+	/// <param name="trackedComponentsDiagnostic"></param>
+	/// <param name="trackedComponentsPerformanceCounter"></param>
 	public LifecycledComponentsReleasePolicy(ITrackedComponentsDiagnostic trackedComponentsDiagnostic,
 		ITrackedComponentsPerformanceCounter trackedComponentsPerformanceCounter)
 	{
-		this._trackedComponentsDiagnostic = trackedComponentsDiagnostic;
+		_trackedComponentsDiagnostic = trackedComponentsDiagnostic;
 		_perfCounter = trackedComponentsPerformanceCounter ?? NullPerformanceCounter.Instance;
 
 		if (trackedComponentsDiagnostic != null)
-		{
-			trackedComponentsDiagnostic.TrackedInstancesRequested += trackedComponentsDiagnostic_TrackedInstancesRequested;
-		}
+			trackedComponentsDiagnostic.TrackedInstancesRequested +=
+				trackedComponentsDiagnostic_TrackedInstancesRequested;
 	}
 
 	private LifecycledComponentsReleasePolicy(LifecycledComponentsReleasePolicy parent)
@@ -92,6 +91,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 				// we could wait indefinatelly. I guess the best way to proceed is to add a 200ms timepout to accquire the lock, and if not succeeded
 				// assume that the other thread just waits and is not going anywhere and go ahead and read this anyway...
 			}
+
 			var array = _instance2Burden.Values.ToArray();
 			return array;
 		}
@@ -104,12 +104,15 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 		{
 			if (_trackedComponentsDiagnostic != null)
 			{
-				_trackedComponentsDiagnostic.TrackedInstancesRequested -= trackedComponentsDiagnostic_TrackedInstancesRequested;
+				_trackedComponentsDiagnostic.TrackedInstancesRequested -=
+					trackedComponentsDiagnostic_TrackedInstancesRequested;
 				_trackedComponentsDiagnostic = null;
 			}
+
 			burdens = _instance2Burden.ToArray();
 			_instance2Burden.Clear();
 		}
+
 		// NOTE: This is relying on a undocumented behavior that order of items when enumerating Dictionary<> will be oldest --> latest
 		foreach (var burden in burdens.Reverse())
 		{
@@ -127,10 +130,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 
 	public bool HasTrack(object instance)
 	{
-		if (instance == null)
-		{
-			return false;
-		}
+		if (instance == null) return false;
 
 		using (_lock.ForReading())
 		{
@@ -140,21 +140,16 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 
 	public void Release(object instance)
 	{
-		if (instance == null)
-		{
-			return;
-		}
+		if (instance == null) return;
 
 		Burden burden;
 		using (_lock.ForWriting())
 		{
 			// NOTE: we don't physically remove the instance from the instance2Burden collection here.
 			// we do it in OnInstanceReleased event handler
-			if (_instance2Burden.TryGetValue(instance, out burden) == false)
-			{
-				return;
-			}
+			if (_instance2Burden.TryGetValue(instance, out burden) == false) return;
 		}
+
 		burden.Release();
 	}
 
@@ -162,12 +157,13 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 	{
 		if (burden.RequiresPolicyRelease == false)
 		{
-			var lifestyle = ((object)burden.Model.CustomLifestyle) ?? burden.Model.LifestyleType;
+			var lifestyle = (object)burden.Model.CustomLifestyle ?? burden.Model.LifestyleType;
 			throw new ArgumentException(
 				string.Format(
 					"Release policy was asked to track object '{0}', but its burden has 'RequiresPolicyRelease' set to false. If object is to be tracked the flag must be true. This is likely a bug in the lifetime manager '{1}'.",
 					instance, lifestyle));
 		}
+
 		try
 		{
 			using (_lock.ForWriting())
@@ -184,6 +180,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 		{
 			throw HelpfulExceptionsUtil.TrackInstanceCalledMultipleTimes(instance, burden);
 		}
+
 		burden.Released += OnInstanceReleased;
 		_perfCounter.IncrementTrackedInstancesCount();
 	}
@@ -192,11 +189,9 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 	{
 		using (_lock.ForWriting())
 		{
-			if (_instance2Burden.Remove(burden.Instance) == false)
-			{
-				return;
-			}
+			if (_instance2Burden.Remove(burden.Instance) == false) return;
 		}
+
 		burden.Released -= OnInstanceReleased;
 		_perfCounter.DecrementTrackedInstancesCount();
 	}
@@ -207,24 +202,22 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 	}
 
 	/// <summary>
-	///     Obtains <see cref = "ITrackedComponentsDiagnostic" /> from given <see cref = "IKernel" /> if present.
+	///     Obtains <see cref="ITrackedComponentsDiagnostic" /> from given <see cref="IKernel" /> if present.
 	/// </summary>
-	/// <param name = "kernel"></param>
+	/// <param name="kernel"></param>
 	/// <returns></returns>
 	public static ITrackedComponentsDiagnostic GetTrackedComponentsDiagnostic(IKernel kernel)
 	{
 		var diagnosticsHost = (IDiagnosticsHost)kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
-		if (diagnosticsHost == null)
-		{
-			return null;
-		}
+		if (diagnosticsHost == null) return null;
 		return diagnosticsHost.GetDiagnostic<ITrackedComponentsDiagnostic>();
 	}
 
 	/// <summary>
-	///     Creates new <see cref = "ITrackedComponentsPerformanceCounter" /> from given <see cref = "IPerformanceMetricsFactory" />.
+	///     Creates new <see cref="ITrackedComponentsPerformanceCounter" /> from given
+	///     <see cref="IPerformanceMetricsFactory" />.
 	/// </summary>
-	/// <param name = "perfMetricsFactory"></param>
+	/// <param name="perfMetricsFactory"></param>
 	/// <returns></returns>
 	[SecuritySafeCritical]
 	public static ITrackedComponentsPerformanceCounter GetTrackedComponentsPerformanceCounter(

@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Internal;
-
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Core;
 using Castle.Core.Internal;
 using Castle.MicroKernel.Handlers;
+
+namespace Castle.MicroKernel.Internal;
 
 public class LazyServiceStrategy : IGenericServiceStrategy
 {

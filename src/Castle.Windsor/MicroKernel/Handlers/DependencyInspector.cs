@@ -12,45 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-
 using Castle.Core;
+
+namespace Castle.MicroKernel.Handlers;
 
 public class DependencyInspector(StringBuilder message) : IDependencyInspector
 {
 	private readonly HashSet<IHandler> _handlersChecked = [];
 
-	public string Message
-	{
-		get { return message.ToString(); }
-	}
+	public string Message => message.ToString();
 
 	public void Inspect(IHandler handler, DependencyModel[] missingDependencies, IKernel kernel)
 	{
-		if (_handlersChecked.Add(handler) == false)
-		{
-			return;
-		}
+		if (_handlersChecked.Add(handler) == false) return;
 		Debug.Assert(missingDependencies.Length > 0);
 		var uniqueOverrides = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 		message.AppendLine();
 		message.AppendFormat("'{0}' is waiting for the following dependencies:", handler.ComponentModel.Name);
 		message.AppendLine();
 		foreach (var dependency in missingDependencies)
-		{
 			if (dependency.ReferencedComponentName != null)
 			{
 				// NOTE: that's a workaround for us having dependency twice potentially, once from configuration and once from actual type scan
 				if (uniqueOverrides.Add(dependency.ReferencedComponentName))
-				{
 					InspectServiceOverrideDependency(dependency, kernel);
-				}
 			}
 			else if (dependency.IsPrimitiveTypeDependency)
 			{
@@ -61,7 +51,6 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
 			{
 				InspectServiceDependency(handler, dependency, kernel);
 			}
-		}
 	}
 
 	private void InspectParameterDependency(DependencyModel dependency)
@@ -83,7 +72,8 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
 		else if (handler == inspectingHandler)
 		{
 			var alternatives = kernel.GetHandlers(type);
-			message.AppendFormat("- Service '{0}' which points back to the component itself.", type.FullName ?? type.Name);
+			message.AppendFormat("- Service '{0}' which points back to the component itself.",
+				type.FullName ?? type.Name);
 			message.AppendLine();
 			message.Append("A dependency cannot be satisfied by the component itself, did you forget to ");
 			if (alternatives.Length == 1)
@@ -92,11 +82,12 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
 			}
 			else
 			{
-				message.AppendLine("make this a service override and point explicitly to a different component exposing this service?");
+				message.AppendLine(
+					"make this a service override and point explicitly to a different component exposing this service?");
 				message.AppendLine();
 				message.Append("The following components also expose the service, but none of them can be resolved:");
-				foreach (var maybeDecoratedHandler in alternatives.Where(maybeDecoratedHandler => maybeDecoratedHandler != inspectingHandler))
-				{
+				foreach (var maybeDecoratedHandler in alternatives.Where(maybeDecoratedHandler =>
+					         maybeDecoratedHandler != inspectingHandler))
 					if (maybeDecoratedHandler is IExposeDependencyInfo info)
 					{
 						info.ObtainDependencyDetails(this);
@@ -104,19 +95,17 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
 					else
 					{
 						message.AppendLine();
-						message.AppendFormat("'{0}' is registered and is matching the required service, but cannot be resolved.",
+						message.AppendFormat(
+							"'{0}' is registered and is matching the required service, but cannot be resolved.",
 							maybeDecoratedHandler.ComponentModel.Name);
 					}
-				}
 			}
 		}
 		else
 		{
-			message.AppendFormat("- Service '{0}' which was registered but is also waiting for dependencies.", handler.ComponentModel.Name);
-			if (handler is IExposeDependencyInfo info)
-			{
-				info.ObtainDependencyDetails(this);
-			}
+			message.AppendFormat("- Service '{0}' which was registered but is also waiting for dependencies.",
+				handler.ComponentModel.Name);
+			if (handler is IExposeDependencyInfo info) info.ObtainDependencyDetails(this);
 		}
 	}
 
@@ -134,13 +123,12 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
 		}
 		else
 		{
-			message.AppendFormat("- Component '{0}' (via override) which was registered but is also waiting for dependencies.", referenceName);
+			message.AppendFormat(
+				"- Component '{0}' (via override) which was registered but is also waiting for dependencies.",
+				referenceName);
 			message.AppendLine();
 
-			if (handler is IExposeDependencyInfo info)
-			{
-				info.ObtainDependencyDetails(this);
-			}
+			if (handler is IExposeDependencyInfo info) info.ObtainDependencyDetails(this);
 		}
 	}
 }

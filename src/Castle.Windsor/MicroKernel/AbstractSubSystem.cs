@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
-
 using System;
-using System.Security;
+
+namespace Castle.MicroKernel;
 
 [Serializable]
 public abstract class AbstractSubSystem :
@@ -24,8 +23,6 @@ public abstract class AbstractSubSystem :
 #endif
 	ISubSystem
 {
-	private IKernelInternal _kernel;
-
 #if FEATURE_REMOTING
 		[SecurityCritical]
 		public override object InitializeLifetimeService()
@@ -36,15 +33,12 @@ public abstract class AbstractSubSystem :
 
 	public virtual void Init(IKernelInternal kernel)
 	{
-		this._kernel = kernel;
+		Kernel = kernel;
 	}
 
 	public virtual void Terminate()
 	{
 	}
 
-	protected IKernelInternal Kernel
-	{
-		get { return _kernel; }
-	}
+	protected IKernelInternal Kernel { get; private set; }
 }

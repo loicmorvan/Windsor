@@ -16,8 +16,5 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
 public class Foo(int number)
 {
-	public int Number
-	{
-		get { return number; }
-	}
+	public int Number => number;
 }

@@ -12,45 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion;
-
 using System;
-
 using Castle.Core.Internal;
 
+namespace Castle.MicroKernel.SubSystems.Conversion;
+
 /// <summary>
-///   Declares a type as being convertible by a <see cref = "ITypeConverter" /> and optionally defines the converter to be used
+///     Declares a type as being convertible by a <see cref="ITypeConverter" /> and optionally defines the converter to be
+///     used
 /// </summary>
-[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Struct, Inherited = false, AllowMultiple = false)]
+[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Struct, Inherited = false)]
 public class ConvertibleAttribute : Attribute
 {
-	private readonly Type _converterType;
-
 	/// <summary>
-	///   Defines the <see cref = "DefaultComplexConverter " /> to be used to convert the type
+	///     Defines the <see cref="DefaultComplexConverter " /> to be used to convert the type
 	/// </summary>
 	public ConvertibleAttribute() : this(typeof(DefaultComplexConverter))
 	{
 	}
 
 	/// <summary>
-	///   Defines the <see cref = "ITypeConverter" /> to be used to convert the type
+	///     Defines the <see cref="ITypeConverter" /> to be used to convert the type
 	/// </summary>
-	/// <param name = "converterType"></param>
+	/// <param name="converterType"></param>
 	public ConvertibleAttribute(Type converterType)
 	{
 		if (converterType.Is<ITypeConverter>() == false)
-		{
 			throw new ArgumentException(
 				string.Format("ConverterType {0} does not implement {1} interface", converterType.FullName,
 					typeof(ITypeConverter).FullName), nameof(converterType));
-		}
 
-		this._converterType = converterType;
+		ConverterType = converterType;
 	}
 
-	public Type ConverterType
-	{
-		get { return _converterType; }
-	}
+	public Type ConverterType { get; }
 }

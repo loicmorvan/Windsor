@@ -16,8 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class CtorWithDefaultValue(string name = "Stefan Mucha")
 {
-	public string Name
-	{
-		get { return name; }
-	}
+	public string Name => name;
 }

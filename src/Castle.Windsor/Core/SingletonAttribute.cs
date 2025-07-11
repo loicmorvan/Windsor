@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
 
+namespace Castle.Core;
+
 /// <summary>
-///   Indicates that the target components wants a
-///   singleton lifestyle.
+///     Indicates that the target components wants a
+///     singleton lifestyle.
 /// </summary>
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+[AttributeUsage(AttributeTargets.Class)]
 public sealed class SingletonAttribute : LifestyleAttribute
 {
 	/// <summary>
-	///   Initializes a new instance of the <see cref = "SingletonAttribute" /> class.
+	///     Initializes a new instance of the <see cref="SingletonAttribute" /> class.
 	/// </summary>
 	public SingletonAttribute() : base(LifestyleType.Singleton)
 	{

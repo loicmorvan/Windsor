@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using System.Collections.Generic;
+
+namespace Castle.Windsor.Tests.Components;
 
 public class CollectionDepAsConstructor(ICollection<IEmptyService> services)
 {
-	public ICollection<IEmptyService> Services
-	{
-		get { return services; }
-	}
+	public ICollection<IEmptyService> Services => services;
 }

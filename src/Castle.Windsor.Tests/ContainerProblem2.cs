@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using Castle.Core;
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
+
+namespace Castle.Windsor.Tests;
 
 [PerThread]
 public class R
@@ -34,7 +33,7 @@ public class CImpl : IC
 
 	public R R
 	{
-		set { _r = value; }
+		set => _r = value;
 	}
 
 	public IN N { get; set; } = null;
@@ -48,10 +47,10 @@ public interface IN
 [Transient]
 public class Dn(IWm vm, ISp sp) : IN
 {
-	private IWm _vm = vm;
 	private ISp _sp = sp;
+	private IWm _vm = vm;
 
-	public IS Cs { get; private set; } = new Bs();
+	public IS Cs { get; } = new Bs();
 }
 
 public interface IWm
@@ -75,13 +74,7 @@ public interface IS
 [Transient]
 public class Bs : IS
 {
-	private ISp _sp;
-
-	public ISp Sp
-	{
-		get { return _sp; }
-		set { _sp = value; }
-	}
+	public ISp Sp { get; set; }
 }
 
 public interface ISp
@@ -96,7 +89,6 @@ public class Sp : ISp
 	}
 }
 
-	
 public class ContainerProblem2
 {
 	[Fact]
@@ -118,7 +110,7 @@ public class ContainerProblem2
 		// container.Kernel.AddComponent("R", typeof(R), LifestyleType.Thread);
 		container.Kernel.Register(Component.For(typeof(R)).Named("R"));
 
-		IC c = container.Resolve<IC>("C");
+		var c = container.Resolve<IC>("C");
 		Assert.NotNull(c);
 	}
 }

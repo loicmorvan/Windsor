@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
 using Castle.Core;
 using Castle.Windsor;
 
+namespace Castle.MicroKernel;
+
 /// <summary>
-/// Represents a collection of named and typed arguments used for dependencies resolved via <see cref="IWindsorContainer.Resolve{T}(Castle.MicroKernel.Arguments)"/>
-/// See: https://github.com/castleproject/Windsor/blob/master/docs/arguments.md
+///     Represents a collection of named and typed arguments used for dependencies resolved via
+///     <see cref="IWindsorContainer.Resolve{T}(Castle.MicroKernel.Arguments)" />
+///     See: https://github.com/castleproject/Windsor/blob/master/docs/arguments.md
 /// </summary>
 public sealed class Arguments
 	: IEnumerable<KeyValuePair<object, object>> // Required for collection initializers
@@ -33,7 +33,7 @@ public sealed class Arguments
 	private readonly Dictionary<object, object> _dictionary;
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="Arguments"/> class that is empty.
+	///     Initializes a new instance of the <see cref="Arguments" /> class that is empty.
 	/// </summary>
 	public Arguments()
 	{
@@ -41,16 +41,40 @@ public sealed class Arguments
 	}
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="Arguments"/> class that contains elements copied from the specified <see cref="Arguments"/>.
+	///     Initializes a new instance of the <see cref="Arguments" /> class that contains elements copied from the specified
+	///     <see cref="Arguments" />.
 	/// </summary>
 	public Arguments(Arguments arguments)
 	{
 		_dictionary = new Dictionary<object, object>(arguments._dictionary, Comparer);
 	}
 
-	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-	public IEnumerator<KeyValuePair<object, object>> GetEnumerator() => _dictionary.GetEnumerator();
 	public int Count => _dictionary.Count;
+
+	public object this[object key]
+	{
+		get
+		{
+			CheckKeyType(key);
+			if (_dictionary.TryGetValue(key, out var value)) return value;
+			return null;
+		}
+		set
+		{
+			CheckKeyType(key);
+			_dictionary[key] = value;
+		}
+	}
+
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return GetEnumerator();
+	}
+
+	public IEnumerator<KeyValuePair<object, object>> GetEnumerator()
+	{
+		return _dictionary.GetEnumerator();
+	}
 
 	public void Add(object key, object value)
 	{
@@ -70,38 +94,17 @@ public sealed class Arguments
 		_dictionary.Remove(key);
 	}
 
-	public object this[object key]
-	{
-		get
-		{
-			CheckKeyType(key);
-			if (_dictionary.TryGetValue(key, out object value))
-			{
-				return value;
-			}
-			return null;
-		}
-		set
-		{
-			CheckKeyType(key);
-			_dictionary[key] = value;
-		}
-	}
-
 	/// <summary>
-	/// Adds a collection of named and/or typed arguments.
+	///     Adds a collection of named and/or typed arguments.
 	/// </summary>
 	public Arguments Add(IEnumerable<KeyValuePair<object, object>> arguments)
 	{
-		foreach (KeyValuePair<object, object> item in arguments)
-		{
-			Add(item.Key, item.Value);
-		}
+		foreach (var item in arguments) Add(item.Key, item.Value);
 		return this;
 	}
 
 	/// <summary>
-	/// Adds a named argument.
+	///     Adds a named argument.
 	/// </summary>
 	public Arguments AddNamed(string key, object value)
 	{
@@ -110,31 +113,25 @@ public sealed class Arguments
 	}
 
 	/// <summary>
-	/// Adds a collection of named arguments, <see cref="Dictionary{TKey,TValue}"/> implements this interface.
+	///     Adds a collection of named arguments, <see cref="Dictionary{TKey,TValue}" /> implements this interface.
 	/// </summary>
 	public Arguments AddNamed(IEnumerable<KeyValuePair<string, object>> arguments)
 	{
-		foreach (var item in arguments)
-		{
-			AddNamed(item.Key, item.Value);
-		}
+		foreach (var item in arguments) AddNamed(item.Key, item.Value);
 		return this;
 	}
 
 	/// <summary>
-	/// Adds a collection of named arguments from public properties of a standard or anonymous type.
+	///     Adds a collection of named arguments from public properties of a standard or anonymous type.
 	/// </summary>
 	public Arguments AddProperties(object instance)
 	{
-		foreach (DictionaryEntry item in new ReflectionBasedDictionaryAdapter(instance))
-		{
-			Add(item.Key, item.Value);
-		}
+		foreach (DictionaryEntry item in new ReflectionBasedDictionaryAdapter(instance)) Add(item.Key, item.Value);
 		return this;
 	}
 
 	/// <summary>
-	/// Adds a typed argument.
+	///     Adds a typed argument.
 	/// </summary>
 	public Arguments AddTyped(Type key, object value)
 	{
@@ -143,7 +140,7 @@ public sealed class Arguments
 	}
 
 	/// <summary>
-	/// Adds a typed argument.
+	///     Adds a typed argument.
 	/// </summary>
 	public Arguments AddTyped<TDependencyType>(TDependencyType value)
 	{
@@ -152,32 +149,26 @@ public sealed class Arguments
 	}
 
 	/// <summary>
-	/// Adds a collection of typed arguments.
+	///     Adds a collection of typed arguments.
 	/// </summary>
 	public Arguments AddTyped(IEnumerable<object> arguments)
 	{
-		foreach (object item in arguments)
-		{
-			AddTyped(item.GetType(), item);
-		}
+		foreach (var item in arguments) AddTyped(item.GetType(), item);
 		return this;
 	}
 
 	/// <summary>
-	/// Adds a collection of typed arguments.
+	///     Adds a collection of typed arguments.
 	/// </summary>
 	public Arguments AddTyped(params object[] arguments)
 	{
-		foreach (object item in arguments)
-		{
-			AddTyped(item.GetType(), item);
-		}
+		foreach (var item in arguments) AddTyped(item.GetType(), item);
 		return this;
 	}
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="Arguments"/> class and adds a collection of named arguments,
-	/// <see cref="Dictionary{TKey,TValue}"/> implements this interface.
+	///     Initializes a new instance of the <see cref="Arguments" /> class and adds a collection of named arguments,
+	///     <see cref="Dictionary{TKey,TValue}" /> implements this interface.
 	/// </summary>
 	public static Arguments FromNamed(IEnumerable<KeyValuePair<string, object>> arguments)
 	{
@@ -185,8 +176,8 @@ public sealed class Arguments
 	}
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="Arguments"/> class and adds a collection of named arguments
-	/// from public properties of a standard or anonymous type.
+	///     Initializes a new instance of the <see cref="Arguments" /> class and adds a collection of named arguments
+	///     from public properties of a standard or anonymous type.
 	/// </summary>
 	public static Arguments FromProperties(object instance)
 	{
@@ -194,8 +185,8 @@ public sealed class Arguments
 	}
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="Arguments"/> class and adds a collection of typed arguments,
-	/// <see cref="Dictionary{TKey,TValue}"/> implements this interface.
+	///     Initializes a new instance of the <see cref="Arguments" /> class and adds a collection of typed arguments,
+	///     <see cref="Dictionary{TKey,TValue}" /> implements this interface.
 	/// </summary>
 	public static Arguments FromTyped(IEnumerable<KeyValuePair<Type, object>> arguments)
 	{
@@ -203,7 +194,7 @@ public sealed class Arguments
 	}
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="Arguments"/> class and adds a collection of typed arguments.
+	///     Initializes a new instance of the <see cref="Arguments" /> class and adds a collection of typed arguments.
 	/// </summary>
 	public static Arguments FromTyped(IEnumerable<object> arguments)
 	{
@@ -213,28 +204,20 @@ public sealed class Arguments
 	private void CheckKeyType(object key)
 	{
 		if (!(key is string) && !(key is Type))
-		{
 			throw new ArgumentException($"The argument '{key}' should be of type string or System.Type.");
-		}
 	}
 
 	private sealed class ArgumentsComparer : IEqualityComparer<object>
 	{
 		public new bool Equals(object x, object y)
 		{
-			if (x is string a)
-			{
-				return StringComparer.OrdinalIgnoreCase.Equals(a, y as string);
-			}
+			if (x is string a) return StringComparer.OrdinalIgnoreCase.Equals(a, y as string);
 			return object.Equals(x, y);
 		}
 
 		public int GetHashCode(object obj)
 		{
-			if (obj is string str)
-			{
-				return StringComparer.OrdinalIgnoreCase.GetHashCode(str);
-			}
+			if (obj is string str) return StringComparer.OrdinalIgnoreCase.GetHashCode(str);
 			return obj.GetHashCode();
 		}
 	}

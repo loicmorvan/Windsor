@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using Castle.Core;
+
+namespace Castle.Windsor.Tests.Components;
 
 public class ClassWithDoNotWireProperties
 {
-	[DoNotWire]
-	public string Host { get; set; }
+	[DoNotWire] public string Host { get; set; }
 
-	[DoNotWire]
-	public int Port { get; set; }
+	[DoNotWire] public int Port { get; set; }
 }

@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests.Framework;
-
 using System;
-
-using Castle.MicroKernel.Lifestyle;
 using Castle.Facilities.AspNetCore.Tests.Framework.Builders;
+using Castle.MicroKernel.Lifestyle;
+
+namespace Castle.Facilities.AspNetCore.Tests.Framework;
 
 public class TestContextFactory
 {
-	public static TestContext Get(Action<WindsorRegistrationOptions> configure = null, Func<IServiceProvider> serviceProviderFactory = null)
+	public static TestContext Get(Action<WindsorRegistrationOptions> configure = null,
+		Func<IServiceProvider> serviceProviderFactory = null)
 	{
 		IServiceProvider serviceProvider = null;
 
@@ -33,6 +33,7 @@ public class TestContextFactory
 
 		var applicationBuilder = ApplicationBuilder.New(serviceProvider);
 
-		return new TestContext(serviceCollection, serviceProvider, applicationBuilder, container, container.RequireScope());
-	} 
+		return new TestContext(serviceCollection, serviceProvider, applicationBuilder, container,
+			container.RequireScope());
+	}
 }

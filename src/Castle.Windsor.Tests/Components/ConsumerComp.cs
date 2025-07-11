@@ -16,8 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ConsumerComp(ICalcService calcservice)
 {
-	public ICalcService Calcservice
-	{
-		get { return calcservice; }
-	}
+	public ICalcService Calcservice => calcservice;
 }

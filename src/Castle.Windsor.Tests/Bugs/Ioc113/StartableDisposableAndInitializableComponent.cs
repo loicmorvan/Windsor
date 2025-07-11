@@ -1,13 +1,17 @@
-namespace Castle.Windsor.Tests.Bugs.Ioc113;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.Core;
+
+namespace Castle.Windsor.Tests.Bugs.Ioc113;
 
 public class StartableDisposableAndInitializableComponent : IInitializable, IDisposable, IStartable
 {
 	public readonly IList<SdiComponentMethods> CalledMethods = new List<SdiComponentMethods>();
+
+	public void Dispose()
+	{
+		CalledMethods.Add(SdiComponentMethods.Dispose);
+	}
 
 	public void Initialize()
 	{
@@ -19,18 +23,13 @@ public class StartableDisposableAndInitializableComponent : IInitializable, IDis
 		CalledMethods.Add(SdiComponentMethods.Start);
 	}
 
-	public void DoSomething()
-	{
-		CalledMethods.Add(SdiComponentMethods.DoSomething);
-	}
-
 	public void Stop()
 	{
 		CalledMethods.Add(SdiComponentMethods.Stop);
 	}
 
-	public void Dispose()
+	public void DoSomething()
 	{
-		CalledMethods.Add(SdiComponentMethods.Dispose);
+		CalledMethods.Add(SdiComponentMethods.DoSomething);
 	}
 }

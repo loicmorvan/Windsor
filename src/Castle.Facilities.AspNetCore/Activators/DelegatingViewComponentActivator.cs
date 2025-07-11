@@ -12,16 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Activators;
-
 using System;
-
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 
-internal sealed class DelegatingViewComponentActivator(Func<Type, object> viewComponentCreator, Action<object> viewComponentReleaser) : IViewComponentActivator
+namespace Castle.Facilities.AspNetCore.Activators;
+
+internal sealed class DelegatingViewComponentActivator(
+	Func<Type, object> viewComponentCreator,
+	Action<object> viewComponentReleaser) : IViewComponentActivator
 {
-	private readonly Func<Type, object> _viewComponentCreator = viewComponentCreator ?? throw new ArgumentNullException(nameof(viewComponentCreator));
-	private readonly Action<object> _viewComponentReleaser = viewComponentReleaser ?? throw new ArgumentNullException(nameof(viewComponentReleaser));
+	private readonly Func<Type, object> _viewComponentCreator =
+		viewComponentCreator ?? throw new ArgumentNullException(nameof(viewComponentCreator));
+
+	private readonly Action<object> _viewComponentReleaser =
+		viewComponentReleaser ?? throw new ArgumentNullException(nameof(viewComponentReleaser));
 
 	public object Create(ViewComponentContext context)
 	{

@@ -12,31 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
 using System.Linq;
 using System.Threading;
-
 using Castle.Core;
+using Castle.Core.Configuration;
 using Castle.Core.Internal;
 using Castle.DynamicProxy;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Handlers;
 using Castle.MicroKernel.Proxy;
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
 using Castle.Windsor.Installer;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Interceptors;
 using Castle.Windsor.Tests.ProxyInfrastructure;
 using Castle.Windsor.Tests.XmlFiles;
 
+namespace Castle.Windsor.Tests;
+
 public class InterceptorsTestCase : IDisposable
 {
-	private IWindsorContainer _container;
 	private readonly ManualResetEvent _startEvent = new(false);
 	private readonly ManualResetEvent _stopEvent = new(false);
+	private IWindsorContainer _container;
 	private CalculatorService _service;
 
 	public InterceptorsTestCase()
@@ -66,7 +65,8 @@ public class InterceptorsTestCase : IDisposable
 	public void Interface_that_depends_on_service_it_is_intercepting()
 	{
 		_container.Register(Component.For<InterceptorThatCauseStackOverflow>(),
-			Component.For<ICameraService>().ImplementedBy<CameraService>().Interceptors<InterceptorThatCauseStackOverflow>(),
+			Component.For<ICameraService>().ImplementedBy<CameraService>()
+				.Interceptors<InterceptorThatCauseStackOverflow>(),
 			//because it has no interceptors, it is okay to resolve it...
 			Component.For<ICameraService>().ImplementedBy<CameraService>().Named("okay to resolve"));
 
@@ -77,7 +77,8 @@ public class InterceptorsTestCase : IDisposable
 	public void InterfaceProxyWithLifecycle()
 	{
 		_container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
-		_container.Register(Component.For(typeof(ICalcService)).ImplementedBy(typeof(CalculatorServiceWithLifecycle)).Named("key"));
+		_container.Register(Component.For(typeof(ICalcService)).ImplementedBy(typeof(CalculatorServiceWithLifecycle))
+			.Named("key"));
 
 		var service = _container.Resolve<ICalcService>("key");
 
@@ -128,14 +129,14 @@ public class InterceptorsTestCase : IDisposable
 	public void Xml_Component_With_Non_Existing_Interceptor_throws()
 	{
 		_container.Install(XmlResource("interceptors.xml"));
-		Assert.Throws<HandlerException>( () =>
+		Assert.Throws<HandlerException>(() =>
 			_container.Resolve<CalculatorService>("ComponentWithNonExistingInterceptor"));
 	}
 
 	[Fact]
 	public void Xml_Component_With_Non_invalid_Interceptor_throws()
 	{
-		Assert.Throws<Exception>( () =>
+		Assert.Throws<Exception>(() =>
 			_container.Install(XmlResource("interceptorsInvalid.xml")));
 	}
 
@@ -145,7 +146,7 @@ public class InterceptorsTestCase : IDisposable
 		_container.Install(XmlResource("mixins.xml"));
 		_service = _container.Resolve<CalculatorService>("ValidComponent");
 
-		Assert.IsType<ISimpleMixIn>(_service, exactMatch: false);
+		Assert.IsType<ISimpleMixIn>(_service, false);
 
 		((ISimpleMixIn)_service).DoSomething();
 	}
@@ -156,9 +157,9 @@ public class InterceptorsTestCase : IDisposable
 		_container.Install(XmlResource("additionalInterfaces.xml"));
 		_service = _container.Resolve<CalculatorService>("ValidComponent");
 
-		Assert.IsType<ISimpleMixIn>(_service, exactMatch: false);
+		Assert.IsType<ISimpleMixIn>(_service, false);
 
-		Assert.Throws<NotImplementedException>( () =>
+		Assert.Throws<NotImplementedException>(() =>
 			((ISimpleMixIn)_service).DoSomething());
 	}
 
@@ -295,13 +296,13 @@ public class InterceptorsTestCase : IDisposable
 
 	private ConfigurationInstaller XmlResource(string fileName)
 	{
-		return Configuration.FromXml(Xml.Embedded(fileName));
+		return Castle.Windsor.Installer.Configuration.FromXml(Xml.Embedded(fileName));
 	}
 }
 
 public class MyInterceptorGreedyFacility : IFacility
 {
-	public void Init(IKernel kernel, Castle.Core.Configuration.IConfiguration facilityConfig)
+	public void Init(IKernel kernel, IConfiguration facilityConfig)
 	{
 		kernel.ComponentRegistered += OnComponentRegistered;
 	}
@@ -310,19 +311,17 @@ public class MyInterceptorGreedyFacility : IFacility
 	{
 	}
 
-	private void OnComponentRegistered(String key, IHandler handler)
+	private void OnComponentRegistered(string key, IHandler handler)
 	{
 		if (key == "key")
-		{
 			handler.ComponentModel.Interceptors.Add(
 				new InterceptorReference("interceptor"));
-		}
 	}
 }
 
 public class MyInterceptorGreedyFacility2 : IFacility
 {
-	public void Init(IKernel kernel, Castle.Core.Configuration.IConfiguration facilityConfig)
+	public void Init(IKernel kernel, IConfiguration facilityConfig)
 	{
 		kernel.ComponentRegistered += OnComponentRegistered;
 	}
@@ -331,12 +330,9 @@ public class MyInterceptorGreedyFacility2 : IFacility
 	{
 	}
 
-	private void OnComponentRegistered(String key, IHandler handler)
+	private void OnComponentRegistered(string key, IHandler handler)
 	{
-		if (handler.ComponentModel.Services.Any(s => s.Is<IInterceptor>()))
-		{
-			return;
-		}
+		if (handler.ComponentModel.Services.Any(s => s.Is<IInterceptor>())) return;
 
 		handler.ComponentModel.Interceptors.Add(new InterceptorReference("interceptor"));
 	}

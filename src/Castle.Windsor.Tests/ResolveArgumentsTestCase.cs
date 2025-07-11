@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor.Extensions;
+
+namespace Castle.Windsor.Tests;
 
 public class ResolveArgumentsTestCase : AbstractContainerTestCase
 {
@@ -28,8 +27,10 @@ public class ResolveArgumentsTestCase : AbstractContainerTestCase
 	{
 		Container.Kernel.Resolver.AddSubResolver(new ListResolver(Container.Kernel));
 		Container.Register(Component.For<Service>());
-		Container.Register(Component.For<IDependencyWithManyImplementations>().ImplementedBy<DependencyImplementationA>());
-		Container.Register(Component.For<IDependencyWithManyImplementations>().ImplementedBy<DependencyImplementationB>());
+		Container.Register(Component.For<IDependencyWithManyImplementations>()
+			.ImplementedBy<DependencyImplementationA>());
+		Container.Register(Component.For<IDependencyWithManyImplementations>()
+			.ImplementedBy<DependencyImplementationB>());
 	}
 
 	[Fact]
@@ -41,7 +42,8 @@ public class ResolveArgumentsTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Can_ResolveAll_using_Arguments_as_Properties()
 	{
-		Container.ResolveAll<IDependencyWithManyImplementations>(Arguments.FromProperties(new { Dependency = new Dependency() }));
+		Container.ResolveAll<IDependencyWithManyImplementations>(
+			Arguments.FromProperties(new { Dependency = new Dependency() }));
 	}
 
 	[Fact]
@@ -53,7 +55,8 @@ public class ResolveArgumentsTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Can_ResolveAll_using_Type_and_Arguments_as_Properties()
 	{
-		Container.ResolveAll(typeof(IDependencyWithManyImplementations), Arguments.FromProperties(new { Dependency = new Dependency() }));
+		Container.ResolveAll(typeof(IDependencyWithManyImplementations),
+			Arguments.FromProperties(new { Dependency = new Dependency() }));
 	}
 
 	[Fact]
@@ -87,56 +90,64 @@ public class ResolveArgumentsTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Can_Resolve_using_Arguments_as_ReadOnlyDictionary()
 	{
-		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object> { { "dependency", new Dependency() } };
+		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object>
+			{ { "dependency", new Dependency() } };
 		Container.Resolve<Service>(new Arguments().AddNamed(readOnlyDictionary));
 	}
 
 	[Fact]
 	public void Can_ResolveAll_using_Arguments_as_ReadOnlyDictionary()
 	{
-		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object> { { "dependency", new Dependency() } };
+		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object>
+			{ { "dependency", new Dependency() } };
 		Container.ResolveAll<IDependencyWithManyImplementations>(new Arguments().AddNamed(readOnlyDictionary));
 	}
 
 	[Fact]
 	public void Can_Resolve_using_ReadOnlyDictionary()
 	{
-		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object> { { "dependency", new Dependency() } };
+		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object>
+			{ { "dependency", new Dependency() } };
 		Container.Resolve<Service>(readOnlyDictionary);
 	}
 
 	[Fact]
 	public void Can_ResolveAll_using_ReadOnlyDictionary()
 	{
-		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object> { { "dependency", new Dependency() } };
+		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object>
+			{ { "dependency", new Dependency() } };
 		Container.ResolveAll<IDependencyWithManyImplementations>(readOnlyDictionary);
 	}
 
 	[Fact]
 	public void Can_Resolve_using_Type_and_Arguments_as_ReadOnlyDictionary()
 	{
-		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object> { { "dependency", new Dependency() } };
+		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object>
+			{ { "dependency", new Dependency() } };
 		Container.Resolve(typeof(Service), new Arguments().AddNamed(readOnlyDictionary));
 	}
 
 	[Fact]
 	public void Can_ResolveAll_using_Type_and_Arguments_as_ReadOnlyDictionary()
 	{
-		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object> { { "dependency", new Dependency() } };
+		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object>
+			{ { "dependency", new Dependency() } };
 		Container.ResolveAll(typeof(IDependencyWithManyImplementations), new Arguments().AddNamed(readOnlyDictionary));
 	}
 
 	[Fact]
 	public void Can_Resolve_Type_and_ReadOnlyDictionary()
 	{
-		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object> { { "dependency", new Dependency() } };
+		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object>
+			{ { "dependency", new Dependency() } };
 		Container.Resolve(typeof(Service), readOnlyDictionary);
 	}
 
 	[Fact]
 	public void Can_ResolveAll_Type_and_ReadOnlyDictionary()
 	{
-		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object> { { "dependency", new Dependency() } };
+		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object>
+			{ { "dependency", new Dependency() } };
 		Container.ResolveAll(typeof(IDependencyWithManyImplementations), readOnlyDictionary);
 	}
 
@@ -164,14 +175,18 @@ public class ResolveArgumentsTestCase : AbstractContainerTestCase
 		Container.Resolve(typeof(IDependencyWithManyImplementations), new Arguments().AddTyped(new Dependency()));
 	}
 
-	private class Dependency { }
+	private class Dependency
+	{
+	}
 
 	private class Service(Dependency dependency)
 	{
 		private readonly Dependency _dependency = dependency ?? throw new ArgumentNullException(nameof(dependency));
 	}
 
-	private interface IDependencyWithManyImplementations { }
+	private interface IDependencyWithManyImplementations
+	{
+	}
 
 	private class DependencyImplementationA(Dependency dependency) : IDependencyWithManyImplementations
 	{

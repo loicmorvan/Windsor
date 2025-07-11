@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System.Linq;
-
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests;
 
 public class ConventionRegistrationConfigureTestCase : AbstractContainerTestCase
 {
@@ -48,7 +47,8 @@ public class ConventionRegistrationConfigureTestCase : AbstractContainerTestCase
 	{
 		Container.Register(Classes.FromAssembly(GetCurrentAssembly())
 			.BasedOn<IEmptyService>()
-			.ConfigureIf(r => char.IsUpper(r.Implementation.Name.Last()), r => r.Named(r.Implementation.Name.Last().ToString())));
+			.ConfigureIf(r => char.IsUpper(r.Implementation.Name.Last()),
+				r => r.Named(r.Implementation.Name.Last().ToString())));
 
 		var a = Container.Resolve<IEmptyService>("a");
 		var b = Container.Resolve<IEmptyService>("b");
@@ -76,7 +76,8 @@ public class ConventionRegistrationConfigureTestCase : AbstractContainerTestCase
 		Container.Register(Classes.FromAssembly(GetCurrentAssembly())
 			.BasedOn<IEmptyService>()
 			.WithService.Base()
-			.ConfigureIf(r => r.Implementation.Name.EndsWith("A"), r => r.Named("A"), r => r.Named((++number).ToString())));
+			.ConfigureIf(r => r.Implementation.Name.EndsWith("A"), r => r.Named("A"),
+				r => r.Named((++number).ToString())));
 
 		var a = Container.Resolve<IEmptyService>("a");
 		Assert.IsType<EmptyServiceA>(a);

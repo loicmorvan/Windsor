@@ -18,10 +18,7 @@ public class ReviewableEmployee : Employee, IReviewableEmployee
 {
 	public IReviewer Reviewer { get; set; }
 
-	public string ReviewerId
-	{
-		get { return Reviewer.EmployeeId; }
-	}
+	public string ReviewerId => Reviewer.EmployeeId;
 
 	public int SalaryThird { get; set; }
 }

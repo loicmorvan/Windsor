@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory.Internal;
-
 using System;
-
 using Castle.Core;
 using Castle.Core.Internal;
 using Castle.MicroKernel.Handlers;
+
+namespace Castle.Facilities.TypedFactory.Internal;
 
 public class DelegateServiceStrategy : IGenericServiceStrategy
 {

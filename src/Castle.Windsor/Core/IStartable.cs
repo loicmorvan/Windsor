@@ -15,17 +15,17 @@
 namespace Castle.Core;
 
 /// <summary>
-///   Interface for components that wish to be started and stopped by the container
+///     Interface for components that wish to be started and stopped by the container
 /// </summary>
 public interface IStartable
 {
 	/// <summary>
-	///   Starts this instance.
+	///     Starts this instance.
 	/// </summary>
 	void Start();
 
 	/// <summary>
-	///   Stops this instance.
+	///     Stops this instance.
 	/// </summary>
 	void Stop();
 }

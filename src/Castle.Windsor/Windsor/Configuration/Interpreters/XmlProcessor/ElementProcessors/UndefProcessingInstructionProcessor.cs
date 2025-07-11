@@ -12,22 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
-using System;
 using System.Xml;
+
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
 public class UndefProcessingInstructionProcessor : AbstractStatementElementProcessor
 {
-	public override XmlNodeType[] AcceptNodeTypes
-	{
-		get { return [XmlNodeType.ProcessingInstruction]; }
-	}
+	public override XmlNodeType[] AcceptNodeTypes => [XmlNodeType.ProcessingInstruction];
 
-	public override String Name
-	{
-		get { return "undef"; }
-	}
+	public override string Name => "undef";
 
 	public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
 	{

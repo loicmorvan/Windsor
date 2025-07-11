@@ -12,32 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.DebuggerViews;
-
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-
 using Castle.MicroKernel;
 using Castle.Windsor.Diagnostics.Helpers;
 
-[DebuggerDisplay("{_description,nq}", Name = "{name,nq}")]
-public class ComponentDebuggerView(IHandler handler, string description, params IComponentDebuggerExtension[] defaultExtension)
+namespace Castle.Windsor.Diagnostics.DebuggerViews;
+
+[DebuggerDisplay("{Description,nq}", Name = "{name,nq}")]
+public class ComponentDebuggerView(
+	IHandler handler,
+	string description,
+	params IComponentDebuggerExtension[] defaultExtension)
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly string _description = description;
+	private readonly IComponentDebuggerExtension[] _extension =
+		defaultExtension.Concat(GetExtensions(handler)).ToArray();
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly IComponentDebuggerExtension[] _extension = defaultExtension.Concat(GetExtensions(handler)).ToArray();
-
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly string _name = handler.GetComponentName();
-
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public string Description
-	{
-		get { return _description; }
-	}
+	public string Description { get; } = description;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
 	public object[] Extensions
@@ -46,19 +40,18 @@ public class ComponentDebuggerView(IHandler handler, string description, params 
 	}
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public string Name
-	{
-		get { return _name; }
-	}
+	public string Name { get; } = handler.GetComponentName();
 
 	public static ComponentDebuggerView BuildFor(IHandler handler, string description = null)
 	{
 		var extensions = new List<IComponentDebuggerExtension> { new DefaultComponentViewBuilder(handler) };
 		extensions.AddRange(GetExtensions(handler));
-		return BuildRawFor(handler, description ?? handler.ComponentModel.GetLifestyleDescription(), extensions.ToArray());
+		return BuildRawFor(handler, description ?? handler.ComponentModel.GetLifestyleDescription(),
+			extensions.ToArray());
 	}
 
-	public static ComponentDebuggerView BuildRawFor(IHandler handler, string description, IComponentDebuggerExtension[] extensions)
+	public static ComponentDebuggerView BuildRawFor(IHandler handler, string description,
+		IComponentDebuggerExtension[] extensions)
 	{
 		return new ComponentDebuggerView(handler, description, extensions);
 	}

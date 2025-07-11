@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using System;
+
+namespace Castle.Windsor.Tests.Components;
 
 public class MarshalCalculatorService :
 #if FEATURE_REMOTING
@@ -27,13 +27,7 @@ public class MarshalCalculatorService :
 		return x + y;
 	}
 
-	public bool Initialized
-	{
-		get { throw new NotImplementedException(); }
-	}
+	public bool Initialized => throw new NotImplementedException();
 
-	public bool Disposed
-	{
-		get { throw new NotImplementedException(); }
-	}
+	public bool Disposed => throw new NotImplementedException();
 }

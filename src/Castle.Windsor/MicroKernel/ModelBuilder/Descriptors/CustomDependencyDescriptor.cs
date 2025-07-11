@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors;
-
 using Castle.Core;
 using Castle.Core.Internal;
 using Castle.MicroKernel.Registration;
+
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
 
 public class CustomDependencyDescriptor : IComponentModelDescriptor
 {
@@ -25,12 +25,12 @@ public class CustomDependencyDescriptor : IComponentModelDescriptor
 
 	public CustomDependencyDescriptor(Arguments arguments)
 	{
-		this._arguments = arguments;
+		_arguments = arguments;
 	}
 
 	public CustomDependencyDescriptor(params Property[] properties)
 	{
-		this._properties = properties;
+		_properties = properties;
 	}
 
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
@@ -40,15 +40,9 @@ public class CustomDependencyDescriptor : IComponentModelDescriptor
 	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
 	{
 		if (_arguments != null)
-		{
 			foreach (var property in _arguments)
-			{
 				model.CustomDependencies[property.Key] = property.Value;
-			}
-		}
-		if (_properties != null)
-		{
-			_properties.ForEach(p => model.CustomDependencies[p.Key] = p.Value);
-		}
+
+		if (_properties != null) _properties.ForEach(p => model.CustomDependencies[p.Key] = p.Value);
 	}
 }

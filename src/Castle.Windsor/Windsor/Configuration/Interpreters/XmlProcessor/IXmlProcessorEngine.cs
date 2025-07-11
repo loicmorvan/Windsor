@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor;
-
 using System;
 using System.Xml;
-
 using Castle.Core.Resource;
+
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor;
 
 public interface IXmlProcessorEngine
 {
-	void AddFlag(String flag);
+	void AddFlag(string flag);
 
 	void AddNodeProcessor(Type type);
 
@@ -31,13 +30,13 @@ public interface IXmlProcessorEngine
 
 	void DispatchProcessCurrent(IXmlProcessorNodeList nodeList);
 
-	XmlElement GetProperty(String name);
+	XmlElement GetProperty(string name);
 
 	IResource GetResource(string uri);
 
-	bool HasFlag(String flag);
+	bool HasFlag(string flag);
 
-	bool HasProperty(String name);
+	bool HasProperty(string name);
 
 	bool HasSpecialProcessor(XmlNode node);
 
@@ -45,5 +44,5 @@ public interface IXmlProcessorEngine
 
 	void PushResource(IResource resource);
 
-	void RemoveFlag(String flag);
+	void RemoveFlag(string flag);
 }

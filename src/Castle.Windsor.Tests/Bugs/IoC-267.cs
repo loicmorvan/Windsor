@@ -51,7 +51,8 @@ namespace Castle.Bugs
 			var compiler = new CSharpCodeProvider();
 			var coreAssembly = typeof(Castle.Core.ProxyServices).GetTypeInfo().Assembly.Location;
 			var windsorAssembly = typeof(DefaultKernel).GetTypeInfo().Assembly.Location;
-			var results = compiler.CompileAssemblyFromSource(new CompilerParameters(new[] { coreAssembly, windsorAssembly }), csharpCode);
+			var results =
+ compiler.CompileAssemblyFromSource(new CompilerParameters(new[] { coreAssembly, windsorAssembly }), csharpCode);
 			Assert.True(results.Errors.HasErrors);
 			Assert.Equal("CS0452", results.Errors[0].ErrorNumber, results.Errors[0].ToString());
 			// The type 'int' must be a reference type in order to use it as parameter 'S' in the generic type or method 'Castle.MicroKernel.Registration.Component.For<S>()'

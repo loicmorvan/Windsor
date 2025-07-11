@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111;
-
 using Castle.Core.Resource;
-using Castle.Windsor;
 using Castle.Windsor.Configuration.Interpreters;
+
+namespace Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111;
 
 public class FacilitiesIssue111
 {
@@ -55,5 +54,4 @@ public class FacilitiesIssue111
 	{
 		new WindsorContainer(new XmlInterpreter(_setupResource));
 	}
-
 }

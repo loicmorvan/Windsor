@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory;
-
 using System;
 using System.ComponentModel;
-
 using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.Facilities.TypedFactory.Internal;
@@ -26,13 +23,16 @@ using Castle.MicroKernel.Proxy;
 using Castle.MicroKernel.Resolvers;
 using Castle.MicroKernel.SubSystems.Conversion;
 using Castle.MicroKernel.Util;
-
 using Component = Castle.MicroKernel.Registration.Component;
 
+namespace Castle.Facilities.TypedFactory;
+
+using Component = Component;
+
 /// <summary>
-///   Provides automatically generated factories on top of interfaces or delegates that
-///   you can use to pull components out of the container without ever referencing it 
-///   explicitly.
+///     Provides automatically generated factories on top of interfaces or delegates that
+///     you can use to pull components out of the container without ever referencing it
+///     explicitly.
 /// </summary>
 public class TypedFactoryFacility : AbstractFacility
 {
@@ -67,10 +67,7 @@ public class TypedFactoryFacility : AbstractFacility
 
 	protected virtual void AddFactories(IConfiguration facilityConfig, ITypeConverter converter)
 	{
-		if (facilityConfig == null)
-		{
-			return;
-		}
+		if (facilityConfig == null) return;
 
 		foreach (var config in facilityConfig.Children["factories"].Children)
 		{

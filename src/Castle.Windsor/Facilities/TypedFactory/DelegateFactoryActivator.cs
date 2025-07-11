@@ -12,15 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory;
-
 using Castle.Core;
 using Castle.Facilities.TypedFactory.Internal;
 using Castle.MicroKernel;
 using Castle.MicroKernel.ComponentActivator;
 using Castle.MicroKernel.Context;
 
-public class DelegateFactoryActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
+namespace Castle.Facilities.TypedFactory;
+
+public class DelegateFactoryActivator(
+	ComponentModel model,
+	IKernelInternal kernel,
+	ComponentInstanceDelegate onCreation,
+	ComponentInstanceDelegate onDestruction)
 	: AbstractComponentActivator(model, kernel, onCreation, onDestruction), IDependencyAwareActivator
 {
 	private readonly IProxyFactoryExtension _proxyFactory = new DelegateProxyFactory();

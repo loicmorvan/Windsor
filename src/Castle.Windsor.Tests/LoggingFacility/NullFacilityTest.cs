@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.LoggingFacility;
-
 using System;
-
 using Castle.Core.Logging;
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
 using Castle.Windsor.Tests.LoggingFacility.Classes;
 
+namespace Castle.Windsor.Tests.LoggingFacility;
+
 /// <summary>
-/// Summary description for ConsoleFacitlyTest.
+///     Summary description for ConsoleFacitlyTest.
 /// </summary>
 public class NullFacilityTest : BaseTest, IDisposable
 {
@@ -35,17 +33,14 @@ public class NullFacilityTest : BaseTest, IDisposable
 
 	public void Dispose()
 	{
-		if (_container != null)
-		{
-			_container.Dispose();
-		}
+		if (_container != null) _container.Dispose();
 	}
 
 	[Fact]
 	public void SimpleTest()
 	{
 		_container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
-		SimpleLoggingComponent test = _container.Resolve<SimpleLoggingComponent>("component");
+		var test = _container.Resolve<SimpleLoggingComponent>("component");
 
 		test.DoSomething();
 	}

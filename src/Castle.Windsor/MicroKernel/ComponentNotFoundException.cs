@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 namespace Castle.MicroKernel;
 
-using System;
-using System.Runtime.Serialization;
-
 /// <summary>
-///   Exception threw when a request for a component
-///   cannot be satisfied because the component does not
-///   exist in the container
+///     Exception threw when a request for a component
+///     cannot be satisfied because the component does not
+///     exist in the container
 /// </summary>
 [Serializable]
 public class ComponentNotFoundException : ComponentResolutionException
@@ -33,12 +32,12 @@ public class ComponentNotFoundException : ComponentResolutionException
 	}
 
 	/// <summary>
-	///   Initializes a new instance of the
-	///   <see cref = "ComponentNotFoundException" />
-	///   class.
+	///     Initializes a new instance of the
+	///     <see cref="ComponentNotFoundException" />
+	///     class.
 	/// </summary>
-	/// <param name = "name">The name.</param>
-	/// <param name = "message">Exception message.</param>
+	/// <param name="name">The name.</param>
+	/// <param name="message">Exception message.</param>
 	public ComponentNotFoundException(string name, string message)
 		: base(message)
 	{
@@ -46,12 +45,12 @@ public class ComponentNotFoundException : ComponentResolutionException
 	}
 
 	/// <summary>
-	///   Initializes a new instance of the
-	///   <see cref = "ComponentNotFoundException" />
-	///   class.
+	///     Initializes a new instance of the
+	///     <see cref="ComponentNotFoundException" />
+	///     class.
 	/// </summary>
-	/// <param name = "service">The service.</param>
-	/// <param name = "message">Exception message.</param>
+	/// <param name="service">The service.</param>
+	/// <param name="message">Exception message.</param>
 	public ComponentNotFoundException(Type service, string message)
 		: base(message)
 	{
@@ -59,13 +58,13 @@ public class ComponentNotFoundException : ComponentResolutionException
 	}
 
 	/// <summary>
-	///   Initializes a new instance of the
-	///   <see cref = "ComponentNotFoundException" />
-	///   class.
+	///     Initializes a new instance of the
+	///     <see cref="ComponentNotFoundException" />
+	///     class.
 	/// </summary>
-	/// <param name = "service">The service.</param>
+	/// <param name="service">The service.</param>
 	public ComponentNotFoundException(Type service) :
-		this(service, String.Format("No component for supporting the service {0} was found", service.FullName))
+		this(service, string.Format("No component for supporting the service {0} was found", service.FullName))
 	{
 	}
 
@@ -89,29 +88,24 @@ public class ComponentNotFoundException : ComponentResolutionException
 	private static string BuildMessage(string name, Type service, int countOfHandlersForTheService)
 	{
 		var message =
-			string.Format("Requested component named '{0}' was not found in the container. Did you forget to register it?{1}",
+			string.Format(
+				"Requested component named '{0}' was not found in the container. Did you forget to register it?{1}",
 				name, Environment.NewLine);
 		if (countOfHandlersForTheService == 0)
-		{
 			return message +
 			       string.Format(
 				       "There are no components supporting requested service '{0}'. You need to register components in order to be able to use them.",
 				       service.FullName);
-		}
 		if (countOfHandlersForTheService == 1)
-		{
 			return message +
 			       string.Format(
 				       "There is one other component supporting requested service '{0}'. Is it what you were looking for?",
 				       service.FullName);
-		}
 		if (countOfHandlersForTheService > 1)
-		{
 			return message +
 			       string.Format(
 				       "There are {0} other components supporting requested service '{1}'. Were you looking for any of them?",
 				       countOfHandlersForTheService, service.FullName);
-		}
 		// this should never happen but if someone passes us wrong information we just ignore it
 		return message;
 	}

@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs.IoC_78;
-
 using Castle.MicroKernel.Handlers;
 using Castle.MicroKernel.Registration;
+
+namespace Castle.Windsor.Tests.Bugs.IoC_78;
 
 public class IoC78 : AbstractContainerTestCase
 {

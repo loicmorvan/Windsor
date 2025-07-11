@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System.Reflection;
-
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests;
 
 public class IsFallbackTestCase : AbstractContainerTestCase
 {
@@ -50,7 +49,9 @@ public class IsFallbackTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Can_make_first_component_default_with_filter()
 	{
-		Container.Register(Component.For<IEmptyService, EmptyServiceA, object>().ImplementedBy<EmptyServiceA>().IsFallback(t => t.GetTypeInfo().IsInterface),
+		Container.Register(
+			Component.For<IEmptyService, EmptyServiceA, object>().ImplementedBy<EmptyServiceA>()
+				.IsFallback(t => t.GetTypeInfo().IsInterface),
 			Component.For<IEmptyService, EmptyServiceB, object>().ImplementedBy<EmptyServiceB>());
 
 		var obj = Container.Resolve<IEmptyService>();
@@ -75,7 +76,8 @@ public class IsFallbackTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Does_affect_order_when_using_ResolveAll()
 	{
-		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().IsFallback(t => t.GetTypeInfo().IsInterface),
+		Container.Register(
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().IsFallback(t => t.GetTypeInfo().IsInterface),
 			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>());
 
 		var obj = Container.ResolveAll<IEmptyService>();

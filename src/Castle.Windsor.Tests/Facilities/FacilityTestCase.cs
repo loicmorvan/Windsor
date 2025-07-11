@@ -12,20 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities;
-
 using System;
-
 using Castle.Core.Configuration;
 using Castle.Facilities.Startable;
 using Castle.MicroKernel;
 using Castle.Windsor.Tests.ClassComponents;
+
+namespace Castle.Windsor.Tests.Facilities;
 
 public class FacilityTestCase
 {
 	private static readonly string FacilityKey = typeof(HiperFacility).FullName;
 	private readonly HiperFacility _facility;
 	private readonly IKernel _kernel;
+
+	public FacilityTestCase()
+	{
+		_kernel = new DefaultKernel();
+
+		IConfiguration confignode = new MutableConfiguration("facility");
+		IConfiguration facilityConf = new MutableConfiguration(FacilityKey);
+		confignode.Children.Add(facilityConf);
+		_kernel.ConfigurationStore.AddFacilityConfiguration(FacilityKey, confignode);
+
+		_facility = new HiperFacility();
+
+		Assert.False(_facility.Initialized);
+		_kernel.AddFacility(_facility);
+	}
 
 	[Fact]
 	public void Cant_have_two_instances_of_any_facility_type()
@@ -45,38 +59,23 @@ public class FacilityTestCase
 		var facility = _kernel.GetFacilities()[0];
 
 		Assert.NotNull(facility);
-		Assert.Same(this._facility, facility);
-	}
-
-	public FacilityTestCase()
-	{
-		_kernel = new DefaultKernel();
-
-		IConfiguration confignode = new MutableConfiguration("facility");
-		IConfiguration facilityConf = new MutableConfiguration(FacilityKey);
-		confignode.Children.Add(facilityConf);
-		_kernel.ConfigurationStore.AddFacilityConfiguration(FacilityKey, confignode);
-
-		_facility = new HiperFacility();
-
-		Assert.False(_facility.Initialized);
-		_kernel.AddFacility(_facility);
+		Assert.Same(_facility, facility);
 	}
 
 	[Fact]
 	public void LifeCycle()
 	{
-		Assert.False(this._facility.Terminated);
+		Assert.False(_facility.Terminated);
 
 		_ = _kernel.GetFacilities()[0];
 
-		Assert.True(this._facility.Initialized);
-		Assert.False(this._facility.Terminated);
+		Assert.True(_facility.Initialized);
+		Assert.False(_facility.Terminated);
 
 		_kernel.Dispose();
 
-		Assert.True(this._facility.Initialized);
-		Assert.True(this._facility.Terminated);
+		Assert.True(_facility.Initialized);
+		Assert.True(_facility.Terminated);
 	}
 
 	[Fact]

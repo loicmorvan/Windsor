@@ -15,7 +15,7 @@
 namespace Castle.Windsor.Tests.ClassComponents;
 
 /// <summary>
-/// Summary description for NonPublicComponent.
+///     Summary description for NonPublicComponent.
 /// </summary>
 internal class NonPublicComponent
 {

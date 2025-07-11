@@ -12,42 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory.Internal;
-
 using System;
 using System.Diagnostics;
 using System.Reflection;
-
 using Castle.Core;
 using Castle.Core.Internal;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers;
 
+namespace Castle.Facilities.TypedFactory.Internal;
+
 [Singleton]
 public class DelegateFactory : ILazyComponentLoader
 {
 	public IRegistration Load(string name, Type service, Arguments arguments)
 	{
-		if (service == null)
-		{
-			return null;
-		}
+		if (service == null) return null;
 
 		var invoke = ExtractInvokeMethod(service);
-		if (invoke == null)
-		{
-			return null;
-		}
-		if (invoke.ReturnType.IsPrimitiveTypeOrCollection())
-		{
-			return null;
-		}
+		if (invoke == null) return null;
+		if (invoke.ReturnType.IsPrimitiveTypeOrCollection()) return null;
 
-		if (service.GetTypeInfo().IsGenericType)
-		{
-			service = service.GetGenericTypeDefinition();
-		}
+		if (service.GetTypeInfo().IsGenericType) service = service.GetGenericTypeDefinition();
 
 		return Component.For(service)
 			.ImplementedBy(service, DelegateServiceStrategy.Instance)
@@ -55,8 +42,10 @@ public class DelegateFactory : ILazyComponentLoader
 			.LifeStyle.Transient
 			.Interceptors(new InterceptorReference(TypedFactoryFacility.InterceptorKey)).Last
 			.Activator<DelegateFactoryActivator>()
-			.DynamicParameters((k, args) => {
-				var selector = k.Resolve<ITypedFactoryComponentSelector>(TypedFactoryFacility.DefaultDelegateSelectorKey);
+			.DynamicParameters((k, args) =>
+			{
+				var selector =
+					k.Resolve<ITypedFactoryComponentSelector>(TypedFactoryFacility.DefaultDelegateSelectorKey);
 				args.AddTyped(selector);
 				return k2 => k2.ReleaseComponent(selector);
 			})
@@ -66,25 +55,16 @@ public class DelegateFactory : ILazyComponentLoader
 	protected string GetName(Type service)
 	{
 		var defaultName = ComponentName.DefaultNameFor(service);
-		if (string.IsNullOrEmpty(defaultName))
-		{
-			return "auto-factory: " + Guid.NewGuid();
-		}
+		if (string.IsNullOrEmpty(defaultName)) return "auto-factory: " + Guid.NewGuid();
 		return "auto-factory: " + defaultName;
 	}
 
 	public static MethodInfo ExtractInvokeMethod(Type service)
 	{
-		if (!service.Is<MulticastDelegate>())
-		{
-			return null;
-		}
+		if (!service.Is<MulticastDelegate>()) return null;
 
 		var invoke = GetInvokeMethod(service);
-		if (!HasReturn(invoke))
-		{
-			return null;
-		}
+		if (!HasReturn(invoke)) return null;
 
 		return invoke;
 	}

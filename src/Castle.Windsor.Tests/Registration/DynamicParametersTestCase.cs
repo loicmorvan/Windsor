@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Registration;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.Registration;
 
 public class DynamicParametersTestCase : AbstractContainerTestCase
 {
@@ -54,10 +54,7 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 				.DynamicParameters((k, d) => // dynamic parameters
 				{
 					var randomNumber = 2;
-					if (randomNumber == 2)
-					{
-						d["customer"] = k.Resolve<ICustomer>("otherCustomer");
-					}
+					if (randomNumber == 2) d["customer"] = k.Resolve<ICustomer>("otherCustomer");
 				}));
 
 		var component = Kernel.Resolve<CommonImplWithDependency>();

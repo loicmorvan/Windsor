@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests;
 
 public class LazyLoadingTestCase : AbstractContainerTestCase
 {
@@ -67,16 +66,12 @@ public class LazyLoadingTestCase : AbstractContainerTestCase
 		int[] count = [10];
 		Exception exception = null;
 		for (var i = 0; i < count[0]; i++)
-		{
 			ThreadPool.QueueUserWorkItem(_ =>
 				{
 					try
 					{
 						Container.Resolve<Implementation>("not registered");
-						if (Interlocked.Decrement(ref count[0]) == 0)
-						{
-							@event.Set();
-						}
+						if (Interlocked.Decrement(ref count[0]) == 0) @event.Set();
 					}
 					catch (Exception e)
 					{
@@ -87,7 +82,6 @@ public class LazyLoadingTestCase : AbstractContainerTestCase
 					}
 				}
 			);
-		}
 
 		@event.WaitOne();
 		Assert.Null(exception);
@@ -124,10 +118,7 @@ public class AbLoaderWithGuardClause : ILazyComponentLoader
 	{
 		Assert.True(CanLoadNow);
 
-		if (service == typeof(A) || service == typeof(B))
-		{
-			return Component.For(service);
-		}
+		if (service == typeof(A) || service == typeof(B)) return Component.For(service);
 
 		return null;
 	}
@@ -137,10 +128,7 @@ public class AbLoader : ILazyComponentLoader
 {
 	public IRegistration Load(string name, Type service, Arguments arguments)
 	{
-		if (service == typeof(A) || service == typeof(B))
-		{
-			return Component.For(service);
-		}
+		if (service == typeof(A) || service == typeof(B)) return Component.For(service);
 
 		return null;
 	}
@@ -169,10 +157,7 @@ public class LoaderForDefaultImplementations : ILazyComponentLoader
 {
 	public IRegistration Load(string name, Type service, Arguments arguments)
 	{
-		if (!service.GetTypeInfo().IsDefined(typeof(DefaultImplementationAttribute)))
-		{
-			return null;
-		}
+		if (!service.GetTypeInfo().IsDefined(typeof(DefaultImplementationAttribute))) return null;
 
 		var attributes = service.GetTypeInfo().GetCustomAttributes(typeof(DefaultImplementationAttribute), false);
 		var attribute = attributes.First() as DefaultImplementationAttribute;
@@ -190,18 +175,12 @@ public class LoaderUsingDependency : ILazyComponentLoader
 
 public class UsingString(string parameter)
 {
-	public string Parameter
-	{
-		get { return parameter; }
-	}
+	public string Parameter => parameter;
 }
 
 public class UsingLazyComponent(IHasDefaultImplementation dependency)
 {
-	public IHasDefaultImplementation Dependency
-	{
-		get { return dependency; }
-	}
+	public IHasDefaultImplementation Dependency => dependency;
 }
 
 [DefaultImplementation(typeof(Implementation))]
@@ -217,11 +196,8 @@ public class Implementation : IHasDefaultImplementation
 	}
 }
 
-[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false)]
+[AttributeUsage(AttributeTargets.Interface)]
 public class DefaultImplementationAttribute(Type implementation) : Attribute
 {
-	public Type Implementation
-	{
-		get { return implementation; }
-	}
+	public Type Implementation => implementation;
 }

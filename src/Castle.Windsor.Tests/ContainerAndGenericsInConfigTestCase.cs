@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using Castle.MicroKernel.Registration;
-using Castle.Windsor.Installer;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests;
 
 public class ContainerAndGenericsInConfigTestCase : AbstractContainerTestCase
 {
 	private IWindsorInstaller FromFile(string fileName)
 	{
-		return Configuration.FromXmlFile(
+		return Castle.Windsor.Installer.Configuration.FromXmlFile(
 			GetFilePath(fileName));
 	}
 
@@ -172,7 +171,7 @@ public class ContainerAndGenericsInConfigTestCase : AbstractContainerTestCase
 		var inner = ((LoggingRepositoryDecorator<IReviewableEmployee>)repository).Inner;
 		Assert.IsType<DemoRepository<IReviewableEmployee>>(inner);
 
-		var actualInner = ((DemoRepository<IReviewableEmployee>)inner);
+		var actualInner = (DemoRepository<IReviewableEmployee>)inner;
 		Assert.Equal("Generic Repostiory With No Cache", actualInner.Name);
 		Assert.IsType<NullCache<IReviewableEmployee>>(actualInner.Cache);
 	}

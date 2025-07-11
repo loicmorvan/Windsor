@@ -12,23 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
-
 using System;
-using System.Runtime.Serialization;
-
 using Castle.Core;
 
+namespace Castle.MicroKernel;
+
 /// <summary>
-///   Exception throw when a circular dependency is detected
+///     Exception throw when a circular dependency is detected
 /// </summary>
 [Serializable]
 public class CircularDependencyException : ComponentResolutionException
 {
 	/// <summary>
-	///   Initializes a new instance of the
-	///   <see cref="CircularDependencyException" />
-	///   class.
+	///     Initializes a new instance of the
+	///     <see cref="CircularDependencyException" />
+	///     class.
 	/// </summary>
 	/// <param name="message">The message.</param>
 	public CircularDependencyException(string message) : base(message)
@@ -36,9 +34,9 @@ public class CircularDependencyException : ComponentResolutionException
 	}
 
 	/// <summary>
-	///   Initializes a new instance of the
-	///   <see cref="CircularDependencyException" />
-	///   class.
+	///     Initializes a new instance of the
+	///     <see cref="CircularDependencyException" />
+	///     class.
 	/// </summary>
 	/// <param name="message">The message.</param>
 	/// <param name="innerException">The inner exception.</param>
@@ -47,9 +45,9 @@ public class CircularDependencyException : ComponentResolutionException
 	}
 
 	/// <summary>
-	///   Initializes a new instance of the
-	///   <see cref="CircularDependencyException" />
-	///   class.
+	///     Initializes a new instance of the
+	///     <see cref="CircularDependencyException" />
+	///     class.
 	/// </summary>
 	/// <param name="message"></param>
 	/// <param name="component"></param>

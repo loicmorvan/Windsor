@@ -12,13 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore;
-
 using System;
 using System.Reflection;
-
 using Castle.Facilities.AspNetCore.Activators;
-
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -26,17 +22,23 @@ using Microsoft.AspNetCore.Mvc.Razor.Internal;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.DependencyInjection;
 
+namespace Castle.Facilities.AspNetCore;
+
 internal static class AspNetCoreMvcExtensions
 {
-	public static void AddCustomControllerActivation(this IServiceCollection services, Func<Type, object> activator, Action<object> releaser)
+	public static void AddCustomControllerActivation(this IServiceCollection services, Func<Type, object> activator,
+		Action<object> releaser)
 	{
 		if (services == null) throw new ArgumentNullException(nameof(services));
 		if (activator == null) throw new ArgumentNullException(nameof(activator));
 
-		services.AddSingleton<IControllerActivator>(new DelegatingControllerActivator(context => activator(context.ActionDescriptor.ControllerTypeInfo.AsType()), (_, instance) => releaser(instance)));
+		services.AddSingleton<IControllerActivator>(new DelegatingControllerActivator(
+			context => activator(context.ActionDescriptor.ControllerTypeInfo.AsType()),
+			(_, instance) => releaser(instance)));
 	}
 
-	public static void AddCustomViewComponentActivation(this IServiceCollection services, Func<Type, object> activator, Action<object> releaser)
+	public static void AddCustomViewComponentActivation(this IServiceCollection services, Func<Type, object> activator,
+		Action<object> releaser)
 	{
 		if (services == null) throw new ArgumentNullException(nameof(services));
 		if (activator == null) throw new ArgumentNullException(nameof(activator));
@@ -44,13 +46,14 @@ internal static class AspNetCoreMvcExtensions
 		services.AddSingleton<IViewComponentActivator>(new DelegatingViewComponentActivator(activator, releaser));
 	}
 
-	public static void AddCustomTagHelperActivation(this IServiceCollection services, Func<Type, object> activator, Predicate<Type> applicationTypeSelector = null)
+	public static void AddCustomTagHelperActivation(this IServiceCollection services, Func<Type, object> activator,
+		Predicate<Type> applicationTypeSelector = null)
 	{
 		if (services == null) throw new ArgumentNullException(nameof(services));
 		if (activator == null) throw new ArgumentNullException(nameof(activator));
 
-		applicationTypeSelector ??= (type => !type.GetTypeInfo().Namespace.StartsWith("Microsoft") &&
-		                                     !type.GetTypeInfo().Name.Contains("__Generated__"));
+		applicationTypeSelector ??= type => !type.GetTypeInfo().Namespace.StartsWith("Microsoft") &&
+		                                    !type.GetTypeInfo().Name.Contains("__Generated__");
 
 		services.AddSingleton<ITagHelperActivator>(provider =>
 			new DelegatingTagHelperActivator(

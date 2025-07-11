@@ -12,16 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
-
 using System;
-using System.Runtime.Serialization;
-
 using Castle.Core;
 using Castle.Core.Internal;
 
+namespace Castle.MicroKernel;
+
 /// <summary>
-///   Exception thrown when resolution process for a component was unsuccessful at some point for whatever reason.
+///     Exception thrown when resolution process for a component was unsuccessful at some point for whatever reason.
 /// </summary>
 [Serializable]
 public class ComponentResolutionException : Exception
@@ -31,32 +29,32 @@ public class ComponentResolutionException : Exception
 	public ComponentResolutionException(string message)
 		: base(message)
 	{
-		ExceptionHelper.SetUp(this);
+		this.SetUp();
 	}
 
 	public ComponentResolutionException(string message, Exception innerException)
 		: base(message, innerException)
 	{
-		ExceptionHelper.SetUp(this);
+		this.SetUp();
 	}
 
 	public ComponentResolutionException(string message, ComponentModel component)
 		: base(message)
 	{
-		ExceptionHelper.SetUp(this);
+		this.SetUp();
 		Component = component;
 	}
 
 	public ComponentResolutionException(string message, Exception innerException, ComponentModel component)
 		: base(message, innerException)
 	{
-		ExceptionHelper.SetUp(this);
+		this.SetUp();
 		Component = component;
 	}
 
 	public ComponentResolutionException(ComponentModel component)
 	{
-		ExceptionHelper.SetUp(this);
+		this.SetUp();
 		Component = component;
 	}
 

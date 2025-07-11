@@ -12,108 +12,70 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion;
-
 using System;
 using System.Linq;
+
+namespace Castle.MicroKernel.SubSystems.Conversion;
 
 public class TypeName
 {
 	private readonly string _assemblyQualifiedName;
 	private readonly TypeName[] _genericTypes;
-	private readonly string _name;
 	private readonly string _namespace;
 
 	public TypeName(string @namespace, string name, TypeName[] genericTypes)
 	{
-		this._name = name;
-		this._genericTypes = genericTypes;
-		this._namespace = @namespace;
+		Name = name;
+		_genericTypes = genericTypes;
+		_namespace = @namespace;
 	}
 
 	public TypeName(string assemblyQualifiedName)
 	{
-		this._assemblyQualifiedName = assemblyQualifiedName;
+		_assemblyQualifiedName = assemblyQualifiedName;
 	}
 
 	private string FullName
 	{
 		get
 		{
-			if (HasNamespace)
-			{
-				return _namespace + "." + _name;
-			}
+			if (HasNamespace) return _namespace + "." + Name;
 			throw new InvalidOperationException("Namespace was not defined.");
 		}
 	}
 
-	private bool HasGenericParameters
-	{
-		get { return _genericTypes.Length > 0; }
-	}
+	private bool HasGenericParameters => _genericTypes.Length > 0;
 
-	private bool HasNamespace
-	{
-		get { return String.IsNullOrEmpty(_namespace) == false; }
-	}
+	private bool HasNamespace => string.IsNullOrEmpty(_namespace) == false;
 
-	private bool IsAssemblyQualified
-	{
-		get { return _assemblyQualifiedName != null; }
-	}
+	private bool IsAssemblyQualified => _assemblyQualifiedName != null;
 
-	private string Name
-	{
-		get { return _name; }
-	}
+	private string Name { get; }
 
 	public string ExtractAssemblyName()
 	{
-		if (IsAssemblyQualified == false)
-		{
-			return null;
-		}
+		if (IsAssemblyQualified == false) return null;
 		var tokens = _assemblyQualifiedName.Split([','], StringSplitOptions.None);
 		var indexOfVersion = Array.FindLastIndex(tokens, s => s.TrimStart(' ').StartsWith("Version="));
-		if (indexOfVersion <= 0)
-		{
-			return tokens.Last().Trim();
-		}
+		if (indexOfVersion <= 0) return tokens.Last().Trim();
 		return tokens[indexOfVersion - 1].Trim();
 	}
 
 	public Type GetType(TypeNameConverter converter)
 	{
-		if (converter == null)
-		{
-			throw new ArgumentNullException(nameof(converter));
-		}
-		if (IsAssemblyQualified)
-		{
-			return Type.GetType(_assemblyQualifiedName, false, true);
-		}
+		if (converter == null) throw new ArgumentNullException(nameof(converter));
+		if (IsAssemblyQualified) return Type.GetType(_assemblyQualifiedName, false, true);
 
 		Type type;
 		if (HasNamespace)
-		{
 			type = converter.GetTypeByFullName(FullName);
-		}
 		else
-		{
 			type = converter.GetTypeByName(Name);
-		}
 
-		if (!HasGenericParameters)
-		{
-			return type;
-		}
+		if (!HasGenericParameters) return type;
 
 		var genericArgs = new Type[_genericTypes.Length];
-		for (var i = 0; i < genericArgs.Length; i++)
-		{
-			genericArgs[i] = _genericTypes[i].GetType(converter);
-		}
+		for (var i = 0; i < genericArgs.Length; i++) genericArgs[i] = _genericTypes[i].GetType(converter);
 
 		return type.MakeGenericType(genericArgs);
 	}

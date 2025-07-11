@@ -12,35 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Text.RegularExpressions;
+using System.Xml;
+
 namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
-using System;
 #if FEATURE_SYSTEM_CONFIGURATION
 	using System.Configuration;
 #endif
-using System.Text.RegularExpressions;
-using System.Xml;
 
 public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 {
 	/// <summary>
-	///   Properties names can contain a-zA-Z0-9_. 
-	///   i.e. #!{ my_node_name } || #{ my.node.name }
-	///   spaces are trimmed
+	///     Properties names can contain a-zA-Z0-9_.
+	///     i.e. #!{ my_node_name } || #{ my.node.name }
+	///     spaces are trimmed
 	/// </summary>
-	private static readonly Regex PropertyValidationRegExp = new(@"(\#!?\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled);
+	private static readonly Regex PropertyValidationRegExp =
+		new(@"(\#!?\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled);
 
 	private static readonly XmlNodeType[] AcceptNodes = [XmlNodeType.CDATA, XmlNodeType.Text];
 
-	public override XmlNodeType[] AcceptNodeTypes
-	{
-		get { return AcceptNodes; }
-	}
+	public override XmlNodeType[] AcceptNodeTypes => AcceptNodes;
 
-	public override String Name
-	{
-		get { return "#text"; }
-	}
+	public override string Name => "#text";
 
 	public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
 	{
@@ -50,11 +45,11 @@ public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 	}
 
 	/// <summary>
-	///   Processes the string.
+	///     Processes the string.
 	/// </summary>
-	/// <param name = "node">The node.</param>
-	/// <param name = "value">The value.</param>
-	/// <param name = "engine">The context.</param>
+	/// <param name="node">The node.</param>
+	/// <param name="value">The value.</param>
+	/// <param name="engine">The context.</param>
 	public void ProcessString(XmlNode node, string value, IXmlProcessorEngine engine)
 	{
 		var fragment = CreateFragment(node);
@@ -63,10 +58,7 @@ public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 		var pos = 0;
 		while ((match = PropertyValidationRegExp.Match(value, pos)).Success)
 		{
-			if (pos < match.Index)
-			{
-				AppendChild(fragment, value.Substring(pos, match.Index - pos));
-			}
+			if (pos < match.Index) AppendChild(fragment, value.Substring(pos, match.Index - pos));
 
 			var propRef = match.Groups[1].Value; // #!{ propKey }
 			var propKey = match.Groups[2].Value; // propKey
@@ -79,10 +71,7 @@ public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 			{
 				// When node has a parentNode (not an attribute)
 				// we copy any attributes for the property into the parentNode
-				if (node.ParentNode != null)
-				{
-					MoveAttributes(node.ParentNode as XmlElement, prop);
-				}
+				if (node.ParentNode != null) MoveAttributes(node.ParentNode as XmlElement, prop);
 
 				AppendChild(fragment, prop.ChildNodes);
 			}
@@ -98,7 +87,8 @@ public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 					else
 #endif
 				{
-					throw new XmlProcessorException(String.Format("Required configuration property {0} not found", propKey));
+					throw new XmlProcessorException(string.Format("Required configuration property {0} not found",
+						propKey));
 				}
 			}
 
@@ -106,10 +96,7 @@ public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 		}
 
 		// Appending anything left
-		if (pos > 0 && pos < value.Length)
-		{
-			AppendChild(fragment, value.Substring(pos, value.Length - pos));
-		}
+		if (pos > 0 && pos < value.Length) AppendChild(fragment, value.Substring(pos, value.Length - pos));
 
 		// we only process when there was at least one match
 		// even when the fragment contents is empty since
@@ -118,13 +105,9 @@ public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 		if (pos > 0)
 		{
 			if (node.NodeType == XmlNodeType.Attribute)
-			{
 				node.Value = fragment.InnerText.Trim();
-			}
 			else
-			{
 				ReplaceNode(node.ParentNode, fragment, node);
-			}
 		}
 	}
 

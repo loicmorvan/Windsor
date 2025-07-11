@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion;
-
 using System;
 using System.Reflection;
-
 using Castle.Core.Configuration;
 
+namespace Castle.MicroKernel.SubSystems.Conversion;
+
 /// <summary>
-///   Converts a string representation to an enum value
+///     Converts a string representation to an enum value
 /// </summary>
 [Serializable]
 public class EnumConverter : AbstractTypeConverter
@@ -30,7 +29,7 @@ public class EnumConverter : AbstractTypeConverter
 		return type.GetTypeInfo().IsEnum;
 	}
 
-	public override object PerformConversion(String value, Type targetType)
+	public override object PerformConversion(string value, Type targetType)
 	{
 		try
 		{
@@ -42,7 +41,7 @@ public class EnumConverter : AbstractTypeConverter
 		}
 		catch (Exception ex)
 		{
-			var message = String.Format(
+			var message = string.Format(
 				"Could not convert from '{0}' to {1}.",
 				value, targetType.FullName);
 

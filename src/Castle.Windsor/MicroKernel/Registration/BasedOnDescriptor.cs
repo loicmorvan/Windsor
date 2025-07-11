@@ -12,50 +12,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration;
-
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Core;
 using Castle.MicroKernel.Lifestyle.Scoped;
 
+namespace Castle.MicroKernel.Registration;
+
 /// <summary>
-///   Describes how to register a group of related types.
+///     Describes how to register a group of related types.
 /// </summary>
 public class BasedOnDescriptor : IRegistration
 {
+	private readonly FromDescriptor _from;
 	private readonly List<Type> _potentialBases;
 	private Action<ComponentRegistration> _configuration;
-	private readonly FromDescriptor _from;
-	private readonly ServiceDescriptor _service;
 	private Predicate<Type> _ifFilter;
 	private Predicate<Type> _unlessFilter;
 
 	/// <summary>
-	///   Initializes a new instance of the BasedOnDescriptor.
+	///     Initializes a new instance of the BasedOnDescriptor.
 	/// </summary>
 	internal BasedOnDescriptor(IEnumerable<Type> basedOn, FromDescriptor from, Predicate<Type> additionalFilters)
 	{
 		_potentialBases = basedOn.ToList();
-		this._from = from;
-		_service = new ServiceDescriptor(this);
+		_from = from;
+		WithService = new ServiceDescriptor(this);
 		If(additionalFilters);
 	}
 
 	/// <summary>
-	///   Gets the service descriptor.
+	///     Gets the service descriptor.
 	/// </summary>
-	public ServiceDescriptor WithService
+	public ServiceDescriptor WithService { get; }
+
+	void IRegistration.Register(IKernelInternal kernel)
 	{
-		get { return _service; }
+		((IRegistration)_from).Register(kernel);
 	}
 
 	/// <summary>
-	///   Allows a type to be registered multiple times.
+	///     Allows a type to be registered multiple times.
 	/// </summary>
 	public FromDescriptor AllowMultipleMatches()
 	{
@@ -63,9 +62,9 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Adds another type to be accepted as base.
+	///     Adds another type to be accepted as base.
 	/// </summary>
-	/// <param name = "basedOn"> The base type. </param>
+	/// <param name="basedOn"> The base type. </param>
 	/// <returns> The descriptor for the type. </returns>
 	public BasedOnDescriptor OrBasedOn(Type basedOn)
 	{
@@ -74,9 +73,9 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Allows customized configurations of each matching type.
+	///     Allows customized configurations of each matching type.
 	/// </summary>
-	/// <param name = "configurer"> The configuration action. </param>
+	/// <param name="configurer"> The configuration action. </param>
 	/// <returns> </returns>
 	public BasedOnDescriptor Configure(Action<ComponentRegistration> configurer)
 	{
@@ -85,13 +84,13 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Allows customized configurations of each matching component with implementation type that is 
-	///   assignable to
-	///   <typeparamref name = "TComponentImplementationType" />
-	///   .
+	///     Allows customized configurations of each matching component with implementation type that is
+	///     assignable to
+	///     <typeparamref name="TComponentImplementationType" />
+	///     .
 	/// </summary>
-	/// <typeparam name = "TComponentImplementationType"> The type assignable from. </typeparam>
-	/// <param name = "configurer"> The configuration action. </param>
+	/// <typeparam name="TComponentImplementationType"> The type assignable from. </typeparam>
+	/// <param name="configurer"> The configuration action. </param>
 	/// <returns> </returns>
 	public BasedOnDescriptor ConfigureFor<TComponentImplementationType>(Action<ComponentRegistration> configurer)
 	{
@@ -99,30 +98,37 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Allows customized configurations of each matching component that satisfies supplied <paramref name = "condition" />.
+	///     Allows customized configurations of each matching component that satisfies supplied <paramref name="condition" />.
 	/// </summary>
-	/// <param name = "condition"> Condition to satisfy </param>
-	/// <param name = "configurer"> The configuration action, executed only for components for which <paramref name = "condition" /> evaluates to <c>true</c> . </param>
+	/// <param name="condition"> Condition to satisfy </param>
+	/// <param name="configurer">
+	///     The configuration action, executed only for components for which
+	///     <paramref name="condition" /> evaluates to <c>true</c> .
+	/// </param>
 	/// <returns> </returns>
 	public BasedOnDescriptor ConfigureIf(Predicate<ComponentRegistration> condition,
 		Action<ComponentRegistration> configurer)
 	{
 		_configuration += r =>
 		{
-			if (condition(r))
-			{
-				configurer(r);
-			}
+			if (condition(r)) configurer(r);
 		};
 		return this;
 	}
 
 	/// <summary>
-	///   Allows customized configurations of each matching component that satisfies supplied <paramref name = "condition" /> and alternative configuration for the rest of components.
+	///     Allows customized configurations of each matching component that satisfies supplied <paramref name="condition" />
+	///     and alternative configuration for the rest of components.
 	/// </summary>
-	/// <param name = "condition"> Condition to satisfy </param>
-	/// <param name = "configurerWhenTrue"> The configuration action, executed only for components for which <paramref name = "condition" /> evaluates to <c>true</c> . </param>
-	/// <param name = "configurerWhenFalse"> The configuration action, executed only for components for which <paramref name = "condition" /> evaluates to <c>false</c> . </param>
+	/// <param name="condition"> Condition to satisfy </param>
+	/// <param name="configurerWhenTrue">
+	///     The configuration action, executed only for components for which
+	///     <paramref name="condition" /> evaluates to <c>true</c> .
+	/// </param>
+	/// <param name="configurerWhenFalse">
+	///     The configuration action, executed only for components for which
+	///     <paramref name="condition" /> evaluates to <c>false</c> .
+	/// </param>
 	/// <returns> </returns>
 	public BasedOnDescriptor ConfigureIf(Predicate<ComponentRegistration> condition,
 		Action<ComponentRegistration> configurerWhenTrue,
@@ -131,41 +137,37 @@ public class BasedOnDescriptor : IRegistration
 		_configuration += r =>
 		{
 			if (condition(r))
-			{
 				configurerWhenTrue(r);
-			}
 			else
-			{
 				configurerWhenFalse(r);
-			}
 		};
 		return this;
 	}
 
 	/// <summary>
-	///   Assigns a conditional predication which must be satisfied.
+	///     Assigns a conditional predication which must be satisfied.
 	/// </summary>
-	/// <param name = "ifFilter"> The predicate to satisfy. </param>
+	/// <param name="ifFilter"> The predicate to satisfy. </param>
 	/// <returns> </returns>
 	public BasedOnDescriptor If(Predicate<Type> ifFilter)
 	{
-		this._ifFilter += ifFilter;
+		_ifFilter += ifFilter;
 		return this;
 	}
 
 	/// <summary>
-	///   Assigns a conditional predication which must not be satisfied.
+	///     Assigns a conditional predication which must not be satisfied.
 	/// </summary>
-	/// <param name = "unlessFilter"> The predicate not to satisify. </param>
+	/// <param name="unlessFilter"> The predicate not to satisify. </param>
 	/// <returns> </returns>
 	public BasedOnDescriptor Unless(Predicate<Type> unlessFilter)
 	{
-		this._unlessFilter += unlessFilter;
+		_unlessFilter += unlessFilter;
 		return this;
 	}
 
 	/// <summary>
-	///   Uses all interfaces implemented by the type (or its base types) as well as their base interfaces.
+	///     Uses all interfaces implemented by the type (or its base types) as well as their base interfaces.
 	/// </summary>
 	/// <returns> </returns>
 	public BasedOnDescriptor WithServiceAllInterfaces()
@@ -174,7 +176,7 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Uses the base type matched on.
+	///     Uses the base type matched on.
 	/// </summary>
 	/// <returns> </returns>
 	public BasedOnDescriptor WithServiceBase()
@@ -183,8 +185,8 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Uses all interfaces that have names matched by implementation type name.
-	///   Matches Foo to IFoo, SuperFooExtended to IFoo and IFooExtended etc
+	///     Uses all interfaces that have names matched by implementation type name.
+	///     Matches Foo to IFoo, SuperFooExtended to IFoo and IFooExtended etc
 	/// </summary>
 	/// <returns> </returns>
 	public BasedOnDescriptor WithServiceDefaultInterfaces()
@@ -193,7 +195,8 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Uses the first interface of a type. This method has non-deterministic behavior when type implements more than one interface!
+	///     Uses the first interface of a type. This method has non-deterministic behavior when type implements more than one
+	///     interface!
 	/// </summary>
 	/// <returns> </returns>
 	public BasedOnDescriptor WithServiceFirstInterface()
@@ -202,14 +205,14 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Uses <paramref name = "implements" /> to lookup the sub interface.
-	///   For example: if you have IService and 
-	///   IProductService : ISomeInterface, IService, ISomeOtherInterface.
-	///   When you call FromInterface(typeof(IService)) then IProductService
-	///   will be used. Useful when you want to register _all_ your services
-	///   and but not want to specify all of them.
+	///     Uses <paramref name="implements" /> to lookup the sub interface.
+	///     For example: if you have IService and
+	///     IProductService : ISomeInterface, IService, ISomeOtherInterface.
+	///     When you call FromInterface(typeof(IService)) then IProductService
+	///     will be used. Useful when you want to register _all_ your services
+	///     and but not want to specify all of them.
 	/// </summary>
-	/// <param name = "implements"> </param>
+	/// <param name="implements"> </param>
 	/// <returns> </returns>
 	public BasedOnDescriptor WithServiceFromInterface(Type implements)
 	{
@@ -217,7 +220,7 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Uses base type to lookup the sub interface.
+	///     Uses base type to lookup the sub interface.
 	/// </summary>
 	/// <returns> </returns>
 	public BasedOnDescriptor WithServiceFromInterface()
@@ -226,9 +229,9 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Assigns a custom service selection strategy.
+	///     Assigns a custom service selection strategy.
 	/// </summary>
-	/// <param name = "selector"> </param>
+	/// <param name="selector"> </param>
 	/// <returns> </returns>
 	public BasedOnDescriptor WithServiceSelect(ServiceDescriptor.ServiceSelector selector)
 	{
@@ -236,7 +239,7 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Uses the type itself.
+	///     Uses the type itself.
 	/// </summary>
 	/// <returns> </returns>
 	public BasedOnDescriptor WithServiceSelf()
@@ -245,7 +248,7 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Sets component lifestyle to specified one.
+	///     Sets component lifestyle to specified one.
 	/// </summary>
 	/// <returns> </returns>
 	public BasedOnDescriptor LifestyleCustom(Type customLifestyleType)
@@ -254,7 +257,7 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Sets component lifestyle to specified one.
+	///     Sets component lifestyle to specified one.
 	/// </summary>
 	/// <returns> </returns>
 	public BasedOnDescriptor LifestyleCustom<TLifestyleManager>() where TLifestyleManager : ILifestyleManager, new()
@@ -263,7 +266,7 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Sets component lifestyle to per thread.
+	///     Sets component lifestyle to per thread.
 	/// </summary>
 	/// <returns> </returns>
 	public BasedOnDescriptor LifestylePerThread()
@@ -272,7 +275,7 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Sets component lifestyle to scoped per explicit scope.
+	///     Sets component lifestyle to scoped per explicit scope.
 	/// </summary>
 	/// <returns> </returns>
 	public BasedOnDescriptor LifestyleScoped()
@@ -281,7 +284,7 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Sets component lifestyle to scoped per explicit scope.
+	///     Sets component lifestyle to scoped per explicit scope.
 	/// </summary>
 	/// <returns> </returns>
 	public BasedOnDescriptor LifestyleScoped(Type scopeAccessorType)
@@ -290,7 +293,7 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Sets component lifestyle to scoped per explicit scope.
+	///     Sets component lifestyle to scoped per explicit scope.
 	/// </summary>
 	/// <returns> </returns>
 	public BasedOnDescriptor LifestyleScoped<TScopeAccessor>() where TScopeAccessor : IScopeAccessor, new()
@@ -299,7 +302,7 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Sets component lifestyle to scoped per component <typeparamref name = "TBaseForRoot" />.
+	///     Sets component lifestyle to scoped per component <typeparamref name="TBaseForRoot" />.
 	/// </summary>
 	/// <returns> </returns>
 	public BasedOnDescriptor LifestyleBoundTo<TBaseForRoot>() where TBaseForRoot : class
@@ -308,7 +311,8 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Sets component lifestyle to scoped per nearest component on the resolution stack where implementation type is assignable to <typeparamref name = "TBaseForRoot" /> .
+	///     Sets component lifestyle to scoped per nearest component on the resolution stack where implementation type is
+	///     assignable to <typeparamref name="TBaseForRoot" /> .
 	/// </summary>
 	/// <returns> </returns>
 	public BasedOnDescriptor LifestyleBoundToNearest<TBaseForRoot>() where TBaseForRoot : class
@@ -317,7 +321,8 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Sets component lifestyle to pooled. If <paramref name = "initialSize" /> or <paramref name = "maxSize" /> are not set default values will be used.
+	///     Sets component lifestyle to pooled. If <paramref name="initialSize" /> or <paramref name="maxSize" /> are not set
+	///     default values will be used.
 	/// </summary>
 	/// <returns> </returns>
 	public BasedOnDescriptor LifestylePooled(int? initialSize = null, int? maxSize = null)
@@ -326,7 +331,7 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Sets component lifestyle to singleton.
+	///     Sets component lifestyle to singleton.
 	/// </summary>
 	/// <returns> </returns>
 	public BasedOnDescriptor LifestyleSingleton()
@@ -335,7 +340,7 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Sets component lifestyle to transient.
+	///     Sets component lifestyle to transient.
 	/// </summary>
 	/// <returns> </returns>
 	public BasedOnDescriptor LifestyleTransient()
@@ -344,9 +349,9 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Assigns the supplied service types.
+	///     Assigns the supplied service types.
 	/// </summary>
-	/// <param name = "types"> </param>
+	/// <param name="types"> </param>
 	/// <returns> </returns>
 	public BasedOnDescriptor WithServices(IEnumerable<Type> types)
 	{
@@ -354,9 +359,9 @@ public class BasedOnDescriptor : IRegistration
 	}
 
 	/// <summary>
-	///   Assigns the supplied service types.
+	///     Assigns the supplied service types.
 	/// </summary>
-	/// <param name = "types"> </param>
+	/// <param name="types"> </param>
 	/// <returns> </returns>
 	public BasedOnDescriptor WithServices(params Type[] types)
 	{
@@ -372,35 +377,22 @@ public class BasedOnDescriptor : IRegistration
 
 	protected bool ExecuteIfCondition(Type type)
 	{
-		if (_ifFilter == null)
-		{
-			return true;
-		}
+		if (_ifFilter == null) return true;
 
 		foreach (Predicate<Type> filter in _ifFilter.GetInvocationList())
-		{
 			if (filter(type) == false)
-			{
 				return false;
-			}
-		}
 
 		return true;
 	}
 
 	protected bool ExecuteUnlessCondition(Type type)
 	{
-		if (_unlessFilter == null)
-		{
-			return false;
-		}
+		if (_unlessFilter == null) return false;
 		foreach (Predicate<Type> filter in _unlessFilter.GetInvocationList())
-		{
 			if (filter(type))
-			{
 				return true;
-			}
-		}
+
 		return false;
 	}
 
@@ -408,7 +400,6 @@ public class BasedOnDescriptor : IRegistration
 	{
 		var actuallyBasedOn = new List<Type>();
 		foreach (var potentialBase in _potentialBases)
-		{
 			if (potentialBase.GetTypeInfo().IsAssignableFrom(type))
 			{
 				actuallyBasedOn.Add(potentialBase);
@@ -416,19 +407,12 @@ public class BasedOnDescriptor : IRegistration
 			else if (potentialBase.GetTypeInfo().IsGenericTypeDefinition)
 			{
 				if (potentialBase.GetTypeInfo().IsInterface)
-				{
 					if (IsBasedOnGenericInterface(type, potentialBase, out baseTypes))
-					{
 						actuallyBasedOn.AddRange(baseTypes);
-					}
-				}
 
-				if (IsBasedOnGenericClass(type, potentialBase, out baseTypes))
-				{
-					actuallyBasedOn.AddRange(baseTypes);
-				}
+				if (IsBasedOnGenericClass(type, potentialBase, out baseTypes)) actuallyBasedOn.AddRange(baseTypes);
 			}
-		}
+
 		baseTypes = actuallyBasedOn.Distinct().ToArray();
 		return baseTypes.Length > 0;
 	}
@@ -437,31 +421,18 @@ public class BasedOnDescriptor : IRegistration
 	{
 		Type[] baseTypes;
 
-		if (!Accepts(type, out baseTypes))
-		{
-			return false;
-		}
+		if (!Accepts(type, out baseTypes)) return false;
 		var defaults = CastleComponentAttribute.GetDefaultsFor(type);
-		var serviceTypes = _service.GetServices(type, baseTypes);
-		if (serviceTypes.Count == 0 && defaults.Services.Length > 0)
-		{
-			serviceTypes = defaults.Services;
-		}
+		var serviceTypes = WithService.GetServices(type, baseTypes);
+		if (serviceTypes.Count == 0 && defaults.Services.Length > 0) serviceTypes = defaults.Services;
 		var registration = Component.For(serviceTypes);
 		registration.ImplementedBy(type);
 
-		if (_configuration != null)
-		{
-			_configuration(registration);
-		}
-		if (String.IsNullOrEmpty(registration.Name) && !String.IsNullOrEmpty(defaults.Name))
-		{
+		if (_configuration != null) _configuration(registration);
+		if (string.IsNullOrEmpty(registration.Name) && !string.IsNullOrEmpty(defaults.Name))
 			registration.Named(defaults.Name);
-		}
 		else
-		{
 			registration.RegisterOptionally();
-		}
 		kernel.Register(registration);
 		return true;
 	}
@@ -479,6 +450,7 @@ public class BasedOnDescriptor : IRegistration
 
 			type = type.GetTypeInfo().BaseType;
 		}
+
 		baseTypes = null;
 		return false;
 	}
@@ -487,27 +459,17 @@ public class BasedOnDescriptor : IRegistration
 	{
 		var types = new List<Type>(4);
 		foreach (var @interface in type.GetInterfaces())
-		{
 			if (@interface.GetTypeInfo().IsGenericType &&
 			    @interface.GetGenericTypeDefinition() == basedOn)
 			{
 				if (@interface.DeclaringType == null &&
 				    @interface.GetTypeInfo().ContainsGenericParameters)
-				{
 					types.Add(@interface.GetGenericTypeDefinition());
-				}
 				else
-				{
 					types.Add(@interface);
-				}
 			}
-		}
+
 		baseTypes = types.ToArray();
 		return baseTypes.Length > 0;
-	}
-
-	void IRegistration.Register(IKernelInternal kernel)
-	{
-		((IRegistration)_from).Register(kernel);
 	}
 }

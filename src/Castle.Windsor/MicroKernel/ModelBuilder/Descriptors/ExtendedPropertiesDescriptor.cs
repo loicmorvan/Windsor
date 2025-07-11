@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors;
-
-using System;
 using System.Collections;
-
 using Castle.Core;
 using Castle.Core.Internal;
 using Castle.MicroKernel.Registration;
+
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
 
 public class ExtendedPropertiesDescriptor : IComponentModelDescriptor
 {
@@ -28,12 +26,12 @@ public class ExtendedPropertiesDescriptor : IComponentModelDescriptor
 
 	public ExtendedPropertiesDescriptor(params Property[] properties)
 	{
-		this._properties = properties;
+		_properties = properties;
 	}
 
 	public ExtendedPropertiesDescriptor(IDictionary dictionary)
 	{
-		this._dictionary = dictionary;
+		_dictionary = dictionary;
 	}
 
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
@@ -43,15 +41,9 @@ public class ExtendedPropertiesDescriptor : IComponentModelDescriptor
 	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
 	{
 		if (_dictionary != null)
-		{
 			foreach (DictionaryEntry property in _dictionary)
-			{
 				model.ExtendedProperties[property.Key] = property.Value;
-			}
-		}
-		if (_properties != null)
-		{
-			_properties.ForEach(p => model.ExtendedProperties[p.Key] = p.Value);
-		}
+
+		if (_properties != null) _properties.ForEach(p => model.ExtendedProperties[p.Key] = p.Value);
 	}
 }

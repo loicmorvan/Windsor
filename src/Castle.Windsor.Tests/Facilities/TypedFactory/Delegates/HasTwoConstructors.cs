@@ -20,13 +20,7 @@ public class HasTwoConstructors(Baz baz, string name)
 	{
 	}
 
-	public Baz Baz
-	{
-		get { return baz; }
-	}
+	public Baz Baz => baz;
 
-	public string Name
-	{
-		get { return name; }
-	}
+	public string Name => name;
 }

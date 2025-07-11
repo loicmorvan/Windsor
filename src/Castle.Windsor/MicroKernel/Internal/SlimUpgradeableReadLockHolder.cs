@@ -12,27 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Internal;
-
 using System.Threading;
+
+namespace Castle.MicroKernel.Internal;
 
 internal class SlimUpgradeableReadLockHolder : IUpgradeableLockHolder
 {
 	private readonly ReaderWriterLockSlim _locker;
-	private SlimWriteLockHolder _writerLock;
 	private readonly bool _wasLockAlreadySelf;
+	private SlimWriteLockHolder _writerLock;
 
 	public SlimUpgradeableReadLockHolder(ReaderWriterLockSlim locker, bool waitForLock, bool wasLockAlreadySelf)
 	{
-		this._locker = locker;
+		_locker = locker;
 		if (wasLockAlreadySelf)
 		{
 			LockAcquired = true;
-			this._wasLockAlreadySelf = true;
+			_wasLockAlreadySelf = true;
 			return;
 		}
 
-		if(waitForLock)
+		if (waitForLock)
 		{
 			locker.EnterUpgradeableReadLock();
 			LockAcquired = true;
@@ -49,13 +49,10 @@ internal class SlimUpgradeableReadLockHolder : IUpgradeableLockHolder
 			_writerLock.Dispose();
 			_writerLock = null;
 		}
+
 		if (!LockAcquired) return;
-		if (!_wasLockAlreadySelf)
-		{
-			_locker.ExitUpgradeableReadLock();
-		}
+		if (!_wasLockAlreadySelf) _locker.ExitUpgradeableReadLock();
 		LockAcquired = false;
-			
 	}
 
 	public ILockHolder Upgrade()
@@ -65,10 +62,7 @@ internal class SlimUpgradeableReadLockHolder : IUpgradeableLockHolder
 
 	public ILockHolder Upgrade(bool waitForLock)
 	{
-		if(_locker.IsWriteLockHeld)
-		{
-			return NoOpLock.Lock;
-		}
+		if (_locker.IsWriteLockHeld) return NoOpLock.Lock;
 
 		_writerLock = new SlimWriteLockHolder(_locker, waitForLock);
 		return _writerLock;

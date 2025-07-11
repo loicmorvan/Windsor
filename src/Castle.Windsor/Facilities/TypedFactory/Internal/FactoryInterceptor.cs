@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory.Internal;
-
-using System;
-
 using Castle.Core;
 using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
 using Castle.MicroKernel;
 
+namespace Castle.Facilities.TypedFactory.Internal;
+
 /// <summary>
-///   Legacy interceptor for old impl. of the facility.
+///     Legacy interceptor for old impl. of the facility.
 /// </summary>
 [Transient]
 public class FactoryInterceptor(IKernel kernel) : IInterceptor, IOnBehalfAware
@@ -40,20 +38,19 @@ public class FactoryInterceptor(IKernel kernel) : IInterceptor, IOnBehalfAware
 				invocation.ReturnValue = kernel.Resolve(invocation.Method.ReturnType);
 				return;
 			}
-			var key = (String)args[0];
+
+			var key = (string)args[0];
 			invocation.ReturnValue = kernel.Resolve<object>(key);
 			return;
 		}
 
 		if (name.Equals(_entry.DestructionMethod))
-		{
 			if (args.Length == 1)
 			{
 				kernel.ReleaseComponent(args[0]);
 				invocation.ReturnValue = null;
 				return;
 			}
-		}
 
 		invocation.Proceed();
 	}

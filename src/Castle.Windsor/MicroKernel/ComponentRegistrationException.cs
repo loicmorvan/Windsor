@@ -12,33 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
-
 using System;
-using System.Runtime.Serialization;
-
 using Castle.Core.Internal;
 
+namespace Castle.MicroKernel;
+
 /// <summary>
-///   Exception threw when there is a problem
-///   registering a component
+///     Exception threw when there is a problem
+///     registering a component
 /// </summary>
 [Serializable]
 public class ComponentRegistrationException : Exception
 {
 	/// <summary>
-	///   Initializes a new instance of the <see cref = "ComponentRegistrationException" /> class.
+	///     Initializes a new instance of the <see cref="ComponentRegistrationException" /> class.
 	/// </summary>
-	/// <param name = "message">The message.</param>
+	/// <param name="message">The message.</param>
 	public ComponentRegistrationException(string message) : base(message)
 	{
-		ExceptionHelper.SetUp(this);
+		this.SetUp();
 	}
 
 	public ComponentRegistrationException(string message, Exception innerException)
 		: base(message, innerException)
 	{
-		ExceptionHelper.SetUp(this);
+		this.SetUp();
 	}
 
 #if FEATURE_SERIALIZATION

@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Internal;
-
 using System.ComponentModel;
+
+namespace Castle.MicroKernel.Internal;
 
 [EditorBrowsable(EditorBrowsableState.Never)]
 public interface IUpgradeableLockHolder : ILockHolder

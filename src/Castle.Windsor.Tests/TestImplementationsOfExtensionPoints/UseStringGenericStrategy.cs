@@ -1,10 +1,9 @@
-namespace Castle.Windsor.Tests.TestImplementationsOfExtensionPoints;
-
 using System;
-
 using Castle.Core;
 using Castle.MicroKernel.Context;
 using Castle.MicroKernel.Handlers;
+
+namespace Castle.Windsor.Tests.TestImplementationsOfExtensionPoints;
 
 public class UseStringGenericStrategy : IGenericImplementationMatchingStrategy
 {

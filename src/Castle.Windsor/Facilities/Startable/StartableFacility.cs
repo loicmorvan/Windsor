@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Startable;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Facilities;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Conversion;
 using Castle.Windsor;
+
+namespace Castle.Facilities.Startable;
 
 public partial class StartableFacility : AbstractFacility
 {
@@ -26,33 +26,41 @@ public partial class StartableFacility : AbstractFacility
 	private StartFlag _flag;
 
 	/// <summary>
-	///     This method changes behavior of the facility. Deferred mode should be used when you have single call to <see cref = "IWindsorContainer.Install" /> and register all your components there. Enabling
-	///     this mode will optimize the behavior of the facility so that it will wait 'till the end of installation and only after all <see cref = "IWindsorInstaller" />s were ran it will instantiate and
-	///     start all the startable components. An exception will be thrown if a startable component can't be instantiated and started. This will help you fail fast and diagnose issues quickly. If you don't
-	///     want the exception to be thrown and you prefer the component to fail silently, use <see cref = "DeferredTryStart" /> method instead.
+	///     This method changes behavior of the facility. Deferred mode should be used when you have single call to
+	///     <see cref="IWindsorContainer.Install" /> and register all your components there. Enabling
+	///     this mode will optimize the behavior of the facility so that it will wait 'till the end of installation and only
+	///     after all <see cref="IWindsorInstaller" />s were ran it will instantiate and
+	///     start all the startable components. An exception will be thrown if a startable component can't be instantiated and
+	///     started. This will help you fail fast and diagnose issues quickly. If you don't
+	///     want the exception to be thrown and you prefer the component to fail silently, use <see cref="DeferredTryStart" />
+	///     method instead.
 	/// </summary>
-	/// <remarks>It is recommended to use this method over <see cref = "DeferredTryStart" /> method.</remarks>
+	/// <remarks>It is recommended to use this method over <see cref="DeferredTryStart" /> method.</remarks>
 	public void DeferredStart()
 	{
 		DeferredStart(new DeferredStartFlag());
 	}
 
 	/// <summary>
-	///     Startable components will be started when <see cref = "StartFlag.Signal" /> method is invoked. This is particularily usedul when you need to perform some extra initialization outside of container
+	///     Startable components will be started when <see cref="StartFlag.Signal" /> method is invoked. This is particularily
+	///     usedul when you need to perform some extra initialization outside of container
 	///     before starting the Startable components.
 	/// </summary>
 	public void DeferredStart(StartFlag flag)
 	{
-		this._flag = flag;
+		_flag = flag;
 	}
 
 	/// <summary>
-	///     This method changes behavior of the facility. Deferred mode should be used when you have single call to <see cref = "IWindsorContainer.Install" /> and register all your components there. Enabling
-	///     this mode will optimize the behavior of the facility so that it will wait 'till the end of installation and only after all <see cref = "IWindsorInstaller" />s were ran it will instantiate and
-	///     start all the startable components. No exception will be thrown if a startable component can't be instantiated and started. If you'd rather fail fast and diagnose issues quickly, use
-	///     <see cref = "DeferredStart()" /> method instead.
+	///     This method changes behavior of the facility. Deferred mode should be used when you have single call to
+	///     <see cref="IWindsorContainer.Install" /> and register all your components there. Enabling
+	///     this mode will optimize the behavior of the facility so that it will wait 'till the end of installation and only
+	///     after all <see cref="IWindsorInstaller" />s were ran it will instantiate and
+	///     start all the startable components. No exception will be thrown if a startable component can't be instantiated and
+	///     started. If you'd rather fail fast and diagnose issues quickly, use
+	///     <see cref="DeferredStart()" /> method instead.
 	/// </summary>
-	/// <remarks>It is recommended to use <see cref = "DeferredStart()" /> method over this method.</remarks>
+	/// <remarks>It is recommended to use <see cref="DeferredStart()" /> method over this method.</remarks>
 	public void DeferredTryStart()
 	{
 		DeferredStart(new DeferredTryStartFlag());

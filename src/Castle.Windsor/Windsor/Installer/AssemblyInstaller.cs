@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Installer;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Core.Internal;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
+
+namespace Castle.Windsor.Installer;
 
 public class AssemblyInstaller : IWindsorInstaller
 {
@@ -30,25 +29,16 @@ public class AssemblyInstaller : IWindsorInstaller
 
 	public AssemblyInstaller(Assembly assembly, InstallerFactory factory)
 	{
-		if (assembly == null)
-		{
-			throw new ArgumentNullException(nameof(assembly));
-		}
-		if (factory == null)
-		{
-			throw new ArgumentNullException(nameof(factory));
-		}
-		this._assembly = assembly;
-		this._factory = factory;
+		if (assembly == null) throw new ArgumentNullException(nameof(assembly));
+		if (factory == null) throw new ArgumentNullException(nameof(factory));
+		_assembly = assembly;
+		_factory = factory;
 	}
 
 	public void Install(IWindsorContainer container, IConfigurationStore store)
 	{
 		var installerTypes = _factory.Select(FilterInstallerTypes(_assembly.GetAvailableTypes()));
-		if (installerTypes == null)
-		{
-			return;
-		}
+		if (installerTypes == null) return;
 
 		foreach (var installerType in installerTypes)
 		{

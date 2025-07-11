@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors;
-
 using System;
-
 using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.Core.Internal;
@@ -23,9 +20,11 @@ using Castle.DynamicProxy;
 using Castle.MicroKernel.Proxy;
 using Castle.MicroKernel.Util;
 
+namespace Castle.MicroKernel.ModelBuilder.Inspectors;
+
 /// <summary>
-///   Inspect the component for <c>InterceptorAttribute</c> and
-///   the configuration for the interceptors node
+///     Inspect the component for <c>InterceptorAttribute</c> and
+///     the configuration for the interceptors node
 /// </summary>
 [Serializable]
 public class InterceptorInspector : IContributeComponentModelConstruction
@@ -36,7 +35,8 @@ public class InterceptorInspector : IContributeComponentModelConstruction
 		CollectFromConfiguration(model);
 	}
 
-	protected virtual void AddInterceptor(InterceptorReference interceptorRef, InterceptorReferenceCollection interceptors)
+	protected virtual void AddInterceptor(InterceptorReference interceptorRef,
+		InterceptorReferenceCollection interceptors)
 	{
 		interceptors.Add(interceptorRef);
 	}
@@ -44,24 +44,15 @@ public class InterceptorInspector : IContributeComponentModelConstruction
 	protected virtual void CollectFromAttributes(ComponentModel model)
 	{
 		var attributes = model.Implementation.GetAttributes<InterceptorAttribute>(true);
-		foreach (var attribute in attributes)
-		{
-			AddInterceptor(attribute.Interceptor, model.Interceptors);
-		}
+		foreach (var attribute in attributes) AddInterceptor(attribute.Interceptor, model.Interceptors);
 	}
 
 	protected virtual void CollectFromConfiguration(ComponentModel model)
 	{
-		if (model.Configuration == null)
-		{
-			return;
-		}
+		if (model.Configuration == null) return;
 
 		var interceptors = model.Configuration.Children["interceptors"];
-		if (interceptors == null)
-		{
-			return;
-		}
+		if (interceptors == null) return;
 
 		CollectInterceptors(model, interceptors);
 		var options = model.ObtainProxyOptions();
@@ -72,17 +63,12 @@ public class InterceptorInspector : IContributeComponentModelConstruction
 	protected virtual void CollectHook(IConfiguration interceptors, ProxyOptions options)
 	{
 		var hook = interceptors.Attributes["hook"];
-		if (hook == null)
-		{
-			return;
-		}
+		if (hook == null) return;
 
 		var hookComponent = ReferenceExpressionUtil.ExtractComponentName(hook);
 		if (hookComponent == null)
-		{
 			throw new Exception(
-				String.Format("The value for the hook must be a reference to a component (Currently {0})", hook));
-		}
+				string.Format("The value for the hook must be a reference to a component (Currently {0})", hook));
 
 		options.Hook = new ComponentReference<IProxyGenerationHook>(hookComponent);
 	}
@@ -90,17 +76,13 @@ public class InterceptorInspector : IContributeComponentModelConstruction
 	protected virtual void CollectSelector(IConfiguration interceptors, ProxyOptions options)
 	{
 		var selector = interceptors.Attributes["selector"];
-		if (selector == null)
-		{
-			return;
-		}
+		if (selector == null) return;
 
 		var selectorComponent = ReferenceExpressionUtil.ExtractComponentName(selector);
 		if (selectorComponent == null)
-		{
 			throw new Exception(
-				String.Format("The value for the selector must be a reference to a component (Currently {0})", selector));
-		}
+				string.Format("The value for the selector must be a reference to a component (Currently {0})",
+					selector));
 
 		options.Selector = new ComponentReference<IInterceptorSelector>(selectorComponent);
 	}
@@ -111,10 +93,9 @@ public class InterceptorInspector : IContributeComponentModelConstruction
 		{
 			var interceptorComponent = ReferenceExpressionUtil.ExtractComponentName(interceptor.Value);
 			if (interceptorComponent == null)
-			{
 				throw new Exception(
-					String.Format("The value for the interceptor must be a reference to a component (Currently {0})", interceptor.Value));
-			}
+					string.Format("The value for the interceptor must be a reference to a component (Currently {0})",
+						interceptor.Value));
 
 			var reference = new InterceptorReference(interceptorComponent);
 

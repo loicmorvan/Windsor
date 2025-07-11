@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents;
-
 using Castle.MicroKernel.Lifestyle;
 
+namespace Castle.Windsor.Tests.ClassComponents;
+
 /// <summary>
-///   Summary description for MyLifestyleHandler.
+///     Summary description for MyLifestyleHandler.
 /// </summary>
 public class CustomLifestyleManager : AbstractLifestyleManager
 {

@@ -12,21 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
-
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Core;
 using Castle.MicroKernel.Context;
 using Castle.MicroKernel.Resolvers;
 
+namespace Castle.MicroKernel;
+
 /// <summary>
-///   Reference to component obtained from the container.
+///     Reference to component obtained from the container.
 /// </summary>
-/// <typeparam name = "T"></typeparam>
+/// <typeparam name="T"></typeparam>
 [Serializable]
 public class ComponentReference<T> : IReference<T>
 {
@@ -40,10 +39,11 @@ public class ComponentReference<T> : IReference<T>
 	protected DependencyModel DependencyModel;
 
 	/// <summary>
-	///   Creates a new instance of <see cref = "ComponentReference{T}" /> referencing default component implemented by <paramref
-	///    name = "componentType" />
+	///     Creates a new instance of <see cref="ComponentReference{T}" /> referencing default component implemented by
+	///     <paramref
+	///         name="componentType" />
 	/// </summary>
-	/// <param name = "componentType"></param>
+	/// <param name="componentType"></param>
 	public ComponentReference(Type componentType)
 	{
 		ReferencedComponentName = ComponentName.DefaultNameFor(componentType);
@@ -51,42 +51,33 @@ public class ComponentReference<T> : IReference<T>
 	}
 
 	/// <summary>
-	///   Creates a new instance of <see cref = "ComponentReference{T}" /> referencing component <paramref
-	///    name = "referencedComponentName" />
+	///     Creates a new instance of <see cref="ComponentReference{T}" /> referencing component
+	///     <paramref
+	///         name="referencedComponentName" />
 	/// </summary>
-	/// <param name = "referencedComponentName"></param>
-	public ComponentReference(String referencedComponentName)
+	/// <param name="referencedComponentName"></param>
+	public ComponentReference(string referencedComponentName)
 	{
-		if (referencedComponentName == null)
-		{
-			throw new ArgumentNullException(nameof(referencedComponentName));
-		}
-		this.ReferencedComponentName = referencedComponentName;
+		if (referencedComponentName == null) throw new ArgumentNullException(nameof(referencedComponentName));
+		ReferencedComponentName = referencedComponentName;
 	}
 
-	protected virtual Type ComponentType
-	{
-		get { return ReferencedComponentType ?? typeof(T); }
-	}
+	protected virtual Type ComponentType => ReferencedComponentType ?? typeof(T);
 
 	public T Resolve(IKernel kernel, CreationContext context)
 	{
 		var handler = GetHandler(kernel);
 		if (handler == null)
-		{
 			throw new DependencyResolverException(
 				string.Format(
 					"The referenced component {0} could not be resolved. Make sure you didn't misspell the name, and that component is registered.",
 					ReferencedComponentName));
-		}
 
 		if (handler.IsBeingResolvedInContext(context))
-		{
 			throw new DependencyResolverException(
 				string.Format(
 					"Cycle detected - referenced component {0} wants to use itself as its dependency. This usually signifies a bug in your code.",
 					handler.ComponentModel.Name));
-		}
 
 		var contextForInterceptor = RebuildContext(handler, context);
 
@@ -101,6 +92,18 @@ public class ComponentReference<T> : IReference<T>
 		}
 	}
 
+	void IReference<T>.Attach(ComponentModel component)
+	{
+		DependencyModel = new ComponentDependencyModel(ReferencedComponentName, ComponentType);
+		component.Dependencies.Add(DependencyModel);
+	}
+
+	void IReference<T>.Detach(ComponentModel component)
+	{
+		if (DependencyModel == null) return;
+		component.Dependencies.Remove(DependencyModel);
+	}
+
 	private IHandler GetHandler(IKernel kernel)
 	{
 		var handler = kernel.GetHandler(ReferencedComponentName);
@@ -110,26 +113,8 @@ public class ComponentReference<T> : IReference<T>
 	private CreationContext RebuildContext(IHandler handler, CreationContext current)
 	{
 		var handlerType = ComponentType ?? handler.ComponentModel.Services.First();
-		if (handlerType.GetTypeInfo().ContainsGenericParameters)
-		{
-			return current;
-		}
+		if (handlerType.GetTypeInfo().ContainsGenericParameters) return current;
 
 		return new CreationContext(handlerType, current, false);
-	}
-
-	void IReference<T>.Attach(ComponentModel component)
-	{
-		DependencyModel = new ComponentDependencyModel(ReferencedComponentName, ComponentType);
-		component.Dependencies.Add(DependencyModel);
-	}
-
-	void IReference<T>.Detach(ComponentModel component)
-	{
-		if (DependencyModel == null)
-		{
-			return;
-		}
-		component.Dependencies.Remove(DependencyModel);
 	}
 }

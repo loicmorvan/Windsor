@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Activators;
-
 using System;
-
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+
+namespace Castle.Facilities.AspNetCore.Activators;
 
 internal sealed class DelegatingTagHelperActivator(
 	Predicate<Type> customCreatorSelector,
@@ -26,14 +25,19 @@ internal sealed class DelegatingTagHelperActivator(
 	ITagHelperActivator defaultTagHelperActivator)
 	: ITagHelperActivator
 {
-	private readonly Predicate<Type> _customCreatorSelector = customCreatorSelector ?? throw new ArgumentNullException(nameof(customCreatorSelector));
-	private readonly Func<Type, object> _customTagHelperCreator = customTagHelperCreator ?? throw new ArgumentNullException(nameof(customTagHelperCreator));
-	private readonly ITagHelperActivator _defaultTagHelperActivator = defaultTagHelperActivator ?? throw new ArgumentNullException(nameof(defaultTagHelperActivator));
+	private readonly Predicate<Type> _customCreatorSelector =
+		customCreatorSelector ?? throw new ArgumentNullException(nameof(customCreatorSelector));
+
+	private readonly Func<Type, object> _customTagHelperCreator =
+		customTagHelperCreator ?? throw new ArgumentNullException(nameof(customTagHelperCreator));
+
+	private readonly ITagHelperActivator _defaultTagHelperActivator =
+		defaultTagHelperActivator ?? throw new ArgumentNullException(nameof(defaultTagHelperActivator));
 
 	public TTagHelper Create<TTagHelper>(ViewContext context) where TTagHelper : ITagHelper
 	{
 		return _customCreatorSelector(typeof(TTagHelper))
-			? (TTagHelper) _customTagHelperCreator(typeof(TTagHelper))
+			? (TTagHelper)_customTagHelperCreator(typeof(TTagHelper))
 			: _defaultTagHelperActivator.Create<TTagHelper>(context);
 	}
 }

@@ -12,68 +12,48 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ComponentActivator;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.Core;
 using Castle.DynamicProxy;
 using Castle.MicroKernel.Context;
 
+namespace Castle.MicroKernel.ComponentActivator;
+
 /// <summary>
-/// Abstract implementation of <see cref = "IComponentActivator" />. The implementors must only override the InternalCreate and InternalDestroy methods in order to perform their creation and destruction
-/// logic.
+///     Abstract implementation of <see cref="IComponentActivator" />. The implementors must only override the
+///     InternalCreate and InternalDestroy methods in order to perform their creation and destruction
+///     logic.
 /// </summary>
 [Serializable]
 public abstract class AbstractComponentActivator : IComponentActivator
 {
-	private readonly IKernelInternal _kernel;
-	private readonly ComponentModel _model;
-	private readonly ComponentInstanceDelegate _onCreation;
-	private readonly ComponentInstanceDelegate _onDestruction;
-
 	/// <summary>
-	/// Constructs an AbstractComponentActivator
+	///     Constructs an AbstractComponentActivator
 	/// </summary>
-	protected AbstractComponentActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
+	protected AbstractComponentActivator(ComponentModel model, IKernelInternal kernel,
+		ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
 	{
-		this._model = model;
-		this._kernel = kernel;
-		this._onCreation = onCreation;
-		this._onDestruction = onDestruction;
+		Model = model;
+		Kernel = kernel;
+		OnCreation = onCreation;
+		OnDestruction = onDestruction;
 	}
 
-	public IKernelInternal Kernel
-	{
-		get { return _kernel; }
-	}
+	public IKernelInternal Kernel { get; }
 
-	public ComponentModel Model
-	{
-		get { return _model; }
-	}
+	public ComponentModel Model { get; }
 
-	public ComponentInstanceDelegate OnCreation
-	{
-		get { return _onCreation; }
-	}
+	public ComponentInstanceDelegate OnCreation { get; }
 
-	public ComponentInstanceDelegate OnDestruction
-	{
-		get { return _onDestruction; }
-	}
-
-	protected abstract object InternalCreate(CreationContext context);
-
-	protected abstract void InternalDestroy(object instance);
+	public ComponentInstanceDelegate OnDestruction { get; }
 
 	public virtual object Create(CreationContext context, Burden burden)
 	{
 		var instance = InternalCreate(context);
 		burden.SetRootInstance(instance);
 
-		_onCreation(_model, instance);
+		OnCreation(Model, instance);
 
 		return instance;
 	}
@@ -82,47 +62,39 @@ public abstract class AbstractComponentActivator : IComponentActivator
 	{
 		InternalDestroy(instance);
 
-		_onDestruction(_model, instance);
+		OnDestruction(Model, instance);
 	}
+
+	protected abstract object InternalCreate(CreationContext context);
+
+	protected abstract void InternalDestroy(object instance);
 
 	protected virtual void ApplyCommissionConcerns(object instance)
 	{
-		if (Model.Lifecycle.HasCommissionConcerns == false)
-		{
-			return;
-		}
+		if (Model.Lifecycle.HasCommissionConcerns == false) return;
 
 		instance = ProxyUtil.GetUnproxiedInstance(instance);
 		if (instance == null)
-		{
 			// see http://issues.castleproject.org/issue/IOC-332 for details
-			throw new NotSupportedException(string.Format("Can not apply commission concerns to component {0} because it appears to be a target-less proxy. Currently those are not supported.", Model.Name));
-		}
+			throw new NotSupportedException(string.Format(
+				"Can not apply commission concerns to component {0} because it appears to be a target-less proxy. Currently those are not supported.",
+				Model.Name));
 		ApplyConcerns(Model.Lifecycle.CommissionConcerns, instance);
 	}
 
 	protected virtual void ApplyConcerns(IEnumerable<ICommissionConcern> steps, object instance)
 	{
-		foreach (var concern in steps)
-		{
-			concern.Apply(Model, instance);
-		}
+		foreach (var concern in steps) concern.Apply(Model, instance);
 	}
 
 	protected virtual void ApplyConcerns(IEnumerable<IDecommissionConcern> steps, object instance)
 	{
-		foreach (var concern in steps)
-		{
-			concern.Apply(Model, instance);
-		}
+		foreach (var concern in steps) concern.Apply(Model, instance);
 	}
 
 	protected virtual void ApplyDecommissionConcerns(object instance)
 	{
-		if (Model.Lifecycle.HasDecommissionConcerns == false)
-		{
-			return;
-		}
+		if (Model.Lifecycle.HasDecommissionConcerns == false) return;
 
 		instance = ProxyUtil.GetUnproxiedInstance(instance);
 		ApplyConcerns(Model.Lifecycle.DecommissionConcerns, instance);

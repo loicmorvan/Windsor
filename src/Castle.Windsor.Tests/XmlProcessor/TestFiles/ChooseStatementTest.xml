@@ -17,5 +17,5 @@
 				<component id="default" att="#{prop1}"/>
 			</otherwise>
 		</choose>
-	</components>		
+	</components>
 </configuration>

@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Lifestyle;
-
 using System;
-
 using Castle.Core;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 
+namespace Castle.Windsor.Tests.Lifestyle;
+
 public class LifestyleApiTestCase : AbstractContainerTestCase
 {
-	private void LifestyleSingle(Func<ComponentRegistration<A>, IRegistration> assingLifestyle, LifestyleType expectedLifestyle)
+	private void LifestyleSingle(Func<ComponentRegistration<A>, IRegistration> assingLifestyle,
+		LifestyleType expectedLifestyle)
 	{
 		var registration = Component.For<A>();
 		Kernel.Register(assingLifestyle(registration));

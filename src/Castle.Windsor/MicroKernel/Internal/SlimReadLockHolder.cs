@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Internal;
-
 using System.ComponentModel;
 using System.Threading;
+
+namespace Castle.MicroKernel.Internal;
 
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal class SlimReadLockHolder : ILockHolder
@@ -24,13 +24,14 @@ internal class SlimReadLockHolder : ILockHolder
 
 	public SlimReadLockHolder(ReaderWriterLockSlim locker, bool waitForLock)
 	{
-		this._locker = locker;
-		if(waitForLock)
+		_locker = locker;
+		if (waitForLock)
 		{
 			locker.EnterReadLock();
 			LockAcquired = true;
 			return;
 		}
+
 		LockAcquired = locker.TryEnterReadLock(0);
 	}
 

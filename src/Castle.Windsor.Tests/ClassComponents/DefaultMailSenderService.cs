@@ -12,25 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents;
-
 using System;
+
+namespace Castle.Windsor.Tests.ClassComponents;
 
 public class DefaultMailSenderService : IDisposable
 {
-	private bool _isDisposed;
-
-	public DefaultMailSenderService()
-	{
-	}
-
-	public bool IsDisposed
-	{
-		get { return _isDisposed; }
-	}
+	public bool IsDisposed { get; private set; }
 
 	public void Dispose()
 	{
-		_isDisposed = true;
+		IsDisposed = true;
 	}
 }

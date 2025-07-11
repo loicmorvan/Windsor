@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers;
-
 using System;
-
 using Castle.MicroKernel.Context;
+
+namespace Castle.MicroKernel.Handlers;
 
 public class ResolveInvocation(CreationContext context, bool instanceRequired)
 {
-	private bool _decommissionRequired;
 	private Action _proceed;
 
 	public Burden Burden { get; set; }
@@ -30,10 +28,7 @@ public class ResolveInvocation(CreationContext context, bool instanceRequired)
 
 	public object ResolvedInstance { get; set; }
 
-	internal bool DecommissionRequired
-	{
-		get { return _decommissionRequired; }
-	}
+	internal bool DecommissionRequired { get; private set; }
 
 	public void Proceed()
 	{
@@ -42,7 +37,7 @@ public class ResolveInvocation(CreationContext context, bool instanceRequired)
 
 	public void RequireDecommission()
 	{
-		_decommissionRequired = true;
+		DecommissionRequired = true;
 	}
 
 	internal void SetProceedDelegate(Action value)

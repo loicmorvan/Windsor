@@ -12,24 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Castle.Core.Internal;
 using Castle.MicroKernel;
+
+namespace Castle.Windsor.Diagnostics;
 
 public partial class DefaultDiagnosticsSubSystem :
 	AbstractSubSystem, IDiagnosticsHost
 {
 	private readonly IDictionary<Type, IDiagnostic<object>> _diagnostics = new Dictionary<Type, IDiagnostic<object>>();
-
-	public override void Terminate()
-	{
-		_diagnostics.Values.OfType<IDisposable>().ForEach(e => e.Dispose());
-	}
 
 	public void AddDiagnostic<TDiagnostic>(TDiagnostic diagnostic) where TDiagnostic : IDiagnostic<object>
 	{
@@ -41,5 +35,10 @@ public partial class DefaultDiagnosticsSubSystem :
 		IDiagnostic<object> value;
 		_diagnostics.TryGetValue(typeof(TDiagnostic), out value);
 		return (TDiagnostic)value;
+	}
+
+	public override void Terminate()
+	{
+		_diagnostics.Values.OfType<IDisposable>().ForEach(e => e.Dispose());
 	}
 }

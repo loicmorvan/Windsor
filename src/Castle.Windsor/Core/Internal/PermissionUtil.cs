@@ -13,7 +13,6 @@
 // limitations under the License.
 
 #if FEATURE_SECURITY_PERMISSIONS
-
 namespace Castle.Core.Internal
 {
 	using System;

@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-
 using Castle.Core.Configuration;
 using Castle.MicroKernel.SubSystems.Conversion;
+
+namespace Castle.Windsor.Tests;
 
 public class DefaultConversionManagerTestCase
 {
@@ -30,7 +29,6 @@ public class DefaultConversionManagerTestCase
 	[Bug("IOC-314")]
 	public void Converting_numbers_uses_ordinal_culture()
 	{
-			
 		Assert.Equal(",", CultureInfo.CreateSpecificCulture("pl-PL").NumberFormat.NumberDecimalSeparator);
 
 		var result = _converter.PerformConversion<decimal>("123.456");
@@ -48,7 +46,7 @@ public class DefaultConversionManagerTestCase
 	[Fact]
 	public void PerformConversionChar()
 	{
-		Assert.Equal('a', _converter.PerformConversion("a", typeof(Char)));
+		Assert.Equal('a', _converter.PerformConversion("a", typeof(char)));
 	}
 
 	[Fact]
@@ -240,10 +238,10 @@ public class DefaultConversionManagerTestCase
 		config.Children.Add(new MutableConfiguration("item", "second"));
 		config.Children.Add(new MutableConfiguration("item", "third"));
 
-		Assert.True(_converter.CanHandleType(typeof(String[])));
+		Assert.True(_converter.CanHandleType(typeof(string[])));
 
-		var array = (String[])
-			_converter.PerformConversion(config, typeof(String[]));
+		var array = (string[])
+			_converter.PerformConversion(config, typeof(string[]));
 
 		Assert.NotNull(array);
 

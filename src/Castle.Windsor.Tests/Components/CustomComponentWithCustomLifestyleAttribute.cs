@@ -15,13 +15,10 @@
 namespace Castle.Windsor.Tests.Components;
 
 /// <summary>
-///   Summary description for CustomComponent.
+///     Summary description for CustomComponent.
 /// </summary>
 [CustomTestLifestyle]
 public class CustomComponentWithCustomLifestyleAttribute : IComponent
 {
-	public int Id
-	{
-		get { return GetHashCode(); }
-	}
+	public int Id => GetHashCode();
 }

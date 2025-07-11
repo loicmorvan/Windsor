@@ -12,47 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.Startable;
-
 using Castle.Facilities.Startable;
 using Castle.MicroKernel.Handlers;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.Facilities.Startable;
 
 public class StartableAndDecoratorsTestCase
 {
-	private class AllInstaller : IWindsorInstaller
-	{
-		public void Install(IWindsorContainer container,
-			IConfigurationStore store)
-		{
-			container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
-			container.Register(Component.For<UsesIEmptyService>().Start());
-		}
-	}
-
-	private class DependenciesInstaller : IWindsorInstaller
-	{
-		public void Install(IWindsorContainer container,
-			IConfigurationStore store)
-		{
-			container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
-		}
-	}
-
-	private class StartableInstaller : IWindsorInstaller
-	{
-		public void Install(IWindsorContainer container,
-			IConfigurationStore store)
-		{
-			container.Register(Component.For<UsesIEmptyService>().Start());
-		}
-	}
-
 	[Fact]
 	public void No_startable_explicit_Resolve_resolves_with_no_issues()
 	{
@@ -148,5 +117,35 @@ public class StartableAndDecoratorsTestCase
 		container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
 			Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
 		container.Register(Component.For<UsesIEmptyService>().Start());
+	}
+
+	private class AllInstaller : IWindsorInstaller
+	{
+		public void Install(IWindsorContainer container,
+			IConfigurationStore store)
+		{
+			container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
+				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
+			container.Register(Component.For<UsesIEmptyService>().Start());
+		}
+	}
+
+	private class DependenciesInstaller : IWindsorInstaller
+	{
+		public void Install(IWindsorContainer container,
+			IConfigurationStore store)
+		{
+			container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
+				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
+		}
+	}
+
+	private class StartableInstaller : IWindsorInstaller
+	{
+		public void Install(IWindsorContainer container,
+			IConfigurationStore store)
+		{
+			container.Register(Component.For<UsesIEmptyService>().Start());
+		}
 	}
 }

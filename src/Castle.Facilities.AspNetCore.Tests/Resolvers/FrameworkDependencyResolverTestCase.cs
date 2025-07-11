@@ -12,22 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests.Resolvers;
-
 using System;
-
-using Castle.Facilities.AspNetCore.Tests.Fakes;
 using Castle.Facilities.AspNetCore.Resolvers;
+using Castle.Facilities.AspNetCore.Tests.Fakes;
 using Castle.Facilities.AspNetCore.Tests.Framework;
-
 using Microsoft.Extensions.DependencyInjection;
 
+namespace Castle.Facilities.AspNetCore.Tests.Resolvers;
 
-
-public class FrameworkDependencyResolverTestCase:IDisposable
+public class FrameworkDependencyResolverTestCase : IDisposable
 {
-	private readonly TestContext _testContext;
 	private readonly FrameworkDependencyResolver _frameworkDependencyResolver;
+	private readonly TestContext _testContext;
 
 	public FrameworkDependencyResolverTestCase()
 	{
@@ -162,7 +158,9 @@ public class FrameworkDependencyResolverTestCase:IDisposable
 	[InlineData(typeof(TagHelperServiceProviderOnly))]
 	[InlineData(typeof(ViewComponentServiceProviderOnly))]
 	[Theory]
-	public void Should_resolve_ServiceProviderOnly_and_WindsorOnly_and_CrossWired_registered_Controllers_TagHelpers_and_ViewComponents_from_WindsorContainer(Type serviceType)
+	public void
+		Should_resolve_ServiceProviderOnly_and_WindsorOnly_and_CrossWired_registered_Controllers_TagHelpers_and_ViewComponents_from_WindsorContainer(
+			Type serviceType)
 	{
 		_testContext.WindsorContainer.Resolve(serviceType);
 	}

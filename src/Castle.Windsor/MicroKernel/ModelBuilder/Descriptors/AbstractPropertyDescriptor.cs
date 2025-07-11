@@ -12,12 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors;
-
-using System;
-
 using Castle.Core;
 using Castle.Core.Configuration;
+
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
 
 public abstract class AbstractPropertyDescriptor : IComponentModelDescriptor
 {
@@ -27,7 +25,7 @@ public abstract class AbstractPropertyDescriptor : IComponentModelDescriptor
 	{
 	}
 
-	protected void AddParameter(ComponentModel model, String name, IConfiguration value)
+	protected void AddParameter(ComponentModel model, string name, IConfiguration value)
 	{
 		var parameters = EnsureParametersConfiguration(model);
 
@@ -37,7 +35,7 @@ public abstract class AbstractPropertyDescriptor : IComponentModelDescriptor
 		parameters.Children.Add(parameter);
 	}
 
-	protected void AddParameter(ComponentModel model, String name, String value)
+	protected void AddParameter(ComponentModel model, string name, string value)
 	{
 		var parameters = EnsureParametersConfiguration(model);
 		parameters.Children.Add(new MutableConfiguration(name, value));
@@ -51,6 +49,7 @@ public abstract class AbstractPropertyDescriptor : IComponentModelDescriptor
 			parameters = new MutableConfiguration("parameters");
 			model.Configuration.Children.Add(parameters);
 		}
+
 		return parameters;
 	}
 }

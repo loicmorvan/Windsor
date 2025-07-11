@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors;
-
 using Castle.Core;
 using Castle.MicroKernel.Handlers;
 using Castle.MicroKernel.Registration;
 
-public class DynamicParametersDescriptor(DynamicParametersWithContextResolveDelegate resolve) : IComponentModelDescriptor
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+
+public class DynamicParametersDescriptor(DynamicParametersWithContextResolveDelegate resolve)
+	: IComponentModelDescriptor
 {
 	private static readonly string Key = "component_resolving_handler";
 
@@ -34,10 +35,7 @@ public class DynamicParametersDescriptor(DynamicParametersWithContextResolveDele
 
 	private ComponentLifecycleExtension GetDynamicParametersExtension(ComponentModel model)
 	{
-		if (model.ExtendedProperties.Contains(Key))
-		{
-			return (ComponentLifecycleExtension)model.ExtendedProperties[Key];
-		}
+		if (model.ExtendedProperties.Contains(Key)) return (ComponentLifecycleExtension)model.ExtendedProperties[Key];
 
 		var dynamicParameters = new ComponentLifecycleExtension();
 		model.ExtendedProperties[Key] = dynamicParameters;

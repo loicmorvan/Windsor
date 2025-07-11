@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor;
-
 using System.Collections.Generic;
 using System.Xml;
+
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor;
 
 public class DefaultXmlProcessorNodeList : IXmlProcessorNodeList
 {
 	private readonly IList<XmlNode> _nodes;
-	private int _index = -1;
 
 	public DefaultXmlProcessorNodeList(XmlNode node)
 	{
@@ -30,53 +29,37 @@ public class DefaultXmlProcessorNodeList : IXmlProcessorNodeList
 
 	public DefaultXmlProcessorNodeList(IList<XmlNode> nodes)
 	{
-		this._nodes = nodes;
+		_nodes = nodes;
 	}
 
 	public DefaultXmlProcessorNodeList(XmlNodeList nodes)
 	{
-		this._nodes = CloneNodeList(nodes);
+		_nodes = CloneNodeList(nodes);
 	}
 
-	public int Count
-	{
-		get { return _nodes.Count; }
-	}
+	public int Count => _nodes.Count;
 
-	public XmlNode Current
-	{
-		get { return _nodes[_index]; }
-	}
+	public XmlNode Current => _nodes[CurrentPosition];
 
-	public int CurrentPosition
-	{
-		get { return _index; }
-		set { _index = value; }
-	}
+	public int CurrentPosition { get; set; } = -1;
 
-	public bool HasCurrent
-	{
-		get { return _index < _nodes.Count; }
-	}
+	public bool HasCurrent => CurrentPosition < _nodes.Count;
 
 	public bool MoveNext()
 	{
-		return ++_index < _nodes.Count;
+		return ++CurrentPosition < _nodes.Count;
 	}
 
 	/// <summary>
-	///   Make a shallow copy of the nodeList.
+	///     Make a shallow copy of the nodeList.
 	/// </summary>
-	/// <param name = "nodeList">The nodeList to be copied.</param>
+	/// <param name="nodeList">The nodeList to be copied.</param>
 	/// <returns></returns>
 	protected IList<XmlNode> CloneNodeList(XmlNodeList nodeList)
 	{
 		IList<XmlNode> nodes = new List<XmlNode>(nodeList.Count);
 
-		foreach (XmlNode node in nodeList)
-		{
-			nodes.Add(node);
-		}
+		foreach (XmlNode node in nodeList) nodes.Add(node);
 
 		return nodes;
 	}

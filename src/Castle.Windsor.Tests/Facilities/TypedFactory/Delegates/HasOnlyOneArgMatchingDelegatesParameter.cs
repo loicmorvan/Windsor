@@ -16,13 +16,7 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
 public class HasOnlyOneArgMatchingDelegatesParameter(string arg1, string name)
 {
-	public string Arg1
-	{
-		get { return arg1; }
-	}
+	public string Arg1 => arg1;
 
-	public string Name
-	{
-		get { return name; }
-	}
+	public string Name => name;
 }

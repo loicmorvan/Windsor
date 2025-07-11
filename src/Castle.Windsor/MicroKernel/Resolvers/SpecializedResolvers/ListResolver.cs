@@ -12,39 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Resolvers.SpecializedResolvers;
-
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-
 using Castle.Core;
 using Castle.Core.Internal;
 using Castle.MicroKernel.Context;
 
+namespace Castle.MicroKernel.Resolvers.SpecializedResolvers;
+
 /// <summary>
-///   Handle dependencies of services in the format of generic IList.
+///     Handle dependencies of services in the format of generic IList.
 /// </summary>
 /// <remarks>
-///   This is a complimentary <see cref = "ISubDependencyResolver" /> implementation 
-///   that is capable of satisfying dependencies of services generic IList.
-///   <para>
-///     Note that it will take precedence over service override for lists defined 
-///     on the configuration.
-///   </para>
+///     This is a complimentary <see cref="ISubDependencyResolver" /> implementation
+///     that is capable of satisfying dependencies of services generic IList.
+///     <para>
+///         Note that it will take precedence over service override for lists defined
+///         on the configuration.
+///     </para>
 /// </remarks>
 /// <example>
-///   In order to install the resolver:
-///   <code>
+///     In order to install the resolver:
+///     <code>
 ///     var kernel = new DefaultKernel();
 ///     kernel.Resolver.AddSubResolver(new ListResolver(kernel));
 ///   </code>
-/// 
-///   <para>
-///     To use it, assuming that IService is on the container:
-///   </para>
-/// 
-///   <code>
+///     <para>
+///         To use it, assuming that IService is on the container:
+///     </para>
+///     <code>
 ///     public class Component
 ///     {
 ///     public Component(IList&lt;IService&gt; services)
@@ -56,7 +53,7 @@ using Castle.MicroKernel.Context;
 public class ListResolver : CollectionResolver
 {
 	public ListResolver(IKernel kernel)
-		: base(kernel, false)
+		: base(kernel)
 	{
 	}
 
@@ -78,9 +75,7 @@ public class ListResolver : CollectionResolver
 	{
 		if (targetItemType.GetTypeInfo().IsGenericType == false ||
 		    targetItemType.GetGenericTypeDefinition() != typeof(IList<>))
-		{
 			return null;
-		}
 		return targetItemType.GetGenericArguments()[0];
 	}
 

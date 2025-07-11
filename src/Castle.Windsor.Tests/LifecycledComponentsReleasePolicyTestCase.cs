@@ -12,19 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Releasers;
-using Castle.Windsor;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests;
 
 public class LifecycledComponentsReleasePolicyTestCase
 {
 	private readonly IWindsorContainer _container;
 	private readonly IReleasePolicy _releasePolicy;
+
+	public LifecycledComponentsReleasePolicyTestCase()
+	{
+		_container = new WindsorContainer();
+		_releasePolicy = _container.Kernel.ReleasePolicy;
+	}
 
 	[Fact]
 	public void AllComponentsReleasePolicy_is_the_default_release_policy_in_Windsor()
@@ -112,12 +117,6 @@ public class LifecycledComponentsReleasePolicyTestCase
 		_container.Release(foo);
 
 		Assert.False(_releasePolicy.HasTrack(foo));
-	}
-
-	public LifecycledComponentsReleasePolicyTestCase()
-	{
-		_container = new WindsorContainer();
-		_releasePolicy = _container.Kernel.ReleasePolicy;
 	}
 
 	[Fact]

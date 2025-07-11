@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.LoggingFacility;
-
 using Castle.Core.Logging;
-using Castle.Facilities.Logging;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Services.Logging.Log4netIntegration;
 using Castle.Services.Logging.NLogIntegration;
-using Castle.Windsor;
+
+namespace Castle.Windsor.Tests.LoggingFacility;
 
 /// <summary>
-/// Summary description for BaseTest.
+///     Summary description for BaseTest.
 /// </summary>
 public abstract class BaseTest
 {
@@ -32,7 +30,8 @@ public abstract class BaseTest
 		IWindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
 		var configFile = GetConfigFile<TLoggerFactory>();
 
-		container.AddFacility<LoggingFacility>(f => f.LogUsing<TLoggerFactory>().WithConfig(configFile));
+		container.AddFacility<Castle.Facilities.Logging.LoggingFacility>(f =>
+			f.LogUsing<TLoggerFactory>().WithConfig(configFile));
 
 		return container;
 	}
@@ -42,14 +41,10 @@ public abstract class BaseTest
 	{
 		if (typeof(TLoggerFactory) == typeof(Log4netFactory) ||
 		    typeof(TLoggerFactory) == typeof(ExtendedLog4netFactory))
-		{
 			return "LoggingFacility\\log4net.facilities.test.config";
-		}
 		if (typeof(TLoggerFactory) == typeof(NLogFactory) ||
 		    typeof(TLoggerFactory) == typeof(ExtendedNLogFactory))
-		{
 			return "LoggingFacility\\NLog.facilities.test.config";
-		}
 		return string.Empty;
 	}
 }

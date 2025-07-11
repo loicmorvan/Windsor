@@ -12,86 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Lifecycle;
-
 using System;
-
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Pools;
 
+namespace Castle.Windsor.Tests.Lifecycle;
+
 public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 {
-	public class Indirection(NonDisposableRoot fakeRoot)
-	{
-		public NonDisposableRoot FakeRoot
-		{
-			get { return fakeRoot; }
-		}
-	}
-
-	public class NonDisposableRoot(A a, B b)
-	{
-		public A A
-		{
-			get { return a; }
-		}
-
-		public B B
-		{
-			get { return b; }
-		}
-	}
-
-	public class A : DisposableBase
-	{
-	}
-
-	public class B : DisposableBase
-	{
-	}
-
-	public class C : DisposableBase
-	{
-	}
-
-	public class GenA<T> : DisposableBase
-	{
-		public B BField { get; set; }
-
-		public GenB<T> GenBField { get; set; }
-	}
-
-	public class GenB<T> : DisposableBase
-	{
-	}
-
-	public class DisposableSpamService(
-		DisposableTemplateEngine templateEngine,
-		PoolableComponent1 pool) : DisposableBase
-	{
-		public DisposableSpamService(DisposableTemplateEngine templateEngine) : this(templateEngine, null)
-		{
-		}
-
-		public DefaultMailSenderService MailSender { get; set; }
-
-		public PoolableComponent1 Pool
-		{
-			get { return pool; }
-		}
-
-		public DisposableTemplateEngine TemplateEngine
-		{
-			get { return templateEngine; }
-		}
-	}
-
-	public class DisposableTemplateEngine : DisposableBase
-	{
-	}
-
 	[Fact]
 	public void ComponentsAreOnlyDisposedOnce()
 	{
@@ -229,10 +159,8 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 	public void Expected_exception_during_creation_doesnt_prevent_from_being_released_properly()
 	{
 		Container.Register(Component.For<GenA<int>>().LifestyleTransient(),
-			Component.For<B>().UsingFactoryMethod<B>(delegate
-				{
-					throw new NotImplementedException("boo hoo!");
-				}).LifestyleTransient()
+			Component.For<B>().UsingFactoryMethod<B>(delegate { throw new NotImplementedException("boo hoo!"); })
+				.LifestyleTransient()
 				.OnDestroy(Assert.NotNull));
 
 		var a = Container.Resolve<GenA<int>>();
@@ -240,4 +168,57 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 		Container.Release(a);
 	}
 
+	public class Indirection(NonDisposableRoot fakeRoot)
+	{
+		public NonDisposableRoot FakeRoot => fakeRoot;
+	}
+
+	public class NonDisposableRoot(A a, B b)
+	{
+		public A A => a;
+
+		public B B => b;
+	}
+
+	public class A : DisposableBase
+	{
+	}
+
+	public class B : DisposableBase
+	{
+	}
+
+	public class C : DisposableBase
+	{
+	}
+
+	public class GenA<T> : DisposableBase
+	{
+		public B BField { get; set; }
+
+		public GenB<T> GenBField { get; set; }
+	}
+
+	public class GenB<T> : DisposableBase
+	{
+	}
+
+	public class DisposableSpamService(
+		DisposableTemplateEngine templateEngine,
+		PoolableComponent1 pool) : DisposableBase
+	{
+		public DisposableSpamService(DisposableTemplateEngine templateEngine) : this(templateEngine, null)
+		{
+		}
+
+		public DefaultMailSenderService MailSender { get; set; }
+
+		public PoolableComponent1 Pool => pool;
+
+		public DisposableTemplateEngine TemplateEngine => templateEngine;
+	}
+
+	public class DisposableTemplateEngine : DisposableBase
+	{
+	}
 }

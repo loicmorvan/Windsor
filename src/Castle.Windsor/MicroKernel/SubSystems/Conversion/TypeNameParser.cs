@@ -19,10 +19,7 @@ public class TypeNameParser : ITypeNameParser
 	public TypeName Parse(string name)
 	{
 		var isPotentiallyFullyQualifiedName = false;
-		if (name.IndexOf(',') != -1)
-		{
-			isPotentiallyFullyQualifiedName = true;
-		}
+		if (name.IndexOf(',') != -1) isPotentiallyFullyQualifiedName = true;
 		var genericIndex = name.IndexOf('`');
 		var genericTypes = new TypeName[] { };
 		if (genericIndex > -1)
@@ -32,24 +29,17 @@ public class TypeNameParser : ITypeNameParser
 			{
 				int count;
 				var countString = name.Substring(genericIndex + 1, start - genericIndex - 1);
-				if (int.TryParse(countString, out count) == false)
-				{
-					return null;
-				}
+				if (int.TryParse(countString, out count) == false) return null;
 				genericTypes = ParseNames(name.Substring(start + 2, name.LastIndexOf("]]") - 2 - start), count);
-				if (genericTypes == null)
-				{
-					return null;
-				}
+				if (genericTypes == null) return null;
 				isPotentiallyFullyQualifiedName = false;
 				name = name.Substring(0, start);
 			}
 		}
+
 		if (isPotentiallyFullyQualifiedName)
-		{
 			//well at this point it either is a fully qualified name, or invalid string
 			return new TypeName(name);
-		}
 		// at this point we assume we have just the type name, probably prefixed with namespace so let's see which one is it
 		return BuildName(name, genericTypes);
 	}
@@ -60,7 +50,7 @@ public class TypeNameParser : ITypeNameParser
 		string typeName;
 		string @namespace = null;
 
-		if (typeStartsHere > -1 && typeStartsHere < (name.Length - 1))
+		if (typeStartsHere > -1 && typeStartsHere < name.Length - 1)
 		{
 			typeName = name.Substring(typeStartsHere + 1);
 			@namespace = name.Substring(0, typeStartsHere);
@@ -69,6 +59,7 @@ public class TypeNameParser : ITypeNameParser
 		{
 			typeName = name;
 		}
+
 		return new TypeName(@namespace, typeName, genericTypes);
 	}
 
@@ -77,12 +68,10 @@ public class TypeNameParser : ITypeNameParser
 		var currentLocation = location;
 		while (currentLocation < text.Length)
 		{
-			if (text[currentLocation] == '[')
-			{
-				return currentLocation;
-			}
+			if (text[currentLocation] == '[') return currentLocation;
 			currentLocation++;
 		}
+
 		return currentLocation;
 	}
 
@@ -100,13 +89,12 @@ public class TypeNameParser : ITypeNameParser
 			else if (current == ']')
 			{
 				open--;
-				if (open == 0)
-				{
-					return currentLocation;
-				}
+				if (open == 0) return currentLocation;
 			}
+
 			currentLocation++;
 		}
+
 		return currentLocation;
 	}
 
@@ -115,12 +103,10 @@ public class TypeNameParser : ITypeNameParser
 		if (count == 1)
 		{
 			var name = Parse(substring);
-			if (name == null)
-			{
-				return [];
-			}
+			if (name == null) return [];
 			return [name];
 		}
+
 		var names = new TypeName[count];
 
 		var location = 0;
@@ -130,6 +116,7 @@ public class TypeNameParser : ITypeNameParser
 			names[i] = Parse(substring.Substring(location, newLocation - location));
 			location = MoveToBeginning(newLocation, substring) + 1;
 		}
+
 		return names;
 	}
 }

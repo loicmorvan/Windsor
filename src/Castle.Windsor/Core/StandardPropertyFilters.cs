@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Core.Internal;
+
+namespace Castle.Core;
 
 public class StandardPropertyFilters
 {
@@ -45,14 +44,16 @@ public class StandardPropertyFilters
 		}
 	}
 
-	public static PropertySet[] Default(ComponentModel model, ICollection<PropertyInfo> properties, PropertySetBuilder propertySetBuilder)
+	public static PropertySet[] Default(ComponentModel model, ICollection<PropertyInfo> properties,
+		PropertySetBuilder propertySetBuilder)
 	{
-		var props = properties.Select(p => propertySetBuilder(p, isOptional: true)).ToArray();
+		var props = properties.Select(p => propertySetBuilder(p, true)).ToArray();
 		properties.Clear();
 		return props;
 	}
 
-	public static PropertyDependencyFilter FromObsoleteFunction(Func<ComponentModel, PropertyInfo, bool> filter, bool isRequired)
+	public static PropertyDependencyFilter FromObsoleteFunction(Func<ComponentModel, PropertyInfo, bool> filter,
+		bool isRequired)
 	{
 		return (model, properties, callback) =>
 		{
@@ -67,30 +68,32 @@ public class StandardPropertyFilters
 		};
 	}
 
-	public static ICollection<PropertyDependencyFilter> GetPropertyFilters(ComponentModel componentModel, bool createIfMissing)
+	public static ICollection<PropertyDependencyFilter> GetPropertyFilters(ComponentModel componentModel,
+		bool createIfMissing)
 	{
-		var filters = (ICollection<PropertyDependencyFilter>)componentModel.ExtendedProperties[Constants.PropertyFilters];
+		var filters =
+			(ICollection<PropertyDependencyFilter>)componentModel.ExtendedProperties[Constants.PropertyFilters];
 		if (filters == null && createIfMissing)
 		{
 			filters = new List<PropertyDependencyFilter>(4);
 			componentModel.ExtendedProperties[Constants.PropertyFilters] = filters;
 		}
+
 		return filters;
 	}
 
-	public static PropertySet[] IgnoreAll(ComponentModel model, ICollection<PropertyInfo> properties, PropertySetBuilder propertySetBuilder)
+	public static PropertySet[] IgnoreAll(ComponentModel model, ICollection<PropertyInfo> properties,
+		PropertySetBuilder propertySetBuilder)
 	{
 		properties.Clear();
 		return [];
 	}
 
-	public static PropertySet[] IgnoreBase(ComponentModel model, ICollection<PropertyInfo> properties, PropertySetBuilder propertySetBuilder)
+	public static PropertySet[] IgnoreBase(ComponentModel model, ICollection<PropertyInfo> properties,
+		PropertySetBuilder propertySetBuilder)
 	{
 		var baseProperties = properties.Where(p => p.DeclaringType != model.Implementation).ToArray();
-		foreach (var baseProperty in baseProperties)
-		{
-			properties.Remove(baseProperty);
-		}
+		foreach (var baseProperty in baseProperties) properties.Remove(baseProperty);
 		return [];
 	}
 
@@ -99,24 +102,23 @@ public class StandardPropertyFilters
 		return (model, properties, _) =>
 		{
 			foreach (var property in properties.ToArray())
-			{
 				if (selector(model, property))
-				{
 					properties.Remove(property);
-				}
-			}
+
 			return [];
 		};
 	}
 
-	public static PropertySet[] RequireAll(ComponentModel model, ICollection<PropertyInfo> properties, PropertySetBuilder propertySetBuilder)
+	public static PropertySet[] RequireAll(ComponentModel model, ICollection<PropertyInfo> properties,
+		PropertySetBuilder propertySetBuilder)
 	{
-		var props = properties.Select(p => propertySetBuilder(p, isOptional: false)).ToArray();
+		var props = properties.Select(p => propertySetBuilder(p, false)).ToArray();
 		properties.Clear();
 		return props;
 	}
 
-	public static PropertySet[] RequireBase(ComponentModel model, ICollection<PropertyInfo> properties, PropertySetBuilder propertySetBuilder)
+	public static PropertySet[] RequireBase(ComponentModel model, ICollection<PropertyInfo> properties,
+		PropertySetBuilder propertySetBuilder)
 	{
 		var baseProperties = properties.Where(p => p.DeclaringType != model.Implementation).ToArray();
 		return baseProperties
@@ -133,7 +135,7 @@ public class StandardPropertyFilters
 			.Select(p =>
 			{
 				properties.Remove(p);
-				return callback(p, isOptional: false);
+				return callback(p, false);
 			}).ToArray();
 	}
 }

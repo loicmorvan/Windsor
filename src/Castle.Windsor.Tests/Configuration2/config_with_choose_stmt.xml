@@ -14,5 +14,5 @@
 				<component id="default"/>
 			</otherwise>
 		</choose>
-	</components>		
+	</components>
 </configuration>

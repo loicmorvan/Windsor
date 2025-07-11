@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
 
+namespace Castle.Core;
+
 /// <summary>
-///   Indicates that the target components wants a
-///   scoped lifestyle.
+///     Indicates that the target components wants a
+///     scoped lifestyle.
 /// </summary>
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+[AttributeUsage(AttributeTargets.Class)]
 public class ScopedAttribute : LifestyleAttribute
 {
 	/// <summary>
-	///   Initializes a new instance of the <see cref = "ScopedAttribute" /> class.
+	///     Initializes a new instance of the <see cref="ScopedAttribute" /> class.
 	/// </summary>
 	public ScopedAttribute()
 		: base(LifestyleType.Scoped)

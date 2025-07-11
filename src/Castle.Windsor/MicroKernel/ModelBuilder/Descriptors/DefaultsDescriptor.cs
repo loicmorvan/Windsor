@@ -12,23 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors;
-
 using System;
 using System.Linq;
-
 using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.Core.Internal;
+
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
 
 public class DefaultsDescriptor(ComponentName name, Type implementation) : IComponentModelDescriptor
 {
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
-		if (model.Implementation == null)
-		{
-			model.Implementation = implementation ?? FirstService(model);
-		}
+		if (model.Implementation == null) model.Implementation = implementation ?? FirstService(model);
 
 		EnsureComponentName(model);
 		EnsureComponentConfiguration(kernel, model);
@@ -46,29 +42,25 @@ public class DefaultsDescriptor(ComponentName name, Type implementation) : IComp
 			configuration = new MutableConfiguration("component");
 			kernel.ConfigurationStore.AddComponentConfiguration(model.Name, configuration);
 		}
-		if (model.Configuration == null)
-		{
-			model.Configuration = configuration;
-		}
-		return;
+
+		if (model.Configuration == null) model.Configuration = configuration;
 	}
 
 	private void EnsureComponentName(ComponentModel model)
 	{
-		if (model.ComponentName != null)
-		{
-			return;
-		}
+		if (model.ComponentName != null) return;
 		if (name != null)
 		{
 			model.ComponentName = name;
 			return;
 		}
+
 		if (model.Implementation == typeof(LateBoundComponent))
 		{
 			model.ComponentName = new ComponentName("Late bound " + FirstService(model).FullName, false);
 			return;
 		}
+
 		model.ComponentName = ComponentName.DefaultFor(model.Implementation);
 	}
 

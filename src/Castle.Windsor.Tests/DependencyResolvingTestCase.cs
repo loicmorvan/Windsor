@@ -12,19 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers;
 using Castle.Windsor.Tests.Components;
 
+namespace Castle.Windsor.Tests;
+
 public class DependencyResolvingTestCase : AbstractContainerTestCase
 {
-
 	[Fact]
 	public void First_by_registration_order_available_component_is_used_to_satisfy_dependency()
 	{
@@ -50,7 +48,8 @@ public class DependencyResolvingTestCase : AbstractContainerTestCase
 	}
 
 	[Fact]
-	public void First_by_registration_order_available_component_is_used_to_satisfy_dependency_regardless_of_dependency_name_if_no_override()
+	public void
+		First_by_registration_order_available_component_is_used_to_satisfy_dependency_regardless_of_dependency_name_if_no_override()
 	{
 		Kernel.Register(Component.For<IAlarmSender>().ImplementedBy<SmsSender>(),
 			Component.For<IAlarmSender>().ImplementedBy<EmailSender>().Named("Sender"),
@@ -62,7 +61,8 @@ public class DependencyResolvingTestCase : AbstractContainerTestCase
 	}
 
 	[Fact]
-	public void First_by_registration_order_available_component_is_used_to_satisfy_dependency_regardless_of_dependency_name_if_no_override_missing_sub_dependency()
+	public void
+		First_by_registration_order_available_component_is_used_to_satisfy_dependency_regardless_of_dependency_name_if_no_override_missing_sub_dependency()
 	{
 		Kernel.Register(Component.For<IAlarmSender>().ImplementedBy<SmsSender>(),
 			Component.For<IAlarmSender>().ImplementedBy<EmailSenderWithDependency>().Named("Sender"),
@@ -183,6 +183,7 @@ public class DependencyResolvingTestCase : AbstractContainerTestCase
 		var exception = Assert.Throws<ArgumentException>(() =>
 			Kernel.Register(Component.For(typeof(int))));
 
-		Assert.Equal("Type System.Int32 is not a class nor an interface, and those are the only values allowed.", exception.Message);
+		Assert.Equal("Type System.Int32 is not a class nor an interface, and those are the only values allowed.",
+			exception.Message);
 	}
 }

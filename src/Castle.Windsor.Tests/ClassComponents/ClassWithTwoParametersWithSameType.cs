@@ -16,13 +16,7 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class ClassWithTwoParametersWithSameType(ICommon one, ICommon two)
 {
-	public ICommon One
-	{
-		get { return one; }
-	}
+	public ICommon One => one;
 
-	public ICommon Two
-	{
-		get { return two; }
-	}
+	public ICommon Two => two;
 }

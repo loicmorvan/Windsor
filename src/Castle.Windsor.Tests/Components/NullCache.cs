@@ -18,7 +18,7 @@ public class NullCache<T> : ICache<T>
 {
 	public T Get(string key)
 	{
-		return default(T);
+		return default;
 	}
 
 	public void Put(string key, T item)

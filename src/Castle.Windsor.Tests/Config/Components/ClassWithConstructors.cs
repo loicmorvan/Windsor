@@ -14,33 +14,22 @@
 
 namespace Castle.Windsor.Tests.Config.Components;
 
-using System;
-
 /// <summary>
-///   Summary description for ClassWithConstructors.
+///     Summary description for ClassWithConstructors.
 /// </summary>
 public class ClassWithConstructors
 {
-	private readonly String _host;
-	private readonly String[] _hosts;
-
-	public ClassWithConstructors(String host)
+	public ClassWithConstructors(string host)
 	{
-		this._host = host;
+		Host = host;
 	}
 
-	public ClassWithConstructors(String[] hosts)
+	public ClassWithConstructors(string[] hosts)
 	{
-		this._hosts = hosts;
+		Hosts = hosts;
 	}
 
-	public String Host
-	{
-		get { return _host; }
-	}
+	public string Host { get; }
 
-	public String[] Hosts
-	{
-		get { return _hosts; }
-	}
+	public string[] Hosts { get; }
 }

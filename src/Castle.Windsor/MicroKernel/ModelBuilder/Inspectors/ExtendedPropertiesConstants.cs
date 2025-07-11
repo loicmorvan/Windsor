@@ -14,17 +14,15 @@
 
 namespace Castle.MicroKernel.ModelBuilder.Inspectors;
 
-using System;
-
 /// <summary>
-///   Only to hold internal constants and get rid of 
-///   magic numbers and hardcode names.
+///     Only to hold internal constants and get rid of
+///     magic numbers and hardcode names.
 /// </summary>
 internal abstract class ExtendedPropertiesConstants
 {
 	public static readonly int PoolDefaultInitialPoolSize = 5;
 	public static readonly int PoolDefaultMaxPoolSize = 15;
 
-	public static readonly String PoolInitialPoolSize = "pool.initial.pool.size";
-	public static readonly String PoolMaxPoolSize = "pool.max.pool.size";
+	public static readonly string PoolInitialPoolSize = "pool.initial.pool.size";
+	public static readonly string PoolMaxPoolSize = "pool.max.pool.size";
 }

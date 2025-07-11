@@ -13,32 +13,31 @@
 // limitations under the License.
 
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers;
-
 using System;
-	
 using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Context;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 
+namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers;
+
 /// <summary>
-/// Use <see name="IKernel.ResolveAll" /> if there is no specific handler for IEnumerable service
+///     Use <see name="IKernel.ResolveAll" /> if there is no specific handler for IEnumerable service
 /// </summary>
-public class RegisteredCollectionResolver(IKernel kernel, bool allowEmptyCollections = true) : CollectionResolver(kernel, allowEmptyCollections)
+public class RegisteredCollectionResolver(IKernel kernel, bool allowEmptyCollections = true)
+	: CollectionResolver(kernel, allowEmptyCollections)
 {
-	public override bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+	public override bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+		ComponentModel model,
 		DependencyModel dependency)
 	{
-		if (Kernel.HasComponent(dependency.TargetItemType))
-		{
-			return false;
-		}
+		if (Kernel.HasComponent(dependency.TargetItemType)) return false;
 
 		return base.CanResolve(context, contextHandlerResolver, model, dependency);
 	}
 
-	public override object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+	public override object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+		ComponentModel model,
 		DependencyModel dependency)
 	{
 		return base.Resolve(context, contextHandlerResolver, model, dependency) as Array;

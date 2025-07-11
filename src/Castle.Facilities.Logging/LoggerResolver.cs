@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Logging;
-
 using System;
 using System.Diagnostics;
-
 using Castle.Core;
 using Castle.Core.Logging;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Context;
 
+namespace Castle.Facilities.Logging;
+
 /// <summary>
-///   Custom resolver used by Windsor. It gives
-///   us some contextual information that we use to set up a logging
-///   before satisfying the dependency
+///     Custom resolver used by Windsor. It gives
+///     us some contextual information that we use to set up a logging
+///     before satisfying the dependency
 /// </summary>
 public class LoggerResolver : ISubDependencyResolver
 {
@@ -35,22 +34,16 @@ public class LoggerResolver : ISubDependencyResolver
 
 	public LoggerResolver(ILoggerFactory loggerFactory)
 	{
-		if (loggerFactory == null)
-		{
-			throw new ArgumentNullException(nameof(loggerFactory));
-		}
+		if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 
-		this._loggerFactory = loggerFactory;
+		_loggerFactory = loggerFactory;
 	}
 
 	public LoggerResolver(IExtendedLoggerFactory extendedLoggerFactory)
 	{
-		if (extendedLoggerFactory == null)
-		{
-			throw new ArgumentNullException(nameof(extendedLoggerFactory));
-		}
+		if (extendedLoggerFactory == null) throw new ArgumentNullException(nameof(extendedLoggerFactory));
 
-		this._extendedLoggerFactory = extendedLoggerFactory;
+		_extendedLoggerFactory = extendedLoggerFactory;
 	}
 
 	public LoggerResolver(ILoggerFactory loggerFactory, string name) : this(loggerFactory)
@@ -58,28 +51,28 @@ public class LoggerResolver : ISubDependencyResolver
 		_logName = name;
 	}
 
-	public LoggerResolver(IExtendedLoggerFactory extendedLoggerFactory, string name) : this (extendedLoggerFactory)
+	public LoggerResolver(IExtendedLoggerFactory extendedLoggerFactory, string name) : this(extendedLoggerFactory)
 	{
 		_logName = name;
 	}
 
-	public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
+	public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
+		DependencyModel dependency)
 	{
 		return dependency.TargetType == typeof(ILogger) || dependency.TargetType == typeof(IExtendedLogger);
 	}
 
-	public object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
+	public object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
+		DependencyModel dependency)
 	{
 		Debug.Assert(CanResolve(context, parentResolver, model, dependency));
 		if (_extendedLoggerFactory != null)
-		{
-			return string.IsNullOrEmpty(_logName) 
-				? _extendedLoggerFactory.Create(model.Implementation) 
+			return string.IsNullOrEmpty(_logName)
+				? _extendedLoggerFactory.Create(model.Implementation)
 				: _extendedLoggerFactory.Create(_logName).CreateChildLogger(model.Implementation.FullName);
-		}
 
 		Debug.Assert(_loggerFactory != null);
-		return string.IsNullOrEmpty(_logName) 
+		return string.IsNullOrEmpty(_logName)
 			? _loggerFactory.Create(model.Implementation)
 			: _loggerFactory.Create(_logName).CreateChildLogger(model.Implementation.FullName);
 	}

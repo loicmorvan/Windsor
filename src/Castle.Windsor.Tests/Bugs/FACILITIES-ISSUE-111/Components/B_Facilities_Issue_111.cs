@@ -1,6 +1,6 @@
-namespace Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111.Components;
-
 using System;
+
+namespace Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111.Components;
 
 public class BFacilitiesIssue111 : IBFacilitiesIssue111
 {

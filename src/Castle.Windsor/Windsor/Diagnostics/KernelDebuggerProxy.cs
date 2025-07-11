@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-
 using Castle.MicroKernel;
 using Castle.Windsor.Diagnostics.DebuggerViews;
+
+namespace Castle.Windsor.Diagnostics;
 
 [DebuggerDisplay("")]
 internal class KernelDebuggerProxy
@@ -33,12 +32,10 @@ internal class KernelDebuggerProxy
 
 	public KernelDebuggerProxy(IKernel kernel)
 	{
-		if (kernel == null)
-		{
-			throw new ArgumentNullException(nameof(kernel));
-		}
+		if (kernel == null) throw new ArgumentNullException(nameof(kernel));
 		_extensions =
-			(IEnumerable<IContainerDebuggerExtension>)(kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IContainerDebuggerExtensionHost) ??
+			(IEnumerable<IContainerDebuggerExtension>)(kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as
+				IContainerDebuggerExtensionHost) ??
 			new IContainerDebuggerExtension[0];
 	}
 

@@ -12,36 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Core;
 using Castle.Core.Configuration;
-using Castle.Core.Internal;
 using Castle.MicroKernel.SubSystems.Conversion;
 
+namespace Castle.MicroKernel.ModelBuilder.Inspectors;
+
 /// <summary>
-///   This implementation of <see cref = "IContributeComponentModelConstruction" />
-///   collects all potential writable public properties exposed by the component 
-///   implementation and populates the model with them.
-///   The Kernel might be able to set some of these properties when the component 
-///   is requested.
+///     This implementation of <see cref="IContributeComponentModelConstruction" />
+///     collects all potential writable public properties exposed by the component
+///     implementation and populates the model with them.
+///     The Kernel might be able to set some of these properties when the component
+///     is requested.
 /// </summary>
 [Serializable]
 public class PropertiesDependenciesModelInspector(IConversionManager converter) : IContributeComponentModelConstruction
 {
-	[NonSerialized]
-	private readonly IConversionManager _converter = converter;
+	[NonSerialized] private readonly IConversionManager _converter = converter;
 
 	/// <summary>
-	///   Adds the properties as optional dependencies of this component.
+	///     Adds the properties as optional dependencies of this component.
 	/// </summary>
-	/// <param name = "kernel"></param>
-	/// <param name = "model"></param>
+	/// <param name="kernel"></param>
+	/// <param name="model"></param>
 	public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 	{
 		InspectProperties(model);
@@ -52,59 +49,40 @@ public class PropertiesDependenciesModelInspector(IConversionManager converter) 
 		var targetType = model.Implementation;
 
 		if (model.InspectionBehavior == PropertiesInspectionBehavior.Undefined)
-		{
 			model.InspectionBehavior = GetInspectionBehaviorFromTheConfiguration(model.Configuration);
-		}
 
 		if (model.InspectionBehavior == PropertiesInspectionBehavior.None)
-		{
 			// Nothing to be inspected
 			return;
-		}
 
 		var properties = GetProperties(model, targetType);
-		if (properties.Count == 0)
-		{
-			return;
-		}
+		if (properties.Count == 0) return;
 		var filters = StandardPropertyFilters.GetPropertyFilters(model, false);
 		if (filters == null)
-		{
-			properties.ForEach(p => model.AddProperty(BuildDependency(p, isOptional: true)));
-		}
+			properties.ForEach(p => model.AddProperty(BuildDependency(p, true)));
 		else
-		{
 			foreach (var filter in filters.Concat([StandardPropertyFilters.Create(PropertyFilter.Default)]))
 			{
 				var dependencies = filter.Invoke(model, properties, BuildDependency);
 				if (dependencies != null)
-				{
 					foreach (var dependency in dependencies)
-					{
 						model.AddProperty(dependency);
-					}
-				}
-				if (properties.Count == 0)
-				{
-					return;
-				}
+
+				if (properties.Count == 0) return;
 			}
-		}
 	}
 
 	private PropertySet BuildDependency(PropertyInfo property, bool isOptional)
 	{
-		var dependency = new PropertyDependencyModel(property, isOptional: isOptional);
+		var dependency = new PropertyDependencyModel(property, isOptional);
 		return new PropertySet(property, dependency);
 	}
 
 	private PropertiesInspectionBehavior GetInspectionBehaviorFromTheConfiguration(IConfiguration config)
 	{
 		if (config == null || config.Attributes["inspectionBehavior"] == null)
-		{
 			// return default behavior
 			return PropertiesInspectionBehavior.All;
-		}
 
 		var enumStringVal = config.Attributes["inspectionBehavior"];
 
@@ -115,11 +93,11 @@ public class PropertiesDependenciesModelInspector(IConversionManager converter) 
 		catch (Exception)
 		{
 			var message =
-				String.Format(
+				string.Format(
 					"Error on properties inspection. Could not convert the inspectionBehavior attribute value into an expected enum value. " +
 					"Value found is '{0}' while possible values are '{1}'",
 					enumStringVal,
-					String.Join(", ", Enum.GetNames(typeof(PropertiesInspectionBehavior))));
+					string.Join(", ", Enum.GetNames(typeof(PropertiesInspectionBehavior))));
 
 			throw new ConverterException(message);
 		}
@@ -129,13 +107,9 @@ public class PropertiesDependenciesModelInspector(IConversionManager converter) 
 	{
 		BindingFlags bindingFlags;
 		if (model.InspectionBehavior == PropertiesInspectionBehavior.DeclaredOnly)
-		{
 			bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-		}
 		else // if (model.InspectionBehavior == PropertiesInspectionBehavior.All) or Undefined
-		{
 			bindingFlags = BindingFlags.Public | BindingFlags.Instance;
-		}
 
 		var properties = targetType.GetProperties(bindingFlags);
 		return properties.Where(IsValidPropertyDependency).ToList();

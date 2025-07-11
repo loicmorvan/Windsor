@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Pool;
-
 using System;
+
+namespace Castle.MicroKernel.Lifestyle.Pool;
 
 [Serializable]
 public class DefaultPoolFactory : IPoolFactory

@@ -3,7 +3,7 @@
 	<components>
 		<component
 			id="myOtherService"
-			type="SimpleMixIn" />
+			type="SimpleMixIn"/>
 		<component
 			id="ValidComponent"
 			type="CalculatorService">

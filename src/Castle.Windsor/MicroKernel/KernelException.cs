@@ -12,37 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
-
 using System;
-using System.Runtime.Serialization;
-
 using Castle.Core.Internal;
 
+namespace Castle.MicroKernel;
+
 /// <summary>
-///   Exception threw by Kernel operations that failed
-///   for some reason.
+///     Exception threw by Kernel operations that failed
+///     for some reason.
 /// </summary>
 [Serializable]
 public class KernelException : Exception
 {
 	/// <summary>
-	///   Initializes a new instance of the <see cref = "KernelException" /> class.
+	///     Initializes a new instance of the <see cref="KernelException" /> class.
 	/// </summary>
-	/// <param name = "message">The message.</param>
+	/// <param name="message">The message.</param>
 	public KernelException(string message) : base(message)
 	{
-		ExceptionHelper.SetUp(this);
+		this.SetUp();
 	}
 
 	/// <summary>
-	///   Initializes a new instance of the <see cref = "KernelException" /> class.
+	///     Initializes a new instance of the <see cref="KernelException" /> class.
 	/// </summary>
-	/// <param name = "message">The message.</param>
-	/// <param name = "innerException">The inner exception.</param>
+	/// <param name="message">The message.</param>
+	/// <param name="innerException">The inner exception.</param>
 	public KernelException(string message, Exception innerException) : base(message, innerException)
 	{
-		ExceptionHelper.SetUp(this);
+		this.SetUp();
 	}
 
 #if FEATURE_SERIALIZATION

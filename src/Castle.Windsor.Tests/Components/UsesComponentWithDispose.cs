@@ -16,8 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class UsesComponentWithDispose(ComponentWithDispose cwd)
 {
-	public ComponentWithDispose Disposable
-	{
-		get { return cwd; }
-	}
+	public ComponentWithDispose Disposable => cwd;
 }

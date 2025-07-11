@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Scope;
-
 using System;
-
 using Castle.MicroKernel.Context;
 using Castle.MicroKernel.Lifestyle.Scoped;
+
+namespace Castle.Windsor.Extensions.DependencyInjection.Scope;
 
 internal class ExtensionContainerRootScopeAccessor : IScopeAccessor
 {
 	public ILifetimeScope GetScope(CreationContext context)
 	{
-		return ExtensionContainerScopeCache.Current.RootScope ?? throw new InvalidOperationException("No root scope available");
+		return ExtensionContainerScopeCache.Current.RootScope ??
+		       throw new InvalidOperationException("No root scope available");
 	}
 
 	public void Dispose()

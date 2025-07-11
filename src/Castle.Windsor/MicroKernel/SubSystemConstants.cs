@@ -14,36 +14,34 @@
 
 namespace Castle.MicroKernel;
 
-using System;
-
 /// <summary>
-///   Holds the keys used by Kernel to register/request 
-///   a subsystem.
+///     Holds the keys used by Kernel to register/request
+///     a subsystem.
 /// </summary>
 public abstract class SubSystemConstants
 {
 	/// <summary>
-	///   Key used for the configuration store subsystem
+	///     Key used for the configuration store subsystem
 	/// </summary>
-	public static readonly String ConfigurationStoreKey = "config.store";
+	public static readonly string ConfigurationStoreKey = "config.store";
 
 	/// <summary>
-	///   Key used for the conversion manager
+	///     Key used for the conversion manager
 	/// </summary>
-	public static readonly String ConversionManagerKey = "conversion.mng";
+	public static readonly string ConversionManagerKey = "conversion.mng";
 
 	/// <summary>
-	///   Key used for the diagnostics subsystem
+	///     Key used for the diagnostics subsystem
 	/// </summary>
-	public static readonly String DiagnosticsKey = "Castle.DiagnosticsSubSystem";
+	public static readonly string DiagnosticsKey = "Castle.DiagnosticsSubSystem";
 
 	/// <summary>
-	///   Key used for the naming subsystem
+	///     Key used for the naming subsystem
 	/// </summary>
-	public static readonly String NamingKey = "naming.sub.key";
+	public static readonly string NamingKey = "naming.sub.key";
 
 	/// <summary>
-	///   Key used for the resource subsystem
+	///     Key used for the resource subsystem
 	/// </summary>
-	public static readonly String ResourceKey = "resource.sub.key";
+	public static readonly string ResourceKey = "resource.sub.key";
 }

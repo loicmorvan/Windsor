@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Scope;
-
 using System;
-
 using Microsoft.Extensions.DependencyInjection;
+
+namespace Castle.Windsor.Extensions.DependencyInjection.Scope;
 
 internal class ServiceScope(IDisposable windsorScope, IServiceProvider serviceProvider) : IServiceScope
 {
 	private readonly IDisposable _scope = windsorScope ?? throw new ArgumentNullException(nameof(_scope));
 
-	public IServiceProvider ServiceProvider { get; } = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+	public IServiceProvider ServiceProvider { get; } =
+		serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
 
 	public void Dispose()
 	{

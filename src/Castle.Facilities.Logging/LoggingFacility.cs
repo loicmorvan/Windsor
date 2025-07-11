@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Logging;
-
 using System;
 using System.Diagnostics;
 using System.Reflection;
-
 using Castle.Core.Internal;
 using Castle.Core.Logging;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Facilities;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Conversion;
+
+namespace Castle.Facilities.Logging;
 
 /// <summary>A facility for logging support.</summary>
 public class LoggingFacility : AbstractFacility
@@ -39,14 +38,14 @@ public class LoggingFacility : AbstractFacility
 	private string _logName;
 	private bool _configuredExternally;
 
-	/// <summary>Initializes a new instance of the <see cref = "LoggingFacility" /> class.</summary>
+	/// <summary>Initializes a new instance of the <see cref="LoggingFacility" /> class.</summary>
 	public LoggingFacility()
 	{
 	}
 
-	/// <summary>Initializes a new instance of the <see cref = "LoggingFacility" /> class using a custom LoggerImplementation</summary>
-	/// <param name = "customLoggerFactory"> The type name of the type of the custom logger factory. </param>
-	/// <param name = "configFile"> The configuration file that should be used by the chosen LoggerImplementation </param>
+	/// <summary>Initializes a new instance of the <see cref="LoggingFacility" /> class using a custom LoggerImplementation</summary>
+	/// <param name="customLoggerFactory"> The type name of the type of the custom logger factory. </param>
+	/// <param name="configFile"> The configuration file that should be used by the chosen LoggerImplementation </param>
 	public LoggingFacility(string customLoggerFactory, string configFile)
 	{
 		_customLoggerFactoryTypeName = customLoggerFactory;
@@ -125,16 +124,20 @@ public class LoggingFacility : AbstractFacility
 		if (FacilityConfig != null)
 		{
 			var customLoggerType = FacilityConfig.Attributes["customLoggerFactory"];
-			if (string.IsNullOrEmpty(customLoggerType) == false) return _converter.PerformConversion<Type>(customLoggerType);
+			if (string.IsNullOrEmpty(customLoggerType) == false)
+				return _converter.PerformConversion<Type>(customLoggerType);
 		}
 
-		if (_customLoggerFactoryTypeName != null) return _converter.PerformConversion<Type>(_customLoggerFactoryTypeName);
+		if (_customLoggerFactoryTypeName != null)
+			return _converter.PerformConversion<Type>(_customLoggerFactoryTypeName);
 		return typeof(NullLogFactory);
 	}
 
 	private void EnsureIsValidLoggerFactoryType()
 	{
-		if (!_loggerFactoryType.Is<ILoggerFactory>()) throw new FacilityException($"The specified type '{_loggerFactoryType}' does not implement ILoggerFactory.");
+		if (!_loggerFactoryType.Is<ILoggerFactory>())
+			throw new FacilityException(
+				$"The specified type '{_loggerFactoryType}' does not implement ILoggerFactory.");
 	}
 
 	private void CreateProperLoggerFactory()
@@ -212,12 +215,14 @@ public class LoggingFacility : AbstractFacility
 		if (factory is IExtendedLoggerFactory loggerFactory)
 		{
 			var defaultLogger = loggerFactory.Create(_logName ?? "Default");
-			Kernel.Register(Component.For<IExtendedLogger>().NamedAutomatically("ilogger.default").Instance(defaultLogger),
+			Kernel.Register(
+				Component.For<IExtendedLogger>().NamedAutomatically("ilogger.default").Instance(defaultLogger),
 				Component.For<ILogger>().NamedAutomatically("ilogger.default.base").Instance(defaultLogger));
 		}
 		else
 		{
-			Kernel.Register(Component.For<ILogger>().NamedAutomatically("ilogger.default").Instance(factory.Create(_logName ?? "Default")));
+			Kernel.Register(Component.For<ILogger>().NamedAutomatically("ilogger.default")
+				.Instance(factory.Create(_logName ?? "Default")));
 		}
 	}
 

@@ -12,49 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs;
-
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
+
+namespace Castle.Windsor.Tests.Bugs;
 
 public class IoC115 : AbstractContainerTestCase
 {
-	public interface IParentService
-	{
-	}
-
-	public class ParentService : IParentService
-	{
-	}
-
-	public interface IChildService1
-	{
-	}
-
-	public class ChildService1 : IChildService1
-	{
-		public ChildService1(IChildService2 xxx)
-		{
-		}
-	}
-
-	public interface IChildService2
-	{
-		IParentService Parent { get; }
-	}
-
-	public class ChildService2(IParentService xxx) : IChildService2
-	{
-		public IParentService Parent
-		{
-			get { return xxx; }
-		}
-	}
-
-	public class AnotherParentService : IParentService
-	{
-	}
-
 	[Fact]
 	[Bug("IOC-115")]
 	public void Can_resolve_from_child_with_dependency_with_dependency_on_parent_component()
@@ -84,5 +47,38 @@ public class IoC115 : AbstractContainerTestCase
 		var resolve = child.Resolve<IChildService2>();
 
 		Assert.IsType<ParentService>(resolve.Parent);
+	}
+
+	public interface IParentService
+	{
+	}
+
+	public class ParentService : IParentService
+	{
+	}
+
+	public interface IChildService1
+	{
+	}
+
+	public class ChildService1 : IChildService1
+	{
+		public ChildService1(IChildService2 xxx)
+		{
+		}
+	}
+
+	public interface IChildService2
+	{
+		IParentService Parent { get; }
+	}
+
+	public class ChildService2(IParentService xxx) : IChildService2
+	{
+		public IParentService Parent => xxx;
+	}
+
+	public class AnotherParentService : IParentService
+	{
 	}
 }

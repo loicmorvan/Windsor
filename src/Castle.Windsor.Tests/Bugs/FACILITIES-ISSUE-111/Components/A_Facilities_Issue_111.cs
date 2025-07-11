@@ -1,12 +1,11 @@
-namespace Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111.Components;
-
 using System;
-
 using Castle.Core;
+
+namespace Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111.Components;
 
 public class AFacilitiesIssue111(IBFacilitiesIssue111[] ibs) : IAFacilitiesIssue111, IStartable
 {
-	IBFacilitiesIssue111[] _ibs = ibs;
+	private IBFacilitiesIssue111[] _ibs = ibs;
 
 	public void Method()
 	{

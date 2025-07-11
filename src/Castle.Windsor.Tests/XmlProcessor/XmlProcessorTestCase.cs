@@ -12,20 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.XmlProcessor;
-
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
-
 using Castle.Windsor.Configuration.Interpreters;
-using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
+
+namespace Castle.Windsor.Tests.XmlProcessor;
 
 /// <summary>
-/// Summary description for Class1.
+///     Summary description for Class1.
 /// </summary>
-	
 public class XmlProcessorTestCase
 {
 	[Fact]
@@ -37,16 +34,15 @@ public class XmlProcessorTestCase
 		foreach (var fileName in files)
 		{
 			var doc = GetXmlDocument(fileName);
-			var processor = new XmlProcessor();
+			var processor = new Configuration.Interpreters.XmlProcessor.XmlProcessor();
 
-			Assert.Throws<ConfigurationProcessingException>( () =>
+			Assert.Throws<ConfigurationProcessingException>(() =>
 				processor.Process(doc.DocumentElement));
-
 		}
 	}
 
 	/// <summary>
-	/// Runs the tests.
+	///     Runs the tests.
 	/// </summary>
 	[Fact]
 	public void RunTests()
@@ -54,13 +50,9 @@ public class XmlProcessorTestCase
 		var files = Directory.GetFiles(GetFullPath(), "*Test.xml");
 		Assert.NotEmpty(files);
 
-		foreach(var fileName in files)
+		foreach (var fileName in files)
 		{
-
-			if (fileName.EndsWith("PropertiesWithAttributesTest.xml"))
-			{
-				continue;
-			}
+			if (fileName.EndsWith("PropertiesWithAttributesTest.xml")) continue;
 
 			var doc = GetXmlDocument(fileName);
 
@@ -68,7 +60,7 @@ public class XmlProcessorTestCase
 
 			var resultDoc = GetXmlDocument(resultFileName);
 
-			var processor = new XmlProcessor();
+			var processor = new Configuration.Interpreters.XmlProcessor.XmlProcessor();
 
 			try
 			{
@@ -82,7 +74,7 @@ public class XmlProcessorTestCase
 
 				Assert.Equal(resultDocStr, resultStr);
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				throw new Exception("Error processing " + fileName, e);
 			}
@@ -93,15 +85,15 @@ public class XmlProcessorTestCase
 
 	public XmlDocument GetXmlDocument(string fileName)
 	{
-		XmlDocument doc = new XmlDocument();
+		var doc = new XmlDocument();
 
-		string content = File.ReadAllText(fileName);
+		var content = File.ReadAllText(fileName);
 		doc.LoadXml(content);
 
 		return doc;
 	}
 
-	private string StripSpaces(String xml)
+	private string StripSpaces(string xml)
 	{
 		return Regex.Replace(xml, "\\s+", "", RegexOptions.Compiled);
 	}

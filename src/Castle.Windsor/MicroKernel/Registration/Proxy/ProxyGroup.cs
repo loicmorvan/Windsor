@@ -12,27 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration.Proxy;
-
 using System;
-
 using Castle.DynamicProxy;
 using Castle.MicroKernel.ModelBuilder.Descriptors;
+
+namespace Castle.MicroKernel.Registration.Proxy;
 
 public class ProxyGroup<TS>(ComponentRegistration<TS> registration) : RegistrationGroup<TS>(registration)
 	where TS : class
 {
-	public ComponentRegistration<TS> AsMarshalByRefClass
-	{
-		get { return AddAttributeDescriptor("marshalByRefProxy", bool.TrueString); }
-	}
+	public ComponentRegistration<TS> AsMarshalByRefClass =>
+		AddAttributeDescriptor("marshalByRefProxy", bool.TrueString);
 
 	public ComponentRegistration<TS> AdditionalInterfaces(params Type[] interfaces)
 	{
-		if (interfaces is { Length: > 0 })
-		{
-			AddDescriptor(new ProxyInterfacesDescriptor(interfaces));
-		}
+		if (interfaces is { Length: > 0 }) AddDescriptor(new ProxyInterfacesDescriptor(interfaces));
 		return Registration;
 	}
 

@@ -12,27 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Facilities;
-
 using System;
-using System.Runtime.Serialization;
-
 using Castle.Core.Internal;
 
+namespace Castle.MicroKernel.Facilities;
+
 /// <summary>
-///   Base exception to be used by facilities.
+///     Base exception to be used by facilities.
 /// </summary>
 [Serializable]
 public class FacilityException : Exception
 {
 	public FacilityException(string message) : base(message)
 	{
-		ExceptionHelper.SetUp(this);
+		this.SetUp();
 	}
 
 	public FacilityException(string message, Exception innerException) : base(message, innerException)
 	{
-		ExceptionHelper.SetUp(this);
+		this.SetUp();
 	}
 
 #if FEATURE_SERIALIZATION

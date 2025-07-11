@@ -1,10 +1,8 @@
-namespace Castle.Windsor.Tests;
-
 using System;
-
 using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
+
+namespace Castle.Windsor.Tests;
 
 public class LifestyleTests
 {
@@ -19,6 +17,7 @@ public class LifestyleTests
 			container.AddChildContainer(childContainer);
 			childInterface = container.Resolve<IInterface>();
 		} // childIhterface is NOT disposing here
+
 		var @interface = container.Resolve<IInterface>();
 		Assert.Same(@interface, childInterface);
 		@interface.Do();
@@ -38,6 +37,7 @@ public class LifestyleTests
 			container.AddChildContainer(childContainer);
 			childFactory = childContainer.Resolve<IFactory>();
 		} // childFactory is disposing here
+
 		var factory = container.Resolve<IFactory>();
 		Assert.Same(factory, childFactory);
 		factory.Create(); // throws an ObjectDisposedException exception
@@ -55,7 +55,7 @@ public class LifestyleTests
 
 	public class InterfaceImpl : IInterface, IDisposable
 	{
-		bool _disposed;
+		private bool _disposed;
 
 		public void Dispose()
 		{
@@ -65,10 +65,7 @@ public class LifestyleTests
 
 		public void Do()
 		{
-			if (_disposed)
-			{
-				throw new NotSupportedException();
-			}
+			if (_disposed) throw new NotSupportedException();
 		}
 	}
 }

@@ -12,17 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
 
-public class CustomActivatorTestCase:IDisposable
+namespace Castle.Windsor.Tests;
+
+public class CustomActivatorTestCase : IDisposable
 {
 	private readonly IKernel _kernel = new DefaultKernel();
+
+	public void Dispose()
+	{
+		_kernel.Dispose();
+	}
 
 	[Fact]
 	public void Can_resolve_component_with_primitive_dependency_via_factory()
@@ -62,11 +66,6 @@ public class CustomActivatorTestCase:IDisposable
 				.Instance(new ClassWithServiceDependency(null)));
 
 		_kernel.Resolve<ClassWithServiceDependency>();
-	}
-
-	public void Dispose()
-	{
-		_kernel.Dispose();
 	}
 }
 

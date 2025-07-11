@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Startable;
-
 using System;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Context;
+
+namespace Castle.Facilities.Startable;
 
 public partial class StartableFacility
 {
@@ -39,10 +38,7 @@ public partial class StartableFacility
 	{
 		protected override void Start(IHandler handler)
 		{
-			if (TryStart(handler) == false)
-			{
-				CacheHandler(handler);
-			}
+			if (TryStart(handler) == false) CacheHandler(handler);
 		}
 
 		private bool TryStart(IHandler handler)
@@ -66,23 +62,17 @@ public partial class StartableFacility
 			base.Init();
 			Events.Kernel.ComponentRegistered += delegate
 			{
-				if (_inStart == false)
-				{
-					Signal();
-				}
+				if (_inStart == false) Signal();
 			};
 		}
 
 		protected override void Start(IHandler handler)
 		{
-			if (TryStart(handler) == false)
-			{
-				CacheHandler(handler);
-			}
+			if (TryStart(handler) == false) CacheHandler(handler);
 		}
 
 		/// <summary>Request the component instance</summary>
-		/// <param name = "handler"></param>
+		/// <param name="handler"></param>
 		private bool TryStart(IHandler handler)
 		{
 			try
@@ -104,14 +94,11 @@ public partial class StartableFacility
 			Kernel = kernel;
 			kernel.ComponentRegistered += (_, handler) =>
 			{
-				if (IsStartable(handler))
-				{
-					StartableComponentRegistered(handler);
-				}
+				if (IsStartable(handler)) StartableComponentRegistered(handler);
 			};
 		}
 
-		public IKernelEvents Kernel { get; private set; }
+		public IKernelEvents Kernel { get; }
 
 		public event Action<IHandler> StartableComponentRegistered = delegate { };
 	}

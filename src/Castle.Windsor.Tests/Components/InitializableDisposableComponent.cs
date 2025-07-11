@@ -12,35 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using System;
-
 using Castle.Core;
+
+namespace Castle.Windsor.Tests.Components;
 
 [Transient]
 public class InitializableDisposableComponent : IInitializable, IDisposable
 {
-	private bool _isDisposed;
-	private bool _isInitialized;
+	public bool IsDisposed { get; private set; }
 
-	public bool IsDisposed
-	{
-		get { return _isDisposed; }
-	}
-
-	public bool IsInitialized
-	{
-		get { return _isInitialized; }
-	}
+	public bool IsInitialized { get; private set; }
 
 	public void Dispose()
 	{
-		_isDisposed = true;
+		IsDisposed = true;
 	}
 
 	public void Initialize()
 	{
-		_isInitialized = true;
+		IsInitialized = true;
 	}
 }

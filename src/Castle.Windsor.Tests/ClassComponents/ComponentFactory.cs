@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents;
-
-using System;
-
 using Castle.Core;
 using Castle.MicroKernel;
+
+namespace Castle.Windsor.Tests.ClassComponents;
 
 [Singleton]
 public class ComponentFactory(IKernel kernel)
 {
-	public object Create(String name)
+	public object Create(string name)
 	{
 		return kernel.Resolve<object>(name);
 	}

@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Interceptors;
-
 using System.Linq;
-
 using Castle.Core;
 using Castle.MicroKernel.Proxy;
+
+namespace Castle.Windsor.Tests.Interceptors;
 
 public class WatcherInterceptorSelector : IModelInterceptorsSelector
 {
@@ -30,14 +29,8 @@ public class WatcherInterceptorSelector : IModelInterceptorsSelector
 
 	public InterceptorReference[] SelectInterceptors(ComponentModel model, InterceptorReference[] interceptors)
 	{
-		if (model.Services.Any(s => s != typeof(IWatcher)))
-		{
-			return null;
-		}
-		if (Interceptors == InterceptorKind.None)
-		{
-			return null;
-		}
+		if (model.Services.Any(s => s != typeof(IWatcher))) return null;
+		if (Interceptors == InterceptorKind.None) return null;
 		return [new InterceptorReference(typeof(WasCalledInterceptor))];
 	}
 }

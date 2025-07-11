@@ -18,7 +18,7 @@ public class CacheWithClassConstraint<T> : ICache<T> where T : class
 {
 	public T Get(string key)
 	{
-		return default(T);
+		return default;
 	}
 
 	public void Put(string key, T item)

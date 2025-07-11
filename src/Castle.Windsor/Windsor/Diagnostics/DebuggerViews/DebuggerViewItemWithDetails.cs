@@ -12,24 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.DebuggerViews;
-
 using System.Diagnostics;
 
-[DebuggerDisplay("{_description,nq}", Name = "{name,nq}")]
+namespace Castle.Windsor.Diagnostics.DebuggerViews;
+
+[DebuggerDisplay("{Description,nq}", Name = "{name,nq}")]
 public class DebuggerViewItemWithDetails(string name, string description, string details, params object[] items)
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly object _description = description;
-
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly string _name = name;
-
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public object Description
-	{
-		get { return _description; }
-	}
+	public object Description { get; } = description;
 
 	public string Details { get; private set; } = details;
 
@@ -37,8 +28,5 @@ public class DebuggerViewItemWithDetails(string name, string description, string
 	public object[] Items { get; set; } = items;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public string Name
-	{
-		get { return _name; }
-	}
+	public string Name { get; } = name;
 }

@@ -14,8 +14,6 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-using System;
-
 public class Employee : IEmployee
 {
 	private string _ntLogin;
@@ -25,10 +23,7 @@ public class Employee : IEmployee
 
 	public string FirstName { get; set; }
 
-	public string FullName
-	{
-		get { return String.Format("{0} {1} {2}", FirstName, MiddleName, LastName); }
-	}
+	public string FullName => string.Format("{0} {1} {2}", FirstName, MiddleName, LastName);
 
 	public bool IsProxy { get; set; }
 
@@ -42,16 +37,13 @@ public class Employee : IEmployee
 	{
 		get
 		{
-			if (_ntLogin.Length > 0)
-			{
-				return _ntLogin;
-			}
+			if (_ntLogin.Length > 0) return _ntLogin;
 			return _ntLogin;
 		}
 	}
 
 	public void SetNtLogin(string ntLogin)
 	{
-		this._ntLogin = ntLogin;
+		_ntLogin = ntLogin;
 	}
 }

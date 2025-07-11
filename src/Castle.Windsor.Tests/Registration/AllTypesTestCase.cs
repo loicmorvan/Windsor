@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Registration;
-
 using System;
 using System.Linq;
-
 using Castle.Core;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
+
+namespace Castle.Windsor.Tests.Registration;
 
 public class AllTypesTestCase : AbstractContainerTestCase
 {
@@ -254,10 +253,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		var handlers = Kernel.GetAssignableHandlers(typeof(ICustomer));
 		Assert.NotEmpty(handlers);
 
-		foreach (var handler in handlers)
-		{
-			Assert.Contains("Chain", handler.ComponentModel.Implementation.FullName);
-		}
+		foreach (var handler in handlers) Assert.Contains("Chain", handler.ComponentModel.Implementation.FullName);
 	}
 
 	[Fact]
@@ -283,9 +279,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		foreach (var handler in Kernel.GetAssignableHandlers(typeof(ICustomer)))
-		{
 			Assert.False(typeof(CustomerChain1).IsAssignableFrom(handler.ComponentModel.Implementation));
-		}
 	}
 
 	[Fact]
@@ -335,16 +329,15 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		foreach (var handler in Kernel.GetAssignableHandlers(typeof(ICommon)))
-		{
 			Assert.Equal(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
-		}
 	}
 
 	[Fact]
 	public void RegisterMultipleAssemblyTypes_BasedOn_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<ICommon>());
-		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<ICustomer>().If(t => t.FullName.Contains("Chain")));
+		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<ICustomer>()
+			.If(t => t.FullName.Contains("Chain")));
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<DefaultTemplateEngine>());
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<DefaultMailSenderService>());
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<DefaultSpamServiceWithConstructor>());
@@ -358,10 +351,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		handlers = Kernel.GetAssignableHandlers(typeof(ICustomer));
 		Assert.NotEmpty(handlers);
 
-		foreach (var handler in handlers)
-		{
-			Assert.Contains("Chain", handler.ComponentModel.Implementation.FullName);
-		}
+		foreach (var handler in handlers) Assert.Contains("Chain", handler.ComponentModel.Implementation.FullName);
 
 		handlers = Kernel.GetAssignableHandlers(typeof(DefaultSpamServiceWithConstructor));
 		Assert.Single(handlers);

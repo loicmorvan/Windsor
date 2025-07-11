@@ -12,22 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration.Proxy;
-
 using System;
+
+namespace Castle.MicroKernel.Registration.Proxy;
 
 public class ItemRegistration<TItem>
 {
-	private IReference<TItem> _item;
-
-	internal IReference<TItem> Item
-	{
-		get { return _item; }
-	}
+	internal IReference<TItem> Item { get; private set; }
 
 	public ItemRegistration<TItem> Instance(TItem instance)
 	{
-		_item = new InstanceReference<TItem>(instance);
+		Item = new InstanceReference<TItem>(instance);
 		return this;
 	}
 
@@ -38,13 +33,13 @@ public class ItemRegistration<TItem>
 
 	public ItemRegistration<TItem> Service(Type serviceType)
 	{
-		_item = new ComponentReference<TItem>(serviceType);
+		Item = new ComponentReference<TItem>(serviceType);
 		return this;
 	}
 
 	public ItemRegistration<TItem> Service(string name)
 	{
-		_item = new ComponentReference<TItem>(name);
+		Item = new ComponentReference<TItem>(name);
 		return this;
 	}
 }

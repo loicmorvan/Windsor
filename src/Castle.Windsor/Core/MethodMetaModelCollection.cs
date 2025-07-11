@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
+namespace Castle.Core;
+
 /// <summary>
-///   Collection of <see cref = "MethodMetaModel" />
+///     Collection of <see cref="MethodMetaModel" />
 /// </summary>
 [Serializable]
 public class MethodMetaModelCollection : Collection<MethodMetaModel>
@@ -28,17 +28,14 @@ public class MethodMetaModelCollection : Collection<MethodMetaModel>
 	private IDictionary _methodInfo2Model;
 
 	/// <summary>
-	///   Gets the method info2 model.
+	///     Gets the method info2 model.
 	/// </summary>
 	/// <value>The method info2 model.</value>
 	public IDictionary MethodInfo2Model
 	{
 		get
 		{
-			if (_methodInfo2Model == null)
-			{
-				_methodInfo2Model = new Dictionary<object, object>();
-			}
+			if (_methodInfo2Model == null) _methodInfo2Model = new Dictionary<object, object>();
 
 			return _methodInfo2Model;
 		}

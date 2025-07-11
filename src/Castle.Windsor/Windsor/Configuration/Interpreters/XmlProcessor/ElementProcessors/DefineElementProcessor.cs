@@ -12,19 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
-using System;
 using System.Xml;
+
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
 public class DefineElementProcessor : AbstractXmlNodeProcessor
 {
-	private static readonly String FlagAttrName = "flag";
+	private static readonly string FlagAttrName = "flag";
 
-	public override String Name
-	{
-		get { return "define"; }
-	}
+	public override string Name => "define";
 
 	public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
 	{

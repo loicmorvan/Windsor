@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System.Collections.Generic;
-
 using Castle.Core;
 using Castle.DynamicProxy;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
 
+namespace Castle.Windsor.Tests;
+
 public class KernelEventsComponentCreatedTestCase : AbstractContainerTestCase
 {
-	readonly IList<KeyValuePair<ComponentModel, object>> _list = new List<KeyValuePair<ComponentModel, object>>();
+	private readonly IList<KeyValuePair<ComponentModel, object>> _list =
+		new List<KeyValuePair<ComponentModel, object>>();
 
 	protected override void AfterContainerCreated()
 	{
@@ -31,7 +31,7 @@ public class KernelEventsComponentCreatedTestCase : AbstractContainerTestCase
 		Container.Kernel.ComponentCreated += Kernel_ComponentCreated;
 	}
 
-	void Kernel_ComponentCreated(ComponentModel model, object instance)
+	private void Kernel_ComponentCreated(ComponentModel model, object instance)
 	{
 		_list.Add(new KeyValuePair<ComponentModel, object>(model, instance));
 	}
@@ -40,10 +40,10 @@ public class KernelEventsComponentCreatedTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Event_raised_for_component_with_interceptor()
 	{
-
 		Container.Register(
 			Component.For<IInterceptor>().ImplementedBy<StandardInterceptor>().LifestyleTransient(),
-			Component.For<IService>().ImplementedBy<MyService>().Interceptors<StandardInterceptor>().LifestyleTransient());
+			Component.For<IService>().ImplementedBy<MyService>().Interceptors<StandardInterceptor>()
+				.LifestyleTransient());
 
 		var service = Container.Resolve<IService>();
 		Assert.NotEmpty(_list);

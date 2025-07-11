@@ -12,16 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Handlers;
-
 using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.ModelBuilder;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
 
+namespace Castle.Windsor.Tests.Handlers;
+
 public class EmptyConstructorTestCase : AbstractContainerTestCase
 {
+	[Fact]
+	public void Component_With_Explicit_Required_Dependency_Will_Be_Marked_Waiting()
+	{
+		Container.Register(Component.For<AProp>()
+			.AddDescriptor(new ExplicitRequiredDependencyDescriptor()));
+
+		var handler = Container.Kernel.GetHandler(typeof(AProp));
+		Assert.Equal(HandlerState.WaitingDependency, handler.CurrentState);
+	}
+
+	[Fact]
+	public void Component_With_Required_Properies_Will_Be_Marked_Waiting()
+	{
+		Container.Register(Component.For<AProp>()
+			.AddDescriptor(new RequirePropertyDescriptor()));
+
+		var handler = Container.Kernel.GetHandler(typeof(AProp));
+		Assert.Equal(HandlerState.WaitingDependency, handler.CurrentState);
+	}
+
 	private class ExplicitRequiredDependencyDescriptor : IComponentModelDescriptor
 	{
 		public void BuildComponentModel(IKernel kernel, ComponentModel model)
@@ -44,25 +64,5 @@ public class EmptyConstructorTestCase : AbstractContainerTestCase
 		{
 			model.Requires<A>();
 		}
-	}
-
-	[Fact]
-	public void Component_With_Explicit_Required_Dependency_Will_Be_Marked_Waiting()
-	{
-		Container.Register(Component.For<AProp>()
-			.AddDescriptor(new ExplicitRequiredDependencyDescriptor()));
-
-		var handler = Container.Kernel.GetHandler(typeof(AProp));
-		Assert.Equal(HandlerState.WaitingDependency, handler.CurrentState);
-	}
-
-	[Fact]
-	public void Component_With_Required_Properies_Will_Be_Marked_Waiting()
-	{
-		Container.Register(Component.For<AProp>()
-			.AddDescriptor(new RequirePropertyDescriptor()));
-
-		var handler = Container.Kernel.GetHandler(typeof(AProp));
-		Assert.Equal(HandlerState.WaitingDependency, handler.CurrentState);
 	}
 }

@@ -15,7 +15,7 @@
 namespace Castle.Windsor.Tests.Components;
 
 /// <summary>
-///   Summary description for IReviewer.
+///     Summary description for IReviewer.
 /// </summary>
 public interface IReviewer : IEmployee
 {

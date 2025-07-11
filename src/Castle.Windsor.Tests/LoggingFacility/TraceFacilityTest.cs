@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_CONSOLETRACELISTENER   //requires System.Diagnostics.ConsoleTraceListener
+#if FEATURE_CONSOLETRACELISTENER //requires System.Diagnostics.ConsoleTraceListener
 namespace Castle.Facilities.Logging.Tests
 {
 	using System;

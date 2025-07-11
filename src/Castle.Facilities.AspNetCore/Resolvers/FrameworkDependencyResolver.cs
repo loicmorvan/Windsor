@@ -12,32 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Resolvers;
-
 using System;
 using System.Linq;
-
 using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Context;
-
 using Microsoft.Extensions.DependencyInjection;
 
-public class FrameworkDependencyResolver(IServiceCollection serviceCollection) : ISubDependencyResolver, IAcceptServiceProvider
+namespace Castle.Facilities.AspNetCore.Resolvers;
+
+public class FrameworkDependencyResolver(IServiceCollection serviceCollection)
+	: ISubDependencyResolver, IAcceptServiceProvider
 {
 	private IServiceProvider _serviceProvider;
 
 	public void AcceptServiceProvider(IServiceProvider serviceProvider)
 	{
-		this._serviceProvider = serviceProvider;
+		_serviceProvider = serviceProvider;
 	}
 
-	public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+	public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+		DependencyModel dependency)
 	{
 		return HasMatchingType(dependency.TargetType);
 	}
 
-	public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+	public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+		DependencyModel dependency)
 	{
 		ThrowIfServiceProviderIsNull();
 		return _serviceProvider.GetService(dependency.TargetType);
@@ -52,9 +53,8 @@ public class FrameworkDependencyResolver(IServiceCollection serviceCollection) :
 	private void ThrowIfServiceProviderIsNull()
 	{
 		if (_serviceProvider == null)
-		{
-			throw new InvalidOperationException($"The serviceProvider for this resolver is null. Please call AcceptServiceProvider first.");
-		}
+			throw new InvalidOperationException(
+				"The serviceProvider for this resolver is null. Please call AcceptServiceProvider first.");
 	}
 }
 

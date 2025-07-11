@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers;
-
 using System;
-
 using Castle.Core;
 using Castle.Core.Internal;
 using Castle.MicroKernel.ModelBuilder;
+
+namespace Castle.MicroKernel.Handlers;
 
 [Serializable]
 public class DefaultHandlerFactory(IKernelInternal kernel) : IHandlerFactory
@@ -46,20 +45,18 @@ public class DefaultHandlerFactory(IKernelInternal kernel) : IHandlerFactory
 
 		var resolveExtensions = model.ResolveExtensions(false);
 		var releaseExtensions = model.ReleaseExtensions(false);
-		if (releaseExtensions == null && resolveExtensions == null)
-		{
-			return new DefaultHandler(model);
-		}
+		if (releaseExtensions == null && resolveExtensions == null) return new DefaultHandler(model);
 		return new ExtendedHandler(model, resolveExtensions, releaseExtensions);
 	}
 
 	private IGenericImplementationMatchingStrategy GenericImplementationMatchingStrategy(ComponentModel model)
 	{
-		return (IGenericImplementationMatchingStrategy) model.ExtendedProperties[Constants.GenericImplementationMatchingStrategy];
+		return (IGenericImplementationMatchingStrategy)model.ExtendedProperties[
+			Constants.GenericImplementationMatchingStrategy];
 	}
 
 	private IGenericServiceStrategy GenericServiceStrategy(ComponentModel model)
 	{
-		return (IGenericServiceStrategy) model.ExtendedProperties[Constants.GenericServiceStrategy];
+		return (IGenericServiceStrategy)model.ExtendedProperties[Constants.GenericServiceStrategy];
 	}
 }

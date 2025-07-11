@@ -12,16 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Resolvers;
-
 using System;
-
 using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Context;
-
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+
+namespace Castle.Facilities.AspNetCore.Resolvers;
 
 public class LoggerDependencyResolver : ISubDependencyResolver, IAcceptServiceProvider
 {
@@ -29,15 +27,17 @@ public class LoggerDependencyResolver : ISubDependencyResolver, IAcceptServicePr
 
 	public void AcceptServiceProvider(IServiceProvider serviceProvider)
 	{
-		this._serviceProvider = serviceProvider;
+		_serviceProvider = serviceProvider;
 	}
 
-	public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+	public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+		DependencyModel dependency)
 	{
 		return dependency.TargetType == typeof(ILogger);
 	}
 
-	public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+	public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+		DependencyModel dependency)
 	{
 		ThrowIfServiceProviderIsNull();
 		return _serviceProvider.GetService<ILoggerFactory>().CreateLogger(model.Name);
@@ -46,8 +46,7 @@ public class LoggerDependencyResolver : ISubDependencyResolver, IAcceptServicePr
 	private void ThrowIfServiceProviderIsNull()
 	{
 		if (_serviceProvider == null)
-		{
-			throw new InvalidOperationException($"The serviceProvider for this resolver is null. Please call AcceptServiceProvider first.");
-		}
+			throw new InvalidOperationException(
+				"The serviceProvider for this resolver is null. Please call AcceptServiceProvider first.");
 	}
 }

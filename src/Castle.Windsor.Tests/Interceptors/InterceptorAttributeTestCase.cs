@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Interceptors;
-
 using Castle.DynamicProxy;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.Interceptors;
 
 public class InterceptorAttributeTestCase : AbstractContainerTestCase
 {
@@ -27,7 +27,7 @@ public class InterceptorAttributeTestCase : AbstractContainerTestCase
 
 	private IInterceptor[] GetInterceptors(object proxy)
 	{
-		return ((IProxyTargetAccessor) proxy).GetInterceptors();
+		return ((IProxyTargetAccessor)proxy).GetInterceptors();
 	}
 
 	[Fact]

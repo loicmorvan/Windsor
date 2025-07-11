@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Handlers;
 using Castle.MicroKernel.Registration;
@@ -24,9 +21,12 @@ using Castle.MicroKernel.Resolvers;
 using Castle.Windsor.Extensions;
 using Castle.Windsor.Tests.RuntimeParameters;
 
+namespace Castle.Windsor.Tests;
+
 public class RuntimeParametersTestCase : AbstractContainerTestCase
 {
-	private readonly Dictionary<string, object> _dependencies = new() { { "cc", new CompC(12) }, { "myArgument", "ernst" } };
+	private readonly Dictionary<string, object> _dependencies = new()
+		{ { "cc", new CompC(12) }, { "myArgument", "ernst" } };
 
 	private void AssertDependencies(CompB compb)
 	{
@@ -138,7 +138,7 @@ public class RuntimeParametersTestCase : AbstractContainerTestCase
 			string.Format(
 				"Can't create component 'compb' as it has dependencies to be satisfied.{0}{0}'compb' is waiting for the following dependencies:{0}- Service 'Castle.MicroKernel.Tests.RuntimeParameters.CompC' which was not registered.{0}- Parameter 'myArgument' which was not provided. Did you forget to set the dependency?{0}",
 				Environment.NewLine);
-		var exception = Assert.Throws<HandlerException>( () => Kernel.Resolve<CompB>());
+		var exception = Assert.Throws<HandlerException>(() => Kernel.Resolve<CompB>());
 		Assert.Equal(expectedMessage, exception.Message);
 	}
 }

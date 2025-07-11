@@ -16,8 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ArrayDepAsConstructor(IEmptyService[] services)
 {
-	public IEmptyService[] Services
-	{
-		get { return services; }
-	}
+	public IEmptyService[] Services => services;
 }

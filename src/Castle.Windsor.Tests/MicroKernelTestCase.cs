@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
-
 using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Handlers;
@@ -25,6 +22,8 @@ using Castle.Windsor.Proxy;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.MicroKernel;
+
+namespace Castle.Windsor.Tests;
 
 public class MicroKernelTestCase : AbstractContainerTestCase
 {
@@ -151,7 +150,8 @@ public class MicroKernelTestCase : AbstractContainerTestCase
 	}
 
 	[Fact]
-	public void IOC_50_AddTwoComponentWithSameService_RequestFirstByKey_RemoveFirst_RequestByService_ShouldReturnSecond()
+	public void
+		IOC_50_AddTwoComponentWithSameService_RequestFirstByKey_RemoveFirst_RequestByService_ShouldReturnSecond()
 	{
 		Kernel.Register(Component.For<ICustomer>().ImplementedBy<CustomerImpl>().Named("key"));
 		Kernel.Register(Component.For<ICustomer>().ImplementedBy<CustomerImpl>().Named("key2"));
@@ -166,7 +166,8 @@ public class MicroKernelTestCase : AbstractContainerTestCase
 	public void KeyCollision()
 	{
 		Kernel.Register(Component.For<CustomerImpl>().Named("key"));
-		Assert.Throws<ComponentRegistrationException>(() => Kernel.Register(Component.For<CustomerImpl>().Named("key")));
+		Assert.Throws<ComponentRegistrationException>(() =>
+			Kernel.Register(Component.For<CustomerImpl>().Named("key")));
 	}
 
 	[Fact]
@@ -243,7 +244,8 @@ public class MicroKernelTestCase : AbstractContainerTestCase
 		Kernel.Register(Component.For<ICustomer>().ImplementedBy<CustomerImpl2>().Named("cust2"));
 		var customer = Kernel.Resolve<ICustomer>("cust");
 
-		var dictionary = new Arguments {
+		var dictionary = new Arguments
+		{
 			{ "name", "customer2Name" },
 			{ "address", "customer2Address" },
 			{ "age", 18 }
@@ -261,7 +263,8 @@ public class MicroKernelTestCase : AbstractContainerTestCase
 			Component.For<C>());
 		// the dependency goes C --> B --> A
 
-		Assert.Throws<DependencyResolverException>(() => Kernel.ResolveAll<C>(new Arguments { { "fakeDependency", "Stefan!" } }));
+		Assert.Throws<DependencyResolverException>(() =>
+			Kernel.ResolveAll<C>(new Arguments { { "fakeDependency", "Stefan!" } }));
 	}
 
 	[Fact]
@@ -278,14 +281,15 @@ public class MicroKernelTestCase : AbstractContainerTestCase
 	[Fact]
 	public void ShouldNotRegisterAbstractClassAsComponentImplementation_With_LifestyleType_And_Override_Signature()
 	{
-		Kernel.Register(Component.For<ICommon>().ImplementedBy<BaseCommonComponent>().Named("abstract").LifeStyle.Pooled);
+		Kernel.Register(
+			Component.For<ICommon>().ImplementedBy<BaseCommonComponent>().Named("abstract").LifeStyle.Pooled);
 
 		var expectedMessage =
 			string.Format(
 				"Type Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent is abstract.{0} As such, it is not possible to instantiate it as implementation of service 'abstract'. Did you forget to proxy it?",
 				Environment.NewLine);
 		var exception =
-			Assert.Throws<ComponentRegistrationException>( () =>
+			Assert.Throws<ComponentRegistrationException>(() =>
 				Kernel.Resolve<ICommon>("abstract"));
 		Assert.Equal(expectedMessage, exception.Message);
 	}
@@ -293,13 +297,14 @@ public class MicroKernelTestCase : AbstractContainerTestCase
 	[Fact]
 	public void ShouldNotRegisterAbstractClassAsComponentImplementation_With_LifestyleType_Signature()
 	{
-		Kernel.Register(Component.For<ICommon>().ImplementedBy<BaseCommonComponent>().Named("abstract").LifeStyle.Pooled);
+		Kernel.Register(
+			Component.For<ICommon>().ImplementedBy<BaseCommonComponent>().Named("abstract").LifeStyle.Pooled);
 		var expectedMessage =
 			string.Format(
 				"Type Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent is abstract.{0} As such, it is not possible to instantiate it as implementation of service 'abstract'. Did you forget to proxy it?",
 				Environment.NewLine);
 		var exception =
-			Assert.Throws<ComponentRegistrationException>( () => Kernel.Resolve<ICommon>("abstract"));
+			Assert.Throws<ComponentRegistrationException>(() => Kernel.Resolve<ICommon>("abstract"));
 		Assert.Equal(expectedMessage, exception.Message);
 	}
 
@@ -313,7 +318,7 @@ public class MicroKernelTestCase : AbstractContainerTestCase
 				"Type Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent is abstract.{0} As such, it is not possible to instantiate it as implementation of service 'abstract'. Did you forget to proxy it?",
 				Environment.NewLine);
 		var exception =
-			Assert.Throws<ComponentRegistrationException>( () => Kernel.Resolve<ICommon>("abstract"));
+			Assert.Throws<ComponentRegistrationException>(() => Kernel.Resolve<ICommon>("abstract"));
 		Assert.Equal(expectedMessage, exception.Message);
 	}
 
@@ -341,7 +346,7 @@ public class MicroKernelTestCase : AbstractContainerTestCase
 				"Type Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent is abstract.{0} As such, it is not possible to instantiate it as implementation of service 'abstract'. Did you forget to proxy it?",
 				Environment.NewLine);
 		var exception =
-			Assert.Throws<ComponentRegistrationException>( () => Kernel.Resolve<ICommon>("abstract"));
+			Assert.Throws<ComponentRegistrationException>(() => Kernel.Resolve<ICommon>("abstract"));
 		Assert.Equal(expectedMessage, exception.Message);
 	}
 
@@ -354,7 +359,7 @@ public class MicroKernelTestCase : AbstractContainerTestCase
 				"Type Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent is abstract.{0} As such, it is not possible to instantiate it as implementation of service 'abstract'. Did you forget to proxy it?",
 				Environment.NewLine);
 		var exception =
-			Assert.Throws<ComponentRegistrationException>( () => Kernel.Resolve<ICommon>("abstract"));
+			Assert.Throws<ComponentRegistrationException>(() => Kernel.Resolve<ICommon>("abstract"));
 		Assert.Equal(expectedMessage, exception.Message);
 	}
 

@@ -18,4 +18,4 @@ public enum FiscalStability
 {
 	DirtFarmer,
 	MrMoneyBags
-};
+}

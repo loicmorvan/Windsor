@@ -12,23 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.SpecializedResolvers;
-
 using System;
 using System.Reflection;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Context;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers;
-using Castle.Windsor;
 using Castle.Windsor.Installer;
 using Castle.Windsor.Proxy;
+
+namespace Castle.Windsor.Tests.SpecializedResolvers;
 
 public class CollectionResolverWithPropagatingContainerTestCase
 	: CollectionResolverTestCase
 {
-	/// <summary>Build a container, where all <see cref = "CreationContext" /> are propagating.</summary>
+	/// <summary>Build a container, where all <see cref="CreationContext" /> are propagating.</summary>
 	/// <returns>A Castle Windsor container</returns>
 	protected override WindsorContainer BuildContainer()
 	{
@@ -53,10 +51,7 @@ public class CollectionResolverWithPropagatingContainerTestCase
 		Assert.NotNull(componentA.Greeting);
 		Assert.NotNull(componentA.ComponentsOfB);
 		Assert.Equal(2, componentA.ComponentsOfB.Length);
-		foreach (IComponentB componentB in componentA.ComponentsOfB)
-		{
-			Assert.Equal(componentA.Greeting, componentB.Greeting);
-		}
+		foreach (var componentB in componentA.ComponentsOfB) Assert.Equal(componentA.Greeting, componentB.Greeting);
 	}
 
 	public class InlineDependenciesPropagatingDependencyResolver

@@ -12,22 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using Castle.Core;
+
+namespace Castle.Windsor.Tests.Components;
 
 public class SimpleServiceInitializable : ISimpleService, IInitializable
 {
-	private bool _isInitialized;
-
-	public bool IsInitialized
-	{
-		get { return _isInitialized; }
-	}
+	public bool IsInitialized { get; private set; }
 
 	public void Initialize()
 	{
-		_isInitialized = true;
+		IsInitialized = true;
 	}
 
 	public void Operation()

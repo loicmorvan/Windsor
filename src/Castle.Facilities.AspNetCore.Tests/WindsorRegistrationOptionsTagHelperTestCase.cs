@@ -12,30 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests;
-
 using System;
-
 using Castle.Facilities.AspNetCore.Tests.Framework;
 using Castle.MicroKernel.Registration;
-
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-	
+namespace Castle.Facilities.AspNetCore.Tests;
 
-public abstract class WindsorRegistrationOptionsTagHelperTestCase: IDisposable
+public abstract class WindsorRegistrationOptionsTagHelperTestCase : IDisposable
 {
+	protected TestContext TestContext;
+
 	public void Dispose()
 	{
 		TestContext.Dispose();
 	}
 
-	protected TestContext TestContext;
-
 	[InlineData(typeof(OverrideTagHelper))]
 	public void Should_resolve_overidden_TagHelpers_using_WindsorRegistrationOptions(Type optionsResolvableType)
 	{
-		TestContext.WindsorContainer.Resolve(optionsResolvableType); 
+		TestContext.WindsorContainer.Resolve(optionsResolvableType);
 	}
 
 	public class OverrideTagHelper : TagHelper
@@ -43,7 +39,6 @@ public abstract class WindsorRegistrationOptionsTagHelperTestCase: IDisposable
 	}
 }
 
-	
 public class WindsorRegistrationOptionsForAssembliesTagHelperTestCase : WindsorRegistrationOptionsTagHelperTestCase
 {
 	public WindsorRegistrationOptionsForAssembliesTagHelperTestCase()
@@ -54,7 +49,6 @@ public class WindsorRegistrationOptionsForAssembliesTagHelperTestCase : WindsorR
 	}
 }
 
-	
 public class WindsorRegistrationOptionsForComponentsTagHelperTestCase : WindsorRegistrationOptionsTagHelperTestCase
 {
 	public WindsorRegistrationOptionsForComponentsTagHelperTestCase()

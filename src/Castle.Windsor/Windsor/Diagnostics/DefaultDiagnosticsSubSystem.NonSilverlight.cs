@@ -12,23 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics;
-
 using System.Collections;
 using System.Collections.Generic;
-
 using Castle.MicroKernel;
 using Castle.Windsor.Diagnostics.Extensions;
+
+namespace Castle.Windsor.Diagnostics;
 
 public partial class DefaultDiagnosticsSubSystem : IDiagnosticsHost, IContainerDebuggerExtensionHost
 {
 	private readonly IList<IContainerDebuggerExtension> _extensions = new List<IContainerDebuggerExtension>();
-
-	public override void Init(IKernelInternal kernel)
-	{
-		base.Init(kernel);
-		InitStandardExtensions();
-	}
 
 	public void Add(IContainerDebuggerExtension item)
 	{
@@ -41,6 +34,17 @@ public partial class DefaultDiagnosticsSubSystem : IDiagnosticsHost, IContainerD
 		return _extensions.GetEnumerator();
 	}
 
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return GetEnumerator();
+	}
+
+	public override void Init(IKernelInternal kernel)
+	{
+		base.Init(kernel);
+		InitStandardExtensions();
+	}
+
 	protected virtual void InitStandardExtensions()
 	{
 		Add(new AllComponents());
@@ -50,11 +54,6 @@ public partial class DefaultDiagnosticsSubSystem : IDiagnosticsHost, IContainerD
 		Add(new DuplicatedDependenciesDebuggerExtension());
 		Add(new UsingContainerAsServiceLocator());
 		Add(new ReleasePolicyTrackedObjects());
-		Add(new Facilities());
-	}
-
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return GetEnumerator();
+		Add(new Extensions.Facilities());
 	}
 }

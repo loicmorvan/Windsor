@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Lifestyle;
-
 using System;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
-
 using Castle.MicroKernel.Lifestyle;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.Lifestyle;
 
 public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContainerTestCase
 {
@@ -29,7 +29,7 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
 		Container.Register(Component.For<A>().LifestyleScoped());
 	}
 
-#if FEATURE_REMOTING   //async delegates depend on Remoting https://github.com/dotnet/corefx/issues/5940 
+#if FEATURE_REMOTING //async delegates depend on Remoting https://github.com/dotnet/corefx/issues/5940 
 		[Fact]
 		public void Context_is_passed_onto_the_next_thread_Begin_End_Invoke()
 		{
@@ -81,7 +81,7 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
 		}
 #endif
 
-	[Fact] 
+	[Fact]
 	public async Task Context_is_passed_onto_the_next_thread_TPL()
 	{
 		using (Container.BeginScope())
@@ -89,10 +89,7 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
 			var instance = default(A);
 			var instanceFromOtherThread = default(A);
 			instance = Container.Resolve<A>();
-			var task = Task.Factory.StartNew(() =>
-			{
-				instanceFromOtherThread = Container.Resolve<A>();
-			});
+			var task = Task.Factory.StartNew(() => { instanceFromOtherThread = Container.Resolve<A>(); });
 			await task;
 			Assert.Same(instance, instanceFromOtherThread);
 		}
@@ -128,9 +125,10 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
 			var signalled = @event.WaitOne(TimeSpan.FromSeconds(2));
 			if (exceptionFromTheOtherThread != null)
 			{
-				var capture = System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(exceptionFromTheOtherThread);
+				var capture = ExceptionDispatchInfo.Capture(exceptionFromTheOtherThread);
 				capture.Throw();
 			}
+
 			Assert.True(signalled, "The other thread didn't finish on time.");
 			Assert.Same(instance, instanceFromOtherThread);
 		}
@@ -167,9 +165,10 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
 			var signalled = @event.WaitOne(TimeSpan.FromSeconds(2));
 			if (exceptionFromTheOtherThread != null)
 			{
-				var capture = System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(exceptionFromTheOtherThread);
+				var capture = ExceptionDispatchInfo.Capture(exceptionFromTheOtherThread);
 				capture.Throw();
 			}
+
 			Assert.True(signalled, "The other thread didn't finish on time.");
 			Assert.Same(instance, instanceFromOtherThread);
 		}

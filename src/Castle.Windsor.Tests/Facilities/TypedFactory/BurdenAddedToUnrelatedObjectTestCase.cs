@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory;
-
 using System;
-
 using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel.Registration;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTestCase
 {
@@ -50,9 +49,12 @@ public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTest
 
 	public sealed class Foo : IDisposable
 	{
-		public event EventHandler Disposed;
+		public void Dispose()
+		{
+			Disposed?.Invoke(this, EventArgs.Empty);
+		}
 
-		public void Dispose() => Disposed?.Invoke(this, EventArgs.Empty);
+		public event EventHandler Disposed;
 	}
 
 	public interface IFactory<T>
@@ -80,14 +82,14 @@ public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTest
 
 	public sealed class ShortLivedViewModel
 	{
-		public IFactory<Foo> FooFactory { get; }
-		public LongLivedService LongLivedService { get; }
-
 		public ShortLivedViewModel(IFactory<Foo> fooFactory, LongLivedService longLivedService)
 		{
 			FooFactory = fooFactory;
 			LongLivedService = longLivedService;
 			longLivedService.StartSomething();
 		}
+
+		public IFactory<Foo> FooFactory { get; }
+		public LongLivedService LongLivedService { get; }
 	}
 }

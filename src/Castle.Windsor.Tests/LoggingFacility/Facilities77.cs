@@ -12,16 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.LoggingFacility;
-
 using Castle.Core.Logging;
-using Castle.Facilities.Logging;
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
 using Castle.Windsor.Tests.LoggingFacility.Classes;
+
+namespace Castle.Windsor.Tests.LoggingFacility;
 
 public class Facilities77 : BaseTest
 {
+	[Fact]
+	public void ShouldCallNoArgsContstructorIfConfigFileNotSpecified()
+	{
+		var container =
+			new WindsorContainer().AddFacility<Castle.Facilities.Logging.LoggingFacility>(f =>
+				f.LogUsing<TestLoggerFactory>());
+
+		container.Register(Component.For<SimpleLoggingComponent>().Named("component"));
+		container.Resolve<SimpleLoggingComponent>("component");
+
+		var logFactory = container.Resolve<TestLoggerFactory>("iloggerfactory");
+		Assert.True(logFactory.NoArgsConstructorWasCalled, "No args constructor was not called");
+	}
+
 	public class TestLoggerFactory : AbstractLoggerFactory
 	{
 		public readonly bool NoArgsConstructorWasCalled;
@@ -45,17 +57,5 @@ public class Facilities77 : BaseTest
 		{
 			return NullLogger.Instance;
 		}
-	}
-
-	[Fact]
-	public void ShouldCallNoArgsContstructorIfConfigFileNotSpecified()
-	{
-		var container = new WindsorContainer().AddFacility<LoggingFacility>(f => f.LogUsing<TestLoggerFactory>());
-
-		container.Register(Component.For<SimpleLoggingComponent>().Named("component"));
-		container.Resolve<SimpleLoggingComponent>("component");
-
-		var logFactory = container.Resolve<TestLoggerFactory>("iloggerfactory");
-		Assert.True(logFactory.NoArgsConstructorWasCalled, "No args constructor was not called");
 	}
 }

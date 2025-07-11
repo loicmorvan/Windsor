@@ -12,33 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
 using Castle.MicroKernel.Handlers;
+
+namespace Castle.MicroKernel;
 
 public partial class DefaultKernel
 {
 	/// <summary>
-	///   Returns a component instance by the key
+	///     Returns a component instance by the key
 	/// </summary>
-	/// <param name = "key"></param>
-	/// <param name = "service"></param>
+	/// <param name="key"></param>
+	/// <param name="service"></param>
 	/// <returns></returns>
-	public virtual object Resolve(String key, Type service)
+	public virtual object Resolve(string key, Type service)
 	{
 		return (this as IKernelInternal).Resolve(key, service, null, ReleasePolicy);
 	}
 
 	/// <summary>
-	///   Returns a component instance by the key
+	///     Returns a component instance by the key
 	/// </summary>
-	/// <param name = "key"></param>
-	/// <param name = "service"></param>
-	/// <param name = "arguments"></param>
+	/// <param name="key"></param>
+	/// <param name="service"></param>
+	/// <param name="arguments"></param>
 	/// <returns></returns>
 	public virtual object Resolve(string key, Type service, Arguments arguments)
 	{
@@ -46,10 +45,10 @@ public partial class DefaultKernel
 	}
 
 	/// <summary>
-	///   Returns the component instance by the service type
-	///   using dynamic arguments
+	///     Returns the component instance by the service type
+	///     using dynamic arguments
 	/// </summary>
-	/// <param name = "arguments"></param>
+	/// <param name="arguments"></param>
 	/// <returns></returns>
 	public T Resolve<T>(Arguments arguments)
 	{
@@ -57,7 +56,7 @@ public partial class DefaultKernel
 	}
 
 	/// <summary>
-	///   Returns the component instance by the component key
+	///     Returns the component instance by the component key
 	/// </summary>
 	/// <returns></returns>
 	public T Resolve<T>()
@@ -66,26 +65,26 @@ public partial class DefaultKernel
 	}
 
 	/// <summary>
-	///   Returns a component instance by the key
+	///     Returns a component instance by the key
 	/// </summary>
-	/// <param name = "key">Component's key</param>
-	/// <typeparam name = "T">Service type</typeparam>
+	/// <param name="key">Component's key</param>
+	/// <typeparam name="T">Service type</typeparam>
 	/// <returns>
-	///   The Component instance
+	///     The Component instance
 	/// </returns>
-	public T Resolve<T>(String key)
+	public T Resolve<T>(string key)
 	{
-		return (T)(this as IKernelInternal).Resolve(key, typeof(T), arguments: null, policy: ReleasePolicy);
+		return (T)(this as IKernelInternal).Resolve(key, typeof(T), null, ReleasePolicy);
 	}
 
 	/// <summary>
-	///   Returns a component instance by the key
+	///     Returns a component instance by the key
 	/// </summary>
-	/// <typeparam name = "T">Service type</typeparam>
-	/// <param name = "key">Component's key</param>
-	/// <param name = "arguments"></param>
+	/// <typeparam name="T">Service type</typeparam>
+	/// <param name="key">Component's key</param>
+	/// <param name="arguments"></param>
 	/// <returns>
-	///   The Component instance
+	///     The Component instance
 	/// </returns>
 	public T Resolve<T>(string key, Arguments arguments)
 	{
@@ -93,7 +92,7 @@ public partial class DefaultKernel
 	}
 
 	/// <summary>
-	///   Returns the component instance by the service type
+	///     Returns the component instance by the service type
 	/// </summary>
 	public object Resolve(Type service)
 	{
@@ -101,11 +100,11 @@ public partial class DefaultKernel
 	}
 
 	/// <summary>
-	///   Returns the component instance by the service type
-	///   using dynamic arguments
+	///     Returns the component instance by the service type
+	///     using dynamic arguments
 	/// </summary>
-	/// <param name = "service"></param>
-	/// <param name = "arguments"></param>
+	/// <param name="service"></param>
+	/// <param name="arguments"></param>
 	/// <returns></returns>
 	public object Resolve(Type service, Arguments arguments)
 	{
@@ -113,21 +112,21 @@ public partial class DefaultKernel
 	}
 
 	/// <summary>
-	///   Returns all the valid component instances by
-	///   the service type
+	///     Returns all the valid component instances by
+	///     the service type
 	/// </summary>
-	/// <param name = "service">The service type</param>
+	/// <param name="service">The service type</param>
 	public Array ResolveAll(Type service)
 	{
 		return (this as IKernelInternal).ResolveAll(service, null, ReleasePolicy);
 	}
 
 	/// <summary>
-	///   Returns all the valid component instances by
-	///   the service type
+	///     Returns all the valid component instances by
+	///     the service type
 	/// </summary>
-	/// <param name = "service">The service type</param>
-	/// <param name = "arguments">
+	/// <param name="service">The service type</param>
+	/// <param name="arguments">
 	///     Arguments to resolve the services
 	/// </param>
 	public Array ResolveAll(Type service, Arguments arguments)
@@ -136,10 +135,10 @@ public partial class DefaultKernel
 	}
 
 	/// <summary>
-	///   Returns component instances that implement TService
+	///     Returns component instances that implement TService
 	/// </summary>
-	/// <typeparam name = "TService"></typeparam>
-	/// <param name = "arguments"></param>
+	/// <typeparam name="TService"></typeparam>
+	/// <param name="arguments"></param>
 	/// <returns></returns>
 	public TService[] ResolveAll<TService>(Arguments arguments)
 	{
@@ -147,9 +146,9 @@ public partial class DefaultKernel
 	}
 
 	/// <summary>
-	///   Returns component instances that implement TService
+	///     Returns component instances that implement TService
 	/// </summary>
-	/// <typeparam name = "TService"></typeparam>
+	/// <typeparam name="TService"></typeparam>
 	/// <returns></returns>
 	public TService[] ResolveAll<TService>()
 	{
@@ -157,12 +156,12 @@ public partial class DefaultKernel
 	}
 
 	/// <summary>
-	///   Returns a component instance by the key
+	///     Returns a component instance by the key
 	/// </summary>
-	/// <param name = "key"></param>
-	/// <param name = "service"></param>
-	/// <param name = "arguments"></param>
-	/// <param name = "policy"></param>
+	/// <param name="key"></param>
+	/// <param name="service"></param>
+	/// <param name="arguments"></param>
+	/// <param name="policy"></param>
 	/// <returns></returns>
 	object IKernelInternal.Resolve(string key, Type service, Arguments arguments, IReleasePolicy policy)
 	{
@@ -172,16 +171,14 @@ public partial class DefaultKernel
 			var otherHandlers = GetHandlers(service).Length;
 			throw new ComponentNotFoundException(key, service, otherHandlers);
 		}
+
 		return ResolveComponent(handler, service ?? typeof(object), arguments, policy);
 	}
 
 	object IKernelInternal.Resolve(Type service, Arguments arguments, IReleasePolicy policy, bool ignoreParentContext)
 	{
 		var handler = (this as IKernelInternal).LoadHandlerByType(null, service, arguments);
-		if(handler == null)
-		{
-			throw new ComponentNotFoundException(service);
-		}
+		if (handler == null) throw new ComponentNotFoundException(service);
 		return ResolveComponent(handler, service, arguments, policy, ignoreParentContext);
 	}
 
@@ -190,10 +187,7 @@ public partial class DefaultKernel
 		var resolved = new List<object>();
 		foreach (var handler in GetHandlers(service))
 		{
-			if (handler.IsBeingResolvedInContext(_currentCreationContext))
-			{
-				continue;
-			}
+			if (handler.IsBeingResolvedInContext(_currentCreationContext)) continue;
 
 			try
 			{
@@ -207,10 +201,7 @@ public partial class DefaultKernel
 			}
 		}
 
-		if (resolved.Count == 0)
-		{
-			EmptyCollectionResolving(service);
-		}
+		if (resolved.Count == 0) EmptyCollectionResolving(service);
 		var components = Array.CreateInstance(service, resolved.Count);
 		((ICollection)resolved).CopyTo(components, 0);
 		return components;

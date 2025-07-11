@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory;
-
 using System;
 using System.Reflection;
-
 using Castle.Core;
 using Castle.MicroKernel;
+
+namespace Castle.Facilities.TypedFactory;
 
 [Singleton]
 public class DefaultDelegateComponentSelector : DefaultTypedFactoryComponentSelector
@@ -32,13 +31,11 @@ public class DefaultDelegateComponentSelector : DefaultTypedFactoryComponentSele
 			if (arg.Contains(parameters[i].ParameterType))
 			{
 				if (IsFunc(method.DeclaringType))
-				{
 					throw new ArgumentException(
 						string.Format("Factory delegate {0} has duplicated arguments of type {1}. " +
 						              "Using generic purpose delegates with duplicated argument types is unsupported, because then it is not possible to match arguments properly. " +
 						              "Use some custom delegate with meaningful argument names or interface based factory instead.",
 							method.DeclaringType, parameters[i].ParameterType));
-				}
 
 				// else we just ignore it. It will likely be matched by name so we don't want to throw prematurely. We could log this though.
 			}
@@ -46,8 +43,10 @@ public class DefaultDelegateComponentSelector : DefaultTypedFactoryComponentSele
 			{
 				arg.Add(parameters[i].ParameterType, arguments[i]);
 			}
+
 			arg.Add(parameters[i].Name, arguments[i]);
 		}
+
 		return arg;
 	}
 

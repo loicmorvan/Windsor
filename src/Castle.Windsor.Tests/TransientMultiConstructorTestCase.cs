@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
-
 using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
+
+namespace Castle.Windsor.Tests;
 
 public class TransientMultiConstructorTestCase
 {
 	[Fact]
 	public void TransientMultiConstructorTest()
 	{
-		DefaultKernel container = new DefaultKernel();
+		var container = new DefaultKernel();
 		((IKernel)container).Register(Component.For(typeof(AnyClass)).Named("AnyClass"));
 
 		var arguments1 = new Arguments();
@@ -34,8 +33,8 @@ public class TransientMultiConstructorTestCase
 		var arguments2 = new Arguments();
 		arguments2.Add("datetime", DateTime.Now.AddDays(1));
 
-		object a = container.Resolve(typeof(AnyClass), arguments1);
-		object b = container.Resolve(typeof(AnyClass), arguments2);
+		var a = container.Resolve(typeof(AnyClass), arguments1);
+		var b = container.Resolve(typeof(AnyClass), arguments2);
 
 		Assert.NotSame(a, b);
 	}
@@ -43,10 +42,10 @@ public class TransientMultiConstructorTestCase
 	[Fact]
 	public void TransientMultipleConstructorNonValueTypeTest()
 	{
-		DefaultKernel container = new DefaultKernel();
+		var container = new DefaultKernel();
 		((IKernel)container).Register(Component.For(typeof(AnyClassWithReference)).Named("AnyClass"));
-		Tester1 one = new Tester1("AnyString");
-		Tester2 two = new Tester2(1);
+		var one = new Tester1("AnyString");
+		var two = new Tester2(1);
 
 		var arguments1 = new Arguments();
 		arguments1.Add("test1", one);
@@ -54,8 +53,8 @@ public class TransientMultiConstructorTestCase
 		var arguments2 = new Arguments();
 		arguments2.Add("test2", two);
 
-		object a = container.Resolve(typeof(AnyClassWithReference), arguments1);
-		object b = container.Resolve(typeof(AnyClassWithReference), arguments2);
+		var a = container.Resolve(typeof(AnyClassWithReference), arguments1);
+		var b = container.Resolve(typeof(AnyClassWithReference), arguments2);
 
 		Assert.NotSame(a, b);
 

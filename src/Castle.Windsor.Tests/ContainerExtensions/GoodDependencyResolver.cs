@@ -12,19 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ContainerExtensions;
-
 using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Context;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.ContainerExtensions;
 
 public class GoodDependencyResolver : ISubDependencyResolver
 {
 	public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
 		DependencyModel dependency)
 	{
-		return dependency.TargetType == typeof(IBookStore) && contextHandlerResolver.CanResolve(context, contextHandlerResolver, model,
+		return dependency.TargetType == typeof(IBookStore) && contextHandlerResolver.CanResolve(context,
+			contextHandlerResolver, model,
 			new DependencyModel(typeof(IBookStore).FullName,
 				typeof(IBookStore), false));
 	}

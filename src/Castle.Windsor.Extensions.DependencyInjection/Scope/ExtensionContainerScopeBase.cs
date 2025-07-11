@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Scope;
-
 using System;
-	
 using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Lifestyle.Scoped;
 
-internal  abstract class ExtensionContainerScopeBase : ILifetimeScope
+namespace Castle.Windsor.Extensions.DependencyInjection.Scope;
+
+internal abstract class ExtensionContainerScopeBase : ILifetimeScope
 {
 	public static readonly string TransientMarker = "Transient";
 	private readonly IScopeCache _scopeCache = new ScopeCache();
@@ -29,10 +28,7 @@ internal  abstract class ExtensionContainerScopeBase : ILifetimeScope
 
 	public virtual void Dispose()
 	{
-		if (_scopeCache is IDisposable disposableCache)
-		{
-			disposableCache.Dispose();
-		}
+		if (_scopeCache is IDisposable disposableCache) disposableCache.Dispose();
 	}
 
 	public Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance)
@@ -42,17 +38,14 @@ internal  abstract class ExtensionContainerScopeBase : ILifetimeScope
 			// Add transient's burden to scope so it gets released
 			if (model.Configuration.Attributes.Get(TransientMarker) == bool.TrueString)
 			{
-				var transientBurden = createInstance(_ => {});
+				var transientBurden = createInstance(_ => { });
 				_scopeCache[transientBurden] = transientBurden;
 				return transientBurden;
 			}
 
 			var scopedBurden = _scopeCache[model];
-			if (scopedBurden != null)
-			{
-				return scopedBurden;
-			}
-			scopedBurden = createInstance((_) => {});
+			if (scopedBurden != null) return scopedBurden;
+			scopedBurden = createInstance(_ => { });
 			_scopeCache[model] = scopedBurden;
 			return scopedBurden;
 		}

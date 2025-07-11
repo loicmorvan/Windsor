@@ -12,40 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors;
-
 using System;
 using System.ComponentModel;
 using System.Linq;
-
 using Castle.Core;
 using Castle.Core.Internal;
 using Castle.MicroKernel.LifecycleConcerns;
 
+namespace Castle.MicroKernel.ModelBuilder.Inspectors;
+
 /// <summary>
-///   Inspects the type looking for interfaces that constitutes
-///   lifecycle interfaces, defined in the Castle.Model namespace.
+///     Inspects the type looking for interfaces that constitutes
+///     lifecycle interfaces, defined in the Castle.Model namespace.
 /// </summary>
 [Serializable]
 public class LifecycleModelInspector : IContributeComponentModelConstruction
 {
 	/// <summary>
-	///   Checks if the type implements <see cref = "IInitializable" /> and or
-	///   <see cref = "IDisposable" /> interfaces.
+	///     Checks if the type implements <see cref="IInitializable" /> and or
+	///     <see cref="IDisposable" /> interfaces.
 	/// </summary>
-	/// <param name = "kernel"></param>
-	/// <param name = "model"></param>
+	/// <param name="kernel"></param>
+	/// <param name="model"></param>
 	public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 	{
-		if (model == null)
-		{
-			throw new ArgumentNullException(nameof(model));
-		}
+		if (model == null) throw new ArgumentNullException(nameof(model));
 		if (IsLateBoundComponent(model))
 		{
 			ProcessLateBoundModel(model);
 			return;
 		}
+
 		ProcessModel(model);
 	}
 
@@ -58,27 +55,16 @@ public class LifecycleModelInspector : IContributeComponentModelConstruction
 	{
 		var commission = new LateBoundCommissionConcerns();
 		if (model.Services.Any(s => s.Is<IInitializable>()))
-		{
 			model.Lifecycle.Add(InitializationConcern.Instance);
-		}
 		else
-		{
 			commission.AddConcern<IInitializable>(InitializationConcern.Instance);
-		}
 
 		if (model.Services.Any(s => s.Is<ISupportInitialize>()))
-		{
 			model.Lifecycle.Add(SupportInitializeConcern.Instance);
-		}
 		else
-		{
 			commission.AddConcern<ISupportInitialize>(SupportInitializeConcern.Instance);
-		}
 
-		if (commission.HasConcerns)
-		{
-			model.Lifecycle.Add(commission);
-		}
+		if (commission.HasConcerns) model.Lifecycle.Add(commission);
 
 		if (model.Services.Any(s => s.Is<IDisposable>()))
 		{
@@ -94,19 +80,10 @@ public class LifecycleModelInspector : IContributeComponentModelConstruction
 
 	private void ProcessModel(ComponentModel model)
 	{
-		if (model.Implementation.Is<IInitializable>())
-		{
-			model.Lifecycle.Add(InitializationConcern.Instance);
-		}
+		if (model.Implementation.Is<IInitializable>()) model.Lifecycle.Add(InitializationConcern.Instance);
 
-		if (model.Implementation.Is<ISupportInitialize>())
-		{
-			model.Lifecycle.Add(SupportInitializeConcern.Instance);
-		}
+		if (model.Implementation.Is<ISupportInitialize>()) model.Lifecycle.Add(SupportInitializeConcern.Instance);
 
-		if (model.Implementation.Is<IDisposable>())
-		{
-			model.Lifecycle.Add(DisposalConcern.Instance);
-		}
+		if (model.Implementation.Is<IDisposable>()) model.Lifecycle.Add(DisposalConcern.Instance);
 	}
 }

@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Lifestyle;
-
 using Castle.MicroKernel.Lifestyle;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.Lifestyle;
 
 public class ScopedLifestyleExplicitAndNestingTestCase : AbstractContainerTestCase
 {
@@ -35,6 +35,7 @@ public class ScopedLifestyleExplicitAndNestingTestCase : AbstractContainerTestCa
 			{
 				Container.Resolve<A>();
 			}
+
 			var after = Container.Resolve<A>();
 			Assert.Same(before, after);
 		}
@@ -51,6 +52,7 @@ public class ScopedLifestyleExplicitAndNestingTestCase : AbstractContainerTestCa
 			{
 				Container.Resolve<ADisposable>();
 			}
+
 			Assert.False(outer.Disposed);
 		}
 	}

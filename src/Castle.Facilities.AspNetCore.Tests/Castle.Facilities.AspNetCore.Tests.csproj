@@ -1,48 +1,48 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
 
-	<ItemGroup>
-		<!-- This is an intentional upgrade to NUnit. This is the solution for https://github.com/castleproject/Windsor/issues/243 once we upgrade NUnit and make dotnet test a first class citizen-->
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-		<PackageReference Include="Microsoft.AspNetCore" Version="2.3.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="2.3.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.7" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.assert" Version="2.9.3" />
-    <PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
+  <ItemGroup>
+    <!-- This is an intentional upgrade to NUnit. This is the solution for https://github.com/castleproject/Windsor/issues/243 once we upgrade NUnit and make dotnet test a first class citizen-->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.3.0"/>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.0"/>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="2.3.0"/>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.7"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
+    <PackageReference Include="xunit" Version="2.9.3"/>
+    <PackageReference Include="xunit.assert" Version="2.9.3"/>
+    <PackageReference Include="xunit.extensibility.core" Version="2.9.3"/>
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-	</ItemGroup>
+  </ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\Castle.Windsor\Castle.Windsor.csproj" />
-	  <ProjectReference Include="..\Castle.Facilities.AspNetCore\Castle.Facilities.AspNetCore.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Castle.Windsor\Castle.Windsor.csproj"/>
+    <ProjectReference Include="..\Castle.Facilities.AspNetCore\Castle.Facilities.AspNetCore.csproj"/>
+  </ItemGroup>
 
-	<ItemGroup>
-	  <None Update="Fakes\ModelFakes.tt">
-	    <Generator>TextTemplatingFileGenerator</Generator>
-	    <LastGenOutput>ModelFakes.cs</LastGenOutput>
-	  </None>
-	</ItemGroup>
+  <ItemGroup>
+    <None Update="Fakes\ModelFakes.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ModelFakes.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
 
-	<ItemGroup>
-	  <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-	</ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}"/>
+  </ItemGroup>
 
-	<ItemGroup>
-	  <Compile Update="Fakes\ModelFakes.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>ModelFakes.tt</DependentUpon>
-	  </Compile>
-	</ItemGroup>
+  <ItemGroup>
+    <Compile Update="Fakes\ModelFakes.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ModelFakes.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
 
 </Project>

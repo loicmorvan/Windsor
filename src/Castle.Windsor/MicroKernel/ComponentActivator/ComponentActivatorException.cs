@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ComponentActivator;
-
 using System;
-using System.Runtime.Serialization;
-
 using Castle.Core;
 
+namespace Castle.MicroKernel.ComponentActivator;
+
 /// <summary>
-///   Exception thrown whe a component could not be activated. THis should come from the component activator.
+///     Exception thrown whe a component could not be activated. THis should come from the component activator.
 /// </summary>
 [Serializable]
 public class ComponentActivatorException : ComponentResolutionException

@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
-
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor;
+
+namespace Castle.Windsor.Tests;
 
 internal class ActionBasedInstaller(Action<IWindsorContainer> install) : IWindsorInstaller
 {

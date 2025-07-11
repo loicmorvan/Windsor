@@ -12,20 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Config;
-
 using System.Linq;
-
 using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.Core.Resource;
 using Castle.MicroKernel;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor.Configuration.Interpreters;
-using Castle.Windsor.Installer;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.XmlFiles;
+
+namespace Castle.Windsor.Tests.Config;
 
 public class ConfigXmlInterpreterTestCase
 {
@@ -62,7 +60,8 @@ public class ConfigXmlInterpreterTestCase
 		var store = new DefaultConfigurationStore();
 		var source = new AssemblyResource("assembly://Castle.Windsor.Tests/missing_config.xml");
 		IKernel kernel = new DefaultKernel();
-		Assert.Throws<ConfigurationProcessingException>(() => new XmlInterpreter(source).ProcessResource(source, store, kernel));
+		Assert.Throws<ConfigurationProcessingException>(() =>
+			new XmlInterpreter(source).ProcessResource(source, store, kernel));
 	}
 
 	[Fact]
@@ -153,7 +152,7 @@ public class ConfigXmlInterpreterTestCase
 	[Fact]
 	public void ShouldThrowIfIdAttributeIsPresentInFacilityConfig()
 	{
-		var facilityConfig = Configuration.FromXml(
+		var facilityConfig = Castle.Windsor.Installer.Configuration.FromXml(
 			new StaticContentResource(
 				@"<castle>
 <facilities>

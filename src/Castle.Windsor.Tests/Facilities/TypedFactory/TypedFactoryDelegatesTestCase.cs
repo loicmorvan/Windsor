@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory;
-
 using System;
 using System.Linq;
-
 using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
@@ -28,11 +25,14 @@ using Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
 using Castle.Windsor.Tests.Interceptors;
-
 using HasTwoConstructors = Castle.Windsor.Tests.Facilities.TypedFactory.Delegates.HasTwoConstructors;
 using ServiceFactory = Castle.Windsor.Tests.Facilities.TypedFactory.Components.ServiceFactory;
 
-	
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
+
+using HasTwoConstructors = HasTwoConstructors;
+using ServiceFactory = ServiceFactory;
+
 public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 {
 	protected override void AfterContainerCreated()
@@ -235,7 +235,8 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 	}
 
 	[Fact]
-	public void Factory_constructor_dependency_is_satisfied_implicitly_even_if_less_greedy_constructor_is_readily_available()
+	public void
+		Factory_constructor_dependency_is_satisfied_implicitly_even_if_less_greedy_constructor_is_readily_available()
 	{
 		Container.Register(Component.For<Bar>().LifeStyle.Transient,
 			Component.For<UsesBarDelegateTwoConstructors>().LifeStyle.Transient);
@@ -269,8 +270,10 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 		DisposableSelector.InstancesCreated = 0;
 		SimpleSelector.InstancesCreated = 0;
 		Container.Register(
-			Component.For<ITypedFactoryComponentSelector>().ImplementedBy<DisposableSelector>().Named("1").LifeStyle.Transient,
-			Component.For<ITypedFactoryComponentSelector>().ImplementedBy<SimpleSelector>().Named("2").LifeStyle.Transient,
+			Component.For<ITypedFactoryComponentSelector>().ImplementedBy<DisposableSelector>().Named("1").LifeStyle
+				.Transient,
+			Component.For<ITypedFactoryComponentSelector>().ImplementedBy<SimpleSelector>().Named("2").LifeStyle
+				.Transient,
 			Component.For<Func<Foo>>().LifeStyle.Transient.AsFactory(x => x.SelectedWith("2")));
 
 		Container.Resolve<Func<Foo>>();
@@ -435,7 +438,8 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 	}
 
 	[Fact]
-	public void Resolution_ShouldNotThrow_When_TwoDelegateFactoriesAreResolvedWithOnePreviouslyLazyLoaded_WithMultipleCtors()
+	public void
+		Resolution_ShouldNotThrow_When_TwoDelegateFactoriesAreResolvedWithOnePreviouslyLazyLoaded_WithMultipleCtors()
 	{
 		Container.Register(Component.For<SimpleComponent1>(),
 			Component.For<SimpleComponent2>(),

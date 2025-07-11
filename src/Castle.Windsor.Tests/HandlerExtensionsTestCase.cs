@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System.Collections.Generic;
 using System.Linq;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Handlers;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests;
 
 public class HandlerExtensionsTestCase : AbstractContainerTestCase
 {
@@ -28,11 +27,9 @@ public class HandlerExtensionsTestCase : AbstractContainerTestCase
 		params IResolveExtension[] items)
 	{
 		var resolveExtensions = new List<IResolveExtension>();
-		foreach (var item in items.Distinct())
-		{
-			resolveExtensions.Add(item);
-		}
-		return componentRegistration.ExtendedProperties(Property.ForKey("Castle.ResolveExtensions").Eq(resolveExtensions));
+		foreach (var item in items.Distinct()) resolveExtensions.Add(item);
+		return componentRegistration.ExtendedProperties(Property.ForKey("Castle.ResolveExtensions")
+			.Eq(resolveExtensions));
 	}
 
 	private ComponentRegistration<TComponent> WithReleaseExtensions<TComponent>(
@@ -40,11 +37,9 @@ public class HandlerExtensionsTestCase : AbstractContainerTestCase
 		where TComponent : class
 	{
 		var releaseExtensions = new List<IReleaseExtension>();
-		foreach (var item in items.Distinct())
-		{
-			releaseExtensions.Add(item);
-		}
-		return componentRegistration.ExtendedProperties(Property.ForKey("Castle.ReleaseExtensions").Eq(releaseExtensions));
+		foreach (var item in items.Distinct()) releaseExtensions.Add(item);
+		return componentRegistration.ExtendedProperties(Property.ForKey("Castle.ReleaseExtensions")
+			.Eq(releaseExtensions));
 	}
 
 	[Fact]
@@ -106,7 +101,7 @@ public class HandlerExtensionsTestCase : AbstractContainerTestCase
 	{
 		var a = new A();
 		var componentRegistration = Component.For<A>();
-		Kernel.Register(AddResolveExtensions(componentRegistration, new ReturnAExtension(a, proceed: true)));
+		Kernel.Register(AddResolveExtensions(componentRegistration, new ReturnAExtension(a, true)));
 		var resolvedA = Kernel.Resolve<A>();
 		Assert.Same(a, resolvedA);
 	}
@@ -120,33 +115,21 @@ public class ReturnAExtension(A a, bool proceed = false) : IResolveExtension
 
 	public void Intercept(ResolveInvocation invocation)
 	{
-		if (proceed)
-		{
-			invocation.Proceed();
-		}
+		if (proceed) invocation.Proceed();
 		invocation.ResolvedInstance = a;
 	}
 }
 
 public class CollectItemsExtension : IResolveExtension, IReleaseExtension
 {
-	private readonly IList<object> _releasedItems = new List<object>();
-	private readonly IList<object> _resolvedItems = new List<object>();
+	public IList<object> ReleasedItems { get; } = new List<object>();
 
-	public IList<object> ReleasedItems
-	{
-		get { return _releasedItems; }
-	}
-
-	public IList<object> ResolvedItems
-	{
-		get { return _resolvedItems; }
-	}
+	public IList<object> ResolvedItems { get; } = new List<object>();
 
 	public void Intercept(ReleaseInvocation invocation)
 	{
 		invocation.Proceed();
-		_releasedItems.Add(invocation.Instance);
+		ReleasedItems.Add(invocation.Instance);
 	}
 
 	public void Init(IKernel kernel, IHandler handler)
@@ -156,6 +139,6 @@ public class CollectItemsExtension : IResolveExtension, IReleaseExtension
 	public void Intercept(ResolveInvocation invocation)
 	{
 		invocation.Proceed();
-		_resolvedItems.Add(invocation.ResolvedInstance);
+		ResolvedItems.Add(invocation.ResolvedInstance);
 	}
 }

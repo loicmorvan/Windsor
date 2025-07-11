@@ -12,24 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Castle.Core.Configuration;
+using Castle.Core.Internal;
+
+namespace Castle.MicroKernel.SubSystems.Conversion;
 
 #if !FEATURE_APPDOMAIN
 using Microsoft.Extensions.DependencyModel;
 #endif
 
-using Castle.Core.Configuration;
-using Castle.Core.Internal;
-
 /// <summary>
-///   Convert a type name to a Type instance.
+///     Convert a type name to a Type instance.
 /// </summary>
 [Serializable]
 public class TypeNameConverter : AbstractTypeConverter
@@ -48,12 +47,9 @@ public class TypeNameConverter : AbstractTypeConverter
 
 	public TypeNameConverter(ITypeNameParser parser)
 	{
-		if (parser == null)
-		{
-			throw new ArgumentNullException(nameof(parser));
-		}
+		if (parser == null) throw new ArgumentNullException(nameof(parser));
 
-		this._parser = parser;
+		_parser = parser;
 	}
 
 	public override bool CanHandleType(Type type)
@@ -61,7 +57,7 @@ public class TypeNameConverter : AbstractTypeConverter
 		return type == typeof(Type);
 	}
 
-	public override object PerformConversion(String value, Type targetType)
+	public override object PerformConversion(string value, Type targetType)
 	{
 		try
 		{
@@ -73,7 +69,7 @@ public class TypeNameConverter : AbstractTypeConverter
 		}
 		catch (Exception ex)
 		{
-			throw new ConverterException(String.Format("Could not convert string '{0}' to a type.", value), ex);
+			throw new ConverterException(string.Format("Could not convert string '{0}' to a type.", value), ex);
 		}
 	}
 
@@ -81,52 +77,36 @@ public class TypeNameConverter : AbstractTypeConverter
 	{
 		// try to create type using case sensitive search first.
 		var type = Type.GetType(name, false, false);
-		if (type != null)
-		{
-			return type;
-		}
+		if (type != null) return type;
 		// if case sensitive search did not create the type, try case insensitive.
 		type = Type.GetType(name, false, true);
-		if (type != null)
-		{
-			return type;
-		}
+		if (type != null) return type;
 		var typeName = ParseName(name);
 		if (typeName == null)
-		{
-			throw new ConverterException(String.Format("Could not convert string '{0}' to a type. It doesn't appear to be a valid type name.", name));
-		}
+			throw new ConverterException(string.Format(
+				"Could not convert string '{0}' to a type. It doesn't appear to be a valid type name.", name));
 
-		InitializeAppDomainAssemblies(forceLoad: false);
+		InitializeAppDomainAssemblies(false);
 		type = typeName.GetType(this);
-		if (type != null)
-		{
-			return type;
-		}
-		if (InitializeAppDomainAssemblies(forceLoad: true))
-		{
-			type = typeName.GetType(this);
-		}
-		if (type != null)
-		{
-			return type;
-		}
+		if (type != null) return type;
+		if (InitializeAppDomainAssemblies(true)) type = typeName.GetType(this);
+		if (type != null) return type;
 		var assemblyName = typeName.ExtractAssemblyName();
 		if (assemblyName != null)
 		{
 			var namePart = assemblyName + ", Version=";
-			var assembly = _assemblies.FirstOrDefault(a => a.FullName.StartsWith(namePart, StringComparison.OrdinalIgnoreCase));
+			var assembly =
+				_assemblies.FirstOrDefault(a => a.FullName.StartsWith(namePart, StringComparison.OrdinalIgnoreCase));
 			if (assembly != null)
-			{
-				throw new ConverterException(String.Format(
+				throw new ConverterException(string.Format(
 					"Could not convert string '{0}' to a type. Assembly {1} was matched, but it doesn't contain the type. Make sure that the type name was not mistyped.",
 					name, assembly.FullName));
-			}
-			throw new ConverterException(String.Format(
+			throw new ConverterException(string.Format(
 				"Could not convert string '{0}' to a type. Assembly was not found. Make sure it was deployed and the name was not mistyped.",
 				name));
 		}
-		throw new ConverterException(String.Format(
+
+		throw new ConverterException(string.Format(
 			"Could not convert string '{0}' to a type. Make sure assembly containing the type has been loaded into the process, or consider specifying assembly qualified name of the type.",
 			name));
 	}
@@ -159,10 +139,7 @@ public class TypeNameConverter : AbstractTypeConverter
 
 			foreach (var assemblyName in dependencies)
 			{
-				if (ShouldSkipAssembly(assemblyName))
-				{
-					continue;
-				}
+				if (ShouldSkipAssembly(assemblyName)) continue;
 
 				var assembly = Assembly.Load(assemblyName);
 
@@ -189,10 +166,7 @@ public class TypeNameConverter : AbstractTypeConverter
 
 	private void Scan(Assembly assembly)
 	{
-		if (assembly.IsDynamic)
-		{
-			return;
-		}
+		if (assembly.IsDynamic) return;
 		try
 		{
 			var exportedTypes = assembly.GetAvailableTypes();
@@ -216,6 +190,7 @@ public class TypeNameConverter : AbstractTypeConverter
 			collection[key] = new MultiType(value);
 			return;
 		}
+
 		existing.AddInnerType(value);
 	}
 
@@ -247,22 +222,17 @@ public class TypeNameConverter : AbstractTypeConverter
 			EnsureUnique(type, name, description);
 			return type.Single();
 		}
+
 		return null;
 	}
 
 	private void EnsureUnique(MultiType type, string value, string missingInformation)
 	{
-		if (type.HasOne)
-		{
-			return;
-		}
+		if (type.HasOne) return;
 
 		var message = new StringBuilder(string.Format("Could not uniquely identify type for '{0}'. ", value));
 		message.AppendLine("The following types were matched:");
-		foreach (var matchedType in type)
-		{
-			message.AppendLine(matchedType.AssemblyQualifiedName);
-		}
+		foreach (var matchedType in type) message.AppendLine(matchedType.AssemblyQualifiedName);
 		message.AppendFormat("Provide more information ({0}) to uniquely identify the type.", missingInformation);
 		throw new ConverterException(message.ToString());
 	}
@@ -276,16 +246,7 @@ public class TypeNameConverter : AbstractTypeConverter
 			_inner.AddFirst(type);
 		}
 
-		public bool HasOne
-		{
-			get { return _inner.Count == 1; }
-		}
-
-		public MultiType AddInnerType(Type type)
-		{
-			_inner.AddLast(type);
-			return this;
-		}
+		public bool HasOne => _inner.Count == 1;
 
 		public IEnumerator<Type> GetEnumerator()
 		{
@@ -295,6 +256,12 @@ public class TypeNameConverter : AbstractTypeConverter
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return ((IEnumerable)_inner).GetEnumerator();
+		}
+
+		public MultiType AddInnerType(Type type)
+		{
+			_inner.AddLast(type);
+			return this;
 		}
 	}
 }

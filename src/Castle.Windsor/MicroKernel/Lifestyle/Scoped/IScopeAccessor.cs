@@ -12,24 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Scoped;
-
 using System;
-
 using Castle.MicroKernel.Context;
 
+namespace Castle.MicroKernel.Lifestyle.Scoped;
+
 /// <summary>
-///   Provides access to <see cref = "IScopeCache" /> held in whatever is appropriate for given scope.
+///     Provides access to <see cref="IScopeCache" /> held in whatever is appropriate for given scope.
 /// </summary>
 /// <remarks>
-///   Implementors should also ensure proper initialization of <see cref = "IScopeCache" /> when accessed for the first time and ensure a thread safe implementation is used when scope or cache access can cause threading issues if non thread safe cache is used.
+///     Implementors should also ensure proper initialization of <see cref="IScopeCache" /> when accessed for the first
+///     time and ensure a thread safe implementation is used when scope or cache access can cause threading issues if non
+///     thread safe cache is used.
 /// </remarks>
 public interface IScopeAccessor : IDisposable
 {
 	/// <summary>
-	///   Provides access to <see cref = "IScopeCache" /> for currently resolved component.
+	///     Provides access to <see cref="IScopeCache" /> for currently resolved component.
 	/// </summary>
-	/// <param name = "context">Current creation context</param>
-	/// <exception cref = "T:System.InvalidOperationException"> Thrown when scope cache could not be accessed.</exception>
+	/// <param name="context">Current creation context</param>
+	/// <exception cref="T:System.InvalidOperationException"> Thrown when scope cache could not be accessed.</exception>
 	ILifetimeScope GetScope(CreationContext context);
 }

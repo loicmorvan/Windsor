@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
 
+namespace Castle.Core;
+
 [Serializable]
-public class ComponentDependencyModel(string referencedComponentName, Type serviceType) : DependencyModel(referencedComponentName, serviceType, false)
+public class ComponentDependencyModel(string referencedComponentName, Type serviceType)
+	: DependencyModel(referencedComponentName, serviceType, false)
 {
 	public ComponentDependencyModel(string referencedComponentName) : this(referencedComponentName, null)
 	{

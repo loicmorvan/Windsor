@@ -16,10 +16,7 @@ namespace Castle.Windsor.Tests.Components;
 
 public class Controller(IView view) : IController
 {
-	public IView View
-	{
-		get { return view; }
-	}
+	public IView View => view;
 
 	public void Process()
 	{

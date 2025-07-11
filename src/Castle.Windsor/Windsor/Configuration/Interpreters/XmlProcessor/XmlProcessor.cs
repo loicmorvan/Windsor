@@ -12,35 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor;
-
 using System;
 using System.Xml;
-
 using Castle.Core.Resource;
 using Castle.MicroKernel.SubSystems.Resource;
 using Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
+
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor;
 
 /// <summary>Pendent</summary>
 public class XmlProcessor
 {
 	private readonly IXmlProcessorEngine _engine;
 
-	/// <summary>Initializes a new instance of the <see cref = "XmlProcessor" /> class.</summary>
+	/// <summary>Initializes a new instance of the <see cref="XmlProcessor" /> class.</summary>
 	public XmlProcessor() : this(null)
 	{
 	}
 
-	/// <summary>Initializes a new instance of the <see cref = "XmlProcessor" /> class.</summary>
-	/// <param name = "environmentName">Name of the environment.</param>
-	/// <param name = "resourceSubSystem">The resource sub system.</param>
+	/// <summary>Initializes a new instance of the <see cref="XmlProcessor" /> class.</summary>
+	/// <param name="environmentName">Name of the environment.</param>
+	/// <param name="resourceSubSystem">The resource sub system.</param>
 	public XmlProcessor(string environmentName, IResourceSubSystem resourceSubSystem)
 	{
 		_engine = new DefaultXmlProcessorEngine(environmentName, resourceSubSystem);
 		RegisterProcessors();
 	}
 
-	/// <summary>Initializes a new instance of the <see cref = "XmlProcessor" /> class.</summary>
+	/// <summary>Initializes a new instance of the <see cref="XmlProcessor" /> class.</summary>
 	public XmlProcessor(string environmentName)
 	{
 		_engine = new DefaultXmlProcessorEngine(environmentName);

@@ -12,12 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ComponentActivator;
-
 using Castle.Core;
 using Castle.MicroKernel.Context;
 
-public class ExternalInstanceActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
+namespace Castle.MicroKernel.ComponentActivator;
+
+public class ExternalInstanceActivator(
+	ComponentModel model,
+	IKernelInternal kernel,
+	ComponentInstanceDelegate onCreation,
+	ComponentInstanceDelegate onDestruction)
 	: AbstractComponentActivator(model, kernel, onCreation, onDestruction), IDependencyAwareActivator
 {
 	public bool CanProvideRequiredDependencies(ComponentModel component)

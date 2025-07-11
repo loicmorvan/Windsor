@@ -12,22 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Pool;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.Core;
 using Castle.MicroKernel.Context;
-using Lock = Castle.MicroKernel.Internal.Lock;
-	
+using Castle.MicroKernel.Internal;
+
+namespace Castle.MicroKernel.Lifestyle.Pool;
+
+using Lock = Lock;
+
 [Serializable]
 public class DefaultPool(int initialSize, int maxsize, IComponentActivator componentActivator) : IPool, IDisposable
 {
 	private readonly Stack<Burden> _available = new(initialSize);
 	private readonly IComponentActivator _componentActivator = componentActivator;
-	private readonly Dictionary<object, Burden> _inUse = new();
 	private readonly int _initialSize = initialSize;
+	private readonly Dictionary<object, Burden> _inUse = new();
 	private readonly int _maxsize = maxsize;
 	private readonly Lock _rwlock = Lock.Create();
 	private bool _initialized;
@@ -36,10 +37,7 @@ public class DefaultPool(int initialSize, int maxsize, IComponentActivator compo
 	{
 		_initialized = false;
 
-		foreach (var burden in _available)
-		{
-			burden.Release();
-		}
+		foreach (var burden in _available) burden.Release();
 		_inUse.Clear();
 		_available.Clear();
 	}
@@ -52,25 +50,16 @@ public class DefaultPool(int initialSize, int maxsize, IComponentActivator compo
 
 			if (_initialized == false)
 			{
-				if (_inUse.TryGetValue(instance, out burden) == true)
-				{
-					_inUse.Remove(instance);
-				}
+				if (_inUse.TryGetValue(instance, out burden)) _inUse.Remove(instance);
 			}
 			else
 			{
-				if (_inUse.TryGetValue(instance, out burden) == false)
-				{
-					return false;
-				}
+				if (_inUse.TryGetValue(instance, out burden) == false) return false;
 				_inUse.Remove(instance);
 
 				if (_available.Count < _maxsize)
 				{
-					if (instance is IRecyclable recyclable)
-					{
-						recyclable.Recycle();
-					}
+					if (instance is IRecyclable recyclable) recyclable.Recycle();
 
 					_available.Push(burden);
 					return false;
@@ -89,10 +78,7 @@ public class DefaultPool(int initialSize, int maxsize, IComponentActivator compo
 		Burden burden;
 		using (_rwlock.ForWriting())
 		{
-			if (!_initialized)
-			{
-				Intitialize(creationCallback, context);
-			}
+			if (!_initialized) Intitialize(creationCallback, context);
 
 			if (_available.Count != 0)
 			{
@@ -103,6 +89,7 @@ public class DefaultPool(int initialSize, int maxsize, IComponentActivator compo
 			{
 				burden = creationCallback.Invoke(context);
 			}
+
 			try
 			{
 				_inUse.Add(burden.Instance, burden);
@@ -113,9 +100,11 @@ public class DefaultPool(int initialSize, int maxsize, IComponentActivator compo
 			}
 			catch (ArgumentNullException)
 			{
-				throw new PoolException("burden returned by creationCallback does not have root instance associated with it (its Instance property is null).");
+				throw new PoolException(
+					"burden returned by creationCallback does not have root instance associated with it (its Instance property is null).");
 			}
 		}
+
 		return burden.Instance;
 	}
 

@@ -12,5 +12,5 @@ public enum SdiComponentMethods
 	Start,
 	DoSomething,
 	Stop,
-	Dispose,
+	Dispose
 }

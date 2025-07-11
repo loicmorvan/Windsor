@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
-
 using System;
-using System.Security;
-
 using Castle.Core;
 
+namespace Castle.MicroKernel;
+
 /// <summary>
-///   Default implementation of <see cref = "IKernel" />. 
-///   This implementation is complete and also support a kernel 
-///   hierarchy (sub containers).
+///     Default implementation of <see cref="IKernel" />.
+///     This implementation is complete and also support a kernel
+///     hierarchy (sub containers).
 /// </summary>
 public partial class DefaultKernel
 {
@@ -40,10 +38,7 @@ public partial class DefaultKernel
 
 	public IDisposable OptimizeDependencyResolution()
 	{
-		if (_handlersChangedDeferred)
-		{
-			return null;
-		}
+		if (_handlersChangedDeferred) return null;
 
 		_handlersChangedDeferred = true;
 
@@ -70,12 +65,12 @@ public partial class DefaultKernel
 		ComponentModelCreated(model);
 	}
 
-	protected virtual void RaiseComponentRegistered(String key, IHandler handler)
+	protected virtual void RaiseComponentRegistered(string key, IHandler handler)
 	{
 		ComponentRegistered(key, handler);
 	}
 
-	protected virtual void RaiseDependencyResolving(ComponentModel client, DependencyModel model, Object dependency)
+	protected virtual void RaiseDependencyResolving(ComponentModel client, DependencyModel model, object dependency)
 	{
 		DependencyResolving(client, model, dependency);
 	}
@@ -155,10 +150,7 @@ public partial class DefaultKernel
 			{
 				try
 				{
-					if (kernel._handlersChanged == false)
-					{
-						return;
-					}
+					if (kernel._handlersChanged == false) return;
 
 					kernel.DoActualRaisingOfHandlersChanged();
 					kernel.RaiseRegistrationCompleted();

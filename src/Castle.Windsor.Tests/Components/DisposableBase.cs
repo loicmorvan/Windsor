@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using System;
+
+namespace Castle.Windsor.Tests.Components;
 
 public abstract class DisposableBase : IDisposable
 {
@@ -22,10 +22,7 @@ public abstract class DisposableBase : IDisposable
 
 	public void Dispose()
 	{
-		if (IsDisposed)
-		{
-			throw new Exception("Already disposed");
-		}
+		if (IsDisposed) throw new Exception("Already disposed");
 		IsDisposed = true;
 	}
 }

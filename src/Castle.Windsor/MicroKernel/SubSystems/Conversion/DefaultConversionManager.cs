@@ -12,23 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.MicroKernel.Context;
 
+namespace Castle.MicroKernel.SubSystems.Conversion;
+
 /// <summary>
-///   Composition of all available conversion managers
+///     Composition of all available conversion managers
 /// </summary>
 [Serializable]
 public class DefaultConversionManager : AbstractSubSystem, IConversionManager, ITypeConverterContext
 {
-	[ThreadStatic]
-	private static Stack<Tuple<ComponentModel,CreationContext>> _slot;
+	[ThreadStatic] private static Stack<Tuple<ComponentModel, CreationContext>> _slot;
+
 	private readonly IList<ITypeConverter> _converters = new List<ITypeConverter>();
 	private readonly IList<ITypeConverter> _standAloneConverters = new List<ITypeConverter>();
 
@@ -37,20 +36,14 @@ public class DefaultConversionManager : AbstractSubSystem, IConversionManager, I
 		InitDefaultConverters();
 	}
 
-	protected virtual void InitDefaultConverters()
+	private Stack<Tuple<ComponentModel, CreationContext>> CurrentStack
 	{
-		Add(new PrimitiveConverter());
-		Add(new TimeSpanConverter());
-		Add(new TypeNameConverter(new TypeNameParser()));
-		Add(new EnumConverter());
-		Add(new ListConverter());
-		Add(new DictionaryConverter());
-		Add(new GenericDictionaryConverter());
-		Add(new GenericListConverter());
-		Add(new ArrayConverter());
-		Add(new ComponentConverter());
-		Add(new AttributeAwareConverter());
-		Add(new ComponentModelConverter());
+		get
+		{
+			if (_slot == null) _slot = new Stack<Tuple<ComponentModel, CreationContext>>();
+
+			return _slot;
+		}
 	}
 
 	public void Add(ITypeConverter converter)
@@ -59,27 +52,20 @@ public class DefaultConversionManager : AbstractSubSystem, IConversionManager, I
 
 		_converters.Add(converter);
 
-		if (!(converter is IKernelDependentConverter))
-		{
-			_standAloneConverters.Add(converter);
-		}
+		if (!(converter is IKernelDependentConverter)) _standAloneConverters.Add(converter);
 	}
 
 	public ITypeConverterContext Context
 	{
-		get { return this; }
-		set { throw new NotImplementedException(); }
+		get => this;
+		set => throw new NotImplementedException();
 	}
 
 	public bool CanHandleType(Type type)
 	{
 		foreach (var converter in _converters)
-		{
 			if (converter.CanHandleType(type))
-			{
 				return true;
-			}
-		}
 
 		return false;
 	}
@@ -87,27 +73,19 @@ public class DefaultConversionManager : AbstractSubSystem, IConversionManager, I
 	public bool CanHandleType(Type type, IConfiguration configuration)
 	{
 		foreach (var converter in _converters)
-		{
 			if (converter.CanHandleType(type, configuration))
-			{
 				return true;
-			}
-		}
 
 		return false;
 	}
 
-	public object PerformConversion(String value, Type targetType)
+	public object PerformConversion(string value, Type targetType)
 	{
 		foreach (var converter in _converters)
-		{
 			if (converter.CanHandleType(targetType))
-			{
 				return converter.PerformConversion(value, targetType);
-			}
-		}
 
-		var message = String.Format("No converter registered to handle the type {0}",
+		var message = string.Format("No converter registered to handle the type {0}",
 			targetType.FullName);
 
 		throw new ConverterException(message);
@@ -116,14 +94,10 @@ public class DefaultConversionManager : AbstractSubSystem, IConversionManager, I
 	public object PerformConversion(IConfiguration configuration, Type targetType)
 	{
 		foreach (var converter in _converters)
-		{
 			if (converter.CanHandleType(targetType, configuration))
-			{
 				return converter.PerformConversion(configuration, targetType);
-			}
-		}
 
-		var message = String.Format("No converter registered to handle the type {0}",
+		var message = string.Format("No converter registered to handle the type {0}",
 			targetType.FullName);
 
 		throw new ConverterException(message);
@@ -139,10 +113,7 @@ public class DefaultConversionManager : AbstractSubSystem, IConversionManager, I
 		return (TTarget)PerformConversion(configuration, typeof(TTarget));
 	}
 
-	IKernelInternal ITypeConverterContext.Kernel
-	{
-		get { return Kernel; }
-	}
+	IKernelInternal ITypeConverterContext.Kernel => Kernel;
 
 	public void Push(ComponentModel model, CreationContext context)
 	{
@@ -158,10 +129,7 @@ public class DefaultConversionManager : AbstractSubSystem, IConversionManager, I
 	{
 		get
 		{
-			if (CurrentStack.Count == 0)
-			{
-				return null;
-			}
+			if (CurrentStack.Count == 0) return null;
 
 			return CurrentStack.Peek().Item1;
 		}
@@ -171,30 +139,27 @@ public class DefaultConversionManager : AbstractSubSystem, IConversionManager, I
 	{
 		get
 		{
-			if (CurrentStack.Count == 0)
-			{
-				return null;
-			}
+			if (CurrentStack.Count == 0) return null;
 
 			return CurrentStack.Peek().Item2;
 		}
 	}
 
-	public ITypeConverter Composition
-	{
-		get { return this; }
-	}
+	public ITypeConverter Composition => this;
 
-	private Stack<Tuple<ComponentModel, CreationContext>> CurrentStack
+	protected virtual void InitDefaultConverters()
 	{
-		get
-		{
-			if (_slot == null)
-			{
-				_slot = new Stack<Tuple<ComponentModel, CreationContext>>();
-			}
-
-			return _slot;
-		}
+		Add(new PrimitiveConverter());
+		Add(new TimeSpanConverter());
+		Add(new TypeNameConverter(new TypeNameParser()));
+		Add(new EnumConverter());
+		Add(new ListConverter());
+		Add(new DictionaryConverter());
+		Add(new GenericDictionaryConverter());
+		Add(new GenericListConverter());
+		Add(new ArrayConverter());
+		Add(new ComponentConverter());
+		Add(new AttributeAwareConverter());
+		Add(new ComponentModelConverter());
 	}
 }

@@ -12,30 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
 using System;
 using System.Xml;
+
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
 public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
 {
 	private static readonly XmlNodeType[] AcceptNodes = [XmlNodeType.Element];
 
-	public abstract String Name { get; }
+	public abstract string Name { get; }
 
-	public virtual XmlNodeType[] AcceptNodeTypes
-	{
-		get { return AcceptNodes; }
-	}
+	public virtual XmlNodeType[] AcceptNodeTypes => AcceptNodes;
 
 	public abstract void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine);
 
 	/// <summary>
-	///   Accepts the specified node.
-	///   Check if node has the same name as the processor and the node.NodeType
-	///   is in the AcceptNodeTypes List
+	///     Accepts the specified node.
+	///     Check if node has the same name as the processor and the node.NodeType
+	///     is in the AcceptNodeTypes List
 	/// </summary>
-	/// <param name = "node">The node.</param>
+	/// <param name="node">The node.</param>
 	/// <returns></returns>
 	public virtual bool Accept(XmlNode node)
 	{
@@ -46,10 +43,7 @@ public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
 	{
 		var childNodes = new DefaultXmlProcessorNodeList(nodes);
 
-		while (childNodes.MoveNext())
-		{
-			AppendChild(element, childNodes.Current);
-		}
+		while (childNodes.MoveNext()) AppendChild(element, childNodes.Current);
 	}
 
 	protected void AppendChild(XmlNode element, string text)
@@ -73,30 +67,26 @@ public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
 	}
 
 	/// <summary>
-	///   Convert and return child parameter into an XmlElement
-	///   An exception will be throw in case the child node cannot be converted
+	///     Convert and return child parameter into an XmlElement
+	///     An exception will be throw in case the child node cannot be converted
 	/// </summary>
-	/// <param name = "element">Parent node</param>
-	/// <param name = "child">Node to be converted</param>
+	/// <param name="element">Parent node</param>
+	/// <param name="child">Node to be converted</param>
 	/// <returns>child node as XmlElement</returns>
 	protected XmlElement GetNodeAsElement(XmlElement element, XmlNode child)
 	{
 		if (child is not XmlElement result)
-		{
 			throw new XmlProcessorException("{0} expects XmlElement found {1}", element.Name, child.NodeType);
-		}
 
 		return result;
 	}
 
-	protected String GetRequiredAttribute(XmlElement element, String attribute)
+	protected string GetRequiredAttribute(XmlElement element, string attribute)
 	{
 		var attValue = element.GetAttribute(attribute).Trim();
 
 		if (attValue == string.Empty)
-		{
 			throw new XmlProcessorException("'{0}' requires a non empty '{1}' attribute", element.Name, attribute);
-		}
 
 		return attValue;
 	}
@@ -122,10 +112,7 @@ public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
 
 	protected void MoveChildNodes(XmlDocumentFragment fragment, XmlElement element)
 	{
-		while (element.ChildNodes.Count > 0)
-		{
-			fragment.AppendChild(element.ChildNodes[0]);
-		}
+		while (element.ChildNodes.Count > 0) fragment.AppendChild(element.ChildNodes[0]);
 	}
 
 	protected void RemoveItSelf(XmlNode node)
@@ -140,10 +127,7 @@ public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
 
 	protected void ReplaceNode(XmlNode element, XmlNode newNode, XmlNode oldNode)
 	{
-		if (newNode == oldNode)
-		{
-			return;
-		}
+		if (newNode == oldNode) return;
 
 		var importedNode = ImportNode(element, newNode);
 

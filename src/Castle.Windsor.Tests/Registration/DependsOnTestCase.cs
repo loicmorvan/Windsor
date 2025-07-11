@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Registration;
-
 using System.Collections.Generic;
 using System.Linq;
-
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Properties;
+
+namespace Castle.Windsor.Tests.Registration;
 
 public class DependsOnTestCase : AbstractContainerTestCase
 {
@@ -173,7 +172,8 @@ public class DependsOnTestCase : AbstractContainerTestCase
 			Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>(),
 			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
 			Component.For<CollectionDepAsConstructor>()
-				.DependsOn(Dependency.OnComponentCollection(typeof(ICollection<IEmptyService>), typeof(EmptyServiceB), typeof(EmptyServiceA))));
+				.DependsOn(Dependency.OnComponentCollection(typeof(ICollection<IEmptyService>), typeof(EmptyServiceB),
+					typeof(EmptyServiceA))));
 
 		var obj = Container.Resolve<CollectionDepAsConstructor>();
 		Assert.Equal(2, obj.Services.Count);
@@ -189,7 +189,8 @@ public class DependsOnTestCase : AbstractContainerTestCase
 			Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>(),
 			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
 			Component.For<CollectionDepAsConstructor>()
-				.DependsOn(Dependency.OnComponentCollection<ICollection<IEmptyService>>(typeof(EmptyServiceB), typeof(EmptyServiceA))));
+				.DependsOn(Dependency.OnComponentCollection<ICollection<IEmptyService>>(typeof(EmptyServiceB),
+					typeof(EmptyServiceA))));
 
 		var obj = Container.Resolve<CollectionDepAsConstructor>();
 		Assert.Equal(2, obj.Services.Count);

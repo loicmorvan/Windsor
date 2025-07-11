@@ -15,14 +15,14 @@
 namespace Castle.Core;
 
 /// <summary>
-///   Lifecycle interface. If implemented by a component,
-///   the method Initialize will be invoked by the container
-///   before making the component available to the external world.
+///     Lifecycle interface. If implemented by a component,
+///     the method Initialize will be invoked by the container
+///     before making the component available to the external world.
 /// </summary>
 public interface IInitializable
 {
 	/// <summary>
-	///   Implementors should perform any initialization logic.
+	///     Implementors should perform any initialization logic.
 	/// </summary>
 	void Initialize();
 }

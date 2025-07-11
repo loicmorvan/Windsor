@@ -12,16 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Configuration2;
-
 using System;
 using System.Threading;
-
-using Castle.Windsor;
 using Castle.Windsor.Configuration.Interpreters;
 using Castle.Windsor.Tests.Components;
 
-public class SynchronizationProblemTestCase:IDisposable
+namespace Castle.Windsor.Tests.Configuration2;
+
+public class SynchronizationProblemTestCase : IDisposable
 {
 	private readonly WindsorContainer _container;
 	private readonly ManualResetEvent _startEvent = new(false);
@@ -29,7 +27,9 @@ public class SynchronizationProblemTestCase:IDisposable
 
 	public SynchronizationProblemTestCase()
 	{
-		_container = new WindsorContainer(new XmlInterpreter(ConfigHelper.ResolveConfigPath("Configuration2/synchtest_config.xml")));
+		_container =
+			new WindsorContainer(
+				new XmlInterpreter(ConfigHelper.ResolveConfigPath("Configuration2/synchtest_config.xml")));
 
 		_container.Resolve(typeof(ComponentWithConfigs));
 	}
@@ -46,7 +46,7 @@ public class SynchronizationProblemTestCase:IDisposable
 
 		var threads = new Thread[threadCount];
 
-		for (int i = 0; i < threadCount; i++)
+		for (var i = 0; i < threadCount; i++)
 		{
 			threads[i] = new Thread(ExecuteMethodUntilSignal);
 			threads[i].Start();
@@ -64,19 +64,17 @@ public class SynchronizationProblemTestCase:IDisposable
 		_startEvent.WaitOne(int.MaxValue);
 
 		while (!_stopEvent.WaitOne(1))
-		{
 			try
 			{
-				ComponentWithConfigs comp = (ComponentWithConfigs) _container.Resolve(typeof(ComponentWithConfigs));
+				var comp = (ComponentWithConfigs)_container.Resolve(typeof(ComponentWithConfigs));
 
 				Assert.Equal(AppContext.BaseDirectory, comp.Name);
 				Assert.Equal(90, comp.Port);
 				Assert.Single(comp.Dict);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Console.WriteLine(DateTime.Now.Ticks + " ---------------------------" + Environment.NewLine + ex);
 			}
-		}
 	}
 }

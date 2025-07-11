@@ -20,8 +20,5 @@ public class Bar(Baz baz, string name)
 
 	public string Description { get; set; }
 
-	public string Name
-	{
-		get { return name; }
-	}
+	public string Name => name;
 }

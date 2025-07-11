@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
 
+namespace Castle.Core;
+
 /// <summary>
-///   Marks as constructor to be skipped and not be selected
-///   by the IoC container during new component activation
+///     Marks as constructor to be skipped and not be selected
+///     by the IoC container during new component activation
 /// </summary>
 [AttributeUsage(AttributeTargets.Constructor)]
 public sealed class DoNotSelectAttribute : Attribute

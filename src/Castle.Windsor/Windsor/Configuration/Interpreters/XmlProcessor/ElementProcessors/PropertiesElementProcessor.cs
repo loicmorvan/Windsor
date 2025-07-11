@@ -12,32 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
-using System;
 using System.Xml;
+
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
 public class PropertiesElementProcessor : AbstractXmlNodeProcessor
 {
-	public override String Name
-	{
-		get { return "properties"; }
-	}
+	public override string Name => "properties";
 
-	///<summary>
-	///</summary>
-	///<param name = "nodeList"></param>
-	///<param name = "engine"></param>
-	///<example>
-	///  <code>
-	///    <properties>
-	///      <attributes>
-	///        <myAttribute>attributeValue</myAttribute>
-	///      </attributes>
-	///      <myProperty>propertyValue</myProperty>
-	///    </properties>
-	///  </code>
-	///</example>
+	/// <summary>
+	/// </summary>
+	/// <param name="nodeList"></param>
+	/// <param name="engine"></param>
+	/// <example>
+	///     <code>
+	///     <properties>
+	///             <attributes>
+	///                 <myAttribute>attributeValue</myAttribute>
+	///             </attributes>
+	///             <myProperty>propertyValue</myProperty>
+	///         </properties>
+	///   </code>
+	/// </example>
 	public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
 	{
 		var element = nodeList.Current as XmlElement;
@@ -88,10 +84,7 @@ public class PropertiesElementProcessor : AbstractXmlNodeProcessor
 				engine.DispatchProcessCurrent(childNodes);
 			}
 
-			if (IgnoreNode(childNodes.Current))
-			{
-				continue;
-			}
+			if (IgnoreNode(childNodes.Current)) continue;
 
 			var elem = GetNodeAsElement(element, childNodes.Current);
 

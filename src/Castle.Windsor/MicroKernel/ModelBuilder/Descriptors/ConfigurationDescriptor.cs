@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors;
-
 using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.MicroKernel.Registration;
+
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
 
 public class ConfigurationDescriptor : IComponentModelDescriptor
 {
@@ -25,27 +25,21 @@ public class ConfigurationDescriptor : IComponentModelDescriptor
 
 	public ConfigurationDescriptor(params Node[] configNodes)
 	{
-		this._configNodes = configNodes;
+		_configNodes = configNodes;
 	}
 
 	public ConfigurationDescriptor(IConfiguration configuration)
 	{
-		this._configuration = configuration;
+		_configuration = configuration;
 	}
 
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
 		if (_configuration != null)
-		{
 			model.Configuration.Children.Add(_configuration);
-		}
 		else
-		{
 			foreach (var configNode in _configNodes)
-			{
 				configNode.ApplyTo(model.Configuration);
-			}
-		}
 	}
 
 	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)

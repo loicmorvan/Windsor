@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using Castle.MicroKernel.SubSystems.Conversion;
-using Castle.Windsor;
 using Castle.Windsor.Configuration.Interpreters;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.XmlFiles;
+
+namespace Castle.Windsor.Tests;
 
 public class PropertiesInspectionBehaviorTestCase
 {
 	[Fact]
 	public void InvalidOption()
 	{
-		var expectedMessage = "Error on properties inspection. Could not convert the inspectionBehavior attribute value into an expected enum value. Value found is 'Invalid' while possible values are 'Undefined, None, All, DeclaredOnly'";
+		var expectedMessage =
+			"Error on properties inspection. Could not convert the inspectionBehavior attribute value into an expected enum value. Value found is 'Invalid' while possible values are 'Undefined, None, All, DeclaredOnly'";
 		var exception = Assert.Throws<ConverterException>(() =>
 			new WindsorContainer(new XmlInterpreter(Xml.Embedded("propertyInspectionBehaviorInvalid.xml"))));
 		Assert.Equal(exception.Message, expectedMessage);

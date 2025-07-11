@@ -18,8 +18,5 @@ public class TrivialComponentWithDependency(ISimpleService dependency) : ICompon
 {
 	public ISimpleService Dependency { get; private set; } = dependency;
 
-	public int Id
-	{
-		get { return 0; }
-	}
+	public int Id => 0;
 }

@@ -7,5 +7,6 @@
 	<?undef prod?>
 	<?undef qa?>
 
-    <include uri="file://..\Castle.Windsor.Tests\XmlProcessor\TestFiles\Pi-ComplexChooseStatementTest.xml" preserve-wrapper="yes"/>
+	<include uri="file://..\Castle.Windsor.Tests\XmlProcessor\TestFiles\Pi-ComplexChooseStatementTest.xml"
+			 preserve-wrapper="yes"/>
 </configuration>

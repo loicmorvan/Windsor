@@ -12,23 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
-using System;
-
 using Castle.Core.Internal;
+
+namespace Castle.Windsor.Tests;
 
 public class GraphNodeTests
 {
 	[Fact]
 	public void SimpleUsage()
 	{
-		GraphNode parent = new GraphNode();
-		GraphNode child = new GraphNode();
-			
+		var parent = new GraphNode();
+		var child = new GraphNode();
+
 		parent.AddDependent(child);
 
-		Assert.Same( child, parent.Dependents[0] );
+		Assert.Same(child, parent.Dependents[0]);
 	}
 
 	[Fact]
@@ -36,9 +34,9 @@ public class GraphNodeTests
 	{
 		GraphNode alone = new TestGraphNode("alone");
 
-		IVertex[] nodes = TopologicalSortAlgo.Sort( new[] { alone } );
+		var nodes = TopologicalSortAlgo.Sort(new[] { alone });
 
-		Assert.Same( alone, nodes[0] );
+		Assert.Same(alone, nodes[0]);
 	}
 
 	[Fact]
@@ -48,17 +46,17 @@ public class GraphNodeTests
 		GraphNode first = new TestGraphNode("first");
 		GraphNode second = new TestGraphNode("second");
 		GraphNode third = new TestGraphNode("third");
-			
+
 		first.AddDependent(second);
 		second.AddDependent(third);
 
-		IVertex[] nodes = 
-			TopologicalSortAlgo.Sort( new GraphNode[] { alone, second, first, third } );
+		var nodes =
+			TopologicalSortAlgo.Sort(new[] { alone, second, first, third });
 
-		Assert.Same( first, nodes[0] );
-		Assert.Same( second, nodes[1] );
-		Assert.Same( third, nodes[2] );
-		Assert.Same( alone, nodes[3] );
+		Assert.Same(first, nodes[0]);
+		Assert.Same(second, nodes[1]);
+		Assert.Same(third, nodes[2]);
+		Assert.Same(alone, nodes[3]);
 	}
 
 	[Fact]
@@ -73,7 +71,7 @@ public class GraphNodeTests
 		GraphNode pants = new TestGraphNode("pants");
 		GraphNode shoes = new TestGraphNode("shoes");
 		GraphNode socks = new TestGraphNode("socks");
-			
+
 		shirt.AddDependent(belt);
 		shirt.AddDependent(tie);
 
@@ -88,27 +86,24 @@ public class GraphNodeTests
 		socks.AddDependent(shoes);
 		belt.AddDependent(jacket);
 
-		IVertex[] nodes = 
-			TopologicalSortAlgo.Sort( 
-				new GraphNode[] 
-					{ shirt, tie, jacket, belt, watch, undershorts, pants, shoes, socks} );
+		var nodes =
+			TopologicalSortAlgo.Sort(
+				new[]
+					{ shirt, tie, jacket, belt, watch, undershorts, pants, shoes, socks });
 
-		Assert.Same( socks, nodes[0] );
-		Assert.Same( undershorts, nodes[1] );
-		Assert.Same( pants, nodes[2] );
-		Assert.Same( shoes, nodes[3] );
-		Assert.Same( watch, nodes[4] );
-		Assert.Same( shirt, nodes[5] );
-		Assert.Same( tie, nodes[6] );
-		Assert.Same( belt, nodes[7] );
-		Assert.Same( jacket, nodes[8] );
+		Assert.Same(socks, nodes[0]);
+		Assert.Same(undershorts, nodes[1]);
+		Assert.Same(pants, nodes[2]);
+		Assert.Same(shoes, nodes[3]);
+		Assert.Same(watch, nodes[4]);
+		Assert.Same(shirt, nodes[5]);
+		Assert.Same(tie, nodes[6]);
+		Assert.Same(belt, nodes[7]);
+		Assert.Same(jacket, nodes[8]);
 	}
 }
 
-public class TestGraphNode(String name) : GraphNode
+public class TestGraphNode(string name) : GraphNode
 {
-	public String Name
-	{
-		get { return name; }
-	}
+	public string Name => name;
 }

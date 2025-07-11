@@ -15,7 +15,7 @@
 namespace Castle.Windsor.Tests.ClassComponents;
 
 /// <summary>
-///   Summary description for CommonImpl2.
+///     Summary description for CommonImpl2.
 /// </summary>
 public class CommonImpl2 : ICommon
 {

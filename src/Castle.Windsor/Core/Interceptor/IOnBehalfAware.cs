@@ -15,9 +15,9 @@
 namespace Castle.Core.Interceptor;
 
 /// <summary>
-///   Interceptors might implement this to receive the
-///   ComponentModel on behalf of the component where the
-///   interceptor is acting.
+///     Interceptors might implement this to receive the
+///     ComponentModel on behalf of the component where the
+///     interceptor is acting.
 /// </summary>
 public interface IOnBehalfAware
 {

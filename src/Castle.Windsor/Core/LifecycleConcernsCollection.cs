@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
+namespace Castle.Core;
+
 /// <summary>
-///   Represents a collection of ordered lifecycle concerns.
+///     Represents a collection of ordered lifecycle concerns.
 /// </summary>
 [Serializable]
 public class LifecycleConcernsCollection
@@ -31,70 +31,55 @@ public class LifecycleConcernsCollection
 	private List<IDecommissionConcern> _decommission;
 
 	/// <summary>
-	///   Returns all concerns for the commission phase
+	///     Returns all concerns for the commission phase
 	/// </summary>
 	/// <value></value>
 	public IEnumerable<ICommissionConcern> CommissionConcerns
 	{
 		get
 		{
-			if (HasCommissionConcerns == false)
-			{
-				return new ICommissionConcern[0];
-			}
+			if (HasCommissionConcerns == false) return new ICommissionConcern[0];
 			return _commission;
 		}
 	}
 
 	/// <summary>
-	///   Returns all concerns for the decommission phase
+	///     Returns all concerns for the decommission phase
 	/// </summary>
 	/// <value></value>
 	public IEnumerable<IDecommissionConcern> DecommissionConcerns
 	{
 		get
 		{
-			if (HasDecommissionConcerns == false)
-			{
-				return new IDecommissionConcern[0];
-			}
+			if (HasDecommissionConcerns == false) return new IDecommissionConcern[0];
 			return _decommission;
 		}
 	}
 
 	/// <summary>
-	///   Gets a value indicating whether this instance has commission steps.
+	///     Gets a value indicating whether this instance has commission steps.
 	/// </summary>
 	/// <value>
-	///   <c>true</c> if this instance has commission steps; otherwise, <c>false</c>.
+	///     <c>true</c> if this instance has commission steps; otherwise, <c>false</c>.
 	/// </value>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public bool HasCommissionConcerns
-	{
-		get { return _commission != null && _commission.Count != 0; }
-	}
+	public bool HasCommissionConcerns => _commission != null && _commission.Count != 0;
 
 	/// <summary>
-	///   Gets a value indicating whether this instance has decommission steps.
+	///     Gets a value indicating whether this instance has decommission steps.
 	/// </summary>
 	/// <value>
-	///   <c>true</c> if this instance has decommission steps; otherwise, <c>false</c>.
+	///     <c>true</c> if this instance has decommission steps; otherwise, <c>false</c>.
 	/// </value>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public bool HasDecommissionConcerns
-	{
-		get { return _decommission != null && _decommission.Count != 0; }
-	}
+	public bool HasDecommissionConcerns => _decommission != null && _decommission.Count != 0;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private List<ICommissionConcern> Commission
 	{
 		get
 		{
-			if (_commission == null)
-			{
-				_commission = new List<ICommissionConcern>();
-			}
+			if (_commission == null) _commission = new List<ICommissionConcern>();
 			return _commission;
 		}
 	}
@@ -104,65 +89,44 @@ public class LifecycleConcernsCollection
 	{
 		get
 		{
-			if (_decommission == null)
-			{
-				_decommission = new List<IDecommissionConcern>();
-			}
+			if (_decommission == null) _decommission = new List<IDecommissionConcern>();
 			return _decommission;
 		}
 	}
 
 	public void Add(ICommissionConcern concern)
 	{
-		if (concern == null)
-		{
-			throw new ArgumentNullException(nameof(concern));
-		}
+		if (concern == null) throw new ArgumentNullException(nameof(concern));
 		Commission.Add(concern);
 	}
 
 	public void Add(IDecommissionConcern concern)
 	{
-		if (concern == null)
-		{
-			throw new ArgumentNullException(nameof(concern));
-		}
+		if (concern == null) throw new ArgumentNullException(nameof(concern));
 		Decommission.Add(concern);
 	}
 
 	public void AddFirst(ICommissionConcern concern)
 	{
-		if (concern == null)
-		{
-			throw new ArgumentNullException(nameof(concern));
-		}
+		if (concern == null) throw new ArgumentNullException(nameof(concern));
 		Commission.Insert(0, concern);
 	}
 
 	public void AddFirst(IDecommissionConcern concern)
 	{
-		if (concern == null)
-		{
-			throw new ArgumentNullException(nameof(concern));
-		}
+		if (concern == null) throw new ArgumentNullException(nameof(concern));
 		Decommission.Insert(0, concern);
 	}
 
 	public void Remove(ICommissionConcern concern)
 	{
-		if (concern == null)
-		{
-			throw new ArgumentNullException(nameof(concern));
-		}
+		if (concern == null) throw new ArgumentNullException(nameof(concern));
 		Commission.Remove(concern);
 	}
 
 	public void Remove(IDecommissionConcern concern)
 	{
-		if (concern == null)
-		{
-			throw new ArgumentNullException(nameof(concern));
-		}
+		if (concern == null) throw new ArgumentNullException(nameof(concern));
 		Decommission.Remove(concern);
 	}
 }

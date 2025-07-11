@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Installer;
-
 using Castle.Core.Resource;
 using Castle.Windsor.Configuration.Interpreters;
+
+namespace Castle.Windsor.Installer;
 
 public static class Configuration
 {
@@ -31,9 +31,9 @@ public static class Configuration
 #endif
 
 	/// <summary>
-	///   Installs all the component from the xml configuration.
+	///     Installs all the component from the xml configuration.
 	/// </summary>
-	/// <param name = "resource">The xml configuration resource.</param>
+	/// <param name="resource">The xml configuration resource.</param>
 	/// <returns></returns>
 	public static ConfigurationInstaller FromXml(IResource resource)
 	{
@@ -41,9 +41,9 @@ public static class Configuration
 	}
 
 	/// <summary>
-	///   Installs all the component from the xml configuration file.
+	///     Installs all the component from the xml configuration file.
 	/// </summary>
-	/// <param name = "file">The xml configuration file.</param>
+	/// <param name="file">The xml configuration file.</param>
 	/// <returns></returns>
 	public static ConfigurationInstaller FromXmlFile(string file)
 	{

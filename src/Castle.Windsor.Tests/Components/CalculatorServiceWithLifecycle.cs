@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using System;
-
 using Castle.Core;
+
+namespace Castle.Windsor.Tests.Components;
 
 [Transient]
 public class CalculatorServiceWithLifecycle :
@@ -25,9 +24,6 @@ public class CalculatorServiceWithLifecycle :
 #endif
 	ICalcService, IInitializable, IDisposable
 {
-	private bool _initialized;
-	private bool _disposed;
-
 	public int Sum(int x, int y)
 	{
 		return x + y;
@@ -35,21 +31,15 @@ public class CalculatorServiceWithLifecycle :
 
 	public void Initialize()
 	{
-		_initialized = true;
+		Initialized = true;
 	}
 
 	public void Dispose()
 	{
-		_disposed = true;
+		Disposed = true;
 	}
 
-	public bool Initialized
-	{
-		get { return _initialized; }
-	}
+	public bool Initialized { get; private set; }
 
-	public bool Disposed
-	{
-		get { return _disposed; }
-	}
+	public bool Disposed { get; private set; }
 }

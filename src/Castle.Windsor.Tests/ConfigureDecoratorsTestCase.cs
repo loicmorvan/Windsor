@@ -12,55 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
-
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
+
+namespace Castle.Windsor.Tests;
 
 public class ConfigureDecoratorsTestCase
 {
-	private interface IDoNothingService
-	{
-		void DoNothing();
-	}
-
-	private interface IDoSomethingService
-	{
-		void DoSomething();
-	}
-
-	private class DoNothingService : IDoNothingService
-	{
-		public void DoNothing()
-		{
-			throw new NotImplementedException();
-		}
-	}
-
-	private class DoNothingServiceDecorator(IDoNothingService inner) : IDoNothingService
-	{
-		public IDoNothingService Inner { get; set; } = inner;
-
-		public void DoNothing()
-		{
-			throw new NotImplementedException();
-		}
-	}
-
-	private class DoSomethingService : IDoSomethingService
-	{
-		public DoSomethingService(IDoNothingService service)
-		{
-		}
-
-		public void DoSomething()
-		{
-			throw new NotImplementedException();
-		}
-	}
-
 	[Fact]
 	public void ShouldResolveComponentFromParent()
 	{
@@ -80,7 +38,8 @@ public class ConfigureDecoratorsTestCase
 	{
 		var container = new WindsorContainer();
 		container.Register(
-			Component.For<IDoNothingService>().ImplementedBy<DoNothingServiceDecorator>().Named("DoNothingServiceDecorator"),
+			Component.For<IDoNothingService>().ImplementedBy<DoNothingServiceDecorator>()
+				.Named("DoNothingServiceDecorator"),
 			Component.For<IDoNothingService>().ImplementedBy<DoNothingService>().Named("DoNothingService"));
 		var service = container.Resolve<IDoNothingService>();
 
@@ -103,7 +62,7 @@ public class ConfigureDecoratorsTestCase
 			Component.For(typeof(IDoNothingService)).ImplementedBy(typeof(DoNothingService)).Named("DoNothingService"));
 		var service = child.Resolve<IDoNothingService>();
 		Assert.NotNull(service);
-		Assert.IsType<DoNothingServiceDecorator>( service);
+		Assert.IsType<DoNothingServiceDecorator>(service);
 	}
 
 	[Fact]
@@ -118,9 +77,50 @@ public class ConfigureDecoratorsTestCase
 		parent.Register(
 			Component.For(typeof(IDoNothingService)).ImplementedBy(typeof(DoNothingService)).Named("DoNothingService"));
 		child.Register(
-			Component.For(typeof(IDoSomethingService)).ImplementedBy(typeof(DoSomethingService)).Named("DoSometingService"));
+			Component.For(typeof(IDoSomethingService)).ImplementedBy(typeof(DoSomethingService))
+				.Named("DoSometingService"));
 		var service = child.Resolve<IDoNothingService>();
 		Assert.NotNull(service);
-		Assert.IsType<DoNothingServiceDecorator>( service);
+		Assert.IsType<DoNothingServiceDecorator>(service);
+	}
+
+	private interface IDoNothingService
+	{
+		void DoNothing();
+	}
+
+	private interface IDoSomethingService
+	{
+		void DoSomething();
+	}
+
+	private class DoNothingService : IDoNothingService
+	{
+		public void DoNothing()
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	private class DoNothingServiceDecorator(IDoNothingService inner) : IDoNothingService
+	{
+		public IDoNothingService Inner { get; } = inner;
+
+		public void DoNothing()
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	private class DoSomethingService : IDoSomethingService
+	{
+		public DoSomethingService(IDoNothingService service)
+		{
+		}
+
+		public void DoSomething()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

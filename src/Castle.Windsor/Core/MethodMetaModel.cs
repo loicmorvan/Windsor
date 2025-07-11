@@ -12,36 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
-
 using Castle.Core.Configuration;
 
+namespace Castle.Core;
+
 /// <summary>
-///   Represents meta information associated with a method
-///   (not yet defined)
+///     Represents meta information associated with a method
+///     (not yet defined)
 /// </summary>
 [Serializable]
 public class MethodMetaModel
 {
-	private readonly IConfiguration _configNode;
-
 	/// <summary>
-	///   Initializes a new instance of the <see cref = "MethodMetaModel" /> class.
+	///     Initializes a new instance of the <see cref="MethodMetaModel" /> class.
 	/// </summary>
-	/// <param name = "configNode">The config node.</param>
+	/// <param name="configNode">The config node.</param>
 	public MethodMetaModel(IConfiguration configNode)
 	{
-		this._configNode = configNode;
+		ConfigNode = configNode;
 	}
 
 	/// <summary>
-	///   Gets the config node.
+	///     Gets the config node.
 	/// </summary>
 	/// <value>The config node.</value>
-	public IConfiguration ConfigNode
-	{
-		get { return _configNode; }
-	}
+	public IConfiguration ConfigNode { get; }
 }

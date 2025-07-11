@@ -12,27 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Windsor.Tests;
-
 using System.Linq;
-
 using Castle.Core;
 using Castle.Facilities.Startable;
 using Castle.MicroKernel.Lifestyle;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Configuration.Interpreters;
-using Castle.Windsor.Installer;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Generics;
 using Castle.Windsor.Tests.XmlFiles;
+
+namespace Castle.Windsor.Tests.Windsor.Tests;
 
 public class XmlConfigStructureTestCase : AbstractContainerTestCase
 {
 	private IWindsorInstaller FromFile(string fileName)
 	{
 		var file = Xml.Embedded(fileName);
-		return Configuration.FromXml(file);
+		return Castle.Windsor.Installer.Configuration.FromXml(file);
 	}
 
 	[Fact]
@@ -114,8 +112,7 @@ public class XmlConfigStructureTestCase : AbstractContainerTestCase
 	public void Invalid_nodes_are_reported_via_exception()
 	{
 		var e =
-			Assert.Throws<ConfigurationProcessingException>(
-				() => Container.Install(FromFile("IOC-103.xml")));
+			Assert.Throws<ConfigurationProcessingException>(() => Container.Install(FromFile("IOC-103.xml")));
 
 		var expected =
 			@"Configuration parser encountered <aze>, but it was expecting to find <installers>, <facilities> or <components>. There might be either a typo on <aze> or you might have forgotten to nest it properly.";

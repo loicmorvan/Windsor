@@ -12,18 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.ComponentActivator;
 using Castle.MicroKernel.Context;
 using Castle.Windsor.Tests.ClassComponents;
 
+namespace Castle.Windsor.Tests.Components;
+
 /// <summary>
-/// Summary description for MyCustomerActivator.
+///     Summary description for MyCustomerActivator.
 /// </summary>
-public class MyCustomerActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
+public class MyCustomerActivator(
+	ComponentModel model,
+	IKernelInternal kernel,
+	ComponentInstanceDelegate onCreation,
+	ComponentInstanceDelegate onDestruction)
 	: AbstractComponentActivator(model, kernel, onCreation, onDestruction)
 {
 	protected override object InternalCreate(CreationContext context)

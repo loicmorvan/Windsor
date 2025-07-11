@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System.Collections.Generic;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
+
+namespace Castle.Windsor.Tests;
 
 public class ContainerProblem
 {
@@ -53,7 +51,7 @@ public class Child : IChild
 	}
 }
 
-public class Parent : List<IChild>,IParent
+public class Parent : List<IChild>, IParent
 {
 	public Parent(IKernel kernel)
 	{

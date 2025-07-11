@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.LoggingFacility.Classes;
-
 using Castle.Core.Logging;
+
+namespace Castle.Windsor.Tests.LoggingFacility.Classes;
 
 public class ComplexLoggingComponent(IExtendedLogger logger)
 {
@@ -23,14 +23,12 @@ public class ComplexLoggingComponent(IExtendedLogger logger)
 		using (logger.ThreadStacks["NDC"].Push("Outside"))
 		{
 			for (var i = 0; i < 3; i++)
-			{
 				using (logger.ThreadStacks["NDC"].Push("Inside" + i))
 				{
 					logger.ThreadProperties["foo"] = "bar";
 					logger.GlobalProperties["flim"] = "flam";
 					logger.Debug("Bim, bam boom.");
 				}
-			}
 		}
 	}
 }

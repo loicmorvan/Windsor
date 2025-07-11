@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs;
-
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
+
+namespace Castle.Windsor.Tests.Bugs;
 
 public class IoC102
 {
 	[Fact]
 	public void ComponentResolutionOrderForKernelAndDpendencyResolverIsTheSame()
 	{
-		IWindsorContainer container = new WindsorContainer()
+		var container = new WindsorContainer()
 			.Register(
 				Component.For<IReader>()
 					.ImplementedBy<AlphaReader>(),
@@ -31,11 +30,11 @@ public class IoC102
 				Component.For<Consumer>()
 			);
 
-		Consumer consumer = container.Resolve<Consumer>();
-		IReader reader2 = container.Resolve<IReader>();
+		var consumer = container.Resolve<Consumer>();
+		var reader2 = container.Resolve<IReader>();
 		Assert.Same(reader2, consumer.Reader);
 	}
-        
+
 	public interface IReader
 	{
 		string Read();

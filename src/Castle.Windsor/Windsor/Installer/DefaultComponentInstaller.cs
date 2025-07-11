@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Installer;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.Core.Internal;
@@ -30,18 +27,20 @@ using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.MicroKernel.SubSystems.Conversion;
 using Castle.Windsor.Configuration.Interpreters;
 
+namespace Castle.Windsor.Installer;
+
 /// <summary>
-///   Default <see cref = "IComponentsInstaller" /> implementation.
+///     Default <see cref="IComponentsInstaller" /> implementation.
 /// </summary>
 public class DefaultComponentInstaller : IComponentsInstaller
 {
 	private string _assemblyName;
 
 	/// <summary>
-	///   Perform installation.
+	///     Perform installation.
 	/// </summary>
-	/// <param name = "container">Target container</param>
-	/// <param name = "store">Configuration store</param>
+	/// <param name="container">Target container</param>
+	/// <param name="store">Configuration store</param>
 	public void SetUp(IWindsorContainer container, IConfigurationStore store)
 	{
 		var converter = container.Kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey) as IConversionManager;
@@ -56,15 +55,9 @@ public class DefaultComponentInstaller : IComponentsInstaller
 	{
 		var instances = new Dictionary<Type, IWindsorInstaller>();
 		var assemblies = new HashSet<Assembly>();
-		foreach (var installer in installers)
-		{
-			AddInstaller(installer, instances, converter, assemblies);
-		}
+		foreach (var installer in installers) AddInstaller(installer, instances, converter, assemblies);
 
-		if (instances.Count != 0)
-		{
-			container.Install(instances.Values.ToArray());
-		}
+		if (instances.Count != 0) container.Install(instances.Values.ToArray());
 	}
 
 	private void AddInstaller(IConfiguration installer, Dictionary<Type, IWindsorInstaller> cache,
@@ -82,10 +75,7 @@ public class DefaultComponentInstaller : IComponentsInstaller
 		if (string.IsNullOrEmpty(_assemblyName) == false)
 		{
 			var assembly = ReflectionUtil.GetAssemblyNamed(_assemblyName);
-			if (assemblies.Contains(assembly))
-			{
-				return;
-			}
+			if (assemblies.Contains(assembly)) return;
 			assemblies.Add(assembly);
 
 			GetAssemblyInstallers(cache, assembly);
@@ -97,17 +87,11 @@ public class DefaultComponentInstaller : IComponentsInstaller
 		var token = installer.Attributes["publicKeyToken"];
 		Debug.Assert(directory != null);
 		var assemblyFilter = new AssemblyFilter(directory, mask);
-		if (token != null)
-		{
-			assemblyFilter.WithKeyToken(token);
-		}
+		if (token != null) assemblyFilter.WithKeyToken(token);
 
 		foreach (var assembly in ReflectionUtil.GetAssemblies(assemblyFilter))
 		{
-			if (assemblies.Contains(assembly))
-			{
-				continue;
-			}
+			if (assemblies.Contains(assembly)) continue;
 			assemblies.Add(assembly);
 			GetAssemblyInstallers(cache, assembly);
 		}
@@ -116,10 +100,7 @@ public class DefaultComponentInstaller : IComponentsInstaller
 	private void GetAssemblyInstallers(Dictionary<Type, IWindsorInstaller> cache, Assembly assembly)
 	{
 		var types = assembly.GetAvailableTypes();
-		foreach (var type in InstallerTypes(types))
-		{
-			AddInstaller(cache, type);
-		}
+		foreach (var type in InstallerTypes(types)) AddInstaller(cache, type);
 	}
 
 	private IEnumerable<Type> InstallerTypes(IEnumerable<Type> types)
@@ -144,7 +125,8 @@ public class DefaultComponentInstaller : IComponentsInstaller
 		}
 	}
 
-	protected virtual void SetUpFacilities(IConfiguration[] configurations, IWindsorContainer container, IConversionManager converter)
+	protected virtual void SetUpFacilities(IConfiguration[] configurations, IWindsorContainer container,
+		IConversionManager converter)
 	{
 		foreach (var facility in configurations)
 		{
@@ -158,14 +140,9 @@ public class DefaultComponentInstaller : IComponentsInstaller
 
 	private void AssertImplementsService(IConfiguration id, Type service, Type implementation)
 	{
-		if (service == null)
-		{
-			return;
-		}
+		if (service == null) return;
 		if (service.GetTypeInfo().IsGenericTypeDefinition)
-		{
 			implementation = implementation.MakeGenericType(service.GetGenericArguments());
-		}
 		if (!service.IsAssignableFrom(implementation))
 		{
 			var message = string.Format("Could not set up component '{0}'. Type '{1}' does not implement service '{2}'",
@@ -176,17 +153,15 @@ public class DefaultComponentInstaller : IComponentsInstaller
 		}
 	}
 
-	protected virtual void SetUpComponents(IConfiguration[] configurations, IWindsorContainer container, IConversionManager converter)
+	protected virtual void SetUpComponents(IConfiguration[] configurations, IWindsorContainer container,
+		IConversionManager converter)
 	{
 		foreach (var component in configurations)
 		{
 			var implementation = GetType(converter, component.Attributes["type"]);
 			var firstService = GetType(converter, component.Attributes["service"]);
 			var services = new HashSet<Type>();
-			if (firstService != null)
-			{
-				services.Add(firstService);
-			}
+			if (firstService != null) services.Add(firstService);
 			CollectAdditionalServices(component, converter, services);
 
 			var name = default(string);
@@ -195,16 +170,11 @@ public class DefaultComponentInstaller : IComponentsInstaller
 				AssertImplementsService(component, firstService, implementation);
 				var defaults = CastleComponentAttribute.GetDefaultsFor(implementation);
 				if (defaults.ServicesSpecifiedExplicitly && services.Count == 0)
-				{
 					defaults.Services.ForEach(s => services.Add(s));
-				}
 				name = GetName(defaults, component);
 			}
 
-			if (services.Count == 0 && implementation == null)
-			{
-				continue;
-			}
+			if (services.Count == 0 && implementation == null) continue;
 
 			container.Register(Component.For(services).ImplementedBy(implementation).Named(name));
 		}
@@ -212,29 +182,21 @@ public class DefaultComponentInstaller : IComponentsInstaller
 
 	private static string GetName(CastleComponentAttribute defaults, IConfiguration component)
 	{
-		if (component.Attributes["id-automatic"] != bool.TrueString)
-		{
-			return component.Attributes["id"];
-		}
+		if (component.Attributes["id-automatic"] != bool.TrueString) return component.Attributes["id"];
 		return defaults.Name;
 	}
 
 	private Type GetType(IConversionManager converter, string typeName)
 	{
-		if (typeName == null)
-		{
-			return null;
-		}
+		if (typeName == null) return null;
 		return converter.PerformConversion<Type>(typeName);
 	}
 
-	private void CollectAdditionalServices(IConfiguration component, IConversionManager converter, ICollection<Type> services)
+	private void CollectAdditionalServices(IConfiguration component, IConversionManager converter,
+		ICollection<Type> services)
 	{
 		var forwardedTypes = component.Children["forwardedTypes"];
-		if (forwardedTypes == null)
-		{
-			return;
-		}
+		if (forwardedTypes == null) return;
 
 		foreach (var forwardedType in forwardedTypes.Children)
 		{

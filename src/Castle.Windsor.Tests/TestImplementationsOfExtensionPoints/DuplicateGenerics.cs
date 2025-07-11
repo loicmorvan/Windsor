@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.TestImplementationsOfExtensionPoints;
-
 using System;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Core;
 using Castle.MicroKernel.Context;
 using Castle.MicroKernel.Handlers;
+
+namespace Castle.Windsor.Tests.TestImplementationsOfExtensionPoints;
 
 public class DuplicateGenerics : IGenericImplementationMatchingStrategy
 {
@@ -29,10 +28,7 @@ public class DuplicateGenerics : IGenericImplementationMatchingStrategy
 		var first = context.RequestedType.GetTypeInfo().GetGenericArguments().First();
 		var length = model.Implementation.GetTypeInfo().GetGenericArguments().Length;
 		var types = new Type[length];
-		for (var i = 0; i < length; i++)
-		{
-			types[i] = first;
-		}
+		for (var i = 0; i < length; i++) types[i] = first;
 		return types;
 	}
 }

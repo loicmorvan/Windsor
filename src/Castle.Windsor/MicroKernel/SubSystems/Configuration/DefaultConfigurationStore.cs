@@ -12,21 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Configuration;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Castle.Core.Configuration;
 using Castle.Core.Resource;
 using Castle.MicroKernel.SubSystems.Resource;
 
+namespace Castle.MicroKernel.SubSystems.Configuration;
+
 /// <summary>
-///   This implementation of <see cref = "IConfigurationStore" />
-///   does not try to obtain an external configuration by any means.
-///   Its only purpose is to serve as a base class for subclasses
-///   that might obtain the configuration node from anywhere.
+///     This implementation of <see cref="IConfigurationStore" />
+///     does not try to obtain an external configuration by any means.
+///     Its only purpose is to serve as a base class for subclasses
+///     that might obtain the configuration node from anywhere.
 /// </summary>
 [Serializable]
 public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
@@ -38,39 +37,39 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	private readonly object _syncLock = new();
 
 	/// <summary>
-	///   Adds the child container configuration.
+	///     Adds the child container configuration.
 	/// </summary>
-	/// <param name = "key">The key.</param>
-	/// <param name = "config">The config.</param>
-	public void AddChildContainerConfiguration(String key, IConfiguration config)
+	/// <param name="key">The key.</param>
+	/// <param name="config">The config.</param>
+	public void AddChildContainerConfiguration(string key, IConfiguration config)
 	{
-		lock(_syncLock)
+		lock (_syncLock)
 		{
 			_childContainers[key] = config;
 		}
 	}
 
 	/// <summary>
-	///   Associates a configuration node with a component key
+	///     Associates a configuration node with a component key
 	/// </summary>
-	/// <param name = "key">item key</param>
-	/// <param name = "config">Configuration node</param>
-	public void AddComponentConfiguration(String key, IConfiguration config)
+	/// <param name="key">item key</param>
+	/// <param name="config">Configuration node</param>
+	public void AddComponentConfiguration(string key, IConfiguration config)
 	{
 		lock (_syncLock)
 		{
 			_components[key] = config;
-		}		
+		}
 	}
 
 	/// <summary>
-	///   Associates a configuration node with a facility key
+	///     Associates a configuration node with a facility key
 	/// </summary>
-	/// <param name = "key">item key</param>
-	/// <param name = "config">Configuration node</param>
-	public void AddFacilityConfiguration(String key, IConfiguration config)
+	/// <param name="key">item key</param>
+	/// <param name="config">Configuration node</param>
+	public void AddFacilityConfiguration(string key, IConfiguration config)
 	{
-		lock(_syncLock)
+		lock (_syncLock)
 		{
 			_facilities[key] = config;
 		}
@@ -78,22 +77,22 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 
 	public void AddInstallerConfiguration(IConfiguration config)
 	{
-		lock(_syncLock)
+		lock (_syncLock)
 		{
 			_installers.Add(config);
 		}
 	}
 
 	/// <summary>
-	///   Returns the configuration node associated with
-	///   the specified child container key. Should return null
-	///   if no association exists.
+	///     Returns the configuration node associated with
+	///     the specified child container key. Should return null
+	///     if no association exists.
 	/// </summary>
-	/// <param name = "key">item key</param>
+	/// <param name="key">item key</param>
 	/// <returns></returns>
-	public IConfiguration GetChildContainerConfiguration(String key)
+	public IConfiguration GetChildContainerConfiguration(string key)
 	{
-		lock(_syncLock)
+		lock (_syncLock)
 		{
 			IConfiguration value;
 			_childContainers.TryGetValue(key, out value);
@@ -102,13 +101,13 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	}
 
 	/// <summary>
-	///   Returns the configuration node associated with
-	///   the specified component key. Should return null
-	///   if no association exists.
+	///     Returns the configuration node associated with
+	///     the specified component key. Should return null
+	///     if no association exists.
 	/// </summary>
-	/// <param name = "key">item key</param>
+	/// <param name="key">item key</param>
 	/// <returns></returns>
-	public IConfiguration GetComponentConfiguration(String key)
+	public IConfiguration GetComponentConfiguration(string key)
 	{
 		lock (_syncLock)
 		{
@@ -119,7 +118,7 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	}
 
 	/// <summary>
-	///   Returns all configuration nodes for components
+	///     Returns all configuration nodes for components
 	/// </summary>
 	/// <returns></returns>
 	public IConfiguration[] GetComponents()
@@ -131,7 +130,7 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	}
 
 	/// <summary>
-	///   Returns all configuration nodes for child containers
+	///     Returns all configuration nodes for child containers
 	/// </summary>
 	/// <returns></returns>
 	public IConfiguration[] GetConfigurationForChildContainers()
@@ -143,7 +142,7 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	}
 
 	/// <summary>
-	///   Returns all configuration nodes for facilities
+	///     Returns all configuration nodes for facilities
 	/// </summary>
 	/// <returns></returns>
 	public IConfiguration[] GetFacilities()
@@ -155,13 +154,13 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	}
 
 	/// <summary>
-	///   Returns the configuration node associated with
-	///   the specified facility key. Should return null
-	///   if no association exists.
+	///     Returns the configuration node associated with
+	///     the specified facility key. Should return null
+	///     if no association exists.
 	/// </summary>
-	/// <param name = "key">item key</param>
+	/// <param name="key">item key</param>
 	/// <returns></returns>
-	public IConfiguration GetFacilityConfiguration(String key)
+	public IConfiguration GetFacilityConfiguration(string key)
 	{
 		lock (_syncLock)
 		{
@@ -179,12 +178,9 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 		}
 	}
 
-	public IResource GetResource(String resourceUri, IResource resource)
+	public IResource GetResource(string resourceUri, IResource resource)
 	{
-		if (resourceUri.IndexOf(Uri.SchemeDelimiter) == -1)
-		{
-			return resource.CreateRelative(resourceUri);
-		}
+		if (resourceUri.IndexOf(Uri.SchemeDelimiter) == -1) return resource.CreateRelative(resourceUri);
 
 		var subSystem = (IResourceSubSystem)Kernel.GetSubSystem(SubSystemConstants.ResourceKey);
 

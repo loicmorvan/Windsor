@@ -12,21 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.LoggingFacility;
-
 using System;
 using System.IO;
-
 using Castle.Core.Logging;
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
 using Castle.Windsor.Tests.LoggingFacility.Classes;
+
+namespace Castle.Windsor.Tests.LoggingFacility;
 
 public class ConsoleFacilityTestCase : BaseTest, IDisposable
 {
 	private readonly IWindsorContainer _container;
-	private readonly StringWriter _outWriter = new();
 	private readonly StringWriter _errorWriter = new();
+	private readonly StringWriter _outWriter = new();
 
 	public ConsoleFacilityTestCase()
 	{
@@ -41,20 +39,18 @@ public class ConsoleFacilityTestCase : BaseTest, IDisposable
 
 	public void Dispose()
 	{
-		if (_container != null)
-		{
-			_container.Dispose();
-		}
+		if (_container != null) _container.Dispose();
 	}
 
 	[Fact]
 	public void SimpleTest()
 	{
 		_container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
-		SimpleLoggingComponent test = _container.Resolve<SimpleLoggingComponent>("component");
+		var test = _container.Resolve<SimpleLoggingComponent>("component");
 
-		String expectedLogOutput = String.Format("[Info] '{0}' Hello world" + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
-		String actualLogOutput = "";
+		var expectedLogOutput = string.Format("[Info] '{0}' Hello world" + Environment.NewLine,
+			typeof(SimpleLoggingComponent).FullName);
+		var actualLogOutput = "";
 
 		test.DoSomething();
 

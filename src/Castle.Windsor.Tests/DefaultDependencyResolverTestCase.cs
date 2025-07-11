@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using Castle.Core.Configuration;
 using Castle.MicroKernel.Handlers;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
+
+namespace Castle.Windsor.Tests;
 
 public class DefaultDependencyResolverTestCase : AbstractContainerTestCase
 {
@@ -36,25 +36,25 @@ public class DefaultDependencyResolverTestCase : AbstractContainerTestCase
 		Kernel.Register(Component.For<ICustomer>().ImplementedBy<CustomerImpl>());
 
 		var customer = (CustomerChain1)Kernel.Resolve<ICustomer>();
-		Assert.IsType<CustomerChain9>( customer);
+		Assert.IsType<CustomerChain9>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsType<CustomerChain8>( customer);
+		Assert.IsType<CustomerChain8>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsType<CustomerChain7>( customer);
+		Assert.IsType<CustomerChain7>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsType<CustomerChain6>( customer);
+		Assert.IsType<CustomerChain6>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsType<CustomerChain5>( customer);
+		Assert.IsType<CustomerChain5>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsType<CustomerChain4>( customer);
+		Assert.IsType<CustomerChain4>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsType<CustomerChain3>( customer);
+		Assert.IsType<CustomerChain3>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsType<CustomerChain2>( customer);
+		Assert.IsType<CustomerChain2>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsType<CustomerChain1>( customer);
+		Assert.IsType<CustomerChain1>(customer);
 		var lastCustomer = customer.CustomerBase;
-		Assert.IsType<CustomerImpl>( lastCustomer);
+		Assert.IsType<CustomerImpl>(lastCustomer);
 	}
 
 	[Fact]
@@ -72,25 +72,25 @@ public class DefaultDependencyResolverTestCase : AbstractContainerTestCase
 			Component.For<ICustomer>().ImplementedBy<CustomerImpl>());
 
 		var customer = (CustomerChain1)Kernel.Resolve<ICustomer>();
-		Assert.IsType<CustomerChain9>( customer);
+		Assert.IsType<CustomerChain9>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsType<CustomerChain8>( customer);
+		Assert.IsType<CustomerChain8>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsType<CustomerChain7>( customer);
+		Assert.IsType<CustomerChain7>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsType<CustomerChain6>( customer);
+		Assert.IsType<CustomerChain6>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsType<CustomerChain5>( customer);
+		Assert.IsType<CustomerChain5>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsType<CustomerChain4>( customer);
+		Assert.IsType<CustomerChain4>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsType<CustomerChain3>( customer);
+		Assert.IsType<CustomerChain3>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsType<CustomerChain2>( customer);
+		Assert.IsType<CustomerChain2>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsType<CustomerChain1>( customer);
+		Assert.IsType<CustomerChain1>(customer);
 		var lastCustomer = customer.CustomerBase;
-		Assert.IsType<CustomerImpl>( lastCustomer);
+		Assert.IsType<CustomerImpl>(lastCustomer);
 	}
 
 	[Fact]

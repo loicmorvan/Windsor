@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
-
 using Castle.Core;
 using Castle.MicroKernel.Registration;
-using Castle.Windsor;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Interceptors;
+
+namespace Castle.Windsor.Tests;
 
 public class ModelInterceptorsSelectorTestCase
 {
@@ -108,7 +106,8 @@ public class ModelInterceptorsSelectorTestCase
 		DisposableInterceptor.InstancesDisposed = 0;
 		DisposableInterceptor.InstancesCreated = 0;
 		var container = new WindsorContainer();
-		container.Kernel.ProxyFactory.AddInterceptorSelector(new ByTypeInterceptorSelector(typeof(DisposableInterceptor)));
+		container.Kernel.ProxyFactory.AddInterceptorSelector(
+			new ByTypeInterceptorSelector(typeof(DisposableInterceptor)));
 		container.Register(Component.For<DisposableInterceptor>(),
 			Component.For<A>().LifeStyle.Transient);
 
@@ -138,5 +137,5 @@ public class Person(IWatcher watcher)
 public enum InterceptorKind
 {
 	None,
-	Dummy,
+	Dummy
 }

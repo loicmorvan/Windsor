@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using System;
+
+namespace Castle.Windsor.Tests.Components;
 
 public class LoggingRepositoryDecorator<T> : IRepository<T>
 {
@@ -26,7 +26,7 @@ public class LoggingRepositoryDecorator<T> : IRepository<T>
 
 	public LoggingRepositoryDecorator(IRepository<T> inner)
 	{
-		this.Inner = inner;
+		Inner = inner;
 	}
 
 	public T Get(int id)

@@ -12,30 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.Core;
 using Castle.MicroKernel.Proxy;
 using Castle.MicroKernel.Util;
+
+namespace Castle.MicroKernel.ModelBuilder.Inspectors;
 
 [Serializable]
 public class MixinInspector : IContributeComponentModelConstruction
 {
 	public void ProcessModel(IKernel kernel, ComponentModel model)
 	{
-		if (model.Configuration == null)
-		{
-			return;
-		}
+		if (model.Configuration == null) return;
 
 		var mixins = model.Configuration.Children["mixins"];
-		if (mixins == null)
-		{
-			return;
-		}
+		if (mixins == null) return;
 
 		var mixinReferences = new List<ComponentReference<object>>();
 		foreach (var mixin in mixins.Children)
@@ -44,17 +37,13 @@ public class MixinInspector : IContributeComponentModelConstruction
 
 			var mixinComponent = ReferenceExpressionUtil.ExtractComponentName(value);
 			if (mixinComponent == null)
-			{
 				throw new Exception(
-					String.Format("The value for the mixin must be a reference to a component (Currently {0})", value));
-			}
+					string.Format("The value for the mixin must be a reference to a component (Currently {0})", value));
 
 			mixinReferences.Add(new ComponentReference<object>(mixinComponent));
 		}
-		if (mixinReferences.Count == 0)
-		{
-			return;
-		}
+
+		if (mixinReferences.Count == 0) return;
 		var options = model.ObtainProxyOptions();
 		mixinReferences.ForEach(options.AddMixinReference);
 	}

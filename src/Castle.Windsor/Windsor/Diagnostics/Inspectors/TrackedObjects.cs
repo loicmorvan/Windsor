@@ -12,19 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Inspectors;
-
 using Castle.MicroKernel;
+
+namespace Castle.Windsor.Diagnostics.Inspectors;
 
 public class TrackedObjects(Burden[] trackedObjects, IReleasePolicy[] subScopes)
 {
-	public IReleasePolicy[] SubScopes
-	{
-		get { return subScopes; }
-	}
+	public IReleasePolicy[] SubScopes => subScopes;
 
-	public Burden[] TrackedObjectBurdens
-	{
-		get { return trackedObjects; }
-	}
+	public Burden[] TrackedObjectBurdens => trackedObjects;
 }

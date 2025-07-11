@@ -12,28 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
 
+namespace Castle.Core;
+
 /// <summary>
-///   Base for Attributes that want to express lifestyle
-///   chosen by the component.
+///     Base for Attributes that want to express lifestyle
+///     chosen by the component.
 /// </summary>
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+[AttributeUsage(AttributeTargets.Class)]
 public abstract class LifestyleAttribute : Attribute
 {
 	/// <summary>
-	///   Initializes a new instance of the <see cref = "LifestyleAttribute" /> class.
+	///     Initializes a new instance of the <see cref="LifestyleAttribute" /> class.
 	/// </summary>
-	/// <param name = "type">The type.</param>
+	/// <param name="type">The type.</param>
 	protected LifestyleAttribute(LifestyleType type)
 	{
 		Lifestyle = type;
 	}
 
 	/// <summary>
-	///   Gets or sets the lifestyle.
+	///     Gets or sets the lifestyle.
 	/// </summary>
 	/// <value>The lifestyle.</value>
 	public LifestyleType Lifestyle { get; set; }

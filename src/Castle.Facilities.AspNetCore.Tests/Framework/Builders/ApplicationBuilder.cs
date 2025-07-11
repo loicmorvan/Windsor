@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests.Framework.Builders;
-
 using System;
-
 using Microsoft.AspNetCore.Builder;
+
+namespace Castle.Facilities.AspNetCore.Tests.Framework.Builders;
 
 public class ApplicationBuilder
 {

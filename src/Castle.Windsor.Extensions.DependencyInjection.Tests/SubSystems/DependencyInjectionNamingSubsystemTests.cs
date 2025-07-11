@@ -13,14 +13,13 @@
 // limitations under the License.
 
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Tests.SubSystems;
-
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Extensions.DependencyInjection.SubSystems;
 using Castle.Windsor.Extensions.DependencyInjection.Tests.Components;
-
 using Xunit;
+
+namespace Castle.Windsor.Extensions.DependencyInjection.Tests.SubSystems;
 
 public class DependencyInjectionNamingSubsystemTests
 {
@@ -32,7 +31,8 @@ public class DependencyInjectionNamingSubsystemTests
 		var target = new DependencyInjectionNamingSubsystem();
 		container.Kernel.AddSubSystem(SubSystemConstants.NamingKey, target);
 
-		container.Register(Component.For<IUserService>().ImplementedBy<DecoratedUserService>().Named(nameof(DecoratedUserService)),
+		container.Register(
+			Component.For<IUserService>().ImplementedBy<DecoratedUserService>().Named(nameof(DecoratedUserService)),
 			Component.For<IUserService>().ImplementedBy<UserService>().Named(nameof(UserService))
 		);
 

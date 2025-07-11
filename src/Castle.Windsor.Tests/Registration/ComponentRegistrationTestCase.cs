@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Registration;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.DynamicProxy;
@@ -31,13 +28,16 @@ using Castle.Windsor.Tests.Config.Components;
 using Castle.Windsor.Tests.Facilities.Startable.Components;
 using Castle.Windsor.Tests.Interceptors;
 
+namespace Castle.Windsor.Tests.Registration;
+
 public class ComponentRegistrationTestCase : AbstractContainerTestCase
 {
 	[Fact]
 	public void AddComponent_WhichIsNull_ThrowsNullArgumentException()
 	{
 		// Previously the kernel assummed everything was OK, and null reffed instead.
-		Assert.Throws<ArgumentNullException>(() => Kernel.Register(Component.For(Type.GetType("NonExistentType, WohooAssembly"))));
+		Assert.Throws<ArgumentNullException>(() =>
+			Kernel.Register(Component.For(Type.GetType("NonExistentType, WohooAssembly"))));
 	}
 
 	[Fact]
@@ -123,7 +123,8 @@ public class ComponentRegistrationTestCase : AbstractContainerTestCase
 	[Fact]
 	public void AddComponent_WithSameName_ThrowsException()
 	{
-		var expectedMessage = "Component customer could not be registered. There is already a component with that name. Did you want to modify the existing component instead? If not, make sure you specify a unique name.";
+		var expectedMessage =
+			"Component customer could not be registered. There is already a component with that name. Did you want to modify the existing component instead? If not, make sure you specify a unique name.";
 		var exception = Assert.Throws<ComponentRegistrationException>(() =>
 		{
 			Kernel.Register(
@@ -154,7 +155,8 @@ public class ComponentRegistrationTestCase : AbstractContainerTestCase
 	[Fact]
 	public void AddComponent_WithImplementationAlreadyAssigned_ThrowsException()
 	{
-		var expectedMessage = "This component has already been assigned implementation Castle.MicroKernel.Tests.ClassComponents.CustomerImpl";
+		var expectedMessage =
+			"This component has already been assigned implementation Castle.MicroKernel.Tests.ClassComponents.CustomerImpl";
 		var exception = Assert.Throws<ComponentRegistrationException>(() =>
 		{
 			Kernel.Register(
@@ -476,12 +478,12 @@ public class ComponentRegistrationTestCase : AbstractContainerTestCase
 		Kernel.Register(
 			Component.For<ClassWithComplexParameter>()
 				.Configuration(
-					Child.ForName("parameters").Eq(
+					Castle.MicroKernel.Registration.Child.ForName("parameters").Eq(
 						Attrib.ForName("notUsed").Eq(true),
-						Child.ForName("complexparam").Eq(
-							Child.ForName("complexparametertype").Eq(
-								Child.ForName("mandatoryvalue").Eq("value1"),
-								Child.ForName("optionalvalue").Eq("value2")
+						Castle.MicroKernel.Registration.Child.ForName("complexparam").Eq(
+							Castle.MicroKernel.Registration.Child.ForName("complexparametertype").Eq(
+								Castle.MicroKernel.Registration.Child.ForName("mandatoryvalue").Eq("value1"),
+								Castle.MicroKernel.Registration.Child.ForName("optionalvalue").Eq("value2")
 							)
 						)
 					)

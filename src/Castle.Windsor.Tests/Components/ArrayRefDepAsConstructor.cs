@@ -16,10 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ArrayRefDepAsConstructor(ref IEmptyService[] services)
 {
-	private readonly IEmptyService[] _services = services;
-
-	public IEmptyService[] Services
-	{
-		get { return _services; }
-	}
+	public IEmptyService[] Services { get; } = services;
 }

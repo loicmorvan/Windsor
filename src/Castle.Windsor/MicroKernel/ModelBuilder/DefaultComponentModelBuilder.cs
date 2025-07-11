@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.Core;
 using Castle.Core.Internal;
 using Castle.MicroKernel.ModelBuilder.Inspectors;
 using Castle.MicroKernel.SubSystems.Conversion;
 
+namespace Castle.MicroKernel.ModelBuilder;
+
 /// <summary>
-///   Summary description for DefaultComponentModelBuilder.
+///     Summary description for DefaultComponentModelBuilder.
 /// </summary>
 [Serializable]
 public class DefaultComponentModelBuilder : IComponentModelBuilder
@@ -32,40 +31,37 @@ public class DefaultComponentModelBuilder : IComponentModelBuilder
 	private readonly IKernel _kernel;
 
 	/// <summary>
-	///   Initializes a new instance of the <see cref = "DefaultComponentModelBuilder" /> class.
+	///     Initializes a new instance of the <see cref="DefaultComponentModelBuilder" /> class.
 	/// </summary>
-	/// <param name = "kernel">The kernel.</param>
+	/// <param name="kernel">The kernel.</param>
 	public DefaultComponentModelBuilder(IKernel kernel)
 	{
-		this._kernel = kernel;
+		_kernel = kernel;
 		InitializeContributors();
 	}
 
 	/// <summary>
-	///   Gets the contributors.
+	///     Gets the contributors.
 	/// </summary>
 	/// <value>The contributors.</value>
-	public IContributeComponentModelConstruction[] Contributors
-	{
-		get { return _contributors.ToArray(); }
-	}
+	public IContributeComponentModelConstruction[] Contributors => _contributors.ToArray();
 
 	/// <summary>
-	///   "To give or supply in common with others; give to a
-	///   common fund or for a common purpose". The contributor
-	///   should inspect the component, or even the configuration
-	///   associated with the component, to add or change information
-	///   in the model that can be used later.
+	///     "To give or supply in common with others; give to a
+	///     common fund or for a common purpose". The contributor
+	///     should inspect the component, or even the configuration
+	///     associated with the component, to add or change information
+	///     in the model that can be used later.
 	/// </summary>
-	/// <param name = "contributor"></param>
+	/// <param name="contributor"></param>
 	public void AddContributor(IContributeComponentModelConstruction contributor)
 	{
 		_contributors.Add(contributor);
 	}
 
 	/// <summary>
-	///   Constructs a new ComponentModel by invoking
-	///   the registered contributors.
+	///     Constructs a new ComponentModel by invoking
+	///     the registered contributors.
 	/// </summary>
 	public ComponentModel BuildModel(ComponentName name, Type[] services, Type classType, Arguments extendedProperties)
 	{
@@ -88,10 +84,7 @@ public class DefaultComponentModelBuilder : IComponentModelBuilder
 			c.ConfigureComponentModel(_kernel, model);
 			if (c is IMetaComponentModelDescriptor meta)
 			{
-				if (metaDescriptors == null)
-				{
-					metaDescriptors = model.GetMetaDescriptors(true);
-				}
+				if (metaDescriptors == null) metaDescriptors = model.GetMetaDescriptors(true);
 				metaDescriptors.Add(meta);
 			}
 		});
@@ -99,16 +92,16 @@ public class DefaultComponentModelBuilder : IComponentModelBuilder
 	}
 
 	/// <summary>
-	///   Removes the specified contributor
+	///     Removes the specified contributor
 	/// </summary>
-	/// <param name = "contributor"></param>
+	/// <param name="contributor"></param>
 	public void RemoveContributor(IContributeComponentModelConstruction contributor)
 	{
 		_contributors.Remove(contributor);
 	}
 
 	/// <summary>
-	///   Initializes the default contributors.
+	///     Initializes the default contributors.
 	/// </summary>
 	protected virtual void InitializeContributors()
 	{

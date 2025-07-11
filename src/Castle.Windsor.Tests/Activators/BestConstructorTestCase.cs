@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Activators;
-
 using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.MicroKernel;
@@ -23,7 +21,10 @@ using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 
-[RelatedTestCase(typeof(HelpfulExceptionsOnResolveTestCase), "Some tests about exceptions thrown when constructor not available.")]
+namespace Castle.Windsor.Tests.Activators;
+
+[RelatedTestCase(typeof(HelpfulExceptionsOnResolveTestCase),
+	"Some tests about exceptions thrown when constructor not available.")]
 public class BestConstructorTestCase : AbstractContainerTestCase
 {
 	[Fact]

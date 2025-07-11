@@ -14,10 +14,7 @@
 
 namespace Castle.Windsor.Tests.Configuration2;
 
-using Castle.Windsor;
-
 using Config = Castle.Windsor.Installer.Configuration;
-	
 
 public class PrivateSettersTestCase
 {
@@ -31,7 +28,6 @@ public class PrivateSettersTestCase
 
 		var item = container.Resolve<IMyConfiguration>();
 		Assert.Equal(1234, item.Port);
-
 	}
 }
 
@@ -42,5 +38,5 @@ public interface IMyConfiguration
 
 public class MyConfiguration(int port) : IMyConfiguration
 {
-	public int Port { get; private set; } = port;
+	public int Port { get; } = port;
 }

@@ -5,7 +5,7 @@
 			id="ValidComponent"
 			type="CalculatorService">
 			<additionalInterfaces>
-				<add interface="ISimpleMixIn" />
+				<add interface="ISimpleMixIn"/>
 			</additionalInterfaces>
 		</component>
 	</components>

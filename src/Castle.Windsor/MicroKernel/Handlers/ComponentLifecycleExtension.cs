@@ -12,30 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers;
-
 using System.Collections.Generic;
+
+namespace Castle.MicroKernel.Handlers;
 
 public class ComponentLifecycleExtension : IResolveExtension
 {
 	private readonly List<ComponentResolvingDelegate> _resolvers = new(4);
 	private IKernel _kernel;
 
-	public void AddHandler(ComponentResolvingDelegate handler)
-	{
-		_resolvers.Add(handler);
-	}
-
 	public void Init(IKernel kernel, IHandler handler)
 	{
-		this._kernel = kernel;
+		_kernel = kernel;
 	}
 
 	public void Intercept(ResolveInvocation invocation)
 	{
 		Releasing releasing = null;
 		if (_resolvers.Count > 0)
-		{
 			foreach (var resolver in _resolvers)
 			{
 				var releaser = resolver(_kernel, invocation.Context);
@@ -46,23 +40,22 @@ public class ComponentLifecycleExtension : IResolveExtension
 						releasing = new Releasing(_resolvers.Count, _kernel);
 						invocation.RequireDecommission();
 					}
+
 					releasing.Add(releaser);
 				}
 			}
-		}
 
 		invocation.Proceed();
 
-		if (releasing == null)
-		{
-			return;
-		}
+		if (releasing == null) return;
 		var burden = invocation.Burden;
-		if (burden == null)
-		{
-			return;
-		}
+		if (burden == null) return;
 		burden.Releasing += releasing.Invoked;
+	}
+
+	public void AddHandler(ComponentResolvingDelegate handler)
+	{
+		_resolvers.Add(handler);
 	}
 
 	private class Releasing(int count, IKernel kernel)

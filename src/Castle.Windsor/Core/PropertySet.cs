@@ -12,52 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
-
 using System;
 using System.Reflection;
 
+namespace Castle.Core;
+
 /// <summary>
-/// 	Represents a property and the respective dependency.
+///     Represents a property and the respective dependency.
 /// </summary>
 /// TODO: remove this class and instead create PropertyDependencyModel like we do for constructors
 [Serializable]
 public class PropertySet
 {
-	private readonly DependencyModel _dependency;
-	private readonly PropertyInfo _propertyInfo;
-
 	/// <summary>
-	/// 	Initializes a new instance of the <see cref = "PropertySet" /> class.
+	///     Initializes a new instance of the <see cref="PropertySet" /> class.
 	/// </summary>
-	/// <param name = "propertyInfo"> The property info. </param>
-	/// <param name = "dependency"> The dependency. </param>
+	/// <param name="propertyInfo"> The property info. </param>
+	/// <param name="dependency"> The dependency. </param>
 	public PropertySet(PropertyInfo propertyInfo, DependencyModel dependency)
 	{
-		this._propertyInfo = propertyInfo;
-		this._dependency = dependency;
+		Property = propertyInfo;
+		Dependency = dependency;
 	}
 
 	/// <summary>
-	/// 	Gets the dependency.
+	///     Gets the dependency.
 	/// </summary>
 	/// <value> The dependency. </value>
-	public DependencyModel Dependency
-	{
-		get { return _dependency; }
-	}
+	public DependencyModel Dependency { get; }
 
 	/// <summary>
-	/// 	Gets the property.
+	///     Gets the property.
 	/// </summary>
 	/// <value> The property. </value>
-	public PropertyInfo Property
-	{
-		get { return _propertyInfo; }
-	}
+	public PropertyInfo Property { get; }
 
 	public override string ToString()
 	{
-		return _dependency.ToString();
+		return Dependency.ToString();
 	}
 }

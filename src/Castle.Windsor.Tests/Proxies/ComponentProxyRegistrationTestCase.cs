@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Proxies;
-
 using System;
-
 using Castle.DynamicProxy;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Handlers;
@@ -24,11 +21,13 @@ using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Interceptors;
 using Castle.Windsor.Tests.ProxyInfrastructure;
 
+namespace Castle.Windsor.Tests.Proxies;
+
 public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 {
 	private void AssertIsProxy(object o)
 	{
-		Assert.IsType<IProxyTargetAccessor>(o, exactMatch: false);
+		Assert.IsType<IProxyTargetAccessor>(o, false);
 	}
 
 	[Fact]
@@ -41,7 +40,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.IsType<ISimpleMixIn>( calculator, exactMatch: false);
+		Assert.IsType<ISimpleMixIn>(calculator, false);
 
 		var mixin = (ISimpleMixIn)calculator;
 		mixin.DoSomething();
@@ -57,7 +56,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.IsType<ISimpleMixIn>( calculator, exactMatch: false);
+		Assert.IsType<ISimpleMixIn>(calculator, false);
 
 		var mixin = (ISimpleMixIn)calculator;
 		mixin.DoSomething();
@@ -72,7 +71,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.IsType<ISimpleMixIn>( calculator, exactMatch: false);
+		Assert.IsType<ISimpleMixIn>(calculator, false);
 
 		var mixin = (ISimpleMixIn)calculator;
 		mixin.DoSomething();
@@ -82,12 +81,13 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 	public void AddComponent_With_typed_component_MixIn()
 	{
 		Container.Register(
-			Component.For<ICalcService>().ImplementedBy<CalculatorService>().Proxy.MixIns(m => m.Component<SimpleMixIn>()),
+			Component.For<ICalcService>().ImplementedBy<CalculatorService>().Proxy
+				.MixIns(m => m.Component<SimpleMixIn>()),
 			Component.For<ISimpleMixIn>().ImplementedBy<SimpleMixIn>());
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.IsType<ISimpleMixIn>( calculator, exactMatch: false);
+		Assert.IsType<ISimpleMixIn>(calculator, false);
 
 		var mixin = (ISimpleMixIn)calculator;
 		mixin.DoSomething();
@@ -169,7 +169,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.IsType<ISimpleService>(calculator, exactMatch: false);
+		Assert.IsType<ISimpleService>(calculator, false);
 
 		var mixin = (ISimpleService)calculator;
 		mixin.Operation();
