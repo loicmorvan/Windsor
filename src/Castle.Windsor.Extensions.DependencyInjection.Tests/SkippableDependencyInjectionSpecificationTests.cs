@@ -29,9 +29,7 @@ namespace Microsoft.Extensions.DependencyInjection.Specification
 	{
 		public string[] SkippedTests => new[] { "SingletonServiceCanBeResolvedFromScope" };
 
-#if NET6_0_OR_GREATER
 		public override bool SupportsIServiceProviderIsService => false;
-#endif
 
 		protected sealed override IServiceProvider CreateServiceProvider(IServiceCollection serviceCollection)
 		{

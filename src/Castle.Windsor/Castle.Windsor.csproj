@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 	</PropertyGroup>
 
 	<Import Project="..\..\buildscripts\common.props"></Import>
@@ -36,7 +36,7 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.1.0" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)'=='net6.0'">
+	<ItemGroup Condition="'$(TargetFramework)'=='net9.0'">
 		<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="6.0.0" />
 	</ItemGroup>
 

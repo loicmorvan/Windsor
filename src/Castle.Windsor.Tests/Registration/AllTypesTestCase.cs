@@ -320,7 +320,7 @@ namespace CastleTests.Registration
 		public void RegisterTypes_WithLinq_RegisteredInContainer()
 		{
 			Kernel.Register(Classes.From(from type in GetCurrentAssembly().GetExportedTypes()
-			                              where type.GetTypeInfo().IsSerializable
+			                              where type.GetTypeInfo().GetAttribute<SerializableAttribute>() is not null
 			                              select type
 				                ).BasedOn<CustomerChain1>());
 

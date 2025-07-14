@@ -7,298 +7,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Castle.Windsor.sln" beforeDir="false" afterPath="$PROJECT_DIR$/Castle.Windsor.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Documentation.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Documentation.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.Mvc.Tests/AspNetMvcFacilityTestCase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.Mvc.Tests/Castle.Facilities.AspNet.Mvc.Tests.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.Mvc.Tests/ControllerFinderTestCase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.Mvc/AspNetMvcControllerFactory.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.Mvc/AspNetMvcFacility.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.Mvc/Castle.Facilities.AspNet.Mvc.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.Mvc/Exceptions/ControllerAssemblyWasNotSetException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.Mvc/Exceptions/LifestyleScopesPotentiallyNotEnabledException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.Mvc/Exceptions/MissingControllerRegistrationException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.SystemWeb.Tests/Castle.Facilities.AspNet.SystemWeb.Tests.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.SystemWeb.Tests/PerWebRequestTestCase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.SystemWeb/AutoregisterPerWebRequestLifestyleModule.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.SystemWeb/Castle.Facilities.AspNet.SystemWeb.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.SystemWeb/LifestyleRegistrationExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.SystemWeb/PerWebRequestAttribute.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.SystemWeb/PerWebRequestLifestyleModule.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.SystemWeb/PerWebRequestLifestyleModuleRegistration.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.SystemWeb/WebRequestScopeAccessor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.WebApi.Tests/AspNetWebApiFacilitySelfHostTestCase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.WebApi.Tests/AspNetWebApiFacilityWebHostTestCase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.WebApi.Tests/Castle.Facilities.AspNet.WebApi.Tests.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.WebApi/AspNetWebApiControllerActivator.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.WebApi/AspNetWebApiControllerDeactivator.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.WebApi/AspNetWebApiDependencyResolver.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.WebApi/AspNetWebApiDependencyScope.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.WebApi/AspNetWebApiFacility.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.WebApi/Castle.Facilities.AspNet.WebApi.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.WebApi/Exceptions/InvalidSelfHostConfigurationException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNet.WebApi/Exceptions/LifestyleScopesPotentiallyNotEnabledException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNetCore.Tests/Castle.Facilities.AspNetCore.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Facilities.AspNetCore.Tests/Castle.Facilities.AspNetCore.Tests.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.AspNetCore/Castle.Facilities.AspNetCore.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Facilities.AspNetCore/Castle.Facilities.AspNetCore.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.Logging/Castle.Facilities.Logging.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Facilities.Logging/Castle.Facilities.Logging.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Demo/Castle.Facilities.WcfIntegration.Demo.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Demo/Default.aspx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Demo/Default.aspx.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Demo/Default.aspx.designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Demo/Global.asax" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Demo/Global.asax.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Demo/Service References/UsingWindsorSvc.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Demo/Service References/UsingWindsorSvc.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Demo/UsingWindsor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Demo/UsingWindsor.svc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Demo/UsingWindsorRest.svc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Demo/UsingWindsorWithoutConfig.svc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Demo/Web.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Demo/Windsor.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/App.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Behaviors/AddOperationsHeader.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Behaviors/CallCountEndpointBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Behaviors/CallCountServiceBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Behaviors/CaptureServiceHost.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Behaviors/ChannelFactoryListener.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Behaviors/DummyContractBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Behaviors/ErrorLogger.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Behaviors/ExtensibleBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Behaviors/ExtensibleBehaviorExtension.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Behaviors/NetDataContractFormatBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Behaviors/RefreshChannelPolicy.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Behaviors/ReplaceOperationsResult.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Behaviors/ServiceHostListener.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Behaviors/StoreMessageBody.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Behaviors/UnitOfworkEndPointBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Castle.Facilities.WcfIntegration.Tests.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Categories/IntegrationTestAttribute.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Client/AsyncChannelFactoryFixture.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Client/Duplex/DuplexClientFixture.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Client/Rest/RestClientFixture.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Client/WcfClientFixture.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/CollectingInterceptor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/Calculator.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/Callback.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/ClassNeedingService.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/HasOne.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/HelloFormatter.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/ICalculator.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/IOne.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/IOperations.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/IServiceWithDependencies.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/IServiceWithSession.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/ITwo.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/Inventory.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/One.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/Operations.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/ServiceWithDependencies.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/ServiceWithSession.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/TraceInterceptor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Components/Two.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/ConfigFixture.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/ConfigureClients.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/ConfigureServices.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/ExceptionsTestCase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/IssuesTestCase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/PlumbingClasses/SelectorDependsOnIOperations.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Service/DataService/DataServiceHostFactoryFixture.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Service/Discovery/LoadBalance/ContractLoadBalancePolicyFactoryTestCase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Service/Discovery/LoadBalance/FirstAvailablePolicyTestCase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Service/Discovery/LoadBalance/RoundRobinPolicyTestCase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Service/Discovery/LoadBalance/ScopeLoadBalancePolicyFactoryTestCase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Service/Lifestyle/PerWcfOperationLifestyleTestCase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Service/Lifestyle/PerWcfSessionLifestyleTestCase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Service/Rest/RestServiceFixture.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Service/ServiceHostFactoryFixture.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Service/ServiceHostFixture.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration.Tests/Service/WcfServiceFixture.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/AbstractWcfPolicy.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/AbstractExtensibleObject.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/AbstractExtension.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/AbstractWcfExtension.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Discovery/IWcfDiscoveryMetadata.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Discovery/WcfDiscoveryDomain.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Discovery/WcfEndpointDiscoveryMetadata.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Errors/WcfErrorBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/ExtensionDependencies.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Lifecyle/AbstractMessageAction.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Lifecyle/AbstractMessageEnvelopeAction.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Lifecyle/IMessageAction.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Lifecyle/IMessageEnvelopeAction.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Lifecyle/IMessageLifecyleAction.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Lifecyle/MessageLifecycle.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Lifecyle/MessageLifecycleBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Logging/AbstractMessageFormatter.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Logging/CustomMessageFormatter.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Logging/LogMessageEndpointBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Logging/LogMessageFormat.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Logging/LogMessageInspector.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Security/AbstractCredentials.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Security/CertificateCredentials.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Security/CustomPrincipalAuthorization.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Security/FetchCertificate.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Security/FetchCertificateBySubject.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Security/UserNameCredentials.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Serialization/DataContractSurrogateBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Serialization/PreserveObjectReferenceBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Serialization/WcfClientQuotasBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/Serialization/WcfServiceQuotasBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/ServiceEndpointExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/WcfBehaviorActivator.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/WcfChannelExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/WcfEndpointExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/WcfExplicitExtension.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/WcfExtensionScope.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/WcfMetadataExtension.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Behaviors/WcfServiceExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Castle.Facilities.WcfIntegration.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/AbstractChannelBuilder.Generic.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/AbstractChannelBuilder.Scope.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/AbstractChannelBuilder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/AbstractChannelFactoryAware.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/AbstractChannelFactoryBuilder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/AdHocChannelFactoryAware.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/AdHocChannelFactoryAwareExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Async/AsyncChannelFactoryBuilder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Async/AsyncWcfCall.Void.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Async/AsyncWcfCall.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Async/AsyncWcfCallBase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Async/AsyncWcfCallContext.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Async/IWcfAsyncCall.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Async/TypeSystem/AsyncMethod.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Async/TypeSystem/AsyncMethodParameter.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Async/TypeSystem/AsyncType.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Async/TypeSystem/AttributeHelpers.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Async/TypeSystem/BeginMethod.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Async/TypeSystem/EndMethod.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Async/TypeSystem/HandleProvider.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Async/WcfAsync.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Async/WcfRemotingAsyncInterceptor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/ChannelFactoryExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/ChannelFactoryHolder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Default/DefaultChannelBuilder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Default/DefaultClientModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/DefaultChannelFactoryBuilder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Discovery/AbstractChannelBuilder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Discovery/DiscoveredEndpointMetadata.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Discovery/DiscoveryEndpointFaultEventArgs.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Discovery/DiscoveryProxyCache.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Discovery/DiscoveryProxyEndpoint.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Discovery/DiscoveryProxyLocator.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Duplex/DuplexChannelBuilder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Duplex/DuplexClientModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/IChannelBuilder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/IChannelBuilderScope.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/IChannelFactoryAware.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/IChannelFactoryBuilder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/IWcfClientFactory.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Policies/RefreshChannelPolicy.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Policies/RepairChannelPolicy.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Policies/RetryTimeoutPolicy.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Proxy/IWcfChannelHolder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Proxy/IWcfInterceptor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Proxy/MethodCallMessage.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Proxy/WcfChannelHolder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Proxy/WcfInterceptorSelector.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Proxy/WcfProxyFactory.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Proxy/WcfProxyGenerationHook.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Proxy/WcfRemotingInterceptor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Rest/RestChannelBuilder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/Rest/RestClientModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/WcfClient.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/WcfClientActivator.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/WcfClientComponentLoader.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/WcfClientDescriptor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/WcfClientExtension.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/WcfClientFactorySelector.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Client/WcfClientModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/ComponentModelExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/IWcfBurden.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/IWcfChannelExtension.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/IWcfCleanUp.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/IWcfClientModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/IWcfEndpoint.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/IWcfEndpointExtension.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/IWcfEndpointVisitor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/IWcfExtension.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/IWcfExtensionVisitor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/IWcfPolicy.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/IWcfServiceExtension.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/IWcfServiceModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Internal/AsyncResult.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Internal/ExceptionHelper.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Internal/SynchronousResult.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Internal/WcfBehaviorInspector.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Internal/WcfBindingUtils.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Internal/WcfBurden.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Internal/WcfBurdenExtension.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Internal/WcfConstants.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Internal/WcfExtensionHelper.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Internal/WcfUtils.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Lifestyles/LifestyleRegistrationExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Lifestyles/WcfOperationScopeAccessor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Lifestyles/WcfOperationScopeHolder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Lifestyles/WcfSessionScopeAccessor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Lifestyles/WcfSessionScopeHolder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/AbstractServiceHostAware.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/AbstractServiceHostBuilder.Generic.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/AbstractServiceHostBuilder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/AdHocServiceHostAware.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/AdHocServiceHostAwareExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Data/DataServiceHost.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Data/DataServiceHostBuilder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Data/DataServiceHostFactory.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Data/DataServiceModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Default/DefaultServiceHost.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Default/DefaultServiceHostBuilder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Default/DefaultServiceHostFactory.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Default/DefaultServiceModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Discovery/LoadBalance/AbstractLoadBalancePolicyFactory.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Discovery/LoadBalance/ContractLoadBalancePolicyFactory.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Discovery/LoadBalance/EndpointFailure.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Discovery/LoadBalance/FirstAvailablePolicy.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Discovery/LoadBalance/ILoadBalancePolicy.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Discovery/LoadBalance/ILoadBalancePolicyFactory.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Discovery/LoadBalance/ListBasedLoadBalancePolicy.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Discovery/LoadBalance/RoundRobinPolicy.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Discovery/LoadBalance/ScopeLoadBalancePolicyFactory.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Discovery/ServiceCatalog/AdHocServiceCatalogProbe.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Discovery/ServiceCatalog/IServiceCatalog.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Discovery/ServiceCatalog/IServiceCatalogImplementation.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Discovery/ServiceCatalog/InMemoryServiceCatalog.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Discovery/ServiceCatalog/ServiceCatalog.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Discovery/WcfDiscoveryExtension.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Discovery/WcfServiceDiscoveryMetadata.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/IServiceHostAware.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/IServiceHostBuilder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/IWcfServiceHost.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Rest/RestServiceHost.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Rest/RestServiceHostBuilder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/Rest/RestServiceModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/ServiceHostExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/WcfServiceExtension.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/WcfServiceModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/WindsorDependencyInjectionServiceBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/WindsorInstanceProvider.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/Service/WindsorServiceHostFactory.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/WcfContextChannel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/WcfEndpoint.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/WcfFacility.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/WcfIntegration.cd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/WcfIntegrationExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Facilities.WcfIntegration/WcfInvocation.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection.Tests/Castle.Windsor.Extensions.DependencyInjection.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection.Tests/Castle.Windsor.Extensions.DependencyInjection.Tests.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/Castle.Windsor.Extensions.DependencyInjection.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/Castle.Windsor.Extensions.DependencyInjection.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.Hosting/Castle.Windsor.Extensions.Hosting.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.Hosting/Castle.Windsor.Extensions.Hosting.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Castle.Windsor.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Castle.Windsor.Tests.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Castle.Windsor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Castle.Windsor.csproj" afterDir="false" />
-    </list>
+    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+      <option value="repository" />
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -344,6 +63,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="Push.Settings">
+    <force-push-targets>
+      <force-push-target remote-path="origin" branch="net9" />
+    </force-push-targets>
+  </component>
   <component name="RunManager" selected=".NET Project.Castle.Windsor.Tests">
     <configuration name="Castle.Windsor.Tests" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
@@ -380,7 +104,25 @@
       <workItem from="1752441600545" duration="1172000" />
       <workItem from="1752442791215" duration="1406000" />
       <workItem from="1752523502697" duration="963000" />
+      <workItem from="1752524478553" duration="289000" />
     </task>
+    <task id="LOCAL-00001" summary="Keep only .NET 6.">
+      <option name="closed" value="true" />
+      <created>1752524708755</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1752524708755</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Missing file?">
+      <option name="closed" value="true" />
+      <created>1752524741209</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1752524741209</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -413,6 +155,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="Keep only .NET 6." />
+    <MESSAGE value="Missing file?" />
+    <option name="LAST_COMMIT_MESSAGE" value="Missing file?" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

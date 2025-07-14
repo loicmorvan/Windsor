@@ -21,9 +21,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	using System.Reflection;
 	using System.Text;
 
-#if !FEATURE_APPDOMAIN
 	using Microsoft.Extensions.DependencyModel;
-#endif
 
 	using Castle.Core.Configuration;
 	using Castle.Core.Internal;
@@ -134,22 +132,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		private bool InitializeAppDomainAssemblies(bool forceLoad)
 		{
 			var anyAssemblyAdded = false;
-#if FEATURE_APPDOMAIN
-			if (forceLoad || assemblies.Count == 0)
-			{
-				var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-				foreach (var assembly in loadedAssemblies)
-				{
-					if (assemblies.Contains(assembly) || ShouldSkipAssembly(assembly))
-					{
-						continue;
-					}
-					anyAssemblyAdded = true;
-					assemblies.Add(assembly);
-					Scan(assembly);
-				}
-			}
-#else
+
 			if (assemblies.Count == 0)
 			{
 				var context = DependencyContext.Default;
@@ -171,7 +154,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 					anyAssemblyAdded = true;
 				}
 			}
-#endif
+			
 			return anyAssemblyAdded;
 		}
 
