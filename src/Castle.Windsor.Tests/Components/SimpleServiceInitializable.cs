@@ -12,26 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+using Castle.Core;
+
+public class SimpleServiceInitializable : ISimpleService, IInitializable
 {
-	using Castle.Core;
+	public bool IsInitialized { get; private set; }
 
-	public class SimpleServiceInitializable : ISimpleService, IInitializable
+	public void Initialize()
 	{
-		private bool isInitialized;
+		IsInitialized = true;
+	}
 
-		public bool IsInitialized
-		{
-			get { return isInitialized; }
-		}
-
-		public void Initialize()
-		{
-			isInitialized = true;
-		}
-
-		public void Operation()
-		{
-		}
+	public void Operation()
+	{
 	}
 }

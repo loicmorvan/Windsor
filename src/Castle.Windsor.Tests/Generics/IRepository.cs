@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Generics
+namespace Castle.Generics;
+
+public interface IRepository
 {
-	public interface IRepository
-	{
-	}
 }

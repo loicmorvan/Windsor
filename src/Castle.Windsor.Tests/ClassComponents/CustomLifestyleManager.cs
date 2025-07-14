@@ -12,17 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
-{
-	using Castle.MicroKernel.Lifestyle;
+namespace Castle.MicroKernel.Tests.ClassComponents;
 
-	/// <summary>
-	///   Summary description for MyLifestyleHandler.
-	/// </summary>
-	public class CustomLifestyleManager : AbstractLifestyleManager
+using Castle.MicroKernel.Lifestyle;
+
+/// <summary>Summary description for MyLifestyleHandler.</summary>
+public class CustomLifestyleManager : AbstractLifestyleManager
+{
+	public override void Dispose()
 	{
-		public override void Dispose()
-		{
-		}
 	}
 }

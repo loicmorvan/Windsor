@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+
+public class GenericComponent<T>
 {
-	public class GenericComponent<T>
-	{
-		public T Value { get; set; }
-	}
+	public T Value { get; set; }
+}
 
-	public class GenericIntComponent : GenericComponent<int>
-	{
-	}
+public class GenericIntComponent : GenericComponent<int>
+{
+}
 
-	public class GenericStringComponent : GenericComponent<string>
-	{
-	}
+public class GenericStringComponent : GenericComponent<string>
+{
 }

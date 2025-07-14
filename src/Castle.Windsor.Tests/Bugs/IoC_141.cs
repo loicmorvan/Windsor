@@ -12,65 +12,61 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Bugs
+namespace Castle.MicroKernel.Tests.Bugs;
+
+using Castle.MicroKernel.Registration;
+
+using CastleTests;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class IoC_141 : AbstractContainerTestCase
 {
-	using System;
-
-	using Castle.MicroKernel.Handlers;
-	using Castle.MicroKernel.Registration;
-
-	using CastleTests;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class IoC_141 : AbstractContainerTestCase
+	public interface IService
 	{
-		public interface IService
-		{
-		}
+	}
 
-		public interface IProcessor<T>
-		{
-		}
+	public interface IProcessor<T>
+	{
+	}
 
-		public interface IAssembler<T>
-		{
-		}
+	public interface IAssembler<T>
+	{
+	}
 
-		public class Service1 : IService
+	public class Service1 : IService
+	{
+		public Service1(IProcessor<object> processor)
 		{
-			public Service1(IProcessor<object> processor)
-			{
-			}
 		}
+	}
 
-		public class DefaultProcessor<T> : IProcessor<T>
+	public class DefaultProcessor<T> : IProcessor<T>
+	{
+		public DefaultProcessor(IAssembler<T> assembler)
 		{
-			public DefaultProcessor(IAssembler<T> assembler)
-			{
-			}
 		}
+	}
 
-		public class ObjectAssembler : IAssembler<object>
-		{
-		}
+	public class ObjectAssembler : IAssembler<object>
+	{
+	}
 
-		[Test]
-		public void Can_resolve_open_generic_service_with_closed_generic_parameter()
-		{
-			Kernel.Register(Component.For(typeof(IProcessor<>)).ImplementedBy(typeof(DefaultProcessor<>)).Named("processor"));
-			Kernel.Register(Component.For(typeof(IAssembler<object>)).ImplementedBy(typeof(ObjectAssembler)).Named("assembler"));
-			Assert.IsInstanceOf(typeof(DefaultProcessor<object>), Kernel.Resolve<IProcessor<object>>());
-		}
+	[Test]
+	public void Can_resolve_open_generic_service_with_closed_generic_parameter()
+	{
+		Kernel.Register(Component.For(typeof(IProcessor<>)).ImplementedBy(typeof(DefaultProcessor<>)).Named("processor"));
+		Kernel.Register(Component.For(typeof(IAssembler<object>)).ImplementedBy(typeof(ObjectAssembler)).Named("assembler"));
+		Assert.IsInstanceOf(typeof(DefaultProcessor<object>), Kernel.Resolve<IProcessor<object>>());
+	}
 
-		[Test]
-		public void Can_resolve_service_with_open_generic_parameter_with_closed_generic_parameter()
-		{
-			Kernel.Register(Component.For(typeof(IService)).ImplementedBy(typeof(Service1)).Named("service1"));
-			Kernel.Register(Component.For(typeof(IProcessor<>)).ImplementedBy(typeof(DefaultProcessor<>)).Named("processor"));
-			Kernel.Register(Component.For(typeof(IAssembler<object>)).ImplementedBy(typeof(ObjectAssembler)).Named("assembler"));
-			Assert.IsInstanceOf(typeof(Service1), Kernel.Resolve<IService>());
-		}
+	[Test]
+	public void Can_resolve_service_with_open_generic_parameter_with_closed_generic_parameter()
+	{
+		Kernel.Register(Component.For(typeof(IService)).ImplementedBy(typeof(Service1)).Named("service1"));
+		Kernel.Register(Component.For(typeof(IProcessor<>)).ImplementedBy(typeof(DefaultProcessor<>)).Named("processor"));
+		Kernel.Register(Component.For(typeof(IAssembler<object>)).ImplementedBy(typeof(ObjectAssembler)).Named("assembler"));
+		Assert.IsInstanceOf(typeof(Service1), Kernel.Resolve<IService>());
 	}
 }

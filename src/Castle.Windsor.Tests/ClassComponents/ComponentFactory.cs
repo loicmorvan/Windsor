@@ -12,26 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.ClassComponents
+namespace CastleTests.ClassComponents;
+
+using Castle.Core;
+using Castle.MicroKernel;
+
+[Singleton]
+public class ComponentFactory
 {
-	using System;
+	private readonly IKernel kernel;
 
-	using Castle.Core;
-	using Castle.MicroKernel;
-
-	[Singleton]
-	public class ComponentFactory
+	public ComponentFactory(IKernel kernel)
 	{
-		private readonly IKernel kernel;
+		this.kernel = kernel;
+	}
 
-		public ComponentFactory(IKernel kernel)
-		{
-			this.kernel = kernel;
-		}
-
-		public object Create(String name)
-		{
-			return kernel.Resolve<object>(name);
-		}
+	public object Create(string name)
+	{
+		return kernel.Resolve<object>(name);
 	}
 }

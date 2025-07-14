@@ -12,24 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder
+namespace Castle.MicroKernel.ModelBuilder;
+
+using Castle.Core;
+
+public interface IComponentModelDescriptor
 {
-	using Castle.Core;
+	/// <summary>Contribute to component model before standard <see cref = "IContributeComponentModelConstruction" /> run.</summary>
+	/// <param name = "kernel"> </param>
+	/// <param name = "model"> </param>
+	void BuildComponentModel(IKernel kernel, ComponentModel model);
 
-	public interface IComponentModelDescriptor
-	{
-		/// <summary>
-		/// 	Contribute to component model before standard <see cref="IContributeComponentModelConstruction" /> run.
-		/// </summary>
-		/// <param name="kernel"> </param>
-		/// <param name="model"> </param>
-		void BuildComponentModel(IKernel kernel, ComponentModel model);
-
-		/// <summary>
-		/// 	Contribute to component model after standard <see cref="IContributeComponentModelConstruction" /> run.
-		/// </summary>
-		/// <param name="kernel"> </param>
-		/// <param name="model"> </param>
-		void ConfigureComponentModel(IKernel kernel, ComponentModel model);
-	}
+	/// <summary>Contribute to component model after standard <see cref = "IContributeComponentModelConstruction" /> run.</summary>
+	/// <param name = "kernel"> </param>
+	/// <param name = "model"> </param>
+	void ConfigureComponentModel(IKernel kernel, ComponentModel model);
 }

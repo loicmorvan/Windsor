@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+
+public class ComponentWithOptionalParameter
 {
-	public class ComponentWithOptionalParameter
-	{
-		public string Parameter { get; set; }
-	}
+	public string Parameter { get; set; }
 }

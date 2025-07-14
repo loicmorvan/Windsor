@@ -12,110 +12,71 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+namespace Castle.MicroKernel.SubSystems.Conversion;
+
+using System;
+using System.Linq;
+
+public class TypeName
 {
-	using System;
-	using System.Linq;
+	private readonly string assemblyQualifiedName;
+	private readonly TypeName[] genericTypes;
+	private readonly string @namespace;
 
-	public class TypeName
+	public TypeName(string @namespace, string name, TypeName[] genericTypes)
 	{
-		private readonly string assemblyQualifiedName;
-		private readonly TypeName[] genericTypes;
-		private readonly string name;
-		private readonly string @namespace;
+		this.Name = name;
+		this.genericTypes = genericTypes;
+		this.@namespace = @namespace;
+	}
 
-		public TypeName(string @namespace, string name, TypeName[] genericTypes)
+	public TypeName(string assemblyQualifiedName)
+	{
+		this.assemblyQualifiedName = assemblyQualifiedName;
+	}
+
+	private string FullName
+	{
+		get
 		{
-			this.name = name;
-			this.genericTypes = genericTypes;
-			this.@namespace = @namespace;
+			if (HasNamespace) return @namespace + "." + Name;
+			throw new InvalidOperationException("Namespace was not defined.");
 		}
+	}
 
-		public TypeName(string assemblyQualifiedName)
-		{
-			this.assemblyQualifiedName = assemblyQualifiedName;
-		}
+	private bool HasGenericParameters => genericTypes.Length > 0;
 
-		private string FullName
-		{
-			get
-			{
-				if (HasNamespace)
-				{
-					return @namespace + "." + name;
-				}
-				throw new InvalidOperationException("Namespace was not defined.");
-			}
-		}
+	private bool HasNamespace => string.IsNullOrEmpty(@namespace) == false;
 
-		private bool HasGenericParameters
-		{
-			get { return genericTypes.Length > 0; }
-		}
+	private bool IsAssemblyQualified => assemblyQualifiedName != null;
 
-		private bool HasNamespace
-		{
-			get { return String.IsNullOrEmpty(@namespace) == false; }
-		}
+	private string Name { get; }
 
-		private bool IsAssemblyQualified
-		{
-			get { return assemblyQualifiedName != null; }
-		}
+	public string ExtractAssemblyName()
+	{
+		if (IsAssemblyQualified == false) return null;
+		var tokens = assemblyQualifiedName.Split(new[] { ',' }, StringSplitOptions.None);
+		var indexOfVersion = Array.FindLastIndex(tokens, s => s.TrimStart(' ').StartsWith("Version="));
+		if (indexOfVersion <= 0) return tokens.Last().Trim();
+		return tokens[indexOfVersion - 1].Trim();
+	}
 
-		private string Name
-		{
-			get { return name; }
-		}
+	public Type GetType(TypeNameConverter converter)
+	{
+		if (converter == null) throw new ArgumentNullException(nameof(converter));
+		if (IsAssemblyQualified) return Type.GetType(assemblyQualifiedName, false, true);
 
-		public string ExtractAssemblyName()
-		{
-			if (IsAssemblyQualified == false)
-			{
-				return null;
-			}
-			var tokens = assemblyQualifiedName.Split(new[] { ',' }, StringSplitOptions.None);
-			var indexOfVersion = Array.FindLastIndex(tokens, s => s.TrimStart(' ').StartsWith("Version="));
-			if (indexOfVersion <= 0)
-			{
-				return tokens.Last().Trim();
-			}
-			return tokens[indexOfVersion - 1].Trim();
-		}
+		Type type;
+		if (HasNamespace)
+			type = converter.GetTypeByFullName(FullName);
+		else
+			type = converter.GetTypeByName(Name);
 
-		public Type GetType(TypeNameConverter converter)
-		{
-			if (converter == null)
-			{
-				throw new ArgumentNullException(nameof(converter));
-			}
-			if (IsAssemblyQualified)
-			{
-				return Type.GetType(assemblyQualifiedName, false, true);
-			}
+		if (!HasGenericParameters) return type;
 
-			Type type;
-			if (HasNamespace)
-			{
-				type = converter.GetTypeByFullName(FullName);
-			}
-			else
-			{
-				type = converter.GetTypeByName(Name);
-			}
+		var genericArgs = new Type[genericTypes.Length];
+		for (var i = 0; i < genericArgs.Length; i++) genericArgs[i] = genericTypes[i].GetType(converter);
 
-			if (!HasGenericParameters)
-			{
-				return type;
-			}
-
-			var genericArgs = new Type[genericTypes.Length];
-			for (var i = 0; i < genericArgs.Length; i++)
-			{
-				genericArgs[i] = genericTypes[i].GetType(converter);
-			}
-
-			return type.MakeGenericType(genericArgs);
-		}
+		return type.MakeGenericType(genericArgs);
 	}
 }

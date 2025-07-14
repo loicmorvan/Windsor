@@ -12,53 +12,52 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests;
+
+using System.Collections.Generic;
+
+using Castle.MicroKernel;
+using Castle.MicroKernel.Registration;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class ContainerProblem
 {
-	using System.Collections.Generic;
-
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class ContainerProblem
+	[Test]
+	public void CausesStackOverflow()
 	{
-		[Test]
-		public void CausesStackOverflow()
-		{
-			IWindsorContainer container = new WindsorContainer();
+		IWindsorContainer container = new WindsorContainer();
 
-			container.Register(Component.For<IChild>().ImplementedBy<Child>().Named("child"));
-			container.Register(Component.For<IParent>().ImplementedBy<Parent>().Named("parent"));
+		container.Register(Component.For<IChild>().ImplementedBy<Child>().Named("child"));
+		container.Register(Component.For<IParent>().ImplementedBy<Parent>().Named("parent"));
 
-			// child or parent will cause a stack overflow...?
+		// child or parent will cause a stack overflow...?
 
-			// IChild child = (IChild)container["child"];
-			// IParent parent = (IParent) container["parent"];
-			container.Resolve<IParent>("parent");
-		}
+		// IChild child = (IChild)container["child"];
+		// IParent parent = (IParent) container["parent"];
+		container.Resolve<IParent>("parent");
 	}
+}
 
-	public interface IParent : IList<IChild>
-	{
-	}
+public interface IParent : IList<IChild>
+{
+}
 
-	public interface IChild
+public interface IChild
+{
+}
+
+public class Child : IChild
+{
+	public Child(IParent parent)
 	{
 	}
+}
 
-	public class Child : IChild
+public class Parent : List<IChild>, IParent
+{
+	public Parent(IKernel kernel)
 	{
-		public Child(IParent parent)
-		{
-		}
-	}
-
-	public class Parent : List<IChild>,IParent
-	{
-		public Parent(IKernel kernel)
-		{
-		}
 	}
 }

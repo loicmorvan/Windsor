@@ -12,20 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor
+namespace Castle.Windsor;
+
+/// <summary>
+///     This interface should be implemented by classes that are available in a bigger context, exposing the container to different areas in the same application.
+///     <para>For example, in Web application, the (global) HttpApplication subclasses should implement this interface to expose the configured container</para>
+/// </summary>
+public interface IContainerAccessor
 {
-	/// <summary>
-	///   This interface should be implemented by classes
-	///   that are available in a bigger context, exposing
-	///   the container to different areas in the same application.
-	///   <para>
-	///     For example, in Web application, the (global) HttpApplication
-	///     subclasses should implement this interface to expose 
-	///     the configured container
-	///   </para>
-	/// </summary>
-	public interface IContainerAccessor
-	{
-		IWindsorContainer Container { get; }
-	}
+	IWindsorContainer Container { get; }
 }

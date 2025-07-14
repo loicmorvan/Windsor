@@ -12,33 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
-{
-	using System;
-	using System.Collections.Generic;
-	using System.Reflection;
+namespace Castle.Core.Internal;
 
-	public class TypeByInheritanceDepthMostSpecificFirstComparer : IComparer<Type>
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+
+public class TypeByInheritanceDepthMostSpecificFirstComparer : IComparer<Type>
+{
+	// TODO: make sure generics (open?) are also handled
+	public int Compare(Type x, Type y)
 	{
-		// TODO: make sure generics (open?) are also handled
-		public int Compare(Type x, Type y)
-		{
-			if (x == y)
-			{
-				return 0;
-			}
-			if (x.GetTypeInfo().IsAssignableFrom(y))
-			{
-				return 1;
-			}
-			if (y.GetTypeInfo().IsAssignableFrom(x))
-			{
-				return -1;
-			}
-			var message =
-				String.Format("Types {0} and {1} are unrelated. That is not allowed. Are you sure you want to make them both services on the same component?",
-				              x, y);
-			throw new ArgumentOutOfRangeException(nameof(x), message);
-		}
+		if (x == y) return 0;
+		if (x.GetTypeInfo().IsAssignableFrom(y)) return 1;
+		if (y.GetTypeInfo().IsAssignableFrom(x)) return -1;
+		var message =
+			string.Format("Types {0} and {1} are unrelated. That is not allowed. Are you sure you want to make them both services on the same component?",
+				x, y);
+		throw new ArgumentOutOfRangeException(nameof(x), message);
 	}
 }

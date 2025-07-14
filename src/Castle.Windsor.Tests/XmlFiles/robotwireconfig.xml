@@ -2,16 +2,16 @@
 
 	<components>
 
-		<component id="left" 
-			service="IArm" 
-			type="PlasmaGunArm" />
+		<component id="left"
+				   service="IArm"
+				   type="PlasmaGunArm"/>
 
-		<component id="right" 
-			service="IArm" 
-			type="HumanArm" />
+		<component id="right"
+				   service="IArm"
+				   type="HumanArm"/>
 
-		<component id="robot" 
-			type="Robot">
+		<component id="robot"
+				   type="Robot">
 			<parameters>
 				<left>${left}</left>
 				<right>${right}</right>

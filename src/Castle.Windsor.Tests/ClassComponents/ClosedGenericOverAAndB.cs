@@ -12,22 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+using CastleTests.Components;
+
+public class ClosedSimpleGenericOverAAndB : ISimpleGeneric<A>, ISimpleGeneric<B>
 {
-	using Castle.Windsor.Tests;
-
-	using CastleTests.Components;
-
-	public class ClosedSimpleGenericOverAAndB : ISimpleGeneric<A>, ISimpleGeneric<B>
+	A ISimpleGeneric<A>.Operation()
 	{
-		A ISimpleGeneric<A>.Operation()
-		{
-			return new A();
-		}
+		return new A();
+	}
 
-		B ISimpleGeneric<B>.Operation()
-		{
-			return new B(new A());
-		}
+	B ISimpleGeneric<B>.Operation()
+	{
+		return new B(new A());
 	}
 }

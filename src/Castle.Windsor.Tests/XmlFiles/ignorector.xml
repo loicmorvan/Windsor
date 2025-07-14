@@ -2,8 +2,8 @@
 
 	<components>
 
-		<component id="server" 
-			type="ClassWithDoNotSelectConstructors">
+		<component id="server"
+				   type="ClassWithDoNotSelectConstructors">
 			<parameters>
 				<dependency>"abcde"</dependency>
 			</parameters>

@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+using System;
+
+public class DisposableGeneric<T> : IDisposable
 {
-	using System;
+	public bool Disposed { get; private set; }
 
-	public class DisposableGeneric<T> : IDisposable
+	public void Dispose()
 	{
-		public bool Disposed { get; private set; }
-
-		public void Dispose()
-		{
-			Disposed = true;
-		}
+		Disposed = true;
 	}
 }

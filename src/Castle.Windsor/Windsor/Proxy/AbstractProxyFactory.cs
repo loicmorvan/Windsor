@@ -12,129 +12,100 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Proxy
+namespace Castle.Windsor.Proxy;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Castle.Core;
+using Castle.Core.Interceptor;
+using Castle.DynamicProxy;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Context;
+using Castle.MicroKernel.Proxy;
+using Castle.MicroKernel.Resolvers;
+
+public abstract class AbstractProxyFactory : IProxyFactory
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+	private List<IModelInterceptorsSelector> selectors;
 
-	using Castle.Core;
-	using Castle.Core.Interceptor;
-	using Castle.DynamicProxy;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Proxy;
-	using Castle.MicroKernel.Resolvers;
+	public abstract object Create(IKernel kernel, object instance, ComponentModel model, CreationContext context,
+		params object[] constructorArguments);
 
-	public abstract class AbstractProxyFactory : IProxyFactory
+	public abstract object Create(IProxyFactoryExtension customFactory, IKernel kernel, ComponentModel model,
+		CreationContext context, params object[] constructorArguments);
+
+	public abstract bool RequiresTargetInstance(IKernel kernel, ComponentModel model);
+
+	public void AddInterceptorSelector(IModelInterceptorsSelector selector)
 	{
-		private List<IModelInterceptorsSelector> selectors;
+		if (selectors == null) selectors = new List<IModelInterceptorsSelector>();
+		selectors.Add(selector);
+	}
 
-		public abstract object Create(IKernel kernel, object instance, ComponentModel model, CreationContext context,
-		                              params object[] constructorArguments);
+	public bool ShouldCreateProxy(ComponentModel model)
+	{
+		if (model.HasInterceptors) return true;
 
-		public abstract object Create(IProxyFactoryExtension customFactory, IKernel kernel, ComponentModel model,
-		                              CreationContext context, params object[] constructorArguments);
+		var options = model.ObtainProxyOptions(false);
+		if (options != null && options.RequiresProxy) return true;
+		if (selectors != null && selectors.Any(s => s.HasInterceptors(model))) return true;
 
-		public abstract bool RequiresTargetInstance(IKernel kernel, ComponentModel model);
+		return false;
+	}
 
-		public void AddInterceptorSelector(IModelInterceptorsSelector selector)
-		{
-			if (selectors == null)
+	protected IEnumerable<InterceptorReference> GetInterceptorsFor(ComponentModel model)
+	{
+		var interceptors = model.Interceptors.ToArray();
+		if (selectors != null)
+			foreach (var selector in selectors)
 			{
-				selectors = new List<IModelInterceptorsSelector>();
-			}
-			selectors.Add(selector);
-		}
+				if (selector.HasInterceptors(model) == false) continue;
 
-		public bool ShouldCreateProxy(ComponentModel model)
-		{
-			if (model.HasInterceptors)
-			{
-				return true;
-			}
-
-			var options = model.ObtainProxyOptions(false);
-			if (options != null && options.RequiresProxy)
-			{
-				return true;
-			}
-			if (selectors != null && selectors.Any(s => s.HasInterceptors(model)))
-			{
-				return true;
+				interceptors = selector.SelectInterceptors(model, interceptors);
+				if (interceptors == null) interceptors = new InterceptorReference[0];
 			}
 
-			return false;
-		}
+		return interceptors;
+	}
 
-		protected IEnumerable<InterceptorReference> GetInterceptorsFor(ComponentModel model)
-		{
-			var interceptors = model.Interceptors.ToArray();
-			if (selectors != null)
+	/// <summary>Obtains the interceptors associated with the component.</summary>
+	/// <param name = "kernel">The kernel instance</param>
+	/// <param name = "model">The component model</param>
+	/// <param name = "context">The creation context</param>
+	/// <returns>interceptors array</returns>
+	protected IInterceptor[] ObtainInterceptors(IKernel kernel, ComponentModel model, CreationContext context)
+	{
+		var interceptors = new List<IInterceptor>();
+		foreach (IReference<IInterceptor> interceptorRef in GetInterceptorsFor(model))
+			try
 			{
-				foreach (var selector in selectors)
+				var interceptor = interceptorRef.Resolve(kernel, context);
+				SetOnBehalfAware(interceptor as IOnBehalfAware, model);
+				interceptors.Add(interceptor);
+			}
+			catch (Exception e)
+			{
+				foreach (var interceptor in interceptors) kernel.ReleaseComponent(interceptor);
+
+				if (e is InvalidCastException)
 				{
-					if (selector.HasInterceptors(model) == false)
-					{
-						continue;
-					}
+					var message = string.Format(
+						"An interceptor registered for {0} doesn't implement the {1} interface",
+						model.Name, typeof(IInterceptor).Name);
 
-					interceptors = selector.SelectInterceptors(model, interceptors);
-					if (interceptors == null)
-					{
-						interceptors = new InterceptorReference[0];
-					}
+					throw new DependencyResolverException(message);
 				}
-			}
-			return interceptors;
-		}
 
-		/// <summary>
-		///   Obtains the interceptors associated with the component.
-		/// </summary>
-		/// <param name = "kernel">The kernel instance</param>
-		/// <param name = "model">The component model</param>
-		/// <param name = "context">The creation context</param>
-		/// <returns>interceptors array</returns>
-		protected IInterceptor[] ObtainInterceptors(IKernel kernel, ComponentModel model, CreationContext context)
-		{
-			var interceptors = new List<IInterceptor>();
-			foreach (IReference<IInterceptor> interceptorRef in GetInterceptorsFor(model))
-			{
-				try
-				{
-					var interceptor = interceptorRef.Resolve(kernel, context);
-					SetOnBehalfAware(interceptor as IOnBehalfAware, model);
-					interceptors.Add(interceptor);
-				}
-				catch (Exception e)
-				{
-					foreach (var interceptor in interceptors)
-					{
-						kernel.ReleaseComponent(interceptor);
-					}
-
-					if (e is InvalidCastException)
-					{
-						var message = String.Format(
-							"An interceptor registered for {0} doesn't implement the {1} interface",
-							model.Name, typeof(IInterceptor).Name);
-
-						throw new DependencyResolverException(message);
-					}
-					throw;
-				}
+				throw;
 			}
 
-			return interceptors.ToArray();
-		}
+		return interceptors.ToArray();
+	}
 
-		protected static void SetOnBehalfAware(IOnBehalfAware onBehalfAware, ComponentModel target)
-		{
-			if (onBehalfAware != null)
-			{
-				onBehalfAware.SetInterceptedComponentModel(target);
-			}
-		}
+	protected static void SetOnBehalfAware(IOnBehalfAware onBehalfAware, ComponentModel target)
+	{
+		if (onBehalfAware != null) onBehalfAware.SetInterceptedComponentModel(target);
 	}
 }

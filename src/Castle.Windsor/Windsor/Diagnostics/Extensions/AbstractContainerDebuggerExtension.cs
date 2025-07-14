@@ -12,27 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Extensions
+namespace Castle.Windsor.Diagnostics.Extensions;
+
+using System.Collections.Generic;
+
+using Castle.MicroKernel;
+using Castle.Windsor.Diagnostics.DebuggerViews;
+
+public abstract class AbstractContainerDebuggerExtension : IContainerDebuggerExtension
 {
-	using System.Collections.Generic;
+	public abstract IEnumerable<DebuggerViewItem> Attach();
 
-	using Castle.MicroKernel;
-	using Castle.Windsor.Diagnostics.DebuggerViews;
+	public abstract void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost);
 
-	public abstract class AbstractContainerDebuggerExtension : IContainerDebuggerExtension
+	protected ComponentDebuggerView DefaultComponentView(IHandler handler)
 	{
-		public abstract IEnumerable<DebuggerViewItem> Attach();
+		return DefaultComponentView(handler, null);
+	}
 
-		public abstract void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost);
-
-		protected ComponentDebuggerView DefaultComponentView(IHandler handler)
-		{
-			return DefaultComponentView(handler, null);
-		}
-
-		protected ComponentDebuggerView DefaultComponentView(IHandler handler, string description)
-		{
-			return ComponentDebuggerView.BuildFor(handler, description);
-		}
+	protected ComponentDebuggerView DefaultComponentView(IHandler handler, string description)
+	{
+		return ComponentDebuggerView.BuildFor(handler, description);
 	}
 }

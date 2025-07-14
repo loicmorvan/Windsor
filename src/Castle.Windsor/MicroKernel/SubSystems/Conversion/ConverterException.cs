@@ -12,34 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+namespace Castle.MicroKernel.SubSystems.Conversion;
+
+using System;
+
+using Castle.Core.Internal;
+
+[Serializable]
+public class ConverterException : Exception
 {
-	using System;
-	using System.Runtime.Serialization;
-
-	using Castle.Core.Internal;
-
-	[Serializable]
-	public class ConverterException : Exception
+	/// <summary>Initializes a new instance of the <see cref = "ConverterException" /> class.</summary>
+	/// <param name = "message">The message.</param>
+	public ConverterException(string message) : base(message)
 	{
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "ConverterException" /> class.
-		/// </summary>
-		/// <param name = "message">The message.</param>
-		public ConverterException(string message) : base(message)
-		{
-			ExceptionHelper.SetUp(this);
-		}
+		this.SetUp();
+	}
 
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "ConverterException" /> class.
-		/// </summary>
-		/// <param name = "message">The message.</param>
-		/// <param name = "innerException">The inner exception.</param>
-		public ConverterException(string message, Exception innerException) : base(message, innerException)
-		{
-			ExceptionHelper.SetUp(this);
-		}
+	/// <summary>Initializes a new instance of the <see cref = "ConverterException" /> class.</summary>
+	/// <param name = "message">The message.</param>
+	/// <param name = "innerException">The inner exception.</param>
+	public ConverterException(string message, Exception innerException) : base(message, innerException)
+	{
+		this.SetUp();
+	}
 
 #if FEATURE_SERIALIZATION
 		/// <summary>
@@ -52,5 +47,4 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 			ExceptionHelper.SetUp(this);
 		}
 #endif
-	}
 }

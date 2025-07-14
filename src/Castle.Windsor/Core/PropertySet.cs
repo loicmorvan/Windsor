@@ -12,53 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
+namespace Castle.Core;
+
+using System;
+using System.Reflection;
+
+/// <summary>Represents a property and the respective dependency.</summary>
+/// TODO: remove this class and instead create PropertyDependencyModel like we do for constructors
+[Serializable]
+public class PropertySet
 {
-	using System;
-	using System.Reflection;
-
-	/// <summary>
-	/// 	Represents a property and the respective dependency.
-	/// </summary>
-	/// TODO: remove this class and instead create PropertyDependencyModel like we do for constructors
-	[Serializable]
-	public class PropertySet
+	/// <summary>Initializes a new instance of the <see cref = "PropertySet" /> class.</summary>
+	/// <param name = "propertyInfo"> The property info. </param>
+	/// <param name = "dependency"> The dependency. </param>
+	public PropertySet(PropertyInfo propertyInfo, DependencyModel dependency)
 	{
-		private readonly DependencyModel dependency;
-		private readonly PropertyInfo propertyInfo;
+		this.Property = propertyInfo;
+		this.Dependency = dependency;
+	}
 
-		/// <summary>
-		/// 	Initializes a new instance of the <see cref = "PropertySet" /> class.
-		/// </summary>
-		/// <param name = "propertyInfo"> The property info. </param>
-		/// <param name = "dependency"> The dependency. </param>
-		public PropertySet(PropertyInfo propertyInfo, DependencyModel dependency)
-		{
-			this.propertyInfo = propertyInfo;
-			this.dependency = dependency;
-		}
+	/// <summary>Gets the dependency.</summary>
+	/// <value> The dependency. </value>
+	public DependencyModel Dependency { get; }
 
-		/// <summary>
-		/// 	Gets the dependency.
-		/// </summary>
-		/// <value> The dependency. </value>
-		public DependencyModel Dependency
-		{
-			get { return dependency; }
-		}
+	/// <summary>Gets the property.</summary>
+	/// <value> The property. </value>
+	public PropertyInfo Property { get; }
 
-		/// <summary>
-		/// 	Gets the property.
-		/// </summary>
-		/// <value> The property. </value>
-		public PropertyInfo Property
-		{
-			get { return propertyInfo; }
-		}
-
-		public override string ToString()
-		{
-			return dependency.ToString();
-		}
+	public override string ToString()
+	{
+		return Dependency.ToString();
 	}
 }

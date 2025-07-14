@@ -12,98 +12,97 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Diagnostics
+namespace CastleTests.Diagnostics;
+
+using System;
+
+using Castle.MicroKernel;
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.Resolvers;
+using Castle.Windsor;
+using Castle.Windsor.Diagnostics;
+
+using CastleTests.Components;
+using CastleTests.Interceptors;
+
+using NUnit.Framework;
+
+public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContainerTestCase
 {
-	using System;
+	private IUsingContainerAsServiceLocatorDiagnostic diagnostic;
 
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Resolvers;
-	using Castle.Windsor;
-	using Castle.Windsor.Diagnostics;
-
-	using CastleTests.Components;
-	using CastleTests.Interceptors;
-
-	using NUnit.Framework;
-
-	public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContainerTestCase
+	protected override void AfterContainerCreated()
 	{
-		private IUsingContainerAsServiceLocatorDiagnostic diagnostic;
+		var host = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IDiagnosticsHost;
+		diagnostic = host.GetDiagnostic<IUsingContainerAsServiceLocatorDiagnostic>();
+	}
 
-		protected override void AfterContainerCreated()
-		{
-			var host = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IDiagnosticsHost;
-			diagnostic = host.GetDiagnostic<IUsingContainerAsServiceLocatorDiagnostic>();
-		}
+	[TestCase(typeof(IKernel))]
+	[TestCase(typeof(IKernelInternal))]
+	[TestCase(typeof(IKernelEvents))]
+	[TestCase(typeof(IWindsorContainer))]
+	[TestCase(typeof(DefaultKernel))]
+	[TestCase(typeof(WindsorContainer))]
+	public void Detects_ctor_dependency_on(Type type)
+	{
+		var generic = typeof(GenericWithCtor<>).MakeGenericType(type);
+		Container.Register(Component.For(generic),
+			Component.For<A>());
 
-		[TestCase(typeof(IKernel))]
-		[TestCase(typeof(IKernelInternal))]
-		[TestCase(typeof(IKernelEvents))]
-		[TestCase(typeof(IWindsorContainer))]
-		[TestCase(typeof(DefaultKernel))]
-		[TestCase(typeof(WindsorContainer))]
-		public void Detects_ctor_dependency_on(Type type)
-		{
-			var generic = typeof(GenericWithCtor<>).MakeGenericType(type);
-			Container.Register(Component.For(generic),
-			                   Component.For<A>());
+		var serviceLocators = diagnostic.Inspect();
+		Assert.AreEqual(1, serviceLocators.Length);
+	}
 
-			var serviceLocators = diagnostic.Inspect();
-			Assert.AreEqual(1, serviceLocators.Length);
-		}
+	[TestCase(typeof(IKernel))]
+	[TestCase(typeof(IKernelInternal))]
+	[TestCase(typeof(IKernelEvents))]
+	[TestCase(typeof(IWindsorContainer))]
+	[TestCase(typeof(DefaultKernel))]
+	[TestCase(typeof(WindsorContainer))]
+	public void Detects_property_dependency_on(Type type)
+	{
+		var generic = typeof(GenericWithProperty<>).MakeGenericType(type);
+		Container.Register(Component.For(generic),
+			Component.For<A>());
 
-		[TestCase(typeof(IKernel))]
-		[TestCase(typeof(IKernelInternal))]
-		[TestCase(typeof(IKernelEvents))]
-		[TestCase(typeof(IWindsorContainer))]
-		[TestCase(typeof(DefaultKernel))]
-		[TestCase(typeof(WindsorContainer))]
-		public void Detects_property_dependency_on(Type type)
-		{
-			var generic = typeof(GenericWithProperty<>).MakeGenericType(type);
-			Container.Register(Component.For(generic),
-			                   Component.For<A>());
+		var serviceLocators = diagnostic.Inspect();
+		Assert.AreEqual(1, serviceLocators.Length);
+	}
 
-			var serviceLocators = diagnostic.Inspect();
-			Assert.AreEqual(1, serviceLocators.Length);
-		}
+	[Test]
+	public void Ignores_interceptors()
+	{
+		Container.Register(
+			Component.For<DependsOnTViaCtorInterceptor<IKernel>>().Named("a"),
+			Component.For<DependsOnTViaPropertyInterceptor<IKernel>>().Named("b"),
+			Component.For<B>().Interceptors("a"),
+			Component.For<A>().Interceptors("b"));
 
-		[Test]
-		public void Ignores_interceptors()
-		{
-			Container.Register(
-				Component.For<DependsOnTViaCtorInterceptor<IKernel>>().Named("a"),
-				Component.For<DependsOnTViaPropertyInterceptor<IKernel>>().Named("b"),
-				Component.For<B>().Interceptors("a"),
-				Component.For<A>().Interceptors("b"));
+		var serviceLocators = diagnostic.Inspect();
+		Assert.IsEmpty(serviceLocators);
+	}
 
-			var serviceLocators = diagnostic.Inspect();
-			Assert.IsEmpty(serviceLocators);
-		}
-		
-		[Test]
-		public void Ignores_lazy()
-		{
-			Container.Register(Component.For<ILazyComponentLoader>()
-			                   	.ImplementedBy<LazyOfTComponentLoader>());
-			Container.Register(Component.For<B>(),
-			                   Component.For<A>());
+	[Test]
+	public void Ignores_lazy()
+	{
+		Container.Register(Component.For<ILazyComponentLoader>()
+			.ImplementedBy<LazyOfTComponentLoader>());
+		Container.Register(Component.For<B>(),
+			Component.For<A>());
 
-			Container.Resolve<Lazy<B>>(); // to trigger lazy registration of lazy
+		Container.Resolve<Lazy<B>>(); // to trigger lazy registration of lazy
 
-			var serviceLocators = diagnostic.Inspect();
-			Assert.IsEmpty(serviceLocators);
-		}
+		var serviceLocators = diagnostic.Inspect();
+		Assert.IsEmpty(serviceLocators);
+	}
 
-		[Test]
-		public void Successfully_handles_cases_with_no_SL_usages()
-		{
-			Container.Register(Component.For<B>(),
-			                   Component.For<A>());
+	[Test]
+	public void Successfully_handles_cases_with_no_SL_usages()
+	{
+		Container.Register(Component.For<B>(),
+			Component.For<A>());
 
-			var serviceLocators = diagnostic.Inspect();
-			Assert.IsEmpty(serviceLocators);
-		}
+		var serviceLocators = diagnostic.Inspect();
+		Assert.IsEmpty(serviceLocators);
 	}
 }

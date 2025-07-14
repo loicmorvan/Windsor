@@ -12,49 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Lifestyle
+namespace Castle.MicroKernel.Tests.Lifestyle;
+
+using System;
+using System.Collections.Generic;
+
+using Castle.Core;
+
+public class CustomLifestyle_InstanceScope : IDisposable
 {
-	using System;
-	using System.Collections.Generic;
+	[ThreadStatic]
+	private static Stack<CustomLifestyle_InstanceScope> localScopes;
 
-	using Castle.Core;
-
-	public class CustomLifestyle_InstanceScope : IDisposable
+	public CustomLifestyle_InstanceScope()
 	{
-		[ThreadStatic]
-		private static Stack<CustomLifestyle_InstanceScope> localScopes;
+		if (localScopes == null) localScopes = new Stack<CustomLifestyle_InstanceScope>();
+		localScopes.Push(this);
+	}
 
-		private readonly IDictionary<ComponentModel, Burden> cache = new Dictionary<ComponentModel, Burden>();
+	public IDictionary<ComponentModel, Burden> Cache { get; } = new Dictionary<ComponentModel, Burden>();
 
-		public CustomLifestyle_InstanceScope()
+	public static CustomLifestyle_InstanceScope Current
+	{
+		get
 		{
-			if (localScopes == null)
-			{
-				localScopes = new Stack<CustomLifestyle_InstanceScope>();
-			}
-			localScopes.Push(this);
+			if (localScopes == null || localScopes.Count == 0) return null;
+			return localScopes.Peek();
 		}
+	}
 
-		public IDictionary<ComponentModel, Burden> Cache
-		{
-			get { return cache; }
-		}
-
-		public void Dispose()
-		{
-			localScopes.Pop();
-		}
-
-		public static CustomLifestyle_InstanceScope Current
-		{
-			get
-			{
-				if (localScopes == null || localScopes.Count == 0)
-				{
-					return null;
-				}
-				return localScopes.Peek();
-			}
-		}
+	public void Dispose()
+	{
+		localScopes.Pop();
 	}
 }

@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.TypedFactoryInterfaces
+namespace Castle.TypedFactoryInterfaces;
+
+using CastleTests.Components;
+
+public interface ICalculatorFactory
 {
-	using CastleTests.Components;
+	ICalcService Create(string id);
 
-	public interface ICalculatorFactory
-	{
-		ICalcService Create(string id);
-
-		void Release(ICalcService calculator);
-	}
+	void Release(ICalcService calculator);
 }

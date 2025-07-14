@@ -12,68 +12,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.RuntimeParameters
+namespace Castle.MicroKernel.Tests.RuntimeParameters;
+
+using Castle.Core;
+
+public class CompA
 {
-	using Castle.Core;
+}
 
-	public class CompA
+public class HasCustomDependency
+{
+	private CompA name;
+
+	public HasCustomDependency(CompA name)
 	{
-		public CompA()
-		{
-		}
+		this.name = name;
+	}
+}
+
+public class NeedClassWithCustomerDependency
+{
+	private HasCustomDependency dependency;
+
+	public NeedClassWithCustomerDependency(HasCustomDependency dependency)
+	{
+		this.dependency = dependency;
+	}
+}
+
+[Transient]
+public class CompB
+{
+	public CompB(CompA ca, CompC cc, string myArgument)
+	{
+		Compc = cc;
+		this.MyArgument = myArgument;
 	}
 
-	public class HasCustomDependency
+	public CompC Compc { get; set; }
+
+	public string MyArgument { get; } = string.Empty;
+}
+
+public class CompC
+{
+	public readonly int test;
+
+	public CompC(int test)
 	{
-		private CompA name;
-
-		public HasCustomDependency(CompA name)
-		{
-			this.name = name;
-		}
-	}
-
-	public class NeedClassWithCustomerDependency
-	{
-		private HasCustomDependency dependency;
-
-		public NeedClassWithCustomerDependency(HasCustomDependency dependency)
-		{
-			this.dependency = dependency;
-		}
-	}
-
-	[Transient]
-	public class CompB
-	{
-		private string myArgument = string.Empty;
-		private CompC compc = null;
-
-		public CompB(CompA ca, CompC cc, string myArgument)
-		{
-			compc = cc;
-			this.myArgument = myArgument;
-		}
-
-		public CompC Compc
-		{
-			get { return compc; }
-			set { compc = value; }
-		}
-
-		public string MyArgument
-		{
-			get { return myArgument; }
-		}
-	}
-
-	public class CompC
-	{
-		public readonly int test;
-
-		public CompC(int test)
-		{
-			this.test = test;
-		}
+		this.test = test;
 	}
 }

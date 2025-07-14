@@ -12,132 +12,103 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
+namespace Castle.Windsor.Diagnostics;
+
+using System.Collections.Generic;
+using System.Linq;
+
+using Castle.Core;
+using Castle.MicroKernel;
+
+public class PotentialLifestyleMismatchesDiagnostic : IPotentialLifestyleMismatchesDiagnostic
 {
-	using System.Collections.Generic;
-	using System.Linq;
+	private readonly IKernel kernel;
 
-	using Castle.Core;
-	using Castle.MicroKernel;
-
-	public class PotentialLifestyleMismatchesDiagnostic : IPotentialLifestyleMismatchesDiagnostic
+	public PotentialLifestyleMismatchesDiagnostic(IKernel kernel)
 	{
-		private readonly IKernel kernel;
+		this.kernel = kernel;
+	}
 
-		public PotentialLifestyleMismatchesDiagnostic(IKernel kernel)
-		{
-			this.kernel = kernel;
-		}
+	public IHandler[][] Inspect()
+	{
+		var allHandlers = kernel.GetAssignableHandlers(typeof(object));
+		var handlersByComponentModel = allHandlers.ToDictionary(h => h.ComponentModel);
 
-		public IHandler[][] Inspect()
-		{
-			var allHandlers = kernel.GetAssignableHandlers(typeof(object));
-			var handlersByComponentModel = allHandlers.ToDictionary(h => h.ComponentModel);
+		var items = new List<MismatchedLifestyleDependency>();
+		foreach (var handler in allHandlers) items.AddRange(GetMismatches(handler, handlersByComponentModel));
+		return items.Select(m => m.GetHandlers()).ToArray();
+	}
 
-			var items = new List<MismatchedLifestyleDependency>();
-			foreach (var handler in allHandlers)
-			{
-				items.AddRange(GetMismatches(handler, handlersByComponentModel));
-			}
-			return items.Select(m => m.GetHandlers()).ToArray();
-		}
+	private IEnumerable<MismatchedLifestyleDependency> GetMismatch(MismatchedLifestyleDependency parent, ComponentModel component,
+		IDictionary<ComponentModel, IHandler> model2Handler)
+	{
+		if (parent.Checked(component)) yield break;
 
-		private IEnumerable<MismatchedLifestyleDependency> GetMismatch(MismatchedLifestyleDependency parent, ComponentModel component,
-		                                                               IDictionary<ComponentModel, IHandler> model2Handler)
-		{
-			if (parent.Checked(component))
-			{
-				yield break;
-			}
-
-			var handler = model2Handler[component];
-			var item = new MismatchedLifestyleDependency(handler, parent);
-			if (item.Mismatched())
-			{
-				yield return item;
-			}
-			else
-			{
-				foreach (ComponentModel dependent in handler.ComponentModel.Dependents)
-				{
-					foreach (var mismatch in GetMismatch(item, dependent, model2Handler))
-					{
-						yield return mismatch;
-					}
-				}
-			}
-		}
-
-		private IEnumerable<MismatchedLifestyleDependency> GetMismatches(IHandler handler, IDictionary<ComponentModel, IHandler> model2Handler)
-		{
-			if (IsSingleton(handler) == false)
-			{
-				yield break;
-			}
-			var root = new MismatchedLifestyleDependency(handler);
+		var handler = model2Handler[component];
+		var item = new MismatchedLifestyleDependency(handler, parent);
+		if (item.Mismatched())
+			yield return item;
+		else
 			foreach (ComponentModel dependent in handler.ComponentModel.Dependents)
-			{
-				foreach (var mismatch in GetMismatch(root, dependent, model2Handler))
-				{
-					yield return mismatch;
-				}
-			}
+			foreach (var mismatch in GetMismatch(item, dependent, model2Handler))
+				yield return mismatch;
+	}
+
+	private IEnumerable<MismatchedLifestyleDependency> GetMismatches(IHandler handler, IDictionary<ComponentModel, IHandler> model2Handler)
+	{
+		if (IsSingleton(handler) == false) yield break;
+		var root = new MismatchedLifestyleDependency(handler);
+		foreach (ComponentModel dependent in handler.ComponentModel.Dependents)
+		foreach (var mismatch in GetMismatch(root, dependent, model2Handler))
+			yield return mismatch;
+	}
+
+	private bool IsSingleton(IHandler component)
+	{
+		var lifestyle = component.ComponentModel.LifestyleType;
+		return lifestyle == LifestyleType.Undefined || lifestyle == LifestyleType.Singleton;
+	}
+
+	private class MismatchedLifestyleDependency
+	{
+		private readonly HashSet<ComponentModel> checkedComponents;
+
+		public MismatchedLifestyleDependency(IHandler handler, MismatchedLifestyleDependency parent = null)
+		{
+			Handler = handler;
+			Parent = parent;
+
+			if (parent == null)
+				checkedComponents = new HashSet<ComponentModel> { handler.ComponentModel };
+			else
+				checkedComponents = new HashSet<ComponentModel> { parent.Handler.ComponentModel };
 		}
 
-		private bool IsSingleton(IHandler component)
+		public IHandler Handler { get; }
+
+		public MismatchedLifestyleDependency Parent { get; }
+
+		public bool Checked(ComponentModel component)
 		{
-			var lifestyle = component.ComponentModel.LifestyleType;
-			return lifestyle == LifestyleType.Undefined || lifestyle == LifestyleType.Singleton;
+			return checkedComponents.Add(component) == false;
 		}
 
-		private class MismatchedLifestyleDependency
+		public IHandler[] GetHandlers()
 		{
-			private readonly HashSet<ComponentModel> checkedComponents;
+			var handlers = new List<IHandler>();
+			BuildHandlersList(handlers);
+			return handlers.ToArray();
+		}
 
-			public MismatchedLifestyleDependency(IHandler handler, MismatchedLifestyleDependency parent = null)
-			{
-				Handler = handler;
-				Parent = parent;
+		public bool Mismatched()
+		{
+			return Handler.ComponentModel.LifestyleType == LifestyleType.Transient;
+		}
 
-				if (parent == null)
-				{
-					checkedComponents = new HashSet<ComponentModel> { handler.ComponentModel };
-				}
-				else
-				{
-					checkedComponents = new HashSet<ComponentModel> { parent.Handler.ComponentModel };
-				}
-			}
-
-			public IHandler Handler { get; private set; }
-
-			public MismatchedLifestyleDependency Parent { get; private set; }
-
-			public bool Checked(ComponentModel component)
-			{
-				return checkedComponents.Add(component) == false;
-			}
-
-			public IHandler[] GetHandlers()
-			{
-				var handlers = new List<IHandler>();
-				BuildHandlersList(handlers);
-				return handlers.ToArray();
-			}
-
-			public bool Mismatched()
-			{
-				return Handler.ComponentModel.LifestyleType == LifestyleType.Transient;
-			}
-
-			private void BuildHandlersList(List<IHandler> handlers)
-			{
-				if (Parent != null)
-				{
-					Parent.BuildHandlersList(handlers);
-				}
-				handlers.Add(Handler);
-			}
+		private void BuildHandlersList(List<IHandler> handlers)
+		{
+			if (Parent != null) Parent.BuildHandlersList(handlers);
+			handlers.Add(Handler);
 		}
 	}
 }

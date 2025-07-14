@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using Castle.Core;
+namespace CastleTests.Components;
 
-	[Interceptor("fooInterceptor")]
-	public class CalculatorServiceWithFooInterceptorNamed : CalculatorService
-	{
-	}
+using Castle.Core;
+
+[Interceptor("fooInterceptor")]
+public class CalculatorServiceWithFooInterceptorNamed : CalculatorService
+{
 }

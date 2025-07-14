@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests.Framework.Builders
-{
-	using Castle.Facilities.AspNetCore.Tests.Fakes;
-	using Microsoft.Extensions.DependencyInjection;
+namespace Castle.Facilities.AspNetCore.Tests.Framework.Builders;
 
-	public class ServiceCollectionBuilder
+using Castle.Facilities.AspNetCore.Tests.Fakes;
+
+using Microsoft.Extensions.DependencyInjection;
+
+public class ServiceCollectionBuilder
+{
+	public static ServiceCollection New()
 	{
-		public static ServiceCollection New()
-		{
-			var serviceCollection = new ServiceCollection();
-			ModelInstaller.RegisterServiceCollection(serviceCollection);
-			return serviceCollection;
-		}
+		var serviceCollection = new ServiceCollection();
+		ModelInstaller.RegisterServiceCollection(serviceCollection);
+		return serviceCollection;
 	}
 }

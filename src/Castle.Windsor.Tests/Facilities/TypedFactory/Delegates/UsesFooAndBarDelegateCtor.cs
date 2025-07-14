@@ -12,22 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.TypedFactory.Delegates
+namespace CastleTests.Facilities.TypedFactory.Delegates;
+
+using System;
+
+using Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
+
+public class UsesFooAndBarDelegateCtor
 {
-	using System;
-
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
-
-	public class UsesFooAndBarDelegateCtor
+	public UsesFooAndBarDelegateCtor(Func<Bar> barFactory, Func<Foo> fooFactory)
 	{
-		public UsesFooAndBarDelegateCtor(Func<Bar> barFactory, Func<Foo> fooFactory)
-		{
-			BarFactory = barFactory;
-			FooFactory = fooFactory;
-		}
-
-		public Func<Bar> BarFactory { get; private set; }
-
-		public Func<Foo> FooFactory { get; private set; }
+		BarFactory = barFactory;
+		FooFactory = fooFactory;
 	}
+
+	public Func<Bar> BarFactory { get; private set; }
+
+	public Func<Foo> FooFactory { get; private set; }
 }

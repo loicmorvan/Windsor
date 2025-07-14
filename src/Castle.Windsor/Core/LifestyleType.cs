@@ -12,56 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
+namespace Castle.Core;
+
+/// <summary>Enumeration used to mark the component's lifestyle.</summary>
+public enum LifestyleType
 {
+	/// <summary>No lifestyle specified.</summary>
+	Undefined = 0,
+
+	/// <summary>Singleton components are instantiated once, and shared between all clients.</summary>
+	Singleton = 1,
+
+	/// <summary>Thread components have a unique instance per thread.</summary>
+	Thread = 2,
+
+	/// <summary>Transient components are created on demand.</summary>
+	Transient = 3,
+
+	/// <summary>Optimization of transient components that keeps instance in a pool instead of always creating them.</summary>
+	Pooled = 4,
+
+	/// <summary>Any other logic to create/release components.</summary>
+	Custom = 6,
+
+	/// <summary>Instances are reused within the scope provided.</summary>
+	Scoped = 7,
+
 	/// <summary>
-	///   Enumeration used to mark the component's lifestyle.
+	///     Instance lifetime and reuse scope is bound to another component further up the object graph. Good scenario for this would be unit of work bound to a presenter in a two tier MVP application. When
+	///     specified in xml a <c>scopeRootBinderType</c> attribute must be specified pointing to a type having default accessible constructor and public method matching signature of
+	///     <code>Func&lt;IHandler[], IHandler&gt;</code> delegate.
 	/// </summary>
-	public enum LifestyleType
-	{
-		/// <summary>
-		///   No lifestyle specified.
-		/// </summary>
-		Undefined = 0,
-
-		/// <summary>
-		///   Singleton components are instantiated once, and shared
-		///   between all clients.
-		/// </summary>
-		Singleton = 1,
-
-		/// <summary>
-		///   Thread components have a unique instance per thread.
-		/// </summary>
-		Thread = 2,
-
-		/// <summary>
-		///   Transient components are created on demand.
-		/// </summary>
-		Transient = 3,
-
-		/// <summary>
-		///   Optimization of transient components that keeps
-		///   instance in a pool instead of always creating them.
-		/// </summary>
-		Pooled = 4,
-
-		/// <summary>
-		///   Any other logic to create/release components.
-		/// </summary>
-		Custom = 6,
-
-		/// <summary>
-		///   Instances are reused within the scope provided.
-		/// </summary>
-		Scoped = 7,
-
-		/// <summary>
-		///   Instance lifetime and reuse scope is bound to another component further up the object graph.
-		///   Good scenario for this would be unit of work bound to a presenter in a two tier MVP application.
-		///   When specified in xml a <c>scopeRootBinderType</c> attribute must be specified pointing to a type
-		///   having default accessible constructor and public method matching signature of <code>Func&lt;IHandler[], IHandler&gt;</code> delegate.
-		/// </summary>
-		Bound = 8
-	}
+	Bound = 8
 }

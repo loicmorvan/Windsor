@@ -12,32 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+
+using Castle.Core;
+using Castle.MicroKernel.LifecycleConcerns;
+
+/// <summary>Adds the actions to ExtendedProperties.</summary>
+/// <typeparam name = "S"></typeparam>
+public class OnCreateComponentDescriptor<S> : IComponentModelDescriptor, IMetaComponentModelDescriptor
+	where S : class
 {
-	using Castle.Core;
-	using Castle.MicroKernel.LifecycleConcerns;
+	private readonly LifecycleActionDelegate<S> action;
 
-	/// <summary>
-	///   Adds the actions to ExtendedProperties.
-	/// </summary>
-	/// <typeparam name = "S"></typeparam>
-	public class OnCreateComponentDescriptor<S> : IComponentModelDescriptor, IMetaComponentModelDescriptor
-		where S : class
+	public OnCreateComponentDescriptor(LifecycleActionDelegate<S> action)
 	{
-		private readonly LifecycleActionDelegate<S> action;
+		this.action = action;
+	}
 
-		public OnCreateComponentDescriptor(LifecycleActionDelegate<S> action)
-		{
-			this.action = action;
-		}
+	public void BuildComponentModel(IKernel kernel, ComponentModel model)
+	{
+	}
 
-		public void BuildComponentModel(IKernel kernel, ComponentModel model)
-		{
-		}
-
-		public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-		{
-			model.Lifecycle.AddFirst(new OnCreatedConcern<S>(action, kernel));
-		}
+	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+	{
+		model.Lifecycle.AddFirst(new OnCreatedConcern<S>(action, kernel));
 	}
 }

@@ -12,19 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel.Tests.ClassComponents;
+
+using CastleTests.Components;
+
+public class TwoEmptyServiceDependenciesConstructor
 {
-	using CastleTests.Components;
-
-	public class TwoEmptyServiceDependenciesConstructor
+	public TwoEmptyServiceDependenciesConstructor(IEmptyService one, IEmptyService two)
 	{
-		public TwoEmptyServiceDependenciesConstructor(IEmptyService one, IEmptyService two)
-		{
-			One = one;
-			Two = two;
-		}
-
-		public IEmptyService One { get; private set; }
-		public IEmptyService Two { get; private set; }
+		One = one;
+		Two = two;
 	}
+
+	public IEmptyService One { get; private set; }
+	public IEmptyService Two { get; private set; }
 }

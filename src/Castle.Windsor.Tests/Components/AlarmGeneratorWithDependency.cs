@@ -12,22 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+public class AlarmGeneratorWithDependency
 {
-	using Castle.Windsor.Tests;
-
-	public class AlarmGeneratorWithDependency
+	public AlarmGeneratorWithDependency(IAlarmSender sender, A dependency)
 	{
-		private readonly IAlarmSender sender;
-
-		public AlarmGeneratorWithDependency(IAlarmSender sender, A dependency)
-		{
-			this.sender = sender;
-		}
-
-		public IAlarmSender Sender
-		{
-			get { return sender; }
-		}
+		this.Sender = sender;
 	}
+
+	public IAlarmSender Sender { get; }
 }

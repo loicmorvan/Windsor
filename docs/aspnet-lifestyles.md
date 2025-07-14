@@ -5,18 +5,18 @@ working with scoped and transient lifestyles.
 
 ## Scoped Lifestyle
 
-This behaviour is effectively a `Per Web Request` lifestyle. A scope is setup for you once the 
+This behaviour is effectively a `Per Web Request` lifestyle. A scope is setup for you once the
 request pipeline for ASP.NET is initiated and disposed once it completes. Anything using this
-lifestyle should hold on to its state for the duration of the web request. 
+lifestyle should hold on to its state for the duration of the web request.
 
 You can nest scopes via the `WindsorContainer.BeginScope` method within a given web request which
-for any component resolved within that child scope will be given a new instance. Once that child 
-scope is disposed, resolved services will honour the original outer scope setup by the facility. 
+for any component resolved within that child scope will be given a new instance. Once that child
+scope is disposed, resolved services will honour the original outer scope setup by the facility.
 
 If you accustomed to using an `instance per matching lifetime scope` from AutoFac, then it is
 important note that windsor does not currently support this. We are considering implementing
 named scopes but this still requires further discussion when it comes to how the overriding behaviours
-of lifestyles would work. 
+of lifestyles would work.
 
 ## Transient Lifestyle
 

@@ -12,45 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Proxies
+namespace CastleTests.Proxies;
+
+using Castle.DynamicProxy;
+using Castle.TypedFactoryInterfaces;
+using Castle.Windsor;
+using Castle.Windsor.Configuration.Interpreters;
+using Castle.XmlFiles;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class TypedFactoryFacilityTestCase
 {
-	using Castle.DynamicProxy;
-	using Castle.TypedFactoryInterfaces;
-	using Castle.Windsor;
-	using Castle.Windsor.Configuration.Interpreters;
-	using Castle.XmlFiles;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class TypedFactoryFacilityTestCase
+	[Test]
+	public void TypedFactory_CreateMethodHasNoId_WorksFine()
 	{
-		[Test]
-		public void TypedFactory_CreateMethodHasNoId_WorksFine()
-		{
-			var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("typedFactoryCreateWithoutId.xml")));
+		var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("typedFactoryCreateWithoutId.xml")));
 
-			var calcFactory = container.Resolve<ICalculatorFactoryCreateWithoutId>();
-			Assert.IsNotNull(calcFactory);
+		var calcFactory = container.Resolve<ICalculatorFactoryCreateWithoutId>();
+		Assert.IsNotNull(calcFactory);
 
-			var calculator = calcFactory.Create();
-			Assert.IsNotNull(calculator);
-			Assert.AreEqual(3, calculator.Sum(1, 2));
-		}
+		var calculator = calcFactory.Create();
+		Assert.IsNotNull(calculator);
+		Assert.AreEqual(3, calculator.Sum(1, 2));
+	}
 
-		[Test]
-		public void TypedFactory_WithProxies_WorksFine()
-		{
-			var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("typedFactory.xml")));
+	[Test]
+	public void TypedFactory_WithProxies_WorksFine()
+	{
+		var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("typedFactory.xml")));
 
-			var calcFactory = container.Resolve<ICalculatorFactory>();
-			Assert.IsNotNull(calcFactory);
+		var calcFactory = container.Resolve<ICalculatorFactory>();
+		Assert.IsNotNull(calcFactory);
 
-			var calculator = calcFactory.Create("default");
-			Assert.IsInstanceOf<IProxyTargetAccessor>(calculator);
-			Assert.AreEqual(3, calculator.Sum(1, 2));
+		var calculator = calcFactory.Create("default");
+		Assert.IsInstanceOf<IProxyTargetAccessor>(calculator);
+		Assert.AreEqual(3, calculator.Sum(1, 2));
 
-			calcFactory.Release(calculator);
-		}
+		calcFactory.Release(calculator);
 	}
 }

@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
-{
-	public class HasTwoConstructors4
-	{
-		public HasTwoConstructors4(string text, SimpleComponent1 x, SimpleComponent2 y)
-		{
-		}
+namespace Castle.MicroKernel.Tests.ClassComponents;
 
-		public HasTwoConstructors4(SimpleComponent1 x)
-		{
-		}
+public class HasTwoConstructors4
+{
+	public HasTwoConstructors4(string text, SimpleComponent1 x, SimpleComponent2 y)
+	{
+	}
+
+	public HasTwoConstructors4(SimpleComponent1 x)
+	{
 	}
 }

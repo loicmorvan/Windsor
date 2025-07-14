@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
+
+public interface IGenericFactory<T>
 {
-	public interface IGenericFactory<T>
-	{
-		T Create();
-	}
+	T Create();
 }

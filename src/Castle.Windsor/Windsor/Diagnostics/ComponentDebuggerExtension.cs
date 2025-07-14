@@ -12,22 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
+namespace Castle.Windsor.Diagnostics;
+
+using System.Collections.Generic;
+
+public class ComponentDebuggerExtension : IComponentDebuggerExtension
 {
-	using System.Collections.Generic;
+	private readonly object[] items;
 
-	public class ComponentDebuggerExtension : IComponentDebuggerExtension
+	public ComponentDebuggerExtension(object[] items)
 	{
-		private readonly object[] items;
+		this.items = items;
+	}
 
-		public ComponentDebuggerExtension(object[] items)
-		{
-			this.items = items;
-		}
-
-		public IEnumerable<object> Attach()
-		{
-			return items;
-		}
+	public IEnumerable<object> Attach()
+	{
+		return items;
 	}
 }

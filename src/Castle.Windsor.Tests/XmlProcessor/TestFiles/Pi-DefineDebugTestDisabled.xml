@@ -2,5 +2,5 @@
 	<!-- some comment -->
 	<?process instruction?>
 	<?define debug?>
-    <include uri="file://..\Castle.Windsor.Tests\XmlProcessor\TestFiles\Pi-ComplexChooseStatementTest.xml"/>
+	<include uri="file://..\Castle.Windsor.Tests\XmlProcessor\TestFiles\Pi-ComplexChooseStatementTest.xml"/>
 </configuration>

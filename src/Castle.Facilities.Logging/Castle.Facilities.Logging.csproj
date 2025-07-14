@@ -1,27 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
 
-	<Import Project="..\..\buildscripts\common.props"></Import>
+  <Import Project="..\..\buildscripts\common.props"></Import>
 
-	<PropertyGroup>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageId>Castle.LoggingFacility</PackageId>
-		<Title>Castle Windsor logging facility</Title>
-		<Description>Castle Windsor logging facility lets you easily inject loggers into your components. It offers integration with most popular 3rd party logging frameworks like log4net, NLog and Serilog (see Castle Core docs).</Description>
-		<PackageTags>castle, windsor, inversionOfControl, DependencyInjection, logging, log4net, nlog</PackageTags>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-		<AssemblyName>Castle.Facilities.Logging</AssemblyName>
-		<RootNamespace>Castle.Facilities.Logging</RootNamespace>
-	</PropertyGroup>
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Castle.LoggingFacility</PackageId>
+    <Title>Castle Windsor logging facility</Title>
+    <Description>Castle Windsor logging facility lets you easily inject loggers into your components. It offers integration with most popular 3rd party logging frameworks like log4net, NLog and Serilog (see Castle Core docs).</Description>
+    <PackageTags>castle, windsor, inversionOfControl, DependencyInjection, logging, log4net, nlog</PackageTags>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AssemblyName>Castle.Facilities.Logging</AssemblyName>
+    <RootNamespace>Castle.Facilities.Logging</RootNamespace>
+  </PropertyGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Castle.Windsor\Castle.Windsor.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Castle.Windsor\Castle.Windsor.csproj"/>
+  </ItemGroup>
 
-	<ItemGroup>
-		<Compile Include="..\..\buildscripts\CommonAssemblyInfo.cs" />
-	</ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\buildscripts\CommonAssemblyInfo.cs"/>
+  </ItemGroup>
 </Project>

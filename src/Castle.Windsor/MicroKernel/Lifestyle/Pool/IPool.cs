@@ -12,24 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Pool
+namespace Castle.MicroKernel.Lifestyle.Pool;
+
+using System;
+
+using Castle.MicroKernel.Context;
+
+/// <summary>Pool implementation contract.</summary>
+public interface IPool : IDisposable
 {
-	using System;
+	/// <summary>Implementors should release the instance or put it on the pool</summary>
+	/// <param name = "instance"></param>
+	bool Release(object instance);
 
-	using Castle.MicroKernel.Context;
-
-	/// <summary>
-	///   Pool implementation contract.
-	/// </summary>
-	public interface IPool : IDisposable
-	{
-		/// <summary>
-		///   Implementors should release the instance or put it
-		///   on the pool
-		/// </summary>
-		/// <param name = "instance"></param>
-		bool Release(object instance);
-
-		object Request(CreationContext context, Func<CreationContext, Burden> creationCallback);
-	}
+	object Request(CreationContext context, Func<CreationContext, Burden> creationCallback);
 }

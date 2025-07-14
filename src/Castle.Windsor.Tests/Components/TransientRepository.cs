@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using Castle.Core;
+namespace CastleTests.Components;
 
-	[Transient]
-	public class TransientRepository<T> : IRepository<T> where T : new()
+using Castle.Core;
+
+[Transient]
+public class TransientRepository<T> : IRepository<T> where T : new()
+{
+	public T Get(int id)
 	{
-		public T Get(int id)
-		{
-			return new T();
-		}
+		return new T();
 	}
 }

@@ -12,26 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
+namespace Castle.Windsor.Diagnostics;
+
+/// <summary>Exposes diagnostics about itself to the <see cref = "IDiagnosticsInspector{TData,TContext}" />.</summary>
+/// <typeparam name = "TData">
+///     Usually simple type containing information provided to the
+///     <see
+///         cref = "IDiagnosticsInspector{TData,TContext}" />
+///     .
+/// </typeparam>
+/// <remarks>
+///     Can be implemented by any type constituting part of container infrastructure. Should have a matching
+///     <see
+///         cref = "IDiagnosticsInspector{TData,TContext}" />
+///     registred in the container that knows how to find it and that prepares information from it for consumption.
+/// </remarks>
+public interface IExposeDiagnostics<out TData>
 {
 	/// <summary>
-	///   Exposes diagnostics about itself to the <see cref = "IDiagnosticsInspector{TData,TContext}" />.
+	///     Collects <typeparamref name = "TData" /> for the <paramref name = "inspector" /> and calls
+	///     <see
+	///         cref = "IDiagnosticsInspector{TData,TContext}.Inspect" />
+	///     if any data available.
 	/// </summary>
-	/// <typeparam name = "TData">Usually simple type containing information provided to the <see
-	///    cref = "IDiagnosticsInspector{TData,TContext}" />.</typeparam>
-	/// <remarks>
-	///   Can be implemented by any type constituting part of container infrastructure. Should have a matching <see
-	///    cref = "IDiagnosticsInspector{TData,TContext}" /> registred in the container that knows
-	///   how to find it and that prepares information from it for consumption.
-	/// </remarks>
-	public interface IExposeDiagnostics<out TData>
-	{
-		/// <summary>
-		///   Collects <typeparamref name = "TData" /> for the <paramref name = "inspector" /> and calls <see
-		///    cref = "IDiagnosticsInspector{TData,TContext}.Inspect" /> if any data available.
-		/// </summary>
-		/// <param name = "inspector"></param>
-		/// <param name = "context">pass-through context. Used by the inspector.</param>
-		void Visit<TContext>(IDiagnosticsInspector<TData, TContext> inspector, TContext context);
-	}
+	/// <param name = "inspector"></param>
+	/// <param name = "context">pass-through context. Used by the inspector.</param>
+	void Visit<TContext>(IDiagnosticsInspector<TData, TContext> inspector, TContext context);
 }

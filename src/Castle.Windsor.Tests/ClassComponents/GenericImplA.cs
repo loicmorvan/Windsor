@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.ClassComponents
-{
-	using CastleTests.Components;
+namespace CastleTests.ClassComponents;
 
-	public class GenericImplA : A, IGeneric<A>
-	{
-	}
+using CastleTests.Components;
+
+public class GenericImplA : A, IGeneric<A>
+{
 }

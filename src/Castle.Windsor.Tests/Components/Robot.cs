@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+public class Robot
 {
-	public class Robot
+	public IArm Left;
+
+	public IArm Right;
+
+	public Robot(IArm left, IArm right)
 	{
-		public IArm Left;
-
-		public IArm Right;
-
-		public Robot(IArm left, IArm right)
-		{
-			Left = left;
-			Right = right;
-		}
+		Left = left;
+		Right = right;
 	}
 }

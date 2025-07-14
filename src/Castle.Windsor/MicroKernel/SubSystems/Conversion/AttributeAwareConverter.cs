@@ -12,71 +12,59 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+namespace Castle.MicroKernel.SubSystems.Conversion;
+
+using System;
+using System.Reflection;
+
+using Castle.Core.Configuration;
+using Castle.Core.Internal;
+
+/// <summary>Looks for a <see cref = "ConvertibleAttribute" /> on the type to be converted. If found, the TypeConverter defined by the attribute is used to perform the conversion.</summary>
+public class AttributeAwareConverter : AbstractTypeConverter
 {
-	using System;
-	using System.Reflection;
-
-	using Castle.Core.Configuration;
-	using Castle.Core.Internal;
-
-	/// <summary>
-	///   Looks for a <see cref = "ConvertibleAttribute" /> on the type to be converted. 
-	///   If found, the TypeConverter defined by the attribute is used to perform the conversion.
-	/// </summary>
-	public class AttributeAwareConverter : AbstractTypeConverter
+	public override bool CanHandleType(Type type)
 	{
-		public override bool CanHandleType(Type type)
-		{
-			var converter = TryGetConverterInstance(type);
+		var converter = TryGetConverterInstance(type);
 
-			if (converter != null)
-			{
-				return converter.CanHandleType(type);
-			}
-			else
-			{
-				return false;
-			}
+		if (converter != null) return converter.CanHandleType(type);
+
+		return false;
+	}
+
+	public override object PerformConversion(string value, Type targetType)
+	{
+		var converter = GetConverterInstance(targetType);
+		return converter.PerformConversion(value, targetType);
+	}
+
+	public override object PerformConversion(IConfiguration configuration, Type targetType)
+	{
+		var converter = GetConverterInstance(targetType);
+		return converter.PerformConversion(configuration, targetType);
+	}
+
+	private ITypeConverter GetConverterInstance(Type type)
+	{
+		var converter = TryGetConverterInstance(type);
+
+		if (converter == null) throw new InvalidOperationException("Type " + type.Name + " does not have a Convertible attribute.");
+
+		return converter;
+	}
+
+	private ITypeConverter TryGetConverterInstance(Type type)
+	{
+		ITypeConverter converter = null;
+
+		var attr = (ConvertibleAttribute)type.GetTypeInfo().GetCustomAttribute(typeof(ConvertibleAttribute));
+
+		if (attr != null)
+		{
+			converter = attr.ConverterType.CreateInstance<ITypeConverter>();
+			converter.Context = Context;
 		}
 
-		public override object PerformConversion(string value, Type targetType)
-		{
-			var converter = GetConverterInstance(targetType);
-			return converter.PerformConversion(value, targetType);
-		}
-
-		public override object PerformConversion(IConfiguration configuration, Type targetType)
-		{
-			var converter = GetConverterInstance(targetType);
-			return converter.PerformConversion(configuration, targetType);
-		}
-
-		private ITypeConverter GetConverterInstance(Type type)
-		{
-			var converter = TryGetConverterInstance(type);
-
-			if (converter == null)
-			{
-				throw new InvalidOperationException("Type " + type.Name + " does not have a Convertible attribute.");
-			}
-
-			return converter;
-		}
-
-		private ITypeConverter TryGetConverterInstance(Type type)
-		{
-			ITypeConverter converter = null;
-
-			var attr = (ConvertibleAttribute)type.GetTypeInfo().GetCustomAttribute(typeof(ConvertibleAttribute));
-
-			if (attr != null)
-			{
-				converter = attr.ConverterType.CreateInstance<ITypeConverter>();
-				converter.Context = Context;
-			}
-
-			return converter;
-		}
+		return converter;
 	}
 }

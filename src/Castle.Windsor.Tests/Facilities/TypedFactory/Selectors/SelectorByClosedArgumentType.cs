@@ -12,32 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.TypedFactory.Selectors
+namespace CastleTests.Facilities.TypedFactory.Selectors;
+
+using System;
+using System.Reflection;
+
+using Castle.Facilities.TypedFactory;
+using Castle.MicroKernel;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+
+public class SelectorByClosedArgumentType : DefaultTypedFactoryComponentSelector
 {
-	using System;
-	using System.Reflection;
-
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel;
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
-
-	public class SelectorByClosedArgumentType : DefaultTypedFactoryComponentSelector
+	public SelectorByClosedArgumentType()
 	{
-		public SelectorByClosedArgumentType()
-		{
-			FallbackToResolveByTypeIfNameNotFound = true;
-		}
+		FallbackToResolveByTypeIfNameNotFound = true;
+	}
 
-		protected override Arguments GetArguments(MethodInfo method, object[] arguments)
-		{
-			//a condition checking if it's actually a method we want to be in should go here
-			return new Arguments().AddTyped(arguments);
-		}
+	protected override Arguments GetArguments(MethodInfo method, object[] arguments)
+	{
+		//a condition checking if it's actually a method we want to be in should go here
+		return new Arguments().AddTyped(arguments);
+	}
 
-		protected override Type GetComponentType(MethodInfo method, object[] arguments)
-		{
-			//a condition checking if it's actually a method we want to be in should go here
-			return typeof(GenericComponent<>).MakeGenericType(arguments[0].GetType());
-		}
+	protected override Type GetComponentType(MethodInfo method, object[] arguments)
+	{
+		//a condition checking if it's actually a method we want to be in should go here
+		return typeof(GenericComponent<>).MakeGenericType(arguments[0].GetType());
 	}
 }

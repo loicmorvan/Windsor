@@ -12,22 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel.Tests.ClassComponents;
+
+using CastleTests.ClassComponents;
+
+public class UsesIGeneric<T>
 {
-	using CastleTests.ClassComponents;
-
-	public class UsesIGeneric<T>
+	public UsesIGeneric(IGeneric<T> dependency)
 	{
-		private readonly IGeneric<T> dependency;
-
-		public UsesIGeneric(IGeneric<T> dependency)
-		{
-			this.dependency = dependency;
-		}
-
-		public IGeneric<T> Dependency
-		{
-			get { return dependency; }
-		}
+		this.Dependency = dependency;
 	}
+
+	public IGeneric<T> Dependency { get; }
 }

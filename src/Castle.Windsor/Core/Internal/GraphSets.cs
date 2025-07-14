@@ -12,78 +12,58 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
+namespace Castle.Core.Internal;
+
+using System.Collections.Generic;
+
+internal enum VertexColor
 {
-	using System.Collections.Generic;
+	NotInThisSet,
 
-	internal enum VertexColor
+	/// <summary>The node has not been visited yet</summary>
+	White,
+
+	/// <summary>This node is in the process of being visited</summary>
+	Gray,
+
+	/// <summary>This now was visited</summary>
+	Black
+}
+
+/// <summary>Represents a collection of objects which are guaranteed to be unique and holds a color for them</summary>
+internal class ColorsSet
+{
+	private readonly IDictionary<IVertex, VertexColor> items = new Dictionary<IVertex, VertexColor>();
+
+	public ColorsSet(IVertex[] items)
 	{
-		NotInThisSet,
-
-		/// <summary>
-		///   The node has not been visited yet
-		/// </summary>
-		White,
-
-		/// <summary>
-		///   This node is in the process of being visited
-		/// </summary>
-		Gray,
-
-		/// <summary>
-		///   This now was visited
-		/// </summary>
-		Black
+		foreach (var item in items) Set(item, VertexColor.White);
 	}
 
-	/// <summary>
-	///   Represents a collection of objects
-	///   which are guaranteed to be unique 
-	///   and holds a color for them
-	/// </summary>
-	internal class ColorsSet
+	public VertexColor ColorOf(IVertex item)
 	{
-		private readonly IDictionary<IVertex, VertexColor> items = new Dictionary<IVertex, VertexColor>();
-
-		public ColorsSet(IVertex[] items)
-		{
-			foreach (var item in items)
-			{
-				Set(item, VertexColor.White);
-			}
-		}
-
-		public VertexColor ColorOf(IVertex item)
-		{
-			if (!items.ContainsKey(item))
-			{
-				return VertexColor.NotInThisSet;
-			}
-			return items[item];
-		}
-
-		public void Set(IVertex item, VertexColor color)
-		{
-			items[item] = color;
-		}
+		if (!items.ContainsKey(item)) return VertexColor.NotInThisSet;
+		return items[item];
 	}
 
-	/// <summary>
-	///   Holds a timestamp (integer) 
-	///   for a given item
-	/// </summary>
-	internal class TimestampSet
+	public void Set(IVertex item, VertexColor color)
 	{
-		private readonly IDictionary<IVertex, int> items = new Dictionary<IVertex, int>();
+		items[item] = color;
+	}
+}
 
-		public void Register(IVertex item, int time)
-		{
-			items[item] = time;
-		}
+/// <summary>Holds a timestamp (integer) for a given item</summary>
+internal class TimestampSet
+{
+	private readonly IDictionary<IVertex, int> items = new Dictionary<IVertex, int>();
 
-		public int TimeOf(IVertex item)
-		{
-			return items[item];
-		}
+	public void Register(IVertex item, int time)
+	{
+		items[item] = time;
+	}
+
+	public int TimeOf(IVertex item)
+	{
+		return items[item];
 	}
 }

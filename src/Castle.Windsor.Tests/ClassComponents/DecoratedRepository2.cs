@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel.Tests.ClassComponents;
+
+public class DecoratedRepository2 : IRepository
 {
-	public class DecoratedRepository2 : IRepository
+	public DecoratedRepository2(string name)
 	{
-		public DecoratedRepository2(string name)
-		{
-		}
 	}
 }

@@ -12,66 +12,67 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Lifestyle
+namespace CastleTests.Lifestyle;
+
+using Castle.MicroKernel.Lifestyle;
+using Castle.MicroKernel.Registration;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class ScopedLifestyleExplicitAndNestingTestCase : AbstractContainerTestCase
 {
-	using Castle.MicroKernel.Lifestyle;
-	using Castle.MicroKernel.Registration;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class ScopedLifestyleExplicitAndNestingTestCase : AbstractContainerTestCase
+	protected override void AfterContainerCreated()
 	{
-		protected override void AfterContainerCreated()
-		{
-			Container.Register(Component.For<A>().LifestyleScoped());
-		}
+		Container.Register(Component.For<A>().LifestyleScoped());
+	}
 
-		[Test]
-		[Ignore("Should we support this scenario or not... there's no explicit parent/child relationship here...")]
-		public void Inner_scope_resolves_from_outer_scope()
+	[Test]
+	[Ignore("Should we support this scenario or not... there's no explicit parent/child relationship here...")]
+	public void Inner_scope_resolves_from_outer_scope()
+	{
+		using (Container.BeginScope())
 		{
+			var outer = Container.Resolve<A>();
 			using (Container.BeginScope())
 			{
-				var outer = Container.Resolve<A>();
-				using (Container.BeginScope())
-				{
-					var inner = Container.Resolve<A>();
-					Assert.AreSame(outer, inner);
-				}
+				var inner = Container.Resolve<A>();
+				Assert.AreSame(outer, inner);
 			}
 		}
+	}
 
-		[Test]
-		public void Inner_scope_should_not_cause_outer_one_to_drop_cache()
+	[Test]
+	public void Inner_scope_should_not_cause_outer_one_to_drop_cache()
+	{
+		using (Container.BeginScope())
 		{
+			var before = Container.Resolve<A>();
 			using (Container.BeginScope())
 			{
-				var before = Container.Resolve<A>();
-				using (Container.BeginScope())
-				{
-					Container.Resolve<A>();
-				}
-				var after = Container.Resolve<A>();
-				Assert.AreSame(before, after);
+				Container.Resolve<A>();
 			}
+
+			var after = Container.Resolve<A>();
+			Assert.AreSame(before, after);
 		}
+	}
 
-		[Test]
-		public void Inner_scope_should_not_cause_outer_one_to_prematurely_release_components()
+	[Test]
+	public void Inner_scope_should_not_cause_outer_one_to_prematurely_release_components()
+	{
+		Container.Register(Component.For<ADisposable>().LifestyleScoped());
+		using (Container.BeginScope())
 		{
-			Container.Register(Component.For<ADisposable>().LifestyleScoped());
+			var outer = Container.Resolve<ADisposable>();
 			using (Container.BeginScope())
 			{
-				var outer = Container.Resolve<ADisposable>();
-				using (Container.BeginScope())
-				{
-					Container.Resolve<ADisposable>();
-				}
-				Assert.IsFalse(outer.Disposed);
+				Container.Resolve<ADisposable>();
 			}
+
+			Assert.IsFalse(outer.Disposed);
 		}
 	}
 }

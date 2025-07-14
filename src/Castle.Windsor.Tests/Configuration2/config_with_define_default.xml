@@ -7,5 +7,5 @@
 	<undef flag="prod"/>
 	<undef flag="qa"/>
 
-    <include uri="file://config_with_choose_stmt.xml"/>
+	<include uri="file://config_with_choose_stmt.xml"/>
 </configuration>

@@ -12,34 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Lifestyle
+namespace Castle.MicroKernel.Tests.Lifestyle;
+
+using System;
+
+using Castle.MicroKernel.Context;
+using Castle.MicroKernel.Lifestyle;
+
+public class CustomLifestyle_Scoped : AbstractLifestyleManager
 {
-	using System;
-
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Lifestyle;
-
-	public class CustomLifestyle_Scoped : AbstractLifestyleManager
+	public override void Dispose()
 	{
-		public override void Dispose()
+	}
+
+	protected override Burden CreateInstance(CreationContext context, bool trackedExternally)
+	{
+		var scope = CustomLifestyle_InstanceScope.Current;
+		if (scope == null) throw new InvalidOperationException("Scope is null");
+
+		Burden instance;
+		if (scope.Cache.TryGetValue(Model, out instance) == false)
 		{
+			instance = base.CreateInstance(context, trackedExternally);
+			scope.Cache[Model] = instance;
 		}
 
-		protected override Burden CreateInstance(CreationContext context, bool trackedExternally)
-		{
-			var scope = CustomLifestyle_InstanceScope.Current;
-			if (scope == null)
-			{
-				throw new InvalidOperationException("Scope is null");
-			}
-
-			Burden instance;
-			if (scope.Cache.TryGetValue(Model, out instance) == false)
-			{
-				instance = base.CreateInstance(context, trackedExternally);
-				scope.Cache[Model] = instance;
-			}
-			return instance;
-		}
+		return instance;
 	}
 }

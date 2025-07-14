@@ -12,42 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+namespace Castle.MicroKernel.SubSystems.Conversion;
+
+using System;
+using System.Diagnostics;
+
+using Castle.Core.Configuration;
+
+[Serializable]
+public class ArrayConverter : AbstractTypeConverter
 {
-	using System;
-	using System.Diagnostics;
-
-	using Castle.Core.Configuration;
-
-	[Serializable]
-	public class ArrayConverter : AbstractTypeConverter
+	public override bool CanHandleType(Type type)
 	{
-		public override bool CanHandleType(Type type)
+		return type.IsArray;
+	}
+
+	public override object PerformConversion(string value, Type targetType)
+	{
+		throw new NotImplementedException();
+	}
+
+	public override object PerformConversion(IConfiguration configuration, Type targetType)
+	{
+		Debug.Assert(targetType.IsArray);
+		var count = configuration.Children.Count;
+		var itemType = targetType.GetElementType();
+
+		var array = Array.CreateInstance(itemType, count);
+
+		var index = 0;
+		foreach (var itemConfig in configuration.Children)
 		{
-			return type.IsArray;
+			var value = Context.Composition.PerformConversion(itemConfig, itemType);
+			array.SetValue(value, index++);
 		}
 
-		public override object PerformConversion(String value, Type targetType)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override object PerformConversion(IConfiguration configuration, Type targetType)
-		{
-			Debug.Assert(targetType.IsArray);
-			var count = configuration.Children.Count;
-			var itemType = targetType.GetElementType();
-
-			var array = Array.CreateInstance(itemType, count);
-
-			var index = 0;
-			foreach (var itemConfig in configuration.Children)
-			{
-				var value = Context.Composition.PerformConversion(itemConfig, itemType);
-				array.SetValue(value, index++);
-			}
-
-			return array;
-		}
+		return array;
 	}
 }

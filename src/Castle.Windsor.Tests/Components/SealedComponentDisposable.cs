@@ -12,22 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+using System;
+
+public sealed class SealedComponentDisposable : IComponent, IDisposable
 {
-	using System;
+	public bool Disposed { get; private set; }
 
-	public sealed class SealedComponentDisposable : IComponent, IDisposable
+	public int ID => 0;
+
+	public void Dispose()
 	{
-		public bool Disposed { get; private set; }
-
-		public int ID
-		{
-			get { return 0; }
-		}
-
-		public void Dispose()
-		{
-			Disposed = true;
-		}
+		Disposed = true;
 	}
 }

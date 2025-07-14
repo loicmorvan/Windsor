@@ -35,10 +35,7 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Scope
 
 		public override void Dispose()
 		{
-			if (ExtensionContainerScopeCache.current.Value == this)
-			{
-				ExtensionContainerScopeCache.current.Value = parent;
-			}
+			if (ExtensionContainerScopeCache.current.Value == this) ExtensionContainerScopeCache.current.Value = parent;
 			base.Dispose();
 		}
 	}

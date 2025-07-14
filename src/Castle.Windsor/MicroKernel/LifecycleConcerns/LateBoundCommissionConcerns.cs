@@ -12,23 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.LifecycleConcerns
+namespace Castle.MicroKernel.LifecycleConcerns;
+
+using System;
+
+using Castle.Core;
+
+/// <summary>Lifetime concern that works for components that don't have their actual type determined upfront</summary>
+[Serializable]
+public class LateBoundCommissionConcerns : LateBoundConcerns<ICommissionConcern>, ICommissionConcern
 {
-	using System;
-
-	using Castle.Core;
-
-	/// <summary>
-	///   Lifetime concern that works for components that don't have their actual type determined upfront
-	/// </summary>
-	[Serializable]
-	public class LateBoundCommissionConcerns : LateBoundConcerns<ICommissionConcern>, ICommissionConcern
+	public override void Apply(ComponentModel model, object component)
 	{
-		public override void Apply(ComponentModel model, object component)
-		{
-			var componentConcerns = GetComponentConcerns(component.GetType());
+		var componentConcerns = GetComponentConcerns(component.GetType());
 
-			componentConcerns.ForEach(c => c.Apply(model, component));
-		}
+		componentConcerns.ForEach(c => c.Apply(model, component));
 	}
 }

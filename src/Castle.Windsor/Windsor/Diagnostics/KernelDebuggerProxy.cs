@@ -12,41 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
-{
-	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Linq;
+namespace Castle.Windsor.Diagnostics;
 
-	using Castle.MicroKernel;
-	using Castle.Windsor.Diagnostics.DebuggerViews;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+
+using Castle.MicroKernel;
+using Castle.Windsor.Diagnostics.DebuggerViews;
+
+[DebuggerDisplay("")]
+internal class KernelDebuggerProxy
+{
+	private readonly IEnumerable<IContainerDebuggerExtension> extensions;
+
+	public KernelDebuggerProxy(IWindsorContainer container) : this(container.Kernel)
+	{
+	}
+
+	public KernelDebuggerProxy(IKernel kernel)
+	{
+		if (kernel == null) throw new ArgumentNullException(nameof(kernel));
+		extensions =
+			(IEnumerable<IContainerDebuggerExtension>)(kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IContainerDebuggerExtensionHost) ??
+			new IContainerDebuggerExtension[0];
+	}
 
 	[DebuggerDisplay("")]
-	internal class KernelDebuggerProxy
+	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+	public DebuggerViewItem[] Extensions
 	{
-		private readonly IEnumerable<IContainerDebuggerExtension> extensions;
-
-		public KernelDebuggerProxy(IWindsorContainer container) : this(container.Kernel)
-		{
-		}
-
-		public KernelDebuggerProxy(IKernel kernel)
-		{
-			if (kernel == null)
-			{
-				throw new ArgumentNullException(nameof(kernel));
-			}
-			extensions =
-				(IEnumerable<IContainerDebuggerExtension>)(kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IContainerDebuggerExtensionHost) ??
-				new IContainerDebuggerExtension[0];
-		}
-
-		[DebuggerDisplay("")]
-		[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-		public DebuggerViewItem[] Extensions
-		{
-			get { return extensions.SelectMany(e => e.Attach()).ToArray(); }
-		}
+		get { return extensions.SelectMany(e => e.Attach()).ToArray(); }
 	}
 }

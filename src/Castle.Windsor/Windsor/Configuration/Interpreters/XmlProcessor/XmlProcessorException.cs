@@ -12,26 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor;
+
+using System;
+
+[Serializable]
+public class XmlProcessorException : Exception
 {
-	using System;
-	using System.Runtime.Serialization;
-
-	[Serializable]
-	public class XmlProcessorException : Exception
+	public XmlProcessorException(string message, params object[] args) : base(string.Format(message, args))
 	{
-		public XmlProcessorException(string message, params object[] args) : base(String.Format(message, args))
-		{
-		}
+	}
 
-		public XmlProcessorException(string message, Exception innerException) : base(message, innerException)
-		{
-		}
+	public XmlProcessorException(string message, Exception innerException) : base(message, innerException)
+	{
+	}
 
 #if FEATURE_SERIALIZATION
 		public XmlProcessorException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 #endif
-	}
 }

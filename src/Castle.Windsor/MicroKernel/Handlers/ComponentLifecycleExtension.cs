@@ -12,81 +12,73 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers
+namespace Castle.MicroKernel.Handlers;
+
+using System.Collections.Generic;
+
+public class ComponentLifecycleExtension : IResolveExtension
 {
-	using System.Collections.Generic;
+	private readonly List<ComponentResolvingDelegate> resolvers = new(4);
+	private IKernel kernel;
 
-	public class ComponentLifecycleExtension : IResolveExtension
+	public void Init(IKernel kernel, IHandler handler)
 	{
-		private readonly List<ComponentResolvingDelegate> resolvers = new List<ComponentResolvingDelegate>(4);
-		private IKernel kernel;
+		this.kernel = kernel;
+	}
 
-		public void AddHandler(ComponentResolvingDelegate handler)
-		{
-			resolvers.Add(handler);
-		}
-
-		public void Init(IKernel kernel, IHandler handler)
-		{
-			this.kernel = kernel;
-		}
-
-		public void Intercept(ResolveInvocation invocation)
-		{
-			Releasing releasing = null;
-			if (resolvers.Count > 0)
+	public void Intercept(ResolveInvocation invocation)
+	{
+		Releasing releasing = null;
+		if (resolvers.Count > 0)
+			foreach (var resolver in resolvers)
 			{
-				foreach (var resolver in resolvers)
+				var releaser = resolver(kernel, invocation.Context);
+				if (releaser != null)
 				{
-					var releaser = resolver(kernel, invocation.Context);
-					if (releaser != null)
+					if (releasing == null)
 					{
-						if (releasing == null)
-						{
-							releasing = new Releasing(resolvers.Count, kernel);
-							invocation.RequireDecommission();
-						}
-						releasing.Add(releaser);
+						releasing = new Releasing(resolvers.Count, kernel);
+						invocation.RequireDecommission();
 					}
+
+					releasing.Add(releaser);
 				}
 			}
 
-			invocation.Proceed();
+		invocation.Proceed();
 
-			if (releasing == null)
-			{
-				return;
-			}
-			var burden = invocation.Burden;
-			if (burden == null)
-			{
-				return;
-			}
-			burden.Releasing += releasing.Invoked;
+		if (releasing == null) return;
+		var burden = invocation.Burden;
+		if (burden == null) return;
+		burden.Releasing += releasing.Invoked;
+	}
+
+	public void AddHandler(ComponentResolvingDelegate handler)
+	{
+		resolvers.Add(handler);
+	}
+
+	private class Releasing
+	{
+		private readonly IKernel kernel;
+		private readonly List<ComponentReleasingDelegate> releasers;
+
+		public Releasing(int count, IKernel kernel)
+		{
+			this.kernel = kernel;
+			releasers = new List<ComponentReleasingDelegate>(count);
 		}
 
-		private class Releasing
+		public void Add(ComponentReleasingDelegate releaser)
 		{
-			private readonly IKernel kernel;
-			private readonly List<ComponentReleasingDelegate> releasers;
+			releasers.Add(releaser);
+		}
 
-			public Releasing(int count, IKernel kernel)
-			{
-				this.kernel = kernel;
-				releasers = new List<ComponentReleasingDelegate>(count);
-			}
+		public void Invoked(Burden burden)
+		{
+			burden.Releasing -= Invoked;
 
-			public void Add(ComponentReleasingDelegate releaser)
-			{
-				releasers.Add(releaser);
-			}
-
-			public void Invoked(Burden burden)
-			{
-				burden.Releasing -= Invoked;
-
-				releasers.ForEach(r => r.Invoke(kernel));
-			}
+			releasers.ForEach(r => r.Invoke(kernel));
 		}
 	}
 }

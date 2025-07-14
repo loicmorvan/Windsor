@@ -18,46 +18,37 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor.Extensions.DependencyInjection.Extensions;
-	
+
 	using Microsoft.Extensions.DependencyInjection;
+
+	using ServiceDescriptor = Microsoft.Extensions.DependencyInjection.ServiceDescriptor;
 
 	internal class RegistrationAdapter
 	{
-		public static IRegistration FromOpenGenericServiceDescriptor(Microsoft.Extensions.DependencyInjection.ServiceDescriptor service)
+		public static IRegistration FromOpenGenericServiceDescriptor(ServiceDescriptor service)
 		{
-			ComponentRegistration<object> registration = Component.For(service.ServiceType)
+			var registration = Component.For(service.ServiceType)
 				.NamedAutomatically(UniqueComponentName(service));
 
-			if(service.ImplementationType != null)
-			{
+			if (service.ImplementationType != null)
 				registration = UsingImplementation(registration, service);
-			}
 			else
-			{
-				throw new System.ArgumentException("Unsupported ServiceDescriptor");
-			}
+				throw new ArgumentException("Unsupported ServiceDescriptor");
 
 			return ResolveLifestyle(registration, service)
 				.IsDefault();
 		}
 
-		public static IRegistration FromServiceDescriptor(Microsoft.Extensions.DependencyInjection.ServiceDescriptor service)
+		public static IRegistration FromServiceDescriptor(ServiceDescriptor service)
 		{
 			var registration = Component.For(service.ServiceType)
 				.NamedAutomatically(UniqueComponentName(service));
 
 			if (service.ImplementationFactory != null)
-			{
 				registration = UsingFactoryMethod(registration, service);
-			}
 			else if (service.ImplementationInstance != null)
-			{
 				registration = UsingInstance(registration, service);
-			}
-			else if (service.ImplementationType != null)
-			{
-				registration = UsingImplementation(registration, service);
-			}
+			else if (service.ImplementationType != null) registration = UsingImplementation(registration, service);
 
 			return ResolveLifestyle(registration, service)
 				.IsDefault();
@@ -65,58 +56,47 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 
 		public static string OriginalComponentName(string uniqueComponentName)
 		{
-			if(uniqueComponentName == null)
-			{
-				return null;
-			}
-			if(!uniqueComponentName.Contains("@"))
-			{
-				return uniqueComponentName;
-			}
+			if (uniqueComponentName == null) return null;
+			if (!uniqueComponentName.Contains("@")) return uniqueComponentName;
 			return uniqueComponentName.Split('@')[0];
 		}
 
-		internal static string UniqueComponentName(Microsoft.Extensions.DependencyInjection.ServiceDescriptor service)
+		internal static string UniqueComponentName(ServiceDescriptor service)
 		{
 			var result = "";
-			if(service.ImplementationType != null)
-			{
+			if (service.ImplementationType != null)
 				result = service.ImplementationType.FullName;
-			}
-			else if(service.ImplementationInstance != null)
-			{
+			else if (service.ImplementationInstance != null)
 				result = service.ImplementationInstance.GetType().FullName;
-			}
 			else
-			{
 				result = service.ImplementationFactory.GetType().FullName;
-			}
-			result = result + "@" + Guid.NewGuid().ToString();
+			result = result + "@" + Guid.NewGuid();
 
 			return result;
 		}
 
-		private static ComponentRegistration<TService> UsingFactoryMethod<TService>(ComponentRegistration<TService> registration, Microsoft.Extensions.DependencyInjection.ServiceDescriptor service) where TService : class
+		private static ComponentRegistration<TService> UsingFactoryMethod<TService>(ComponentRegistration<TService> registration, ServiceDescriptor service) where TService : class
 		{
-			return registration.UsingFactoryMethod((kernel) => {
-				var serviceProvider = kernel.Resolve<System.IServiceProvider>();
+			return registration.UsingFactoryMethod(kernel =>
+			{
+				var serviceProvider = kernel.Resolve<IServiceProvider>();
 				return service.ImplementationFactory(serviceProvider) as TService;
 			});
 		}
 
-		private static ComponentRegistration<TService> UsingInstance<TService>(ComponentRegistration<TService> registration, Microsoft.Extensions.DependencyInjection.ServiceDescriptor service) where TService : class
+		private static ComponentRegistration<TService> UsingInstance<TService>(ComponentRegistration<TService> registration, ServiceDescriptor service) where TService : class
 		{
 			return registration.Instance(service.ImplementationInstance as TService);
 		}
 
-		private static ComponentRegistration<TService> UsingImplementation<TService>(ComponentRegistration<TService> registration, Microsoft.Extensions.DependencyInjection.ServiceDescriptor service) where TService : class
+		private static ComponentRegistration<TService> UsingImplementation<TService>(ComponentRegistration<TService> registration, ServiceDescriptor service) where TService : class
 		{
 			return registration.ImplementedBy(service.ImplementationType);
 		}
 
-		private static ComponentRegistration<TService> ResolveLifestyle<TService>(ComponentRegistration<TService> registration, Microsoft.Extensions.DependencyInjection.ServiceDescriptor service) where TService : class
+		private static ComponentRegistration<TService> ResolveLifestyle<TService>(ComponentRegistration<TService> registration, ServiceDescriptor service) where TService : class
 		{
-			switch(service.Lifetime)
+			switch (service.Lifetime)
 			{
 				case ServiceLifetime.Singleton:
 					return registration.LifeStyle.NetStatic();
@@ -124,9 +104,9 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 					return registration.LifeStyle.ScopedToNetServiceScope();
 				case ServiceLifetime.Transient:
 					return registration.LifestyleNetTransient();
-					
+
 				default:
-					throw new System.ArgumentException($"Invalid lifetime {service.Lifetime}");
+					throw new ArgumentException($"Invalid lifetime {service.Lifetime}");
 			}
 		}
 	}

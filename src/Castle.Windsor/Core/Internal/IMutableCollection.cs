@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
+namespace Castle.Core.Internal;
+
+using System.Collections.Generic;
+
+public interface IMutableCollection<T> : IEnumerable<T>
 {
-	using System.Collections.Generic;
+	int Count { get; }
 
-	public interface IMutableCollection<T> : IEnumerable<T>
-	{
-		int Count { get; }
+	void Add(T item);
 
-		void Add(T item);
-
-		bool Remove(T item);
-	}
+	bool Remove(T item);
 }

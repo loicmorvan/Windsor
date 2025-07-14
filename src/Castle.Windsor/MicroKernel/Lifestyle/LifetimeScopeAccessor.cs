@@ -12,34 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle
+namespace Castle.MicroKernel.Lifestyle;
+
+using System;
+
+using Castle.MicroKernel.Context;
+using Castle.MicroKernel.Lifestyle.Scoped;
+
+using Scope = Castle.MicroKernel.Lifestyle.Scoped.CallContextLifetimeScope;
+
+public class LifetimeScopeAccessor : IScopeAccessor
 {
-	using System;
-
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Lifestyle.Scoped;
-
-	using Scope = Castle.MicroKernel.Lifestyle.Scoped.CallContextLifetimeScope;
-
-	public class LifetimeScopeAccessor : IScopeAccessor
+	public void Dispose()
 	{
-		public void Dispose()
-		{
-			var scope = Scope.ObtainCurrentScope();
-			if (scope != null)
-			{
-				scope.Dispose();
-			}
-		}
+		var scope = Scope.ObtainCurrentScope();
+		if (scope != null) scope.Dispose();
+	}
 
-		public ILifetimeScope GetScope(CreationContext context)
-		{
-			var scope = Scope.ObtainCurrentScope();
-			if (scope == null)
-			{
-				throw new InvalidOperationException("Scope was not available. Did you forget to call container.BeginScope()?");
-			}
-			return scope;
-		}
+	public ILifetimeScope GetScope(CreationContext context)
+	{
+		var scope = Scope.ObtainCurrentScope();
+		if (scope == null) throw new InvalidOperationException("Scope was not available. Did you forget to call container.BeginScope()?");
+		return scope;
 	}
 }

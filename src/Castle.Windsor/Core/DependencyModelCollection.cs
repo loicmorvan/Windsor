@@ -12,55 +12,46 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
+namespace Castle.Core;
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+
+using Castle.Core.Internal;
+
+/// <summary>Collection of <see cref = "DependencyModel" />.</summary>
+[Serializable]
+[DebuggerDisplay("Count = {dependencies.Count}")]
+public class DependencyModelCollection : IMutableCollection<DependencyModel>
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.Diagnostics;
+	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+	private readonly List<DependencyModel> dependencies = new();
 
-	using Castle.Core.Internal;
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	public int Count => dependencies.Count;
 
-	/// <summary>
-	///     Collection of <see cref = "DependencyModel" />.
-	/// </summary>
-	[Serializable]
-	[DebuggerDisplay("Count = {dependencies.Count}")]
-	public class DependencyModelCollection : IMutableCollection<DependencyModel>
+	[DebuggerStepThrough]
+	public IEnumerator<DependencyModel> GetEnumerator()
 	{
-		[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-		private readonly List<DependencyModel> dependencies = new List<DependencyModel>();
+		return dependencies.GetEnumerator();
+	}
 
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		public int Count
-		{
-			get { return dependencies.Count; }
-		}
+	public void Add(DependencyModel dependencyModel)
+	{
+		if (dependencyModel == null) throw new ArgumentNullException(nameof(dependencyModel));
+		dependencies.Add(dependencyModel);
+	}
 
-		[DebuggerStepThrough]
-		public IEnumerator<DependencyModel> GetEnumerator()
-		{
-			return dependencies.GetEnumerator();
-		}
+	public bool Remove(DependencyModel dependencyModel)
+	{
+		return dependencies.Remove(dependencyModel);
+	}
 
-		public void Add(DependencyModel dependencyModel)
-		{
-			if (dependencyModel == null)
-			{
-				throw new ArgumentNullException(nameof(dependencyModel));
-			}
-			dependencies.Add(dependencyModel);
-		}
-
-		public bool Remove(DependencyModel dependencyModel)
-		{
-			return dependencies.Remove(dependencyModel);
-		}
-
-		[DebuggerStepThrough]
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+	[DebuggerStepThrough]
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return GetEnumerator();
 	}
 }

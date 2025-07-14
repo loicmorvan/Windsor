@@ -12,20 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+using Castle.Core;
+
+public class ClassWithDoNotSelectConstructors
 {
-    using Castle.Core;
+	public ClassWithDoNotSelectConstructors()
+	{
+	}
 
-    public class ClassWithDoNotSelectConstructors
-    {
-        public ClassWithDoNotSelectConstructors() { }
-        
-        [DoNotSelect]
-        public ClassWithDoNotSelectConstructors(string dependency)
-        {
-            Dependency = dependency;
-        }
+	[DoNotSelect]
+	public ClassWithDoNotSelectConstructors(string dependency)
+	{
+		Dependency = dependency;
+	}
 
-        public string Dependency { get; private set; }
-    }
+	public string Dependency { get; private set; }
 }

@@ -12,22 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
+
+using System;
+
+public class UsesBarDelegate
 {
-	using System;
+	private readonly Func<string, string, Bar> barFactory;
 
-	public class UsesBarDelegate
+	public UsesBarDelegate(Func<string, string, Bar> barFactory)
 	{
-		private readonly Func<string, string, Bar> barFactory;
+		this.barFactory = barFactory;
+	}
 
-		public UsesBarDelegate(Func<string, string, Bar> barFactory)
-		{
-			this.barFactory = barFactory;
-		}
-
-		public Bar GetBar(string name, string description)
-		{
-			return barFactory(name, description);
-		}
+	public Bar GetBar(string name, string description)
+	{
+		return barFactory(name, description);
 	}
 }

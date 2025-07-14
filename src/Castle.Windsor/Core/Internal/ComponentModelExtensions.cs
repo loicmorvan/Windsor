@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
+namespace Castle.Core.Internal;
+
+using System;
+
+public static class ComponentModelExtensions
 {
-	using System;
-
-	public static class ComponentModelExtensions
+	public static Predicate<Type> GetDefaultComponentForServiceFilter(this ComponentModel component)
 	{
-		public static Predicate<Type> GetDefaultComponentForServiceFilter(this ComponentModel component)
-		{
-			return (Predicate<Type>) component.ExtendedProperties[Constants.DefaultComponentForServiceFilter];
-		}
+		return (Predicate<Type>)component.ExtendedProperties[Constants.DefaultComponentForServiceFilter];
+	}
 
-		public static Predicate<Type> GetFallbackComponentForServiceFilter(this ComponentModel component)
-		{
-			return (Predicate<Type>) component.ExtendedProperties[Constants.FallbackComponentForServiceFilter];
-		}
+	public static Predicate<Type> GetFallbackComponentForServiceFilter(this ComponentModel component)
+	{
+		return (Predicate<Type>)component.ExtendedProperties[Constants.FallbackComponentForServiceFilter];
 	}
 }

@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
-{
-	using System;
+namespace Castle.Core;
 
-	/// <summary>
-	///   Specifies the proxying behavior for a component.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-	public sealed class ComponentProxyBehaviorAttribute : Attribute
-	{
-		private Type[] additionalInterfaces;
+using System;
+
+/// <summary>Specifies the proxying behavior for a component.</summary>
+[AttributeUsage(AttributeTargets.Class)]
+public sealed class ComponentProxyBehaviorAttribute : Attribute
+{
+	private Type[] additionalInterfaces;
 
 #if FEATURE_REMOTING
 		/// <summary>
@@ -32,21 +30,15 @@ namespace Castle.Core
 		public bool UseMarshalByRefProxy { get; set; }
 #endif
 
-		/// <summary>
-		///   Gets or sets the additional interfaces used during proxy generation.
-		/// </summary>
-		public Type[] AdditionalInterfaces
+	/// <summary>Gets or sets the additional interfaces used during proxy generation.</summary>
+	public Type[] AdditionalInterfaces
+	{
+		get
 		{
-			get
-			{
-				if (additionalInterfaces != null)
-				{
-					return additionalInterfaces;
-				}
+			if (additionalInterfaces != null) return additionalInterfaces;
 
-				return Type.EmptyTypes;
-			}
-			set { additionalInterfaces = value; }
+			return Type.EmptyTypes;
 		}
+		set => additionalInterfaces = value;
 	}
 }

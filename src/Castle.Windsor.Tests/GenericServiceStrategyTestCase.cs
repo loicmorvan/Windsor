@@ -12,80 +12,79 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace CastleTests;
+
+using System;
+
+using Castle.Core;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Handlers;
+using Castle.MicroKernel.Registration;
+
+using CastleTests.ClassComponents;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class GenericServiceStrategyTestCase : AbstractContainerTestCase
 {
-	using System;
-
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Handlers;
-	using Castle.MicroKernel.Registration;
-
-	using CastleTests.ClassComponents;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class GenericServiceStrategyTestCase : AbstractContainerTestCase
+	[Test]
+	public void NOT_supports_returns_false_for_HasComponent()
 	{
-		[Test]
-		public void NOT_supports_returns_false_for_HasComponent()
-		{
-			Container.Register(Component.For(typeof(IGeneric<>))
-			                   	.ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((t, c) => false)));
+		Container.Register(Component.For(typeof(IGeneric<>))
+			.ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((t, c) => false)));
 
-			Assert.IsFalse(Kernel.HasComponent(typeof(IGeneric<int>)));
-		}
-
-		[Test]
-		public void NOT_supports_returns_null_for_GetHandler()
-		{
-			Container.Register(Component.For(typeof(IGeneric<>))
-			                   	.ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((t, c) => false)));
-
-			Assert.IsNull(Kernel.GetHandler(typeof(IGeneric<int>)));
-		}
-
-		[Test]
-		public void NOT_supports_returns_zero_for_GetAssignableHandlers()
-		{
-			Container.Register(Component.For(typeof(IGeneric<>))
-			                   	.ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((t, c) => false)));
-
-			Assert.IsEmpty(Kernel.GetAssignableHandlers(typeof(IGeneric<int>)));
-		}
-
-		[Test]
-		public void NOT_supports_returns_zero_for_GetHandlers()
-		{
-			Container.Register(Component.For(typeof(IGeneric<>))
-			                   	.ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((t, c) => false)));
-
-			Assert.IsEmpty(Kernel.GetHandlers(typeof(IGeneric<int>)));
-		}
-
-		[Test]
-		public void NOT_supports_throws_ComponentNotFoundException_when_resolving()
-		{
-			Container.Register(Component.For(typeof(IGeneric<>))
-			                   	.ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((t, c) => false)));
-
-			Assert.Throws<ComponentNotFoundException>(() => Container.Resolve<IGeneric<int>>());
-		}
+		Assert.IsFalse(Kernel.HasComponent(typeof(IGeneric<int>)));
 	}
 
-	internal class DelegatingServiceStrategy : IGenericServiceStrategy
+	[Test]
+	public void NOT_supports_returns_null_for_GetHandler()
 	{
-		private readonly Func<Type, ComponentModel, bool> supports;
+		Container.Register(Component.For(typeof(IGeneric<>))
+			.ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((t, c) => false)));
 
-		public DelegatingServiceStrategy(Func<Type, ComponentModel, bool> supports)
-		{
-			this.supports = supports;
-		}
+		Assert.IsNull(Kernel.GetHandler(typeof(IGeneric<int>)));
+	}
 
-		public bool Supports(Type service, ComponentModel component)
-		{
-			return supports.Invoke(service, component);
-		}
+	[Test]
+	public void NOT_supports_returns_zero_for_GetAssignableHandlers()
+	{
+		Container.Register(Component.For(typeof(IGeneric<>))
+			.ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((t, c) => false)));
+
+		Assert.IsEmpty(Kernel.GetAssignableHandlers(typeof(IGeneric<int>)));
+	}
+
+	[Test]
+	public void NOT_supports_returns_zero_for_GetHandlers()
+	{
+		Container.Register(Component.For(typeof(IGeneric<>))
+			.ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((t, c) => false)));
+
+		Assert.IsEmpty(Kernel.GetHandlers(typeof(IGeneric<int>)));
+	}
+
+	[Test]
+	public void NOT_supports_throws_ComponentNotFoundException_when_resolving()
+	{
+		Container.Register(Component.For(typeof(IGeneric<>))
+			.ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((t, c) => false)));
+
+		Assert.Throws<ComponentNotFoundException>(() => Container.Resolve<IGeneric<int>>());
+	}
+}
+
+internal class DelegatingServiceStrategy : IGenericServiceStrategy
+{
+	private readonly Func<Type, ComponentModel, bool> supports;
+
+	public DelegatingServiceStrategy(Func<Type, ComponentModel, bool> supports)
+	{
+		this.supports = supports;
+	}
+
+	public bool Supports(Type service, ComponentModel component)
+	{
+		return supports.Invoke(service, component);
 	}
 }

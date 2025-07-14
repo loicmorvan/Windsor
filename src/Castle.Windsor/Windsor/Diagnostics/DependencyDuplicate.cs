@@ -12,54 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
+namespace Castle.Windsor.Diagnostics;
+
+using Castle.Core;
+
+public class DependencyDuplicate
 {
-	using Castle.Core;
-
-	public class DependencyDuplicate
+	public DependencyDuplicate(DependencyModel dependency1, DependencyModel dependency2, DependencyDuplicationReason reason)
 	{
-		public DependencyDuplicate(DependencyModel dependency1, DependencyModel dependency2, DependencyDuplicationReason reason)
-		{
-			Dependency1 = dependency1;
-			Dependency2 = dependency2;
-			Reason = reason;
-		}
+		Dependency1 = dependency1;
+		Dependency2 = dependency2;
+		Reason = reason;
+	}
 
-		public DependencyModel Dependency1 { get; private set; }
-		public DependencyModel Dependency2 { get; private set; }
-		public DependencyDuplicationReason Reason { get; private set; }
+	public DependencyModel Dependency1 { get; }
+	public DependencyModel Dependency2 { get; }
+	public DependencyDuplicationReason Reason { get; }
 
-		public override bool Equals(object obj)
-		{
-			if (ReferenceEquals(null, obj))
-			{
-				return false;
-			}
-			if (ReferenceEquals(this, obj))
-			{
-				return true;
-			}
-			if (obj.GetType() != GetType())
-			{
-				return false;
-			}
-			return Equals((DependencyDuplicate)obj);
-		}
+	public override bool Equals(object obj)
+	{
+		if (ReferenceEquals(null, obj)) return false;
+		if (ReferenceEquals(this, obj)) return true;
+		if (obj.GetType() != GetType()) return false;
+		return Equals((DependencyDuplicate)obj);
+	}
 
-		public override int GetHashCode()
+	public override int GetHashCode()
+	{
+		unchecked
 		{
-			unchecked
-			{
-				var hashCode = (Dependency1 != null ? Dependency1.GetHashCode() : 0);
-				hashCode = (hashCode*397) ^ (Dependency2 != null ? Dependency2.GetHashCode() : 0);
-				hashCode = (hashCode*397) ^ Reason.GetHashCode();
-				return hashCode;
-			}
+			var hashCode = Dependency1 != null ? Dependency1.GetHashCode() : 0;
+			hashCode = (hashCode * 397) ^ (Dependency2 != null ? Dependency2.GetHashCode() : 0);
+			hashCode = (hashCode * 397) ^ Reason.GetHashCode();
+			return hashCode;
 		}
+	}
 
-		protected bool Equals(DependencyDuplicate other)
-		{
-			return Equals(Dependency1, other.Dependency1) && Equals(Dependency2, other.Dependency2) && Reason.Equals(other.Reason);
-		}
+	protected bool Equals(DependencyDuplicate other)
+	{
+		return Equals(Dependency1, other.Dependency1) && Equals(Dependency2, other.Dependency2) && Reason.Equals(other.Reason);
 	}
 }

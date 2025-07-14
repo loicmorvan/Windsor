@@ -12,76 +12,70 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+
+using System;
+
+using Castle.Core;
+
+public class InterceptorDescriptor : IComponentModelDescriptor
 {
-	using System;
-
-	using Castle.Core;
-
-	public class InterceptorDescriptor : IComponentModelDescriptor
+	public enum Where
 	{
-		private readonly int insertIndex;
-		private readonly InterceptorReference[] interceptors;
-		private readonly Where where;
+		First,
+		Last,
+		Insert,
+		Default
+	}
 
-		public InterceptorDescriptor(InterceptorReference[] interceptors, Where where)
-		{
-			this.interceptors = interceptors;
-			this.where = where;
-		}
+	private readonly int insertIndex;
+	private readonly InterceptorReference[] interceptors;
+	private readonly Where where;
 
-		public InterceptorDescriptor(InterceptorReference[] interceptors, int insertIndex)
-			: this(interceptors, Where.Insert)
-		{
-			if (insertIndex < 0)
+	public InterceptorDescriptor(InterceptorReference[] interceptors, Where where)
+	{
+		this.interceptors = interceptors;
+		this.where = where;
+	}
+
+	public InterceptorDescriptor(InterceptorReference[] interceptors, int insertIndex)
+		: this(interceptors, Where.Insert)
+	{
+		if (insertIndex < 0) throw new ArgumentOutOfRangeException(nameof(insertIndex), "insertIndex must be >= 0");
+
+		this.insertIndex = insertIndex;
+	}
+
+	public InterceptorDescriptor(InterceptorReference[] interceptors)
+	{
+		where = Where.Default;
+		this.interceptors = interceptors;
+	}
+
+	public void BuildComponentModel(IKernel kernel, ComponentModel model)
+	{
+	}
+
+	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+	{
+		foreach (var interceptor in interceptors)
+			switch (where)
 			{
-				throw new ArgumentOutOfRangeException(nameof(insertIndex), "insertIndex must be >= 0");
+				case Where.First:
+					model.Interceptors.AddFirst(interceptor);
+					break;
+
+				case Where.Last:
+					model.Interceptors.AddLast(interceptor);
+					break;
+
+				case Where.Insert:
+					model.Interceptors.Insert(insertIndex, interceptor);
+					break;
+
+				default:
+					model.Interceptors.Add(interceptor);
+					break;
 			}
-
-			this.insertIndex = insertIndex;
-		}
-
-		public InterceptorDescriptor(InterceptorReference[] interceptors)
-		{
-			where = Where.Default;
-			this.interceptors = interceptors;
-		}
-
-		public void BuildComponentModel(IKernel kernel, ComponentModel model)
-		{
-		}
-
-		public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-		{
-			foreach (var interceptor in interceptors)
-			{
-				switch (where)
-				{
-					case Where.First:
-						model.Interceptors.AddFirst(interceptor);
-						break;
-
-					case Where.Last:
-						model.Interceptors.AddLast(interceptor);
-						break;
-
-					case Where.Insert:
-						model.Interceptors.Insert(insertIndex, interceptor);
-						break;
-
-					default:
-						model.Interceptors.Add(interceptor);
-						break;
-				}
-			}
-		}
-
-		public enum Where
-		{
-			First,
-			Last,
-			Insert,
-			Default
-		}
 	}
 }

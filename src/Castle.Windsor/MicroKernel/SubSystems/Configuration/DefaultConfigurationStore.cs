@@ -12,187 +12,157 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Configuration
+namespace Castle.MicroKernel.SubSystems.Configuration;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Castle.Core.Configuration;
+using Castle.Core.Resource;
+using Castle.MicroKernel.SubSystems.Resource;
+
+/// <summary>
+///     This implementation of <see cref = "IConfigurationStore" /> does not try to obtain an external configuration by any means. Its only purpose is to serve as a base class for subclasses that might
+///     obtain the configuration node from anywhere.
+/// </summary>
+[Serializable]
+public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+	private readonly IDictionary<string, IConfiguration> childContainers = new Dictionary<string, IConfiguration>();
+	private readonly IDictionary<string, IConfiguration> components = new Dictionary<string, IConfiguration>();
+	private readonly IDictionary<string, IConfiguration> facilities = new Dictionary<string, IConfiguration>();
+	private readonly ICollection<IConfiguration> installers = new List<IConfiguration>();
+	private readonly object syncLock = new();
 
-	using Castle.Core.Configuration;
-	using Castle.Core.Resource;
-	using Castle.MicroKernel.SubSystems.Resource;
-
-	/// <summary>
-	///   This implementation of <see cref = "IConfigurationStore" />
-	///   does not try to obtain an external configuration by any means.
-	///   Its only purpose is to serve as a base class for subclasses
-	///   that might obtain the configuration node from anywhere.
-	/// </summary>
-	[Serializable]
-	public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
+	/// <summary>Adds the child container configuration.</summary>
+	/// <param name = "key">The key.</param>
+	/// <param name = "config">The config.</param>
+	public void AddChildContainerConfiguration(string key, IConfiguration config)
 	{
-		private readonly IDictionary<string, IConfiguration> childContainers = new Dictionary<string, IConfiguration>();
-		private readonly IDictionary<string, IConfiguration> components = new Dictionary<string, IConfiguration>();
-		private readonly IDictionary<string, IConfiguration> facilities = new Dictionary<string, IConfiguration>();
-		private readonly ICollection<IConfiguration> installers = new List<IConfiguration>();
-		private readonly object syncLock = new object();
-
-		/// <summary>
-		///   Adds the child container configuration.
-		/// </summary>
-		/// <param name = "key">The key.</param>
-		/// <param name = "config">The config.</param>
-		public void AddChildContainerConfiguration(String key, IConfiguration config)
+		lock (syncLock)
 		{
-			lock(syncLock)
-			{
-				childContainers[key] = config;
-			}
+			childContainers[key] = config;
 		}
+	}
 
-		/// <summary>
-		///   Associates a configuration node with a component key
-		/// </summary>
-		/// <param name = "key">item key</param>
-		/// <param name = "config">Configuration node</param>
-		public void AddComponentConfiguration(String key, IConfiguration config)
+	/// <summary>Associates a configuration node with a component key</summary>
+	/// <param name = "key">item key</param>
+	/// <param name = "config">Configuration node</param>
+	public void AddComponentConfiguration(string key, IConfiguration config)
+	{
+		lock (syncLock)
 		{
-			lock (syncLock)
-			{
-				components[key] = config;
-			}		
+			components[key] = config;
 		}
+	}
 
-		/// <summary>
-		///   Associates a configuration node with a facility key
-		/// </summary>
-		/// <param name = "key">item key</param>
-		/// <param name = "config">Configuration node</param>
-		public void AddFacilityConfiguration(String key, IConfiguration config)
+	/// <summary>Associates a configuration node with a facility key</summary>
+	/// <param name = "key">item key</param>
+	/// <param name = "config">Configuration node</param>
+	public void AddFacilityConfiguration(string key, IConfiguration config)
+	{
+		lock (syncLock)
 		{
-			lock(syncLock)
-			{
-				facilities[key] = config;
-			}
+			facilities[key] = config;
 		}
+	}
 
-		public void AddInstallerConfiguration(IConfiguration config)
+	public void AddInstallerConfiguration(IConfiguration config)
+	{
+		lock (syncLock)
 		{
-			lock(syncLock)
-			{
-				installers.Add(config);
-			}
+			installers.Add(config);
 		}
+	}
 
-		/// <summary>
-		///   Returns the configuration node associated with
-		///   the specified child container key. Should return null
-		///   if no association exists.
-		/// </summary>
-		/// <param name = "key">item key</param>
-		/// <returns></returns>
-		public IConfiguration GetChildContainerConfiguration(String key)
+	/// <summary>Returns the configuration node associated with the specified child container key. Should return null if no association exists.</summary>
+	/// <param name = "key">item key</param>
+	/// <returns></returns>
+	public IConfiguration GetChildContainerConfiguration(string key)
+	{
+		lock (syncLock)
 		{
-			lock(syncLock)
-			{
-				IConfiguration value;
-				childContainers.TryGetValue(key, out value);
-				return value;
-			}
+			IConfiguration value;
+			childContainers.TryGetValue(key, out value);
+			return value;
 		}
+	}
 
-		/// <summary>
-		///   Returns the configuration node associated with
-		///   the specified component key. Should return null
-		///   if no association exists.
-		/// </summary>
-		/// <param name = "key">item key</param>
-		/// <returns></returns>
-		public IConfiguration GetComponentConfiguration(String key)
+	/// <summary>Returns the configuration node associated with the specified component key. Should return null if no association exists.</summary>
+	/// <param name = "key">item key</param>
+	/// <returns></returns>
+	public IConfiguration GetComponentConfiguration(string key)
+	{
+		lock (syncLock)
 		{
-			lock (syncLock)
-			{
-				IConfiguration value;
-				components.TryGetValue(key, out value);
-				return value;
-			}
+			IConfiguration value;
+			components.TryGetValue(key, out value);
+			return value;
 		}
+	}
 
-		/// <summary>
-		///   Returns all configuration nodes for components
-		/// </summary>
-		/// <returns></returns>
-		public IConfiguration[] GetComponents()
+	/// <summary>Returns all configuration nodes for components</summary>
+	/// <returns></returns>
+	public IConfiguration[] GetComponents()
+	{
+		lock (syncLock)
 		{
-			lock (syncLock)
-			{
-				return components.Values.ToArray();
-			}
+			return components.Values.ToArray();
 		}
+	}
 
-		/// <summary>
-		///   Returns all configuration nodes for child containers
-		/// </summary>
-		/// <returns></returns>
-		public IConfiguration[] GetConfigurationForChildContainers()
+	/// <summary>Returns all configuration nodes for child containers</summary>
+	/// <returns></returns>
+	public IConfiguration[] GetConfigurationForChildContainers()
+	{
+		lock (syncLock)
 		{
-			lock (syncLock)
-			{
-				return childContainers.Values.ToArray();
-			}
+			return childContainers.Values.ToArray();
 		}
+	}
 
-		/// <summary>
-		///   Returns all configuration nodes for facilities
-		/// </summary>
-		/// <returns></returns>
-		public IConfiguration[] GetFacilities()
+	/// <summary>Returns all configuration nodes for facilities</summary>
+	/// <returns></returns>
+	public IConfiguration[] GetFacilities()
+	{
+		lock (syncLock)
 		{
-			lock (syncLock)
-			{
-				return facilities.Values.ToArray();
-			}
+			return facilities.Values.ToArray();
 		}
+	}
 
-		/// <summary>
-		///   Returns the configuration node associated with
-		///   the specified facility key. Should return null
-		///   if no association exists.
-		/// </summary>
-		/// <param name = "key">item key</param>
-		/// <returns></returns>
-		public IConfiguration GetFacilityConfiguration(String key)
+	/// <summary>Returns the configuration node associated with the specified facility key. Should return null if no association exists.</summary>
+	/// <param name = "key">item key</param>
+	/// <returns></returns>
+	public IConfiguration GetFacilityConfiguration(string key)
+	{
+		lock (syncLock)
 		{
-			lock (syncLock)
-			{
-				IConfiguration value;
-				facilities.TryGetValue(key, out value);
-				return value;
-			}
+			IConfiguration value;
+			facilities.TryGetValue(key, out value);
+			return value;
 		}
+	}
 
-		public IConfiguration[] GetInstallers()
+	public IConfiguration[] GetInstallers()
+	{
+		lock (syncLock)
 		{
-			lock (syncLock)
-			{
-				return installers.ToArray();
-			}
+			return installers.ToArray();
 		}
+	}
 
-		public IResource GetResource(String resourceUri, IResource resource)
-		{
-			if (resourceUri.IndexOf(Uri.SchemeDelimiter) == -1)
-			{
-				return resource.CreateRelative(resourceUri);
-			}
+	public IResource GetResource(string resourceUri, IResource resource)
+	{
+		if (resourceUri.IndexOf(Uri.SchemeDelimiter) == -1) return resource.CreateRelative(resourceUri);
 
-			var subSystem = (IResourceSubSystem)Kernel.GetSubSystem(SubSystemConstants.ResourceKey);
+		var subSystem = (IResourceSubSystem)Kernel.GetSubSystem(SubSystemConstants.ResourceKey);
 
-			return subSystem.CreateResource(resourceUri, resource.FileBasePath);
-		}
+		return subSystem.CreateResource(resourceUri, resource.FileBasePath);
+	}
 
-		public override void Terminate()
-		{
-		}
+	public override void Terminate()
+	{
 	}
 }

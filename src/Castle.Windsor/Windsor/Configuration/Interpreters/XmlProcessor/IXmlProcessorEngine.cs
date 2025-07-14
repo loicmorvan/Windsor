@@ -12,39 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor;
+
+using System;
+using System.Xml;
+
+using Castle.Core.Resource;
+
+public interface IXmlProcessorEngine
 {
-	using System;
-	using System.Xml;
+	void AddFlag(string flag);
 
-	using Castle.Core.Resource;
+	void AddNodeProcessor(Type type);
 
-	public interface IXmlProcessorEngine
-	{
-		void AddFlag(String flag);
+	void AddProperty(XmlElement element);
 
-		void AddNodeProcessor(Type type);
+	void DispatchProcessAll(IXmlProcessorNodeList nodeList);
 
-		void AddProperty(XmlElement element);
+	void DispatchProcessCurrent(IXmlProcessorNodeList nodeList);
 
-		void DispatchProcessAll(IXmlProcessorNodeList nodeList);
+	XmlElement GetProperty(string name);
 
-		void DispatchProcessCurrent(IXmlProcessorNodeList nodeList);
+	IResource GetResource(string uri);
 
-		XmlElement GetProperty(String name);
+	bool HasFlag(string flag);
 
-		IResource GetResource(string uri);
+	bool HasProperty(string name);
 
-		bool HasFlag(String flag);
+	bool HasSpecialProcessor(XmlNode node);
 
-		bool HasProperty(String name);
+	void PopResource();
 
-		bool HasSpecialProcessor(XmlNode node);
+	void PushResource(IResource resource);
 
-		void PopResource();
-
-		void PushResource(IResource resource);
-
-		void RemoveFlag(String flag);
-	}
+	void RemoveFlag(string flag);
 }

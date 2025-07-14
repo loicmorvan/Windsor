@@ -12,43 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+
+using Castle.Core;
+using Castle.MicroKernel.Handlers;
+using Castle.MicroKernel.Registration;
+
+public class DynamicParametersDescriptor : IComponentModelDescriptor
 {
-	using Castle.Core;
-	using Castle.MicroKernel.Handlers;
-	using Castle.MicroKernel.Registration;
+	private static readonly string key = "component_resolving_handler";
+	private readonly DynamicParametersWithContextResolveDelegate resolve;
 
-	public class DynamicParametersDescriptor : IComponentModelDescriptor
+	public DynamicParametersDescriptor(DynamicParametersWithContextResolveDelegate resolve)
 	{
-		private static readonly string key = "component_resolving_handler";
-		private readonly DynamicParametersWithContextResolveDelegate resolve;
+		this.resolve = resolve;
+	}
 
-		public DynamicParametersDescriptor(DynamicParametersWithContextResolveDelegate resolve)
-		{
-			this.resolve = resolve;
-		}
+	public void BuildComponentModel(IKernel kernel, ComponentModel model)
+	{
+		var dynamicParameters = GetDynamicParametersExtension(model);
+		dynamicParameters.AddHandler((k, c) => resolve(k, c, c.AdditionalArguments));
+	}
 
-		public void BuildComponentModel(IKernel kernel, ComponentModel model)
-		{
-			var dynamicParameters = GetDynamicParametersExtension(model);
-			dynamicParameters.AddHandler((k, c) => resolve(k, c, c.AdditionalArguments));
-		}
+	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+	{
+	}
 
-		public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-		{
-		}
+	private ComponentLifecycleExtension GetDynamicParametersExtension(ComponentModel model)
+	{
+		if (model.ExtendedProperties.Contains(key)) return (ComponentLifecycleExtension)model.ExtendedProperties[key];
 
-		private ComponentLifecycleExtension GetDynamicParametersExtension(ComponentModel model)
-		{
-			if (model.ExtendedProperties.Contains(key))
-			{
-				return (ComponentLifecycleExtension)model.ExtendedProperties[key];
-			}
-
-			var dynamicParameters = new ComponentLifecycleExtension();
-			model.ExtendedProperties[key] = dynamicParameters;
-			model.ResolveExtensions(true).Add(dynamicParameters);
-			return dynamicParameters;
-		}
+		var dynamicParameters = new ComponentLifecycleExtension();
+		model.ExtendedProperties[key] = dynamicParameters;
+		model.ResolveExtensions(true).Add(dynamicParameters);
+		return dynamicParameters;
 	}
 }

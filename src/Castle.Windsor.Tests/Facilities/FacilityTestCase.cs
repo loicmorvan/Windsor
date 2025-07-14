@@ -12,85 +12,84 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities
+namespace CastleTests.Facilities;
+
+using System;
+
+using Castle.Core.Configuration;
+using Castle.Facilities.Startable;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Tests.ClassComponents;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class FacilityTestCase
 {
-	using System;
-
-	using Castle.Core.Configuration;
-	using Castle.Facilities.Startable;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Tests.ClassComponents;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class FacilityTestCase
+	[SetUp]
+	public void Init()
 	{
-		private static readonly string facilityKey = typeof(HiperFacility).FullName;
-		private HiperFacility facility;
-		private IKernel kernel;
+		kernel = new DefaultKernel();
 
-		[Test]
-		public void Cant_have_two_instances_of_any_facility_type()
-		{
-			kernel.AddFacility<StartableFacility>();
+		IConfiguration confignode = new MutableConfiguration("facility");
+		IConfiguration facilityConf = new MutableConfiguration(facilityKey);
+		confignode.Children.Add(facilityConf);
+		kernel.ConfigurationStore.AddFacilityConfiguration(facilityKey, confignode);
 
-			var exception = Assert.Throws<ArgumentException>(() => kernel.AddFacility<StartableFacility>());
+		facility = new HiperFacility();
 
-			Assert.AreEqual(
-				"Facility of type 'Castle.Facilities.Startable.StartableFacility' has already been registered with the container. Only one facility of a given type can exist in the container.",
-				exception.Message);
-		}
+		Assert.IsFalse(facility.Initialized);
+		kernel.AddFacility(facility);
+	}
 
-		[Test]
-		public void Creation()
-		{
-			var facility = kernel.GetFacilities()[0];
+	private static readonly string facilityKey = typeof(HiperFacility).FullName;
+	private HiperFacility facility;
+	private IKernel kernel;
 
-			Assert.IsNotNull(facility);
-			Assert.AreSame(this.facility, facility);
-		}
+	[Test]
+	public void Cant_have_two_instances_of_any_facility_type()
+	{
+		kernel.AddFacility<StartableFacility>();
 
-		[SetUp]
-		public void Init()
-		{
-			kernel = new DefaultKernel();
+		var exception = Assert.Throws<ArgumentException>(() => kernel.AddFacility<StartableFacility>());
 
-			IConfiguration confignode = new MutableConfiguration("facility");
-			IConfiguration facilityConf = new MutableConfiguration(facilityKey);
-			confignode.Children.Add(facilityConf);
-			kernel.ConfigurationStore.AddFacilityConfiguration(facilityKey, confignode);
+		Assert.AreEqual(
+			"Facility of type 'Castle.Facilities.Startable.StartableFacility' has already been registered with the container. Only one facility of a given type can exist in the container.",
+			exception.Message);
+	}
 
-			facility = new HiperFacility();
+	[Test]
+	public void Creation()
+	{
+		var facility = kernel.GetFacilities()[0];
 
-			Assert.IsFalse(facility.Initialized);
-			kernel.AddFacility(facility);
-		}
+		Assert.IsNotNull(facility);
+		Assert.AreSame(this.facility, facility);
+	}
 
-		[Test]
-		public void LifeCycle()
-		{
-			Assert.IsFalse(this.facility.Terminated);
+	[Test]
+	public void LifeCycle()
+	{
+		Assert.IsFalse(this.facility.Terminated);
 
-			var facility = kernel.GetFacilities()[0];
+		var facility = kernel.GetFacilities()[0];
 
-			Assert.IsTrue(this.facility.Initialized);
-			Assert.IsFalse(this.facility.Terminated);
+		Assert.IsTrue(this.facility.Initialized);
+		Assert.IsFalse(this.facility.Terminated);
 
-			kernel.Dispose();
+		kernel.Dispose();
 
-			Assert.IsTrue(this.facility.Initialized);
-			Assert.IsTrue(this.facility.Terminated);
-		}
+		Assert.IsTrue(this.facility.Initialized);
+		Assert.IsTrue(this.facility.Terminated);
+	}
 
-		[Test]
-		public void OnCreationCallback()
-		{
-			StartableFacility facility = null;
+	[Test]
+	public void OnCreationCallback()
+	{
+		StartableFacility facility = null;
 
-			kernel.AddFacility<StartableFacility>(f => facility = f);
+		kernel.AddFacility<StartableFacility>(f => facility = f);
 
-			Assert.IsNotNull(facility);
-		}
+		Assert.IsNotNull(facility);
 	}
 }

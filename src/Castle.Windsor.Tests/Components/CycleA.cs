@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+public class CycleA
 {
-	public class CycleA
+	public CycleA(CycleB b)
 	{
-		public CycleA(CycleB b)
-		{
-		}
 	}
 }

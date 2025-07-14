@@ -1,8 +1,8 @@
 <?pi instruction will also be removed ?>
 <!-- some comments here, this should be removed by the xsl -->
 <configuration>
-	<define flag="debug" />
-	<define flag="qa" />
+	<define flag="debug"/>
+	<define flag="qa"/>
 
 	<components>
 		<if defined="DEBUG">
@@ -31,6 +31,6 @@
 		</if>
 
 		<component id="default"/>
-	</components>		
+	</components>
 
 </configuration>

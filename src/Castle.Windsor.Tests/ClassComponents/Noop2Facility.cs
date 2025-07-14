@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel.Tests.ClassComponents;
+
+using Castle.Core.Configuration;
+
+public class Noop2Facility : IFacility
 {
-	using Castle.Core.Configuration;
-
-	public class Noop2Facility : IFacility
+	public void Init(IKernel kernel, IConfiguration facilityConfig)
 	{
-		public void Init(IKernel kernel, IConfiguration facilityConfig)
-		{
-		}
+	}
 
-		public void Terminate()
-		{
-		}
+	public void Terminate()
+	{
 	}
 }

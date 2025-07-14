@@ -12,33 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.MicroKernel;
+
+using System;
+
+/// <summary>
+///     Implementation of this interface allows for extension of the way the container looks up multiple handlers. It provides the necessary hook to allow for business logic to prioritize, filter, and
+///     sort handlers when resolving multiple handlers.
+/// </summary>
+public interface IHandlersFilter
 {
-	using System;
+	/// <summary>Whatever the selector has an opinion about resolving a component with the specified service and key.</summary>
+	/// <param name = "service">The service interface that we want to resolve</param>
+	bool HasOpinionAbout(Type service);
 
 	/// <summary>
-	///   Implementation of this interface allows for extension of the way
-	///   the container looks up multiple handlers. It provides the necessary
-	///   hook to allow for business logic to prioritize, filter, and sort
-	///   handlers when resolving multiple handlers.
+	///     Select the appropriate handlers (if any) from the list of defined handlers, returning them in the order they should be executed. The returned handlers should members from the
+	///     <paramref name = "handlers" /> array.
 	/// </summary>
-	public interface IHandlersFilter
-	{
-		/// <summary>
-		///   Whatever the selector has an opinion about resolving a component with the 
-		///   specified service and key.
-		/// </summary>
-		/// <param name = "service">The service interface that we want to resolve</param>
-		bool HasOpinionAbout(Type service);
-
-		/// <summary>
-		///   Select the appropriate handlers (if any) from the list of defined handlers,
-		///   returning them in the order they should be executed.
-		///   The returned handlers should members from the <paramref name = "handlers" /> array.
-		/// </summary>
-		/// <param name = "service">The service interface that we want to resolve</param>
-		/// <param name = "handlers">The defined handlers</param>
-		/// <returns>The selected handlers, or an empty array, or null</returns>
-		IHandler[] SelectHandlers(Type service, IHandler[] handlers);
-	}
+	/// <param name = "service">The service interface that we want to resolve</param>
+	/// <param name = "handlers">The defined handlers</param>
+	/// <returns>The selected handlers, or an empty array, or null</returns>
+	IHandler[] SelectHandlers(Type service, IHandler[] handlers);
 }

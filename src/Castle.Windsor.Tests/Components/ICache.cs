@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public interface ICache<T>
-	{
-		T Get(string key);
+namespace CastleTests.Components;
 
-		void Put(string key, T item);
-	}
+public interface ICache<T>
+{
+	T Get(string key);
+
+	void Put(string key, T item);
 }

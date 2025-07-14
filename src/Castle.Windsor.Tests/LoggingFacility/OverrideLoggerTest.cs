@@ -12,23 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Logging.Tests
+namespace Castle.Facilities.Logging.Tests;
+
+using Castle.Core.Logging;
+using Castle.MicroKernel.SubSystems.Configuration;
+using Castle.Windsor;
+
+public abstract class OverrideLoggerTest : BaseTest
 {
-	using Castle.Core.Logging;
-	using Castle.MicroKernel.SubSystems.Configuration;
-	using Castle.Windsor;
-
-	public abstract class OverrideLoggerTest : BaseTest
+	protected virtual IWindsorContainer CreateConfiguredContainer<TLoggerFactory>(string logName)
+		where TLoggerFactory : ILoggerFactory
 	{
-		protected virtual IWindsorContainer CreateConfiguredContainer<TLoggerFactory>(string logName)
-			where TLoggerFactory : ILoggerFactory
-		{
-			IWindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
-			var configFile = GetConfigFile<TLoggerFactory>();
+		IWindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
+		var configFile = GetConfigFile<TLoggerFactory>();
 
-			container.AddFacility<LoggingFacility>(f => f.LogUsing<TLoggerFactory>().WithConfig(configFile).ToLog(logName));
+		container.AddFacility<LoggingFacility>(f => f.LogUsing<TLoggerFactory>().WithConfig(configFile).ToLog(logName));
 
-			return container;
-		}
+		return container;
 	}
 }

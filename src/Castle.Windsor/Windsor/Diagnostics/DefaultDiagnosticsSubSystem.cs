@@ -12,35 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
+namespace Castle.Windsor.Diagnostics;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Castle.Core.Internal;
+using Castle.MicroKernel;
+
+public partial class DefaultDiagnosticsSubSystem :
+	AbstractSubSystem, IDiagnosticsHost
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+	private readonly IDictionary<Type, IDiagnostic<object>> diagnostics = new Dictionary<Type, IDiagnostic<object>>();
 
-	using Castle.Core.Internal;
-	using Castle.MicroKernel;
-
-	public partial class DefaultDiagnosticsSubSystem :
-		AbstractSubSystem, IDiagnosticsHost
+	public void AddDiagnostic<TDiagnostic>(TDiagnostic diagnostic) where TDiagnostic : IDiagnostic<object>
 	{
-		private readonly IDictionary<Type, IDiagnostic<object>> diagnostics = new Dictionary<Type, IDiagnostic<object>>();
+		diagnostics.Add(typeof(TDiagnostic), diagnostic);
+	}
 
-		public override void Terminate()
-		{
-			diagnostics.Values.OfType<IDisposable>().ForEach(e => e.Dispose());
-		}
+	public TDiagnostic GetDiagnostic<TDiagnostic>() where TDiagnostic : IDiagnostic<object>
+	{
+		IDiagnostic<object> value;
+		diagnostics.TryGetValue(typeof(TDiagnostic), out value);
+		return (TDiagnostic)value;
+	}
 
-		public void AddDiagnostic<TDiagnostic>(TDiagnostic diagnostic) where TDiagnostic : IDiagnostic<object>
-		{
-			diagnostics.Add(typeof(TDiagnostic), diagnostic);
-		}
-
-		public TDiagnostic GetDiagnostic<TDiagnostic>() where TDiagnostic : IDiagnostic<object>
-		{
-			IDiagnostic<object> value;
-			diagnostics.TryGetValue(typeof(TDiagnostic), out value);
-			return (TDiagnostic)value;
-		}
+	public override void Terminate()
+	{
+		diagnostics.Values.OfType<IDisposable>().ForEach(e => e.Dispose());
 	}
 }

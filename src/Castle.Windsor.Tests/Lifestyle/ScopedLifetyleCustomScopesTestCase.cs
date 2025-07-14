@@ -12,55 +12,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Lifestyle
+namespace CastleTests.Lifestyle;
+
+using Castle.Core.Internal;
+using Castle.MicroKernel.Registration;
+
+using CastleTests.Components;
+using CastleTests.TestInfrastructure;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class ScopedLifetyleCustomScopesTestCase : AbstractContainerTestCase
 {
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Registration;
-
-	using CastleTests.Components;
-	using CastleTests.TestInfrastructure;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class ScopedLifetyleCustomScopesTestCase : AbstractContainerTestCase
+	[Test]
+	public void Can_use_custom_scope_accessor_with_scoped_lifestyle()
 	{
-		[Test]
-		public void Can_use_custom_scope_accessor_with_scoped_lifestyle()
-		{
-			StaticScopeAccessor.ResetScope();
-			Container.Register(Component.For<A>().LifestyleScoped(scopeAccessorType: typeof(StaticScopeAccessor)));
+		StaticScopeAccessor.ResetScope();
+		Container.Register(Component.For<A>().LifestyleScoped(typeof(StaticScopeAccessor)));
 
-			var a1 = Container.Resolve<A>();
-			var a2 = Container.Resolve<A>();
+		var a1 = Container.Resolve<A>();
+		var a2 = Container.Resolve<A>();
 
-			Assert.AreSame(a1, a2);
-		}
+		Assert.AreSame(a1, a2);
+	}
 
-		[Test]
-		public void Can_use_custom_scope_accessor_with_scoped_lifestyle_generic()
-		{
-			StaticScopeAccessor.ResetScope();
-			Container.Register(Component.For<A>().LifestyleScoped<StaticScopeAccessor>());
+	[Test]
+	public void Can_use_custom_scope_accessor_with_scoped_lifestyle_generic()
+	{
+		StaticScopeAccessor.ResetScope();
+		Container.Register(Component.For<A>().LifestyleScoped<StaticScopeAccessor>());
 
-			var a1 = Container.Resolve<A>();
-			var a2 = Container.Resolve<A>();
+		var a1 = Container.Resolve<A>();
+		var a2 = Container.Resolve<A>();
 
-			Assert.AreSame(a1, a2);
-		}
+		Assert.AreSame(a1, a2);
+	}
 
-		[Test]
-		public void Can_use_custom_scope_accessor_with_scoped_lifestyle_multiple()
-		{
-			StaticScopeAccessor.ResetScope();
-			Container.Register(Classes.FromAssembly(GetCurrentAssembly())
-			                   	.Where(c => c.Is<A>())
-			                   	.LifestyleScoped<StaticScopeAccessor>());
+	[Test]
+	public void Can_use_custom_scope_accessor_with_scoped_lifestyle_multiple()
+	{
+		StaticScopeAccessor.ResetScope();
+		Container.Register(Classes.FromAssembly(GetCurrentAssembly())
+			.Where(c => c.Is<A>())
+			.LifestyleScoped<StaticScopeAccessor>());
 
-			var a1 = Container.Resolve<A>();
-			var a2 = Container.Resolve<A>();
+		var a1 = Container.Resolve<A>();
+		var a2 = Container.Resolve<A>();
 
-			Assert.AreSame(a1, a2);
-		}
+		Assert.AreSame(a1, a2);
 	}
 }

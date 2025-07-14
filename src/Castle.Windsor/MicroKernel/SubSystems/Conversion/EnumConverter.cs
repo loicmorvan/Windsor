@@ -12,47 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+namespace Castle.MicroKernel.SubSystems.Conversion;
+
+using System;
+using System.Reflection;
+
+using Castle.Core.Configuration;
+
+/// <summary>Converts a string representation to an enum value</summary>
+[Serializable]
+public class EnumConverter : AbstractTypeConverter
 {
-	using System;
-	using System.Reflection;
-
-	using Castle.Core.Configuration;
-
-	/// <summary>
-	///   Converts a string representation to an enum value
-	/// </summary>
-	[Serializable]
-	public class EnumConverter : AbstractTypeConverter
+	public override bool CanHandleType(Type type)
 	{
-		public override bool CanHandleType(Type type)
-		{
-			return type.GetTypeInfo().IsEnum;
-		}
+		return type.GetTypeInfo().IsEnum;
+	}
 
-		public override object PerformConversion(String value, Type targetType)
+	public override object PerformConversion(string value, Type targetType)
+	{
+		try
 		{
-			try
-			{
-				return Enum.Parse(targetType, value, true);
-			}
-			catch (ConverterException)
-			{
-				throw;
-			}
-			catch (Exception ex)
-			{
-				var message = String.Format(
-					"Could not convert from '{0}' to {1}.",
-					value, targetType.FullName);
-
-				throw new ConverterException(message, ex);
-			}
+			return Enum.Parse(targetType, value, true);
 		}
-
-		public override object PerformConversion(IConfiguration configuration, Type targetType)
+		catch (ConverterException)
 		{
-			return PerformConversion(configuration.Value, targetType);
+			throw;
 		}
+		catch (Exception ex)
+		{
+			var message = string.Format(
+				"Could not convert from '{0}' to {1}.",
+				value, targetType.FullName);
+
+			throw new ConverterException(message, ex);
+		}
+	}
+
+	public override object PerformConversion(IConfiguration configuration, Type targetType)
+	{
+		return PerformConversion(configuration.Value, targetType);
 	}
 }

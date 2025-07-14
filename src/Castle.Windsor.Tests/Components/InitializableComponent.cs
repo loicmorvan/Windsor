@@ -12,23 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+using Castle.Core;
+
+[Transient]
+public class InitializableComponent : IInitializable
 {
-	using Castle.Core;
+	public bool IsInitialized { get; private set; }
 
-	[Transient]
-	public class InitializableComponent : IInitializable
+	public void Initialize()
 	{
-		private bool isInitialized;
-
-		public bool IsInitialized
-		{
-			get { return isInitialized; }
-		}
-
-		public void Initialize()
-		{
-			isInitialized = true;
-		}
+		IsInitialized = true;
 	}
 }

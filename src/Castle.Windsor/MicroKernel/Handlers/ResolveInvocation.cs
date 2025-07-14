@@ -12,48 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers
+namespace Castle.MicroKernel.Handlers;
+
+using System;
+
+using Castle.MicroKernel.Context;
+
+public class ResolveInvocation
 {
-	using System;
+	private Action proceed;
 
-	using Castle.MicroKernel.Context;
-
-	public class ResolveInvocation
+	public ResolveInvocation(CreationContext context, bool instanceRequired)
 	{
-		private bool decommissionRequired;
-		private Action proceed;
+		Context = context;
+		InstanceRequired = instanceRequired;
+	}
 
-		public ResolveInvocation(CreationContext context, bool instanceRequired)
-		{
-			Context = context;
-			InstanceRequired = instanceRequired;
-		}
+	public Burden Burden { get; set; }
 
-		public Burden Burden { get; set; }
+	public CreationContext Context { get; private set; }
+	public bool InstanceRequired { get; private set; }
 
-		public CreationContext Context { get; private set; }
-		public bool InstanceRequired { get; private set; }
+	public object ResolvedInstance { get; set; }
 
-		public object ResolvedInstance { get; set; }
+	internal bool DecommissionRequired { get; private set; }
 
-		internal bool DecommissionRequired
-		{
-			get { return decommissionRequired; }
-		}
+	public void Proceed()
+	{
+		proceed.Invoke();
+	}
 
-		public void Proceed()
-		{
-			proceed.Invoke();
-		}
+	public void RequireDecommission()
+	{
+		DecommissionRequired = true;
+	}
 
-		public void RequireDecommission()
-		{
-			decommissionRequired = true;
-		}
-
-		internal void SetProceedDelegate(Action value)
-		{
-			proceed = value;
-		}
+	internal void SetProceedDelegate(Action value)
+	{
+		proceed = value;
 	}
 }

@@ -12,57 +12,56 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.Startable.Components
+namespace Castle.Windsor.Tests.Facilities.Startable.Components;
+
+using Castle.Core;
+
+public class StartableChainParent : IStartable
 {
-	using Castle.Core;
+	public static int createcount;
+	public static int startcount;
 
-	public class StartableChainParent : IStartable
+	public StartableChainParent(StartableChainDependency item1, StartableChainGeneric<string> item2)
 	{
-		public static int createcount;
-		public static int startcount;
-
-		public StartableChainParent(StartableChainDependency item1, StartableChainGeneric<string> item2)
-		{
-			++createcount;
-		}
-
-		public void Start()
-		{
-			++startcount;
-		}
-
-		public void Stop()
-		{
-		}
+		++createcount;
 	}
 
-	public class StartableChainDependency : IStartable
+	public void Start()
 	{
-		public static int createcount;
-		public static int startcount;
-
-		public StartableChainDependency(StartableChainGeneric<string> item)
-		{
-			++createcount;
-		}
-
-		public void Start()
-		{
-			++startcount;
-		}
-
-		public void Stop()
-		{
-		}
+		++startcount;
 	}
 
-	public class StartableChainGeneric<T>
+	public void Stop()
 	{
-		public static int createcount;
+	}
+}
 
-		public StartableChainGeneric()
-		{
-			++createcount;
-		}
+public class StartableChainDependency : IStartable
+{
+	public static int createcount;
+	public static int startcount;
+
+	public StartableChainDependency(StartableChainGeneric<string> item)
+	{
+		++createcount;
+	}
+
+	public void Start()
+	{
+		++startcount;
+	}
+
+	public void Stop()
+	{
+	}
+}
+
+public class StartableChainGeneric<T>
+{
+	public static int createcount;
+
+	public StartableChainGeneric()
+	{
+		++createcount;
 	}
 }

@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+public class ReviewerRepository : DemoRepository<IReviewer>
 {
-	public class ReviewerRepository : DemoRepository<IReviewer>
+	public new ICache<IReviewer> Cache { get; set; }
+
+	public new string Name { get; set; }
+
+	public new IReviewer Get(int id)
 	{
-		public new ICache<IReviewer> Cache { get; set; }
-
-		public new string Name { get; set; }
-
-		public new IReviewer Get(int id)
-		{
-			return null;
-		}
+		return null;
 	}
 }

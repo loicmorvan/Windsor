@@ -12,43 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.LoggingFacility
+namespace CastleTests.LoggingFacility;
+
+using Castle.Core.Logging;
+using Castle.Core.Resource;
+using Castle.Facilities.Logging;
+using Castle.Services.Logging.Log4netIntegration;
+using Castle.Windsor;
+using Castle.Windsor.Installer;
+
+using CastleTests.LoggingFacility.Tests.Classes;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class CustomFacilityTests
 {
-	using Castle.Core.Logging;
-	using Castle.Core.Resource;
-	using Castle.Facilities.Logging;
-	using Castle.Services.Logging.Log4netIntegration;
-	using Castle.Windsor;
-	using Castle.Windsor.Installer;
-
-	using CastleTests.LoggingFacility.Tests.Classes;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class CustomFacilityTests
+	[Test]
+	public void ReadCustomFacilityConfigFromXML()
 	{
-		[Test]
-		public void ReadCustomFacilityConfigFromXML()
+		using (var container = new WindsorContainer())
 		{
-			using (var container = new WindsorContainer())
-			{
-				container.Install(
-					Configuration.FromXml(
-						new StaticContentResource(
-							string.Format(
-								@"<castle>
+			container.Install(
+				Configuration.FromXml(
+					new StaticContentResource(
+						string.Format(
+							@"<castle>
 <facilities>
 <facility
   customLoggerFactory='{0}'
   type='{1}'/>
 </facilities>
 </castle>",
-								typeof(CustomLog4NetFactory).AssemblyQualifiedName,
-								typeof(LoggingFacility).AssemblyQualifiedName))));
-				var logger = container.Resolve<ILogger>();
-				Assert.IsInstanceOf<Log4netLogger>(logger);
-			}
+							typeof(CustomLog4NetFactory).AssemblyQualifiedName,
+							typeof(LoggingFacility).AssemblyQualifiedName))));
+			var logger = container.Resolve<ILogger>();
+			Assert.IsInstanceOf<Log4netLogger>(logger);
 		}
 	}
 }

@@ -12,38 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests.Framework.Builders
+namespace Castle.Facilities.AspNetCore.Tests.Framework.Builders;
+
+using System;
+
+using Castle.Facilities.AspNetCore.Tests.Fakes;
+using Castle.Windsor;
+
+using Microsoft.Extensions.DependencyInjection;
+
+public class WindsorContainerBuilder
 {
-	using System;
-
-	using Castle.Facilities.AspNetCore.Tests.Fakes;
-	using Castle.Windsor;
-
-	using Microsoft.AspNetCore.Builder;
-	using Microsoft.Extensions.DependencyInjection;
-
-	public class WindsorContainerBuilder
+	public static IWindsorContainer New(IServiceCollection services, Action<WindsorRegistrationOptions> configure, Func<IServiceProvider> serviceProviderFactory)
 	{
-		public static IWindsorContainer New(IServiceCollection services, Action<WindsorRegistrationOptions> configure, Func<IServiceProvider> serviceProviderFactory)
-		{
-			return BuildWindsorContainer(services, configure, serviceProviderFactory);
-		}
+		return BuildWindsorContainer(services, configure, serviceProviderFactory);
+	}
 
-		private static IWindsorContainer BuildWindsorContainer(IServiceCollection services, Action<WindsorRegistrationOptions> configure = null, Func<IServiceProvider> serviceProviderFactory = null)
-		{
-			var container = new WindsorContainer().AddFacility<AspNetCoreFacility>(f => f.CrossWiresInto(services));
+	private static IWindsorContainer BuildWindsorContainer(IServiceCollection services, Action<WindsorRegistrationOptions> configure = null, Func<IServiceProvider> serviceProviderFactory = null)
+	{
+		var container = new WindsorContainer().AddFacility<AspNetCoreFacility>(f => f.CrossWiresInto(services));
 
-			RegisterApplicationComponents(container, services);
+		RegisterApplicationComponents(container, services);
 
-			services.AddWindsor(container, configure, serviceProviderFactory);
+		services.AddWindsor(container, configure, serviceProviderFactory);
 
-			return container;
-		}
+		return container;
+	}
 
-		private static void RegisterApplicationComponents(IWindsorContainer container, IServiceCollection serviceCollection)
-		{
-			ModelInstaller.RegisterWindsor(container);
-			ModelInstaller.RegisterCrossWired(container, serviceCollection);
-		}
+	private static void RegisterApplicationComponents(IWindsorContainer container, IServiceCollection serviceCollection)
+	{
+		ModelInstaller.RegisterWindsor(container);
+		ModelInstaller.RegisterCrossWired(container, serviceCollection);
 	}
 }

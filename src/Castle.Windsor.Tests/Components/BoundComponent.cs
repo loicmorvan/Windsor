@@ -12,27 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+using System.Linq;
+
+using Castle.Core;
+using Castle.MicroKernel;
+
+[BoundTo(typeof(Binder))]
+public class BoundComponent : IComponent
 {
-	using System.Linq;
+	public int ID => GetHashCode();
 
-	using Castle.Core;
-	using Castle.MicroKernel;
-
-	[BoundTo(typeof(Binder))]
-	public class BoundComponent : IComponent
+	public class Binder
 	{
-		public int ID
+		public IHandler Bind(IHandler[] handlers)
 		{
-			get { return GetHashCode(); }
-		}
-
-		public class Binder
-		{
-			public IHandler Bind(IHandler[] handlers)
-			{
-				return handlers.First();
-			}
+			return handlers.First();
 		}
 	}
 }

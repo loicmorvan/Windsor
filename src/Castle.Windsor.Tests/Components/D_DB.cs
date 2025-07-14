@@ -12,19 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+public class D_DB
 {
-	public class D_DB
+	public D_DB(B b)
 	{
-		public D_DB(B b)
-		{
-			B = b;
-		}
-
-		public D_DB()
-		{
-		}
-
-		public B B { get; private set; }
+		B = b;
 	}
+
+	public D_DB()
+	{
+	}
+
+	public B B { get; private set; }
 }

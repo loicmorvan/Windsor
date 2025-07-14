@@ -12,28 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Configuration2
+namespace Castle.Windsor.Tests.Configuration2;
+
+using System;
+
+using Castle.Windsor.Configuration.Interpreters;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class EvalSupportTestCase
 {
-	using System;
-
-	using Castle.Core.Internal;
-	using Castle.Windsor.Configuration.Interpreters;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class EvalSupportTestCase
+	[Test]
+	public void AssertBaseDirectoryIsCorrectlyEvaluated()
 	{
-		[Test]
-		public void AssertBaseDirectoryIsCorrectlyEvaluated()
-		{
-			var container = new WindsorContainer(new XmlInterpreter(ConfigHelper.ResolveConfigPath("Configuration2/eval_config.xml")), new CustomEnv(true));
+		var container = new WindsorContainer(new XmlInterpreter(ConfigHelper.ResolveConfigPath("Configuration2/eval_config.xml")), new CustomEnv(true));
 
-			var prop = container.Resolve<ComponentWithStringProperty>("component");
+		var prop = container.Resolve<ComponentWithStringProperty>("component");
 
-			Assert.AreEqual(AppContext.BaseDirectory, prop.Name);
-		}
+		Assert.AreEqual(AppContext.BaseDirectory, prop.Name);
 	}
 }

@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using Castle.Core;
-	using Castle.DynamicProxy;
+namespace CastleTests.Components;
 
-	[Interceptor("fooInterceptor")]
-	[Interceptor(typeof(StandardInterceptor))]
-	public class CalculatorServiceWithStandartInterceptorTwo : CalculatorService
-	{
-	}
+using Castle.Core;
+using Castle.DynamicProxy;
+
+[Interceptor("fooInterceptor")]
+[Interceptor(typeof(StandardInterceptor))]
+public class CalculatorServiceWithStandartInterceptorTwo : CalculatorService
+{
 }

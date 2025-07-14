@@ -12,21 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel.Tests.ClassComponents;
+
+public class HasTwoConstructors
 {
-	public class HasTwoConstructors
+	public HasTwoConstructors(ICustomer customer)
 	{
-		public HasTwoConstructors(ICustomer customer)
-		{
-			Customer = customer;
-		}
-
-		public HasTwoConstructors(ICommon common)
-		{
-			Common = common;
-		}
-
-		public ICommon Common { get; set; }
-		public ICustomer Customer { get; set; }
+		Customer = customer;
 	}
+
+	public HasTwoConstructors(ICommon common)
+	{
+		Common = common;
+	}
+
+	public ICommon Common { get; set; }
+	public ICustomer Customer { get; set; }
 }

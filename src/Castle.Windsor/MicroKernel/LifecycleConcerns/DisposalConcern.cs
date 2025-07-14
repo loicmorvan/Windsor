@@ -12,37 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.LifecycleConcerns
+namespace Castle.MicroKernel.LifecycleConcerns;
+
+using System;
+
+using Castle.Core;
+
+/// <summary>Summary description for DisposalConcern.</summary>
+[Serializable]
+public class DisposalConcern : IDecommissionConcern
 {
-	using System;
-
-	using Castle.Core;
-
-	/// <summary>
-	/// Summary description for DisposalConcern.
-	/// </summary>
-	[Serializable]
-	public class DisposalConcern : IDecommissionConcern
+	protected DisposalConcern()
 	{
-		private static readonly DisposalConcern instance = new DisposalConcern();
+	}
 
-		public static DisposalConcern Instance
-		{
-			get { return instance; }
-		}
+	public static DisposalConcern Instance { get; } = new();
 
-		protected DisposalConcern()
-		{
-		}
-
-		public void Apply(ComponentModel model, object component)
-		{
-			var disposable = component as IDisposable;
-			if (disposable == null)
-			{
-				return;
-			}
-			disposable.Dispose();
-		}
+	public void Apply(ComponentModel model, object component)
+	{
+		var disposable = component as IDisposable;
+		if (disposable == null) return;
+		disposable.Dispose();
 	}
 }

@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
-{
-	using CastleTests.ClassComponents;
+namespace Castle.MicroKernel.Tests.ClassComponents;
 
-	public class GenericImpl2<T> : IGeneric<T>
-	{
-		public int Value { get; set; }
-	}
+using CastleTests.ClassComponents;
+
+public class GenericImpl2<T> : IGeneric<T>
+{
+	public int Value { get; set; }
 }

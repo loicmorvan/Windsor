@@ -12,58 +12,57 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Pools
+namespace Castle.MicroKernel.Tests.Pools;
+
+using System.Threading;
+
+using Castle.MicroKernel.Registration;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class MultithreadedPooledTestCase
 {
-	using System.Threading;
+	private readonly ManualResetEvent startEvent = new(false);
+	private readonly ManualResetEvent stopEvent = new(false);
+	private IKernel kernel;
 
-	using Castle.MicroKernel.Registration;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class MultithreadedPooledTestCase
+	public void ExecuteMethodUntilSignal()
 	{
-		private readonly ManualResetEvent startEvent = new ManualResetEvent(false);
-		private readonly ManualResetEvent stopEvent = new ManualResetEvent(false);
-		private IKernel kernel;
+		startEvent.WaitOne(int.MaxValue);
 
-		public void ExecuteMethodUntilSignal()
+		while (!stopEvent.WaitOne(1))
 		{
-			startEvent.WaitOne(int.MaxValue);
+			var instance = kernel.Resolve<PoolableComponent1>("a");
 
-			while (!stopEvent.WaitOne(1))
-			{
-				var instance = kernel.Resolve<PoolableComponent1>("a");
+			Assert.IsNotNull(instance);
 
-				Assert.IsNotNull(instance);
+			Thread.Sleep(1 * 500);
 
-				Thread.Sleep(1*500);
+			kernel.ReleaseComponent(instance);
+		}
+	}
 
-				kernel.ReleaseComponent(instance);
-			}
+	[Test]
+	public void Multithreaded()
+	{
+		kernel = new DefaultKernel();
+		kernel.Register(Component.For(typeof(PoolableComponent1)).Named("a"));
+
+		const int threadCount = 15;
+
+		var threads = new Thread[threadCount];
+
+		for (var i = 0; i < threadCount; i++)
+		{
+			threads[i] = new Thread(ExecuteMethodUntilSignal);
+			threads[i].Start();
 		}
 
-		[Test]
-		public void Multithreaded()
-		{
-			kernel = new DefaultKernel();
-			kernel.Register(Component.For(typeof(PoolableComponent1)).Named("a"));
+		startEvent.Set();
 
-			const int threadCount = 15;
+		Thread.CurrentThread.Join(3 * 1000);
 
-			var threads = new Thread[threadCount];
-
-			for (var i = 0; i < threadCount; i++)
-			{
-				threads[i] = new Thread(ExecuteMethodUntilSignal);
-				threads[i].Start();
-			}
-
-			startEvent.Set();
-
-			Thread.CurrentThread.Join(3*1000);
-
-			stopEvent.Set();
-		}
+		stopEvent.Set();
 	}
 }

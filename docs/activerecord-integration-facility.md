@@ -1,6 +1,8 @@
 # ActiveRecord Integration Facility
 
-Use the ActiveRecord Integration facility if you want to benefit from the transaction management offered by the [Automatic Transaction Management Facility](atm-facility.md) and if you want to have the Container configuring the [ActiveRecord framework](https://github.com/castleproject/ActiveRecord) (this keeps the configuration centralized).
+Use the ActiveRecord Integration facility if you want to benefit from the transaction management offered by
+the [Automatic Transaction Management Facility](atm-facility.md) and if you want to have the Container configuring
+the [ActiveRecord framework](https://github.com/castleproject/ActiveRecord) (this keeps the configuration centralized).
 
 The facility does not change in any way how ActiveRecord types are managed, loaded, saved and so on.
 
@@ -30,11 +32,13 @@ Just install the facility and add the proper configuration
 </configuration>
 ```
 
-The configuration is basically the same as ActiveRecord. The exception is the assemblies node which you use to specify the assembly name that has the ActiveRecord types.
+The configuration is basically the same as ActiveRecord. The exception is the assemblies node which you use to specify
+the assembly name that has the ActiveRecord types.
 
 ### Auto wiring
 
-The facility also adds `ISessionFactoryHolder` and `ISessionFactory` as components, so you can gain access to NHibernate's `ISession` from any component. For example:
+The facility also adds `ISessionFactoryHolder` and `ISessionFactory` as components, so you can gain access to
+NHibernate's `ISession` from any component. For example:
 
 ```csharp
 public class CustomerService
@@ -55,11 +59,13 @@ public class CustomerService
 }
 ```
 
-:information_source: **`OpenSession`:** You can only invoke `OpenSession` on the `ISessionFactory`, and also do not forget to close the Session as it is being managed by ActiveRecord.
+:information_source: **`OpenSession`:** You can only invoke `OpenSession` on the `ISessionFactory`, and also do not
+forget to close the Session as it is being managed by ActiveRecord.
 
 ### Transaction support
 
-This facility is aware of transactions, for more information check [Automatic Transaction Management Facility](atm-facility.md).
+This facility is aware of transactions, for more information
+check [Automatic Transaction Management Facility](atm-facility.md).
 
 ### Required Assemblies
 

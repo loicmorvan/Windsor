@@ -12,127 +12,120 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests;
+
+using Castle.Core;
+using Castle.MicroKernel.Registration;
+
+using NUnit.Framework;
+
+[PerThread]
+public class R
 {
-	using Castle.Core;
-	using Castle.MicroKernel.Registration;
+}
 
-	using NUnit.Framework;
+public interface IC
+{
+	IN N { get; set; }
+}
 
-	[PerThread]
-	public class R
+public class CImpl : IC
+{
+	private R r;
+
+	public CImpl()
 	{
+		N = null;
 	}
 
-	public interface IC
+	public R R
 	{
-		IN N { get; set; }
+		set => r = value;
 	}
 
-	public class CImpl : IC
+	public IN N { get; set; }
+}
+
+public interface IN
+{
+	IS CS { get; }
+}
+
+[Transient]
+public class DN : IN
+{
+	private ISP sp;
+	private IWM vm;
+
+	public DN(IWM vm, ISP sp)
 	{
-		private R r = null;
-
-		public R R
-		{
-			set { r = value; }
-		}
-
-		public CImpl()
-		{
-			N = null;
-		}
-
-		public IN N { get; set; }
+		this.vm = vm;
+		this.sp = sp;
+		CS = new BS();
 	}
 
-	public interface IN
+	public IS CS { get; }
+}
+
+public interface IWM
+{
+	void A(IN n);
+}
+
+public class WM : IWM
+{
+	public void A(IN n)
 	{
-		IS CS { get; }
+		//...
 	}
+}
 
-	[Transient]
-	public class DN : IN
+public interface IS
+{
+	ISP SP { get; set; }
+}
+
+[Transient]
+public class BS : IS
+{
+	public ISP SP { get; set; }
+}
+
+public interface ISP
+{
+	void Save(IS s);
+}
+
+public class SP : ISP
+{
+	public void Save(IS s)
 	{
-		private IWM vm;
-		private ISP sp;
-
-		public IS CS { get; private set; }
-
-		public DN(IWM vm, ISP sp)
-		{
-			this.vm = vm;
-			this.sp = sp;
-			CS = new BS();
-		}
 	}
+}
 
-	public interface IWM
+[TestFixture]
+public class ContainerProblem2
+{
+	[Test]
+	public void CausesStackOverflow()
 	{
-		void A(IN n);
-	}
+		IWindsorContainer container = new WindsorContainer();
 
-	public class WM : IWM
-	{
-		public void A(IN n)
-		{
-			//...
-		}
-	}
+		container.Register(Component.For(typeof(IS)).ImplementedBy(typeof(BS)).Named("BS"));
+		container.Register(Component.For(typeof(IC)).ImplementedBy(typeof(CImpl)).Named("C"));
+		container.Register(Component.For(typeof(IWM)).ImplementedBy(typeof(WM)).Named("WM"));
+		container.Register(Component.For(typeof(ISP)).ImplementedBy(typeof(SP)).Named("SP"));
 
-	public interface IS
-	{
-		ISP SP { get; set; }
-	}
+		//TODO: dead code - why is it here?
+		// ComponentModel model = new ComponentModel("R", typeof(R), typeof(R));
+		// model.LifestyleType = LifestyleType.Custom;
+		// model.CustomLifestyle = typeof(PerThreadLifestyleManager);
 
-	[Transient]
-	public class BS : IS
-	{
-		private ISP _sp = null;
+		// container.Kernel.AddCustomComponent(model);
+		// container.Kernel.AddComponent("R", typeof(R), LifestyleType.Thread);
+		container.Kernel.Register(Component.For(typeof(R)).Named("R"));
 
-		public ISP SP
-		{
-			get { return _sp; }
-			set { _sp = value; }
-		}
-	}
-
-	public interface ISP
-	{
-		void Save(IS s);
-	}
-
-	public class SP : ISP
-	{
-		public void Save(IS s)
-		{
-		}
-	}
-
-	[TestFixture]
-	public class ContainerProblem2
-	{
-		[Test]
-		public void CausesStackOverflow()
-		{
-			IWindsorContainer container = new WindsorContainer();
-
-			container.Register(Component.For(typeof(IS)).ImplementedBy(typeof(BS)).Named("BS"));
-			container.Register(Component.For(typeof(IC)).ImplementedBy(typeof(CImpl)).Named("C"));
-			container.Register(Component.For(typeof(IWM)).ImplementedBy(typeof(WM)).Named("WM"));
-			container.Register(Component.For(typeof(ISP)).ImplementedBy(typeof(SP)).Named("SP"));
-
-			//TODO: dead code - why is it here?
-			// ComponentModel model = new ComponentModel("R", typeof(R), typeof(R));
-			// model.LifestyleType = LifestyleType.Custom;
-			// model.CustomLifestyle = typeof(PerThreadLifestyleManager);
-
-			// container.Kernel.AddCustomComponent(model);
-			// container.Kernel.AddComponent("R", typeof(R), LifestyleType.Thread);
-			container.Kernel.Register(Component.For(typeof(R)).Named("R"));
-
-			IC c = container.Resolve<IC>("C");
-			Assert.IsNotNull(c);
-		}
+		var c = container.Resolve<IC>("C");
+		Assert.IsNotNull(c);
 	}
 }

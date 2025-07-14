@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Interceptors
+namespace Castle.Windsor.Tests.Interceptors;
+
+using Castle.DynamicProxy;
+
+using CastleTests.Components;
+
+public class InterceptorThatCauseStackOverflow : IInterceptor
 {
-	using Castle.DynamicProxy;
-
-	using CastleTests.Components;
-
-	public class InterceptorThatCauseStackOverflow : IInterceptor
+	public InterceptorThatCauseStackOverflow(ICameraService service)
 	{
-		public InterceptorThatCauseStackOverflow(ICameraService service)
-		{
-		}
+	}
 
-		public void Intercept(IInvocation invocation)
-		{
-		}
+	public void Intercept(IInvocation invocation)
+	{
 	}
 }

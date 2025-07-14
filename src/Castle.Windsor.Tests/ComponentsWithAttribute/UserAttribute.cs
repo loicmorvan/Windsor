@@ -12,22 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ComponentsWithAttribute
+namespace Castle.Windsor.Tests.ComponentsWithAttribute;
+
+using System;
+
+public class UserAttribute : Attribute
 {
-	using System;
-
-	public class UserAttribute : Attribute
+	public UserAttribute(bool register)
 	{
-		private readonly bool register;
-
-		public UserAttribute(bool register)
-		{
-			this.register = register;
-		}
-
-		public bool Register
-		{
-			get { return register; }
-		}
+		this.Register = register;
 	}
+
+	public bool Register { get; }
 }

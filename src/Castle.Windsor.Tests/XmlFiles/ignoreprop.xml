@@ -2,8 +2,8 @@
 
 	<components>
 
-		<component id="server" 
-			type="ClassWithDoNotWireProperties">
+		<component id="server"
+				   type="ClassWithDoNotWireProperties">
 			<parameters>
 				<Port>100</Port>
 				<Host>server</Host>

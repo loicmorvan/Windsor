@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+public class Camera : ICamera
 {
-	public class Camera : ICamera
-	{
-		public string IPNumber { get; set; }
-		public int Id { get; set; }
-		public string Name { get; set; }
-	}
+	public string IPNumber { get; set; }
+	public int Id { get; set; }
+	public string Name { get; set; }
 }

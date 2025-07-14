@@ -12,79 +12,78 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.Startable
+namespace CastleTests.Facilities.Startable;
+
+using Castle.Facilities.Startable;
+using Castle.MicroKernel.Handlers;
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.Tests.ClassComponents;
+using Castle.Windsor.Tests;
+using Castle.Windsor.Tests.Facilities.Startable.Components;
+
+using NUnit.Framework;
+
+public class ManuallyTriggeredStartTestCase : AbstractContainerTestCase
 {
-	using Castle.Facilities.Startable;
-	using Castle.MicroKernel.Handlers;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Tests.ClassComponents;
-	using Castle.Windsor.Tests;
-	using Castle.Windsor.Tests.Facilities.Startable.Components;
-
-	using NUnit.Framework;
-
-	public class ManuallyTriggeredStartTestCase : AbstractContainerTestCase
+	[Test]
+	public void Can_manually_trigger_start()
 	{
-		[Test]
-		public void Can_manually_trigger_start()
-		{
-			var flag = new StartFlag();
-			Startable.Started = false;
-			Container.AddFacility<StartableFacility>(f => f.DeferredStart(flag));
-			Container.Register(Component.For<Startable>(),
-				Component.For<ICustomer>().ImplementedBy<CustomerImpl>());
+		var flag = new StartFlag();
+		Startable.Started = false;
+		Container.AddFacility<StartableFacility>(f => f.DeferredStart(flag));
+		Container.Register(Component.For<Startable>(),
+			Component.For<ICustomer>().ImplementedBy<CustomerImpl>());
 
-			Assert.IsFalse(Startable.Started);
+		Assert.IsFalse(Startable.Started);
 
-			flag.Signal();
+		flag.Signal();
 
-			Assert.IsTrue(Startable.Started);
-		}
+		Assert.IsTrue(Startable.Started);
+	}
 
-		[Test]
-		public void Can_manually_trigger_start_only_once()
-		{
-			var flag = new StartFlag();
-			Startable.Started = false;
-			Container.AddFacility<StartableFacility>(f => f.DeferredStart(flag));
-			Container.Register(Component.For<Startable>().LifestyleTransient(),
-				Component.For<ICustomer>().ImplementedBy<CustomerImpl>());
+	[Test]
+	public void Can_manually_trigger_start_only_once()
+	{
+		var flag = new StartFlag();
+		Startable.Started = false;
+		Container.AddFacility<StartableFacility>(f => f.DeferredStart(flag));
+		Container.Register(Component.For<Startable>().LifestyleTransient(),
+			Component.For<ICustomer>().ImplementedBy<CustomerImpl>());
 
-			flag.Signal();
-			Startable.Started = false;
-			flag.Signal();
-			Assert.IsFalse(Startable.Started);
-		}
+		flag.Signal();
+		Startable.Started = false;
+		flag.Signal();
+		Assert.IsFalse(Startable.Started);
+	}
 
-		[Test]
-		public void Can_manually_trigger_start_when_using_Install()
-		{
-			var flag = new StartFlag();
-			Startable.Started = false;
-			Container.AddFacility<StartableFacility>(f => f.DeferredStart(flag));
-			Container.Install(
-				new ActionBasedInstaller(c => c.Register(Component.For<Startable>(),
-					Component.For<ICustomer>().ImplementedBy<CustomerImpl>()))
-				);
+	[Test]
+	public void Can_manually_trigger_start_when_using_Install()
+	{
+		var flag = new StartFlag();
+		Startable.Started = false;
+		Container.AddFacility<StartableFacility>(f => f.DeferredStart(flag));
+		Container.Install(
+			new ActionBasedInstaller(c => c.Register(Component.For<Startable>(),
+				Component.For<ICustomer>().ImplementedBy<CustomerImpl>()))
+		);
 
-			Assert.IsFalse(Startable.Started);
+		Assert.IsFalse(Startable.Started);
 
-			flag.Signal();
+		flag.Signal();
 
-			Assert.IsTrue(Startable.Started);
-		}
+		Assert.IsTrue(Startable.Started);
+	}
 
-		[Test]
-		public void Manually_triggered_start_throws_on_missing_dependencies()
-		{
-			var flag = new StartFlag();
-			Startable.Started = false;
-			Container.AddFacility<StartableFacility>(f => f.DeferredStart(flag));
-			Container.Register(Component.For<Startable>());
+	[Test]
+	public void Manually_triggered_start_throws_on_missing_dependencies()
+	{
+		var flag = new StartFlag();
+		Startable.Started = false;
+		Container.AddFacility<StartableFacility>(f => f.DeferredStart(flag));
+		Container.Register(Component.For<Startable>());
 
-			Assert.Throws<HandlerException>(() =>
-				flag.Signal()
-				);
-		}
+		Assert.Throws<HandlerException>(() =>
+			flag.Signal()
+		);
 	}
 }

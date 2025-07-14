@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+using CastleTests.Components;
+
+public class HasCtorDependency
 {
-	using CastleTests.Components;
-
-	public class HasCtorDependency
+	public HasCtorDependency(ISimpleService dependency)
 	{
-		public HasCtorDependency(ISimpleService dependency)
-		{
-			Dependency = dependency;
-		}
-
-		public ISimpleService Dependency { get; private set; }
+		Dependency = dependency;
 	}
+
+	public ISimpleService Dependency { get; private set; }
 }

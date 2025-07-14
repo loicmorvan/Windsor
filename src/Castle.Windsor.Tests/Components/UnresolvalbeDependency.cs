@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using Castle.Windsor.Tests;
+namespace CastleTests.Components;
 
-	public class UnresolvalbeDependency : IDependency
+public class UnresolvalbeDependency : IDependency
+{
+	public UnresolvalbeDependency(A a)
 	{
-		public UnresolvalbeDependency(A a)
-		{
-		}
 	}
 }

@@ -12,48 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
+
+using System;
+using System.Xml;
+
+public class EvalProcessingInstructionProcessor : AbstractXmlNodeProcessor
 {
-	using System;
-	using System.Xml;
+	private static readonly XmlNodeType[] acceptNodes = new[] { XmlNodeType.ProcessingInstruction };
 
-	using Castle.Core.Internal;
+	public override XmlNodeType[] AcceptNodeTypes => acceptNodes;
 
-	public class EvalProcessingInstructionProcessor : AbstractXmlNodeProcessor
+	public override string Name => "eval";
+
+	public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
 	{
-		private static readonly XmlNodeType[] acceptNodes = new[] { XmlNodeType.ProcessingInstruction };
+		var node = nodeList.Current as XmlProcessingInstruction;
 
-		public override XmlNodeType[] AcceptNodeTypes
-		{
-			get { return acceptNodes; }
-		}
+		var fragment = CreateFragment(node);
 
-		public override string Name
-		{
-			get { return "eval"; }
-		}
+		var expression = node.Data;
 
-		public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
-		{
-			var node = nodeList.Current as XmlProcessingInstruction;
+		// We don't have an expression evaluator right now, so expression will 
+		// be just pre-defined literals that we know how to evaluate
 
-			var fragment = CreateFragment(node);
+		object evaluated = "";
 
-			var expression = node.Data;
+		if (string.Compare(expression, "$basedirectory", true) == 0) evaluated = AppContext.BaseDirectory;
 
-			// We don't have an expression evaluator right now, so expression will 
-			// be just pre-defined literals that we know how to evaluate
+		fragment.AppendChild(node.OwnerDocument.CreateTextNode(evaluated.ToString()));
 
-			object evaluated = "";
-
-			if (string.Compare(expression, "$basedirectory", true) == 0)
-			{
-				evaluated = AppContext.BaseDirectory;
-			}
-
-			fragment.AppendChild(node.OwnerDocument.CreateTextNode(evaluated.ToString()));
-
-			ReplaceNode(node.ParentNode, fragment, node);
-		}
+		ReplaceNode(node.ParentNode, fragment, node);
 	}
 }

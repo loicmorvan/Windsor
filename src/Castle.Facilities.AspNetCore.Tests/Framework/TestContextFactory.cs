@@ -12,28 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests.Framework
+namespace Castle.Facilities.AspNetCore.Tests.Framework;
+
+using System;
+
+using Castle.Facilities.AspNetCore.Tests.Framework.Builders;
+using Castle.MicroKernel.Lifestyle;
+
+public class TestContextFactory
 {
-	using System;
-
-	using Castle.MicroKernel.Lifestyle;
-	using Castle.Facilities.AspNetCore.Tests.Framework.Builders;
-
-	public class TestContextFactory
+	public static TestContext Get(Action<WindsorRegistrationOptions> configure = null, Func<IServiceProvider> serviceProviderFactory = null)
 	{
-		public static TestContext Get(Action<WindsorRegistrationOptions> configure = null, Func<IServiceProvider> serviceProviderFactory = null)
-		{
-			IServiceProvider serviceProvider = null;
+		IServiceProvider serviceProvider = null;
 
-			var serviceCollection = ServiceCollectionBuilder.New();
+		var serviceCollection = ServiceCollectionBuilder.New();
 
-			var container = WindsorContainerBuilder.New(serviceCollection,
-				configure ?? (opts => opts.UseEntryAssembly(typeof(TestContextFactory).Assembly)),
-				serviceProviderFactory ?? (() => serviceProvider = ServiceProviderBuilder.New(serviceCollection)));
+		var container = WindsorContainerBuilder.New(serviceCollection,
+			configure ?? (opts => opts.UseEntryAssembly(typeof(TestContextFactory).Assembly)),
+			serviceProviderFactory ?? (() => serviceProvider = ServiceProviderBuilder.New(serviceCollection)));
 
-			var applicationBuilder = ApplicationBuilder.New(serviceProvider);
+		var applicationBuilder = ApplicationBuilder.New(serviceProvider);
 
-			return new TestContext(serviceCollection, serviceProvider, applicationBuilder, container, container.RequireScope());
-		} 
+		return new TestContext(serviceCollection, serviceProvider, applicationBuilder, container, container.RequireScope());
 	}
 }

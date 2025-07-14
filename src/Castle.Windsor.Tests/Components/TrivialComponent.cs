@@ -12,13 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+public class TrivialComponent : IComponent
 {
-	public class TrivialComponent : IComponent
-	{
-		public int ID
-		{
-			get { return 0; }
-		}
-	}
+	public int ID => 0;
 }

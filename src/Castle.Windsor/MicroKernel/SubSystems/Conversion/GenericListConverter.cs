@@ -12,96 +12,84 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+namespace Castle.MicroKernel.SubSystems.Conversion;
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
+
+using Castle.Core.Configuration;
+using Castle.Core.Internal;
+using Castle.MicroKernel.Context;
+using Castle.MicroKernel.Util;
+
+[Serializable]
+public class GenericListConverter : AbstractTypeConverter
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Reflection;
-
-	using Castle.Core.Configuration;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Util;
-
-	[Serializable]
-	public class GenericListConverter : AbstractTypeConverter
+	public override bool CanHandleType(Type type)
 	{
-		public override bool CanHandleType(Type type)
+		if (!type.GetTypeInfo().IsGenericType) return false;
+
+		var genericDef = type.GetGenericTypeDefinition();
+
+		return genericDef == typeof(IList<>)
+		       || genericDef == typeof(ICollection<>)
+		       || genericDef == typeof(List<>)
+		       || genericDef == typeof(IEnumerable<>);
+	}
+
+	public override object PerformConversion(string value, Type targetType)
+	{
+		if (ReferenceExpressionUtil.IsReference(value))
 		{
-			if (!type.GetTypeInfo().IsGenericType)
-			{
-				return false;
-			}
+			var newValue = ReferenceExpressionUtil.ExtractComponentName(value);
+			var handler = Context.Kernel.LoadHandlerByName(newValue, targetType, null);
+			if (handler == null) throw new ConverterException(string.Format("Component '{0}' was not found in the container.", newValue));
 
-			var genericDef = type.GetGenericTypeDefinition();
-
-			return (genericDef == typeof(IList<>)
-			        || genericDef == typeof(ICollection<>)
-			        || genericDef == typeof(List<>)
-			        || genericDef == typeof(IEnumerable<>));
+			return handler.Resolve(Context.CurrentCreationContext ?? CreationContext.CreateEmpty());
 		}
 
-		public override object PerformConversion(String value, Type targetType)
-		{
-			if (ReferenceExpressionUtil.IsReference(value))
-			{
-				string newValue = ReferenceExpressionUtil.ExtractComponentName(value);
-				var handler = Context.Kernel.LoadHandlerByName(newValue, targetType, null);
-				if (handler == null)
-				{
-					throw new ConverterException(string.Format("Component '{0}' was not found in the container.", newValue));
-				}
+		throw new NotImplementedException();
+	}
 
-				return handler.Resolve(Context.CurrentCreationContext ?? CreationContext.CreateEmpty());
-			}
-			throw new NotImplementedException();
+	public override object PerformConversion(IConfiguration configuration, Type targetType)
+	{
+		Debug.Assert(CanHandleType(targetType));
+
+		var argTypes = targetType.GetGenericArguments();
+
+		if (argTypes.Length != 1) throw new ConverterException("Expected type with one generic argument.");
+
+		var itemType = configuration.Attributes["type"];
+		var convertTo = argTypes[0];
+
+		if (itemType != null) convertTo = Context.Composition.PerformConversion<Type>(itemType);
+
+		var helperType = typeof(ListHelper<>).MakeGenericType(convertTo);
+		var converterHelper = helperType.CreateInstance<IGenericCollectionConverterHelper>(this);
+		return converterHelper.ConvertConfigurationToCollection(configuration);
+	}
+
+	private class ListHelper<T> : IGenericCollectionConverterHelper
+	{
+		private readonly GenericListConverter parent;
+
+		public ListHelper(GenericListConverter parent)
+		{
+			this.parent = parent;
 		}
 
-		public override object PerformConversion(IConfiguration configuration, Type targetType)
+		public object ConvertConfigurationToCollection(IConfiguration configuration)
 		{
-			Debug.Assert(CanHandleType(targetType));
-
-			var argTypes = targetType.GetGenericArguments();
-
-			if (argTypes.Length != 1)
+			var list = new List<T>();
+			foreach (var itemConfig in configuration.Children)
 			{
-				throw new ConverterException("Expected type with one generic argument.");
+				var item = parent.Context.Composition.PerformConversion<T>(itemConfig);
+				list.Add(item);
 			}
 
-			var itemType = configuration.Attributes["type"];
-			var convertTo = argTypes[0];
-
-			if (itemType != null)
-			{
-				convertTo = Context.Composition.PerformConversion<Type>(itemType);
-			}
-
-			var helperType = typeof(ListHelper<>).MakeGenericType(convertTo);
-			var converterHelper = helperType.CreateInstance<IGenericCollectionConverterHelper>(this);
-			return converterHelper.ConvertConfigurationToCollection(configuration);
-		}
-
-		private class ListHelper<T> : IGenericCollectionConverterHelper
-		{
-			private readonly GenericListConverter parent;
-
-			public ListHelper(GenericListConverter parent)
-			{
-				this.parent = parent;
-			}
-
-			public object ConvertConfigurationToCollection(IConfiguration configuration)
-			{
-				var list = new List<T>();
-				foreach (var itemConfig in configuration.Children)
-				{
-					var item = parent.Context.Composition.PerformConversion<T>(itemConfig);
-					list.Add(item);
-				}
-
-				return list;
-			}
+			return list;
 		}
 	}
 }

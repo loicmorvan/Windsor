@@ -12,80 +12,79 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs.IoC_78
+namespace Castle.Windsor.Tests.Bugs.IoC_78;
+
+using Castle.MicroKernel.Handlers;
+using Castle.MicroKernel.Registration;
+
+using CastleTests;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class IoC78 : AbstractContainerTestCase
 {
-	using Castle.MicroKernel.Handlers;
-	using Castle.MicroKernel.Registration;
-
-	using CastleTests;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class IoC78 : AbstractContainerTestCase
+	[Test]
+	public void Will_Ignore_Components_Already_in_Dependency_Tracker_Constructor()
 	{
-		[Test]
-		public void Will_Ignore_Components_Already_in_Dependency_Tracker_Constructor()
-		{
-			Container.Register(Component.For<IChain>().ImplementedBy<MyChain>().Named("chain"));
-			Container.Register(Component.For<IChain>().ImplementedBy<MyChain2>().Named("chain2"));
+		Container.Register(Component.For<IChain>().ImplementedBy<MyChain>().Named("chain"));
+		Container.Register(Component.For<IChain>().ImplementedBy<MyChain2>().Named("chain2"));
 
-			var resolve = Container.Resolve<IChain>("chain2");
-			Assert.IsNotNull(resolve);
-		}
-
-		[Test]
-		public void Will_Ignore_Components_Already_in_Dependency_Tracker_Property()
-		{
-			Container.Register(Component.For<IChain>().ImplementedBy<MyChain3>());
-
-			var chain3 = (MyChain3)Container.Resolve<IChain>();
-			Assert.IsNull(chain3.Chain);
-		}
-
-		[Test]
-		public void Will_Not_Try_To_Resolve_Component_To_Itself()
-		{
-			Container.Register(Component.For<IChain>().ImplementedBy<MyChain4>());
-			Assert.Throws<HandlerException>(() => Container.Resolve<IChain>());
-		}
+		var resolve = Container.Resolve<IChain>("chain2");
+		Assert.IsNotNull(resolve);
 	}
 
-	public interface IChain
+	[Test]
+	public void Will_Ignore_Components_Already_in_Dependency_Tracker_Property()
+	{
+		Container.Register(Component.For<IChain>().ImplementedBy<MyChain3>());
+
+		var chain3 = (MyChain3)Container.Resolve<IChain>();
+		Assert.IsNull(chain3.Chain);
+	}
+
+	[Test]
+	public void Will_Not_Try_To_Resolve_Component_To_Itself()
+	{
+		Container.Register(Component.For<IChain>().ImplementedBy<MyChain4>());
+		Assert.Throws<HandlerException>(() => Container.Resolve<IChain>());
+	}
+}
+
+public interface IChain
+{
+}
+
+public class MyChain : IChain
+{
+	public MyChain()
 	{
 	}
 
-	public class MyChain : IChain
+	public MyChain(IChain chain)
 	{
-		public MyChain()
-		{
-		}
+	}
+}
 
-		public MyChain(IChain chain)
-		{
-		}
+public class MyChain2 : IChain
+{
+	public MyChain2()
+	{
 	}
 
-	public class MyChain2 : IChain
+	public MyChain2(IChain chain)
 	{
-		public MyChain2()
-		{
-		}
-
-		public MyChain2(IChain chain)
-		{
-		}
 	}
+}
 
-	public class MyChain4 : IChain
+public class MyChain4 : IChain
+{
+	public MyChain4(IChain chain)
 	{
-		public MyChain4(IChain chain)
-		{
-		}
 	}
+}
 
-	public class MyChain3 : IChain
-	{
-		public IChain Chain { get; set; }
-	}
+public class MyChain3 : IChain
+{
+	public IChain Chain { get; set; }
 }

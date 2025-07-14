@@ -2,7 +2,8 @@
 
 ## Specifying decorators using fluent API (AllTypes)
 
-When registering multiple types at once using `AllTypes.` syntax, it is not possible to rely on order of registration to handle decorated services.
+When registering multiple types at once using `AllTypes.` syntax, it is not possible to rely on order of registration to
+handle decorated services.
 
 For instance suppose we are planning to run some tasks on application startup:
 
@@ -24,7 +25,8 @@ public void RunStartupTasks()
 }
 ```
 
-Now since the order of execution of these tasks are indeterministic, some work needs to be done if tasks should run on specific order. Take this as an example where the order of execution matters:
+Now since the order of execution of these tasks are indeterministic, some work needs to be done if tasks should run on
+specific order. Take this as an example where the order of execution matters:
 
 ```csharp
 public interface ITask
@@ -50,7 +52,9 @@ public class UpgradeSchemaTask : ITask
 }
 ```
 
-To handle this kind of scenarios, we may use an instance of `IHandlerSelector` interface and manually specify the order. The handler selector is first asked if it has any opinion about a service interface, and it does, it is asked to provide proper handler. Here's an implementation that solves the issue in our example:
+To handle this kind of scenarios, we may use an instance of `IHandlerSelector` interface and manually specify the order.
+The handler selector is first asked if it has any opinion about a service interface, and it does, it is asked to provide
+proper handler. Here's an implementation that solves the issue in our example:
 
 ```csharp
 public class TaskSelector : IHandlerSelector

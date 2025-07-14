@@ -12,39 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+using System.Collections;
+
+using Castle.Core;
+
+[Transient]
+public class ComponentWithConfigs
 {
-	using System.Collections;
-
-	using Castle.Core;
-
-	[Transient]
-	public class ComponentWithConfigs
+	public ComponentWithConfigs(string name, int port, IDictionary dict)
 	{
-		private readonly IDictionary dict;
-		private readonly string name;
-		private readonly int port;
-
-		public ComponentWithConfigs(string name, int port, IDictionary dict)
-		{
-			this.name = name;
-			this.port = port;
-			this.dict = dict;
-		}
-
-		public IDictionary Dict
-		{
-			get { return dict; }
-		}
-
-		public string Name
-		{
-			get { return name; }
-		}
-
-		public int Port
-		{
-			get { return port; }
-		}
+		this.Name = name;
+		this.Port = port;
+		this.Dict = dict;
 	}
+
+	public IDictionary Dict { get; }
+
+	public string Name { get; }
+
+	public int Port { get; }
 }

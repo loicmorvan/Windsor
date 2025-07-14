@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+public interface ISimpleGeneric<T>
 {
-	public interface ISimpleGeneric<T>
-	{
-		T Operation();
-	}
+	T Operation();
 }

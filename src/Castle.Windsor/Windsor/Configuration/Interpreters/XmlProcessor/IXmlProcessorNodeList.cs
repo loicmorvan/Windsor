@@ -12,19 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor;
+
+using System.Xml;
+
+public interface IXmlProcessorNodeList
 {
-	using System.Xml;
+	int Count { get; }
+	XmlNode Current { get; }
 
-	public interface IXmlProcessorNodeList
-	{
-		int Count { get; }
-		XmlNode Current { get; }
+	int CurrentPosition { get; set; }
 
-		int CurrentPosition { get; set; }
+	bool HasCurrent { get; }
 
-		bool HasCurrent { get; }
-
-		bool MoveNext();
-	}
+	bool MoveNext();
 }

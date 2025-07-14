@@ -12,81 +12,61 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle
-{
-	using System;
-	using System.Diagnostics;
+namespace Castle.MicroKernel.Lifestyle;
 
-	using Castle.Core;
-	using Castle.MicroKernel.Context;
+using System;
+using System.Diagnostics;
+
+using Castle.Core;
+using Castle.MicroKernel.Context;
+
+/// <summary>Base implementation of <see cref = "ILifestyleManager" /></summary>
+[Serializable]
+public abstract class AbstractLifestyleManager : ILifestyleManager
+{
+	protected IComponentActivator ComponentActivator { get; private set; }
+
+	protected IKernel Kernel { get; private set; }
+
+	protected ComponentModel Model { get; private set; }
 
 	/// <summary>
-	///   Base implementation of <see cref="ILifestyleManager"/>
+	///     Invoked when the container gets disposed. The container will not call it multiple times in multithreaded environments. However it may be called at the same time when some out of band release
+	///     mechanism is in progress. Resolving those potential issues is the task of implementors
 	/// </summary>
-	[Serializable]
-	public abstract class AbstractLifestyleManager : ILifestyleManager
+	public abstract void Dispose();
+
+	public virtual void Init(IComponentActivator componentActivator, IKernel kernel, ComponentModel model)
 	{
-		private IComponentActivator componentActivator;
-		private IKernel kernel;
-		private ComponentModel model;
+		this.ComponentActivator = componentActivator;
+		this.Kernel = kernel;
+		this.Model = model;
+	}
 
-		protected IComponentActivator ComponentActivator
-		{
-			get { return componentActivator; }
-		}
+	public virtual bool Release(object instance)
+	{
+		ComponentActivator.Destroy(instance);
+		return true;
+	}
 
-		protected IKernel Kernel
-		{
-			get { return kernel; }
-		}
+	public virtual object Resolve(CreationContext context, IReleasePolicy releasePolicy)
+	{
+		var burden = CreateInstance(context, false);
+		Track(burden, releasePolicy);
+		return burden.Instance;
+	}
 
-		protected ComponentModel Model
-		{
-			get { return model; }
-		}
+	protected virtual Burden CreateInstance(CreationContext context, bool trackedExternally)
+	{
+		var burden = context.CreateBurden(ComponentActivator, trackedExternally);
 
-		/// <summary>
-		///   Invoked when the container gets disposed. The container will not call it multiple times in multithreaded environments.
-		///   However it may be called at the same time when some out of band release mechanism is in progress. Resolving those potential
-		///   issues is the task of implementors
-		/// </summary>
-		public abstract void Dispose();
+		var instance = ComponentActivator.Create(context, burden);
+		Debug.Assert(ReferenceEquals(instance, burden.Instance));
+		return burden;
+	}
 
-		public virtual void Init(IComponentActivator componentActivator, IKernel kernel, ComponentModel model)
-		{
-			this.componentActivator = componentActivator;
-			this.kernel = kernel;
-			this.model = model;
-		}
-
-		public virtual bool Release(object instance)
-		{
-			componentActivator.Destroy(instance);
-			return true;
-		}
-
-		public virtual object Resolve(CreationContext context, IReleasePolicy releasePolicy)
-		{
-			var burden = CreateInstance(context, false);
-			Track(burden, releasePolicy);
-			return burden.Instance;
-		}
-
-		protected virtual Burden CreateInstance(CreationContext context, bool trackedExternally)
-		{
-			var burden = context.CreateBurden(ComponentActivator, trackedExternally);
-
-			var instance = componentActivator.Create(context, burden);
-			Debug.Assert(ReferenceEquals(instance, burden.Instance));
-			return burden;
-		}
-
-		protected virtual void Track(Burden burden, IReleasePolicy releasePolicy)
-		{
-			if (burden.RequiresPolicyRelease)
-			{
-				releasePolicy.Track(burden.Instance, burden);
-			}
-		}
+	protected virtual void Track(Burden burden, IReleasePolicy releasePolicy)
+	{
+		if (burden.RequiresPolicyRelease) releasePolicy.Track(burden.Instance, burden);
 	}
 }

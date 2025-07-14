@@ -12,20 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel.Tests.ClassComponents;
+
+public class Repository1 : IRepository
 {
-	public class Repository1 : IRepository
+	public Repository1(IRepository inner)
 	{
-		private readonly IRepository inner;
-
-		public Repository1(IRepository inner)
-		{
-			this.inner = inner;
-		}
-
-		public IRepository InnerRepository
-		{
-			get { return inner; }
-		}
+		this.InnerRepository = inner;
 	}
+
+	public IRepository InnerRepository { get; }
 }

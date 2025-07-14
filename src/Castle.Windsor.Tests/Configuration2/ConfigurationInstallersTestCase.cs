@@ -12,26 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Configuration2
+namespace Castle.Windsor.Tests.Configuration2;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class ConfigurationInstallersTestCase
 {
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class ConfigurationInstallersTestCase
+	[Test]
+	public void Installers_by_type()
 	{
+		var container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_installers_type.xml"));
+		container.Resolve<object>("Customer-by-CustomerInstaller");
+	}
 
-		[Test]
-		public void Installers_by_type()
-		{
-			var container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_installers_type.xml"));
-			container.Resolve<object>("Customer-by-CustomerInstaller");
-		}
-
-		[Test]
-		public void Installers_by_assembly()
-		{
-			var container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_installers_assembly.xml"));
-			container.Resolve<object>("Customer-by-CustomerInstaller");
-		}
+	[Test]
+	public void Installers_by_assembly()
+	{
+		var container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_installers_assembly.xml"));
+		container.Resolve<object>("Customer-by-CustomerInstaller");
 	}
 }

@@ -12,16 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Logging.Tests.Classes
+namespace Castle.Facilities.Logging.Tests.Classes;
+
+public interface ISmtpServer
 {
-	using System;
+	void Start();
 
-	public interface ISmtpServer
-	{
-		void Start();
+	void Stop();
 
-		void Stop();
-
-		void InternalSend(String from, String to, String contents);
-	}
+	void InternalSend(string from, string to, string contents);
 }

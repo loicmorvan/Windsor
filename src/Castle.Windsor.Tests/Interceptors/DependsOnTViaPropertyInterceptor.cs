@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Interceptors
-{
-	using Castle.DynamicProxy;
+namespace CastleTests.Interceptors;
 
-	public class DependsOnTViaPropertyInterceptor<T> : StandardInterceptor
-	{
-		public T Tee { get; set; }
-	}
+using Castle.DynamicProxy;
+
+public class DependsOnTViaPropertyInterceptor<T> : StandardInterceptor
+{
+	public T Tee { get; set; }
 }

@@ -12,42 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Extensions
+namespace Castle.Windsor.Diagnostics.Extensions;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Castle.Core.Internal;
+using Castle.MicroKernel;
+using Castle.Windsor.Diagnostics.DebuggerViews;
+
+public class AllServices : AbstractContainerDebuggerExtension
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+	private const string name = "All services";
+	private IAllServicesDiagnostic diagnostic;
 
-	using Castle.Core.Internal;
-	using Castle.MicroKernel;
-	using Castle.Windsor.Diagnostics.DebuggerViews;
-
-	public class AllServices : AbstractContainerDebuggerExtension
+	public override IEnumerable<DebuggerViewItem> Attach()
 	{
-		private const string name = "All services";
-		private IAllServicesDiagnostic diagnostic;
-
-		public override IEnumerable<DebuggerViewItem> Attach()
+		var map = diagnostic.Inspect();
+		var items = map.Select(p => BuildServiceView(p, p.Key.ToCSharpString())).ToArray();
+		Array.Sort(items, (i1, i2) => i1.Name.CompareTo(i2.Name));
+		return new[]
 		{
-			var map = diagnostic.Inspect();
-			var items = map.Select(p => BuildServiceView(p, p.Key.ToCSharpString())).ToArray();
-			Array.Sort(items, (i1, i2) => i1.Name.CompareTo(i2.Name));
-			return new[]
-			{
-				new DebuggerViewItem(name, "Count = " + items.Length, items)
-			};
-		}
+			new DebuggerViewItem(name, "Count = " + items.Length, items)
+		};
+	}
 
-		public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
-		{
-			diagnostic = new AllServicesDiagnostic(kernel);
-			diagnosticsHost.AddDiagnostic(diagnostic);
-		}
+	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
+	{
+		diagnostic = new AllServicesDiagnostic(kernel);
+		diagnosticsHost.AddDiagnostic(diagnostic);
+	}
 
-		private DebuggerViewItem BuildServiceView(IEnumerable<IHandler> handlers, string name)
-		{
-			var components = handlers.Select(DefaultComponentView).ToArray();
-			return new DebuggerViewItem(name, "Count = " + components.Length, components);
-		}
+	private DebuggerViewItem BuildServiceView(IEnumerable<IHandler> handlers, string name)
+	{
+		var components = handlers.Select(DefaultComponentView).ToArray();
+		return new DebuggerViewItem(name, "Count = " + components.Length, components);
 	}
 }

@@ -12,24 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+using System.Collections.Generic;
+
+public class EnumerableDepAsConstructor
 {
-	using System.Collections.Generic;
-
-	using CastleTests.Components;
-
-	public class EnumerableDepAsConstructor
+	public EnumerableDepAsConstructor(IEnumerable<IEmptyService> services)
 	{
-		private readonly IEnumerable<IEmptyService> services;
-
-		public EnumerableDepAsConstructor(IEnumerable<IEmptyService> services)
-		{
-			this.services = services;
-		}
-
-		public IEnumerable<IEmptyService> Services
-		{
-			get { return services; }
-		}
+		this.Services = services;
 	}
+
+	public IEnumerable<IEmptyService> Services { get; }
 }

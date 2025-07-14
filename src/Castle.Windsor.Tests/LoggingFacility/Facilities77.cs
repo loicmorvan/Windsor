@@ -12,53 +12,52 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Logging.Tests
+namespace Castle.Facilities.Logging.Tests;
+
+using Castle.Core.Logging;
+using Castle.Facilities.Logging.Tests.Classes;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class Facilities77 : BaseTest
 {
-	using Castle.Core.Logging;
-	using Castle.Facilities.Logging.Tests.Classes;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class Facilities77 : BaseTest
+	public class TestLoggerFactory : AbstractLoggerFactory
 	{
-		public class TestLoggerFactory : AbstractLoggerFactory
+		public bool NoArgsConstructorWasCalled;
+
+		public TestLoggerFactory() : this("someconfigfile")
 		{
-			public bool NoArgsConstructorWasCalled;
-
-			public TestLoggerFactory() : this("someconfigfile")
-			{
-				NoArgsConstructorWasCalled = true;
-			}
-
-			public TestLoggerFactory(string configFile)
-			{
-				NoArgsConstructorWasCalled = false;
-			}
-
-			public override ILogger Create(string name)
-			{
-				return NullLogger.Instance;
-			}
-
-			public override ILogger Create(string name, LoggerLevel level)
-			{
-				return NullLogger.Instance;
-			}
+			NoArgsConstructorWasCalled = true;
 		}
 
-		[Test]
-		public void ShouldCallNoArgsContstructorIfConfigFileNotSpecified()
+		public TestLoggerFactory(string configFile)
 		{
-			var container = new WindsorContainer().AddFacility<LoggingFacility>(f => f.LogUsing<TestLoggerFactory>());
-
-			container.Register(Component.For<SimpleLoggingComponent>().Named("component"));
-			container.Resolve<SimpleLoggingComponent>("component");
-
-			var logFactory = container.Resolve<TestLoggerFactory>("iloggerfactory");
-			Assert.IsTrue(logFactory.NoArgsConstructorWasCalled, "No args constructor was not called");
+			NoArgsConstructorWasCalled = false;
 		}
+
+		public override ILogger Create(string name)
+		{
+			return NullLogger.Instance;
+		}
+
+		public override ILogger Create(string name, LoggerLevel level)
+		{
+			return NullLogger.Instance;
+		}
+	}
+
+	[Test]
+	public void ShouldCallNoArgsContstructorIfConfigFileNotSpecified()
+	{
+		var container = new WindsorContainer().AddFacility<LoggingFacility>(f => f.LogUsing<TestLoggerFactory>());
+
+		container.Register(Component.For<SimpleLoggingComponent>().Named("component"));
+		container.Resolve<SimpleLoggingComponent>("component");
+
+		var logFactory = container.Resolve<TestLoggerFactory>("iloggerfactory");
+		Assert.IsTrue(logFactory.NoArgsConstructorWasCalled, "No args constructor was not called");
 	}
 }

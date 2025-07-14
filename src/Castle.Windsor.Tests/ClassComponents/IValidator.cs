@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel.Tests.ClassComponents;
+
+/// <summary>Summary description for IValidator.</summary>
+public interface IValidator<in T>
 {
-	/// <summary>
-	/// Summary description for IValidator.
-	/// </summary>
-	public interface IValidator<in T>
-	{
-		bool IsValid(T target);
-	}
+	bool IsValid(T target);
 }

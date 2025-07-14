@@ -12,65 +12,53 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+
+using Castle.Core.Configuration;
+using Castle.MicroKernel.Registration;
+
+public class AttributeDescriptor<S> : AbstractOverwriteableDescriptor<S>
+	where S : class
 {
-	using System;
+	private readonly string name;
+	private readonly string value;
 
-	using Castle.Core.Configuration;
-	using Castle.MicroKernel.Registration;
-
-	public class AttributeDescriptor<S> : AbstractOverwriteableDescriptor<S>
-		where S : class
+	/// <summary>Constructs the <see cref = "AttributeDescriptor{S}" /> descriptor with name and value.</summary>
+	/// <param name = "name">The attribute name.</param>
+	/// <param name = "value">The attribute value.</param>
+	public AttributeDescriptor(string name, string value)
 	{
-		private readonly String name;
-		private readonly String value;
-
-		/// <summary>
-		///   Constructs the <see cref = "AttributeDescriptor{S}" /> descriptor with name and value.
-		/// </summary>
-		/// <param name = "name">The attribute name.</param>
-		/// <param name = "value">The attribute value.</param>
-		public AttributeDescriptor(String name, String value)
-		{
-			this.name = name;
-			this.value = value;
-		}
-
-		protected override void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
-		{
-			if (configuration.Attributes[name] == null || IsOverWrite)
-			{
-				configuration.Attributes[name] = value;
-			}
-		}
+		this.name = name;
+		this.value = value;
 	}
 
-	public class AttributeKeyDescriptor<S>
-		where S : class
+	protected override void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
 	{
-		private readonly ComponentRegistration<S> component;
-		private readonly String name;
+		if (configuration.Attributes[name] == null || IsOverWrite) configuration.Attributes[name] = value;
+	}
+}
 
-		/// <summary>
-		///   Constructs the <see cref = "AttributeKeyDescriptor{S}" /> descriptor with name.
-		/// </summary>
-		/// <param name = "component">The component.</param>
-		/// <param name = "name">The attribute name.</param>
-		public AttributeKeyDescriptor(ComponentRegistration<S> component, String name)
-		{
-			this.component = component;
-			this.name = name;
-		}
+public class AttributeKeyDescriptor<S>
+	where S : class
+{
+	private readonly ComponentRegistration<S> component;
+	private readonly string name;
 
-		/// <summary>
-		///   Builds the <see cref = "AttributeKeyDescriptor{S}" /> with value.
-		/// </summary>
-		/// <param name = "value">The attribute value.</param>
-		/// <returns>The <see cref = "ComponentRegistration{S}" /></returns>
-		public ComponentRegistration<S> Eq(Object value)
-		{
-			var attribValue = (value != null) ? value.ToString() : "";
-			return component.AddAttributeDescriptor(name, attribValue);
-		}
+	/// <summary>Constructs the <see cref = "AttributeKeyDescriptor{S}" /> descriptor with name.</summary>
+	/// <param name = "component">The component.</param>
+	/// <param name = "name">The attribute name.</param>
+	public AttributeKeyDescriptor(ComponentRegistration<S> component, string name)
+	{
+		this.component = component;
+		this.name = name;
+	}
+
+	/// <summary>Builds the <see cref = "AttributeKeyDescriptor{S}" /> with value.</summary>
+	/// <param name = "value">The attribute value.</param>
+	/// <returns>The <see cref = "ComponentRegistration{S}" /></returns>
+	public ComponentRegistration<S> Eq(object value)
+	{
+		var attribValue = value != null ? value.ToString() : "";
+		return component.AddAttributeDescriptor(name, attribValue);
 	}
 }

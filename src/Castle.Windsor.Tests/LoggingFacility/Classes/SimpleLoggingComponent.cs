@@ -12,30 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Logging.Tests.Classes
+namespace Castle.Facilities.Logging.Tests.Classes;
+
+using Castle.Core.Logging;
+
+/// <summary>Summary description for SimpleLoggingComponent.</summary>
+public class SimpleLoggingComponent
 {
-	using Castle.Core.Logging;
-
-	/// <summary>
-	/// Summary description for SimpleLoggingComponent.
-	/// </summary>
-	public class SimpleLoggingComponent
+	public SimpleLoggingComponent(ILogger logger)
 	{
-		private ILogger logger;
+		this.Logger = logger;
+	}
 
-		public SimpleLoggingComponent(ILogger logger)
-		{
-			this.logger = logger;
-		}
+	public ILogger Logger { get; }
 
-		public void DoSomething()
-		{
-			Logger.Info("Hello world");
-		}
-
-		public ILogger Logger
-		{
-			get { return logger; }
-		}
+	public void DoSomething()
+	{
+		Logger.Info("Hello world");
 	}
 }

@@ -12,89 +12,83 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs
+namespace Castle.Windsor.Tests.Bugs;
+
+using Castle.MicroKernel.Registration;
+
+using CastleTests;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class IoC_115 : AbstractContainerTestCase
 {
-	using Castle.MicroKernel.Registration;
-
-	using CastleTests;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class IoC_115 : AbstractContainerTestCase
+	public interface IParentService
 	{
-		public interface IParentService
+	}
+
+	public class ParentService : IParentService
+	{
+	}
+
+	public interface IChildService1
+	{
+	}
+
+	public class ChildService1 : IChildService1
+	{
+		public ChildService1(IChildService2 xxx)
 		{
 		}
+	}
 
-		public class ParentService : IParentService
+	public interface IChildService2
+	{
+		IParentService Parent { get; }
+	}
+
+	public class ChildService2 : IChildService2
+	{
+		public ChildService2(IParentService xxx)
 		{
+			this.Parent = xxx;
 		}
 
-		public interface IChildService1
-		{
-		}
+		public IParentService Parent { get; }
+	}
 
-		public class ChildService1 : IChildService1
-		{
-			public ChildService1(IChildService2 xxx)
-			{
-			}
-		}
+	public class AnotherParentService : IParentService
+	{
+	}
 
-		public interface IChildService2
-		{
-			IParentService Parent { get; }
-		}
+	[Test]
+	[Bug("IOC-115")]
+	public void Can_resolve_from_child_with_dependency_with_dependency_on_parent_component()
+	{
+		var child = new WindsorContainer();
+		Container.AddChildContainer(child);
 
-		public class ChildService2 : IChildService2
-		{
-			private readonly IParentService xxx;
+		Container.Register(Component.For<IParentService>().ImplementedBy<ParentService>());
+		child.Register(Component.For<IChildService1>().ImplementedBy<ChildService1>(),
+			Component.For<IChildService2>().ImplementedBy<ChildService2>());
 
-			public ChildService2(IParentService xxx)
-			{
-				this.xxx = xxx;
-			}
+		// dependency chain goes ChildService1 --> (I)ChildService2 --> IParentService
+		Assert.DoesNotThrow(() => child.Resolve<IChildService1>());
+	}
 
-			public IParentService Parent
-			{
-				get { return xxx; }
-			}
-		}
+	[Test]
+	[Bug("IOC-115")]
+	public void Parent_component_resolved_via_child_container_can_only_depend_on_components_from_parent()
+	{
+		var child = new WindsorContainer();
+		Container.AddChildContainer(child);
 
-		public class AnotherParentService : IParentService
-		{
-		}
+		Container.Register(Component.For<IParentService>().ImplementedBy<ParentService>(),
+			Component.For<IChildService2>().ImplementedBy<ChildService2>());
+		child.Register(Component.For<IParentService>().ImplementedBy<AnotherParentService>());
 
-		[Test]
-		[Bug("IOC-115")]
-		public void Can_resolve_from_child_with_dependency_with_dependency_on_parent_component()
-		{
-			var child = new WindsorContainer();
-			Container.AddChildContainer(child);
+		var resolve = child.Resolve<IChildService2>();
 
-			Container.Register(Component.For<IParentService>().ImplementedBy<ParentService>());
-			child.Register(Component.For<IChildService1>().ImplementedBy<ChildService1>(),
-			               Component.For<IChildService2>().ImplementedBy<ChildService2>());
-
-			// dependency chain goes ChildService1 --> (I)ChildService2 --> IParentService
-			Assert.DoesNotThrow(() => child.Resolve<IChildService1>());
-		}
-
-		[Test]
-		[Bug("IOC-115")]
-		public void Parent_component_resolved_via_child_container_can_only_depend_on_components_from_parent()
-		{
-			var child = new WindsorContainer();
-			Container.AddChildContainer(child);
-
-			Container.Register(Component.For<IParentService>().ImplementedBy<ParentService>(),
-			                   Component.For<IChildService2>().ImplementedBy<ChildService2>());
-			child.Register(Component.For<IParentService>().ImplementedBy<AnotherParentService>());
-
-			var resolve = child.Resolve<IChildService2>();
-
-			Assert.IsInstanceOf<ParentService>(resolve.Parent);
-		}
+		Assert.IsInstanceOf<ParentService>(resolve.Parent);
 	}
 }

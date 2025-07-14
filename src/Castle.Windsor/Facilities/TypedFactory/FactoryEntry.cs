@@ -12,66 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory
+namespace Castle.Facilities.TypedFactory;
+
+using System;
+using System.ComponentModel;
+using System.Reflection;
+
+/// <summary>Legacy class from old impl. of the facility. Do not use it.</summary>
+[EditorBrowsable(EditorBrowsableState.Never)]
+public class FactoryEntry
 {
-	using System;
-	using System.ComponentModel;
-	using System.Reflection;
-
-	/// <summary>
-	///   Legacy class from old impl. of the facility. Do not use it.
-	/// </summary>
-	[EditorBrowsable(EditorBrowsableState.Never)]
-	public class FactoryEntry
+	public FactoryEntry(string id, Type factoryInterface, string creationMethod, string destructionMethod)
 	{
-		private readonly String creationMethod;
-		private readonly String destructionMethod;
-		private readonly Type factoryInterface;
-		private readonly String id;
+		if (string.IsNullOrEmpty(id)) throw new ArgumentNullException(nameof(id));
+		if (factoryInterface == null) throw new ArgumentNullException(nameof(factoryInterface));
+		if (!factoryInterface.GetTypeInfo().IsInterface) throw new ArgumentException("factoryInterface must be an interface");
+		if (string.IsNullOrEmpty(creationMethod)) throw new ArgumentNullException(nameof(creationMethod));
 
-		public FactoryEntry(String id, Type factoryInterface, String creationMethod, String destructionMethod)
-		{
-			if (string.IsNullOrEmpty(id))
-			{
-				throw new ArgumentNullException(nameof(id));
-			}
-			if (factoryInterface == null)
-			{
-				throw new ArgumentNullException(nameof(factoryInterface));
-			}
-			if (!factoryInterface.GetTypeInfo().IsInterface)
-			{
-				throw new ArgumentException("factoryInterface must be an interface");
-			}
-			if (string.IsNullOrEmpty(creationMethod))
-			{
-				throw new ArgumentNullException(nameof(creationMethod));
-			}
-
-			this.id = id;
-			this.factoryInterface = factoryInterface;
-			this.creationMethod = creationMethod;
-			this.destructionMethod = destructionMethod;
-		}
-
-		public String CreationMethod
-		{
-			get { return creationMethod; }
-		}
-
-		public String DestructionMethod
-		{
-			get { return destructionMethod; }
-		}
-
-		public Type FactoryInterface
-		{
-			get { return factoryInterface; }
-		}
-
-		public String Id
-		{
-			get { return id; }
-		}
+		this.Id = id;
+		this.FactoryInterface = factoryInterface;
+		this.CreationMethod = creationMethod;
+		this.DestructionMethod = destructionMethod;
 	}
+
+	public string CreationMethod { get; }
+
+	public string DestructionMethod { get; }
+
+	public Type FactoryInterface { get; }
+
+	public string Id { get; }
 }

@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.ClassComponents
+namespace CastleTests.ClassComponents;
+
+using Castle.MicroKernel.Tests.ClassComponents;
+
+public class CustomerValidatorAndRepository : IValidator<ICustomer>, IRepository<ICustomer>
 {
-	using Castle.MicroKernel.Tests.ClassComponents;
-
-	public class CustomerValidatorAndRepository : IValidator<ICustomer>, IRepository<ICustomer>
+	public ICustomer Find()
 	{
-		public ICustomer Find()
-		{
-			return new CustomerImpl();
-		}
+		return new CustomerImpl();
+	}
 
-		public bool IsValid(ICustomer customer)
-		{
-			return true;
-		}
+	public bool IsValid(ICustomer customer)
+	{
+		return true;
 	}
 }

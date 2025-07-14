@@ -12,21 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors
+namespace Castle.MicroKernel.ModelBuilder.Inspectors;
+
+using System;
+using System.Linq;
+using System.Reflection;
+
+using Castle.Core;
+
+[Serializable]
+public class GenericInspector : IContributeComponentModelConstruction
 {
-	using System;
-	using System.Linq;
-	using System.Reflection;
-
-	using Castle.Core;
-
-	[Serializable]
-	public class GenericInspector : IContributeComponentModelConstruction
+	public void ProcessModel(IKernel kernel, ComponentModel model)
 	{
-		public void ProcessModel(IKernel kernel, ComponentModel model)
-		{
-			model.RequiresGenericArguments = model.Implementation != null && model.Implementation.GetTypeInfo().IsGenericTypeDefinition ||
-			                                 model.Services.Any(s => s.GetTypeInfo().IsGenericTypeDefinition);
-		}
+		model.RequiresGenericArguments = (model.Implementation != null && model.Implementation.GetTypeInfo().IsGenericTypeDefinition) ||
+		                                 model.Services.Any(s => s.GetTypeInfo().IsGenericTypeDefinition);
 	}
 }

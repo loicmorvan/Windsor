@@ -12,33 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ComponentActivator
+namespace Castle.MicroKernel.ComponentActivator;
+
+using System;
+
+using Castle.Core;
+
+/// <summary>Exception thrown when component has no resolvable constructor that can be used to create an instance.</summary>
+[Serializable]
+public class NoResolvableConstructorFoundException : ComponentActivatorException
 {
-	using System;
-	using System.Runtime.Serialization;
-
-	using Castle.Core;
-
-	/// <summary>
-	///   Exception thrown when component has no resolvable constructor that can be used to create an instance.
-	/// </summary>
-	[Serializable]
-	public class NoResolvableConstructorFoundException : ComponentActivatorException
+	public NoResolvableConstructorFoundException(Type type, ComponentModel componentModel)
+		: base(
+			string.Format("Could not find resolvable constructor for {0}. Make sure all required dependencies are provided.",
+				type.FullName), componentModel)
 	{
-		private readonly Type type;
+		this.Type = type;
+	}
 
-		public NoResolvableConstructorFoundException(Type type, ComponentModel componentModel)
-			: base(
-				string.Format("Could not find resolvable constructor for {0}. Make sure all required dependencies are provided.",
-				              type.FullName), componentModel)
-		{
-			this.type = type;
-		}
-
-		public NoResolvableConstructorFoundException(string message, Exception innerException, ComponentModel componentModel)
-			: base(message, innerException, componentModel)
-		{
-		}
+	public NoResolvableConstructorFoundException(string message, Exception innerException, ComponentModel componentModel)
+		: base(message, innerException, componentModel)
+	{
+	}
 
 #if FEATURE_SERIALIZATION
 		public NoResolvableConstructorFoundException(SerializationInfo info, StreamingContext context)
@@ -47,9 +42,5 @@ namespace Castle.MicroKernel.ComponentActivator
 		}
 #endif
 
-		public Type Type
-		{
-			get { return type; }
-		}
-	}
+	public Type Type { get; }
 }

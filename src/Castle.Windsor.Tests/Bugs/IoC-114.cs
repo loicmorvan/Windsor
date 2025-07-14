@@ -12,41 +12,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Bugs
+namespace CastleTests.Bugs;
+
+using Castle.MicroKernel.Registration;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class IoC_114 : AbstractContainerTestCase
 {
-	using Castle.MicroKernel.Registration;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class IoC_114 : AbstractContainerTestCase
+	public interface IService1
 	{
-		public interface IService1
-		{
-		}
+	}
 
-		public class Service1 : IService1
-		{
-		}
+	public class Service1 : IService1
+	{
+	}
 
-		public interface IService2
-		{
-		}
+	public interface IService2
+	{
+	}
 
-		public class Service2 : IService2
-		{
-			public IService1 S { get; private set; }
-		}
+	public class Service2 : IService2
+	{
+		public IService1 S { get; private set; }
+	}
 
-		[Test]
-		public void UsingPropertyWithPrivateSetter()
-		{
-			Container.Register(Component.For<IService1>().ImplementedBy<Service1>(),
-			                   Component.For<IService2>().ImplementedBy<Service2>());
+	[Test]
+	public void UsingPropertyWithPrivateSetter()
+	{
+		Container.Register(Component.For<IService1>().ImplementedBy<Service1>(),
+			Component.For<IService2>().ImplementedBy<Service2>());
 
-			var service2 = (Service2)Container.Resolve<IService2>();
+		var service2 = (Service2)Container.Resolve<IService2>();
 
-			Assert.IsNull(service2.S, "Kernel should ignore private setter properties");
-		}
+		Assert.IsNull(service2.S, "Kernel should ignore private setter properties");
 	}
 }

@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests.Framework.Builders
+namespace Castle.Facilities.AspNetCore.Tests.Framework.Builders;
+
+using System;
+
+using Microsoft.Extensions.DependencyInjection;
+
+public class ServiceProviderBuilder
 {
-	using System;
-
-	using Microsoft.Extensions.DependencyInjection;
-
-	public class ServiceProviderBuilder
+	public static IServiceProvider New(IServiceCollection services)
 	{
-		public static IServiceProvider New(IServiceCollection services)
-		{
-			return services.BuildServiceProvider(validateScopes: false);
-		}
+		return services.BuildServiceProvider(false);
 	}
 }

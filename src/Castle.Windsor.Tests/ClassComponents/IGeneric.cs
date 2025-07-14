@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.ClassComponents
+namespace CastleTests.ClassComponents;
+
+public interface IGeneric<T>
 {
-	public interface IGeneric<T>
-	{
-	}
 }

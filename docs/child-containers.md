@@ -4,7 +4,8 @@
 They are not recommended unless you have deep understanding of the inner workings of Windsor.
 However, you are welcome to contribute changes to them.
 
-Your use case may be better suited to using an [`IHandlerSelector`](handler-selectors.md) to override specific registrations or a [scoped lifestyle](lifestyles.md#scoped).
+Your use case may be better suited to using an [`IHandlerSelector`](handler-selectors.md) to override specific
+registrations or a [scoped lifestyle](lifestyles.md#scoped).
 
 ## External resources
 

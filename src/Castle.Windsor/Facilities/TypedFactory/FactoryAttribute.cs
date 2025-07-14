@@ -12,30 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory
+namespace Castle.Facilities.TypedFactory;
+
+using System;
+
+/// <summary>Specifies default configuration for a typed factory. All Selector* properties are mutually exclusive, that is you're only meant to set one.</summary>
+[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Delegate)]
+public class FactoryAttribute : Attribute
 {
-	using System;
+	/// <summary>Specifies component to use as selector for given factory. This works like any named service override.</summary>
+	public string SelectorComponentName { get; set; }
+
+	/// <summary>Specifies component to use as selector for given factory. This works like any typed service override.</summary>
+	public Type SelectorComponentType { get; set; }
 
 	/// <summary>
-	///   Specifies default configuration for a typed factory. All Selector* properties are mutually exclusive, that is you're only meant to set one.
+	///     Specifies type of the selector to use for given factory. The type will be instantiated using default constructor. It must implement
+	///     <see
+	///         cref = "ITypedFactoryComponentSelector" />
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Delegate, AllowMultiple = false, Inherited = false)]
-	public class FactoryAttribute : Attribute
-	{
-		/// <summary>
-		///   Specifies component to use as selector for given factory. This works like any named service override.
-		/// </summary>
-		public string SelectorComponentName { get; set; }
-
-		/// <summary>
-		///   Specifies component to use as selector for given factory. This works like any typed service override.
-		/// </summary>
-		public Type SelectorComponentType { get; set; }
-
-		/// <summary>
-		///   Specifies type of the selector to use for given factory. The type will be instantiated using default constructor. It must implement <see
-		///    cref = "ITypedFactoryComponentSelector" />
-		/// </summary>
-		public Type SelectorType { get; set; }
-	}
+	public Type SelectorType { get; set; }
 }

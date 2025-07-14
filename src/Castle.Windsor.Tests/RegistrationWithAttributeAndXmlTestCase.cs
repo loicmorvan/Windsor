@@ -12,30 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace CastleTests;
+
+using Castle.Core.Resource;
+using Castle.Windsor.Installer;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class RegistrationWithAttributeAndXmlTestCase : AbstractContainerTestCase
 {
-	using Castle.Core.Resource;
-	using Castle.Windsor.Installer;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class RegistrationWithAttributeAndXmlTestCase : AbstractContainerTestCase
+	[Test]
+	[Bug("IOC-295")]
+	public void Registration_via_xml_no_service_specified_uses_service_from_attribute()
 	{
-		[Test]
-		[Bug("IOC-295")]
-		public void Registration_via_xml_no_service_specified_uses_service_from_attribute()
-		{
-			var xml = @"<configuration>
+		var xml = @"<configuration>
   <components>
     <component type=""HasType"" />
   </components>
 </configuration>";
 
-			Container.Install(Configuration.FromXml(new StaticContentResource(xml)));
-			Assert.IsTrue(Kernel.HasComponent(typeof(ISimpleService)));
-		}
+		Container.Install(Configuration.FromXml(new StaticContentResource(xml)));
+		Assert.IsTrue(Kernel.HasComponent(typeof(ISimpleService)));
 	}
 }

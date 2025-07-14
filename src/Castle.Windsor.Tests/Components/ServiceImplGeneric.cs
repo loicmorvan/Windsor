@@ -1,7 +1,6 @@
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+public class ServiceImplGeneric<T> : IService
 {
-	public class ServiceImplGeneric<T> : IService
-	{
-		public string Name { get; set; }
-	}
+	public string Name { get; set; }
 }

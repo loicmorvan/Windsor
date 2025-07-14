@@ -1,12 +1,11 @@
+namespace Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111.Components;
+
 using System;
 
-namespace Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111.Components
+public class B_Facilities_Issue_111 : IB_Facilities_Issue_111
 {
-	public class B_Facilities_Issue_111 : IB_Facilities_Issue_111
+	public void Method()
 	{
-		public void Method()
-		{
-			Console.WriteLine("B: Method");
-		}
+		Console.WriteLine("B: Method");
 	}
 }

@@ -12,65 +12,53 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle
+namespace Castle.MicroKernel.Lifestyle;
+
+using System;
+
+using Castle.Core.Internal;
+using Castle.MicroKernel.ComponentActivator;
+using Castle.MicroKernel.Context;
+
+/// <summary>Only one instance is created first time an instance of the component is requested, and it is then reused for all subseque.</summary>
+[Serializable]
+public class SingletonLifestyleManager : AbstractLifestyleManager, IContextLifestyleManager
 {
-	using System;
+	private readonly ThreadSafeInit init = new();
+	private Burden cachedBurden;
 
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.ComponentActivator;
-	using Castle.MicroKernel.Context;
-
-	/// <summary>
-	///   Only one instance is created first time an instance of the component is requested, and it is then reused for all subseque.
-	/// </summary>
-	[Serializable]
-	public class SingletonLifestyleManager : AbstractLifestyleManager, IContextLifestyleManager
+	public object GetContextInstance(CreationContext context)
 	{
-		private readonly ThreadSafeInit init = new ThreadSafeInit();
-		private Burden cachedBurden;
+		return context.GetContextualProperty(DefaultComponentActivator.InstanceStash);
+	}
 
-		public override void Dispose()
+	public override void Dispose()
+	{
+		var localInstance = cachedBurden;
+		if (localInstance != null)
 		{
-			var localInstance = cachedBurden;
-			if (localInstance != null)
-			{
-				localInstance.Release();
-				cachedBurden = null;
-			}
+			localInstance.Release();
+			cachedBurden = null;
 		}
+	}
 
-		public override object Resolve(CreationContext context, IReleasePolicy releasePolicy)
+	public override object Resolve(CreationContext context, IReleasePolicy releasePolicy)
+	{
+		// 1. read from cache
+		if (cachedBurden != null) return cachedBurden.Instance;
+		var initializing = false;
+		try
 		{
-			// 1. read from cache
-			if (cachedBurden != null)
-			{
-				return cachedBurden.Instance;
-			}
-			var initializing = false;
-			try
-			{
-				initializing = init.ExecuteThreadSafeOnce();
-				if (cachedBurden != null)
-				{
-					return cachedBurden.Instance;
-				}
-				var burden = CreateInstance(context, true);
-				cachedBurden = burden;
-				Track(burden, releasePolicy);
-				return burden.Instance;
-			}
-			finally
-			{
-				if (initializing)
-				{
-					init.EndThreadSafeOnceSection();
-				}
-			}
+			initializing = init.ExecuteThreadSafeOnce();
+			if (cachedBurden != null) return cachedBurden.Instance;
+			var burden = CreateInstance(context, true);
+			cachedBurden = burden;
+			Track(burden, releasePolicy);
+			return burden.Instance;
 		}
-
-		public object GetContextInstance(CreationContext context)
+		finally
 		{
-			return context.GetContextualProperty(DefaultComponentActivator.InstanceStash);
+			if (initializing) init.EndThreadSafeOnceSection();
 		}
 	}
 }

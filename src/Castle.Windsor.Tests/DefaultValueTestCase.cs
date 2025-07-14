@@ -12,104 +12,103 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace CastleTests;
+
+using System.Collections.Generic;
+
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class DefaultValueTestCase : AbstractContainerTestCase
 {
-	using System.Collections.Generic;
-
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class DefaultValueTestCase : AbstractContainerTestCase
+	[Test]
+	public void Can_resolve_component_with_default_ctor_value()
 	{
-		[Test]
-		public void Can_resolve_component_with_default_ctor_value()
-		{
-			Container.Register(Component.For<CtorWithDefaultValue>());
+		Container.Register(Component.For<CtorWithDefaultValue>());
 
-			Container.Resolve<CtorWithDefaultValue>();
+		Container.Resolve<CtorWithDefaultValue>();
+	}
+
+	[Test]
+	public void Can_resolve_component_with_default_ctor_value_null_for_service_dependency()
+	{
+		Container.Register(Component.For<HasNullDefaultForServiceDependency>());
+
+		var service = Container.Resolve<HasNullDefaultForServiceDependency>();
+
+		Assert.IsNull(service.Dependency);
+	}
+
+	[Test]
+	public void Null_is_a_valid_default_value()
+	{
+		Container.Register(Component.For<CtorWithNullDefaultValueAndDefault>());
+
+		var value = Container.Resolve<CtorWithNullDefaultValueAndDefault>();
+
+		Assert.IsNull(value.Name);
+	}
+
+	[Test]
+	public void Uses_ctor_with_defaults_when_greediest()
+	{
+		Container.Register(Component.For<CtorWithDefaultValueAndDefault>());
+
+		var value = Container.Resolve<CtorWithDefaultValueAndDefault>();
+
+		Assert.That(string.IsNullOrEmpty(value.Name), Is.False);
+	}
+
+	[Test]
+	public void Uses_ctor_with_explicit_dependency_when_equally_greedy_as_default_1()
+	{
+		Container.Register(Component.For<TwoCtorsWithDefaultValue>().DependsOn(Property.ForKey("name").Eq("Adam Mickiewicz")));
+
+		var value = Container.Resolve<TwoCtorsWithDefaultValue>();
+
+		Assert.AreEqual("Adam Mickiewicz", value.Name);
+	}
+
+	[Test]
+	public void Uses_ctor_with_explicit_dependency_when_equally_greedy_as_default_2()
+	{
+		Container.Register(Component.For<TwoCtorsWithDefaultValue>().DependsOn(Property.ForKey("age").Eq(123)));
+
+		var value = Container.Resolve<TwoCtorsWithDefaultValue>();
+
+		Assert.AreEqual(123, value.Age);
+	}
+
+	[Test]
+	public void Uses_explicit_value_over_default()
+	{
+		Container.Register(Component.For<CtorWithDefaultValue>().DependsOn(Property.ForKey("name").Eq("Adam Mickiewicz")));
+
+		var value = Container.Resolve<CtorWithDefaultValue>();
+
+		Assert.AreEqual("Adam Mickiewicz", value.Name);
+	}
+
+	[Test]
+	public void First_chance_exceptions_are_not_thrown()
+	{
+		using (var container = new WindsorContainer())
+		{
+			container.Register(Component.For<HasCtorWithOptionalInterfaceParameter>());
+
+			TestUtils.AssertNoFirstChanceExceptions(() => container.Resolve<HasCtorWithOptionalInterfaceParameter>());
 		}
+	}
 
-		[Test]
-		public void Can_resolve_component_with_default_ctor_value_null_for_service_dependency()
+	private sealed class HasCtorWithOptionalInterfaceParameter
+	{
+		public HasCtorWithOptionalInterfaceParameter(IEqualityComparer<int> comparer = null)
 		{
-			Container.Register(Component.For<HasNullDefaultForServiceDependency>());
-
-			var service = Container.Resolve<HasNullDefaultForServiceDependency>();
-
-			Assert.IsNull(service.Dependency);
-		}
-
-		[Test]
-		public void Null_is_a_valid_default_value()
-		{
-			Container.Register(Component.For<CtorWithNullDefaultValueAndDefault>());
-
-			var value = Container.Resolve<CtorWithNullDefaultValueAndDefault>();
-
-			Assert.IsNull(value.Name);
-		}
-
-		[Test]
-		public void Uses_ctor_with_defaults_when_greediest()
-		{
-			Container.Register(Component.For<CtorWithDefaultValueAndDefault>());
-
-			var value = Container.Resolve<CtorWithDefaultValueAndDefault>();
-
-			Assert.That(string.IsNullOrEmpty(value.Name), Is.False);
-		}
-
-		[Test]
-		public void Uses_ctor_with_explicit_dependency_when_equally_greedy_as_default_1()
-		{
-			Container.Register(Component.For<TwoCtorsWithDefaultValue>().DependsOn(Property.ForKey("name").Eq("Adam Mickiewicz")));
-
-			var value = Container.Resolve<TwoCtorsWithDefaultValue>();
-
-			Assert.AreEqual("Adam Mickiewicz", value.Name);
-		}
-
-		[Test]
-		public void Uses_ctor_with_explicit_dependency_when_equally_greedy_as_default_2()
-		{
-			Container.Register(Component.For<TwoCtorsWithDefaultValue>().DependsOn(Property.ForKey("age").Eq(123)));
-
-			var value = Container.Resolve<TwoCtorsWithDefaultValue>();
-
-			Assert.AreEqual(123, value.Age);
-		}
-
-		[Test]
-		public void Uses_explicit_value_over_default()
-		{
-			Container.Register(Component.For<CtorWithDefaultValue>().DependsOn(Property.ForKey("name").Eq("Adam Mickiewicz")));
-
-			var value = Container.Resolve<CtorWithDefaultValue>();
-
-			Assert.AreEqual("Adam Mickiewicz", value.Name);
-		}
-
-		[Test]
-		public void First_chance_exceptions_are_not_thrown()
-		{
-			using (var container = new WindsorContainer())
-			{
-				container.Register(Component.For<HasCtorWithOptionalInterfaceParameter>());
-
-				TestUtils.AssertNoFirstChanceExceptions(() => container.Resolve<HasCtorWithOptionalInterfaceParameter>());
-			}
-		}
-
-		private sealed class HasCtorWithOptionalInterfaceParameter
-		{
-			public HasCtorWithOptionalInterfaceParameter(IEqualityComparer<int> comparer = null)
-			{
-			}
 		}
 	}
 }

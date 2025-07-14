@@ -12,38 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder
+namespace Castle.MicroKernel.ModelBuilder;
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+
+using Castle.Core;
+
+[EditorBrowsable(EditorBrowsableState.Never)]
+public static class ComponentModelDescriptorUtil
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel;
+	public static readonly string MetaDescriptorsKey = "Castle.meta-descriptors";
 
-	using Castle.Core;
-
-	[EditorBrowsable(EditorBrowsableState.Never)]
-	public static class ComponentModelDescriptorUtil
+	public static ICollection<IMetaComponentModelDescriptor> GetMetaDescriptors(this ComponentModel model, bool ensureExists)
 	{
-		public static readonly string MetaDescriptorsKey = "Castle.meta-descriptors";
+		if (model == null) throw new ArgumentNullException(nameof(model));
 
-		public static ICollection<IMetaComponentModelDescriptor> GetMetaDescriptors(this ComponentModel model, bool ensureExists)
+		var metaDescriptors = model.ExtendedProperties[MetaDescriptorsKey] as ICollection<IMetaComponentModelDescriptor>;
+		if (metaDescriptors == null && ensureExists)
 		{
-			if (model == null)
-			{
-				throw new ArgumentNullException(nameof(model));
-			}
-
-			var metaDescriptors = model.ExtendedProperties[MetaDescriptorsKey] as ICollection<IMetaComponentModelDescriptor>;
-			if (metaDescriptors == null && ensureExists)
-			{
-				metaDescriptors = new List<IMetaComponentModelDescriptor>();
-				model.ExtendedProperties[MetaDescriptorsKey] = metaDescriptors;
-			}
-			return metaDescriptors;
+			metaDescriptors = new List<IMetaComponentModelDescriptor>();
+			model.ExtendedProperties[MetaDescriptorsKey] = metaDescriptors;
 		}
 
-		public static void RemoveMetaDescriptors(ComponentModel model)
-		{
-			model.ExtendedProperties.Remove(MetaDescriptorsKey);
-		}
+		return metaDescriptors;
+	}
+
+	public static void RemoveMetaDescriptors(ComponentModel model)
+	{
+		model.ExtendedProperties.Remove(MetaDescriptorsKey);
 	}
 }

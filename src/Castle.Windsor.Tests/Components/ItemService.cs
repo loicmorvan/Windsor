@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components
-{
-	public class ItemService : IItemService
-	{
-		private IBookStore bookStore;
+namespace Castle.Windsor.Tests.Components;
 
-		public ItemService(IBookStore bookStore)
-		{
-			this.bookStore = bookStore;
-		}
+public class ItemService : IItemService
+{
+	private IBookStore bookStore;
+
+	public ItemService(IBookStore bookStore)
+	{
+		this.bookStore = bookStore;
 	}
 }

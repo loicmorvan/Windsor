@@ -12,44 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Logging.Tests
+namespace Castle.Facilities.Logging.Tests;
+
+using Castle.Core.Logging;
+using Castle.MicroKernel.SubSystems.Configuration;
+using Castle.Services.Logging.Log4netIntegration;
+using Castle.Services.Logging.NLogIntegration;
+using Castle.Windsor;
+
+/// <summary>Summary description for BaseTest.</summary>
+public abstract class BaseTest
 {
-	using Castle.Core.Logging;
-	using Castle.MicroKernel.SubSystems.Configuration;
-	using Castle.Services.Logging.Log4netIntegration;
-	using Castle.Services.Logging.NLogIntegration;
-	using Castle.Windsor;
-
-	/// <summary>
-	/// Summary description for BaseTest.
-	/// </summary>
-	public abstract class BaseTest
+	protected virtual IWindsorContainer CreateConfiguredContainer<TLoggerFactory>()
+		where TLoggerFactory : ILoggerFactory
 	{
-		protected virtual IWindsorContainer CreateConfiguredContainer<TLoggerFactory>()
-			where TLoggerFactory : ILoggerFactory
-		{
-			IWindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
-			var configFile = GetConfigFile<TLoggerFactory>();
+		IWindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
+		var configFile = GetConfigFile<TLoggerFactory>();
 
-			container.AddFacility<LoggingFacility>(f => f.LogUsing<TLoggerFactory>().WithConfig(configFile));
+		container.AddFacility<LoggingFacility>(f => f.LogUsing<TLoggerFactory>().WithConfig(configFile));
 
-			return container;
-		}
+		return container;
+	}
 
-		protected string GetConfigFile<TLoggerFactory>()
-			where TLoggerFactory : ILoggerFactory
-		{
-			if (typeof(TLoggerFactory) == typeof(Log4netFactory) ||
-				typeof(TLoggerFactory) == typeof(ExtendedLog4netFactory))
-			{
-				return "LoggingFacility\\log4net.facilities.test.config";
-			}
-			if (typeof(TLoggerFactory) == typeof(NLogFactory) ||
-				typeof(TLoggerFactory) == typeof(ExtendedNLogFactory))
-			{
-				return "LoggingFacility\\NLog.facilities.test.config";
-			}
-			return string.Empty;
-		}
+	protected string GetConfigFile<TLoggerFactory>()
+		where TLoggerFactory : ILoggerFactory
+	{
+		if (typeof(TLoggerFactory) == typeof(Log4netFactory) ||
+		    typeof(TLoggerFactory) == typeof(ExtendedLog4netFactory))
+			return "LoggingFacility\\log4net.facilities.test.config";
+		if (typeof(TLoggerFactory) == typeof(NLogFactory) ||
+		    typeof(TLoggerFactory) == typeof(ExtendedNLogFactory))
+			return "LoggingFacility\\NLog.facilities.test.config";
+		return string.Empty;
 	}
 }

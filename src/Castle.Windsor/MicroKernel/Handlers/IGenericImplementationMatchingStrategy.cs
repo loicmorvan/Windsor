@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers
+namespace Castle.MicroKernel.Handlers;
+
+using System;
+
+using Castle.Core;
+using Castle.MicroKernel.Context;
+
+public interface IGenericImplementationMatchingStrategy
 {
-	using System;
-
-	using Castle.Core;
-	using Castle.MicroKernel.Context;
-
-	public interface IGenericImplementationMatchingStrategy
-	{
-		Type[] GetGenericArguments(ComponentModel model, CreationContext context);
-	}
+	Type[] GetGenericArguments(ComponentModel model, CreationContext context);
 }

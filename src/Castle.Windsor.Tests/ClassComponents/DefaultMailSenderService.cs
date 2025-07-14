@@ -12,26 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel.Tests.ClassComponents;
+
+using System;
+
+public class DefaultMailSenderService : IDisposable
 {
-	using System;
+	public bool IsDisposed { get; private set; }
 
-	public class DefaultMailSenderService : IDisposable
+	public void Dispose()
 	{
-		private bool isDisposed = false;
-
-		public DefaultMailSenderService()
-		{
-		}
-
-		public bool IsDisposed
-		{
-			get { return isDisposed; }
-		}
-
-		public void Dispose()
-		{
-			isDisposed = true;
-		}
+		IsDisposed = true;
 	}
 }

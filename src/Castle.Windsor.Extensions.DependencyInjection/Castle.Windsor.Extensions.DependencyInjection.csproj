@@ -7,30 +7,30 @@
 
   <Import Project="..\..\buildscripts\common.props"></Import>
 
-	<PropertyGroup>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageId>Castle.Windsor.Extensions.DependencyInjection</PackageId>
-		<Title>Castle Windsor extension for .NET Extensions DependencyInjection</Title>
-		<Description>Allows to use Castle Windsor as a container using IServiceProvider</Description>
-		<PackageTags>castle, windsor, inversionOfControl, DependencyInjection, aspnet, core</PackageTags>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-		<AssemblyName>Castle.Windsor.Extensions.DependencyInjection</AssemblyName>
-		<RootNamespace>Castle.Windsor.Extensions.DependencyInjection</RootNamespace>
-	</PropertyGroup>
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Castle.Windsor.Extensions.DependencyInjection</PackageId>
+    <Title>Castle Windsor extension for .NET Extensions DependencyInjection</Title>
+    <Description>Allows to use Castle Windsor as a container using IServiceProvider</Description>
+    <PackageTags>castle, windsor, inversionOfControl, DependencyInjection, aspnet, core</PackageTags>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AssemblyName>Castle.Windsor.Extensions.DependencyInjection</AssemblyName>
+    <RootNamespace>Castle.Windsor.Extensions.DependencyInjection</RootNamespace>
+  </PropertyGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.3" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.3" />
-		<PackageReference Include="Microsoft.Extensions.Options" Version="3.1.3" />
-	</ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.3"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.3"/>
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.3"/>
+  </ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)'=='net9.0'">
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-	</ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net9.0'">
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0"/>
+  </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Castle.Windsor\Castle.Windsor.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Castle.Windsor\Castle.Windsor.csproj"/>
+  </ItemGroup>
 </Project>

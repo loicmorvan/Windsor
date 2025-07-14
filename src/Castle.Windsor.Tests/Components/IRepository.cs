@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+public interface IRepository<T>
 {
-	public interface IRepository<T>
-	{
-		T Get(int id);
-	}
+	T Get(int id);
 }

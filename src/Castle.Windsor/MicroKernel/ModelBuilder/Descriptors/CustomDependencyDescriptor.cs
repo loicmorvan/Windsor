@@ -12,44 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+
+using Castle.Core;
+using Castle.Core.Internal;
+using Castle.MicroKernel.Registration;
+
+public class CustomDependencyDescriptor : IComponentModelDescriptor
 {
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Registration;
+	private readonly Arguments arguments;
+	private readonly Property[] properties;
 
-	public class CustomDependencyDescriptor : IComponentModelDescriptor
+	public CustomDependencyDescriptor(Arguments arguments)
 	{
-		private readonly Arguments arguments;
-		private readonly Property[] properties;
+		this.arguments = arguments;
+	}
 
-		public CustomDependencyDescriptor(Arguments arguments)
-		{
-			this.arguments = arguments;
-		}
+	public CustomDependencyDescriptor(params Property[] properties)
+	{
+		this.properties = properties;
+	}
 
-		public CustomDependencyDescriptor(params Property[] properties)
-		{
-			this.properties = properties;
-		}
+	public void BuildComponentModel(IKernel kernel, ComponentModel model)
+	{
+	}
 
-		public void BuildComponentModel(IKernel kernel, ComponentModel model)
-		{
-		}
+	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+	{
+		if (arguments != null)
+			foreach (var property in arguments)
+				model.CustomDependencies[property.Key] = property.Value;
 
-		public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-		{
-			if (arguments != null)
-			{
-				foreach (var property in arguments)
-				{
-					model.CustomDependencies[property.Key] = property.Value;
-				}
-			}
-			if (properties != null)
-			{
-				properties.ForEach(p => model.CustomDependencies[p.Key] = p.Value);
-			}
-		}
+		if (properties != null) properties.ForEach(p => model.CustomDependencies[p.Key] = p.Value);
 	}
 }

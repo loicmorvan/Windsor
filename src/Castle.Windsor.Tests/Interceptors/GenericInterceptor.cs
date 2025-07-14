@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Interceptors
-{
-	using Castle.DynamicProxy;
+namespace Castle.Windsor.Tests.Interceptors;
 
-	public class GenericInterceptor<T> : IInterceptor
+using Castle.DynamicProxy;
+
+public class GenericInterceptor<T> : IInterceptor
+{
+	public void Intercept(IInvocation invocation)
 	{
-		public void Intercept(IInvocation invocation)
-		{
-			invocation.Proceed();
-		}
+		invocation.Proceed();
 	}
 }

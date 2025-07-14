@@ -12,34 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Activators
+namespace Castle.Facilities.AspNetCore.Activators;
+
+using System;
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
+
+internal sealed class DelegatingControllerActivator : IControllerActivator
 {
-	using System;
+	private readonly Func<ControllerContext, object> controllerCreator;
+	private readonly Action<ControllerContext, object> controllerReleaser;
 
-	using Microsoft.AspNetCore.Mvc;
-	using Microsoft.AspNetCore.Mvc.Controllers;
-
-	internal sealed class DelegatingControllerActivator : IControllerActivator
+	public DelegatingControllerActivator(
+		Func<ControllerContext, object> controllerCreator,
+		Action<ControllerContext, object> controllerReleaser)
 	{
-		private readonly Func<ControllerContext, object> controllerCreator;
-		private readonly Action<ControllerContext, object> controllerReleaser;
+		this.controllerCreator = controllerCreator ?? throw new ArgumentNullException(nameof(controllerCreator));
+		this.controllerReleaser = controllerReleaser ?? throw new ArgumentNullException(nameof(controllerReleaser));
+	}
 
-		public DelegatingControllerActivator(
-			Func<ControllerContext, object> controllerCreator, 
-			Action<ControllerContext, object> controllerReleaser)
-		{
-			this.controllerCreator = controllerCreator ?? throw new ArgumentNullException(nameof(controllerCreator));
-			this.controllerReleaser = controllerReleaser ?? throw new ArgumentNullException(nameof(controllerReleaser));
-		}
+	public object Create(ControllerContext context)
+	{
+		return controllerCreator(context);
+	}
 
-		public object Create(ControllerContext context)
-		{
-			return controllerCreator(context);
-		}
-
-		public void Release(ControllerContext context, object controller)
-		{
-			controllerReleaser(context, controller);
-		}
+	public void Release(ControllerContext context, object controller)
+	{
+		controllerReleaser(context, controller);
 	}
 }

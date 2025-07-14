@@ -12,18 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
+namespace Castle.Windsor.Diagnostics;
+
+/// <summary>Base inteface for exposing diagnostic information about container, its components and extensions</summary>
+/// <typeparam name = "T"> </typeparam>
+public interface IDiagnostic<out T>
 {
-	/// <summary>
-	/// 	Base inteface for exposing diagnostic information about container, its components and extensions
-	/// </summary>
-	/// <typeparam name = "T"> </typeparam>
-	public interface IDiagnostic<out T>
-	{
-		/// <summary>
-		/// 	Collects specified diagnostic information.
-		/// </summary>
-		/// <returns> </returns>
-		T Inspect();
-	}
+	/// <summary>Collects specified diagnostic information.</summary>
+	/// <returns> </returns>
+	T Inspect();
 }

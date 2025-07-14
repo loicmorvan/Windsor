@@ -12,31 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
+namespace Castle.Windsor.Diagnostics;
+
+using System.Linq;
+
+using Castle.MicroKernel;
+
+public class PotentiallyMisconfiguredComponentsDiagnostic : IPotentiallyMisconfiguredComponentsDiagnostic
 {
-	using System.Linq;
+	private readonly IKernel kernel;
 
-	using Castle.MicroKernel;
-
-	public class PotentiallyMisconfiguredComponentsDiagnostic : IPotentiallyMisconfiguredComponentsDiagnostic
+	public PotentiallyMisconfiguredComponentsDiagnostic(IKernel kernel)
 	{
-		private readonly IKernel kernel;
+		this.kernel = kernel;
+	}
 
-		public PotentiallyMisconfiguredComponentsDiagnostic(IKernel kernel)
-		{
-			this.kernel = kernel;
-		}
+	public IHandler[] Inspect()
+	{
+		var allHandlers = kernel.GetAssignableHandlers(typeof(object));
+		var waitingHandlers = allHandlers.Where(IsWaitingForDependencies).ToArray();
+		return waitingHandlers;
+	}
 
-		public IHandler[] Inspect()
-		{
-			var allHandlers = kernel.GetAssignableHandlers(typeof(object));
-			var waitingHandlers = allHandlers.Where(IsWaitingForDependencies).ToArray();
-			return waitingHandlers;
-		}
-
-		private bool IsWaitingForDependencies(IHandler handler)
-		{
-			return handler.CurrentState == HandlerState.WaitingDependency;
-		}
+	private bool IsWaitingForDependencies(IHandler handler)
+	{
+		return handler.CurrentState == HandlerState.WaitingDependency;
 	}
 }

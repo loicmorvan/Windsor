@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ComponentsWithAttribute
+namespace Castle.Windsor.Tests.ComponentsWithAttribute;
+
+[User(true)]
+public class HasUserAttributeRegister
 {
-	[User(true)]
-	public class HasUserAttributeRegister
-	{
-	}
 }

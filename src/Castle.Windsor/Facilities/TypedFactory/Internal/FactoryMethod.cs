@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory.Internal
+namespace Castle.Facilities.TypedFactory.Internal;
+
+public enum FactoryMethod
 {
-	public enum FactoryMethod
-	{
-		Resolve,
-		Release,
-		Dispose
-	}
+	Resolve,
+	Release,
+	Dispose
 }

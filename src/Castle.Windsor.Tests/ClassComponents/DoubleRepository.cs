@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel.Tests.ClassComponents;
+
+public class DoubleRepository<T, T2> : IRepository<T>
+	where T : class
+	where T2 : struct
 {
-	public class DoubleRepository<T, T2> : IRepository<T>
-		where T : class
-		where T2 : struct
+	public T Find()
 	{
-		public T Find()
-		{
-			return null;
-		}
+		return null;
 	}
 }

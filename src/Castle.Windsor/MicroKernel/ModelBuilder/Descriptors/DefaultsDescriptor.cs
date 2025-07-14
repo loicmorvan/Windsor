@@ -12,78 +12,70 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+
+using System;
+using System.Linq;
+
+using Castle.Core;
+using Castle.Core.Configuration;
+using Castle.Core.Internal;
+
+public class DefaultsDescriptor : IComponentModelDescriptor
 {
-	using System;
-	using System.Linq;
+	private readonly Type implementation;
+	private readonly ComponentName name;
 
-	using Castle.Core;
-	using Castle.Core.Configuration;
-	using Castle.Core.Internal;
-
-	public class DefaultsDescriptor : IComponentModelDescriptor
+	public DefaultsDescriptor(ComponentName name, Type implementation)
 	{
-		private readonly Type implementation;
-		private readonly ComponentName name;
+		this.name = name;
+		this.implementation = implementation;
+	}
 
-		public DefaultsDescriptor(ComponentName name, Type implementation)
+	public void BuildComponentModel(IKernel kernel, ComponentModel model)
+	{
+		if (model.Implementation == null) model.Implementation = implementation ?? FirstService(model);
+
+		EnsureComponentName(model);
+		EnsureComponentConfiguration(kernel, model);
+	}
+
+	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+	{
+	}
+
+	private void EnsureComponentConfiguration(IKernel kernel, ComponentModel model)
+	{
+		var configuration = kernel.ConfigurationStore.GetComponentConfiguration(model.Name);
+		if (configuration == null)
 		{
-			this.name = name;
-			this.implementation = implementation;
+			configuration = new MutableConfiguration("component");
+			kernel.ConfigurationStore.AddComponentConfiguration(model.Name, configuration);
 		}
 
-		public void BuildComponentModel(IKernel kernel, ComponentModel model)
-		{
-			if (model.Implementation == null)
-			{
-				model.Implementation = implementation ?? FirstService(model);
-			}
+		if (model.Configuration == null) model.Configuration = configuration;
+	}
 
-			EnsureComponentName(model);
-			EnsureComponentConfiguration(kernel, model);
-		}
-
-		public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+	private void EnsureComponentName(ComponentModel model)
+	{
+		if (model.ComponentName != null) return;
+		if (name != null)
 		{
-		}
-
-		private void EnsureComponentConfiguration(IKernel kernel, ComponentModel model)
-		{
-			var configuration = kernel.ConfigurationStore.GetComponentConfiguration(model.Name);
-			if (configuration == null)
-			{
-				configuration = new MutableConfiguration("component");
-				kernel.ConfigurationStore.AddComponentConfiguration(model.Name, configuration);
-			}
-			if (model.Configuration == null)
-			{
-				model.Configuration = configuration;
-			}
+			model.ComponentName = name;
 			return;
 		}
 
-		private void EnsureComponentName(ComponentModel model)
+		if (model.Implementation == typeof(LateBoundComponent))
 		{
-			if (model.ComponentName != null)
-			{
-				return;
-			}
-			if (name != null)
-			{
-				model.ComponentName = name;
-				return;
-			}
-			if (model.Implementation == typeof(LateBoundComponent))
-			{
-				model.ComponentName = new ComponentName("Late bound " + FirstService(model).FullName, false);
-				return;
-			}
-			model.ComponentName = ComponentName.DefaultFor(model.Implementation);
+			model.ComponentName = new ComponentName("Late bound " + FirstService(model).FullName, false);
+			return;
 		}
 
-		private Type FirstService(ComponentModel model)
-		{
-			return model.Services.First();
-		}
+		model.ComponentName = ComponentName.DefaultFor(model.Implementation);
+	}
+
+	private Type FirstService(ComponentModel model)
+	{
+		return model.Services.First();
 	}
 }

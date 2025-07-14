@@ -12,26 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Bugs
+namespace Castle.MicroKernel.Tests.Bugs;
+
+using Castle.Facilities.Startable;
+using Castle.MicroKernel.Registration;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class IoC_95
 {
-	using Castle.Facilities.Startable;
-	using Castle.MicroKernel.Registration;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class IoC_95
+	[Test]
+	public void AddingComponentToRootKernelWhenChildKernelHasStartableFacility()
 	{
-		[Test]
-		public void AddingComponentToRootKernelWhenChildKernelHasStartableFacility()
-		{
-			IKernel kernel = new DefaultKernel();
-			IKernel childKernel = new DefaultKernel();
-			kernel.AddChildKernel(childKernel);
-			childKernel.AddFacility(new StartableFacility());
-			kernel.Register(Component.For(typeof (A)).Named("string")); // exception here
-		}
+		IKernel kernel = new DefaultKernel();
+		IKernel childKernel = new DefaultKernel();
+		kernel.AddChildKernel(childKernel);
+		childKernel.AddFacility(new StartableFacility());
+		kernel.Register(Component.For(typeof(A)).Named("string")); // exception here
 	}
 }

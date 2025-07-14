@@ -12,20 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+public class ConsumerComp
 {
-	public class ConsumerComp
+	public ConsumerComp(ICalcService calcservice)
 	{
-		private readonly ICalcService calcservice;
-
-		public ConsumerComp(ICalcService calcservice)
-		{
-			this.calcservice = calcservice;
-		}
-
-		public ICalcService Calcservice
-		{
-			get { return calcservice; }
-		}
+		this.Calcservice = calcservice;
 	}
+
+	public ICalcService Calcservice { get; }
 }

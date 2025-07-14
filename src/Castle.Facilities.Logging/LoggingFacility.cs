@@ -12,91 +12,85 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Logging
+namespace Castle.Facilities.Logging;
+
+using System;
+using System.Diagnostics;
+using System.Reflection;
+
+using Castle.Core.Internal;
+using Castle.Core.Logging;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Facilities;
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.SubSystems.Conversion;
+
+/// <summary>A facility for logging support.</summary>
+public class LoggingFacility : AbstractFacility
 {
-	using System;
-	using System.Diagnostics;
-	using System.Reflection;
+	private readonly string customLoggerFactoryTypeName;
+	private string configFileName;
 
-	using Castle.Core.Internal;
-	using Castle.Core.Logging;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Facilities;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.SubSystems.Conversion;
+	private ITypeConverter converter;
 
-	/// <summary>
-	///   A facility for logging support.
-	/// </summary>
-	public class LoggingFacility : AbstractFacility
+	private Type loggerFactoryType;
+	private LoggerLevel? loggerLevel;
+	private ILoggerFactory loggerFactory;
+	private string logName;
+	private bool configuredExternally;
+
+	/// <summary>Initializes a new instance of the <see cref = "LoggingFacility" /> class.</summary>
+	public LoggingFacility()
 	{
-		private readonly string customLoggerFactoryTypeName;
-		private string configFileName;
+	}
 
-		private ITypeConverter converter;
+	/// <summary>Initializes a new instance of the <see cref = "LoggingFacility" /> class using a custom LoggerImplementation</summary>
+	/// <param name = "customLoggerFactory"> The type name of the type of the custom logger factory. </param>
+	/// <param name = "configFile"> The configuration file that should be used by the chosen LoggerImplementation </param>
+	public LoggingFacility(string customLoggerFactory, string configFile)
+	{
+		customLoggerFactoryTypeName = customLoggerFactory;
+		configFileName = configFile;
+	}
 
-		private Type loggerFactoryType;
-		private LoggerLevel? loggerLevel;
-		private ILoggerFactory loggerFactory;
-		private string logName;
-		private bool configuredExternally;
+	public LoggingFacility LogUsing<TLoggerFactory>()
+		where TLoggerFactory : ILoggerFactory
+	{
+		loggerFactoryType = typeof(TLoggerFactory);
+		return this;
+	}
 
-		/// <summary>
-		///   Initializes a new instance of the <see cref="LoggingFacility" /> class.
-		/// </summary>
-		public LoggingFacility()
-		{
-		}
+	public LoggingFacility LogUsing<TLoggerFactory>(TLoggerFactory loggerFactory)
+		where TLoggerFactory : ILoggerFactory
+	{
+		loggerFactoryType = typeof(TLoggerFactory);
+		this.loggerFactory = loggerFactory;
+		return this;
+	}
 
-		/// <summary>
-		///   Initializes a new instance of the <see cref="LoggingFacility" /> class using a custom LoggerImplementation
-		/// </summary>
-		/// <param name="customLoggerFactory"> The type name of the type of the custom logger factory. </param>
-		/// <param name="configFile"> The configuration file that should be used by the chosen LoggerImplementation </param>
-		public LoggingFacility(string customLoggerFactory, string configFile)
-		{
-			customLoggerFactoryTypeName = customLoggerFactory;
-			configFileName = configFile;
-		}
+	public LoggingFacility ConfiguredExternally()
+	{
+		configuredExternally = true;
+		return this;
+	}
 
-		public LoggingFacility LogUsing<TLoggerFactory>()
-			where TLoggerFactory : ILoggerFactory
-		{
-			loggerFactoryType = typeof(TLoggerFactory);
-			return this;
-		}
+	public LoggingFacility WithConfig(string configFile)
+	{
+		configFileName = configFile ?? throw new ArgumentNullException(nameof(configFile));
+		return this;
+	}
 
-		public LoggingFacility LogUsing<TLoggerFactory>(TLoggerFactory loggerFactory)
-			where TLoggerFactory : ILoggerFactory
-		{
-			loggerFactoryType = typeof(TLoggerFactory);
-			this.loggerFactory = loggerFactory;
-			return this;
-		}
+	public LoggingFacility WithLevel(LoggerLevel level)
+	{
+		loggerLevel = level;
+		return this;
+	}
 
-		public LoggingFacility ConfiguredExternally()
-		{
-			configuredExternally = true;
-			return this;
-		}
-
-		public LoggingFacility WithConfig(string configFile)
-		{
-			configFileName = configFile ?? throw new ArgumentNullException(nameof(configFile));
-			return this;
-		}
-
-		public LoggingFacility WithLevel(LoggerLevel level)
-		{
-			loggerLevel = level;
-			return this;
-		}
-
-		public LoggingFacility ToLog(string name)
-		{
-			logName = name;
-			return this;
-		}
+	public LoggingFacility ToLog(string name)
+	{
+		logName = name;
+		return this;
+	}
 
 #if FEATURE_SYSTEM_CONFIGURATION
 		/// <summary>
@@ -110,191 +104,147 @@ namespace Castle.Facilities.Logging
 		}
 #endif
 
-		protected override void Init()
+	protected override void Init()
+	{
+		SetUpTypeConverter();
+		if (loggerFactory == null) ReadConfigurationAndCreateLoggerFactory();
+		RegisterLoggerFactory(loggerFactory);
+		RegisterDefaultILogger(loggerFactory);
+		RegisterSubResolver(loggerFactory);
+	}
+
+	private void ReadConfigurationAndCreateLoggerFactory()
+	{
+		if (loggerFactoryType == null) loggerFactoryType = ReadCustomLoggerType();
+		EnsureIsValidLoggerFactoryType();
+		CreateProperLoggerFactory();
+	}
+
+	private Type ReadCustomLoggerType()
+	{
+		if (FacilityConfig != null)
 		{
-			SetUpTypeConverter();
-			if (loggerFactory == null)
-			{
-				ReadConfigurationAndCreateLoggerFactory();
-			}
-			RegisterLoggerFactory(loggerFactory);
-			RegisterDefaultILogger(loggerFactory);
-			RegisterSubResolver(loggerFactory);
+			var customLoggerType = FacilityConfig.Attributes["customLoggerFactory"];
+			if (string.IsNullOrEmpty(customLoggerType) == false) return converter.PerformConversion<Type>(customLoggerType);
 		}
 
-		private void ReadConfigurationAndCreateLoggerFactory()
+		if (customLoggerFactoryTypeName != null) return converter.PerformConversion<Type>(customLoggerFactoryTypeName);
+		return typeof(NullLogFactory);
+	}
+
+	private void EnsureIsValidLoggerFactoryType()
+	{
+		if (!loggerFactoryType.Is<ILoggerFactory>()) throw new FacilityException($"The specified type '{loggerFactoryType}' does not implement ILoggerFactory.");
+	}
+
+	private void CreateProperLoggerFactory()
+	{
+		Debug.Assert(loggerFactoryType != null);
+
+		var ctorArgs = GetLoggingFactoryArguments();
+		loggerFactory = loggerFactoryType.CreateInstance<ILoggerFactory>(ctorArgs);
+	}
+
+	private string GetConfigFile()
+	{
+		if (configFileName != null) return configFileName;
+
+		if (FacilityConfig != null) return FacilityConfig.Attributes["configFile"];
+		return null;
+	}
+
+	private object[] GetLoggingFactoryArguments()
+	{
+		const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
+
+		ConstructorInfo ctor;
+		if (IsConfiguredExternally())
 		{
-			if (loggerFactoryType == null)
-			{
-				loggerFactoryType = ReadCustomLoggerType();
-			}
-			EnsureIsValidLoggerFactoryType();
-			CreateProperLoggerFactory();
+			ctor = loggerFactoryType.GetConstructor(flags, null, new[] { typeof(bool) }, null);
+			if (ctor != null) return new object[] { true };
 		}
 
-		private Type ReadCustomLoggerType()
+		var configFile = GetConfigFile();
+		if (configFile != null)
 		{
-			if (FacilityConfig != null)
-			{
-				var customLoggerType = FacilityConfig.Attributes["customLoggerFactory"];
-				if (string.IsNullOrEmpty(customLoggerType) == false)
-				{
-					return converter.PerformConversion<Type>(customLoggerType);
-				}
-			}
-			if (customLoggerFactoryTypeName != null)
-			{
-				return converter.PerformConversion<Type>(customLoggerFactoryTypeName);
-			}
-			return typeof(NullLogFactory);
+			ctor = loggerFactoryType.GetConstructor(flags, null, new[] { typeof(string) }, null);
+			if (ctor != null) return new object[] { configFile };
 		}
 
-		private void EnsureIsValidLoggerFactoryType()
+		var level = GetLoggingLevel();
+		if (level != null)
 		{
-			if (!loggerFactoryType.Is<ILoggerFactory>())
-			{
-				throw new FacilityException($"The specified type '{loggerFactoryType}' does not implement ILoggerFactory.");
-			}
+			ctor = loggerFactoryType.GetConstructor(flags, null, new[] { typeof(LoggerLevel) }, null);
+			if (ctor != null) return new object[] { level.Value };
 		}
 
-		private void CreateProperLoggerFactory()
-		{
-			Debug.Assert(loggerFactoryType != null, "loggerFactoryType != null");
+		ctor = loggerFactoryType.GetConstructor(flags, null, Type.EmptyTypes, null);
+		if (ctor != null) return new object[0];
+		throw new FacilityException($"No support constructor found for logging type '{loggerFactoryType}'");
+	}
 
-			var ctorArgs = GetLoggingFactoryArguments();
-			loggerFactory = loggerFactoryType.CreateInstance<ILoggerFactory>(ctorArgs);
+	private bool IsConfiguredExternally()
+	{
+		if (configuredExternally) return true;
+		if (FacilityConfig != null)
+		{
+			var value = FacilityConfig.Attributes["configuredExternally"];
+			if (value != null) return converter.PerformConversion<bool>(value);
 		}
 
-		private string GetConfigFile()
-		{
-			if (configFileName != null)
-			{
-				return configFileName;
-			}
+		return false;
+	}
 
-			if (FacilityConfig != null)
-			{
-				return FacilityConfig.Attributes["configFile"];
-			}
-			return null;
+	private LoggerLevel? GetLoggingLevel()
+	{
+		if (loggerLevel.HasValue) return loggerLevel;
+		if (FacilityConfig != null)
+		{
+			var level = FacilityConfig.Attributes["loggerLevel"];
+			if (level != null) return converter.PerformConversion<LoggerLevel>(level);
 		}
 
-		private object[] GetLoggingFactoryArguments()
+		return null;
+	}
+
+	private void RegisterDefaultILogger(ILoggerFactory factory)
+	{
+		if (factory is IExtendedLoggerFactory)
 		{
-			const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
+			var defaultLogger = ((IExtendedLoggerFactory)factory).Create(logName ?? "Default");
+			Kernel.Register(Component.For<IExtendedLogger>().NamedAutomatically("ilogger.default").Instance(defaultLogger),
+				Component.For<ILogger>().NamedAutomatically("ilogger.default.base").Instance(defaultLogger));
+		}
+		else
+		{
+			Kernel.Register(Component.For<ILogger>().NamedAutomatically("ilogger.default").Instance(factory.Create(logName ?? "Default")));
+		}
+	}
 
-			ConstructorInfo ctor;
-			if (IsConfiguredExternally())
-			{
-				ctor = loggerFactoryType.GetConstructor(flags, null, new[] { typeof(bool) }, null);
-				if (ctor != null)
-				{
-					return new object[] { true };
-				}
-			}
-			var configFile = GetConfigFile();
-			if (configFile != null)
-			{
-				ctor = loggerFactoryType.GetConstructor(flags, null, new[] { typeof(string) }, null);
-				if (ctor != null)
-				{
-					return new object[] { configFile };
-				}
-			}
+	private void RegisterLoggerFactory(ILoggerFactory factory)
+	{
+		if (factory is IExtendedLoggerFactory)
+			Kernel.Register(
+				Component.For<IExtendedLoggerFactory>().NamedAutomatically("iloggerfactory").Instance((IExtendedLoggerFactory)factory),
+				Component.For<ILoggerFactory>().NamedAutomatically("iloggerfactory.base").Instance(factory));
+		else
+			Kernel.Register(Component.For<ILoggerFactory>().NamedAutomatically("iloggerfactory").Instance(factory));
+	}
 
-			var level = GetLoggingLevel();
-			if (level != null)
-			{
-				ctor = loggerFactoryType.GetConstructor(flags, null, new[] { typeof(LoggerLevel) }, null);
-				if (ctor != null)
-				{
-					return new object[] { level.Value };
-				}
-			}
-			ctor = loggerFactoryType.GetConstructor(flags, null, Type.EmptyTypes, null);
-			if (ctor != null)
-			{
-				return new object[0];
-			}
-			throw new FacilityException($"No support constructor found for logging type '{loggerFactoryType}'");
+	private void RegisterSubResolver(ILoggerFactory loggerFactory)
+	{
+		var extendedLoggerFactory = loggerFactory as IExtendedLoggerFactory;
+		if (extendedLoggerFactory == null)
+		{
+			Kernel.Resolver.AddSubResolver(new LoggerResolver(loggerFactory, logName));
+			return;
 		}
 
-		private bool IsConfiguredExternally()
-		{
-			if (configuredExternally)
-			{
-				return true;
-			}
-			if (FacilityConfig != null)
-			{
-				var value = FacilityConfig.Attributes["configuredExternally"];
-				if (value != null)
-				{
-					return converter.PerformConversion<bool>(value);
-				}
-			}
-			return false;
-		}
+		Kernel.Resolver.AddSubResolver(new LoggerResolver(extendedLoggerFactory, logName));
+	}
 
-		private LoggerLevel? GetLoggingLevel()
-		{
-			if (loggerLevel.HasValue)
-			{
-				return loggerLevel;
-			}
-			if (FacilityConfig != null)
-			{
-				var level = FacilityConfig.Attributes["loggerLevel"];
-				if (level != null)
-				{
-					return converter.PerformConversion<LoggerLevel>(level);
-				}
-			}
-			return null;
-		}
-
-		private void RegisterDefaultILogger(ILoggerFactory factory)
-		{
-			if (factory is IExtendedLoggerFactory)
-			{
-				var defaultLogger = ((IExtendedLoggerFactory) factory).Create(logName ?? "Default");
-				Kernel.Register(Component.For<IExtendedLogger>().NamedAutomatically("ilogger.default").Instance(defaultLogger),
-				                Component.For<ILogger>().NamedAutomatically("ilogger.default.base").Instance(defaultLogger));
-			}
-			else
-			{
-				Kernel.Register(Component.For<ILogger>().NamedAutomatically("ilogger.default").Instance(factory.Create(logName ?? "Default")));
-			}
-		}
-
-		private void RegisterLoggerFactory(ILoggerFactory factory)
-		{
-			if (factory is IExtendedLoggerFactory)
-			{
-				Kernel.Register(
-					Component.For<IExtendedLoggerFactory>().NamedAutomatically("iloggerfactory").Instance((IExtendedLoggerFactory) factory),
-					Component.For<ILoggerFactory>().NamedAutomatically("iloggerfactory.base").Instance(factory));
-			}
-			else
-			{
-				Kernel.Register(Component.For<ILoggerFactory>().NamedAutomatically("iloggerfactory").Instance(factory));
-			}
-		}
-
-		private void RegisterSubResolver(ILoggerFactory loggerFactory)
-		{
-			var extendedLoggerFactory = loggerFactory as IExtendedLoggerFactory;
-			if (extendedLoggerFactory == null)
-			{
-				Kernel.Resolver.AddSubResolver(new LoggerResolver(loggerFactory, logName));
-				return;
-			}
-			Kernel.Resolver.AddSubResolver(new LoggerResolver(extendedLoggerFactory, logName));
-		}
-
-		private void SetUpTypeConverter()
-		{
-			converter = Kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey) as IConversionManager;
-		}
+	private void SetUpTypeConverter()
+	{
+		converter = Kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey) as IConversionManager;
 	}
 }

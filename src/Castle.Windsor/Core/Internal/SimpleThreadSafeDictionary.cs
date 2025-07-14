@@ -12,79 +12,71 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
+namespace Castle.Core.Internal;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Castle.MicroKernel.Internal;
+
+/// <summary>
+///     Simple type for thread safe adding/reading to/from keyed store. The difference between this and built in concurrent dictionary is that in this case adding is happening under a lock so never more
+///     than one thread will be adding at a time.
+/// </summary>
+/// <typeparam name = "TKey"> </typeparam>
+/// <typeparam name = "TValue"> </typeparam>
+public class SimpleThreadSafeDictionary<TKey, TValue>
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	
-	/// <summary>
-	///   Simple type for thread safe adding/reading to/from keyed store. The difference between this and built in concurrent dictionary is that in this case adding is happening under a lock so never more than one thread will be adding at a time.
-	/// </summary>
-	/// <typeparam name="TKey"> </typeparam>
-	/// <typeparam name="TValue"> </typeparam>
-	public class SimpleThreadSafeDictionary<TKey, TValue>
+	private readonly Dictionary<TKey, TValue> inner = new();
+	private readonly Lock @lock = Lock.Create();
+
+	public bool Contains(TKey key)
 	{
-		private readonly Dictionary<TKey, TValue> inner = new Dictionary<TKey, TValue>();
-		private readonly MicroKernel.Internal.Lock @lock = MicroKernel.Internal.Lock.Create();
-
-		public bool Contains(TKey key)
+		using (@lock.ForReading())
 		{
-			using (@lock.ForReading())
-			{
-				return inner.ContainsKey(key);
-			}
+			return inner.ContainsKey(key);
+		}
+	}
+
+	/// <summary>Returns all values and clears the dictionary</summary>
+	/// <returns> </returns>
+	public TValue[] EjectAllValues()
+	{
+		using (@lock.ForWriting())
+		{
+			var values = inner.Values.ToArray();
+			inner.Clear();
+			return values;
+		}
+	}
+
+	public TValue GetOrAdd(TKey key, Func<TKey, TValue> factory)
+	{
+		using (var token = @lock.ForReadingUpgradeable())
+		{
+			TValue value;
+			if (inner.TryGetValue(key, out value)) return value;
+			// We can safely allow reads from other threads while preparing new value, since 
+			// only 1 thread can hold upgradable read lock (even write requests will wait on it).
+			// Also this helps to prevent downstream deadlocks due to factory method call
+			var newValue = factory(key);
+			token.Upgrade();
+			if (inner.TryGetValue(key, out value)) return value;
+			value = newValue;
+			inner.Add(key, value);
+			return value;
+		}
+	}
+
+	public TValue GetOrThrow(TKey key)
+	{
+		using (@lock.ForReading())
+		{
+			TValue value;
+			if (inner.TryGetValue(key, out value)) return value;
 		}
 
-		/// <summary>
-		///   Returns all values and clears the dictionary
-		/// </summary>
-		/// <returns> </returns>
-		public TValue[] EjectAllValues()
-		{
-			using (@lock.ForWriting())
-			{
-				var values = inner.Values.ToArray();
-				inner.Clear();
-				return values;
-			}
-		}
-
-		public TValue GetOrAdd(TKey key, Func<TKey, TValue> factory)
-		{
-			using (var token = @lock.ForReadingUpgradeable())
-			{
-				TValue value;
-				if (inner.TryGetValue(key, out value))
-				{
-					return value;
-				}
-				// We can safely allow reads from other threads while preparing new value, since 
-				// only 1 thread can hold upgradable read lock (even write requests will wait on it).
-				// Also this helps to prevent downstream deadlocks due to factory method call
-				var newValue = factory(key);
-				token.Upgrade();
-				if (inner.TryGetValue(key, out value))
-				{
-					return value;
-				}
-				value = newValue;
-				inner.Add(key, value);
-				return value;
-			}
-		}
-
-		public TValue GetOrThrow(TKey key)
-		{
-			using (@lock.ForReading())
-			{
-				TValue value;
-				if (inner.TryGetValue(key, out value))
-				{
-					return value;
-				}
-			}
-			throw new ArgumentException(string.Format("Item for key {0} was not found.", key));
-		}
+		throw new ArgumentException(string.Format("Item for key {0} was not found.", key));
 	}
 }

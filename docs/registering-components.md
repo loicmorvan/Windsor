@@ -25,11 +25,13 @@ To register a component you need to specify at least two things - id of the comp
 
 :information_source: In Windsor 3 `id` attribute is optional, so you need to only specify `type`.
 
-This is identical to specifying `Component.For<EmailNotificationService>().Named("notification");` with [Fluent Registration API](fluent-registration-api.md).
+This is identical to specifying `Component.For<EmailNotificationService>().Named("notification");`
+with [Fluent Registration API](fluent-registration-api.md).
 
 ### Component with abstraction
 
-More often you will want the component type to be an abstract base type, or interface, implemented by the type you're exposing
+More often you will want the component type to be an abstract base type, or interface, implemented by the type you're
+exposing
 
 ```xml
 <components>
@@ -41,7 +43,8 @@ More often you will want the component type to be an abstract base type, or inte
 </components>
 ```
 
-This is identical to specifying `Component.For<INotificationService>().ImplementedBy<EmailNotificationService>().Named("notification");`.
+This is identical to specifying
+`Component.For<INotificationService>().ImplementedBy<EmailNotificationService>().Named("notification");`.
 
 ### Component with lifestyle
 
@@ -58,17 +61,18 @@ It is possible to specify a lifestyle via the XML configuration
 </components>
 ```
 
-The list of valid values for the `lifestyle` attribute (mapped to appropriate [`LifestyleManager`](lifestyles.md) enum values):
+The list of valid values for the `lifestyle` attribute (mapped to appropriate [`LifestyleManager`](lifestyles.md) enum
+values):
 
-Lifestyle   | Notes
------------ | -----
-`singleton` | This is the default lifestyle in Windsor
-`thread`    |
-`transient` | [Windsor keeps references to transient components](release-policy.md)!
-`pooled`    | Two additional attributes need to be defined: `initialPoolSize` and `maxPoolSize` both of which accept positive integer values
-`scoped`    | Optionally specifying the `scopeAccessorType` attribute
-`bound`     |
-`custom`    | For custom lifestyle additional attribute needs to be defined: `customLifestyleType` which points to the type implementing the lifestyle
+ Lifestyle   | Notes                                                                                                                                    
+-------------|------------------------------------------------------------------------------------------------------------------------------------------
+ `singleton` | This is the default lifestyle in Windsor                                                                                                 
+ `thread`    |
+ `transient` | [Windsor keeps references to transient components](release-policy.md)!                                                                   
+ `pooled`    | Two additional attributes need to be defined: `initialPoolSize` and `maxPoolSize` both of which accept positive integer values           
+ `scoped`    | Optionally specifying the `scopeAccessorType` attribute                                                                                  
+ `bound`     |
+ `custom`    | For custom lifestyle additional attribute needs to be defined: `customLifestyleType` which points to the type implementing the lifestyle 
 
 ### Component with parameters
 
@@ -94,19 +98,25 @@ As shown in the example parameters can be defined in three distinct ways:
 
 #### Inline parameters
 
-In the above example `smtpServer` is an inline parameter: its value - localhost:667, is provided right on the spot. Windsor's XML format lets you specify not just primitive types, but also lists, arrays, dictionaries or any other complex types. ([read more](xml-inline-parameters.md))
+In the above example `smtpServer` is an inline parameter: its value - localhost:667, is provided right on the spot.
+Windsor's XML format lets you specify not just primitive types, but also lists, arrays, dictionaries or any other
+complex types. ([read more](xml-inline-parameters.md))
 
 #### Property references
 
-In the above example `senderEmail` is a property reference parameter: its value is defined in the `<properties>` section of the configuration file (not shown here) under name `admin.email`. You specify property references using `#{property.id}` notation.
+In the above example `senderEmail` is a property reference parameter: its value is defined in the `<properties>` section
+of the configuration file (not shown here) under name `admin.email`. You specify property references using
+`#{property.id}` notation.
 
 #### Service overrides (other service as parameter)
 
-In the above example `emailFormatter` is a service override parameter: as its value another component, registered with id equals `emailFormatter` will be used. You specify service overrides using `${service.id}` notation.
+In the above example `emailFormatter` is a service override parameter: as its value another component, registered with
+id equals `emailFormatter` will be used. You specify service overrides using `${service.id}` notation.
 
 #### Component with multiple services (forwarded types)
 
-Single component can be used as multiple services. This feature, called [forwarded types](forwarded-types.md) in Windsor, is also exposed via XML.
+Single component can be used as multiple services. This feature, called [forwarded types](forwarded-types.md) in
+Windsor, is also exposed via XML.
 
 ```xml
 <components>
@@ -123,7 +133,8 @@ Single component can be used as multiple services. This feature, called [forward
 
 #### Setting properties
 
-By default when Windsor creates component it will try to set all its settable properties it can provide value for. When using XML configuration this behavior can be adjusted.
+By default when Windsor creates component it will try to set all its settable properties it can provide value for. When
+using XML configuration this behavior can be adjusted.
 
 ```xml
 <component
@@ -134,17 +145,19 @@ By default when Windsor creates component it will try to set all its settable pr
 </component>
 ```
 
-Inspection behavior | Notes
-------------------- | -----
-all | This is the default behavior
-none | Windsor will not try to set any properties
-declaredonly | Only properties declared on the component's type (and not ones declared on base types) will be set
+ Inspection behavior | Notes                                                                                              
+---------------------|----------------------------------------------------------------------------------------------------
+ all                 | This is the default behavior                                                                       
+ none                | Windsor will not try to set any properties                                                         
+ declaredonly        | Only properties declared on the component's type (and not ones declared on base types) will be set 
 
 ### Proxy components
 
 All power of underlying DynamicProxy library is exposed via XML configuration.
 
-:information_source: **Read more:** This guide only discusses the XML syntax. To learn more about how DynamicProxy works and how and where it can be helpful, [read this tutorial](http://kozmic.pl/archive/2009/04/27/castle-dynamic-proxy-tutorial.aspx).
+:information_source: **Read more:** This guide only discusses the XML syntax. To learn more about how DynamicProxy works
+and how and where it can be
+helpful, [read this tutorial](http://kozmic.pl/archive/2009/04/27/castle-dynamic-proxy-tutorial.aspx).
 
 #### Interceptors
 
@@ -212,7 +225,8 @@ You reference other services you want to mix in using Windsor's standard referen
 
 #### Additional interfaces
 
-Windsor lets you specify additional interfaces to be implemented by your proxy. Implementation for these interfaces should be provided by interceptors:
+Windsor lets you specify additional interfaces to be implemented by your proxy. Implementation for these interfaces
+should be provided by interceptors:
 
 ```xml
 <component

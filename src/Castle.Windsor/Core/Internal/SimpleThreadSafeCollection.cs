@@ -9,48 +9,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
+namespace Castle.Core.Internal;
+
+using System.Collections.Generic;
+
+using Castle.MicroKernel.Internal;
+
+public class SimpleThreadSafeCollection<T>
 {
-	using System.Collections.Generic;
+	private readonly List<T> implementation = new();
+	private readonly Lock @lock = Lock.Create();
 
-	public class SimpleThreadSafeCollection<T>
+	public int Count
 	{
-		private readonly List<T> implementation = new List<T>();
-		private readonly MicroKernel.Internal.Lock @lock =MicroKernel.Internal.Lock.Create();
-
-		public int Count
-		{
-			get
-			{
-				using (@lock.ForReading())
-				{
-					return implementation.Count;
-				}
-			}
-		}
-
-		public void Add(T item)
-		{
-			using (@lock.ForWriting())
-			{
-				implementation.Add(item);
-			}
-		}
-
-		public bool Remove(T item)
-		{
-			using (@lock.ForWriting())
-			{
-				return implementation.Remove(item);
-			}
-		}
-
-		public T[] ToArray()
+		get
 		{
 			using (@lock.ForReading())
 			{
-				return implementation.ToArray();
+				return implementation.Count;
 			}
+		}
+	}
+
+	public void Add(T item)
+	{
+		using (@lock.ForWriting())
+		{
+			implementation.Add(item);
+		}
+	}
+
+	public bool Remove(T item)
+	{
+		using (@lock.ForWriting())
+		{
+			return implementation.Remove(item);
+		}
+	}
+
+	public T[] ToArray()
+	{
+		using (@lock.ForReading())
+		{
+			return implementation.ToArray();
 		}
 	}
 }

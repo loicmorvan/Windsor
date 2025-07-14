@@ -12,22 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Lifestyle
+namespace Castle.MicroKernel.Tests.Lifestyle;
+
+using Castle.MicroKernel.Handlers;
+
+public class CustomLifestyle_Scope : IResolveExtension
 {
-	using Castle.MicroKernel.Handlers;
-
-	public class CustomLifestyle_Scope : IResolveExtension
+	public void Init(IKernel kernel, IHandler handler)
 	{
-		public void Init(IKernel kernel, IHandler handler)
-		{
-		}
+	}
 
-		public void Intercept(ResolveInvocation invocation)
+	public void Intercept(ResolveInvocation invocation)
+	{
+		using (new CustomLifestyle_InstanceScope())
 		{
-			using (new CustomLifestyle_InstanceScope())
-			{
-				invocation.Proceed();
-			}
+			invocation.Proceed();
 		}
 	}
 }

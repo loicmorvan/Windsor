@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class NeedsGenericType
-	{
-		private ICache<string> cache;
+namespace CastleTests.Components;
 
-		public NeedsGenericType(ICache<string> cache)
-		{
-			this.cache = cache;
-		}
+public class NeedsGenericType
+{
+	private ICache<string> cache;
+
+	public NeedsGenericType(ICache<string> cache)
+	{
+		this.cache = cache;
 	}
 }

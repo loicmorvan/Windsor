@@ -12,17 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+public class EmptyServiceComposite : IEmptyService
 {
-	using CastleTests.Components;
-
-	public class EmptyServiceComposite : IEmptyService
+	public EmptyServiceComposite(IEmptyService[] inner)
 	{
-		public EmptyServiceComposite(IEmptyService[] inner)
-		{
-			Inner = inner;
-		}
-
-		public IEmptyService[] Inner { get; private set; }
+		Inner = inner;
 	}
+
+	public IEmptyService[] Inner { get; private set; }
 }

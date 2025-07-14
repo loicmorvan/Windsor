@@ -12,30 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace CastleTests;
+
+using Castle.MicroKernel.Lifestyle;
+using Castle.MicroKernel.Registration;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class ResolveScopesTestCase : AbstractContainerTestCase
 {
-	using Castle.MicroKernel.Lifestyle;
-	using Castle.MicroKernel.Registration;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class ResolveScopesTestCase : AbstractContainerTestCase
+	[Test]
+	[Ignore("We're not supporting this. Either explicit ReleaseComponent should happen or typed facatory should be used.")]
+	public void Resolve_scope_should_scope_lifetime_of_transient_components()
 	{
-		[Test]
-		[Ignore("We're not supporting this. Either explicit ReleaseComponent should happen or typed facatory should be used.")]
-		public void Resolve_scope_should_scope_lifetime_of_transient_components()
+		Container.Register(Component.For<ADisposable>().LifeStyle.Transient);
+		ADisposable a;
+		using (Container.BeginScope())
 		{
-			Container.Register(Component.For<ADisposable>().LifeStyle.Transient);
-			ADisposable a;
-			using(Container.BeginScope())
-			{
-				a = Container.Resolve<ADisposable>();
-				Assert.False(a.Disposed);
-			}
-			Assert.True(a.Disposed);
+			a = Container.Resolve<ADisposable>();
+			Assert.False(a.Disposed);
 		}
+
+		Assert.True(a.Disposed);
 	}
 }

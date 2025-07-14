@@ -12,30 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+
+using System;
+
+using Castle.Core;
+using Castle.MicroKernel.Proxy;
+
+public class ProxyInterfacesDescriptor : IComponentModelDescriptor
 {
-	using System;
+	private readonly Type[] interfaces;
 
-	using Castle.Core;
-	using Castle.MicroKernel.Proxy;
-
-	public class ProxyInterfacesDescriptor : IComponentModelDescriptor
+	public ProxyInterfacesDescriptor(Type[] interfaces)
 	{
-		private readonly Type[] interfaces;
+		this.interfaces = interfaces;
+	}
 
-		public ProxyInterfacesDescriptor(Type[] interfaces)
-		{
-			this.interfaces = interfaces;
-		}
+	public void BuildComponentModel(IKernel kernel, ComponentModel model)
+	{
+		var options = model.ObtainProxyOptions();
+		options.AddAdditionalInterfaces(interfaces);
+	}
 
-		public void BuildComponentModel(IKernel kernel, ComponentModel model)
-		{
-			var options = model.ObtainProxyOptions();
-			options.AddAdditionalInterfaces(interfaces);
-		}
-
-		public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-		{
-		}
+	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+	{
 	}
 }

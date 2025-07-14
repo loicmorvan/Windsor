@@ -12,60 +12,60 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+namespace Castle.Windsor.Tests.Bugs;
+
 using Castle.MicroKernel.Registration;
+
 using NUnit.Framework;
 
-namespace Castle.Windsor.Tests.Bugs
+[TestFixture]
+public class IoC_102
 {
-    [TestFixture]
-    public class IoC_102
-    {
-        [Test]
-        public void ComponentResolutionOrderForKernelAndDpendencyResolverIsTheSame()
-        {
-            IWindsorContainer container = new WindsorContainer()
-                .Register(
-                    Component.For<IReader>()
-                        .ImplementedBy<AlphaReader>(),
-                    Component.For<IReader>()
-                        .ImplementedBy<BetaReader>(),
-                    Component.For<Consumer>()
-                );
+	[Test]
+	public void ComponentResolutionOrderForKernelAndDpendencyResolverIsTheSame()
+	{
+		var container = new WindsorContainer()
+			.Register(
+				Component.For<IReader>()
+					.ImplementedBy<AlphaReader>(),
+				Component.For<IReader>()
+					.ImplementedBy<BetaReader>(),
+				Component.For<Consumer>()
+			);
 
-            Consumer consumer = container.Resolve<Consumer>();
-            IReader reader2 = container.Resolve<IReader>();
-            Assert.AreSame(reader2, consumer.Reader);
-        }
-        
-        public interface IReader
-        {
-            string Read();
-        }
+		var consumer = container.Resolve<Consumer>();
+		var reader2 = container.Resolve<IReader>();
+		Assert.AreSame(reader2, consumer.Reader);
+	}
 
-        public class AlphaReader : IReader
-        {
-            public string Read()
-            {
-                return "Alpha";
-            }
-        }
+	public interface IReader
+	{
+		string Read();
+	}
 
-        public class BetaReader : IReader
-        {
-            public string Read()
-            {
-                return "Beta";
-            }
-        }
+	public class AlphaReader : IReader
+	{
+		public string Read()
+		{
+			return "Alpha";
+		}
+	}
 
-        public class Consumer
-        {
-            public IReader Reader;
+	public class BetaReader : IReader
+	{
+		public string Read()
+		{
+			return "Beta";
+		}
+	}
 
-            public Consumer(IReader reader)
-            {
-                this.Reader = reader;
-            }
-        }
-    }
+	public class Consumer
+	{
+		public IReader Reader;
+
+		public Consumer(IReader reader)
+		{
+			Reader = reader;
+		}
+	}
 }

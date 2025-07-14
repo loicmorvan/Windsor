@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+/// <summary>Summary description for IComponent.</summary>
+public interface IComponent
 {
-	/// <summary>
-	///   Summary description for IComponent.
-	/// </summary>
-	public interface IComponent
-	{
-		int ID { get; }
-	}
+	int ID { get; }
 }

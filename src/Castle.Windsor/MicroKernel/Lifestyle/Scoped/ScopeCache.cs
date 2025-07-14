@@ -12,57 +12,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Scoped
+namespace Castle.MicroKernel.Lifestyle.Scoped;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+
+using Castle.Core.Internal;
+
+public class ScopeCache : IScopeCache, IDisposable
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Threading;
+	// NOTE: does that need to be thread safe?
+	private IDictionary<object, Burden> cache = new Dictionary<object, Burden>();
 
-	using Castle.Core.Internal;
-
-	public class ScopeCache : IScopeCache, IDisposable
+	public void Dispose()
 	{
-		// NOTE: does that need to be thread safe?
-		private IDictionary<object, Burden> cache = new Dictionary<object, Burden>();
+		var localCache = Interlocked.Exchange(ref cache, null);
+		if (localCache == null)
+			// that should never happen but Dispose in general is expected to be safe to call so... let's obey the rules
+			return;
+		localCache.Values.Reverse().ForEach(b => b.Release());
+	}
 
-		public Burden this[object id]
+	public Burden this[object id]
+	{
+		set
 		{
-			set
+			try
 			{
-				try
-				{
-					cache.Add(id, value);
-				}
-				catch (NullReferenceException)
-				{
-					throw new ObjectDisposedException("Scope cache was already disposed. This is most likely a bug in the calling code.");
-				}
+				cache.Add(id, value);
 			}
-			get
+			catch (NullReferenceException)
 			{
-				try
-				{
-					Burden burden;
-					cache.TryGetValue(id, out burden);
-					return burden;
-				}
-				catch (NullReferenceException)
-				{
-					throw new ObjectDisposedException("Scope cache was already disposed. This is most likely a bug in the calling code.");
-				}
+				throw new ObjectDisposedException("Scope cache was already disposed. This is most likely a bug in the calling code.");
 			}
 		}
-
-		public void Dispose()
+		get
 		{
-			var localCache = Interlocked.Exchange(ref cache, null);
-			if (localCache == null)
+			try
 			{
-				// that should never happen but Dispose in general is expected to be safe to call so... let's obey the rules
-				return;
+				Burden burden;
+				cache.TryGetValue(id, out burden);
+				return burden;
 			}
-			localCache.Values.Reverse().ForEach(b => b.Release());
+			catch (NullReferenceException)
+			{
+				throw new ObjectDisposedException("Scope cache was already disposed. This is most likely a bug in the calling code.");
+			}
 		}
 	}
 }

@@ -12,67 +12,66 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Bugs.Ioc113
+namespace CastleTests.Bugs.Ioc113;
+
+using System.Collections.Generic;
+
+using Castle.Facilities.Startable;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.Tests.Bugs.Ioc113;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class IoC_113_When_resolving_initializable_disposable_and_startable_component
 {
-	using System.Collections.Generic;
-
-	using Castle.Facilities.Startable;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Tests.Bugs.Ioc113;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class IoC_113_When_resolving_initializable_disposable_and_startable_component
+	[SetUp]
+	public void SetUp()
 	{
-		[SetUp]
-		public void SetUp()
-		{
-			kernel = new DefaultKernel();
+		kernel = new DefaultKernel();
 
-			kernel.AddFacility<StartableFacility>();
+		kernel.AddFacility<StartableFacility>();
 
-			kernel.Register(
-				Component.For<StartableDisposableAndInitializableComponent>()
-					.LifeStyle.Transient
-				);
+		kernel.Register(
+			Component.For<StartableDisposableAndInitializableComponent>()
+				.LifeStyle.Transient
+		);
 
-			component = kernel.Resolve<StartableDisposableAndInitializableComponent>();
-			component.DoSomething();
-			kernel.ReleaseComponent(component);
+		component = kernel.Resolve<StartableDisposableAndInitializableComponent>();
+		component.DoSomething();
+		kernel.ReleaseComponent(component);
 
-			calledMethods = component.calledMethods;
-		}
+		calledMethods = component.calledMethods;
+	}
 
-		private IKernel kernel;
-		private StartableDisposableAndInitializableComponent component;
-		private IList<SdiComponentMethods> calledMethods;
+	private IKernel kernel;
+	private StartableDisposableAndInitializableComponent component;
+	private IList<SdiComponentMethods> calledMethods;
 
-		[Test]
-		public void Should_call_DoSomething_between_start_and_stop()
-		{
-			Assert.AreEqual(SdiComponentMethods.DoSomething, calledMethods[2]);
-		}
+	[Test]
+	public void Should_call_DoSomething_between_start_and_stop()
+	{
+		Assert.AreEqual(SdiComponentMethods.DoSomething, calledMethods[2]);
+	}
 
-		[Test]
-		public void Should_call_all_methods_once()
-		{
-			Assert.AreEqual(5, component.calledMethods.Count);
-		}
+	[Test]
+	public void Should_call_all_methods_once()
+	{
+		Assert.AreEqual(5, component.calledMethods.Count);
+	}
 
-		[Test]
-		public void Should_call_initialize_before_start()
-		{
-			Assert.AreEqual(SdiComponentMethods.Initialize, calledMethods[0]);
-			Assert.AreEqual(SdiComponentMethods.Start, calledMethods[1]);
-		}
+	[Test]
+	public void Should_call_initialize_before_start()
+	{
+		Assert.AreEqual(SdiComponentMethods.Initialize, calledMethods[0]);
+		Assert.AreEqual(SdiComponentMethods.Start, calledMethods[1]);
+	}
 
-		[Test]
-		public void Should_call_stop_before_dispose()
-		{
-			Assert.AreEqual(SdiComponentMethods.Stop, calledMethods[3]);
-			Assert.AreEqual(SdiComponentMethods.Dispose, calledMethods[4]);
-		}
+	[Test]
+	public void Should_call_stop_before_dispose()
+	{
+		Assert.AreEqual(SdiComponentMethods.Stop, calledMethods[3]);
+		Assert.AreEqual(SdiComponentMethods.Dispose, calledMethods[4]);
 	}
 }

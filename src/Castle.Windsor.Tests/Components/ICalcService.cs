@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public interface ICalcService
-	{
-		bool Disposed { get; }
-		bool Initialized { get; }
+namespace CastleTests.Components;
 
-		int Sum(int x, int y);
-	}
+public interface ICalcService
+{
+	bool Disposed { get; }
+	bool Initialized { get; }
+
+	int Sum(int x, int y);
 }

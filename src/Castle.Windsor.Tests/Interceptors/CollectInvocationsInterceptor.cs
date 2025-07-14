@@ -12,25 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Interceptors
+namespace CastleTests.Interceptors;
+
+using System.Collections.Generic;
+
+using Castle.DynamicProxy;
+
+public class CollectInvocationsInterceptor : IInterceptor
 {
-	using System.Collections.Generic;
+	public IList<IInvocation> Invocations { get; } = new List<IInvocation>();
 
-	using Castle.DynamicProxy;
-
-	public class CollectInvocationsInterceptor : IInterceptor
+	public void Intercept(IInvocation invocation)
 	{
-		private readonly IList<IInvocation> invocations = new List<IInvocation>();
-
-		public IList<IInvocation> Invocations
-		{
-			get { return invocations; }
-		}
-
-		public void Intercept(IInvocation invocation)
-		{
-			invocations.Add(invocation);
-			invocation.Proceed();
-		}
+		Invocations.Add(invocation);
+		invocation.Proceed();
 	}
 }

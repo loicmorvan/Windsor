@@ -12,23 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
+
+using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+
+public interface IProtocolHandlerFactory1
 {
-	using System;
+	IProtocolHandler Create();
 
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+	void Release(IProtocolHandler handler);
+}
 
-	public interface IProtocolHandlerFactory1
-	{
-		IProtocolHandler Create();
+public interface IProtocolHandlerFactory2
+{
+	IProtocolHandler Create(string key);
 
-		void Release(IProtocolHandler handler);
-	}
-
-	public interface IProtocolHandlerFactory2
-	{
-		IProtocolHandler Create(String key);
-
-		void Release(IProtocolHandler handler);
-	}
+	void Release(IProtocolHandler handler);
 }

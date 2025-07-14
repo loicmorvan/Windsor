@@ -12,150 +12,119 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration
+namespace Castle.MicroKernel.Registration;
+
+using System;
+
+using Castle.Core;
+
+/// <summary>Represents a key/value pair.</summary>
+public class Property
 {
-	using System;
-
-	using Castle.Core;
-
-	/// <summary>
-	///   Represents a key/value pair.
-	/// </summary>
-	public class Property
+	public Property(object key, object value)
 	{
-		private readonly object key;
-		private readonly object value;
+		this.Key = key;
+		this.Value = value;
+	}
 
-		public Property(object key, object value)
-		{
-			this.key = key;
-			this.value = value;
-		}
+	/// <summary>Gets the property key.</summary>
+	public object Key { get; }
 
-		/// <summary>
-		///   Gets the property key.
-		/// </summary>
-		public object Key
-		{
-			get { return key; }
-		}
+	/// <summary>Gets the property value.</summary>
+	public object Value { get; }
 
-		/// <summary>
-		///   Gets the property value.
-		/// </summary>
-		public object Value
-		{
-			get { return value; }
-		}
+	/// <summary>Create a <see cref = "PropertyKey" /> with key.</summary>
+	/// <param name = "key">The property key.</param>
+	/// <returns>The new <see cref = "PropertyKey" /></returns>
+	public static PropertyKey ForKey(string key)
+	{
+		return new PropertyKey(key);
+	}
 
-		/// <summary>
-		///   Create a <see cref = "PropertyKey" /> with key.
-		/// </summary>
-		/// <param name = "key">The property key.</param>
-		/// <returns>The new <see cref = "PropertyKey" /></returns>
-		public static PropertyKey ForKey(String key)
-		{
-			return new PropertyKey(key);
-		}
+	/// <summary>Create a <see cref = "PropertyKey" /> with key.</summary>
+	/// <param name = "key">The property key.</param>
+	/// <returns>The new <see cref = "PropertyKey" /></returns>
+	public static PropertyKey ForKey(Type key)
+	{
+		return new PropertyKey(key);
+	}
 
-		/// <summary>
-		///   Create a <see cref = "PropertyKey" /> with key.
-		/// </summary>
-		/// <param name = "key">The property key.</param>
-		/// <returns>The new <see cref = "PropertyKey" /></returns>
-		public static PropertyKey ForKey(Type key)
-		{
-			return new PropertyKey(key);
-		}
+	/// <summary>Create a <see cref = "PropertyKey" /> with key.</summary>
+	/// <param key = "key">The property key.</param>
+	/// <returns>The new <see cref = "PropertyKey" /></returns>
+	public static PropertyKey ForKey<TKey>()
+	{
+		return new PropertyKey(typeof(TKey));
+	}
 
-		/// <summary>
-		///   Create a <see cref = "PropertyKey" /> with key.
-		/// </summary>
-		/// <param key = "key">The property key.</param>
-		/// <returns>The new <see cref = "PropertyKey" /></returns>
-		public static PropertyKey ForKey<TKey>()
-		{
-			return new PropertyKey(typeof(TKey));
-		}
+	public static implicit operator Dependency(Property item)
+	{
+		return item == null ? null : new Dependency(item);
+	}
+}
 
-		public static implicit operator Dependency(Property item)
-		{
-			return item == null ? null : new Dependency(item);
-		}
+/// <summary>Represents a property key.</summary>
+public class PropertyKey
+{
+	internal PropertyKey(object key)
+	{
+		this.Key = key;
+	}
+
+	/// <summary>The property key key.</summary>
+	public object Key { get; }
+
+	/// <summary>Builds the <see cref = "Property" /> with key/value.</summary>
+	/// <param name = "value">The property value.</param>
+	/// <returns>The new <see cref = "Property" /></returns>
+	public Property Eq(object value)
+	{
+		return new Property(Key, value);
 	}
 
 	/// <summary>
-	///   Represents a property key.
+	///     Builds a service override using other component registered with given <paramref name = "componentName" /> as value for dependency with given
+	///     <see
+	///         cref = "Key" />
+	///     .
 	/// </summary>
-	public class PropertyKey
+	/// <param name = "componentName"></param>
+	/// <returns></returns>
+	public ServiceOverride Is(string componentName)
 	{
-		private readonly object key;
+		return GetServiceOverrideKey().Eq(componentName);
+	}
 
-		internal PropertyKey(object key)
-		{
-			this.key = key;
-		}
+	/// <summary>
+	///     Builds a service override using other component registered with given <paramref name = "componentImplementation" /> and no explicit name, as value for dependency with given
+	///     <see
+	///         cref = "Key" />
+	///     .
+	/// </summary>
+	/// <returns></returns>
+	public ServiceOverride Is(Type componentImplementation)
+	{
+		if (componentImplementation == null) throw new ArgumentNullException(nameof(componentImplementation));
+		return GetServiceOverrideKey().Eq(ComponentName.DefaultNameFor(componentImplementation));
+	}
 
-		/// <summary>
-		///   The property key key.
-		/// </summary>
-		public object Key
-		{
-			get { return key; }
-		}
+	/// <summary>
+	///     Builds a service override using other component registered with given
+	///     <typeparam name = "TComponentImplementation" />
+	///     and no explicit name, as value for dependency with given
+	///     <see
+	///         cref = "Key" />
+	///     .
+	/// </summary>
+	/// <returns></returns>
+	public ServiceOverride Is<TComponentImplementation>()
+	{
+		return Is(typeof(TComponentImplementation));
+	}
 
-		/// <summary>
-		///   Builds the <see cref = "Property" /> with key/value.
-		/// </summary>
-		/// <param name = "value">The property value.</param>
-		/// <returns>The new <see cref = "Property" /></returns>
-		public Property Eq(Object value)
-		{
-			return new Property(key, value);
-		}
-
-		/// <summary>
-		///   Builds a service override using other component registered with given <paramref name = "componentName" /> as value for dependency with given <see
-		///    cref = "Key" />.
-		/// </summary>
-		/// <param name = "componentName"></param>
-		/// <returns></returns>
-		public ServiceOverride Is(string componentName)
-		{
-			return GetServiceOverrideKey().Eq(componentName);
-		}
-
-		/// <summary>
-		///   Builds a service override using other component registered with given <paramref name = "componentImplementation" /> and no explicit name, as value for dependency with given <see
-		///    cref = "Key" />.
-		/// </summary>
-		/// <returns></returns>
-		public ServiceOverride Is(Type componentImplementation)
-		{
-			if (componentImplementation == null)
-			{
-				throw new ArgumentNullException(nameof(componentImplementation));
-			}
-			return GetServiceOverrideKey().Eq(ComponentName.DefaultNameFor(componentImplementation));
-		}
-
-		/// <summary>
-		///   Builds a service override using other component registered with given <typeparam name = "TComponentImplementation" /> and no explicit name, as value for dependency with given <see
-		///    cref = "Key" />.
-		/// </summary>
-		/// <returns></returns>
-		public ServiceOverride Is<TComponentImplementation>()
-		{
-			return Is(typeof(TComponentImplementation));
-		}
-
-		private ServiceOverrideKey GetServiceOverrideKey()
-		{
-			if (key is Type)
-			{
-				return ServiceOverride.ForKey((Type)key);
-			}
-			return ServiceOverride.ForKey((string)key);
-		}
+	private ServiceOverrideKey GetServiceOverrideKey()
+	{
+		if (Key is Type) return ServiceOverride.ForKey((Type)Key);
+		return ServiceOverride.ForKey((string)Key);
 	}
 }

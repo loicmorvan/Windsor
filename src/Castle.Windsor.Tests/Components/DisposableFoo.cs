@@ -12,22 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+using System;
+
+public class DisposableFoo : IDisposable
 {
-	using System;
+	public static int DisposedCount { get; private set; }
 
-	public class DisposableFoo : IDisposable
+	public void Dispose()
 	{
-		public static int DisposedCount { get; private set; }
+		DisposedCount++;
+	}
 
-		public void Dispose()
-		{
-			DisposedCount++;
-		}
-
-		public static void ResetDisposedCount()
-		{
-			DisposedCount = 0;
-		}
+	public static void ResetDisposedCount()
+	{
+		DisposedCount = 0;
 	}
 }

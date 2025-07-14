@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public interface IView
-	{
-		IController Controller { get; set; }
+namespace CastleTests.Components;
 
-		void Display();
-	}
+public interface IView
+{
+	IController Controller { get; set; }
+
+	void Display();
 }

@@ -12,22 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Interceptors
+namespace Castle.Windsor.Tests.Interceptors;
+
+using System;
+using System.Reflection;
+
+using Castle.DynamicProxy;
+
+public class ReturnDefaultInterceptor : IInterceptor
 {
-	using System;
-	using System.Reflection;
-
-	using Castle.DynamicProxy;
-
-	public class ReturnDefaultInterceptor : IInterceptor
+	public void Intercept(IInvocation invocation)
 	{
-		public void Intercept(IInvocation invocation)
-		{
-			var returnType = invocation.Method.ReturnType;
-			if (returnType.GetTypeInfo().IsValueType && returnType != typeof(void))
-			{
-				invocation.ReturnValue = Activator.CreateInstance(returnType);
-			}
-		}
+		var returnType = invocation.Method.ReturnType;
+		if (returnType.GetTypeInfo().IsValueType && returnType != typeof(void)) invocation.ReturnValue = Activator.CreateInstance(returnType);
 	}
 }

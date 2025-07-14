@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+public class ContravariantDerived : IAmContravariant<EmptySub1>
 {
-	public class ContravariantDerived : IAmContravariant<EmptySub1>
+	public void Method(EmptySub1 item)
 	{
-		public void Method(EmptySub1 item)
-		{
-		}
 	}
 }

@@ -12,53 +12,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Internal
+namespace Castle.MicroKernel.Internal;
+
+using System.Threading;
+
+public class SlimReadWriteLock : Lock
 {
-	using System.Threading;
+	private readonly ReaderWriterLockSlim locker = new(LockRecursionPolicy.NoRecursion);
 
-	public class SlimReadWriteLock : Lock
+	public bool IsReadLockHeld => locker.IsReadLockHeld;
+
+	public bool IsUpgradeableReadLockHeld => locker.IsUpgradeableReadLockHeld;
+
+	public bool IsWriteLockHeld => locker.IsWriteLockHeld;
+
+	public override IUpgradeableLockHolder ForReadingUpgradeable()
 	{
-		private readonly ReaderWriterLockSlim locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+		return ForReadingUpgradeable(true);
+	}
 
-		public override IUpgradeableLockHolder ForReadingUpgradeable()
-		{
-			return ForReadingUpgradeable(true);
-		}
+	public override ILockHolder ForReading()
+	{
+		return ForReading(true);
+	}
 
-		public override ILockHolder ForReading()
-		{
-			return ForReading(true);
-		}
+	public override ILockHolder ForWriting()
+	{
+		return ForWriting(true);
+	}
 
-		public override ILockHolder ForWriting()
-		{
-			return ForWriting(true);
-		}
+	public override IUpgradeableLockHolder ForReadingUpgradeable(bool waitForLock)
+	{
+		return new SlimUpgradeableReadLockHolder(locker, waitForLock, locker.IsUpgradeableReadLockHeld || locker.IsWriteLockHeld);
+	}
 
-		public override IUpgradeableLockHolder ForReadingUpgradeable(bool waitForLock)
-		{
-			return new SlimUpgradeableReadLockHolder(locker, waitForLock, locker.IsUpgradeableReadLockHeld || locker.IsWriteLockHeld);
-		}
+	public override ILockHolder ForReading(bool waitForLock)
+	{
+		if (locker.IsReadLockHeld || locker.IsUpgradeableReadLockHeld || locker.IsWriteLockHeld) return NoOpLock.Lock;
 
-		public override ILockHolder ForReading(bool waitForLock)
-		{
-			if (locker.IsReadLockHeld || locker.IsUpgradeableReadLockHeld || locker.IsWriteLockHeld)
-			{
-				return NoOpLock.Lock;
-			}
+		return new SlimReadLockHolder(locker, waitForLock);
+	}
 
-			return new SlimReadLockHolder(locker, waitForLock);
-		}
-
-		public override ILockHolder ForWriting(bool waitForLock)
-		{
-			return locker.IsWriteLockHeld ? NoOpLock.Lock : new SlimWriteLockHolder(locker, waitForLock);
-		}
-
-		public bool IsReadLockHeld => locker.IsReadLockHeld;
-
-		public bool IsUpgradeableReadLockHeld => locker.IsUpgradeableReadLockHeld;
-
-		public bool IsWriteLockHeld => locker.IsWriteLockHeld;
+	public override ILockHolder ForWriting(bool waitForLock)
+	{
+		return locker.IsWriteLockHeld ? NoOpLock.Lock : new SlimWriteLockHolder(locker, waitForLock);
 	}
 }

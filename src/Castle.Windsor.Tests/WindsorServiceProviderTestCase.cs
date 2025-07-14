@@ -12,32 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace CastleTests;
+
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class WindsorServiceProviderTextCase : AbstractContainerTestCase
 {
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor;
-	using CastleTests.Components;
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class WindsorServiceProviderTextCase : AbstractContainerTestCase
+	[Test]
+	public void Can_windsor_service_provider_resolve_services()
 	{
-		[Test]
-		public void Can_windsor_service_provider_resolve_services()
-		{
-			Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
-			var provider = new WindsorServiceProvider(Container);
-			var service = provider.GetService<IEmptyService>();
-			Assert.IsNotNull(service);
-		}
+		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
+		var provider = new WindsorServiceProvider(Container);
+		var service = provider.GetService<IEmptyService>();
+		Assert.IsNotNull(service);
+	}
 
-		[Test]
-		[Bug("IOC-323")]
-		public void Can_windsor_service_provider_return_null_when_service_not_found()
-		{
-			var provider = new WindsorServiceProvider(Container);
-			var service = provider.GetService<IEmptyService>();
-			Assert.IsNull(service);
-		}
+	[Test]
+	[Bug("IOC-323")]
+	public void Can_windsor_service_provider_return_null_when_service_not_found()
+	{
+		var provider = new WindsorServiceProvider(Container);
+		var service = provider.GetService<IEmptyService>();
+		Assert.IsNull(service);
 	}
 }

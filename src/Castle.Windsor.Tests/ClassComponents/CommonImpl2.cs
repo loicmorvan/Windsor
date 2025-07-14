@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel.Tests.ClassComponents;
+
+/// <summary>Summary description for CommonImpl2.</summary>
+public class CommonImpl2 : ICommon
 {
-	/// <summary>
-	///   Summary description for CommonImpl2.
-	/// </summary>
-	public class CommonImpl2 : ICommon
-	{
-	}
 }

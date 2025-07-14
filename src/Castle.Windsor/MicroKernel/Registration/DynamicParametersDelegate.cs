@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration
-{
-	public delegate void DynamicParametersDelegate(IKernel kernel, Arguments arguments);
-}
+namespace Castle.MicroKernel.Registration;
+
+public delegate void DynamicParametersDelegate(IKernel kernel, Arguments arguments);

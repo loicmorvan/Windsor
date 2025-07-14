@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Scoped
+namespace Castle.MicroKernel.Lifestyle.Scoped;
+
+using System;
+
+using Castle.Core;
+
+public interface ILifetimeScope : IDisposable
 {
-	using System;
-
-	using Castle.Core;
-
-	public interface ILifetimeScope : IDisposable
-	{
-		Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance);
-	}
+	Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance);
 }

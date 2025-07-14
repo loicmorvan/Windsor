@@ -12,26 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ProxyInfrastructure
+namespace Castle.ProxyInfrastructure;
+
+using System;
+using System.Reflection;
+
+using Castle.DynamicProxy;
+
+public class ProxyNothingHook : IProxyGenerationHook
 {
-	using System;
-	using System.Reflection;
-
-	using Castle.DynamicProxy;
-
-	public class ProxyNothingHook : IProxyGenerationHook
+	public void MethodsInspected()
 	{
-		public void MethodsInspected()
-		{
-		}
+	}
 
-		public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
-		{
-		}
+	public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
+	{
+	}
 
-		public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
-		{
-			return false;
-		}
+	public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
+	{
+		return false;
 	}
 }

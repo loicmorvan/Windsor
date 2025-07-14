@@ -5,16 +5,16 @@
 
 	<properties>
 		<?if debug?>
-			<choose>		
-				<when defined="debug">
-					<myprop>should-exist</myprop>			
-				</when>
-				<when not-defined="debug">
-					<myprop2>should-not-exist</myprop2>			
-				</when>
-			</choose>
+		<choose>
+			<when defined="debug">
+				<myprop>should-exist</myprop>
+			</when>
+			<when not-defined="debug">
+				<myprop2>should-not-exist</myprop2>
+			</when>
+		</choose>
 		<?else?>
-			<myprop2>should-not-exist</myprop2>
+		<myprop2>should-not-exist</myprop2>
 		<?end?>
 
 		<env>
@@ -22,9 +22,9 @@
 		</env>
 		<log>
 			<?if DEBUG?>
-				<?if log?>debug-log<?else?>debug-not-log<?end?>
+			<?if log?>debug-log<?else?>debug-not-log<?end?>
 			<?else?>
-				<?if log?>qa-log<?else?>qa-not-log<?end?>
+			<?if log?>qa-log<?else?>qa-not-log<?end?>
 			<?end?>
 		</log>
 
@@ -46,9 +46,9 @@
 
 	<components>
 		#{myprop}#!{myprop2}
-		<component>#{env}</component>		
-		<component>#{log}</component>		
-		<component>#{env2}</component>		
-		<component>#{log2}</component>		
+		<component>#{env}</component>
+		<component>#{log}</component>
+		<component>#{env2}</component>
+		<component>#{log2}</component>
 	</components>
 </configuration>

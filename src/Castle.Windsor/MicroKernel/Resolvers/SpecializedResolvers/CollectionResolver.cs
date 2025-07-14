@@ -12,67 +12,58 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Resolvers.SpecializedResolvers
+namespace Castle.MicroKernel.Resolvers.SpecializedResolvers;
+
+using System;
+using System.Collections.Generic;
+
+using Castle.Core;
+using Castle.Core.Internal;
+using Castle.MicroKernel.Context;
+
+/// <summary>More generic alternative to <see cref = "ArrayResolver" /> and <see cref = "ListResolver" />. It supports arrays as well as any generic interface type assignable from arrays.</summary>
+/// <remarks>The collection instance that is provided is read only, even for interfaces like <see cref = "IList{T}" /></remarks>
+public class CollectionResolver : ISubDependencyResolver
 {
-	using System;
-	using System.Collections.Generic;
+	protected readonly bool allowEmptyCollections;
+	protected readonly IKernel kernel;
 
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Context;
-
-	/// <summary>
-	///   More generic alternative to <see cref = "ArrayResolver" /> and <see cref = "ListResolver" />.
-	///   It supports arrays as well as any generic interface type assignable from arrays.
-	/// </summary>
-	/// <remarks>
-	///   The collection instance that is provided is read only, even for interfaces like <see cref = "IList{T}" />
-	/// </remarks>
-	public class CollectionResolver : ISubDependencyResolver
+	public CollectionResolver(IKernel kernel, bool allowEmptyCollections = false)
 	{
-		protected readonly bool allowEmptyCollections;
-		protected readonly IKernel kernel;
+		this.kernel = kernel;
+		this.allowEmptyCollections = allowEmptyCollections;
+	}
 
-		public CollectionResolver(IKernel kernel, bool allowEmptyCollections = false)
-		{
-			this.kernel = kernel;
-			this.allowEmptyCollections = allowEmptyCollections;
-		}
+	public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+		ComponentModel model,
+		DependencyModel dependency)
+	{
+		if (dependency.TargetItemType == null) return false;
 
-		public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
-		                               ComponentModel model,
-		                               DependencyModel dependency)
-		{
-			if (dependency.TargetItemType == null)
-			{
-				return false;
-			}
+		var itemType = GetItemType(dependency.TargetItemType);
+		return itemType != null &&
+		       HasParameter(dependency) == false &&
+		       CanSatisfy(itemType);
+	}
 
-			var itemType = GetItemType(dependency.TargetItemType);
-			return itemType != null &&
-			       HasParameter(dependency) == false &&
-			       CanSatisfy(itemType);
-		}
+	public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+		DependencyModel dependency)
+	{
+		return kernel.ResolveAll(GetItemType(dependency.TargetItemType), context.AdditionalArguments);
+	}
 
-		public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
-		                              DependencyModel dependency)
-		{
-			return kernel.ResolveAll(GetItemType(dependency.TargetItemType), context.AdditionalArguments);
-		}
+	protected virtual bool CanSatisfy(Type itemType)
+	{
+		return allowEmptyCollections || kernel.HasComponent(itemType);
+	}
 
-		protected virtual bool CanSatisfy(Type itemType)
-		{
-			return allowEmptyCollections || kernel.HasComponent(itemType);
-		}
+	protected virtual Type GetItemType(Type targetItemType)
+	{
+		return targetItemType.GetCompatibleArrayItemType();
+	}
 
-		protected virtual Type GetItemType(Type targetItemType)
-		{
-			return targetItemType.GetCompatibleArrayItemType();
-		}
-
-		protected virtual bool HasParameter(DependencyModel dependency)
-		{
-			return dependency.Parameter != null;
-		}
+	protected virtual bool HasParameter(DependencyModel dependency)
+	{
+		return dependency.Parameter != null;
 	}
 }

@@ -12,22 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
-{
-	using System;
+namespace Castle.Core;
 
-	/// <summary>
-	///   Indicates that the target components wants a
-	///   transient lifestyle.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-	public sealed class TransientAttribute : LifestyleAttribute
+using System;
+
+/// <summary>Indicates that the target components wants a transient lifestyle.</summary>
+[AttributeUsage(AttributeTargets.Class)]
+public sealed class TransientAttribute : LifestyleAttribute
+{
+	/// <summary>Initializes a new instance of the <see cref = "TransientAttribute" /> class.</summary>
+	public TransientAttribute() : base(LifestyleType.Transient)
 	{
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "TransientAttribute" /> class.
-		/// </summary>
-		public TransientAttribute() : base(LifestyleType.Transient)
-		{
-		}
 	}
 }

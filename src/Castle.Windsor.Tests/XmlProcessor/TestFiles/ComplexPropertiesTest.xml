@@ -5,13 +5,13 @@
 		<child1>
 			<child attr="#{prop1}">=#{prop2}=</child>
 		</child1>
-	</properties>	
+	</properties>
 	<properties>
 		<prop3>prop3 value</prop3>
 		<child2>
 			<child>#{prop1} #{prop2} #{prop3}</child>
 		</child2>
-	</properties>	
+	</properties>
 	#{child1}
 	#{child2}
 </root>

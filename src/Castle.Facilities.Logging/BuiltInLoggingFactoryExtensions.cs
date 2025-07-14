@@ -12,17 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Logging
+namespace Castle.Facilities.Logging;
+
+using System.Runtime.Versioning;
+
+using Castle.Core.Logging;
+
+public static class BuiltInLoggingFactoryExtensions
 {
-	using Castle.Core.Logging;
-
-	public static class BuiltInLoggingFactoryExtensions
+	public static LoggingFacility LogUsingNullLogger(this LoggingFacility loggingFacility)
 	{
-		public static LoggingFacility LogUsingNullLogger(this LoggingFacility loggingFacility) => loggingFacility.LogUsing<NullLogFactory>();
-		public static LoggingFacility LogUsingConsoleLogger(this LoggingFacility loggingFacility) => loggingFacility.LogUsing<ConsoleFactory>();
+		return loggingFacility.LogUsing<NullLogFactory>();
+	}
 
-		[System.Runtime.Versioning.SupportedOSPlatform("windows")]
-		public static LoggingFacility LogUsingDiagnosticsLogger(this LoggingFacility loggingFacility) => loggingFacility.LogUsing<DiagnosticsLoggerFactory>();
-		public static LoggingFacility LogUsingTraceLogger(this LoggingFacility loggingFacility) => loggingFacility.LogUsing<TraceLoggerFactory>();
+	public static LoggingFacility LogUsingConsoleLogger(this LoggingFacility loggingFacility)
+	{
+		return loggingFacility.LogUsing<ConsoleFactory>();
+	}
+
+	[SupportedOSPlatform("windows")]
+	public static LoggingFacility LogUsingDiagnosticsLogger(this LoggingFacility loggingFacility)
+	{
+		return loggingFacility.LogUsing<DiagnosticsLoggerFactory>();
+	}
+
+	public static LoggingFacility LogUsingTraceLogger(this LoggingFacility loggingFacility)
+	{
+		return loggingFacility.LogUsing<TraceLoggerFactory>();
 	}
 }

@@ -17,14 +17,12 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Scope
 {
 	using System;
 
-	using Castle.Windsor;
-
 	using Microsoft.Extensions.DependencyInjection;
 
 	internal class WindsorScopeFactory : IServiceScopeFactory
 	{
 		private readonly IWindsorContainer scopeFactoryContainer;
-		
+
 		public WindsorScopeFactory(IWindsorContainer container)
 		{
 			scopeFactoryContainer = container;

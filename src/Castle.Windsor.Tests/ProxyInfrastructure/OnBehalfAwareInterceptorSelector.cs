@@ -12,30 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ProxyInfrastructure
+namespace Castle.ProxyInfrastructure;
+
+using System;
+using System.Reflection;
+
+using Castle.Core;
+using Castle.Core.Interceptor;
+using Castle.DynamicProxy;
+
+using NUnit.Framework;
+
+public class OnBehalfAwareInterceptorSelector : IInterceptorSelector, IOnBehalfAware
 {
-	using System;
-	using System.Reflection;
+	public static ComponentModel target;
 
-	using Castle.Core;
-	using Castle.Core.Interceptor;
-	using Castle.DynamicProxy;
-
-	using NUnit.Framework;
-
-	public class OnBehalfAwareInterceptorSelector : IInterceptorSelector, IOnBehalfAware
+	public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
 	{
-		public static ComponentModel target;
+		Assert.IsNotNull(target);
+		return interceptors;
+	}
 
-		public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
-		{
-			Assert.IsNotNull(target);
-			return interceptors;
-		}
-
-		public void SetInterceptedComponentModel(ComponentModel target)
-		{
-			OnBehalfAwareInterceptorSelector.target = target;
-		}
+	public void SetInterceptedComponentModel(ComponentModel target)
+	{
+		OnBehalfAwareInterceptorSelector.target = target;
 	}
 }

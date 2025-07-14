@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using Castle.Core;
-	using Castle.DynamicProxy;
+namespace CastleTests.Components;
 
-	public class StandardInterceptorAttribute : InterceptorAttribute
+using Castle.Core;
+using Castle.DynamicProxy;
+
+public class StandardInterceptorAttribute : InterceptorAttribute
+{
+	public StandardInterceptorAttribute() : base(typeof(StandardInterceptor))
 	{
-		public StandardInterceptorAttribute() : base(typeof(StandardInterceptor))
-		{
-		}
 	}
 }

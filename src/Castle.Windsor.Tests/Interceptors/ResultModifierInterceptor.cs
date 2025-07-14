@@ -12,39 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Interceptors
+namespace Castle.Windsor.Tests.Interceptors;
+
+using Castle.DynamicProxy;
+
+public class ResultModifierInterceptor : IInterceptor
 {
-	using Castle.DynamicProxy;
+	private readonly int? returnValue;
 
-	public class ResultModifierInterceptor : IInterceptor
+	public ResultModifierInterceptor()
 	{
-		private readonly int? returnValue;
+	}
 
-		public ResultModifierInterceptor()
-		{
-		}
+	public ResultModifierInterceptor(int returnValue)
+	{
+		this.returnValue = returnValue;
+	}
 
-		public ResultModifierInterceptor(int returnValue)
+	public void Intercept(IInvocation invocation)
+	{
+		if (invocation.Method.Name.Equals("Sum"))
 		{
-			this.returnValue = returnValue;
-		}
-
-		public void Intercept(IInvocation invocation)
-		{
-			if (invocation.Method.Name.Equals("Sum"))
+			invocation.Proceed();
+			var result = invocation.ReturnValue;
+			if (!returnValue.HasValue)
 			{
-				invocation.Proceed();
-				var result = invocation.ReturnValue;
-				if (!returnValue.HasValue)
-				{
-					invocation.ReturnValue = ((int)result) + 1;
-					return;
-				}
-				invocation.ReturnValue = returnValue.Value;
+				invocation.ReturnValue = (int)result + 1;
 				return;
 			}
 
-			invocation.Proceed();
+			invocation.ReturnValue = returnValue.Value;
+			return;
 		}
+
+		invocation.Proceed();
 	}
 }

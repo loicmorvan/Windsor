@@ -12,21 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration
-{
-	using Castle.MicroKernel.SubSystems.Configuration;
-	using Castle.Windsor;
+namespace Castle.MicroKernel.Registration;
 
-	/// <summary>
-	///   The contract to install components in the container.
-	/// </summary>
-	public interface IWindsorInstaller
-	{
-		/// <summary>
-		///   Performs the installation in the <see cref = "IWindsorContainer" />.
-		/// </summary>
-		/// <param name = "container">The container.</param>
-		/// <param name = "store">The configuration store.</param>
-		void Install(IWindsorContainer container, IConfigurationStore store);
-	}
+using Castle.MicroKernel.SubSystems.Configuration;
+using Castle.Windsor;
+
+/// <summary>The contract to install components in the container.</summary>
+public interface IWindsorInstaller
+{
+	/// <summary>Performs the installation in the <see cref = "IWindsorContainer" />.</summary>
+	/// <param name = "container">The container.</param>
+	/// <param name = "store">The configuration store.</param>
+	void Install(IWindsorContainer container, IConfigurationStore store);
 }

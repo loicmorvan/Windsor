@@ -12,51 +12,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests
+namespace Castle.MicroKernel.Tests;
+
+using Castle.Core;
+using Castle.Core.Internal;
+using Castle.MicroKernel.Registration;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class GraphTestCase
 {
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class GraphTestCase
+	[TearDown]
+	public void Dispose()
 	{
-		private IKernel kernel;
+		kernel.Dispose();
+	}
 
-		[TearDown]
-		public void Dispose()
-		{
-			kernel.Dispose();
-		}
+	[SetUp]
+	public void Init()
+	{
+		kernel = new DefaultKernel();
+	}
 
-		[SetUp]
-		public void Init()
-		{
-			kernel = new DefaultKernel();
-		}
+	private IKernel kernel;
 
-		[Test]
-		public void TopologicalSortOnComponents()
-		{
-			kernel.Register(Component.For(typeof(A)).Named("a"));
-			kernel.Register(Component.For(typeof(B)).Named("b"));
-			kernel.Register(Component.For(typeof(C)).Named("c"));
+	[Test]
+	public void TopologicalSortOnComponents()
+	{
+		kernel.Register(Component.For(typeof(A)).Named("a"));
+		kernel.Register(Component.For(typeof(B)).Named("b"));
+		kernel.Register(Component.For(typeof(C)).Named("c"));
 
-			var nodes = kernel.GraphNodes;
+		var nodes = kernel.GraphNodes;
 
-			Assert.IsNotNull(nodes);
-			Assert.AreEqual(3, nodes.Length);
+		Assert.IsNotNull(nodes);
+		Assert.AreEqual(3, nodes.Length);
 
-			var vertices = TopologicalSortAlgo.Sort(nodes);
+		var vertices = TopologicalSortAlgo.Sort(nodes);
 
-			Assert.AreEqual("c", (vertices[0] as ComponentModel).Name);
-			Assert.AreEqual("b", (vertices[1] as ComponentModel).Name);
-			Assert.AreEqual("a", (vertices[2] as ComponentModel).Name);
-		}
+		Assert.AreEqual("c", (vertices[0] as ComponentModel).Name);
+		Assert.AreEqual("b", (vertices[1] as ComponentModel).Name);
+		Assert.AreEqual("a", (vertices[2] as ComponentModel).Name);
 	}
 }

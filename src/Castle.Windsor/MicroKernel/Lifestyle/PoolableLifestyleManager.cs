@@ -12,114 +12,92 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle
+namespace Castle.MicroKernel.Lifestyle;
+
+using System;
+
+using Castle.Core.Internal;
+using Castle.MicroKernel.Context;
+using Castle.MicroKernel.Lifestyle.Pool;
+using Castle.MicroKernel.Registration;
+
+/// <summary>Manages a pool of objects.</summary>
+[Serializable]
+public class PoolableLifestyleManager : AbstractLifestyleManager
 {
-	using System;
+	private static readonly object poolFactoryLock = new();
+	private readonly ThreadSafeInit init = new();
+	private readonly int initialSize;
+	private readonly int maxSize;
+	private IPool pool;
 
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Lifestyle.Pool;
-	using Castle.MicroKernel.Registration;
-
-	/// <summary>
-	///   Manages a pool of objects.
-	/// </summary>
-	[Serializable]
-	public class PoolableLifestyleManager : AbstractLifestyleManager
+	public PoolableLifestyleManager(int initialSize, int maxSize)
 	{
-		private static readonly object poolFactoryLock = new object();
-		private readonly ThreadSafeInit init = new ThreadSafeInit();
-		private readonly int initialSize;
-		private readonly int maxSize;
-		private IPool pool;
+		this.initialSize = initialSize;
+		this.maxSize = maxSize;
+	}
 
-		public PoolableLifestyleManager(int initialSize, int maxSize)
+	protected IPool Pool
+	{
+		get
 		{
-			this.initialSize = initialSize;
-			this.maxSize = maxSize;
-		}
-
-		protected IPool Pool
-		{
-			get
+			if (pool != null) return pool;
+			var initializing = false;
+			try
 			{
-				if (pool != null)
-				{
-					return pool;
-				}
-				var initializing = false;
-				try
-				{
-					initializing = init.ExecuteThreadSafeOnce();
+				initializing = init.ExecuteThreadSafeOnce();
 
-					if (pool == null)
-					{
-						pool = CreatePool(initialSize, maxSize);
-					}
-					return pool;
-				}
-				finally
-				{
-					if (initializing)
-					{
-						init.EndThreadSafeOnceSection();
-					}
-				}
+				if (pool == null) pool = CreatePool(initialSize, maxSize);
+				return pool;
+			}
+			finally
+			{
+				if (initializing) init.EndThreadSafeOnceSection();
 			}
 		}
+	}
 
-		public override void Dispose()
-		{
-			if (pool != null)
+	public override void Dispose()
+	{
+		if (pool != null) pool.Dispose();
+	}
+
+	public override bool Release(object instance)
+	{
+		if (pool != null) return pool.Release(instance);
+		return false;
+	}
+
+	public override object Resolve(CreationContext context, IReleasePolicy releasePolicy)
+	{
+		return Pool.Request(context, c => PoolCreationCallback(c, releasePolicy));
+	}
+
+	protected IPool CreatePool(int initialSize, int maxSize)
+	{
+		if (!Kernel.HasComponent(typeof(IPoolFactory)))
+			lock (poolFactoryLock)
 			{
-				pool.Dispose();
-			}
-		}
-
-		public override bool Release(object instance)
-		{
-			if (pool != null)
-			{
-				return pool.Release(instance);
-			}
-			return false;
-		}
-
-		public override object Resolve(CreationContext context, IReleasePolicy releasePolicy)
-		{
-			return Pool.Request(context, c => PoolCreationCallback(c, releasePolicy));
-		}
-
-		protected IPool CreatePool(int initialSize, int maxSize)
-		{
-			if (!Kernel.HasComponent(typeof(IPoolFactory)))
-			{
-				lock (poolFactoryLock)
-				{
-					if (!Kernel.HasComponent(typeof(IPoolFactory)))
-					{
-						Kernel.Register(Component.For<IPoolFactory>()
-							.ImplementedBy<DefaultPoolFactory>()
-							.NamedAutomatically("castle.internal-pool-factory"));
-					}
-				}
+				if (!Kernel.HasComponent(typeof(IPoolFactory)))
+					Kernel.Register(Component.For<IPoolFactory>()
+						.ImplementedBy<DefaultPoolFactory>()
+						.NamedAutomatically("castle.internal-pool-factory"));
 			}
 
-			var factory = Kernel.Resolve<IPoolFactory>();
-			return factory.Create(initialSize, maxSize, ComponentActivator);
-		}
+		var factory = Kernel.Resolve<IPoolFactory>();
+		return factory.Create(initialSize, maxSize, ComponentActivator);
+	}
 
-		protected virtual Burden PoolCreationCallback(CreationContext context, IReleasePolicy releasePolicy)
-		{
-			var burden = base.CreateInstance(context, false);
-			Track(burden, releasePolicy);
-			return burden;
-		}
+	protected virtual Burden PoolCreationCallback(CreationContext context, IReleasePolicy releasePolicy)
+	{
+		var burden = base.CreateInstance(context, false);
+		Track(burden, releasePolicy);
+		return burden;
+	}
 
-		protected override void Track(Burden burden, IReleasePolicy releasePolicy)
-		{
-			burden.RequiresDecommission = true;
-			releasePolicy.Track(burden.Instance, burden);
-		}
+	protected override void Track(Burden burden, IReleasePolicy releasePolicy)
+	{
+		burden.RequiresDecommission = true;
+		releasePolicy.Track(burden.Instance, burden);
 	}
 }

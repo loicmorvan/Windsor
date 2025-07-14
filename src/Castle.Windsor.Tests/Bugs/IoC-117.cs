@@ -12,49 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Bugs
+namespace Castle.MicroKernel.Tests.Bugs;
+
+using System;
+
+using Castle.MicroKernel.Registration;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class IoC_117
 {
-	using System;
-
-	using Castle.MicroKernel.Registration;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class IoC_117
+	[Test]
+	public void Public_property_with_Protected_setter_causes_Object_Reference_exception()
 	{
-		[Test]
-		public void Public_property_with_Protected_setter_causes_Object_Reference_exception()
+		IKernel kernel = new DefaultKernel();
+
+		kernel.Register(Component.For<Presenter>());
+		kernel.Register(Component.For<View>());
+
+		try
 		{
-			IKernel kernel = new DefaultKernel();
-
-		    kernel.Register(Component.For<Presenter>());
-		    kernel.Register(Component.For<View>());
-
-		    try
-			{
-				Presenter p = (Presenter)kernel.Resolve(typeof(Presenter));
-				Assert.IsNotNull(p);
-			}
-			catch (NullReferenceException)
-			{
-				Assert.Fail("Should not have thrown a NullReferenceException");
-			}
+			var p = (Presenter)kernel.Resolve(typeof(Presenter));
+			Assert.IsNotNull(p);
+		}
+		catch (NullReferenceException)
+		{
+			Assert.Fail("Should not have thrown a NullReferenceException");
 		}
 	}
+}
 
-	public class Presenter
-	{
-		private View view;
+public class Presenter
+{
+	public virtual View View { get; protected set; }
+}
 
-		public virtual View View
-		{
-			get { return view;  }
-			protected set { view = value;}
-		}
-	}
-
-	public class View
-	{
-	}
+public class View
+{
 }

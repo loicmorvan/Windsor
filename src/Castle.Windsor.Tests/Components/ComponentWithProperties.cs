@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class ComponentWithProperties
-	{
-		public string Prop1 { get; set; }
+namespace CastleTests.Components;
 
-		public int Prop2 { get; set; }
-	}
+public class ComponentWithProperties
+{
+	public string Prop1 { get; set; }
+
+	public int Prop2 { get; set; }
 }

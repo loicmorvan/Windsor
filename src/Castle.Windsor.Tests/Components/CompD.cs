@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+public class CompD
 {
-	public class CompD
+	public CompD(CompA compA)
 	{
-		public CompD(CompA compA)
-		{
-		}
 	}
 }

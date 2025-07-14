@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+using CastleTests.Components;
+
+public class UsesDisposableFoo
 {
-	using CastleTests.Components;
+	private DisposableFoo foo;
 
-	public class UsesDisposableFoo
+	public UsesDisposableFoo(DisposableFoo foo)
 	{
-		private DisposableFoo foo;
-
-		public UsesDisposableFoo(DisposableFoo foo)
-		{
-			this.foo = foo;
-		}
+		this.foo = foo;
 	}
 }

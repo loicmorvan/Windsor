@@ -9,48 +9,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
-{
-	using System;
-	using System.Threading;
+namespace Castle.Core.Internal;
 
-	[Serializable]
-	public class GraphNode :
+using System;
+using System.Threading;
+
+[Serializable]
+public class GraphNode :
 #if FEATURE_REMOTING
 		MarshalByRefObject,
 #endif
-		IVertex
-	{
-		private SimpleThreadSafeCollection<GraphNode> outgoing;
+	IVertex
+{
+	private SimpleThreadSafeCollection<GraphNode> outgoing;
 
-		public void AddDependent(GraphNode node)
+	public void AddDependent(GraphNode node)
+	{
+		var collection = outgoing;
+		if (collection == null)
+		{
+			var @new = new SimpleThreadSafeCollection<GraphNode>();
+			collection = Interlocked.CompareExchange(ref outgoing, @new, null) ?? @new;
+		}
+
+		collection.Add(node);
+	}
+
+	/// <summary>The nodes that this node depends on</summary>
+	public GraphNode[] Dependents
+	{
+		get
 		{
 			var collection = outgoing;
-			if (collection == null)
-			{
-				var @new = new SimpleThreadSafeCollection<GraphNode>();
-				collection = Interlocked.CompareExchange(ref outgoing, @new, null) ?? @new;
-			}
-			collection.Add(node);
-		}
-
-		/// <summary>The nodes that this node depends on</summary>
-		public GraphNode[] Dependents
-		{
-			get
-			{
-				var collection = outgoing;
-				if (collection == null)
-				{
-					return new GraphNode[0];
-				}
-				return collection.ToArray();
-			}
-		}
-
-		IVertex[] IVertex.Adjacencies
-		{
-			get { return Dependents; }
+			if (collection == null) return new GraphNode[0];
+			return collection.ToArray();
 		}
 	}
+
+	IVertex[] IVertex.Adjacencies => Dependents;
 }

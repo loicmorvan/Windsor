@@ -12,80 +12,70 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests;
+
+using System.Collections.Generic;
+using System.Linq;
+
+using Castle.Windsor.Installer;
+using Castle.XmlFiles;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class ServiceOverridesStackOverflowTestCase
 {
-	using System.Collections.Generic;
-	using System.Linq;
-
-	using Castle.XmlFiles;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class ServiceOverridesStackOverflowTestCase
+	[Test]
+	public void Should_not_StackOverflow()
 	{
-		[Test]
-		public void Should_not_StackOverflow()
-		{
-			var container = new WindsorContainer()
-				.Install(Castle.Windsor.Installer.Configuration.FromXml(Xml.Embedded("channel1.xml")));
+		var container = new WindsorContainer()
+			.Install(Configuration.FromXml(Xml.Embedded("channel1.xml")));
 
-			var channel = container.Resolve<MessageChannel>("MessageChannel1");
-			var array = channel.RootDevice.Children.ToArray();
+		var channel = container.Resolve<MessageChannel>("MessageChannel1");
+		var array = channel.RootDevice.Children.ToArray();
 
-			Assert.AreSame(channel.RootDevice, container.Resolve<IDevice>("device1"));
-			Assert.AreEqual(2, array.Length);
-			Assert.AreSame(array[0], container.Resolve<IDevice>("device2"));
-			Assert.AreSame(array[1], container.Resolve<IDevice>("device3"));
-		}
+		Assert.AreSame(channel.RootDevice, container.Resolve<IDevice>("device1"));
+		Assert.AreEqual(2, array.Length);
+		Assert.AreSame(array[0], container.Resolve<IDevice>("device2"));
+		Assert.AreSame(array[1], container.Resolve<IDevice>("device3"));
+	}
+}
+
+public class MessageChannel
+{
+	public MessageChannel(IDevice root)
+	{
+		RootDevice = root;
 	}
 
-	public class MessageChannel
+	public IDevice RootDevice { get; }
+}
+
+public interface IDevice
+{
+	MessageChannel Channel { get; }
+	IEnumerable<IDevice> Children { get; }
+}
+
+public abstract class BaseDevice : IDevice
+{
+	public abstract IEnumerable<IDevice> Children { get; }
+
+	public MessageChannel Channel { get; set; }
+}
+
+public class TestDevice : BaseDevice
+{
+	private readonly List<IDevice> children;
+
+	public TestDevice()
 	{
-		private readonly IDevice rootDevice;
-
-		public MessageChannel(IDevice root)
-		{
-			rootDevice = root;
-		}
-
-		public IDevice RootDevice
-		{
-			get { return rootDevice; }
-		}
 	}
 
-	public interface IDevice
+	public TestDevice(IEnumerable<IDevice> theChildren)
 	{
-		MessageChannel Channel { get; }
-		IEnumerable<IDevice> Children { get; }
-
+		children = new List<IDevice>(theChildren);
 	}
 
-	public abstract class BaseDevice : IDevice
-	{
-		public abstract IEnumerable<IDevice> Children { get; }
-
-		public MessageChannel Channel { get; set; }
-
-	}
-
-	public class TestDevice : BaseDevice
-	{
-		private readonly List<IDevice> children;
-
-		public TestDevice()
-		{
-		}
-
-		public TestDevice(IEnumerable<IDevice> theChildren)
-		{
-			children = new List<IDevice>(theChildren);
-		}
-
-		public override IEnumerable<IDevice> Children
-		{
-			get { return children; }
-		}
-	}
+	public override IEnumerable<IDevice> Children => children;
 }

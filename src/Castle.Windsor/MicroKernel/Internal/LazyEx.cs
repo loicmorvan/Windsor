@@ -13,46 +13,40 @@
 // limitations under the License.
 
 
-namespace Castle.MicroKernel.Internal
+namespace Castle.MicroKernel.Internal;
+
+using System;
+
+public class LazyEx<T> : Lazy<T>, IDisposable
 {
-	using System;
-	using System.Collections;
+	private readonly IKernel kernel;
 
-	public class LazyEx<T> : Lazy<T>, IDisposable
+	public LazyEx(IKernel kernel, Arguments arguments)
+		: base(() => kernel.Resolve<T>(arguments))
 	{
-		private readonly IKernel kernel;
+		this.kernel = kernel;
+	}
 
-		public LazyEx(IKernel kernel, Arguments arguments)
-			: base(() => kernel.Resolve<T>(arguments))
-		{
-			this.kernel = kernel;
-		}
+	public LazyEx(IKernel kernel, string overrideComponentName)
+		: base(() => kernel.Resolve<T>(overrideComponentName))
+	{
+		this.kernel = kernel;
+	}
 
-		public LazyEx(IKernel kernel, string overrideComponentName)
-			: base(() => kernel.Resolve<T>(overrideComponentName))
-		{
-			this.kernel = kernel;
-		}
+	public LazyEx(IKernel kernel, string overrideComponentName, Arguments arguments)
+		: base(() => kernel.Resolve<T>(overrideComponentName, arguments))
+	{
+		this.kernel = kernel;
+	}
 
-		public LazyEx(IKernel kernel, string overrideComponentName, Arguments arguments)
-			: base(() => kernel.Resolve<T>(overrideComponentName, arguments))
-		{
-			this.kernel = kernel;
-		}
+	public LazyEx(IKernel kernel)
+		: base(kernel.Resolve<T>)
+	{
+		this.kernel = kernel;
+	}
 
-		public LazyEx(IKernel kernel)
-			: base(kernel.Resolve<T>)
-		{
-			this.kernel = kernel;
-		}
-
-		public void Dispose()
-		{
-			if (IsValueCreated)
-			{
-				kernel.ReleaseComponent(Value);
-			}
-		}
+	public void Dispose()
+	{
+		if (IsValueCreated) kernel.ReleaseComponent(Value);
 	}
 }
-

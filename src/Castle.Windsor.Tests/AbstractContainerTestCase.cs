@@ -12,61 +12,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace CastleTests;
+
+using System.Reflection;
+
+using Castle.MicroKernel;
+using Castle.Windsor;
+
+using NUnit.Framework;
+
+[TestFixture]
+public abstract class AbstractContainerTestCase
 {
-	using System.Reflection;
-
-	using Castle.MicroKernel;
-	using Castle.Windsor;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public abstract class AbstractContainerTestCase
+	[TearDown]
+	public void CleanUp()
 	{
-		[TearDown]
-		public void CleanUp()
-		{
-			container.Dispose();
-		}
+		container.Dispose();
+	}
 
-		[SetUp]
-		public void Init()
-		{
-			container = BuildContainer();
-			AfterContainerCreated();
-		}
+	[SetUp]
+	public void Init()
+	{
+		container = BuildContainer();
+		AfterContainerCreated();
+	}
 
-		private WindsorContainer container;
+	private WindsorContainer container;
 
-		protected IWindsorContainer Container
-		{
-			get { return container; }
-		}
+	protected IWindsorContainer Container => container;
 
-		protected IKernel Kernel
-		{
-			get { return container.Kernel; }
-		}
+	protected IKernel Kernel => container.Kernel;
 
-		protected virtual void AfterContainerCreated()
-		{
-		}
+	protected virtual void AfterContainerCreated()
+	{
+	}
 
-		protected virtual WindsorContainer BuildContainer()
-		{
-			return new WindsorContainer();
-		}
+	protected virtual WindsorContainer BuildContainer()
+	{
+		return new WindsorContainer();
+	}
 
-		protected void ResetContainer()
-		{
-			CleanUp();
-			Init();
-		}
+	protected void ResetContainer()
+	{
+		CleanUp();
+		Init();
+	}
 
-		protected Assembly GetCurrentAssembly()
-		{
-			return typeof(AbstractContainerTestCase).GetTypeInfo().Assembly;
-		}
+	protected Assembly GetCurrentAssembly()
+	{
+		return typeof(AbstractContainerTestCase).GetTypeInfo().Assembly;
 	}
 }

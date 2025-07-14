@@ -12,30 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Extensions
+namespace Castle.Windsor.Diagnostics.Extensions;
+
+using System.Collections.Generic;
+
+using Castle.MicroKernel;
+using Castle.Windsor.Diagnostics.DebuggerViews;
+
+public class Facilities : IContainerDebuggerExtension
 {
-	using System.Collections.Generic;
+	private IKernel kernel;
 
-	using Castle.MicroKernel;
-	using Castle.Windsor.Diagnostics.DebuggerViews;
-
-	public class Facilities : IContainerDebuggerExtension
+	public IEnumerable<DebuggerViewItem> Attach()
 	{
-		private IKernel kernel;
+		var facilities = kernel.GetFacilities();
+		if (facilities.Length == 0) yield break;
+		yield return new DebuggerViewItem("Facilities", "Count = " + facilities.Length, facilities);
+	}
 
-		public IEnumerable<DebuggerViewItem> Attach()
-		{
-			var facilities = kernel.GetFacilities();
-			if (facilities.Length == 0)
-			{
-				yield break;
-			}
-			yield return new DebuggerViewItem("Facilities", "Count = " + facilities.Length, facilities);
-		}
-
-		public void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
-		{
-			this.kernel = kernel;
-		}
+	public void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
+	{
+		this.kernel = kernel;
 	}
 }

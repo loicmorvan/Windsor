@@ -1,6 +1,7 @@
 # Conditional component registration
 
-In cases when you want to register a component only if (or unless) certain conditions are met, there are appropriate methods exposed in the API.
+In cases when you want to register a component only if (or unless) certain conditions are met, there are appropriate
+methods exposed in the API.
 
 ## Registering component only if it was not registered previously
 
@@ -58,7 +59,10 @@ container.Register(
 );
 ```
 
-:information_source: **Convention over Configuration:** Notice what the above gives up - by virtue of putting a class in a specific namespace, inheriting from specific interface or having a specific attribute our components get registered and made available as services. We defined something very important here - conventions that free us from coding everything explicitly. This can't be overemphasized.
+:information_source: **Convention over Configuration:** Notice what the above gives up - by virtue of putting a class in
+a specific namespace, inheriting from specific interface or having a specific attribute our components get registered
+and made available as services. We defined something very important here - conventions that free us from coding
+everything explicitly. This can't be overemphasized.
 
 ## See also
 

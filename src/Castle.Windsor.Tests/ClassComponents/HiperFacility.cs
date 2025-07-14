@@ -12,28 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel.Tests.ClassComponents;
+
+using Castle.Core.Configuration;
+
+using NUnit.Framework;
+
+public class HiperFacility : IFacility
 {
-	using Castle.Core.Configuration;
+	public bool Initialized { get; private set; }
+	public bool Terminated { get; private set; }
 
-	using NUnit.Framework;
-
-	public class HiperFacility : IFacility
+	public void Init(IKernel kernel, IConfiguration facilityConfig)
 	{
-		public bool Initialized { get; private set; }
-		public bool Terminated { get; private set; }
+		Assert.IsNotNull(kernel);
+		Assert.IsNotNull(facilityConfig);
 
-		public void Init(IKernel kernel, IConfiguration facilityConfig)
-		{
-			Assert.IsNotNull(kernel);
-			Assert.IsNotNull(facilityConfig);
+		Initialized = true;
+	}
 
-			Initialized = true;
-		}
-
-		public void Terminate()
-		{
-			Terminated = true;
-		}
+	public void Terminate()
+	{
+		Terminated = true;
 	}
 }

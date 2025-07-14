@@ -12,51 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore
+namespace Castle.Facilities.AspNetCore;
+
+using System;
+using System.Reflection;
+
+using Castle.Facilities.AspNetCore.Activators;
+
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.Internal;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.Razor.Internal;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
+using Microsoft.Extensions.DependencyInjection;
+
+internal static class AspNetCoreMvcExtensions
 {
-	using System;
-	using System.Reflection;
-
-	using Castle.Facilities.AspNetCore.Activators;
-
-	using Microsoft.AspNetCore.Mvc.Controllers;
-	using Microsoft.AspNetCore.Mvc.Internal;
-	using Microsoft.AspNetCore.Mvc.Razor;
-	using Microsoft.AspNetCore.Mvc.Razor.Internal;
-	using Microsoft.AspNetCore.Mvc.ViewComponents;
-	using Microsoft.Extensions.DependencyInjection;
-
-	internal static class AspNetCoreMvcExtensions
+	public static void AddCustomControllerActivation(this IServiceCollection services, Func<Type, object> activator, Action<object> releaser)
 	{
-		public static void AddCustomControllerActivation(this IServiceCollection services, Func<Type, object> activator, Action<object> releaser)
-		{
-			if (services == null) throw new ArgumentNullException(nameof(services));
-			if (activator == null) throw new ArgumentNullException(nameof(activator));
+		if (services == null) throw new ArgumentNullException(nameof(services));
+		if (activator == null) throw new ArgumentNullException(nameof(activator));
 
-			services.AddSingleton<IControllerActivator>(new DelegatingControllerActivator(context => activator(context.ActionDescriptor.ControllerTypeInfo.AsType()), (context, instance) => releaser(instance)));
-		}
+		services.AddSingleton<IControllerActivator>(new DelegatingControllerActivator(context => activator(context.ActionDescriptor.ControllerTypeInfo.AsType()), (context, instance) => releaser(instance)));
+	}
 
-		public static void AddCustomViewComponentActivation(this IServiceCollection services, Func<Type, object> activator, Action<object> releaser)
-		{
-			if (services == null) throw new ArgumentNullException(nameof(services));
-			if (activator == null) throw new ArgumentNullException(nameof(activator));
+	public static void AddCustomViewComponentActivation(this IServiceCollection services, Func<Type, object> activator, Action<object> releaser)
+	{
+		if (services == null) throw new ArgumentNullException(nameof(services));
+		if (activator == null) throw new ArgumentNullException(nameof(activator));
 
-			services.AddSingleton<IViewComponentActivator>(new DelegatingViewComponentActivator(activator, releaser));
-		}
+		services.AddSingleton<IViewComponentActivator>(new DelegatingViewComponentActivator(activator, releaser));
+	}
 
-		public static void AddCustomTagHelperActivation(this IServiceCollection services, Func<Type, object> activator, Predicate<Type> applicationTypeSelector = null)
-		{
-			if (services == null) throw new ArgumentNullException(nameof(services));
-			if (activator == null) throw new ArgumentNullException(nameof(activator));
+	public static void AddCustomTagHelperActivation(this IServiceCollection services, Func<Type, object> activator, Predicate<Type> applicationTypeSelector = null)
+	{
+		if (services == null) throw new ArgumentNullException(nameof(services));
+		if (activator == null) throw new ArgumentNullException(nameof(activator));
 
-			applicationTypeSelector = applicationTypeSelector ?? (type => !type.GetTypeInfo().Namespace.StartsWith("Microsoft") &&
-																	!type.GetTypeInfo().Name.Contains("__Generated__"));
+		applicationTypeSelector = applicationTypeSelector ?? (type => !type.GetTypeInfo().Namespace.StartsWith("Microsoft") &&
+		                                                              !type.GetTypeInfo().Name.Contains("__Generated__"));
 
-			services.AddSingleton<ITagHelperActivator>(provider =>
-				new DelegatingTagHelperActivator(
-					applicationTypeSelector,
-					activator,
-					new DefaultTagHelperActivator(provider.GetRequiredService<ITypeActivatorCache>())));
-		}
+		services.AddSingleton<ITagHelperActivator>(provider =>
+			new DelegatingTagHelperActivator(
+				applicationTypeSelector,
+				activator,
+				new DefaultTagHelperActivator(provider.GetRequiredService<ITypeActivatorCache>())));
 	}
 }

@@ -12,104 +12,103 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Installer
+namespace Castle.Windsor.Installer;
+
+using System;
+
+using Castle.Core.Configuration;
+using Castle.Core.Resource;
+using Castle.MicroKernel;
+using Castle.MicroKernel.SubSystems.Configuration;
+
+internal class PartialConfigurationStore : IConfigurationStore, IDisposable
 {
-	using System;
+	private readonly IConfigurationStore inner;
+	private readonly IConfigurationStore partial;
 
-	using Castle.Core.Configuration;
-	using Castle.Core.Resource;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.SubSystems.Configuration;
-
-	internal class PartialConfigurationStore : IConfigurationStore, IDisposable
+	public PartialConfigurationStore(IKernelInternal kernel)
 	{
-		private readonly IConfigurationStore inner;
-		private readonly IConfigurationStore partial;
+		inner = kernel.ConfigurationStore;
+		partial = new DefaultConfigurationStore();
+		partial.Init(kernel);
+	}
 
-		public PartialConfigurationStore(IKernelInternal kernel)
-		{
-			inner = kernel.ConfigurationStore;
-			partial = new DefaultConfigurationStore();
-			partial.Init(kernel);
-		}
+	public void AddChildContainerConfiguration(string name, IConfiguration config)
+	{
+		inner.AddChildContainerConfiguration(name, config);
+		partial.AddChildContainerConfiguration(name, config);
+	}
 
-		public void AddChildContainerConfiguration(String name, IConfiguration config)
-		{
-			inner.AddChildContainerConfiguration(name, config);
-			partial.AddChildContainerConfiguration(name, config);
-		}
+	public void AddComponentConfiguration(string key, IConfiguration config)
+	{
+		inner.AddComponentConfiguration(key, config);
+		partial.AddComponentConfiguration(key, config);
+	}
 
-		public void AddComponentConfiguration(String key, IConfiguration config)
-		{
-			inner.AddComponentConfiguration(key, config);
-			partial.AddComponentConfiguration(key, config);
-		}
+	public void AddFacilityConfiguration(string key, IConfiguration config)
+	{
+		inner.AddFacilityConfiguration(key, config);
+		partial.AddFacilityConfiguration(key, config);
+	}
 
-		public void AddFacilityConfiguration(String key, IConfiguration config)
-		{
-			inner.AddFacilityConfiguration(key, config);
-			partial.AddFacilityConfiguration(key, config);
-		}
+	public void AddInstallerConfiguration(IConfiguration config)
+	{
+		inner.AddInstallerConfiguration(config);
+		partial.AddInstallerConfiguration(config);
+	}
 
-		public void AddInstallerConfiguration(IConfiguration config)
-		{
-			inner.AddInstallerConfiguration(config);
-			partial.AddInstallerConfiguration(config);
-		}
+	public IConfiguration GetChildContainerConfiguration(string key)
+	{
+		return partial.GetChildContainerConfiguration(key);
+	}
 
-		public IConfiguration GetChildContainerConfiguration(String key)
-		{
-			return partial.GetChildContainerConfiguration(key);
-		}
+	public IConfiguration GetComponentConfiguration(string key)
+	{
+		return partial.GetComponentConfiguration(key);
+	}
 
-		public IConfiguration GetComponentConfiguration(String key)
-		{
-			return partial.GetComponentConfiguration(key);
-		}
+	public IConfiguration[] GetComponents()
+	{
+		return partial.GetComponents();
+	}
 
-		public IConfiguration[] GetComponents()
-		{
-			return partial.GetComponents();
-		}
+	public IConfiguration[] GetConfigurationForChildContainers()
+	{
+		return partial.GetConfigurationForChildContainers();
+	}
 
-		public IConfiguration[] GetConfigurationForChildContainers()
-		{
-			return partial.GetConfigurationForChildContainers();
-		}
+	public IConfiguration[] GetFacilities()
+	{
+		return partial.GetFacilities();
+	}
 
-		public IConfiguration[] GetFacilities()
-		{
-			return partial.GetFacilities();
-		}
+	public IConfiguration GetFacilityConfiguration(string key)
+	{
+		return partial.GetFacilityConfiguration(key);
+	}
 
-		public IConfiguration GetFacilityConfiguration(String key)
-		{
-			return partial.GetFacilityConfiguration(key);
-		}
+	public IConfiguration[] GetInstallers()
+	{
+		return partial.GetInstallers();
+	}
 
-		public IConfiguration[] GetInstallers()
-		{
-			return partial.GetInstallers();
-		}
+	public IResource GetResource(string resourceUri, IResource resource)
+	{
+		return inner.GetResource(resourceUri, resource);
+	}
 
-		public IResource GetResource(String resourceUri, IResource resource)
-		{
-			return inner.GetResource(resourceUri, resource);
-		}
+	public void Init(IKernelInternal kernel)
+	{
+		partial.Init(kernel);
+	}
 
-		public void Dispose()
-		{
-			Terminate();
-		}
+	public void Terminate()
+	{
+		partial.Terminate();
+	}
 
-		public void Init(IKernelInternal kernel)
-		{
-			partial.Init(kernel);
-		}
-
-		public void Terminate()
-		{
-			partial.Terminate();
-		}
+	public void Dispose()
+	{
+		Terminate();
 	}
 }

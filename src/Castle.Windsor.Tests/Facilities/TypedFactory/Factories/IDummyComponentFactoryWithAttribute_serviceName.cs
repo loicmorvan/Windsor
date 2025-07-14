@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.TypedFactory.Factories
-{
-	using Castle.Facilities.TypedFactory;
+namespace CastleTests.Facilities.TypedFactory.Factories;
 
-	[Factory(SelectorComponentName = "selector")]
-	public interface IDummyComponentFactoryWithAttribute_serviceName : IDummyComponentFactory
-	{
-	}
+using Castle.Facilities.TypedFactory;
+
+[Factory(SelectorComponentName = "selector")]
+public interface IDummyComponentFactoryWithAttribute_serviceName : IDummyComponentFactory
+{
 }

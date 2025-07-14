@@ -12,35 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests;
+
+using Castle.Windsor.Installer;
+using Castle.XmlFiles;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+/// <summary>Check for existence of any problem, as reported http://forum.castleproject.org/posts/list/214.page</summary>
+[TestFixture]
+public class RobotWireTestCase
 {
-	using Castle.XmlFiles;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	/// <summary>
-	/// Check for existence of any problem, as 
-	/// reported http://forum.castleproject.org/posts/list/214.page
-	/// </summary>
-	[TestFixture]
-	public class RobotWireTestCase
+	[Test]
+	public void WireTest()
 	{
-		[Test]
-		public void WireTest()
-		{
-			var container = new WindsorContainer();
-			container.Install(Castle.Windsor.Installer.Configuration.FromXml(Xml.Embedded("robotwireconfig.xml")));
+		var container = new WindsorContainer();
+		container.Install(Configuration.FromXml(Xml.Embedded("robotwireconfig.xml")));
 
-			var robot = container.Resolve<Robot>();
+		var robot = container.Resolve<Robot>();
 
-			Assert.IsNotNull(robot);
-			Assert.IsNotNull(robot.Left);
-			Assert.IsNotNull(robot.Right);
+		Assert.IsNotNull(robot);
+		Assert.IsNotNull(robot.Left);
+		Assert.IsNotNull(robot.Right);
 
-			Assert.AreEqual("PlasmaGunArm", robot.Left.GetType().Name);
-			Assert.AreEqual("HumanArm", robot.Right.GetType().Name);
-		}
+		Assert.AreEqual("PlasmaGunArm", robot.Left.GetType().Name);
+		Assert.AreEqual("HumanArm", robot.Right.GetType().Name);
 	}
 }

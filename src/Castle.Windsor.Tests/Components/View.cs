@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class View : IView
-	{
-		public IController Controller { get; set; }
+namespace CastleTests.Components;
 
-		public void Display()
-		{
-		}
+public class View : IView
+{
+	public IController Controller { get; set; }
+
+	public void Display()
+	{
 	}
 }

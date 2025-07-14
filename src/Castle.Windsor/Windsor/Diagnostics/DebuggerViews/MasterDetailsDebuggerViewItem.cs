@@ -12,46 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.DebuggerViews
+namespace Castle.Windsor.Diagnostics.DebuggerViews;
+
+using System.Diagnostics;
+
+public class MasterDetailsDebuggerViewItem
 {
-	using System.Diagnostics;
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	private readonly string masterDescription;
 
-	public class MasterDetailsDebuggerViewItem
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	private readonly string masterName;
+
+	public MasterDetailsDebuggerViewItem(object master, string masterDescription, string masterName, object[] details)
 	{
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		private readonly object[] details;
-
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		private readonly object master;
-
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		private readonly string masterDescription;
-
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		private readonly string masterName;
-
-		public MasterDetailsDebuggerViewItem(object master, string masterDescription, string masterName, object[] details)
-		{
-			this.master = master;
-			this.masterDescription = masterDescription;
-			this.masterName = masterName;
-			this.details = details;
-		}
-
-		/// <summary>
-		///   Stupid name, but debugger views in Visual Studio display items in alphabetical order so if we want
-		///   to have that item on top its name must be alphabetically before <see cref = "Details" />
-		/// </summary>
-		[DebuggerDisplay("{masterDescription,nq}", Name = "{masterName,nq}")]
-		public object AMaster
-		{
-			get { return master; }
-		}
-
-		[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-		public object[] Details
-		{
-			get { return details; }
-		}
+		this.AMaster = master;
+		this.masterDescription = masterDescription;
+		this.masterName = masterName;
+		this.Details = details;
 	}
+
+	/// <summary>
+	///     Stupid name, but debugger views in Visual Studio display items in alphabetical order so if we want to have that item on top its name must be alphabetically before <see cref = "Details" />
+	/// </summary>
+	[DebuggerDisplay("{masterDescription,nq}", Name = "{masterName,nq}")]
+	public object AMaster { get; }
+
+	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+	public object[] Details { get; }
 }

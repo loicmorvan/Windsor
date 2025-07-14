@@ -2,7 +2,8 @@
 
 You don't have to keep all configuration in a single file. Includes allow you to refer to configuration in other places.
 
-All you need to do is specify an include node with the Uri that will be used to create the proper `Resource`. For example, the following will use the `FileResource`:
+All you need to do is specify an include node with the Uri that will be used to create the proper `Resource`. For
+example, the following will use the `FileResource`:
 
 ```xml
 <include uri="file://c:\mydir\services.xml">
@@ -43,7 +44,9 @@ The next one will use a file in a network share
 <include uri="\\mysharedplace\myconfig.xml">
 ```
 
-You can use multiple includes. Just have in mind that the id cannot repeat. If it does, the last registered id for the facility or for the component will be used and the previous will be discarded without warning or exceptions being thrown.
+You can use multiple includes. Just have in mind that the id cannot repeat. If it does, the last registered id for the
+facility or for the component will be used and the previous will be discarded without warning or exceptions being
+thrown.
 
 Any properties that are referenced within an include file must be above the include element like so:
 
@@ -54,7 +57,8 @@ Any properties that are referenced within an include file must be above the incl
 <include uri="file://include_file_using_timeoutduration.xml">
 ```
 
-If you reverse the order and put the include node above any properties that it references, you will get the following exception:
+If you reverse the order and put the include node above any properties that it references, you will get the following
+exception:
 
 ```
 failed: Castle.Windsor.Configuration.Interpreters.XmlProcessor.ConfigurationProcessingException : Error processing node configuration, inner content ...

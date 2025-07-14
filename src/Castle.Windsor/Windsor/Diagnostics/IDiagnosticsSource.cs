@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
-{
-	using Castle.MicroKernel;
+namespace Castle.Windsor.Diagnostics;
 
-	public interface IDiagnosticsSource<out TResult>
-	{
-		TResult Inspect(IKernel kernel);
-	}
+using Castle.MicroKernel;
+
+public interface IDiagnosticsSource<out TResult>
+{
+	TResult Inspect(IKernel kernel);
 }

@@ -12,22 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
+namespace Castle.Windsor.Diagnostics;
+
+using Castle.MicroKernel;
+
+public class AllComponentsDiagnostic : IAllComponentsDiagnostic
 {
-	using Castle.MicroKernel;
+	private readonly IKernel kernel;
 
-	public class AllComponentsDiagnostic : IAllComponentsDiagnostic
+	public AllComponentsDiagnostic(IKernel kernel)
 	{
-		private readonly IKernel kernel;
+		this.kernel = kernel;
+	}
 
-		public AllComponentsDiagnostic(IKernel kernel)
-		{
-			this.kernel = kernel;
-		}
-
-		public IHandler[] Inspect()
-		{
-			return kernel.GetAssignableHandlers(typeof(object));
-		}
+	public IHandler[] Inspect()
+	{
+		return kernel.GetAssignableHandlers(typeof(object));
 	}
 }

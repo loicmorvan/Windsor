@@ -12,23 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ProxyInfrastructure
+namespace Castle.ProxyInfrastructure;
+
+using System;
+
+public class DisposableHook : ProxyAllHook, IDisposable
 {
-	using System;
+	public static int InstancesCreated;
+	public static int InstancesDisposed;
 
-	public class DisposableHook : ProxyAllHook, IDisposable
+	public DisposableHook()
 	{
-		public static int InstancesCreated;
-		public static int InstancesDisposed;
+		InstancesCreated++;
+	}
 
-		public DisposableHook()
-		{
-			InstancesCreated++;
-		}
-
-		public void Dispose()
-		{
-			InstancesDisposed++;
-		}
+	public void Dispose()
+	{
+		InstancesDisposed++;
 	}
 }

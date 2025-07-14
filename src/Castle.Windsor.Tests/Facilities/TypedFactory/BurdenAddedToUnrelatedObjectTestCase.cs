@@ -12,90 +12,92 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.TypedFactory
+namespace CastleTests.Facilities.TypedFactory;
+
+using System;
+
+using Castle.Facilities.TypedFactory;
+using Castle.MicroKernel.Registration;
+
+using NUnit.Framework;
+
+public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTestCase
 {
-	using System;
-
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel.Registration;
-
-	using NUnit.Framework;
-
-	public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTestCase
+	protected override void AfterContainerCreated()
 	{
-		protected override void AfterContainerCreated()
+		Container.AddFacility<TypedFactoryFacility>();
+	}
+
+	[Test]
+	public void Object_resolved_from_factory_is_not_added_as_burden_of_object_being_created()
+	{
+		Container.Register(
+			Component.For(typeof(IFactory<>)).AsFactory(),
+			Component.For<Foo>().LifeStyle.Transient,
+			Component.For<LongLivedService>().LifeStyle.Singleton,
+			Component.For<ShortLivedViewModel>().LifeStyle.Transient);
+
+		var longLivedService = Container.Resolve<LongLivedService>();
+		var shortLivedViewModel = Container.Resolve<ShortLivedViewModel>();
+
+		var prematureDisposalHandler = new EventHandler((s, e) =>
+			Assert.Fail("Long-lived service’s connection was disposed when short-lived view model was released."));
+
+		longLivedService.SqlConnection.Disposed += prematureDisposalHandler;
+		Container.Release(shortLivedViewModel);
+		longLivedService.SqlConnection.Disposed -= prematureDisposalHandler;
+
+		Container.Release(longLivedService);
+	}
+
+	public sealed class Foo : IDisposable
+	{
+		public void Dispose()
 		{
-			Container.AddFacility<TypedFactoryFacility>();
+			Disposed?.Invoke(this, EventArgs.Empty);
 		}
 
-		[Test]
-		public void Object_resolved_from_factory_is_not_added_as_burden_of_object_being_created()
+		public event EventHandler Disposed;
+	}
+
+	public interface IFactory<T>
+	{
+		T Resolve();
+		void Release(T instance);
+	}
+
+	public sealed class LongLivedService
+	{
+		public LongLivedService(IFactory<Foo> fooFactory)
 		{
-			Container.Register(
-				Component.For(typeof(IFactory<>)).AsFactory(),
-				Component.For<Foo>().LifeStyle.Transient,
-				Component.For<LongLivedService>().LifeStyle.Singleton,
-				Component.For<ShortLivedViewModel>().LifeStyle.Transient);
-
-			var longLivedService = Container.Resolve<LongLivedService>();
-			var shortLivedViewModel = Container.Resolve<ShortLivedViewModel>();
-
-			var prematureDisposalHandler = new EventHandler((s, e) =>
-				Assert.Fail("Long-lived service’s connection was disposed when short-lived view model was released."));
-
-			longLivedService.SqlConnection.Disposed += prematureDisposalHandler;
-			Container.Release(shortLivedViewModel);
-			longLivedService.SqlConnection.Disposed -= prematureDisposalHandler;
-
-			Container.Release(longLivedService);
+			FooFactory = fooFactory;
 		}
 
-		public sealed class Foo : IDisposable
-		{
-			public event EventHandler Disposed;
+		public IFactory<Foo> FooFactory { get; }
 
-			public void Dispose() => Disposed?.Invoke(this, EventArgs.Empty);
+		public Foo SqlConnection { get; private set; }
+
+		public void StartSomething()
+		{
+			SqlConnection = FooFactory.Resolve();
 		}
 
-		public interface IFactory<T>
+		public void Dispose()
 		{
-			T Resolve();
-			void Release(T instance);
+			FooFactory.Release(SqlConnection);
+		}
+	}
+
+	public sealed class ShortLivedViewModel
+	{
+		public ShortLivedViewModel(IFactory<Foo> fooFactory, LongLivedService longLivedService)
+		{
+			FooFactory = fooFactory;
+			LongLivedService = longLivedService;
+			longLivedService.StartSomething();
 		}
 
-		public sealed class LongLivedService
-		{
-			public IFactory<Foo> FooFactory { get; }
-
-			public Foo SqlConnection { get; private set; }
-
-			public LongLivedService(IFactory<Foo> fooFactory)
-			{
-				FooFactory = fooFactory;
-			}
-
-			public void StartSomething()
-			{
-				SqlConnection = FooFactory.Resolve();
-			}
-
-			public void Dispose()
-			{
-				FooFactory.Release(SqlConnection);
-			}
-		}
-
-		public sealed class ShortLivedViewModel
-		{
-			public IFactory<Foo> FooFactory { get; }
-			public LongLivedService LongLivedService { get; }
-
-			public ShortLivedViewModel(IFactory<Foo> fooFactory, LongLivedService longLivedService)
-			{
-				FooFactory = fooFactory;
-				LongLivedService = longLivedService;
-				longLivedService.StartSomething();
-			}
-		}
+		public IFactory<Foo> FooFactory { get; }
+		public LongLivedService LongLivedService { get; }
 	}
 }

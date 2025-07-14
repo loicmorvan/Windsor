@@ -12,27 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests;
+
+using Castle.Windsor.Installer;
+using Castle.XmlFiles;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class IgnoreWireTestCase
 {
-	using Castle.XmlFiles;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class IgnoreWireTestCase
+	[Test]
+	public void TestIgnoreAttribute()
 	{
-		[Test]
-		public void TestIgnoreAttribute()
-		{
-			var container = new WindsorContainer();
-			container.Install(Castle.Windsor.Installer.Configuration.FromXml(Xml.Embedded("ignoreprop.xml")));
+		var container = new WindsorContainer();
+		container.Install(Configuration.FromXml(Xml.Embedded("ignoreprop.xml")));
 
-			var server = container.Resolve<ClassWithDoNotWireProperties>();
+		var server = container.Resolve<ClassWithDoNotWireProperties>();
 
-			Assert.AreEqual(0, server.Port);
-			Assert.IsNull(server.Host);
-		}
+		Assert.AreEqual(0, server.Port);
+		Assert.IsNull(server.Host);
 	}
 }

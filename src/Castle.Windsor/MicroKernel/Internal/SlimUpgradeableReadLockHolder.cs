@@ -12,68 +12,61 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Internal
+namespace Castle.MicroKernel.Internal;
+
+using System.Threading;
+
+internal class SlimUpgradeableReadLockHolder : IUpgradeableLockHolder
 {
-	using System.Threading;
+	private readonly ReaderWriterLockSlim locker;
+	private readonly bool wasLockAlreadySelf;
+	private SlimWriteLockHolder writerLock;
 
-	internal class SlimUpgradeableReadLockHolder : IUpgradeableLockHolder
+	public SlimUpgradeableReadLockHolder(ReaderWriterLockSlim locker, bool waitForLock, bool wasLockAlreadySelf)
 	{
-		private readonly ReaderWriterLockSlim locker;
-		private SlimWriteLockHolder writerLock;
-		private readonly bool wasLockAlreadySelf;
-
-		public SlimUpgradeableReadLockHolder(ReaderWriterLockSlim locker, bool waitForLock, bool wasLockAlreadySelf)
+		this.locker = locker;
+		if (wasLockAlreadySelf)
 		{
-			this.locker = locker;
-			if (wasLockAlreadySelf)
-			{
-				LockAcquired = true;
-				this.wasLockAlreadySelf = true;
-				return;
-			}
-
-			if(waitForLock)
-			{
-				locker.EnterUpgradeableReadLock();
-				LockAcquired = true;
-				return;
-			}
-
-			LockAcquired = locker.TryEnterUpgradeableReadLock(0);
+			LockAcquired = true;
+			this.wasLockAlreadySelf = true;
+			return;
 		}
 
-		public void Dispose()
+		if (waitForLock)
 		{
-			if (writerLock != null && writerLock.LockAcquired)
-			{
-				writerLock.Dispose();
-				writerLock = null;
-			}
-			if (!LockAcquired) return;
-			if (!wasLockAlreadySelf)
-			{
-				locker.ExitUpgradeableReadLock();
-			}
-			LockAcquired = false;
-			
+			locker.EnterUpgradeableReadLock();
+			LockAcquired = true;
+			return;
 		}
 
-		public ILockHolder Upgrade()
-		{
-			return Upgrade(true);
-		}
-
-		public ILockHolder Upgrade(bool waitForLock)
-		{
-			if(locker.IsWriteLockHeld)
-			{
-				return NoOpLock.Lock;
-			}
-
-			writerLock = new SlimWriteLockHolder(locker, waitForLock);
-			return writerLock;
-		}
-
-		public bool LockAcquired { get; private set; }
+		LockAcquired = locker.TryEnterUpgradeableReadLock(0);
 	}
+
+	public void Dispose()
+	{
+		if (writerLock != null && writerLock.LockAcquired)
+		{
+			writerLock.Dispose();
+			writerLock = null;
+		}
+
+		if (!LockAcquired) return;
+		if (!wasLockAlreadySelf) locker.ExitUpgradeableReadLock();
+		LockAcquired = false;
+	}
+
+	public ILockHolder Upgrade()
+	{
+		return Upgrade(true);
+	}
+
+	public ILockHolder Upgrade(bool waitForLock)
+	{
+		if (locker.IsWriteLockHeld) return NoOpLock.Lock;
+
+		writerLock = new SlimWriteLockHolder(locker, waitForLock);
+		return writerLock;
+	}
+
+	public bool LockAcquired { get; private set; }
 }

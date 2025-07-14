@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Generics
-{
-	public class GenericA<T>
-	{
-		public T Item { get; set; }
+namespace CastleTests.Generics;
 
-		public GenericB<T> B { get; set; }
-	}
+public class GenericA<T>
+{
+	public T Item { get; set; }
+
+	public GenericB<T> B { get; set; }
 }

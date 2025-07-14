@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
+
+using System;
+
+using Castle.MicroKernel.Tests.ClassComponents;
+
+public class ServiceWithMultipleCtors
 {
-	using System;
-
-	using Castle.MicroKernel.Tests.ClassComponents;
-
-	public class ServiceWithMultipleCtors
+	public ServiceWithMultipleCtors()
 	{
-		public ServiceWithMultipleCtors()
-		{
-		}
+	}
 
-		public ServiceWithMultipleCtors(SimpleComponent3 a, Func<SimpleComponent1> b, Func<SimpleComponent2> c)
-		{
-		}
+	public ServiceWithMultipleCtors(SimpleComponent3 a, Func<SimpleComponent1> b, Func<SimpleComponent2> c)
+	{
 	}
 }

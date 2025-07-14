@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using Castle.Core;
-	using Castle.MicroKernel.Tests.ClassComponents;
+namespace CastleTests.Components;
 
-	public class CustomTestLifestyleAttribute : CustomLifestyleAttribute
+using Castle.Core;
+using Castle.MicroKernel.Tests.ClassComponents;
+
+public class CustomTestLifestyleAttribute : CustomLifestyleAttribute
+{
+	public CustomTestLifestyleAttribute()
+		: base(typeof(CustomLifestyleManager))
 	{
-		public CustomTestLifestyleAttribute()
-			: base(typeof(CustomLifestyleManager))
-		{
-		}
 	}
 }

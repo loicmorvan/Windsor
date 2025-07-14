@@ -12,31 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Configuration2
+namespace Castle.Windsor.Tests.Configuration2;
+
+using Castle.MicroKernel.Tests.ClassComponents;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class ConfigurationForwardedTypesTestCase
 {
-
-	using Castle.MicroKernel.Tests.ClassComponents;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class ConfigurationForwardedTypesTestCase
+	[SetUp]
+	public void SetUp()
 	{
+		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_forwarded_types.xml"));
+	}
 
-		[SetUp]
-		public void SetUp()
-		{
-			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_forwarded_types.xml"));
-		}
+	private IWindsorContainer container;
 
-		private IWindsorContainer container;
-
-		[Test]
-		public void Component_with_forwarded_types()
-		{
-			var first = container.Resolve<ICommon>("hasForwards");
-			var second = container.Resolve<ICommon2>();
-			Assert.AreSame(first, second);
-		}
+	[Test]
+	public void Component_with_forwarded_types()
+	{
+		var first = container.Resolve<ICommon>("hasForwards");
+		var second = container.Resolve<ICommon2>();
+		Assert.AreSame(first, second);
 	}
 }

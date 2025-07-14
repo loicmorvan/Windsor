@@ -12,32 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Proxy
+namespace Castle.MicroKernel.Proxy;
+
+using Castle.Core;
+
+/// <summary>Helper support for proxy configuration.</summary>
+public static class ProxyOptionsUtil
 {
-	using Castle.Core;
-
-	/// <summary>
-	///   Helper support for proxy configuration.
-	/// </summary>
-	public static class ProxyOptionsUtil
+	/// <summary>Obtains the <see cref = "ProxyOptions" /> associated with the <see cref = "ComponentModel" />.</summary>
+	/// <param name = "model">The component model.</param>
+	/// <param name = "createOnDemand">true if the options should be created if not present.</param>
+	/// <returns>The associated proxy options for the component model.</returns>
+	public static ProxyOptions ObtainProxyOptions(this ComponentModel model, bool createOnDemand = true)
 	{
-		/// <summary>
-		///   Obtains the <see cref = "ProxyOptions" /> associated with the <see cref = "ComponentModel" />.
-		/// </summary>
-		/// <param name = "model">The component model.</param>
-		/// <param name = "createOnDemand">true if the options should be created if not present.</param>
-		/// <returns>The associated proxy options for the component model.</returns>
-		public static ProxyOptions ObtainProxyOptions(this ComponentModel model, bool createOnDemand = true)
+		var options = model.ExtendedProperties[ProxyConstants.ProxyOptionsKey] as ProxyOptions;
+
+		if (options == null && createOnDemand)
 		{
-			var options = model.ExtendedProperties[ProxyConstants.ProxyOptionsKey] as ProxyOptions;
-
-			if (options == null && createOnDemand)
-			{
-				options = new ProxyOptions(model);
-				model.ExtendedProperties[ProxyConstants.ProxyOptionsKey] = options;
-			}
-
-			return options;
+			options = new ProxyOptions(model);
+			model.ExtendedProperties[ProxyConstants.ProxyOptionsKey] = options;
 		}
+
+		return options;
 	}
 }

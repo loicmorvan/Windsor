@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.ClassComponents
+namespace CastleTests.ClassComponents;
+
+using System;
+
+using Castle.MicroKernel.Tests.ClassComponents;
+
+public class PropertySetterThrows
 {
-	using System;
-
-	using Castle.MicroKernel.Tests.ClassComponents;
-
-	public class PropertySetterThrows
+	public ICommon CommonService
 	{
-		public ICommon CommonService
-		{
-			set { throw new InvalidOperationException("Kaboom!"); }
-		}
+		set => throw new InvalidOperationException("Kaboom!");
 	}
 }

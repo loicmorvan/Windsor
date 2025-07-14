@@ -12,67 +12,61 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+namespace Castle.MicroKernel.SubSystems.Conversion;
+
+using System;
+using System.Globalization;
+
+using Castle.Core.Configuration;
+
+/// <summary>Implements all standard conversions.</summary>
+[Serializable]
+public class PrimitiveConverter : AbstractTypeConverter
 {
-	using System;
-	using System.Globalization;
-
-	using Castle.Core.Configuration;
-
-	/// <summary>
-	///   Implements all standard conversions.
-	/// </summary>
-	[Serializable]
-	public class PrimitiveConverter : AbstractTypeConverter
+	private readonly Type[] types = new[]
 	{
-		private readonly Type[] types = new[]
-		{
-			typeof(Char),
-			typeof(DateTime),
-			typeof(Decimal),
-			typeof(Boolean),
-			typeof(Int16),
-			typeof(Int32),
-			typeof(Int64),
-			typeof(UInt16),
-			typeof(UInt32),
-			typeof(UInt64),
-			typeof(Byte),
-			typeof(SByte),
-			typeof(Single),
-			typeof(Double),
-			typeof(String)
-		};
+		typeof(char),
+		typeof(DateTime),
+		typeof(decimal),
+		typeof(bool),
+		typeof(short),
+		typeof(int),
+		typeof(long),
+		typeof(ushort),
+		typeof(uint),
+		typeof(ulong),
+		typeof(byte),
+		typeof(sbyte),
+		typeof(float),
+		typeof(double),
+		typeof(string)
+	};
 
-		public override bool CanHandleType(Type type)
+	public override bool CanHandleType(Type type)
+	{
+		return Array.IndexOf(types, type) != -1;
+	}
+
+	public override object PerformConversion(string value, Type targetType)
+	{
+		if (targetType == typeof(string)) return value;
+
+		try
 		{
-			return Array.IndexOf(types, type) != -1;
+			return Convert.ChangeType(value, targetType, CultureInfo.InvariantCulture);
 		}
-
-		public override object PerformConversion(String value, Type targetType)
+		catch (Exception ex)
 		{
-			if (targetType == typeof(String))
-			{
-				return value;
-			}
+			var message = string.Format(
+				"Could not convert from '{0}' to {1}",
+				value, targetType.FullName);
 
-			try
-			{
-				return Convert.ChangeType(value, targetType, CultureInfo.InvariantCulture);
-			}
-			catch (Exception ex)
-			{
-				var message = String.Format(
-					"Could not convert from '{0}' to {1}",
-					value, targetType.FullName);
-
-				throw new ConverterException(message, ex);
-			}
+			throw new ConverterException(message, ex);
 		}
+	}
 
-		public override object PerformConversion(IConfiguration configuration, Type targetType)
-		{
-			return PerformConversion(configuration.Value, targetType);
-		}
+	public override object PerformConversion(IConfiguration configuration, Type targetType)
+	{
+		return PerformConversion(configuration.Value, targetType);
 	}
 }

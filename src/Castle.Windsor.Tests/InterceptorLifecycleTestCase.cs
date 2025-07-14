@@ -12,32 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace CastleTests;
+
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.Interceptors;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+public class InterceptorLifecycleTestCase : AbstractContainerTestCase
 {
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.Interceptors;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	public class InterceptorLifecycleTestCase : AbstractContainerTestCase
+	[Test]
+	public void Disposable_interceptor_gets_properly_released_when_the_component_gets_released()
 	{
-		[Test]
-		public void Disposable_interceptor_gets_properly_released_when_the_component_gets_released()
-		{
-			DisposableInterceptor.InstancesCreated = 0;
-			DisposableInterceptor.InstancesDisposed = 0;
-			Container.Register(Component.For<DisposableInterceptor>().LifestyleTransient(),
-			                   Component.For<A>().LifestyleTransient().Interceptors<DisposableInterceptor>());
+		DisposableInterceptor.InstancesCreated = 0;
+		DisposableInterceptor.InstancesDisposed = 0;
+		Container.Register(Component.For<DisposableInterceptor>().LifestyleTransient(),
+			Component.For<A>().LifestyleTransient().Interceptors<DisposableInterceptor>());
 
-			var a = Container.Resolve<A>();
+		var a = Container.Resolve<A>();
 
-			Assert.AreEqual(1,DisposableInterceptor.InstancesCreated);
+		Assert.AreEqual(1, DisposableInterceptor.InstancesCreated);
 
-			Container.Release(a);
+		Container.Release(a);
 
-			Assert.AreEqual(1, DisposableInterceptor.InstancesDisposed);
-		}
+		Assert.AreEqual(1, DisposableInterceptor.InstancesDisposed);
 	}
 }

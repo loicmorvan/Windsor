@@ -1,8 +1,12 @@
 # Extensibility Sample App - EventBrokerFacility
 
-The EventBroker sample shows how you would go about extending and customising Windsor. The app contains a simple [facility](facilities.md) that internally uses [ComponentModel construction contributors](componentmodel-construction-contributors.md) and [lifecycle concerns](lifecycle.md) to provide its functionality.
+The EventBroker sample shows how you would go about extending and customising Windsor. The app contains a
+simple [facility](facilities.md) that internally
+uses [ComponentModel construction contributors](componentmodel-construction-contributors.md)
+and [lifecycle concerns](lifecycle.md) to provide its functionality.
 
-:information_source: **Get the code:** You can get the code for the sample [here](http://github.com/kkozmic/Castle.Samples.Extensibility).
+:information_source: **Get the code:** You can get the code for the
+sample [here](http://github.com/kkozmic/Castle.Samples.Extensibility).
 
 :information_source: The sample is based on a code contributed by Jason Meckley
 
@@ -22,17 +26,25 @@ public interface IListener<T>
 }
 ```
 
-Objects wishing to publish an event consume an `IEventPublisher` and use it to broadcast the event. Objects wishing to be notified of certain events implement the `IListener<T>` interface where `T` is the type of message that they are interested in.
+Objects wishing to publish an event consume an `IEventPublisher` and use it to broadcast the event. Objects wishing to
+be notified of certain events implement the `IListener<T>` interface where `T` is the type of message that they are
+interested in.
 
-Routing of messages to listeners is done (unsurprisingly) by the `EventBroker` class which is the implementation of `IEventPublisher` interface.
+Routing of messages to listeners is done (unsurprisingly) by the `EventBroker` class which is the implementation of
+`IEventPublisher` interface.
 
 ### `EventBrokerFacility`
 
-By implementing `IListener<T>` listeners expose enough information for Windsor to discover them, subscribe to the message when they are created and unsubscribe when their lifetime ends. However Windsor obviously does not know about our EventBroker so we need to extend it with this knowledge.
+By implementing `IListener<T>` listeners expose enough information for Windsor to discover them, subscribe to the
+message when they are created and unsubscribe when their lifetime ends. However Windsor obviously does not know about
+our EventBroker so we need to extend it with this knowledge.
 
-We do this via a facility which will encapsulate all of our extension logic. The following snippet is the full implementation of the facility:
+We do this via a facility which will encapsulate all of our extension logic. The following snippet is the full
+implementation of the facility:
 
-:warning: **Remember - this is sample code:** Remember that this is sample code which has its sole purpose of showcasing how you would go about extending Windsor yourself. It does not meet robustness, security, performance and other requirements of a production quality code.
+:warning: **Remember - this is sample code:** Remember that this is sample code which has its sole purpose of showcasing
+how you would go about extending Windsor yourself. It does not meet robustness, security, performance and other
+requirements of a production quality code.
 
 ```csharp
 public class EventBrokerFacility : AbstractFacility
@@ -56,11 +68,15 @@ public class EventBrokerFacility : AbstractFacility
 }
 ```
 
-All the facility does is register two components, including our `EventBroker` and add a [custom ComponentModel construction contributors](componentmodel-construction-contributors.md) which we'll discuss shortly. Notice that `EventBroker` is registered as both `IEventPublisher` as we mentioned previously and `IEventRegister` which we'll also discuss in a moment.
+All the facility does is register two components, including our `EventBroker` and add
+a [custom ComponentModel construction contributors](componentmodel-construction-contributors.md) which we'll discuss
+shortly. Notice that `EventBroker` is registered as both `IEventPublisher` as we mentioned previously and
+`IEventRegister` which we'll also discuss in a moment.
 
 ### `EventBrokerContributor`
 
-The contributor analyses components being registered looking for listeners and when it finds one it attaches custom lifestyle concerns for registering/unregistering the component's instances with the EventBroker. Here's its entire code
+The contributor analyses components being registered looking for listeners and when it finds one it attaches custom
+lifestyle concerns for registering/unregistering the component's instances with the EventBroker. Here's its entire code
 
 ```csharp
 public class EventBrokerContributor : IContributeComponentModelConstruction
@@ -81,7 +97,8 @@ public class EventBrokerContributor : IContributeComponentModelConstruction
 
 ### Lifestyle concerns
 
-The two [lifecycle concerns](lifecycle.md) subscribe component instance to receive messages right after it is created, and unsubscribe it when its lifetime ends. They also are very simple.
+The two [lifecycle concerns](lifecycle.md) subscribe component instance to receive messages right after it is created,
+and unsubscribe it when its lifetime ends. They also are very simple.
 
 ```csharp
 public class RegisterWithEventBroker : ICommissionConcern
@@ -117,4 +134,5 @@ public class UnregisterWithEventBroker : IDecommissionConcern
 
 ### Summary
 
-This sample demonstrates how easy it is to extend Windsor using various extensibility mechanisms and how to encapsulate them together using a facility.
+This sample demonstrates how easy it is to extend Windsor using various extensibility mechanisms and how to encapsulate
+them together using a facility.

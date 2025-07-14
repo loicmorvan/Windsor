@@ -12,20 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel.Tests.ClassComponents;
+
+public class UsesSimpleComponent1
 {
-	public class UsesSimpleComponent1
+	public UsesSimpleComponent1(SimpleComponent1 dependency)
 	{
-		private readonly SimpleComponent1 dependency;
-
-		public UsesSimpleComponent1(SimpleComponent1 dependency)
-		{
-			this.dependency = dependency;
-		}
-
-		public SimpleComponent1 Dependency
-		{
-			get { return dependency; }
-		}
+		this.Dependency = dependency;
 	}
+
+	public SimpleComponent1 Dependency { get; }
 }

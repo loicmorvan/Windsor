@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
+namespace Castle.Core.Internal;
+
+/// <summary>Abstract representation of a vertex.</summary>
+public interface IVertex
 {
-	/// <summary>
-	///   Abstract representation of a vertex.
-	/// </summary>
-	public interface IVertex
-	{
-		IVertex[] Adjacencies { get; }
-	}
+	IVertex[] Adjacencies { get; }
 }

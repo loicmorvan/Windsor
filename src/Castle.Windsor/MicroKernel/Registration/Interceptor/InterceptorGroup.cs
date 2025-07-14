@@ -12,60 +12,59 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration.Interceptor
+namespace Castle.MicroKernel.Registration.Interceptor;
+
+using Castle.Core;
+using Castle.DynamicProxy;
+using Castle.MicroKernel.ModelBuilder.Descriptors;
+
+public class InterceptorGroup<S> : RegistrationGroup<S>
+	where S : class
 {
-	using Castle.Core;
-	using Castle.DynamicProxy;
-	using Castle.MicroKernel.ModelBuilder.Descriptors;
+	private readonly InterceptorReference[] interceptors;
 
-	public class InterceptorGroup<S> : RegistrationGroup<S>
-		where S : class
+	public InterceptorGroup(ComponentRegistration<S> registration, InterceptorReference[] interceptors)
+		: base(registration)
 	{
-		private readonly InterceptorReference[] interceptors;
+		this.interceptors = interceptors;
+	}
 
-		public InterceptorGroup(ComponentRegistration<S> registration, InterceptorReference[] interceptors)
-			: base(registration)
+	public ComponentRegistration<S> Anywhere
+	{
+		get
 		{
-			this.interceptors = interceptors;
-		}
-
-		public ComponentRegistration<S> Anywhere
-		{
-			get
-			{
-				AddDescriptor(new InterceptorDescriptor(interceptors));
-				return Registration;
-			}
-		}
-
-		public ComponentRegistration<S> First
-		{
-			get
-			{
-				AddDescriptor(new InterceptorDescriptor(interceptors, InterceptorDescriptor.Where.First));
-				return Registration;
-			}
-		}
-
-		public ComponentRegistration<S> Last
-		{
-			get
-			{
-				AddDescriptor(new InterceptorDescriptor(interceptors, InterceptorDescriptor.Where.Last));
-				return Registration;
-			}
-		}
-
-		public ComponentRegistration<S> AtIndex(int index)
-		{
-			AddDescriptor(new InterceptorDescriptor(interceptors, index));
+			AddDescriptor(new InterceptorDescriptor(interceptors));
 			return Registration;
 		}
+	}
 
-		public InterceptorGroup<S> SelectedWith(IInterceptorSelector selector)
+	public ComponentRegistration<S> First
+	{
+		get
 		{
-			Registration.SelectInterceptorsWith(selector);
-			return this;
+			AddDescriptor(new InterceptorDescriptor(interceptors, InterceptorDescriptor.Where.First));
+			return Registration;
 		}
+	}
+
+	public ComponentRegistration<S> Last
+	{
+		get
+		{
+			AddDescriptor(new InterceptorDescriptor(interceptors, InterceptorDescriptor.Where.Last));
+			return Registration;
+		}
+	}
+
+	public ComponentRegistration<S> AtIndex(int index)
+	{
+		AddDescriptor(new InterceptorDescriptor(interceptors, index));
+		return Registration;
+	}
+
+	public InterceptorGroup<S> SelectedWith(IInterceptorSelector selector)
+	{
+		Registration.SelectInterceptorsWith(selector);
+		return this;
 	}
 }

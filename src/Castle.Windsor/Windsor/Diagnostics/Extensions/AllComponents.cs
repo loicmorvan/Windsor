@@ -12,42 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Extensions
+namespace Castle.Windsor.Diagnostics.Extensions;
+
+using System;
+using System.Collections.Generic;
+
+using Castle.Core.Internal;
+using Castle.MicroKernel;
+using Castle.Windsor.Diagnostics.DebuggerViews;
+
+public class AllComponents : AbstractContainerDebuggerExtension
 {
-	using System;
-	using System.Collections.Generic;
+	private const string name = "All components";
 
-	using Castle.Core.Internal;
-	using Castle.MicroKernel;
-	using Castle.Windsor.Diagnostics.DebuggerViews;
+	private IAllComponentsDiagnostic diagnostic;
 
-	public class AllComponents : AbstractContainerDebuggerExtension
+	public static string Name => name;
+
+	public override IEnumerable<DebuggerViewItem> Attach()
 	{
-		private const string name = "All components";
+		var handlers = diagnostic.Inspect();
 
-		private IAllComponentsDiagnostic diagnostic;
-
-		public override IEnumerable<DebuggerViewItem> Attach()
+		var items = handlers.ConvertAll(DefaultComponentView);
+		Array.Sort(items, (c1, c2) => c1.Name.CompareTo(c2.Name));
+		return new[]
 		{
-			var handlers = diagnostic.Inspect();
+			new DebuggerViewItem(name, "Count = " + items.Length, items)
+		};
+	}
 
-			var items = handlers.ConvertAll(DefaultComponentView);
-			Array.Sort(items, (c1, c2) => c1.Name.CompareTo(c2.Name));
-			return new[]
-			{
-				new DebuggerViewItem(name, "Count = " + items.Length, items)
-			};
-		}
-
-		public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
-		{
-			diagnostic = new AllComponentsDiagnostic(kernel);
-			diagnosticsHost.AddDiagnostic(diagnostic);
-		}
-
-		public static string Name
-		{
-			get { return name; }
-		}
+	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
+	{
+		diagnostic = new AllComponentsDiagnostic(kernel);
+		diagnosticsHost.AddDiagnostic(diagnostic);
 	}
 }

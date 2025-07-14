@@ -12,32 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.ContainerExtensions
+namespace CastleTests.ContainerExtensions;
+
+using Castle.MicroKernel;
+
+public class MyCustomReleasePolicy : IReleasePolicy
 {
-	using Castle.MicroKernel;
-
-	public class MyCustomReleasePolicy : IReleasePolicy
+	public void Dispose()
 	{
-		public void Dispose()
-		{
-		}
+	}
 
-		public IReleasePolicy CreateSubPolicy()
-		{
-			return this;
-		}
+	public IReleasePolicy CreateSubPolicy()
+	{
+		return this;
+	}
 
-		public bool HasTrack(object instance)
-		{
-			return false;
-		}
+	public bool HasTrack(object instance)
+	{
+		return false;
+	}
 
-		public void Release(object instance)
-		{
-		}
+	public void Release(object instance)
+	{
+	}
 
-		public void Track(object instance, Burden burden)
-		{
-		}
+	public void Track(object instance, Burden burden)
+	{
 	}
 }

@@ -12,55 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
+namespace Castle.Core.Internal;
+
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+
+public class ComponentServicesUtil
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Reflection;
+	private static readonly TypeByInheritanceDepthMostSpecificFirstComparer comparer = new();
 
-	public class ComponentServicesUtil
+	public static void AddService(IList<Type> existingServices, HashSet<Type> lookup, Type newService)
 	{
-		private static readonly TypeByInheritanceDepthMostSpecificFirstComparer comparer = new TypeByInheritanceDepthMostSpecificFirstComparer();
-
-		public static void AddService(IList<Type> existingServices, HashSet<Type> lookup, Type newService)
+		if (lookup.Contains(newService)) return;
+		if (newService.GetTypeInfo().IsInterface)
 		{
-			if (lookup.Contains(newService))
+			existingServices.Add(newService);
+			lookup.Add(newService);
+			return;
+		}
+
+		if (newService.GetTypeInfo().IsClass == false)
+			throw new ArgumentException(
+				string.Format("Type {0} is not a class nor an interface, and those are the only values allowed.", newService));
+		var count = existingServices.Count;
+		for (var i = 0; i < count; i++)
+		{
+			if (existingServices[i].GetTypeInfo().IsInterface)
 			{
-				return;
+				existingServices.Insert(i, newService);
+				lookup.Add(newService);
 			}
-			if (newService.GetTypeInfo().IsInterface)
+
+			var result = comparer.Compare(newService, existingServices[i]);
+			if (result < 0)
 			{
-				existingServices.Add(newService);
+				existingServices.Insert(i, newService);
 				lookup.Add(newService);
 				return;
 			}
-			if (newService.GetTypeInfo().IsClass == false)
-			{
-				throw new ArgumentException(
-					string.Format("Type {0} is not a class nor an interface, and those are the only values allowed.", newService));
-			}
-			var count = existingServices.Count;
-			for (var i = 0; i < count; i++)
-			{
-				if (existingServices[i].GetTypeInfo().IsInterface)
-				{
-					existingServices.Insert(i, newService);
-					lookup.Add(newService);
-				}
-				var result = comparer.Compare(newService, existingServices[i]);
-				if (result < 0)
-				{
-					existingServices.Insert(i, newService);
-					lookup.Add(newService);
-					return;
-				}
-				if (result == 0)
-				{
-					return;
-				}
-			}
-			lookup.Add(newService);
-			existingServices.Add(newService);
+
+			if (result == 0) return;
 		}
+
+		lookup.Add(newService);
+		existingServices.Add(newService);
 	}
 }

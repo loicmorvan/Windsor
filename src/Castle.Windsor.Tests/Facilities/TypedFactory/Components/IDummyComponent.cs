@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components
-{
-	using System;
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
-	public interface IDummyComponent
-	{
-		String Name { get; set; }
-	}
+public interface IDummyComponent
+{
+	string Name { get; set; }
 }

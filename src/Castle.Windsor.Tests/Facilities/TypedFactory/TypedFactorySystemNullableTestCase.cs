@@ -12,61 +12,62 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.TypedFactory
+namespace CastleTests.Facilities.TypedFactory;
+
+using System;
+
+using Castle.Facilities.TypedFactory;
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.Resolvers;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class TypedFactorySystemNullableTestCase : AbstractContainerTestCase
 {
-	using System;
-
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Resolvers;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class TypedFactorySystemNullableTestCase : AbstractContainerTestCase
+	protected override void AfterContainerCreated()
 	{
-		protected override void AfterContainerCreated()
+		Container.AddFacility<TypedFactoryFacility>();
+	}
+
+	[Test]
+	public void Null_may_be_specified_through_typed_factory_for_non_optional_System_Nullable_constructor_parameter()
+	{
+		Container.Register(
+			Component.For<DependencyFromContainer>(),
+			Component.For<ComponentWithNonOptionalNullableParameter>(),
+			Component.For<ComponentWithNonOptionalNullableParameter.Factory>().AsFactory());
+
+		var factory = Container.Resolve<ComponentWithNonOptionalNullableParameter.Factory>();
+		factory.Invoke(null);
+	}
+
+	[Test]
+	public void Non_optional_System_Nullable_constructor_parameter_is_still_required()
+	{
+		Container.Register(
+			Component.For<DependencyFromContainer>(),
+			Component.For<ComponentWithNonOptionalNullableParameter>(),
+			Component.For<Func<ComponentWithNonOptionalNullableParameter>>().AsFactory());
+
+		var factory = Container.Resolve<Func<ComponentWithNonOptionalNullableParameter>>();
+
+		Assert.That(() => factory.Invoke(), Throws.InstanceOf<DependencyResolverException>()
+			.With.Property("Message")
+			.EqualTo(
+				$"Could not resolve non-optional dependency for '{typeof(ComponentWithNonOptionalNullableParameter)}' ({typeof(ComponentWithNonOptionalNullableParameter)}). Parameter 'nonOptionalNullableParameter' type '{typeof(int?).FullName}'"));
+	}
+
+	public sealed class DependencyFromContainer
+	{
+	}
+
+	public sealed class ComponentWithNonOptionalNullableParameter
+	{
+		public delegate ComponentWithNonOptionalNullableParameter Factory(int? nonOptionalNullableParameter);
+
+		public ComponentWithNonOptionalNullableParameter(int? nonOptionalNullableParameter, DependencyFromContainer dependencyFromContainer)
 		{
-			Container.AddFacility<TypedFactoryFacility>();
-		}
-
-		[Test]
-		public void Null_may_be_specified_through_typed_factory_for_non_optional_System_Nullable_constructor_parameter()
-		{
-			Container.Register(
-				Component.For<DependencyFromContainer>(),
-				Component.For<ComponentWithNonOptionalNullableParameter>(),
-				Component.For<ComponentWithNonOptionalNullableParameter.Factory>().AsFactory());
-
-			var factory = Container.Resolve<ComponentWithNonOptionalNullableParameter.Factory>();
-			factory.Invoke(nonOptionalNullableParameter: null);
-		}
-
-		[Test]
-		public void Non_optional_System_Nullable_constructor_parameter_is_still_required()
-		{
-			Container.Register(
-				Component.For<DependencyFromContainer>(),
-				Component.For<ComponentWithNonOptionalNullableParameter>(),
-				Component.For<Func<ComponentWithNonOptionalNullableParameter>>().AsFactory());
-
-			var factory = Container.Resolve<Func<ComponentWithNonOptionalNullableParameter>>();
-
-			Assert.That(() => factory.Invoke(), Throws.InstanceOf<DependencyResolverException>()
-				.With.Property("Message").EqualTo($"Could not resolve non-optional dependency for '{typeof(ComponentWithNonOptionalNullableParameter)}' ({typeof(ComponentWithNonOptionalNullableParameter)}). Parameter 'nonOptionalNullableParameter' type '{typeof(int?).FullName}'"));
-		}
-
-		public sealed class DependencyFromContainer
-		{
-		}
-
-		public sealed class ComponentWithNonOptionalNullableParameter
-		{
-			public delegate ComponentWithNonOptionalNullableParameter Factory(int? nonOptionalNullableParameter);
-
-			public ComponentWithNonOptionalNullableParameter(int? nonOptionalNullableParameter, DependencyFromContainer dependencyFromContainer)
-			{
-			}
 		}
 	}
 }

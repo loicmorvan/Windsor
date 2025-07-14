@@ -12,22 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+
+/// <summary>Summary description for MirandaProtocolHandler.</summary>
+public class MirandaProtocolHandler : IProtocolHandler
 {
-	using System;
+	#region IProtocolHandler Members
 
-	/// <summary>
-	/// Summary description for MirandaProtocolHandler.
-	/// </summary>
-	public class MirandaProtocolHandler : IProtocolHandler
+	public void Handle(string content)
 	{
-		#region IProtocolHandler Members
-
-		public void Handle(String content)
-		{
-			// TODO:  Add MirandaProtocolHandler.Handle implementation
-		}
-
-		#endregion
+		// TODO:  Add MirandaProtocolHandler.Handle implementation
 	}
+
+	#endregion
 }

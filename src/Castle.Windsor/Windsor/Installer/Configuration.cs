@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Installer
-{
-	using Castle.Core.Resource;
-	using Castle.Windsor.Configuration.Interpreters;
+namespace Castle.Windsor.Installer;
 
-	public static class Configuration
-	{
+using Castle.Core.Resource;
+using Castle.Windsor.Configuration.Interpreters;
+
+public static class Configuration
+{
 #if FEATURE_SYSTEM_CONFIGURATION
 		/// <summary>
 		///   Installs all the components from the App.Config file.
@@ -30,24 +30,19 @@ namespace Castle.Windsor.Installer
 		}
 #endif
 
-		/// <summary>
-		///   Installs all the component from the xml configuration.
-		/// </summary>
-		/// <param name = "resource">The xml configuration resource.</param>
-		/// <returns></returns>
-		public static ConfigurationInstaller FromXml(IResource resource)
-		{
-			return new ConfigurationInstaller(new XmlInterpreter(resource));
-		}
+	/// <summary>Installs all the component from the xml configuration.</summary>
+	/// <param name = "resource">The xml configuration resource.</param>
+	/// <returns></returns>
+	public static ConfigurationInstaller FromXml(IResource resource)
+	{
+		return new ConfigurationInstaller(new XmlInterpreter(resource));
+	}
 
-		/// <summary>
-		///   Installs all the component from the xml configuration file.
-		/// </summary>
-		/// <param name = "file">The xml configuration file.</param>
-		/// <returns></returns>
-		public static ConfigurationInstaller FromXmlFile(string file)
-		{
-			return new ConfigurationInstaller(new XmlInterpreter(file));
-		}
+	/// <summary>Installs all the component from the xml configuration file.</summary>
+	/// <param name = "file">The xml configuration file.</param>
+	/// <returns></returns>
+	public static ConfigurationInstaller FromXmlFile(string file)
+	{
+		return new ConfigurationInstaller(new XmlInterpreter(file));
 	}
 }

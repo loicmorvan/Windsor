@@ -12,93 +12,84 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors
+namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
+
+using System.Xml;
+
+public class PropertiesElementProcessor : AbstractXmlNodeProcessor
 {
-	using System;
-	using System.Xml;
+	public override string Name => "properties";
 
-	public class PropertiesElementProcessor : AbstractXmlNodeProcessor
+	/// <summary></summary>
+	/// <param name = "nodeList"></param>
+	/// <param name = "engine"></param>
+	/// <example>
+	///     <code>
+	///     <properties>
+	///             <attributes>
+	///                 <myAttribute>attributeValue</myAttribute>
+	///             </attributes>
+	///             <myProperty>propertyValue</myProperty>
+	///         </properties>
+	///   </code>
+	/// </example>
+	public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
 	{
-		public override String Name
+		var element = nodeList.Current as XmlElement;
+
+		IXmlProcessorNodeList childNodes = new DefaultXmlProcessorNodeList(element.ChildNodes);
+
+		while (childNodes.MoveNext())
 		{
-			get { return "properties"; }
-		}
-
-		///<summary>
-		///</summary>
-		///<param name = "nodeList"></param>
-		///<param name = "engine"></param>
-		///<example>
-		///  <code>
-		///    <properties>
-		///      <attributes>
-		///        <myAttribute>attributeValue</myAttribute>
-		///      </attributes>
-		///      <myProperty>propertyValue</myProperty>
-		///    </properties>
-		///  </code>
-		///</example>
-		public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
-		{
-			var element = nodeList.Current as XmlElement;
-
-			IXmlProcessorNodeList childNodes = new DefaultXmlProcessorNodeList(element.ChildNodes);
-
-			while (childNodes.MoveNext())
+			// Properties processing its a little more complicated than usual
+			// since we need to support all special tags (if,else,define...)
+			// plus we need to register any regular element as a property asap
+			// since we should support properties that reference other properties
+			// i.e. <myprop2>#{prop1}</myprop2> 			
+			if (engine.HasSpecialProcessor(childNodes.Current))
 			{
-				// Properties processing its a little more complicated than usual
-				// since we need to support all special tags (if,else,define...)
-				// plus we need to register any regular element as a property asap
-				// since we should support properties that reference other properties
-				// i.e. <myprop2>#{prop1}</myprop2> 			
-				if (engine.HasSpecialProcessor(childNodes.Current))
+				// Current node its a special element so we bookmark it before processing it...
+				var current = childNodes.Current;
+
+				var pos = childNodes.CurrentPosition;
+
+				engine.DispatchProcessCurrent(childNodes);
+
+				// ...after processing we need to refresh childNodes
+				// to account for any special element that affects the node tree (if,choose...)
+				childNodes = new DefaultXmlProcessorNodeList(element.ChildNodes);
+
+				// we only care about changes in the tree from the current node and forward
+				// so if the new list is empty or smaller we just exit the loop
+				if (pos < childNodes.Count)
 				{
-					// Current node its a special element so we bookmark it before processing it...
-					var current = childNodes.Current;
+					childNodes.CurrentPosition = pos;
 
-					var pos = childNodes.CurrentPosition;
-
-					engine.DispatchProcessCurrent(childNodes);
-
-					// ...after processing we need to refresh childNodes
-					// to account for any special element that affects the node tree (if,choose...)
-					childNodes = new DefaultXmlProcessorNodeList(element.ChildNodes);
-
-					// we only care about changes in the tree from the current node and forward
-					// so if the new list is empty or smaller we just exit the loop
-					if (pos < childNodes.Count)
+					// if the current node gets replaced in the new list we need to restart processing
+					// otherwise we just continue as usual
+					if (childNodes.Current != current)
 					{
-						childNodes.CurrentPosition = pos;
-
-						// if the current node gets replaced in the new list we need to restart processing
-						// otherwise we just continue as usual
-						if (childNodes.Current != current)
-						{
-							childNodes.CurrentPosition -= 1;
-							continue;
-						}
-					}
-					else
-					{
-						break;
+						childNodes.CurrentPosition -= 1;
+						continue;
 					}
 				}
 				else
 				{
-					engine.DispatchProcessCurrent(childNodes);
+					break;
 				}
-
-				if (IgnoreNode(childNodes.Current))
-				{
-					continue;
-				}
-
-				var elem = GetNodeAsElement(element, childNodes.Current);
-
-				engine.AddProperty(elem);
+			}
+			else
+			{
+				engine.DispatchProcessCurrent(childNodes);
 			}
 
-			RemoveItSelf(element);
+			if (IgnoreNode(childNodes.Current)) continue;
+
+			var elem = GetNodeAsElement(element, childNodes.Current);
+
+			engine.AddProperty(elem);
 		}
+
+		RemoveItSelf(element);
 	}
 }

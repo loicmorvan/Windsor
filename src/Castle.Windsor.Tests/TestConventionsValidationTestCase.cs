@@ -12,39 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace CastleTests;
+
+using System;
+using System.Linq;
+using System.Reflection;
+
+using NUnit.Framework;
+
+[Ignore("Used to be explicit but fails on netcoreapp1.0 when run with VS2017 Resharper")]
+public class TestConventionsValidationTestCase : AbstractContainerTestCase
 {
-	using System;
-	using System.Linq;
-	using System.Reflection;
-
-	using NUnit.Framework;
-	
-	[Ignore("Used to be explicit but fails on netcoreapp1.0 when run with VS2017 Resharper")]
-	public class TestConventionsValidationTestCase : AbstractContainerTestCase
+	[Test]
+	public void All_Test_Cases_should_be_named_something_TestCase()
 	{
-		[Test]
-		public void All_Test_Cases_should_be_named_something_TestCase()
-		{
-			var types = GetType().GetTypeInfo().Assembly.GetExportedTypes();
-			var testCases = types.Where(t => t.GetTypeInfo().IsDefined(typeof(TestFixtureAttribute), inherit: true))
-				.Except(new[] { typeof(AbstractContainerTestCase) })
-				.ToArray();
+		var types = GetType().GetTypeInfo().Assembly.GetExportedTypes();
+		var testCases = types.Where(t => t.GetTypeInfo().IsDefined(typeof(TestFixtureAttribute), true))
+			.Except(new[] { typeof(AbstractContainerTestCase) })
+			.ToArray();
 
-			var illNamedTestCases = testCases.Where(t => t.Name.EndsWith("TestCase") == false).ToArray();
-			Assert.IsEmpty(illNamedTestCases, string.Join<Type>(Environment.NewLine, illNamedTestCases));
-		}
+		var illNamedTestCases = testCases.Where(t => t.Name.EndsWith("TestCase") == false).ToArray();
+		Assert.IsEmpty(illNamedTestCases, string.Join<Type>(Environment.NewLine, illNamedTestCases));
+	}
 
-		[Test]
-		public void All_Test_Cases_should_inherit_AbstractContainerTestCase()
-		{
-			var types = GetType().GetTypeInfo().Assembly.GetExportedTypes();
-			var testCases = types.Where(t => t.GetTypeInfo().IsDefined(typeof(TestFixtureAttribute), inherit: true))
-				.Except(new[] { typeof(AbstractContainerTestCase) })
-				.ToArray();
+	[Test]
+	public void All_Test_Cases_should_inherit_AbstractContainerTestCase()
+	{
+		var types = GetType().GetTypeInfo().Assembly.GetExportedTypes();
+		var testCases = types.Where(t => t.GetTypeInfo().IsDefined(typeof(TestFixtureAttribute), true))
+			.Except(new[] { typeof(AbstractContainerTestCase) })
+			.ToArray();
 
-			var missingTestCases = testCases.Where(t => typeof(AbstractContainerTestCase).GetTypeInfo().IsAssignableFrom(t) == false).ToArray();
-			Assert.IsEmpty(missingTestCases, string.Join<Type>(Environment.NewLine, missingTestCases));
-		}
+		var missingTestCases = testCases.Where(t => typeof(AbstractContainerTestCase).GetTypeInfo().IsAssignableFrom(t) == false).ToArray();
+		Assert.IsEmpty(missingTestCases, string.Join<Type>(Environment.NewLine, missingTestCases));
 	}
 }

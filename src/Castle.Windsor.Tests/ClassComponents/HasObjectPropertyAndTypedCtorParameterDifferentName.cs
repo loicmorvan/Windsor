@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.ClassComponents
+namespace CastleTests.ClassComponents;
+
+using CastleTests.Components;
+
+public class HasObjectPropertyAndTypedCtorParameterDifferentName
 {
-	using CastleTests.Components;
-
-	public class HasObjectPropertyAndTypedCtorParameterDifferentName
+	public HasObjectPropertyAndTypedCtorParameterDifferentName(IEmptyService emptyService)
 	{
-		public HasObjectPropertyAndTypedCtorParameterDifferentName(IEmptyService emptyService)
-		{
-			SomeService = emptyService;
-		}
-
-		public object SomeService { get; set; }
+		SomeService = emptyService;
 	}
+
+	public object SomeService { get; set; }
 }

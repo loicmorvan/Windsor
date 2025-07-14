@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents
-{
-	using CastleTests.Components;
+namespace Castle.Windsor.Tests.ClassComponents;
 
-	public class DependsOnThrowingComponent
+using CastleTests.Components;
+
+public class DependsOnThrowingComponent
+{
+	public DependsOnThrowingComponent(ISimpleService service, ThrowsInCtor throws)
 	{
-		public DependsOnThrowingComponent(ISimpleService service, ThrowsInCtor throws)
-		{
-		}
 	}
 }

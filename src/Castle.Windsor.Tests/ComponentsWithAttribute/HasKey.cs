@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ComponentsWithAttribute
-{
-	using Castle.Core;
+namespace Castle.Windsor.Tests.ComponentsWithAttribute;
 
-	[CastleComponent("key")]
-	public class HasKey
-	{
-	}
+using Castle.Core;
+
+[CastleComponent("key")]
+public class HasKey
+{
 }

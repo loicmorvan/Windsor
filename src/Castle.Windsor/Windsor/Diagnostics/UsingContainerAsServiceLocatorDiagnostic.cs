@@ -12,54 +12,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
+namespace Castle.Windsor.Diagnostics;
+
+using System;
+using System.Linq;
+
+using Castle.Core.Internal;
+using Castle.DynamicProxy;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Internal;
+using Castle.MicroKernel.Resolvers;
+
+public class UsingContainerAsServiceLocatorDiagnostic : IUsingContainerAsServiceLocatorDiagnostic
 {
-	using System;
-	using System.Linq;
-
-	using Castle.Core.Internal;
-	using Castle.DynamicProxy;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Resolvers;
-
-	public class UsingContainerAsServiceLocatorDiagnostic : IUsingContainerAsServiceLocatorDiagnostic
+	public static Type[] ContainerTypes =
 	{
-		public static Type[] ContainerTypes =
-			{
-				typeof(IKernel),
-				typeof(IWindsorContainer),
-				typeof(IKernelEvents),
-				typeof(IKernelInternal),
-				typeof(DefaultKernel),
-				typeof(WindsorContainer),
-			};
+		typeof(IKernel),
+		typeof(IWindsorContainer),
+		typeof(IKernelEvents),
+		typeof(IKernelInternal),
+		typeof(DefaultKernel),
+		typeof(WindsorContainer)
+	};
 
-		public static Predicate<IHandler>[] ExceptionsToTheRule =
-			{
-				h => h.ComponentModel.Implementation.Is<IInterceptor>(),
-				h => h.ComponentModel.Services.Any(s => s.Is<ILazyComponentLoader>()),
-				h => h.ComponentModel.Implementation == typeof(MicroKernel.Internal.LazyEx<>),
-			};
+	public static Predicate<IHandler>[] ExceptionsToTheRule =
+	{
+		h => h.ComponentModel.Implementation.Is<IInterceptor>(),
+		h => h.ComponentModel.Services.Any(s => s.Is<ILazyComponentLoader>()),
+		h => h.ComponentModel.Implementation == typeof(LazyEx<>)
+	};
 
-		private readonly IKernel kernel;
+	private readonly IKernel kernel;
 
-		public UsingContainerAsServiceLocatorDiagnostic(IKernel kernel)
-		{
-			this.kernel = kernel;
-		}
+	public UsingContainerAsServiceLocatorDiagnostic(IKernel kernel)
+	{
+		this.kernel = kernel;
+	}
 
-		public IHandler[] Inspect()
-		{
-			var allHandlers = kernel.GetAssignableHandlers(typeof(object));
-			var handlersWithContainerDependency = allHandlers.Where(HasDependencyOnTheContainer);
-			return handlersWithContainerDependency
-				.Where(h => ExceptionsToTheRule.Any(e => e(h)) == false)
-				.ToArray();
-		}
+	public IHandler[] Inspect()
+	{
+		var allHandlers = kernel.GetAssignableHandlers(typeof(object));
+		var handlersWithContainerDependency = allHandlers.Where(HasDependencyOnTheContainer);
+		return handlersWithContainerDependency
+			.Where(h => ExceptionsToTheRule.Any(e => e(h)) == false)
+			.ToArray();
+	}
 
-		private bool HasDependencyOnTheContainer(IHandler handler)
-		{
-			return handler.ComponentModel.Dependencies.Any(d => ContainerTypes.Any(c => c == d.TargetItemType));
-		}
+	private bool HasDependencyOnTheContainer(IHandler handler)
+	{
+		return handler.ComponentModel.Dependencies.Any(d => ContainerTypes.Any(c => c == d.TargetItemType));
 	}
 }

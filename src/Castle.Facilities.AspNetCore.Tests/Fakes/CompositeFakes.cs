@@ -12,46 +12,45 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests.Fakes
+namespace Castle.Facilities.AspNetCore.Tests.Fakes;
+
+using System;
+
+public class CompositeController
 {
-	using System;
-
-	public class CompositeController
+	public CompositeController(
+		ControllerCrossWired crossWiredController,
+		ControllerServiceProviderOnly serviceProviderOnlyController,
+		ControllerWindsorOnly windsorOnlyController)
 	{
-		public CompositeController(
-			ControllerCrossWired crossWiredController, 
-			ControllerServiceProviderOnly serviceProviderOnlyController, 
-			ControllerWindsorOnly windsorOnlyController)
-		{
-			if (crossWiredController == null) throw new ArgumentNullException(nameof(crossWiredController));
-			if (serviceProviderOnlyController == null) throw new ArgumentNullException(nameof(serviceProviderOnlyController));
-			if (windsorOnlyController == null) throw new ArgumentNullException(nameof(windsorOnlyController));
-		}
+		if (crossWiredController == null) throw new ArgumentNullException(nameof(crossWiredController));
+		if (serviceProviderOnlyController == null) throw new ArgumentNullException(nameof(serviceProviderOnlyController));
+		if (windsorOnlyController == null) throw new ArgumentNullException(nameof(windsorOnlyController));
 	}
+}
 
-	public class CompositeTagHelper
+public class CompositeTagHelper
+{
+	public CompositeTagHelper(
+		TagHelperCrossWired crossWiredTagHelper,
+		TagHelperServiceProviderOnly serviceProviderOnlyTagHelper,
+		TagHelperWindsorOnly windsorOnlyTagHelper)
 	{
-		public CompositeTagHelper(
-			TagHelperCrossWired crossWiredTagHelper, 
-			TagHelperServiceProviderOnly serviceProviderOnlyTagHelper, 
-			TagHelperWindsorOnly windsorOnlyTagHelper)
-		{
-			if (crossWiredTagHelper == null) throw new ArgumentNullException(nameof(crossWiredTagHelper));
-			if (serviceProviderOnlyTagHelper == null) throw new ArgumentNullException(nameof(serviceProviderOnlyTagHelper));
-			if (windsorOnlyTagHelper == null) throw new ArgumentNullException(nameof(windsorOnlyTagHelper));
-		}
+		if (crossWiredTagHelper == null) throw new ArgumentNullException(nameof(crossWiredTagHelper));
+		if (serviceProviderOnlyTagHelper == null) throw new ArgumentNullException(nameof(serviceProviderOnlyTagHelper));
+		if (windsorOnlyTagHelper == null) throw new ArgumentNullException(nameof(windsorOnlyTagHelper));
 	}
+}
 
-	public class CompositeViewComponent
+public class CompositeViewComponent
+{
+	public CompositeViewComponent(
+		ViewComponentCrossWired crossWiredViewComponent,
+		ViewComponentServiceProviderOnly serviceProviderOnlyViewComponent,
+		ViewComponentWindsorOnly windsorOnlyViewComponent)
 	{
-		public CompositeViewComponent(
-			ViewComponentCrossWired crossWiredViewComponent, 
-			ViewComponentServiceProviderOnly serviceProviderOnlyViewComponent, 
-			ViewComponentWindsorOnly windsorOnlyViewComponent)
-		{
-			if (crossWiredViewComponent == null) throw new ArgumentNullException(nameof(crossWiredViewComponent));
-			if (serviceProviderOnlyViewComponent == null) throw new ArgumentNullException(nameof(serviceProviderOnlyViewComponent));
-			if (windsorOnlyViewComponent == null) throw new ArgumentNullException(nameof(windsorOnlyViewComponent));
-		}
+		if (crossWiredViewComponent == null) throw new ArgumentNullException(nameof(crossWiredViewComponent));
+		if (serviceProviderOnlyViewComponent == null) throw new ArgumentNullException(nameof(serviceProviderOnlyViewComponent));
+		if (windsorOnlyViewComponent == null) throw new ArgumentNullException(nameof(windsorOnlyViewComponent));
 	}
 }

@@ -12,70 +12,67 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests;
+
+using Castle.MicroKernel.ComponentActivator;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Interceptors;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class FailureCleanUpTestCase
 {
-	using System;
-
-	using Castle.MicroKernel.ComponentActivator;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.ClassComponents;
-	using Castle.Windsor.Tests.Interceptors;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class FailureCleanUpTestCase
+	[SetUp]
+	public void Init()
 	{
-		[SetUp]
-		public void Init()
-		{
-			container = new WindsorContainer();
-		}
+		container = new WindsorContainer();
+	}
 
-		private IWindsorContainer container;
+	private IWindsorContainer container;
 
-		[Test]
-		public void When_constructor_throws_ctor_dependencies_get_released()
-		{
-			SimpleServiceDisposable.DisposedCount = 0;
-			container.Register(
-				Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>().LifeStyle.Transient,
-				Component.For<ThrowsInCtorWithDisposableDependency>()
-				);
+	[Test]
+	public void When_constructor_throws_ctor_dependencies_get_released()
+	{
+		SimpleServiceDisposable.DisposedCount = 0;
+		container.Register(
+			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>().LifeStyle.Transient,
+			Component.For<ThrowsInCtorWithDisposableDependency>()
+		);
 
-			Assert.Throws<ComponentActivatorException>(() => container.Resolve<ThrowsInCtorWithDisposableDependency>());
-			Assert.AreEqual(1, SimpleServiceDisposable.DisposedCount);
-		}
+		Assert.Throws<ComponentActivatorException>(() => container.Resolve<ThrowsInCtorWithDisposableDependency>());
+		Assert.AreEqual(1, SimpleServiceDisposable.DisposedCount);
+	}
 
-		[Test]
-		public void When_constructor_dependency_throws_previous_dependencies_get_released()
-		{
-			SimpleServiceDisposable.DisposedCount = 0;
-			container.Register(
-				Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>().LifeStyle.Transient,
-				Component.For<ThrowsInCtor>().LifeStyle.Transient,
-				Component.For<DependsOnThrowingComponent>()
-				);
+	[Test]
+	public void When_constructor_dependency_throws_previous_dependencies_get_released()
+	{
+		SimpleServiceDisposable.DisposedCount = 0;
+		container.Register(
+			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>().LifeStyle.Transient,
+			Component.For<ThrowsInCtor>().LifeStyle.Transient,
+			Component.For<DependsOnThrowingComponent>()
+		);
 
-			Assert.Throws<ComponentActivatorException>(() => container.Resolve<DependsOnThrowingComponent>());
-			Assert.AreEqual(1, SimpleServiceDisposable.DisposedCount);
-		}
+		Assert.Throws<ComponentActivatorException>(() => container.Resolve<DependsOnThrowingComponent>());
+		Assert.AreEqual(1, SimpleServiceDisposable.DisposedCount);
+	}
 
-		[Test]
-		public void When_interceptor_throws_previous_dependencies_get_released()
-		{
-			DisposableFoo.ResetDisposedCount();
-			container.Register(
-				Component.For<ThrowInCtorInterceptor>().LifeStyle.Transient,
-				Component.For<DisposableFoo>().LifeStyle.Transient,
-				Component.For<UsesDisposableFoo>().LifeStyle.Transient
-					.Interceptors<ThrowInCtorInterceptor>()
-				);
+	[Test]
+	public void When_interceptor_throws_previous_dependencies_get_released()
+	{
+		DisposableFoo.ResetDisposedCount();
+		container.Register(
+			Component.For<ThrowInCtorInterceptor>().LifeStyle.Transient,
+			Component.For<DisposableFoo>().LifeStyle.Transient,
+			Component.For<UsesDisposableFoo>().LifeStyle.Transient
+				.Interceptors<ThrowInCtorInterceptor>()
+		);
 
-			Assert.Throws<ComponentActivatorException>(() => container.Resolve<UsesDisposableFoo>());
-			Assert.AreEqual(1, DisposableFoo.DisposedCount);
-		}
+		Assert.Throws<ComponentActivatorException>(() => container.Resolve<UsesDisposableFoo>());
+		Assert.AreEqual(1, DisposableFoo.DisposedCount);
 	}
 }

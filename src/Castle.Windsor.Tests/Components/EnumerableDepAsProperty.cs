@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+using System.Collections.Generic;
+
+public class EnumerableDepAsProperty
 {
-	using System.Collections.Generic;
-
-	using CastleTests.Components;
-
-	public class EnumerableDepAsProperty
-	{
-		public IEnumerable<IEmptyService> Services { get; set; }
-	}
+	public IEnumerable<IEmptyService> Services { get; set; }
 }

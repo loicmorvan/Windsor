@@ -13,7 +13,6 @@
 // limitations under the License.
 
 #if FEATURE_WPF //This test requires PresentationCore.dll (specified in Configuration2/config_with_using_assembly.xml)
-
 namespace Castle.Windsor.Tests.Configuration2
 {
 	using System;

@@ -12,62 +12,61 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.TypedFactory
+namespace CastleTests.Facilities.TypedFactory;
+
+using System;
+
+using Castle.Facilities.TypedFactory;
+using Castle.MicroKernel.Registration;
+
+using NUnit.Framework;
+
+public sealed class TypedFactoryDisposeOrderTestCase : AbstractContainerTestCase
 {
-	using System;
-
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel.Registration;
-
-	using NUnit.Framework;
-
-	public sealed class TypedFactoryDisposeOrderTestCase : AbstractContainerTestCase
+	protected override void AfterContainerCreated()
 	{
-		protected override void AfterContainerCreated()
+		Container.AddFacility<TypedFactoryFacility>();
+	}
+
+	[Test]
+	public void Typed_factories_are_not_disposed_before_their_dependents()
+	{
+		Container.Register(
+			Component.For<Dependency>(),
+			Component.For<Dependent>());
+
+		Container.Resolve<Dependent>();
+	}
+
+	public sealed class Dependency : IDisposable
+	{
+		private bool isDisposed;
+
+		public void Dispose()
 		{
-			Container.AddFacility<TypedFactoryFacility>();
+			isDisposed = true;
 		}
 
-		[Test]
-		public void Typed_factories_are_not_disposed_before_their_dependents()
+		public void Use()
 		{
-			Container.Register(
-				Component.For<Dependency>(),
-				Component.For<Dependent>());
+			if (isDisposed) throw new ObjectDisposedException(nameof(Dependency));
+		}
+	}
 
-			Container.Resolve<Dependent>();
+	public sealed class Dependent : IDisposable
+	{
+		private readonly Func<Dependency> factory;
+
+		public Dependent(Func<Dependency> factory)
+		{
+			this.factory = factory;
 		}
 
-		public sealed class Dependency : IDisposable
+		public void Dispose()
 		{
-			private bool isDisposed;
-
-			public void Use()
+			using (var needed = factory.Invoke())
 			{
-				if (isDisposed) throw new ObjectDisposedException(nameof(Dependency));
-			}
-
-			public void Dispose()
-			{
-				isDisposed = true;
-			}
-		}
-
-		public sealed class Dependent : IDisposable
-		{
-			private readonly Func<Dependency> factory;
-
-			public Dependent(Func<Dependency> factory)
-			{
-				this.factory = factory;
-			}
-
-			public void Dispose()
-			{
-				using (var needed = factory.Invoke())
-				{
-					needed.Use();
-				}
+				needed.Use();
 			}
 		}
 	}

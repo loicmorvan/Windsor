@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Installers
-{
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.SubSystems.Configuration;
-	using Castle.MicroKernel.Tests.ClassComponents;
-	using Castle.Windsor;
+namespace CastleTests.Installers;
 
-	public class CustomerInstaller : IWindsorInstaller
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.SubSystems.Configuration;
+using Castle.MicroKernel.Tests.ClassComponents;
+using Castle.Windsor;
+
+public class CustomerInstaller : IWindsorInstaller
+{
+	public void Install(IWindsorContainer container, IConfigurationStore store)
 	{
-		public void Install(IWindsorContainer container, IConfigurationStore store)
-		{
-			container.Register(Component.For<ICustomer>().ImplementedBy<CustomerImpl>().Named("Customer-by-CustomerInstaller"));
-		}
+		container.Register(Component.For<ICustomer>().ImplementedBy<CustomerImpl>().Named("Customer-by-CustomerInstaller"));
 	}
 }

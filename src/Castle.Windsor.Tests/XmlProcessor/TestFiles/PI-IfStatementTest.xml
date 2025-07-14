@@ -6,27 +6,27 @@
 
 	<components>
 		<?if DEBUG?>
-			<component id="debug">
-				<item> some value </item>
-				<item2><![CDATA[ some <&> value2 ]]></item2>
-			</component>
+		<component id="debug">
+			<item>some value</item>
+			<item2><![CDATA[ some <&> value2 ]]></item2>
+		</component>
 		<?else?>
-			<component id="notdebug"/>
+		<component id="notdebug"/>
 		<?end?>
 
 		<?if Qa?>
-			<component id="qa"/>
+		<component id="qa"/>
 		<?else?>
-			<component id="notqa"/>
+		<component id="notqa"/>
 		<?end?>
 
 		<?if Prod?>
-			<component id="prod"/>
+		<component id="prod"/>
 		<?else?>
-			<component id="notprod"/>
+		<component id="notprod"/>
 		<?end?>
 
 		<component id="default"/>
-	</components>		
+	</components>
 
 </configuration>

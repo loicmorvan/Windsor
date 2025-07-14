@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+//[Castle.Core.Transient] //Test passes if this attributed added
+public class RepositoryNotMarkedAsTransient<T> : IRepository<T> where T : new()
 {
-	//[Castle.Core.Transient] //Test passes if this attributed added
-	public class RepositoryNotMarkedAsTransient<T> : IRepository<T> where T : new()
+	public T Get(int id)
 	{
-		public T Get(int id)
-		{
-			return new T();
-		}
+		return new T();
 	}
 }

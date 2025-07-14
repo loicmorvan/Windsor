@@ -12,14 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+namespace Castle.MicroKernel.SubSystems.Conversion;
+
+/// <summary>Marker interface that signals that a converter depends on IKernel to be able to perform the conversion.</summary>
+public interface IKernelDependentConverter
 {
-	/// <summary>
-	///   Marker interface that signals that a converter
-	///   depends on IKernel to be able to perform 
-	///   the conversion.
-	/// </summary>
-	public interface IKernelDependentConverter
-	{
-	}
 }

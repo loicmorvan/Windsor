@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.ClassComponents
-{
-	using Castle.MicroKernel.Tests.ClassComponents;
+namespace CastleTests.ClassComponents;
 
-	public class CommonServiceUser2
-	{
-		public ICommon CommonService { get; set; }
-	}
+using Castle.MicroKernel.Tests.ClassComponents;
+
+public class CommonServiceUser2
+{
+	public ICommon CommonService { get; set; }
 }

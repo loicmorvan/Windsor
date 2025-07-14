@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ClassComponents
-{
-	public class HasNestedType
-	{
-		public class Nested
-		{
-		}
+namespace Castle.ClassComponents;
 
-		public class NestedGeneric<TArg>
-		{
-		}
+public class HasNestedType
+{
+	public class Nested
+	{
+	}
+
+	public class NestedGeneric<TArg>
+	{
 	}
 }

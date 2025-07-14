@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class B
-	{
-		public B(A a)
-		{
-			A = a;
-		}
+namespace CastleTests.Components;
 
-		public A A { get; private set; }
+public class B
+{
+	public B(A a)
+	{
+		A = a;
 	}
+
+	public A A { get; private set; }
 }

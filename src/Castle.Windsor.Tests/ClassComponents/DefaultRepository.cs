@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel.Tests.ClassComponents;
+
+public class DefaultRepository<T> : IRepository<T>
+	where T : class, new()
 {
-	public class DefaultRepository<T> : IRepository<T>
-		where T : class, new()
+	public T Find()
 	{
-		public T Find()
-		{
-			return new T();
-		}
+		return new T();
 	}
 }

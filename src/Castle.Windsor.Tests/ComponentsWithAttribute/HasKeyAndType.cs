@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ComponentsWithAttribute
+namespace Castle.Windsor.Tests.ComponentsWithAttribute;
+
+using Castle.Core;
+
+using CastleTests.Components;
+
+[CastleComponent("keyAndType", typeof(ISimpleService))]
+public class HasKeyAndType : ISimpleService
 {
-	using Castle.Core;
-
-	using CastleTests.Components;
-
-	[CastleComponent("keyAndType", typeof(ISimpleService))]
-	public class HasKeyAndType : ISimpleService
+	public void Operation()
 	{
-		public void Operation()
-		{
-		}
 	}
 }

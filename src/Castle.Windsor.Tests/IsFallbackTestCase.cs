@@ -12,89 +12,89 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace CastleTests;
+
+using System.Reflection;
+
+using Castle.MicroKernel.Registration;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+public class IsFallbackTestCase : AbstractContainerTestCase
 {
-	using System.Reflection;
-	using Castle.MicroKernel.Registration;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	public class IsFallbackTestCase : AbstractContainerTestCase
+	[Test]
+	public void Can_make_a_component_fallback_via_AllTypes_1()
 	{
-		[Test]
-		public void Can_make_a_component_fallback_via_AllTypes_1()
-		{
-			Container.Register(
-				Classes.From(typeof(EmptyServiceA), typeof(EmptyServiceB))
-					.BasedOn<IEmptyService>()
-					.WithService.Base()
-					.ConfigureFor<EmptyServiceB>(c => c.IsFallback()));
-			var obj = Container.Resolve<IEmptyService>();
+		Container.Register(
+			Classes.From(typeof(EmptyServiceA), typeof(EmptyServiceB))
+				.BasedOn<IEmptyService>()
+				.WithService.Base()
+				.ConfigureFor<EmptyServiceB>(c => c.IsFallback()));
+		var obj = Container.Resolve<IEmptyService>();
 
-			Assert.IsNotInstanceOf<EmptyServiceB>(obj);
-		}
+		Assert.IsNotInstanceOf<EmptyServiceB>(obj);
+	}
 
-		[Test]
-		public void Can_make_a_component_fallback_via_AllTypes_2()
-		{
-			Container.Register(
-				Classes.From(typeof(EmptyServiceA), typeof(EmptyServiceB))
-					.BasedOn<IEmptyService>()
-					.WithService.Base()
-					.ConfigureFor<EmptyServiceA>(c => c.IsFallback()));
-			var obj = Container.Resolve<IEmptyService>();
+	[Test]
+	public void Can_make_a_component_fallback_via_AllTypes_2()
+	{
+		Container.Register(
+			Classes.From(typeof(EmptyServiceA), typeof(EmptyServiceB))
+				.BasedOn<IEmptyService>()
+				.WithService.Base()
+				.ConfigureFor<EmptyServiceA>(c => c.IsFallback()));
+		var obj = Container.Resolve<IEmptyService>();
 
-			Assert.IsNotInstanceOf<EmptyServiceA>(obj);
-		}
+		Assert.IsNotInstanceOf<EmptyServiceA>(obj);
+	}
 
-		[Test]
-		public void Can_make_first_component_default_with_filter()
-		{
-			Container.Register(Component.For<IEmptyService, EmptyServiceA, object>().ImplementedBy<EmptyServiceA>().IsFallback(t => t.GetTypeInfo().IsInterface),
-			                   Component.For<IEmptyService, EmptyServiceB, object>().ImplementedBy<EmptyServiceB>());
+	[Test]
+	public void Can_make_first_component_default_with_filter()
+	{
+		Container.Register(Component.For<IEmptyService, EmptyServiceA, object>().ImplementedBy<EmptyServiceA>().IsFallback(t => t.GetTypeInfo().IsInterface),
+			Component.For<IEmptyService, EmptyServiceB, object>().ImplementedBy<EmptyServiceB>());
 
-			var obj = Container.Resolve<IEmptyService>();
+		var obj = Container.Resolve<IEmptyService>();
 
-			Assert.IsInstanceOf<EmptyServiceB>(obj);
+		Assert.IsInstanceOf<EmptyServiceB>(obj);
 
-			var obj2 = Container.Resolve<object>();
-			Assert.IsInstanceOf<EmptyServiceA>(obj2);
-		}
+		var obj2 = Container.Resolve<object>();
+		Assert.IsInstanceOf<EmptyServiceA>(obj2);
+	}
 
-		[Test]
-		public void Can_make_first_component_fallback()
-		{
-			Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().IsFallback(),
-			                   Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>());
+	[Test]
+	public void Can_make_first_component_fallback()
+	{
+		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().IsFallback(),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>());
 
-			var obj = Container.Resolve<IEmptyService>();
+		var obj = Container.Resolve<IEmptyService>();
 
-			Assert.IsInstanceOf<EmptyServiceB>(obj);
-		}
+		Assert.IsInstanceOf<EmptyServiceB>(obj);
+	}
 
-		[Test]
-		public void Does_affect_order_when_using_ResolveAll()
-		{
-			Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().IsFallback(t => t.GetTypeInfo().IsInterface),
-			                   Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>());
+	[Test]
+	public void Does_affect_order_when_using_ResolveAll()
+	{
+		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().IsFallback(t => t.GetTypeInfo().IsInterface),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>());
 
-			var obj = Container.ResolveAll<IEmptyService>();
+		var obj = Container.ResolveAll<IEmptyService>();
 
-			Assert.IsInstanceOf<EmptyServiceB>(obj[0]);
-			Assert.IsInstanceOf<EmptyServiceA>(obj[1]);
-		}
+		Assert.IsInstanceOf<EmptyServiceB>(obj[0]);
+		Assert.IsInstanceOf<EmptyServiceA>(obj[1]);
+	}
 
-		[Test]
-		public void Later_fallback_does_not_override_earlier_one()
-		{
-			Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().IsFallback(),
-			                   Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().IsFallback());
+	[Test]
+	public void Later_fallback_does_not_override_earlier_one()
+	{
+		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().IsFallback(),
+			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().IsFallback());
 
-			var obj = Container.Resolve<IEmptyService>();
+		var obj = Container.Resolve<IEmptyService>();
 
-			Assert.IsInstanceOf<EmptyServiceA>(obj);
-		}
+		Assert.IsInstanceOf<EmptyServiceA>(obj);
 	}
 }

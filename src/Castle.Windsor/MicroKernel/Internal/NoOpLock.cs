@@ -12,20 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Internal
+namespace Castle.MicroKernel.Internal;
+
+using System.ComponentModel;
+
+[EditorBrowsable(EditorBrowsableState.Never)]
+internal class NoOpLock : ILockHolder
 {
-	using System.ComponentModel;
+	public static readonly ILockHolder Lock = new NoOpLock();
 
-	[EditorBrowsable(EditorBrowsableState.Never)]
-	internal class NoOpLock : ILockHolder
+	public void Dispose()
 	{
-		public static readonly ILockHolder Lock = new NoOpLock();
-
-		public void Dispose()
-		{
-
-		}
-
-		public bool LockAcquired => true;
 	}
+
+	public bool LockAcquired => true;
 }

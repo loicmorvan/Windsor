@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+namespace Castle.MicroKernel.SubSystems.Conversion;
+
+public interface ITypeNameParser
 {
-	public interface ITypeNameParser
-	{
-		TypeName Parse(string name);
-	}
+	TypeName Parse(string name);
 }

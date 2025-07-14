@@ -12,27 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.Startable.Components
+namespace Castle.Windsor.Tests.Facilities.Startable.Components;
+
+using System;
+
+using Castle.Core;
+
+public class StartableWithError : IStartable
 {
-	using System;
-	using Castle.Core;
+	public static int StartedCount;
 
-	public class StartableWithError : IStartable
+	public bool Started { get; private set; }
+
+	public void Start()
 	{
-		public static int StartedCount;
+		Started = true;
+		StartedCount++;
+		throw new Exception("This should go bonk");
+	}
 
-		public bool Started { get; private set; }
-
-		public void Start()
-		{
-			Started = true;
-			StartedCount++;
-			throw new Exception("This should go bonk");
-		}
-
-		public void Stop()
-		{
-			Started = false;
-		}
+	public void Stop()
+	{
+		Started = false;
 	}
 }

@@ -1,6 +1,7 @@
 # NHibernate Facility
 
-The NHibernate facility provides two levels of integration with NHibernate. You should pick the one you feel more comfortable with.
+The NHibernate facility provides two levels of integration with NHibernate. You should pick the one you feel more
+comfortable with.
 
 * You can just receive the `ISessionFactory` and Configuration on your components and use it as you wish.
 * You can use `ISessionManager` component to manage sessions.
@@ -39,11 +40,14 @@ With this scenario you have to control transactions and share sessions instances
 
 ## Integration level 2
 
-The second level of integration introduce the ISessionManager interface so you can use session and leave to the ISessionManager implementation the responsability of sharing compatible session within an invocation chain and be aware of transactions.
+The second level of integration introduce the ISessionManager interface so you can use session and leave to the
+ISessionManager implementation the responsability of sharing compatible session within an invocation chain and be aware
+of transactions.
 
 ## Configuration
 
-The configuration serves two purposes: configure NHibernate and configure the facility for the environment it is running in.
+The configuration serves two purposes: configure NHibernate and configure the facility for the environment it is running
+in.
 
 ### Configuration Schema
 
@@ -67,7 +71,8 @@ The configuration serves two purposes: configure NHibernate and configure the fa
 </facilities>
 ```
 
-You can register more than one factory if you are accessing more than one database. In this case, you must provide an alias for the factory:
+You can register more than one factory if you are accessing more than one database. In this case, you must provide an
+alias for the factory:
 
 ```xml
 <facilities>
@@ -85,7 +90,8 @@ You can register more than one factory if you are accessing more than one databa
 
 The alias is used to obtain an ISession instance through ISessionManager. More on that below.
 
-The attribute isWeb allows the facility to switch the implementation for ISessionStore. You can provide your own implementation using the attribute customStore.
+The attribute isWeb allows the facility to switch the implementation for ISessionStore. You can provide your own
+implementation using the attribute customStore.
 
 ### Configuration Sample
 
@@ -129,11 +135,15 @@ The attribute isWeb allows the facility to switch the implementation for ISessio
 </configuration>
 ```
 
-If you wish to use a connection string from a section of your configuration file then you need to use the NHibernate hibernate.connection.connection_string_name property rather than the hibernate.connection.connection_string property. This is documented in the [NHibernate documentation](http://www.hibernate.org/hib_docs/nhibernate/1.2/reference/en/html/session-configuration.html#d0e771).
+If you wish to use a connection string from a section of your configuration file then you need to use the NHibernate
+hibernate.connection.connection_string_name property rather than the hibernate.connection.connection_string property.
+This is documented in
+the [NHibernate documentation](http://www.hibernate.org/hib_docs/nhibernate/1.2/reference/en/html/session-configuration.html#d0e771).
 
 ## Using it
 
-To use the NHibernate facility you just need to register it and provide the configuration. If you want to use the integration level 2 approach, you can make your data access component require the ISessionManager.
+To use the NHibernate facility you just need to register it and provide the configuration. If you want to use the
+integration level 2 approach, you can make your data access component require the ISessionManager.
 
 ### ISessionManager
 
@@ -164,7 +174,8 @@ public class BlogDao
 }
 ```
 
-When OpenSession is called without arguments, the first configured Session Factory is used. If you have more than one database you have to specify the alias:
+When OpenSession is called without arguments, the first configured Session Factory is used. If you have more than one
+database you have to specify the alias:
 
 ```csharp
 public Blog CreateBlog(String name)
@@ -181,7 +192,8 @@ public Blog CreateBlog(String name)
 }
 ```
 
-If your component access another component, or just call another method that will use a session, within an opened session, the SessionManager will use the same session. For example:
+If your component access another component, or just call another method that will use a session, within an opened
+session, the SessionManager will use the same session. For example:
 
 ```csharp
 public class BlogDao
@@ -229,7 +241,8 @@ public class BlogDao
 
 ### Web applications
 
-If you make use of NHibernate's Lazy loading, then, for a web application, you must provide a session instance for the request lifetime. NHibernate facility provides a Http Module to do that.
+If you make use of NHibernate's Lazy loading, then, for a web application, you must provide a session instance for the
+request lifetime. NHibernate facility provides a Http Module to do that.
 
 The following sections illustrates the steps to make everything work as expected.
 
@@ -304,7 +317,8 @@ In your web.config, register the module SessionWebModule:
 
 ## Generic DAO
 
-A fellow Castle user, Steve Degosserie, has shared his implementation of NHibernateGenericDao. Follows a list of operations it implements:
+A fellow Castle user, Steve Degosserie, has shared his implementation of NHibernateGenericDao. Follows a list of
+operations it implements:
 
 ```csharp
 Array FindAll(Type type)
@@ -329,9 +343,11 @@ void InitializeLazyProperty(object instance, string propertyName)
 
 ## Transaction Support
 
-When you use the ISessionManager you can use declarative transaction management, together with the Automatic Transaction Management Facility.
+When you use the ISessionManager you can use declarative transaction management, together with the Automatic Transaction
+Management Facility.
 
-You can use the Transactional and Transaction attributes to associate transaction boundaries with your DAO class or business classes.
+You can use the Transactional and Transaction attributes to associate transaction boundaries with your DAO class or
+business classes.
 
 ```csharp
 [Transactional]
@@ -357,5 +373,6 @@ public class BlogDao
 
 ## Required Assemblies
 
-* [Castle.Facilities.NHibernateIntegration.dll](https://github.com/castleproject/Windsor/tree/master/src/Castle.Facilities.NHibernateIntegration) was not shipped with Windsor v3, see [issue #101](https://github.com/castleproject/Windsor/issues/101) for details
+* [Castle.Facilities.NHibernateIntegration.dll](https://github.com/castleproject/Windsor/tree/master/src/Castle.Facilities.NHibernateIntegration)
+  was not shipped with Windsor v3, see [issue #101](https://github.com/castleproject/Windsor/issues/101) for details
 * [NHibernate assemblies](http://www.nhforge.org)

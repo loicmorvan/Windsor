@@ -12,63 +12,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Extensions
+namespace Castle.Windsor.Diagnostics.Extensions;
+
+using System.Collections.Generic;
+using System.Linq;
+
+using Castle.MicroKernel;
+using Castle.Windsor.Diagnostics.DebuggerViews;
+using Castle.Windsor.Diagnostics.Helpers;
+
+public class ReleasePolicyTrackedObjects : AbstractContainerDebuggerExtension
 {
-	using System.Collections.Generic;
-	using System.Linq;
+	private const string name = "Objects tracked by release policy";
+	private TrackedComponentsDiagnostic diagnostic;
 
-	using Castle.MicroKernel;
-	using Castle.Windsor.Diagnostics.DebuggerViews;
-	using Castle.Windsor.Diagnostics.Helpers;
+	public static string Name => name;
 
-	public class ReleasePolicyTrackedObjects : AbstractContainerDebuggerExtension
+	public override IEnumerable<DebuggerViewItem> Attach()
 	{
-		private const string name = "Objects tracked by release policy";
-		private TrackedComponentsDiagnostic diagnostic;
+		var result = diagnostic.Inspect();
+		if (result == null) return new DebuggerViewItem[0];
+		var item = BuildItem(result);
+		if (item != null) return new[] { item };
+		return new DebuggerViewItem[0];
+	}
 
-		public override IEnumerable<DebuggerViewItem> Attach()
+	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
+	{
+		diagnostic = new TrackedComponentsDiagnostic();
+		diagnosticsHost.AddDiagnostic<ITrackedComponentsDiagnostic>(diagnostic);
+	}
+
+	private DebuggerViewItem BuildItem(ILookup<IHandler, object> results)
+	{
+		var totalCount = 0;
+		var items = new List<DebuggerViewItem>();
+		foreach (var result in results.OrderBy(l => l.Key.ComponentModel.Name))
 		{
-			var result = diagnostic.Inspect();
-			if (result == null)
-			{
-				return new DebuggerViewItem[0];
-			}
-			var item = BuildItem(result);
-			if (item != null)
-			{
-				return new[] { item };
-			}
-			return new DebuggerViewItem[0];
+			var handler = result.Key;
+			var objects = result.ToArray();
+			totalCount += objects.Length;
+			var view = ComponentDebuggerView.BuildFor(handler);
+			var item = new DebuggerViewItem(handler.GetComponentName(),
+				"Count = " + objects.Length,
+				new MasterDetailsDebuggerViewItem(view, view.Description, "Component", objects));
+			items.Add(item);
 		}
 
-		public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
-		{
-			diagnostic = new TrackedComponentsDiagnostic();
-			diagnosticsHost.AddDiagnostic<ITrackedComponentsDiagnostic>(diagnostic);
-		}
-
-		private DebuggerViewItem BuildItem(ILookup<IHandler, object> results)
-		{
-			var totalCount = 0;
-			var items = new List<DebuggerViewItem>();
-			foreach (var result in results.OrderBy(l => l.Key.ComponentModel.Name))
-			{
-				var handler = result.Key;
-				var objects = result.ToArray();
-				totalCount += objects.Length;
-				var view = ComponentDebuggerView.BuildFor(handler);
-				var item = new DebuggerViewItem(handler.GetComponentName(),
-				                                "Count = " + objects.Length,
-				                                new MasterDetailsDebuggerViewItem(view, view.Description, "Component", objects));
-				items.Add(item);
-			}
-			items.Sort((f, s) => f.Name.CompareTo(s.Name));
-			return new DebuggerViewItem(name, "Count = " + totalCount, items.ToArray());
-		}
-
-		public static string Name
-		{
-			get { return name; }
-		}
+		items.Sort((f, s) => f.Name.CompareTo(s.Name));
+		return new DebuggerViewItem(name, "Count = " + totalCount, items.ToArray());
 	}
 }

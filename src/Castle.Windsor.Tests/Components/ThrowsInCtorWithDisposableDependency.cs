@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using System;
+namespace CastleTests.Components;
 
-	public class ThrowsInCtorWithDisposableDependency
+using System;
+
+public class ThrowsInCtorWithDisposableDependency
+{
+	public ThrowsInCtorWithDisposableDependency(ISimpleService depedency)
 	{
-		public ThrowsInCtorWithDisposableDependency(ISimpleService depedency)
-		{
-			throw new Exception("Booooo!");
-		}
+		throw new Exception("Booooo!");
 	}
 }

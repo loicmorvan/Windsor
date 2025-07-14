@@ -12,36 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers
+namespace Castle.MicroKernel.Handlers;
+
+using System;
+
+public class ReleaseInvocation
 {
-	using System;
+	private Action proceed;
 
-	public class ReleaseInvocation
+	public ReleaseInvocation(Burden burden)
 	{
-		private Action proceed;
+		Burden = burden;
+	}
 
-		public ReleaseInvocation(Burden burden)
-		{
-			Burden = burden;
-		}
+	public Burden Burden { get; }
 
-		public Burden Burden { get; private set; }
+	public object Instance => Burden.Instance;
 
-		public object Instance
-		{
-			get { return Burden.Instance; }
-		}
+	public bool ReturnValue { get; set; }
 
-		public bool ReturnValue { get; set; }
+	public void Proceed()
+	{
+		proceed.Invoke();
+	}
 
-		public void Proceed()
-		{
-			proceed.Invoke();
-		}
-
-		internal void SetProceedDelegate(Action value)
-		{
-			proceed = value;
-		}
+	internal void SetProceedDelegate(Action value)
+	{
+		proceed = value;
 	}
 }

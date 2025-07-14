@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory
-{
-	public class ServiceRedirect
-	{
-		private readonly ServiceWithMultipleCtors serviceWithMultipleCtors;
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
-		public ServiceRedirect(ServiceWithMultipleCtors serviceWithMultipleCtors)
-		{
-			this.serviceWithMultipleCtors = serviceWithMultipleCtors;
-		}
+public class ServiceRedirect
+{
+	private readonly ServiceWithMultipleCtors serviceWithMultipleCtors;
+
+	public ServiceRedirect(ServiceWithMultipleCtors serviceWithMultipleCtors)
+	{
+		this.serviceWithMultipleCtors = serviceWithMultipleCtors;
 	}
 }

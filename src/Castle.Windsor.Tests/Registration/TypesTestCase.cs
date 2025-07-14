@@ -12,47 +12,47 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Registration
+namespace CastleTests.Registration;
+
+using System.Reflection;
+
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.Tests.ClassComponents;
+using Castle.Windsor.Tests.Interceptors;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class TypesTestCase : AbstractContainerTestCase
 {
-	using System.Reflection;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Tests.ClassComponents;
-	using Castle.Windsor.Tests.Interceptors;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class TypesTestCase : AbstractContainerTestCase
+	[Test]
+	public void Based_on_interface_types_registered()
 	{
-		[Test]
-		public void Based_on_interface_types_registered()
-		{
-			Container.Register(Types.FromAssembly(GetCurrentAssembly())
-			                   	.BasedOn(typeof(ICommon))
-				);
+		Container.Register(Types.FromAssembly(GetCurrentAssembly())
+			.BasedOn(typeof(ICommon))
+		);
 
-			var handlers = Kernel.GetHandlers(typeof(ICommon));
-			Assert.AreEqual(1, handlers.Length);
+		var handlers = Kernel.GetHandlers(typeof(ICommon));
+		Assert.AreEqual(1, handlers.Length);
 
-			handlers = Kernel.GetAssignableHandlers(typeof(ICommon));
-			Assert.Greater(handlers.Length, 1);
-		}
+		handlers = Kernel.GetAssignableHandlers(typeof(ICommon));
+		Assert.Greater(handlers.Length, 1);
+	}
 
-		[Test]
-		public void Interface_registered_with_no_implementation_with_interceptor_can_be_used()
-		{
-			Container.Register(
-				Component.For<ReturnDefaultInterceptor>(),
-				Types.FromAssembly(GetCurrentAssembly())
-					.BasedOn(typeof(ISimpleService))
-					.If(t => t.GetTypeInfo().IsInterface)
-					.Configure(t => t.Interceptors<ReturnDefaultInterceptor>())
-				);
+	[Test]
+	public void Interface_registered_with_no_implementation_with_interceptor_can_be_used()
+	{
+		Container.Register(
+			Component.For<ReturnDefaultInterceptor>(),
+			Types.FromAssembly(GetCurrentAssembly())
+				.BasedOn(typeof(ISimpleService))
+				.If(t => t.GetTypeInfo().IsInterface)
+				.Configure(t => t.Interceptors<ReturnDefaultInterceptor>())
+		);
 
-			var common = Container.Resolve<ISimpleService>();
-			common.Operation();
-		}
+		var common = Container.Resolve<ISimpleService>();
+		common.Operation();
 	}
 }

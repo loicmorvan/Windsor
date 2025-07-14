@@ -12,101 +12,99 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests
+namespace Castle.MicroKernel.Tests;
+
+using Castle.Core;
+using Castle.MicroKernel.Context;
+using Castle.MicroKernel.Registration;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class SubResolverTestCase
 {
-	using Castle.Core;
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class SubResolverTestCase
+	[Test]
+	public void WillAskResolverWhenTryingToResolveDependencyAfterAnotherHandlerWasRegistered()
 	{
-		[Test]
-		public void WillAskResolverWhenTryingToResolveDependencyAfterAnotherHandlerWasRegistered()
+		var resolver = new FooBarResolver();
+
+		IKernel kernel = new DefaultKernel();
+		kernel.Resolver.AddSubResolver(resolver);
+
+		kernel.Register(Component.For<Foo>());
+		var handler = kernel.GetHandler(typeof(Foo));
+
+		Assert.AreEqual(HandlerState.WaitingDependency, handler.CurrentState);
+
+		resolver.Result = 15;
+
+		kernel.Register(Component.For<A>());
+
+		Assert.AreEqual(HandlerState.Valid, handler.CurrentState);
+	}
+
+	public class Foo
+	{
+		private int bar;
+
+		public Foo(int bar)
 		{
-			var resolver = new FooBarResolver();
+			this.bar = bar;
+		}
+	}
 
-			IKernel kernel = new DefaultKernel();
-			kernel.Resolver.AddSubResolver(resolver);
+	public class FooBarResolver : ISubDependencyResolver
+	{
+		public int? Result;
 
-			kernel.Register(Component.For<Foo>());
-			var handler = kernel.GetHandler(typeof(Foo));
-
-			Assert.AreEqual(HandlerState.WaitingDependency, handler.CurrentState);
-
-			resolver.Result = 15;
-
-			kernel.Register(Component.For<A>());
-
-			Assert.AreEqual(HandlerState.Valid, handler.CurrentState);
+		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+		{
+			return Result != null;
 		}
 
-		public class Foo
+		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
 		{
-			private int bar;
+			return Result.Value;
+		}
+	}
 
-			public Foo(int bar)
-			{
-				this.bar = bar;
-			}
+	[Test]
+	public void Sub_resolver_can_provide_null_as_the_value_to_use()
+	{
+		IKernel kernel = new DefaultKernel();
+		kernel.Resolver.AddSubResolver(new NullResolver());
+
+		kernel.Register(Component.For<ComponentWithDependencyNotInContainer>());
+
+		Assert.Null(kernel.Resolve<ComponentWithDependencyNotInContainer>().DependencyNotInContainer);
+	}
+
+	public sealed class ComponentWithDependencyNotInContainer
+	{
+		public ComponentWithDependencyNotInContainer(DependencyNotInContainer dependencyNotInContainer)
+		{
+			DependencyNotInContainer = dependencyNotInContainer;
 		}
 
-		public class FooBarResolver : ISubDependencyResolver
+		public DependencyNotInContainer DependencyNotInContainer { get; }
+	}
+
+	public sealed class DependencyNotInContainer
+	{
+	}
+
+	private sealed class NullResolver : ISubDependencyResolver
+	{
+		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
 		{
-			public int? Result;
-
-			public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
-			{
-				return Result != null;
-			}
-
-			public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
-			{
-				return Result.Value;
-			}
+			return true;
 		}
 
-		[Test]
-		public void Sub_resolver_can_provide_null_as_the_value_to_use()
+		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
 		{
-			IKernel kernel = new DefaultKernel();
-			kernel.Resolver.AddSubResolver(new NullResolver());
-
-			kernel.Register(Component.For<ComponentWithDependencyNotInContainer>());
-
-			Assert.Null(kernel.Resolve<ComponentWithDependencyNotInContainer>().DependencyNotInContainer);
-		}
-
-		public sealed class ComponentWithDependencyNotInContainer
-		{
-			public ComponentWithDependencyNotInContainer(DependencyNotInContainer dependencyNotInContainer)
-			{
-				DependencyNotInContainer = dependencyNotInContainer;
-			}
-
-			public DependencyNotInContainer DependencyNotInContainer { get; }
-		}
-
-		public sealed class DependencyNotInContainer
-		{
-		}
-
-		private sealed class NullResolver : ISubDependencyResolver
-		{
-			public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
-			{
-				return true;
-			}
-
-			public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
-			{
-				return null;
-			}
+			return null;
 		}
 	}
 }

@@ -12,23 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Registration.Interceptors.Single
+namespace Castle.MicroKernel.Tests.Registration.Interceptors.Single;
+
+using System.Collections.Generic;
+
+using Castle.Core;
+using Castle.MicroKernel.Registration;
+
+public class SingleInterceptorKey : InterceptorsTestCaseHelper
 {
-	using System.Collections.Generic;
-
-	using Castle.Core;
-	using Castle.MicroKernel.Registration;
-
-	public class SingleInterceptorKey : InterceptorsTestCaseHelper
+	public override IRegistration RegisterInterceptors<S>(ComponentRegistration<S> registration)
 	{
-		public override IRegistration RegisterInterceptors<S>(ComponentRegistration<S> registration)
-		{
-			return registration.Interceptors("interceptorKey");
-		}
+		return registration.Interceptors("interceptorKey");
+	}
 
-		public override IEnumerable<InterceptorReference> GetExpectedInterceptorsInCorrectOrder()
-		{
-			yield return InterceptorReference.ForKey("interceptorKey");
-		}
+	public override IEnumerable<InterceptorReference> GetExpectedInterceptorsInCorrectOrder()
+	{
+		yield return InterceptorReference.ForKey("interceptorKey");
 	}
 }

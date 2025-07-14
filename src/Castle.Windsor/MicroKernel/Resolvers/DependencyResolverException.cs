@@ -12,34 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Resolvers
+namespace Castle.MicroKernel.Resolvers;
+
+using System;
+
+using Castle.Core.Internal;
+
+[Serializable]
+public class DependencyResolverException : Exception
 {
-	using System;
-	using System.Runtime.Serialization;
-
-	using Castle.Core.Internal;
-
-	[Serializable]
-	public class DependencyResolverException : Exception
+	/// <summary>Initializes a new instance of the <see cref = "DependencyResolverException" /> class.</summary>
+	/// <param name = "message">The message.</param>
+	/// <param name = "innerException">The inner exception.</param>
+	public DependencyResolverException(string message, Exception innerException) : base(message, innerException)
 	{
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "DependencyResolverException" /> class.
-		/// </summary>
-		/// <param name = "message">The message.</param>
-		/// <param name = "innerException">The inner exception.</param>
-		public DependencyResolverException(string message, Exception innerException) : base(message, innerException)
-		{
-			ExceptionHelper.SetUp(this);
-		}
+		this.SetUp();
+	}
 
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "DependencyResolverException" /> class.
-		/// </summary>
-		/// <param name = "message">The message.</param>
-		public DependencyResolverException(string message) : base(message)
-		{
-			ExceptionHelper.SetUp(this);
-		}
+	/// <summary>Initializes a new instance of the <see cref = "DependencyResolverException" /> class.</summary>
+	/// <param name = "message">The message.</param>
+	public DependencyResolverException(string message) : base(message)
+	{
+		this.SetUp();
+	}
 
 #if FEATURE_SERIALIZATION
 		/// <summary>
@@ -52,5 +47,4 @@ namespace Castle.MicroKernel.Resolvers
 			ExceptionHelper.SetUp(this);
 		}
 #endif
-	}
 }

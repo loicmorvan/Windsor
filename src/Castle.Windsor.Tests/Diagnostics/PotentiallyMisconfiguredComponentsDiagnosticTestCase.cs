@@ -12,44 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Diagnostics
+namespace CastleTests.Diagnostics;
+
+using Castle.MicroKernel;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Diagnostics;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+public class PotentiallyMisconfiguredComponentsDiagnosticTestCase : AbstractContainerTestCase
 {
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Diagnostics;
+	private IPotentiallyMisconfiguredComponentsDiagnostic diagnostic;
 
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	public class PotentiallyMisconfiguredComponentsDiagnosticTestCase : AbstractContainerTestCase
+	protected override void AfterContainerCreated()
 	{
-		private IPotentiallyMisconfiguredComponentsDiagnostic diagnostic;
+		var host = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IDiagnosticsHost;
+		diagnostic = host.GetDiagnostic<IPotentiallyMisconfiguredComponentsDiagnostic>();
+	}
 
-		protected override void AfterContainerCreated()
-		{
-			var host = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IDiagnosticsHost;
-			diagnostic = host.GetDiagnostic<IPotentiallyMisconfiguredComponentsDiagnostic>();
-		}
+	[Test]
+	public void Empty_when_all_components_healthy()
+	{
+		Container.Register(Component.For<A>(), Component.For<B>(), Component.For<C>());
 
-		[Test]
-		public void Empty_when_all_components_healthy()
-		{
-			Container.Register(Component.For<A>(), Component.For<B>(), Component.For<C>());
+		var handlers = diagnostic.Inspect();
 
-			var handlers = diagnostic.Inspect();
+		Assert.IsEmpty(handlers);
+	}
 
-			Assert.IsEmpty(handlers);
-		}
+	[Test]
+	public void Has_all_components_with_missing_or_waiting_dependencies()
+	{
+		Container.Register(Component.For<B>(), Component.For<C>());
 
-		[Test]
-		public void Has_all_components_with_missing_or_waiting_dependencies()
-		{
-			Container.Register(Component.For<B>(), Component.For<C>());
+		var handlers = diagnostic.Inspect();
 
-			var handlers = diagnostic.Inspect();
-
-			Assert.AreEqual(2, handlers.Length);
-		}
+		Assert.AreEqual(2, handlers.Length);
 	}
 }

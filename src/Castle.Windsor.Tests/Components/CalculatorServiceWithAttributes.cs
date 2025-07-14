@@ -12,25 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using System;
+namespace CastleTests.Components;
 
-	using Castle.Core;
-	using Castle.Windsor.Tests.Interceptors;
+using Castle.Core;
+using Castle.Windsor.Tests.Interceptors;
 
-	/// <summary>
-	///   Summary description for CalculatorServiceWithAttributes.
-	/// </summary>
-	[Interceptor(typeof(ResultModifierInterceptor))]
-	public class CalculatorServiceWithAttributes
+/// <summary>Summary description for CalculatorServiceWithAttributes.</summary>
+[Interceptor(typeof(ResultModifierInterceptor))]
+public class CalculatorServiceWithAttributes
 #if FEATURE_REMOTING
 		: MarshalByRefObject
 #endif
+{
+	public virtual int Sum(int x, int y)
 	{
-		public virtual int Sum(int x, int y)
-		{
-			return x + y;
-		}
+		return x + y;
 	}
 }

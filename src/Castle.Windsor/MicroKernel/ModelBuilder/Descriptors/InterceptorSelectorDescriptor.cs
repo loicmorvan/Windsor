@@ -12,29 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+
+using Castle.Core;
+using Castle.DynamicProxy;
+using Castle.MicroKernel.Proxy;
+
+public class InterceptorSelectorDescriptor : IComponentModelDescriptor
 {
-	using Castle.Core;
-	using Castle.DynamicProxy;
-	using Castle.MicroKernel.Proxy;
+	private readonly IReference<IInterceptorSelector> selector;
 
-	public class InterceptorSelectorDescriptor : IComponentModelDescriptor
+	public InterceptorSelectorDescriptor(IReference<IInterceptorSelector> selector)
 	{
-		private readonly IReference<IInterceptorSelector> selector;
+		this.selector = selector;
+	}
 
-		public InterceptorSelectorDescriptor(IReference<IInterceptorSelector> selector)
-		{
-			this.selector = selector;
-		}
+	public void BuildComponentModel(IKernel kernel, ComponentModel model)
+	{
+		var options = model.ObtainProxyOptions();
+		options.Selector = selector;
+	}
 
-		public void BuildComponentModel(IKernel kernel, ComponentModel model)
-		{
-			var options = model.ObtainProxyOptions();
-			options.Selector = selector;
-		}
-
-		public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-		{
-		}
+	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+	{
 	}
 }

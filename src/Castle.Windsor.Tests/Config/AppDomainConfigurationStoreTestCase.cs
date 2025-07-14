@@ -14,7 +14,6 @@
 
 
 #if FEATURE_SYSTEM_CONFIGURATION
-
 namespace Castle.Windsor.Tests.Config
 {
 	using Castle.Core.Resource;

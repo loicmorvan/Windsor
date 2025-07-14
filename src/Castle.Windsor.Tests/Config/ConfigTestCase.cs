@@ -12,31 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Config
+namespace CastleTests.Config;
+
+using Castle.Windsor.Installer;
+using Castle.Windsor.Tests;
+using Castle.Windsor.Tests.Interceptors;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class ConfigTestCase : AbstractContainerTestCase
 {
-	using Castle.Windsor.Installer;
-	using Castle.Windsor.Tests;
-	using Castle.Windsor.Tests.Interceptors;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class ConfigTestCase : AbstractContainerTestCase
+	[Test]
+	[Ignore("Not supported. Would be good to have, not sure if in this form or another")]
+	public void Can_split_configuration_between_multiple_component_elements()
 	{
-		[Test]
-		[Ignore("Not supported. Would be good to have, not sure if in this form or another")]
-		public void Can_split_configuration_between_multiple_component_elements()
-		{
-			// see http://stackoverflow.com/questions/3253975/castle-windsor-with-xml-includes-customization-problem for real life scenario
-			Container.Install(Configuration.FromXmlFile(ConfigHelper.ResolveConfigPath("Configuration/OneComponentInTwoPieces.xml")));
-			var service = Container.Resolve<ISimpleService>("Foo");
-			var interceptor = Container.Resolve<CountingInterceptor>("a");
+		// see http://stackoverflow.com/questions/3253975/castle-windsor-with-xml-includes-customization-problem for real life scenario
+		Container.Install(Configuration.FromXmlFile(ConfigHelper.ResolveConfigPath("Configuration/OneComponentInTwoPieces.xml")));
+		var service = Container.Resolve<ISimpleService>("Foo");
+		var interceptor = Container.Resolve<CountingInterceptor>("a");
 
-			service.Operation();
+		service.Operation();
 
-			Assert.AreEqual(1, interceptor.InterceptedCallsCount);
-		}
+		Assert.AreEqual(1, interceptor.InterceptedCallsCount);
 	}
 }

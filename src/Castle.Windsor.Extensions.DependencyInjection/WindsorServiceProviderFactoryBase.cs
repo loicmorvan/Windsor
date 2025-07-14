@@ -22,13 +22,14 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 	using Castle.Windsor.Extensions.DependencyInjection.Extensions;
 	using Castle.Windsor.Extensions.DependencyInjection.Resolvers;
 	using Castle.Windsor.Extensions.DependencyInjection.Scope;
+	using Castle.Windsor.Extensions.DependencyInjection.SubSystems;
 
 	using Microsoft.Extensions.DependencyInjection;
 
 	public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactory<IWindsorContainer>
 	{
-		internal ExtensionContainerRootScope rootScope;
 		protected IWindsorContainer rootContainer;
+		internal ExtensionContainerRootScope rootScope;
 
 		public virtual IWindsorContainer Container => rootContainer;
 
@@ -62,22 +63,16 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 		{
 			container.Kernel.AddSubSystem(
 				SubSystemConstants.NamingKey,
-				new SubSystems.DependencyInjectionNamingSubsystem()
+				new DependencyInjectionNamingSubsystem()
 			);
 		}
 
 		protected virtual IWindsorContainer BuildContainer(IServiceCollection serviceCollection, IWindsorContainer windsorContainer)
 		{
-			if (rootContainer == null)
-			{
-				CreateRootContainer();
-			}
+			if (rootContainer == null) CreateRootContainer();
 			if (rootContainer == null) throw new ArgumentNullException("Could not initialize container");
 
-			if (serviceCollection == null)
-			{
-				return rootContainer;
-			}
+			if (serviceCollection == null) return rootContainer;
 
 			RegisterContainer(rootContainer);
 			RegisterProviders(rootContainer);
@@ -119,12 +114,9 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 					.LifestyleSingleton());
 		}
 
-		protected virtual void RegisterServiceCollection(IServiceCollection serviceCollection,IWindsorContainer container)
+		protected virtual void RegisterServiceCollection(IServiceCollection serviceCollection, IWindsorContainer container)
 		{
-			foreach (var service in serviceCollection)
-			{
-				rootContainer.Register(service.CreateWindsorRegistration());
-			}
+			foreach (var service in serviceCollection) rootContainer.Register(service.CreateWindsorRegistration());
 		}
 
 		protected virtual void AddSubResolvers()

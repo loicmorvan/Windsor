@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+[StandardInterceptor]
+public class CalculatorServiceWithStandardInterceptor : CalculatorService
 {
-	[StandardInterceptor]
-	public class CalculatorServiceWithStandardInterceptor : CalculatorService
-	{
-	}
 }

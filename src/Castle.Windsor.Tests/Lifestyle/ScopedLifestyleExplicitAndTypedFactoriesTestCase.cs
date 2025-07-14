@@ -12,84 +12,83 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Lifestyle
+namespace CastleTests.Lifestyle;
+
+using Castle.Facilities.TypedFactory;
+using Castle.MicroKernel.Lifestyle;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class ScopedLifestyleExplicitAndTypedFactoriesTestCase : AbstractContainerTestCase
 {
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel.Lifestyle;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class ScopedLifestyleExplicitAndTypedFactoriesTestCase : AbstractContainerTestCase
+	protected override void AfterContainerCreated()
 	{
-		protected override void AfterContainerCreated()
+		Container.AddFacility<TypedFactoryFacility>();
+	}
+
+	[Test]
+	public void Can_obtain_scoped_component_via_factory()
+	{
+		Container.Register(Component.For<UsesDisposableFooDelegate>().LifestyleTransient(),
+			Component.For<DisposableFoo>().LifestyleScoped());
+
+		var instance = Container.Resolve<UsesDisposableFooDelegate>();
+		using (Container.BeginScope())
 		{
-			Container.AddFacility<TypedFactoryFacility>();
+			instance.GetFoo();
 		}
+	}
 
-		[Test]
-		public void Can_obtain_scoped_component_via_factory()
+	[Test]
+	public void Scoped_component_via_factory_and_outsideinstances_reused_properly()
+	{
+		Container.Register(Component.For<UsesFooAndDelegate>().LifeStyle.Transient,
+			Component.For<Foo>().LifeStyle.Scoped()
+				.DependsOn(Parameter.ForKey("number").Eq("1")));
+		using (Container.BeginScope())
 		{
-			Container.Register(Component.For<UsesDisposableFooDelegate>().LifestyleTransient(),
-			                   Component.For<DisposableFoo>().LifestyleScoped());
+			var instance = Container.Resolve<UsesFooAndDelegate>();
 
+			var one = instance.Foo;
+			var two = instance.GetFoo();
+			Assert.AreSame(one, two);
+		}
+	}
+
+	[Test]
+	public void Scoped_component_via_factory_instances_reused_properly()
+	{
+		Container.Register(Component.For<UsesDisposableFooDelegate>().LifeStyle.Transient,
+			Component.For<DisposableFoo>().LifestyleScoped());
+		using (Container.BeginScope())
+		{
 			var instance = Container.Resolve<UsesDisposableFooDelegate>();
-			using (Container.BeginScope())
-			{
-				instance.GetFoo();
-			}
+
+			var one = instance.GetFoo();
+			var two = instance.GetFoo();
+
+			Assert.AreSame(one, two);
 		}
+	}
 
-		[Test]
-		public void Scoped_component_via_factory_and_outsideinstances_reused_properly()
+	[Test]
+	public void Scoped_component_via_factory_reused_properly_across_factories()
+	{
+		Container.Register(Component.For<UsesTwoFooDelegates>().LifeStyle.Transient,
+			Component.For<Foo>().LifestyleScoped());
+
+		var instance = Container.Resolve<UsesTwoFooDelegates>();
+		using (Container.BeginScope())
 		{
-			Container.Register(Component.For<UsesFooAndDelegate>().LifeStyle.Transient,
-			                   Component.For<Foo>().LifeStyle.Scoped()
-			                   	.DependsOn(Parameter.ForKey("number").Eq("1")));
-			using (Container.BeginScope())
-			{
-				var instance = Container.Resolve<UsesFooAndDelegate>();
+			var one = instance.GetFooOne();
+			var two = instance.GetFooTwo();
 
-				var one = instance.Foo;
-				var two = instance.GetFoo();
-				Assert.AreSame(one, two);
-			}
-		}
-
-		[Test]
-		public void Scoped_component_via_factory_instances_reused_properly()
-		{
-			Container.Register(Component.For<UsesDisposableFooDelegate>().LifeStyle.Transient,
-			                   Component.For<DisposableFoo>().LifestyleScoped());
-			using (Container.BeginScope())
-			{
-				var instance = Container.Resolve<UsesDisposableFooDelegate>();
-
-				var one = instance.GetFoo();
-				var two = instance.GetFoo();
-
-				Assert.AreSame(one, two);
-			}
-		}
-
-		[Test]
-		public void Scoped_component_via_factory_reused_properly_across_factories()
-		{
-			Container.Register(Component.For<UsesTwoFooDelegates>().LifeStyle.Transient,
-			                   Component.For<Foo>().LifestyleScoped());
-
-			var instance = Container.Resolve<UsesTwoFooDelegates>();
-			using (Container.BeginScope())
-			{
-				var one = instance.GetFooOne();
-				var two = instance.GetFooTwo();
-
-				Assert.AreSame(one, two);
-			}
+			Assert.AreSame(one, two);
 		}
 	}
 }

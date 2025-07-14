@@ -12,18 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+public class UnresolvalbeDependencyWithPrimitiveConstructor : IDependency
 {
-	using Castle.Windsor.Tests;
-
-	public class UnresolvalbeDependencyWithPrimitiveConstructor : IDependency
+	public UnresolvalbeDependencyWithPrimitiveConstructor(A a)
 	{
-		public UnresolvalbeDependencyWithPrimitiveConstructor(A a)
-		{
-		}
+	}
 
-		public UnresolvalbeDependencyWithPrimitiveConstructor(string str)
-		{
-		}
+	public UnresolvalbeDependencyWithPrimitiveConstructor(string str)
+	{
 	}
 }

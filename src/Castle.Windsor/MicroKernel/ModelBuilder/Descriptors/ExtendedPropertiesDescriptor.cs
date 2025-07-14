@@ -12,47 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+
+using System.Collections;
+
+using Castle.Core;
+using Castle.Core.Internal;
+using Castle.MicroKernel.Registration;
+
+public class ExtendedPropertiesDescriptor : IComponentModelDescriptor
 {
-	using System;
-	using System.Collections;
+	private readonly IDictionary dictionary;
+	private readonly Property[] properties;
 
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Registration;
-
-	public class ExtendedPropertiesDescriptor : IComponentModelDescriptor
+	public ExtendedPropertiesDescriptor(params Property[] properties)
 	{
-		private readonly IDictionary dictionary;
-		private readonly Property[] properties;
+		this.properties = properties;
+	}
 
-		public ExtendedPropertiesDescriptor(params Property[] properties)
-		{
-			this.properties = properties;
-		}
+	public ExtendedPropertiesDescriptor(IDictionary dictionary)
+	{
+		this.dictionary = dictionary;
+	}
 
-		public ExtendedPropertiesDescriptor(IDictionary dictionary)
-		{
-			this.dictionary = dictionary;
-		}
+	public void BuildComponentModel(IKernel kernel, ComponentModel model)
+	{
+	}
 
-		public void BuildComponentModel(IKernel kernel, ComponentModel model)
-		{
-		}
+	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+	{
+		if (dictionary != null)
+			foreach (DictionaryEntry property in dictionary)
+				model.ExtendedProperties[property.Key] = property.Value;
 
-		public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-		{
-			if (dictionary != null)
-			{
-				foreach (DictionaryEntry property in dictionary)
-				{
-					model.ExtendedProperties[property.Key] = property.Value;
-				}
-			}
-			if (properties != null)
-			{
-				properties.ForEach(p => model.ExtendedProperties[p.Key] = p.Value);
-			}
-		}
+		if (properties != null) properties.ForEach(p => model.ExtendedProperties[p.Key] = p.Value);
 	}
 }

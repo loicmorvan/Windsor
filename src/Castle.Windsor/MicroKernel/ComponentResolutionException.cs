@@ -12,53 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.MicroKernel;
+
+using System;
+
+using Castle.Core;
+using Castle.Core.Internal;
+
+/// <summary>Exception thrown when resolution process for a component was unsuccessful at some point for whatever reason.</summary>
+[Serializable]
+public class ComponentResolutionException : Exception
 {
-	using System;
-	using System.Runtime.Serialization;
+	public ComponentModel Component { get; private set; }
 
-	using Castle.Core;
-	using Castle.Core.Internal;
-
-	/// <summary>
-	///   Exception thrown when resolution process for a component was unsuccessful at some point for whatever reason.
-	/// </summary>
-	[Serializable]
-	public class ComponentResolutionException : Exception
+	public ComponentResolutionException(string message)
+		: base(message)
 	{
-		public ComponentModel Component { get; private set; }
+		this.SetUp();
+	}
 
-		public ComponentResolutionException(string message)
-			: base(message)
-		{
-			ExceptionHelper.SetUp(this);
-		}
+	public ComponentResolutionException(string message, Exception innerException)
+		: base(message, innerException)
+	{
+		this.SetUp();
+	}
 
-		public ComponentResolutionException(string message, Exception innerException)
-			: base(message, innerException)
-		{
-			ExceptionHelper.SetUp(this);
-		}
+	public ComponentResolutionException(string message, ComponentModel component)
+		: base(message)
+	{
+		this.SetUp();
+		Component = component;
+	}
 
-		public ComponentResolutionException(string message, ComponentModel component)
-			: base(message)
-		{
-			ExceptionHelper.SetUp(this);
-			Component = component;
-		}
+	public ComponentResolutionException(string message, Exception innerException, ComponentModel component)
+		: base(message, innerException)
+	{
+		this.SetUp();
+		Component = component;
+	}
 
-		public ComponentResolutionException(string message, Exception innerException, ComponentModel component)
-			: base(message, innerException)
-		{
-			ExceptionHelper.SetUp(this);
-			Component = component;
-		}
-
-		public ComponentResolutionException(ComponentModel component)
-		{
-			ExceptionHelper.SetUp(this);
-			Component = component;
-		}
+	public ComponentResolutionException(ComponentModel component)
+	{
+		this.SetUp();
+		Component = component;
+	}
 
 #if FEATURE_SERIALIZATION
 		public ComponentResolutionException(SerializationInfo info, StreamingContext context)
@@ -67,5 +64,4 @@ namespace Castle.MicroKernel
 			ExceptionHelper.SetUp(this);
 		}
 #endif
-	}
 }

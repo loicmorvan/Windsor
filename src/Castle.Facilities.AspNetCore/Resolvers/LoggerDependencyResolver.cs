@@ -12,43 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Resolvers
+namespace Castle.Facilities.AspNetCore.Resolvers;
+
+using System;
+
+using Castle.Core;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Context;
+
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
+public class LoggerDependencyResolver : ISubDependencyResolver, IAcceptServiceProvider
 {
-	using System;
+	private IServiceProvider serviceProvider;
 
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Context;
-
-	using Microsoft.Extensions.DependencyInjection;
-	using Microsoft.Extensions.Logging;
-
-	public class LoggerDependencyResolver : ISubDependencyResolver, IAcceptServiceProvider
+	public void AcceptServiceProvider(IServiceProvider serviceProvider)
 	{
-		private IServiceProvider serviceProvider;
+		this.serviceProvider = serviceProvider;
+	}
 
-		public void AcceptServiceProvider(IServiceProvider serviceProvider)
-		{
-			this.serviceProvider = serviceProvider;
-		}
+	public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+	{
+		return dependency.TargetType == typeof(ILogger);
+	}
 
-		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
-		{
-			return dependency.TargetType == typeof(ILogger);
-		}
+	public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+	{
+		ThrowIfServiceProviderIsNull();
+		return serviceProvider.GetService<ILoggerFactory>().CreateLogger(model.Name);
+	}
 
-		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
-		{
-			ThrowIfServiceProviderIsNull();
-			return serviceProvider.GetService<ILoggerFactory>().CreateLogger(model.Name);
-		}
-
-		private void ThrowIfServiceProviderIsNull()
-		{
-			if (serviceProvider == null)
-			{
-				throw new InvalidOperationException($"The serviceProvider for this resolver is null. Please call AcceptServiceProvider first.");
-			}
-		}
+	private void ThrowIfServiceProviderIsNull()
+	{
+		if (serviceProvider == null) throw new InvalidOperationException("The serviceProvider for this resolver is null. Please call AcceptServiceProvider first.");
 	}
 }

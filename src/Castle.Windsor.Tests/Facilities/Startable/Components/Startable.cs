@@ -12,26 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.Startable.Components
+namespace Castle.Windsor.Tests.Facilities.Startable.Components;
+
+using Castle.Core;
+using Castle.MicroKernel.Tests.ClassComponents;
+
+public class Startable : IStartable
 {
-	using Castle.Core;
-	using Castle.MicroKernel.Tests.ClassComponents;
+	public static bool Started;
 
-	public class Startable : IStartable
+	public Startable(ICustomer customer)
 	{
-		public static bool Started;
+	}
 
-		public Startable(ICustomer customer)
-		{
-		}
+	public void Start()
+	{
+		Started = true;
+	}
 
-		public void Start()
-		{
-			Started = true;
-		}
-
-		public void Stop()
-		{
-		}
+	public void Stop()
+	{
 	}
 }

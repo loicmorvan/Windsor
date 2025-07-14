@@ -12,28 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel.Tests.ClassComponents;
+
+/// <summary>Summary description for DefaultCustomer.</summary>
+public class DefaultCustomer
 {
-	using System;
+	public string Name { get; set; }
 
-	/// <summary>
-	/// Summary description for DefaultCustomer.
-	/// </summary>
-	public class DefaultCustomer
-	{
-		private String name;
-		private String address;
-
-		public String Name
-		{
-			get { return name; }
-			set { name = value; }
-		}
-
-		public String Address
-		{
-			get { return address; }
-			set { address = value; }
-		}
-	}
+	public string Address { get; set; }
 }

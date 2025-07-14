@@ -12,27 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+using System;
+
+public class LoggingRepositoryDecorator<T> : IRepository<T>
 {
-	using System;
+	public IRepository<T> inner;
 
-	public class LoggingRepositoryDecorator<T> : IRepository<T>
+	public LoggingRepositoryDecorator()
 	{
-		public IRepository<T> inner;
+	}
 
-		public LoggingRepositoryDecorator()
-		{
-		}
+	public LoggingRepositoryDecorator(IRepository<T> inner)
+	{
+		this.inner = inner;
+	}
 
-		public LoggingRepositoryDecorator(IRepository<T> inner)
-		{
-			this.inner = inner;
-		}
-
-		public T Get(int id)
-		{
-			Console.WriteLine("Getting {0}", id);
-			return inner.Get(id);
-		}
+	public T Get(int id)
+	{
+		Console.WriteLine("Getting {0}", id);
+		return inner.Get(id);
 	}
 }

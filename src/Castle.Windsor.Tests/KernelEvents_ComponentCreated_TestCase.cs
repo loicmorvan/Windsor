@@ -12,45 +12,46 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace CastleTests;
+
+using System.Collections.Generic;
+using System.Linq;
+
+using Castle.Core;
+using Castle.DynamicProxy;
+using Castle.MicroKernel.Registration;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class KernelEvents_ComponentCreated_TestCase : AbstractContainerTestCase
 {
-	using System.Collections.Generic;
-	using Castle.Core;
-	using Castle.DynamicProxy;
-	using Castle.MicroKernel.Registration;
-	using CastleTests.Components;
-	using NUnit.Framework;
-	using System.Linq;
+	private readonly IList<KeyValuePair<ComponentModel, object>> list = new List<KeyValuePair<ComponentModel, object>>();
 
-	[TestFixture]
-	public class KernelEvents_ComponentCreated_TestCase : AbstractContainerTestCase
+	protected override void AfterContainerCreated()
 	{
-		readonly IList<KeyValuePair<ComponentModel, object>> list = new List<KeyValuePair<ComponentModel, object>>();
+		list.Clear();
+		Container.Kernel.ComponentCreated += Kernel_ComponentCreated;
+	}
 
-		protected override void AfterContainerCreated()
-		{
-			list.Clear();
-			Container.Kernel.ComponentCreated += Kernel_ComponentCreated;
-		}
-
-		void Kernel_ComponentCreated(ComponentModel model, object instance)
-		{
-			list.Add(new KeyValuePair<ComponentModel, object>(model, instance));
-		}
+	private void Kernel_ComponentCreated(ComponentModel model, object instance)
+	{
+		list.Add(new KeyValuePair<ComponentModel, object>(model, instance));
+	}
 
 
-		[Test]
-		[Description("As reported in http://stackoverflow.com/questions/8923931/castle-windsor-component-created-event-with-interceptor")]
-		public void Event_raised_for_component_with_interceptor()
-		{
+	[Test]
+	[Description("As reported in http://stackoverflow.com/questions/8923931/castle-windsor-component-created-event-with-interceptor")]
+	public void Event_raised_for_component_with_interceptor()
+	{
+		Container.Register(
+			Component.For<IInterceptor>().ImplementedBy<StandardInterceptor>().LifestyleTransient(),
+			Component.For<IService>().ImplementedBy<MyService>().Interceptors<StandardInterceptor>().LifestyleTransient());
 
-			Container.Register(
-				Component.For<IInterceptor>().ImplementedBy<StandardInterceptor>().LifestyleTransient(),
-				Component.For<IService>().ImplementedBy<MyService>().Interceptors<StandardInterceptor>().LifestyleTransient());
-
-			var service = Container.Resolve<IService>();
-			CollectionAssert.IsNotEmpty(list);
-			Assert.IsTrue(list.Any(t => t.Value == service));
-		}
+		var service = Container.Resolve<IService>();
+		CollectionAssert.IsNotEmpty(list);
+		Assert.IsTrue(list.Any(t => t.Value == service));
 	}
 }

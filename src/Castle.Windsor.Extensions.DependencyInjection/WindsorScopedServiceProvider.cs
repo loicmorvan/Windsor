@@ -18,39 +18,21 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
-	
-	using Castle.Windsor;
+
 	using Castle.Windsor.Extensions.DependencyInjection.Scope;
 
 	using Microsoft.Extensions.DependencyInjection;
 
 	internal class WindsorScopedServiceProvider : IServiceProvider, ISupportRequiredService, IDisposable
 	{
+		private readonly IWindsorContainer container;
 		private readonly ExtensionContainerScopeBase scope;
 		private bool disposing;
 
-		private readonly IWindsorContainer container;
-		
 		public WindsorScopedServiceProvider(IWindsorContainer container)
 		{
 			this.container = container;
 			scope = ExtensionContainerScopeCache.Current;
-		}
-
-		public object GetService(Type serviceType)
-		{
-			using(_ = new ForcedScope(scope))
-			{
-				return ResolveInstanceOrNull(serviceType, true);	
-			}
-		}
-
-		public object GetRequiredService(Type serviceType)
-		{
-			using(_ = new ForcedScope(scope))
-			{
-				return ResolveInstanceOrNull(serviceType, false);	
-			}
 		}
 
 		public void Dispose()
@@ -62,12 +44,26 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 			disposableScope?.Dispose();
 			container.Dispose();
 		}
+
+		public object GetService(Type serviceType)
+		{
+			using (_ = new ForcedScope(scope))
+			{
+				return ResolveInstanceOrNull(serviceType, true);
+			}
+		}
+
+		public object GetRequiredService(Type serviceType)
+		{
+			using (_ = new ForcedScope(scope))
+			{
+				return ResolveInstanceOrNull(serviceType, false);
+			}
+		}
+
 		private object ResolveInstanceOrNull(Type serviceType, bool isOptional)
 		{
-			if (container.Kernel.HasComponent(serviceType))
-			{
-				return container.Resolve(serviceType);
-			}
+			if (container.Kernel.HasComponent(serviceType)) return container.Resolve(serviceType);
 
 			if (serviceType.GetTypeInfo().IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
 			{
@@ -75,10 +71,7 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 				return allObjects;
 			}
 
-			if (isOptional)
-			{
-				return null;
-			}
+			if (isOptional) return null;
 
 			return container.Resolve(serviceType);
 		}

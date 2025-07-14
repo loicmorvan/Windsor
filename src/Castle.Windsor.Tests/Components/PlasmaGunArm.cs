@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class PlasmaGunArm : IArm
-	{
-		public float GetLength()
-		{
-			return 2.0f;
-		}
+namespace CastleTests.Components;
 
-		public void Rotate(float degree)
-		{
-		}
+public class PlasmaGunArm : IArm
+{
+	public float GetLength()
+	{
+		return 2.0f;
+	}
+
+	public void Rotate(float degree)
+	{
 	}
 }

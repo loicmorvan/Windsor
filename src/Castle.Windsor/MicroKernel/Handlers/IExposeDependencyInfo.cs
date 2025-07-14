@@ -12,21 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers
+namespace Castle.MicroKernel.Handlers;
+
+/// <summary>Might be implemented by a handler so it can expose access to dependency information which is used to construct meaningful error messages</summary>
+public interface IExposeDependencyInfo
 {
 	/// <summary>
-	///   Might be implemented by a handler 
-	///   so it can expose access to dependency information 
-	///   which is used to construct meaningful error messages
+	///     Informs the <paramref name = "inspector" /> about missing dependencies. Implementers should ignore the call if no dependencies are missing and call back the inspector with the information
+	///     required otherwise
 	/// </summary>
-	public interface IExposeDependencyInfo
-	{
-		/// <summary>
-		///   Informs the <paramref name = "inspector" /> about missing dependencies.
-		///   Implementers should ignore the call if no dependencies are missing and 
-		///   call back the inspector with the information required otherwise
-		/// </summary>
-		/// <param name = "inspector"></param>
-		void ObtainDependencyDetails(IDependencyInspector inspector);
-	}
+	/// <param name = "inspector"></param>
+	void ObtainDependencyDetails(IDependencyInspector inspector);
 }

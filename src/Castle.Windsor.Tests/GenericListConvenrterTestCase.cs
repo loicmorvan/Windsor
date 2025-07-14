@@ -12,23 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace CastleTests;
+
+using System.Collections.Generic;
+
+using Castle.Core.Resource;
+using Castle.Windsor.Installer;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class GenericListConvenrterTestCase : AbstractContainerTestCase
 {
-	using System.Collections.Generic;
-
-	using Castle.Core.Resource;
-	using Castle.Windsor.Installer;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class GenericListConvenrterTestCase : AbstractContainerTestCase
+	[Test]
+	public void Can_read_component_with_dictionary_of_lists()
 	{
-		[Test]
-		public void Can_read_component_with_dictionary_of_lists()
-		{
-			var xml =
-				@"<configuration>
+		var xml =
+			@"<configuration>
 	<components>
 		<component service=""IMyObject"" type=""MyObject"">
 			<parameters>
@@ -47,30 +47,26 @@ namespace CastleTests
 	</components>
 </configuration>";
 
-			Container.Install(Configuration.FromXml(new StaticContentResource(xml)));
-			var item = Container.Resolve<IMyObject>();
+		Container.Install(Configuration.FromXml(new StaticContentResource(xml)));
+		var item = Container.Resolve<IMyObject>();
 
-			Assert.AreEqual(1, item.Count);
-		}
+		Assert.AreEqual(1, item.Count);
 	}
+}
 
-	public interface IMyObject
+public interface IMyObject
+{
+	int Count { get; }
+}
+
+public class MyObject : IMyObject
+{
+	protected readonly IDictionary<int, IList<string>> stuff;
+
+	public MyObject(IDictionary<int, IList<string>> stuff)
 	{
-		int Count { get; }
+		this.stuff = stuff;
 	}
 
-	public class MyObject : IMyObject
-	{
-		protected readonly IDictionary<int, IList<string>> stuff;
-
-		public MyObject(IDictionary<int, IList<string>> stuff)
-		{
-			this.stuff = stuff;
-		}
-
-		public virtual int Count
-		{
-			get { return stuff.Count; }
-		}
-	}
+	public virtual int Count => stuff.Count;
 }

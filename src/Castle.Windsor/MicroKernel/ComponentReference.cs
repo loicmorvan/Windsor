@@ -12,125 +12,108 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
-{
-	using System;
-	using System.Diagnostics;
-	using System.Linq;
-	using System.Reflection;
+namespace Castle.MicroKernel;
 
-	using Castle.Core;
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Resolvers;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+
+using Castle.Core;
+using Castle.MicroKernel.Context;
+using Castle.MicroKernel.Resolvers;
+
+/// <summary>Reference to component obtained from the container.</summary>
+/// <typeparam name = "T"></typeparam>
+[Serializable]
+public class ComponentReference<T> : IReference<T>
+{
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	protected readonly string referencedComponentName;
+
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	protected readonly Type referencedComponentType;
+
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	protected DependencyModel dependencyModel;
 
 	/// <summary>
-	///   Reference to component obtained from the container.
+	///     Creates a new instance of <see cref = "ComponentReference{T}" /> referencing default component implemented by
+	///     <paramref
+	///         name = "componentType" />
 	/// </summary>
-	/// <typeparam name = "T"></typeparam>
-	[Serializable]
-	public class ComponentReference<T> : IReference<T>
+	/// <param name = "componentType"></param>
+	public ComponentReference(Type componentType)
 	{
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		protected readonly string referencedComponentName;
+		referencedComponentName = ComponentName.DefaultNameFor(componentType);
+		referencedComponentType = componentType;
+	}
 
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		protected readonly Type referencedComponentType;
+	/// <summary>
+	///     Creates a new instance of <see cref = "ComponentReference{T}" /> referencing component
+	///     <paramref
+	///         name = "referencedComponentName" />
+	/// </summary>
+	/// <param name = "referencedComponentName"></param>
+	public ComponentReference(string referencedComponentName)
+	{
+		if (referencedComponentName == null) throw new ArgumentNullException(nameof(referencedComponentName));
+		this.referencedComponentName = referencedComponentName;
+	}
 
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		protected DependencyModel dependencyModel;
+	protected virtual Type ComponentType => referencedComponentType ?? typeof(T);
 
-		/// <summary>
-		///   Creates a new instance of <see cref = "ComponentReference{T}" /> referencing default component implemented by <paramref
-		///    name = "componentType" />
-		/// </summary>
-		/// <param name = "componentType"></param>
-		public ComponentReference(Type componentType)
+	public T Resolve(IKernel kernel, CreationContext context)
+	{
+		var handler = GetHandler(kernel);
+		if (handler == null)
+			throw new DependencyResolverException(
+				string.Format(
+					"The referenced component {0} could not be resolved. Make sure you didn't misspell the name, and that component is registered.",
+					referencedComponentName));
+
+		if (handler.IsBeingResolvedInContext(context))
+			throw new DependencyResolverException(
+				string.Format(
+					"Cycle detected - referenced component {0} wants to use itself as its dependency. This usually signifies a bug in your code.",
+					handler.ComponentModel.Name));
+
+		var contextForInterceptor = RebuildContext(handler, context);
+
+		try
 		{
-			referencedComponentName = ComponentName.DefaultNameFor(componentType);
-			referencedComponentType = componentType;
+			return (T)handler.Resolve(contextForInterceptor);
 		}
-
-		/// <summary>
-		///   Creates a new instance of <see cref = "ComponentReference{T}" /> referencing component <paramref
-		///    name = "referencedComponentName" />
-		/// </summary>
-		/// <param name = "referencedComponentName"></param>
-		public ComponentReference(String referencedComponentName)
+		catch (InvalidCastException e)
 		{
-			if (referencedComponentName == null)
-			{
-				throw new ArgumentNullException(nameof(referencedComponentName));
-			}
-			this.referencedComponentName = referencedComponentName;
+			throw new ComponentResolutionException(
+				string.Format("Component {0} is not compatible with type {1}.", referencedComponentName, typeof(T)), e);
 		}
+	}
 
-		protected virtual Type ComponentType
-		{
-			get { return referencedComponentType ?? typeof(T); }
-		}
+	void IReference<T>.Attach(ComponentModel component)
+	{
+		dependencyModel = new ComponentDependencyModel(referencedComponentName, ComponentType);
+		component.Dependencies.Add(dependencyModel);
+	}
 
-		public T Resolve(IKernel kernel, CreationContext context)
-		{
-			var handler = GetHandler(kernel);
-			if (handler == null)
-			{
-				throw new DependencyResolverException(
-					string.Format(
-						"The referenced component {0} could not be resolved. Make sure you didn't misspell the name, and that component is registered.",
-						referencedComponentName));
-			}
+	void IReference<T>.Detach(ComponentModel component)
+	{
+		if (dependencyModel == null) return;
+		component.Dependencies.Remove(dependencyModel);
+	}
 
-			if (handler.IsBeingResolvedInContext(context))
-			{
-				throw new DependencyResolverException(
-					string.Format(
-						"Cycle detected - referenced component {0} wants to use itself as its dependency. This usually signifies a bug in your code.",
-						handler.ComponentModel.Name));
-			}
+	private IHandler GetHandler(IKernel kernel)
+	{
+		var handler = kernel.GetHandler(referencedComponentName);
+		return handler;
+	}
 
-			var contextForInterceptor = RebuildContext(handler, context);
+	private CreationContext RebuildContext(IHandler handler, CreationContext current)
+	{
+		var handlerType = ComponentType ?? handler.ComponentModel.Services.First();
+		if (handlerType.GetTypeInfo().ContainsGenericParameters) return current;
 
-			try
-			{
-				return (T)handler.Resolve(contextForInterceptor);
-			}
-			catch (InvalidCastException e)
-			{
-				throw new ComponentResolutionException(
-					string.Format("Component {0} is not compatible with type {1}.", referencedComponentName, typeof(T)), e);
-			}
-		}
-
-		private IHandler GetHandler(IKernel kernel)
-		{
-			var handler = kernel.GetHandler(referencedComponentName);
-			return handler;
-		}
-
-		private CreationContext RebuildContext(IHandler handler, CreationContext current)
-		{
-			var handlerType = ComponentType ?? handler.ComponentModel.Services.First();
-			if (handlerType.GetTypeInfo().ContainsGenericParameters)
-			{
-				return current;
-			}
-
-			return new CreationContext(handlerType, current, false);
-		}
-
-		void IReference<T>.Attach(ComponentModel component)
-		{
-			dependencyModel = new ComponentDependencyModel(referencedComponentName, ComponentType);
-			component.Dependencies.Add(dependencyModel);
-		}
-
-		void IReference<T>.Detach(ComponentModel component)
-		{
-			if (dependencyModel == null)
-			{
-				return;
-			}
-			component.Dependencies.Remove(dependencyModel);
-		}
+		return new CreationContext(handlerType, current, false);
 	}
 }

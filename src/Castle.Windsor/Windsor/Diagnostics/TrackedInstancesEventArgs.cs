@@ -12,25 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
+namespace Castle.Windsor.Diagnostics;
+
+using System;
+using System.Collections.Generic;
+
+using Castle.MicroKernel;
+
+public class TrackedInstancesEventArgs : EventArgs
 {
-	using System;
-	using System.Collections.Generic;
+	private readonly List<Burden> burdens = new();
 
-	using Castle.MicroKernel;
+	public Burden[] Items => burdens.ToArray();
 
-	public class TrackedInstancesEventArgs : EventArgs
+	public void AddRange(IEnumerable<Burden> burden)
 	{
-		private readonly List<Burden> burdens = new List<Burden>();
-
-		public Burden[] Items
-		{
-			get { return burdens.ToArray(); }
-		}
-
-		public void AddRange(IEnumerable<Burden> burden)
-		{
-			burdens.AddRange(burden);
-		}
+		burdens.AddRange(burden);
 	}
 }

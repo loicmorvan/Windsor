@@ -12,108 +12,93 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.XmlProcessor
+namespace Castle.Windsor.Tests.XmlProcessor;
+
+using System;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Xml;
+
+using Castle.Windsor.Configuration.Interpreters;
+using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
+
+using NUnit.Framework;
+
+/// <summary>Summary description for Class1.</summary>
+[TestFixture]
+public class XmlProcessorTestCase
 {
-	using System;
-	using System.IO;
-	using System.Text.RegularExpressions;
-	using System.Xml;
-
-	using Castle.Core.Internal;
-	using Castle.Windsor.Configuration.Interpreters;
-	using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
-
-	using NUnit.Framework;
-
-	/// <summary>
-	/// Summary description for Class1.
-	/// </summary>
-	[TestFixture]
-	public class XmlProcessorTestCase
+	[Test]
+	public void InvalidFiles()
 	{
-		[Test]
-		public void InvalidFiles()
+		var files = Directory.GetFiles(GetFullPath(), "Invalid*.xml");
+		Assert.IsNotEmpty(files);
+
+		foreach (var fileName in files)
 		{
-			var files = Directory.GetFiles(GetFullPath(), "Invalid*.xml");
-			Assert.IsNotEmpty(files);
+			var doc = GetXmlDocument(fileName);
+			var processor = new XmlProcessor();
 
-			foreach (var fileName in files)
+			Assert.Throws(typeof(ConfigurationProcessingException), () =>
+				processor.Process(doc.DocumentElement));
+		}
+	}
+
+	/// <summary>Runs the tests.</summary>
+	[Test]
+	public void RunTests()
+	{
+		var files = Directory.GetFiles(GetFullPath(), "*Test.xml");
+		Assert.IsNotEmpty(files);
+
+		foreach (var fileName in files)
+		{
+			if (fileName.EndsWith("PropertiesWithAttributesTest.xml")) continue;
+
+			var doc = GetXmlDocument(fileName);
+
+			var resultFileName = fileName.Substring(0, fileName.Length - 4) + "Result.xml";
+
+			var resultDoc = GetXmlDocument(resultFileName);
+
+			var processor = new XmlProcessor();
+
+			try
 			{
-				var doc = GetXmlDocument(fileName);
-				var processor = new XmlProcessor();
+				var result = processor.Process(doc.DocumentElement);
 
-				Assert.Throws(typeof(ConfigurationProcessingException), () =>
-					processor.Process(doc.DocumentElement));
+				var resultDocStr = StripSpaces(resultDoc.OuterXml);
+				var resultStr = StripSpaces(result.OuterXml);
 
+				// Debug.WriteLine(resultDocStr);
+				// Debug.WriteLine(resultStr);
+
+				Assert.AreEqual(resultDocStr, resultStr);
+			}
+			catch (Exception e)
+			{
+				throw new Exception("Error processing " + fileName, e);
 			}
 		}
+	}
 
-		/// <summary>
-		/// Runs the tests.
-		/// </summary>
-		[Test]
-		public void RunTests()
-		{
-			var files = Directory.GetFiles(GetFullPath(), "*Test.xml");
-			Assert.IsNotEmpty(files);
+	public XmlDocument GetXmlDocument(string fileName)
+	{
+		var doc = new XmlDocument();
 
-			foreach(var fileName in files)
-			{
+		var content = File.ReadAllText(fileName);
+		doc.LoadXml(content);
 
-				if (fileName.EndsWith("PropertiesWithAttributesTest.xml"))
-				{
-					continue;
-				}
+		return doc;
+	}
 
-				var doc = GetXmlDocument(fileName);
+	private string StripSpaces(string xml)
+	{
+		return Regex.Replace(xml, "\\s+", "", RegexOptions.Compiled);
+	}
 
-				var resultFileName = fileName.Substring(0, fileName.Length - 4) + "Result.xml";
-
-				var resultDoc = GetXmlDocument(resultFileName);
-
-				var processor = new XmlProcessor();
-
-				try
-				{
-					var result = processor.Process(doc.DocumentElement);
-
-					var resultDocStr = StripSpaces(resultDoc.OuterXml);
-					var resultStr = StripSpaces(result.OuterXml);
-
-					// Debug.WriteLine(resultDocStr);
-					// Debug.WriteLine(resultStr);
-
-					Assert.AreEqual(resultDocStr, resultStr);
-				}
-				catch(Exception e)
-				{
-					throw new Exception("Error processing " + fileName, e);
-				}
-			}
-		}
-
-		#region Helpers
-
-		public XmlDocument GetXmlDocument(string fileName)
-		{
-			XmlDocument doc = new XmlDocument();
-
-			string content = File.ReadAllText(fileName);
-			doc.LoadXml(content);
-
-			return doc;
-		}
-
-		private string StripSpaces(String xml)
-		{
-			return Regex.Replace(xml, "\\s+", "", RegexOptions.Compiled);
-		}
-
-		private string GetFullPath()
-		{
-			return Path.Combine(AppContext.BaseDirectory, ConfigHelper.ResolveConfigPath("XmlProcessor/TestFiles/"));
-		}
-
-		#endregion
+	private string GetFullPath()
+	{
+		return Path.Combine(AppContext.BaseDirectory, ConfigHelper.ResolveConfigPath("XmlProcessor/TestFiles/"));
 	}
 }

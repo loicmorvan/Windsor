@@ -12,35 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests;
+
+using Castle.MicroKernel.Registration;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class ReportedProblemTestCase
 {
-	using Castle.MicroKernel.Registration;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class ReportedProblemTestCase
+	[SetUp]
+	public void Init()
 	{
-		private IWindsorContainer container;
+		container = new WindsorContainer();
+	}
 
-		[SetUp]
-		public void Init()
-		{
-			container = new WindsorContainer();
-		}
+	private IWindsorContainer container;
 
-		[Test]
-		public void StackOverflowProblem()
-		{
-			container.Register(Component.For<Employee>());
-			container.Register(Component.For<Reviewer>());
-			container.Register(Component.For<ReviewableEmployee>());
+	[Test]
+	public void StackOverflowProblem()
+	{
+		container.Register(Component.For<Employee>());
+		container.Register(Component.For<Reviewer>());
+		container.Register(Component.For<ReviewableEmployee>());
 
-			Assert.IsNotNull(container.Resolve<ReviewableEmployee>());
-			Assert.IsNotNull(container.Resolve<Reviewer>());
-			Assert.IsNotNull(container.Resolve<Employee>());
-		}
+		Assert.IsNotNull(container.Resolve<ReviewableEmployee>());
+		Assert.IsNotNull(container.Resolve<Reviewer>());
+		Assert.IsNotNull(container.Resolve<Employee>());
 	}
 }

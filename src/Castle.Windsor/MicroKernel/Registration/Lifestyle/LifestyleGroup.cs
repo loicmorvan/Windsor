@@ -12,168 +12,116 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration.Lifestyle
+namespace Castle.MicroKernel.Registration.Lifestyle;
+
+using System;
+
+using Castle.Core;
+using Castle.Core.Internal;
+using Castle.MicroKernel.Lifestyle.Scoped;
+using Castle.MicroKernel.ModelBuilder.Descriptors;
+
+public class LifestyleGroup<TService> : RegistrationGroup<TService>
+	where TService : class
 {
-	using System;
-
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Lifestyle.Scoped;
-	using Castle.MicroKernel.ModelBuilder.Descriptors;
-
-	public class LifestyleGroup<TService> : RegistrationGroup<TService>
-		where TService : class
+	public LifestyleGroup(ComponentRegistration<TService> registration)
+		: base(registration)
 	{
-		public LifestyleGroup(ComponentRegistration<TService> registration)
-			: base(registration)
-		{
-		}
+	}
 
-		/// <summary>
-		///   Sets the lifestyle to the specified
-		///   <paramref name = "type" />
-		///   .
-		/// </summary>
-		/// <param name = "type"> The type. </param>
-		/// <returns> </returns>
-		public ComponentRegistration<TService> Is(LifestyleType type)
-		{
-			if (Enum.IsDefined(typeof(LifestyleType), type) == false)
-			{
-				throw InvalidValue(type, "Not a valid lifestyle");
-			}
-			if (type == LifestyleType.Undefined)
-			{
-				throw InvalidValue(type, string.Format("{0} is not a valid lifestyle type.", LifestyleType.Undefined));
-			}
+	public ComponentRegistration<TService> Transient => AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Transient));
 
-			return AddDescriptor(new LifestyleDescriptor<TService>(type));
-		}
+	public ComponentRegistration<TService> Singleton => AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Singleton));
 
-		private ArgumentOutOfRangeException InvalidValue(LifestyleType type, string message)
-		{
-			return new ArgumentOutOfRangeException(nameof(type), type, message);
-		}
+	public ComponentRegistration<TService> PerThread => AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Thread));
 
-		public ComponentRegistration<TService> Transient
-		{
-			get { return AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Transient)); }
-		}
+	public ComponentRegistration<TService> Pooled => AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Pooled));
 
-		public ComponentRegistration<TService> Singleton
-		{
-			get { return AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Singleton)); }
-		}
+	/// <summary>Sets the lifestyle to the specified <paramref name = "type" /> .</summary>
+	/// <param name = "type"> The type. </param>
+	/// <returns> </returns>
+	public ComponentRegistration<TService> Is(LifestyleType type)
+	{
+		if (Enum.IsDefined(typeof(LifestyleType), type) == false) throw InvalidValue(type, "Not a valid lifestyle");
+		if (type == LifestyleType.Undefined) throw InvalidValue(type, string.Format("{0} is not a valid lifestyle type.", LifestyleType.Undefined));
 
-		public ComponentRegistration<TService> PerThread
-		{
-			get { return AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Thread)); }
-		}
+		return AddDescriptor(new LifestyleDescriptor<TService>(type));
+	}
 
-		public ComponentRegistration<TService> Pooled
-		{
-			get { return AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Pooled)); }
-		}
+	private ArgumentOutOfRangeException InvalidValue(LifestyleType type, string message)
+	{
+		return new ArgumentOutOfRangeException(nameof(type), type, message);
+	}
 
-		public ComponentRegistration<TService> PooledWithSize(int? initialSize, int? maxSize)
-		{
-			var pooledWithSize = Pooled;
-			if (initialSize.HasValue)
-			{
-				pooledWithSize = pooledWithSize.Attribute("initialPoolSize").Eq(initialSize);
-			}
-			if (maxSize.HasValue)
-			{
-				pooledWithSize = pooledWithSize.Attribute("maxPoolSize").Eq(maxSize);
-			}
-			return pooledWithSize;
-		}
+	public ComponentRegistration<TService> PooledWithSize(int? initialSize, int? maxSize)
+	{
+		var pooledWithSize = Pooled;
+		if (initialSize.HasValue) pooledWithSize = pooledWithSize.Attribute("initialPoolSize").Eq(initialSize);
+		if (maxSize.HasValue) pooledWithSize = pooledWithSize.Attribute("maxPoolSize").Eq(maxSize);
+		return pooledWithSize;
+	}
 
-		/// <summary>
-		///   Assigns scoped lifestyle with scope accessed via
-		///   <typeparamref name = "TScopeAccessor" />
-		///   instances.
-		/// </summary>
-		/// <typeparam name = "TScopeAccessor"> </typeparam>
-		/// <returns> </returns>
-		public ComponentRegistration<TService> Scoped<TScopeAccessor>() where TScopeAccessor : IScopeAccessor, new()
-		{
-			return Scoped(typeof(TScopeAccessor));
-		}
+	/// <summary>Assigns scoped lifestyle with scope accessed via <typeparamref name = "TScopeAccessor" /> instances.</summary>
+	/// <typeparam name = "TScopeAccessor"> </typeparam>
+	/// <returns> </returns>
+	public ComponentRegistration<TService> Scoped<TScopeAccessor>() where TScopeAccessor : IScopeAccessor, new()
+	{
+		return Scoped(typeof(TScopeAccessor));
+	}
 
-		/// <summary>
-		///   Assigns scoped lifestyle with scope accessed via
-		///   <paramref name = "scopeAccessorType" />
-		///   instances if provided, or default accessor otherwise.
-		/// </summary>
-		/// <returns> </returns>
-		public ComponentRegistration<TService> Scoped(Type scopeAccessorType)
-		{
-			var registration = AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Scoped));
-			if (scopeAccessorType == null)
-			{
-				return registration;
-			}
-			var scopeAccessor = new ExtendedPropertiesDescriptor(new Property(Constants.ScopeAccessorType, scopeAccessorType));
-			return registration.AddDescriptor(scopeAccessor);
-		}
+	/// <summary>Assigns scoped lifestyle with scope accessed via <paramref name = "scopeAccessorType" /> instances if provided, or default accessor otherwise.</summary>
+	/// <returns> </returns>
+	public ComponentRegistration<TService> Scoped(Type scopeAccessorType)
+	{
+		var registration = AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Scoped));
+		if (scopeAccessorType == null) return registration;
+		var scopeAccessor = new ExtendedPropertiesDescriptor(new Property(Constants.ScopeAccessorType, scopeAccessorType));
+		return registration.AddDescriptor(scopeAccessor);
+	}
 
-		/// <summary>
-		///   Assigns scoped lifestyle with scope accessed via default accessor.
-		/// </summary>
-		/// <returns> </returns>
-		public ComponentRegistration<TService> Scoped()
-		{
-			return Scoped(null);
-		}
+	/// <summary>Assigns scoped lifestyle with scope accessed via default accessor.</summary>
+	/// <returns> </returns>
+	public ComponentRegistration<TService> Scoped()
+	{
+		return Scoped(null);
+	}
 
-		public ComponentRegistration<TService> BoundTo<TBaseForRoot>() where TBaseForRoot : class
-		{
-			return BoundTo(CreationContextScopeAccessor.DefaultScopeRootSelector<TBaseForRoot>);
-		}
+	public ComponentRegistration<TService> BoundTo<TBaseForRoot>() where TBaseForRoot : class
+	{
+		return BoundTo(CreationContextScopeAccessor.DefaultScopeRootSelector<TBaseForRoot>);
+	}
 
-		public ComponentRegistration<TService> BoundToNearest<TBaseForRoot>() where TBaseForRoot : class
-		{
-			return BoundTo(CreationContextScopeAccessor.NearestScopeRootSelector<TBaseForRoot>);
-		}
+	public ComponentRegistration<TService> BoundToNearest<TBaseForRoot>() where TBaseForRoot : class
+	{
+		return BoundTo(CreationContextScopeAccessor.NearestScopeRootSelector<TBaseForRoot>);
+	}
 
-		public ComponentRegistration<TService> BoundTo(Func<IHandler[], IHandler> scopeRootBinder)
-		{
-			return AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Bound))
-				.ExtendedProperties(new Property(Constants.ScopeRootSelector, scopeRootBinder));
-		}
+	public ComponentRegistration<TService> BoundTo(Func<IHandler[], IHandler> scopeRootBinder)
+	{
+		return AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Bound))
+			.ExtendedProperties(new Property(Constants.ScopeRootSelector, scopeRootBinder));
+	}
 
-		/// <summary>
-		///   Assign a custom lifestyle type, that implements
-		///   <see cref = "ILifestyleManager" />
-		///   .
-		/// </summary>
-		/// <param name = "customLifestyleType"> Type of the custom lifestyle. </param>
-		/// <returns> </returns>
-		public ComponentRegistration<TService> Custom(Type customLifestyleType)
-		{
-			if (customLifestyleType.Is<ILifestyleManager>() == false)
-			{
-				throw new ComponentRegistrationException(String.Format(
-					"The type {0} must implement {1} to " +
-					"be used as a custom lifestyle", customLifestyleType.FullName, typeof(ILifestyleManager).FullName));
-			}
+	/// <summary>Assign a custom lifestyle type, that implements <see cref = "ILifestyleManager" /> .</summary>
+	/// <param name = "customLifestyleType"> Type of the custom lifestyle. </param>
+	/// <returns> </returns>
+	public ComponentRegistration<TService> Custom(Type customLifestyleType)
+	{
+		if (customLifestyleType.Is<ILifestyleManager>() == false)
+			throw new ComponentRegistrationException(string.Format(
+				"The type {0} must implement {1} to " +
+				"be used as a custom lifestyle", customLifestyleType.FullName, typeof(ILifestyleManager).FullName));
 
-			return AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Custom))
-				.Attribute("customLifestyleType").Eq(customLifestyleType.AssemblyQualifiedName);
-		}
+		return AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Custom))
+			.Attribute("customLifestyleType").Eq(customLifestyleType.AssemblyQualifiedName);
+	}
 
-		/// <summary>
-		///   Assign a custom lifestyle type, that implements
-		///   <see cref = "ILifestyleManager" />
-		///   .
-		/// </summary>
-		/// <typeparam name = "TLifestyleManager"> The type of the custom lifestyle </typeparam>
-		/// <returns> </returns>
-		public ComponentRegistration<TService> Custom<TLifestyleManager>()
-			where TLifestyleManager : ILifestyleManager, new()
-		{
-			return Custom(typeof(TLifestyleManager));
-		}
+	/// <summary>Assign a custom lifestyle type, that implements <see cref = "ILifestyleManager" /> .</summary>
+	/// <typeparam name = "TLifestyleManager"> The type of the custom lifestyle </typeparam>
+	/// <returns> </returns>
+	public ComponentRegistration<TService> Custom<TLifestyleManager>()
+		where TLifestyleManager : ILifestyleManager, new()
+	{
+		return Custom(typeof(TLifestyleManager));
 	}
 }

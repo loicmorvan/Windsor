@@ -14,7 +14,6 @@
 
 
 #if FEATURE_SYSTEM_CONFIGURATION
-
 namespace Castle.Windsor.Configuration.AppDomain
 {
 	using System.Configuration;

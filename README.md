@@ -12,11 +12,13 @@ See the [releases](https://github.com/castleproject/Windsor/releases).
 
 ## License
 
-Castle Windsor is &copy; 2004-2023 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
+Castle Windsor is &copy; 2004-2023 Castle Project. It is free software, and may be redistributed under the terms of
+the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
 
 ## NuGet Preview Feed
 
-If you would like to use preview NuGet's from our CI builds on AppVeyor, you can add the following NuGet source to your project:
+If you would like to use preview NuGet's from our CI builds on AppVeyor, you can add the following NuGet source to your
+project:
 
 ```
 https://ci.appveyor.com/nuget/windsor-qkry8n2r6yak
@@ -28,15 +30,15 @@ https://ci.appveyor.com/nuget/windsor-qkry8n2r6yak
 
 The following conditional compilation symbols are currently defined for Windsor:
 
-Symbol                              | .NET 4.6.2         | .NET Standard / 6
------------------------------------ | ------------------ | ------------------
-`FEATURE_APPDOMAIN`                 | :white_check_mark: | :no_entry_sign:
-`FEATURE_ASSEMBLIES`                | :white_check_mark: | :no_entry_sign:
-`FEATURE_PERFCOUNTERS`              | :white_check_mark: | :no_entry_sign:
-`FEATURE_REMOTING`                  | :white_check_mark: | :no_entry_sign:
-`FEATURE_SECURITY_PERMISSIONS`      | :white_check_mark: | :no_entry_sign:
-`FEATURE_SERIALIZATION`             | :white_check_mark: | :no_entry_sign:
-`FEATURE_SYSTEM_CONFIGURATION`      | :white_check_mark: | :no_entry_sign:
+ Symbol                             | .NET 4.6.2         | .NET Standard / 6 
+------------------------------------|--------------------|-------------------
+ `FEATURE_APPDOMAIN`                | :white_check_mark: | :no_entry_sign:   
+ `FEATURE_ASSEMBLIES`               | :white_check_mark: | :no_entry_sign:   
+ `FEATURE_PERFCOUNTERS`             | :white_check_mark: | :no_entry_sign:   
+ `FEATURE_REMOTING`                 | :white_check_mark: | :no_entry_sign:   
+ `FEATURE_SECURITY_PERMISSIONS`     | :white_check_mark: | :no_entry_sign:   
+ `FEATURE_SERIALIZATION`            | :white_check_mark: | :no_entry_sign:   
+ `FEATURE_SYSTEM_CONFIGURATION`     | :white_check_mark: | :no_entry_sign:   
 
 * `FEATURE_APPDOMAIN` - enables support for features that make use of an AppDomain in the host.
 * `FEATURE_ASSEMBLIES` - uses `AssemblyName.GetAssemblyName()` and `Assembly.LoadFile()`.
@@ -47,6 +49,7 @@ Symbol                              | .NET 4.6.2         | .NET Standard / 6
 * `FEATURE_SYSTEM_CONFIGURATION` - enables features that use `System.Configuration` and the `ConfigurationManager`.
 
 The following conditional compilation symbols are defined for tests only under .NET 4.6.2:
+
 * `FEATURE_CODEDOM` - enables code that uses `System.CodeDom`.
 * `FEATURE_CONSOLETRACELISTENER` - enables code that requires `System.Diagnostics.ConsoleTraceListener`.
 * `FEATURE_THREADABORT` - enables code that uses `Thread.Abort()`.

@@ -1,27 +1,35 @@
 # Logging Facility
 
-The logging facility provides a seamless way to add logging capabilities to your application. There are two levels of integration.
+The logging facility provides a seamless way to add logging capabilities to your application. There are two levels of
+integration.
 
 * Allow your classes to receive an `ILogger` instance for logging support
-* Allow you to ask for an `ILoggerFactory` instance to provide logging support to classes that are not managed by Windsor.
+* Allow you to ask for an `ILoggerFactory` instance to provide logging support to classes that are not managed by
+  Windsor.
 
-:information_source: **Logger abstraction:** Castle Project does not contain its own logging framework. There are already excellent frameworks out there. Instead `ILogger` and `ILoggerFactory` are abstractions Windsor uses to decouple itself from the framework you decide to use.
+:information_source: **Logger abstraction:** Castle Project does not contain its own logging framework. There are
+already excellent frameworks out there. Instead `ILogger` and `ILoggerFactory` are abstractions Windsor uses to decouple
+itself from the framework you decide to use.
 
 ## Loggers
 
-Castle Core [provides many logger abstraction implementations](https://github.com/castleproject/Core/blob/master/docs/logging.md), however you can also create your own.
+Castle
+Core [provides many logger abstraction implementations](https://github.com/castleproject/Core/blob/master/docs/logging.md),
+however you can also create your own.
 
 ## Registering the facility
 
 ### In code
 
-The recommended way of configuring the facility is using code. When specifying custom `ILoggerFactory` or `IExtendedLoggerFactory` you use the following generic overload:
+The recommended way of configuring the facility is using code. When specifying custom `ILoggerFactory` or
+`IExtendedLoggerFactory` you use the following generic overload:
 
 ```csharp
 container.AddFacility<LoggingFacility>(f => f.LogUsing<CustomLoggerFactory>());
 ```
 
-For example, using the log4net logger factory with configuration stored in a `log4net.xml` file, the code would look like this:
+For example, using the log4net logger factory with configuration stored in a `log4net.xml` file, the code would look
+like this:
 
 ```csharp
 container.AddFacility<LoggingFacility>(f => f.LogUsing<Log4netFactory>().WithConfig("log4net.xml"));
@@ -30,6 +38,7 @@ container.AddFacility<LoggingFacility>(f => f.LogUsing<Log4netFactory>().WithCon
 #### Built-in logging factories
 
 There are a few helper methods for built-in logging factories:
+
 ```csharp
 // Null Logger
 container.AddFacility<LoggingFacility>(f => f.LogUsingNullLogger());
@@ -74,7 +83,8 @@ The full list of configuraation attributes is shown in the following example:
 
 ## Best practices
 
-We recommend that you make logging optional on your components/services. This way you maximize the reusability. For example:
+We recommend that you make logging optional on your components/services. This way you maximize the reusability. For
+example:
 
 ```csharp
 using Castle.Core.Logging;
@@ -91,9 +101,11 @@ public class CustomerService
 }
 ```
 
-With the approach above, the logger field will never be null. Also, if the logging facility was registered on the container, it will be able to supply a logger instance using the `Logger` property.
+With the approach above, the logger field will never be null. Also, if the logging facility was registered on the
+container, it will be able to supply a logger instance using the `Logger` property.
 
 ## Required Assemblies
 
 * `Castle.Facilities.Logging.dll` (bundled with Windsor)
-* `Castle.Core.dll` (contains the `ILogger` and `ILoggerFactory` interfaces; included as a dependency in the Windsor NuGet package)
+* `Castle.Core.dll` (contains the `ILogger` and `ILoggerFactory` interfaces; included as a dependency in the Windsor
+  NuGet package)

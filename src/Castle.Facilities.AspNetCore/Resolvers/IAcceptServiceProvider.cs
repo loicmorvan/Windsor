@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Resolvers
-{
-	using System;
+namespace Castle.Facilities.AspNetCore.Resolvers;
 
-	public interface IAcceptServiceProvider
-	{
-		void AcceptServiceProvider(IServiceProvider serviceProvider);
-	}
+using System;
+
+public interface IAcceptServiceProvider
+{
+	void AcceptServiceProvider(IServiceProvider serviceProvider);
 }

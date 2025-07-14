@@ -12,36 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.TestInfrastructure
+namespace CastleTests.TestInfrastructure;
+
+using System.ComponentModel;
+
+using Castle.MicroKernel.Context;
+using Castle.MicroKernel.Lifestyle.Scoped;
+
+[Description("statically")]
+public class StaticScopeAccessor : IScopeAccessor
 {
-	using System.ComponentModel;
+	public static DefaultLifetimeScope Scope { get; private set; } = new();
 
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Lifestyle.Scoped;
-
-	[Description("statically")]
-	public class StaticScopeAccessor : IScopeAccessor
+	public void Dispose()
 	{
-		private static DefaultLifetimeScope scope = new DefaultLifetimeScope();
+		Scope.Dispose();
+	}
 
-		public void Dispose()
-		{
-			scope.Dispose();
-		}
+	public ILifetimeScope GetScope(CreationContext context)
+	{
+		return Scope;
+	}
 
-		public ILifetimeScope GetScope(CreationContext context)
-		{
-			return scope;
-		}
-
-		public static DefaultLifetimeScope Scope
-		{
-			get { return scope; }
-		}
-
-		public static void ResetScope()
-		{
-			scope = new DefaultLifetimeScope();
-		}
+	public static void ResetScope()
+	{
+		Scope = new DefaultLifetimeScope();
 	}
 }

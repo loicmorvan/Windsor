@@ -12,16 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	/// <summary>
-	///   Summary description for IReviewableEmployee.
-	/// </summary>
-	public interface IReviewableEmployee : IEmployee
-	{
-		IReviewer Reviewer { get; set; }
+namespace CastleTests.Components;
 
-		string ReviewerID { get; }
-		int SalaryThird { get; set; }
-	}
+/// <summary>Summary description for IReviewableEmployee.</summary>
+public interface IReviewableEmployee : IEmployee
+{
+	IReviewer Reviewer { get; set; }
+
+	string ReviewerID { get; }
+	int SalaryThird { get; set; }
 }

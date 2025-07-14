@@ -14,11 +14,8 @@
 
 namespace Castle.Windsor.Extensions.DependencyInjection
 {
-	using Microsoft.Extensions.DependencyInjection;
-
 	public sealed class WindsorServiceProviderFactory : WindsorServiceProviderFactoryBase
 	{
-
 		public WindsorServiceProviderFactory()
 		{
 			CreateRootScope();

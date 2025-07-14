@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace CastleTests;
+
+using System;
+
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true)]
+public class RelatedTestCaseAttribute : Attribute
 {
-	using System;
-
-	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true)]
-	public class RelatedTestCaseAttribute : Attribute
+	public RelatedTestCaseAttribute(Type relatedTestCaseType, string descriptoin = null)
 	{
-		public RelatedTestCaseAttribute(Type relatedTestCaseType, string descriptoin = null)
-		{
-			RelatedTestCaseType = relatedTestCaseType;
-			Descriptoin = descriptoin;
-		}
-
-		public string Descriptoin { get; set; }
-		public Type RelatedTestCaseType { get; set; }
+		RelatedTestCaseType = relatedTestCaseType;
+		Descriptoin = descriptoin;
 	}
+
+	public string Descriptoin { get; set; }
+	public Type RelatedTestCaseType { get; set; }
 }

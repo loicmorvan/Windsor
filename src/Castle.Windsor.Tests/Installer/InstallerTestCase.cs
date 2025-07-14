@@ -12,46 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Installer
+namespace CastleTests.Installer;
+
+using Castle.Windsor;
+using Castle.Windsor.Configuration.Interpreters;
+using Castle.XmlFiles;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class InstallerTestCase : AbstractContainerTestCase
 {
-	using System;
-
-	using Castle.Windsor;
-	using Castle.Windsor.Configuration.Interpreters;
-	using Castle.Windsor.Tests;
-	using Castle.XmlFiles;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class InstallerTestCase : AbstractContainerTestCase
+	[Test]
+	public void InstallCalcService()
 	{
+		var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("installerconfig.xml")));
 
-		[Test]
-		public void InstallCalcService()
-		{
-			var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("installerconfig.xml")));
+		Assert.IsTrue(container.Kernel.HasComponent(typeof(ICalcService)));
+		Assert.IsTrue(container.Kernel.HasComponent("calcservice"));
+	}
 
-			Assert.IsTrue(container.Kernel.HasComponent(typeof(ICalcService)));
-			Assert.IsTrue(container.Kernel.HasComponent("calcservice"));
-		}
+	[Test]
+	public void InstallChildContainer()
+	{
+		var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("installerconfig.xml")));
+		var child1 = container.GetChildContainer("child1");
 
-		[Test]
-		public void InstallChildContainer()
-		{
-			var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("installerconfig.xml")));
-			var child1 = container.GetChildContainer("child1");
+		Assert.IsNotNull(child1);
+		Assert.AreEqual(child1.Parent, container);
+		Assert.IsTrue(child1.Kernel.HasComponent(typeof(ICalcService)));
+		Assert.IsTrue(child1.Kernel.HasComponent("child_calcservice"));
 
-			Assert.IsNotNull(child1);
-			Assert.AreEqual(child1.Parent, container);
-			Assert.IsTrue(child1.Kernel.HasComponent(typeof(ICalcService)));
-			Assert.IsTrue(child1.Kernel.HasComponent("child_calcservice"));
-
-			var calcservice = container.Resolve<ICalcService>("calcservice");
-			var child_calcservice = child1.Resolve<ICalcService>();
-			Assert.AreNotEqual(calcservice, child_calcservice);
-		}
+		var calcservice = container.Resolve<ICalcService>("calcservice");
+		var child_calcservice = child1.Resolve<ICalcService>();
+		Assert.AreNotEqual(calcservice, child_calcservice);
 	}
 }

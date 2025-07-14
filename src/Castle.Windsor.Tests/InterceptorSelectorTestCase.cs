@@ -12,56 +12,55 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests;
+
+using Castle.Core;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.Tests.Interceptors;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class InterceptorsSelectorTestCase
 {
-	using Castle.Core;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.Interceptors;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class InterceptorsSelectorTestCase
+	[Test]
+	public void CanApplyInterceptorsToSelectedMethods()
 	{
-		[Test]
-		public void CanApplyInterceptorsToSelectedMethods()
-		{
-			IWindsorContainer container = new WindsorContainer();
-			container.Register(
-				Component.For<ICatalog>()
-					.ImplementedBy<SimpleCatalog>()
-					.Interceptors(InterceptorReference.ForType<WasCalledInterceptor>())
-					.SelectedWith(new DummyInterceptorSelector()).Anywhere,
-				Component.For<WasCalledInterceptor>()
-				);
+		IWindsorContainer container = new WindsorContainer();
+		container.Register(
+			Component.For<ICatalog>()
+				.ImplementedBy<SimpleCatalog>()
+				.Interceptors(InterceptorReference.ForType<WasCalledInterceptor>())
+				.SelectedWith(new DummyInterceptorSelector()).Anywhere,
+			Component.For<WasCalledInterceptor>()
+		);
 
-			Assert.IsFalse(WasCalledInterceptor.WasCalled);
+		Assert.IsFalse(WasCalledInterceptor.WasCalled);
 
-			var catalog = container.Resolve<ICatalog>();
-			catalog.AddItem("hot dogs");
-			Assert.IsTrue(WasCalledInterceptor.WasCalled);
+		var catalog = container.Resolve<ICatalog>();
+		catalog.AddItem("hot dogs");
+		Assert.IsTrue(WasCalledInterceptor.WasCalled);
 
-			WasCalledInterceptor.WasCalled = false;
-			catalog.RemoveItem("hot dogs");
-			Assert.IsFalse(WasCalledInterceptor.WasCalled);
-		}
+		WasCalledInterceptor.WasCalled = false;
+		catalog.RemoveItem("hot dogs");
+		Assert.IsFalse(WasCalledInterceptor.WasCalled);
+	}
+}
+
+public interface ICatalog
+{
+	void AddItem(object item);
+
+	void RemoveItem(object item);
+}
+
+public class SimpleCatalog : ICatalog
+{
+	public void AddItem(object item)
+	{
 	}
 
-	public interface ICatalog
+	public void RemoveItem(object item)
 	{
-		void AddItem(object item);
-
-		void RemoveItem(object item);
-	}
-
-	public class SimpleCatalog : ICatalog
-	{
-		public void AddItem(object item)
-		{
-		}
-
-		public void RemoveItem(object item)
-		{
-		}
 	}
 }

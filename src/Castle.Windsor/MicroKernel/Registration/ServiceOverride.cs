@@ -12,154 +12,129 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration
+namespace Castle.MicroKernel.Registration;
+
+using System;
+using System.Collections.Generic;
+
+/// <summary>Represents a service override.</summary>
+public class ServiceOverride
 {
-	using System;
-	using System.Collections.Generic;
-
-	/// <summary>
-	///   Represents a service override.
-	/// </summary>
-	public class ServiceOverride
+	internal ServiceOverride(object dependencyKey, object value) : this(dependencyKey, value, null)
 	{
-		internal ServiceOverride(object dependencyKey, object value) : this(dependencyKey, value, null)
-		{
-		}
-
-		internal ServiceOverride(object dependencyKey, object value, Type type)
-		{
-			DependencyKey = dependencyKey;
-			Value = value;
-			Type = type;
-		}
-
-		public object DependencyKey { get; private set; }
-
-		/// <summary>
-		///   Gets the optional value type specifier.
-		/// </summary>
-		public Type Type { get; private set; }
-
-		public object Value { get; private set; }
-
-		/// <summary>
-		///   Creates a <see cref = "ServiceOverrideKey" /> with key.
-		/// </summary>
-		/// <param name = "key">The service override key.</param>
-		/// <returns>The new <see cref = "ServiceOverrideKey" /></returns>
-		public static ServiceOverrideKey ForKey(String key)
-		{
-			return new ServiceOverrideKey(key);
-		}
-
-		/// <summary>
-		///   Creates a <see cref = "ServiceOverrideKey" /> with key.
-		/// </summary>
-		/// <param name = "key">The service override key.</param>
-		/// <returns>The new <see cref = "ServiceOverrideKey" /></returns>
-		public static ServiceOverrideKey ForKey(Type key)
-		{
-			return new ServiceOverrideKey(key);
-		}
-
-		/// <summary>
-		///   Creates a <see cref = "ServiceOverrideKey" /> with key.
-		/// </summary>
-		/// <typeparam name = "TKey">The service override key.</typeparam>
-		/// <returns>The new <see cref = "ServiceOverrideKey" /></returns>
-		public static ServiceOverrideKey ForKey<TKey>()
-		{
-			return new ServiceOverrideKey(typeof(TKey));
-		}
-
-		/// <summary>
-		///   Implicitly converts service override to dependency. This is a API trick to keep the API clean and focused.
-		/// </summary>
-		/// <param name = "item"></param>
-		/// <returns></returns>
-		public static implicit operator Dependency(ServiceOverride item)
-		{
-			return item == null ? null : new Dependency(item);
-		}
 	}
 
-	/// <summary>
-	///   Represents a service override key.
-	/// </summary>
-	public class ServiceOverrideKey
+	internal ServiceOverride(object dependencyKey, object value, Type type)
 	{
-		private readonly object key;
+		DependencyKey = dependencyKey;
+		Value = value;
+		Type = type;
+	}
 
-		internal ServiceOverrideKey(String key)
-		{
-			this.key = key;
-		}
+	public object DependencyKey { get; private set; }
 
-		internal ServiceOverrideKey(Type key)
-		{
-			this.key = key;
-		}
+	/// <summary>Gets the optional value type specifier.</summary>
+	public Type Type { get; private set; }
 
-		/// <summary>
-		///   Builds the <see cref = "ServiceOverride" /> with key/value.
-		/// </summary>
-		/// <param name = "value">The service override value.</param>
-		/// <returns>The new <see cref = "ServiceOverride" /></returns>
-		public ServiceOverride Eq(String value)
-		{
-			return new ServiceOverride(key, value);
-		}
+	public object Value { get; private set; }
 
-		/// <summary>
-		///   Builds the <see cref = "ServiceOverride" /> with key/values.
-		/// </summary>
-		/// <param name = "value">The service override values.</param>
-		/// <returns>The new <see cref = "ServiceOverride" /></returns>
-		public ServiceOverride Eq(params String[] value)
-		{
-			return new ServiceOverride(key, value);
-		}
+	/// <summary>Creates a <see cref = "ServiceOverrideKey" /> with key.</summary>
+	/// <param name = "key">The service override key.</param>
+	/// <returns>The new <see cref = "ServiceOverrideKey" /></returns>
+	public static ServiceOverrideKey ForKey(string key)
+	{
+		return new ServiceOverrideKey(key);
+	}
 
-		/// <summary>
-		///   Builds the <see cref = "ServiceOverride" /> with key/values.
-		/// </summary>
-		/// <param name = "value">The service override values.</param>
-		/// <returns>The new <see cref = "ServiceOverride" /></returns>
-		/// <typeparam name = "V">The value type.</typeparam>
-		public ServiceOverride Eq<V>(params String[] value)
-		{
-			return new ServiceOverride(key, value, typeof(V));
-		}
+	/// <summary>Creates a <see cref = "ServiceOverrideKey" /> with key.</summary>
+	/// <param name = "key">The service override key.</param>
+	/// <returns>The new <see cref = "ServiceOverrideKey" /></returns>
+	public static ServiceOverrideKey ForKey(Type key)
+	{
+		return new ServiceOverrideKey(key);
+	}
 
-		/// <summary>
-		///   Builds the <see cref = "ServiceOverride" /> with key/values.
-		/// </summary>
-		/// <param name = "value">The service override values.</param>
-		/// <returns>The new <see cref = "ServiceOverride" /></returns>
-		public ServiceOverride Eq(IEnumerable<String> value)
-		{
-			return new ServiceOverride(key, value);
-		}
+	/// <summary>Creates a <see cref = "ServiceOverrideKey" /> with key.</summary>
+	/// <typeparam name = "TKey">The service override key.</typeparam>
+	/// <returns>The new <see cref = "ServiceOverrideKey" /></returns>
+	public static ServiceOverrideKey ForKey<TKey>()
+	{
+		return new ServiceOverrideKey(typeof(TKey));
+	}
 
-		/// <summary>
-		///   Builds the <see cref = "ServiceOverride" /> with key/values.
-		/// </summary>
-		/// <param name = "value">The service override values.</param>
-		/// <returns>The new <see cref = "ServiceOverride" /></returns>
-		/// <typeparam name = "V">The value type.</typeparam>
-		public ServiceOverride Eq<V>(IEnumerable<String> value)
-		{
-			return new ServiceOverride(key, value, typeof(V));
-		}
+	/// <summary>Implicitly converts service override to dependency. This is a API trick to keep the API clean and focused.</summary>
+	/// <param name = "item"></param>
+	/// <returns></returns>
+	public static implicit operator Dependency(ServiceOverride item)
+	{
+		return item == null ? null : new Dependency(item);
+	}
+}
 
-		public ServiceOverride Eq(params Type[] componentTypes)
-		{
-			return new ServiceOverride(key, componentTypes);
-		}
+/// <summary>Represents a service override key.</summary>
+public class ServiceOverrideKey
+{
+	private readonly object key;
 
-		public ServiceOverride Eq<V>(params Type[] componentTypes)
-		{
-			return new ServiceOverride(key, componentTypes, typeof(V));
-		}
+	internal ServiceOverrideKey(string key)
+	{
+		this.key = key;
+	}
+
+	internal ServiceOverrideKey(Type key)
+	{
+		this.key = key;
+	}
+
+	/// <summary>Builds the <see cref = "ServiceOverride" /> with key/value.</summary>
+	/// <param name = "value">The service override value.</param>
+	/// <returns>The new <see cref = "ServiceOverride" /></returns>
+	public ServiceOverride Eq(string value)
+	{
+		return new ServiceOverride(key, value);
+	}
+
+	/// <summary>Builds the <see cref = "ServiceOverride" /> with key/values.</summary>
+	/// <param name = "value">The service override values.</param>
+	/// <returns>The new <see cref = "ServiceOverride" /></returns>
+	public ServiceOverride Eq(params string[] value)
+	{
+		return new ServiceOverride(key, value);
+	}
+
+	/// <summary>Builds the <see cref = "ServiceOverride" /> with key/values.</summary>
+	/// <param name = "value">The service override values.</param>
+	/// <returns>The new <see cref = "ServiceOverride" /></returns>
+	/// <typeparam name = "V">The value type.</typeparam>
+	public ServiceOverride Eq<V>(params string[] value)
+	{
+		return new ServiceOverride(key, value, typeof(V));
+	}
+
+	/// <summary>Builds the <see cref = "ServiceOverride" /> with key/values.</summary>
+	/// <param name = "value">The service override values.</param>
+	/// <returns>The new <see cref = "ServiceOverride" /></returns>
+	public ServiceOverride Eq(IEnumerable<string> value)
+	{
+		return new ServiceOverride(key, value);
+	}
+
+	/// <summary>Builds the <see cref = "ServiceOverride" /> with key/values.</summary>
+	/// <param name = "value">The service override values.</param>
+	/// <returns>The new <see cref = "ServiceOverride" /></returns>
+	/// <typeparam name = "V">The value type.</typeparam>
+	public ServiceOverride Eq<V>(IEnumerable<string> value)
+	{
+		return new ServiceOverride(key, value, typeof(V));
+	}
+
+	public ServiceOverride Eq(params Type[] componentTypes)
+	{
+		return new ServiceOverride(key, componentTypes);
+	}
+
+	public ServiceOverride Eq<V>(params Type[] componentTypes)
+	{
+		return new ServiceOverride(key, componentTypes, typeof(V));
 	}
 }

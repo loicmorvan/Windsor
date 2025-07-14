@@ -16,14 +16,13 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Extensions
 {
 	using Castle.MicroKernel.Registration;
 
+	using ServiceDescriptor = Microsoft.Extensions.DependencyInjection.ServiceDescriptor;
+
 	public static class ServiceDescriptorExtensions
 	{
-		public static IRegistration CreateWindsorRegistration(this Microsoft.Extensions.DependencyInjection.ServiceDescriptor service)
+		public static IRegistration CreateWindsorRegistration(this ServiceDescriptor service)
 		{
-			if (service.ServiceType.ContainsGenericParameters)
-			{
-				return RegistrationAdapter.FromOpenGenericServiceDescriptor(service);
-			}
+			if (service.ServiceType.ContainsGenericParameters) return RegistrationAdapter.FromOpenGenericServiceDescriptor(service);
 
 			return RegistrationAdapter.FromServiceDescriptor(service);
 		}

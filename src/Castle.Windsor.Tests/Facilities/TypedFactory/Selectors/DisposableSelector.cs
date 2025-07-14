@@ -12,25 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Selectors
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
+
+using System;
+
+using Castle.Facilities.TypedFactory;
+
+public class DisposableSelector : DefaultTypedFactoryComponentSelector, IDisposable
 {
-	using System;
+	public static int InstancesDisposed;
+	public static int InstancesCreated;
 
-	using Castle.Facilities.TypedFactory;
-
-	public class DisposableSelector : DefaultTypedFactoryComponentSelector, IDisposable
+	public DisposableSelector()
 	{
-		public static int InstancesDisposed;
-		public static int InstancesCreated;
+		InstancesCreated++;
+	}
 
-		public DisposableSelector()
-		{
-			InstancesCreated++;
-		}
-
-		public void Dispose()
-		{
-			InstancesDisposed++;
-		}
+	public void Dispose()
+	{
+		InstancesDisposed++;
 	}
 }

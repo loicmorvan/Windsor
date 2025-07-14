@@ -12,31 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace CastleTests;
+
+using System;
+
+using Castle.Core;
+using Castle.MicroKernel.Context;
+using Castle.MicroKernel.Handlers;
+
+public class StubGenericImplementationMatchingStrategy : IGenericImplementationMatchingStrategy
 {
-	using System;
+	private readonly Func<ComponentModel, CreationContext, Type[]> result;
 
-	using Castle.Core;
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Handlers;
-
-	public class StubGenericImplementationMatchingStrategy : IGenericImplementationMatchingStrategy
+	public StubGenericImplementationMatchingStrategy(Func<ComponentModel, CreationContext, Type[]> result)
 	{
-		private readonly Func<ComponentModel, CreationContext, Type[]> result;
+		this.result = result;
+	}
 
-		public StubGenericImplementationMatchingStrategy(Func<ComponentModel, CreationContext, Type[]> result)
-		{
-			this.result = result;
-		}
+	public StubGenericImplementationMatchingStrategy(params Type[] result)
+	{
+		this.result = delegate { return result; };
+	}
 
-		public StubGenericImplementationMatchingStrategy(params Type[] result)
-		{
-			this.result = delegate { return result; };
-		}
-
-		public Type[] GetGenericArguments(ComponentModel model, CreationContext context)
-		{
-			return result(model, context);
-		}
+	public Type[] GetGenericArguments(ComponentModel model, CreationContext context)
+	{
+		return result(model, context);
 	}
 }

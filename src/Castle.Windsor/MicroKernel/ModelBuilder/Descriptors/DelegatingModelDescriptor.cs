@@ -12,39 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+
+using System;
+
+using Castle.Core;
+
+public class DelegatingModelDescriptor : IComponentModelDescriptor
 {
-	using System;
+	private readonly Action<IKernel, ComponentModel> builder;
+	private readonly Action<IKernel, ComponentModel> configurer;
 
-	using Castle.Core;
-
-	public class DelegatingModelDescriptor : IComponentModelDescriptor
+	public DelegatingModelDescriptor(Action<IKernel, ComponentModel> builder = null, Action<IKernel, ComponentModel> configurer = null)
 	{
-		private readonly Action<IKernel, ComponentModel> builder;
-		private readonly Action<IKernel, ComponentModel> configurer;
+		this.builder = builder;
+		this.configurer = configurer;
+	}
 
-		public DelegatingModelDescriptor(Action<IKernel, ComponentModel> builder = null, Action<IKernel, ComponentModel> configurer = null)
-		{
-			this.builder = builder;
-			this.configurer = configurer;
-		}
+	public void BuildComponentModel(IKernel kernel, ComponentModel model)
+	{
+		if (builder == null) return;
+		builder(kernel, model);
+	}
 
-		public void BuildComponentModel(IKernel kernel, ComponentModel model)
-		{
-			if (builder == null)
-			{
-				return;
-			}
-			builder(kernel, model);
-		}
-
-		public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-		{
-			if (configurer == null)
-			{
-				return;
-			}
-			configurer(kernel, model);
-		}
+	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+	{
+		if (configurer == null) return;
+		configurer(kernel, model);
 	}
 }

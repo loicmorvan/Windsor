@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
-{
-	using System;
+namespace Castle.Core.Internal;
 
-	public static class ExceptionHelper
+using System;
+
+public static class ExceptionHelper
+{
+	public static Exception SetUp(this Exception exception)
 	{
-		public static Exception SetUp(this Exception exception)
-		{
-			exception.HelpLink = Constants.ExceptionHelpLink;
-			return exception;
-		}
+		exception.HelpLink = Constants.ExceptionHelpLink;
+		return exception;
 	}
 }

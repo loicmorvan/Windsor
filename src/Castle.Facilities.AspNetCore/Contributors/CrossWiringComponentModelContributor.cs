@@ -12,69 +12,56 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Contributors
+namespace Castle.Facilities.AspNetCore.Contributors;
+
+using System;
+using System.Linq;
+
+using Castle.Core;
+using Castle.MicroKernel;
+using Castle.MicroKernel.LifecycleConcerns;
+using Castle.MicroKernel.Lifestyle;
+using Castle.MicroKernel.ModelBuilder;
+
+using Microsoft.Extensions.DependencyInjection;
+
+public class CrossWiringComponentModelContributor : IContributeComponentModelConstruction
 {
-	using System;
-	using System.Linq;
-
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.LifecycleConcerns;
-	using Castle.MicroKernel.Lifestyle;
-	using Castle.MicroKernel.ModelBuilder;
-
-	using Microsoft.Extensions.DependencyInjection;
-
-	public class CrossWiringComponentModelContributor : IContributeComponentModelConstruction
+	public CrossWiringComponentModelContributor(IServiceCollection services)
 	{
-		private readonly IServiceCollection services;
+		this.Services = services ??
+		                throw new InvalidOperationException(
+			                "Please call `Container.AddFacility<AspNetCoreFacility>(f => f.CrossWiresInto(services));` first. This should happen before any cross wiring registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md");
+	}
 
-		public IServiceCollection Services => services;
+	public IServiceCollection Services { get; }
 
-		public CrossWiringComponentModelContributor(IServiceCollection services)
+	public void ProcessModel(IKernel kernel, ComponentModel model)
+	{
+		if (model.Configuration.Attributes.Get(AspNetCoreFacility.IsCrossWiredIntoServiceCollectionKey) == bool.TrueString)
 		{
-			this.services = services ?? throw new InvalidOperationException("Please call `Container.AddFacility<AspNetCoreFacility>(f => f.CrossWiresInto(services));` first. This should happen before any cross wiring registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md");
-		}
-
-		public void ProcessModel(IKernel kernel, ComponentModel model)
-		{
-			if (model.Configuration.Attributes.Get(AspNetCoreFacility.IsCrossWiredIntoServiceCollectionKey) == Boolean.TrueString)
+			if (model.Lifecycle.HasDecommissionConcerns)
 			{
-				if (model.Lifecycle.HasDecommissionConcerns)
-				{
-					var disposableConcern = model.Lifecycle.DecommissionConcerns.OfType<DisposalConcern>().FirstOrDefault();
-					if (disposableConcern != null)
-					{
-						model.Lifecycle.Remove(disposableConcern);
-					}
-				}
-
-				var key = model.Name;
-
-				foreach (var serviceType in model.Services)
-				{
-					if (model.LifestyleType == LifestyleType.Transient)
-					{
-						services.AddTransient(serviceType, p => kernel.Resolve(key, serviceType));
-					}
-					else if (model.LifestyleType == LifestyleType.Scoped)
-					{
-						services.AddScoped(serviceType, p =>
-						{
-							kernel.RequireScope();
-							return kernel.Resolve(key, serviceType);
-						});
-					}
-					else if (model.LifestyleType == LifestyleType.Singleton)
-					{
-						services.AddSingleton(serviceType, p => kernel.Resolve(key, serviceType));
-					}
-					else
-					{
-						throw new NotSupportedException($"The Castle Windsor ASP.NET Core facility only supports the following lifestyles: {nameof(LifestyleType.Transient)}, {nameof(LifestyleType.Scoped)} and {nameof(LifestyleType.Singleton)}.");
-					}
-				}
+				var disposableConcern = model.Lifecycle.DecommissionConcerns.OfType<DisposalConcern>().FirstOrDefault();
+				if (disposableConcern != null) model.Lifecycle.Remove(disposableConcern);
 			}
+
+			var key = model.Name;
+
+			foreach (var serviceType in model.Services)
+				if (model.LifestyleType == LifestyleType.Transient)
+					Services.AddTransient(serviceType, p => kernel.Resolve(key, serviceType));
+				else if (model.LifestyleType == LifestyleType.Scoped)
+					Services.AddScoped(serviceType, p =>
+					{
+						kernel.RequireScope();
+						return kernel.Resolve(key, serviceType);
+					});
+				else if (model.LifestyleType == LifestyleType.Singleton)
+					Services.AddSingleton(serviceType, p => kernel.Resolve(key, serviceType));
+				else
+					throw new NotSupportedException(
+						$"The Castle Windsor ASP.NET Core facility only supports the following lifestyles: {nameof(LifestyleType.Transient)}, {nameof(LifestyleType.Scoped)} and {nameof(LifestyleType.Singleton)}.");
 		}
 	}
 }

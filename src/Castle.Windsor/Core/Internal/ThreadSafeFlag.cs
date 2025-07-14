@@ -12,26 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
+namespace Castle.Core.Internal;
+
+using System;
+using System.Threading;
+
+[Serializable]
+public struct ThreadSafeFlag
 {
-	using System;
-	using System.Threading;
+	/// <summary>0 == false, 1 = =true</summary>
+	private int signaled;
 
-	[Serializable]
-	public struct ThreadSafeFlag
+	/// <summary>Signals (sets) the flag.</summary>
+	/// <returns><c>true</c> if the current thread signaled the flag, <c>false</c> if some other thread signaled the flag before.</returns>
+	public bool Signal()
 	{
-		/// <summary>
-		///   0 == false, 1 = =true
-		/// </summary>
-		private int signaled;
-
-		/// <summary>
-		///   Signals (sets) the flag.
-		/// </summary>
-		/// <returns><c>true</c> if the current thread signaled the flag, <c>false</c> if some other thread signaled the flag before.</returns>
-		public bool Signal()
-		{
-			return Interlocked.Exchange(ref signaled, 1) == 0;
-		}
+		return Interlocked.Exchange(ref signaled, 1) == 0;
 	}
 }

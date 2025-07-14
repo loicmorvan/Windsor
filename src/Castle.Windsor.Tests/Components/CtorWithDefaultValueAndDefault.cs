@@ -12,24 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace CastleTests.Components;
+
+public class CtorWithDefaultValueAndDefault
 {
-	public class CtorWithDefaultValueAndDefault
+	public CtorWithDefaultValueAndDefault(string name = "Stefan Mucha")
 	{
-		private readonly string name;
-
-		public CtorWithDefaultValueAndDefault(string name = "Stefan Mucha")
-		{
-			this.name = name;
-		}
-
-		public CtorWithDefaultValueAndDefault()
-		{
-		}
-
-		public string Name
-		{
-			get { return name; }
-		}
+		this.Name = name;
 	}
+
+	public CtorWithDefaultValueAndDefault()
+	{
+	}
+
+	public string Name { get; }
 }

@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Generics
-{
-	using CastleTests.Generics;
+namespace Castle.Generics;
 
-	public class Repository<T> : IRepository<T>
-	{
-	}
+using CastleTests.Generics;
+
+public class Repository<T> : IRepository<T>
+{
 }

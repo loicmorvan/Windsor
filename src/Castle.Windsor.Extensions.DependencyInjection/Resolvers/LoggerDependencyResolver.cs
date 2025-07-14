@@ -18,7 +18,7 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers
 	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Context;
-	
+
 	using Microsoft.Extensions.Logging;
 
 	public class LoggerDependencyResolver : ISubDependencyResolver
@@ -29,6 +29,7 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers
 		{
 			this.kernel = kernel;
 		}
+
 		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
 		{
 			return dependency.TargetType == typeof(ILogger);

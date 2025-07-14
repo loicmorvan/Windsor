@@ -1,10 +1,14 @@
 # WCF Integration Facility
 
-WCF Integration facility enables integration with Windows Communication Foundation. It makes services and WCF proxies available as services in your application, lets you use non-default constructor and inject dependencies into your services, adds ability to easily set up your services with extensions, call services asynchronously without needing to use code generation and much more.
+WCF Integration facility enables integration with Windows Communication Foundation. It makes services and WCF proxies
+available as services in your application, lets you use non-default constructor and inject dependencies into your
+services, adds ability to easily set up your services with extensions, call services asynchronously without needing to
+use code generation and much more.
 
 ## Installing the facility
 
-WCF Integration Facility lives in `Castle.Facilities.WcfIntegration.dll` file distributed as part of Windsor binary package.
+WCF Integration Facility lives in `Castle.Facilities.WcfIntegration.dll` file distributed as part of Windsor binary
+package.
 
 If you're using Nuget, you'll have to download it separately using the following command:
 
@@ -24,7 +28,8 @@ Some of the functionality exposed by the facility on the client side of WCF appl
 
 :information_source: Notice that the documentation is still being created and the list is incomplete.
 
-* Windsor replaces standard WCF client side remoting proxy with its own Dynamic Proxy. This lets you add [interceptors](interceptors.md) to it like to any other Windsor component.
+* Windsor replaces standard WCF client side remoting proxy with its own Dynamic Proxy. This lets you
+  add [interceptors](interceptors.md) to it like to any other Windsor component.
 * [Ability to perform asynchronous calls without need to code-generate client-side proxy](wcf-facility-async-calls.md)
 * [Transparently recycle the channel when it gets closed/faulted](wcf-facility-refresh-channel-policy.md)
 

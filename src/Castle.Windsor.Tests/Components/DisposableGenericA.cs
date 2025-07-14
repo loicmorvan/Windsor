@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using Castle.Windsor.Tests;
+namespace CastleTests.Components;
 
-	internal class DisposableGenericA : DisposableGeneric<A>
-	{
-	}
+internal class DisposableGenericA : DisposableGeneric<A>
+{
 }

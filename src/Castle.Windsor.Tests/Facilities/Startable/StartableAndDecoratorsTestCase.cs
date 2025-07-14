@@ -12,163 +12,162 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.Startable
+namespace Castle.Windsor.Tests.Facilities.Startable;
+
+using Castle.Facilities.Startable;
+using Castle.MicroKernel.Handlers;
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.SubSystems.Configuration;
+
+using CastleTests.Components;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class StartableAndDecoratorsTestCase
 {
-	using Castle.Facilities.Startable;
-	using Castle.MicroKernel.Handlers;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.SubSystems.Configuration;
-
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class StartableAndDecoratorsTestCase
+	private class AllInstaller : IWindsorInstaller
 	{
-		private class AllInstaller : IWindsorInstaller
+		public void Install(IWindsorContainer container,
+			IConfigurationStore store)
 		{
-			public void Install(IWindsorContainer container,
-			                    IConfigurationStore store)
-			{
-				container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
-				                   Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
-				container.Register(Component.For<UsesIEmptyService>().Start());
-			}
+			container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
+				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
+			container.Register(Component.For<UsesIEmptyService>().Start());
 		}
+	}
 
-		private class DependenciesInstaller : IWindsorInstaller
+	private class DependenciesInstaller : IWindsorInstaller
+	{
+		public void Install(IWindsorContainer container,
+			IConfigurationStore store)
 		{
-			public void Install(IWindsorContainer container,
-			                    IConfigurationStore store)
-			{
-				container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
-				                   Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
-			}
+			container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
+				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
 		}
+	}
 
-		private class StartableInstaller : IWindsorInstaller
+	private class StartableInstaller : IWindsorInstaller
+	{
+		public void Install(IWindsorContainer container,
+			IConfigurationStore store)
 		{
-			public void Install(IWindsorContainer container,
-			                    IConfigurationStore store)
-			{
-				container.Register(Component.For<UsesIEmptyService>().Start());
-			}
+			container.Register(Component.For<UsesIEmptyService>().Start());
 		}
+	}
 
-		[Test]
-		public void No_startable_explicit_Resolve_resolves_with_no_issues()
+	[Test]
+	public void No_startable_explicit_Resolve_resolves_with_no_issues()
+	{
+		using (var container = new WindsorContainer())
 		{
-			using (var container = new WindsorContainer())
-			{
-				container.AddFacility<StartableFacility>(f => f.DeferredStart());
-				container.Register(
-					Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
-					Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
-					Component.For<UsesIEmptyService>()
-					);
-				container.Resolve<UsesIEmptyService>();
-			}
+			container.AddFacility<StartableFacility>(f => f.DeferredStart());
+			container.Register(
+				Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
+				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
+				Component.For<UsesIEmptyService>()
+			);
+			container.Resolve<UsesIEmptyService>();
 		}
+	}
 
-		[Test]
-		public void Startable_and_components_in_separate_Install_Resolve_Startable_last_works()
+	[Test]
+	public void Startable_and_components_in_separate_Install_Resolve_Startable_last_works()
+	{
+		using (var container = new WindsorContainer())
 		{
-			using (var container = new WindsorContainer())
-			{
-				container.AddFacility<StartableFacility>(f => f.DeferredStart());
-				container.Install(new DependenciesInstaller());
-				container.Register(Component.For<UsesIEmptyService>().Start());
-			}
+			container.AddFacility<StartableFacility>(f => f.DeferredStart());
+			container.Install(new DependenciesInstaller());
+			container.Register(Component.For<UsesIEmptyService>().Start());
 		}
+	}
 
-		[Test]
-		public void Startable_and_components_in_separate_Install_Startable_first_throws()
+	[Test]
+	public void Startable_and_components_in_separate_Install_Startable_first_throws()
+	{
+		using (var container = new WindsorContainer())
 		{
-			using (var container = new WindsorContainer())
-			{
-				container.AddFacility<StartableFacility>(f => f.DeferredStart());
+			container.AddFacility<StartableFacility>(f => f.DeferredStart());
 
-				Assert.Throws<HandlerException>(() =>
-				{
-					container.Install(new StartableInstaller());
-					container.Install(new DependenciesInstaller());
-				});
-			}
-		}
-
-		[Test]
-		public void Startable_and_components_in_separate_Install_Startable_last_works()
-		{
-			using (var container = new WindsorContainer())
+			Assert.Throws<HandlerException>(() =>
 			{
-				container.AddFacility<StartableFacility>(f => f.DeferredStart());
-				container.Install(new DependenciesInstaller());
 				container.Install(new StartableInstaller());
-			}
+				container.Install(new DependenciesInstaller());
+			});
 		}
+	}
 
-		[Test]
-		public void Startable_and_components_in_single_Install_works()
+	[Test]
+	public void Startable_and_components_in_separate_Install_Startable_last_works()
+	{
+		using (var container = new WindsorContainer())
 		{
-			using (var container = new WindsorContainer())
-			{
-				container.AddFacility<StartableFacility>(f => f.DeferredStart());
-				container.Install(new DependenciesInstaller(),
-				                  new StartableInstaller());
-			}
+			container.AddFacility<StartableFacility>(f => f.DeferredStart());
+			container.Install(new DependenciesInstaller());
+			container.Install(new StartableInstaller());
 		}
+	}
 
-		[Test]
-		public void Startable_and_components_in_single_Installer_works()
+	[Test]
+	public void Startable_and_components_in_single_Install_works()
+	{
+		using (var container = new WindsorContainer())
 		{
-			using (var container = new WindsorContainer())
-			{
-				container.AddFacility<StartableFacility>(f => f.DeferredStart());
-				container.Install(new AllInstaller());
-			}
+			container.AddFacility<StartableFacility>(f => f.DeferredStart());
+			container.Install(new DependenciesInstaller(),
+				new StartableInstaller());
 		}
+	}
 
-		[Test]
-		public void Startable_and_components_in_single_Register_works()
+	[Test]
+	public void Startable_and_components_in_single_Installer_works()
+	{
+		using (var container = new WindsorContainer())
 		{
-			using (var container = new WindsorContainer())
-			{
-				container.AddFacility<StartableFacility>(f => f.DeferredStart());
-				container.Register(
-					Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
-					Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
-					Component.For<UsesIEmptyService>().Start()
-					);
-			}
+			container.AddFacility<StartableFacility>(f => f.DeferredStart());
+			container.Install(new AllInstaller());
 		}
+	}
 
-		[Test]
-		public void Startable_and_components_separate_Register_Startable_first_throws()
+	[Test]
+	public void Startable_and_components_in_single_Register_works()
+	{
+		using (var container = new WindsorContainer())
 		{
-			using (var container = new WindsorContainer())
-			{
-				container.AddFacility<StartableFacility>(f => f.DeferredStart());
-
-				Assert.Throws<HandlerException>(() =>
-				{
-					container.Register(Component.For<UsesIEmptyService>().Start());
-					container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
-					                   Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
-				});
-			}
+			container.AddFacility<StartableFacility>(f => f.DeferredStart());
+			container.Register(
+				Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
+				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
+				Component.For<UsesIEmptyService>().Start()
+			);
 		}
+	}
 
-		[Test]
-		public void Startable_and_components_separate_Register_Startable_last_works()
+	[Test]
+	public void Startable_and_components_separate_Register_Startable_first_throws()
+	{
+		using (var container = new WindsorContainer())
 		{
-			using (var container = new WindsorContainer())
+			container.AddFacility<StartableFacility>(f => f.DeferredStart());
+
+			Assert.Throws<HandlerException>(() =>
 			{
-				container.AddFacility<StartableFacility>(f => f.DeferredStart());
-				container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
-				                   Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
 				container.Register(Component.For<UsesIEmptyService>().Start());
-			}
+				container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
+					Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
+			});
+		}
+	}
+
+	[Test]
+	public void Startable_and_components_separate_Register_Startable_last_works()
+	{
+		using (var container = new WindsorContainer())
+		{
+			container.AddFacility<StartableFacility>(f => f.DeferredStart());
+			container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
+				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
+			container.Register(Component.For<UsesIEmptyService>().Start());
 		}
 	}
 }
