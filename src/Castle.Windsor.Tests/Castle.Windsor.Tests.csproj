@@ -4,7 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
 
-  <Import Project="..\..\buildscripts\common.props"></Import>
+  <Import Project="..\..\buildscripts\common.props"/>
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
@@ -51,26 +51,9 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2"/>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'=='net462'">
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="11.0.0"/>
-  </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Castle.Facilities.Logging\Castle.Facilities.Logging.csproj"/>
     <ProjectReference Include="..\Castle.Windsor\Castle.Windsor.csproj"/>
   </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'=='net462'">
-    <Reference Include="PresentationCore"/>
-    <Reference Include="PresentationFramework"/>
-    <Reference Include="System.Configuration"/>
-    <Reference Include="System.Windows.Forms"/>
-    <Reference Include="System.Xaml"/>
-    <Reference Include="WindowsBase"/>
-  </ItemGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)'=='net462'">
-    <DefineConstants>$(DefineConstants);FEATURE_THREADABORT;FEATURE_WPF;FEATURE_CONSOLETRACELISTENER</DefineConstants>
-  </PropertyGroup>
 
 </Project>

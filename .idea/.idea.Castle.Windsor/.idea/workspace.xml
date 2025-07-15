@@ -7,7 +7,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="" />
+    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Castle.Windsor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Castle.Windsor.csproj" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -45,6 +48,9 @@
   &quot;associatedIndex&quot;: 5
 }</component>
   <component name="ProjectId" id="2zpwejCmhTluBQGgZmbXS3hZdaR" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -55,11 +61,13 @@
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;T4 Template Run Configuration.ModelFakes.tt.executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;net9&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;RiderNuGetOptionsPageId&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -105,6 +113,8 @@
       <workItem from="1752442791215" duration="1406000" />
       <workItem from="1752523502697" duration="963000" />
       <workItem from="1752524478553" duration="289000" />
+      <workItem from="1752524974087" duration="1444000" />
+      <workItem from="1752606859242" duration="461000" />
     </task>
     <task id="LOCAL-00001" summary="Keep only .NET 6.">
       <option name="closed" value="true" />
@@ -122,7 +132,23 @@
       <option name="project" value="LOCAL" />
       <updated>1752524741209</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Switched to .NET 9.">
+      <option name="closed" value="true" />
+      <created>1752525822189</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1752525822189</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Full cleanup.">
+      <option name="closed" value="true" />
+      <created>1752526036691</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1752526036691</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -157,7 +183,9 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Keep only .NET 6." />
     <MESSAGE value="Missing file?" />
-    <option name="LAST_COMMIT_MESSAGE" value="Missing file?" />
+    <MESSAGE value="Switched to .NET 9." />
+    <MESSAGE value="Full cleanup." />
+    <option name="LAST_COMMIT_MESSAGE" value="Full cleanup." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
