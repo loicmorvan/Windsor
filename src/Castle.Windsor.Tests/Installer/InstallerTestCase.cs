@@ -20,33 +20,30 @@ using Castle.XmlFiles;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class InstallerTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void InstallCalcService()
 	{
 		var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("installerconfig.xml")));
 
-		Assert.IsTrue(container.Kernel.HasComponent(typeof(ICalcService)));
-		Assert.IsTrue(container.Kernel.HasComponent("calcservice"));
+		Assert.True(container.Kernel.HasComponent(typeof(ICalcService)));
+		Assert.True(container.Kernel.HasComponent("calcservice"));
 	}
 
-	[Test]
+	[Fact]
 	public void InstallChildContainer()
 	{
 		var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("installerconfig.xml")));
 		var child1 = container.GetChildContainer("child1");
 
-		Assert.IsNotNull(child1);
-		Assert.AreEqual(child1.Parent, container);
-		Assert.IsTrue(child1.Kernel.HasComponent(typeof(ICalcService)));
-		Assert.IsTrue(child1.Kernel.HasComponent("child_calcservice"));
+		Assert.NotNull(child1);
+		Assert.Equal(child1.Parent, container);
+		Assert.True(child1.Kernel.HasComponent(typeof(ICalcService)));
+		Assert.True(child1.Kernel.HasComponent("child_calcservice"));
 
 		var calcservice = container.Resolve<ICalcService>("calcservice");
 		var child_calcservice = child1.Resolve<ICalcService>();
-		Assert.AreNotEqual(calcservice, child_calcservice);
+		Assert.NotEqual(calcservice, child_calcservice);
 	}
 }

@@ -22,11 +22,9 @@ using Castle.MicroKernel.Tests.ClassComponents;
 using CastleTests.ClassComponents;
 using CastleTests.Components;
 
-using NUnit.Framework;
-
 public class TypedServiceOverridesAndDependenciesTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Mixin_picks_component_implemented_by_that_type()
 	{
 		Container.Register(Component.For<A>()
@@ -37,10 +35,10 @@ public class TypedServiceOverridesAndDependenciesTestCase : AbstractContainerTes
 		var item = Container.Resolve<A>();
 		var two = (ISimpleService2)item;
 
-		Assert.AreEqual("b", two.Method());
+		Assert.Equal("b", two.Method());
 	}
 
-	[Test]
+	[Fact]
 	public void Picks_component_implemented_by_that_type()
 	{
 		Container.Register(Component.For<CommonServiceUser>()
@@ -49,10 +47,10 @@ public class TypedServiceOverridesAndDependenciesTestCase : AbstractContainerTes
 			Component.For<ICommon>().ImplementedBy<CommonImpl2>());
 
 		var item = Container.Resolve<CommonServiceUser>();
-		Assert.IsInstanceOf<CommonImpl2>(item.CommonService);
+		Assert.IsType<CommonImpl2>(item.CommonService);
 	}
 
-	[Test]
+	[Fact]
 	public void Picks_component_implemented_by_that_type_open_generic()
 	{
 		Container.Register(Component.For(typeof(UsesIGeneric<>))
@@ -61,10 +59,10 @@ public class TypedServiceOverridesAndDependenciesTestCase : AbstractContainerTes
 			Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)));
 
 		var item = Container.Resolve<UsesIGeneric<A>>();
-		Assert.IsInstanceOf<GenericImpl2<A>>(item.Dependency);
+		Assert.IsType<GenericImpl2<A>>(item.Dependency);
 	}
 
-	[Test]
+	[Fact]
 	public void Picks_component_implemented_by_that_type_open_generic_if_matching_closed_registered()
 	{
 		Container.Register(Component.For(typeof(UsesIGeneric<>))
@@ -74,13 +72,10 @@ public class TypedServiceOverridesAndDependenciesTestCase : AbstractContainerTes
 			Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)));
 
 		var item = Container.Resolve<UsesIGeneric<A>>();
-		Assert.IsInstanceOf<GenericImpl2<A>>(item.Dependency);
+		Assert.IsType<GenericImpl2<A>>(item.Dependency);
 	}
 
-	[Test(
-		Description =
-			"This is not exactly perfect. IMO we should throw here, but making it work like that would require some serious changes and I don't think it's a common scenario."
-	)]
+	[Fact]
 	public void Picks_component_implemented_by_that_type_with_default_name_if_multiple()
 	{
 		Container.Register(Component.For<CommonServiceUser>()
@@ -90,14 +85,14 @@ public class TypedServiceOverridesAndDependenciesTestCase : AbstractContainerTes
 			Component.For<ICommon>().ImplementedBy<CommonImpl2>());
 
 		var item = Container.Resolve<CommonServiceUser>();
-		Assert.IsInstanceOf<CommonImpl2>(item.CommonService);
+		Assert.IsType<CommonImpl2>(item.CommonService);
 
 		var default2 = Container.Resolve<ICommon>(ComponentName.DefaultNameFor(typeof(CommonImpl2)));
 
-		Assert.AreSame(default2, item.CommonService);
+		Assert.Same(default2, item.CommonService);
 	}
 
-	[Test]
+	[Fact]
 	public void Throws_if_component_implemented_by_that_type_non_default_name()
 	{
 		Container.Register(Component.For<CommonServiceUser>()

@@ -21,8 +21,6 @@ using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
-using NUnit.Framework;
-
 public static class TestUtils
 {
 	public static void AssertNoFirstChanceExceptions(Action action)

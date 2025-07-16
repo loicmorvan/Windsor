@@ -22,9 +22,6 @@ using Castle.MicroKernel.Tests.Pools;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 {
 	public class Indirection
@@ -98,7 +95,7 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 	{
 	}
 
-	[Test]
+	[Fact]
 	public void ComponentsAreOnlyDisposedOnce()
 	{
 		Kernel.Register(
@@ -106,15 +103,15 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 			Component.For<DisposableTemplateEngine>().Named("templateengine").LifeStyle.Transient);
 
 		var instance1 = Kernel.Resolve<DisposableSpamService>("spamservice");
-		Assert.IsFalse(instance1.IsDisposed);
-		Assert.IsFalse(instance1.TemplateEngine.IsDisposed);
+		Assert.False(instance1.IsDisposed);
+		Assert.False(instance1.TemplateEngine.IsDisposed);
 
 		Kernel.ReleaseComponent(instance1);
 		Kernel.ReleaseComponent(instance1);
 		Kernel.ReleaseComponent(instance1);
 	}
 
-	[Test]
+	[Fact]
 	public void DisposingSubLevelBurdenWontDisposeComponentAsTheyAreDisposedAlready()
 	{
 		Kernel.Register(
@@ -123,30 +120,30 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 			Component.For<DisposableTemplateEngine>().Named("templateengine").LifeStyle.Transient);
 
 		var instance1 = Kernel.Resolve<DisposableSpamService>("spamservice");
-		Assert.IsFalse(instance1.IsDisposed);
-		Assert.IsFalse(instance1.TemplateEngine.IsDisposed);
+		Assert.False(instance1.IsDisposed);
+		Assert.False(instance1.TemplateEngine.IsDisposed);
 
 		Kernel.ReleaseComponent(instance1);
 		Kernel.ReleaseComponent(instance1.TemplateEngine);
 	}
 
-	[Test]
+	[Fact]
 	public void GenericTransientComponentsAreReleasedInChain()
 	{
 		Kernel.Register(Component.For(typeof(GenA<>)).LifeStyle.Transient);
 		Kernel.Register(Component.For(typeof(GenB<>)).LifeStyle.Transient);
 
 		var instance1 = Kernel.Resolve<GenA<string>>();
-		Assert.IsFalse(instance1.IsDisposed);
-		Assert.IsFalse(instance1.GenBField.IsDisposed);
+		Assert.False(instance1.IsDisposed);
+		Assert.False(instance1.GenBField.IsDisposed);
 
 		Kernel.ReleaseComponent(instance1);
 
-		Assert.IsTrue(instance1.IsDisposed);
-		Assert.IsTrue(instance1.GenBField.IsDisposed);
+		Assert.True(instance1.IsDisposed);
+		Assert.True(instance1.GenBField.IsDisposed);
 	}
 
-	[Test]
+	[Fact]
 	public void SingletonReferencedComponentIsNotDisposed()
 	{
 		Kernel.Register(
@@ -157,17 +154,17 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 			Component.For(typeof(DisposableTemplateEngine)).Named("templateengine").LifeStyle.Transient);
 
 		var instance1 = Kernel.Resolve<DisposableSpamService>("spamservice");
-		Assert.IsFalse(instance1.IsDisposed);
-		Assert.IsFalse(instance1.TemplateEngine.IsDisposed);
+		Assert.False(instance1.IsDisposed);
+		Assert.False(instance1.TemplateEngine.IsDisposed);
 
 		Kernel.ReleaseComponent(instance1);
 
-		Assert.IsTrue(instance1.IsDisposed);
-		Assert.IsTrue(instance1.TemplateEngine.IsDisposed);
-		Assert.IsFalse(instance1.MailSender.IsDisposed);
+		Assert.True(instance1.IsDisposed);
+		Assert.True(instance1.TemplateEngine.IsDisposed);
+		Assert.False(instance1.MailSender.IsDisposed);
 	}
 
-	[Test]
+	[Fact]
 	public void TransientReferencedComponentsAreReleasedInChain()
 	{
 		Kernel.Register(
@@ -176,16 +173,16 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 		);
 
 		var service = Kernel.Resolve<DisposableSpamService>();
-		Assert.IsFalse(service.IsDisposed);
-		Assert.IsFalse(service.TemplateEngine.IsDisposed);
+		Assert.False(service.IsDisposed);
+		Assert.False(service.TemplateEngine.IsDisposed);
 
 		Kernel.ReleaseComponent(service);
 
-		Assert.IsTrue(service.IsDisposed);
-		Assert.IsTrue(service.TemplateEngine.IsDisposed);
+		Assert.True(service.IsDisposed);
+		Assert.True(service.TemplateEngine.IsDisposed);
 	}
 
-	[Test]
+	[Fact]
 	public void TransientReferencesAreNotHeldByContainer()
 	{
 		Kernel.Register(Component.For<EmptyClass>().LifeStyle.Transient);
@@ -195,7 +192,7 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 			.AssertNoLongerReferenced();
 	}
 
-	[Test]
+	[Fact]
 	public void WhenRootComponentIsNotDisposableButDependenciesAre_DependenciesShouldBeDisposed()
 	{
 		Kernel.Register(Component.For(typeof(NonDisposableRoot)).Named("root").LifeStyle.Transient);
@@ -203,16 +200,16 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 		Kernel.Register(Component.For(typeof(B)).Named("b").LifeStyle.Transient);
 
 		var instance1 = Kernel.Resolve<NonDisposableRoot>();
-		Assert.IsFalse(instance1.A.IsDisposed);
-		Assert.IsFalse(instance1.B.IsDisposed);
+		Assert.False(instance1.A.IsDisposed);
+		Assert.False(instance1.B.IsDisposed);
 
 		Kernel.ReleaseComponent(instance1);
 
-		Assert.IsTrue(instance1.A.IsDisposed);
-		Assert.IsTrue(instance1.B.IsDisposed);
+		Assert.True(instance1.A.IsDisposed);
+		Assert.True(instance1.B.IsDisposed);
 	}
 
-	[Test]
+	[Fact]
 	public void WhenRootComponentIsNotDisposableButThirdLevelDependenciesAre_DependenciesShouldBeDisposed()
 	{
 		Kernel.Register(Component.For(typeof(Indirection)).Named("root").LifeStyle.Transient);
@@ -221,22 +218,22 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 		Kernel.Register(Component.For(typeof(B)).Named("b").LifeStyle.Transient);
 
 		var instance1 = Kernel.Resolve<Indirection>();
-		Assert.IsFalse(instance1.FakeRoot.A.IsDisposed);
-		Assert.IsFalse(instance1.FakeRoot.B.IsDisposed);
+		Assert.False(instance1.FakeRoot.A.IsDisposed);
+		Assert.False(instance1.FakeRoot.B.IsDisposed);
 
 		Kernel.ReleaseComponent(instance1);
 
-		Assert.IsTrue(instance1.FakeRoot.A.IsDisposed);
-		Assert.IsTrue(instance1.FakeRoot.B.IsDisposed);
+		Assert.True(instance1.FakeRoot.A.IsDisposed);
+		Assert.True(instance1.FakeRoot.B.IsDisposed);
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-320")]
 	public void Expected_exception_during_creation_doesnt_prevent_from_being_released_properly()
 	{
 		Container.Register(Component.For<GenA<int>>().LifestyleTransient(),
 			Component.For<B>().UsingFactoryMethod<B>(delegate { throw new NotImplementedException("boo hoo!"); }).LifestyleTransient()
-				.OnDestroy(Assert.IsNotNull));
+				.OnDestroy(Assert.NotNull));
 
 		var a = Container.Resolve<GenA<int>>();
 

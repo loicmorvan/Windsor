@@ -22,21 +22,18 @@ using Castle.XmlFiles;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class CreatingContainerTestCase
 {
 #if FEATURE_SYSTEM_CONFIGURATION
-		[Test]
+		[Fact]
 		public void With_config_section()
 		{
 			var sectionName = "config://castle/";//trailing slash is required
 
 			var uri = new CustomUri(sectionName);
 
-			Assert.AreEqual("config", uri.Scheme);
-			Assert.AreEqual("castle", uri.Host);
+			Assert.Equal("config", uri.Scheme);
+			Assert.Equal("castle", uri.Host);
 
 			var container = new WindsorContainer(sectionName);
 
@@ -44,7 +41,7 @@ public class CreatingContainerTestCase
 		}
 #endif
 
-	[Test]
+	[Fact]
 	public void With_configuration_file()
 	{
 		var filePath = Xml.FilePath("hasFileIncludes.xml");
@@ -53,20 +50,20 @@ public class CreatingContainerTestCase
 
 		var container = new WindsorContainer(filePath);
 
-		Assert.AreEqual(2, container.Kernel.GetFacilities().Length);
+		Assert.Equal(2, container.Kernel.GetFacilities().Length);
 	}
 
-	[Test]
+	[Fact]
 	public void With_configuration_file_relative()
 	{
 		var filePath = "XmlFiles/hasFileIncludes.xml";
 
 		var container = new WindsorContainer(filePath);
 
-		Assert.AreEqual(2, container.Kernel.GetFacilities().Length);
+		Assert.Equal(2, container.Kernel.GetFacilities().Length);
 	}
 
-	[Test]
+	[Fact]
 	public void With_embedded_xml()
 	{
 		var resourcePath = Xml.EmbeddedPath("componentWithoutId.xml");
@@ -76,11 +73,5 @@ public class CreatingContainerTestCase
 		var container = new WindsorContainer(resourcePath);
 
 		container.Resolve<A>();
-	}
-
-	[Test]
-	[Ignore("Not really possible to test in isolation...")]
-	public void With_unc_path()
-	{
 	}
 }

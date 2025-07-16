@@ -16,17 +16,15 @@
 
 namespace Castle.Windsor.Tests.Configuration2;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class ConfigWithStatementsTestCase
 {
 	private IWindsorContainer container;
 
-	[TestCase("debug")]
-	[TestCase("prod")]
-	[TestCase("qa")]
-	[TestCase("default")]
+	[Theory]
+	[InlineData("debug")]
+	[InlineData("prod")]
+	[InlineData("qa")]
+	[InlineData("default")]
 	public void SimpleChoose(string flag)
 	{
 		var file = ConfigHelper.ResolveConfigPath("Configuration2/config_with_define_{0}.xml", flag);
@@ -35,39 +33,39 @@ public class ConfigWithStatementsTestCase
 
 		var store = container.Kernel.ConfigurationStore;
 
-		Assert.AreEqual(1, store.GetComponents().Length);
+		Assert.Single(store.GetComponents());
 
 		var config = store.GetComponentConfiguration(flag);
 
-		Assert.IsNotNull(config);
+		Assert.NotNull(config);
 	}
 
-	[Test]
+	[Fact]
 	public void SimpleIf()
 	{
 		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_if_stmt.xml"));
 		var store = container.Kernel.ConfigurationStore;
 
-		Assert.AreEqual(4, store.GetComponents().Length);
+		Assert.Equal(4, store.GetComponents().Length);
 
 		var config = store.GetComponentConfiguration("debug");
-		Assert.IsNotNull(config);
+		Assert.NotNull(config);
 
 		var childItem = config.Children["item"];
-		Assert.IsNotNull(childItem);
-		Assert.AreEqual("some value", childItem.Value);
+		Assert.NotNull(childItem);
+		Assert.Equal("some value", childItem.Value);
 
 		childItem = config.Children["item2"];
-		Assert.IsNotNull(childItem);
-		Assert.AreEqual("some <&> value2", childItem.Value);
+		Assert.NotNull(childItem);
+		Assert.Equal("some <&> value2", childItem.Value);
 
 		config = store.GetComponentConfiguration("qa");
-		Assert.IsNotNull(config);
+		Assert.NotNull(config);
 
 		config = store.GetComponentConfiguration("default");
-		Assert.IsNotNull(config);
+		Assert.NotNull(config);
 
 		config = store.GetComponentConfiguration("notprod");
-		Assert.IsNotNull(config);
+		Assert.NotNull(config);
 	}
 }

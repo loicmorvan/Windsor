@@ -14,19 +14,16 @@
 
 namespace Castle.Windsor.Tests.Configuration2;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class ConfigurationInstallersTestCase
 {
-	[Test]
+	[Fact]
 	public void Installers_by_type()
 	{
 		var container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_installers_type.xml"));
 		container.Resolve<object>("Customer-by-CustomerInstaller");
 	}
 
-	[Test]
+	[Fact]
 	public void Installers_by_assembly()
 	{
 		var container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_installers_assembly.xml"));

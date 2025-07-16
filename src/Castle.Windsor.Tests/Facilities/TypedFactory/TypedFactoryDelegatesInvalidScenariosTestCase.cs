@@ -22,9 +22,6 @@ using Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class TypedFactoryDelegatesInvalidScenariosTestCase : AbstractContainerTestCase
 {
 	protected override void AfterContainerCreated()
@@ -32,33 +29,33 @@ public class TypedFactoryDelegatesInvalidScenariosTestCase : AbstractContainerTe
 		Container.AddFacility<TypedFactoryFacility>();
 	}
 
-	[Test]
+	[Fact]
 	public void Dependency_on_Func_of_bool_is_not_satisfied()
 	{
 		Container.Register(Component.For<HasFuncProperty<bool>>());
 
 		var item = Container.Resolve<HasFuncProperty<bool>>();
 
-		Assert.IsNull(item.Function);
+		Assert.Null(item.Function);
 	}
 
-	[Test]
+	[Fact]
 	public void Dependency_on_Func_of_string_is_not_satisfied()
 	{
 		Container.Register(Component.For<HasFuncProperty<string>>());
 
 		var item = Container.Resolve<HasFuncProperty<string>>();
 
-		Assert.IsNull(item.Function);
+		Assert.Null(item.Function);
 	}
 
-	[Test]
+	[Fact]
 	public void Dependency_on_Func_of_string_is_not_satisfied_after_resolving_valid_func()
 	{
 		Container.Register(Component.For<HasFuncProperty<string>>());
 		Container.Resolve<Func<A>>();
 		var item = Container.Resolve<HasFuncProperty<string>>();
 
-		Assert.IsNull(item.Function);
+		Assert.Null(item.Function);
 	}
 }

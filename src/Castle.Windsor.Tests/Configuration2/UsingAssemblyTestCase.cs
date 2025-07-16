@@ -20,18 +20,15 @@ namespace Castle.Windsor.Tests.Configuration2
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.SubSystems.Conversion;
 
-	using NUnit.Framework;
-
-	[TestFixture]
 	public class UsingAssemblyTestCase
 	{
-		[Test]
+		[Fact]
 		public void Installers_by_type()
 		{
 			var container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_using_assembly.xml"));
 			var manager = container.Kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey) as IConversionManager;
 			var type = manager.PerformConversion<Type>("BrushMappingMode");
-			Assert.IsNotNull(type);
+			Assert.NotNull(type);
 		}
 	}
 }

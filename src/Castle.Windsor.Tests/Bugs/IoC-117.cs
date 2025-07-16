@@ -18,12 +18,9 @@ using System;
 
 using Castle.MicroKernel.Registration;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class IoC_117
 {
-	[Test]
+	[Fact]
 	public void Public_property_with_Protected_setter_causes_Object_Reference_exception()
 	{
 		IKernel kernel = new DefaultKernel();
@@ -34,7 +31,7 @@ public class IoC_117
 		try
 		{
 			var p = (Presenter)kernel.Resolve(typeof(Presenter));
-			Assert.IsNotNull(p);
+			Assert.NotNull(p);
 		}
 		catch (NullReferenceException)
 		{

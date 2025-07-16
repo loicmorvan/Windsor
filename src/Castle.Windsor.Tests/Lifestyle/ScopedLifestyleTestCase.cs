@@ -25,20 +25,18 @@ using Castle.Windsor.Tests.ClassComponents;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
 public class ScopedLifestyleTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Can_apply_scoped_lifestyle_via_attribute()
 	{
 		Container.Register(Component.For<ScopedComponent>());
 
 		var handler = Kernel.GetHandler(typeof(ScopedComponent));
-		Assert.AreEqual(LifestyleType.Scoped, handler.ComponentModel.LifestyleType);
+		Assert.Equal(LifestyleType.Scoped, handler.ComponentModel.LifestyleType);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_create_scope_without_using_container_or_kernel()
 	{
 		Container.Register(Component.For<A>().LifeStyle.Scoped());
@@ -48,7 +46,7 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void Ending_scope_releases_component()
 	{
 		DisposableFoo.ResetDisposedCount();
@@ -60,10 +58,10 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
 			Container.Resolve<DisposableFoo>();
 		}
 
-		Assert.AreEqual(1, DisposableFoo.DisposedCount);
+		Assert.Equal(1, DisposableFoo.DisposedCount);
 	}
 
-	[Test]
+	[Fact]
 	public void Resolve_scoped_component_within_a_scope_successful()
 	{
 		Container.Register(Component.For<A>().LifeStyle.Scoped());
@@ -73,7 +71,7 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void Resolve_scoped_component_within_a_scope_successful_registered_via_attribute()
 	{
 		Container.Register(Component.For<ScopedComponent>());
@@ -83,7 +81,7 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void Resolve_scoped_component_without_a_scope_throws_helpful_exception()
 	{
 		Container.Register(Component.For<A>().LifeStyle.Scoped());
@@ -91,29 +89,12 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
 		var exception = Assert.Throws<InvalidOperationException>(() =>
 			Container.Resolve<A>());
 
-		Assert.AreEqual(
+		Assert.Equal(
 			"Scope was not available. Did you forget to call container.BeginScope()?",
 			exception.Message);
 	}
 
-	[Test]
-	[Ignore("This fails... not sure what the behavior should be... that has to be discussed based on some real life usages")]
-	public void Scoped_component_instance_from_outer_scope_is_reused_within_nested_scope()
-	{
-		Container.Register(Component.For<A>().LifeStyle.Scoped());
-
-		using (Container.BeginScope())
-		{
-			var a1 = Container.Resolve<A>();
-			using (Container.BeginScope())
-			{
-				var a2 = Container.Resolve<A>();
-				Assert.AreSame(a1, a2);
-			}
-		}
-	}
-
-	[Test]
+	[Fact]
 	public void Scoped_component_instance_is_reused_within_the_scope()
 	{
 		Container.Register(Component.For<A>().LifeStyle.Scoped());
@@ -122,11 +103,11 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
 		{
 			var a1 = Container.Resolve<A>();
 			var a2 = Container.Resolve<A>();
-			Assert.AreSame(a1, a2);
+			Assert.Same(a1, a2);
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void Scoped_component_is_bound_to_the_innermost_scope()
 	{
 		DisposableFoo.ResetDisposedCount();
@@ -138,16 +119,16 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
 			using (Container.BeginScope())
 			{
 				Container.Resolve<DisposableFoo>();
-				Assert.AreEqual(0, DisposableFoo.DisposedCount);
+				Assert.Equal(0, DisposableFoo.DisposedCount);
 			}
 
-			Assert.AreEqual(1, DisposableFoo.DisposedCount);
+			Assert.Equal(1, DisposableFoo.DisposedCount);
 		}
 
-		Assert.AreEqual(1, DisposableFoo.DisposedCount);
+		Assert.Equal(1, DisposableFoo.DisposedCount);
 	}
 
-	[Test]
+	[Fact]
 	public void Scoped_component_is_not_released_by_call_to_container_Release()
 	{
 		DisposableFoo foo;
@@ -159,11 +140,11 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
 		{
 			foo = Container.Resolve<DisposableFoo>();
 			Container.Release(foo);
-			Assert.AreEqual(0, DisposableFoo.DisposedCount);
+			Assert.Equal(0, DisposableFoo.DisposedCount);
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void Scoped_component_is_not_tracked_by_the_release_policy()
 	{
 		DisposableFoo foo;
@@ -174,11 +155,11 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
 		using (Container.BeginScope())
 		{
 			foo = Container.Resolve<DisposableFoo>();
-			Assert.IsFalse(Kernel.ReleasePolicy.HasTrack(foo));
+			Assert.False(Kernel.ReleasePolicy.HasTrack(foo));
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void Transient_depending_on_scoped_component_is_not_tracked_by_the_container()
 	{
 		Container.Register(Component.For<DisposableFoo>().LifeStyle.Scoped(),
@@ -192,7 +173,7 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void Transient_depending_on_scoped_component_is_not_tracked_by_the_release_policy()
 	{
 		Container.Register(Component.For<DisposableFoo>().LifeStyle.Scoped(),
@@ -201,22 +182,22 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
 		using (Container.BeginScope())
 		{
 			var udf = Container.Resolve<UsesDisposableFoo>();
-			Assert.IsFalse(Kernel.ReleasePolicy.HasTrack(udf));
+			Assert.False(Kernel.ReleasePolicy.HasTrack(udf));
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void Requiring_scope_without_parent_scope_begins_new_scope()
 	{
 		Container.Register(Component.For<A>().LifeStyle.Scoped());
 		using (var scope = Container.RequireScope())
 		{
 			Container.Resolve<A>();
-			Assert.IsNotNull(scope);
+			Assert.NotNull(scope);
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void Requiring_scope_within_parent_scope_uses_parent_scope()
 	{
 		Container.Register(Component.For<A>().LifeStyle.Scoped());
@@ -226,13 +207,13 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
 			using (var scope = Container.RequireScope())
 			{
 				var aa = Container.Resolve<A>();
-				Assert.AreSame(a, aa);
-				Assert.IsNull(scope);
+				Assert.Same(a, aa);
+				Assert.Null(scope);
 			}
 		}
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-319")]
 	public void Nested_container_and_scope_used_together_dont_cause_components_to_be_released_twice()
 	{
@@ -252,6 +233,6 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
 			child.Resolve<DisposableFoo>();
 		}
 
-		Assert.AreEqual(1, DisposableFoo.DisposedCount);
+		Assert.Equal(1, DisposableFoo.DisposedCount);
 	}
 }

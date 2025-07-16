@@ -23,18 +23,16 @@ using Castle.MicroKernel.Tests;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
 public class DependencyCyclesTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Can_detect_and_report_cycle_via_factory_method()
 	{
 		Container.Register(
 			Component.For<A>().UsingFactoryMethod(k =>
 			{
 				var thisCreatesCycle = k.Resolve<C>();
-				Assert.NotNull(thisCreatesCycle, "just so that the variable is not optimized away");
+				Assert.NotNull(thisCreatesCycle);
 				return new A();
 			}),
 			Component.For<B>(),
@@ -46,10 +44,10 @@ public class DependencyCyclesTestCase : AbstractContainerTestCase
 				"Dependency cycle has been detected when trying to resolve component 'CastleTests.Components.C'.{0}The resolution tree that resulted in the cycle is the following:{0}Component 'CastleTests.Components.C' resolved as dependency of{0}\tcomponent 'Late bound CastleTests.Components.A' resolved as dependency of{0}\tcomponent 'CastleTests.Components.B' resolved as dependency of{0}\tcomponent 'CastleTests.Components.C' which is the root component being resolved.{0}",
 				Environment.NewLine);
 
-		Assert.AreEqual(message, exception.Message);
+		Assert.Equal(message, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_detect_and_report_cycle_where_container_has_lazy_loaders()
 	{
 		Container.Register(
@@ -62,6 +60,6 @@ public class DependencyCyclesTestCase : AbstractContainerTestCase
 				"Dependency cycle has been detected when trying to resolve component 'CastleTests.Components.EmptyServiceDecorator'.{0}The resolution tree that resulted in the cycle is the following:{0}Component 'CastleTests.Components.EmptyServiceDecorator' resolved as dependency of{0}	component 'CastleTests.Components.EmptyServiceDecorator' which is the root component being resolved.{0}",
 				Environment.NewLine);
 
-		Assert.AreEqual(message, exception.Message);
+		Assert.Equal(message, exception.Message);
 	}
 }

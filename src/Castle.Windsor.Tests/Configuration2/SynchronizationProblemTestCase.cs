@@ -21,22 +21,16 @@ using Castle.Windsor.Configuration.Interpreters;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
-[Explicit]
-public class SynchronizationProblemTestCase
+public class SynchronizationProblemTestCase:IDisposable
 {
-	[SetUp]
-	public void Init()
+	public SynchronizationProblemTestCase()
 	{
 		container = new WindsorContainer(new XmlInterpreter(ConfigHelper.ResolveConfigPath("Configuration2/synchtest_config.xml")));
 
 		container.Resolve(typeof(ComponentWithConfigs));
 	}
 
-	[TearDown]
-	public void Terminate()
+	public void Dispose()
 	{
 		container.Dispose();
 	}
@@ -45,7 +39,7 @@ public class SynchronizationProblemTestCase
 	private readonly ManualResetEvent startEvent = new(false);
 	private readonly ManualResetEvent stopEvent = new(false);
 
-	[Test]
+	[Fact]
 	public void ResolveWithConfigTest()
 	{
 		const int threadCount = 50;
@@ -74,9 +68,9 @@ public class SynchronizationProblemTestCase
 			{
 				var comp = (ComponentWithConfigs)container.Resolve(typeof(ComponentWithConfigs));
 
-				Assert.AreEqual(AppContext.BaseDirectory, comp.Name);
-				Assert.AreEqual(90, comp.Port);
-				Assert.AreEqual(1, comp.Dict.Count);
+				Assert.Equal(AppContext.BaseDirectory, comp.Name);
+				Assert.Equal(90, comp.Port);
+				Assert.Single(comp.Dict);
 			}
 			catch (Exception ex)
 			{

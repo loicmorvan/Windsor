@@ -25,46 +25,42 @@ using Castle.MicroKernel.Resolvers;
 using CastleTests;
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class LazyLoadingTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Can_Lazily_resolve_component()
 	{
 		Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LoaderForDefaultImplementations>());
 		var service = Container.Resolve("foo", typeof(IHasDefaultImplementation));
-		Assert.IsNotNull(service);
-		Assert.IsInstanceOf<Implementation>(service);
+		Assert.NotNull(service);
+		Assert.IsType<Implementation>(service);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_lazily_resolve_dependency()
 	{
 		Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LoaderForDefaultImplementations>(),
 			Component.For<UsingLazyComponent>());
 		var component = Container.Resolve<UsingLazyComponent>();
-		Assert.IsNotNull(component.Dependency);
+		Assert.NotNull(component.Dependency);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_lazily_resolve_explicit_dependency()
 	{
 		Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LoaderUsingDependency>());
 		var component = Container.Resolve<UsingString>(new Arguments().AddNamed("parameter", "Hello"));
-		Assert.AreEqual("Hello", component.Parameter);
+		Assert.Equal("Hello", component.Parameter);
 	}
 
-	[Test]
+	[Fact]
 	public void Component_loaded_lazily_can_have_lazy_dependencies()
 	{
 		Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<ABLoader>());
 		Container.Resolve<B>();
 	}
 
-	[Test]
-	[Timeout(2000)]
+	[Fact(Timeout = 2000)]
 	public void Loaders_are_thread_safe()
 	{
 		Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<SlowLoader>());
@@ -89,11 +85,11 @@ public class LazyLoadingTestCase : AbstractContainerTestCase
 				}
 			);
 		@event.WaitOne();
-		Assert.IsNull(exception);
-		Assert.AreEqual(0, count[0]);
+		Assert.Null(exception);
+		Assert.Equal(0, count[0]);
 	}
 
-	[Test]
+	[Fact]
 	public void Loaders_only_triggered_when_resolving()
 	{
 		var loader = new ABLoaderWithGuardClause();
@@ -105,7 +101,7 @@ public class LazyLoadingTestCase : AbstractContainerTestCase
 		Container.Resolve<B>();
 	}
 
-	[Test]
+	[Fact]
 	public void Loaders_with_dependencies_dont_overflow_the_stack()
 	{
 		Container.Register(Component.For<LoaderWithDependency>());

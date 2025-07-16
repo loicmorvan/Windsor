@@ -25,32 +25,29 @@ using Castle.XmlFiles;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class ConfigurationInstallerTestCase : AbstractContainerTestCase
 {
 #if FEATURE_SYSTEM_CONFIGURATION
-		[Test]
+		[Fact]
 		public void Can_reference_components_from_app_config_in_component_node()
 		{
 			Container.Install(Configuration.FromAppConfig());
 
 			var item = Container.Resolve<ClassWithArguments>();
-			Assert.AreEqual("a string", item.Arg1);
-			Assert.AreEqual(42, item.Arg2);
+			Assert.Equal("a string", item.Arg1);
+			Assert.Equal(42, item.Arg2);
 		}
 
-		[Test]
+		[Fact]
 		public void InstallComponents_FromAppConfig_ComponentsInstalled()
 		{
 			Container.Install(Configuration.FromAppConfig());
 
-			Assert.IsTrue(Container.Kernel.HasComponent(typeof(ICalcService)));
-			Assert.IsTrue(Container.Kernel.HasComponent("calcservice"));
+			Assert.True(Container.Kernel.HasComponent(typeof(ICalcService)));
+			Assert.True(Container.Kernel.HasComponent("calcservice"));
 		}
 
-		[Test]
+		[Fact]
 		public void InstallComponents_FromMultiple_ComponentsInstalled()
 		{
 			Container.Install(
@@ -59,16 +56,16 @@ public class ConfigurationInstallerTestCase : AbstractContainerTestCase
 				Configuration.FromXml(Xml.Embedded("robotwireconfig.xml"))
 				);
 
-			Assert.IsTrue(Container.Kernel.HasComponent(typeof(ICalcService)));
-			Assert.IsTrue(Container.Kernel.HasComponent("calcservice"));
-			Assert.IsTrue(Container.Kernel.HasComponent(typeof(ClassWithDoNotWireProperties)));
-			Assert.IsTrue(Container.Kernel.HasComponent("server"));
-			Assert.IsTrue(Container.Kernel.HasComponent(typeof(Robot)));
-			Assert.IsTrue(Container.Kernel.HasComponent("robot"));
+			Assert.True(Container.Kernel.HasComponent(typeof(ICalcService)));
+			Assert.True(Container.Kernel.HasComponent("calcservice"));
+			Assert.True(Container.Kernel.HasComponent(typeof(ClassWithDoNotWireProperties)));
+			Assert.True(Container.Kernel.HasComponent("server"));
+			Assert.True(Container.Kernel.HasComponent(typeof(Robot)));
+			Assert.True(Container.Kernel.HasComponent("robot"));
 		}
 #endif
 
-	[Test]
+	[Fact]
 	public void InstallComponents_FromXmlFileWithEnvironment_ComponentsInstalled()
 	{
 		Container.Install(
@@ -79,20 +76,20 @@ public class ConfigurationInstallerTestCase : AbstractContainerTestCase
 
 		var prop = Container.Resolve<ComponentWithStringProperty>("component");
 
-		Assert.AreEqual("John Doe", prop.Name);
+		Assert.Equal("John Doe", prop.Name);
 	}
 
-	[Test]
+	[Fact]
 	public void InstallComponents_FromXmlFile_ComponentsInstalled()
 	{
 		Container.Install(
 			Configuration.FromXml(Xml.Embedded("installerconfig.xml")));
 
-		Assert.IsTrue(Container.Kernel.HasComponent(typeof(ICalcService)));
-		Assert.IsTrue(Container.Kernel.HasComponent("calcservice"));
+		Assert.True(Container.Kernel.HasComponent(typeof(ICalcService)));
+		Assert.True(Container.Kernel.HasComponent("calcservice"));
 	}
 
-	[Test]
+	[Fact]
 	public void InstallComponents_FromXmlFile_first_and_from_code()
 	{
 		Container.Install(
@@ -102,22 +99,7 @@ public class ConfigurationInstallerTestCase : AbstractContainerTestCase
 				.Named("camera"))));
 
 		var camera = Container.Resolve<ICamera>();
-		Assert.AreEqual("from configuration", camera.Name);
-	}
-
-	[Test]
-	[Ignore("This does not work. Would be cool if it did, but we need deeper restructuring first.")]
-	public void InstallComponents_from_code_first_and_FromXmlFile()
-	{
-		Container.Install(
-			new Installer(c => c.Register(Component.For<ICamera>()
-				.ImplementedBy<Camera>()
-				.Named("camera"))),
-			Configuration.FromXml(Xml.Embedded("justConfiguration.xml"))
-		);
-
-		var camera = Container.Resolve<ICamera>();
-		Assert.AreEqual("from configuration", camera.Name);
+		Assert.Equal("from configuration", camera.Name);
 	}
 }
 

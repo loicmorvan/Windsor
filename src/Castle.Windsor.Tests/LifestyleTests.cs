@@ -6,11 +6,9 @@ using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 
-using NUnit.Framework;
-
 public class LifestyleTests
 {
-	[Test]
+	[Fact]
 	public void TestForSerivces()
 	{
 		using (var container = new WindsorContainer())
@@ -24,12 +22,12 @@ public class LifestyleTests
 			} // childIhterface is NOT disposing here
 
 			var @interface = container.Resolve<IInterface>();
-			Assert.AreSame(@interface, childInterface);
+			Assert.Same(@interface, childInterface);
 			@interface.Do();
 		} // but is disposing here and this is right behavior
 	}
 
-	[Test]
+	[Fact]
 	public void TestForTypedFactories()
 	{
 		using (var container = new WindsorContainer())
@@ -46,8 +44,8 @@ public class LifestyleTests
 			} // childFactory is disposing here
 
 			var factory = container.Resolve<IFactory>();
-			Assert.AreSame(factory, childFactory);
-			Assert.DoesNotThrow(() => factory.Create()); // throws an ObjectDisposedException exception
+			Assert.Same(factory, childFactory);
+			factory.Create(); // throws an ObjectDisposedException exception
 		} // but should be disposed here
 	}
 

@@ -22,12 +22,9 @@ using Castle.MicroKernel.Tests.ClassComponents;
 
 using CastleTests;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class DecoratorsTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Should_ignore_reference_to_itself()
 	{
 		Kernel.Register(
@@ -35,10 +32,10 @@ public class DecoratorsTestCase : AbstractContainerTestCase
 			Component.For<IRepository>().ImplementedBy<DecoratedRepository>()
 		);
 		var repos = (Repository1)Kernel.Resolve<IRepository>();
-		Assert.IsInstanceOf(typeof(DecoratedRepository), repos.InnerRepository);
+		Assert.IsType<DecoratedRepository>(repos.InnerRepository);
 	}
 
-	[Test]
+	[Fact]
 	public void Will_give_good_error_message_if_cannot_resolve_service_that_is_likely_decorated()
 	{
 		Kernel.Register(
@@ -52,10 +49,10 @@ public class DecoratorsTestCase : AbstractContainerTestCase
 			string.Format(
 				"Can't create component 'Castle.MicroKernel.Tests.ClassComponents.Repository1' as it has dependencies to be satisfied.{0}{0}'Castle.MicroKernel.Tests.ClassComponents.Repository1' is waiting for the following dependencies:{0}- Service 'Castle.MicroKernel.Tests.ClassComponents.IRepository' which points back to the component itself.{0}A dependency cannot be satisfied by the component itself, did you forget to make this a service override and point explicitly to a different component exposing this service?{0}{0}The following components also expose the service, but none of them can be resolved:{0}'Castle.MicroKernel.Tests.ClassComponents.DecoratedRepository2' is waiting for the following dependencies:{0}- Parameter 'name' which was not provided. Did you forget to set the dependency?{0}",
 				Environment.NewLine);
-		Assert.AreEqual(expectedMessage, exception.Message);
+		Assert.Equal(expectedMessage, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void Will_give_good_error_message_if_cannot_resolve_service_that_is_likely_decorated_when_there_are_multiple_service()
 	{
 		Kernel.Register(

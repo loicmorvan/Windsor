@@ -23,18 +23,15 @@ namespace Castle.MicroKernel.Tests
 	using Castle.MicroKernel.Registration;
 	using Castle.MicroKernel.Tests.ClassComponents;
 
-	using NUnit.Framework;
-
-	[TestFixture]
 	public class SerializationTestCase
 	{
-		[Test]
+		[Fact]
 		[Ignore("For some reason the deserialization of kernel members is resulting in null values")]
 		public void KernelSerialization()
 		{
 			IKernel kernel = new DefaultKernel();
 			kernel.Register(Component.For(typeof(CustomerImpl)).Named("key"));
-			Assert.IsTrue(kernel.HasComponent("key"));
+			Assert.True(kernel.HasComponent("key"));
 
 			var stream = new MemoryStream();
 			var formatter = new BinaryFormatter();
@@ -44,11 +41,11 @@ namespace Castle.MicroKernel.Tests
 			stream.Position = 0;
 
 			var desKernel = (IKernel)formatter.Deserialize(stream);
-			Assert.IsTrue(desKernel.HasComponent("key"));
+			Assert.True(desKernel.HasComponent("key"));
 		}
 
 #if FEATURE_APPDOMAIN
-		[Test]
+		[Fact]
 		[Ignore("To compile on Mono")]
 		public void RemoteAccess()
 		{
@@ -64,7 +61,7 @@ namespace Castle.MicroKernel.Tests
 				             	"Castle.Windsor", "Castle.MicroKernel.DefaultKernel");
 
 				kernel.Register(Component.For(typeof(CustomerImpl)).Named("key"));
-				Assert.IsTrue(kernel.HasComponent("key"));
+				Assert.True(kernel.HasComponent("key"));
 			}
 			catch (Exception ex)
 			{
@@ -76,7 +73,7 @@ namespace Castle.MicroKernel.Tests
 			}
 		}
 
-		[Test]
+		[Fact]
 		[Ignore(@"Registration API is not serializable. Also ther are problems running this on mono2 profile")]
 		public void RemoteAccessToComponentGraph()
 		{
@@ -92,12 +89,12 @@ namespace Castle.MicroKernel.Tests
 				             	"Castle.Windsor", "Castle.MicroKernel.DefaultKernel");
 
 				kernel.Register(Component.For(typeof(CustomerImpl)).Named("key"));
-				Assert.IsTrue(kernel.HasComponent("key"));
+				Assert.True(kernel.HasComponent("key"));
 
 				var nodes = kernel.GraphNodes;
 
-				Assert.IsNotNull(nodes);
-				Assert.AreEqual(1, nodes.Length);
+				Assert.NotNull(nodes);
+				Assert.Equal(1, nodes.Length);
 			}
 			catch (Exception ex)
 			{

@@ -30,12 +30,9 @@ using CastleTests;
 using CastleTests.ClassComponents;
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class ConfigurationTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	[Bug("https://github.com/castleproject/Windsor/issues/574")]
 	public void DictionaryWithReferencedProperty()
 	{
@@ -63,12 +60,12 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 		Container.Install(Configuration.FromXml(new StaticContentResource(config)));
 		var stringToStringDictionary = Container.Resolve<Dictionary<string, string>>("stringToStringDictionary");
 		Assert.NotNull(stringToStringDictionary);
-		Assert.AreEqual(2, stringToStringDictionary.Count);
-		Assert.AreEqual("Property Value 1", stringToStringDictionary["Key 1"]);
-		Assert.AreEqual("Property Value 2", stringToStringDictionary["Key 2"]);
+		Assert.Equal(2, stringToStringDictionary.Count);
+		Assert.Equal("Property Value 1", stringToStringDictionary["Key 1"]);
+		Assert.Equal("Property Value 2", stringToStringDictionary["Key 2"]);
 	}
 
-	[Test]
+	[Fact]
 	[Bug("https://github.com/castleproject/Windsor/issues/574")]
 	public void DictionaryWithReferencedList()
 	{
@@ -117,10 +114,10 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 		var stringsList = Container.Resolve<List<string>>("list");
 		var stringToListDictionary = Container.Resolve<Dictionary<string, List<string>>>("stringToListDictionary");
 		Assert.NotNull(stringToListDictionary);
-		Assert.AreEqual(2, stringToListDictionary.Count);
+		Assert.Equal(2, stringToListDictionary.Count);
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-155")]
 	public void Type_not_implementing_service_should_throw()
 	{
@@ -140,10 +137,10 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 			typeof(IEmptyService).AssemblyQualifiedName,
 			typeof(EmptyServiceA).AssemblyQualifiedName);
 
-		Assert.AreEqual(expected, exception.Message);
+		Assert.Equal(expected, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-197")]
 	public void DictionaryAsParameterInXml()
 	{
@@ -178,10 +175,10 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 					typeof(HasDictionaryDependency).AssemblyQualifiedName))));
 
 		var myInstance = Container.Resolve<HasDictionaryDependency>();
-		Assert.AreEqual(2, myInstance.DictionaryProperty.Count);
+		Assert.Equal(2, myInstance.DictionaryProperty.Count);
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-73")]
 	public void ShouldNotThrowCircularDependencyException()
 	{
@@ -215,7 +212,7 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 		Assert.NotNull(user.EmptyService);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_properly_populate_array_dependency_from_xml_config_when_registering_by_convention()
 	{
 		Container.Install(Configuration.FromXmlFile("config\\ComponentWithArrayDependency.config"))
@@ -225,11 +222,11 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 
 		var configDependency = Container.Resolve<IClassWithConfigDependency>();
 
-		Assert.AreEqual(configDependency.GetName(), "value");
-		Assert.AreEqual(configDependency.GetServerIp("Database"), "3.24.23.33");
+		Assert.Equal("value", configDependency.GetName());
+		Assert.Equal("3.24.23.33", configDependency.GetServerIp("Database"));
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-142")]
 	public void Can_satisfy_nullable_ctor_dependency()
 	{
@@ -241,7 +238,7 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 		container.Resolve<HasNullableDoubleConstructor>();
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-142")]
 	public void Can_satisfy_nullable_property_dependency()
 	{
@@ -251,10 +248,10 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 		container.Register(Component.For<HasNullableIntProperty>().Configuration(configuration));
 
 		var s = container.Resolve<HasNullableIntProperty>();
-		Assert.IsNotNull(s.SomeVal);
+		Assert.NotNull(s.SomeVal);
 	}
 
-	[Test]
+	[Fact]
 	public void ComplexConfigurationParameter()
 	{
 		var key = "key";
@@ -280,13 +277,13 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 
 		var instance = Kernel.Resolve<ClassWithComplexParameter>(key);
 
-		Assert.IsNotNull(instance);
-		Assert.IsNotNull(instance.ComplexParam);
-		Assert.AreEqual(value1, instance.ComplexParam.MandatoryValue);
-		Assert.AreEqual(value2, instance.ComplexParam.OptionalValue);
+		Assert.NotNull(instance);
+		Assert.NotNull(instance.ComplexParam);
+		Assert.Equal(value1, instance.ComplexParam.MandatoryValue);
+		Assert.Equal(value2, instance.ComplexParam.OptionalValue);
 	}
 
-	[Test]
+	[Fact]
 	public void ConstructorWithArrayParameter()
 	{
 		var confignode = new MutableConfiguration("key");
@@ -307,14 +304,14 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 		Kernel.Register(Component.For(typeof(ClassWithConstructors)).Named("key"));
 
 		var instance = Kernel.Resolve<ClassWithConstructors>("key");
-		Assert.IsNotNull(instance);
-		Assert.IsNull(instance.Host);
-		Assert.AreEqual("castle", instance.Hosts[0]);
-		Assert.AreEqual("uol", instance.Hosts[1]);
-		Assert.AreEqual("folha", instance.Hosts[2]);
+		Assert.NotNull(instance);
+		Assert.Null(instance.Host);
+		Assert.Equal("castle", instance.Hosts[0]);
+		Assert.Equal("uol", instance.Hosts[1]);
+		Assert.Equal("folha", instance.Hosts[2]);
 	}
 
-	[Test]
+	[Fact]
 	public void ConstructorWithArrayParameterAndCustomType()
 	{
 		var confignode = new MutableConfiguration("key");
@@ -337,13 +334,13 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 			Component.For<ICommon>().ImplementedBy<CommonImpl2>().Named("commonservice2"));
 
 		var instance = Kernel.Resolve<ClassWithArrayConstructor>("key");
-		Assert.IsNotNull(instance.Services);
-		Assert.AreEqual(2, instance.Services.Length);
-		Assert.AreEqual("CommonImpl1", instance.Services[0].GetType().Name);
-		Assert.AreEqual("CommonImpl2", instance.Services[1].GetType().Name);
+		Assert.NotNull(instance.Services);
+		Assert.Equal(2, instance.Services.Length);
+		Assert.Equal("CommonImpl1", instance.Services[0].GetType().Name);
+		Assert.Equal("CommonImpl2", instance.Services[1].GetType().Name);
 	}
 
-	[Test]
+	[Fact]
 	public void ConstructorWithListParameterAndCustomType()
 	{
 		var confignode = new MutableConfiguration("key");
@@ -367,13 +364,13 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy(typeof(CommonImpl2)).Named("commonservice2"));
 
 		var instance = Kernel.Resolve<ClassWithListConstructor>("key");
-		Assert.IsNotNull(instance.Services);
-		Assert.AreEqual(2, instance.Services.Count);
-		Assert.AreEqual("CommonImpl1", instance.Services[0].GetType().Name);
-		Assert.AreEqual("CommonImpl2", instance.Services[1].GetType().Name);
+		Assert.NotNull(instance.Services);
+		Assert.Equal(2, instance.Services.Count);
+		Assert.Equal("CommonImpl1", instance.Services[0].GetType().Name);
+		Assert.Equal("CommonImpl2", instance.Services[1].GetType().Name);
 	}
 
-	[Test]
+	[Fact]
 	public void ConstructorWithStringParameters()
 	{
 		var confignode = new MutableConfiguration("key");
@@ -388,12 +385,12 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 		Kernel.Register(Component.For<ClassWithConstructors>().Named("key"));
 
 		var instance = Kernel.Resolve<ClassWithConstructors>("key");
-		Assert.IsNotNull(instance);
-		Assert.IsNotNull(instance.Host);
-		Assert.AreEqual("castleproject.org", instance.Host);
+		Assert.NotNull(instance);
+		Assert.NotNull(instance.Host);
+		Assert.Equal("castleproject.org", instance.Host);
 	}
 
-	[Test]
+	[Fact]
 	public void CustomLifestyleManager()
 	{
 		var key = "key";
@@ -409,12 +406,12 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 		var instance = Kernel.Resolve<ICommon>(key);
 		var handler = Kernel.GetHandler(key);
 
-		Assert.IsNotNull(instance);
-		Assert.AreEqual(LifestyleType.Custom, handler.ComponentModel.LifestyleType);
-		Assert.AreEqual(typeof(CustomLifestyleManager), handler.ComponentModel.CustomLifestyle);
+		Assert.NotNull(instance);
+		Assert.Equal(LifestyleType.Custom, handler.ComponentModel.LifestyleType);
+		Assert.Equal(typeof(CustomLifestyleManager), handler.ComponentModel.CustomLifestyle);
 	}
 
-	[Test]
+	[Fact]
 	public void ServiceOverride()
 	{
 		var confignode = new MutableConfiguration("key");
@@ -432,11 +429,11 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 
 		var instance = Kernel.Resolve<CommonServiceUser>("commonserviceuser");
 
-		Assert.IsNotNull(instance);
-		Assert.AreEqual(typeof(CommonImpl2), instance.CommonService.GetType());
+		Assert.NotNull(instance);
+		Assert.Equal(typeof(CommonImpl2), instance.CommonService.GetType());
 	}
 
-	[Test]
+	[Fact]
 	public void ServiceOverrideUsingProperties()
 	{
 		var confignode = new MutableConfiguration("key");
@@ -455,7 +452,7 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 
 		var instance = Kernel.Resolve<CommonServiceUser2>("commonserviceuser");
 
-		Assert.IsNotNull(instance);
-		Assert.AreEqual(typeof(CommonImpl2), instance.CommonService.GetType());
+		Assert.NotNull(instance);
+		Assert.Equal(typeof(CommonImpl2), instance.CommonService.GetType());
 	}
 }

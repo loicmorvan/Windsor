@@ -23,12 +23,9 @@ using Castle.MicroKernel.Registration;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class MultiServiceGenericComponentsTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Closed_generic_component_with_generic_and_non_generic_service__generic_first_resolve_by_key()
 	{
 		Container.Register(
@@ -36,26 +33,26 @@ public class MultiServiceGenericComponentsTestCase : AbstractContainerTestCase
 				.ImplementedBy<ARepository<B>>()
 				.Named("repo")
 		);
-		Assert.AreSame(
+		Assert.Same(
 			Container.Resolve<Generics.IRepository<A>>("repo"),
 			Container.Resolve<IARepository>("repo")
 		);
 	}
 
-	[Test]
+	[Fact]
 	public void Closed_generic_component_with_generic_and_non_generic_service__generic_first_resolve_by_type()
 	{
 		Container.Register(
 			Component.For<Generics.IRepository<A>, IARepository>()
 				.ImplementedBy<ARepository<B>>()
 		);
-		Assert.AreSame(
+		Assert.Same(
 			Container.Resolve<Generics.IRepository<A>>(),
 			Container.Resolve<IARepository>()
 		);
 	}
 
-	[Test]
+	[Fact]
 	public void Closed_generic_component_with_generic_and_non_generic_service__non_generic_first_resolve_by_key()
 	{
 		Container.Register(
@@ -63,26 +60,26 @@ public class MultiServiceGenericComponentsTestCase : AbstractContainerTestCase
 				.ImplementedBy<ARepository<B>>()
 				.Named("repo")
 		);
-		Assert.AreSame(
+		Assert.Same(
 			Container.Resolve<Generics.IRepository<A>>("repo"),
 			Container.Resolve<IARepository>("repo")
 		);
 	}
 
-	[Test]
+	[Fact]
 	public void Closed_generic_component_with_generic_and_non_generic_service__non_generic_first_resolve_by_type()
 	{
 		Container.Register(
 			Component.For<IARepository, Generics.IRepository<A>>()
 				.ImplementedBy<ARepository<B>>()
 		);
-		Assert.AreSame(
+		Assert.Same(
 			Container.Resolve<Generics.IRepository<A>>(),
 			Container.Resolve<IARepository>()
 		);
 	}
 
-	[Test]
+	[Fact]
 	public void Non_generic_component_with_generic_and_non_generic_service__generic_first_resolve_by_key()
 	{
 		Container.Register(
@@ -90,26 +87,26 @@ public class MultiServiceGenericComponentsTestCase : AbstractContainerTestCase
 				.ImplementedBy<ARepository>()
 				.Named("repo")
 		);
-		Assert.AreSame(
+		Assert.Same(
 			Container.Resolve<Generics.IRepository<A>>("repo"),
 			Container.Resolve<IARepository>("repo")
 		);
 	}
 
-	[Test]
+	[Fact]
 	public void Non_generic_component_with_generic_and_non_generic_service__generic_first_resolve_by_type()
 	{
 		Container.Register(
 			Component.For<Generics.IRepository<A>, IARepository>()
 				.ImplementedBy<ARepository>()
 		);
-		Assert.AreSame(
+		Assert.Same(
 			Container.Resolve<Generics.IRepository<A>>(),
 			Container.Resolve<IARepository>()
 		);
 	}
 
-	[Test]
+	[Fact]
 	public void Non_generic_component_with_generic_and_non_generic_service__non_generic_first_resolve_by_key()
 	{
 		Container.Register(
@@ -117,26 +114,26 @@ public class MultiServiceGenericComponentsTestCase : AbstractContainerTestCase
 				.ImplementedBy<ARepository>()
 				.Named("repo")
 		);
-		Assert.AreSame(
+		Assert.Same(
 			Container.Resolve<Generics.IRepository<A>>("repo"),
 			Container.Resolve<IARepository>("repo")
 		);
 	}
 
-	[Test]
+	[Fact]
 	public void Non_generic_component_with_generic_and_non_generic_service__non_generic_first_resolve_by_type()
 	{
 		Container.Register(
 			Component.For<IARepository, Generics.IRepository<A>>()
 				.ImplementedBy<ARepository>()
 		);
-		Assert.AreSame(
+		Assert.Same(
 			Container.Resolve<Generics.IRepository<A>>(),
 			Container.Resolve<IARepository>()
 		);
 	}
 
-	[Test]
+	[Fact]
 	public void Open_generic_component_with_generic_and_non_generic_service__generic_first_resolve_by_key()
 	{
 		Container.Register(
@@ -148,7 +145,7 @@ public class MultiServiceGenericComponentsTestCase : AbstractContainerTestCase
 		Container.Resolve<Generics.IRepository<A>>("repo");
 	}
 
-	[Test]
+	[Fact]
 	public void Open_generic_component_with_generic_and_non_generic_service__generic_first_resolve_by_key_Object_throws_friendly_message()
 	{
 		Container.Register(
@@ -159,14 +156,14 @@ public class MultiServiceGenericComponentsTestCase : AbstractContainerTestCase
 
 		var exception = Assert.Throws<HandlerException>(() => Container.Resolve<object>("repo", new Arguments()));
 
-		Assert.AreEqual(
+		Assert.Equal(
 			string.Format(
 				"Requested type System.Object has 0 generic parameter(s), whereas component implementation type Castle.Generics.Repository`1[T] requires 1.{0}This means that Windsor does not have enough information to properly create that component for you.{0}You can instruct Windsor which types it should use to close this generic component by supplying an implementation of IGenericImplementationMatchingStrategy.{0}Please consult the documentation for examples of how to do that.",
 				Environment.NewLine),
 			exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void Open_generic_component_with_generic_and_non_generic_service__generic_first_resolve_by_key_non_generic_throws_friendly_message()
 	{
 		Container.Register(
@@ -177,14 +174,14 @@ public class MultiServiceGenericComponentsTestCase : AbstractContainerTestCase
 
 		var exception = Assert.Throws<HandlerException>(() => Container.Resolve<IRepository>("repo"));
 
-		Assert.AreEqual(
+		Assert.Equal(
 			string.Format(
 				"Requested type Castle.Generics.IRepository has 0 generic parameter(s), whereas component implementation type Castle.Generics.Repository`1[T] requires 1.{0}This means that Windsor does not have enough information to properly create that component for you.{0}You can instruct Windsor which types it should use to close this generic component by supplying an implementation of IGenericImplementationMatchingStrategy.{0}Please consult the documentation for examples of how to do that.",
 				Environment.NewLine),
 			exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void Open_generic_component_with_generic_and_non_generic_service__generic_first_resolve_by_type()
 	{
 		Container.Register(
@@ -195,7 +192,7 @@ public class MultiServiceGenericComponentsTestCase : AbstractContainerTestCase
 		Container.Resolve<Generics.IRepository<A>>();
 	}
 
-	[Test(Description = "IOC-248")]
+	[Fact]
 	public void Open_generic_component_with_generic_and_non_generic_service__non_generic_first_resolve_by_key()
 	{
 		Container.Register(
@@ -207,7 +204,7 @@ public class MultiServiceGenericComponentsTestCase : AbstractContainerTestCase
 		Container.Resolve<Generics.IRepository<A>>("repo");
 	}
 
-	[Test(Description = "IOC-248")]
+	[Fact]
 	public void Open_generic_component_with_generic_and_non_generic_service__non_generic_first_resolve_by_type()
 	{
 		Container.Register(

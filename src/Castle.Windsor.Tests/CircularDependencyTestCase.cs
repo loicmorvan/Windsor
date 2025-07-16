@@ -25,29 +25,26 @@ namespace Castle.Windsor.Tests
 	using CastleTests;
 	using CastleTests.Components;
 
-	using NUnit.Framework;
-
-	[TestFixture]
 	public class CircularDependencyTestCase : AbstractContainerTestCase
 	{
-		[Test]
+		[Fact]
 		public void ShouldNotGetCircularDepencyExceptionWhenResolvingTypeOnItselfWithDifferentModels()
 		{
 			var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("IOC-51.xml")));
-			Assert.IsNotNull(container.Resolve<object>("path.fileFinder"));
+			Assert.NotNull(container.Resolve<object>("path.fileFinder"));
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldNotSetTheViewControllerProperty()
 		{
 			Container.Register(Component.For<IController>().ImplementedBy<Controller>().Named("controller"),
 				Component.For<IView>().ImplementedBy<View>().Named("view"));
 			var controller = Container.Resolve<Controller>("controller");
-			Assert.IsNotNull(controller.View);
-			Assert.IsNull(controller.View.Controller);
+			Assert.NotNull(controller.View);
+			Assert.Null(controller.View.Controller);
 		}
 
-		[Test]
+		[Fact]
 		public void Should_not_try_to_instantiate_singletons_twice_when_circular_dependency()
 		{
 			SingletonComponent.CtorCallsCount = 0;
@@ -55,25 +52,11 @@ namespace Castle.Windsor.Tests
 				Component.For<SingletonDependency>());
 
 			var component = Container.Resolve<SingletonComponent>();
-			Assert.IsNotNull(component.Dependency);
-			Assert.AreEqual(1, SingletonComponent.CtorCallsCount);
+			Assert.NotNull(component.Dependency);
+			Assert.Equal(1, SingletonComponent.CtorCallsCount);
 		}
 
-		[Test]
-		[Ignore("This is not supported. Should be?")]
-		public void Should_not_try_to_instantiate_singletons_twice_when_circular_property_dependency()
-		{
-			SingletonPropertyComponent.CtorCallsCount = 0;
-			Container.Register(Component.For<SingletonPropertyComponent>(),
-				Component.For<SingletonPropertyDependency>());
-
-			var component = Container.Resolve<SingletonPropertyComponent>();
-			Assert.IsNotNull(component.Dependency);
-			Assert.AreSame(component, component.Dependency.Component);
-			Assert.AreEqual(1, SingletonPropertyComponent.CtorCallsCount);
-		}
-
-		[Test]
+		[Fact]
 		public void ThrowsACircularDependencyException2()
 		{
 			Container.Register(Component.For<CompA>().Named("compA"),
@@ -87,7 +70,7 @@ namespace Castle.Windsor.Tests
 				string.Format(
 					"Dependency cycle has been detected when trying to resolve component 'compA'.{0}The resolution tree that resulted in the cycle is the following:{0}Component 'compA' resolved as dependency of{0}	component 'compD' resolved as dependency of{0}	component 'compC' resolved as dependency of{0}	component 'compB' resolved as dependency of{0}	component 'compA' which is the root component being resolved.{0}",
 					Environment.NewLine);
-			Assert.AreEqual(expectedMessage, exception.Message);
+			Assert.Equal(expectedMessage, exception.Message);
 		}
 	}
 

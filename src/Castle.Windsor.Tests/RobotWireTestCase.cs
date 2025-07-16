@@ -19,13 +19,10 @@ using Castle.XmlFiles;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
 /// <summary>Check for existence of any problem, as reported http://forum.castleproject.org/posts/list/214.page</summary>
-[TestFixture]
 public class RobotWireTestCase
 {
-	[Test]
+	[Fact]
 	public void WireTest()
 	{
 		var container = new WindsorContainer();
@@ -33,11 +30,11 @@ public class RobotWireTestCase
 
 		var robot = container.Resolve<Robot>();
 
-		Assert.IsNotNull(robot);
-		Assert.IsNotNull(robot.Left);
-		Assert.IsNotNull(robot.Right);
+		Assert.NotNull(robot);
+		Assert.NotNull(robot.Left);
+		Assert.NotNull(robot.Right);
 
-		Assert.AreEqual("PlasmaGunArm", robot.Left.GetType().Name);
-		Assert.AreEqual("HumanArm", robot.Right.GetType().Name);
+		Assert.Equal("PlasmaGunArm", robot.Left.GetType().Name);
+		Assert.Equal("HumanArm", robot.Right.GetType().Name);
 	}
 }

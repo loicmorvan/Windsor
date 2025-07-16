@@ -18,16 +18,13 @@ using System.Threading;
 
 using Castle.MicroKernel.Registration;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class MultithreadedPooledTestCase
 {
 	private readonly ManualResetEvent startEvent = new(false);
 	private readonly ManualResetEvent stopEvent = new(false);
 	private IKernel kernel;
 
-	public void ExecuteMethodUntilSignal()
+	private void ExecuteMethodUntilSignal()
 	{
 		startEvent.WaitOne(int.MaxValue);
 
@@ -35,7 +32,7 @@ public class MultithreadedPooledTestCase
 		{
 			var instance = kernel.Resolve<PoolableComponent1>("a");
 
-			Assert.IsNotNull(instance);
+			Assert.NotNull(instance);
 
 			Thread.Sleep(1 * 500);
 
@@ -43,7 +40,7 @@ public class MultithreadedPooledTestCase
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void Multithreaded()
 	{
 		kernel = new DefaultKernel();

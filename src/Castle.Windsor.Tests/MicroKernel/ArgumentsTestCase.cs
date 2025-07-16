@@ -24,12 +24,9 @@ using Castle.Windsor.Tests.Components;
 using CastleTests;
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class ArgumentsTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Any_type_as_key_is_not_supported()
 	{
 		var arguments = new Arguments();
@@ -38,7 +35,7 @@ public class ArgumentsTestCase : AbstractContainerTestCase
 		Assert.Throws<ArgumentException>(delegate { arguments.Add(new object(), "value"); });
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-147")]
 	public void Can_have_dictionary_as_inline_dependency()
 	{
@@ -48,10 +45,10 @@ public class ArgumentsTestCase : AbstractContainerTestCase
 		var dictionaryProperty = new Dictionary<string, string>();
 
 		var obj = container.Resolve<HasDictionaryDependency>(Arguments.FromProperties(new { dictionaryProperty }));
-		Assert.AreSame(dictionaryProperty, obj.DictionaryProperty);
+		Assert.Same(dictionaryProperty, obj.DictionaryProperty);
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-142")]
 	public void Can_satisfy_nullable_property_dependency()
 	{
@@ -60,20 +57,20 @@ public class ArgumentsTestCase : AbstractContainerTestCase
 		var arguments = new Arguments().AddNamed("SomeVal", 5);
 		var s = Container.Resolve<HasNullableIntProperty>(arguments);
 
-		Assert.IsNotNull(s.SomeVal);
+		Assert.NotNull(s.SomeVal);
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-142")]
 	public void Can_satisfy_nullable_ctor_dependency()
 	{
 		Container.Register(Component.For<HasNullableDoubleConstructor>());
 
 		var s = Container.Resolve<HasNullableDoubleConstructor>(new Arguments().AddNamed("foo", 5d));
-		Assert.IsNotNull(s);
+		Assert.NotNull(s);
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-92")]
 	public void Can_mix_hashtable_parameters_and_configuration_parameters()
 	{
@@ -85,7 +82,7 @@ public class ArgumentsTestCase : AbstractContainerTestCase
 		Container.Resolve<HasStringAndIntDependency>(new Arguments().AddNamed("y", 1));
 	}
 
-	[Test]
+	[Fact]
 	public void Handles_Type_as_key()
 	{
 		var arguments = new Arguments();
@@ -94,12 +91,12 @@ public class ArgumentsTestCase : AbstractContainerTestCase
 
 		arguments.Add(key, value);
 
-		Assert.AreEqual(1, arguments.Count);
-		Assert.IsTrue(arguments.Contains(key));
-		Assert.AreSame(value, arguments[key]);
+		Assert.Equal(1, arguments.Count);
+		Assert.True(arguments.Contains(key));
+		Assert.Same(value, arguments[key]);
 	}
 
-	[Test]
+	[Fact]
 	public void Handles_string_as_key()
 	{
 		var arguments = new Arguments();
@@ -108,12 +105,12 @@ public class ArgumentsTestCase : AbstractContainerTestCase
 
 		arguments.Add(key, value);
 
-		Assert.AreEqual(1, arguments.Count);
-		Assert.IsTrue(arguments.Contains(key));
-		Assert.AreSame(value, arguments[key]);
+		Assert.Equal(1, arguments.Count);
+		Assert.True(arguments.Contains(key));
+		Assert.Same(value, arguments[key]);
 	}
 
-	[Test]
+	[Fact]
 	public void Handles_string_as_key_case_insensitive()
 	{
 		var arguments = new Arguments();
@@ -122,7 +119,7 @@ public class ArgumentsTestCase : AbstractContainerTestCase
 
 		arguments.Add(key, value);
 
-		Assert.IsTrue(arguments.Contains(key.ToLower()));
-		Assert.IsTrue(arguments.Contains(key.ToUpper()));
+		Assert.True(arguments.Contains(key.ToLower()));
+		Assert.True(arguments.Contains(key.ToUpper()));
 	}
 }

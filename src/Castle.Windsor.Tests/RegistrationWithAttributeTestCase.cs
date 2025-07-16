@@ -24,22 +24,19 @@ using Castle.Windsor.Tests.ComponentsWithAttribute;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class RegistrationWithAttributeTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Attribute_key_can_be_overwritten()
 	{
 		Container.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(Component.IsCastleComponent)
 			.ConfigureFor<HasKey>(k => k.Named("changedKey")));
 
-		Assert.IsNull(Container.Kernel.GetHandler("hasKey"));
-		Assert.IsNotNull(Container.Kernel.GetHandler("changedKey"));
+		Assert.Null(Container.Kernel.GetHandler("hasKey"));
+		Assert.NotNull(Container.Kernel.GetHandler("changedKey"));
 	}
 
-	[Test]
+	[Fact]
 	public void Attribute_lifestyle_can_be_overwritten()
 	{
 		Container.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -48,44 +45,44 @@ public class RegistrationWithAttributeTestCase : AbstractContainerTestCase
 
 		var handler = Container.Kernel.GetHandler("keyTransient");
 
-		Assert.AreEqual(LifestyleType.Pooled, handler.ComponentModel.LifestyleType);
+		Assert.Equal(LifestyleType.Pooled, handler.ComponentModel.LifestyleType);
 	}
 
-	[Test]
+	[Fact]
 	public void Attribute_registers_key_properly()
 	{
 		Container.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(Component.IsCastleComponent));
 
 		var handler = Container.Kernel.GetHandler("key");
 
-		Assert.IsNotNull(handler);
-		Assert.AreEqual(typeof(HasKey), handler.ComponentModel.Services.Single());
-		Assert.AreEqual(typeof(HasKey), handler.ComponentModel.Implementation);
-		Assert.AreEqual(LifestyleType.Undefined, handler.ComponentModel.LifestyleType);
+		Assert.NotNull(handler);
+		Assert.Equal(typeof(HasKey), handler.ComponentModel.Services.Single());
+		Assert.Equal(typeof(HasKey), handler.ComponentModel.Implementation);
+		Assert.Equal(LifestyleType.Undefined, handler.ComponentModel.LifestyleType);
 	}
 
-	[Test]
+	[Fact]
 	public void Attribute_registers_type_and_name()
 	{
 		Container.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(Component.IsCastleComponent));
 
 		var handler = Container.Kernel.GetHandler("keyAndType");
 
-		Assert.AreEqual(typeof(ISimpleService), handler.ComponentModel.Services.Single());
-		Assert.AreEqual(typeof(HasKeyAndType), handler.ComponentModel.Implementation);
-		Assert.AreEqual(LifestyleType.Undefined, handler.ComponentModel.LifestyleType);
+		Assert.Equal(typeof(ISimpleService), handler.ComponentModel.Services.Single());
+		Assert.Equal(typeof(HasKeyAndType), handler.ComponentModel.Implementation);
+		Assert.Equal(LifestyleType.Undefined, handler.ComponentModel.LifestyleType);
 	}
 
-	[Test]
+	[Fact]
 	public void Attribute_registers_type_properly()
 	{
 		Container.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(Component.IsCastleComponent));
 
 		var handlers = Container.Kernel.GetHandlers(typeof(ISimpleService));
-		Assert.IsNotEmpty(handlers);
+		Assert.NotEmpty(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void Attribute_sets_lifestyle()
 	{
 		Container.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(Component.IsCastleComponent));
@@ -93,10 +90,10 @@ public class RegistrationWithAttributeTestCase : AbstractContainerTestCase
 		var one = Container.Resolve<HasKeyTransient>("keyTransient");
 		var two = Container.Resolve<HasKeyTransient>("keyTransient");
 
-		Assert.AreNotSame(one, two);
+		Assert.NotSame(one, two);
 	}
 
-	[Test]
+	[Fact]
 	public void Attribute_type_can_be_overwritten()
 	{
 		Container.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -105,21 +102,21 @@ public class RegistrationWithAttributeTestCase : AbstractContainerTestCase
 
 		var handler = Container.Kernel.GetAssignableHandlers(typeof(HasType)).Single();
 
-		Assert.AreEqual(typeof(HasType), handler.ComponentModel.Services.Single());
+		Assert.Equal(typeof(HasType), handler.ComponentModel.Services.Single());
 	}
 
-	[Test]
+	[Fact]
 	public void Can_filter_types_based_on_attribute()
 	{
 		Container.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(Component.IsCastleComponent));
 
 		var handlers = Container.Kernel.GetAssignableHandlers(typeof(object));
 
-		Assert.Greater(handlers.Length, 0);
-		foreach (var handler in handlers) Assert.That(handler.ComponentModel.Implementation.GetTypeInfo().IsDefined(typeof(CastleComponentAttribute)));
+		Assert.True(handlers.Length > 0);
+		foreach (var handler in handlers) Assert.True(handler.ComponentModel.Implementation.GetTypeInfo().IsDefined(typeof(CastleComponentAttribute)));
 	}
 
-	[Test]
+	[Fact]
 	public void Can_filter_types_based_on_custom_attribute()
 	{
 		Container.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(Component.HasAttribute<UserAttribute>));
@@ -128,7 +125,7 @@ public class RegistrationWithAttributeTestCase : AbstractContainerTestCase
 		Container.Resolve<HasUserAttributeNonRegister>();
 	}
 
-	[Test]
+	[Fact]
 	public void Can_filter_types_based_on_custom_attribute_properties()
 	{
 		Container.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(Component.HasAttribute<UserAttribute>(u => u.Register)));

@@ -19,12 +19,9 @@ using Castle.MicroKernel.Registration;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class IoC_95
 {
-	[Test]
+	[Fact]
 	public void AddingComponentToRootKernelWhenChildKernelHasStartableFacility()
 	{
 		IKernel kernel = new DefaultKernel();

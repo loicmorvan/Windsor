@@ -17,8 +17,6 @@ namespace Castle.Windsor.Tests;
 using Castle.Core;
 using Castle.MicroKernel.Registration;
 
-using NUnit.Framework;
-
 [PerThread]
 public class R
 {
@@ -103,10 +101,9 @@ public class SP : ISP
 	}
 }
 
-[TestFixture]
 public class ContainerProblem2
 {
-	[Test]
+	[Fact]
 	public void CausesStackOverflow()
 	{
 		IWindsorContainer container = new WindsorContainer();
@@ -126,6 +123,6 @@ public class ContainerProblem2
 		container.Kernel.Register(Component.For(typeof(R)).Named("R"));
 
 		var c = container.Resolve<IC>("C");
-		Assert.IsNotNull(c);
+		Assert.NotNull(c);
 	}
 }

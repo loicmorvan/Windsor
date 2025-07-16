@@ -20,18 +20,15 @@ using Castle.Windsor.Configuration.Interpreters;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class EvalSupportTestCase
 {
-	[Test]
+	[Fact]
 	public void AssertBaseDirectoryIsCorrectlyEvaluated()
 	{
 		var container = new WindsorContainer(new XmlInterpreter(ConfigHelper.ResolveConfigPath("Configuration2/eval_config.xml")), new CustomEnv(true));
 
 		var prop = container.Resolve<ComponentWithStringProperty>("component");
 
-		Assert.AreEqual(AppContext.BaseDirectory, prop.Name);
+		Assert.Equal(AppContext.BaseDirectory, prop.Name);
 	}
 }

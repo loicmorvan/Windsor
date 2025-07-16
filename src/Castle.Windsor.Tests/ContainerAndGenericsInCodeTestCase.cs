@@ -25,12 +25,9 @@ using Castle.Windsor.Tests.Interceptors;
 using CastleTests.ClassComponents;
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class ContainerAndGenericsInCodeTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Can_create_generic_with_ctor_dependency_on_array_of_generics()
 	{
 		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, false));
@@ -40,7 +37,7 @@ public class ContainerAndGenericsInCodeTestCase : AbstractContainerTestCase
 		Container.Resolve<UsesArrayOfGeneric<int>>();
 	}
 
-	[Test]
+	[Fact]
 	public void Can_create_nonGeneric_with_ctor_dependency_on_generic()
 	{
 		Container.Register(Component.For<NeedsGenericType>(),
@@ -48,10 +45,10 @@ public class ContainerAndGenericsInCodeTestCase : AbstractContainerTestCase
 
 		var needsGenericType = Container.Resolve<NeedsGenericType>();
 
-		Assert.IsNotNull(needsGenericType);
+		Assert.NotNull(needsGenericType);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_intercept_open_generic_components()
 	{
 		Container.Register(Component.For<CollectInterceptedIdInterceptor>(),
@@ -61,11 +58,10 @@ public class ContainerAndGenericsInCodeTestCase : AbstractContainerTestCase
 		var demoRepository = Container.Resolve<Components.IRepository<object>>();
 		demoRepository.Get(12);
 
-		Assert.AreEqual(12, CollectInterceptedIdInterceptor.InterceptedId,
-			"invocation should have been intercepted by MyInterceptor");
+		Assert.Equal(12, CollectInterceptedIdInterceptor.InterceptedId);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_proxy_closed_generic_components()
 	{
 		Container.AddFacility<MyInterceptorGreedyFacility>();
@@ -76,10 +72,10 @@ public class ContainerAndGenericsInCodeTestCase : AbstractContainerTestCase
 
 		var store = Container.Resolve<Components.IRepository<Employee>>();
 
-		Assert.IsNotInstanceOf<DemoRepository<Employee>>(store, "This should have been a proxy");
+		Assert.IsNotType<DemoRepository<Employee>>(store);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_proxy_open_generic_components()
 	{
 		Container.AddFacility<MyInterceptorGreedyFacility2>();
@@ -88,23 +84,10 @@ public class ContainerAndGenericsInCodeTestCase : AbstractContainerTestCase
 
 		var store = Container.Resolve<Components.IRepository<Employee>>();
 
-		Assert.IsNotInstanceOf<DemoRepository<Employee>>(store, "This should have been a proxy");
+		Assert.IsNotType<DemoRepository<Employee>>(store);
 	}
 
-	[Test]
-	[Ignore("Currently due to how we obtain open-generic handlers that can't be fixed easily.")]
-	public void Open_generic_as_dependency_does_not_block_resolvability_of_parent()
-	{
-		Container.Register(Component.For(typeof(IGeneric<>))
-				.ImplementedBy(typeof(GenericWithTDependency<>)),
-			Component.For<UsesIGeneric<A>>(),
-			Component.For<A>().UsingFactoryMethod(() => new A()));
-
-		var handler = Kernel.GetHandler(typeof(UsesIGeneric<A>));
-		Assert.AreEqual(HandlerState.Valid, handler.CurrentState);
-	}
-
-	[Test]
+	[Fact]
 	public void Open_generic_singleton_produces_unique_instances_per_closed_type()
 	{
 		Container.Register(
@@ -117,12 +100,12 @@ public class ContainerAndGenericsInCodeTestCase : AbstractContainerTestCase
 		var o3 = Container.Resolve<Components.IRepository<Reviewer>>();
 		var o4 = Container.Resolve<Components.IRepository<Reviewer>>();
 
-		Assert.AreSame(o1, o2);
-		Assert.AreSame(o3, o4);
-		Assert.AreNotSame(o1, o4);
+		Assert.Same(o1, o2);
+		Assert.Same(o3, o4);
+		Assert.NotSame(o1, o4);
 	}
 
-	[Test]
+	[Fact]
 	public void Open_generic_trasient_via_attribute_produces_unique_instances()
 	{
 		Container.Register(Component.For(typeof(Components.IRepository<>))
@@ -133,12 +116,12 @@ public class ContainerAndGenericsInCodeTestCase : AbstractContainerTestCase
 		var o3 = Container.Resolve<Components.IRepository<Reviewer>>();
 		var o4 = Container.Resolve<Components.IRepository<Reviewer>>();
 
-		Assert.AreNotSame(o1, o2);
-		Assert.AreNotSame(o1, o3);
-		Assert.AreNotSame(o1, o4);
+		Assert.NotSame(o1, o2);
+		Assert.NotSame(o1, o3);
+		Assert.NotSame(o1, o4);
 	}
 
-	[Test]
+	[Fact]
 	public void Open_generic_trasient_via_registration_produces_unique_instances()
 	{
 		Container.Register(
@@ -151,12 +134,12 @@ public class ContainerAndGenericsInCodeTestCase : AbstractContainerTestCase
 		var o3 = Container.Resolve<Components.IRepository<Reviewer>>();
 		var o4 = Container.Resolve<Components.IRepository<Reviewer>>();
 
-		Assert.AreNotSame(o1, o2);
-		Assert.AreNotSame(o1, o3);
-		Assert.AreNotSame(o1, o4);
+		Assert.NotSame(o1, o2);
+		Assert.NotSame(o1, o3);
+		Assert.NotSame(o1, o4);
 	}
 
-	[Test]
+	[Fact]
 	public void Proxy_for_generic_component_does_not_affect_lifestyle()
 	{
 		Container.AddFacility<MyInterceptorGreedyFacility2>();
@@ -168,12 +151,12 @@ public class ContainerAndGenericsInCodeTestCase : AbstractContainerTestCase
 		var store = Container.Resolve<Components.IRepository<Employee>>();
 		var anotherStore = Container.Resolve<Components.IRepository<Employee>>();
 
-		Assert.IsNotInstanceOf<DemoRepository<Employee>>(store, "This should have been a proxy");
-		Assert.IsNotInstanceOf<DemoRepository<Employee>>(anotherStore, "This should have been a proxy");
-		Assert.AreNotSame(store, anotherStore, "This should be two different instances");
+		Assert.IsNotType<DemoRepository<Employee>>(store);
+		Assert.IsNotType<DemoRepository<Employee>>(anotherStore);
+		Assert.NotSame(store, anotherStore);
 	}
 
-	[Test]
+	[Fact]
 	public void Proxy_parent_does_not_make_generic_child_a_proxy()
 	{
 		Container.Register(Component.For<CollectInterceptedIdInterceptor>(),
@@ -186,6 +169,6 @@ public class ContainerAndGenericsInCodeTestCase : AbstractContainerTestCase
 
 		var specification = Container.Resolve<ISpecification>();
 
-		Assert.IsInstanceOf<TransientRepository<int>>(specification.Repository, "Should not be a proxy");
+		Assert.IsType<TransientRepository<int>>(specification.Repository);
 	}
 }

@@ -29,9 +29,6 @@ using CastleTests;
 using CastleTests.Components;
 using CastleTests.Generics;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class XmlConfigStructureTestCase : AbstractContainerTestCase
 {
 	private IWindsorInstaller FromFile(string fileName)
@@ -40,81 +37,81 @@ public class XmlConfigStructureTestCase : AbstractContainerTestCase
 		return Configuration.FromXml(file);
 	}
 
-	[Test]
+	[Fact]
 	public void Bound_lifestyle_can_be_specify_via_type_only()
 	{
 		Container.Install(FromFile("BoundLifestyle.xml"));
 		var handler = Kernel.GetHandler(typeof(A));
 
-		Assert.IsNotNull(handler);
-		Assert.AreEqual(LifestyleType.Bound, handler.ComponentModel.LifestyleType);
+		Assert.NotNull(handler);
+		Assert.Equal(LifestyleType.Bound, handler.ComponentModel.LifestyleType);
 
 		var a = Container.Resolve<GenericA<A>>();
-		Assert.AreSame(a.Item, a.B.Item);
+		Assert.Same(a.Item, a.B.Item);
 	}
 
-	[Test]
+	[Fact]
 	public void Scoped_lifestyle_can_be_specified_via_type_only()
 	{
 		Container.Install(FromFile("ScopedLifestyleImplicit.xml"));
 		var handler = Kernel.GetHandler(typeof(A));
 
-		Assert.IsNotNull(handler);
-		Assert.AreEqual(LifestyleType.Scoped, handler.ComponentModel.LifestyleType);
+		Assert.NotNull(handler);
+		Assert.Equal(LifestyleType.Scoped, handler.ComponentModel.LifestyleType);
 
 		using (Container.BeginScope())
 		{
 			var a1 = Container.Resolve<A>();
 			var a2 = Container.Resolve<A>();
-			Assert.AreSame(a1, a2);
+			Assert.Same(a1, a2);
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void Scoped_lifestyle_can_be_specified_in_Xml()
 	{
 		Container.Install(FromFile("ScopedLifestyle.xml"));
 		var handler = Kernel.GetHandler(typeof(A));
 
-		Assert.IsNotNull(handler);
-		Assert.AreEqual(LifestyleType.Scoped, handler.ComponentModel.LifestyleType);
+		Assert.NotNull(handler);
+		Assert.Equal(LifestyleType.Scoped, handler.ComponentModel.LifestyleType);
 
 		using (Container.BeginScope())
 		{
 			var a1 = Container.Resolve<A>();
 			var a2 = Container.Resolve<A>();
-			Assert.AreSame(a1, a2);
+			Assert.Same(a1, a2);
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void Custom_lifestyle_can_be_specify_via_type_only()
 	{
 		Container.Install(FromFile("CustomLifestyle.xml"));
 		var handler = Kernel.GetHandler(typeof(A));
 
-		Assert.IsNotNull(handler);
-		Assert.AreEqual(LifestyleType.Custom, handler.ComponentModel.LifestyleType);
-		Assert.AreEqual(typeof(CustomLifestyleManager), handler.ComponentModel.CustomLifestyle);
+		Assert.NotNull(handler);
+		Assert.Equal(LifestyleType.Custom, handler.ComponentModel.LifestyleType);
+		Assert.Equal(typeof(CustomLifestyleManager), handler.ComponentModel.CustomLifestyle);
 	}
 
-	[Test]
+	[Fact]
 	public void Id_is_not_required_for_component_if_type_is_specified()
 	{
 		Container.Install(FromFile("componentWithoutId.xml"));
 		Kernel.Resolve<A>();
 	}
 
-	[Test]
+	[Fact]
 	public void Id_is_not_required_for_facility_if_type_is_specified()
 	{
 		Container.Install(FromFile("facilityWithoutId.xml"));
 		var facilities = Kernel.GetFacilities();
-		Assert.IsNotEmpty(facilities);
-		Assert.IsInstanceOf<StartableFacility>(facilities.Single());
+		Assert.NotEmpty(facilities);
+		Assert.IsType<StartableFacility>(facilities.Single());
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IoC-103")]
 	public void Invalid_nodes_are_reported_via_exception()
 	{
@@ -123,6 +120,6 @@ public class XmlConfigStructureTestCase : AbstractContainerTestCase
 
 		var expected =
 			@"Configuration parser encountered <aze>, but it was expecting to find <installers>, <facilities> or <components>. There might be either a typo on <aze> or you might have forgotten to nest it properly.";
-		Assert.AreEqual(expected, e.Message);
+		Assert.Equal(expected, e.Message);
 	}
 }

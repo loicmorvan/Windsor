@@ -16,12 +16,9 @@ namespace Castle.Windsor.Tests.Bugs;
 
 using Castle.MicroKernel.Registration;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class IoC_102
 {
-	[Test]
+	[Fact]
 	public void ComponentResolutionOrderForKernelAndDpendencyResolverIsTheSame()
 	{
 		var container = new WindsorContainer()
@@ -35,7 +32,7 @@ public class IoC_102
 
 		var consumer = container.Resolve<Consumer>();
 		var reader2 = container.Resolve<IReader>();
-		Assert.AreSame(reader2, consumer.Reader);
+		Assert.Same(reader2, consumer.Reader);
 	}
 
 	public interface IReader

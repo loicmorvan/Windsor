@@ -24,8 +24,6 @@ using Castle.Windsor.Tests.Interceptors;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
 public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerTestCase
 {
 	private IPotentialLifestyleMismatchesDiagnostic diagnostic;
@@ -36,17 +34,17 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerT
 		diagnostic = host.GetDiagnostic<IPotentialLifestyleMismatchesDiagnostic>();
 	}
 
-	[Test]
+	[Fact]
 	public void Can_detect_singleton_depending_on_transient()
 	{
 		Container.Register(Component.For<B>().LifeStyle.Singleton,
 			Component.For<A>().LifeStyle.Transient);
 
 		var mismatches = diagnostic.Inspect();
-		Assert.AreEqual(1, mismatches.Length);
+		Assert.Single(mismatches);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_detect_singleton_depending_on_transient_directly_and_indirectly()
 	{
 		Container.Register(Component.For<CBA>().LifeStyle.Singleton,
@@ -54,12 +52,12 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerT
 			Component.For<A>().LifeStyle.Transient);
 
 		var items = diagnostic.Inspect();
-		Assert.AreEqual(3, items.Length);
+		Assert.Equal(3, items.Length);
 		var cbaMismatches = items.Where(i => i.First().ComponentModel.Services.Single() == typeof(CBA)).ToArray();
-		Assert.AreEqual(2, cbaMismatches.Length);
+		Assert.Equal(2, cbaMismatches.Length);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_detect_singleton_depending_on_transient_indirectly()
 	{
 		Container.Register(Component.For<C>().LifeStyle.Singleton,
@@ -67,10 +65,10 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerT
 			Component.For<A>().LifeStyle.Transient);
 
 		var mismatches = diagnostic.Inspect();
-		Assert.AreEqual(2, mismatches.Length);
+		Assert.Equal(2, mismatches.Length);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_detect_singleton_depending_on_transient_indirectly_via_custom_lifestyle()
 	{
 		Container.Register(Component.For<C>().LifeStyle.Singleton,
@@ -78,10 +76,10 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerT
 			Component.For<A>().LifeStyle.Transient);
 
 		var mismatches = diagnostic.Inspect();
-		Assert.AreEqual(1, mismatches.Length);
+		Assert.Single(mismatches);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_detect_singleton_depending_on_two_transients_directly_and_indirectly()
 	{
 		Container.Register(Component.For<CBA>().LifeStyle.Singleton,
@@ -89,38 +87,38 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerT
 			Component.For<A>().LifeStyle.Transient);
 
 		var items = diagnostic.Inspect();
-		Assert.AreEqual(2, items.Length);
+		Assert.Equal(2, items.Length);
 		var cbaMismatches = items.Where(i => i.First().ComponentModel.Services.Single() == typeof(CBA)).ToArray();
-		Assert.AreEqual(2, cbaMismatches.Length);
+		Assert.Equal(2, cbaMismatches.Length);
 	}
 
-	[Test(Description = "When failing this test causes stack overflow")]
+	[Fact]
 	public void Can_handle_dependency_cycles()
 	{
 		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
 			Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>());
 
 		var mismatches = diagnostic.Inspect();
-		Assert.IsEmpty(mismatches);
+		Assert.Empty(mismatches);
 	}
 
-	[Test]
+	[Fact]
 	public void Decorators_dont_trigger_stack_overflow()
 	{
 		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
 			Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
 			Component.For<UsesIEmptyService>());
 		var items = diagnostic.Inspect();
-		Assert.IsEmpty(items);
+		Assert.Empty(items);
 	}
 
-	[Test(Description = "If the test fails, StackOverflowException is thrown")]
+	[Fact]
 	public void Does_not_crash_on_dependency_cycles()
 	{
 		Container.Register(Component.For<InterceptorThatCauseStackOverflow>().Named("interceptor"),
 			Component.For<ICameraService>().ImplementedBy<CameraService>().Interceptors<InterceptorThatCauseStackOverflow>(),
 			Component.For<ICameraService>().ImplementedBy<CameraService>().Named("ok to resolve - has no interceptors"));
 		var items = diagnostic.Inspect();
-		Assert.IsEmpty(items);
+		Assert.Empty(items);
 	}
 }

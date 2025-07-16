@@ -22,34 +22,31 @@ using System.Xml;
 using Castle.Windsor.Configuration.Interpreters;
 using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
 
-using NUnit.Framework;
-
 /// <summary>Summary description for Class1.</summary>
-[TestFixture]
 public class XmlProcessorTestCase
 {
-	[Test]
+	[Fact]
 	public void InvalidFiles()
 	{
 		var files = Directory.GetFiles(GetFullPath(), "Invalid*.xml");
-		Assert.IsNotEmpty(files);
+		Assert.NotEmpty(files);
 
 		foreach (var fileName in files)
 		{
 			var doc = GetXmlDocument(fileName);
 			var processor = new XmlProcessor();
 
-			Assert.Throws(typeof(ConfigurationProcessingException), () =>
+			Assert.Throws<ConfigurationProcessingException>(() =>
 				processor.Process(doc.DocumentElement));
 		}
 	}
 
 	/// <summary>Runs the tests.</summary>
-	[Test]
+	[Fact]
 	public void RunTests()
 	{
 		var files = Directory.GetFiles(GetFullPath(), "*Test.xml");
-		Assert.IsNotEmpty(files);
+		Assert.NotEmpty(files);
 
 		foreach (var fileName in files)
 		{
@@ -73,7 +70,7 @@ public class XmlProcessorTestCase
 				// Debug.WriteLine(resultDocStr);
 				// Debug.WriteLine(resultStr);
 
-				Assert.AreEqual(resultDocStr, resultStr);
+				Assert.Equal(resultDocStr, resultStr);
 			}
 			catch (Exception e)
 			{

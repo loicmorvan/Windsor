@@ -22,9 +22,6 @@ using CastleTests.ClassComponents;
 using CastleTests.Components;
 using CastleTests.TestImplementationsOfExtensionPoints;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class GenericMultipleServicesComponentResolutionTestCase : AbstractContainerTestCase
 {
 	protected override void AfterContainerCreated()
@@ -39,7 +36,7 @@ public class GenericMultipleServicesComponentResolutionTestCase : AbstractContai
 	}
 
 
-	[Test]
+	[Fact]
 	public void Can_resolve_generic_component_exposing_interface_and_class_service()
 	{
 		Container.Register(
@@ -50,11 +47,11 @@ public class GenericMultipleServicesComponentResolutionTestCase : AbstractContai
 		var dummy = Container.Resolve<IDummyComponent<string>>();
 		var @class = Container.Resolve<GenericDummyComponentImpl<string>>();
 
-		Assert.AreSame(generic, dummy);
-		Assert.AreSame(@class, dummy);
+		Assert.Same(generic, dummy);
+		Assert.Same(@class, dummy);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_resolve_generic_component_exposing_interface_and_class_service_with_non_generic_base()
 	{
 		Container.Register(
@@ -65,13 +62,13 @@ public class GenericMultipleServicesComponentResolutionTestCase : AbstractContai
 		var generic = Container.Resolve<IGeneric<string>>();
 		var dummy = Container.Resolve<IDummyComponent<string>>();
 
-		Assert.AreSame(generic, dummy);
+		Assert.Same(generic, dummy);
 		var handler = Kernel.GetHandler(typeof(IGeneric<string>));
-		Assert.IsTrue(handler.Supports(typeof(A)));
-		Assert.IsTrue(handler.Supports(typeof(IMarkerInterface)));
+		Assert.True(handler.Supports(typeof(A)));
+		Assert.True(handler.Supports(typeof(IMarkerInterface)));
 	}
 
-	[Test]
+	[Fact]
 	public void Can_resolve_generic_component_exposing_two_unrelated_implemented_services()
 	{
 		Container.Register(
@@ -81,10 +78,10 @@ public class GenericMultipleServicesComponentResolutionTestCase : AbstractContai
 		var generic = Container.Resolve<IGeneric<string>>();
 		var dummy = Container.Resolve<IDummyComponent<string>>();
 
-		Assert.AreSame(generic, dummy);
+		Assert.Same(generic, dummy);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_resolve_generic_component_exposing_two_unrelated_implemented_services_each_closed_over_different_generic_argument()
 	{
 		Container.Register(
@@ -94,20 +91,20 @@ public class GenericMultipleServicesComponentResolutionTestCase : AbstractContai
 		var generic = Container.Resolve<IGeneric<string>>();
 		var dummy = Container.Resolve<IDummyComponent<string>>();
 
-		Assert.AreSame(generic, dummy);
+		Assert.Same(generic, dummy);
 	}
 
-	[Test]
+	[Fact]
 	public void Dependency_resolution_generic_proxy_should_implement_all_services()
 	{
 		var comp = Container.Resolve<UseGenericExtended1>();
-		Assert.AreSame(comp.Generic, comp.GenericExtended);
+		Assert.Same(comp.Generic, comp.GenericExtended);
 	}
 
-	[Test]
+	[Fact]
 	public void Generic_handler_caching_should_not_affect_resolution()
 	{
 		var comp = Container.Resolve<UseGenericExtended2>();
-		Assert.AreSame(comp.Generic, comp.GenericExtended);
+		Assert.Same(comp.Generic, comp.GenericExtended);
 	}
 }

@@ -14,6 +14,8 @@
 
 namespace Castle.Facilities.Logging.Tests;
 
+using System;
+
 using Castle.Facilities.Logging.Tests.Classes;
 using Castle.MicroKernel.Registration;
 using Castle.Services.Logging.NLogIntegration;
@@ -22,27 +24,22 @@ using Castle.Windsor;
 using NLog;
 using NLog.Targets;
 
-using NUnit.Framework;
-
 /// <summary>Summary description for NLogFacilityTestts.</summary>
-[TestFixture]
-public class NLogFacilityTests : BaseTest
+public class NLogFacilityTests : BaseTest, IDisposable
 {
-	[SetUp]
-	public void Setup()
+	public NLogFacilityTests()
 	{
 		container = base.CreateConfiguredContainer<NLogFactory>();
 	}
 
-	[TearDown]
-	public void Teardown()
+	public void Dispose()
 	{
 		if (container != null) container.Dispose();
 	}
 
 	private IWindsorContainer container;
 
-	[Test]
+	[Fact]
 	public void SimpleTest()
 	{
 		container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
@@ -53,6 +50,6 @@ public class NLogFacilityTests : BaseTest
 		var expectedLogOutput = string.Format("|INFO|{0}|Hello world", typeof(SimpleLoggingComponent).FullName);
 		var actualLogOutput = (LogManager.Configuration.FindTargetByName("memory") as MemoryTarget).Logs[0];
 		actualLogOutput = actualLogOutput.Substring(actualLogOutput.IndexOf('|'));
-		Assert.AreEqual(expectedLogOutput, actualLogOutput);
+		Assert.Equal(expectedLogOutput, actualLogOutput);
 	}
 }

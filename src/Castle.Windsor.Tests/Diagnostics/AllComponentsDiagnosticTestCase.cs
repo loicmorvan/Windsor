@@ -25,8 +25,6 @@ using Castle.Windsor.Diagnostics;
 using CastleTests.ClassComponents;
 using CastleTests.Components;
 
-using NUnit.Framework;
-
 public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 {
 	private IAllComponentsDiagnostic diagnostic;
@@ -37,7 +35,7 @@ public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 		diagnostic = host.GetDiagnostic<IAllComponentsDiagnostic>();
 	}
 
-	[Test]
+	[Fact]
 	public void Doesnt_include_closed_versions_of_generic_handler()
 	{
 		Container.Register(Component.For(typeof(GenericImpl1<>)));
@@ -46,10 +44,10 @@ public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 
 		var handlers = diagnostic.Inspect();
 
-		Assert.AreEqual(1, handlers.Length);
+		Assert.Single(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void Shows_also_components_from_parent_container()
 	{
 		var parent = new WindsorContainer();
@@ -62,28 +60,28 @@ public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 
 		var handlers = diagnostic.Inspect();
 
-		Assert.AreEqual(4, handlers.Length);
+		Assert.Equal(4, handlers.Length);
 	}
 
-	[Test]
+	[Fact]
 	public void Works_with_empty_container()
 	{
 		var handlers = diagnostic.Inspect();
 
-		Assert.IsEmpty(handlers);
+		Assert.Empty(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void Works_with_generic_handlers()
 	{
 		Container.Register(Component.For(typeof(GenericImpl1<>)));
 
 		var handlers = diagnostic.Inspect();
 
-		Assert.AreEqual(1, handlers.Length);
+		Assert.Single(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void Works_with_multi_service_components()
 	{
 		Container.Register(Component.For<IEmptyService, EmptyServiceA>()
@@ -91,11 +89,11 @@ public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 
 		var handlers = diagnostic.Inspect();
 
-		Assert.AreEqual(1, handlers.Length);
-		Assert.AreEqual(2, handlers[0].ComponentModel.Services.Count());
+		Assert.Single(handlers);
+		Assert.Equal(2, handlers[0].ComponentModel.Services.Count());
 	}
 
-	[Test]
+	[Fact]
 	public void Works_with_multiple_handlers_for_given_type()
 	{
 		Container.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)),
@@ -103,6 +101,6 @@ public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 
 		var handlers = diagnostic.Inspect();
 
-		Assert.AreEqual(2, handlers.Length);
+		Assert.Equal(2, handlers.Length);
 	}
 }

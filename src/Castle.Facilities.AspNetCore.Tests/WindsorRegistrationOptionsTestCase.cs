@@ -22,29 +22,24 @@ using Castle.MicroKernel.Registration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-using NUnit.Framework;
-
 using TestContext = Castle.Facilities.AspNetCore.Tests.Framework.TestContext;
 
-public abstract class WindsorRegistrationOptionsTestCase
+public abstract class WindsorRegistrationOptionsTestCase:IDisposable
 {
 	protected TestContext testContext;
 
-	[SetUp]
-	public abstract void SetUp();
-
-	[TearDown]
-	public void TearDown()
+	public void Dispose()
 	{
 		testContext.Dispose();
 	}
 
-	[TestCase(typeof(OverrideTagHelper))]
-	[TestCase(typeof(OverrideController))]
-	[TestCase(typeof(OverrideViewComponent))]
+	[Theory]
+	[InlineData(typeof(OverrideTagHelper))]
+	[InlineData(typeof(OverrideController))]
+	[InlineData(typeof(OverrideViewComponent))]
 	public void Should_resolve_overidden_Controllers_TagHelpers_and_ViewComponents_using_WindsorRegistrationOptions(Type optionsResolvableType)
 	{
-		Assert.DoesNotThrow(() => { testContext.WindsorContainer.Resolve(optionsResolvableType); });
+		testContext.WindsorContainer.Resolve(optionsResolvableType);
 	}
 
 	public class OverrideTagHelper : TagHelper
@@ -60,11 +55,9 @@ public abstract class WindsorRegistrationOptionsTestCase
 	}
 }
 
-[TestFixture]
 public class WindsorRegistrationOptionsForAssembliesTestCase : WindsorRegistrationOptionsTestCase
 {
-	[SetUp]
-	public override void SetUp()
+	public WindsorRegistrationOptionsForAssembliesTestCase()
 	{
 		testContext = TestContextFactory.Get(opts => opts
 			.UseEntryAssembly(typeof(WindsorRegistrationOptionsTestCase).Assembly)
@@ -74,11 +67,9 @@ public class WindsorRegistrationOptionsForAssembliesTestCase : WindsorRegistrati
 	}
 }
 
-[TestFixture]
 public class WindsorRegistrationOptionsForComponentsTestCase : WindsorRegistrationOptionsTestCase
 {
-	[SetUp]
-	public override void SetUp()
+	public WindsorRegistrationOptionsForComponentsTestCase()
 	{
 		testContext = TestContextFactory.Get(opts => opts
 			.UseEntryAssembly(typeof(WindsorRegistrationOptionsTestCase).Assembly)

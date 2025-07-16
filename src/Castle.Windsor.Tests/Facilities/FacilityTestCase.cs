@@ -21,13 +21,9 @@ using Castle.Facilities.Startable;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Tests.ClassComponents;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class FacilityTestCase
 {
-	[SetUp]
-	public void Init()
+	public FacilityTestCase()
 	{
 		kernel = new DefaultKernel();
 
@@ -38,7 +34,7 @@ public class FacilityTestCase
 
 		facility = new HiperFacility();
 
-		Assert.IsFalse(facility.Initialized);
+		Assert.False(facility.Initialized);
 		kernel.AddFacility(facility);
 	}
 
@@ -46,50 +42,50 @@ public class FacilityTestCase
 	private HiperFacility facility;
 	private IKernel kernel;
 
-	[Test]
+	[Fact]
 	public void Cant_have_two_instances_of_any_facility_type()
 	{
 		kernel.AddFacility<StartableFacility>();
 
 		var exception = Assert.Throws<ArgumentException>(() => kernel.AddFacility<StartableFacility>());
 
-		Assert.AreEqual(
+		Assert.Equal(
 			"Facility of type 'Castle.Facilities.Startable.StartableFacility' has already been registered with the container. Only one facility of a given type can exist in the container.",
 			exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void Creation()
 	{
 		var facility = kernel.GetFacilities()[0];
 
-		Assert.IsNotNull(facility);
-		Assert.AreSame(this.facility, facility);
+		Assert.NotNull(facility);
+		Assert.Same(this.facility, facility);
 	}
 
-	[Test]
+	[Fact]
 	public void LifeCycle()
 	{
-		Assert.IsFalse(this.facility.Terminated);
+		Assert.False(this.facility.Terminated);
 
 		var facility = kernel.GetFacilities()[0];
 
-		Assert.IsTrue(this.facility.Initialized);
-		Assert.IsFalse(this.facility.Terminated);
+		Assert.True(this.facility.Initialized);
+		Assert.False(this.facility.Terminated);
 
 		kernel.Dispose();
 
-		Assert.IsTrue(this.facility.Initialized);
-		Assert.IsTrue(this.facility.Terminated);
+		Assert.True(this.facility.Initialized);
+		Assert.True(this.facility.Terminated);
 	}
 
-	[Test]
+	[Fact]
 	public void OnCreationCallback()
 	{
 		StartableFacility facility = null;
 
 		kernel.AddFacility<StartableFacility>(f => facility = f);
 
-		Assert.IsNotNull(facility);
+		Assert.NotNull(facility);
 	}
 }

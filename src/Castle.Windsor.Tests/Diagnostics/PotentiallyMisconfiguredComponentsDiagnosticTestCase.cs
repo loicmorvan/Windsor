@@ -20,8 +20,6 @@ using Castle.Windsor.Diagnostics;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
 public class PotentiallyMisconfiguredComponentsDiagnosticTestCase : AbstractContainerTestCase
 {
 	private IPotentiallyMisconfiguredComponentsDiagnostic diagnostic;
@@ -32,23 +30,23 @@ public class PotentiallyMisconfiguredComponentsDiagnosticTestCase : AbstractCont
 		diagnostic = host.GetDiagnostic<IPotentiallyMisconfiguredComponentsDiagnostic>();
 	}
 
-	[Test]
+	[Fact]
 	public void Empty_when_all_components_healthy()
 	{
 		Container.Register(Component.For<A>(), Component.For<B>(), Component.For<C>());
 
 		var handlers = diagnostic.Inspect();
 
-		Assert.IsEmpty(handlers);
+		Assert.Empty(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void Has_all_components_with_missing_or_waiting_dependencies()
 	{
 		Container.Register(Component.For<B>(), Component.For<C>());
 
 		var handlers = diagnostic.Inspect();
 
-		Assert.AreEqual(2, handlers.Length);
+		Assert.Equal(2, handlers.Length);
 	}
 }

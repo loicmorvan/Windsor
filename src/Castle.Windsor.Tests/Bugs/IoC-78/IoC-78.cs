@@ -19,31 +19,28 @@ using Castle.MicroKernel.Registration;
 
 using CastleTests;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class IoC78 : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Will_Ignore_Components_Already_in_Dependency_Tracker_Constructor()
 	{
 		Container.Register(Component.For<IChain>().ImplementedBy<MyChain>().Named("chain"));
 		Container.Register(Component.For<IChain>().ImplementedBy<MyChain2>().Named("chain2"));
 
 		var resolve = Container.Resolve<IChain>("chain2");
-		Assert.IsNotNull(resolve);
+		Assert.NotNull(resolve);
 	}
 
-	[Test]
+	[Fact]
 	public void Will_Ignore_Components_Already_in_Dependency_Tracker_Property()
 	{
 		Container.Register(Component.For<IChain>().ImplementedBy<MyChain3>());
 
 		var chain3 = (MyChain3)Container.Resolve<IChain>();
-		Assert.IsNull(chain3.Chain);
+		Assert.Null(chain3.Chain);
 	}
 
-	[Test]
+	[Fact]
 	public void Will_Not_Try_To_Resolve_Component_To_Itself()
 	{
 		Container.Register(Component.For<IChain>().ImplementedBy<MyChain4>());

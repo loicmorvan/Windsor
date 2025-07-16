@@ -21,12 +21,9 @@ using Castle.MicroKernel;
 using Castle.MicroKernel.Context;
 using Castle.MicroKernel.Registration;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class HandlerSelectorsTestCase
 {
-	[Test]
+	[Fact]
 	public void SelectUsingBusinessLogic_DirectSelection()
 	{
 		IWindsorContainer container = new WindsorContainer();
@@ -35,14 +32,14 @@ public class HandlerSelectorsTestCase
 		var selector = new WatcherSelector();
 		container.Kernel.AddHandlerSelector(selector);
 
-		Assert.IsInstanceOf(typeof(BirdWatcher), container.Resolve<IWatcher>(), "default");
+		Assert.IsType<BirdWatcher>(container.Resolve<IWatcher>());
 		selector.Interest = Interest.Astronomy;
-		Assert.IsInstanceOf(typeof(SatiWatcher), container.Resolve<IWatcher>(), "change-by-context");
+		Assert.IsType<SatiWatcher>(container.Resolve<IWatcher>());
 		selector.Interest = Interest.Biology;
-		Assert.IsInstanceOf(typeof(BirdWatcher), container.Resolve<IWatcher>(), "explicit");
+		Assert.IsType<BirdWatcher>(container.Resolve<IWatcher>());
 	}
 
-	[Test]
+	[Fact]
 	public void SelectUsingBusinessLogic_SubDependency()
 	{
 		IWindsorContainer container = new WindsorContainer();
@@ -52,14 +49,14 @@ public class HandlerSelectorsTestCase
 		var selector = new WatcherSelector();
 		container.Kernel.AddHandlerSelector(selector);
 
-		Assert.IsInstanceOf(typeof(BirdWatcher), container.Resolve<Person>().Watcher, "default");
+		Assert.IsType<BirdWatcher>(container.Resolve<Person>().Watcher);
 		selector.Interest = Interest.Astronomy;
-		Assert.IsInstanceOf(typeof(SatiWatcher), container.Resolve<Person>().Watcher, "change-by-context");
+		Assert.IsType<SatiWatcher>(container.Resolve<Person>().Watcher);
 		selector.Interest = Interest.Biology;
-		Assert.IsInstanceOf(typeof(BirdWatcher), container.Resolve<Person>().Watcher, "explicit");
+		Assert.IsType<BirdWatcher>(container.Resolve<Person>().Watcher);
 	}
 
-	[Test]
+	[Fact]
 	public void SubDependencyResolverHasHigherPriorityThanHandlerSelector()
 	{
 		IWindsorContainer container = new WindsorContainer();
@@ -71,9 +68,8 @@ public class HandlerSelectorsTestCase
 		container.Kernel.Resolver.AddSubResolver(new WatchSubDependencySelector());
 
 		selector.Interest = Interest.Biology;
-		Assert.IsInstanceOf(typeof(SatiWatcher), container.Resolve<Person>().Watcher,
-			"sub dependency should resolve sati");
-		Assert.IsInstanceOf(typeof(BirdWatcher), container.Resolve<IWatcher>(), "root dependency should resolve bird");
+		Assert.IsType<SatiWatcher>(container.Resolve<Person>().Watcher);
+		Assert.IsType<BirdWatcher>(container.Resolve<IWatcher>());
 	}
 
 	public enum Interest

@@ -18,12 +18,9 @@ using Castle.MicroKernel;
 using Castle.MicroKernel.Handlers;
 using Castle.MicroKernel.Registration;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class SystemNullableTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Null_may_be_specified_for_non_optional_System_Nullable_constructor_parameter()
 	{
 		Container.Register(
@@ -34,21 +31,23 @@ public class SystemNullableTestCase : AbstractContainerTestCase
 			Arguments.FromProperties(new { nonOptionalNullableParameter = (int?)null }));
 	}
 
-	[Test]
+	[Fact]
 	public void Non_optional_System_Nullable_constructor_parameter_is_still_required()
 	{
 		Container.Register(
 			Component.For<DependencyFromContainer>(),
 			Component.For<ComponentWithNonOptionalNullableParameter>());
 
-		Assert.That(
-			() => Container.Resolve<ComponentWithNonOptionalNullableParameter>(),
-			Throws.InstanceOf<HandlerException>()
-				.With.Property("Message").EqualTo($@"Can't create component '{typeof(ComponentWithNonOptionalNullableParameter)}' as it has dependencies to be satisfied.
+		var exception = Assert.Throws<HandlerException>(() => Container.Resolve<ComponentWithNonOptionalNullableParameter>());
+		Assert.Equal(
+			$"""
+				 Can't create component '{typeof(ComponentWithNonOptionalNullableParameter)}' as it has dependencies to be satisfied.
 
-'{typeof(ComponentWithNonOptionalNullableParameter)}' is waiting for the following dependencies:
-- Parameter 'nonOptionalNullableParameter' which was not provided. Did you forget to set the dependency?
-".ConvertToEnvironmentLineEndings()));
+				 '{typeof(ComponentWithNonOptionalNullableParameter)}' is waiting for the following dependencies:
+				 - Parameter 'nonOptionalNullableParameter' which was not provided. Did you forget to set the dependency?
+
+				 """.ConvertToEnvironmentLineEndings(),
+			exception.Message);
 	}
 
 	public sealed class DependencyFromContainer

@@ -20,8 +20,6 @@ using Castle.Core;
 using Castle.Facilities.Startable;
 using Castle.MicroKernel.Registration;
 
-using NUnit.Framework;
-
 public interface IBlackboard
 {
 }
@@ -64,10 +62,9 @@ public interface IServiceWithoutImplementation
 {
 }
 
-[TestFixture]
 public class IoC_169
 {
-	[Test]
+	[Fact]
 	public void BulkRegistrations_WhenRegistrationMatchesNoInstancesOfService_StopsStartableFacilityFromWorking()
 	{
 		AbstractBlackboard.PrepareForTest();

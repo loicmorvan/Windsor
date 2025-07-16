@@ -19,9 +19,6 @@ using Castle.MicroKernel.Registration;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class ScopedLifestyleExplicitAndNestingTestCase : AbstractContainerTestCase
 {
 	protected override void AfterContainerCreated()
@@ -29,22 +26,7 @@ public class ScopedLifestyleExplicitAndNestingTestCase : AbstractContainerTestCa
 		Container.Register(Component.For<A>().LifestyleScoped());
 	}
 
-	[Test]
-	[Ignore("Should we support this scenario or not... there's no explicit parent/child relationship here...")]
-	public void Inner_scope_resolves_from_outer_scope()
-	{
-		using (Container.BeginScope())
-		{
-			var outer = Container.Resolve<A>();
-			using (Container.BeginScope())
-			{
-				var inner = Container.Resolve<A>();
-				Assert.AreSame(outer, inner);
-			}
-		}
-	}
-
-	[Test]
+	[Fact]
 	public void Inner_scope_should_not_cause_outer_one_to_drop_cache()
 	{
 		using (Container.BeginScope())
@@ -56,11 +38,11 @@ public class ScopedLifestyleExplicitAndNestingTestCase : AbstractContainerTestCa
 			}
 
 			var after = Container.Resolve<A>();
-			Assert.AreSame(before, after);
+			Assert.Same(before, after);
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void Inner_scope_should_not_cause_outer_one_to_prematurely_release_components()
 	{
 		Container.Register(Component.For<ADisposable>().LifestyleScoped());
@@ -72,7 +54,7 @@ public class ScopedLifestyleExplicitAndNestingTestCase : AbstractContainerTestCa
 				Container.Resolve<ADisposable>();
 			}
 
-			Assert.IsFalse(outer.Disposed);
+			Assert.False(outer.Disposed);
 		}
 	}
 }

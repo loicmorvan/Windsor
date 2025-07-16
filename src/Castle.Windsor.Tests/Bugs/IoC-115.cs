@@ -18,9 +18,6 @@ using Castle.MicroKernel.Registration;
 
 using CastleTests;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class IoC_115 : AbstractContainerTestCase
 {
 	public interface IParentService
@@ -61,7 +58,7 @@ public class IoC_115 : AbstractContainerTestCase
 	{
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-115")]
 	public void Can_resolve_from_child_with_dependency_with_dependency_on_parent_component()
 	{
@@ -73,10 +70,10 @@ public class IoC_115 : AbstractContainerTestCase
 			Component.For<IChildService2>().ImplementedBy<ChildService2>());
 
 		// dependency chain goes ChildService1 --> (I)ChildService2 --> IParentService
-		Assert.DoesNotThrow(() => child.Resolve<IChildService1>());
+		child.Resolve<IChildService1>();
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-115")]
 	public void Parent_component_resolved_via_child_container_can_only_depend_on_components_from_parent()
 	{
@@ -89,6 +86,6 @@ public class IoC_115 : AbstractContainerTestCase
 
 		var resolve = child.Resolve<IChildService2>();
 
-		Assert.IsInstanceOf<ParentService>(resolve.Parent);
+		Assert.IsType<ParentService>(resolve.Parent);
 	}
 }

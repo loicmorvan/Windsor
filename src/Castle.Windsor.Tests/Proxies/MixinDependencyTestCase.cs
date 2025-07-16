@@ -22,11 +22,9 @@ using Castle.MicroKernel.Registration;
 using CastleTests.Components;
 using CastleTests.Interceptors;
 
-using NUnit.Framework;
-
 public class MixinDependencyTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Bound_mixin_reused_as_implicit_and_explicit_dependency_chain()
 	{
 		Container.Register(
@@ -53,12 +51,12 @@ public class MixinDependencyTestCase : AbstractContainerTestCase
 		var outerMixin = ((outerProxy as IProxyTargetAccessor).GetInterceptors()[0] as CollectInvocationsInterceptor).Invocations[0].InvocationTarget;
 		var innerMixin = ((innerProxy as IProxyTargetAccessor).GetInterceptors()[0] as CollectInvocationsInterceptor).Invocations[0].InvocationTarget;
 
-		Assert.AreNotSame(innerMixin, outerMixin);
-		Assert.AreSame(outerMixin, outerProxy.Dependency);
-		Assert.AreSame(innerMixin, innerProxy.Dependency);
+		Assert.NotSame(innerMixin, outerMixin);
+		Assert.Same(outerMixin, outerProxy.Dependency);
+		Assert.Same(innerMixin, innerProxy.Dependency);
 	}
 
-	[Test]
+	[Fact]
 	public void Bound_mixin_reused_as_implicit_and_explicit_dependency_simple()
 	{
 		Container.Register(
@@ -75,6 +73,6 @@ public class MixinDependencyTestCase : AbstractContainerTestCase
 		var id = (proxy as IComponent).ID; // to trigger interception;
 		var interceptor = Container.Resolve<CollectInvocationsInterceptor>();
 		var mixin = interceptor.Invocations.Single().InvocationTarget;
-		Assert.AreSame(mixin, proxy.Dependency);
+		Assert.Same(mixin, proxy.Dependency);
 	}
 }

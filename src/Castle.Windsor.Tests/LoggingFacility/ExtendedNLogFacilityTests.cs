@@ -14,6 +14,8 @@
 
 namespace Castle.Facilities.Logging.Tests;
 
+using System;
+
 using Castle.Facilities.Logging.Tests.Classes;
 using Castle.MicroKernel.Registration;
 using Castle.Services.Logging.NLogIntegration;
@@ -22,26 +24,21 @@ using Castle.Windsor;
 using NLog;
 using NLog.Targets;
 
-using NUnit.Framework;
-
-[TestFixture]
-public class ExtendedNLogFacilityTests : BaseTest
+public class ExtendedNLogFacilityTests : BaseTest, IDisposable
 {
-	[SetUp]
-	public void Setup()
+	public ExtendedNLogFacilityTests()
 	{
 		container = base.CreateConfiguredContainer<ExtendedNLogFactory>();
 	}
 
-	[TearDown]
-	public void Teardown()
+	public void Dispose()
 	{
 		container.Dispose();
 	}
 
 	private IWindsorContainer container;
 
-	[Test]
+	[Fact]
 	public void SimpleTest()
 	{
 		container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component1"));
@@ -53,7 +50,7 @@ public class ExtendedNLogFacilityTests : BaseTest
 		var actualLogOutput = (LogManager.Configuration.FindTargetByName("memory") as MemoryTarget).Logs[0];
 		actualLogOutput = actualLogOutput.Substring(actualLogOutput.IndexOf('|'));
 
-		Assert.AreEqual(expectedLogOutput, actualLogOutput);
+		Assert.Equal(expectedLogOutput, actualLogOutput);
 
 		container.Register(Component.For(typeof(SmtpServer)).Named("component2"));
 		var smtpServer = container.Resolve<ISmtpServer>("component2");
@@ -66,10 +63,10 @@ public class ExtendedNLogFacilityTests : BaseTest
 		actualLogOutput = (LogManager.Configuration.FindTargetByName("memory") as MemoryTarget).Logs[1];
 		actualLogOutput = actualLogOutput.Substring(actualLogOutput.IndexOf('|'));
 
-		Assert.AreEqual(expectedLogOutput, actualLogOutput);
+		Assert.Equal(expectedLogOutput, actualLogOutput);
 	}
 
-	[Test]
+	[Fact]
 	public void ContextTest()
 	{
 		container.Register(Component.For(typeof(ComplexLoggingComponent)).Named("component1"));
@@ -81,6 +78,6 @@ public class ExtendedNLogFacilityTests : BaseTest
 		var actualLogOutput = (LogManager.Configuration.FindTargetByName("memory1") as MemoryTarget).Logs[0];
 		actualLogOutput = actualLogOutput.Substring(actualLogOutput.IndexOf('|'));
 
-		Assert.AreEqual(expectedLogOutput, actualLogOutput);
+		Assert.Equal(expectedLogOutput, actualLogOutput);
 	}
 }

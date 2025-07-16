@@ -22,55 +22,51 @@ using System.Threading;
 using Castle.Core.Configuration;
 using Castle.MicroKernel.SubSystems.Conversion;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class DefaultConversionManagerTestCase
 {
 	private readonly DefaultConversionManager converter = new();
 
-	[Test]
-	[SetCulture("pl-PL")]
+	[Fact]
 	[Bug("IOC-314")]
 	public void Converting_numbers_uses_ordinal_culture()
 	{
-		Assert.AreEqual(",", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+		Assert.Equal(",", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
 
 		var result = converter.PerformConversion<decimal>("123.456");
 
-		Assert.AreEqual(123.456m, result);
+		Assert.Equal(123.456m, result);
 	}
 
-	[Test]
+	[Fact]
 	public void PerformConversionInt()
 	{
-		Assert.AreEqual(100, converter.PerformConversion("100", typeof(int)));
-		Assert.AreEqual(1234, converter.PerformConversion("1234", typeof(int)));
+		Assert.Equal(100, converter.PerformConversion("100", typeof(int)));
+		Assert.Equal(1234, converter.PerformConversion("1234", typeof(int)));
 	}
 
-	[Test]
+	[Fact]
 	public void PerformConversionChar()
 	{
-		Assert.AreEqual('a', converter.PerformConversion("a", typeof(char)));
+		Assert.Equal('a', converter.PerformConversion("a", typeof(char)));
 	}
 
-	[Test]
+	[Fact]
 	public void PerformConversionBool()
 	{
-		Assert.AreEqual(true, converter.PerformConversion("true", typeof(bool)));
-		Assert.AreEqual(false, converter.PerformConversion("false", typeof(bool)));
+		Assert.Equal(true, converter.PerformConversion("true", typeof(bool)));
+		Assert.Equal(false, converter.PerformConversion("false", typeof(bool)));
 	}
 
-	[Test]
+	[Fact]
 	public void PerformConversionType()
 	{
-		Assert.AreEqual(typeof(DefaultConversionManagerTestCase),
+		Assert.Equal(typeof(DefaultConversionManagerTestCase),
 			converter.PerformConversion(
 				"CastleTests.DefaultConversionManagerTestCase, Castle.Windsor.Tests",
 				typeof(Type)));
 	}
 
-	[Test]
+	[Fact]
 	public void PerformConversionList()
 	{
 		var config = new MutableConfiguration("list");
@@ -80,17 +76,17 @@ public class DefaultConversionManagerTestCase
 		config.Children.Add(new MutableConfiguration("item", "second"));
 		config.Children.Add(new MutableConfiguration("item", "third"));
 
-		Assert.IsTrue(converter.CanHandleType(typeof(IList)));
-		Assert.IsTrue(converter.CanHandleType(typeof(ArrayList)));
+		Assert.True(converter.CanHandleType(typeof(IList)));
+		Assert.True(converter.CanHandleType(typeof(ArrayList)));
 
 		var list = (IList)converter.PerformConversion(config, typeof(IList));
-		Assert.IsNotNull(list);
-		Assert.AreEqual("first", list[0]);
-		Assert.AreEqual("second", list[1]);
-		Assert.AreEqual("third", list[2]);
+		Assert.NotNull(list);
+		Assert.Equal("first", list[0]);
+		Assert.Equal("second", list[1]);
+		Assert.Equal("third", list[2]);
 	}
 
-	[Test]
+	[Fact]
 	public void Dictionary()
 	{
 		var config = new MutableConfiguration("dictionary");
@@ -121,22 +117,22 @@ public class DefaultConversionManagerTestCase
 
 		config.Children.Add(dateItem);
 
-		Assert.IsTrue(converter.CanHandleType(typeof(IDictionary)));
-		Assert.IsTrue(converter.CanHandleType(typeof(Hashtable)));
+		Assert.True(converter.CanHandleType(typeof(IDictionary)));
+		Assert.True(converter.CanHandleType(typeof(Hashtable)));
 
 		var dict = (IDictionary)
 			converter.PerformConversion(config, typeof(IDictionary));
 
-		Assert.IsNotNull(dict);
+		Assert.NotNull(dict);
 
-		Assert.AreEqual("first", dict["key1"]);
-		Assert.AreEqual("second", dict["key2"]);
-		Assert.AreEqual("third", dict["key3"]);
-		Assert.AreEqual(40, dict[4]);
-		Assert.AreEqual(new DateTime(2005, 12, 1), dict[new DateTime(2000, 1, 1)]);
+		Assert.Equal("first", dict["key1"]);
+		Assert.Equal("second", dict["key2"]);
+		Assert.Equal("third", dict["key3"]);
+		Assert.Equal(40, dict[4]);
+		Assert.Equal(new DateTime(2005, 12, 1), dict[new DateTime(2000, 1, 1)]);
 	}
 
-	[Test]
+	[Fact]
 	public void DictionaryWithDifferentValueTypes()
 	{
 		var config = new MutableConfiguration("dictionary");
@@ -156,16 +152,16 @@ public class DefaultConversionManagerTestCase
 		var dict =
 			(IDictionary)converter.PerformConversion(config, typeof(IDictionary));
 
-		Assert.IsNotNull(dict);
+		Assert.NotNull(dict);
 
-		Assert.AreEqual(123, dict["intentry"]);
+		Assert.Equal(123, dict["intentry"]);
 		var values = (int[])dict["values"];
-		Assert.IsNotNull(values);
-		Assert.AreEqual(1, values.Length);
-		Assert.AreEqual(400, values[0]);
+		Assert.NotNull(values);
+		Assert.Single(values);
+		Assert.Equal(400, values[0]);
 	}
 
-	[Test]
+	[Fact]
 	public void GenericPerformConversionList()
 	{
 		var config = new MutableConfiguration("list");
@@ -175,17 +171,17 @@ public class DefaultConversionManagerTestCase
 		config.Children.Add(new MutableConfiguration("item", "3147"));
 		config.Children.Add(new MutableConfiguration("item", "997"));
 
-		Assert.IsTrue(converter.CanHandleType(typeof(IList<double>)));
-		Assert.IsTrue(converter.CanHandleType(typeof(List<string>)));
+		Assert.True(converter.CanHandleType(typeof(IList<double>)));
+		Assert.True(converter.CanHandleType(typeof(List<string>)));
 
 		var list = (IList<long>)converter.PerformConversion(config, typeof(IList<long>));
-		Assert.IsNotNull(list);
-		Assert.AreEqual(345L, list[0]);
-		Assert.AreEqual(3147L, list[1]);
-		Assert.AreEqual(997L, list[2]);
+		Assert.NotNull(list);
+		Assert.Equal(345L, list[0]);
+		Assert.Equal(3147L, list[1]);
+		Assert.Equal(997L, list[2]);
 	}
 
-	[Test]
+	[Fact]
 	public void ListOfLongGuessingType()
 	{
 		var config = new MutableConfiguration("list");
@@ -194,17 +190,17 @@ public class DefaultConversionManagerTestCase
 		config.Children.Add(new MutableConfiguration("item", "3147"));
 		config.Children.Add(new MutableConfiguration("item", "997"));
 
-		Assert.IsTrue(converter.CanHandleType(typeof(IList<double>)));
-		Assert.IsTrue(converter.CanHandleType(typeof(List<string>)));
+		Assert.True(converter.CanHandleType(typeof(IList<double>)));
+		Assert.True(converter.CanHandleType(typeof(List<string>)));
 
 		var list = (IList<long>)converter.PerformConversion(config, typeof(IList<long>));
-		Assert.IsNotNull(list);
-		Assert.AreEqual(345L, list[0]);
-		Assert.AreEqual(3147L, list[1]);
-		Assert.AreEqual(997L, list[2]);
+		Assert.NotNull(list);
+		Assert.Equal(345L, list[0]);
+		Assert.Equal(3147L, list[1]);
+		Assert.Equal(997L, list[2]);
 	}
 
-	[Test]
+	[Fact]
 	public void GenericDictionary()
 	{
 		var config = new MutableConfiguration("dictionary");
@@ -221,20 +217,20 @@ public class DefaultConversionManagerTestCase
 		thirdItem.Attributes["key"] = "key3";
 		config.Children.Add(thirdItem);
 
-		Assert.IsTrue(converter.CanHandleType(typeof(IDictionary<string, string>)));
-		Assert.IsTrue(converter.CanHandleType(typeof(Dictionary<string, int>)));
+		Assert.True(converter.CanHandleType(typeof(IDictionary<string, string>)));
+		Assert.True(converter.CanHandleType(typeof(Dictionary<string, int>)));
 
 		var dict =
 			(IDictionary<string, int>)converter.PerformConversion(config, typeof(IDictionary<string, int>));
 
-		Assert.IsNotNull(dict);
+		Assert.NotNull(dict);
 
-		Assert.AreEqual(1, dict["key1"]);
-		Assert.AreEqual(2, dict["key2"]);
-		Assert.AreEqual(3, dict["key3"]);
+		Assert.Equal(1, dict["key1"]);
+		Assert.Equal(2, dict["key2"]);
+		Assert.Equal(3, dict["key3"]);
 	}
 
-	[Test]
+	[Fact]
 	public void Array()
 	{
 		var config = new MutableConfiguration("array");
@@ -243,26 +239,26 @@ public class DefaultConversionManagerTestCase
 		config.Children.Add(new MutableConfiguration("item", "second"));
 		config.Children.Add(new MutableConfiguration("item", "third"));
 
-		Assert.IsTrue(converter.CanHandleType(typeof(string[])));
+		Assert.True(converter.CanHandleType(typeof(string[])));
 
 		var array = (string[])
 			converter.PerformConversion(config, typeof(string[]));
 
-		Assert.IsNotNull(array);
+		Assert.NotNull(array);
 
-		Assert.AreEqual("first", array[0]);
-		Assert.AreEqual("second", array[1]);
-		Assert.AreEqual("third", array[2]);
+		Assert.Equal("first", array[0]);
+		Assert.Equal("second", array[1]);
+		Assert.Equal("third", array[2]);
 	}
 
-	[Test]
+	[Fact]
 	public void PerformConversionTimeSpan()
 	{
-		Assert.AreEqual(TimeSpan.Zero, converter.PerformConversion("0", typeof(TimeSpan)));
-		Assert.AreEqual(TimeSpan.FromDays(14), converter.PerformConversion("14", typeof(TimeSpan)));
-		Assert.AreEqual(new TimeSpan(0, 1, 2, 3), converter.PerformConversion("1:2:3", typeof(TimeSpan)));
-		Assert.AreEqual(new TimeSpan(0, 0, 0, 0, 250), converter.PerformConversion("0:0:0.250", typeof(TimeSpan)));
-		Assert.AreEqual(new TimeSpan(10, 20, 30, 40, 500),
+		Assert.Equal(TimeSpan.Zero, converter.PerformConversion("0", typeof(TimeSpan)));
+		Assert.Equal(TimeSpan.FromDays(14), converter.PerformConversion("14", typeof(TimeSpan)));
+		Assert.Equal(new TimeSpan(0, 1, 2, 3), converter.PerformConversion("1:2:3", typeof(TimeSpan)));
+		Assert.Equal(new TimeSpan(0, 0, 0, 0, 250), converter.PerformConversion("0:0:0.250", typeof(TimeSpan)));
+		Assert.Equal(new TimeSpan(10, 20, 30, 40, 500),
 			converter.PerformConversion("10.20:30:40.50", typeof(TimeSpan)));
 	}
 }

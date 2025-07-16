@@ -24,12 +24,9 @@ namespace Castle.Bugs
 
 	using Microsoft.CSharp;
 
-	using NUnit.Framework;
-
-	[TestFixture]
 	public class IoC_267
 	{
-		[Test]
+		[Fact]
 		public void When_attemting_to_register_component_descended_from_valuetype_should_not_compile()
 		{
 			var csharpCode =
@@ -53,7 +50,7 @@ namespace Castle.Bugs
 			var windsorAssembly = typeof(DefaultKernel).GetTypeInfo().Assembly.Location;
 			var results = compiler.CompileAssemblyFromSource(new CompilerParameters(new[] { coreAssembly, windsorAssembly }), csharpCode);
 			Assert.True(results.Errors.HasErrors);
-			Assert.AreEqual("CS0452", results.Errors[0].ErrorNumber, results.Errors[0].ToString());
+			Assert.Equal("CS0452", results.Errors[0].ErrorNumber, results.Errors[0].ToString());
 			// The type 'int' must be a reference type in order to use it as parameter 'S' in the generic type or method 'Castle.MicroKernel.Registration.Component.For<S>()'
 		}
 	}

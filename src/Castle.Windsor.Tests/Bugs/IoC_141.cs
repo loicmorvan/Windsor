@@ -18,9 +18,6 @@ using Castle.MicroKernel.Registration;
 
 using CastleTests;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class IoC_141 : AbstractContainerTestCase
 {
 	public interface IService
@@ -53,20 +50,20 @@ public class IoC_141 : AbstractContainerTestCase
 	{
 	}
 
-	[Test]
+	[Fact]
 	public void Can_resolve_open_generic_service_with_closed_generic_parameter()
 	{
 		Kernel.Register(Component.For(typeof(IProcessor<>)).ImplementedBy(typeof(DefaultProcessor<>)).Named("processor"));
 		Kernel.Register(Component.For(typeof(IAssembler<object>)).ImplementedBy(typeof(ObjectAssembler)).Named("assembler"));
-		Assert.IsInstanceOf(typeof(DefaultProcessor<object>), Kernel.Resolve<IProcessor<object>>());
+		Assert.IsType<DefaultProcessor<object>>(Kernel.Resolve<IProcessor<object>>());
 	}
 
-	[Test]
+	[Fact]
 	public void Can_resolve_service_with_open_generic_parameter_with_closed_generic_parameter()
 	{
 		Kernel.Register(Component.For(typeof(IService)).ImplementedBy(typeof(Service1)).Named("service1"));
 		Kernel.Register(Component.For(typeof(IProcessor<>)).ImplementedBy(typeof(DefaultProcessor<>)).Named("processor"));
 		Kernel.Register(Component.For(typeof(IAssembler<object>)).ImplementedBy(typeof(ObjectAssembler)).Named("assembler"));
-		Assert.IsInstanceOf(typeof(Service1), Kernel.Resolve<IService>());
+		Assert.IsType<Service1>(Kernel.Resolve<IService>());
 	}
 }

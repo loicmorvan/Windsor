@@ -22,12 +22,9 @@ using CastleTests;
 using CastleTests.Components;
 using CastleTests.Facilities.TypedFactory.Factories;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class TypedFactoryAndSubContainersTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Facility_When_added_to_a_child_container_wher_parent_has_facility_pulls_from_child()
 	{
 		var childContainer = new WindsorContainer();
@@ -45,12 +42,12 @@ public class TypedFactoryAndSubContainersTestCase : AbstractContainerTestCase
 		var fromFactory = childContainer.Resolve<IDummyComponentFactory>().CreateDummyComponent();
 		var fromChild = childContainer.Resolve<IDummyComponent>();
 
-		Assert.AreSame(fromFactory, fromChild);
-		Assert.AreNotSame(fromChild, fromParent);
-		Assert.AreNotSame(fromFactory, fromParent);
+		Assert.Same(fromFactory, fromChild);
+		Assert.NotSame(fromChild, fromParent);
+		Assert.NotSame(fromFactory, fromParent);
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-345")]
 	public void Resolve_SingletonAndDisposeChildContainer_ShouldNotDisposeSingleton()
 	{

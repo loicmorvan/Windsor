@@ -21,27 +21,22 @@ using Castle.MicroKernel.Registration;
 
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-using NUnit.Framework;
-
 using TestContext = Castle.Facilities.AspNetCore.Tests.Framework.TestContext;
 
-public abstract class WindsorRegistrationOptionsTagHelperTestCase
+public abstract class WindsorRegistrationOptionsTagHelperTestCase:IDisposable
 {
 	protected TestContext testContext;
 
-	[SetUp]
-	public abstract void SetUp();
-
-	[TearDown]
-	public void TearDown()
+	public void Dispose()
 	{
 		testContext.Dispose();
 	}
 
-	[TestCase(typeof(OverrideTagHelper))]
+	[Theory]
+	[InlineData(typeof(OverrideTagHelper))]
 	public void Should_resolve_overidden_TagHelpers_using_WindsorRegistrationOptions(Type optionsResolvableType)
 	{
-		Assert.DoesNotThrow(() => { testContext.WindsorContainer.Resolve(optionsResolvableType); });
+		testContext.WindsorContainer.Resolve(optionsResolvableType);
 	}
 
 	public class OverrideTagHelper : TagHelper
@@ -49,11 +44,9 @@ public abstract class WindsorRegistrationOptionsTagHelperTestCase
 	}
 }
 
-[TestFixture]
 public class WindsorRegistrationOptionsForAssembliesTagHelperTestCase : WindsorRegistrationOptionsTagHelperTestCase
 {
-	[SetUp]
-	public override void SetUp()
+	public WindsorRegistrationOptionsForAssembliesTagHelperTestCase()
 	{
 		testContext = TestContextFactory.Get(opts => opts
 			.UseEntryAssembly(typeof(Uri).Assembly)
@@ -61,11 +54,9 @@ public class WindsorRegistrationOptionsForAssembliesTagHelperTestCase : WindsorR
 	}
 }
 
-[TestFixture]
 public class WindsorRegistrationOptionsForComponentsTagHelperTestCase : WindsorRegistrationOptionsTagHelperTestCase
 {
-	[SetUp]
-	public override void SetUp()
+	public WindsorRegistrationOptionsForComponentsTagHelperTestCase()
 	{
 		testContext = TestContextFactory.Get(opts => opts
 			.UseEntryAssembly(typeof(Uri).Assembly)

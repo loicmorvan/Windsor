@@ -27,27 +27,22 @@ using log4net.Appender;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
 
-using NUnit.Framework;
-
 /// <summary>Summary description for Log4NetFacilityTests.</summary>
-[TestFixture]
-public class Log4NetFacilityTests : BaseTest
+public class Log4NetFacilityTests : BaseTest, IDisposable
 {
-	[SetUp]
-	public void Setup()
+	public Log4NetFacilityTests()
 	{
 		container = base.CreateConfiguredContainer<ExtendedLog4netFactory>();
 	}
 
-	[TearDown]
-	public void Teardown()
+	public void Dispose()
 	{
 		container.Dispose();
 	}
 
 	private IWindsorContainer container;
 
-	[Test]
+	[Fact]
 	public void SimpleTest()
 	{
 		container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
@@ -61,6 +56,6 @@ public class Log4NetFacilityTests : BaseTest
 		var patternLayout = new PatternLayout("[%-5level] [%logger] - %message%newline");
 		patternLayout.Format(actualLogOutput, memoryAppender.GetEvents()[0]);
 
-		Assert.AreEqual(expectedLogOutput, actualLogOutput.ToString());
+		Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
 	}
 }

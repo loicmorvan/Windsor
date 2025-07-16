@@ -23,12 +23,9 @@ using Castle.MicroKernel.Tests.ClassComponents;
 
 using CastleTests;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class UnsatisfiedDependenciesTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void OverrideIsForcedDependency()
 	{
 		var config = new MutableConfiguration("component");
@@ -43,15 +40,15 @@ public class UnsatisfiedDependenciesTestCase : AbstractContainerTestCase
 		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy(typeof(CommonImpl1)).Named("common1"));
 		Kernel.Register(Component.For(typeof(CommonServiceUser3)).Named("key"));
 		var exception =
-			Assert.Throws(typeof(HandlerException), () => Kernel.Resolve<CommonServiceUser3>("key"));
+			Assert.Throws<HandlerException>(() => Kernel.Resolve<CommonServiceUser3>("key"));
 		var expectedMessage =
 			string.Format(
 				"Can't create component 'key' as it has dependencies to be satisfied.{0}{0}'key' is waiting for the following dependencies:{0}- Component 'common2' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
 				Environment.NewLine);
-		Assert.AreEqual(expectedMessage, exception.Message);
+		Assert.Equal(expectedMessage, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void SatisfiedOverride()
 	{
 		var config = new MutableConfiguration("component");
@@ -68,12 +65,12 @@ public class UnsatisfiedDependenciesTestCase : AbstractContainerTestCase
 		Kernel.Register(Component.For(typeof(CommonServiceUser)).Named("key"));
 		var instance = Kernel.Resolve<CommonServiceUser>("key");
 
-		Assert.IsNotNull(instance);
-		Assert.IsNotNull(instance.CommonService);
-		Assert.AreEqual("CommonImpl2", instance.CommonService.GetType().Name);
+		Assert.NotNull(instance);
+		Assert.NotNull(instance.CommonService);
+		Assert.Equal("CommonImpl2", instance.CommonService.GetType().Name);
 	}
 
-	[Test]
+	[Fact]
 	public void SatisfiedOverrideRecursive()
 	{
 		var config1 = new MutableConfiguration("component");
@@ -102,16 +99,16 @@ public class UnsatisfiedDependenciesTestCase : AbstractContainerTestCase
 
 		var instance = Kernel.Resolve<IRepository>();
 
-		Assert.IsNotNull(instance);
-		Assert.IsInstanceOf<Repository1>(instance);
-		Assert.IsInstanceOf<Repository2>(((Repository1)instance).InnerRepository);
-		Assert.IsInstanceOf<Repository3>(
+		Assert.NotNull(instance);
+		Assert.IsType<Repository1>(instance);
+		Assert.IsType<Repository2>(((Repository1)instance).InnerRepository);
+		Assert.IsType<Repository3>(
 			((Repository2)((Repository1)instance).InnerRepository).InnerRepository);
-		Assert.IsInstanceOf<DecoratedRepository>(
+		Assert.IsType<DecoratedRepository>(
 			((Repository3)((Repository2)((Repository1)instance).InnerRepository).InnerRepository).InnerRepository);
 	}
 
-	[Test]
+	[Fact]
 	public void UnsatisfiedConfigValues()
 	{
 		var config = new MutableConfiguration("component");
@@ -132,10 +129,10 @@ public class UnsatisfiedDependenciesTestCase : AbstractContainerTestCase
 			string.Format(
 				"Can't create component 'key' as it has dependencies to be satisfied.{0}{0}'key' is waiting for the following dependencies:{0}- Parameter 'name' which was not provided. Did you forget to set the dependency?{0}- Parameter 'address' which was not provided. Did you forget to set the dependency?{0}- Parameter 'age' which was not provided. Did you forget to set the dependency?{0}",
 				Environment.NewLine);
-		Assert.AreEqual(expectedMessage, exception.Message);
+		Assert.Equal(expectedMessage, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void UnsatisfiedOverride()
 	{
 		var config = new MutableConfiguration("component");
@@ -150,19 +147,19 @@ public class UnsatisfiedDependenciesTestCase : AbstractContainerTestCase
 		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy(typeof(CommonImpl1)).Named("common1"));
 		Kernel.Register(Component.For(typeof(CommonServiceUser)).Named("key"));
 		var exception =
-			Assert.Throws(typeof(HandlerException), () => Kernel.Resolve<CommonServiceUser>("key"));
+			Assert.Throws<HandlerException>(() => Kernel.Resolve<CommonServiceUser>("key"));
 		var expectedMessage =
 			string.Format(
 				"Can't create component 'key' as it has dependencies to be satisfied.{0}{0}'key' is waiting for the following dependencies:{0}- Component 'common2' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
 				Environment.NewLine);
-		Assert.AreEqual(expectedMessage, exception.Message);
+		Assert.Equal(expectedMessage, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void UnsatisfiedService()
 	{
 		Kernel.Register(Component.For(typeof(CommonServiceUser)).Named("key"));
 
-		Assert.Throws(typeof(HandlerException), () => Kernel.Resolve<CommonServiceUser>("key"));
+		Assert.Throws<HandlerException>(() => Kernel.Resolve<CommonServiceUser>("key"));
 	}
 }

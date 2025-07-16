@@ -18,28 +18,24 @@ using Castle.MicroKernel.Registration;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class ReportedProblemTestCase
 {
-	[SetUp]
-	public void Init()
+	public ReportedProblemTestCase()
 	{
 		container = new WindsorContainer();
 	}
 
 	private IWindsorContainer container;
 
-	[Test]
+	[Fact]
 	public void StackOverflowProblem()
 	{
 		container.Register(Component.For<Employee>());
 		container.Register(Component.For<Reviewer>());
 		container.Register(Component.For<ReviewableEmployee>());
 
-		Assert.IsNotNull(container.Resolve<ReviewableEmployee>());
-		Assert.IsNotNull(container.Resolve<Reviewer>());
-		Assert.IsNotNull(container.Resolve<Employee>());
+		Assert.NotNull(container.Resolve<ReviewableEmployee>());
+		Assert.NotNull(container.Resolve<Reviewer>());
+		Assert.NotNull(container.Resolve<Employee>());
 	}
 }

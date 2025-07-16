@@ -17,12 +17,9 @@ namespace Castle.Windsor.Tests.Bugs;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class IoC_138
 {
-	[Test]
+	[Fact]
 	public void TestResolveSubComponentInConstructorWithParameters()
 	{
 		var container = new WindsorContainer();
@@ -33,7 +30,7 @@ public class IoC_138
 		var component = container.Resolve<UsesServiceLocator>(
 			new Arguments { { "test", "bla" } });
 
-		Assert.IsNotNull(component.Other);
+		Assert.NotNull(component.Other);
 	}
 
 	public class DependsOnStringTest2

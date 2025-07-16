@@ -20,8 +20,8 @@ using Castle.Facilities.TypedFactory;
 
 public class DisposableSelector : DefaultTypedFactoryComponentSelector, IDisposable
 {
-	public static int InstancesDisposed;
-	public static int InstancesCreated;
+	public int InstancesDisposed;
+	public int InstancesCreated;
 
 	public DisposableSelector()
 	{

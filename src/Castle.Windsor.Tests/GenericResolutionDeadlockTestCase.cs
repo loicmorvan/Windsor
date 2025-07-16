@@ -9,12 +9,9 @@ namespace CastleTests
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor;
 
-	using NUnit.Framework;
-
-	[TestFixture]
 	public class GenericResolutionDeadlockTestCase
 	{
-		[Test]
+		[Fact]
 		[Repeat(200)]
 		public void No_deadlock_upon_resolving_complex_generic_types_on_multiple_threads()
 		{
@@ -77,7 +74,7 @@ namespace CastleTests
 			// Cleanup for next iteration
 			container.Dispose();
 
-			Assert.IsNull(exceptionOnExecute, "Resolution on one of the threads failed");
+			Assert.Null(exceptionOnExecute, "Resolution on one of the threads failed");
 			Assert.False(deadlockFailed, "Deadlock occurred");
 		}
 

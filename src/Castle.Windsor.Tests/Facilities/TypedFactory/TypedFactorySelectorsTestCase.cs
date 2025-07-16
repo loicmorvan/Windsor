@@ -22,9 +22,6 @@ using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 using CastleTests.Components;
 using CastleTests.Facilities.TypedFactory.Selectors;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class TypedFactorySelectorsTestCase : AbstractContainerTestCase
 {
 	protected override void AfterContainerCreated()
@@ -32,7 +29,7 @@ public class TypedFactorySelectorsTestCase : AbstractContainerTestCase
 		Container.AddFacility<TypedFactoryFacility>();
 	}
 
-	[Test]
+	[Fact]
 	public void Explicitly_specified_name_fails_if_not_present()
 	{
 		Container.Register(Component.For<A>(),
@@ -44,7 +41,7 @@ public class TypedFactorySelectorsTestCase : AbstractContainerTestCase
 		Assert.Throws<ComponentNotFoundException>(() => factory.Create());
 	}
 
-	[Test]
+	[Fact]
 	public void Implicitly_specified_name_falls_back_if_not_present()
 	{
 		Container.Register(Component.For<A>(),

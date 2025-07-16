@@ -19,11 +19,9 @@ using Castle.Windsor.Tests.Interceptors;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
 public class InterceptorLifecycleTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Disposable_interceptor_gets_properly_released_when_the_component_gets_released()
 	{
 		DisposableInterceptor.InstancesCreated = 0;
@@ -33,10 +31,10 @@ public class InterceptorLifecycleTestCase : AbstractContainerTestCase
 
 		var a = Container.Resolve<A>();
 
-		Assert.AreEqual(1, DisposableInterceptor.InstancesCreated);
+		Assert.Equal(1, DisposableInterceptor.InstancesCreated);
 
 		Container.Release(a);
 
-		Assert.AreEqual(1, DisposableInterceptor.InstancesDisposed);
+		Assert.Equal(1, DisposableInterceptor.InstancesDisposed);
 	}
 }

@@ -24,38 +24,35 @@ using Castle.Windsor.Tests.ClassComponents;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class WithServiceTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void AllInterfaces_uses_all_implemented_interfaces()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(t => t == typeof(TwoInterfacesImpl)).WithService.AllInterfaces());
 		var services = Kernel.GetAssignableHandlers(typeof(object)).Single().ComponentModel.Services.ToArray();
-		Assert.AreEqual(2, services.Length);
-		Assert.True(services.Any(s => s == typeof(ICommon)));
-		Assert.True(services.Any(s => s == typeof(ICommon2)));
+		Assert.Equal(2, services.Length);
+		Assert.Contains(services, s => s == typeof(ICommon));
+		Assert.Contains(services, s => s == typeof(ICommon2));
 	}
 
-	[Test]
+	[Fact]
 	public void AllInterfaces_uses_single_interface()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(t => t == typeof(CommonImpl1)).WithService.AllInterfaces());
 		var handler = Kernel.GetAssignableHandlers(typeof(object)).Single();
-		Assert.AreEqual(typeof(ICommon), handler.ComponentModel.Services.Single());
+		Assert.Equal(typeof(ICommon), handler.ComponentModel.Services.Single());
 	}
 
-	[Test]
+	[Fact]
 	public void AllTypes_not_specified_uses_service_itself()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(t => t == typeof(CommonImpl1)));
 		var handler = Kernel.GetAssignableHandlers(typeof(object)).Single();
-		Assert.AreEqual(typeof(CommonImpl1), handler.ComponentModel.Services.Single());
+		Assert.Equal(typeof(CommonImpl1), handler.ComponentModel.Services.Single());
 	}
 
-	[Test]
+	[Fact]
 	public void Base_uses_both_types_from_BasedOn_if_implemented_generically_twice()
 	{
 		// NOTE: This scenario should be tested for not just Base, but also other methods as well?
@@ -65,67 +62,67 @@ public class WithServiceTestCase : AbstractContainerTestCase
 		var aHandlers = Kernel.GetAssignableHandlers(typeof(ISimpleGeneric<A>));
 		var bHandlers = Kernel.GetAssignableHandlers(typeof(ISimpleGeneric<B>));
 
-		Assert.IsNotEmpty(allHandlers);
+		Assert.NotEmpty(allHandlers);
 		Assert.True(allHandlers.All(h => h.ComponentModel.Implementation == typeof(ClosedSimpleGenericOverAAndB)));
-		Assert.IsNotEmpty(aHandlers);
-		Assert.IsNotEmpty(bHandlers);
+		Assert.NotEmpty(aHandlers);
+		Assert.NotEmpty(bHandlers);
 	}
 
-	[Test]
+	[Fact]
 	public void Base_uses_type_from_BasedOn()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<ICommon>().WithService.Base());
 
 		var handlers = Kernel.GetAssignableHandlers(typeof(object));
 
-		Assert.IsNotEmpty(handlers);
+		Assert.NotEmpty(handlers);
 		Assert.True(handlers.All(h => h.ComponentModel.Services.Any(s => s == typeof(ICommon))));
 	}
 
-	[Test]
+	[Fact]
 	public void Can_cumulate_services()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(t => t == typeof(TwoInterfacesImpl))
 			.WithService.AllInterfaces()
 			.WithService.Self());
 		var services = Kernel.GetAssignableHandlers(typeof(object)).Single().ComponentModel.Services.ToArray();
-		Assert.AreEqual(3, services.Length);
-		Assert.True(services.Any(s => s == typeof(ICommon)));
-		Assert.True(services.Any(s => s == typeof(ICommon2)));
-		Assert.True(services.Any(s => s == typeof(TwoInterfacesImpl)));
+		Assert.Equal(3, services.Length);
+		Assert.Contains(services, s => s == typeof(ICommon));
+		Assert.Contains(services, s => s == typeof(ICommon2));
+		Assert.Contains(services, s => s == typeof(TwoInterfacesImpl));
 	}
 
-	[Test]
+	[Fact]
 	public void Can_cumulate_services_without_duplication()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(t => t == typeof(TwoInterfacesImpl))
 			.WithService.AllInterfaces()
 			.WithService.FirstInterface());
 		var handlers = Kernel.GetAssignableHandlers(typeof(object));
-		Assert.AreEqual(1, handlers.Length);
+		Assert.Single(handlers);
 		var handler = handlers.Single();
-		Assert.True(handler.ComponentModel.Services.Any(s => s == typeof(ICommon)));
-		Assert.True(handler.ComponentModel.Services.Any(s => s == typeof(ICommon2)));
+		Assert.Contains(handler.ComponentModel.Services, s => s == typeof(ICommon));
+		Assert.Contains(handler.ComponentModel.Services, s => s == typeof(ICommon2));
 	}
 
-	[Test]
+	[Fact]
 	public void Component_not_specified_uses_service_itself()
 	{
 		Kernel.Register(Component.For<CommonImpl1>());
 		var handler = Kernel.GetAssignableHandlers(typeof(object)).Single();
-		Assert.AreEqual(typeof(CommonImpl1), handler.ComponentModel.Services.Single());
+		Assert.Equal(typeof(CommonImpl1), handler.ComponentModel.Services.Single());
 	}
 
-	[Test]
+	[Fact]
 	public void DefaultInterface_can_match_multiple_types()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(t => t == typeof(CommonSub1Impl)).WithService.DefaultInterfaces());
 		var one = Kernel.Resolve<ICommon>();
 		var two = Kernel.Resolve<ICommonSub1>();
-		Assert.AreSame(one, two);
+		Assert.Same(one, two);
 	}
 
-	[Test]
+	[Fact]
 	public void DefaultInterface_ignores_not_matched_interfaces()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(t => t == typeof(CommonSub2Impl)).WithService.DefaultInterfaces());
@@ -133,51 +130,51 @@ public class WithServiceTestCase : AbstractContainerTestCase
 		var one = Kernel.Resolve<ICommon>();
 		var two = Kernel.Resolve<ICommonSub2>();
 
-		Assert.AreSame(one, two);
+		Assert.Same(one, two);
 		Assert.Throws<ComponentNotFoundException>(() => Kernel.Resolve<ICommonSub1>());
 	}
 
-	[Test]
+	[Fact]
 	public void DefaultInterface_ignores_on_no_interface_matched()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(t => t == typeof(TwoInterfacesImpl)).WithService.DefaultInterfaces());
 		var handler = Kernel.GetAssignableHandlers(typeof(object)).Single();
-		Assert.AreEqual(typeof(TwoInterfacesImpl), handler.ComponentModel.Services.Single());
+		Assert.Equal(typeof(TwoInterfacesImpl), handler.ComponentModel.Services.Single());
 	}
 
-	[Test]
+	[Fact]
 	public void DefaultInterface_matches_by_type_name()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(t => t == typeof(CommonImpl1)).WithService.DefaultInterfaces());
 		var handler = Kernel.GetAssignableHandlers(typeof(object)).Single();
-		Assert.AreEqual(typeof(ICommon), handler.ComponentModel.Services.Single());
+		Assert.Equal(typeof(ICommon), handler.ComponentModel.Services.Single());
 	}
 
-	[Test]
+	[Fact]
 	public void FirstInterface_uses_single_interface()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(t => t == typeof(CommonImpl1)).WithService.FirstInterface());
 		var handler = Kernel.GetAssignableHandlers(typeof(object)).Single();
-		Assert.AreEqual(typeof(ICommon), handler.ComponentModel.Services.Single());
+		Assert.Equal(typeof(ICommon), handler.ComponentModel.Services.Single());
 	}
 
-	[Test]
+	[Fact]
 	public void FromInterface_uses_subtypes_of_type_from_BasedOn_but_not_the_type_itself()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<ICommon>().WithService.FromInterface());
 
 		var handlers = Kernel.GetAssignableHandlers(typeof(object));
 
-		Assert.IsNotEmpty(handlers);
+		Assert.NotEmpty(handlers);
 		Assert.True(handlers.All(h => typeof(ICommon).GetTypeInfo().IsAssignableFrom(h.ComponentModel.Services.Single())));
-		Assert.True(handlers.Any(h => typeof(ICommon) != h.ComponentModel.Services.Single()));
+		Assert.Contains(handlers, h => typeof(ICommon) != h.ComponentModel.Services.Single());
 	}
 
-	[Test]
+	[Fact]
 	public void Self_uses_service_itself()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).Where(t => t == typeof(CommonImpl1)).WithService.Self());
 		var handler = Kernel.GetAssignableHandlers(typeof(object)).Single();
-		Assert.AreEqual(typeof(CommonImpl1), handler.ComponentModel.Services.Single());
+		Assert.Equal(typeof(CommonImpl1), handler.ComponentModel.Services.Single());
 	}
 }

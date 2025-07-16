@@ -25,12 +25,9 @@ using Castle.MicroKernel.Tests.ClassComponents;
 
 using CastleTests.ClassComponents;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class AllTypesTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_BasedOn_RegisteredInContainer1()
 	{
 		Kernel.Register(Classes
@@ -39,13 +36,13 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(ICommon));
-		Assert.AreEqual(0, handlers.Length);
+		Assert.Empty(handlers);
 
 		handlers = Kernel.GetAssignableHandlers(typeof(ICommon));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_BasedOn_RegisteredInContainer2()
 	{
 		Kernel.Register(Classes
@@ -54,25 +51,25 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(ICommon));
-		Assert.AreEqual(0, handlers.Length);
+		Assert.Empty(handlers);
 
 		handlers = Kernel.GetAssignableHandlers(typeof(ICommon));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypesFromThisAssembly_BasedOn_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn(typeof(ICommon)));
 
 		var handlers = Kernel.GetHandlers(typeof(ICommon));
-		Assert.AreEqual(0, handlers.Length);
+		Assert.Empty(handlers);
 
 		handlers = Kernel.GetAssignableHandlers(typeof(ICommon));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterDirectoryAssemblyTypes_BasedOn_RegisteredInContainer()
 	{
 		var directory = AppContext.BaseDirectory;
@@ -80,26 +77,26 @@ public class AllTypesTestCase : AbstractContainerTestCase
 			.BasedOn<ICommon>());
 
 		var handlers = Kernel.GetHandlers(typeof(ICommon));
-		Assert.AreEqual(0, handlers.Length);
+		Assert.Empty(handlers);
 
 		handlers = Kernel.GetAssignableHandlers(typeof(ICommon));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_NoService_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
 			.BasedOn<ICommon>());
 
 		var handlers = Kernel.GetHandlers(typeof(ICommon));
-		Assert.AreEqual(0, handlers.Length);
+		Assert.Empty(handlers);
 
 		handlers = Kernel.GetAssignableHandlers(typeof(ICommon));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_FirstInterfaceService_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -108,13 +105,13 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(ICommon));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 
 		handlers = Kernel.GetAssignableHandlers(typeof(ICommon));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_LookupInterfaceService_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -123,22 +120,22 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(ICommon));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 
 		handlers = Kernel.GetHandlers(typeof(ICommonSub1));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 
 		handlers = Kernel.GetAssignableHandlers(typeof(ICommonSub1));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 
 		handlers = Kernel.GetHandlers(typeof(ICommonSub2));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 
 		handlers = Kernel.GetAssignableHandlers(typeof(ICommonSub2));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_DefaultService_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -147,13 +144,13 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(ICommon));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 
 		handlers = Kernel.GetAssignableHandlers(typeof(ICommon));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_WithConfiguration_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -167,12 +164,12 @@ public class AllTypesTestCase : AbstractContainerTestCase
 
 		foreach (var handler in Kernel.GetAssignableHandlers(typeof(ICommon)))
 		{
-			Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
-			Assert.AreEqual(handler.ComponentModel.Implementation.FullName + "XYZ", handler.ComponentModel.Name);
+			Assert.Equal(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
+			Assert.Equal(handler.ComponentModel.Implementation.FullName + "XYZ", handler.ComponentModel.Name);
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_WithConfigurationBasedOnImplementation_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -188,23 +185,23 @@ public class AllTypesTestCase : AbstractContainerTestCase
 
 		foreach (var handler in Kernel.GetAssignableHandlers(typeof(ICommon)))
 		{
-			Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
-			Assert.AreEqual(handler.ComponentModel.Implementation.FullName + "XYZ", handler.ComponentModel.Name);
+			Assert.Equal(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
+			Assert.Equal(handler.ComponentModel.Implementation.FullName + "XYZ", handler.ComponentModel.Name);
 
 			if (handler.ComponentModel.Implementation == typeof(CommonImpl1))
 			{
-				Assert.AreEqual(1, handler.ComponentModel.CustomDependencies.Count);
-				Assert.IsTrue(handler.ComponentModel.CustomDependencies.Contains("key1"));
+				Assert.Equal(1, handler.ComponentModel.CustomDependencies.Count);
+				Assert.True(handler.ComponentModel.CustomDependencies.Contains("key1"));
 			}
 			else if (handler.ComponentModel.Implementation == typeof(CommonImpl2))
 			{
-				Assert.AreEqual(1, handler.ComponentModel.CustomDependencies.Count);
-				Assert.IsTrue(handler.ComponentModel.CustomDependencies.Contains("key2"));
+				Assert.Equal(1, handler.ComponentModel.CustomDependencies.Count);
+				Assert.True(handler.ComponentModel.CustomDependencies.Contains("key2"));
 			}
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterGenericTypes_BasedOnGenericDefinition_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.From(typeof(DefaultRepository<>))
@@ -213,10 +210,10 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var repository = Kernel.Resolve<IRepository<CustomerImpl>>();
-		Assert.IsNotNull(repository);
+		Assert.NotNull(repository);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterGenericTypes_WithGenericDefinition_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -225,17 +222,17 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(IValidator<ICustomer>));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 		var validator = Kernel.Resolve<IValidator<ICustomer>>();
-		Assert.IsNotNull(validator);
+		Assert.NotNull(validator);
 
 		handlers = Kernel.GetHandlers(typeof(IValidator<CustomerChain1>));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 		var validator2 = Kernel.Resolve<IValidator<CustomerChain1>>();
-		Assert.IsNotNull(validator2);
+		Assert.NotNull(validator2);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_ClosedGenericTypes_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -244,13 +241,13 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(IMapper<CommonImpl1>));
-		Assert.AreEqual(1, handlers.Length);
+		Assert.Single(handlers);
 
 		handlers = Kernel.GetAssignableHandlers(typeof(IMapper<CommonImpl2>));
-		Assert.AreEqual(1, handlers.Length);
+		Assert.Single(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_IfCondition_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -259,12 +256,12 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetAssignableHandlers(typeof(ICustomer));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 
-		foreach (var handler in handlers) Assert.IsTrue(handler.ComponentModel.Implementation.FullName.Contains("Chain"));
+		foreach (var handler in handlers) Assert.Contains("Chain", handler.ComponentModel.Implementation.FullName);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_MultipleIfCondition_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -274,11 +271,11 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetAssignableHandlers(typeof(ICustomer));
-		Assert.AreEqual(1, handlers.Length);
-		Assert.AreEqual(typeof(CustomerChain2), handlers.Single().ComponentModel.Implementation);
+		Assert.Single(handlers);
+		Assert.Equal(typeof(CustomerChain2), handlers.Single().ComponentModel.Implementation);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_UnlessCondition_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -286,10 +283,10 @@ public class AllTypesTestCase : AbstractContainerTestCase
 			.Unless(t => typeof(CustomerChain1).IsAssignableFrom(t))
 		);
 
-		foreach (var handler in Kernel.GetAssignableHandlers(typeof(ICustomer))) Assert.IsFalse(typeof(CustomerChain1).IsAssignableFrom(handler.ComponentModel.Implementation));
+		foreach (var handler in Kernel.GetAssignableHandlers(typeof(ICustomer))) Assert.False(typeof(CustomerChain1).IsAssignableFrom(handler.ComponentModel.Implementation));
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_MultipleUnlessCondition_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -299,16 +296,16 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetAssignableHandlers(typeof(ICustomer));
-		Assert.IsNotEmpty(handlers);
+		Assert.NotEmpty(handlers);
 		foreach (var handler in handlers)
 		{
 			var name = handler.ComponentModel.Implementation.Name;
-			Assert.IsFalse(name.EndsWith("2"));
-			Assert.IsFalse(name.EndsWith("3"));
+			Assert.False(name.EndsWith("2"));
+			Assert.False(name.EndsWith("3"));
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterTypes_WithLinq_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.From(from type in GetCurrentAssembly().GetExportedTypes()
@@ -317,10 +314,10 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		).BasedOn<CustomerChain1>());
 
 		var handlers = Kernel.GetAssignableHandlers(typeof(CustomerChain1));
-		Assert.AreEqual(2, handlers.Length);
+		Assert.Equal(2, handlers.Length);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_WithLinqConfiguration_RegisteredInContainer()
 	{
 		Kernel.Register(Classes
@@ -333,12 +330,12 @@ public class AllTypesTestCase : AbstractContainerTestCase
 
 		foreach (var handler in Kernel.GetAssignableHandlers(typeof(ICommon)))
 		{
-			Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
-			Assert.AreEqual(handler.ComponentModel.Implementation.FullName + "XYZ", handler.ComponentModel.Name);
+			Assert.Equal(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
+			Assert.Equal(handler.ComponentModel.Implementation.FullName + "XYZ", handler.ComponentModel.Name);
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_WithLinqConfigurationReturningValue_RegisteredInContainer()
 	{
 		Kernel.Register(Classes
@@ -347,10 +344,10 @@ public class AllTypesTestCase : AbstractContainerTestCase
 			.Configure(component => component.LifestyleTransient())
 		);
 
-		foreach (var handler in Kernel.GetAssignableHandlers(typeof(ICommon))) Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
+		foreach (var handler in Kernel.GetAssignableHandlers(typeof(ICommon))) Assert.Equal(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterMultipleAssemblyTypes_BasedOn_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<ICommon>());
@@ -360,21 +357,21 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<DefaultSpamServiceWithConstructor>());
 
 		var handlers = Kernel.GetHandlers(typeof(ICommon));
-		Assert.AreEqual(0, handlers.Length);
+		Assert.Empty(handlers);
 
 		handlers = Kernel.GetAssignableHandlers(typeof(ICommon));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 
 		handlers = Kernel.GetAssignableHandlers(typeof(ICustomer));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 
-		foreach (var handler in handlers) Assert.IsTrue(handler.ComponentModel.Implementation.FullName.Contains("Chain"));
+		foreach (var handler in handlers) Assert.Contains("Chain", handler.ComponentModel.Implementation.FullName);
 
 		handlers = Kernel.GetAssignableHandlers(typeof(DefaultSpamServiceWithConstructor));
-		Assert.AreEqual(1, handlers.Length);
+		Assert.Single(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_WhereConditionSatisifed_RegisteredInContainer()
 	{
 		Kernel.Register(
@@ -384,10 +381,10 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(ICustomer));
-		Assert.AreEqual(1, handlers.Length);
+		Assert.Single(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_OnlyPublicTypes_WillNotRegisterNonPublicTypes()
 	{
 		Kernel.Register(
@@ -396,10 +393,10 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(NonPublicComponent));
-		Assert.AreEqual(0, handlers.Length);
+		Assert.Empty(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_IncludeNonPublicTypes_WillNRegisterNonPublicTypes()
 	{
 		Kernel.Register(
@@ -409,10 +406,10 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(NonPublicComponent));
-		Assert.AreEqual(1, handlers.Length);
+		Assert.Single(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_WhenTypeInNamespace_RegisteredInContainer()
 	{
 		Kernel.Register(
@@ -422,10 +419,10 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(ICustomer));
-		Assert.IsTrue(handlers.Length > 0);
+		Assert.True(handlers.Length > 0);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_WhenTypeInMissingNamespace_NotRegisteredInContainer()
 	{
 		Kernel.Register(
@@ -434,10 +431,10 @@ public class AllTypesTestCase : AbstractContainerTestCase
 				.WithService.FirstInterface()
 		);
 
-		Assert.AreEqual(0, Kernel.GetAssignableHandlers(typeof(object)).Length);
+		Assert.Empty(Kernel.GetAssignableHandlers(typeof(object)));
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_WhenTypeInSameNamespaceAsComponent_RegisteredInContainer()
 	{
 		Kernel.Register(
@@ -447,10 +444,10 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(ICustomer));
-		Assert.IsTrue(handlers.Length > 0);
+		Assert.True(handlers.Length > 0);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterSpecificTypes_WithGenericDefinition_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.From(typeof(CustomerRepository))
@@ -459,10 +456,10 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var repository = Kernel.Resolve<IRepository<ICustomer>>();
-		Assert.IsNotNull(repository);
+		Assert.NotNull(repository);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterGenericTypes_BasedOnGenericDefinitionUsingSelect_RegisteredInContainer()
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -471,10 +468,10 @@ public class AllTypesTestCase : AbstractContainerTestCase
 				from type in t.GetInterfaces()
 				where !type.Equals(typeof(ITask))
 				select type));
-		Assert.IsNotNull(Kernel.Resolve<ITask<object>>());
+		Assert.NotNull(Kernel.Resolve<ITask<object>>());
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_MultipleBasedOn_RegisteredInContainer()
 	{
 		Kernel.Register(Classes
@@ -484,16 +481,16 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(CommonImpl1));
-		Assert.AreEqual(1, handlers.Length);
+		Assert.Single(handlers);
 
 		handlers = Kernel.GetHandlers(typeof(Common2Impl));
-		Assert.AreEqual(1, handlers.Length);
+		Assert.Single(handlers);
 
 		handlers = Kernel.GetHandlers(typeof(TwoInterfacesImpl));
-		Assert.AreEqual(1, handlers.Length);
+		Assert.Single(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_MultipleBasedOnWithServiceBase_RegisteredInContainer()
 	{
 		Kernel.Register(Classes
@@ -504,13 +501,13 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(ICommon));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 
 		handlers = Kernel.GetHandlers(typeof(ICommon2));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterAssemblyTypes_MultipleBasedOnWithThreeBases_RegisteredInContainer()
 	{
 		Kernel.Register(Classes
@@ -522,16 +519,16 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(ICommon));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 
 		handlers = Kernel.GetHandlers(typeof(ICommon2));
-		Assert.AreNotEqual(0, handlers.Length);
+		Assert.NotEmpty(handlers);
 
 		var validatorHandlers = Kernel.GetHandlers(typeof(IValidator<ICustomer>));
-		Assert.AreNotEqual(0, validatorHandlers.Length);
+		Assert.NotEmpty(validatorHandlers);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterGenericTypes_MultipleBasedOnWithGenericDefinition_RegisteredInContainer()
 	{
 		Kernel.Register(Classes
@@ -542,13 +539,13 @@ public class AllTypesTestCase : AbstractContainerTestCase
 		);
 
 		var validatorHandlers = Kernel.GetHandlers(typeof(IValidator<ICustomer>));
-		Assert.AreNotEqual(0, validatorHandlers.Length);
+		Assert.NotEmpty(validatorHandlers);
 
 		var repositoryHandlers = Kernel.GetHandlers(typeof(IRepository<ICustomer>));
-		Assert.AreNotEqual(0, repositoryHandlers.Length);
+		Assert.NotEmpty(repositoryHandlers);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterGenericTypes_MultipleBasedOnImplementingBothInterfaces_RegisteredWithBothAsServices()
 	{
 		Kernel.Register(Classes
@@ -563,10 +560,10 @@ public class AllTypesTestCase : AbstractContainerTestCase
 			.Single(x => x.ComponentModel.Implementation == typeof(CustomerValidatorAndRepository));
 
 		var services = handler.ComponentModel.Services.ToList();
-		Assert.Contains(typeof(IRepository<ICustomer>), services);
+		Assert.Contains(typeof(IRepository<ICustomer>),services);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterGenericTypes_MultipleBasedOnImplementingOneInterface_RegisteredWithOneService()
 	{
 		Kernel.Register(Classes
@@ -581,10 +578,10 @@ public class AllTypesTestCase : AbstractContainerTestCase
 			.Single(x => x.ComponentModel.Implementation == typeof(CustomerValidator));
 
 		var services = handler.ComponentModel.Services.ToArray();
-		Assert.AreEqual(1, services.Length);
+		Assert.Single(services);
 	}
 
-	[Test]
+	[Fact]
 	public void RegisterGenericTypes_MultipleBasedOnWithTheSameTypesTwice_SelectedAsOneBase()
 	{
 		Type[] services = null;
@@ -599,6 +596,6 @@ public class AllTypesTestCase : AbstractContainerTestCase
 			})
 		);
 
-		Assert.AreEqual(1, services.Length);
+		Assert.Single(services);
 	}
 }

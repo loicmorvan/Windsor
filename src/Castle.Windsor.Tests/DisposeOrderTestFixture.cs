@@ -20,12 +20,9 @@ using System.Collections.Generic;
 using Castle.Core;
 using Castle.MicroKernel.Registration;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class DisposeOrderTestFixture
 {
-	[Test]
+	[Fact]
 	public void Dictionary_enumerates_from_oldest_to_latest()
 	{
 		var expected1 = new[] { 1, 2, 4, 3 };
@@ -35,7 +32,7 @@ public class DisposeOrderTestFixture
 		var index = 0;
 		foreach (var keyValuePair in dictionary1)
 		{
-			Assert.AreEqual(expected1[index], keyValuePair.Key);
+			Assert.Equal(expected1[index], keyValuePair.Key);
 			index++;
 		}
 
@@ -47,27 +44,9 @@ public class DisposeOrderTestFixture
 		index = 0;
 		foreach (var keyValuePair in dictionary2)
 		{
-			Assert.AreEqual(expected2[index], keyValuePair.Key);
+			Assert.Equal(expected2[index], keyValuePair.Key);
 			index++;
 		}
-	}
-
-	[Test]
-	[Ignore(
-		"This is not possible to implement w/o serious changes, and the scenario is quite uncommon/bad practice anyway")]
-	public void ShouldDisposeComponentsInProperOrder()
-	{
-		var container = new WindsorContainer();
-
-		container.Install(
-			new ActionBasedInstaller(c => c.Register(Component.For<IMyService>().ImplementedBy<MyService>().LifeStyle.Transient,
-				Component.For<IMyComponent>().ImplementedBy<MyComponent>()))
-		);
-
-		var component = container.Resolve<IMyComponent>();
-		container.Release(component);
-
-		container.Dispose();
 	}
 
 	private interface IMyComponent : IInitializable, IDisposable

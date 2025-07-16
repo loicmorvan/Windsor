@@ -21,11 +21,9 @@ using Castle.MicroKernel.Tests.ClassComponents;
 using Castle.Windsor.Tests;
 using Castle.Windsor.Tests.Facilities.Startable.Components;
 
-using NUnit.Framework;
-
 public class ManuallyTriggeredStartTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Can_manually_trigger_start()
 	{
 		var flag = new StartFlag();
@@ -34,14 +32,14 @@ public class ManuallyTriggeredStartTestCase : AbstractContainerTestCase
 		Container.Register(Component.For<Startable>(),
 			Component.For<ICustomer>().ImplementedBy<CustomerImpl>());
 
-		Assert.IsFalse(Startable.Started);
+		Assert.False(Startable.Started);
 
 		flag.Signal();
 
-		Assert.IsTrue(Startable.Started);
+		Assert.True(Startable.Started);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_manually_trigger_start_only_once()
 	{
 		var flag = new StartFlag();
@@ -53,10 +51,10 @@ public class ManuallyTriggeredStartTestCase : AbstractContainerTestCase
 		flag.Signal();
 		Startable.Started = false;
 		flag.Signal();
-		Assert.IsFalse(Startable.Started);
+		Assert.False(Startable.Started);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_manually_trigger_start_when_using_Install()
 	{
 		var flag = new StartFlag();
@@ -67,14 +65,14 @@ public class ManuallyTriggeredStartTestCase : AbstractContainerTestCase
 				Component.For<ICustomer>().ImplementedBy<CustomerImpl>()))
 		);
 
-		Assert.IsFalse(Startable.Started);
+		Assert.False(Startable.Started);
 
 		flag.Signal();
 
-		Assert.IsTrue(Startable.Started);
+		Assert.True(Startable.Started);
 	}
 
-	[Test]
+	[Fact]
 	public void Manually_triggered_start_throws_on_missing_dependencies()
 	{
 		var flag = new StartFlag();

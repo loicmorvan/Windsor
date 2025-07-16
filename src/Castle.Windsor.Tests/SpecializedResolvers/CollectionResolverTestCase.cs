@@ -26,9 +26,6 @@ using CastleTests;
 using CastleTests.Components;
 using CastleTests.SpecializedResolvers;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class CollectionResolverTestCase : AbstractContainerTestCase
 {
 	protected override void AfterContainerCreated()
@@ -36,7 +33,7 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel));
 	}
 
-	[Test]
+	[Fact]
 	public void Composite_service_can_be_resolved_without_triggering_circular_dependency_detection_fuse()
 	{
 		Container.Register(Classes.FromAssembly(GetCurrentAssembly())
@@ -45,10 +42,10 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 			.ConfigureFor<EmptyServiceComposite>(r => r.Forward<EmptyServiceComposite>()));
 
 		var composite = Container.Resolve<EmptyServiceComposite>();
-		Assert.AreEqual(5, composite.Inner.Length);
+		Assert.Equal(5, composite.Inner.Length);
 	}
 
-	[Test(Description = "IOC-238")]
+	[Fact]
 	public void Composite_service_can_be_resolved_without_triggering_circular_dependency_detection_fuse_composite_registered_first()
 	{
 		Container.Register(
@@ -60,10 +57,10 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 		);
 
 		var composite = Container.Resolve<EmptyServiceComposite>();
-		Assert.AreEqual(4, composite.Inner.Length);
+		Assert.Equal(4, composite.Inner.Length);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnArrayOfServices_OnConstructor()
 	{
 		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
@@ -72,12 +69,12 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<ArrayDepAsConstructor>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.AreEqual(2, component.Services.Length);
-		foreach (var service in component.Services) Assert.IsNotNull(service);
+		Assert.NotNull(component.Services);
+		Assert.Equal(2, component.Services.Length);
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOn_Readonly_collection_OfServices_OnConstructor()
 	{
 		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
@@ -86,13 +83,13 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<ReadOnlyCollectionDepAsConstructor>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.AreEqual(2, component.Services.Count);
-		foreach (var service in component.Services) Assert.IsNotNull(service);
+		Assert.NotNull(component.Services);
+		Assert.Equal(2, component.Services.Count);
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
 
-	[Test]
+	[Fact]
 	public void DependencyOn_Readonly_list_OfServices_OnConstructor()
 	{
 		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
@@ -101,12 +98,12 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<ReadOnlyListDepAsConstructor>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.AreEqual(2, component.Services.Count);
-		foreach (var service in component.Services) Assert.IsNotNull(service);
+		Assert.NotNull(component.Services);
+		Assert.Equal(2, component.Services.Count);
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnArrayOfServices_OnConstructor_empty_allowed_empty_provided()
 	{
 		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, true));
@@ -114,11 +111,11 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<ArrayDepAsConstructor>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.IsEmpty(component.Services);
+		Assert.NotNull(component.Services);
+		Assert.Empty(component.Services);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnArrayOfServices_OnConstructor_empty_not_allowed_throws()
 	{
 		Container.Register(Component.For<ArrayDepAsConstructor>());
@@ -126,7 +123,7 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 		Assert.Throws<HandlerException>(() => Container.Resolve<ArrayDepAsConstructor>());
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnArrayOfServices_OnProperty()
 	{
 		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
@@ -135,12 +132,12 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<ArrayDepAsProperty>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.AreEqual(2, component.Services.Length);
-		foreach (var service in component.Services) Assert.IsNotNull(service);
+		Assert.NotNull(component.Services);
+		Assert.Equal(2, component.Services.Length);
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnArrayOfServices_OnProperty_empty()
 	{
 		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, true));
@@ -148,20 +145,20 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<ArrayDepAsProperty>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.IsEmpty(component.Services);
+		Assert.NotNull(component.Services);
+		Assert.Empty(component.Services);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnArrayOfServices_OnProperty_empty_not_allowed_null()
 	{
 		Container.Register(Component.For<ArrayDepAsProperty>());
 
 		var component = Container.Resolve<ArrayDepAsProperty>();
-		Assert.IsNull(component.Services);
+		Assert.Null(component.Services);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnCollectionOfServices_OnConstructor()
 	{
 		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
@@ -170,12 +167,12 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<CollectionDepAsConstructor>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.AreEqual(2, component.Services.Count);
-		foreach (var service in component.Services) Assert.IsNotNull(service);
+		Assert.NotNull(component.Services);
+		Assert.Equal(2, component.Services.Count);
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnCollectionOfServices_OnConstructor_empty()
 	{
 		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, true));
@@ -183,11 +180,11 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<CollectionDepAsConstructor>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.AreEqual(0, component.Services.Count);
+		Assert.NotNull(component.Services);
+		Assert.Empty(component.Services);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnCollectionOfServices_OnConstructor_empty_not_allowed_throws()
 	{
 		Container.Register(Component.For<CollectionDepAsConstructor>());
@@ -195,7 +192,7 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 		Assert.Throws<HandlerException>(() => Container.Resolve<CollectionDepAsConstructor>());
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnCollectionOfServices_OnProperty()
 	{
 		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
@@ -204,12 +201,12 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<CollectionDepAsProperty>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.AreEqual(2, component.Services.Count);
-		foreach (var service in component.Services) Assert.IsNotNull(service);
+		Assert.NotNull(component.Services);
+		Assert.Equal(2, component.Services.Count);
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnCollectionOfServices_OnProperty_empty()
 	{
 		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, true));
@@ -217,11 +214,11 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<CollectionDepAsProperty>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.AreEqual(0, component.Services.Count);
+		Assert.NotNull(component.Services);
+		Assert.Empty(component.Services);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnCollectionOfServices_OnProperty_empty_not_allowed_throws()
 	{
 		Container.Register(Component.For<CollectionDepAsConstructor>());
@@ -229,7 +226,7 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 		Assert.Throws<HandlerException>(() => Container.Resolve<CollectionDepAsConstructor>());
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnEnumerableOfServices_OnConstructor()
 	{
 		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
@@ -238,12 +235,12 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<EnumerableDepAsProperty>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.AreEqual(2, component.Services.Count());
-		foreach (var service in component.Services) Assert.IsNotNull(service);
+		Assert.NotNull(component.Services);
+		Assert.Equal(2, component.Services.Count());
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnEnumerableOfServices_OnConstructor_empty()
 	{
 		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, true));
@@ -251,11 +248,11 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<EnumerableDepAsProperty>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.IsFalse(component.Services.Any());
+		Assert.NotNull(component.Services);
+		Assert.False(component.Services.Any());
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnEnumerableOfServices_OnConstructor_empty_not_allowed_throws()
 	{
 		Container.Register(Component.For<EnumerableDepAsConstructor>());
@@ -263,7 +260,7 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 		Assert.Throws<HandlerException>(() => Container.Resolve<EnumerableDepAsConstructor>());
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnEnumerableOfServices_OnProperty()
 	{
 		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
@@ -272,12 +269,12 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<EnumerableDepAsProperty>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.AreEqual(2, component.Services.Count());
-		foreach (var service in component.Services) Assert.IsNotNull(service);
+		Assert.NotNull(component.Services);
+		Assert.Equal(2, component.Services.Count());
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnEnumerableOfServices_OnProperty_empty()
 	{
 		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, true));
@@ -285,20 +282,20 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<EnumerableDepAsProperty>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.IsFalse(component.Services.Any());
+		Assert.NotNull(component.Services);
+		Assert.False(component.Services.Any());
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnEnumerableOfServices_OnProperty_empty_not_allowed_null()
 	{
 		Container.Register(Component.For<EnumerableDepAsProperty>());
 
 		var component = Container.Resolve<EnumerableDepAsProperty>();
-		Assert.IsNull(component.Services);
+		Assert.Null(component.Services);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnListOfServices_OnConstructor()
 	{
 		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
@@ -307,12 +304,12 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<ListDepAsConstructor>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.AreEqual(2, component.Services.Count);
-		foreach (var service in component.Services) Assert.IsNotNull(service);
+		Assert.NotNull(component.Services);
+		Assert.Equal(2, component.Services.Count);
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnListOfServices_OnConstructor_empty()
 	{
 		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, true));
@@ -320,11 +317,11 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<ListDepAsConstructor>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.AreEqual(0, component.Services.Count);
+		Assert.NotNull(component.Services);
+		Assert.Empty(component.Services);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnListOfServices_OnConstructor_empty_not_allowed_throws()
 	{
 		Container.Register(Component.For<ListDepAsConstructor>());
@@ -332,7 +329,7 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 		Assert.Throws<HandlerException>(() => Container.Resolve<ListDepAsConstructor>());
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnListOfServices_OnProperty()
 	{
 		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
@@ -341,12 +338,12 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<ListDepAsProperty>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.AreEqual(2, component.Services.Count);
-		foreach (var service in component.Services) Assert.IsNotNull(service);
+		Assert.NotNull(component.Services);
+		Assert.Equal(2, component.Services.Count);
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnListOfServices_OnProperty_empty()
 	{
 		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, true));
@@ -354,20 +351,20 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<ListDepAsProperty>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.AreEqual(0, component.Services.Count);
+		Assert.NotNull(component.Services);
+		Assert.Empty(component.Services);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnListOfServices_OnProperty_empty_not_allowed_null()
 	{
 		Container.Register(Component.For<ListDepAsProperty>());
 
 		var component = Container.Resolve<ListDepAsProperty>();
-		Assert.IsNull(component.Services);
+		Assert.Null(component.Services);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOn_ref_ArrayOfServices_OnConstructor()
 	{
 		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
@@ -376,68 +373,68 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<ArrayRefDepAsConstructor>();
 
-		Assert.IsNotNull(component.Services);
-		Assert.AreEqual(2, component.Services.Length);
-		foreach (var service in component.Services) Assert.IsNotNull(service);
+		Assert.NotNull(component.Services);
+		Assert.Equal(2, component.Services.Length);
+		foreach (var service in component.Services) Assert.NotNull(service);
 	}
 
-	[Test(Description = "IOC-240")]
+	[Fact]
 	public void Honors_collection_override_all_components_in()
 	{
 		Container.Install(new CollectionServiceOverridesInstaller());
 		var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectAll");
 		var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
-		Assert.That(dependencies, Has.Count.EqualTo(3));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceA)));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceB)));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceDecoratorViaProperty)));
+		Assert.Equal(3, dependencies.Count);
+		Assert.Contains(typeof(EmptyServiceA), dependencies);
+		Assert.Contains(typeof(EmptyServiceB), dependencies);
+		Assert.Contains(typeof(EmptyServiceDecoratorViaProperty), dependencies);
 	}
 
-	[Test(Description = "IOC-240")]
+	[Fact]
 	public void Honors_collection_override_one_components_in()
 	{
 		Container.Install(new CollectionServiceOverridesInstaller());
 		var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectFooOnly");
 		var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
-		Assert.That(dependencies, Has.Count.EqualTo(1));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceA)));
+		Assert.Single(dependencies);
+		Assert.Contains(typeof(EmptyServiceA), dependencies);
 	}
 
-	[Test(Description = "IOC-240")]
+	[Fact]
 	public void Honors_collection_override_one_components_in_no_resolver()
 	{
 		var container = new WindsorContainer();
 		container.Install(new CollectionServiceOverridesInstaller());
 		var fooItemTest = container.Resolve<ArrayDepAsConstructor>("InjectFooOnly");
 		var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
-		Assert.That(dependencies, Has.Count.EqualTo(1));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceA)));
+		Assert.Single(dependencies);
+		Assert.Contains(typeof(EmptyServiceA), dependencies);
 	}
 
-	[Test(Description = "IOC-240")]
+	[Fact]
 	public void Honors_collection_override_some_components_in()
 	{
 		Container.Install(new CollectionServiceOverridesInstaller());
 		var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectFooAndBarOnly");
 		var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
-		Assert.That(dependencies, Has.Count.EqualTo(2));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceA)));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceB)));
+		Assert.Equal(2, dependencies.Count);
+		Assert.Contains(typeof(EmptyServiceA), dependencies);
+		Assert.Contains(typeof(EmptyServiceB), dependencies);
 	}
 
-	[Test(Description = "IOC-240")]
+	[Fact]
 	public void Honors_collection_override_some_components_in_no_resolver()
 	{
 		var container = new WindsorContainer();
 		container.Install(new CollectionServiceOverridesInstaller());
 		var fooItemTest = container.Resolve<ArrayDepAsConstructor>("InjectFooAndBarOnly");
 		var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
-		Assert.That(dependencies, Has.Count.EqualTo(2));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceA)));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceB)));
+		Assert.Equal(2, dependencies.Count);
+		Assert.Contains(typeof(EmptyServiceA), dependencies);
+		Assert.Contains(typeof(EmptyServiceB), dependencies);
 	}
 
-	[Test]
+	[Fact]
 	public void List_is_readonly()
 	{
 		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
@@ -446,7 +443,7 @@ public class CollectionResolverTestCase : AbstractContainerTestCase
 
 		var component = Container.Resolve<ListDepAsConstructor>();
 
-		Assert.IsTrue(component.Services.IsReadOnly);
+		Assert.True(component.Services.IsReadOnly);
 		Assert.Throws<NotSupportedException>(() => component.Services.Add(new EmptyServiceA()));
 	}
 }

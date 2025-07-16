@@ -22,9 +22,6 @@ using Castle.Windsor;
 using Castle.Windsor.Tests;
 using Castle.Windsor.Tests.Facilities.Startable.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class OptimizedForSingleInstallTestCase : AbstractContainerTestCase
 {
 	protected override void AfterContainerCreated()
@@ -33,19 +30,19 @@ public class OptimizedForSingleInstallTestCase : AbstractContainerTestCase
 		Startable.Started = false;
 	}
 
-	[Test]
+	[Fact]
 	public void Appearing_missing_dependencies_dont_cause_component_to_be_started_before_the_end_of_Install()
 	{
 		Container.Install(new ActionBasedInstaller(c => c.Register(Component.For<Startable>())),
 			new ActionBasedInstaller(c =>
 			{
 				c.Register(Component.For<ICustomer>().ImplementedBy<CustomerImpl>());
-				Assert.IsFalse(Startable.Started);
+				Assert.False(Startable.Started);
 			}));
-		Assert.IsTrue(Startable.Started);
+		Assert.True(Startable.Started);
 	}
 
-	[Test]
+	[Fact]
 	public void Facility_wont_try_to_start_anything_before_the_end_of_Install()
 	{
 		Container.Install(
@@ -53,12 +50,12 @@ public class OptimizedForSingleInstallTestCase : AbstractContainerTestCase
 			new ActionBasedInstaller(c =>
 			{
 				c.Register(Component.For<Startable>());
-				Assert.IsFalse(Startable.Started);
+				Assert.False(Startable.Started);
 			}));
-		Assert.IsTrue(Startable.Started);
+		Assert.True(Startable.Started);
 	}
 
-	[Test]
+	[Fact]
 	public void Missing_dependencies_after_the_end_of_Install_cause_exception()
 	{
 		Assert.Throws<HandlerException>(() =>
@@ -66,7 +63,7 @@ public class OptimizedForSingleInstallTestCase : AbstractContainerTestCase
 				new ActionBasedInstaller(c => c.Register(Component.For<Startable>()))));
 	}
 
-	[Test]
+	[Fact]
 	public void Missing_dependencies_after_the_end_of_Install_no_exception_when_tryStart_true()
 	{
 		var container = new WindsorContainer();
@@ -74,10 +71,10 @@ public class OptimizedForSingleInstallTestCase : AbstractContainerTestCase
 
 		container.Install(new ActionBasedInstaller(c => c.Register(Component.For<Startable>())));
 
-		Assert.IsFalse(Startable.Started);
+		Assert.False(Startable.Started);
 	}
 
-	[Test]
+	[Fact]
 	public void Missing_dependencies_after_the_end_of_Install_starts_after_adding_missing_dependency_after_Install()
 	{
 		var container = new WindsorContainer();
@@ -86,6 +83,6 @@ public class OptimizedForSingleInstallTestCase : AbstractContainerTestCase
 		container.Install(new ActionBasedInstaller(c => c.Register(Component.For<Startable>())));
 
 		container.Register(Component.For<ICustomer>().ImplementedBy<CustomerImpl>());
-		Assert.IsTrue(Startable.Started);
+		Assert.True(Startable.Started);
 	}
 }

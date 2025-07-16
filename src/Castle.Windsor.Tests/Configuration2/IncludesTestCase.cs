@@ -20,14 +20,11 @@ using Castle.Windsor.Configuration.Interpreters;
 using Castle.Windsor.Tests;
 using Castle.XmlFiles;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class IncludesTestCase
 {
 	private IWindsorContainer container;
 
-	[Test]
+	[Fact]
 	public void AssemblyResourceAndIncludes()
 	{
 		container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("hasResourceIncludes.xml")));
@@ -35,7 +32,7 @@ public class IncludesTestCase
 		AssertConfiguration();
 	}
 
-	[Test]
+	[Fact]
 	public void FileResourceAndIncludes()
 	{
 		container = new WindsorContainer(new XmlInterpreter(Xml.File("hasFileIncludes.xml")));
@@ -43,7 +40,7 @@ public class IncludesTestCase
 		AssertConfiguration();
 	}
 
-	[Test]
+	[Fact]
 	public void FileResourceAndRelativeIncludes()
 	{
 		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_include_relative.xml"));
@@ -51,7 +48,7 @@ public class IncludesTestCase
 		AssertConfiguration();
 	}
 
-	[Test]
+	[Fact]
 	public void FileResourceAndRelativeIncludes2()
 	{
 		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_include_relative2.xml"));
@@ -63,26 +60,26 @@ public class IncludesTestCase
 	{
 		var store = container.Kernel.ConfigurationStore;
 
-		Assert.AreEqual(2, store.GetFacilities().Length);
-		Assert.AreEqual(2, store.GetComponents().Length);
+		Assert.Equal(2, store.GetFacilities().Length);
+		Assert.Equal(2, store.GetComponents().Length);
 
 		var config = store.GetFacilityConfiguration(typeof(NoopFacility).FullName);
 		var childItem = config.Children["item"];
-		Assert.IsNotNull(childItem);
-		Assert.AreEqual("value", childItem.Value);
+		Assert.NotNull(childItem);
+		Assert.Equal("value", childItem.Value);
 
 		config = store.GetFacilityConfiguration(typeof(Noop2Facility).FullName);
-		Assert.IsNotNull(config);
-		Assert.AreEqual("value within CDATA section", config.Value);
+		Assert.NotNull(config);
+		Assert.Equal("value within CDATA section", config.Value);
 
 		config = store.GetComponentConfiguration("testidcomponent1");
 		childItem = config.Children["item"];
-		Assert.IsNotNull(childItem);
-		Assert.AreEqual("value1", childItem.Value);
+		Assert.NotNull(childItem);
+		Assert.Equal("value1", childItem.Value);
 
 		config = store.GetComponentConfiguration("testidcomponent2");
 		childItem = config.Children["item"];
-		Assert.IsNotNull(childItem);
-		Assert.AreEqual("value2", childItem.Value);
+		Assert.NotNull(childItem);
+		Assert.Equal("value2", childItem.Value);
 	}
 }

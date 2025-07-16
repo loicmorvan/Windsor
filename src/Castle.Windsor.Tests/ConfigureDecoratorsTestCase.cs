@@ -18,9 +18,6 @@ using System;
 
 using Castle.MicroKernel.Registration;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class ConfigureDecoratorsTestCase
 {
 	private interface IDoNothingService
@@ -68,7 +65,7 @@ public class ConfigureDecoratorsTestCase
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void ShouldResolveComponentFromParent()
 	{
 		var parent = new WindsorContainer();
@@ -78,11 +75,11 @@ public class ConfigureDecoratorsTestCase
 			Component.For<IDoNothingService>().ImplementedBy<DoNothingService>().Named("DoNothingService"),
 			Component.For<IDoSomethingService>().ImplementedBy<DoSomethingService>().Named("DoSomethingService"));
 
-		Assert.IsNotNull(child.Resolve<IDoNothingService>());
-		Assert.IsNotNull(child.Resolve<IDoSomethingService>());
+		Assert.NotNull(child.Resolve<IDoNothingService>());
+		Assert.NotNull(child.Resolve<IDoSomethingService>());
 	}
 
-	[Test]
+	[Fact]
 	public void ShouldResolveDecoratedComponent()
 	{
 		var container = new WindsorContainer();
@@ -91,11 +88,11 @@ public class ConfigureDecoratorsTestCase
 			Component.For<IDoNothingService>().ImplementedBy<DoNothingService>().Named("DoNothingService"));
 		var service = container.Resolve<IDoNothingService>();
 
-		Assert.IsInstanceOf<DoNothingServiceDecorator>(service);
-		Assert.IsInstanceOf<DoNothingService>(((DoNothingServiceDecorator)service).Inner);
+		Assert.IsType<DoNothingServiceDecorator>(service);
+		Assert.IsType<DoNothingService>(((DoNothingServiceDecorator)service).Inner);
 	}
 
-	[Test]
+	[Fact]
 	public void ShouldResolveDecoratedComponentFromGrandParent()
 	{
 		var grandParent = new WindsorContainer();
@@ -109,11 +106,11 @@ public class ConfigureDecoratorsTestCase
 		grandParent.Register(
 			Component.For(typeof(IDoNothingService)).ImplementedBy(typeof(DoNothingService)).Named("DoNothingService"));
 		var service = child.Resolve<IDoNothingService>();
-		Assert.IsNotNull(service);
-		Assert.IsInstanceOf(typeof(DoNothingServiceDecorator), service);
+		Assert.NotNull(service);
+		Assert.IsType<DoNothingServiceDecorator>(service);
 	}
 
-	[Test]
+	[Fact]
 	public void ShouldResolveDecoratedComponentFromParent()
 	{
 		var parent = new WindsorContainer();
@@ -127,7 +124,7 @@ public class ConfigureDecoratorsTestCase
 		child.Register(
 			Component.For(typeof(IDoSomethingService)).ImplementedBy(typeof(DoSomethingService)).Named("DoSometingService"));
 		var service = child.Resolve<IDoNothingService>();
-		Assert.IsNotNull(service);
-		Assert.IsInstanceOf(typeof(DoNothingServiceDecorator), service);
+		Assert.NotNull(service);
+		Assert.IsType<DoNothingServiceDecorator>(service);
 	}
 }

@@ -20,12 +20,9 @@ using Castle.MicroKernel.Registration;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class SubResolverTestCase
 {
-	[Test]
+	[Fact]
 	public void WillAskResolverWhenTryingToResolveDependencyAfterAnotherHandlerWasRegistered()
 	{
 		var resolver = new FooBarResolver();
@@ -36,13 +33,13 @@ public class SubResolverTestCase
 		kernel.Register(Component.For<Foo>());
 		var handler = kernel.GetHandler(typeof(Foo));
 
-		Assert.AreEqual(HandlerState.WaitingDependency, handler.CurrentState);
+		Assert.Equal(HandlerState.WaitingDependency, handler.CurrentState);
 
 		resolver.Result = 15;
 
 		kernel.Register(Component.For<A>());
 
-		Assert.AreEqual(HandlerState.Valid, handler.CurrentState);
+		Assert.Equal(HandlerState.Valid, handler.CurrentState);
 	}
 
 	public class Foo
@@ -70,7 +67,7 @@ public class SubResolverTestCase
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void Sub_resolver_can_provide_null_as_the_value_to_use()
 	{
 		IKernel kernel = new DefaultKernel();

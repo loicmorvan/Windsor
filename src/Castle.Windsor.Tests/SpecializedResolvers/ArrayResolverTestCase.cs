@@ -23,12 +23,9 @@ using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class ArrayResolverTestCase : AbstractContainerTestCase
 {
-	[Test(Description = "IOC-239")]
+	[Fact]
 	public void ArrayResolution_UnresolvableDependencyCausesResolutionFailure()
 	{
 		Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel, true));
@@ -48,10 +45,10 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 				typeof(UnresolvalbeDependencyWithPrimitiveConstructor).FullName,
 				typeof(A).FullName);
 
-		Assert.AreEqual(message, exception.Message);
+		Assert.Equal(message, exception.Message);
 	}
 
-	[Test(Description = "IOC-239")]
+	[Fact]
 	public void ArrayResolution_UnresolvableDependencyCausesResolutionFailure_ServiceConstructor()
 	{
 		Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel, true));
@@ -72,10 +69,10 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 				typeof(A).FullName,
 				typeof(IEmptyService).FullName);
 
-		Assert.AreEqual(message, exception.Message);
+		Assert.Equal(message, exception.Message);
 	}
 
-	[Test(Description = "IOC-239")]
+	[Fact]
 	public void ArrayResolution_UnresolvableDependencyIsNotIncluded()
 	{
 		Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
@@ -95,10 +92,10 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 				typeof(UnresolvalbeDependency).FullName,
 				typeof(A).FullName);
 
-		Assert.AreEqual(message, exception.Message);
+		Assert.Equal(message, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void Composite_service_can_be_resolved_without_triggering_circular_dependency_detection_fuse()
 	{
 		Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
@@ -108,10 +105,10 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 			.ConfigureFor<EmptyServiceComposite>(r => r.Forward<EmptyServiceComposite>()));
 
 		var composite = Container.Resolve<EmptyServiceComposite>();
-		Assert.AreEqual(5, composite.Inner.Length);
+		Assert.Equal(5, composite.Inner.Length);
 	}
 
-	[Test(Description = "IOC-238")]
+	[Fact]
 	public void Composite_service_can_be_resolved_without_triggering_circular_dependency_detection_fuse_composite_registered_first()
 	{
 		Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
@@ -124,10 +121,10 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 		);
 
 		var composite = Container.Resolve<EmptyServiceComposite>();
-		Assert.AreEqual(4, composite.Inner.Length);
+		Assert.Equal(4, composite.Inner.Length);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnArrayOfServices_OnConstructor()
 	{
 		Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
@@ -137,13 +134,13 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 
 		var comp = Container.Resolve<ArrayDepAsConstructor>();
 
-		Assert.IsNotNull(comp);
-		Assert.IsNotNull(comp.Services);
-		Assert.AreEqual(2, comp.Services.Length);
-		foreach (var service in comp.Services) Assert.IsNotNull(service);
+		Assert.NotNull(comp);
+		Assert.NotNull(comp.Services);
+		Assert.Equal(2, comp.Services.Length);
+		foreach (var service in comp.Services) Assert.NotNull(service);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnArrayOfServices_OnProperty()
 	{
 		Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
@@ -153,13 +150,13 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 
 		var comp = Container.Resolve<ArrayDepAsProperty>();
 
-		Assert.IsNotNull(comp);
-		Assert.IsNotNull(comp.Services);
-		Assert.AreEqual(2, comp.Services.Length);
-		foreach (var service in comp.Services) Assert.IsNotNull(service);
+		Assert.NotNull(comp);
+		Assert.NotNull(comp.Services);
+		Assert.Equal(2, comp.Services.Length);
+		foreach (var service in comp.Services) Assert.NotNull(service);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOnArrayWhenEmpty()
 	{
 		Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel, true));
@@ -167,13 +164,13 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 			Component.For<ArrayDepAsProperty>());
 
 		var proxy = Container.Resolve<ArrayDepAsConstructor>();
-		Assert.IsNotNull(proxy.Services);
+		Assert.NotNull(proxy.Services);
 
 		var proxy2 = Container.Resolve<ArrayDepAsProperty>();
-		Assert.IsNotNull(proxy2.Services);
+		Assert.NotNull(proxy2.Services);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyOn_ref_ArrayOfServices_OnConstructor()
 	{
 		Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
@@ -183,66 +180,66 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 
 		var comp = Container.Resolve<ArrayRefDepAsConstructor>();
 
-		Assert.IsNotNull(comp);
-		Assert.IsNotNull(comp.Services);
-		Assert.AreEqual(2, comp.Services.Length);
-		foreach (var service in comp.Services) Assert.IsNotNull(service);
+		Assert.NotNull(comp);
+		Assert.NotNull(comp.Services);
+		Assert.Equal(2, comp.Services.Length);
+		foreach (var service in comp.Services) Assert.NotNull(service);
 	}
 
-	[Test(Description = "IOC-240")]
+	[Fact]
 	public void InjectAll()
 	{
 		Container.Kernel.Resolver.AddSubResolver(new ArrayResolver(Container.Kernel, true));
 		Container.Install(new CollectionServiceOverridesInstaller());
 		var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectAll");
 		var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
-		Assert.That(dependencies, Has.Count.EqualTo(3));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceA)));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceB)));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceDecoratorViaProperty)));
+		Assert.Equal(3, dependencies.Count);
+		Assert.Contains(typeof(EmptyServiceA), dependencies);
+		Assert.Contains(typeof(EmptyServiceB), dependencies);
+		Assert.Contains(typeof(EmptyServiceDecoratorViaProperty), dependencies);
 	}
 
-	[Test(Description = "IOC-240")]
+	[Fact]
 	public void InjectFooAndBarOnly_WithArrayResolver()
 	{
 		Container.Kernel.Resolver.AddSubResolver(new ArrayResolver(Container.Kernel, true));
 		Container.Install(new CollectionServiceOverridesInstaller());
 		var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectFooAndBarOnly");
 		var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
-		Assert.That(dependencies, Has.Count.EqualTo(2));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceA)));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceB)));
+		Assert.Equal(2, dependencies.Count);
+		Assert.Contains(typeof(EmptyServiceA), dependencies);
+		Assert.Contains(typeof(EmptyServiceB), dependencies);
 	}
 
-	[Test(Description = "IOC-240")]
+	[Fact]
 	public void InjectFooAndBarOnly_WithoutArrayResolver()
 	{
 		Container.Install(new CollectionServiceOverridesInstaller());
 		var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectFooAndBarOnly");
 		var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
-		Assert.That(dependencies, Has.Count.EqualTo(2));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceA)));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceB)));
+		Assert.Equal(2, dependencies.Count);
+		Assert.Contains(typeof(EmptyServiceA), dependencies);
+		Assert.Contains(typeof(EmptyServiceB), dependencies);
 	}
 
-	[Test(Description = "IOC-240")]
+	[Fact]
 	public void InjectFooOnly_WithArrayResolver()
 	{
 		Container.Kernel.Resolver.AddSubResolver(new ArrayResolver(Container.Kernel, true));
 		Container.Install(new CollectionServiceOverridesInstaller());
 		var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectFooOnly");
 		var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
-		Assert.That(dependencies, Has.Count.EqualTo(1));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceA)));
+		Assert.Single(dependencies);
+		Assert.Contains(typeof(EmptyServiceA), dependencies);
 	}
 
-	[Test(Description = "IOC-240")]
+	[Fact]
 	public void InjectFooOnly_WithoutArrayResolver()
 	{
 		Container.Install(new CollectionServiceOverridesInstaller());
 		var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectFooOnly");
 		var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
-		Assert.That(dependencies, Has.Count.EqualTo(1));
-		Assert.That(dependencies, Has.Member(typeof(EmptyServiceA)));
+		Assert.Single(dependencies);
+		Assert.Contains(typeof(EmptyServiceA), dependencies);
 	}
 }

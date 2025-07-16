@@ -14,14 +14,11 @@
 
 namespace Castle.Windsor.Tests.Configuration2;
 
-using NUnit.Framework;
-
 using Config = Castle.Windsor.Installer.Configuration;
 
-[TestFixture(Description = "Based on http://theburningmonk.com/2010/08/castle-windsor-tips-say-no-to-private-setter/")]
 public class PrivateSettersTestCase
 {
-	[Test]
+	[Fact]
 	public void Private_setter_does_not_get_called_when_using_config()
 	{
 		var container = new WindsorContainer();
@@ -30,7 +27,7 @@ public class PrivateSettersTestCase
 				ConfigHelper.ResolveConfigPath("Configuration2/class_with_private_setter.xml")));
 
 		var item = container.Resolve<IMyConfiguration>();
-		Assert.AreEqual(1234, item.Port);
+		Assert.Equal(1234, item.Port);
 	}
 }
 

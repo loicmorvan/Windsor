@@ -25,17 +25,14 @@ using Castle.Windsor.Tests.Interceptors;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 {
 	private void AssertIsProxy(object o)
 	{
-		Assert.IsInstanceOf<IProxyTargetAccessor>(o);
+		Assert.IsType<IProxyTargetAccessor>(o, exactMatch: false);
 	}
 
-	[Test]
+	[Fact]
 	public void AddComponent_WithMixIn_AddsMixin()
 	{
 		Container.Register(Component.For<ICalcService>()
@@ -45,13 +42,13 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.IsInstanceOf(typeof(ISimpleMixIn), calculator);
+		Assert.IsType<ISimpleMixIn>(calculator, exactMatch: false);
 
 		var mixin = (ISimpleMixIn)calculator;
 		mixin.DoSomething();
 	}
 
-	[Test]
+	[Fact]
 	public void AddComponent_With_instance_given_MixIn()
 	{
 		Container.Register(
@@ -61,13 +58,13 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.IsInstanceOf(typeof(ISimpleMixIn), calculator);
+		Assert.IsType<ISimpleMixIn>(calculator, exactMatch: false);
 
 		var mixin = (ISimpleMixIn)calculator;
 		mixin.DoSomething();
 	}
 
-	[Test]
+	[Fact]
 	public void AddComponent_With_named_component_MixIn()
 	{
 		Container.Register(
@@ -76,13 +73,13 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.IsInstanceOf(typeof(ISimpleMixIn), calculator);
+		Assert.IsType<ISimpleMixIn>(calculator, exactMatch: false);
 
 		var mixin = (ISimpleMixIn)calculator;
 		mixin.DoSomething();
 	}
 
-	[Test]
+	[Fact]
 	public void AddComponent_With_typed_component_MixIn()
 	{
 		Container.Register(
@@ -91,13 +88,13 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.IsInstanceOf(typeof(ISimpleMixIn), calculator);
+		Assert.IsType<ISimpleMixIn>(calculator, exactMatch: false);
 
 		var mixin = (ISimpleMixIn)calculator;
 		mixin.DoSomething();
 	}
 
-	[Test]
+	[Fact]
 	public void Missing_dependency_on_hook_statically_detected()
 	{
 		Container.Register(Component.For<ICalcService>()
@@ -105,12 +102,12 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 			.Proxy.Hook(h => h.Service<ProxyNothingHook>()));
 
 		var calc = Container.Kernel.GetHandler(typeof(ICalcService));
-		Assert.AreEqual(HandlerState.WaitingDependency, calc.CurrentState);
+		Assert.Equal(HandlerState.WaitingDependency, calc.CurrentState);
 
 		var exception =
 			Assert.Throws<HandlerException>(() =>
 				Container.Resolve<ICalcService>());
-		Assert.AreEqual(
+		Assert.Equal(
 			string.Format(
 				"Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Component 'Castle.ProxyInfrastructure.ProxyNothingHook' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
 				Environment.NewLine,
@@ -118,7 +115,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 			exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void Missing_dependency_on_mixin_statically_detected()
 	{
 		Container.Register(Component.For<ICalcService>()
@@ -126,7 +123,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 			.Proxy.MixIns(m => m.Component<A>()));
 
 		var calc = Container.Kernel.GetHandler(typeof(ICalcService));
-		Assert.AreEqual(HandlerState.WaitingDependency, calc.CurrentState);
+		Assert.Equal(HandlerState.WaitingDependency, calc.CurrentState);
 
 		var exception =
 			Assert.Throws<HandlerException>(() =>
@@ -136,10 +133,10 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 			Environment.NewLine,
 			typeof(CalculatorService).FullName,
 			typeof(A).FullName);
-		Assert.AreEqual(message, exception.Message);
+		Assert.Equal(message, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void Missing_dependency_on_selector_statically_detected()
 	{
 		Container.Register(Component.For<ICalcService>()
@@ -147,7 +144,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 			.SelectInterceptorsWith(s => s.Service<DummyInterceptorSelector>()));
 
 		var calc = Container.Kernel.GetHandler(typeof(ICalcService));
-		Assert.AreEqual(HandlerState.WaitingDependency, calc.CurrentState);
+		Assert.Equal(HandlerState.WaitingDependency, calc.CurrentState);
 
 		var exception =
 			Assert.Throws<HandlerException>(() =>
@@ -157,10 +154,10 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 			Environment.NewLine,
 			typeof(CalculatorService).FullName);
 
-		Assert.AreEqual(message, exception.Message);
+		Assert.Equal(message, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void Releasing_MixIn_releases_all_parts()
 	{
 		SimpleServiceDisposable.DisposedCount = 0;
@@ -173,15 +170,15 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.IsInstanceOf<ISimpleService>(calculator);
+		Assert.IsType<ISimpleService>(calculator, exactMatch: false);
 
 		var mixin = (ISimpleService)calculator;
 		mixin.Operation();
 		Container.Release(mixin);
-		Assert.AreEqual(1, SimpleServiceDisposable.DisposedCount);
+		Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
 	}
 
-	[Test]
+	[Fact]
 	public void can_atach_hook_as_instance_simple()
 	{
 		var interceptor = new ResultModifierInterceptor(5);
@@ -194,10 +191,10 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.AreEqual(4, calculator.Sum(2, 2));
+		Assert.Equal(4, calculator.Sum(2, 2));
 	}
 
-	[Test]
+	[Fact]
 	public void can_atach_hook_as_instance_simple_via_nested_closure()
 	{
 		var interceptor = new ResultModifierInterceptor(5);
@@ -210,10 +207,10 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.AreEqual(4, calculator.Sum(2, 2));
+		Assert.Equal(4, calculator.Sum(2, 2));
 	}
 
-	[Test]
+	[Fact]
 	public void can_atach_hook_as_named_service()
 	{
 		var interceptor = new ResultModifierInterceptor(5);
@@ -226,10 +223,10 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.AreEqual(4, calculator.Sum(2, 2));
+		Assert.Equal(4, calculator.Sum(2, 2));
 	}
 
-	[Test]
+	[Fact]
 	public void can_atach_hook_as_typed_service()
 	{
 		var interceptor = new ResultModifierInterceptor(5);
@@ -242,10 +239,10 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.AreEqual(4, calculator.Sum(2, 2));
+		Assert.Equal(4, calculator.Sum(2, 2));
 	}
 
-	[Test]
+	[Fact]
 	public void can_proxy_interfaces_with_no_impl_given_just_a_hook()
 	{
 		Container.Register(Component.For<ICalcService>()
@@ -255,7 +252,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 		AssertIsProxy(calculator);
 	}
 
-	[Test]
+	[Fact]
 	public void hook_gets_disposed_after_proxy_is_created()
 	{
 		DisposableHook.InstancesCreated = 0;
@@ -271,7 +268,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
 
-		Assert.AreEqual(1, DisposableHook.InstancesCreated);
-		Assert.AreEqual(1, DisposableHook.InstancesDisposed);
+		Assert.Equal(1, DisposableHook.InstancesCreated);
+		Assert.Equal(1, DisposableHook.InstancesDisposed);
 	}
 }

@@ -17,13 +17,9 @@ namespace Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111;
 using Castle.Core.Resource;
 using Castle.Windsor.Configuration.Interpreters;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class FACILITIES_ISSUE_111
 {
-	[SetUp]
-	public void Setup()
+	public FACILITIES_ISSUE_111()
 	{
 		setupResource = new StaticContentResource(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
 
@@ -58,7 +54,7 @@ public class FACILITIES_ISSUE_111
 
 	private IResource setupResource;
 
-	[Test]
+	[Fact]
 	public void Registering_IStartable_Out_Of_Order_On_Array_Should_Not_Throw_Exception()
 	{
 		new WindsorContainer(new XmlInterpreter(setupResource));

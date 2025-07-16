@@ -22,15 +22,12 @@ namespace Castle.Windsor.Tests.Config
 	using Castle.MicroKernel.Tests.ClassComponents;
 	using Castle.Windsor.Configuration.Interpreters;
 
-	using NUnit.Framework;
-
 	/// <summary>
 	///   Summary description for AppDomainConfigSourceTestCase.
 	/// </summary>
-	[TestFixture]
 	public class AppDomainConfigSourceTestCase
 	{
-		[Test]
+		[Fact]
 		public void ProperDeserialization()
 		{
 			var store = new DefaultConfigurationStore();
@@ -38,27 +35,27 @@ namespace Castle.Windsor.Tests.Config
 			IKernel kernel = new DefaultKernel();
 			interpreter.ProcessResource(interpreter.Source, store, kernel);
 
-			Assert.AreEqual(2, store.GetFacilities().Length);
-			Assert.AreEqual(4, store.GetComponents().Length);
+			Assert.Equal(2, store.GetFacilities().Length);
+			Assert.Equal(4, store.GetComponents().Length);
 
 			var config = store.GetFacilityConfiguration(typeof(NoopFacility).FullName);
 			var childItem = config.Children["item"];
-			Assert.IsNotNull(childItem);
-			Assert.AreEqual("value", childItem.Value);
+			Assert.NotNull(childItem);
+			Assert.Equal("value", childItem.Value);
 
 			config = store.GetFacilityConfiguration(typeof(Noop2Facility).FullName);
-			Assert.IsNotNull(config);
-			Assert.AreEqual("value within CDATA section", config.Value);
+			Assert.NotNull(config);
+			Assert.Equal("value within CDATA section", config.Value);
 
 			config = store.GetComponentConfiguration("testidcomponent1");
 			childItem = config.Children["item"];
-			Assert.IsNotNull(childItem);
-			Assert.AreEqual("value1", childItem.Value);
+			Assert.NotNull(childItem);
+			Assert.Equal("value1", childItem.Value);
 
 			config = store.GetComponentConfiguration("testidcomponent2");
 			childItem = config.Children["item"];
-			Assert.IsNotNull(childItem);
-			Assert.AreEqual("value2", childItem.Value);
+			Assert.NotNull(childItem);
+			Assert.Equal("value2", childItem.Value);
 		}
 	}
 }

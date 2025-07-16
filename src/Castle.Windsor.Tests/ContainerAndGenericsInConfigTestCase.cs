@@ -20,8 +20,6 @@ using Castle.Windsor.Installer;
 using CastleTests;
 using CastleTests.Components;
 
-using NUnit.Framework;
-
 public class ContainerAndGenericsInConfigTestCase : AbstractContainerTestCase
 {
 	private IWindsorInstaller FromFile(string fileName)
@@ -35,98 +33,98 @@ public class ContainerAndGenericsInConfigTestCase : AbstractContainerTestCase
 		return ConfigHelper.ResolveConfigPath("Config/" + fileName);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_build_dependency_chains_of_open_generics()
 	{
 		Container.Install(FromFile("chainOfResponsibility.config"));
 
 		var resolve = Container.Resolve<IResultFinder<int>>();
 
-		Assert.IsTrue(resolve.Finder is DatabaseResultFinder<int>);
-		Assert.IsTrue(resolve.Finder.Finder is WebServiceResultFinder<int>);
-		Assert.IsTrue(resolve.Finder.Finder.Finder is FailedResultFinder<int>);
-		Assert.IsTrue(resolve.Finder.Finder.Finder.Finder == null);
+		Assert.True(resolve.Finder is DatabaseResultFinder<int>);
+		Assert.True(resolve.Finder.Finder is WebServiceResultFinder<int>);
+		Assert.True(resolve.Finder.Finder.Finder is FailedResultFinder<int>);
+		Assert.True(resolve.Finder.Finder.Finder.Finder == null);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_resolve_closed_generic_service()
 	{
 		Container.Install(FromFile("GenericsConfig.xml"));
 		var repos = Container.Resolve<IRepository<int>>("int.repos.generic");
 
-		Assert.IsInstanceOf<DemoRepository<int>>(repos);
+		Assert.IsType<DemoRepository<int>>(repos);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_resolve_closed_generic_service_decorator()
 	{
 		Container.Install(FromFile("GenericsConfig.xml"));
 
 		var repository = Container.Resolve<IRepository<int>>("int.repos");
 
-		Assert.IsInstanceOf<LoggingRepositoryDecorator<int>>(repository);
-		Assert.IsInstanceOf<DemoRepository<int>>(((LoggingRepositoryDecorator<int>)repository).inner);
+		Assert.IsType<LoggingRepositoryDecorator<int>>(repository);
+		Assert.IsType<DemoRepository<int>>(((LoggingRepositoryDecorator<int>)repository).inner);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_resolve_closed_generic_service_decorator_with_service_override()
 	{
 		Container.Install(FromFile("DecoratorConfig.xml"));
 		var repos = Container.Resolve<IRepository<int>>();
 
-		Assert.IsInstanceOf<LoggingRepositoryDecorator<int>>(repos);
-		Assert.IsInstanceOf<DemoRepository<int>>(((LoggingRepositoryDecorator<int>)repos).inner);
-		Assert.AreEqual("second", ((DemoRepository<int>)((LoggingRepositoryDecorator<int>)repos).inner).Name);
+		Assert.IsType<LoggingRepositoryDecorator<int>>(repos);
+		Assert.IsType<DemoRepository<int>>(((LoggingRepositoryDecorator<int>)repos).inner);
+		Assert.Equal("second", ((DemoRepository<int>)((LoggingRepositoryDecorator<int>)repos).inner).Name);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_resolve_open_generic_service_with_service_overrides()
 	{
 		Container.Install(FromFile("ComplexGenericConfig.xml"));
 
 		var repository = Container.Resolve<IRepository<IEmployee>>();
-		Assert.IsInstanceOf<LoggingRepositoryDecorator<IEmployee>>(repository);
+		Assert.IsType<LoggingRepositoryDecorator<IEmployee>>(repository);
 
 		var inner = ((LoggingRepositoryDecorator<IEmployee>)repository).inner;
-		Assert.IsInstanceOf<DemoRepository<IEmployee>>(inner);
+		Assert.IsType<DemoRepository<IEmployee>>(inner);
 
 		var actualInner = (DemoRepository<IEmployee>)inner;
-		Assert.AreEqual("Generic Repostiory", actualInner.Name);
-		Assert.IsInstanceOf<DictionaryCache<IEmployee>>(actualInner.Cache);
+		Assert.Equal("Generic Repostiory", actualInner.Name);
+		Assert.IsType<DictionaryCache<IEmployee>>(actualInner.Cache);
 	}
 
-	[Test]
+	[Fact]
 	public void Closes_generic_dependency_over_correct_type_for_open_generic_components()
 	{
 		Container.Install(FromFile("GenericDecoratorConfig.xml"));
 
 		var repos = Container.Resolve<IRepository<string>>();
-		Assert.IsInstanceOf<LoggingRepositoryDecorator<string>>(repos);
+		Assert.IsType<LoggingRepositoryDecorator<string>>(repos);
 
-		Assert.AreEqual("second", ((DemoRepository<string>)((LoggingRepositoryDecorator<string>)repos).inner).Name);
+		Assert.Equal("second", ((DemoRepository<string>)((LoggingRepositoryDecorator<string>)repos).inner).Name);
 	}
 
-	[Test]
+	[Fact]
 	public void Correctly_detects_unresolvable_dependency_on_same_closed_generic_service()
 	{
 		Container.Install(FromFile("RecursiveDecoratorConfig.xml"));
 
 		var repository = Container.Resolve<IRepository<int>>();
 
-		Assert.IsNull(((LoggingRepositoryDecorator<int>)repository).inner);
+		Assert.Null(((LoggingRepositoryDecorator<int>)repository).inner);
 	}
 
-	[Test]
+	[Fact]
 	public void Correctly_detects_unresolvable_dependency_on_same_open_generic_service()
 	{
 		Container.Install(FromFile("RecursiveDecoratorConfigOpenGeneric.xml"));
 
 		var repository = Container.Resolve<IRepository<int>>();
 
-		Assert.IsNull(((LoggingRepositoryDecorator<int>)repository).inner);
+		Assert.Null(((LoggingRepositoryDecorator<int>)repository).inner);
 	}
 
-	[Test]
+	[Fact]
 	public void Prefers_closed_service_over_open()
 	{
 		Container.Install(FromFile("chainOfResponsibility_smart.config"));
@@ -134,65 +132,65 @@ public class ContainerAndGenericsInConfigTestCase : AbstractContainerTestCase
 		var ofInt = Container.Resolve<IResultFinder<int>>();
 		var ofString = Container.Resolve<IResultFinder<string>>();
 
-		Assert.IsInstanceOf<CacheResultFinder<int>>(ofInt);
-		Assert.IsInstanceOf<DatabaseResultFinder<int>>(ofInt.Finder);
-		Assert.IsInstanceOf<WebServiceResultFinder<int>>(ofInt.Finder.Finder);
-		Assert.IsNull(ofInt.Finder.Finder.Finder);
+		Assert.IsType<CacheResultFinder<int>>(ofInt);
+		Assert.IsType<DatabaseResultFinder<int>>(ofInt.Finder);
+		Assert.IsType<WebServiceResultFinder<int>>(ofInt.Finder.Finder);
+		Assert.Null(ofInt.Finder.Finder.Finder);
 
-		Assert.IsInstanceOf<ResultFinderStringDecorator>(ofString);
-		Assert.IsNotNull(ofString.Finder);
+		Assert.IsType<ResultFinderStringDecorator>(ofString);
+		Assert.NotNull(ofString.Finder);
 	}
 
-	[Test]
+	[Fact]
 	public void Prefers_closed_service_over_open_2()
 	{
 		Container.Install(FromFile("ComplexGenericConfig.xml"));
 
 		var repository = Container.Resolve<IRepository<IReviewer>>();
 
-		Assert.IsInstanceOf<ReviewerRepository>(repository);
+		Assert.IsType<ReviewerRepository>(repository);
 	}
 
-	[Test]
+	[Fact]
 	public void Prefers_closed_service_over_open_and_uses_default_components_for_dependencies()
 	{
 		Container.Install(FromFile("ComplexGenericConfig.xml"));
 
 		var repository = Container.Resolve<IRepository<IReviewer>>();
 
-		Assert.IsInstanceOf<ReviewerRepository>(repository);
-		Assert.IsInstanceOf<DictionaryCache<IReviewer>>(((ReviewerRepository)repository).Cache);
+		Assert.IsType<ReviewerRepository>(repository);
+		Assert.IsType<DictionaryCache<IReviewer>>(((ReviewerRepository)repository).Cache);
 	}
 
-	[Test]
+	[Fact]
 	public void Prefers_closed_service_over_open_and_uses_service_overrides_for_dependencies()
 	{
 		Container.Install(FromFile("ComplexGenericConfig.xml"));
 
 		var repository = Container.Resolve<IRepository<IReviewableEmployee>>();
 
-		Assert.IsInstanceOf<LoggingRepositoryDecorator<IReviewableEmployee>>(repository);
+		Assert.IsType<LoggingRepositoryDecorator<IReviewableEmployee>>(repository);
 
 		var inner = ((LoggingRepositoryDecorator<IReviewableEmployee>)repository).inner;
-		Assert.IsInstanceOf<DemoRepository<IReviewableEmployee>>(inner);
+		Assert.IsType<DemoRepository<IReviewableEmployee>>(inner);
 
 		var actualInner = (DemoRepository<IReviewableEmployee>)inner;
-		Assert.AreEqual("Generic Repostiory With No Cache", actualInner.Name);
-		Assert.IsInstanceOf<NullCache<IReviewableEmployee>>(actualInner.Cache);
+		Assert.Equal("Generic Repostiory With No Cache", actualInner.Name);
+		Assert.IsType<NullCache<IReviewableEmployee>>(actualInner.Cache);
 	}
 
-	[Test]
+	[Fact]
 	public void Resolves_named_open_generic_service_even_if_closed_version_with_different_name_exists()
 	{
 		Container.Install(FromFile("ComplexGenericConfig.xml"));
 
 		var repository = Container.Resolve<IRepository<IReviewer>>("generic.repository");
 
-		Assert.IsNotInstanceOf<ReviewerRepository>(repository);
-		Assert.IsInstanceOf<DemoRepository<IReviewer>>(repository);
+		Assert.IsNotType<ReviewerRepository>(repository);
+		Assert.IsType<DemoRepository<IReviewer>>(repository);
 	}
 
-	[Test]
+	[Fact]
 	public void Returns_same_instance_for_open_generic_singleton_service()
 	{
 		Container.Install(FromFile("GenericDecoratorConfig.xml"));
@@ -200,20 +198,20 @@ public class ContainerAndGenericsInConfigTestCase : AbstractContainerTestCase
 		var one = Container.Resolve<IRepository<string>>();
 		var two = Container.Resolve<IRepository<string>>();
 
-		Assert.AreSame(one, two);
+		Assert.Same(one, two);
 	}
 
-	[Test]
+	[Fact]
 	public void Returns_same_instance_for_open_generic_singleton_service_multiple_closed_types()
 	{
 		Container.Install(FromFile("GenericDecoratorConfig.xml"));
 
 		var one = Container.Resolve<IRepository<string>>();
 		var two = Container.Resolve<IRepository<string>>();
-		Assert.AreSame(one, two);
+		Assert.Same(one, two);
 
 		var three = Container.Resolve<IRepository<int>>();
 		var four = Container.Resolve<IRepository<int>>();
-		Assert.AreSame(three, four);
+		Assert.Same(three, four);
 	}
 }

@@ -27,27 +27,22 @@ using log4net.Appender;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
 
-using NUnit.Framework;
-
 /// <summary>Summary description for ExtendedLog4NetFacilityTests.</summary>
-[TestFixture]
-public class ExtendedLog4NetFacilityTestCase : BaseTest
+public class ExtendedLog4NetFacilityTestCase : BaseTest, IDisposable
 {
-	[SetUp]
-	public void Setup()
+	public ExtendedLog4NetFacilityTestCase()
 	{
 		container = base.CreateConfiguredContainer<ExtendedLog4netFactory>();
 	}
 
-	[TearDown]
-	public void Teardown()
+	public void Dispose()
 	{
 		container.Dispose();
 	}
 
 	private IWindsorContainer container;
 
-	[Test]
+	[Fact]
 	public void SimpleTest()
 	{
 		container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component1"));
@@ -61,7 +56,7 @@ public class ExtendedLog4NetFacilityTestCase : BaseTest
 		var patternLayout = new PatternLayout("[%-5level] [%logger] - %message%newline");
 		patternLayout.Format(actualLogOutput, memoryAppender.GetEvents()[0]);
 
-		Assert.AreEqual(expectedLogOutput, actualLogOutput.ToString());
+		Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
 
 		container.Register(Component.For(typeof(SmtpServer)).Named("component2"));
 		var smtpServer = container.Resolve<ISmtpServer>("component2");
@@ -75,14 +70,14 @@ public class ExtendedLog4NetFacilityTestCase : BaseTest
 		actualLogOutput = new StringWriter();
 		patternLayout = new PatternLayout("[%-5level] [%logger] - %message%newline");
 
-		Assert.AreEqual(memoryAppender.GetEvents().Length, 4);
+		Assert.Equal(4, memoryAppender.GetEvents().Length);
 
 		patternLayout.Format(actualLogOutput, memoryAppender.GetEvents()[3]);
 
-		Assert.AreEqual(expectedLogOutput, actualLogOutput.ToString());
+		Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
 	}
 
-	[Test]
+	[Fact]
 	public void ContextTest()
 	{
 		container.Register(Component.For<ComplexLoggingComponent>().Named("component1"));
@@ -97,6 +92,6 @@ public class ExtendedLog4NetFacilityTestCase : BaseTest
 		var patternLayout = new PatternLayout("[%-5level] [%logger] [%properties{NDC}] [%properties{foo}] [%properties{flim}] - %message%newline");
 		patternLayout.Format(actualLogOutput, memoryAppender.GetEvents()[0]);
 
-		Assert.AreEqual(expectedLogOutput, actualLogOutput.ToString());
+		Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
 	}
 }

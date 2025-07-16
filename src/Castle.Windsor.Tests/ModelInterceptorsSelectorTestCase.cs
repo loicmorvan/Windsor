@@ -22,12 +22,9 @@ using Castle.Windsor.Tests.Interceptors;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class ModelInterceptorsSelectorTestCase
 {
-	[Test]
+	[Fact]
 	public void CanAddInterceptor_DirectSelection()
 	{
 		IWindsorContainer container = new WindsorContainer();
@@ -43,17 +40,17 @@ public class ModelInterceptorsSelectorTestCase
 		WasCalledInterceptor.WasCalled = false;
 		var watcher = container.Resolve<IWatcher>();
 		watcher.OnSomethingInterestingToWatch += delegate { };
-		Assert.IsFalse(WasCalledInterceptor.WasCalled);
+		Assert.False(WasCalledInterceptor.WasCalled);
 
 		selector.Interceptors = InterceptorKind.Dummy;
 
 		WasCalledInterceptor.WasCalled = false;
 		watcher = container.Resolve<IWatcher>();
 		watcher.OnSomethingInterestingToWatch += delegate { };
-		Assert.IsTrue(WasCalledInterceptor.WasCalled);
+		Assert.True(WasCalledInterceptor.WasCalled);
 	}
 
-	[Test]
+	[Fact]
 	public void InterceptorSelectors_Are_Cumulative()
 	{
 		IWindsorContainer container = new WindsorContainer();
@@ -67,11 +64,11 @@ public class ModelInterceptorsSelectorTestCase
 
 		var watcher = container.Resolve<IWatcher>();
 		watcher.OnSomethingInterestingToWatch += delegate { };
-		Assert.IsTrue(WasCalledInterceptor.WasCalled);
-		Assert.IsTrue(WasCalledInterceptor.WasCalled);
+		Assert.True(WasCalledInterceptor.WasCalled);
+		Assert.True(WasCalledInterceptor.WasCalled);
 	}
 
-	[Test]
+	[Fact]
 	public void TurnProxyOnAndOff_DirectSelection()
 	{
 		IWindsorContainer container = new WindsorContainer();
@@ -81,12 +78,12 @@ public class ModelInterceptorsSelectorTestCase
 		var selector = new WatcherInterceptorSelector();
 		container.Kernel.ProxyFactory.AddInterceptorSelector(selector);
 
-		Assert.IsFalse(container.Resolve<IWatcher>().GetType().Name.Contains("Proxy"));
+		Assert.DoesNotContain("Proxy",container.Resolve<IWatcher>().GetType().Name);
 		selector.Interceptors = InterceptorKind.Dummy;
-		Assert.IsTrue(container.Resolve<IWatcher>().GetType().Name.Contains("Proxy"));
+		Assert.Contains("Proxy",container.Resolve<IWatcher>().GetType().Name);
 	}
 
-	[Test]
+	[Fact]
 	public void TurnProxyOnAndOff_SubDependency()
 	{
 		IWindsorContainer container = new WindsorContainer();
@@ -96,16 +93,16 @@ public class ModelInterceptorsSelectorTestCase
 		var selector = new WatcherInterceptorSelector();
 		container.Kernel.ProxyFactory.AddInterceptorSelector(selector);
 
-		Assert.IsFalse(container.Resolve<Person>().Watcher.GetType().Name.Contains("Proxy"));
-		Assert.IsFalse(container.Resolve<Person>().GetType().Name.Contains("Proxy"));
+		Assert.DoesNotContain("Proxy",container.Resolve<Person>().Watcher.GetType().Name);
+		Assert.DoesNotContain("Proxy",container.Resolve<Person>().GetType().Name);
 
 		selector.Interceptors = InterceptorKind.Dummy;
 
-		Assert.IsFalse(container.Resolve<Person>().GetType().Name.Contains("Proxy"));
-		Assert.IsTrue(container.Resolve<Person>().Watcher.GetType().Name.Contains("Proxy"));
+		Assert.DoesNotContain("Proxy",container.Resolve<Person>().GetType().Name);
+		Assert.Contains("Proxy",container.Resolve<Person>().Watcher.GetType().Name);
 	}
 
-	[Test]
+	[Fact]
 	public void Interceptor_selected_by_selector_gets_released_properly()
 	{
 		DisposableInterceptor.InstancesDisposed = 0;
@@ -116,10 +113,10 @@ public class ModelInterceptorsSelectorTestCase
 			Component.For<A>().LifeStyle.Transient);
 
 		var a = container.Resolve<A>();
-		Assert.AreEqual(1, DisposableInterceptor.InstancesCreated);
+		Assert.Equal(1, DisposableInterceptor.InstancesCreated);
 
 		container.Release(a);
-		Assert.AreEqual(1, DisposableInterceptor.InstancesDisposed);
+		Assert.Equal(1, DisposableInterceptor.InstancesDisposed);
 	}
 }
 

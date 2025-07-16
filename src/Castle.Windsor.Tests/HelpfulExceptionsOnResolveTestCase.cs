@@ -28,12 +28,9 @@ using Castle.MicroKernel.Tests.Configuration.Components;
 using CastleTests.ClassComponents;
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void No_resolvable_constructor_no_inline_arguments()
 	{
 		Container.Register(Component.For<ClassWithConstructors>());
@@ -48,10 +45,10 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 				"- Parameter 'hosts' which was not provided. Did you forget to set the dependency?{0}",
 				Environment.NewLine,
 				typeof(ClassWithConstructors));
-		Assert.AreEqual(message, exception.Message);
+		Assert.Equal(message, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-141")]
 	public void No_resolvable_constructor_open_generic_component()
 	{
@@ -66,10 +63,10 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 			"- Service 'Castle.MicroKernel.Tests.Bugs.IoC_141+IAssembler`1[[{1}]]' which was not registered.{0}",
 			Environment.NewLine, typeof(int).AssemblyQualifiedName);
 
-		Assert.AreEqual(message, exception.Message);
+		Assert.Equal(message, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void No_resolvable_constructor_with_inline_arguments()
 	{
 		Container.Register(Component.For<ClassWithConstructors>());
@@ -85,10 +82,10 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 				"- Parameter 'hosts' which was not provided. Did you forget to set the dependency?{0}",
 				Environment.NewLine,
 				typeof(ClassWithConstructors));
-		Assert.AreEqual(message, exception.Message);
+		Assert.Equal(message, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void ReleasePolicy_tracking_the_same_instance_twice_with_transient_lifestyle_and_factory_method_suggests_different_lifestyle()
 	{
 		var a = new ADisposable();
@@ -109,10 +106,10 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 				"Alternatively, if you do not wish for Windsor to track the objects coming from the factory change your registration to '.UsingFactoryMethod(yourFactory, managedExternally: true)'",
 				Environment.NewLine);
 
-		Assert.AreEqual(message, exception.Message);
+		Assert.Equal(message, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void Resolving_by_name_not_found_prints_helpful_message_many_other_options_present()
 	{
 		Container.Register(Component.For<A>(),
@@ -128,10 +125,10 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 				"There are 2 other components supporting requested service '{1}'. Were you looking for any of them?",
 				Environment.NewLine, typeof(A).FullName);
 
-		Assert.AreEqual(expected, exception.Message);
+		Assert.Equal(expected, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void Resolving_by_name_not_found_prints_helpful_message_one_other_option_present()
 	{
 		Container.Register(Component.For<A>());
@@ -146,10 +143,10 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 				"There is one other component supporting requested service '{1}'. Is it what you were looking for?",
 				Environment.NewLine, typeof(A).FullName);
 
-		Assert.AreEqual(expected, exception.Message);
+		Assert.Equal(expected, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void Resolving_by_name_not_found_prints_helpful_message_zero_other_options_present()
 	{
 		var exception =
@@ -162,10 +159,10 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 				"There are no components supporting requested service '{1}'. You need to register components in order to be able to use them.",
 				Environment.NewLine, typeof(A).FullName);
 
-		Assert.AreEqual(expected, exception.Message);
+		Assert.Equal(expected, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-120")]
 	public void When_attemting_to_resolve_component_with_internal_ctor_should_throw_meaningfull_exception()
 	{
@@ -188,10 +185,10 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 					Environment.NewLine,
 					typeof(HasInternalConstructor).FullName);
 #endif
-		Assert.AreEqual(message, exception.Message);
+		Assert.Equal(message, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-83")]
 	[Bug("IOC-120")]
 	public void When_attemting_to_resolve_component_with_protected_ctor_should_throw_meaningfull_exception()
@@ -212,10 +209,10 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 					Environment.NewLine,
 					typeof(HasProtectedConstructor).FullName);
 #endif
-		Assert.AreEqual(message, exception.Message);
+		Assert.Equal(message, exception.Message);
 	}
 
-	[Test]
+	[Fact]
 	public void When_property_setter_throws_at_resolution_time_exception_suggests_disabling_setting_the_property()
 	{
 		Container.Register(
@@ -231,6 +228,6 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 			typeof(PropertySetterThrows),
 			typeof(DoNotWireAttribute).Name);
 
-		Assert.AreEqual(message, exception.Message);
+		Assert.Equal(message, exception.Message);
 	}
 }

@@ -22,23 +22,18 @@ using Castle.Facilities.AspNetCore.Tests.Framework;
 
 using Microsoft.Extensions.DependencyInjection;
 
-using NUnit.Framework;
-
 using TestContext = Castle.Facilities.AspNetCore.Tests.Framework.TestContext;
 
-[TestFixture]
-public class FrameworkDependencyResolverTestCase
+public class FrameworkDependencyResolverTestCase:IDisposable
 {
-	[SetUp]
-	public void SetUp()
+	public FrameworkDependencyResolverTestCase()
 	{
 		testContext = TestContextFactory.Get();
 		frameworkDependencyResolver = new FrameworkDependencyResolver(testContext.ServiceCollection);
 		frameworkDependencyResolver.AcceptServiceProvider(testContext.ServiceProvider);
 	}
 
-	[TearDown]
-	public void TearDown()
+	public void Dispose()
 	{
 		testContext.Dispose();
 	}
@@ -46,123 +41,129 @@ public class FrameworkDependencyResolverTestCase
 	private TestContext testContext;
 	private FrameworkDependencyResolver frameworkDependencyResolver;
 
-	[Test]
+	[Fact]
 	public void Should_not_match_null()
 	{
-		Assert.That(frameworkDependencyResolver.HasMatchingType(null), Is.False);
+		Assert.False(frameworkDependencyResolver.HasMatchingType(null));
 	}
 
-	[TestCase(typeof(ServiceProviderOnlyTransient))]
-	[TestCase(typeof(ServiceProviderOnlyTransientGeneric<OpenOptions>))]
-	[TestCase(typeof(ServiceProviderOnlyTransientGeneric<ClosedOptions>))]
-	[TestCase(typeof(ServiceProviderOnlyTransientDisposable))]
-	[TestCase(typeof(ServiceProviderOnlyScoped))]
-	[TestCase(typeof(ServiceProviderOnlyScopedGeneric<OpenOptions>))]
-	[TestCase(typeof(ServiceProviderOnlyScopedGeneric<ClosedOptions>))]
-	[TestCase(typeof(ServiceProviderOnlyScopedDisposable))]
-	[TestCase(typeof(ServiceProviderOnlySingleton))]
-	[TestCase(typeof(ServiceProviderOnlySingletonGeneric<OpenOptions>))]
-	[TestCase(typeof(ServiceProviderOnlySingletonGeneric<ClosedOptions>))]
-	[TestCase(typeof(ServiceProviderOnlySingletonDisposable))]
-	[TestCase(typeof(ControllerServiceProviderOnly))]
-	[TestCase(typeof(TagHelperServiceProviderOnly))]
-	[TestCase(typeof(ViewComponentServiceProviderOnly))]
+	[InlineData(typeof(ServiceProviderOnlyTransient))]
+	[InlineData(typeof(ServiceProviderOnlyTransientGeneric<OpenOptions>))]
+	[InlineData(typeof(ServiceProviderOnlyTransientGeneric<ClosedOptions>))]
+	[InlineData(typeof(ServiceProviderOnlyTransientDisposable))]
+	[InlineData(typeof(ServiceProviderOnlyScoped))]
+	[InlineData(typeof(ServiceProviderOnlyScopedGeneric<OpenOptions>))]
+	[InlineData(typeof(ServiceProviderOnlyScopedGeneric<ClosedOptions>))]
+	[InlineData(typeof(ServiceProviderOnlyScopedDisposable))]
+	[InlineData(typeof(ServiceProviderOnlySingleton))]
+	[InlineData(typeof(ServiceProviderOnlySingletonGeneric<OpenOptions>))]
+	[InlineData(typeof(ServiceProviderOnlySingletonGeneric<ClosedOptions>))]
+	[InlineData(typeof(ServiceProviderOnlySingletonDisposable))]
+	[InlineData(typeof(ControllerServiceProviderOnly))]
+	[InlineData(typeof(TagHelperServiceProviderOnly))]
+	[InlineData(typeof(ViewComponentServiceProviderOnly))]
+	[Theory]
 	public void Should_match_ServiceProvider_services(Type serviceType)
 	{
-		Assert.That(frameworkDependencyResolver.HasMatchingType(serviceType), Is.True);
+		Assert.True(frameworkDependencyResolver.HasMatchingType(serviceType));
 	}
 
-	[TestCase(typeof(CrossWiredTransient))]
-	[TestCase(typeof(CrossWiredTransientGeneric<OpenOptions>))]
-	[TestCase(typeof(CrossWiredTransientGeneric<ClosedOptions>))]
-	[TestCase(typeof(CrossWiredTransientDisposable))]
-	[TestCase(typeof(CrossWiredScoped))]
-	[TestCase(typeof(CrossWiredScopedGeneric<OpenOptions>))]
-	[TestCase(typeof(CrossWiredScopedGeneric<ClosedOptions>))]
-	[TestCase(typeof(CrossWiredScopedDisposable))]
-	[TestCase(typeof(CrossWiredSingleton))]
-	[TestCase(typeof(CrossWiredSingletonGeneric<OpenOptions>))]
-	[TestCase(typeof(CrossWiredSingletonGeneric<ClosedOptions>))]
-	[TestCase(typeof(CrossWiredSingletonDisposable))]
-	[TestCase(typeof(ControllerCrossWired))]
-	[TestCase(typeof(TagHelperCrossWired))]
-	[TestCase(typeof(ViewComponentCrossWired))]
+	[InlineData(typeof(CrossWiredTransient))]
+	[InlineData(typeof(CrossWiredTransientGeneric<OpenOptions>))]
+	[InlineData(typeof(CrossWiredTransientGeneric<ClosedOptions>))]
+	[InlineData(typeof(CrossWiredTransientDisposable))]
+	[InlineData(typeof(CrossWiredScoped))]
+	[InlineData(typeof(CrossWiredScopedGeneric<OpenOptions>))]
+	[InlineData(typeof(CrossWiredScopedGeneric<ClosedOptions>))]
+	[InlineData(typeof(CrossWiredScopedDisposable))]
+	[InlineData(typeof(CrossWiredSingleton))]
+	[InlineData(typeof(CrossWiredSingletonGeneric<OpenOptions>))]
+	[InlineData(typeof(CrossWiredSingletonGeneric<ClosedOptions>))]
+	[InlineData(typeof(CrossWiredSingletonDisposable))]
+	[InlineData(typeof(ControllerCrossWired))]
+	[InlineData(typeof(TagHelperCrossWired))]
+	[InlineData(typeof(ViewComponentCrossWired))]
+	[Theory]
 	public void Should_match_CrossWired_services(Type serviceType)
 	{
-		Assert.That(frameworkDependencyResolver.HasMatchingType(serviceType), Is.True);
+		Assert.True(frameworkDependencyResolver.HasMatchingType(serviceType));
 	}
 
-	[TestCase(typeof(WindsorOnlyTransient))]
-	[TestCase(typeof(WindsorOnlyTransientGeneric<OpenOptions>))]
-	[TestCase(typeof(WindsorOnlyTransientGeneric<ClosedOptions>))]
-	[TestCase(typeof(WindsorOnlyTransientDisposable))]
-	[TestCase(typeof(WindsorOnlyScoped))]
-	[TestCase(typeof(WindsorOnlyScopedGeneric<OpenOptions>))]
-	[TestCase(typeof(WindsorOnlyScopedGeneric<ClosedOptions>))]
-	[TestCase(typeof(WindsorOnlyScopedDisposable))]
-	[TestCase(typeof(WindsorOnlySingleton))]
-	[TestCase(typeof(WindsorOnlySingletonGeneric<OpenOptions>))]
-	[TestCase(typeof(WindsorOnlySingletonGeneric<ClosedOptions>))]
-	[TestCase(typeof(WindsorOnlySingletonDisposable))]
-	[TestCase(typeof(ControllerWindsorOnly))]
-	[TestCase(typeof(TagHelperWindsorOnly))]
-	[TestCase(typeof(ViewComponentWindsorOnly))]
+	[InlineData(typeof(WindsorOnlyTransient))]
+	[InlineData(typeof(WindsorOnlyTransientGeneric<OpenOptions>))]
+	[InlineData(typeof(WindsorOnlyTransientGeneric<ClosedOptions>))]
+	[InlineData(typeof(WindsorOnlyTransientDisposable))]
+	[InlineData(typeof(WindsorOnlyScoped))]
+	[InlineData(typeof(WindsorOnlyScopedGeneric<OpenOptions>))]
+	[InlineData(typeof(WindsorOnlyScopedGeneric<ClosedOptions>))]
+	[InlineData(typeof(WindsorOnlyScopedDisposable))]
+	[InlineData(typeof(WindsorOnlySingleton))]
+	[InlineData(typeof(WindsorOnlySingletonGeneric<OpenOptions>))]
+	[InlineData(typeof(WindsorOnlySingletonGeneric<ClosedOptions>))]
+	[InlineData(typeof(WindsorOnlySingletonDisposable))]
+	[InlineData(typeof(ControllerWindsorOnly))]
+	[InlineData(typeof(TagHelperWindsorOnly))]
+	[InlineData(typeof(ViewComponentWindsorOnly))]
+	[Theory]
 	public void Should_not_match_WindsorOnly_services(Type serviceType)
 	{
-		Assert.That(!frameworkDependencyResolver.HasMatchingType(serviceType), Is.True);
+		Assert.True(!frameworkDependencyResolver.HasMatchingType(serviceType));
 	}
 
-	[TestCase(typeof(ServiceProviderOnlyTransient))]
-	[TestCase(typeof(ServiceProviderOnlyTransientGeneric<OpenOptions>))]
-	[TestCase(typeof(ServiceProviderOnlyTransientGeneric<ClosedOptions>))]
-	[TestCase(typeof(ServiceProviderOnlyTransientDisposable))]
-	[TestCase(typeof(ServiceProviderOnlyScoped))]
-	[TestCase(typeof(ServiceProviderOnlyScopedGeneric<OpenOptions>))]
-	[TestCase(typeof(ServiceProviderOnlyScopedGeneric<ClosedOptions>))]
-	[TestCase(typeof(ServiceProviderOnlyScopedDisposable))]
-	[TestCase(typeof(ServiceProviderOnlySingleton))]
-	[TestCase(typeof(ServiceProviderOnlySingletonGeneric<OpenOptions>))]
-	[TestCase(typeof(ServiceProviderOnlySingletonGeneric<ClosedOptions>))]
-	[TestCase(typeof(ServiceProviderOnlySingletonDisposable))]
-	[TestCase(typeof(ControllerServiceProviderOnly))]
-	[TestCase(typeof(TagHelperServiceProviderOnly))]
-	[TestCase(typeof(ViewComponentServiceProviderOnly))]
+	[InlineData(typeof(ServiceProviderOnlyTransient))]
+	[InlineData(typeof(ServiceProviderOnlyTransientGeneric<OpenOptions>))]
+	[InlineData(typeof(ServiceProviderOnlyTransientGeneric<ClosedOptions>))]
+	[InlineData(typeof(ServiceProviderOnlyTransientDisposable))]
+	[InlineData(typeof(ServiceProviderOnlyScoped))]
+	[InlineData(typeof(ServiceProviderOnlyScopedGeneric<OpenOptions>))]
+	[InlineData(typeof(ServiceProviderOnlyScopedGeneric<ClosedOptions>))]
+	[InlineData(typeof(ServiceProviderOnlyScopedDisposable))]
+	[InlineData(typeof(ServiceProviderOnlySingleton))]
+	[InlineData(typeof(ServiceProviderOnlySingletonGeneric<OpenOptions>))]
+	[InlineData(typeof(ServiceProviderOnlySingletonGeneric<ClosedOptions>))]
+	[InlineData(typeof(ServiceProviderOnlySingletonDisposable))]
+	[InlineData(typeof(ControllerServiceProviderOnly))]
+	[InlineData(typeof(TagHelperServiceProviderOnly))]
+	[InlineData(typeof(ViewComponentServiceProviderOnly))]
+	[Theory]
 	public void Should_resolve_all_ServiceProviderOnly_services_from_ServiceProvider(Type serviceType)
 	{
-		Assert.DoesNotThrow(() => { testContext.ServiceProvider.GetRequiredService(serviceType); });
+		testContext.ServiceProvider.GetRequiredService(serviceType);
 	}
 
-	[TestCase(typeof(CrossWiredTransient))]
-	[TestCase(typeof(CrossWiredTransientGeneric<OpenOptions>))]
-	[TestCase(typeof(CrossWiredTransientGeneric<ClosedOptions>))]
-	[TestCase(typeof(CrossWiredTransientDisposable))]
-	[TestCase(typeof(CrossWiredScoped))]
-	[TestCase(typeof(CrossWiredScopedGeneric<OpenOptions>))]
-	[TestCase(typeof(CrossWiredScopedGeneric<ClosedOptions>))]
-	[TestCase(typeof(CrossWiredScopedDisposable))]
-	[TestCase(typeof(CrossWiredSingleton))]
-	[TestCase(typeof(CrossWiredSingletonGeneric<OpenOptions>))]
-	[TestCase(typeof(CrossWiredSingletonGeneric<ClosedOptions>))]
-	[TestCase(typeof(CrossWiredSingletonDisposable))]
-	[TestCase(typeof(ControllerCrossWired))]
-	[TestCase(typeof(TagHelperCrossWired))]
-	[TestCase(typeof(ViewComponentCrossWired))]
+	[InlineData(typeof(CrossWiredTransient))]
+	[InlineData(typeof(CrossWiredTransientGeneric<OpenOptions>))]
+	[InlineData(typeof(CrossWiredTransientGeneric<ClosedOptions>))]
+	[InlineData(typeof(CrossWiredTransientDisposable))]
+	[InlineData(typeof(CrossWiredScoped))]
+	[InlineData(typeof(CrossWiredScopedGeneric<OpenOptions>))]
+	[InlineData(typeof(CrossWiredScopedGeneric<ClosedOptions>))]
+	[InlineData(typeof(CrossWiredScopedDisposable))]
+	[InlineData(typeof(CrossWiredSingleton))]
+	[InlineData(typeof(CrossWiredSingletonGeneric<OpenOptions>))]
+	[InlineData(typeof(CrossWiredSingletonGeneric<ClosedOptions>))]
+	[InlineData(typeof(CrossWiredSingletonDisposable))]
+	[InlineData(typeof(ControllerCrossWired))]
+	[InlineData(typeof(TagHelperCrossWired))]
+	[InlineData(typeof(ViewComponentCrossWired))]
+	[Theory]
 	public void Should_resolve_all_CrossWiredOnly_services_from_ServiceProvider(Type serviceType)
 	{
-		Assert.DoesNotThrow(() => { testContext.ServiceProvider.GetRequiredService(serviceType); });
+		 testContext.ServiceProvider.GetRequiredService(serviceType); 
 	}
 
-	[TestCase(typeof(ControllerCrossWired))]
-	[TestCase(typeof(TagHelperCrossWired))]
-	[TestCase(typeof(ViewComponentCrossWired))]
-	[TestCase(typeof(ControllerWindsorOnly))]
-	[TestCase(typeof(TagHelperWindsorOnly))]
-	[TestCase(typeof(ViewComponentWindsorOnly))]
-	[TestCase(typeof(ControllerServiceProviderOnly))]
-	[TestCase(typeof(TagHelperServiceProviderOnly))]
-	[TestCase(typeof(ViewComponentServiceProviderOnly))]
+	[InlineData(typeof(ControllerCrossWired))]
+	[InlineData(typeof(TagHelperCrossWired))]
+	[InlineData(typeof(ViewComponentCrossWired))]
+	[InlineData(typeof(ControllerWindsorOnly))]
+	[InlineData(typeof(TagHelperWindsorOnly))]
+	[InlineData(typeof(ViewComponentWindsorOnly))]
+	[InlineData(typeof(ControllerServiceProviderOnly))]
+	[InlineData(typeof(TagHelperServiceProviderOnly))]
+	[InlineData(typeof(ViewComponentServiceProviderOnly))]
+	[Theory]
 	public void Should_resolve_ServiceProviderOnly_and_WindsorOnly_and_CrossWired_registered_Controllers_TagHelpers_and_ViewComponents_from_WindsorContainer(Type serviceType)
 	{
-		Assert.DoesNotThrow(() => { testContext.WindsorContainer.Resolve(serviceType); });
+		 testContext.WindsorContainer.Resolve(serviceType); 
 	}
 }

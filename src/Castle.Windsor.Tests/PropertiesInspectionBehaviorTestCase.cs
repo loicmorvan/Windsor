@@ -21,39 +21,36 @@ using Castle.XmlFiles;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class PropertiesInspectionBehaviorTestCase
 {
-	[Test]
+	[Fact]
 	public void InvalidOption()
 	{
 		var expectedMessage =
 			"Error on properties inspection. Could not convert the inspectionBehavior attribute value into an expected enum value. Value found is 'Invalid' while possible values are 'Undefined, None, All, DeclaredOnly'";
 		var exception = Assert.Throws<ConverterException>(() =>
 			new WindsorContainer(new XmlInterpreter(Xml.Embedded("propertyInspectionBehaviorInvalid.xml"))));
-		Assert.AreEqual(exception.Message, expectedMessage);
+		Assert.Equal(exception.Message, expectedMessage);
 	}
 
-	[Test]
+	[Fact]
 	public void PropertiesInspectionTestCase()
 	{
 		var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("propertyInspectionBehavior.xml")));
 
 		var comp = container.Resolve<ExtendedComponentWithProperties>("comp1");
-		Assert.IsNull(comp.Prop1);
-		Assert.AreEqual(0, comp.Prop2);
-		Assert.AreEqual(0, comp.Prop3);
+		Assert.Null(comp.Prop1);
+		Assert.Equal(0, comp.Prop2);
+		Assert.Equal(0, comp.Prop3);
 
 		comp = container.Resolve<ExtendedComponentWithProperties>("comp2"); // All
-		Assert.IsNotNull(comp.Prop1);
-		Assert.AreEqual(1, comp.Prop2);
-		Assert.AreEqual(2, comp.Prop3);
+		Assert.NotNull(comp.Prop1);
+		Assert.Equal(1, comp.Prop2);
+		Assert.Equal(2, comp.Prop3);
 
 		comp = container.Resolve<ExtendedComponentWithProperties>("comp3"); // DeclaredOnly
-		Assert.IsNull(comp.Prop1);
-		Assert.AreEqual(0, comp.Prop2);
-		Assert.AreEqual(2, comp.Prop3);
+		Assert.Null(comp.Prop1);
+		Assert.Equal(0, comp.Prop2);
+		Assert.Equal(2, comp.Prop3);
 	}
 }

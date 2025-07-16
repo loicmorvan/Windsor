@@ -25,8 +25,6 @@ using Castle.Windsor.Diagnostics;
 using CastleTests.Components;
 using CastleTests.Interceptors;
 
-using NUnit.Framework;
-
 public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContainerTestCase
 {
 	private IUsingContainerAsServiceLocatorDiagnostic diagnostic;
@@ -37,12 +35,13 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContaine
 		diagnostic = host.GetDiagnostic<IUsingContainerAsServiceLocatorDiagnostic>();
 	}
 
-	[TestCase(typeof(IKernel))]
-	[TestCase(typeof(IKernelInternal))]
-	[TestCase(typeof(IKernelEvents))]
-	[TestCase(typeof(IWindsorContainer))]
-	[TestCase(typeof(DefaultKernel))]
-	[TestCase(typeof(WindsorContainer))]
+	[Theory]
+	[InlineData(typeof(IKernel))]
+	[InlineData(typeof(IKernelInternal))]
+	[InlineData(typeof(IKernelEvents))]
+	[InlineData(typeof(IWindsorContainer))]
+	[InlineData(typeof(DefaultKernel))]
+	[InlineData(typeof(WindsorContainer))]
 	public void Detects_ctor_dependency_on(Type type)
 	{
 		var generic = typeof(GenericWithCtor<>).MakeGenericType(type);
@@ -50,15 +49,16 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContaine
 			Component.For<A>());
 
 		var serviceLocators = diagnostic.Inspect();
-		Assert.AreEqual(1, serviceLocators.Length);
+		Assert.Single(serviceLocators);
 	}
 
-	[TestCase(typeof(IKernel))]
-	[TestCase(typeof(IKernelInternal))]
-	[TestCase(typeof(IKernelEvents))]
-	[TestCase(typeof(IWindsorContainer))]
-	[TestCase(typeof(DefaultKernel))]
-	[TestCase(typeof(WindsorContainer))]
+	[Theory]
+	[InlineData(typeof(IKernel))]
+	[InlineData(typeof(IKernelInternal))]
+	[InlineData(typeof(IKernelEvents))]
+	[InlineData(typeof(IWindsorContainer))]
+	[InlineData(typeof(DefaultKernel))]
+	[InlineData(typeof(WindsorContainer))]
 	public void Detects_property_dependency_on(Type type)
 	{
 		var generic = typeof(GenericWithProperty<>).MakeGenericType(type);
@@ -66,10 +66,10 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContaine
 			Component.For<A>());
 
 		var serviceLocators = diagnostic.Inspect();
-		Assert.AreEqual(1, serviceLocators.Length);
+		Assert.Single(serviceLocators);
 	}
 
-	[Test]
+	[Fact]
 	public void Ignores_interceptors()
 	{
 		Container.Register(
@@ -79,10 +79,10 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContaine
 			Component.For<A>().Interceptors("b"));
 
 		var serviceLocators = diagnostic.Inspect();
-		Assert.IsEmpty(serviceLocators);
+		Assert.Empty(serviceLocators);
 	}
 
-	[Test]
+	[Fact]
 	public void Ignores_lazy()
 	{
 		Container.Register(Component.For<ILazyComponentLoader>()
@@ -93,16 +93,16 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContaine
 		Container.Resolve<Lazy<B>>(); // to trigger lazy registration of lazy
 
 		var serviceLocators = diagnostic.Inspect();
-		Assert.IsEmpty(serviceLocators);
+		Assert.Empty(serviceLocators);
 	}
 
-	[Test]
+	[Fact]
 	public void Successfully_handles_cases_with_no_SL_usages()
 	{
 		Container.Register(Component.For<B>(),
 			Component.For<A>());
 
 		var serviceLocators = diagnostic.Inspect();
-		Assert.IsEmpty(serviceLocators);
+		Assert.Empty(serviceLocators);
 	}
 }

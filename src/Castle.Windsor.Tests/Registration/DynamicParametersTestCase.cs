@@ -20,27 +20,24 @@ using Castle.MicroKernel.Tests.ClassComponents;
 using CastleTests;
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class DynamicParametersTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Arguments_are_case_insensitive_when_using_anonymous_object()
 	{
 		var wasCalled = false;
 		Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((k, d) =>
 		{
-			Assert.IsTrue(d.Contains("ArG1"));
+			Assert.True(d.Contains("ArG1"));
 			wasCalled = true;
 		}));
 
 		Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2).AddNamed("arg1", "foo"));
 
-		Assert.IsTrue(wasCalled);
+		Assert.True(wasCalled);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_dynamically_override_services()
 	{
 		Kernel.Register(
@@ -62,21 +59,21 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 				}));
 
 		var component = Kernel.Resolve<CommonImplWithDependency>();
-		Assert.IsInstanceOf<CustomerImpl2>(component.Customer);
+		Assert.IsType<CustomerImpl2>(component.Customer);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_mix_registration_and_call_site_parameters()
 	{
 		Kernel.Register(
 			Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((k, d) => d["arg1"] = "foo"));
 
 		var component = Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2));
-		Assert.AreEqual(2, component.Arg2);
-		Assert.AreEqual("foo", component.Arg1);
+		Assert.Equal(2, component.Arg2);
+		Assert.Equal("foo", component.Arg1);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_release_components_with_dynamic_parameters()
 	{
 		var releaseCalled = 0;
@@ -90,14 +87,14 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 				.DynamicParameters((k, d) => { return kk => ++releaseCalled; }));
 
 		var component = Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2));
-		Assert.AreEqual(2, component.Arg2);
-		Assert.AreEqual("foo", component.Arg1);
+		Assert.Equal(2, component.Arg2);
+		Assert.Equal("foo", component.Arg1);
 
 		Kernel.ReleaseComponent(component);
-		Assert.AreEqual(2, releaseCalled);
+		Assert.Equal(2, releaseCalled);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_release_generics_with_dynamic_parameters()
 	{
 		var releaseCalled = 0;
@@ -112,13 +109,13 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 				.DynamicParameters((k, d) => { return kk => ++releaseCalled; }));
 
 		var component = Kernel.Resolve<IGenericClassWithParameter<int>>(new Arguments().AddNamed("name", "bar"));
-		Assert.AreEqual("foo", component.Name);
+		Assert.Equal("foo", component.Name);
 
 		Kernel.ReleaseComponent(component);
-		Assert.AreEqual(2, releaseCalled);
+		Assert.Equal(2, releaseCalled);
 	}
 
-	[Test]
+	[Fact]
 	public void Should_handle_multiple_calls()
 	{
 		var arg1 = "bar";
@@ -128,11 +125,11 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 			.DynamicParameters((k, d) => { d["arg1"] = arg1; })
 			.DynamicParameters((k, d) => { d["arg2"] = arg2; }));
 		var component = Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2).AddNamed("arg1", "foo"));
-		Assert.AreEqual(arg1, component.Arg1);
-		Assert.AreEqual(arg2, component.Arg2);
+		Assert.Equal(arg1, component.Arg1);
+		Assert.Equal(arg2, component.Arg2);
 	}
 
-	[Test]
+	[Fact]
 	public void Should_have_access_to_parameters_passed_from_call_site()
 	{
 		string arg1 = null;
@@ -143,18 +140,18 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 			arg2 = (int)d["arg2"];
 		}));
 		var component = Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2).AddNamed("arg1", "foo"));
-		Assert.AreEqual("foo", arg1);
-		Assert.AreEqual(2, arg2);
+		Assert.Equal("foo", arg1);
+		Assert.Equal(2, arg2);
 	}
 
-	[Test]
+	[Fact]
 	public void Should_not_require_explicit_registration()
 	{
 		Kernel.Register(Component.For<CommonSub2Impl>().LifeStyle.Transient.DynamicParameters((k, d) => { }));
-		Assert.DoesNotThrow(() => Kernel.Resolve<CommonSub2Impl>());
+		Kernel.Resolve<CommonSub2Impl>();
 	}
 
-	[Test]
+	[Fact]
 	public void Should_override_parameters_passed_from_call_site()
 	{
 		var arg1 = "bar";
@@ -165,11 +162,11 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 			d["arg2"] = arg2;
 		}));
 		var component = Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2).AddNamed("arg1", "foo"));
-		Assert.AreEqual(arg1, component.Arg1);
-		Assert.AreEqual(arg2, component.Arg2);
+		Assert.Equal(arg1, component.Arg1);
+		Assert.Equal(arg2, component.Arg2);
 	}
 
-	[Test]
+	[Fact]
 	public void Should_resolve_component_when_no_parameters_passed_from_call_site()
 	{
 		var arg1 = "bar";
@@ -180,7 +177,6 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 			d["arg2"] = arg2;
 		}));
 
-		Assert.DoesNotThrow(() =>
-			Kernel.Resolve<ClassWithArguments>());
+			Kernel.Resolve<ClassWithArguments>();
 	}
 }

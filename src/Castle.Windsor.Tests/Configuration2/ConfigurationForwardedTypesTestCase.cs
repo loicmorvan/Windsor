@@ -16,24 +16,20 @@ namespace Castle.Windsor.Tests.Configuration2;
 
 using Castle.MicroKernel.Tests.ClassComponents;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class ConfigurationForwardedTypesTestCase
 {
-	[SetUp]
-	public void SetUp()
+	public ConfigurationForwardedTypesTestCase()
 	{
 		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_forwarded_types.xml"));
 	}
 
 	private IWindsorContainer container;
 
-	[Test]
+	[Fact]
 	public void Component_with_forwarded_types()
 	{
 		var first = container.Resolve<ICommon>("hasForwards");
 		var second = container.Resolve<ICommon2>();
-		Assert.AreSame(first, second);
+		Assert.Same(first, second);
 	}
 }

@@ -16,9 +16,6 @@ namespace CastleTests.Bugs;
 
 using Castle.MicroKernel.Registration;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class IoC_114 : AbstractContainerTestCase
 {
 	public interface IService1
@@ -38,7 +35,7 @@ public class IoC_114 : AbstractContainerTestCase
 		public IService1 S { get; private set; }
 	}
 
-	[Test]
+	[Fact]
 	public void UsingPropertyWithPrivateSetter()
 	{
 		Container.Register(Component.For<IService1>().ImplementedBy<Service1>(),
@@ -46,6 +43,6 @@ public class IoC_114 : AbstractContainerTestCase
 
 		var service2 = (Service2)Container.Resolve<IService2>();
 
-		Assert.IsNull(service2.S, "Kernel should ignore private setter properties");
+		Assert.Null(service2.S);
 	}
 }

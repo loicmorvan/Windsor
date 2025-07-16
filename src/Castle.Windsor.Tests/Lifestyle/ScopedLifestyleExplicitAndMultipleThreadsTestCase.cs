@@ -24,9 +24,6 @@ using Castle.MicroKernel.Registration;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContainerTestCase
 {
 	protected override void AfterContainerCreated()
@@ -35,7 +32,7 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
 	}
 
 #if FEATURE_REMOTING //async delegates depend on Remoting https://github.com/dotnet/corefx/issues/5940 
-		[Test]
+		[Fact]
 		public void Context_is_passed_onto_the_next_thread_Begin_End_Invoke()
 		{
 			using (Container.BeginScope())
@@ -46,17 +43,17 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
 				var initialThreadId = Thread.CurrentThread.ManagedThreadId;
 				Action action = () =>
 				{
-					Assert.AreNotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
+					Assert.NotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
 					instanceFromOtherThread = Container.Resolve<A>();
 				};
 
 				var result = action.BeginInvoke(null, null);
 				result.AsyncWaitHandle.WaitOne();
-				Assert.AreSame(instance, instanceFromOtherThread);
+				Assert.Same(instance, instanceFromOtherThread);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void Context_is_NOT_visible_in_unrelated_thread_Begin_End_Invoke()
 		{
 			var startLock = new ManualResetEvent(false);
@@ -68,7 +65,7 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
 				using (Container.BeginScope())
 				{
 					startLock.WaitOne();
-					Assert.AreNotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
+					Assert.NotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
 					instanceFromOtherThread = Container.Resolve<A>();
 					resolvedLock.Set();
 				}
@@ -81,13 +78,13 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
 				resolvedLock.WaitOne();
 
 				result.AsyncWaitHandle.WaitOne();
-				Assert.AreNotSame(instance, instanceFromOtherThread);
+				Assert.NotSame(instance, instanceFromOtherThread);
 			}
 		}
 #endif
 
-	[Test]
-	public void Context_is_passed_onto_the_next_thread_TPL()
+	[Fact]
+	public async Task Context_is_passed_onto_the_next_thread_TPL()
 	{
 		using (Container.BeginScope())
 		{
@@ -96,12 +93,12 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
 			instance = Container.Resolve<A>();
 			var initialThreadId = Thread.CurrentThread.ManagedThreadId;
 			var task = Task.Factory.StartNew(() => { instanceFromOtherThread = Container.Resolve<A>(); });
-			task.Wait();
-			Assert.AreSame(instance, instanceFromOtherThread);
+			await task;
+			Assert.Same(instance, instanceFromOtherThread);
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void Context_is_passed_onto_the_next_thread_ThreadPool()
 	{
 		using (Container.BeginScope())
@@ -114,7 +111,7 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
 			var exceptionFromTheOtherThread = default(Exception);
 			ThreadPool.QueueUserWorkItem(_ =>
 			{
-				Assert.AreNotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
+				Assert.NotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
 				try
 				{
 					instanceFromOtherThread = Container.Resolve<A>();
@@ -135,12 +132,12 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
 				capture.Throw();
 			}
 
-			Assert.IsTrue(signalled, "The other thread didn't finish on time.");
-			Assert.AreSame(instance, instanceFromOtherThread);
+			Assert.True(signalled, "The other thread didn't finish on time.");
+			Assert.Same(instance, instanceFromOtherThread);
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void Context_is_passed_onto_the_next_thread_explicit()
 	{
 		using (Container.BeginScope())
@@ -153,7 +150,7 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
 			var exceptionFromTheOtherThread = default(Exception);
 			var otherThread = new Thread(() =>
 			{
-				Assert.AreNotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
+				Assert.NotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
 				try
 				{
 					instanceFromOtherThread = Container.Resolve<A>();
@@ -175,8 +172,8 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
 				capture.Throw();
 			}
 
-			Assert.IsTrue(signalled, "The other thread didn't finish on time.");
-			Assert.AreSame(instance, instanceFromOtherThread);
+			Assert.True(signalled, "The other thread didn't finish on time.");
+			Assert.Same(instance, instanceFromOtherThread);
 		}
 	}
 }

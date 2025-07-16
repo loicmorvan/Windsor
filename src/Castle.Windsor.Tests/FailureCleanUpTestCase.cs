@@ -21,20 +21,16 @@ using Castle.Windsor.Tests.Interceptors;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class FailureCleanUpTestCase
 {
-	[SetUp]
-	public void Init()
+	public FailureCleanUpTestCase()
 	{
 		container = new WindsorContainer();
 	}
 
 	private IWindsorContainer container;
 
-	[Test]
+	[Fact]
 	public void When_constructor_throws_ctor_dependencies_get_released()
 	{
 		SimpleServiceDisposable.DisposedCount = 0;
@@ -44,10 +40,10 @@ public class FailureCleanUpTestCase
 		);
 
 		Assert.Throws<ComponentActivatorException>(() => container.Resolve<ThrowsInCtorWithDisposableDependency>());
-		Assert.AreEqual(1, SimpleServiceDisposable.DisposedCount);
+		Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
 	}
 
-	[Test]
+	[Fact]
 	public void When_constructor_dependency_throws_previous_dependencies_get_released()
 	{
 		SimpleServiceDisposable.DisposedCount = 0;
@@ -58,10 +54,10 @@ public class FailureCleanUpTestCase
 		);
 
 		Assert.Throws<ComponentActivatorException>(() => container.Resolve<DependsOnThrowingComponent>());
-		Assert.AreEqual(1, SimpleServiceDisposable.DisposedCount);
+		Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
 	}
 
-	[Test]
+	[Fact]
 	public void When_interceptor_throws_previous_dependencies_get_released()
 	{
 		DisposableFoo.ResetDisposedCount();
@@ -73,6 +69,6 @@ public class FailureCleanUpTestCase
 		);
 
 		Assert.Throws<ComponentActivatorException>(() => container.Resolve<UsesDisposableFoo>());
-		Assert.AreEqual(1, DisposableFoo.DisposedCount);
+		Assert.Equal(1, DisposableFoo.DisposedCount);
 	}
 }

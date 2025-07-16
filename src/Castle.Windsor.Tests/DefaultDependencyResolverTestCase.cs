@@ -21,12 +21,9 @@ using Castle.MicroKernel.Tests.ClassComponents;
 
 using CastleTests.ClassComponents;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class DefaultDependencyResolverTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void DependencyChain_each_registered_separately()
 	{
 		Kernel.Register(Component.For<ICustomer>().ImplementedBy<CustomerChain9>());
@@ -41,28 +38,28 @@ public class DefaultDependencyResolverTestCase : AbstractContainerTestCase
 		Kernel.Register(Component.For<ICustomer>().ImplementedBy<CustomerImpl>());
 
 		var customer = (CustomerChain1)Kernel.Resolve<ICustomer>();
-		Assert.IsInstanceOf(typeof(CustomerChain9), customer);
+		Assert.IsType<CustomerChain9>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerChain8), customer);
+		Assert.IsType<CustomerChain8>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerChain7), customer);
+		Assert.IsType<CustomerChain7>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerChain6), customer);
+		Assert.IsType<CustomerChain6>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerChain5), customer);
+		Assert.IsType<CustomerChain5>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerChain4), customer);
+		Assert.IsType<CustomerChain4>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerChain3), customer);
+		Assert.IsType<CustomerChain3>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerChain2), customer);
+		Assert.IsType<CustomerChain2>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerChain1), customer);
+		Assert.IsType<CustomerChain1>(customer);
 		var lastCustomer = customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerImpl), lastCustomer);
+		Assert.IsType<CustomerImpl>(lastCustomer);
 	}
 
-	[Test]
+	[Fact]
 	public void DependencyChain_registered_all_at_once()
 	{
 		Kernel.Register(Component.For<ICustomer>().ImplementedBy<CustomerChain9>(),
@@ -77,28 +74,28 @@ public class DefaultDependencyResolverTestCase : AbstractContainerTestCase
 			Component.For<ICustomer>().ImplementedBy<CustomerImpl>());
 
 		var customer = (CustomerChain1)Kernel.Resolve<ICustomer>();
-		Assert.IsInstanceOf(typeof(CustomerChain9), customer);
+		Assert.IsType<CustomerChain9>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerChain8), customer);
+		Assert.IsType<CustomerChain8>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerChain7), customer);
+		Assert.IsType<CustomerChain7>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerChain6), customer);
+		Assert.IsType<CustomerChain6>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerChain5), customer);
+		Assert.IsType<CustomerChain5>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerChain4), customer);
+		Assert.IsType<CustomerChain4>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerChain3), customer);
+		Assert.IsType<CustomerChain3>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerChain2), customer);
+		Assert.IsType<CustomerChain2>(customer);
 		customer = (CustomerChain1)customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerChain1), customer);
+		Assert.IsType<CustomerChain1>(customer);
 		var lastCustomer = customer.CustomerBase;
-		Assert.IsInstanceOf(typeof(CustomerImpl), lastCustomer);
+		Assert.IsType<CustomerImpl>(lastCustomer);
 	}
 
-	[Test]
+	[Fact]
 	public void FactoryPattern()
 	{
 		Kernel.Register(Component.For<DefaultSpamServiceWithConstructor>().Named("spamservice"),
@@ -108,17 +105,17 @@ public class DefaultDependencyResolverTestCase : AbstractContainerTestCase
 
 		var factory = Kernel.Resolve<ComponentFactory>("factory");
 
-		Assert.IsNotNull(factory);
+		Assert.NotNull(factory);
 
 		var spamservice =
 			(DefaultSpamServiceWithConstructor)factory.Create("spamservice");
 
-		Assert.IsNotNull(spamservice);
-		Assert.IsNotNull(spamservice.MailSender);
-		Assert.IsNotNull(spamservice.TemplateEngine);
+		Assert.NotNull(spamservice);
+		Assert.NotNull(spamservice.MailSender);
+		Assert.NotNull(spamservice.TemplateEngine);
 	}
 
-	[Test]
+	[Fact]
 	public void ResolvingConcreteClassThroughConstructor()
 	{
 		Kernel.Register(Component.For<DefaultSpamServiceWithConstructor>(),
@@ -127,12 +124,12 @@ public class DefaultDependencyResolverTestCase : AbstractContainerTestCase
 
 		var spamservice = Kernel.Resolve<DefaultSpamServiceWithConstructor>();
 
-		Assert.IsNotNull(spamservice);
-		Assert.IsNotNull(spamservice.MailSender);
-		Assert.IsNotNull(spamservice.TemplateEngine);
+		Assert.NotNull(spamservice);
+		Assert.NotNull(spamservice.MailSender);
+		Assert.NotNull(spamservice.TemplateEngine);
 	}
 
-	[Test]
+	[Fact]
 	public void ResolvingConcreteClassThroughProperties()
 	{
 		Kernel.Register(Component.For<DefaultSpamService>(),
@@ -141,12 +138,12 @@ public class DefaultDependencyResolverTestCase : AbstractContainerTestCase
 
 		var spamservice = Kernel.Resolve<DefaultSpamService>();
 
-		Assert.IsNotNull(spamservice);
-		Assert.IsNotNull(spamservice.MailSender);
-		Assert.IsNotNull(spamservice.TemplateEngine);
+		Assert.NotNull(spamservice);
+		Assert.NotNull(spamservice.MailSender);
+		Assert.NotNull(spamservice.TemplateEngine);
 	}
 
-	[Test]
+	[Fact]
 	public void ResolvingPrimitivesThroughProperties()
 	{
 		var config = new MutableConfiguration("component");
@@ -164,13 +161,13 @@ public class DefaultDependencyResolverTestCase : AbstractContainerTestCase
 
 		var customer = Kernel.Resolve<ICustomer>("customer");
 
-		Assert.IsNotNull(customer);
-		Assert.AreEqual("hammett", customer.Name);
-		Assert.AreEqual("something", customer.Address);
-		Assert.AreEqual(25, customer.Age);
+		Assert.NotNull(customer);
+		Assert.Equal("hammett", customer.Name);
+		Assert.Equal("something", customer.Address);
+		Assert.Equal(25, customer.Age);
 	}
 
-	[Test]
+	[Fact]
 	public void Resolving_by_name_is_case_insensitive()
 	{
 		Kernel.Register(Component.For<DefaultSpamServiceWithConstructor>().Named("spamService"));
@@ -179,12 +176,12 @@ public class DefaultDependencyResolverTestCase : AbstractContainerTestCase
 
 		var spamservice = Kernel.Resolve<DefaultSpamServiceWithConstructor>("spamSERVICE");
 
-		Assert.IsNotNull(spamservice);
-		Assert.IsNotNull(spamservice.MailSender);
-		Assert.IsNotNull(spamservice.TemplateEngine);
+		Assert.NotNull(spamservice);
+		Assert.NotNull(spamservice.MailSender);
+		Assert.NotNull(spamservice.TemplateEngine);
 	}
 
-	[Test]
+	[Fact]
 	public void Service_override_by_name_is_case_insensitive()
 	{
 		Kernel.Register(Component.For<DefaultSpamServiceWithConstructor>().Named("spamService"));
@@ -194,12 +191,12 @@ public class DefaultDependencyResolverTestCase : AbstractContainerTestCase
 
 		var spamservice = Kernel.Resolve<DefaultSpamServiceWithConstructor>("spamSERVICE");
 
-		Assert.IsNotNull(spamservice);
-		Assert.IsNotNull(spamservice.MailSender);
-		Assert.IsNotNull(spamservice.TemplateEngine);
+		Assert.NotNull(spamservice);
+		Assert.NotNull(spamservice.MailSender);
+		Assert.NotNull(spamservice.TemplateEngine);
 	}
 
-	[Test]
+	[Fact]
 	public void UnresolvedDependencies()
 	{
 		Kernel.Register(Component.For<DefaultSpamServiceWithConstructor>(),

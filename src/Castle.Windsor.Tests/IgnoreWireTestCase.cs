@@ -19,12 +19,9 @@ using Castle.XmlFiles;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class IgnoreWireTestCase
 {
-	[Test]
+	[Fact]
 	public void TestIgnoreAttribute()
 	{
 		var container = new WindsorContainer();
@@ -32,7 +29,7 @@ public class IgnoreWireTestCase
 
 		var server = container.Resolve<ClassWithDoNotWireProperties>();
 
-		Assert.AreEqual(0, server.Port);
-		Assert.IsNull(server.Host);
+		Assert.Equal(0, server.Port);
+		Assert.Null(server.Host);
 	}
 }

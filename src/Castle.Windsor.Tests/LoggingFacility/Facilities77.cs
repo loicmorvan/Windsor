@@ -19,9 +19,6 @@ using Castle.Facilities.Logging.Tests.Classes;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class Facilities77 : BaseTest
 {
 	public class TestLoggerFactory : AbstractLoggerFactory
@@ -49,7 +46,7 @@ public class Facilities77 : BaseTest
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void ShouldCallNoArgsContstructorIfConfigFileNotSpecified()
 	{
 		var container = new WindsorContainer().AddFacility<LoggingFacility>(f => f.LogUsing<TestLoggerFactory>());
@@ -58,6 +55,6 @@ public class Facilities77 : BaseTest
 		container.Resolve<SimpleLoggingComponent>("component");
 
 		var logFactory = container.Resolve<TestLoggerFactory>("iloggerfactory");
-		Assert.IsTrue(logFactory.NoArgsConstructorWasCalled, "No args constructor was not called");
+		Assert.True(logFactory.NoArgsConstructorWasCalled, "No args constructor was not called");
 	}
 }

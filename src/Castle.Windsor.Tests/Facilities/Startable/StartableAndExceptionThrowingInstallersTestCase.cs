@@ -23,12 +23,9 @@ using Castle.Windsor.Tests;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class StartableAndExceptionThrowingInstallersTestCase
 {
-	[Test]
+	[Fact]
 	[Bug("IOC-311")]
 	public void InstallShouldThrowExceptionFromFailedInstaller()
 	{
@@ -55,7 +52,7 @@ public class StartableAndExceptionThrowingInstallersTestCase
 		}
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-311")]
 	public void StartableComponentShouldNotStartIfExceptionThrownByInstaller()
 	{
@@ -78,7 +75,7 @@ public class StartableAndExceptionThrowingInstallersTestCase
 			// being implemented by a using() block or something similar
 			// via OptimizeDependencyResolutionDisposable.Dispose()
 
-			Assert.AreEqual(0, UsesIEmptyService.instancesCreated);
+			Assert.Equal(0, UsesIEmptyService.instancesCreated);
 		}
 	}
 }

@@ -21,13 +21,9 @@ using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Tests.Bugs.Ioc113;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class IoC_113_When_resolving_initializable_disposable_and_startable_component
 {
-	[SetUp]
-	public void SetUp()
+	public IoC_113_When_resolving_initializable_disposable_and_startable_component()
 	{
 		kernel = new DefaultKernel();
 
@@ -49,29 +45,29 @@ public class IoC_113_When_resolving_initializable_disposable_and_startable_compo
 	private StartableDisposableAndInitializableComponent component;
 	private IList<SdiComponentMethods> calledMethods;
 
-	[Test]
+	[Fact]
 	public void Should_call_DoSomething_between_start_and_stop()
 	{
-		Assert.AreEqual(SdiComponentMethods.DoSomething, calledMethods[2]);
+		Assert.Equal(SdiComponentMethods.DoSomething, calledMethods[2]);
 	}
 
-	[Test]
+	[Fact]
 	public void Should_call_all_methods_once()
 	{
-		Assert.AreEqual(5, component.calledMethods.Count);
+		Assert.Equal(5, component.calledMethods.Count);
 	}
 
-	[Test]
+	[Fact]
 	public void Should_call_initialize_before_start()
 	{
-		Assert.AreEqual(SdiComponentMethods.Initialize, calledMethods[0]);
-		Assert.AreEqual(SdiComponentMethods.Start, calledMethods[1]);
+		Assert.Equal(SdiComponentMethods.Initialize, calledMethods[0]);
+		Assert.Equal(SdiComponentMethods.Start, calledMethods[1]);
 	}
 
-	[Test]
+	[Fact]
 	public void Should_call_stop_before_dispose()
 	{
-		Assert.AreEqual(SdiComponentMethods.Stop, calledMethods[3]);
-		Assert.AreEqual(SdiComponentMethods.Dispose, calledMethods[4]);
+		Assert.Equal(SdiComponentMethods.Stop, calledMethods[3]);
+		Assert.Equal(SdiComponentMethods.Dispose, calledMethods[4]);
 	}
 }

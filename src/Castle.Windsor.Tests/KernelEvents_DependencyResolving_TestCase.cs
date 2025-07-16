@@ -22,9 +22,6 @@ using Castle.Core.Configuration;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Tests.ClassComponents;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class KernelEvents_DependencyResolving_TestCase : AbstractContainerTestCase
 {
 	protected override void AfterContainerCreated()
@@ -37,12 +34,12 @@ public class KernelEvents_DependencyResolving_TestCase : AbstractContainerTestCa
 
 	private void AssertEvent(ComponentModel client, DependencyModel model, object dependency)
 	{
-		Assert.AreEqual(expectedClient, client);
-		Assert.IsTrue(expectedModels.Contains(model));
-		Assert.IsNotNull(dependency);
+		Assert.Equal(expectedClient, client);
+		Assert.Contains(model, expectedModels);
+		Assert.NotNull(dependency);
 	}
 
-	[Test]
+	[Fact]
 	public void ResolvingConcreteClassThroughConstructor()
 	{
 		Kernel.Register(Component.For(typeof(DefaultSpamServiceWithConstructor)).Named("spamservice"));
@@ -52,8 +49,8 @@ public class KernelEvents_DependencyResolving_TestCase : AbstractContainerTestCa
 		var mailservice = Kernel.Resolve<DefaultMailSenderService>("mailsender");
 		var templateengine = Kernel.Resolve<DefaultTemplateEngine>("templateengine");
 
-		Assert.IsNotNull(mailservice);
-		Assert.IsNotNull(templateengine);
+		Assert.NotNull(mailservice);
+		Assert.NotNull(templateengine);
 
 		expectedClient = Kernel.GetHandler("spamservice").ComponentModel;
 		expectedModels =
@@ -63,10 +60,10 @@ public class KernelEvents_DependencyResolving_TestCase : AbstractContainerTestCa
 		var spamservice =
 			Kernel.Resolve<DefaultSpamServiceWithConstructor>("spamservice");
 
-		Assert.IsNotNull(spamservice);
+		Assert.NotNull(spamservice);
 	}
 
-	[Test]
+	[Fact]
 	public void ResolvingConcreteClassThroughProperties()
 	{
 		Kernel.Register(Component.For<DefaultSpamService>().Named("spamservice"));
@@ -76,8 +73,8 @@ public class KernelEvents_DependencyResolving_TestCase : AbstractContainerTestCa
 		var mailservice = Kernel.Resolve<DefaultMailSenderService>("mailsender");
 		var templateengine = Kernel.Resolve<DefaultTemplateEngine>("templateengine");
 
-		Assert.IsNotNull(mailservice);
-		Assert.IsNotNull(templateengine);
+		Assert.NotNull(mailservice);
+		Assert.NotNull(templateengine);
 
 		expectedClient = Kernel.GetHandler("spamservice").ComponentModel;
 		expectedModels = new List<DependencyModel>();
@@ -85,10 +82,10 @@ public class KernelEvents_DependencyResolving_TestCase : AbstractContainerTestCa
 
 		var spamservice = Kernel.Resolve<DefaultSpamService>("spamservice");
 
-		Assert.IsNotNull(spamservice);
+		Assert.NotNull(spamservice);
 	}
 
-	[Test]
+	[Fact]
 	public void ResolvingPrimitivesThroughProperties()
 	{
 		var config = new MutableConfiguration("component");
@@ -110,6 +107,6 @@ public class KernelEvents_DependencyResolving_TestCase : AbstractContainerTestCa
 
 		var customer = Kernel.Resolve<ICustomer>("customer");
 
-		Assert.IsNotNull(customer);
+		Assert.NotNull(customer);
 	}
 }

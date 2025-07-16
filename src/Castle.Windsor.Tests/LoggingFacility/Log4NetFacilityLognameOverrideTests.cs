@@ -27,26 +27,21 @@ using log4net.Appender;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
 
-using NUnit.Framework;
-
-[TestFixture]
-public class Log4NetFacilityLognameOverrideTests : OverrideLoggerTest
+public class Log4NetFacilityLognameOverrideTests : OverrideLoggerTest, IDisposable
 {
-	[SetUp]
-	public void Setup()
+	public Log4NetFacilityLognameOverrideTests()
 	{
 		container = base.CreateConfiguredContainer<ExtendedLog4netFactory>("Override");
 	}
 
-	[TearDown]
-	public void Teardown()
+	public void Dispose()
 	{
 		container.Dispose();
 	}
 
 	private IWindsorContainer container;
 
-	[Test]
+	[Fact]
 	public void OverrideTest()
 	{
 		container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
@@ -60,6 +55,6 @@ public class Log4NetFacilityLognameOverrideTests : OverrideLoggerTest
 		var patternLayout = new PatternLayout("[%-5level] [%logger] - %message%newline");
 		patternLayout.Format(actualLogOutput, memoryAppender.GetEvents()[0]);
 
-		Assert.AreEqual(expectedLogOutput, actualLogOutput.ToString());
+		Assert.Equal(expectedLogOutput, actualLogOutput.ToString());
 	}
 }

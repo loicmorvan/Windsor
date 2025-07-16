@@ -23,9 +23,6 @@ using Castle.MicroKernel.Registration;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class KernelEvents_ComponentCreated_TestCase : AbstractContainerTestCase
 {
 	private readonly IList<KeyValuePair<ComponentModel, object>> list = new List<KeyValuePair<ComponentModel, object>>();
@@ -42,8 +39,7 @@ public class KernelEvents_ComponentCreated_TestCase : AbstractContainerTestCase
 	}
 
 
-	[Test]
-	[Description("As reported in http://stackoverflow.com/questions/8923931/castle-windsor-component-created-event-with-interceptor")]
+	[Fact]
 	public void Event_raised_for_component_with_interceptor()
 	{
 		Container.Register(
@@ -51,7 +47,7 @@ public class KernelEvents_ComponentCreated_TestCase : AbstractContainerTestCase
 			Component.For<IService>().ImplementedBy<MyService>().Interceptors<StandardInterceptor>().LifestyleTransient());
 
 		var service = Container.Resolve<IService>();
-		CollectionAssert.IsNotEmpty(list);
-		Assert.IsTrue(list.Any(t => t.Value == service));
+		Assert.NotEmpty(list);
+		Assert.Contains(list, t => t.Value == service);
 	}
 }

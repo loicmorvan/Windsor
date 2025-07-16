@@ -22,12 +22,9 @@ using Castle.MicroKernel.Tests.ClassComponents;
 using CastleTests.ClassComponents;
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class OpenGenericsTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void ExtendedProperties_incl_ProxyOptions_are_honored_for_open_generic_types()
 	{
 		Container.Register(
@@ -36,10 +33,10 @@ public class OpenGenericsTestCase : AbstractContainerTestCase
 
 		var proxy = Container.Resolve<Collection<int>>();
 
-		Assert.IsInstanceOf<ISimpleService>(proxy);
+		Assert.IsType<ISimpleService>(proxy, exactMatch: false);
 	}
 
-	[Test]
+	[Fact]
 	public void Open_generic_handlers_get_included_when_generic_service_requested()
 	{
 		Container.Register(Component.For<IGeneric<A>>().ImplementedBy<GenericImpl1<A>>(),
@@ -47,10 +44,10 @@ public class OpenGenericsTestCase : AbstractContainerTestCase
 
 		var items = Container.ResolveAll<IGeneric<A>>();
 
-		Assert.AreEqual(2, items.Length);
+		Assert.Equal(2, items.Length);
 	}
 
-	[Test]
+	[Fact]
 	public void Open_generic_multiple_services_favor_closed_service()
 	{
 		Container.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)),
@@ -58,10 +55,10 @@ public class OpenGenericsTestCase : AbstractContainerTestCase
 
 		var item = Container.Resolve<IGeneric<A>>();
 
-		Assert.IsInstanceOf<GenericImplA>(item);
+		Assert.IsType<GenericImplA>(item);
 	}
 
-	[Test]
+	[Fact]
 	public void ResolveAll_properly_skips_open_generic_service_with_generic_constraints_that_dont_match()
 	{
 		Container.Register(
@@ -70,10 +67,10 @@ public class OpenGenericsTestCase : AbstractContainerTestCase
 
 		var invalid = Container.ResolveAll<IHasGenericConstraints<EmptySub1, EmptyClass>>();
 
-		Assert.AreEqual(0, invalid.Length);
+		Assert.Empty(invalid);
 	}
 
-	[Test]
+	[Fact]
 	public void ResolveAll_returns_matching_open_generic_service_with_generic_constraints()
 	{
 		Container.Register(
@@ -82,10 +79,10 @@ public class OpenGenericsTestCase : AbstractContainerTestCase
 
 		var valid = Container.ResolveAll<IHasGenericConstraints<EmptySub2WithMarkerInterface, EmptyClass>>();
 
-		Assert.AreEqual(1, valid.Length);
+		Assert.Single(valid);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_use_open_generic_with_LateBoundComponent_implementing_partial_closure()
 	{
 		Container.Register(
@@ -99,7 +96,7 @@ public class OpenGenericsTestCase : AbstractContainerTestCase
 					return k.Resolve(closedType);
 				}));
 		var repo = Container.Resolve<Castle.MicroKernel.Tests.ClassComponents.IRepository<string>>();
-		Assert.AreEqual(repo.Find(), default(string));
-		Assert.IsInstanceOf(typeof(DoubleRepository<string, int>), repo);
+		Assert.Equal(default(string), repo.Find());
+		Assert.IsType<DoubleRepository<string, int>>(repo);
 	}
 }

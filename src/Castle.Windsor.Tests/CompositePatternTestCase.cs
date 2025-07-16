@@ -20,12 +20,9 @@ using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using CastleTests;
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class CompositePatternTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Can_resolve_composite_based_solely_on_conventions()
 	{
 		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel));
@@ -39,7 +36,7 @@ public class CompositePatternTestCase : AbstractContainerTestCase
 				.Configure(c => c.LifestyleTransient()));
 
 		var obj = Container.Resolve<IEmptyService2>();
-		Assert.IsInstanceOf<CompositeEmptyService2>(obj);
-		Assert.AreEqual(5, ((CompositeEmptyService2)obj).Inner.Length);
+		Assert.IsType<CompositeEmptyService2>(obj);
+		Assert.Equal(5, ((CompositeEmptyService2)obj).Inner.Length);
 	}
 }

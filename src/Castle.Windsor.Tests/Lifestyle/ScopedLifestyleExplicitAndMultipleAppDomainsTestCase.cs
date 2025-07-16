@@ -19,8 +19,6 @@ namespace CastleTests.Lifestyle
 	using Castle.MicroKernel.Lifestyle;
 	using Castle.MicroKernel.Registration;
 	using CastleTests.Components;
-	using NUnit.Framework;
-
 	public class ScopedLifestyleExplicitAndMultipleAppDomainsTestCase : AbstractContainerTestCase
 	{
 		protected override void AfterContainerCreated()
@@ -33,7 +31,7 @@ namespace CastleTests.Lifestyle
 			return AppDomain.CreateDomain("Another", null, new AppDomainSetup {ApplicationBase = AppDomain.CurrentDomain.BaseDirectory});
 		}
 
-		[Test]
+		[Fact]
 		public void Context_is_preserved_if_crossed_to_other_AppDomain_in_the_meantime()
 		{
 			using (Container.BeginScope())
@@ -44,7 +42,7 @@ namespace CastleTests.Lifestyle
 				Activator.CreateInstance(anotherDomain, typeof (Object).Assembly.FullName, typeof (Object).FullName).Unwrap();
 
 				var two = Container.Resolve<A>();
-				Assert.AreSame(one, two);
+				Assert.Same(one, two);
 			}
 		}
 	}

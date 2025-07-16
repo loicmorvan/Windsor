@@ -27,10 +27,7 @@ using Castle.Windsor.Tests.Components;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
 /// <summary>Summary description for SubContainersTestCase.</summary>
-[TestFixture]
 public class SubContainersTestCase : AbstractContainerTestCase
 {
 	/// <summary>collects events in an array list, used for ensuring we are cleaning up the parent kernel event subscriptions correctly.</summary>
@@ -51,18 +48,18 @@ public class SubContainersTestCase : AbstractContainerTestCase
 
 		public void AddedAsChildKernel(object sender, EventArgs e)
 		{
-			Assert.AreEqual(expectedSender, sender);
+			Assert.Equal(expectedSender, sender);
 			Events.Add(Added);
 		}
 
 		public void RemovedAsChildKernel(object sender, EventArgs e)
 		{
-			Assert.AreEqual(expectedSender, sender);
+			Assert.Equal(expectedSender, sender);
 			Events.Add(Removed);
 		}
 	}
 
-	[Test]
+	[Fact]
 	public void AddChildKernelToTwoParentsThrowsException()
 	{
 		var expectedMessage = "You can not change the kernel parent once set, use the RemoveChildKernel and AddChildKernel methods together to achieve this.";
@@ -72,13 +69,13 @@ public class SubContainersTestCase : AbstractContainerTestCase
 		IKernel subkernel = new DefaultKernel();
 
 		Kernel.AddChildKernel(subkernel);
-		Assert.AreEqual(Kernel, subkernel.Parent);
+		Assert.Equal(Kernel, subkernel.Parent);
 
 		var exception = Assert.Throws<KernelException>(() => kernel2.AddChildKernel(subkernel));
-		Assert.AreEqual(exception.Message, expectedMessage);
+		Assert.Equal(exception.Message, expectedMessage);
 	}
 
-	[Test]
+	[Fact]
 	public void ChildDependenciesIsSatisfiedEvenWhenComponentTakesLongToBeAddedToParentContainer()
 	{
 		var container = new DefaultKernel();
@@ -93,7 +90,7 @@ public class SubContainersTestCase : AbstractContainerTestCase
 		childContainer.Resolve<UsesIEmptyService>();
 	}
 
-	[Test]
+	[Fact]
 	public void ChildDependenciesSatisfiedAmongContainers()
 	{
 		IKernel subkernel = new DefaultKernel();
@@ -106,12 +103,12 @@ public class SubContainersTestCase : AbstractContainerTestCase
 
 		var spamservice = subkernel.Resolve<DefaultSpamService>("spamservice");
 
-		Assert.IsNotNull(spamservice);
-		Assert.IsNotNull(spamservice.MailSender);
-		Assert.IsNotNull(spamservice.TemplateEngine);
+		Assert.NotNull(spamservice);
+		Assert.NotNull(spamservice.MailSender);
+		Assert.NotNull(spamservice.TemplateEngine);
 	}
 
-	[Test]
+	[Fact]
 	public void ChildKernelFindsAndCreateParentComponent()
 	{
 		IKernel subkernel = new DefaultKernel();
@@ -120,11 +117,11 @@ public class SubContainersTestCase : AbstractContainerTestCase
 
 		Kernel.AddChildKernel(subkernel);
 
-		Assert.IsTrue(subkernel.HasComponent(typeof(DefaultTemplateEngine)));
-		Assert.IsNotNull(subkernel.Resolve<DefaultTemplateEngine>());
+		Assert.True(subkernel.HasComponent(typeof(DefaultTemplateEngine)));
+		Assert.NotNull(subkernel.Resolve<DefaultTemplateEngine>());
 	}
 
-	[Test]
+	[Fact]
 	public void ChildKernelOverloadsParentKernel1()
 	{
 		var instance1 = new DefaultTemplateEngine();
@@ -134,17 +131,17 @@ public class SubContainersTestCase : AbstractContainerTestCase
 
 		IKernel subkernel = new DefaultKernel();
 		subkernel.Register(Component.For<DefaultTemplateEngine>().Named("engine").Instance(instance1));
-		Assert.AreEqual(instance1, subkernel.Resolve<DefaultTemplateEngine>("engine"));
+		Assert.Equal(instance1, subkernel.Resolve<DefaultTemplateEngine>("engine"));
 
 		Kernel.Register(Component.For<DefaultTemplateEngine>().Named("engine").Instance(instance2));
-		Assert.AreEqual(instance2, Kernel.Resolve<DefaultTemplateEngine>("engine"));
+		Assert.Equal(instance2, Kernel.Resolve<DefaultTemplateEngine>("engine"));
 
 		Kernel.AddChildKernel(subkernel);
-		Assert.AreEqual(instance1, subkernel.Resolve<DefaultTemplateEngine>("engine"));
-		Assert.AreEqual(instance2, Kernel.Resolve<DefaultTemplateEngine>("engine"));
+		Assert.Equal(instance1, subkernel.Resolve<DefaultTemplateEngine>("engine"));
+		Assert.Equal(instance2, Kernel.Resolve<DefaultTemplateEngine>("engine"));
 	}
 
-	[Test]
+	[Fact]
 	public void ChildKernelOverloadsParentKernel2()
 	{
 		var instance1 = new DefaultTemplateEngine();
@@ -156,15 +153,15 @@ public class SubContainersTestCase : AbstractContainerTestCase
 		// subkernel added first, then populated with overloaded components after
 
 		Kernel.Register(Component.For<DefaultTemplateEngine>().Named("engine").Instance(instance2));
-		Assert.AreEqual(instance2, Kernel.Resolve<DefaultTemplateEngine>("engine"));
-		Assert.AreEqual(instance2, subkernel.Resolve<DefaultTemplateEngine>("engine"));
+		Assert.Equal(instance2, Kernel.Resolve<DefaultTemplateEngine>("engine"));
+		Assert.Equal(instance2, subkernel.Resolve<DefaultTemplateEngine>("engine"));
 
 		subkernel.Register(Component.For<DefaultTemplateEngine>().Named("engine").Instance(instance1));
-		Assert.AreEqual(instance1, subkernel.Resolve<DefaultTemplateEngine>("engine"));
-		Assert.AreEqual(instance2, Kernel.Resolve<DefaultTemplateEngine>("engine"));
+		Assert.Equal(instance1, subkernel.Resolve<DefaultTemplateEngine>("engine"));
+		Assert.Equal(instance2, Kernel.Resolve<DefaultTemplateEngine>("engine"));
 	}
 
-	[Test]
+	[Fact]
 	public void DependenciesSatisfiedAmongContainers()
 	{
 		IKernel subkernel = new DefaultKernel();
@@ -178,12 +175,12 @@ public class SubContainersTestCase : AbstractContainerTestCase
 
 		var spamservice = subkernel.Resolve<DefaultSpamService>("spamservice");
 
-		Assert.IsNotNull(spamservice);
-		Assert.IsNotNull(spamservice.MailSender);
-		Assert.IsNotNull(spamservice.TemplateEngine);
+		Assert.NotNull(spamservice);
+		Assert.NotNull(spamservice.MailSender);
+		Assert.NotNull(spamservice.TemplateEngine);
 	}
 
-	[Test]
+	[Fact]
 	public void DependenciesSatisfiedAmongContainersUsingEvents()
 	{
 		IKernel subkernel = new DefaultKernel();
@@ -198,12 +195,12 @@ public class SubContainersTestCase : AbstractContainerTestCase
 		var spamservice =
 			subkernel.Resolve<DefaultSpamServiceWithConstructor>("spamservice");
 
-		Assert.IsNotNull(spamservice);
-		Assert.IsNotNull(spamservice.MailSender);
-		Assert.IsNotNull(spamservice.TemplateEngine);
+		Assert.NotNull(spamservice);
+		Assert.NotNull(spamservice.MailSender);
+		Assert.NotNull(spamservice.TemplateEngine);
 	}
 
-	[Test]
+	[Fact]
 	public void ParentKernelFindsAndCreateChildComponent()
 	{
 		IKernel subkernel = new DefaultKernel();
@@ -212,12 +209,12 @@ public class SubContainersTestCase : AbstractContainerTestCase
 
 		Kernel.AddChildKernel(subkernel);
 
-		Assert.IsFalse(Kernel.HasComponent(typeof(DefaultTemplateEngine)));
+		Assert.False(Kernel.HasComponent(typeof(DefaultTemplateEngine)));
 
 		Assert.Throws<ComponentNotFoundException>(() => Kernel.Resolve<DefaultTemplateEngine>());
 	}
 
-	[Test]
+	[Fact]
 	public void RemoveChildKernelCleansUp()
 	{
 		IKernel subkernel = new DefaultKernel();
@@ -226,17 +223,17 @@ public class SubContainersTestCase : AbstractContainerTestCase
 		subkernel.AddedAsChildKernel += eventCollector.AddedAsChildKernel;
 
 		Kernel.AddChildKernel(subkernel);
-		Assert.AreEqual(Kernel, subkernel.Parent);
-		Assert.AreEqual(1, eventCollector.Events.Count);
-		Assert.AreEqual(EventsCollector.Added, eventCollector.Events[0]);
+		Assert.Equal(Kernel, subkernel.Parent);
+		Assert.Single(eventCollector.Events);
+		Assert.Equal(EventsCollector.Added, eventCollector.Events[0]);
 
 		Kernel.RemoveChildKernel(subkernel);
-		Assert.IsNull(subkernel.Parent);
-		Assert.AreEqual(2, eventCollector.Events.Count);
-		Assert.AreEqual(EventsCollector.Removed, eventCollector.Events[1]);
+		Assert.Null(subkernel.Parent);
+		Assert.Equal(2, eventCollector.Events.Count);
+		Assert.Equal(EventsCollector.Removed, eventCollector.Events[1]);
 	}
 
-	[Test]
+	[Fact]
 	public void RemovingChildKernelUnsubscribesFromParentEvents()
 	{
 		IKernel subkernel = new DefaultKernel();
@@ -249,29 +246,14 @@ public class SubContainersTestCase : AbstractContainerTestCase
 		Kernel.AddChildKernel(subkernel);
 		Kernel.RemoveChildKernel(subkernel);
 
-		Assert.AreEqual(4, eventCollector.Events.Count);
-		Assert.AreEqual(EventsCollector.Added, eventCollector.Events[0]);
-		Assert.AreEqual(EventsCollector.Removed, eventCollector.Events[1]);
-		Assert.AreEqual(EventsCollector.Added, eventCollector.Events[2]);
-		Assert.AreEqual(EventsCollector.Removed, eventCollector.Events[3]);
+		Assert.Equal(4, eventCollector.Events.Count);
+		Assert.Equal(EventsCollector.Added, eventCollector.Events[0]);
+		Assert.Equal(EventsCollector.Removed, eventCollector.Events[1]);
+		Assert.Equal(EventsCollector.Added, eventCollector.Events[2]);
+		Assert.Equal(EventsCollector.Removed, eventCollector.Events[3]);
 	}
 
-	[Test]
-	[Ignore(
-		"Support for this was removed due to issues with scoping (SimpleComponent1 would become visible from parent container)."
-	)]
-	public void Requesting_parent_component_with_child_dependency_from_child_component()
-	{
-		var subkernel = new DefaultKernel();
-		Kernel.AddChildKernel(subkernel);
-
-		Kernel.Register(Component.For<UsesSimpleComponent1>());
-		subkernel.Register(Component.For<SimpleComponent1>());
-
-		subkernel.Resolve<UsesSimpleComponent1>();
-	}
-
-	[Test]
+	[Fact]
 	public void Parent_component_will_NOT_have_dependencies_from_child()
 	{
 		Kernel.Register(Component.For<DefaultTemplateEngine>(),
@@ -284,12 +266,12 @@ public class SubContainersTestCase : AbstractContainerTestCase
 
 		var spamservice = child.Resolve<DefaultSpamService>();
 
-		Assert.IsNotNull(spamservice);
-		Assert.IsNotNull(spamservice.TemplateEngine);
-		Assert.IsNull(spamservice.MailSender);
+		Assert.NotNull(spamservice);
+		Assert.NotNull(spamservice.TemplateEngine);
+		Assert.Null(spamservice.MailSender);
 	}
 
-	[Test]
+	[Fact]
 	public void Singleton_withNonSingletonDependencies_doesNotReResolveDependencies()
 	{
 		Kernel.Register(Component.For(typeof(DefaultSpamService)).Named("spamservice"));
@@ -307,39 +289,15 @@ public class SubContainersTestCase : AbstractContainerTestCase
 		var templateengine1 = subkernel1.Resolve<DefaultTemplateEngine>("templateengine");
 		var spamservice1 = subkernel1.Resolve<DefaultSpamService>("spamservice");
 
-		Assert.IsNull(spamservice1.TemplateEngine);
+		Assert.Null(spamservice1.TemplateEngine);
 
 		var templateengine2 = subkernel2.Resolve<DefaultTemplateEngine>("templateengine");
 		var spamservice2 = subkernel2.Resolve<DefaultSpamService>("spamservice");
 
-		Assert.AreSame(spamservice1, spamservice2);
+		Assert.Same(spamservice1, spamservice2);
 	}
 
-	[Test]
-	[Ignore(
-		"Support for this was removed due to issues with scoping (SimpleComponent1 would become visible from parent container)."
-	)]
-	public void Three_level_hierarchy([Values(0, 1, 2)] int parentComponentContainer,
-		[Values(0, 1, 2)] int childComponentContainer)
-	{
-		var subKernel = new DefaultKernel();
-		var subSubKernel = new DefaultKernel();
-		Kernel.AddChildKernel(subKernel);
-		subKernel.AddChildKernel(subSubKernel);
-		var containers = new[]
-		{
-			Kernel,
-			subKernel,
-			subSubKernel
-		};
-
-		containers[parentComponentContainer].Register(Component.For<UsesSimpleComponent1>());
-		containers[childComponentContainer].Register(Component.For<SimpleComponent1>());
-
-		subSubKernel.Resolve<UsesSimpleComponent1>();
-	}
-
-	[Test]
+	[Fact]
 	[Bug("IOC-345")]
 	public void Do_NOT_UseChildComponentsForParentDependenciesWhenRequestedFromChild()
 	{
@@ -356,15 +314,15 @@ public class SubContainersTestCase : AbstractContainerTestCase
 		var sub_templateengine = subkernel.Resolve<DefaultTemplateEngine>("templateengine");
 
 		var spamservice = subkernel.Resolve<DefaultSpamService>("spamservice");
-		Assert.AreNotEqual(spamservice.TemplateEngine, sub_templateengine);
-		Assert.AreEqual(spamservice.TemplateEngine, templateengine);
+		Assert.NotEqual(spamservice.TemplateEngine, sub_templateengine);
+		Assert.Equal(spamservice.TemplateEngine, templateengine);
 
 		spamservice = Kernel.Resolve<DefaultSpamService>("spamservice");
-		Assert.AreNotEqual(spamservice.TemplateEngine, sub_templateengine);
-		Assert.AreEqual(spamservice.TemplateEngine, templateengine);
+		Assert.NotEqual(spamservice.TemplateEngine, sub_templateengine);
+		Assert.Equal(spamservice.TemplateEngine, templateengine);
 	}
 
-	[Test]
+	[Fact]
 	[Bug("IOC-325")]
 	public void TryResolvingViaChildKernelShouldNotThrowException()
 	{
@@ -375,9 +333,9 @@ public class SubContainersTestCase : AbstractContainerTestCase
 			var handler = childKernel.GetHandler(typeof(BookStore));
 
 			// Assert setup invariant
-			Assert.IsInstanceOf<ParentHandlerWrapper>(handler);
+			Assert.IsType<ParentHandlerWrapper>(handler);
 
-			Assert.DoesNotThrow(() => handler.TryResolve(CreationContext.CreateEmpty()));
+			handler.TryResolve(CreationContext.CreateEmpty());
 		}
 	}
 }

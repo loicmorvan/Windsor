@@ -28,13 +28,9 @@ using Castle.MicroKernel.Tests.ClassComponents;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Facilities.Startable.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class StartableFacilityTestCase
 {
-	[SetUp]
-	public void SetUp()
+	public StartableFacilityTestCase()
 	{
 		kernel = new DefaultKernel();
 
@@ -51,9 +47,9 @@ public class StartableFacilityTestCase
 	{
 		var startable = instance as NoInterfaceStartableComponent;
 
-		Assert.IsNotNull(startable);
-		Assert.IsTrue(startable.Started);
-		Assert.IsFalse(startable.Stopped);
+		Assert.NotNull(startable);
+		Assert.True(startable.Started);
+		Assert.False(startable.Stopped);
 
 		startableCreatedBeforeResolved = true;
 	}
@@ -62,14 +58,14 @@ public class StartableFacilityTestCase
 	{
 		var startable = instance as StartableComponent;
 
-		Assert.IsNotNull(startable);
-		Assert.IsTrue(startable.Started);
-		Assert.IsFalse(startable.Stopped);
+		Assert.NotNull(startable);
+		Assert.True(startable.Started);
+		Assert.False(startable.Stopped);
 
 		startableCreatedBeforeResolved = true;
 	}
 
-	[Test]
+	[Fact]
 	public void Startable_with_throwing_property_dependency()
 	{
 		HasThrowingPropertyDependency.InstancesStarted = 0;
@@ -81,20 +77,20 @@ public class StartableFacilityTestCase
 				.StartUsingMethod(x => x.Start)
 		);
 
-		Assert.AreEqual(1, HasThrowingPropertyDependency.InstancesCreated);
-		Assert.AreEqual(1, HasThrowingPropertyDependency.InstancesStarted);
+		Assert.Equal(1, HasThrowingPropertyDependency.InstancesCreated);
+		Assert.Equal(1, HasThrowingPropertyDependency.InstancesStarted);
 	}
 
-	[Test]
+	[Fact]
 	public void Starts_component_without_start_method()
 	{
 		ClassWithInstanceCount.InstancesCount = 0;
 		kernel.AddFacility<StartableFacility>(f => f.DeferredTryStart());
 		kernel.Register(Component.For<ClassWithInstanceCount>().Start());
-		Assert.AreEqual(1, ClassWithInstanceCount.InstancesCount);
+		Assert.Equal(1, ClassWithInstanceCount.InstancesCount);
 	}
 
-	[Test]
+	[Fact]
 	public void Starts_component_without_start_method_AllTypes()
 	{
 		ClassWithInstanceCount.InstancesCount = 0;
@@ -102,10 +98,10 @@ public class StartableFacilityTestCase
 		kernel.Register(Classes.FromAssembly(currentAssembly)
 			.Where(t => t == typeof(ClassWithInstanceCount))
 			.Configure(c => c.Start()));
-		Assert.AreEqual(1, ClassWithInstanceCount.InstancesCount);
+		Assert.Equal(1, ClassWithInstanceCount.InstancesCount);
 	}
 
-	[Test]
+	[Fact]
 	public void TestComponentWithNoInterface()
 	{
 		kernel.ComponentCreated += OnNoInterfaceStartableComponentStarted;
@@ -121,19 +117,19 @@ public class StartableFacilityTestCase
 		kernel.AddFacility<StartableFacility>();
 		kernel.Register(Component.For<NoInterfaceStartableComponent>().Named("b"));
 
-		Assert.IsTrue(startableCreatedBeforeResolved, "Component was not properly started");
+		Assert.True(startableCreatedBeforeResolved, "Component was not properly started");
 
 		var component = kernel.Resolve<NoInterfaceStartableComponent>("b");
 
-		Assert.IsNotNull(component);
-		Assert.IsTrue(component.Started);
-		Assert.IsFalse(component.Stopped);
+		Assert.NotNull(component);
+		Assert.True(component.Started);
+		Assert.False(component.Stopped);
 
 		kernel.ReleaseComponent(component);
-		Assert.IsTrue(component.Stopped);
+		Assert.True(component.Stopped);
 	}
 
-	[Test]
+	[Fact]
 	public void TestInterfaceBasedStartable()
 	{
 		kernel.ComponentCreated += OnStartableComponentStarted;
@@ -142,19 +138,19 @@ public class StartableFacilityTestCase
 
 		kernel.Register(Component.For(typeof(StartableComponent)).Named("a"));
 
-		Assert.IsTrue(startableCreatedBeforeResolved, "Component was not properly started");
+		Assert.True(startableCreatedBeforeResolved, "Component was not properly started");
 
 		var component = kernel.Resolve<StartableComponent>("a");
 
-		Assert.IsNotNull(component);
-		Assert.IsTrue(component.Started);
-		Assert.IsFalse(component.Stopped);
+		Assert.NotNull(component);
+		Assert.True(component.Started);
+		Assert.False(component.Stopped);
 
 		kernel.ReleaseComponent(component);
-		Assert.IsTrue(component.Stopped);
+		Assert.True(component.Stopped);
 	}
 
-	[Test]
+	[Fact]
 	public void TestStartableCallsStartOnlyOnceOnError()
 	{
 		StartableWithError.StartedCount = 0;
@@ -166,15 +162,15 @@ public class StartableFacilityTestCase
 					Component.For<ICommon>().ImplementedBy<CommonImpl1>()));
 
 		// Every additional registration causes Start to be called again and again...
-		Assert.AreEqual("This should go bonk", ex.Message);
-		Assert.AreEqual(1, StartableWithError.StartedCount);
+		Assert.Equal("This should go bonk", ex.Message);
+		Assert.Equal(1, StartableWithError.StartedCount);
 	}
 
 	/// <summary>
 	///     This test has one startable component dependent on another, and both are dependent on a third generic component - all are singletons. We need to make sure we only get one instance of each
 	///     component created.
 	/// </summary>
-	[Test]
+	[Fact]
 	public void TestStartableChainWithGenerics()
 	{
 		kernel.AddFacility<StartableFacility>();
@@ -182,26 +178,26 @@ public class StartableFacilityTestCase
 		// Add parent. This has a dependency so won't be started yet.
 		kernel.Register(Component.For(typeof(StartableChainParent)).Named("chainparent"));
 
-		Assert.AreEqual(0, StartableChainDependency.startcount);
-		Assert.AreEqual(0, StartableChainDependency.createcount);
+		Assert.Equal(0, StartableChainDependency.startcount);
+		Assert.Equal(0, StartableChainDependency.createcount);
 
 		// Add generic dependency. This is not startable so won't get created. 
 		kernel.Register(Component.For(typeof(StartableChainGeneric<>)).Named("chaingeneric"));
 
-		Assert.AreEqual(0, StartableChainDependency.startcount);
-		Assert.AreEqual(0, StartableChainDependency.createcount);
+		Assert.Equal(0, StartableChainDependency.startcount);
+		Assert.Equal(0, StartableChainDependency.createcount);
 
 		// Add dependency. This will satisfy the dependency so everything will start.
 		kernel.Register(Component.For(typeof(StartableChainDependency)).Named("chaindependency"));
 
-		Assert.AreEqual(1, StartableChainParent.startcount);
-		Assert.AreEqual(1, StartableChainParent.createcount);
-		Assert.AreEqual(1, StartableChainDependency.startcount);
-		Assert.AreEqual(1, StartableChainDependency.createcount);
-		Assert.AreEqual(1, StartableChainGeneric<string>.createcount);
+		Assert.Equal(1, StartableChainParent.startcount);
+		Assert.Equal(1, StartableChainParent.createcount);
+		Assert.Equal(1, StartableChainDependency.startcount);
+		Assert.Equal(1, StartableChainDependency.createcount);
+		Assert.Equal(1, StartableChainGeneric<string>.createcount);
 	}
 
-	[Test]
+	[Fact]
 	public void TestStartableCustomDependencies()
 	{
 		kernel.ComponentCreated += OnStartableComponentStarted;
@@ -212,19 +208,19 @@ public class StartableFacilityTestCase
 				.Named("a")
 				.DependsOn(Property.ForKey("config").Eq(1))
 		);
-		Assert.IsTrue(startableCreatedBeforeResolved, "Component was not properly started");
+		Assert.True(startableCreatedBeforeResolved, "Component was not properly started");
 
 		var component = kernel.Resolve<StartableComponentCustomDependencies>("a");
 
-		Assert.IsNotNull(component);
-		Assert.IsTrue(component.Started);
-		Assert.IsFalse(component.Stopped);
+		Assert.NotNull(component);
+		Assert.True(component.Started);
+		Assert.False(component.Stopped);
 
 		kernel.ReleaseComponent(component);
-		Assert.IsTrue(component.Stopped);
+		Assert.True(component.Stopped);
 	}
 
-	[Test]
+	[Fact]
 	public void TestStartableExplicitFakeDependencies()
 	{
 		kernel.ComponentCreated += OnStartableComponentStarted;
@@ -244,7 +240,7 @@ public class StartableFacilityTestCase
 		Assert.True(startableCreatedBeforeResolved, "Component was not properly started");
 	}
 
-	[Test]
+	[Fact]
 	public void TestStartableWithRegisteredCustomDependencies()
 	{
 		kernel.ComponentCreated += OnStartableComponentStarted;
@@ -255,19 +251,19 @@ public class StartableFacilityTestCase
 		kernel.Register(Component.For<StartableComponentCustomDependencies>().DependsOn(dependencies));
 		;
 
-		Assert.IsTrue(startableCreatedBeforeResolved, "Component was not properly started");
+		Assert.True(startableCreatedBeforeResolved, "Component was not properly started");
 
 		var component = kernel.Resolve<StartableComponentCustomDependencies>();
 
-		Assert.IsNotNull(component);
-		Assert.IsTrue(component.Started);
-		Assert.IsFalse(component.Stopped);
+		Assert.NotNull(component);
+		Assert.True(component.Started);
+		Assert.False(component.Stopped);
 
 		kernel.ReleaseComponent(component);
-		Assert.IsTrue(component.Stopped);
+		Assert.True(component.Stopped);
 	}
 
-	[Test]
+	[Fact]
 	public void Works_when_Start_and_Stop_methods_have_overloads()
 	{
 		kernel.AddFacility<StartableFacility>();
@@ -275,9 +271,9 @@ public class StartableFacilityTestCase
 			.StartUsingMethod("Start")
 			.StopUsingMethod("Stop"));
 		var c = kernel.Resolve<WithOverloads>();
-		Assert.IsTrue(c.StartCalled);
+		Assert.True(c.StartCalled);
 		kernel.ReleaseComponent(c);
-		Assert.IsTrue(c.StopCalled);
+		Assert.True(c.StopCalled);
 	}
 }
 

@@ -24,9 +24,6 @@ namespace Castle.Facilities.Logging.Tests
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor;
 
-	using NUnit.Framework;
-
-	[TestFixture]
 	public class TraceFacilityTest : BaseTest
 	{
 		[SetUp]
@@ -58,7 +55,7 @@ namespace Castle.Facilities.Logging.Tests
 		private IWindsorContainer container;
 		private readonly StringWriter consoleWriter = new StringWriter();
 
-		[Test]
+		[Fact]
 		public void SimpleTest()
 		{
 			container.Register(Component.For(typeof(SimpleLoggingComponent)).Named("component"));
@@ -73,7 +70,7 @@ namespace Castle.Facilities.Logging.Tests
 			}
 
 			var actualLogOutput = consoleWriter.GetStringBuilder().ToString();
-			Assert.AreEqual(expectedLogOutput, actualLogOutput);
+			Assert.Equal(expectedLogOutput, actualLogOutput);
 		}
 	}
 }

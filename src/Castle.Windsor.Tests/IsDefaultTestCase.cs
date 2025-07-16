@@ -20,11 +20,9 @@ using Castle.MicroKernel.Registration;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
 public class IsDefaultTestCase : AbstractContainerTestCase
 {
-	[Test]
+	[Fact]
 	public void Can_make_a_component_default_via_AllTypes_1()
 	{
 		Container.Register(
@@ -34,10 +32,10 @@ public class IsDefaultTestCase : AbstractContainerTestCase
 				.ConfigureFor<EmptyServiceB>(c => c.IsDefault()));
 		var obj = Container.Resolve<IEmptyService>();
 
-		Assert.IsInstanceOf<EmptyServiceB>(obj);
+		Assert.IsType<EmptyServiceB>(obj);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_make_a_component_default_via_AllTypes_2()
 	{
 		Container.Register(
@@ -47,10 +45,10 @@ public class IsDefaultTestCase : AbstractContainerTestCase
 				.ConfigureFor<EmptyServiceA>(c => c.IsDefault()));
 		var obj = Container.Resolve<IEmptyService>();
 
-		Assert.IsInstanceOf<EmptyServiceA>(obj);
+		Assert.IsType<EmptyServiceA>(obj);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_make_non_first_component_default()
 	{
 		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
@@ -58,10 +56,10 @@ public class IsDefaultTestCase : AbstractContainerTestCase
 
 		var obj = Container.Resolve<IEmptyService>();
 
-		Assert.IsInstanceOf<EmptyServiceB>(obj);
+		Assert.IsType<EmptyServiceB>(obj);
 	}
 
-	[Test]
+	[Fact]
 	public void Can_make_non_first_component_default_with_filter()
 	{
 		Container.Register(Component.For<IEmptyService, EmptyServiceA, object>().ImplementedBy<EmptyServiceA>(),
@@ -69,13 +67,13 @@ public class IsDefaultTestCase : AbstractContainerTestCase
 
 		var obj = Container.Resolve<IEmptyService>();
 
-		Assert.IsInstanceOf<EmptyServiceB>(obj);
+		Assert.IsType<EmptyServiceB>(obj);
 
 		var obj2 = Container.Resolve<object>();
-		Assert.IsInstanceOf<EmptyServiceA>(obj2);
+		Assert.IsType<EmptyServiceA>(obj2);
 	}
 
-	[Test]
+	[Fact]
 	public void Does_affect_order_when_using_ResolveAll()
 	{
 		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
@@ -83,11 +81,11 @@ public class IsDefaultTestCase : AbstractContainerTestCase
 
 		var obj = Container.ResolveAll<IEmptyService>();
 
-		Assert.IsInstanceOf<EmptyServiceB>(obj[0]);
-		Assert.IsInstanceOf<EmptyServiceA>(obj[1]);
+		Assert.IsType<EmptyServiceB>(obj[0]);
+		Assert.IsType<EmptyServiceA>(obj[1]);
 	}
 
-	[Test]
+	[Fact]
 	public void Later_default_overrides_earlier_one()
 	{
 		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().IsDefault(t => t.GetTypeInfo().IsInterface),
@@ -95,6 +93,6 @@ public class IsDefaultTestCase : AbstractContainerTestCase
 
 		var obj = Container.Resolve<IEmptyService>();
 
-		Assert.IsInstanceOf<EmptyServiceB>(obj);
+		Assert.IsType<EmptyServiceB>(obj);
 	}
 }

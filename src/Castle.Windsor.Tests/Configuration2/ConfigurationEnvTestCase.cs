@@ -18,12 +18,9 @@ using Castle.Windsor.Configuration.Interpreters;
 
 using CastleTests.Components;
 
-using NUnit.Framework;
-
-[TestFixture]
 public class ConfigurationEnvTestCase
 {
-	[Test]
+	[Fact]
 	public void AssertDefineIsSetBasedOnEnvironmentInformation()
 	{
 		var configPath = ConfigHelper.ResolveConfigPath("Configuration2/env_config.xml");
@@ -31,13 +28,13 @@ public class ConfigurationEnvTestCase
 
 		var prop = container.Resolve<ComponentWithStringProperty>("component");
 
-		Assert.AreEqual("John Doe", prop.Name);
+		Assert.Equal("John Doe", prop.Name);
 
 		container = new WindsorContainer(new XmlInterpreter(configPath), new CustomEnv(false));
 
 		prop = container.Resolve<ComponentWithStringProperty>("component");
 
-		Assert.AreEqual("Hammett", prop.Name);
+		Assert.Equal("Hammett", prop.Name);
 	}
 }
 
