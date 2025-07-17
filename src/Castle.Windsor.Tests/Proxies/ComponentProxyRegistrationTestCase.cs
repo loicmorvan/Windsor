@@ -24,6 +24,7 @@ using Castle.ProxyInfrastructure;
 using Castle.Windsor.Tests.Interceptors;
 
 using CastleTests.Components;
+using CastleTests.Facilities.TypedFactory;
 
 public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 {
@@ -160,8 +161,8 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Releasing_MixIn_releases_all_parts()
 	{
-		SimpleServiceDisposable.DisposedCount = 0;
 		Container.Register(
+			Component.For<TypedFactoryDelegatesTestCase.LifecycleCounter>(),
 			Component.For<ICalcService>()
 				.ImplementedBy<CalculatorService>().Proxy.MixIns(m => m.Component<SimpleServiceDisposable>())
 				.LifeStyle.Transient,
@@ -175,7 +176,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 		var mixin = (ISimpleService)calculator;
 		mixin.Operation();
 		Container.Release(mixin);
-		Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
+		Assert.Equal(1, Container.Resolve<TypedFactoryDelegatesTestCase.LifecycleCounter>().InstancesDisposed);
 	}
 
 	[Fact]

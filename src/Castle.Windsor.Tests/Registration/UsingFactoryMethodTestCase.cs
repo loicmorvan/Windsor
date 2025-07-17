@@ -25,6 +25,7 @@ using Castle.Windsor.Tests;
 using Castle.Windsor.Tests.ClassComponents;
 
 using CastleTests.Components;
+using CastleTests.Facilities.TypedFactory;
 
 public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 {
@@ -293,6 +294,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 	public void Factory_created_abstract_non_disposable_services_with_disposable_dependency_are_tracked()
 	{
 		Kernel.Register(
+			Component.For<TypedFactoryDelegatesTestCase.LifecycleCounter>(),
 			Component.For<IComponent>().LifeStyle.Transient
 				.UsingFactoryMethod(k => new TrivialComponentWithDependency(k.Resolve<ISimpleService>())),
 			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>().LifeStyle.Transient);
@@ -350,6 +352,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 	public void Factory_created_sealed_non_disposable_services_with_disposable_dependency_are_tracked()
 	{
 		Kernel.Register(
+			Component.For<TypedFactoryDelegatesTestCase.LifecycleCounter>(),
 			Component.For<SealedComponentWithDependency>().LifeStyle.Transient
 				.UsingFactoryMethod(k => new SealedComponentWithDependency(k.Resolve<ISimpleService>())),
 			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>().LifeStyle.Transient);
@@ -363,11 +366,12 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Factory_created_sealed_non_disposable_services_with_factory_created_disposable_dependency_are_tracked()
 	{
+		var counter = new TypedFactoryDelegatesTestCase.LifecycleCounter();
 		Kernel.Register(
 			Component.For<SealedComponentWithDependency>().LifeStyle.Transient
 				.UsingFactoryMethod(k => new SealedComponentWithDependency(k.Resolve<ISimpleService>())),
 			Component.For<ISimpleService>().LifeStyle.Transient
-				.UsingFactoryMethod(() => new SimpleServiceDisposable()));
+				.UsingFactoryMethod(() => new SimpleServiceDisposable(counter)));
 
 		var component = Kernel.Resolve<SealedComponentWithDependency>();
 

@@ -19,27 +19,28 @@ using Castle.Windsor.Tests.ClassComponents;
 
 using CastleTests;
 using CastleTests.Components;
+using CastleTests.Facilities.TypedFactory;
 
 public class LifecycledComponentsReleasePolicyComponentTrackingTestCase : AbstractContainerTestCase
 {
 	[Fact]
 	public void Disposable_singleton_as_dependency_of_non_disposable_transient_is_decommissionsed_with_container()
 	{
-		SimpleServiceDisposable.DisposedCount = 0;
-		Container.Register(Component.For<HasCtorDependency>().LifeStyle.Transient,
+		Container.Register(
+			Component.For<TypedFactoryDelegatesTestCase.LifecycleCounter>(),
+			Component.For<HasCtorDependency>().LifeStyle.Transient,
 			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>());
 
 		Container.Resolve<HasCtorDependency>();
 		Dispose();
 
-		Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
+		Assert.Equal(1, Container.Resolve<TypedFactoryDelegatesTestCase.LifecycleCounter>().InstancesDisposed);
 		;
 	}
 
 	[Fact]
 	public void Non_disposable_transient_with_disposable_singleton_as_dependency_is_not_tracked()
 	{
-		SimpleServiceDisposable.DisposedCount = 0;
 		Container.Register(Component.For<HasCtorDependency>().LifeStyle.Transient,
 			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>());
 

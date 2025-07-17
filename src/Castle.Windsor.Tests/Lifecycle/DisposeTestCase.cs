@@ -19,24 +19,25 @@ using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
 using CastleTests;
 using CastleTests.Components;
+using CastleTests.Facilities.TypedFactory;
 
 public class DisposeTestCase : AbstractContainerTestCase
 {
 	[Fact]
 	public void Disposable_component_for_nondisposable_service_built_via_factory_should_be_disposed_when_released()
 	{
-		SimpleServiceDisposable.DisposedCount = 0;
+		var counter = new TypedFactoryDelegatesTestCase.LifecycleCounter();
 		Container.Register(Component.For<ISimpleService>()
-			.UsingFactoryMethod(() => new SimpleServiceDisposable())
+			.UsingFactoryMethod(() => new SimpleServiceDisposable(counter))
 			.LifeStyle.Transient);
 
 		var service = Container.Resolve<ISimpleService>();
 
-		Assert.Equal(0, SimpleServiceDisposable.DisposedCount);
+		Assert.Equal(0, counter.InstancesDisposed);
 
 		Container.Release(service);
 
-		Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
+		Assert.Equal(1, counter.InstancesDisposed);
 	}
 
 	[Fact]
@@ -54,15 +55,16 @@ public class DisposeTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Disposable_component_for_nondisposable_service_should_be_disposed_when_released()
 	{
-		SimpleServiceDisposable.DisposedCount = 0;
-		Container.Register(Component.For<ISimpleService>()
+		Container.Register(
+			Component.For<TypedFactoryDelegatesTestCase.LifecycleCounter>(),
+			Component.For<ISimpleService>()
 			.ImplementedBy<SimpleServiceDisposable>()
 			.LifeStyle.Transient);
 
 		var service = Container.Resolve<ISimpleService>();
 		Container.Release(service);
 
-		Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
+		Assert.Equal(1, Container.Resolve<TypedFactoryDelegatesTestCase.LifecycleCounter>().InstancesDisposed);
 	}
 
 	[Fact]

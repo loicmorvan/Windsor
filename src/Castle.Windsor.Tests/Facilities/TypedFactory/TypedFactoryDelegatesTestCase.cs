@@ -16,6 +16,7 @@ namespace CastleTests.Facilities.TypedFactory;
 
 using System;
 using System.Linq;
+using System.Reflection;
 
 using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel;
@@ -201,31 +202,36 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Factory_DOES_NOT_implicitly_pick_registered_selector_explicitly_registered_factory()
 	{
-		DisposableSelector.InstancesCreated = 0;
-		DisposableSelector.InstancesDisposed = 0;
 		Container.Register(
-			Component.For<ITypedFactoryComponentSelector>().ImplementedBy<DisposableSelector>().LifeStyle.Transient,
+			Component.For<ITypedFactoryComponentSelector>().ImplementedBy<NotInstantiableSelector>().LifeStyle.Transient,
 			Component.For<Func<Foo>>().LifeStyle.Transient.AsFactory());
 
 		Container.Resolve<Func<Foo>>();
+	}
 
-		Assert.Equal(0, DisposableSelector.InstancesCreated);
+	public class NotInstantiableSelector : ITypedFactoryComponentSelector
+	{
+		public NotInstantiableSelector()
+		{
+			Assert.Fail();
+		}
+
+		public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method, Type type, object[] arguments)
+		{
+			throw new NotImplementedException();
+		}
 	}
 
 	[Fact]
 	public void Factory_DOES_NOT_implicitly_pick_registered_selector_implicitly_registered_factory()
 	{
-		DisposableSelector.InstancesCreated = 0;
-		DisposableSelector.InstancesDisposed = 0;
 		Container.Register(
 			Component
 				.For<ITypedFactoryComponentSelector>()
-				.ImplementedBy<DisposableSelector>()
+				.ImplementedBy<NotInstantiableSelector>()
 				.LifeStyle.Transient);
 
 		Container.Resolve<Func<Foo>>();
-
-		Assert.Equal(0, DisposableSelector.InstancesCreated);
 	}
 
 	[Fact]
@@ -271,16 +277,14 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Factory_explicitly_pick_registered_selector()
 	{
-		DisposableSelector.InstancesCreated = 0;
 		SimpleSelector.InstancesCreated = 0;
 		Container.Register(
-			Component.For<ITypedFactoryComponentSelector>().ImplementedBy<DisposableSelector>().Named("1").LifeStyle.Transient,
+			Component.For<ITypedFactoryComponentSelector>().ImplementedBy<NotInstantiableSelector>().Named("1").LifeStyle.Transient,
 			Component.For<ITypedFactoryComponentSelector>().ImplementedBy<SimpleSelector>().Named("2").LifeStyle.Transient,
 			Component.For<Func<Foo>>().LifeStyle.Transient.AsFactory(x => x.SelectedWith("2")));
 
 		Container.Resolve<Func<Foo>>();
 
-		Assert.Equal(0, DisposableSelector.InstancesCreated);
 		Assert.Equal(1, SimpleSelector.InstancesCreated);
 	}
 
@@ -422,21 +426,49 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 		Assert.Equal(1, DisposableFoo.DisposedCount);
 	}
 
+	public class LifecycleCounter
+	{
+		public int InstancesCreated;
+		public int InstancesDisposed;
+	}
+
+	public class SelectorWithLifecycleCounter : ITypedFactoryComponentSelector, IDisposable
+	{
+		private readonly LifecycleCounter counter;
+
+		public SelectorWithLifecycleCounter(LifecycleCounter counter)
+		{
+			this.counter = counter;
+			counter.InstancesCreated += 1;
+		}
+
+		public void Dispose()
+		{
+			counter.InstancesDisposed += 1;
+		}
+
+		public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method, Type type, object[] arguments)
+		{
+			throw new NotImplementedException();
+		}
+	}
+
 	[Fact]
 	public void Releasing_factory_releases_selector()
 	{
-		DisposableSelector.InstancesCreated = 0;
-		DisposableSelector.InstancesDisposed = 0;
+		var counter = new LifecycleCounter();
+
 		Container.Register(
-			Component.For<DisposableSelector>().LifeStyle.Transient,
-			Component.For<Func<Foo>>().LifeStyle.Transient.AsFactory(x => x.SelectedWith<DisposableSelector>()));
+			Component.For<LifecycleCounter>().Instance(counter),
+			Component.For<SelectorWithLifecycleCounter>().LifeStyle.Transient,
+			Component.For<Func<Foo>>().LifeStyle.Transient.AsFactory(x => x.SelectedWith<SelectorWithLifecycleCounter>()));
 		var factory = Container.Resolve<Func<Foo>>();
 
-		Assert.Equal(1, DisposableSelector.InstancesCreated);
+		Assert.Equal(1, counter.InstancesCreated);
 
 		Container.Release(factory);
 
-		Assert.Equal(1, DisposableSelector.InstancesDisposed);
+		Assert.Equal(1, counter.InstancesDisposed);
 	}
 
 	[Fact]

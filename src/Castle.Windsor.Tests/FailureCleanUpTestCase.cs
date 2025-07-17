@@ -20,6 +20,7 @@ using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Interceptors;
 
 using CastleTests.Components;
+using CastleTests.Facilities.TypedFactory;
 
 public class FailureCleanUpTestCase
 {
@@ -33,28 +34,28 @@ public class FailureCleanUpTestCase
 	[Fact]
 	public void When_constructor_throws_ctor_dependencies_get_released()
 	{
-		SimpleServiceDisposable.DisposedCount = 0;
 		container.Register(
+			Component.For<TypedFactoryDelegatesTestCase.LifecycleCounter>(),
 			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>().LifeStyle.Transient,
 			Component.For<ThrowsInCtorWithDisposableDependency>()
 		);
 
 		Assert.Throws<ComponentActivatorException>(() => container.Resolve<ThrowsInCtorWithDisposableDependency>());
-		Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
+		Assert.Equal(1, container.Resolve<TypedFactoryDelegatesTestCase.LifecycleCounter>().InstancesDisposed);
 	}
 
 	[Fact]
 	public void When_constructor_dependency_throws_previous_dependencies_get_released()
 	{
-		SimpleServiceDisposable.DisposedCount = 0;
 		container.Register(
+			Component.For<TypedFactoryDelegatesTestCase.LifecycleCounter>(),
 			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>().LifeStyle.Transient,
 			Component.For<ThrowsInCtor>().LifeStyle.Transient,
 			Component.For<DependsOnThrowingComponent>()
 		);
 
 		Assert.Throws<ComponentActivatorException>(() => container.Resolve<DependsOnThrowingComponent>());
-		Assert.Equal(1, SimpleServiceDisposable.DisposedCount);
+		Assert.Equal(1, container.Resolve<TypedFactoryDelegatesTestCase.LifecycleCounter>().InstancesDisposed);
 	}
 
 	[Fact]

@@ -16,13 +16,13 @@ namespace CastleTests.Components;
 
 using System;
 
-public class SimpleServiceDisposable : ISimpleService, IDisposable
-{
-	public static int DisposedCount;
+using CastleTests.Facilities.TypedFactory;
 
+public class SimpleServiceDisposable(TypedFactoryDelegatesTestCase.LifecycleCounter lifecycleCounter) : ISimpleService, IDisposable
+{
 	public void Dispose()
 	{
-		DisposedCount++;
+		lifecycleCounter.InstancesDisposed++;
 	}
 
 	public void Operation()

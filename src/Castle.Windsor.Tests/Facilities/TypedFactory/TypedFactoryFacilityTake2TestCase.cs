@@ -496,16 +496,15 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 	[Fact]
 	public void Releasing_factory_releases_selector()
 	{
-		DisposableSelector.InstancesCreated = 0;
-		DisposableSelector.InstancesDisposed = 0;
 		Container.Register(
-			Component.For<IDummyComponentFactory>().AsFactory(f => f.SelectedWith<DisposableSelector>()).LifestyleTransient(),
-			Component.For<DisposableSelector>().LifeStyle.Transient);
+			Component.For<TypedFactoryDelegatesTestCase.LifecycleCounter>(),
+			Component.For<IDummyComponentFactory>().AsFactory(f => f.SelectedWith<TypedFactoryDelegatesTestCase.SelectorWithLifecycleCounter>()).LifestyleTransient(),
+			Component.For<TypedFactoryDelegatesTestCase.SelectorWithLifecycleCounter>().LifeStyle.Transient);
 		var factory = Container.Resolve<IDummyComponentFactory>();
 
 		Container.Release(factory);
 
-		Assert.Equal(1, DisposableSelector.InstancesDisposed);
+		Assert.Equal(1, Container.Resolve<TypedFactoryDelegatesTestCase.LifecycleCounter>().InstancesDisposed);
 	}
 
 	[Fact]
