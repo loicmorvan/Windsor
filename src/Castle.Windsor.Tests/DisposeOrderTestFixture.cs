@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 
 using Castle.Core;
-using Castle.MicroKernel.Registration;
 
 public class DisposeOrderTestFixture
 {

@@ -34,21 +34,6 @@ using CastleTests.Components;
 
 public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 {
-	public class DisposableMockObject : IDisposable
-	{
-		private readonly Action disposeAction;
-
-		public DisposableMockObject(Action disposeAction)
-		{
-			this.disposeAction = disposeAction;
-		}
-
-		public void Dispose()
-		{
-			disposeAction();
-		}
-	}
-
 	[Fact]
 	public void DisposePoolDisposesTrackedComponents()
 	{
@@ -227,6 +212,21 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 			Thread.Sleep(TimeSpan.FromSeconds(1));
 
 			Assert.Equal(0, kernel.parallelCount);
+		}
+	}
+
+	public class DisposableMockObject : IDisposable
+	{
+		private readonly Action disposeAction;
+
+		public DisposableMockObject(Action disposeAction)
+		{
+			this.disposeAction = disposeAction;
+		}
+
+		public void Dispose()
+		{
+			disposeAction();
 		}
 	}
 

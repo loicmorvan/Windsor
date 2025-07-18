@@ -30,18 +30,18 @@ using Castle.Windsor.Tests.Facilities.Startable.Components;
 
 public class StartableFacilityTestCase
 {
+	private readonly Assembly currentAssembly = typeof(StartableFacilityTestCase).GetTypeInfo().Assembly;
+
+	private readonly IKernel kernel;
+
+	private bool startableCreatedBeforeResolved;
+
 	public StartableFacilityTestCase()
 	{
 		kernel = new DefaultKernel();
 
 		startableCreatedBeforeResolved = false;
 	}
-
-	private readonly Assembly currentAssembly = typeof(StartableFacilityTestCase).GetTypeInfo().Assembly;
-
-	private IKernel kernel;
-
-	private bool startableCreatedBeforeResolved;
 
 	private void OnNoInterfaceStartableComponentStarted(ComponentModel mode, object instance)
 	{

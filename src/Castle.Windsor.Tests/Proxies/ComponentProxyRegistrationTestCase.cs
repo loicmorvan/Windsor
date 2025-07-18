@@ -30,7 +30,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 {
 	private void AssertIsProxy(object o)
 	{
-		Assert.IsType<IProxyTargetAccessor>(o, exactMatch: false);
+		Assert.IsType<IProxyTargetAccessor>(o, false);
 	}
 
 	[Fact]
@@ -43,7 +43,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.IsType<ISimpleMixIn>(calculator, exactMatch: false);
+		Assert.IsType<ISimpleMixIn>(calculator, false);
 
 		var mixin = (ISimpleMixIn)calculator;
 		mixin.DoSomething();
@@ -59,7 +59,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.IsType<ISimpleMixIn>(calculator, exactMatch: false);
+		Assert.IsType<ISimpleMixIn>(calculator, false);
 
 		var mixin = (ISimpleMixIn)calculator;
 		mixin.DoSomething();
@@ -74,7 +74,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.IsType<ISimpleMixIn>(calculator, exactMatch: false);
+		Assert.IsType<ISimpleMixIn>(calculator, false);
 
 		var mixin = (ISimpleMixIn)calculator;
 		mixin.DoSomething();
@@ -89,7 +89,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.IsType<ISimpleMixIn>(calculator, exactMatch: false);
+		Assert.IsType<ISimpleMixIn>(calculator, false);
 
 		var mixin = (ISimpleMixIn)calculator;
 		mixin.DoSomething();
@@ -171,7 +171,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 
 		var calculator = Container.Resolve<ICalcService>();
 		AssertIsProxy(calculator);
-		Assert.IsType<ISimpleService>(calculator, exactMatch: false);
+		Assert.IsType<ISimpleService>(calculator, false);
 
 		var mixin = (ISimpleService)calculator;
 		mixin.Operation();

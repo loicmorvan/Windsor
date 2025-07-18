@@ -23,9 +23,9 @@ public class ComponentWithConfigs
 {
 	public ComponentWithConfigs(string name, int port, IDictionary dict)
 	{
-		this.Name = name;
-		this.Port = port;
-		this.Dict = dict;
+		Name = name;
+		Port = port;
+		Dict = dict;
 	}
 
 	public IDictionary Dict { get; }

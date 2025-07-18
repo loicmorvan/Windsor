@@ -20,7 +20,7 @@ public class UsesLazy<T>
 {
 	public UsesLazy(Lazy<T> lazy)
 	{
-		this.Lazy = lazy;
+		Lazy = lazy;
 	}
 
 	public Lazy<T> Lazy { get; }

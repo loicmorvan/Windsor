@@ -22,8 +22,12 @@ using Castle.Facilities.Logging.Tests.Classes;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 
-public class ConsoleFacilityTestCase : BaseTest,IDisposable
+public class ConsoleFacilityTestCase : BaseTest, IDisposable
 {
+	private readonly IWindsorContainer container;
+	private readonly StringWriter errorWriter = new();
+	private readonly StringWriter outWriter = new();
+
 	public ConsoleFacilityTestCase()
 	{
 		container = base.CreateConfiguredContainer<ConsoleFactory>();
@@ -39,10 +43,6 @@ public class ConsoleFacilityTestCase : BaseTest,IDisposable
 	{
 		if (container != null) container.Dispose();
 	}
-
-	private IWindsorContainer container;
-	private readonly StringWriter outWriter = new();
-	private readonly StringWriter errorWriter = new();
 
 	[Fact]
 	public void SimpleTest()

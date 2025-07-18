@@ -18,7 +18,7 @@ public class ArrayDepAsConstructor
 {
 	public ArrayDepAsConstructor(IEmptyService[] services)
 	{
-		this.Services = services;
+		Services = services;
 	}
 
 	public IEmptyService[] Services { get; }

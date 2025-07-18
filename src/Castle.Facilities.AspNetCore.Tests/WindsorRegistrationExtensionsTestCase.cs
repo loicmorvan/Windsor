@@ -29,8 +29,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 using TestContext = Castle.Facilities.AspNetCore.Tests.Framework.TestContext;
 
-public class WindsorRegistrationExtensionsTestCase:IDisposable
+public class WindsorRegistrationExtensionsTestCase : IDisposable
 {
+	private readonly TestContext testContext;
+
 	public WindsorRegistrationExtensionsTestCase()
 	{
 		testContext = TestContextFactory.Get();
@@ -40,8 +42,6 @@ public class WindsorRegistrationExtensionsTestCase:IDisposable
 	{
 		testContext?.Dispose();
 	}
-
-	private TestContext testContext;
 
 	[InlineData(typeof(ControllerWindsorOnly))]
 	[InlineData(typeof(TagHelperWindsorOnly))]
@@ -71,8 +71,8 @@ public class WindsorRegistrationExtensionsTestCase:IDisposable
 	[Theory]
 	public void Should_resolve_ServiceProviderOnly_and_CrossWired_Controllers_TagHelpers_and_ViewComponents_from_WindsorContainer_and_ServiceProvider(Type serviceType)
 	{
-			testContext.WindsorContainer.Resolve(serviceType);
-			testContext.ServiceProvider.GetRequiredService(serviceType);
+		testContext.WindsorContainer.Resolve(serviceType);
+		testContext.ServiceProvider.GetRequiredService(serviceType);
 	}
 
 	[InlineData(typeof(CrossWiredScoped))]
@@ -247,10 +247,10 @@ public class WindsorRegistrationExtensionsTestCase:IDisposable
 	{
 		testContext.WindsorContainer.Register(Component.For(compositeType).CrossWired().LifestyleSingleton());
 
-			using (var sp = testContext.ServiceCollection.BuildServiceProvider())
-			{
-				sp.GetRequiredService(compositeType);
-			}
+		using (var sp = testContext.ServiceCollection.BuildServiceProvider())
+		{
+			sp.GetRequiredService(compositeType);
+		}
 	}
 
 	[InlineData(typeof(CompositeTagHelper))]
@@ -261,10 +261,10 @@ public class WindsorRegistrationExtensionsTestCase:IDisposable
 	{
 		testContext.WindsorContainer.Register(Component.For(compositeType).CrossWired().LifestyleScoped());
 
-			using (var sp = testContext.ServiceCollection.BuildServiceProvider())
-			{
-				sp.GetRequiredService(compositeType);
-			}
+		using (var sp = testContext.ServiceCollection.BuildServiceProvider())
+		{
+			sp.GetRequiredService(compositeType);
+		}
 	}
 
 	[InlineData(typeof(CompositeTagHelper))]
@@ -275,10 +275,10 @@ public class WindsorRegistrationExtensionsTestCase:IDisposable
 	{
 		testContext.WindsorContainer.Register(Component.For(compositeType).CrossWired().LifestyleTransient());
 
-			using (var sp = testContext.ServiceCollection.BuildServiceProvider())
-			{
-				sp.GetRequiredService(compositeType);
-			}
+		using (var sp = testContext.ServiceCollection.BuildServiceProvider())
+		{
+			sp.GetRequiredService(compositeType);
+		}
 	}
 
 	[Fact]
@@ -292,9 +292,9 @@ public class WindsorRegistrationExtensionsTestCase:IDisposable
 		{
 			var services = sp.GetServices<IAuthorizationHandler>();
 
-			Assert.Equal(3,services.Count());
+			Assert.Equal(3, services.Count());
 			Assert.Equal(
-				new HashSet<Type>(services.Select(x=>x.GetType())).Count,
+				new HashSet<Type>(services.Select(x => x.GetType())).Count,
 				services.Select(s => s.GetType()).Count());
 		}
 	}

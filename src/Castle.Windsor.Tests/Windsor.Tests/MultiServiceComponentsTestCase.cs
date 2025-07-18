@@ -22,40 +22,6 @@ using CastleTests;
 
 public class MultiServiceComponentsTestCase : AbstractContainerTestCase
 {
-	public interface IRepository
-	{
-	}
-
-	public interface IRepository<T> : IRepository
-	{
-	}
-
-	public interface IUserRepository : IRepository<User>
-	{
-	}
-
-	public class MyRepository : IUserRepository
-	{
-	}
-
-	public class User
-	{
-	}
-
-	public class MyRepository2 : IUserRepository
-	{
-		public MyRepository2(User user)
-		{
-		}
-	}
-
-	public class ServiceUsingRepository
-	{
-		public ServiceUsingRepository(IRepository repos)
-		{
-		}
-	}
-
 	[Fact]
 	public void Can_register_handler_forwarding_using_generics_and_resolveAll()
 	{
@@ -152,5 +118,39 @@ public class MultiServiceComponentsTestCase : AbstractContainerTestCase
 
 		var repos = Container.ResolveAll<IRepository>();
 		Assert.Single(repos);
+	}
+
+	public interface IRepository
+	{
+	}
+
+	public interface IRepository<T> : IRepository
+	{
+	}
+
+	public interface IUserRepository : IRepository<User>
+	{
+	}
+
+	public class MyRepository : IUserRepository
+	{
+	}
+
+	public class User
+	{
+	}
+
+	public class MyRepository2 : IUserRepository
+	{
+		public MyRepository2(User user)
+		{
+		}
+	}
+
+	public class ServiceUsingRepository
+	{
+		public ServiceUsingRepository(IRepository repos)
+		{
+		}
 	}
 }

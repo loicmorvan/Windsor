@@ -18,7 +18,7 @@ public class UsesComponentWithDispose
 {
 	public UsesComponentWithDispose(ComponentWithDispose cwd)
 	{
-		this.Disposable = cwd;
+		Disposable = cwd;
 	}
 
 	public ComponentWithDispose Disposable { get; }

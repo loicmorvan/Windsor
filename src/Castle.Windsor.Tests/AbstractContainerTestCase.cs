@@ -22,14 +22,20 @@ using Castle.Windsor;
 
 public abstract class AbstractContainerTestCase : IDisposable
 {
-	public void Dispose()
-	{
-		container.Dispose();
-	}
+	private WindsorContainer container;
 
 	public AbstractContainerTestCase()
 	{
 		Init();
+	}
+
+	protected IWindsorContainer Container => container;
+
+	protected IKernel Kernel => container.Kernel;
+
+	public void Dispose()
+	{
+		container.Dispose();
 	}
 
 	private void Init()
@@ -37,12 +43,6 @@ public abstract class AbstractContainerTestCase : IDisposable
 		container = BuildContainer();
 		AfterContainerCreated();
 	}
-
-	private WindsorContainer container;
-
-	protected IWindsorContainer Container => container;
-
-	protected IKernel Kernel => container.Kernel;
 
 	protected virtual void AfterContainerCreated()
 	{

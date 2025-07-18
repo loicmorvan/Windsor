@@ -18,7 +18,7 @@ public class AlarmGeneratorWithDependency
 {
 	public AlarmGeneratorWithDependency(IAlarmSender sender, A dependency)
 	{
-		this.Sender = sender;
+		Sender = sender;
 	}
 
 	public IAlarmSender Sender { get; }

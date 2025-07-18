@@ -18,8 +18,8 @@ public class ClassWithArrayConstructor
 {
 	public ClassWithArrayConstructor(ICommon first, ICommon[] services)
 	{
-		this.First = first;
-		this.Services = services;
+		First = first;
+		Services = services;
 	}
 
 	public ICommon First { get; }

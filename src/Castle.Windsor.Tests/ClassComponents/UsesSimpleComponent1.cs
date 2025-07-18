@@ -18,7 +18,7 @@ public class UsesSimpleComponent1
 {
 	public UsesSimpleComponent1(SimpleComponent1 dependency)
 	{
-		this.Dependency = dependency;
+		Dependency = dependency;
 	}
 
 	public SimpleComponent1 Dependency { get; }

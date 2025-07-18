@@ -20,7 +20,7 @@ public class EnumerableDepAsConstructor
 {
 	public EnumerableDepAsConstructor(IEnumerable<IEmptyService> services)
 	{
-		this.Services = services;
+		Services = services;
 	}
 
 	public IEnumerable<IEmptyService> Services { get; }

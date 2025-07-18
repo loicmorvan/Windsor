@@ -18,7 +18,7 @@ public class Foo
 {
 	public Foo(int number)
 	{
-		this.Number = number;
+		Number = number;
 	}
 
 	public int Number { get; }

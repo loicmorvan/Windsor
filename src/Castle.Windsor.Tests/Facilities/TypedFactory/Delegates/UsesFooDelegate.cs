@@ -22,7 +22,7 @@ public class UsesFooDelegate
 
 	public UsesFooDelegate(Func<int, Foo> myFooFactory)
 	{
-		this.Factory = myFooFactory;
+		Factory = myFooFactory;
 		counter = 0;
 	}
 

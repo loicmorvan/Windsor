@@ -19,7 +19,7 @@ public class CommonServiceUser
 {
 	public CommonServiceUser(ICommon common)
 	{
-		this.CommonService = common;
+		CommonService = common;
 	}
 
 	public ICommon CommonService { get; }

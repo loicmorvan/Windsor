@@ -21,8 +21,12 @@ using Castle.Windsor.Configuration.Interpreters;
 
 using CastleTests.Components;
 
-public class SynchronizationProblemTestCase:IDisposable
+public class SynchronizationProblemTestCase : IDisposable
 {
+	private readonly WindsorContainer container;
+	private readonly ManualResetEvent startEvent = new(false);
+	private readonly ManualResetEvent stopEvent = new(false);
+
 	public SynchronizationProblemTestCase()
 	{
 		container = new WindsorContainer(new XmlInterpreter(ConfigHelper.ResolveConfigPath("Configuration2/synchtest_config.xml")));
@@ -34,10 +38,6 @@ public class SynchronizationProblemTestCase:IDisposable
 	{
 		container.Dispose();
 	}
-
-	private WindsorContainer container;
-	private readonly ManualResetEvent startEvent = new(false);
-	private readonly ManualResetEvent stopEvent = new(false);
 
 	[Fact]
 	public void ResolveWithConfigTest()

@@ -42,8 +42,8 @@ public abstract class AbstractFacility : IFacility, IDisposable
 	/// <param name = "facilityConfig"></param>
 	void IFacility.Init(IKernel kernel, IConfiguration facilityConfig)
 	{
-		this.Kernel = kernel;
-		this.FacilityConfig = facilityConfig;
+		Kernel = kernel;
+		FacilityConfig = facilityConfig;
 
 		Init();
 	}

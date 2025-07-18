@@ -30,6 +30,8 @@ using log4net.Repository.Hierarchy;
 /// <summary>Summary description for Log4NetFacilityTests.</summary>
 public class Log4NetFacilityTests : BaseTest, IDisposable
 {
+	private readonly IWindsorContainer container;
+
 	public Log4NetFacilityTests()
 	{
 		container = base.CreateConfiguredContainer<ExtendedLog4netFactory>();
@@ -39,8 +41,6 @@ public class Log4NetFacilityTests : BaseTest, IDisposable
 	{
 		container.Dispose();
 	}
-
-	private IWindsorContainer container;
 
 	[Fact]
 	public void SimpleTest()

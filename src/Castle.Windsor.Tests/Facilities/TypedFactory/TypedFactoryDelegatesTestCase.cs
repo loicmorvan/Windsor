@@ -209,19 +209,6 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 		Container.Resolve<Func<Foo>>();
 	}
 
-	public class NotInstantiableSelector : ITypedFactoryComponentSelector
-	{
-		public NotInstantiableSelector()
-		{
-			Assert.Fail();
-		}
-
-		public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method, Type type, object[] arguments)
-		{
-			throw new NotImplementedException();
-		}
-	}
-
 	[Fact]
 	public void Factory_DOES_NOT_implicitly_pick_registered_selector_implicitly_registered_factory()
 	{
@@ -426,27 +413,6 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 		Assert.Equal(1, DisposableFoo.DisposedCount);
 	}
 
-	public class SelectorWithLifecycleCounter : ITypedFactoryComponentSelector, IDisposable
-	{
-		private readonly LifecycleCounter counter;
-
-		public SelectorWithLifecycleCounter(LifecycleCounter counter)
-		{
-			this.counter = counter;
-			counter.InstancesCreated += 1;
-		}
-
-		public void Dispose()
-		{
-			counter.InstancesDisposed += 1;
-		}
-
-		public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method, Type type, object[] arguments)
-		{
-			throw new NotImplementedException();
-		}
-	}
-
 	[Fact]
 	public void Releasing_factory_releases_selector()
 	{
@@ -494,5 +460,39 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 		var component = factory.Invoke();
 
 		Assert.IsType<Component2>(component);
+	}
+
+	public class NotInstantiableSelector : ITypedFactoryComponentSelector
+	{
+		public NotInstantiableSelector()
+		{
+			Assert.Fail();
+		}
+
+		public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method, Type type, object[] arguments)
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	public class SelectorWithLifecycleCounter : ITypedFactoryComponentSelector, IDisposable
+	{
+		private readonly LifecycleCounter counter;
+
+		public SelectorWithLifecycleCounter(LifecycleCounter counter)
+		{
+			this.counter = counter;
+			counter.InstancesCreated += 1;
+		}
+
+		public void Dispose()
+		{
+			counter.InstancesDisposed += 1;
+		}
+
+		public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method, Type type, object[] arguments)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

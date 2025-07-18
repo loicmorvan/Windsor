@@ -29,6 +29,8 @@ using log4net.Repository.Hierarchy;
 
 public class Log4NetFacilityLognameOverrideTests : OverrideLoggerTest, IDisposable
 {
+	private readonly IWindsorContainer container;
+
 	public Log4NetFacilityLognameOverrideTests()
 	{
 		container = base.CreateConfiguredContainer<ExtendedLog4netFactory>("Override");
@@ -38,8 +40,6 @@ public class Log4NetFacilityLognameOverrideTests : OverrideLoggerTest, IDisposab
 	{
 		container.Dispose();
 	}
-
-	private IWindsorContainer container;
 
 	[Fact]
 	public void OverrideTest()

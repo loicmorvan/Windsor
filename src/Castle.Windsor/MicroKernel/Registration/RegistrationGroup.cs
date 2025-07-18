@@ -22,7 +22,7 @@ public abstract class RegistrationGroup<S>
 {
 	public RegistrationGroup(ComponentRegistration<S> registration)
 	{
-		this.Registration = registration;
+		Registration = registration;
 	}
 
 	public ComponentRegistration<S> Registration { get; }

@@ -18,7 +18,7 @@ public class ArrayRefDepAsConstructor
 {
 	public ArrayRefDepAsConstructor(ref IEmptyService[] services)
 	{
-		this.Services = services;
+		Services = services;
 	}
 
 	public IEmptyService[] Services { get; }

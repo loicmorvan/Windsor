@@ -176,7 +176,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 			.UsingFactoryMethod(() => new TrivialComponent())
 			.Proxy.AdditionalInterfaces(typeof(IEmptyService)));
 		var component = Kernel.Resolve<IComponent>();
-		Assert.IsType<IEmptyService>(component, exactMatch: false);
+		Assert.IsType<IEmptyService>(component, false);
 	}
 
 	[Fact]
@@ -192,7 +192,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 
 		var id = component.ID;
 
-		Assert.IsType<IProxyTargetAccessor>(component, exactMatch: false);
+		Assert.IsType<IProxyTargetAccessor>(component, false);
 	}
 
 	[Fact]
@@ -208,7 +208,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 
 		var id = component.ID;
 
-		Assert.IsType<IProxyTargetAccessor>(component, exactMatch: false);
+		Assert.IsType<IProxyTargetAccessor>(component, false);
 	}
 
 	[Fact]
@@ -219,7 +219,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 			.UsingFactoryMethod(() => new TrivialComponent())
 			.Proxy.MixIns(new CameraService()));
 		var component = Kernel.Resolve<IComponent>();
-		Assert.IsType<ICameraService>(component, exactMatch: false);
+		Assert.IsType<ICameraService>(component, false);
 	}
 
 	[Fact]

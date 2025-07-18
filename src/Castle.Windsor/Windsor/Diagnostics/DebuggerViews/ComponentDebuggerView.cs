@@ -30,7 +30,7 @@ public class ComponentDebuggerView
 	public ComponentDebuggerView(IHandler handler, string description, params IComponentDebuggerExtension[] defaultExtension)
 	{
 		Name = handler.GetComponentName();
-		this.Description = description;
+		Description = description;
 		extension = defaultExtension.Concat(GetExtensions(handler)).ToArray();
 	}
 

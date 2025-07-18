@@ -21,8 +21,8 @@ public class DebuggerViewItemWithDetails
 {
 	public DebuggerViewItemWithDetails(string name, string description, string details, params object[] items)
 	{
-		this.Name = name;
-		this.Description = description;
+		Name = name;
+		Description = description;
 		Details = details;
 		Items = items;
 	}

@@ -19,12 +19,12 @@ public class ClassWithConstructors
 {
 	public ClassWithConstructors(string host)
 	{
-		this.Host = host;
+		Host = host;
 	}
 
 	public ClassWithConstructors(string[] hosts)
 	{
-		this.Hosts = hosts;
+		Hosts = hosts;
 	}
 
 	public string Host { get; }

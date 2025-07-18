@@ -31,10 +31,10 @@ public abstract class AbstractComponentActivator : IComponentActivator
 	/// <summary>Constructs an AbstractComponentActivator</summary>
 	protected AbstractComponentActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
 	{
-		this.Model = model;
-		this.Kernel = kernel;
-		this.OnCreation = onCreation;
-		this.OnDestruction = onDestruction;
+		Model = model;
+		Kernel = kernel;
+		OnCreation = onCreation;
+		OnDestruction = onDestruction;
 	}
 
 	public IKernelInternal Kernel { get; }

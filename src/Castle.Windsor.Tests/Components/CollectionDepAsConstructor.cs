@@ -20,7 +20,7 @@ public class CollectionDepAsConstructor
 {
 	public CollectionDepAsConstructor(ICollection<IEmptyService> services)
 	{
-		this.Services = services;
+		Services = services;
 	}
 
 	public ICollection<IEmptyService> Services { get; }

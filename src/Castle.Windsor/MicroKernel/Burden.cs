@@ -30,7 +30,7 @@ public class Burden
 
 	internal Burden(IHandler handler, bool requiresDecommission, bool trackedExternally)
 	{
-		this.Handler = handler;
+		Handler = handler;
 		TrackedExternally = trackedExternally;
 		if (requiresDecommission)
 		{

@@ -47,10 +47,10 @@
     <PackageReference Include="Castle.Core-log4net" Version="[5.1.0,6.0)"/>
     <PackageReference Include="Castle.Core-NLog" Version="[5.1.0,6.0)"/>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2"/>
-    <PackageReference Include="Moq" Version="4.17.2" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.assert" Version="2.9.3" />
-    <PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
+    <PackageReference Include="Moq" Version="4.17.2"/>
+    <PackageReference Include="xunit" Version="2.9.3"/>
+    <PackageReference Include="xunit.assert" Version="2.9.3"/>
+    <PackageReference Include="xunit.extensibility.core" Version="2.9.3"/>
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

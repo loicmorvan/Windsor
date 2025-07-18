@@ -18,8 +18,8 @@ public class ClassWithArguments
 {
 	public ClassWithArguments(string arg1, int arg2)
 	{
-		this.Arg1 = arg1;
-		this.Arg2 = arg2;
+		Arg1 = arg1;
+		Arg2 = arg2;
 	}
 
 	public string Arg1 { get; }

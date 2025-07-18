@@ -23,19 +23,19 @@ public class ServiceUser
 	public ServiceUser(A a)
 	{
 		if (a == null) throw new ArgumentNullException();
-		this.AComponent = a;
+		AComponent = a;
 	}
 
 	public ServiceUser(A a, B b) : this(a)
 	{
 		if (b == null) throw new ArgumentNullException();
-		this.BComponent = b;
+		BComponent = b;
 	}
 
 	public ServiceUser(A a, B b, C c) : this(a, b)
 	{
 		if (c == null) throw new ArgumentNullException();
-		this.CComponent = c;
+		CComponent = c;
 	}
 
 	public A AComponent { get; }

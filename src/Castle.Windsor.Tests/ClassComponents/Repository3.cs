@@ -18,7 +18,7 @@ public class Repository3 : IRepository
 {
 	public Repository3(IRepository inner)
 	{
-		this.InnerRepository = inner;
+		InnerRepository = inner;
 	}
 
 	public IRepository InnerRepository { get; }

@@ -34,8 +34,8 @@ public class DefaultGenericHandler : AbstractHandler
 
 	public DefaultGenericHandler(ComponentModel model, IGenericImplementationMatchingStrategy implementationMatchingStrategy, IGenericServiceStrategy serviceStrategy) : base(model)
 	{
-		this.ImplementationMatchingStrategy = implementationMatchingStrategy;
-		this.ServiceStrategy = serviceStrategy;
+		ImplementationMatchingStrategy = implementationMatchingStrategy;
+		ServiceStrategy = serviceStrategy;
 	}
 
 	public IGenericImplementationMatchingStrategy ImplementationMatchingStrategy { get; }

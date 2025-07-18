@@ -33,7 +33,7 @@ public class OpenGenericsTestCase : AbstractContainerTestCase
 
 		var proxy = Container.Resolve<Collection<int>>();
 
-		Assert.IsType<ISimpleService>(proxy, exactMatch: false);
+		Assert.IsType<ISimpleService>(proxy, false);
 	}
 
 	[Fact]
@@ -96,7 +96,7 @@ public class OpenGenericsTestCase : AbstractContainerTestCase
 					return k.Resolve(closedType);
 				}));
 		var repo = Container.Resolve<Castle.MicroKernel.Tests.ClassComponents.IRepository<string>>();
-		Assert.Equal(default(string), repo.Find());
+		Assert.Equal(default, repo.Find());
 		Assert.IsType<DoubleRepository<string, int>>(repo);
 	}
 }

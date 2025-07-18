@@ -23,6 +23,13 @@ using Castle.MicroKernel.Registration;
 
 public class HandlerSelectorsTestCase
 {
+	public enum Interest
+	{
+		None,
+		Biology,
+		Astronomy
+	}
+
 	[Fact]
 	public void SelectUsingBusinessLogic_DirectSelection()
 	{
@@ -70,13 +77,6 @@ public class HandlerSelectorsTestCase
 		selector.Interest = Interest.Biology;
 		Assert.IsType<SatiWatcher>(container.Resolve<Person>().Watcher);
 		Assert.IsType<BirdWatcher>(container.Resolve<IWatcher>());
-	}
-
-	public enum Interest
-	{
-		None,
-		Biology,
-		Astronomy
 	}
 
 	public class BirdWatcher : IWatcher

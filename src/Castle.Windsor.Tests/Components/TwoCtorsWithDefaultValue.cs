@@ -18,12 +18,12 @@ public class TwoCtorsWithDefaultValue
 {
 	public TwoCtorsWithDefaultValue(string name = "Stefan Mucha")
 	{
-		this.Name = name;
+		Name = name;
 	}
 
 	public TwoCtorsWithDefaultValue(int age = 100)
 	{
-		this.Age = age;
+		Age = age;
 	}
 
 	public int Age { get; }

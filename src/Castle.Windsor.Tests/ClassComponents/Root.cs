@@ -18,8 +18,8 @@ public class Root
 {
 	public Root(Branch branch, Leaf leaf)
 	{
-		this.Branch = branch;
-		this.Leaf = leaf;
+		Branch = branch;
+		Leaf = leaf;
 	}
 
 	public Branch Branch { get; }

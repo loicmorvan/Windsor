@@ -26,10 +26,10 @@ public class MasterDetailsDebuggerViewItem
 
 	public MasterDetailsDebuggerViewItem(object master, string masterDescription, string masterName, object[] details)
 	{
-		this.AMaster = master;
+		AMaster = master;
 		this.masterDescription = masterDescription;
 		this.masterName = masterName;
-		this.Details = details;
+		Details = details;
 	}
 
 	/// <summary>

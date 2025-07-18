@@ -32,7 +32,7 @@ public class ClassWithComplexParameter
 
 		public ComplexParameterType(string mandatoryValue)
 		{
-			this.MandatoryValue = mandatoryValue;
+			MandatoryValue = mandatoryValue;
 		}
 
 		public string MandatoryValue { get; }

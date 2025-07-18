@@ -26,12 +26,12 @@ using CastleTests.Components;
 
 public class TypeNameConverterTestCase
 {
+	private readonly TypeNameConverter converter;
+
 	public TypeNameConverterTestCase()
 	{
 		converter = new TypeNameConverter(new TypeNameParser());
 	}
-
-	private TypeNameConverter converter;
 
 	[Fact]
 	public void Can_handle_generic_of_generics_properly()
@@ -202,14 +202,6 @@ public class TypeNameConverterTestCase
 		Assert.Equal(message, exception.Message);
 	}
 
-	private class TestCaseSensitivity
-	{
-	}
-
-	private class TESTCASESENSITIVITY
-	{
-	}
-
 	[Fact]
 	public void Can_resolve_exact_match_if_two_classes_exist_that_differ_only_by_case()
 	{
@@ -222,5 +214,13 @@ public class TypeNameConverterTestCase
 		var name2 = type2.AssemblyQualifiedName;
 		var result2 = converter.PerformConversion(name2, typeof(Type));
 		Assert.Equal(type2, result2);
+	}
+
+	private class TestCaseSensitivity
+	{
+	}
+
+	private class TESTCASESENSITIVITY
+	{
 	}
 }

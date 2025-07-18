@@ -18,7 +18,7 @@ public class ConsumerComp
 {
 	public ConsumerComp(ICalcService calcservice)
 	{
-		this.Calcservice = calcservice;
+		Calcservice = calcservice;
 	}
 
 	public ICalcService Calcservice { get; }

@@ -20,12 +20,12 @@ using Castle.MicroKernel.Internal;
 
 public class SlimReadWriteLockTestCase
 {
+	private readonly SlimReadWriteLock @lock;
+
 	public SlimReadWriteLockTestCase()
 	{
 		@lock = new SlimReadWriteLock();
 	}
-
-	private SlimReadWriteLock @lock;
 
 	[Fact]
 	public void Can_be_used_ForReading_multiple_nested_time()

@@ -25,7 +25,7 @@ public abstract class Node
 {
 	protected Node(string name)
 	{
-		this.Name = name;
+		Name = name;
 	}
 
 	protected string Name { get; }

@@ -40,7 +40,7 @@ public abstract class AbstractInterpreter : IConfigurationInterpreter
 	{
 		if (source == null) throw new ArgumentNullException(nameof(source), "IResource is null");
 
-		this.Source = source;
+		Source = source;
 
 		PushResource(source);
 	}

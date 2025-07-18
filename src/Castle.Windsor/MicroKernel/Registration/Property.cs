@@ -23,8 +23,8 @@ public class Property
 {
 	public Property(object key, object value)
 	{
-		this.Key = key;
-		this.Value = value;
+		Key = key;
+		Value = value;
 	}
 
 	/// <summary>Gets the property key.</summary>
@@ -68,7 +68,7 @@ public class PropertyKey
 {
 	internal PropertyKey(object key)
 	{
-		this.Key = key;
+		Key = key;
 	}
 
 	/// <summary>The property key key.</summary>

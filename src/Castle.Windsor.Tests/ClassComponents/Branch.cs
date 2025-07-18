@@ -18,7 +18,7 @@ public class Branch
 {
 	public Branch(Leaf leaf)
 	{
-		this.Leaf = leaf;
+		Leaf = leaf;
 	}
 
 	public Leaf Leaf { get; }

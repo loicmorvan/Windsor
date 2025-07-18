@@ -25,7 +25,7 @@ public class InterceptorsSelectorTestCase
 	{
 		var reporter = new CallReporter();
 		var container = new WindsorContainer();
-		
+
 		container.Register(
 			Component.For<CallReporter>().Instance(reporter),
 			Component.For<ICatalog>()

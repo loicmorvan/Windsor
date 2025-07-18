@@ -20,7 +20,7 @@ public class ClassWithListConstructor
 {
 	public ClassWithListConstructor(IList services)
 	{
-		this.Services = services;
+		Services = services;
 	}
 
 	public IList Services { get; }

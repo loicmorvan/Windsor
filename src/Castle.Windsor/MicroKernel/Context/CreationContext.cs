@@ -74,8 +74,8 @@ public class CreationContext :
 		Arguments additionalArguments, ITypeConverter converter,
 		CreationContext parent)
 	{
-		this.RequestedType = requestedType;
-		this.Handler = handler;
+		RequestedType = requestedType;
+		Handler = handler;
 		ReleasePolicy = releasePolicy;
 		this.additionalArguments = additionalArguments;
 		this.converter = converter;
@@ -331,10 +331,10 @@ public class CreationContext :
 
 		public ResolutionContext(CreationContext context, IHandler handler, bool requiresDecommission, bool trackContext)
 		{
-			this.Context = context;
+			Context = context;
 			this.requiresDecommission = requiresDecommission;
 			this.trackContext = trackContext;
-			this.Handler = handler;
+			Handler = handler;
 		}
 
 		public Burden Burden { get; private set; }
@@ -350,7 +350,7 @@ public class CreationContext :
 
 		public void AttachBurden(Burden burden)
 		{
-			this.Burden = burden;
+			Burden = burden;
 		}
 
 		public Burden CreateBurden(bool trackedExternally)

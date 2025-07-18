@@ -18,13 +18,13 @@ public class HasTwoConstructors
 {
 	public HasTwoConstructors(Baz baz)
 	{
-		this.Baz = baz;
+		Baz = baz;
 	}
 
 	public HasTwoConstructors(Baz baz, string name)
 	{
-		this.Baz = baz;
-		this.Name = name;
+		Baz = baz;
+		Name = name;
 	}
 
 	public Baz Baz { get; }

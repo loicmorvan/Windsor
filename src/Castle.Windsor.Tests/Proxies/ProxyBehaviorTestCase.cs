@@ -38,7 +38,7 @@ public class ProxyBehaviorTestCase : AbstractContainerTestCase
 			Configuration.FromXml(Xml.Embedded("proxyBehavior.xml")));
 		var calcService = Container.Resolve<ICalcService>("default");
 		Assert.NotNull(calcService);
-		Assert.IsNotType<IDisposable>(calcService, exactMatch: false);
+		Assert.IsNotType<IDisposable>(calcService, false);
 	}
 
 	[Fact]
@@ -182,7 +182,7 @@ public class ProxyBehaviorTestCase : AbstractContainerTestCase
 
 		var common = Container.Resolve<ICommon>();
 
-		Assert.IsNotType<ICommon2>(common, exactMatch: false);
+		Assert.IsNotType<ICommon2>(common, false);
 	}
 
 	[Fact]
@@ -198,7 +198,7 @@ public class ProxyBehaviorTestCase : AbstractContainerTestCase
 
 		var common = Container.Resolve<ICommon>();
 
-		Assert.IsType<ICommon2>(common, exactMatch: false);
+		Assert.IsType<ICommon2>(common, false);
 	}
 
 #if FEATURE_REMOTING

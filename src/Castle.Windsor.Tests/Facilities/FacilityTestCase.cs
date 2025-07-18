@@ -23,6 +23,10 @@ using Castle.MicroKernel.Tests.ClassComponents;
 
 public class FacilityTestCase
 {
+	private static readonly string facilityKey = typeof(HiperFacility).FullName;
+	private readonly HiperFacility facility;
+	private readonly IKernel kernel;
+
 	public FacilityTestCase()
 	{
 		kernel = new DefaultKernel();
@@ -37,10 +41,6 @@ public class FacilityTestCase
 		Assert.False(facility.Initialized);
 		kernel.AddFacility(facility);
 	}
-
-	private static readonly string facilityKey = typeof(HiperFacility).FullName;
-	private HiperFacility facility;
-	private IKernel kernel;
 
 	[Fact]
 	public void Cant_have_two_instances_of_any_facility_type()

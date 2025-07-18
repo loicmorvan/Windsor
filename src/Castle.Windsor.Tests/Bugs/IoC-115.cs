@@ -20,44 +20,6 @@ using CastleTests;
 
 public class IoC_115 : AbstractContainerTestCase
 {
-	public interface IParentService
-	{
-	}
-
-	public class ParentService : IParentService
-	{
-	}
-
-	public interface IChildService1
-	{
-	}
-
-	public class ChildService1 : IChildService1
-	{
-		public ChildService1(IChildService2 xxx)
-		{
-		}
-	}
-
-	public interface IChildService2
-	{
-		IParentService Parent { get; }
-	}
-
-	public class ChildService2 : IChildService2
-	{
-		public ChildService2(IParentService xxx)
-		{
-			this.Parent = xxx;
-		}
-
-		public IParentService Parent { get; }
-	}
-
-	public class AnotherParentService : IParentService
-	{
-	}
-
 	[Fact]
 	[Bug("IOC-115")]
 	public void Can_resolve_from_child_with_dependency_with_dependency_on_parent_component()
@@ -87,5 +49,43 @@ public class IoC_115 : AbstractContainerTestCase
 		var resolve = child.Resolve<IChildService2>();
 
 		Assert.IsType<ParentService>(resolve.Parent);
+	}
+
+	public interface IParentService
+	{
+	}
+
+	public class ParentService : IParentService
+	{
+	}
+
+	public interface IChildService1
+	{
+	}
+
+	public class ChildService1 : IChildService1
+	{
+		public ChildService1(IChildService2 xxx)
+		{
+		}
+	}
+
+	public interface IChildService2
+	{
+		IParentService Parent { get; }
+	}
+
+	public class ChildService2 : IChildService2
+	{
+		public ChildService2(IParentService xxx)
+		{
+			Parent = xxx;
+		}
+
+		public IParentService Parent { get; }
+	}
+
+	public class AnotherParentService : IParentService
+	{
 	}
 }

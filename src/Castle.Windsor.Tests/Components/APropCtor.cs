@@ -18,7 +18,7 @@ public class APropCtor
 {
 	public APropCtor(A2 a)
 	{
-		this.A = a;
+		A = a;
 	}
 
 	public A2 A { get; }

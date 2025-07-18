@@ -48,7 +48,7 @@ public class TypedFactorySystemNullableTestCase : AbstractContainerTestCase
 			Component.For<Func<ComponentWithNonOptionalNullableParameter>>().AsFactory());
 
 		var factory = Container.Resolve<Func<ComponentWithNonOptionalNullableParameter>>();
-		
+
 		var exception = Assert.Throws<DependencyResolverException>(() => factory.Invoke());
 		Assert.Equal(
 			$"Could not resolve non-optional dependency for '{typeof(ComponentWithNonOptionalNullableParameter)}' ({typeof(ComponentWithNonOptionalNullableParameter)}). Parameter 'nonOptionalNullableParameter' type '{typeof(int?).FullName}'",

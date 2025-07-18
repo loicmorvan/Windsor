@@ -17,6 +17,7 @@ namespace Castle.MicroKernel.Releasers;
 #if FEATURE_PERFCOUNTERS
 	using System.Diagnostics;
 #endif
+
 using System;
 using System.Collections.Generic;
 using System.Linq;

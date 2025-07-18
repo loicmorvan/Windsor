@@ -20,12 +20,12 @@ using CastleTests.Components;
 
 public class ReportedProblemTestCase
 {
+	private readonly IWindsorContainer container;
+
 	public ReportedProblemTestCase()
 	{
 		container = new WindsorContainer();
 	}
-
-	private IWindsorContainer container;
 
 	[Fact]
 	public void StackOverflowProblem()

@@ -24,8 +24,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 using TestContext = Castle.Facilities.AspNetCore.Tests.Framework.TestContext;
 
-public class FrameworkDependencyResolverTestCase:IDisposable
+public class FrameworkDependencyResolverTestCase : IDisposable
 {
+	private readonly FrameworkDependencyResolver frameworkDependencyResolver;
+
+	private readonly TestContext testContext;
+
 	public FrameworkDependencyResolverTestCase()
 	{
 		testContext = TestContextFactory.Get();
@@ -37,9 +41,6 @@ public class FrameworkDependencyResolverTestCase:IDisposable
 	{
 		testContext.Dispose();
 	}
-
-	private TestContext testContext;
-	private FrameworkDependencyResolver frameworkDependencyResolver;
 
 	[Fact]
 	public void Should_not_match_null()
@@ -149,7 +150,7 @@ public class FrameworkDependencyResolverTestCase:IDisposable
 	[Theory]
 	public void Should_resolve_all_CrossWiredOnly_services_from_ServiceProvider(Type serviceType)
 	{
-		 testContext.ServiceProvider.GetRequiredService(serviceType); 
+		testContext.ServiceProvider.GetRequiredService(serviceType);
 	}
 
 	[InlineData(typeof(ControllerCrossWired))]
@@ -164,6 +165,6 @@ public class FrameworkDependencyResolverTestCase:IDisposable
 	[Theory]
 	public void Should_resolve_ServiceProviderOnly_and_WindsorOnly_and_CrossWired_registered_Controllers_TagHelpers_and_ViewComponents_from_WindsorContainer(Type serviceType)
 	{
-		 testContext.WindsorContainer.Resolve(serviceType); 
+		testContext.WindsorContainer.Resolve(serviceType);
 	}
 }

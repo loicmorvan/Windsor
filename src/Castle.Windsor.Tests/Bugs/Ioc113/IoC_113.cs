@@ -23,6 +23,11 @@ using Castle.MicroKernel.Tests.Bugs.Ioc113;
 
 public class IoC_113_When_resolving_initializable_disposable_and_startable_component
 {
+	private readonly IList<SdiComponentMethods> calledMethods;
+	private readonly StartableDisposableAndInitializableComponent component;
+
+	private readonly IKernel kernel;
+
 	public IoC_113_When_resolving_initializable_disposable_and_startable_component()
 	{
 		kernel = new DefaultKernel();
@@ -40,10 +45,6 @@ public class IoC_113_When_resolving_initializable_disposable_and_startable_compo
 
 		calledMethods = component.calledMethods;
 	}
-
-	private IKernel kernel;
-	private StartableDisposableAndInitializableComponent component;
-	private IList<SdiComponentMethods> calledMethods;
 
 	[Fact]
 	public void Should_call_DoSomething_between_start_and_stop()

@@ -36,7 +36,7 @@ public class ConvertibleAttribute : Attribute
 				string.Format("ConverterType {0} does not implement {1} interface", converterType.FullName,
 					typeof(ITypeConverter).FullName), nameof(converterType));
 
-		this.ConverterType = converterType;
+		ConverterType = converterType;
 	}
 
 	public Type ConverterType { get; }

@@ -21,8 +21,10 @@ using Castle.MicroKernel.Registration;
 
 using CastleTests.Components;
 
-public class CustomActivatorTestCase:IDisposable
+public class CustomActivatorTestCase : IDisposable
 {
+	private readonly IKernel kernel;
+
 	public CustomActivatorTestCase()
 	{
 		kernel = new DefaultKernel();
@@ -32,8 +34,6 @@ public class CustomActivatorTestCase:IDisposable
 	{
 		kernel.Dispose();
 	}
-
-	private IKernel kernel;
 
 	[Fact]
 	public void Can_resolve_component_with_primitive_dependency_via_factory()

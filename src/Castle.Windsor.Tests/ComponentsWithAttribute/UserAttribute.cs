@@ -20,7 +20,7 @@ public class UserAttribute : Attribute
 {
 	public UserAttribute(bool register)
 	{
-		this.Register = register;
+		Register = register;
 	}
 
 	public bool Register { get; }

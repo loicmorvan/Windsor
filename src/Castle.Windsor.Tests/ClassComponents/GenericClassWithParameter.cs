@@ -23,7 +23,7 @@ public class GenericClassWithParameter<T> : IGenericClassWithParameter<T>
 {
 	public GenericClassWithParameter(string name)
 	{
-		this.Name = name;
+		Name = name;
 	}
 
 	public string Name { get; }

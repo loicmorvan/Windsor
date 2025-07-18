@@ -27,6 +27,8 @@ using NLog.Targets;
 /// <summary>Summary description for NLogFacilityTestts.</summary>
 public class NLogFacilityTests : BaseTest, IDisposable
 {
+	private readonly IWindsorContainer container;
+
 	public NLogFacilityTests()
 	{
 		container = base.CreateConfiguredContainer<NLogFactory>();
@@ -36,8 +38,6 @@ public class NLogFacilityTests : BaseTest, IDisposable
 	{
 		if (container != null) container.Dispose();
 	}
-
-	private IWindsorContainer container;
 
 	[Fact]
 	public void SimpleTest()

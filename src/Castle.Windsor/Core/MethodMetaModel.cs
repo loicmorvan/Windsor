@@ -26,7 +26,7 @@ public class MethodMetaModel
 	/// <param name = "configNode">The config node.</param>
 	public MethodMetaModel(IConfiguration configNode)
 	{
-		this.ConfigNode = configNode;
+		ConfigNode = configNode;
 	}
 
 	/// <summary>Gets the config node.</summary>

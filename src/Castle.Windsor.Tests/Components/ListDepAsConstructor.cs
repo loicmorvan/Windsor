@@ -20,7 +20,7 @@ public class ListDepAsConstructor
 {
 	public ListDepAsConstructor(IList<IEmptyService> services)
 	{
-		this.Services = services;
+		Services = services;
 	}
 
 	public IList<IEmptyService> Services { get; }

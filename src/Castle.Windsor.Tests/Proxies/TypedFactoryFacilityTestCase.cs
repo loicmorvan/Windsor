@@ -44,7 +44,7 @@ public class TypedFactoryFacilityTestCase
 		Assert.NotNull(calcFactory);
 
 		var calculator = calcFactory.Create("default");
-		Assert.IsType<IProxyTargetAccessor>(calculator, exactMatch: false);
+		Assert.IsType<IProxyTargetAccessor>(calculator, false);
 		Assert.Equal(3, calculator.Sum(1, 2));
 
 		calcFactory.Release(calculator);

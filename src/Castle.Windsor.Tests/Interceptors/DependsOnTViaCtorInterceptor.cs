@@ -20,7 +20,7 @@ public class DependsOnTViaCtorInterceptor<T> : StandardInterceptor
 {
 	public DependsOnTViaCtorInterceptor(T tee)
 	{
-		this.Tee = tee;
+		Tee = tee;
 	}
 
 	public T Tee { get; }

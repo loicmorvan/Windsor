@@ -25,7 +25,7 @@ public class TypeName
 
 	public TypeName(string @namespace, string name, TypeName[] genericTypes)
 	{
-		this.Name = name;
+		Name = name;
 		this.genericTypes = genericTypes;
 		this.@namespace = @namespace;
 	}

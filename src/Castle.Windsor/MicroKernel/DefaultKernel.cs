@@ -430,8 +430,8 @@ public partial class DefaultKernel :
 	///     <code>kernel.Register(Classes.FromThisAssembly().BasedOn&lt;IService&gt;().WithServiceDefaultInterfaces().Configure(c => c.LifestyleTransient()));</code>
 	/// </example>
 	/// <param name = "registrations">
-	///     The component registrations created by <see cref = "Component.For{TService}" /> , <see cref = "Classes.FromAssembly(Assembly)" /> or different entry method to the
-	///     fluent API.
+	///     The component registrations created by <see cref = "Component.For{TService}" /> , <see cref = "Classes.FromAssembly(Assembly)" /> or different entry method to the fluent
+	///     API.
 	/// </param>
 	/// <returns> The kernel. </returns>
 	public IKernel Register(params IRegistration[] registrations)

@@ -52,8 +52,8 @@ public class AspNetCoreFacility : AbstractFacility
 	}
 
 	/// <summary>
-	///     Registers Windsor `aware` <see cref = "IMiddleware" /> into the <see cref = "IApplicationBuilder" /> via the <see cref = "WindsorRegistrationExtensions.AsMiddleware" /> component
-	///     registration extension
+	///     Registers Windsor `aware` <see cref = "IMiddleware" /> into the <see cref = "IApplicationBuilder" /> via the <see cref = "WindsorRegistrationExtensions.AsMiddleware" /> component registration
+	///     extension
 	/// </summary>
 	/// <param name = "applicationBuilder">
 	///     <see cref = "IApplicationBuilder" />

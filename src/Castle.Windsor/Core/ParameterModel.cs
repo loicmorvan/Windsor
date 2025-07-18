@@ -27,8 +27,8 @@ public class ParameterModel
 	/// <param name = "value">The value.</param>
 	public ParameterModel(string name, string value)
 	{
-		this.Name = name;
-		this.Value = value;
+		Name = name;
+		Value = value;
 	}
 
 	/// <summary>Initializes a new instance of the <see cref = "ParameterModel" /> class.</summary>
@@ -36,7 +36,7 @@ public class ParameterModel
 	/// <param name = "value">The value.</param>
 	public ParameterModel(string name, IConfiguration value)
 	{
-		this.Name = name;
+		Name = name;
 		ConfigValue = value;
 	}
 

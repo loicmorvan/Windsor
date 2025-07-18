@@ -33,8 +33,14 @@ using Castle.XmlFiles;
 
 using CastleTests.Components;
 
-public class InterceptorsTestCase:IDisposable
+public class InterceptorsTestCase : IDisposable
 {
+	private readonly ManualResetEvent startEvent = new(false);
+	private readonly ManualResetEvent stopEvent = new(false);
+
+	private IWindsorContainer container;
+	private CalculatorService service;
+
 	public InterceptorsTestCase()
 	{
 		container = new WindsorContainer();
@@ -45,11 +51,6 @@ public class InterceptorsTestCase:IDisposable
 	{
 		container.Dispose();
 	}
-
-	private IWindsorContainer container;
-	private readonly ManualResetEvent startEvent = new(false);
-	private readonly ManualResetEvent stopEvent = new(false);
-	private CalculatorService service;
 
 	[Fact]
 	public void InterfaceProxy()
@@ -146,7 +147,7 @@ public class InterceptorsTestCase:IDisposable
 		container.Install(XmlResource("mixins.xml"));
 		service = container.Resolve<CalculatorService>("ValidComponent");
 
-		Assert.IsType<ISimpleMixIn>(service, exactMatch: false);
+		Assert.IsType<ISimpleMixIn>(service, false);
 
 		((ISimpleMixIn)service).DoSomething();
 	}
@@ -157,7 +158,7 @@ public class InterceptorsTestCase:IDisposable
 		container.Install(XmlResource("additionalInterfaces.xml"));
 		service = container.Resolve<CalculatorService>("ValidComponent");
 
-		Assert.IsType<ISimpleMixIn>(service, exactMatch: false);
+		Assert.IsType<ISimpleMixIn>(service, false);
 
 		Assert.Throws<NotImplementedException>(() =>
 			((ISimpleMixIn)service).DoSomething());

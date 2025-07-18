@@ -20,6 +20,23 @@ using CastleTests;
 
 public class IoC_141 : AbstractContainerTestCase
 {
+	[Fact]
+	public void Can_resolve_open_generic_service_with_closed_generic_parameter()
+	{
+		Kernel.Register(Component.For(typeof(IProcessor<>)).ImplementedBy(typeof(DefaultProcessor<>)).Named("processor"));
+		Kernel.Register(Component.For(typeof(IAssembler<object>)).ImplementedBy(typeof(ObjectAssembler)).Named("assembler"));
+		Assert.IsType<DefaultProcessor<object>>(Kernel.Resolve<IProcessor<object>>());
+	}
+
+	[Fact]
+	public void Can_resolve_service_with_open_generic_parameter_with_closed_generic_parameter()
+	{
+		Kernel.Register(Component.For(typeof(IService)).ImplementedBy(typeof(Service1)).Named("service1"));
+		Kernel.Register(Component.For(typeof(IProcessor<>)).ImplementedBy(typeof(DefaultProcessor<>)).Named("processor"));
+		Kernel.Register(Component.For(typeof(IAssembler<object>)).ImplementedBy(typeof(ObjectAssembler)).Named("assembler"));
+		Assert.IsType<Service1>(Kernel.Resolve<IService>());
+	}
+
 	public interface IService
 	{
 	}
@@ -48,22 +65,5 @@ public class IoC_141 : AbstractContainerTestCase
 
 	public class ObjectAssembler : IAssembler<object>
 	{
-	}
-
-	[Fact]
-	public void Can_resolve_open_generic_service_with_closed_generic_parameter()
-	{
-		Kernel.Register(Component.For(typeof(IProcessor<>)).ImplementedBy(typeof(DefaultProcessor<>)).Named("processor"));
-		Kernel.Register(Component.For(typeof(IAssembler<object>)).ImplementedBy(typeof(ObjectAssembler)).Named("assembler"));
-		Assert.IsType<DefaultProcessor<object>>(Kernel.Resolve<IProcessor<object>>());
-	}
-
-	[Fact]
-	public void Can_resolve_service_with_open_generic_parameter_with_closed_generic_parameter()
-	{
-		Kernel.Register(Component.For(typeof(IService)).ImplementedBy(typeof(Service1)).Named("service1"));
-		Kernel.Register(Component.For(typeof(IProcessor<>)).ImplementedBy(typeof(DefaultProcessor<>)).Named("processor"));
-		Kernel.Register(Component.For(typeof(IAssembler<object>)).ImplementedBy(typeof(ObjectAssembler)).Named("assembler"));
-		Assert.IsType<Service1>(Kernel.Resolve<IService>());
 	}
 }

@@ -15,7 +15,6 @@
 namespace CastleTests;
 
 using Castle.DynamicProxy;
-using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.MicroKernel.Tests.ClassComponents;
@@ -30,7 +29,7 @@ public class ContainerAndGenericsInCodeTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Can_create_generic_with_ctor_dependency_on_array_of_generics()
 	{
-		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, false));
+		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel));
 		Container.Register(Component.For(typeof(UsesArrayOfGeneric<>)),
 			Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)));
 

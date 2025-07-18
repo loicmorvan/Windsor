@@ -23,7 +23,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using TestContext = Castle.Facilities.AspNetCore.Tests.Framework.TestContext;
 
-public abstract class WindsorRegistrationOptionsViewComponentTestCase:IDisposable
+public abstract class WindsorRegistrationOptionsViewComponentTestCase : IDisposable
 {
 	protected TestContext testContext;
 

@@ -382,16 +382,17 @@ not registered or the name was misspelleed and a wrong component would be picked
 potentially severe issues in the application. New version adapts fail-fast approach in those
 cases to give dvelopers immediate feedback the configuration is wrong.
 fix - Actual fix depends on which part of the behavior you want:
+
 - If you do care about the fallback behavior, that is get the component by name and if
-not present fallback to resolve by type, you can specify it explicitly when registering your
-factory:
-.AsFactory(
-new DefaultTypedFactoryComponentSelector(fallbackToResolveByTypeIfNameNotFound: true));
+  not present fallback to resolve by type, you can specify it explicitly when registering your
+  factory:
+  .AsFactory(
+  new DefaultTypedFactoryComponentSelector(fallbackToResolveByTypeIfNameNotFound: true));
 - if you don't care about the fallback and what you really want is a 'GetSomeFoo' method
-that resolves by type, either rename the method so that its name doesn't start with 'get'
-or disable the "'get' methods resolve by name" behavior explicitly when registering your
-factory:
-.AsFactory(new DefaultTypedFactoryComponentSelector(getMethodsResolveByName: false))
+  that resolves by type, either rename the method so that its name doesn't start with 'get'
+  or disable the "'get' methods resolve by name" behavior explicitly when registering your
+  factory:
+  .AsFactory(new DefaultTypedFactoryComponentSelector(getMethodsResolveByName: false))
 
 change - Referencing interceptors by type will not work if the interceptor has custom name.
 impact - medium
@@ -651,21 +652,22 @@ fixability - medium
 description - To limit unnecessary tracking of components, which unnecessarily consumes memory
 and causes contention in multithreaded scenarios the following change was made to release
 policy semantics:
+
 - only objects whose decommission is managed by the policy (ie which are released by call to
-policy.Release, or indirectly: container.Release) can now be Tracked. This is determined by
-the 'RequiresPolicyRelease' flag on Burden. If the flag is not set the policy can throw.
-fix - The change is likely to affect code using custom lifetime managers. It is now up to the
-manager to decide if it will release the object itself (then it should pass 'true' to
-'public Burden CreateBurden(bool trackedExternally)' method on CreationContext). Tracking
-happens also for objects that require it ('RequiresDecommission' on burden is 'true').
-If lifestyle manager wants to make sure the object will be tracked it can set this flag.
-Otherwise it is up to Windsor to decide if it needs to track the object or not.
-Another side-effect of the change is that calling 'container.Kernel.ReleasePolicy.HasTrack'
-may now return 'false', when it previously would return 'true', if the object does not meet
-the criteria mentioned above. If you were using this method, make sure you review your code
-that depends on it, and adjust it to the new requirements. The semantics of 'HasTrack' is
-'does the release policy track this object', not 'does anything in the container track it'
-anymore.
+  policy.Release, or indirectly: container.Release) can now be Tracked. This is determined by
+  the 'RequiresPolicyRelease' flag on Burden. If the flag is not set the policy can throw.
+  fix - The change is likely to affect code using custom lifetime managers. It is now up to the
+  manager to decide if it will release the object itself (then it should pass 'true' to
+  'public Burden CreateBurden(bool trackedExternally)' method on CreationContext). Tracking
+  happens also for objects that require it ('RequiresDecommission' on burden is 'true').
+  If lifestyle manager wants to make sure the object will be tracked it can set this flag.
+  Otherwise it is up to Windsor to decide if it needs to track the object or not.
+  Another side-effect of the change is that calling 'container.Kernel.ReleasePolicy.HasTrack'
+  may now return 'false', when it previously would return 'true', if the object does not meet
+  the criteria mentioned above. If you were using this method, make sure you review your code
+  that depends on it, and adjust it to the new requirements. The semantics of 'HasTrack' is
+  'does the release policy track this object', not 'does anything in the container track it'
+  anymore.
 
 change - IReleasePolicy interface has a new method: IReleasePolicy CreateSubPolicy(); usage of
 sub-policies changes how typed factories handle out-of-band-release of components (see
@@ -702,20 +704,21 @@ fix - If you implement custom lifestyle consult the implementation of standard l
 examples how to handle each aspect of component lifestyle management. Broadly speaking the
 behavior should be the following (*do* inherit from AbstractLifestyleManager for your own
 convenience):
+
 - if your lifestyle employs caching, it should cache Burdens, not the objects resolved
-directly. Look up its cache, and if you find matching burden return object it manages
-(accessed via 'Instance' property)
+  directly. Look up its cache, and if you find matching burden return object it manages
+  (accessed via 'Instance' property)
 - on cache miss call base.CreateInstance to obtain new instance from activator. This method
-will not return the managed object directly but rather a Burden instance. The 2nd argument
-'trackedExternally' should be set to true if the lifestyle manager uses some external mecha-
-nism to track end of life for components. If not, (when set to true) releasePolicy will take
-the responsibility.
+  will not return the managed object directly but rather a Burden instance. The 2nd argument
+  'trackedExternally' should be set to true if the lifestyle manager uses some external mecha-
+  nism to track end of life for components. If not, (when set to true) releasePolicy will take
+  the responsibility.
 - inspect burden's RequiresDecommission property. If its value is true that means either
-the intsance obtained or at least one of its dependencies can not be released out of band
-and will require to be released explicitly. If the property is set to true you are required
-to track the componetn obtained with releasePolicy provided (you can use base.Track method
-to acheave that). If the property is false, release policy will ignore the component when
-container's Release method is called, and rely on your out of band handling).
+  the intsance obtained or at least one of its dependencies can not be released out of band
+  and will require to be released explicitly. If the property is set to true you are required
+  to track the componetn obtained with releasePolicy provided (you can use base.Track method
+  to acheave that). If the property is false, release policy will ignore the component when
+  container's Release method is called, and rely on your out of band handling).
 - cache your newly obtained instance if needed.
 - return the intance, (burden.Instance)
 

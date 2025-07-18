@@ -69,7 +69,7 @@ public class ClassInheritanceTestCase : AbstractContainerTestCase
 		var obj = Container.Resolve<JohnParent>();
 
 		Assert.True(IsProxy(obj));
-		Assert.IsType<JohnChild>(obj, exactMatch: false);
+		Assert.IsType<JohnChild>(obj, false);
 	}
 
 	[Fact]
@@ -82,8 +82,8 @@ public class ClassInheritanceTestCase : AbstractContainerTestCase
 		var obj = Container.Resolve<JohnParent>();
 
 		Assert.True(IsProxy(obj));
-		Assert.IsType<JohnChild>(obj,exactMatch:false);
-		Assert.IsType<IEmptyService>(obj, exactMatch: false);
+		Assert.IsType<JohnChild>(obj, false);
+		Assert.IsType<IEmptyService>(obj, false);
 	}
 
 	[Fact]
@@ -96,9 +96,9 @@ public class ClassInheritanceTestCase : AbstractContainerTestCase
 		var obj = Container.Resolve<JohnParent>();
 
 		Assert.True(IsProxy(obj));
-		Assert.IsType<JohnChild>(obj, exactMatch: false);
-		Assert.IsType<IEmptyService>(obj, exactMatch: false);
-		Assert.IsType<IGeneric<IEmployee>>(obj, exactMatch: false);
+		Assert.IsType<JohnChild>(obj, false);
+		Assert.IsType<IEmptyService>(obj, false);
+		Assert.IsType<IGeneric<IEmployee>>(obj, false);
 	}
 
 	[Fact]
@@ -110,7 +110,7 @@ public class ClassInheritanceTestCase : AbstractContainerTestCase
 		var obj = Container.Resolve<JohnParent>();
 
 		Assert.True(IsProxy(obj));
-		Assert.IsType<JohnChild>(obj, exactMatch: false);
+		Assert.IsType<JohnChild>(obj, false);
 	}
 
 	[Fact]

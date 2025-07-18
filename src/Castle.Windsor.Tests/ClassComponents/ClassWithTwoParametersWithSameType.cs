@@ -18,8 +18,8 @@ public class ClassWithTwoParametersWithSameType
 {
 	public ClassWithTwoParametersWithSameType(ICommon one, ICommon two)
 	{
-		this.One = one;
-		this.Two = two;
+		One = one;
+		Two = two;
 	}
 
 	public ICommon One { get; }

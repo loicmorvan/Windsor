@@ -20,7 +20,7 @@ public class ReadOnlyListDepAsConstructor
 {
 	public ReadOnlyListDepAsConstructor(IReadOnlyList<IEmptyService> services)
 	{
-		this.Services = services;
+		Services = services;
 	}
 
 	public IReadOnlyList<IEmptyService> Services { get; }

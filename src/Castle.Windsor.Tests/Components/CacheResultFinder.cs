@@ -22,7 +22,7 @@ public class CacheResultFinder<T> : IResultFinder<T>
 
 	public CacheResultFinder(IResultFinder<T> finder)
 	{
-		this.Finder = finder;
+		Finder = finder;
 	}
 
 	public IResultFinder<T> Finder { get; }

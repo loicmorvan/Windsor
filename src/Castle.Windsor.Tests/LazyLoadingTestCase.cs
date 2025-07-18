@@ -183,7 +183,7 @@ public class UsingString
 {
 	public UsingString(string parameter)
 	{
-		this.Parameter = parameter;
+		Parameter = parameter;
 	}
 
 	public string Parameter { get; }
@@ -193,7 +193,7 @@ public class UsingLazyComponent
 {
 	public UsingLazyComponent(IHasDefaultImplementation dependency)
 	{
-		this.Dependency = dependency;
+		Dependency = dependency;
 	}
 
 	public IHasDefaultImplementation Dependency { get; }
@@ -217,7 +217,7 @@ public class DefaultImplementationAttribute : Attribute
 {
 	public DefaultImplementationAttribute(Type implementation)
 	{
-		this.Implementation = implementation;
+		Implementation = implementation;
 	}
 
 	public Type Implementation { get; }

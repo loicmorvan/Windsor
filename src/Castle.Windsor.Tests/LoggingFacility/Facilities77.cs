@@ -21,6 +21,18 @@ using Castle.Windsor;
 
 public class Facilities77 : BaseTest
 {
+	[Fact]
+	public void ShouldCallNoArgsContstructorIfConfigFileNotSpecified()
+	{
+		var container = new WindsorContainer().AddFacility<LoggingFacility>(f => f.LogUsing<TestLoggerFactory>());
+
+		container.Register(Component.For<SimpleLoggingComponent>().Named("component"));
+		container.Resolve<SimpleLoggingComponent>("component");
+
+		var logFactory = container.Resolve<TestLoggerFactory>("iloggerfactory");
+		Assert.True(logFactory.NoArgsConstructorWasCalled, "No args constructor was not called");
+	}
+
 	public class TestLoggerFactory : AbstractLoggerFactory
 	{
 		public bool NoArgsConstructorWasCalled;
@@ -44,17 +56,5 @@ public class Facilities77 : BaseTest
 		{
 			return NullLogger.Instance;
 		}
-	}
-
-	[Fact]
-	public void ShouldCallNoArgsContstructorIfConfigFileNotSpecified()
-	{
-		var container = new WindsorContainer().AddFacility<LoggingFacility>(f => f.LogUsing<TestLoggerFactory>());
-
-		container.Register(Component.For<SimpleLoggingComponent>().Named("component"));
-		container.Resolve<SimpleLoggingComponent>("component");
-
-		var logFactory = container.Resolve<TestLoggerFactory>("iloggerfactory");
-		Assert.True(logFactory.NoArgsConstructorWasCalled, "No args constructor was not called");
 	}
 }

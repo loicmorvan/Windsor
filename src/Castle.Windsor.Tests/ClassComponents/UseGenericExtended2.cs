@@ -18,8 +18,8 @@ public class UseGenericExtended2
 {
 	public UseGenericExtended2(IGenericExtended<string> genericExtended, IGeneric<string> generic)
 	{
-		this.GenericExtended = genericExtended;
-		this.Generic = generic;
+		GenericExtended = genericExtended;
+		Generic = generic;
 	}
 
 	public IGeneric<string> Generic { get; }

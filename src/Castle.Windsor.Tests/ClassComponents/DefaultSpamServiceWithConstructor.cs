@@ -20,7 +20,7 @@ public class DefaultSpamServiceWithConstructor
 	public DefaultSpamServiceWithConstructor(DefaultMailSenderService mailsender, DefaultTemplateEngine templateEngine)
 	{
 		MailSender = mailsender;
-		this.TemplateEngine = templateEngine;
+		TemplateEngine = templateEngine;
 	}
 
 	public DefaultMailSenderService MailSender { get; }

@@ -18,8 +18,8 @@ public class HasOnlyOneArgMatchingDelegatesParameter
 {
 	public HasOnlyOneArgMatchingDelegatesParameter(string arg1, string name)
 	{
-		this.Arg1 = arg1;
-		this.Name = name;
+		Arg1 = arg1;
+		Name = name;
 	}
 
 	public string Arg1 { get; }

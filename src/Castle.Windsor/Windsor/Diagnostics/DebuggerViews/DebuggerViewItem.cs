@@ -21,16 +21,16 @@ public class DebuggerViewItem
 {
 	public DebuggerViewItem(string name, string description, object value)
 	{
-		this.Name = name;
-		this.Description = description;
-		this.Value = value;
+		Name = name;
+		Description = description;
+		Value = value;
 	}
 
 	public DebuggerViewItem(string name, object value)
 	{
-		this.Name = name;
+		Name = name;
 		Description = value;
-		this.Value = value;
+		Value = value;
 	}
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]

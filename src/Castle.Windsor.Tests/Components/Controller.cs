@@ -18,7 +18,7 @@ public class Controller : IController
 {
 	public Controller(IView view)
 	{
-		this.View = view;
+		View = view;
 	}
 
 	public IView View { get; }

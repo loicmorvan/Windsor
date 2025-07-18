@@ -30,35 +30,6 @@ using CastleTests.Components;
 /// <summary>Summary description for SubContainersTestCase.</summary>
 public class SubContainersTestCase : AbstractContainerTestCase
 {
-	/// <summary>collects events in an array list, used for ensuring we are cleaning up the parent kernel event subscriptions correctly.</summary>
-	private class EventsCollector
-	{
-		public const string Added = "added";
-		public const string Removed = "removed";
-
-		private readonly object expectedSender;
-
-		public EventsCollector(object expectedSender)
-		{
-			this.expectedSender = expectedSender;
-			Events = new List<string>();
-		}
-
-		public List<string> Events { get; }
-
-		public void AddedAsChildKernel(object sender, EventArgs e)
-		{
-			Assert.Equal(expectedSender, sender);
-			Events.Add(Added);
-		}
-
-		public void RemovedAsChildKernel(object sender, EventArgs e)
-		{
-			Assert.Equal(expectedSender, sender);
-			Events.Add(Removed);
-		}
-	}
-
 	[Fact]
 	public void AddChildKernelToTwoParentsThrowsException()
 	{
@@ -336,6 +307,35 @@ public class SubContainersTestCase : AbstractContainerTestCase
 			Assert.IsType<ParentHandlerWrapper>(handler);
 
 			handler.TryResolve(CreationContext.CreateEmpty());
+		}
+	}
+
+	/// <summary>collects events in an array list, used for ensuring we are cleaning up the parent kernel event subscriptions correctly.</summary>
+	private class EventsCollector
+	{
+		public const string Added = "added";
+		public const string Removed = "removed";
+
+		private readonly object expectedSender;
+
+		public EventsCollector(object expectedSender)
+		{
+			this.expectedSender = expectedSender;
+			Events = new List<string>();
+		}
+
+		public List<string> Events { get; }
+
+		public void AddedAsChildKernel(object sender, EventArgs e)
+		{
+			Assert.Equal(expectedSender, sender);
+			Events.Add(Added);
+		}
+
+		public void RemovedAsChildKernel(object sender, EventArgs e)
+		{
+			Assert.Equal(expectedSender, sender);
+			Events.Add(Removed);
 		}
 	}
 }

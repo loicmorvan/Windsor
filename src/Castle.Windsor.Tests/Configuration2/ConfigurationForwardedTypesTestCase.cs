@@ -18,12 +18,12 @@ using Castle.MicroKernel.Tests.ClassComponents;
 
 public class ConfigurationForwardedTypesTestCase
 {
+	private readonly IWindsorContainer container;
+
 	public ConfigurationForwardedTypesTestCase()
 	{
 		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_forwarded_types.xml"));
 	}
-
-	private IWindsorContainer container;
 
 	[Fact]
 	public void Component_with_forwarded_types()

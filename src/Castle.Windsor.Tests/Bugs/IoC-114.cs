@@ -18,6 +18,17 @@ using Castle.MicroKernel.Registration;
 
 public class IoC_114 : AbstractContainerTestCase
 {
+	[Fact]
+	public void UsingPropertyWithPrivateSetter()
+	{
+		Container.Register(Component.For<IService1>().ImplementedBy<Service1>(),
+			Component.For<IService2>().ImplementedBy<Service2>());
+
+		var service2 = (Service2)Container.Resolve<IService2>();
+
+		Assert.Null(service2.S);
+	}
+
 	public interface IService1
 	{
 	}
@@ -33,16 +44,5 @@ public class IoC_114 : AbstractContainerTestCase
 	public class Service2 : IService2
 	{
 		public IService1 S { get; private set; }
-	}
-
-	[Fact]
-	public void UsingPropertyWithPrivateSetter()
-	{
-		Container.Register(Component.For<IService1>().ImplementedBy<Service1>(),
-			Component.For<IService2>().ImplementedBy<Service2>());
-
-		var service2 = (Service2)Container.Resolve<IService2>();
-
-		Assert.Null(service2.S);
 	}
 }

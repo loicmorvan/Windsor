@@ -20,7 +20,7 @@ public class AppHost
 {
 	public AppHost(IEnumerable<IAppScreen> screens)
 	{
-		this.Screens = screens;
+		Screens = screens;
 	}
 
 	public IEnumerable<IAppScreen> Screens { get; }

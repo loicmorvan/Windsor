@@ -20,51 +20,6 @@ using Castle.MicroKernel.Registration;
 
 public class ConfigureDecoratorsTestCase
 {
-	private interface IDoNothingService
-	{
-		void DoNothing();
-	}
-
-	private interface IDoSomethingService
-	{
-		void DoSomething();
-	}
-
-	private class DoNothingService : IDoNothingService
-	{
-		public void DoNothing()
-		{
-			throw new NotImplementedException();
-		}
-	}
-
-	private class DoNothingServiceDecorator : IDoNothingService
-	{
-		public DoNothingServiceDecorator(IDoNothingService inner)
-		{
-			Inner = inner;
-		}
-
-		public IDoNothingService Inner { get; }
-
-		public void DoNothing()
-		{
-			throw new NotImplementedException();
-		}
-	}
-
-	private class DoSomethingService : IDoSomethingService
-	{
-		public DoSomethingService(IDoNothingService service)
-		{
-		}
-
-		public void DoSomething()
-		{
-			throw new NotImplementedException();
-		}
-	}
-
 	[Fact]
 	public void ShouldResolveComponentFromParent()
 	{
@@ -126,5 +81,50 @@ public class ConfigureDecoratorsTestCase
 		var service = child.Resolve<IDoNothingService>();
 		Assert.NotNull(service);
 		Assert.IsType<DoNothingServiceDecorator>(service);
+	}
+
+	private interface IDoNothingService
+	{
+		void DoNothing();
+	}
+
+	private interface IDoSomethingService
+	{
+		void DoSomething();
+	}
+
+	private class DoNothingService : IDoNothingService
+	{
+		public void DoNothing()
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	private class DoNothingServiceDecorator : IDoNothingService
+	{
+		public DoNothingServiceDecorator(IDoNothingService inner)
+		{
+			Inner = inner;
+		}
+
+		public IDoNothingService Inner { get; }
+
+		public void DoNothing()
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	private class DoSomethingService : IDoSomethingService
+	{
+		public DoSomethingService(IDoNothingService service)
+		{
+		}
+
+		public void DoSomething()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

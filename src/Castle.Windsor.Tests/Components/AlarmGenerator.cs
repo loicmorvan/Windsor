@@ -18,7 +18,7 @@ public class AlarmGenerator
 {
 	public AlarmGenerator(IAlarmSender sender)
 	{
-		this.Sender = sender;
+		Sender = sender;
 	}
 
 	public IAlarmSender Sender { get; }

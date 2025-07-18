@@ -560,7 +560,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
 			.Single(x => x.ComponentModel.Implementation == typeof(CustomerValidatorAndRepository));
 
 		var services = handler.ComponentModel.Services.ToList();
-		Assert.Contains(typeof(IRepository<ICustomer>),services);
+		Assert.Contains(typeof(IRepository<ICustomer>), services);
 	}
 
 	[Fact]

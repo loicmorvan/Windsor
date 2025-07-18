@@ -22,7 +22,7 @@ public class WebServiceResultFinder<T> : IResultFinder<T>
 
 	public WebServiceResultFinder(IResultFinder<T> finder)
 	{
-		this.Finder = finder;
+		Finder = finder;
 	}
 
 	public IResultFinder<T> Finder { get; }

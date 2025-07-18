@@ -18,7 +18,7 @@ public class ResultFinderStringDecorator : IResultFinder<string>
 {
 	public ResultFinderStringDecorator(IResultFinder<string> finder)
 	{
-		this.Finder = finder;
+		Finder = finder;
 	}
 
 	public IResultFinder<string> Finder { get; }

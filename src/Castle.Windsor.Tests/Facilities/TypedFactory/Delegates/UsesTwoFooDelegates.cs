@@ -22,8 +22,8 @@ public class UsesTwoFooDelegates
 
 	public UsesTwoFooDelegates(Func<int, Foo> one, Func<int, Foo> two)
 	{
-		this.One = one;
-		this.Two = two;
+		One = one;
+		Two = two;
 		counter = 0;
 	}
 

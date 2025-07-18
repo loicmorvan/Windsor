@@ -46,7 +46,7 @@ public class CompB
 	public CompB(CompA ca, CompC cc, string myArgument)
 	{
 		Compc = cc;
-		this.MyArgument = myArgument;
+		MyArgument = myArgument;
 	}
 
 	public CompC Compc { get; set; }

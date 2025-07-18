@@ -24,77 +24,6 @@ using CastleTests.Components;
 
 public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 {
-	public class Indirection
-	{
-		public Indirection(NonDisposableRoot fakeRoot)
-		{
-			this.FakeRoot = fakeRoot;
-		}
-
-		public NonDisposableRoot FakeRoot { get; }
-	}
-
-	public class NonDisposableRoot
-	{
-		public NonDisposableRoot(A a, B b)
-		{
-			this.A = a;
-			this.B = b;
-		}
-
-		public A A { get; }
-
-		public B B { get; }
-	}
-
-	public class A : DisposableBase
-	{
-	}
-
-	public class B : DisposableBase
-	{
-	}
-
-	public class C : DisposableBase
-	{
-	}
-
-	public class GenA<T> : DisposableBase
-	{
-		public B BField { get; set; }
-
-		public GenB<T> GenBField { get; set; }
-	}
-
-	public class GenB<T> : DisposableBase
-	{
-	}
-
-	public class DisposableSpamService : DisposableBase
-	{
-		public DisposableSpamService(DisposableTemplateEngine templateEngine)
-		{
-			this.TemplateEngine = templateEngine;
-		}
-
-		public DisposableSpamService(DisposableTemplateEngine templateEngine,
-			PoolableComponent1 pool)
-		{
-			this.TemplateEngine = templateEngine;
-			this.Pool = pool;
-		}
-
-		public DefaultMailSenderService MailSender { get; set; }
-
-		public PoolableComponent1 Pool { get; }
-
-		public DisposableTemplateEngine TemplateEngine { get; }
-	}
-
-	public class DisposableTemplateEngine : DisposableBase
-	{
-	}
-
 	[Fact]
 	public void ComponentsAreOnlyDisposedOnce()
 	{
@@ -238,5 +167,76 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 		var a = Container.Resolve<GenA<int>>();
 
 		Container.Release(a);
+	}
+
+	public class Indirection
+	{
+		public Indirection(NonDisposableRoot fakeRoot)
+		{
+			FakeRoot = fakeRoot;
+		}
+
+		public NonDisposableRoot FakeRoot { get; }
+	}
+
+	public class NonDisposableRoot
+	{
+		public NonDisposableRoot(A a, B b)
+		{
+			A = a;
+			B = b;
+		}
+
+		public A A { get; }
+
+		public B B { get; }
+	}
+
+	public class A : DisposableBase
+	{
+	}
+
+	public class B : DisposableBase
+	{
+	}
+
+	public class C : DisposableBase
+	{
+	}
+
+	public class GenA<T> : DisposableBase
+	{
+		public B BField { get; set; }
+
+		public GenB<T> GenBField { get; set; }
+	}
+
+	public class GenB<T> : DisposableBase
+	{
+	}
+
+	public class DisposableSpamService : DisposableBase
+	{
+		public DisposableSpamService(DisposableTemplateEngine templateEngine)
+		{
+			TemplateEngine = templateEngine;
+		}
+
+		public DisposableSpamService(DisposableTemplateEngine templateEngine,
+			PoolableComponent1 pool)
+		{
+			TemplateEngine = templateEngine;
+			Pool = pool;
+		}
+
+		public DefaultMailSenderService MailSender { get; set; }
+
+		public PoolableComponent1 Pool { get; }
+
+		public DisposableTemplateEngine TemplateEngine { get; }
+	}
+
+	public class DisposableTemplateEngine : DisposableBase
+	{
 	}
 }

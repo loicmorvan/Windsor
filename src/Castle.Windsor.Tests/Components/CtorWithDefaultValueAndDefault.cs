@@ -18,7 +18,7 @@ public class CtorWithDefaultValueAndDefault
 {
 	public CtorWithDefaultValueAndDefault(string name = "Stefan Mucha")
 	{
-		this.Name = name;
+		Name = name;
 	}
 
 	public CtorWithDefaultValueAndDefault()

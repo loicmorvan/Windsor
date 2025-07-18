@@ -27,8 +27,8 @@ public class PropertySet
 	/// <param name = "dependency"> The dependency. </param>
 	public PropertySet(PropertyInfo propertyInfo, DependencyModel dependency)
 	{
-		this.Property = propertyInfo;
-		this.Dependency = dependency;
+		Property = propertyInfo;
+		Dependency = dependency;
 	}
 
 	/// <summary>Gets the dependency.</summary>

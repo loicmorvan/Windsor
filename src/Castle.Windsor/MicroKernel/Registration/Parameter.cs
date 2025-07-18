@@ -23,13 +23,13 @@ public class Parameter
 
 	internal Parameter(string key, string value)
 	{
-		this.Key = key;
+		Key = key;
 		this.value = value;
 	}
 
 	internal Parameter(string key, IConfiguration configNode)
 	{
-		this.Key = key;
+		Key = key;
 		value = configNode;
 	}
 
@@ -61,7 +61,7 @@ public class ParameterKey
 {
 	internal ParameterKey(string name)
 	{
-		this.Name = name;
+		Name = name;
 	}
 
 	/// <summary>The parameter key name.</summary>

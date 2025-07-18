@@ -20,7 +20,7 @@ public class ComponentWithStringProperty
 	/// <param name = "name">The name.</param>
 	public ComponentWithStringProperty(string name)
 	{
-		this.Name = name;
+		Name = name;
 	}
 
 	/// <summary>Gets the name.</summary>

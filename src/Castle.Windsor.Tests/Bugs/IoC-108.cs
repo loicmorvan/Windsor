@@ -18,6 +18,15 @@ using Castle.MicroKernel.Registration;
 
 public class IoC_108 : AbstractContainerTestCase
 {
+	[Fact]
+	public void Should_not_fail_when_constructor_parameter_and_public_property_with_private_setter_have_same_name()
+	{
+		Container.Register(Component.For<Service2>(),
+			Component.For<Service1>());
+
+		Container.Resolve<Service2>();
+	}
+
 	public class Service1
 	{
 		public void OpA()
@@ -37,14 +46,5 @@ public class IoC_108 : AbstractContainerTestCase
 		}
 
 		public Service1 Service1 { get; private set; }
-	}
-
-	[Fact]
-	public void Should_not_fail_when_constructor_parameter_and_public_property_with_private_setter_have_same_name()
-	{
-		Container.Register(Component.For<Service2>(),
-			Component.For<Service1>());
-
-		Container.Resolve<Service2>();
 	}
 }

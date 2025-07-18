@@ -22,19 +22,19 @@ using Castle.MicroKernel.Registration;
 
 using CastleTests.Components;
 
-public class GraphTestCase:IDisposable
+public class GraphTestCase : IDisposable
 {
-	public void Dispose()
-	{
-		kernel.Dispose();
-	}
+	private readonly IKernel kernel;
 
 	public GraphTestCase()
 	{
 		kernel = new DefaultKernel();
 	}
 
-	private IKernel kernel;
+	public void Dispose()
+	{
+		kernel.Dispose();
+	}
 
 	[Fact]
 	public void TopologicalSortOnComponents()

@@ -27,7 +27,7 @@ public class NoResolvableConstructorFoundException : ComponentActivatorException
 			string.Format("Could not find resolvable constructor for {0}. Make sure all required dependencies are provided.",
 				type.FullName), componentModel)
 	{
-		this.Type = type;
+		Type = type;
 	}
 
 	public NoResolvableConstructorFoundException(string message, Exception innerException, ComponentModel componentModel)

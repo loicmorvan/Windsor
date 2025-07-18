@@ -332,7 +332,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 		public HandlerWithPriority(int priority, IHandler handler)
 		{
 			this.priority = priority;
-			this.Handler = handler;
+			Handler = handler;
 		}
 
 		public IHandler Handler { get; }

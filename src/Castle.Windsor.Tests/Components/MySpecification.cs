@@ -18,7 +18,7 @@ public class MySpecification : ISpecification
 {
 	public MySpecification(IRepository<int> repository)
 	{
-		this.Repository = repository;
+		Repository = repository;
 	}
 
 	public IRepository<int> Repository { get; }

@@ -42,7 +42,7 @@ public class DependencyModel
 	// TODO: add configuration so that information about override is attached to the dependency
 	public DependencyModel(string dependencyKey, Type targetType, bool isOptional, bool hasDefaultValue, object defaultValue)
 	{
-		this.TargetType = targetType;
+		TargetType = targetType;
 		if (targetType != null && targetType.IsByRef)
 			TargetItemType = targetType.GetElementType();
 		else

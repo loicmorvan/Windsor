@@ -33,8 +33,8 @@ public sealed class PooledAttribute : LifestyleAttribute
 	/// <param name = "maxPoolSize">Max pool size.</param>
 	public PooledAttribute(int initialPoolSize, int maxPoolSize) : base(LifestyleType.Pooled)
 	{
-		this.InitialPoolSize = initialPoolSize;
-		this.MaxPoolSize = maxPoolSize;
+		InitialPoolSize = initialPoolSize;
+		MaxPoolSize = maxPoolSize;
 	}
 
 	/// <summary>Gets the initial size of the pool.</summary>

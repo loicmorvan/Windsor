@@ -20,7 +20,7 @@ public class UsesUri
 {
 	public UsesUri(Uri uri)
 	{
-		this.Uri = uri;
+		Uri = uri;
 	}
 
 	public Uri Uri { get; }

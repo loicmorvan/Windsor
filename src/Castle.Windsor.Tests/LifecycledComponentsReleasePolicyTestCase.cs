@@ -24,14 +24,14 @@ using CastleTests.Components;
 
 public class LifecycledComponentsReleasePolicyTestCase
 {
+	private readonly IWindsorContainer container;
+	private readonly IReleasePolicy releasePolicy;
+
 	public LifecycledComponentsReleasePolicyTestCase()
 	{
 		container = new WindsorContainer();
 		releasePolicy = container.Kernel.ReleasePolicy;
 	}
-
-	private IWindsorContainer container;
-	private IReleasePolicy releasePolicy;
 
 	[Fact]
 	public void AllComponentsReleasePolicy_is_the_default_release_policy_in_Windsor()

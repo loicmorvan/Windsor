@@ -22,7 +22,7 @@ public class DatabaseResultFinder<T> : IResultFinder<T>
 
 	public DatabaseResultFinder(IResultFinder<T> finder)
 	{
-		this.Finder = finder;
+		Finder = finder;
 	}
 
 	public IResultFinder<T> Finder { get; }

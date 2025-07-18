@@ -22,7 +22,7 @@ public class CommonServiceUser3
 
 	public CommonServiceUser3(ICommon common)
 	{
-		this.CommonService = common;
+		CommonService = common;
 	}
 
 	public ICommon CommonService { get; }

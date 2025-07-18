@@ -28,8 +28,8 @@ public class ConstructorCandidate : IComparable<ConstructorCandidate>
 	/// <param name = "dependencies">The dependencies.</param>
 	public ConstructorCandidate(ConstructorInfo constructorInfo, ConstructorDependencyModel[] dependencies)
 	{
-		this.Constructor = constructorInfo;
-		this.Dependencies = dependencies;
+		Constructor = constructorInfo;
+		Dependencies = dependencies;
 		dependencies.ForEach(InitParameter);
 	}
 

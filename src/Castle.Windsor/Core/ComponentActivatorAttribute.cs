@@ -24,7 +24,7 @@ public sealed class ComponentActivatorAttribute : Attribute
 	/// <param name = "componentActivatorType">Type of the component activator.</param>
 	public ComponentActivatorAttribute(Type componentActivatorType)
 	{
-		this.ComponentActivatorType = componentActivatorType;
+		ComponentActivatorType = componentActivatorType;
 	}
 
 	/// <summary>Gets the type of the component activator.</summary>

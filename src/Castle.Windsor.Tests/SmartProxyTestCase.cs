@@ -17,6 +17,7 @@ namespace Castle.Windsor.Tests;
 #if FEATURE_REMOTING
 	using System.Runtime.Remoting;
 #endif
+
 using System;
 
 using Castle.DynamicProxy;
@@ -25,8 +26,10 @@ using Castle.Windsor.Tests.Interceptors;
 
 using CastleTests.Components;
 
-public class SmartProxyTestCase:IDisposable
+public class SmartProxyTestCase : IDisposable
 {
+	private readonly IWindsorContainer container;
+
 	public SmartProxyTestCase()
 	{
 		container = new WindsorContainer();
@@ -38,8 +41,6 @@ public class SmartProxyTestCase:IDisposable
 	{
 		container.Dispose();
 	}
-
-	private IWindsorContainer container;
 
 	[Fact]
 	public void ConcreteClassProxy()

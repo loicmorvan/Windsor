@@ -33,7 +33,7 @@ public abstract class AbstractSubSystem :
 
 	public virtual void Init(IKernelInternal kernel)
 	{
-		this.Kernel = kernel;
+		Kernel = kernel;
 	}
 
 	public virtual void Terminate()

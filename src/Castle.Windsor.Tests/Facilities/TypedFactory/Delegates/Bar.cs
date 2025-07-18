@@ -21,7 +21,7 @@ public class Bar
 	public Bar(Baz baz, string name)
 	{
 		this.baz = baz;
-		this.Name = name;
+		Name = name;
 	}
 
 	public string Description { get; set; }

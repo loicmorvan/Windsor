@@ -24,13 +24,13 @@ using Castle.MicroKernel.Tests.ClassComponents;
 
 public class KernelEvents_DependencyResolving_TestCase : AbstractContainerTestCase
 {
+	private ComponentModel expectedClient;
+	private List<DependencyModel> expectedModels;
+
 	protected override void AfterContainerCreated()
 	{
 		Kernel.DependencyResolving += AssertEvent;
 	}
-
-	private ComponentModel expectedClient;
-	private List<DependencyModel> expectedModels;
 
 	private void AssertEvent(ComponentModel client, DependencyModel model, object dependency)
 	{

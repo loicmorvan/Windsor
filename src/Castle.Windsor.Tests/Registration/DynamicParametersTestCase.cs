@@ -177,6 +177,6 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 			d["arg2"] = arg2;
 		}));
 
-			Kernel.Resolve<ClassWithArguments>();
+		Kernel.Resolve<ClassWithArguments>();
 	}
 }

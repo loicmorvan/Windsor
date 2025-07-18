@@ -21,7 +21,7 @@ public class SimpleLoggingComponent
 {
 	public SimpleLoggingComponent(ILogger logger)
 	{
-		this.Logger = logger;
+		Logger = logger;
 	}
 
 	public ILogger Logger { get; }

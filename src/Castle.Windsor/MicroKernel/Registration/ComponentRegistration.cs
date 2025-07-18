@@ -880,8 +880,8 @@ public class ComponentRegistration<TService> : IRegistration
 
 	/// <summary>Filters (settable) properties of the component's implementation type to expose in the container as mandatory dependencies</summary>
 	/// <param name = "propertySelector">
-	///     Predicate finding properties. If it returns <c>true</c> the property will be added to <see cref = "ComponentModel.Properties" /> collection and Windsor will make it
-	///     a mandatory dependency.
+	///     Predicate finding properties. If it returns <c>true</c> the property will be added to <see cref = "ComponentModel.Properties" /> collection and Windsor will make it a
+	///     mandatory dependency.
 	/// </param>
 	public ComponentRegistration<TService> PropertiesRequire(Func<PropertyInfo, bool> propertySelector)
 	{
@@ -904,8 +904,8 @@ public class ComponentRegistration<TService> : IRegistration
 
 	/// <summary>Filters (settable) properties of the component's implementation type to expose in the container as mandatory dependencies</summary>
 	/// <param name = "propertySelector">
-	///     Predicate finding properties. If it returns <c>true</c> the property will be added to <see cref = "ComponentModel.Properties" /> collection and Windsor will make it
-	///     a mandatory dependency.
+	///     Predicate finding properties. If it returns <c>true</c> the property will be added to <see cref = "ComponentModel.Properties" /> collection and Windsor will make it a
+	///     mandatory dependency.
 	/// </param>
 	public ComponentRegistration<TService> PropertiesRequire(Func<ComponentModel, PropertyInfo, bool> propertySelector)
 	{

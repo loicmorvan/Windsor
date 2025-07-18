@@ -20,8 +20,8 @@ public class TrackedObjects
 {
 	public TrackedObjects(Burden[] trackedObjects, IReleasePolicy[] subScopes)
 	{
-		this.TrackedObjectBurdens = trackedObjects;
-		this.SubScopes = subScopes;
+		TrackedObjectBurdens = trackedObjects;
+		SubScopes = subScopes;
 	}
 
 	public IReleasePolicy[] SubScopes { get; }

@@ -29,9 +29,9 @@ public class CrossWiringComponentModelContributor : IContributeComponentModelCon
 {
 	public CrossWiringComponentModelContributor(IServiceCollection services)
 	{
-		this.Services = services ??
-		                throw new InvalidOperationException(
-			                "Please call `Container.AddFacility<AspNetCoreFacility>(f => f.CrossWiresInto(services));` first. This should happen before any cross wiring registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md");
+		Services = services ??
+		           throw new InvalidOperationException(
+			           "Please call `Container.AddFacility<AspNetCoreFacility>(f => f.CrossWiresInto(services));` first. This should happen before any cross wiring registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md");
 	}
 
 	public IServiceCollection Services { get; }

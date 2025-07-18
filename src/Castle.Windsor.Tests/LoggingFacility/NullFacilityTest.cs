@@ -24,6 +24,8 @@ using Castle.Windsor;
 /// <summary>Summary description for ConsoleFacitlyTest.</summary>
 public class NullFacilityTest : BaseTest, IDisposable
 {
+	private readonly IWindsorContainer container;
+
 	public NullFacilityTest()
 	{
 		container = base.CreateConfiguredContainer<NullLogFactory>();
@@ -33,8 +35,6 @@ public class NullFacilityTest : BaseTest, IDisposable
 	{
 		if (container != null) container.Dispose();
 	}
-
-	private IWindsorContainer container;
 
 	[Fact]
 	public void SimpleTest()

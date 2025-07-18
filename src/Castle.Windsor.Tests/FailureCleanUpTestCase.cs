@@ -24,12 +24,12 @@ using CastleTests.Facilities.TypedFactory;
 
 public class FailureCleanUpTestCase
 {
+	private readonly IWindsorContainer container;
+
 	public FailureCleanUpTestCase()
 	{
 		container = new WindsorContainer();
 	}
-
-	private IWindsorContainer container;
 
 	[Fact]
 	public void When_constructor_throws_ctor_dependencies_get_released()

@@ -42,6 +42,17 @@ public class SubResolverTestCase
 		Assert.Equal(HandlerState.Valid, handler.CurrentState);
 	}
 
+	[Fact]
+	public void Sub_resolver_can_provide_null_as_the_value_to_use()
+	{
+		IKernel kernel = new DefaultKernel();
+		kernel.Resolver.AddSubResolver(new NullResolver());
+
+		kernel.Register(Component.For<ComponentWithDependencyNotInContainer>());
+
+		Assert.Null(kernel.Resolve<ComponentWithDependencyNotInContainer>().DependencyNotInContainer);
+	}
+
 	public class Foo
 	{
 		private int bar;
@@ -65,17 +76,6 @@ public class SubResolverTestCase
 		{
 			return Result.Value;
 		}
-	}
-
-	[Fact]
-	public void Sub_resolver_can_provide_null_as_the_value_to_use()
-	{
-		IKernel kernel = new DefaultKernel();
-		kernel.Resolver.AddSubResolver(new NullResolver());
-
-		kernel.Register(Component.For<ComponentWithDependencyNotInContainer>());
-
-		Assert.Null(kernel.Resolve<ComponentWithDependencyNotInContainer>().DependencyNotInContainer);
 	}
 
 	public sealed class ComponentWithDependencyNotInContainer

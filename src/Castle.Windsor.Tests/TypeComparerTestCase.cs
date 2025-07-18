@@ -23,12 +23,12 @@ using CastleTests.Components;
 
 public class TypeComparerTestCase
 {
+	private readonly TypeByInheritanceDepthMostSpecificFirstComparer comparer;
+
 	public TypeComparerTestCase()
 	{
 		comparer = new TypeByInheritanceDepthMostSpecificFirstComparer();
 	}
-
-	private TypeByInheritanceDepthMostSpecificFirstComparer comparer;
 
 	[Fact]
 	public void More_specific_type_goes_first()

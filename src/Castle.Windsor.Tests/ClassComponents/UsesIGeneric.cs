@@ -20,7 +20,7 @@ public class UsesIGeneric<T>
 {
 	public UsesIGeneric(IGeneric<T> dependency)
 	{
-		this.Dependency = dependency;
+		Dependency = dependency;
 	}
 
 	public IGeneric<T> Dependency { get; }

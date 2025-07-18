@@ -38,9 +38,9 @@ public abstract class AbstractLifestyleManager : ILifestyleManager
 
 	public virtual void Init(IComponentActivator componentActivator, IKernel kernel, ComponentModel model)
 	{
-		this.ComponentActivator = componentActivator;
-		this.Kernel = kernel;
-		this.Model = model;
+		ComponentActivator = componentActivator;
+		Kernel = kernel;
+		Model = model;
 	}
 
 	public virtual bool Release(object instance)

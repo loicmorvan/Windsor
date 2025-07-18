@@ -50,8 +50,10 @@ the dependency it will try to do the following:
 * For parameter dependency it will inspect `ComponentModel`'s `Parameters` collection for matching dependency. These
   include parameters passed from XML, or via `Parameters` method on fluent API.
 *
+
 For [service override dependency](registering-components-one-by-one.md#supplying-the-component-for-a-dependency-to-use-service-override),
 it will try to resolve component matching the key specified.
+
 * For service dependency it will try to resolve any component matching the service specified.
 
 If none of the above works, a `DependencyResolverException` will be thrown.

@@ -22,8 +22,8 @@ using System.Text;
 public static class TypeUtil
 {
 	/// <summary>
-	///     Indicates whether the type is explicitly marked as nullable. Currently only detects nullable value types via <see cref = "Nullable{T}" />, but could be expanded to detect C# nullable
-	///     reference types.
+	///     Indicates whether the type is explicitly marked as nullable. Currently only detects nullable value types via <see cref = "Nullable{T}" />, but could be expanded to detect C# nullable reference
+	///     types.
 	/// </summary>
 	internal static bool IsNullable(this Type type)
 	{

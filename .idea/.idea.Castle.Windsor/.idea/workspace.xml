@@ -7,17 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Castle.Windsor.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Castle.Windsor.Tests.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/SimpleServiceDisposable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/SimpleServiceDisposable.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/InterceptorSelectorTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/InterceptorSelectorTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Interceptors/WasCalledInterceptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Interceptors/WasCalledInterceptor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/LazyComponentsTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/LazyComponentsTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/LazyLoadingTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/LazyLoadingTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifecycle/DisposeTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifecycle/DisposeTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Windsor.Tests/LifecycledComponentsReleasePolicyComponentTrackingTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Windsor.Tests/LifecycledComponentsReleasePolicyComponentTrackingTestCase.cs" afterDir="false" />
-    </list>
+    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -132,7 +122,7 @@
       <workItem from="1752606859242" duration="8731000" />
       <workItem from="1752694460046" duration="8328000" />
       <workItem from="1752781019791" duration="5665000" />
-      <workItem from="1752869928348" duration="4293000" />
+      <workItem from="1752869928348" duration="5600000" />
     </task>
     <task id="LOCAL-00001" summary="Keep only .NET 6.">
       <option name="closed" value="true" />
@@ -190,7 +180,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752786847912</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Fixed all tests after switching to .NET 9.&#10;&#10;Still remaining the 8 tests that never worked.">
+      <option name="closed" value="true" />
+      <created>1752875115721</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1752875115721</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -230,7 +228,8 @@
     <MESSAGE value="Improved projects." />
     <MESSAGE value="Backup" />
     <MESSAGE value="Fixed some tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed some tests" />
+    <MESSAGE value="Fixed all tests after switching to .NET 9.&#10;&#10;Still remaining the 8 tests that never worked." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed all tests after switching to .NET 9.&#10;&#10;Still remaining the 8 tests that never worked." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -252,10 +251,10 @@
           <line>24</line>
           <properties documentPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/SimpleServiceDisposable.cs" containingFunctionPresentation="Method 'Dispose'">
             <startOffsets>
-              <option value="895" />
+              <option value="865" />
             </startOffsets>
             <endOffsets>
-              <option value="932" />
+              <option value="902" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="4" />

@@ -24,7 +24,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 using TestContext = Castle.Facilities.AspNetCore.Tests.Framework.TestContext;
 
-public abstract class WindsorRegistrationOptionsTestCase:IDisposable
+public abstract class WindsorRegistrationOptionsTestCase : IDisposable
 {
 	protected TestContext testContext;
 

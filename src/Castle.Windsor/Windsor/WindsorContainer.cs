@@ -123,10 +123,10 @@ public class WindsorContainer :
 		if (kernel == null) throw new ArgumentNullException(nameof(kernel));
 		if (installer == null) throw new ArgumentNullException(nameof(installer));
 
-		this.Name = name;
+		Name = name;
 		this.kernel = kernel;
 		this.kernel.ProxyFactory = new DefaultProxyFactory();
-		this.Installer = installer;
+		Installer = installer;
 	}
 
 	/// <summary>Constructs with a given <see cref = "IProxyFactory" />.</summary>
@@ -165,7 +165,7 @@ public class WindsorContainer :
 		if (parent == null) throw new ArgumentNullException(nameof(parent));
 		if (interpreter == null) throw new ArgumentNullException(nameof(interpreter));
 
-		this.Name = name;
+		Name = name;
 
 		parent.AddChildContainer(this);
 

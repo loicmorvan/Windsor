@@ -29,10 +29,10 @@ public class FactoryEntry
 		if (!factoryInterface.GetTypeInfo().IsInterface) throw new ArgumentException("factoryInterface must be an interface");
 		if (string.IsNullOrEmpty(creationMethod)) throw new ArgumentNullException(nameof(creationMethod));
 
-		this.Id = id;
-		this.FactoryInterface = factoryInterface;
-		this.CreationMethod = creationMethod;
-		this.DestructionMethod = destructionMethod;
+		Id = id;
+		FactoryInterface = factoryInterface;
+		CreationMethod = creationMethod;
+		DestructionMethod = destructionMethod;
 	}
 
 	public string CreationMethod { get; }

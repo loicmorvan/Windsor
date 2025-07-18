@@ -80,6 +80,7 @@ using them.
 
 We leverage the base implementation of the factory to figure out based on the route which controller type should handle
 the request. In some cases when the engine can't find a controller a null type will be provided in which case we return
+
 404. Otherwise, we resolve the controller.
 
 :information_source: **What about `IControllerActivator`?** In version 3 of its MVC framework Microsoft introduced a new
