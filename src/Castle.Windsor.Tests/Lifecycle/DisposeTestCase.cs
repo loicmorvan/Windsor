@@ -14,6 +14,8 @@
 
 namespace Castle.Windsor.Tests.Lifecycle;
 
+using System;
+
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
@@ -26,7 +28,7 @@ public class DisposeTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Disposable_component_for_nondisposable_service_built_via_factory_should_be_disposed_when_released()
 	{
-		var counter = new TypedFactoryDelegatesTestCase.LifecycleCounter();
+		var counter = new LifecycleCounter();
 		Container.Register(Component.For<ISimpleService>()
 			.UsingFactoryMethod(() => new SimpleServiceDisposable(counter))
 			.LifeStyle.Transient);
@@ -43,9 +45,11 @@ public class DisposeTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Disposable_component_for_nondisposable_service_is_tracked()
 	{
-		Container.Register(Component.For<ISimpleService>()
-			.ImplementedBy<SimpleServiceDisposable>()
-			.LifeStyle.Transient);
+		Container.Register(
+			Component.For<LifecycleCounter>(),
+			Component.For<ISimpleService>()
+				.ImplementedBy<SimpleServiceDisposable>()
+				.LifeStyle.Transient);
 
 		var service = Container.Resolve<ISimpleService>();
 
@@ -56,15 +60,15 @@ public class DisposeTestCase : AbstractContainerTestCase
 	public void Disposable_component_for_nondisposable_service_should_be_disposed_when_released()
 	{
 		Container.Register(
-			Component.For<TypedFactoryDelegatesTestCase.LifecycleCounter>(),
+			Component.For<LifecycleCounter>(),
 			Component.For<ISimpleService>()
-			.ImplementedBy<SimpleServiceDisposable>()
-			.LifeStyle.Transient);
+				.ImplementedBy<SimpleServiceDisposable>()
+				.LifeStyle.Transient);
 
 		var service = Container.Resolve<ISimpleService>();
 		Container.Release(service);
 
-		Assert.Equal(1, Container.Resolve<TypedFactoryDelegatesTestCase.LifecycleCounter>().InstancesDisposed);
+		Assert.Equal(1, Container.Resolve<LifecycleCounter>().InstancesDisposed);
 	}
 
 	[Fact]
@@ -92,22 +96,24 @@ public class DisposeTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Disposable_singleton_dependency_of_transient_open_generic_is_disposed()
 	{
-		DisposableFoo.ResetDisposedCount();
+		var counter = new LifecycleCounter();
+
 		Container.Register(
 			Component.For(typeof(GenericComponent<>)).LifeStyle.Transient,
-			Component.For<DisposableFoo>().LifeStyle.Singleton
+			Component.For<LifecycleCounter>().Instance(counter),
+			Component.For<Disposable>().LifeStyle.Singleton
 		);
 
 		var tracker = ReferenceTracker
 			.Track(() =>
 			{
-				var depender = Container.Resolve<GenericComponent<DisposableFoo>>();
+				var depender = Container.Resolve<GenericComponent<Disposable>>();
 				return depender.Value;
 			});
 
 		Container.Dispose();
 
-		Assert.Equal(1, DisposableFoo.DisposedCount);
+		Assert.Equal(1, counter.InstancesDisposed);
 		tracker.AssertNoLongerReferenced();
 	}
 
@@ -175,5 +181,13 @@ public class DisposeTestCase : AbstractContainerTestCase
 		Container.Dispose();
 
 		Assert.True(component.Disposed);
+	}
+
+	public sealed class Disposable(LifecycleCounter counter) : IDisposable
+	{
+		public void Dispose()
+		{
+			counter.InstancesDisposed += 1;
+		}
 	}
 }

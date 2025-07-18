@@ -35,27 +35,27 @@ public class FailureCleanUpTestCase
 	public void When_constructor_throws_ctor_dependencies_get_released()
 	{
 		container.Register(
-			Component.For<TypedFactoryDelegatesTestCase.LifecycleCounter>(),
+			Component.For<LifecycleCounter>(),
 			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>().LifeStyle.Transient,
 			Component.For<ThrowsInCtorWithDisposableDependency>()
 		);
 
 		Assert.Throws<ComponentActivatorException>(() => container.Resolve<ThrowsInCtorWithDisposableDependency>());
-		Assert.Equal(1, container.Resolve<TypedFactoryDelegatesTestCase.LifecycleCounter>().InstancesDisposed);
+		Assert.Equal(1, container.Resolve<LifecycleCounter>().InstancesDisposed);
 	}
 
 	[Fact]
 	public void When_constructor_dependency_throws_previous_dependencies_get_released()
 	{
 		container.Register(
-			Component.For<TypedFactoryDelegatesTestCase.LifecycleCounter>(),
+			Component.For<LifecycleCounter>(),
 			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>().LifeStyle.Transient,
 			Component.For<ThrowsInCtor>().LifeStyle.Transient,
 			Component.For<DependsOnThrowingComponent>()
 		);
 
 		Assert.Throws<ComponentActivatorException>(() => container.Resolve<DependsOnThrowingComponent>());
-		Assert.Equal(1, container.Resolve<TypedFactoryDelegatesTestCase.LifecycleCounter>().InstancesDisposed);
+		Assert.Equal(1, container.Resolve<LifecycleCounter>().InstancesDisposed);
 	}
 
 	[Fact]

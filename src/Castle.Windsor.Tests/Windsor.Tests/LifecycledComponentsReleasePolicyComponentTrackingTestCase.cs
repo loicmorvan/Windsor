@@ -26,22 +26,27 @@ public class LifecycledComponentsReleasePolicyComponentTrackingTestCase : Abstra
 	[Fact]
 	public void Disposable_singleton_as_dependency_of_non_disposable_transient_is_decommissionsed_with_container()
 	{
-		Container.Register(
-			Component.For<TypedFactoryDelegatesTestCase.LifecycleCounter>(),
-			Component.For<HasCtorDependency>().LifeStyle.Transient,
-			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>());
+		var lifecycleCounter = new LifecycleCounter();
 
-		Container.Resolve<HasCtorDependency>();
-		Dispose();
+		using (var windsorContainer = new WindsorContainer())
+		{
+			windsorContainer.Register(
+				Component.For<LifecycleCounter>().Instance(lifecycleCounter),
+				Component.For<HasCtorDependency>().LifeStyle.Transient,
+				Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>());
 
-		Assert.Equal(1, Container.Resolve<TypedFactoryDelegatesTestCase.LifecycleCounter>().InstancesDisposed);
-		;
+			windsorContainer.Resolve<HasCtorDependency>();
+		}
+
+		Assert.Equal(1, lifecycleCounter.InstancesDisposed);
 	}
 
 	[Fact]
 	public void Non_disposable_transient_with_disposable_singleton_as_dependency_is_not_tracked()
 	{
-		Container.Register(Component.For<HasCtorDependency>().LifeStyle.Transient,
+		Container.Register(
+			Component.For<LifecycleCounter>(),
+			Component.For<HasCtorDependency>().LifeStyle.Transient,
 			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>());
 
 		var root = Container.Resolve<HasCtorDependency>();

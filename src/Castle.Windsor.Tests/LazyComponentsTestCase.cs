@@ -22,8 +22,10 @@ using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers;
+using Castle.Windsor.Tests.Lifecycle;
 
 using CastleTests.Components;
+using CastleTests.Facilities.TypedFactory;
 
 public class LazyComponentsTestCase : AbstractContainerTestCase
 {
@@ -225,17 +227,19 @@ public class LazyComponentsTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Releasing_lazy_releases_requested_component()
 	{
-		DisposableFoo.ResetDisposedCount();
+		var counter = new LifecycleCounter();
 
-		Container.Register(Component.For<DisposableFoo>().LifeStyle.Transient);
+		Container.Register(
+			Component.For<LifecycleCounter>().Instance(counter),
+			Component.For<DisposeTestCase.Disposable>().LifeStyle.Transient);
 
-		var lazy = Container.Resolve<Lazy<DisposableFoo>>();
+		var lazy = Container.Resolve<Lazy<DisposeTestCase.Disposable>>();
 
-		Assert.Equal(0, DisposableFoo.DisposedCount);
+		Assert.Equal(0, counter.InstancesDisposed);
 		var value = lazy.Value;
 
 		Container.Release(lazy);
-		Assert.Equal(1, DisposableFoo.DisposedCount);
+		Assert.Equal(1, counter.InstancesDisposed);
 	}
 
 	[Fact]

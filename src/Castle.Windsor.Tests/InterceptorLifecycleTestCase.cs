@@ -18,23 +18,25 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor.Tests.Interceptors;
 
 using CastleTests.Components;
+using CastleTests.Facilities.TypedFactory;
 
 public class InterceptorLifecycleTestCase : AbstractContainerTestCase
 {
 	[Fact]
 	public void Disposable_interceptor_gets_properly_released_when_the_component_gets_released()
 	{
-		DisposableInterceptor.InstancesCreated = 0;
-		DisposableInterceptor.InstancesDisposed = 0;
-		Container.Register(Component.For<DisposableInterceptor>().LifestyleTransient(),
+		var counter = new LifecycleCounter();
+		Container.Register(
+			Component.For<LifecycleCounter>().Instance(counter),
+			Component.For<DisposableInterceptor>().LifestyleTransient(),
 			Component.For<A>().LifestyleTransient().Interceptors<DisposableInterceptor>());
 
 		var a = Container.Resolve<A>();
 
-		Assert.Equal(1, DisposableInterceptor.InstancesCreated);
+		Assert.Equal(1, counter.InstancesCreated);
 
 		Container.Release(a);
 
-		Assert.Equal(1, DisposableInterceptor.InstancesDisposed);
+		Assert.Equal(1, counter.InstancesDisposed);
 	}
 }

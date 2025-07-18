@@ -23,8 +23,11 @@ public class InterceptorsSelectorTestCase
 	[Fact]
 	public void CanApplyInterceptorsToSelectedMethods()
 	{
-		IWindsorContainer container = new WindsorContainer();
+		var reporter = new CallReporter();
+		var container = new WindsorContainer();
+		
 		container.Register(
+			Component.For<CallReporter>().Instance(reporter),
 			Component.For<ICatalog>()
 				.ImplementedBy<SimpleCatalog>()
 				.Interceptors(InterceptorReference.ForType<WasCalledInterceptor>())
@@ -32,15 +35,15 @@ public class InterceptorsSelectorTestCase
 			Component.For<WasCalledInterceptor>()
 		);
 
-		Assert.False(WasCalledInterceptor.WasCalled);
+		Assert.False(reporter.WasCalled);
 
 		var catalog = container.Resolve<ICatalog>();
 		catalog.AddItem("hot dogs");
-		Assert.True(WasCalledInterceptor.WasCalled);
+		Assert.True(reporter.WasCalled);
 
-		WasCalledInterceptor.WasCalled = false;
+		reporter.WasCalled = false;
 		catalog.RemoveItem("hot dogs");
-		Assert.False(WasCalledInterceptor.WasCalled);
+		Assert.False(reporter.WasCalled);
 	}
 }
 

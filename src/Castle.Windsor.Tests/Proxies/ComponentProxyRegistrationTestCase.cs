@@ -162,7 +162,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 	public void Releasing_MixIn_releases_all_parts()
 	{
 		Container.Register(
-			Component.For<TypedFactoryDelegatesTestCase.LifecycleCounter>(),
+			Component.For<LifecycleCounter>(),
 			Component.For<ICalcService>()
 				.ImplementedBy<CalculatorService>().Proxy.MixIns(m => m.Component<SimpleServiceDisposable>())
 				.LifeStyle.Transient,
@@ -176,7 +176,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 		var mixin = (ISimpleService)calculator;
 		mixin.Operation();
 		Container.Release(mixin);
-		Assert.Equal(1, Container.Resolve<TypedFactoryDelegatesTestCase.LifecycleCounter>().InstancesDisposed);
+		Assert.Equal(1, Container.Resolve<LifecycleCounter>().InstancesDisposed);
 	}
 
 	[Fact]

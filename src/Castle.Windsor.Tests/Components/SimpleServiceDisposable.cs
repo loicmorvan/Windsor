@@ -18,7 +18,7 @@ using System;
 
 using CastleTests.Facilities.TypedFactory;
 
-public class SimpleServiceDisposable(TypedFactoryDelegatesTestCase.LifecycleCounter lifecycleCounter) : ISimpleService, IDisposable
+public sealed class SimpleServiceDisposable(LifecycleCounter lifecycleCounter) : ISimpleService, IDisposable
 {
 	public void Dispose()
 	{

@@ -16,12 +16,15 @@ namespace Castle.Windsor.Tests.Interceptors;
 
 using Castle.DynamicProxy;
 
-public class WasCalledInterceptor : StandardInterceptor
+public class CallReporter
 {
-	public static bool WasCalled;
+	public bool WasCalled;
+}
 
+public class WasCalledInterceptor(CallReporter reporter) : StandardInterceptor
+{
 	protected override void PreProceed(IInvocation invocation)
 	{
-		WasCalled = true;
+		reporter.WasCalled = true;
 	}
 }

@@ -18,6 +18,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers;
@@ -61,14 +62,14 @@ public class LazyLoadingTestCase : AbstractContainerTestCase
 	}
 
 	[Fact(Timeout = 2000)]
-	public void Loaders_are_thread_safe()
+	public async Task Loaders_are_thread_safe()
 	{
 		Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<SlowLoader>());
 		var @event = new ManualResetEvent(false);
-		int[] count = { 10 };
+		int[] count = [10];
 		Exception exception = null;
 		for (var i = 0; i < count[0]; i++)
-			ThreadPool.QueueUserWorkItem(o =>
+			ThreadPool.QueueUserWorkItem(_ =>
 				{
 					try
 					{
@@ -84,7 +85,8 @@ public class LazyLoadingTestCase : AbstractContainerTestCase
 					}
 				}
 			);
-		@event.WaitOne();
+
+		await Task.Run(() => @event.WaitOne());
 		Assert.Null(exception);
 		Assert.Equal(0, count[0]);
 	}

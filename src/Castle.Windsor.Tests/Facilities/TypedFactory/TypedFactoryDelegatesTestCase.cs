@@ -426,12 +426,6 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 		Assert.Equal(1, DisposableFoo.DisposedCount);
 	}
 
-	public class LifecycleCounter
-	{
-		public int InstancesCreated;
-		public int InstancesDisposed;
-	}
-
 	public class SelectorWithLifecycleCounter : ITypedFactoryComponentSelector, IDisposable
 	{
 		private readonly LifecycleCounter counter;
