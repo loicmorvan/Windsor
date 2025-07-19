@@ -39,10 +39,10 @@ public abstract class BaseTest
 	{
 		if (typeof(TLoggerFactory) == typeof(Log4netFactory) ||
 		    typeof(TLoggerFactory) == typeof(ExtendedLog4netFactory))
-			return "LoggingFacility\\log4net.facilities.test.config";
+			return "LoggingFacility/log4net.facilities.test.config";
 		if (typeof(TLoggerFactory) == typeof(NLogFactory) ||
 		    typeof(TLoggerFactory) == typeof(ExtendedNLogFactory))
-			return "LoggingFacility\\NLog.facilities.test.config";
+			return "LoggingFacility/NLog.facilities.test.config";
 		return string.Empty;
 	}
 }

@@ -215,8 +215,16 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Can_properly_populate_array_dependency_from_xml_config_when_registering_by_convention()
 	{
-		Container.Install(Configuration.FromXmlFile("config\\ComponentWithArrayDependency.config"))
-			.Register(Component.For<IConfig>().ImplementedBy<Config>().Named("componentWithArrayDependency"));
+		Container
+			.Install(
+				Configuration
+					.FromXmlFile("config/ComponentWithArrayDependency.config"))
+			.Register(
+				Component
+					.For<IConfig>()
+					.ImplementedBy<Config>()
+					.Named("componentWithArrayDependency"));
+		
 		Container.Register(
 			Classes.FromAssembly(GetCurrentAssembly()).Pick().WithServiceFirstInterface());
 

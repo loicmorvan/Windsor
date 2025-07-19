@@ -85,8 +85,7 @@ public class ExtendedLog4NetFacilityTestCase : BaseTest, IDisposable
 
 		complexLoggingComponent.DoSomeContextual();
 
-		var expectedLogOutput = string.Format("[DEBUG] [Castle.Facilities.Logging.Tests.Classes.ComplexLoggingComponent] [Outside Inside0] [bar] [flam] - Bim, bam boom." + Environment.NewLine,
-			typeof(SimpleLoggingComponent).FullName);
+		var expectedLogOutput = "[DEBUG] [Castle.Facilities.Logging.Tests.Classes.ComplexLoggingComponent] [Outside Inside0] [bar] [flam] - Bim, bam boom." + Environment.NewLine;
 		var memoryAppender = ((Hierarchy)LogManager.GetRepository()).Root.GetAppender("memory") as MemoryAppender;
 		var actualLogOutput = new StringWriter();
 		var patternLayout = new PatternLayout("[%-5level] [%logger] [%properties{NDC}] [%properties{foo}] [%properties{flim}] - %message%newline");
