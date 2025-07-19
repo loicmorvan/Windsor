@@ -49,7 +49,7 @@ public class TypedFactoryFacility : AbstractFacility
 	{
 		var model = new ComponentModel(
 			new ComponentName(entry.Id, true),
-			new[] { entry.FactoryInterface },
+			[entry.FactoryInterface],
 			typeof(Empty),
 			new Arguments { { "typed.fac.entry", entry } }) { LifestyleType = LifestyleType.Singleton };
 

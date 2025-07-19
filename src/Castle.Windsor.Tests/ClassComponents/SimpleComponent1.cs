@@ -14,6 +14,4 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents;
 
-public class SimpleComponent1
-{
-}
+public class SimpleComponent1;

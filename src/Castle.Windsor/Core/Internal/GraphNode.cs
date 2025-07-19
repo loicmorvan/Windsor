@@ -41,7 +41,7 @@ public class GraphNode :
 		get
 		{
 			var collection = outgoing;
-			if (collection == null) return new GraphNode[0];
+			if (collection == null) return [];
 			return collection.ToArray();
 		}
 	}

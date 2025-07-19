@@ -16,9 +16,7 @@ namespace Castle.MicroKernel.Tests.RuntimeParameters;
 
 using Castle.Core;
 
-public class CompA
-{
-}
+public class CompA;
 
 public class HasCustomDependency
 {

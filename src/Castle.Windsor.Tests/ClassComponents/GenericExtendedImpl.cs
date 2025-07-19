@@ -14,6 +14,4 @@
 
 namespace CastleTests.ClassComponents;
 
-public class GenericExtendedImpl<T> : IGenericExtended<T>
-{
-}
+public class GenericExtendedImpl<T> : IGenericExtended<T>;

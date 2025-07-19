@@ -17,6 +17,4 @@ namespace Castle.Windsor.Diagnostics;
 using Castle.MicroKernel;
 
 /// <summary>Collects all handlers for components in hosting container.</summary>
-public interface IAllComponentsDiagnostic : IDiagnostic<IHandler[]>
-{
-}
+public interface IAllComponentsDiagnostic : IDiagnostic<IHandler[]>;

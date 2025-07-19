@@ -14,6 +14,4 @@
 
 namespace CastleTests.Components;
 
-public interface IEmptyService2
-{
-}
+public interface IEmptyService2;

@@ -14,6 +14,4 @@
 
 namespace CastleTests.Components;
 
-public class SmsSender : IAlarmSender
-{
-}
+public class SmsSender : IAlarmSender;

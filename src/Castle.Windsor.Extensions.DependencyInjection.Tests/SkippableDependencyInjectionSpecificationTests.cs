@@ -19,6 +19,7 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection.Specification;
 
 using System;
@@ -27,18 +28,15 @@ using System.Linq;
 
 public abstract class SkippableDependencyInjectionSpecificationTests : DependencyInjectionSpecificationTests
 {
-	public string[] SkippedTests => new[] { "SingletonServiceCanBeResolvedFromScope" };
+	private static string[] SkippedTests => ["SingletonServiceCanBeResolvedFromScope"];
 
 	public override bool SupportsIServiceProviderIsService => false;
 
 	protected sealed override IServiceProvider CreateServiceProvider(IServiceCollection serviceCollection)
 	{
-		foreach (var stackFrame in new StackTrace(1).GetFrames().Take(2))
-			if (SkippedTests.Contains(stackFrame.GetMethod().Name))
-				// We skip tests by returning MEDI service provider that we know passes the test
-				return serviceCollection.BuildServiceProvider();
-
-		return CreateServiceProviderImpl(serviceCollection);
+		return new StackTrace(1).GetFrames().Take(2).Any(stackFrame => SkippedTests.Contains(stackFrame.GetMethod().Name))
+			? serviceCollection.BuildServiceProvider()
+			: CreateServiceProviderImpl(serviceCollection);
 	}
 
 	protected abstract IServiceProvider CreateServiceProviderImpl(IServiceCollection serviceCollection);

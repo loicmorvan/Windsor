@@ -17,6 +17,4 @@ namespace CastleTests.Components;
 using Castle.Core;
 
 [Interceptor("fooInterceptor")]
-public class CalculatorServiceWithFooInterceptorNamed : CalculatorService
-{
-}
+public class CalculatorServiceWithFooInterceptorNamed : CalculatorService;

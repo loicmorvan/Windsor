@@ -57,7 +57,7 @@ public class CastleComponentAttribute : LifestyleAttribute
 		var attribute = (CastleComponentAttribute)type.GetTypeInfo().GetCustomAttribute(typeof(CastleComponentAttribute));
 		if (attribute != null)
 		{
-			if (attribute.ServicesSpecifiedExplicitly == false) attribute.Services = new[] { type };
+			if (attribute.ServicesSpecifiedExplicitly == false) attribute.Services = [type];
 			return attribute;
 		}
 

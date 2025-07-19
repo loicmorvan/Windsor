@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//Microsoft namespace is intentional - suggested by Microsoft
-
+// ReSharper disable once CheckNamespace : Microsoft namespace is intentional - suggested by Microsoft
+// ReSharper disable UnusedType.Global : TODO missing tests
+// ReSharper disable UnusedMember.Global : TODO missing tests
 namespace Microsoft.Extensions.Hosting
 {
 	using System;

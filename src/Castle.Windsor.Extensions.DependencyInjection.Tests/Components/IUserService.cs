@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Extensions.DependencyInjection.Tests.Components;
 
-public interface IUserService
-{
-}
+public interface IUserService;

@@ -55,9 +55,7 @@ public class TypedFactorySystemNullableTestCase : AbstractContainerTestCase
 			exception.Message);
 	}
 
-	public sealed class DependencyFromContainer
-	{
-	}
+	public sealed class DependencyFromContainer;
 
 	public sealed class ComponentWithNonOptionalNullableParameter
 	{

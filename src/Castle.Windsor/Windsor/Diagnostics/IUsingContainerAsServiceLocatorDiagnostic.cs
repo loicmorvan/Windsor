@@ -20,6 +20,4 @@ using Castle.MicroKernel;
 ///     Detects components that are not extending Windsor's infrastructure yet depend on the container which usually means they use the container as service locator which is a bad practice and should be
 ///     avoided.
 /// </summary>
-public interface IUsingContainerAsServiceLocatorDiagnostic : IDiagnostic<IHandler[]>
-{
-}
+public interface IUsingContainerAsServiceLocatorDiagnostic : IDiagnostic<IHandler[]>;

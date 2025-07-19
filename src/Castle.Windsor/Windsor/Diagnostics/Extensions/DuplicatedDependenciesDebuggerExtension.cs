@@ -33,12 +33,12 @@ public class DuplicatedDependenciesDebuggerExtension : AbstractContainerDebugger
 	public override IEnumerable<DebuggerViewItem> Attach()
 	{
 		var result = diagnostic.Inspect();
-		if (result.Length == 0) return Enumerable.Empty<DebuggerViewItem>();
+		if (result.Length == 0) return [];
 		var items = BuildItems(result);
-		return new[]
-		{
+		return
+		[
 			new DebuggerViewItem(name, "Count = " + items.Length, items)
-		};
+		];
 	}
 
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)

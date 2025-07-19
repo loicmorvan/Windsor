@@ -103,8 +103,8 @@ public class TypeNameParser : ITypeNameParser
 		if (count == 1)
 		{
 			var name = Parse(substring);
-			if (name == null) return new TypeName[0];
-			return new[] { name };
+			if (name == null) return [];
+			return [name];
 		}
 
 		var names = new TypeName[count];

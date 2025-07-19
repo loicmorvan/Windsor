@@ -14,6 +14,4 @@
 
 namespace Castle.Generics;
 
-public class ARepository<T> : IARepository
-{
-}
+public class ARepository<T> : IARepository;

@@ -14,6 +14,4 @@
 
 namespace Castle.Generics;
 
-public interface IRepository
-{
-}
+public interface IRepository;

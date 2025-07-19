@@ -18,9 +18,7 @@ using Castle.Core;
 using Castle.MicroKernel.Registration;
 
 [PerThread]
-public class R
-{
-}
+public class R;
 
 public interface IC
 {

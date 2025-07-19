@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public interface IItemService
-{
-}
+public interface IItemService;

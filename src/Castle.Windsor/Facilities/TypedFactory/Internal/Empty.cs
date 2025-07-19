@@ -14,6 +14,4 @@
 
 namespace Castle.Facilities.TypedFactory.Internal;
 
-public class Empty
-{
-}
+public class Empty;

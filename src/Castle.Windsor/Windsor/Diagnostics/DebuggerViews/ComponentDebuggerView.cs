@@ -67,6 +67,6 @@ public class ComponentDebuggerView
 	{
 		var handlerExtensions = handler.ComponentModel.ExtendedProperties["DebuggerExtensions"];
 		return (IEnumerable<IComponentDebuggerExtension>)handlerExtensions ??
-		       Enumerable.Empty<IComponentDebuggerExtension>();
+		       [];
 	}
 }

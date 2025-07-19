@@ -32,6 +32,6 @@ public class WatcherInterceptorSelector : IModelInterceptorsSelector
 	{
 		if (model.Services.Any(s => s != typeof(IWatcher))) return null;
 		if (Interceptors == InterceptorKind.None) return null;
-		return new[] { new InterceptorReference(typeof(WasCalledInterceptor)) };
+		return [new InterceptorReference(typeof(WasCalledInterceptor))];
 	}
 }

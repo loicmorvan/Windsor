@@ -40,7 +40,7 @@ public abstract class AbstractProxyFactory : IProxyFactory
 
 	public void AddInterceptorSelector(IModelInterceptorsSelector selector)
 	{
-		if (selectors == null) selectors = new List<IModelInterceptorsSelector>();
+		if (selectors == null) selectors = [];
 		selectors.Add(selector);
 	}
 
@@ -64,7 +64,7 @@ public abstract class AbstractProxyFactory : IProxyFactory
 				if (selector.HasInterceptors(model) == false) continue;
 
 				interceptors = selector.SelectInterceptors(model, interceptors);
-				if (interceptors == null) interceptors = new InterceptorReference[0];
+				if (interceptors == null) interceptors = [];
 			}
 
 		return interceptors;

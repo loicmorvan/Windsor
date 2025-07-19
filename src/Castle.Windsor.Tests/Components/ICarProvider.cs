@@ -14,6 +14,4 @@
 
 namespace CastleTests.Components;
 
-public interface ICarProvider
-{
-}
+public interface ICarProvider;

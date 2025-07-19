@@ -264,7 +264,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
 			var setMethod = property.Property.GetSetMethod();
 			try
 			{
-				setMethod.Invoke(instance, new[] { value });
+				setMethod.Invoke(instance, [value]);
 			}
 			catch (Exception ex)
 			{

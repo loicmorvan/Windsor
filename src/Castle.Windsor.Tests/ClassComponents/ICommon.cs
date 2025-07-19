@@ -15,6 +15,4 @@
 namespace Castle.MicroKernel.Tests.ClassComponents;
 
 /// <summary>Summary description for ICommon.</summary>
-public interface ICommon
-{
-}
+public interface ICommon;

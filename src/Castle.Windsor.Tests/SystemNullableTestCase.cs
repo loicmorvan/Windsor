@@ -50,9 +50,7 @@ public class SystemNullableTestCase : AbstractContainerTestCase
 			exception.Message);
 	}
 
-	public sealed class DependencyFromContainer
-	{
-	}
+	public sealed class DependencyFromContainer;
 
 	public sealed class ComponentWithNonOptionalNullableParameter
 	{

@@ -40,12 +40,12 @@ public static class ReflectionUtil
 	{
 		EnsureIsAssignable<TBase>(subtypeofTBase);
 
-		return Instantiate<TBase>(subtypeofTBase, ctorArgs ?? new object[0]);
+		return Instantiate<TBase>(subtypeofTBase, ctorArgs ?? []);
 	}
 
 	public static IEnumerable<Assembly> GetApplicationAssemblies(Assembly rootAssembly)
 	{
-		var index = rootAssembly.FullName.IndexOfAny(new[] { '.', ',' });
+		var index = rootAssembly.FullName.IndexOfAny(['.', ',']);
 		if (index < 0)
 			throw new ArgumentException(
 				string.Format("Could not determine application name for assembly \"{0}\". Please use a different method for obtaining assemblies.",
@@ -251,7 +251,7 @@ public static class ReflectionUtil
 
 	private static TBase Instantiate<TBase>(Type subtypeofTBase, object[] ctorArgs)
 	{
-		ctorArgs = ctorArgs ?? new object[0];
+		ctorArgs = ctorArgs ?? [];
 		var types = ctorArgs.ConvertAll(a => a == null ? typeof(object) : a.GetType());
 		var constructor = subtypeofTBase.GetConstructor(BindingFlags.Instance | BindingFlags.Public, null, types, null);
 		if (constructor != null) return (TBase)Instantiate(constructor, ctorArgs);

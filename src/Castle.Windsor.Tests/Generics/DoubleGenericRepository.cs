@@ -16,6 +16,4 @@ namespace Castle.Generics;
 
 using CastleTests.Generics;
 
-public class DoubleGenericRepository<T1, T2> : IRepository<T1>
-{
-}
+public class DoubleGenericRepository<T1, T2> : IRepository<T1>;

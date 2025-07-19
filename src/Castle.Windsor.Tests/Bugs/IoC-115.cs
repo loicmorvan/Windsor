@@ -51,17 +51,11 @@ public class IoC_115 : AbstractContainerTestCase
 		Assert.IsType<ParentService>(resolve.Parent);
 	}
 
-	public interface IParentService
-	{
-	}
+	public interface IParentService;
 
-	public class ParentService : IParentService
-	{
-	}
+	public class ParentService : IParentService;
 
-	public interface IChildService1
-	{
-	}
+	public interface IChildService1;
 
 	public class ChildService1 : IChildService1
 	{
@@ -85,7 +79,5 @@ public class IoC_115 : AbstractContainerTestCase
 		public IParentService Parent { get; }
 	}
 
-	public class AnotherParentService : IParentService
-	{
-	}
+	public class AnotherParentService : IParentService;
 }

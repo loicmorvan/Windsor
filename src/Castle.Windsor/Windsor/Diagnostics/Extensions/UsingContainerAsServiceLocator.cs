@@ -31,13 +31,13 @@ public class UsingContainerAsServiceLocator : AbstractContainerDebuggerExtension
 	public override IEnumerable<DebuggerViewItem> Attach()
 	{
 		var handlers = diagnostic.Inspect();
-		if (handlers.Length == 0) return Enumerable.Empty<DebuggerViewItem>();
+		if (handlers.Length == 0) return [];
 		Array.Sort(handlers, (f, s) => f.ComponentModel.Name.CompareTo(s.ComponentModel.Name));
 		var items = handlers.ConvertAll(DefaultComponentView);
-		return new[]
-		{
+		return
+		[
 			new DebuggerViewItem(name, "Count = " + items.Length, items)
-		};
+		];
 	}
 
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)

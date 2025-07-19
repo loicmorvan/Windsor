@@ -16,6 +16,4 @@ namespace Castle.Generics;
 
 using CastleTests.Components;
 
-public interface IARepository : CastleTests.Generics.IRepository<A>
-{
-}
+public interface IARepository : CastleTests.Generics.IRepository<A>;

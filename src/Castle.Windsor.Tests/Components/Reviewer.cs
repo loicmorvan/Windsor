@@ -14,6 +14,4 @@
 
 namespace CastleTests.Components;
 
-public class Reviewer : Employee, IReviewer
-{
-}
+public class Reviewer : Employee, IReviewer;

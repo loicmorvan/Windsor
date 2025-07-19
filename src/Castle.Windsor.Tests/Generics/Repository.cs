@@ -16,6 +16,4 @@ namespace Castle.Generics;
 
 using CastleTests.Generics;
 
-public class Repository<T> : IRepository<T>
-{
-}
+public class Repository<T> : IRepository<T>;

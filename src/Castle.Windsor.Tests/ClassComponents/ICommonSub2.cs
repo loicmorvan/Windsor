@@ -15,6 +15,4 @@
 namespace Castle.MicroKernel.Tests.ClassComponents;
 
 /// <summary></summary>
-public interface ICommonSub2 : ICommonSub1
-{
-}
+public interface ICommonSub2 : ICommonSub1;

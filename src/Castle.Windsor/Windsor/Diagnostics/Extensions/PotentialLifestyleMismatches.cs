@@ -36,14 +36,14 @@ public class PotentialLifestyleMismatches : AbstractContainerDebuggerExtension
 	public override IEnumerable<DebuggerViewItem> Attach()
 	{
 		var mismatches = diagnostic.Inspect();
-		if (mismatches.Length == 0) return Enumerable.Empty<DebuggerViewItem>();
+		if (mismatches.Length == 0) return [];
 
 		Array.Sort(mismatches, (f, s) => f[0].ComponentModel.Name.CompareTo(s[0].ComponentModel.Name));
 		var items = mismatches.ConvertAll(MismatchedComponentView);
-		return new[]
-		{
+		return
+		[
 			new DebuggerViewItem(name, "Count = " + mismatches.Length, items)
-		};
+		];
 	}
 
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)

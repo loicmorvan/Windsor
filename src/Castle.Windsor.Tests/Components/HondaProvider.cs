@@ -14,6 +14,4 @@
 
 namespace CastleTests.Components;
 
-public class HondaProvider : ICarProvider
-{
-}
+public class HondaProvider : ICarProvider;

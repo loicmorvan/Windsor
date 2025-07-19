@@ -33,7 +33,7 @@ public class ReleasePolicyTrackedObjects : AbstractContainerDebuggerExtension
 		var result = diagnostic.Inspect();
 		if (result == null) return new DebuggerViewItem[0];
 		var item = BuildItem(result);
-		if (item != null) return new[] { item };
+		if (item != null) return [item];
 		return new DebuggerViewItem[0];
 	}
 

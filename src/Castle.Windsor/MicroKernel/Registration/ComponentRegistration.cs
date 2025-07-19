@@ -18,6 +18,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -43,9 +44,9 @@ using Castle.MicroKernel.Registration.Proxy;
 public class ComponentRegistration<TService> : IRegistration
 	where TService : class
 {
-	private readonly List<IComponentModelDescriptor> descriptors = new();
-	private readonly List<Type> potentialServices = new();
-	private readonly HashSet<Type> potentialServicesLookup = new();
+	private readonly List<IComponentModelDescriptor> descriptors = [];
+	private readonly List<Type> potentialServices = [];
+	private readonly HashSet<Type> potentialServicesLookup = [];
 
 	private bool ifComponentRegisteredIgnore;
 	private ComponentName name;
@@ -184,7 +185,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// </example>
 	public ComponentRegistration<TService> DependsOn(Dependency dependency)
 	{
-		return DependsOn(new[] { dependency });
+		return DependsOn([dependency]);
 	}
 
 	/// <summary>
@@ -323,7 +324,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> ExtendedProperties(Property property)
 	{
-		return ExtendedProperties(new[] { property });
+		return ExtendedProperties([property]);
 	}
 
 	/// <summary>Sets <see cref = "ComponentModel.ExtendedProperties" /> for this component.</summary>
@@ -399,7 +400,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// </summary>
 	/// <typeparam name = "TImpl"> The type that is the implementation for the service. </typeparam>
 	/// <returns> </returns>
-	public ComponentRegistration<TService> ImplementedBy<TImpl>() where TImpl : TService
+	public ComponentRegistration<TService> ImplementedBy<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TImpl>() where TImpl : TService
 	{
 		return ImplementedBy(typeof(TImpl));
 	}
@@ -498,7 +499,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> Interceptors<TInterceptor>() where TInterceptor : IInterceptor
 	{
-		return AddDescriptor(new InterceptorDescriptor(new[] { new InterceptorReference(typeof(TInterceptor)) }));
+		return AddDescriptor(new InterceptorDescriptor([new InterceptorReference(typeof(TInterceptor))]));
 	}
 
 	/// <summary>Set the interceptor for this component.</summary>

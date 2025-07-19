@@ -22,9 +22,7 @@ using Castle.MicroKernel.Lifestyle;
 
 using Microsoft.AspNetCore.Http;
 
-public class AnyComponent
-{
-}
+public class AnyComponent;
 
 public class AnyComponentWithLifestyleManager : AbstractLifestyleManager
 {

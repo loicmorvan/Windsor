@@ -14,6 +14,4 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents;
 
-public class DecoratedRepository : IRepository
-{
-}
+public class DecoratedRepository : IRepository;

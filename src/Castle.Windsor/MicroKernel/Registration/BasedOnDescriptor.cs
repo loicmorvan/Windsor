@@ -362,7 +362,7 @@ public class BasedOnDescriptor : IRegistration
 			if (type.GetTypeInfo().IsGenericType &&
 			    type.GetGenericTypeDefinition() == basedOn)
 			{
-				baseTypes = new[] { type };
+				baseTypes = [type];
 				return true;
 			}
 

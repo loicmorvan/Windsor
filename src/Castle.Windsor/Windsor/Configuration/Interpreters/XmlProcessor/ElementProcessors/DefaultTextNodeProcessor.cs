@@ -25,7 +25,7 @@ public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 	/// <summary>Properties names can contain a-zA-Z0-9_. i.e. #!{ my_node_name } || #{ my.node.name } spaces are trimmed</summary>
 	private static readonly Regex PropertyValidationRegExp = new(@"(\#!?\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled);
 
-	private static readonly XmlNodeType[] acceptNodes = new[] { XmlNodeType.CDATA, XmlNodeType.Text };
+	private static readonly XmlNodeType[] acceptNodes = [XmlNodeType.CDATA, XmlNodeType.Text];
 
 	public override XmlNodeType[] AcceptNodeTypes => acceptNodes;
 

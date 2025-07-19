@@ -18,6 +18,4 @@ using System.Collections.Generic;
 
 using Castle.MicroKernel;
 
-public interface ITrackedObjectsInspector : IDiagnosticsSource<IEnumerable<KeyValuePair<IHandler, object[]>>>
-{
-}
+public interface ITrackedObjectsInspector : IDiagnosticsSource<IEnumerable<KeyValuePair<IHandler, object[]>>>;

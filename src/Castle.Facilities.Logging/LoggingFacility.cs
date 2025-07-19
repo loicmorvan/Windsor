@@ -160,26 +160,26 @@ public class LoggingFacility : AbstractFacility
 		ConstructorInfo ctor;
 		if (IsConfiguredExternally())
 		{
-			ctor = loggerFactoryType.GetConstructor(flags, null, new[] { typeof(bool) }, null);
-			if (ctor != null) return new object[] { true };
+			ctor = loggerFactoryType.GetConstructor(flags, null, [typeof(bool)], null);
+			if (ctor != null) return [true];
 		}
 
 		var configFile = GetConfigFile();
 		if (configFile != null)
 		{
-			ctor = loggerFactoryType.GetConstructor(flags, null, new[] { typeof(string) }, null);
-			if (ctor != null) return new object[] { configFile };
+			ctor = loggerFactoryType.GetConstructor(flags, null, [typeof(string)], null);
+			if (ctor != null) return [configFile];
 		}
 
 		var level = GetLoggingLevel();
 		if (level != null)
 		{
-			ctor = loggerFactoryType.GetConstructor(flags, null, new[] { typeof(LoggerLevel) }, null);
-			if (ctor != null) return new object[] { level.Value };
+			ctor = loggerFactoryType.GetConstructor(flags, null, [typeof(LoggerLevel)], null);
+			if (ctor != null) return [level.Value];
 		}
 
 		ctor = loggerFactoryType.GetConstructor(flags, null, Type.EmptyTypes, null);
-		if (ctor != null) return new object[0];
+		if (ctor != null) return [];
 		throw new FacilityException($"No support constructor found for logging type '{loggerFactoryType}'");
 	}
 

@@ -61,15 +61,9 @@ public class OpenGenericConstructorSelectionTestCase : AbstractContainerTestCase
 		}
 	}
 
-	public class ClosedGenericArrayList : IClosedGenericArrayList<ArrayList>
-	{
-	}
+	public class ClosedGenericArrayList : IClosedGenericArrayList<ArrayList>;
 
-	public interface IOpenGeneric<T>
-	{
-	}
+	public interface IOpenGeneric<T>;
 
-	public interface IClosedGenericArrayList<T>
-	{
-	}
+	public interface IClosedGenericArrayList<T>;
 }

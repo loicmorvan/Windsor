@@ -32,10 +32,10 @@ public class AllServices : AbstractContainerDebuggerExtension
 		var map = diagnostic.Inspect();
 		var items = map.Select(p => BuildServiceView(p, p.Key.ToCSharpString())).ToArray();
 		Array.Sort(items, (i1, i2) => i1.Name.CompareTo(i2.Name));
-		return new[]
-		{
+		return
+		[
 			new DebuggerViewItem(name, "Count = " + items.Length, items)
-		};
+		];
 	}
 
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)

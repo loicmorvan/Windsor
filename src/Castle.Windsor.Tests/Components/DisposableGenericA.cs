@@ -14,6 +14,4 @@
 
 namespace CastleTests.Components;
 
-internal class DisposableGenericA : DisposableGeneric<A>
-{
-}
+internal class DisposableGenericA : DisposableGeneric<A>;

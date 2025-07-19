@@ -19,7 +19,7 @@ using System.Xml;
 
 public class EvalProcessingInstructionProcessor : AbstractXmlNodeProcessor
 {
-	private static readonly XmlNodeType[] acceptNodes = new[] { XmlNodeType.ProcessingInstruction };
+	private static readonly XmlNodeType[] acceptNodes = [XmlNodeType.ProcessingInstruction];
 
 	public override XmlNodeType[] AcceptNodeTypes => acceptNodes;
 

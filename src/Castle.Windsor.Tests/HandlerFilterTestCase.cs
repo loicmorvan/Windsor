@@ -180,45 +180,25 @@ public class HandlerFilterTestCase : AbstractContainerTestCase
 		}
 	}
 
-	private class FirstImplementation : ISomeService
-	{
-	}
+	private class FirstImplementation : ISomeService;
 
-	private interface ISomeService
-	{
-	}
+	private interface ISomeService;
 
-	private interface ISomeTask
-	{
-	}
+	private interface ISomeTask;
 
-	private interface IUnimportantService
-	{
-	}
+	private interface IUnimportantService;
 
-	private class SecondImplementation : ISomeService
-	{
-	}
+	private class SecondImplementation : ISomeService;
 
-	private class Task1 : ISomeTask
-	{
-	}
+	private class Task1 : ISomeTask;
 
-	private class Task2 : ISomeTask
-	{
-	}
+	private class Task2 : ISomeTask;
 
-	private class Task3 : ISomeTask
-	{
-	}
+	private class Task3 : ISomeTask;
 
-	private class Task4 : ISomeTask
-	{
-	}
+	private class Task4 : ISomeTask;
 
-	private class Task5 : ISomeTask
-	{
-	}
+	private class Task5 : ISomeTask;
 
 	private class TestHandlersFilter : IHandlersFilter
 	{
@@ -242,11 +222,7 @@ public class HandlerFilterTestCase : AbstractContainerTestCase
 		}
 	}
 
-	private class ThirdImplementation : ISomeService
-	{
-	}
+	private class ThirdImplementation : ISomeService;
 
-	private class UnimportantImpl : IUnimportantService
-	{
-	}
+	private class UnimportantImpl : IUnimportantService;
 }

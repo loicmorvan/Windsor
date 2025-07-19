@@ -14,6 +14,4 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents;
 
-public class DefaultTemplateEngine
-{
-}
+public class DefaultTemplateEngine;

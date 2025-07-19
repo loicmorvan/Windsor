@@ -63,7 +63,7 @@ public abstract class FromDescriptor : IRegistration
 	/// <returns> The descriptor for the type. </returns>
 	public BasedOnDescriptor BasedOn(Type basedOn)
 	{
-		return BasedOn((IEnumerable<Type>)new[] { basedOn });
+		return BasedOn((IEnumerable<Type>) [basedOn]);
 	}
 
 	/// <summary>Returns the descriptor for accepting a type.</summary>
@@ -147,7 +147,7 @@ public abstract class FromDescriptor : IRegistration
 	/// <returns> The descriptor for the type. </returns>
 	public BasedOnDescriptor Where(Predicate<Type> accepted)
 	{
-		var descriptor = new BasedOnDescriptor(new[] { typeof(object) }, this, additionalFilters).If(accepted);
+		var descriptor = new BasedOnDescriptor([typeof(object)], this, additionalFilters).If(accepted);
 		criterias.Add(descriptor);
 		return descriptor;
 	}

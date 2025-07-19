@@ -14,6 +14,4 @@
 
 namespace CastleTests.Components;
 
-public class EmptyBase
-{
-}
+public class EmptyBase;

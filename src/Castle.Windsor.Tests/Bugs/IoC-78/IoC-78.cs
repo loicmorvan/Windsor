@@ -48,9 +48,7 @@ public class IoC78 : AbstractContainerTestCase
 	}
 }
 
-public interface IChain
-{
-}
+public interface IChain;
 
 public class MyChain : IChain
 {

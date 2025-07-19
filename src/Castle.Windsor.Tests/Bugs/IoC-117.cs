@@ -45,6 +45,4 @@ public class Presenter
 	public virtual View View { get; protected set; }
 }
 
-public class View
-{
-}
+public class View;

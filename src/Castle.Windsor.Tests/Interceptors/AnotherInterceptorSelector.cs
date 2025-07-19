@@ -28,6 +28,6 @@ public class AnotherInterceptorSelector : IModelInterceptorsSelector
 
 	public InterceptorReference[] SelectInterceptors(ComponentModel model, InterceptorReference[] interceptors)
 	{
-		return new[] { new InterceptorReference(typeof(WasCalledInterceptor)) };
+		return [new InterceptorReference(typeof(WasCalledInterceptor))];
 	}
 }

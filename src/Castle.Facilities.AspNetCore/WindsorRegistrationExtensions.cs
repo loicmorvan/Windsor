@@ -135,7 +135,7 @@ public static class WindsorRegistrationExtensions
 
 	private static void InstallFrameworkIntegration(IServiceCollection services, IWindsorContainer container)
 	{
-		services.AddRequestScopingMiddleware(() => new[] { container.RequireScope(), container.Resolve<IServiceProvider>().CreateScope() });
+		services.AddRequestScopingMiddleware(() => [container.RequireScope(), container.Resolve<IServiceProvider>().CreateScope()]);
 		services.AddCustomTagHelperActivation(container.Resolve);
 		services.AddCustomControllerActivation(container.Resolve, container.Release);
 		services.AddCustomViewComponentActivation(container.Resolve, container.Release);

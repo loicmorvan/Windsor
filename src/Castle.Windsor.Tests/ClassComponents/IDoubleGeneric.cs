@@ -14,6 +14,4 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents;
 
-public interface IDoubleGeneric<TOne, TTwo>
-{
-}
+public interface IDoubleGeneric<TOne, TTwo>;

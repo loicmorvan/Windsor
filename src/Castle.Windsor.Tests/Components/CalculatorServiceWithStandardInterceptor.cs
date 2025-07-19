@@ -15,6 +15,4 @@
 namespace CastleTests.Components;
 
 [StandardInterceptor]
-public class CalculatorServiceWithStandardInterceptor : CalculatorService
-{
-}
+public class CalculatorServiceWithStandardInterceptor : CalculatorService;

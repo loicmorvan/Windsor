@@ -79,9 +79,9 @@ public class PotentialLifestyleMismatchesDiagnostic : IPotentialLifestyleMismatc
 			Parent = parent;
 
 			if (parent == null)
-				checkedComponents = new HashSet<ComponentModel> { handler.ComponentModel };
+				checkedComponents = [handler.ComponentModel];
 			else
-				checkedComponents = new HashSet<ComponentModel> { parent.Handler.ComponentModel };
+				checkedComponents = [parent.Handler.ComponentModel];
 		}
 
 		public IHandler Handler { get; }

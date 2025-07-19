@@ -120,25 +120,15 @@ public class MultiServiceComponentsTestCase : AbstractContainerTestCase
 		Assert.Single(repos);
 	}
 
-	public interface IRepository
-	{
-	}
+	public interface IRepository;
 
-	public interface IRepository<T> : IRepository
-	{
-	}
+	public interface IRepository<T> : IRepository;
 
-	public interface IUserRepository : IRepository<User>
-	{
-	}
+	public interface IUserRepository : IRepository<User>;
 
-	public class MyRepository : IUserRepository
-	{
-	}
+	public class MyRepository : IUserRepository;
 
-	public class User
-	{
-	}
+	public class User;
 
 	public class MyRepository2 : IUserRepository
 	{

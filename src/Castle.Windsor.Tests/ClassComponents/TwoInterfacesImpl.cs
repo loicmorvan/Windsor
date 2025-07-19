@@ -14,6 +14,4 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents;
 
-public class TwoInterfacesImpl : ICommon2, ICommon
-{
-}
+public class TwoInterfacesImpl : ICommon2, ICommon;

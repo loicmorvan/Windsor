@@ -21,6 +21,8 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 
 	using Castle.Windsor.Extensions.DependencyInjection.Scope;
 
+	using JetBrains.Annotations;
+
 	using Microsoft.Extensions.DependencyInjection;
 
 	internal class WindsorScopedServiceProvider : IServiceProvider, ISupportRequiredService, IDisposable
@@ -37,11 +39,10 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 
 		public void Dispose()
 		{
-			if (!(scope is ExtensionContainerRootScope)) return;
+			if (scope is not ExtensionContainerRootScope) return;
 			if (disposing) return;
 			disposing = true;
-			var disposableScope = scope as IDisposable;
-			disposableScope?.Dispose();
+			scope?.Dispose();
 			container.Dispose();
 		}
 

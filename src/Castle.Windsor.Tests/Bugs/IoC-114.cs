@@ -29,17 +29,11 @@ public class IoC_114 : AbstractContainerTestCase
 		Assert.Null(service2.S);
 	}
 
-	public interface IService1
-	{
-	}
+	public interface IService1;
 
-	public class Service1 : IService1
-	{
-	}
+	public class Service1 : IService1;
 
-	public interface IService2
-	{
-	}
+	public interface IService2;
 
 	public class Service2 : IService2
 	{

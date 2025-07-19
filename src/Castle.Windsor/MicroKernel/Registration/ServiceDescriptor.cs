@@ -66,7 +66,7 @@ public class ServiceDescriptor
 			var first = type.GetInterfaces().FirstOrDefault();
 			if (first == null) return null;
 
-			return new[] { first };
+			return [first];
 		});
 	}
 
@@ -127,7 +127,7 @@ public class ServiceDescriptor
 	/// <returns></returns>
 	public BasedOnDescriptor Self()
 	{
-		return Select((t, b) => new[] { t });
+		return Select((t, b) => [t]);
 	}
 
 	internal ICollection<Type> GetServices(Type type, Type[] baseType)

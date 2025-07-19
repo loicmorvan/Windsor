@@ -30,7 +30,7 @@ public class IfProcessingInstructionProcessor : AbstractXmlNodeProcessor
 	private static readonly string ElsifPiName = "elsif";
 	private static readonly string EndPiName = "end";
 	private static readonly string IfPiName = "if";
-	private static readonly XmlNodeType[] acceptNodes = new[] { XmlNodeType.ProcessingInstruction };
+	private static readonly XmlNodeType[] acceptNodes = [XmlNodeType.ProcessingInstruction];
 
 	public override XmlNodeType[] AcceptNodeTypes => acceptNodes;
 

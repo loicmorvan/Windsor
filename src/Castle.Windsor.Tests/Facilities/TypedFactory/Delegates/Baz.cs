@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
-public class Baz
-{
-}
+public class Baz;

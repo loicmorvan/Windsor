@@ -25,13 +25,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 
-public class OpenOptions
-{
-}
+public class OpenOptions;
 
-public class ClosedOptions
-{
-}
+public class ClosedOptions;
 
 public interface IDisposableObservable
 {
@@ -56,9 +52,7 @@ public class ServiceProviderOnlyTransient : IWeakReferenceObservable
 	public bool HasReference => reference.IsAlive;
 }
 
-public class ServiceProviderOnlyTransientGeneric<T> : ServiceProviderOnlyTransient
-{
-}
+public class ServiceProviderOnlyTransientGeneric<T> : ServiceProviderOnlyTransient;
 
 public class ServiceProviderOnlyTransientDisposable : ServiceProviderOnlyTransient, IDisposable, IDisposableObservable, IWeakReferenceObservable
 {
@@ -84,9 +78,7 @@ public class ServiceProviderOnlyScoped : IWeakReferenceObservable
 	public bool HasReference => reference.IsAlive;
 }
 
-public class ServiceProviderOnlyScopedGeneric<T> : ServiceProviderOnlyScoped
-{
-}
+public class ServiceProviderOnlyScopedGeneric<T> : ServiceProviderOnlyScoped;
 
 public class ServiceProviderOnlyScopedDisposable : ServiceProviderOnlyScoped, IDisposable, IDisposableObservable, IWeakReferenceObservable
 {
@@ -112,9 +104,7 @@ public class ServiceProviderOnlySingleton : IWeakReferenceObservable
 	public bool HasReference => reference.IsAlive;
 }
 
-public class ServiceProviderOnlySingletonGeneric<T> : ServiceProviderOnlySingleton
-{
-}
+public class ServiceProviderOnlySingletonGeneric<T> : ServiceProviderOnlySingleton;
 
 public class ServiceProviderOnlySingletonDisposable : ServiceProviderOnlySingleton, IDisposable, IDisposableObservable, IWeakReferenceObservable
 {
@@ -140,9 +130,7 @@ public class WindsorOnlyTransient : IWeakReferenceObservable
 	public bool HasReference => reference.IsAlive;
 }
 
-public class WindsorOnlyTransientGeneric<T> : WindsorOnlyTransient
-{
-}
+public class WindsorOnlyTransientGeneric<T> : WindsorOnlyTransient;
 
 public class WindsorOnlyTransientDisposable : WindsorOnlyTransient, IDisposable, IDisposableObservable, IWeakReferenceObservable
 {
@@ -168,9 +156,7 @@ public class WindsorOnlyScoped : IWeakReferenceObservable
 	public bool HasReference => reference.IsAlive;
 }
 
-public class WindsorOnlyScopedGeneric<T> : WindsorOnlyScoped
-{
-}
+public class WindsorOnlyScopedGeneric<T> : WindsorOnlyScoped;
 
 public class WindsorOnlyScopedDisposable : WindsorOnlyScoped, IDisposable, IDisposableObservable, IWeakReferenceObservable
 {
@@ -196,9 +182,7 @@ public class WindsorOnlySingleton : IWeakReferenceObservable
 	public bool HasReference => reference.IsAlive;
 }
 
-public class WindsorOnlySingletonGeneric<T> : WindsorOnlySingleton
-{
-}
+public class WindsorOnlySingletonGeneric<T> : WindsorOnlySingleton;
 
 public class WindsorOnlySingletonDisposable : WindsorOnlySingleton, IDisposable, IDisposableObservable, IWeakReferenceObservable
 {
@@ -224,9 +208,7 @@ public class CrossWiredTransient : IWeakReferenceObservable
 	public bool HasReference => reference.IsAlive;
 }
 
-public class CrossWiredTransientGeneric<T> : CrossWiredTransient
-{
-}
+public class CrossWiredTransientGeneric<T> : CrossWiredTransient;
 
 public class CrossWiredTransientDisposable : CrossWiredTransient, IDisposable, IDisposableObservable, IWeakReferenceObservable
 {
@@ -252,9 +234,7 @@ public class CrossWiredScoped : IWeakReferenceObservable
 	public bool HasReference => reference.IsAlive;
 }
 
-public class CrossWiredScopedGeneric<T> : CrossWiredScoped
-{
-}
+public class CrossWiredScopedGeneric<T> : CrossWiredScoped;
 
 public class CrossWiredScopedDisposable : CrossWiredScoped, IDisposable, IDisposableObservable, IWeakReferenceObservable
 {
@@ -280,9 +260,7 @@ public class CrossWiredSingleton : IWeakReferenceObservable
 	public bool HasReference => reference.IsAlive;
 }
 
-public class CrossWiredSingletonGeneric<T> : CrossWiredSingleton
-{
-}
+public class CrossWiredSingletonGeneric<T> : CrossWiredSingleton;
 
 public class CrossWiredSingletonDisposable : CrossWiredSingleton, IDisposable, IDisposableObservable, IWeakReferenceObservable
 {

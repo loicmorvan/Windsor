@@ -14,6 +14,4 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents;
 
-public abstract class BaseCommonComponent : ICommon
-{
-}
+public abstract class BaseCommonComponent : ICommon;

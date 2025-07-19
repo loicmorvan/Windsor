@@ -74,7 +74,7 @@ public class ProxyOptions
 		get
 		{
 			if (mixInList != null) return mixInList;
-			return new IReference<object>[] { };
+			return [];
 		}
 	}
 
@@ -94,7 +94,7 @@ public class ProxyOptions
 	{
 		if (interfaces == null || interfaces.Length == 0) return;
 
-		if (interfaceList == null) interfaceList = new List<Type>();
+		if (interfaceList == null) interfaceList = [];
 
 		interfaceList.AddRange(interfaces);
 	}
@@ -105,7 +105,7 @@ public class ProxyOptions
 	{
 		if (mixIns == null || mixIns.Length == 0) return;
 
-		if (mixInList == null) mixInList = new List<IReference<object>>();
+		if (mixInList == null) mixInList = [];
 
 		foreach (var mixIn in mixIns)
 		{
@@ -121,7 +121,7 @@ public class ProxyOptions
 	{
 		if (mixIn == null) throw new ArgumentNullException(nameof(mixIn));
 
-		if (mixInList == null) mixInList = new List<IReference<object>>();
+		if (mixInList == null) mixInList = [];
 		mixInList.Add(mixIn);
 		mixIn.Attach(component);
 	}

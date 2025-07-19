@@ -14,6 +14,4 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents;
 
-public interface IRepository
-{
-}
+public interface IRepository;

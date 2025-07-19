@@ -15,6 +15,4 @@
 namespace Castle.Windsor.Tests.ComponentsWithAttribute;
 
 [User(false)]
-public class HasUserAttributeNonRegister
-{
-}
+public class HasUserAttributeNonRegister;

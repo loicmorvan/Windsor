@@ -216,11 +216,7 @@ public class TypeNameConverterTestCase
 		Assert.Equal(type2, result2);
 	}
 
-	private class TestCaseSensitivity
-	{
-	}
+	private class TestCaseSensitivity;
 
-	private class TESTCASESENSITIVITY
-	{
-	}
+	private class TESTCASESENSITIVITY;
 }

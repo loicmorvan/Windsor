@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class Leaf
-{
-}
+public class Leaf;

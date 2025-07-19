@@ -18,6 +18,4 @@ using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
 using CastleTests.Components;
 
-public class GenericDummyComponentAImpl<T> : A, IGeneric<T>, IDummyComponent<T>, IMarkerInterface
-{
-}
+public class GenericDummyComponentAImpl<T> : A, IGeneric<T>, IDummyComponent<T>, IMarkerInterface;

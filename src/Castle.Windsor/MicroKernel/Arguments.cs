@@ -171,7 +171,7 @@ public sealed class Arguments
 
 	private void CheckKeyType(object key)
 	{
-		if (!(key is string) && !(key is Type)) throw new ArgumentException($"The argument '{key}' should be of type string or System.Type.");
+		if (key is not string && key is not Type) throw new ArgumentException($"The argument '{key}' should be of type string or System.Type.");
 	}
 
 	private sealed class ArgumentsComparer : IEqualityComparer<object>

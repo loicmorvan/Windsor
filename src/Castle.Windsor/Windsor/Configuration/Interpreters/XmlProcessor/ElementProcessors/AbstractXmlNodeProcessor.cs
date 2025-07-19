@@ -19,7 +19,7 @@ using System.Xml;
 
 public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
 {
-	private static readonly XmlNodeType[] acceptNodes = new[] { XmlNodeType.Element };
+	private static readonly XmlNodeType[] acceptNodes = [XmlNodeType.Element];
 
 	public abstract string Name { get; }
 

@@ -14,6 +14,4 @@
 
 namespace CastleTests.Components;
 
-public class ResolvableDependency : IDependency
-{
-}
+public class ResolvableDependency : IDependency;

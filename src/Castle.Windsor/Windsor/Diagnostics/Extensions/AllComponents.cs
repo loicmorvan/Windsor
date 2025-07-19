@@ -35,10 +35,10 @@ public class AllComponents : AbstractContainerDebuggerExtension
 
 		var items = handlers.ConvertAll(DefaultComponentView);
 		Array.Sort(items, (c1, c2) => c1.Name.CompareTo(c2.Name));
-		return new[]
-		{
+		return
+		[
 			new DebuggerViewItem(name, "Count = " + items.Length, items)
-		};
+		];
 	}
 
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)

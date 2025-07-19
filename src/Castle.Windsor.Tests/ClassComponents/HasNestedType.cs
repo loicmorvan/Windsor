@@ -16,11 +16,7 @@ namespace Castle.ClassComponents;
 
 public class HasNestedType
 {
-	public class Nested
-	{
-	}
+	public class Nested;
 
-	public class NestedGeneric<TArg>
-	{
-	}
+	public class NestedGeneric<TArg>;
 }

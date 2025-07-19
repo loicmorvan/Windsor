@@ -14,6 +14,4 @@
 
 namespace CastleTests.Components;
 
-public class EmptyServiceC : IEmptyService
-{
-}
+public class EmptyServiceC : IEmptyService;

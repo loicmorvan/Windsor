@@ -16,6 +16,4 @@ namespace CastleTests.ClassComponents;
 
 using CastleTests.Components;
 
-public class GenericImplA : A, IGeneric<A>
-{
-}
+public class GenericImplA : A, IGeneric<A>;

@@ -14,6 +14,4 @@
 
 namespace CastleTests.Components;
 
-public class A2
-{
-}
+public class A2;

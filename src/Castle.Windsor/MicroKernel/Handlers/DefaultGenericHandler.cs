@@ -87,14 +87,14 @@ public class DefaultGenericHandler : AbstractHandler
 		var openServices = ComponentModel.Services.ToArray();
 		if (openServices.Length == 1 && requestedType.GetTypeInfo().IsGenericType && openServices[0] == requestedType.GetGenericTypeDefinition())
 			// shortcut for the most common case
-			return new[] { requestedType };
+			return [requestedType];
 		var closedServices = new List<Type>(openServices.Length);
 		var index = AdaptClassServices(closedImplementationType, closedServices, openServices);
 		if (index == openServices.Length - 1 && closedServices.Count > 0) return closedServices.ToArray();
 		AdaptInterfaceServices(closedImplementationType, closedServices, openServices, index);
 		if (closedServices.Count == 0)
 			// we obviously have either a bug or an uncovered case. I suppose the best we can do at this point is to fallback to the old behaviour
-			return new[] { requestedType };
+			return [requestedType];
 		return closedServices.ToArray();
 	}
 

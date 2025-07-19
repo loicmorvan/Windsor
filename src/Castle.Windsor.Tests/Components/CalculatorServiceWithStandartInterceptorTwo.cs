@@ -19,6 +19,4 @@ using Castle.DynamicProxy;
 
 [Interceptor("fooInterceptor")]
 [Interceptor(typeof(StandardInterceptor))]
-public class CalculatorServiceWithStandartInterceptorTwo : CalculatorService
-{
-}
+public class CalculatorServiceWithStandartInterceptorTwo : CalculatorService;

@@ -62,7 +62,7 @@ public class PropertiesDependenciesModelInspector : IContributeComponentModelCon
 		if (filters == null)
 			properties.ForEach(p => model.AddProperty(BuildDependency(p, true)));
 		else
-			foreach (var filter in filters.Concat(new[] { StandardPropertyFilters.Create(PropertyFilter.Default) }))
+			foreach (var filter in filters.Concat([StandardPropertyFilters.Create(PropertyFilter.Default)]))
 			{
 				var dependencies = filter.Invoke(model, properties, BuildDependency);
 				if (dependencies != null)

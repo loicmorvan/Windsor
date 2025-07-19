@@ -164,9 +164,7 @@ public class ResolveArgumentsTestCase : AbstractContainerTestCase
 		Container.Resolve(typeof(IDependencyWithManyImplementations), new Arguments().AddTyped(new Dependency()));
 	}
 
-	private class Dependency
-	{
-	}
+	private class Dependency;
 
 	private class Service
 	{
@@ -178,9 +176,7 @@ public class ResolveArgumentsTestCase : AbstractContainerTestCase
 		}
 	}
 
-	private interface IDependencyWithManyImplementations
-	{
-	}
+	private interface IDependencyWithManyImplementations;
 
 	private class DependencyImplementationA : IDependencyWithManyImplementations
 	{

@@ -30,12 +30,12 @@ internal class CollectionServiceOverridesInstaller : IWindsorInstaller
 			Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>().Named("baz"),
 			Component.For<ArrayDepAsConstructor>().Named("InjectAll"),
 			Component.For<ArrayDepAsConstructor>().Named("InjectFooOnly")
-				.DependsOn(ServiceOverride.ForKey("services").Eq(new[] { "foo" })),
+				.DependsOn(ServiceOverride.ForKey("services").Eq(["foo"])),
 			Component.For<ArrayDepAsConstructor>().Named("InjectFooAndBarOnly")
 				.DependsOn(ServiceOverride.ForKey("services").Eq("foo", "bar")),
 			Component.For<ListDepAsConstructor>().Named("InjectAllList"),
 			Component.For<ListDepAsConstructor>().Named("InjectFooOnlyList")
-				.DependsOn(ServiceOverride.ForKey("services").Eq(new[] { "foo" })),
+				.DependsOn(ServiceOverride.ForKey("services").Eq(["foo"])),
 			Component.For<ListDepAsConstructor>().Named("InjectFooAndBarOnlyList")
 				.DependsOn(ServiceOverride.ForKey("services").Eq("foo", "bar")));
 	}

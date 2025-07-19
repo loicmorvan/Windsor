@@ -120,7 +120,7 @@ public class AssemblyFilter : IAssemblyProvider
 	{
 		try
 		{
-			if (Directory.Exists(directoryName) == false) return Enumerable.Empty<string>();
+			if (Directory.Exists(directoryName) == false) return [];
 			if (string.IsNullOrEmpty(mask)) return Directory.EnumerateFiles(directoryName);
 			return Directory.EnumerateFiles(directoryName, mask);
 		}

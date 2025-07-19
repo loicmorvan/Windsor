@@ -39,9 +39,7 @@ public abstract class WindsorRegistrationOptionsTagHelperTestCase : IDisposable
 		testContext.WindsorContainer.Resolve(optionsResolvableType);
 	}
 
-	public class OverrideTagHelper : TagHelper
-	{
-	}
+	public class OverrideTagHelper : TagHelper;
 }
 
 public class WindsorRegistrationOptionsForAssembliesTagHelperTestCase : WindsorRegistrationOptionsTagHelperTestCase

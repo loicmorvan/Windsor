@@ -52,7 +52,7 @@ public class DefaultConversionManager : AbstractSubSystem, IConversionManager, I
 
 		converters.Add(converter);
 
-		if (!(converter is IKernelDependentConverter)) standAloneConverters.Add(converter);
+		if (converter is not IKernelDependentConverter) standAloneConverters.Add(converter);
 	}
 
 	public ITypeConverterContext Context

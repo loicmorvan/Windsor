@@ -87,7 +87,7 @@ public abstract class AbstractHandler :
 	{
 		if (CurrentState == HandlerState.Valid) return;
 		var missing = missingDependencies;
-		inspector.Inspect(this, missing != null ? missing.ToArray() : new DependencyModel[0], Kernel);
+		inspector.Inspect(this, missing != null ? missing.ToArray() : [], Kernel);
 	}
 
 	private bool HasCustomParameter(object key)

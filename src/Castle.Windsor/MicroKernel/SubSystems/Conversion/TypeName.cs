@@ -55,7 +55,7 @@ public class TypeName
 	public string ExtractAssemblyName()
 	{
 		if (IsAssemblyQualified == false) return null;
-		var tokens = assemblyQualifiedName.Split(new[] { ',' }, StringSplitOptions.None);
+		var tokens = assemblyQualifiedName.Split([','], StringSplitOptions.None);
 		var indexOfVersion = Array.FindLastIndex(tokens, s => s.TrimStart(' ').StartsWith("Version="));
 		if (indexOfVersion <= 0) return tokens.Last().Trim();
 		return tokens[indexOfVersion - 1].Trim();

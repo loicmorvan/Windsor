@@ -116,21 +116,15 @@ namespace CastleTests.Registration
 
 namespace RootNamespace
 {
-	public class RootComponent
-	{
-	}
+	public class RootComponent;
 }
 
 namespace RootNamespaceEx
 {
-	public class RootComponentEx
-	{
-	}
+	public class RootComponentEx;
 }
 
 namespace RootNamespace.Sub
 {
-	public class SubComponent
-	{
-	}
+	public class SubComponent;
 }

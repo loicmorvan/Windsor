@@ -23,8 +23,8 @@ using Castle.Core.Configuration;
 [Serializable]
 public class PrimitiveConverter : AbstractTypeConverter
 {
-	private readonly Type[] types = new[]
-	{
+	private readonly Type[] types =
+	[
 		typeof(char),
 		typeof(DateTime),
 		typeof(decimal),
@@ -40,7 +40,7 @@ public class PrimitiveConverter : AbstractTypeConverter
 		typeof(float),
 		typeof(double),
 		typeof(string)
-	};
+	];
 
 	public override bool CanHandleType(Type type)
 	{

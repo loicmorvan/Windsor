@@ -39,9 +39,7 @@ public abstract class WindsorRegistrationOptionsControllerTestCase : IDisposable
 		testContext.WindsorContainer.Resolve(optionsResolvableType);
 	}
 
-	public class OverrideController : Controller
-	{
-	}
+	public class OverrideController : Controller;
 }
 
 public class WindsorRegistrationOptionsForAssembliesControllerTestCase : WindsorRegistrationOptionsControllerTestCase

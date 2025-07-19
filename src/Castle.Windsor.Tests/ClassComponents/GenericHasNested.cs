@@ -16,11 +16,7 @@ namespace Castle.ClassComponents;
 
 public class GenericHasNested<TOuter>
 {
-	public class Nested
-	{
-	}
+	public class Nested;
 
-	public class NestedGeneric<TInner>
-	{
-	}
+	public class NestedGeneric<TInner>;
 }

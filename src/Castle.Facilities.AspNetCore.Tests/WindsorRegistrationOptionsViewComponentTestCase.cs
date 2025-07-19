@@ -39,9 +39,7 @@ public abstract class WindsorRegistrationOptionsViewComponentTestCase : IDisposa
 		testContext.WindsorContainer.Resolve(optionsResolvableType);
 	}
 
-	public class OverrideViewComponent : ViewComponent
-	{
-	}
+	public class OverrideViewComponent : ViewComponent;
 }
 
 public class WindsorRegistrationOptionsForAssembliesViewComponentTestCase : WindsorRegistrationOptionsViewComponentTestCase

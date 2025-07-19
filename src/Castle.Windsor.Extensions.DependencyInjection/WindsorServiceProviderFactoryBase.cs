@@ -16,6 +16,7 @@
 namespace Castle.Windsor.Extensions.DependencyInjection
 {
 	using System;
+	using System.Diagnostics;
 
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Registration;
@@ -69,8 +70,8 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 
 		protected virtual IWindsorContainer BuildContainer(IServiceCollection serviceCollection, IWindsorContainer windsorContainer)
 		{
-			if (rootContainer == null) CreateRootContainer();
-			if (rootContainer == null) throw new ArgumentNullException("Could not initialize container");
+			if (rootContainer is null) CreateRootContainer();
+			Debug.Assert(rootContainer is not null, "Could not initialize container");
 
 			if (serviceCollection == null) return rootContainer;
 

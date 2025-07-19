@@ -17,6 +17,4 @@ namespace CastleTests.Facilities.TypedFactory.Factories;
 using Castle.Facilities.TypedFactory;
 
 [Factory(SelectorComponentName = "selector")]
-public interface IDummyComponentFactoryWithAttribute_serviceName : IDummyComponentFactory
-{
-}
+public interface IDummyComponentFactoryWithAttribute_serviceName : IDummyComponentFactory;

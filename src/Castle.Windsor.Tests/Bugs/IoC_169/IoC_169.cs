@@ -20,17 +20,11 @@ using Castle.Core;
 using Castle.Facilities.Startable;
 using Castle.MicroKernel.Registration;
 
-public interface IBlackboard
-{
-}
+public interface IBlackboard;
 
-public interface IChalk
-{
-}
+public interface IChalk;
 
-public class Chalk : IChalk
-{
-}
+public class Chalk : IChalk;
 
 public abstract class AbstractBlackboard : IBlackboard, IStartable
 {
@@ -58,9 +52,7 @@ public class Blackboard : AbstractBlackboard
 	}
 }
 
-public interface IServiceWithoutImplementation
-{
-}
+public interface IServiceWithoutImplementation;
 
 public class IoC_169
 {

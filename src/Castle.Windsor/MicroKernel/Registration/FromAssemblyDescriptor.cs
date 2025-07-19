@@ -29,7 +29,7 @@ public class FromAssemblyDescriptor : FromDescriptor
 
 	protected internal FromAssemblyDescriptor(Assembly assembly, Predicate<Type> additionalFilters) : base(additionalFilters)
 	{
-		assemblies = new[] { assembly };
+		assemblies = [assembly];
 	}
 
 	protected internal FromAssemblyDescriptor(IEnumerable<Assembly> assemblies, Predicate<Type> additionalFilters)
