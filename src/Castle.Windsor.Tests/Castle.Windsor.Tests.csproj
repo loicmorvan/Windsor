@@ -58,7 +58,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Castle.Facilities.Logging\Castle.Facilities.Logging.csproj"/>
     <ProjectReference Include="..\Castle.Windsor\Castle.Windsor.csproj"/>
   </ItemGroup>
 
