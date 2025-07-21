@@ -23,15 +23,9 @@ using Castle.Windsor.MicroKernel.Context;
 
 using Microsoft.Extensions.DependencyInjection;
 
-public class FrameworkDependencyResolver : ISubDependencyResolver, IAcceptServiceProvider
+public class FrameworkDependencyResolver(IServiceCollection serviceCollection) : ISubDependencyResolver, IAcceptServiceProvider
 {
-	private readonly IServiceCollection serviceCollection;
 	private IServiceProvider serviceProvider;
-
-	public FrameworkDependencyResolver(IServiceCollection serviceCollection)
-	{
-		this.serviceCollection = serviceCollection;
-	}
 
 	public void AcceptServiceProvider(IServiceProvider serviceProvider)
 	{

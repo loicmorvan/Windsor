@@ -63,7 +63,7 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 
 		internal static string UniqueComponentName(ServiceDescriptor service)
 		{
-			var result = "";
+			string result;
 			if (service.ImplementationType != null)
 				result = service.ImplementationType.FullName;
 			else if (service.ImplementationInstance != null)
