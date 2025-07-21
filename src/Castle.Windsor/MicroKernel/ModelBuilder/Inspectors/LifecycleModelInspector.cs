@@ -31,7 +31,7 @@ public class LifecycleModelInspector : IContributeComponentModelConstruction
 	/// <param name = "model"></param>
 	public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 	{
-		if (model == null) throw new ArgumentNullException(nameof(model));
+		ArgumentNullException.ThrowIfNull(model);
 		if (IsLateBoundComponent(model))
 		{
 			ProcessLateBoundModel(model);

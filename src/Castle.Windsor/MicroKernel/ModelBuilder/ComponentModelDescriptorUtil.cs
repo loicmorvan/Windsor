@@ -27,7 +27,7 @@ public static class ComponentModelDescriptorUtil
 
 	public static ICollection<IMetaComponentModelDescriptor> GetMetaDescriptors(this ComponentModel model, bool ensureExists)
 	{
-		if (model == null) throw new ArgumentNullException(nameof(model));
+		ArgumentNullException.ThrowIfNull(model);
 
 		var metaDescriptors = model.ExtendedProperties[MetaDescriptorsKey] as ICollection<IMetaComponentModelDescriptor>;
 		if (metaDescriptors == null && ensureExists)

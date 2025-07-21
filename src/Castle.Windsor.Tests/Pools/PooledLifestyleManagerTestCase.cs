@@ -192,25 +192,23 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Parallel_usage_only_registers_single_factory()
 	{
-		using (var evt = new AutoResetEvent(false))
-		{
-			var kernel = new ParallelAccessAwareKernel(evt);
+		using var evt = new AutoResetEvent(false);
+		var kernel = new ParallelAccessAwareKernel(evt);
 
-			var manager1 = new MyPoolableLifestyleManager();
-			var manager2 = new MyPoolableLifestyleManager();
+		var manager1 = new MyPoolableLifestyleManager();
+		var manager2 = new MyPoolableLifestyleManager();
 
-			manager1.Init(null, kernel, null);
-			manager2.Init(null, kernel, null);
+		manager1.Init(null, kernel, null);
+		manager2.Init(null, kernel, null);
 
-			ThreadPool.QueueUserWorkItem(o => { manager1.CreatePool(); });
-			ThreadPool.QueueUserWorkItem(o => { manager2.CreatePool(); });
+		ThreadPool.QueueUserWorkItem(o => { manager1.CreatePool(); });
+		ThreadPool.QueueUserWorkItem(o => { manager2.CreatePool(); });
 
-			Thread.Sleep(TimeSpan.FromSeconds(1));
-			evt.Set();
-			Thread.Sleep(TimeSpan.FromSeconds(1));
+		Thread.Sleep(TimeSpan.FromSeconds(1));
+		evt.Set();
+		Thread.Sleep(TimeSpan.FromSeconds(1));
 
-			Assert.Equal(0, kernel.parallelCount);
-		}
+		Assert.Equal(0, kernel.parallelCount);
 	}
 
 	public class DisposableMockObject : IDisposable

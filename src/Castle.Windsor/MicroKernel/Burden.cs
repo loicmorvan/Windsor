@@ -97,7 +97,7 @@ public class Burden
 
 	public void SetRootInstance(object instance)
 	{
-		if (instance == null) throw new ArgumentNullException(nameof(instance));
+		ArgumentNullException.ThrowIfNull(instance);
 		Instance = instance;
 		if (decommission == Decommission.LateBound)
 			// TODO: this may need to be extended if we lazily provide any other decimmission concerns

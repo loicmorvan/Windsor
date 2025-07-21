@@ -39,14 +39,14 @@ public class MixinRegistration : IEnumerable<IReference<object>>
 
 	public MixinRegistration Component(Type serviceType)
 	{
-		if (serviceType == null) throw new ArgumentNullException(nameof(serviceType));
+		ArgumentNullException.ThrowIfNull(serviceType);
 		items.Add(new ComponentReference<object>(serviceType));
 		return this;
 	}
 
 	public MixinRegistration Component(string name)
 	{
-		if (name == null) throw new ArgumentNullException(nameof(name));
+		ArgumentNullException.ThrowIfNull(name);
 		items.Add(new ComponentReference<object>(name));
 		return this;
 	}

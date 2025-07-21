@@ -57,7 +57,7 @@ public class ComponentReference<T> : IReference<T>
 	/// <param name = "referencedComponentName"></param>
 	public ComponentReference(string referencedComponentName)
 	{
-		if (referencedComponentName == null) throw new ArgumentNullException(nameof(referencedComponentName));
+		ArgumentNullException.ThrowIfNull(referencedComponentName);
 		this.referencedComponentName = referencedComponentName;
 	}
 

@@ -82,37 +82,37 @@ public class LifecycleConcernsCollection
 
 	public void Add(ICommissionConcern concern)
 	{
-		if (concern == null) throw new ArgumentNullException(nameof(concern));
+		ArgumentNullException.ThrowIfNull(concern);
 		Commission.Add(concern);
 	}
 
 	public void Add(IDecommissionConcern concern)
 	{
-		if (concern == null) throw new ArgumentNullException(nameof(concern));
+		ArgumentNullException.ThrowIfNull(concern);
 		Decommission.Add(concern);
 	}
 
 	public void AddFirst(ICommissionConcern concern)
 	{
-		if (concern == null) throw new ArgumentNullException(nameof(concern));
+		ArgumentNullException.ThrowIfNull(concern);
 		Commission.Insert(0, concern);
 	}
 
 	public void AddFirst(IDecommissionConcern concern)
 	{
-		if (concern == null) throw new ArgumentNullException(nameof(concern));
+		ArgumentNullException.ThrowIfNull(concern);
 		Decommission.Insert(0, concern);
 	}
 
 	public void Remove(ICommissionConcern concern)
 	{
-		if (concern == null) throw new ArgumentNullException(nameof(concern));
+		ArgumentNullException.ThrowIfNull(concern);
 		Commission.Remove(concern);
 	}
 
 	public void Remove(IDecommissionConcern concern)
 	{
-		if (concern == null) throw new ArgumentNullException(nameof(concern));
+		ArgumentNullException.ThrowIfNull(concern);
 		Decommission.Remove(concern);
 	}
 }

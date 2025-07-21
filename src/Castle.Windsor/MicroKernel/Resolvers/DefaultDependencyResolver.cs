@@ -38,7 +38,7 @@ public class DefaultDependencyResolver : IDependencyResolver
 	/// <param name = "subResolver">The subresolver instance</param>
 	public void AddSubResolver(ISubDependencyResolver subResolver)
 	{
-		if (subResolver == null) throw new ArgumentNullException(nameof(subResolver));
+		ArgumentNullException.ThrowIfNull(subResolver);
 
 		subResolvers.Add(subResolver);
 	}

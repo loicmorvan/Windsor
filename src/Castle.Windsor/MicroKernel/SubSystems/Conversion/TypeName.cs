@@ -63,7 +63,7 @@ public class TypeName
 
 	public Type GetType(TypeNameConverter converter)
 	{
-		if (converter == null) throw new ArgumentNullException(nameof(converter));
+		ArgumentNullException.ThrowIfNull(converter);
 		if (IsAssemblyQualified) return Type.GetType(assemblyQualifiedName, false, true);
 
 		Type type;

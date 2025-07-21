@@ -89,19 +89,17 @@ public class CallContextLifetimeScope : ILifetimeScope
 
 	public Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance)
 	{
-		using (var token = @lock.ForReadingUpgradeable())
+		using var token = @lock.ForReadingUpgradeable();
+		var burden = cache[model];
+		if (burden == null)
 		{
-			var burden = cache[model];
-			if (burden == null)
-			{
-				token.Upgrade();
+			token.Upgrade();
 
-				burden = createInstance(delegate { });
-				cache[model] = burden;
-			}
-
-			return burden;
+			burden = createInstance(delegate { });
+			cache[model] = burden;
 		}
+
+		return burden;
 	}
 
 	[SecuritySafeCritical]

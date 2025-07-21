@@ -115,14 +115,14 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 
 	public virtual IHandler[] GetAssignableHandlers(Type service)
 	{
-		if (service == null) throw new ArgumentNullException(nameof(service));
+		ArgumentNullException.ThrowIfNull(service);
 		if (service == typeof(object)) return GetAllHandlers();
 		return GetAssignableHandlersNoFiltering(service);
 	}
 
 	public virtual IHandler GetHandler(string name)
 	{
-		if (name == null) throw new ArgumentNullException(nameof(name));
+		ArgumentNullException.ThrowIfNull(name);
 
 		if (selectors != null)
 		{
@@ -137,7 +137,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 
 	public virtual IHandler GetHandler(Type service)
 	{
-		if (service == null) throw new ArgumentNullException(nameof(service));
+		ArgumentNullException.ThrowIfNull(service);
 		if (selectors != null)
 		{
 			var selectorsOpinion = GetSelectorsOpinion(null, service);
@@ -163,7 +163,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 
 	public virtual IHandler[] GetHandlers(Type service)
 	{
-		if (service == null) throw new ArgumentNullException(nameof(service));
+		ArgumentNullException.ThrowIfNull(service);
 		if (filters != null)
 		{
 			var filtersOpinion = GetFiltersOpinion(service);
@@ -171,14 +171,12 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 		}
 
 		IHandler[] result;
-		using (var locker = @lock.ForReadingUpgradeable())
-		{
-			if (handlerListsByTypeCache.TryGetValue(service, out result)) return result;
-			result = GetHandlersNoLock(service);
+		using var locker = @lock.ForReadingUpgradeable();
+		if (handlerListsByTypeCache.TryGetValue(service, out result)) return result;
+		result = GetHandlersNoLock(service);
 
-			locker.Upgrade();
-			handlerListsByTypeCache[service] = result;
-		}
+		locker.Upgrade();
+		handlerListsByTypeCache[service] = result;
 
 		return result;
 	}
@@ -216,15 +214,13 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 	protected IHandler[] GetAssignableHandlersNoFiltering(Type service)
 	{
 		IHandler[] result;
-		using (var locker = @lock.ForReadingUpgradeable())
-		{
-			if (assignableHandlerListsByTypeCache.TryGetValue(service, out result)) return result;
+		using var locker = @lock.ForReadingUpgradeable();
+		if (assignableHandlerListsByTypeCache.TryGetValue(service, out result)) return result;
 
-			locker.Upgrade();
-			if (assignableHandlerListsByTypeCache.TryGetValue(service, out result)) return result;
-			result = name2Handler.Values.Where(h => h.SupportsAssignable(service)).ToArray();
-			assignableHandlerListsByTypeCache[service] = result;
-		}
+		locker.Upgrade();
+		if (assignableHandlerListsByTypeCache.TryGetValue(service, out result)) return result;
+		result = name2Handler.Values.Where(h => h.SupportsAssignable(service)).ToArray();
+		assignableHandlerListsByTypeCache[service] = result;
 
 		return result;
 	}

@@ -157,32 +157,28 @@ public class SlimReadWriteLockTestCase
 	[Fact]
 	public void Can_be_used_ForWriting_when_used_ForReadingUpgradeable_and_upgraded_after()
 	{
-		using (var upg = @lock.ForReadingUpgradeable())
+		using var upg = @lock.ForReadingUpgradeable();
+		using (var holder = @lock.ForWriting())
 		{
-			using (var holder = @lock.ForWriting())
-			{
-				Assert.True(@lock.IsUpgradeableReadLockHeld);
-				Assert.True(holder.LockAcquired);
-				upg.Upgrade();
-			}
-
 			Assert.True(@lock.IsUpgradeableReadLockHeld);
+			Assert.True(holder.LockAcquired);
+			upg.Upgrade();
 		}
+
+		Assert.True(@lock.IsUpgradeableReadLockHeld);
 	}
 
 	[Fact]
 	public void Can_be_used_ForWriting_when_used_ForReadingUpgradeable_and_upgraded_before()
 	{
-		using (var upg = @lock.ForReadingUpgradeable())
+		using var upg = @lock.ForReadingUpgradeable();
+		upg.Upgrade();
+		using (var holder = @lock.ForWriting())
 		{
-			upg.Upgrade();
-			using (var holder = @lock.ForWriting())
-			{
-				Assert.True(@lock.IsUpgradeableReadLockHeld);
-				Assert.True(holder.LockAcquired);
-			}
-
 			Assert.True(@lock.IsUpgradeableReadLockHeld);
+			Assert.True(holder.LockAcquired);
 		}
+
+		Assert.True(@lock.IsUpgradeableReadLockHeld);
 	}
 }

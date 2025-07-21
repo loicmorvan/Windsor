@@ -40,7 +40,7 @@ public class DependencyModelCollection : IMutableCollection<DependencyModel>
 
 	public void Add(DependencyModel dependencyModel)
 	{
-		if (dependencyModel == null) throw new ArgumentNullException(nameof(dependencyModel));
+		ArgumentNullException.ThrowIfNull(dependencyModel);
 		dependencies.Add(dependencyModel);
 	}
 

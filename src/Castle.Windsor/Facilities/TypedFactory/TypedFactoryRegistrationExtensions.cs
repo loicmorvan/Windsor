@@ -112,7 +112,7 @@ public static class TypedFactoryRegistrationExtensions
 		Action<TypedFactoryConfiguration> configuration)
 		where TFactoryInterface : class
 	{
-		if (registration == null) throw new ArgumentNullException(nameof(registration));
+		ArgumentNullException.ThrowIfNull(registration);
 		var classServices = registration.Services.TakeWhile(s => s.GetTypeInfo().IsClass).ToArray();
 		if (classServices.Any() == false)
 		{

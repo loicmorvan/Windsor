@@ -66,7 +66,7 @@ public class TypedFactoryConfiguration
 
 	public void SelectedWith(ITypedFactoryComponentSelector selector)
 	{
-		if (selector == null) throw new ArgumentNullException(nameof(selector));
+		ArgumentNullException.ThrowIfNull(selector);
 
 		selectorReference = new InstanceReference<ITypedFactoryComponentSelector>(selector);
 	}

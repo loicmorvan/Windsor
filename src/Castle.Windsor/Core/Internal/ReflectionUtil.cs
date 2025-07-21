@@ -187,7 +187,7 @@ public static class ReflectionUtil
 
 	public static bool IsAssemblyFile(string filePath)
 	{
-		if (filePath == null) throw new ArgumentNullException(nameof(filePath));
+		ArgumentNullException.ThrowIfNull(filePath);
 
 		string extension;
 		try

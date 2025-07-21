@@ -42,7 +42,7 @@ public class PropertySetCollection : IMutableCollection<PropertySet>
 
 	void IMutableCollection<PropertySet>.Add(PropertySet property)
 	{
-		if (property == null) throw new ArgumentNullException(nameof(property));
+		ArgumentNullException.ThrowIfNull(property);
 		properties.Add(property);
 	}
 

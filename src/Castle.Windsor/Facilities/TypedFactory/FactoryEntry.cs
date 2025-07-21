@@ -25,7 +25,7 @@ public class FactoryEntry
 	public FactoryEntry(string id, Type factoryInterface, string creationMethod, string destructionMethod)
 	{
 		if (string.IsNullOrEmpty(id)) throw new ArgumentNullException(nameof(id));
-		if (factoryInterface == null) throw new ArgumentNullException(nameof(factoryInterface));
+		ArgumentNullException.ThrowIfNull(factoryInterface);
 		if (!factoryInterface.GetTypeInfo().IsInterface) throw new ArgumentException("factoryInterface must be an interface");
 		if (string.IsNullOrEmpty(creationMethod)) throw new ArgumentNullException(nameof(creationMethod));
 

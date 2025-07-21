@@ -119,7 +119,7 @@ public class ProxyOptions
 	/// <param name = "mixIn"> The mix in. </param>
 	public void AddMixinReference(IReference<object> mixIn)
 	{
-		if (mixIn == null) throw new ArgumentNullException(nameof(mixIn));
+		ArgumentNullException.ThrowIfNull(mixIn);
 
 		if (mixInList == null) mixInList = [];
 		mixInList.Add(mixIn);

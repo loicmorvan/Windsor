@@ -31,21 +31,21 @@ public class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 
 	public IResource CreateResource(string resource)
 	{
-		if (resource == null) throw new ArgumentNullException(nameof(resource));
+		ArgumentNullException.ThrowIfNull(resource);
 
 		return CreateResource(new CustomUri(resource));
 	}
 
 	public IResource CreateResource(string resource, string basePath)
 	{
-		if (resource == null) throw new ArgumentNullException(nameof(resource));
+		ArgumentNullException.ThrowIfNull(resource);
 
 		return CreateResource(new CustomUri(resource), basePath);
 	}
 
 	public IResource CreateResource(CustomUri uri)
 	{
-		if (uri == null) throw new ArgumentNullException(nameof(uri));
+		ArgumentNullException.ThrowIfNull(uri);
 
 		foreach (var resFactory in resourceFactories)
 			if (resFactory.Accept(uri))
@@ -57,8 +57,8 @@ public class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 
 	public IResource CreateResource(CustomUri uri, string basePath)
 	{
-		if (uri == null) throw new ArgumentNullException(nameof(uri));
-		if (basePath == null) throw new ArgumentNullException(nameof(basePath));
+		ArgumentNullException.ThrowIfNull(uri);
+		ArgumentNullException.ThrowIfNull(basePath);
 
 		foreach (var resFactory in resourceFactories)
 			if (resFactory.Accept(uri))
@@ -70,7 +70,7 @@ public class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 
 	public void RegisterResourceFactory(IResourceFactory resourceFactory)
 	{
-		if (resourceFactory == null) throw new ArgumentNullException(nameof(resourceFactory));
+		ArgumentNullException.ThrowIfNull(resourceFactory);
 
 		resourceFactories.Add(resourceFactory);
 	}

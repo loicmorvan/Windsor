@@ -20,6 +20,8 @@ using System.Threading.Tasks;
 
 using Castle.Windsor.MicroKernel.Lifestyle;
 
+using JetBrains.Annotations;
+
 using Microsoft.AspNetCore.Http;
 
 public class AnyComponent;
@@ -33,25 +35,22 @@ public class AnyComponentWithLifestyleManager : AbstractLifestyleManager
 
 public sealed class AnyMiddleware : IMiddleware
 {
-	private readonly AnyComponent anyComponent;
-	private readonly CrossWiredScopedDisposable crossWiredScopedDisposable;
-	private readonly ServiceProviderOnlyScopedDisposable serviceProviderOnlyScopedDisposable;
-	private readonly WindsorOnlyScopedDisposable windsorOnlyScopedDisposable;
-
+	[UsedImplicitly]
 	public AnyMiddleware(
 		ServiceProviderOnlyScopedDisposable serviceProviderOnlyScopedDisposable,
 		WindsorOnlyScopedDisposable windsorOnlyScopedDisposable,
 		CrossWiredScopedDisposable crossWiredScopedDisposable)
 	{
-		this.serviceProviderOnlyScopedDisposable = serviceProviderOnlyScopedDisposable ?? throw new ArgumentNullException(nameof(serviceProviderOnlyScopedDisposable));
-		this.windsorOnlyScopedDisposable = windsorOnlyScopedDisposable ?? throw new ArgumentNullException(nameof(windsorOnlyScopedDisposable));
-		this.crossWiredScopedDisposable = crossWiredScopedDisposable ?? throw new ArgumentNullException(nameof(crossWiredScopedDisposable));
+		ArgumentNullException.ThrowIfNull(serviceProviderOnlyScopedDisposable);
+		ArgumentNullException.ThrowIfNull(windsorOnlyScopedDisposable);
+		ArgumentNullException.ThrowIfNull(crossWiredScopedDisposable);
 	}
 
+	[UsedImplicitly]
 	public AnyMiddleware(AnyComponent anyComponent)
 	{
 		// This will never get called because Windsor picks the most greedy constructor
-		this.anyComponent = anyComponent ?? throw new ArgumentNullException(nameof(anyComponent));
+		ArgumentNullException.ThrowIfNull(anyComponent);
 	}
 
 	public async Task InvokeAsync(HttpContext context, RequestDelegate next)

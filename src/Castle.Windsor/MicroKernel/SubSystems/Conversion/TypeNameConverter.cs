@@ -44,7 +44,7 @@ public class TypeNameConverter : AbstractTypeConverter
 
 	public TypeNameConverter(ITypeNameParser parser)
 	{
-		if (parser == null) throw new ArgumentNullException(nameof(parser));
+		ArgumentNullException.ThrowIfNull(parser);
 
 		this.parser = parser;
 	}

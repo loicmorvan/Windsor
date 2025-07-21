@@ -295,17 +295,15 @@ public class SubContainersTestCase : AbstractContainerTestCase
 	[Bug("IOC-325")]
 	public void TryResolvingViaChildKernelShouldNotThrowException()
 	{
-		using (var childKernel = new DefaultKernel())
-		{
-			Kernel.Register(Component.For<BookStore>());
-			Kernel.AddChildKernel(childKernel);
-			var handler = childKernel.GetHandler(typeof(BookStore));
+		using var childKernel = new DefaultKernel();
+		Kernel.Register(Component.For<BookStore>());
+		Kernel.AddChildKernel(childKernel);
+		var handler = childKernel.GetHandler(typeof(BookStore));
 
-			// Assert setup invariant
-			Assert.IsType<ParentHandlerWrapper>(handler);
+		// Assert setup invariant
+		Assert.IsType<ParentHandlerWrapper>(handler);
 
-			handler.TryResolve(CreationContext.CreateEmpty());
-		}
+		handler.TryResolve(CreationContext.CreateEmpty());
 	}
 
 	/// <summary>collects events in an array list, used for ensuring we are cleaning up the parent kernel event subscriptions correctly.</summary>

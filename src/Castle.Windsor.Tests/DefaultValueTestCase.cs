@@ -93,12 +93,10 @@ public class DefaultValueTestCase : AbstractContainerTestCase
 	[Fact]
 	public void First_chance_exceptions_are_not_thrown()
 	{
-		using (var container = new WindsorContainer())
-		{
-			container.Register(Component.For<HasCtorWithOptionalInterfaceParameter>());
+		using var container = new WindsorContainer();
+		container.Register(Component.For<HasCtorWithOptionalInterfaceParameter>());
 
-			TestUtils.AssertNoFirstChanceExceptions(() => container.Resolve<HasCtorWithOptionalInterfaceParameter>());
-		}
+		TestUtils.AssertNoFirstChanceExceptions(() => container.Resolve<HasCtorWithOptionalInterfaceParameter>());
 	}
 
 	private sealed class HasCtorWithOptionalInterfaceParameter

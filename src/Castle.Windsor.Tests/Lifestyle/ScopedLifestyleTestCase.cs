@@ -189,11 +189,9 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
 	public void Requiring_scope_without_parent_scope_begins_new_scope()
 	{
 		Container.Register(Component.For<A>().LifeStyle.Scoped());
-		using (var scope = Container.RequireScope())
-		{
-			Container.Resolve<A>();
-			Assert.NotNull(scope);
-		}
+		using var scope = Container.RequireScope();
+		Container.Resolve<A>();
+		Assert.NotNull(scope);
 	}
 
 	[Fact]

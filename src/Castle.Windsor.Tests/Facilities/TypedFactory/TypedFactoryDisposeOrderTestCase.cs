@@ -62,10 +62,8 @@ public sealed class TypedFactoryDisposeOrderTestCase : AbstractContainerTestCase
 
 		public void Dispose()
 		{
-			using (var needed = factory.Invoke())
-			{
-				needed.Use();
-			}
+			using var needed = factory.Invoke();
+			needed.Use();
 		}
 	}
 }

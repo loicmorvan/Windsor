@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="2024.3.0"/>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2"/>
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.1"/>
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.2"/>
@@ -22,21 +23,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Castle.Windsor\Castle.Windsor.csproj"/>
     <ProjectReference Include="..\Castle.Facilities.AspNetCore\Castle.Facilities.AspNetCore.csproj"/>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Fakes\ModelFakes.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ModelFakes.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Fakes\ModelFakes.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ModelFakes.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
 
 </Project>

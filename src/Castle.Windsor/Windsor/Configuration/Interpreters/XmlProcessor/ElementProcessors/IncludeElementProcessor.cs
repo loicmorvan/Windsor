@@ -53,34 +53,32 @@ public class IncludeElementProcessor : AbstractXmlNodeProcessor
 		frag = CreateFragment(element);
 
 		foreach (var uri in uriList)
-			using (var resource = engine.GetResource(uri))
+		{
+			using var resource = engine.GetResource(uri);
+			var doc = new XmlDocument();
+
+			try
 			{
-				var doc = new XmlDocument();
-
-				try
-				{
-					using (var stream = resource.GetStreamReader())
-					{
-						doc.Load(stream);
-					}
-				}
-				catch (Exception ex)
-				{
-					throw new ConfigurationProcessingException(
-						string.Format("Error processing include node: {0}", includeUri), ex);
-				}
-
-				engine.PushResource(resource);
-
-				engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(doc.DocumentElement));
-
-				engine.PopResource();
-
-				if (element.GetAttribute("preserve-wrapper") == "yes")
-					AppendChild(frag, doc.DocumentElement);
-				else
-					AppendChild(frag, doc.DocumentElement.ChildNodes);
+				using var stream = resource.GetStreamReader();
+				doc.Load(stream);
 			}
+			catch (Exception ex)
+			{
+				throw new ConfigurationProcessingException(
+					string.Format("Error processing include node: {0}", includeUri), ex);
+			}
+
+			engine.PushResource(resource);
+
+			engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(doc.DocumentElement));
+
+			engine.PopResource();
+
+			if (element.GetAttribute("preserve-wrapper") == "yes")
+				AppendChild(frag, doc.DocumentElement);
+			else
+				AppendChild(frag, doc.DocumentElement.ChildNodes);
+		}
 
 		return frag;
 	}

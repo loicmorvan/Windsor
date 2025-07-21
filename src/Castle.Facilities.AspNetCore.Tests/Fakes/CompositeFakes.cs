@@ -23,9 +23,9 @@ public class CompositeController
 		ControllerServiceProviderOnly serviceProviderOnlyController,
 		ControllerWindsorOnly windsorOnlyController)
 	{
-		if (crossWiredController == null) throw new ArgumentNullException(nameof(crossWiredController));
-		if (serviceProviderOnlyController == null) throw new ArgumentNullException(nameof(serviceProviderOnlyController));
-		if (windsorOnlyController == null) throw new ArgumentNullException(nameof(windsorOnlyController));
+		ArgumentNullException.ThrowIfNull(crossWiredController);
+		ArgumentNullException.ThrowIfNull(serviceProviderOnlyController);
+		ArgumentNullException.ThrowIfNull(windsorOnlyController);
 	}
 }
 
@@ -36,9 +36,9 @@ public class CompositeTagHelper
 		TagHelperServiceProviderOnly serviceProviderOnlyTagHelper,
 		TagHelperWindsorOnly windsorOnlyTagHelper)
 	{
-		if (crossWiredTagHelper == null) throw new ArgumentNullException(nameof(crossWiredTagHelper));
-		if (serviceProviderOnlyTagHelper == null) throw new ArgumentNullException(nameof(serviceProviderOnlyTagHelper));
-		if (windsorOnlyTagHelper == null) throw new ArgumentNullException(nameof(windsorOnlyTagHelper));
+		ArgumentNullException.ThrowIfNull(crossWiredTagHelper);
+		ArgumentNullException.ThrowIfNull(serviceProviderOnlyTagHelper);
+		ArgumentNullException.ThrowIfNull(windsorOnlyTagHelper);
 	}
 }
 
@@ -49,8 +49,8 @@ public class CompositeViewComponent
 		ViewComponentServiceProviderOnly serviceProviderOnlyViewComponent,
 		ViewComponentWindsorOnly windsorOnlyViewComponent)
 	{
-		if (crossWiredViewComponent == null) throw new ArgumentNullException(nameof(crossWiredViewComponent));
-		if (serviceProviderOnlyViewComponent == null) throw new ArgumentNullException(nameof(serviceProviderOnlyViewComponent));
-		if (windsorOnlyViewComponent == null) throw new ArgumentNullException(nameof(windsorOnlyViewComponent));
+		ArgumentNullException.ThrowIfNull(crossWiredViewComponent);
+		ArgumentNullException.ThrowIfNull(serviceProviderOnlyViewComponent);
+		ArgumentNullException.ThrowIfNull(windsorOnlyViewComponent);
 	}
 }

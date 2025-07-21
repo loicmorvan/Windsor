@@ -473,7 +473,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> Instance(TService instance)
 	{
-		if (instance == null) throw new ArgumentNullException(nameof(instance));
+		ArgumentNullException.ThrowIfNull(instance);
 		return ImplementedBy(instance.GetType())
 			.Activator<ExternalInstanceActivator>()
 			.ExtendedProperties(Property.ForKey("instance").Eq(instance));
@@ -834,7 +834,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <remarks>When specified for multiple components for any given service the one registered after will override the one selected before.</remarks>
 	public ComponentRegistration<TService> IsDefault(Predicate<Type> serviceFilter)
 	{
-		if (serviceFilter == null) throw new ArgumentNullException(nameof(serviceFilter));
+		ArgumentNullException.ThrowIfNull(serviceFilter);
 		var properties = new Property(Constants.DefaultComponentForServiceFilter, serviceFilter);
 		return ExtendedProperties(properties);
 	}
@@ -855,7 +855,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <param name = "serviceFilter"> Invoked for each service exposed by given component if returns <c>true</c> this component will be the fallback for that service. </param>
 	public ComponentRegistration<TService> IsFallback(Predicate<Type> serviceFilter)
 	{
-		if (serviceFilter == null) throw new ArgumentNullException(nameof(serviceFilter));
+		ArgumentNullException.ThrowIfNull(serviceFilter);
 		var properties = new Property(Constants.FallbackComponentForServiceFilter, serviceFilter);
 		return ExtendedProperties(properties);
 	}

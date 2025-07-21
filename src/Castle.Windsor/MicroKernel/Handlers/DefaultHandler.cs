@@ -126,12 +126,10 @@ public class DefaultHandler : AbstractHandler
 
 		try
 		{
-			using (var ctx = context.EnterResolutionContext(this, requiresDecommission))
-			{
-				var instance = lifestyleManager.Resolve(context, context.ReleasePolicy);
-				burden = ctx.Burden;
-				return instance;
-			}
+			using var ctx = context.EnterResolutionContext(this, requiresDecommission);
+			var instance = lifestyleManager.Resolve(context, context.ReleasePolicy);
+			burden = ctx.Burden;
+			return instance;
 		}
 		catch (NoResolvableConstructorFoundException)
 		{

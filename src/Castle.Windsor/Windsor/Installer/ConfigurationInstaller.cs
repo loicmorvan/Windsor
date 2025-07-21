@@ -32,7 +32,7 @@ public class ConfigurationInstaller : IWindsorInstaller
 	/// <summary>Initializes a new instance of the ConfigurationInstaller class.</summary>
 	public ConfigurationInstaller(IConfigurationInterpreter interpreter)
 	{
-		if (interpreter == null) throw new ArgumentNullException(nameof(interpreter));
+		ArgumentNullException.ThrowIfNull(interpreter);
 		this.interpreter = interpreter;
 	}
 

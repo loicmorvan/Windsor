@@ -216,7 +216,7 @@ public partial class DefaultKernel :
 
 	public virtual void AddChildKernel(IKernel childKernel)
 	{
-		if (childKernel == null) throw new ArgumentNullException(nameof(childKernel));
+		ArgumentNullException.ThrowIfNull(childKernel);
 
 		childKernel.Parent = this;
 		childKernels.Add(childKernel);
@@ -232,7 +232,7 @@ public partial class DefaultKernel :
 
 	IHandler IKernelInternal.CreateHandler(ComponentModel model)
 	{
-		if (model == null) throw new ArgumentNullException(nameof(model));
+		ArgumentNullException.ThrowIfNull(model);
 
 		RaiseComponentModelCreated(model);
 		return HandlerFactory.Create(model);
@@ -242,7 +242,7 @@ public partial class DefaultKernel :
 
 	public virtual IKernel AddFacility(IFacility facility)
 	{
-		if (facility == null) throw new ArgumentNullException(nameof(facility));
+		ArgumentNullException.ThrowIfNull(facility);
 		var facilityType = facility.GetType();
 		if (facilities.Any(f => f.GetType() == facilityType))
 			throw new ArgumentException(
@@ -280,8 +280,8 @@ public partial class DefaultKernel :
 
 	public virtual void AddSubSystem(string name, ISubSystem subsystem)
 	{
-		if (name == null) throw new ArgumentNullException(nameof(name));
-		if (subsystem == null) throw new ArgumentNullException(nameof(subsystem));
+		ArgumentNullException.ThrowIfNull(name);
+		ArgumentNullException.ThrowIfNull(subsystem);
 
 		subsystem.Init(this);
 		subsystems[name] = subsystem;
@@ -323,7 +323,7 @@ public partial class DefaultKernel :
 
 	public virtual IHandler GetHandler(string name)
 	{
-		if (name == null) throw new ArgumentNullException(nameof(name));
+		ArgumentNullException.ThrowIfNull(name);
 
 		var handler = NamingSubSystem.GetHandler(name);
 
@@ -334,7 +334,7 @@ public partial class DefaultKernel :
 
 	public virtual IHandler GetHandler(Type service)
 	{
-		if (service == null) throw new ArgumentNullException(nameof(service));
+		ArgumentNullException.ThrowIfNull(service);
 
 		var handler = NamingSubSystem.GetHandler(service);
 		if (handler == null && Parent != null) handler = WrapParentHandler(Parent.GetHandler(service));
@@ -436,7 +436,7 @@ public partial class DefaultKernel :
 	/// <returns> The kernel. </returns>
 	public IKernel Register(params IRegistration[] registrations)
 	{
-		if (registrations == null) throw new ArgumentNullException(nameof(registrations));
+		ArgumentNullException.ThrowIfNull(registrations);
 
 		var token = OptimizeDependencyResolution();
 		foreach (var registration in registrations) registration.Register(this);
@@ -460,7 +460,7 @@ public partial class DefaultKernel :
 
 	public virtual void RemoveChildKernel(IKernel childKernel)
 	{
-		if (childKernel == null) throw new ArgumentNullException(nameof(childKernel));
+		ArgumentNullException.ThrowIfNull(childKernel);
 
 		childKernel.Parent = null;
 		childKernels.Remove(childKernel);
@@ -535,7 +535,7 @@ public partial class DefaultKernel :
 
 	public virtual IComponentActivator CreateComponentActivator(ComponentModel model)
 	{
-		if (model == null) throw new ArgumentNullException(nameof(model));
+		ArgumentNullException.ThrowIfNull(model);
 
 		IComponentActivator activator;
 
@@ -684,7 +684,7 @@ public partial class DefaultKernel :
 
 	IHandler IKernelInternal.LoadHandlerByName(string name, Type service, Arguments arguments)
 	{
-		if (name == null) throw new ArgumentNullException(nameof(name));
+		ArgumentNullException.ThrowIfNull(name);
 
 		var handler = GetHandler(name);
 		if (handler != null) return handler;
@@ -719,7 +719,7 @@ public partial class DefaultKernel :
 
 	IHandler IKernelInternal.LoadHandlerByType(string name, Type service, Arguments arguments)
 	{
-		if (service == null) throw new ArgumentNullException(nameof(service));
+		ArgumentNullException.ThrowIfNull(service);
 
 		var handler = GetHandler(service);
 		if (handler != null) return handler;

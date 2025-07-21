@@ -247,10 +247,8 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	{
 		testContext.WindsorContainer.Register(Component.For(compositeType).CrossWired().LifestyleSingleton());
 
-		using (var sp = testContext.ServiceCollection.BuildServiceProvider())
-		{
-			sp.GetRequiredService(compositeType);
-		}
+		using var sp = testContext.ServiceCollection.BuildServiceProvider();
+		sp.GetRequiredService(compositeType);
 	}
 
 	[InlineData(typeof(CompositeTagHelper))]
@@ -261,10 +259,8 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	{
 		testContext.WindsorContainer.Register(Component.For(compositeType).CrossWired().LifestyleScoped());
 
-		using (var sp = testContext.ServiceCollection.BuildServiceProvider())
-		{
-			sp.GetRequiredService(compositeType);
-		}
+		using var sp = testContext.ServiceCollection.BuildServiceProvider();
+		sp.GetRequiredService(compositeType);
 	}
 
 	[InlineData(typeof(CompositeTagHelper))]
@@ -275,10 +271,8 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	{
 		testContext.WindsorContainer.Register(Component.For(compositeType).CrossWired().LifestyleTransient());
 
-		using (var sp = testContext.ServiceCollection.BuildServiceProvider())
-		{
-			sp.GetRequiredService(compositeType);
-		}
+		using var sp = testContext.ServiceCollection.BuildServiceProvider();
+		sp.GetRequiredService(compositeType);
 	}
 
 	[Fact]
@@ -288,15 +282,14 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 			.BasedOn<IAuthorizationHandler>().WithServiceBase()
 			.LifestyleTransient().Configure(c => c.CrossWired()));
 
-		using (var sp = testContext.ServiceCollection.BuildServiceProvider())
-		{
-			var services = sp.GetServices<IAuthorizationHandler>();
+		using var sp = testContext.ServiceCollection.BuildServiceProvider();
+		var services = sp.GetServices<IAuthorizationHandler>();
 
-			Assert.Equal(3, services.Count());
-			Assert.Equal(
-				new HashSet<Type>(services.Select(x => x.GetType())).Count,
-				services.Select(s => s.GetType()).Count());
-		}
+		var authorizationHandlers = services as IAuthorizationHandler[] ?? services.ToArray();
+		Assert.Equal(3, authorizationHandlers.Length);
+		Assert.Equal(
+			new HashSet<Type>(authorizationHandlers.Select(x => x.GetType())).Count,
+			authorizationHandlers.Select(s => s.GetType()).Count());
 	}
 
 	[InlineData(LifestyleType.Bound)]
@@ -319,10 +312,8 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	[Fact]
 	public void Should_throw_if_Facility_is_added_without_calling_CrossWiresInto_on_IWindsorContainer_AddFacility()
 	{
-		using (var container = new WindsorContainer())
-		{
-			Assert.Throws<InvalidOperationException>(() => { container.AddFacility<AspNetCoreFacility>(); });
-		}
+		using var container = new WindsorContainer();
+		Assert.Throws<InvalidOperationException>(() => { container.AddFacility<AspNetCoreFacility>(); });
 	}
 
 	[Fact] // https://github.com/castleproject/Windsor/issues/411

@@ -26,7 +26,7 @@ public static class HandlerExtensionsUtil
 
 	public static ICollection<IReleaseExtension> ReleaseExtensions(this ComponentModel model, bool ensureExists)
 	{
-		if (model == null) throw new ArgumentNullException(nameof(model));
+		ArgumentNullException.ThrowIfNull(model);
 
 		var releaseExtensions = model.ExtendedProperties[ReleaseExtensionsKey] as ICollection<IReleaseExtension>;
 		if (releaseExtensions == null && ensureExists)
@@ -40,7 +40,7 @@ public static class HandlerExtensionsUtil
 
 	public static ICollection<IResolveExtension> ResolveExtensions(this ComponentModel model, bool ensureExists)
 	{
-		if (model == null) throw new ArgumentNullException(nameof(model));
+		ArgumentNullException.ThrowIfNull(model);
 
 		var resolveExtensions = model.ExtendedProperties[ResolveExtensionsKey] as ICollection<IResolveExtension>;
 		if (resolveExtensions == null && ensureExists)

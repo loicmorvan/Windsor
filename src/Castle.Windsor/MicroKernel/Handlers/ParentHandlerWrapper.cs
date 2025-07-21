@@ -31,8 +31,8 @@ public class ParentHandlerWrapper : IHandler, IDisposable
 	/// <param name = "parentReleasePolicy">Release policy of the parent container.</param>
 	public ParentHandlerWrapper(IHandler parentHandler, ISubDependencyResolver childResolver, IReleasePolicy parentReleasePolicy)
 	{
-		if (parentHandler == null) throw new ArgumentNullException(nameof(parentHandler));
-		if (childResolver == null) throw new ArgumentNullException(nameof(childResolver));
+		ArgumentNullException.ThrowIfNull(parentHandler);
+		ArgumentNullException.ThrowIfNull(childResolver);
 
 		this.parentHandler = parentHandler;
 		this.childResolver = childResolver;

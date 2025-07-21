@@ -25,9 +25,9 @@ internal static class AspNetCoreExtensions
 {
 	public static void AddRequestScopingMiddleware(this IServiceCollection services, Func<IEnumerable<IDisposable>> requestScopeProvider)
 	{
-		if (services == null) throw new ArgumentNullException(nameof(services));
+		ArgumentNullException.ThrowIfNull(services);
 
-		if (requestScopeProvider == null) throw new ArgumentNullException(nameof(requestScopeProvider));
+		ArgumentNullException.ThrowIfNull(requestScopeProvider);
 
 		services.AddSingleton<IStartupFilter>(new RequestScopingStartupFilter(requestScopeProvider));
 	}

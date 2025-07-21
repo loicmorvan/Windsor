@@ -31,7 +31,7 @@ public class FromAssembly
 	/// <returns> </returns>
 	public static IWindsorInstaller Containing(Type type)
 	{
-		if (type == null) throw new ArgumentNullException(nameof(type));
+		ArgumentNullException.ThrowIfNull(type);
 		var assembly = type.GetTypeInfo().Assembly;
 		return Instance(assembly);
 	}
@@ -43,7 +43,7 @@ public class FromAssembly
 	/// <returns> </returns>
 	public static IWindsorInstaller Containing(Type type, InstallerFactory installerFactory)
 	{
-		if (type == null) throw new ArgumentNullException(nameof(type));
+		ArgumentNullException.ThrowIfNull(type);
 		var assembly = type.GetTypeInfo().Assembly;
 		return Instance(assembly, installerFactory);
 	}
