@@ -84,7 +84,7 @@ public class GenericImplementationWithGreaterArityThanServiceTestCase : Abstract
 
 		var message =
 			string.Format(
-				"Requested type Castle.Windsor.Tests.Generics.IRepository`1[Castle.Windsor.Tests.Components.A] has 1 generic parameter(s), whereas component implementation type Castle.Generics.DoubleGenericRepository`2[T1,T2] requires 2.{0}This means that Windsor does not have enough information to properly create that component for you.{0}You can instruct Windsor which types it should use to close this generic component by supplying an implementation of IGenericImplementationMatchingStrategy.{0}Please consult the documentation for examples of how to do that.",
+				"Requested type Castle.Windsor.Tests.Generics.IRepository`1[Castle.Windsor.Tests.Components.A] has 1 generic parameter(s), whereas component implementation type Castle.Windsor.Tests.Generics.DoubleGenericRepository`2[T1,T2] requires 2.{0}This means that Windsor does not have enough information to properly create that component for you.{0}You can instruct Windsor which types it should use to close this generic component by supplying an implementation of IGenericImplementationMatchingStrategy.{0}Please consult the documentation for examples of how to do that.",
 				Environment.NewLine);
 		Assert.Equal(message, exception.Message);
 	}
@@ -100,7 +100,7 @@ public class GenericImplementationWithGreaterArityThanServiceTestCase : Abstract
 
 		var message =
 			string.Format(
-				"Requested type Castle.Windsor.Tests.Generics.IRepository`1[Castle.Windsor.Tests.Components.A] has 1 generic parameter(s), whereas component implementation type Castle.Generics.DoubleGenericRepository`2[T1,T2] requires 2.{0}This means that Windsor does not have enough information to properly create that component for you.{0}This is most likely a bug in the IGenericImplementationMatchingStrategy implementation this component uses (Castle.Windsor.Tests.StubGenericImplementationMatchingStrategy).{0}Please consult the documentation for examples of how to implement it properly.",
+				"Requested type Castle.Windsor.Tests.Generics.IRepository`1[Castle.Windsor.Tests.Components.A] has 1 generic parameter(s), whereas component implementation type Castle.Windsor.Tests.Generics.DoubleGenericRepository`2[T1,T2] requires 2.{0}This means that Windsor does not have enough information to properly create that component for you.{0}This is most likely a bug in the IGenericImplementationMatchingStrategy implementation this component uses (Castle.Windsor.Tests.StubGenericImplementationMatchingStrategy).{0}Please consult the documentation for examples of how to implement it properly.",
 				Environment.NewLine);
 		Assert.Equal(message, exception.Message);
 	}

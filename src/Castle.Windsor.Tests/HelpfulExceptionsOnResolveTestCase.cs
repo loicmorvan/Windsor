@@ -58,7 +58,7 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 		var message = string.Format(
 			"Can't create component 'processor' as it has dependencies to be satisfied.{0}{0}" +
 			"'processor' is waiting for the following dependencies:{0}" +
-			"- Service 'Castle.Windsor.MicroKernel.Tests.Bugs.IoC_141+IAssembler`1[[{1}]]' which was not registered.{0}",
+			"- Service 'Castle.Windsor.Tests.Bugs.IoC_141+IAssembler`1[[{1}]]' which was not registered.{0}",
 			Environment.NewLine, typeof(int).AssemblyQualifiedName);
 
 		Assert.Equal(message, exception.Message);

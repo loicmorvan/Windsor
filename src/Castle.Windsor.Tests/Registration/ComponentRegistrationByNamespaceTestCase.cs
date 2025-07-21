@@ -19,6 +19,8 @@ using System.Linq;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 
+using RootNamespace;
+
 public class ComponentRegistrationByNamespaceTestCase : AbstractContainerTestCase
 {
 	private int ComponentsCount()
@@ -110,9 +112,3 @@ public class ComponentRegistrationByNamespaceTestCase : AbstractContainerTestCas
 		Assert.Equal(2, ComponentsCount());
 	}
 }
-
-public class RootComponent;
-
-public class RootComponentEx;
-
-public class SubComponent;

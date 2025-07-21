@@ -444,16 +444,9 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 		var exception =
 			Assert.Throws<ArgumentException>(() => Kernel.Resolve<ClassWithConstructors>());
 
-#if NET462_OR_GREATER
-			var expected =
-				"Can not instantiate proxy of class: Castle.Windsor.MicroKernel.Tests.Configuration.Components.ClassWithConstructors." + Environment.NewLine +
-				"Could not find a parameterless constructor.\r\n" +
-				"Parameter name: constructorArguments";
-#else
 		var expected =
-			"Can not instantiate proxy of class: Castle.Windsor.MicroKernel.Tests.Configuration.Components.ClassWithConstructors." + Environment.NewLine +
+			"Can not instantiate proxy of class: Castle.Windsor.Tests.Config.Components.ClassWithConstructors." + Environment.NewLine +
 			"Could not find a parameterless constructor. (Parameter 'constructorArguments')";
-#endif
 
 		Assert.Equal(expected, exception.Message);
 	}
