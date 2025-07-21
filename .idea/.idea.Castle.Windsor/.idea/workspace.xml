@@ -7,17 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Registration/RootComponent.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Registration/RootComponentEx.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Registration/SubComponent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Castle.Windsor.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Castle.Windsor.Tests.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/GenericImplementationWithGreaterArityThanServiceTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/GenericImplementationWithGreaterArityThanServiceTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/HelpfulExceptionsOnResolveTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/HelpfulExceptionsOnResolveTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Registration/ComponentRegistrationByNamespaceTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Registration/ComponentRegistrationByNamespaceTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Registration/UsingFactoryMethodTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Registration/UsingFactoryMethodTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Windsor.Tests/MultiServiceGenericComponentsTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Windsor.Tests/MultiServiceGenericComponentsTestCase.cs" afterDir="false" />
-    </list>
+    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -237,7 +227,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753046387215</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Fixed latest failing tests.">
+      <option name="closed" value="true" />
+      <created>1753129624696</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1753129624696</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -282,7 +280,8 @@
     <MESSAGE value="Cleanup everything" />
     <MESSAGE value="Fixed tests. Some random failure still remains." />
     <MESSAGE value="Removed logging facilities." />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed logging facilities." />
+    <MESSAGE value="Fixed latest failing tests." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed latest failing tests." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

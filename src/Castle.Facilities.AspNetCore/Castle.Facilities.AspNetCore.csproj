@@ -4,7 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
 
-  <Import Project="..\..\buildscripts\common.props"></Import>
+  <Import Project="..\..\buildscripts\common.props"/>
 
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
