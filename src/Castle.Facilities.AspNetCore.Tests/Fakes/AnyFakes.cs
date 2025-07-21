@@ -13,7 +13,7 @@
 // limitations under the License.
 
 
-namespace Castle.Windsor.Facilities.AspNetCore.Tests.Fakes;
+namespace Castle.Facilities.AspNetCore.Tests.Fakes;
 
 using System;
 using System.Threading.Tasks;

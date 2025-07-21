@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Facilities.AspNetCore.Tests.Resolvers;
+namespace Castle.Facilities.AspNetCore.Tests.Resolvers;
 
 using System;
 
-using Castle.Windsor.Facilities.AspNetCore.Resolvers;
-using Castle.Windsor.Facilities.AspNetCore.Tests.Fakes;
-using Castle.Windsor.Facilities.AspNetCore.Tests.Framework;
+using Castle.Facilities.AspNetCore.Resolvers;
+using Castle.Facilities.AspNetCore.Tests.Fakes;
+using Castle.Facilities.AspNetCore.Tests.Framework;
 
 using Microsoft.Extensions.DependencyInjection;
 
-using TestContext = Castle.Windsor.Facilities.AspNetCore.Tests.Framework.TestContext;
+using TestContext = Castle.Facilities.AspNetCore.Tests.Framework.TestContext;
 
 public class FrameworkDependencyResolverTestCase : IDisposable
 {

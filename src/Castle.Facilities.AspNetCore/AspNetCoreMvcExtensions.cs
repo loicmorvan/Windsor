@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Facilities.AspNetCore;
+namespace Castle.Facilities.AspNetCore;
 
 using System;
 using System.Reflection;
 
-using Castle.Windsor.Facilities.AspNetCore.Activators;
+using Castle.Facilities.AspNetCore.Activators;
 
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Internal;

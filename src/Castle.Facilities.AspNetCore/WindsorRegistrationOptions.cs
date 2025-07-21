@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Facilities.AspNetCore;
+namespace Castle.Facilities.AspNetCore;
 
 using System.Collections.Generic;
 using System.Reflection;
 
-using Castle.Core;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
 

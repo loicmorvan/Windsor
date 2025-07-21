@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Facilities.AspNetCore.Tests.Framework;
+namespace Castle.Facilities.AspNetCore.Tests.Framework;
 
 using System;
 
-using Castle.Windsor;
 using Castle.Windsor.Windsor;
 
 using Microsoft.AspNetCore.Builder;

@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Facilities.AspNetCore;
+namespace Castle.Facilities.AspNetCore;
 
 using System;
 using System.Linq;
 
-using Castle.Windsor.Facilities.AspNetCore.Resolvers;
-using Castle.Windsor;
+using Castle.Facilities.AspNetCore.Resolvers;
 using Castle.Windsor.MicroKernel.Lifestyle;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;

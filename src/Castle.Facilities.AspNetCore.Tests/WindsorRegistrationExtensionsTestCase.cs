@@ -12,16 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Facilities.AspNetCore.Tests;
+namespace Castle.Facilities.AspNetCore.Tests;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Castle.Core;
-using Castle.Windsor.Facilities.AspNetCore.Tests.Fakes;
-using Castle.Windsor.Facilities.AspNetCore.Tests.Framework;
-using Castle.Windsor;
+using Castle.Facilities.AspNetCore.Tests.Fakes;
+using Castle.Facilities.AspNetCore.Tests.Framework;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
@@ -29,7 +27,7 @@ using Castle.Windsor.Windsor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
-using TestContext = Castle.Windsor.Facilities.AspNetCore.Tests.Framework.TestContext;
+using TestContext = Castle.Facilities.AspNetCore.Tests.Framework.TestContext;
 
 public class WindsorRegistrationExtensionsTestCase : IDisposable
 {
