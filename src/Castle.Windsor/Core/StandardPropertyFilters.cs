@@ -94,7 +94,7 @@ public class StandardPropertyFilters
 
 	public static PropertyDependencyFilter IgnoreSelected(Func<ComponentModel, PropertyInfo, bool> selector)
 	{
-		return (model, properties, callback) =>
+		return (model, properties, _) =>
 		{
 			foreach (var property in properties.ToArray())
 				if (selector(model, property))

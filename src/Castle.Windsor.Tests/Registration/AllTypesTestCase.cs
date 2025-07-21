@@ -462,7 +462,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
 	{
 		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
 			.BasedOn<ITask>()
-			.WithService.Select((t, b) =>
+			.WithService.Select((t, _) =>
 				from type in t.GetInterfaces()
 				where !type.Equals(typeof(ITask))
 				select type));
@@ -587,7 +587,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
 			.FromAssembly(GetCurrentAssembly())
 			.BasedOn(typeof(IValidator<>))
 			.OrBasedOn(typeof(IValidator<>))
-			.WithService.Select((t, b) =>
+			.WithService.Select((_, b) =>
 			{
 				services = b;
 				return b;

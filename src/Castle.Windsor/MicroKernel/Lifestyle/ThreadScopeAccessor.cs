@@ -36,7 +36,7 @@ public class ThreadScopeAccessor : IScopeAccessor
 	public ILifetimeScope GetScope(CreationContext context)
 	{
 		var currentThreadId = GetCurrentThreadId();
-		return items.GetOrAdd(currentThreadId, id => new DefaultLifetimeScope());
+		return items.GetOrAdd(currentThreadId, _ => new DefaultLifetimeScope());
 	}
 
 	protected virtual int GetCurrentThreadId()

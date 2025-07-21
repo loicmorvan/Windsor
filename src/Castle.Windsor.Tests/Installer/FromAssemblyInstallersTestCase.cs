@@ -89,7 +89,7 @@ public class FromAssemblyInstallersTestCase : AbstractContainerTestCase
 	{
 		var location = AppContext.BaseDirectory;
 		var called = false;
-		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).FilterByAssembly(a =>
+		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).FilterByAssembly(_ =>
 		{
 			called = true;
 			return true;
@@ -103,7 +103,7 @@ public class FromAssemblyInstallersTestCase : AbstractContainerTestCase
 	public void Install_from_assembly_by_directory_empty_name_searches_currentDirectory()
 	{
 		var called = false;
-		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(string.Empty).FilterByAssembly(a =>
+		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(string.Empty).FilterByAssembly(_ =>
 		{
 			called = true;
 			return true;
@@ -118,7 +118,7 @@ public class FromAssemblyInstallersTestCase : AbstractContainerTestCase
 	{
 		var location = AppContext.BaseDirectory;
 		var byNameCalled = false;
-		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).FilterByName(a =>
+		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).FilterByName(_ =>
 		{
 			byNameCalled = true;
 			return true;
@@ -133,7 +133,7 @@ public class FromAssemblyInstallersTestCase : AbstractContainerTestCase
 	{
 		var location = AppContext.BaseDirectory;
 		var called = false;
-		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).FilterByAssembly(a =>
+		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).FilterByAssembly(_ =>
 		{
 			called = true;
 			return false;
@@ -148,7 +148,7 @@ public class FromAssemblyInstallersTestCase : AbstractContainerTestCase
 	{
 		var location = AppContext.BaseDirectory;
 		var byNameCalled = false;
-		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).FilterByName(a =>
+		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).FilterByName(_ =>
 		{
 			byNameCalled = true;
 			return false;

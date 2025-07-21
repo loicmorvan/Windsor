@@ -251,7 +251,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> DependsOn(DynamicParametersDelegate resolve)
 	{
-		return DynamicParameters((k, c, d) =>
+		return DynamicParameters((k, _, d) =>
 		{
 			resolve(k, d);
 			return null;
@@ -266,7 +266,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> DependsOn(DynamicParametersResolveDelegate resolve)
 	{
-		return DynamicParameters((k, c, d) => resolve(k, d));
+		return DynamicParameters((k, _, d) => resolve(k, d));
 	}
 
 	/// <summary>
@@ -287,7 +287,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> DynamicParameters(DynamicParametersDelegate resolve)
 	{
-		return DynamicParameters((k, c, d) =>
+		return DynamicParameters((k, _, d) =>
 		{
 			resolve(k, d);
 			return null;
@@ -299,7 +299,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> DynamicParameters(DynamicParametersResolveDelegate resolve)
 	{
-		return DynamicParameters((k, c, d) => resolve(k, d));
+		return DynamicParameters((k, _, d) => resolve(k, d));
 	}
 
 	/// <summary>Allows custom dependencies to by defined dynamically with releasing capability.</summary>
@@ -751,7 +751,7 @@ public class ComponentRegistration<TService> : IRegistration
 		bool managedExternally = false)
 		where TImpl : TService
 	{
-		return UsingFactoryMethod((k, m, c) => factoryMethod(), managedExternally);
+		return UsingFactoryMethod((_, _, _) => factoryMethod(), managedExternally);
 	}
 
 	/// <summary>Uses a factory method to instantiate the component.</summary>
@@ -763,7 +763,7 @@ public class ComponentRegistration<TService> : IRegistration
 		bool managedExternally = false)
 		where TImpl : TService
 	{
-		return UsingFactoryMethod((k, m, c) => factoryMethod(k), managedExternally);
+		return UsingFactoryMethod((k, _, _) => factoryMethod(k), managedExternally);
 	}
 
 	/// <summary>Uses a factory method to instantiate the component.</summary>
@@ -794,7 +794,7 @@ public class ComponentRegistration<TService> : IRegistration
 	public ComponentRegistration<TService> UsingFactoryMethod<TImpl>(Func<IKernel, CreationContext, TImpl> factoryMethod)
 		where TImpl : TService
 	{
-		return UsingFactoryMethod((k, m, c) => factoryMethod(k, c));
+		return UsingFactoryMethod((k, _, c) => factoryMethod(k, c));
 	}
 
 	internal void RegisterOptionally()
@@ -897,7 +897,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// </param>
 	public ComponentRegistration<TService> PropertiesIgnore(Func<ComponentModel, PropertyInfo, bool> propertySelector)
 	{
-		return AddDescriptor(new DelegatingModelDescriptor((k, c) =>
+		return AddDescriptor(new DelegatingModelDescriptor((_, c) =>
 		{
 			var filters = StandardPropertyFilters.GetPropertyFilters(c, true);
 			filters.Add(StandardPropertyFilters.IgnoreSelected(propertySelector));
@@ -911,7 +911,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// </param>
 	public ComponentRegistration<TService> PropertiesRequire(Func<ComponentModel, PropertyInfo, bool> propertySelector)
 	{
-		return AddDescriptor(new DelegatingModelDescriptor((k, c) =>
+		return AddDescriptor(new DelegatingModelDescriptor((_, c) =>
 		{
 			var filters = StandardPropertyFilters.GetPropertyFilters(c, true);
 			filters.Add(StandardPropertyFilters.RequireSelected(propertySelector));
@@ -926,7 +926,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> Properties(PropertyFilter filter)
 	{
-		return AddDescriptor(new DelegatingModelDescriptor((k, c) =>
+		return AddDescriptor(new DelegatingModelDescriptor((_, c) =>
 		{
 			var filters = StandardPropertyFilters.GetPropertyFilters(c, true);
 			filters.Add(StandardPropertyFilters.Create(filter));

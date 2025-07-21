@@ -38,7 +38,7 @@ public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTest
 		var longLivedService = Container.Resolve<LongLivedService>();
 		var shortLivedViewModel = Container.Resolve<ShortLivedViewModel>();
 
-		var prematureDisposalHandler = new EventHandler((s, e) =>
+		var prematureDisposalHandler = new EventHandler((_, _) =>
 			Assert.Fail("Long-lived service’s connection was disposed when short-lived view model was released."));
 
 		longLivedService.SqlConnection.Disposed += prematureDisposalHandler;

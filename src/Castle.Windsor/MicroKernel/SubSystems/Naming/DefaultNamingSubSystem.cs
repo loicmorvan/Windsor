@@ -299,7 +299,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 		var fallbackFilter = handler.ComponentModel.GetFallbackComponentForServiceFilter();
 		if (defaultsFilter == null)
 		{
-			if (fallbackFilter == null) return service => new HandlerWithPriority(0, handler);
+			if (fallbackFilter == null) return _ => new HandlerWithPriority(0, handler);
 			return service => new HandlerWithPriority(fallbackFilter(service) ? -1 : 0, handler);
 		}
 

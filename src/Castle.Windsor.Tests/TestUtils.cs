@@ -27,7 +27,7 @@ public static class TestUtils
 	{
 		var firstChanceExceptions = new List<Exception>();
 
-		var handler = new EventHandler<FirstChanceExceptionEventArgs>((sender, e) =>
+		var handler = new EventHandler<FirstChanceExceptionEventArgs>((_, e) =>
 			firstChanceExceptions.Add(e.Exception));
 
 		AppDomain.CurrentDomain.FirstChanceException += handler;

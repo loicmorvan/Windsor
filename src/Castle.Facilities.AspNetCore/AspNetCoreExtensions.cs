@@ -53,7 +53,7 @@ internal static class AspNetCoreExtensions
 
 		private void ConfigureRequestScoping(IApplicationBuilder builder)
 		{
-			builder.Use(async (context, next) =>
+			builder.Use(async (_, next) =>
 			{
 				var scopes = requestScopeProvider();
 				try

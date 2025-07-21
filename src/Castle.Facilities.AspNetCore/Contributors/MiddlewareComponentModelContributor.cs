@@ -50,7 +50,7 @@ public class MiddlewareComponentModelContributor : IContributeComponentModelCons
 					try
 					{
 						var middleware = (IMiddleware)kernel.Resolve(service);
-						await middleware.InvokeAsync(context, async ctx => await next());
+						await middleware.InvokeAsync(context, async _ => await next());
 					}
 					finally
 					{

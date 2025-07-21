@@ -24,7 +24,7 @@ public class LifecycleActionTestCase : AbstractContainerTestCase
 	public void CanModify_when_singleton()
 	{
 		Container.Register(Component.For<IService>().ImplementedBy<MyService>()
-			.OnCreate((kernel, instance) => instance.Name += "a"));
+			.OnCreate((_, instance) => instance.Name += "a"));
 		var service = Container.Resolve<IService>();
 		Assert.Equal("a", service.Name);
 		service = Container.Resolve<IService>();
@@ -35,8 +35,8 @@ public class LifecycleActionTestCase : AbstractContainerTestCase
 	public void CanModify_when_singleton_multiple_ordered()
 	{
 		Container.Register(Component.For<IService>().ImplementedBy<MyService>()
-			.OnCreate((kernel, instance) => instance.Name += "a",
-				(kernel, instance) => instance.Name += "b"));
+			.OnCreate((_, instance) => instance.Name += "a",
+				(_, instance) => instance.Name += "b"));
 		var service = Container.Resolve<IService>();
 		Assert.Equal("ab", service.Name);
 		service = Container.Resolve<IService>();
@@ -48,7 +48,7 @@ public class LifecycleActionTestCase : AbstractContainerTestCase
 	{
 		MyService2.staticname = "";
 		Container.Register(Component.For<IService2>().ImplementedBy<MyService2>()
-			.LifeStyle.Transient.OnCreate((kernel, instance) => instance.Name += "a"));
+			.LifeStyle.Transient.OnCreate((_, instance) => instance.Name += "a"));
 		var service = Container.Resolve<IService2>();
 		Assert.Equal("a", service.Name);
 		service = Container.Resolve<IService2>();
@@ -60,8 +60,8 @@ public class LifecycleActionTestCase : AbstractContainerTestCase
 	{
 		MyService2.staticname = "";
 		Container.Register(Component.For<IService2>().ImplementedBy<MyService2>()
-			.LifeStyle.Transient.OnCreate((kernel, instance) => instance.Name += "a",
-				(kernel, instance) => instance.Name += "b"));
+			.LifeStyle.Transient.OnCreate((_, instance) => instance.Name += "a",
+				(_, instance) => instance.Name += "b"));
 		var service = Container.Resolve<IService2>();
 		Assert.Equal("ab", service.Name);
 
@@ -73,7 +73,7 @@ public class LifecycleActionTestCase : AbstractContainerTestCase
 	public void Can_mix_vaious_overloads_OnCreate()
 	{
 		Container.Register(Component.For<IService>().ImplementedBy<MyService>()
-			.OnCreate((kernel, instance) => instance.Name += "a")
+			.OnCreate((_, instance) => instance.Name += "a")
 			.OnCreate(instance => instance.Name += "b"));
 		var service = Container.Resolve<IService>();
 		Assert.Equal("ba", service.Name);
@@ -84,7 +84,7 @@ public class LifecycleActionTestCase : AbstractContainerTestCase
 	{
 		var called = false;
 		Container.Register(Component.For(typeof(GenericA<>))
-			.OnCreate((kernel, instance) => { called = true; }));
+			.OnCreate((_, _) => { called = true; }));
 		Container.Resolve<GenericA<int>>();
 		Assert.True(called);
 	}
@@ -95,7 +95,7 @@ public class LifecycleActionTestCase : AbstractContainerTestCase
 		var called = false;
 		Container.Register(Component.For(typeof(GenericA<>))
 			.LifestyleTransient()
-			.OnDestroy((kernel, instance) => { called = true; }));
+			.OnDestroy((_, _) => { called = true; }));
 		var item = Container.Resolve<GenericA<int>>();
 		Container.Release(item);
 		Assert.True(called);
@@ -106,7 +106,7 @@ public class LifecycleActionTestCase : AbstractContainerTestCase
 	{
 		Container.Register(Component.For<IService>().ImplementedBy<MyService>()
 			.LifestyleTransient()
-			.OnDestroy((kernel, instance) => instance.Name += "a")
+			.OnDestroy((_, instance) => instance.Name += "a")
 			.OnDestroy(instance => instance.Name += "b"));
 		var service = Container.Resolve<IService>();
 		Assert.Equal(string.Empty, service.Name);
@@ -122,7 +122,7 @@ public class LifecycleActionTestCase : AbstractContainerTestCase
 		var wasDisposed = false;
 		Container.Register(Component.For<ADisposable>()
 			.LifeStyle.Transient
-			.OnDestroy((k, i) => { wasDisposed = i.Disposed; }));
+			.OnDestroy((_, i) => { wasDisposed = i.Disposed; }));
 
 		var a = Container.Resolve<ADisposable>();
 		Container.Release(a);
@@ -137,7 +137,7 @@ public class LifecycleActionTestCase : AbstractContainerTestCase
 		var called = false;
 		Container.Register(Component.For<A>()
 			.LifeStyle.Transient
-			.OnDestroy((k, i) => { called = true; }));
+			.OnDestroy((_, _) => { called = true; }));
 
 		Assert.False(called);
 		var a = Container.Resolve<A>();
@@ -151,7 +151,7 @@ public class LifecycleActionTestCase : AbstractContainerTestCase
 	{
 		Container.Register(Component.For<A>()
 			.LifeStyle.Transient
-			.OnDestroy((k, i) => { }));
+			.OnDestroy((_, _) => { }));
 
 		var a = Container.Resolve<A>();
 		Assert.True(Kernel.ReleasePolicy.HasTrack(a));
@@ -163,7 +163,7 @@ public class LifecycleActionTestCase : AbstractContainerTestCase
 	{
 		Container.Register(Component.For<IService>()
 			.UsingFactoryMethod(() => new MyService())
-			.OnCreate((kernel, instance) => instance.Name += "a"));
+			.OnCreate((_, instance) => instance.Name += "a"));
 
 		var service = Container.Resolve<IService>();
 

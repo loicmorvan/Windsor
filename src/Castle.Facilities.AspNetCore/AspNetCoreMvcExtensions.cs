@@ -33,7 +33,7 @@ internal static class AspNetCoreMvcExtensions
 		ArgumentNullException.ThrowIfNull(services);
 		ArgumentNullException.ThrowIfNull(activator);
 
-		services.AddSingleton<IControllerActivator>(new DelegatingControllerActivator(context => activator(context.ActionDescriptor.ControllerTypeInfo.AsType()), (context, instance) => releaser(instance)));
+		services.AddSingleton<IControllerActivator>(new DelegatingControllerActivator(context => activator(context.ActionDescriptor.ControllerTypeInfo.AsType()), (_, instance) => releaser(instance)));
 	}
 
 	public static void AddCustomViewComponentActivation(this IServiceCollection services, Func<Type, object> activator, Action<object> releaser)

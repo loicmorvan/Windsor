@@ -21,43 +21,27 @@ using Castle.Windsor.MicroKernel.Registration;
 
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-using TestContext = Castle.Facilities.AspNetCore.Tests.Framework.TestContext;
-
-public abstract class WindsorRegistrationOptionsTagHelperTestCase : IDisposable
+public abstract class WindsorRegistrationOptionsTagHelperTestCase
 {
-	protected TestContext testContext;
-
-	public void Dispose()
+	[Theory]
+	[InlineData(typeof(OverrideTagHelper))]
+	public void WindsorRegistrationOptionsForAssembliesTagHelperTestCase(Type optionsResolvableType)
 	{
-		testContext.Dispose();
+		using var testContext = TestContextFactory.Get(opts => opts
+			.UseEntryAssembly(typeof(Uri).Assembly)
+			.RegisterTagHelpers(typeof(OverrideTagHelper).Assembly));
+		testContext.WindsorContainer.Resolve(optionsResolvableType);
 	}
 
 	[Theory]
 	[InlineData(typeof(OverrideTagHelper))]
-	public void Should_resolve_overidden_TagHelpers_using_WindsorRegistrationOptions(Type optionsResolvableType)
+	public void WindsorRegistrationOptionsForComponentsTagHelperTestCase(Type optionsResolvableType)
 	{
+		using var testContext = TestContextFactory.Get(opts => opts
+			.UseEntryAssembly(typeof(Uri).Assembly)
+			.RegisterTagHelpers(Component.For<OverrideTagHelper>().LifestyleScoped().Named("tag-helpers")));
 		testContext.WindsorContainer.Resolve(optionsResolvableType);
 	}
 
-	public class OverrideTagHelper : TagHelper;
-}
-
-public class WindsorRegistrationOptionsForAssembliesTagHelperTestCase : WindsorRegistrationOptionsTagHelperTestCase
-{
-	public WindsorRegistrationOptionsForAssembliesTagHelperTestCase()
-	{
-		testContext = TestContextFactory.Get(opts => opts
-			.UseEntryAssembly(typeof(Uri).Assembly)
-			.RegisterTagHelpers(typeof(OverrideTagHelper).Assembly));
-	}
-}
-
-public class WindsorRegistrationOptionsForComponentsTagHelperTestCase : WindsorRegistrationOptionsTagHelperTestCase
-{
-	public WindsorRegistrationOptionsForComponentsTagHelperTestCase()
-	{
-		testContext = TestContextFactory.Get(opts => opts
-			.UseEntryAssembly(typeof(Uri).Assembly)
-			.RegisterTagHelpers(Component.For<OverrideTagHelper>().LifestyleScoped().Named("tag-helpers")));
-	}
+	private class OverrideTagHelper : TagHelper;
 }

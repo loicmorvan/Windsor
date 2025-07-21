@@ -140,10 +140,10 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 	{
 		Kernel.Register(
 			Component.For<ICarProvider>()
-				.UsingFactoryMethod(k => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.MrMoneyBags }))
+				.UsingFactoryMethod(_ => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.MrMoneyBags }))
 				.Named("ferrariProvider"),
 			Component.For<ICarProvider>()
-				.UsingFactoryMethod(k => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
+				.UsingFactoryMethod(_ => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
 				.Named("hondaProvider")
 		);
 

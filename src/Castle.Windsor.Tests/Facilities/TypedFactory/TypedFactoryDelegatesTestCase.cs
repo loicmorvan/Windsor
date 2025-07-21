@@ -356,7 +356,7 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 	{
 		var foo = new DisposableFoo();
 		Container.Register(Component.For<DisposableFoo>().LifeStyle.Transient,
-			Component.For<Func<int, DisposableFoo>>().Instance(i => foo),
+			Component.For<Func<int, DisposableFoo>>().Instance(_ => foo),
 			Component.For<UsesDisposableFooDelegate>().LifeStyle.Transient);
 		var dependsOnFoo = Container.Resolve<UsesDisposableFooDelegate>();
 		var otherFoo = dependsOnFoo.GetFoo();

@@ -38,21 +38,21 @@ public class ServiceDescriptor
 	/// <returns></returns>
 	public BasedOnDescriptor AllInterfaces()
 	{
-		return Select((t, b) => t.GetAllInterfaces());
+		return Select((t, _) => t.GetAllInterfaces());
 	}
 
 	/// <summary>Uses the base type matched on.</summary>
 	/// <returns></returns>
 	public BasedOnDescriptor Base()
 	{
-		return Select((t, b) => b);
+		return Select((_, b) => b);
 	}
 
 	/// <summary>Uses all interfaces that have names matched by implementation type name. Matches Foo to IFoo, SuperFooExtended to IFoo and IFooExtended etc</summary>
 	/// <returns></returns>
 	public BasedOnDescriptor DefaultInterfaces()
 	{
-		return Select((type, @base) =>
+		return Select((type, _) =>
 			type.GetAllInterfaces()
 				.Where(i => type.Name.Contains(GetInterfaceName(i))));
 	}
@@ -61,7 +61,7 @@ public class ServiceDescriptor
 	/// <returns></returns>
 	public BasedOnDescriptor FirstInterface()
 	{
-		return Select((type, @base) =>
+		return Select((type, _) =>
 		{
 			var first = type.GetInterfaces().FirstOrDefault();
 			if (first == null) return null;
@@ -127,7 +127,7 @@ public class ServiceDescriptor
 	/// <returns></returns>
 	public BasedOnDescriptor Self()
 	{
-		return Select((t, b) => [t]);
+		return Select((t, _) => [t]);
 	}
 
 	internal ICollection<Type> GetServices(Type type, Type[] baseType)

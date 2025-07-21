@@ -28,7 +28,7 @@ public class KernelEvents_EmptyCollectionResolving_TestCase : AbstractContainerT
 		Kernel.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
 
 		var wasRaised = false;
-		Kernel.EmptyCollectionResolving += t => { wasRaised = true; };
+		Kernel.EmptyCollectionResolving += _ => { wasRaised = true; };
 
 		var services = Container.ResolveAll<IEmptyService>();
 
@@ -45,7 +45,7 @@ public class KernelEvents_EmptyCollectionResolving_TestCase : AbstractContainerT
 		childContainer.Parent = Container;
 
 		var wasRaised = false;
-		childContainer.Kernel.EmptyCollectionResolving += t => { wasRaised = true; };
+		childContainer.Kernel.EmptyCollectionResolving += _ => { wasRaised = true; };
 
 		var services = childContainer.ResolveAll<IEmptyService>();
 

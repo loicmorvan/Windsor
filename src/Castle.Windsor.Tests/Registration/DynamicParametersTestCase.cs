@@ -25,7 +25,7 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 	public void Arguments_are_case_insensitive_when_using_anonymous_object()
 	{
 		var wasCalled = false;
-		Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((k, d) =>
+		Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((_, d) =>
 		{
 			Assert.True(d.Contains("ArG1"));
 			wasCalled = true;
@@ -65,7 +65,7 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 	public void Can_mix_registration_and_call_site_parameters()
 	{
 		Kernel.Register(
-			Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((k, d) => d["arg1"] = "foo"));
+			Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((_, d) => d["arg1"] = "foo"));
 
 		var component = Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2));
 		Assert.Equal(2, component.Arg2);
@@ -78,12 +78,12 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 		var releaseCalled = 0;
 		Kernel.Register(
 			Component.For<ClassWithArguments>().LifeStyle.Transient
-				.DynamicParameters((k, d) =>
+				.DynamicParameters((_, d) =>
 				{
 					d["arg1"] = "foo";
-					return kk => ++releaseCalled;
+					return _ => ++releaseCalled;
 				})
-				.DynamicParameters((k, d) => { return kk => ++releaseCalled; }));
+				.DynamicParameters((_, _) => { return _ => ++releaseCalled; }));
 
 		var component = Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2));
 		Assert.Equal(2, component.Arg2);
@@ -100,12 +100,12 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 		Kernel.Register(
 			Component.For(typeof(IGenericClassWithParameter<>))
 				.ImplementedBy(typeof(GenericClassWithParameter<>)).LifeStyle.Transient
-				.DynamicParameters((k, d) =>
+				.DynamicParameters((_, d) =>
 				{
 					d["name"] = "foo";
-					return kk => ++releaseCalled;
+					return _ => ++releaseCalled;
 				})
-				.DynamicParameters((k, d) => { return kk => ++releaseCalled; }));
+				.DynamicParameters((_, _) => { return _ => ++releaseCalled; }));
 
 		var component = Kernel.Resolve<IGenericClassWithParameter<int>>(new Arguments().AddNamed("name", "bar"));
 		Assert.Equal("foo", component.Name);
@@ -121,8 +121,8 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 		var arg2 = 5;
 		Kernel.Register(Component.For<ClassWithArguments>()
 			.LifeStyle.Transient
-			.DynamicParameters((k, d) => { d["arg1"] = arg1; })
-			.DynamicParameters((k, d) => { d["arg2"] = arg2; }));
+			.DynamicParameters((_, d) => { d["arg1"] = arg1; })
+			.DynamicParameters((_, d) => { d["arg2"] = arg2; }));
 		var component = Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2).AddNamed("arg1", "foo"));
 		Assert.Equal(arg1, component.Arg1);
 		Assert.Equal(arg2, component.Arg2);
@@ -133,7 +133,7 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 	{
 		string arg1 = null;
 		var arg2 = 0;
-		Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((k, d) =>
+		Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((_, d) =>
 		{
 			arg1 = (string)d["arg1"];
 			arg2 = (int)d["arg2"];
@@ -146,7 +146,7 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Should_not_require_explicit_registration()
 	{
-		Kernel.Register(Component.For<CommonSub2Impl>().LifeStyle.Transient.DynamicParameters((k, d) => { }));
+		Kernel.Register(Component.For<CommonSub2Impl>().LifeStyle.Transient.DynamicParameters((_, _) => { }));
 		Kernel.Resolve<CommonSub2Impl>();
 	}
 
@@ -155,7 +155,7 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 	{
 		var arg1 = "bar";
 		var arg2 = 5;
-		Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((k, d) =>
+		Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((_, d) =>
 		{
 			d["arg1"] = arg1;
 			d["arg2"] = arg2;
@@ -170,7 +170,7 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 	{
 		var arg1 = "bar";
 		var arg2 = 5;
-		Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((k, d) =>
+		Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((_, d) =>
 		{
 			d["arg1"] = arg1;
 			d["arg2"] = arg2;

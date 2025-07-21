@@ -143,7 +143,7 @@ public class LifecycledComponentsReleasePolicyTestCase
 	[Fact]
 	public void Tracks_simple_components_with_DynamicDependencies_requiring_decommission()
 	{
-		container.Register(Transient<A>().DynamicParameters((kernel, parameters) => delegate { }));
+		container.Register(Transient<A>().DynamicParameters((_, _) => delegate { }));
 
 		var a = container.Resolve<A>();
 
@@ -165,7 +165,7 @@ public class LifecycledComponentsReleasePolicyTestCase
 	public void Tracks_simple_components_with_simple_dependencies_havingDynamicDependencies_requiring_decommission()
 	{
 		container.Register(Transient<B>(),
-			Transient<A>().DynamicParameters((kernel, parameters) => delegate { }));
+			Transient<A>().DynamicParameters((_, _) => delegate { }));
 
 		var b = container.Resolve<B>();
 

@@ -62,7 +62,7 @@ public class HandlerFilterTestCase : AbstractContainerTestCase
 			Component.For<ISomeTask>().ImplementedBy<Task2>(),
 			Component.For<ISomeTask>().ImplementedBy<Task1>());
 
-		Container.Kernel.AddHandlersFilter(new DelegatingFilter(typeof(ISomeTask), h => false));
+		Container.Kernel.AddHandlersFilter(new DelegatingFilter(typeof(ISomeTask), _ => false));
 
 		var instances = Container.ResolveAll(typeof(ISomeTask));
 
@@ -145,7 +145,7 @@ public class HandlerFilterTestCase : AbstractContainerTestCase
 		public DelegatingFilter(Type typeToFilter, Func<IHandler, bool> filter = null)
 		{
 			this.typeToFilter = typeToFilter;
-			this.filter = filter ?? (t => true);
+			this.filter = filter ?? (_ => true);
 		}
 
 		public IHandler[] HandlersAsked { get; private set; }

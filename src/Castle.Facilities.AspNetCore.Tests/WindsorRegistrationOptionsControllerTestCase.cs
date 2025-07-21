@@ -21,43 +21,27 @@ using Castle.Windsor.MicroKernel.Registration;
 
 using Microsoft.AspNetCore.Mvc;
 
-using TestContext = Castle.Facilities.AspNetCore.Tests.Framework.TestContext;
-
-public abstract class WindsorRegistrationOptionsControllerTestCase : IDisposable
+public abstract class WindsorRegistrationOptionsControllerTestCase
 {
-	protected TestContext testContext;
-
-	public void Dispose()
+	[Theory]
+	[InlineData(typeof(OverrideController))]
+	public void WindsorRegistrationOptionsForAssembliesControllerTestCase(Type optionsResolvableType)
 	{
-		testContext.Dispose();
+		using var testContext = TestContextFactory.Get(opts => opts
+			.UseEntryAssembly(typeof(Uri).Assembly)
+			.RegisterControllers(typeof(OverrideController).Assembly));
+		testContext.WindsorContainer.Resolve(optionsResolvableType);
 	}
 
 	[Theory]
 	[InlineData(typeof(OverrideController))]
-	public void Should_resolve_overidden_Controllers_using_WindsorRegistrationOptions(Type optionsResolvableType)
+	public void WindsorRegistrationOptionsForComponentsControllerTestCase(Type optionsResolvableType)
 	{
+		using var testContext = TestContextFactory.Get(opts => opts
+			.UseEntryAssembly(typeof(Uri).Assembly)
+			.RegisterControllers(Component.For<OverrideController>().LifestyleScoped().Named("controllers")));
 		testContext.WindsorContainer.Resolve(optionsResolvableType);
 	}
 
-	public class OverrideController : Controller;
-}
-
-public class WindsorRegistrationOptionsForAssembliesControllerTestCase : WindsorRegistrationOptionsControllerTestCase
-{
-	public WindsorRegistrationOptionsForAssembliesControllerTestCase()
-	{
-		testContext = TestContextFactory.Get(opts => opts
-			.UseEntryAssembly(typeof(Uri).Assembly)
-			.RegisterControllers(typeof(OverrideController).Assembly));
-	}
-}
-
-public class WindsorRegistrationOptionsForComponentsControllerTestCase : WindsorRegistrationOptionsControllerTestCase
-{
-	public WindsorRegistrationOptionsForComponentsControllerTestCase()
-	{
-		testContext = TestContextFactory.Get(opts => opts
-			.UseEntryAssembly(typeof(Uri).Assembly)
-			.RegisterControllers(Component.For<OverrideController>().LifestyleScoped().Named("controllers")));
-	}
+	protected class OverrideController : Controller;
 }

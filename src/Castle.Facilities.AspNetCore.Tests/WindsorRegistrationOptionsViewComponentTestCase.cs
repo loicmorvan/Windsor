@@ -21,43 +21,27 @@ using Castle.Windsor.MicroKernel.Registration;
 
 using Microsoft.AspNetCore.Mvc;
 
-using TestContext = Castle.Facilities.AspNetCore.Tests.Framework.TestContext;
-
-public abstract class WindsorRegistrationOptionsViewComponentTestCase : IDisposable
+public abstract class WindsorRegistrationOptionsViewComponentTestCase
 {
-	protected TestContext testContext;
-
-	public void Dispose()
+	[Theory]
+	[InlineData(typeof(OverrideViewComponent))]
+	public void WindsorRegistrationOptionsForAssembliesViewComponentTestCase(Type optionsResolvableType)
 	{
-		testContext.Dispose();
+		using var testContext = TestContextFactory.Get(opts => opts
+			.UseEntryAssembly(typeof(Uri).Assembly)
+			.RegisterViewComponents(typeof(OverrideViewComponent).Assembly));
+		testContext.WindsorContainer.Resolve(optionsResolvableType);
 	}
 
 	[Theory]
 	[InlineData(typeof(OverrideViewComponent))]
-	public void Should_resolve_overidden_ViewComponents_using_WindsorRegistrationOptions(Type optionsResolvableType)
+	public void WindsorRegistrationOptionsForComponentsViewComponentTestCase(Type optionsResolvableType)
 	{
+		using var testContext = TestContextFactory.Get(opts => opts
+			.UseEntryAssembly(typeof(Uri).Assembly)
+			.RegisterViewComponents(Component.For<OverrideViewComponent>().LifestyleScoped().Named("view-components")));
 		testContext.WindsorContainer.Resolve(optionsResolvableType);
 	}
 
-	public class OverrideViewComponent : ViewComponent;
-}
-
-public class WindsorRegistrationOptionsForAssembliesViewComponentTestCase : WindsorRegistrationOptionsViewComponentTestCase
-{
-	public WindsorRegistrationOptionsForAssembliesViewComponentTestCase()
-	{
-		testContext = TestContextFactory.Get(opts => opts
-			.UseEntryAssembly(typeof(Uri).Assembly)
-			.RegisterViewComponents(typeof(OverrideViewComponent).Assembly));
-	}
-}
-
-public class WindsorRegistrationOptionsForComponentsViewComponentTestCase : WindsorRegistrationOptionsViewComponentTestCase
-{
-	public WindsorRegistrationOptionsForComponentsViewComponentTestCase()
-	{
-		testContext = TestContextFactory.Get(opts => opts
-			.UseEntryAssembly(typeof(Uri).Assembly)
-			.RegisterViewComponents(Component.For<OverrideViewComponent>().LifestyleScoped().Named("view-components")));
-	}
+	protected class OverrideViewComponent : ViewComponent;
 }

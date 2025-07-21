@@ -93,7 +93,7 @@ public partial class StartableFacility
 		public StartableEvents(IKernelEvents kernel)
 		{
 			Kernel = kernel;
-			kernel.ComponentRegistered += (key, handler) =>
+			kernel.ComponentRegistered += (_, handler) =>
 			{
 				if (IsStartable(handler)) StartableComponentRegistered(handler);
 			};

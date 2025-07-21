@@ -51,7 +51,7 @@ public class PropertyDependenciesTestCase : AbstractContainerTestCase
 	{
 		Container.Register(Component.For(typeof(GenericImpl2<>))
 			.DependsOn(Dependency.OnValue(typeof(int), 5))
-			.PropertiesIgnore(p => true));
+			.PropertiesIgnore(_ => true));
 
 		var item = Container.Resolve<GenericImpl2<A>>();
 		Assert.Equal(0, item.Value);
@@ -75,7 +75,7 @@ public class PropertyDependenciesTestCase : AbstractContainerTestCase
 		Container.Register(
 			Component.For<ICommon>().ImplementedBy<CommonImpl1>(),
 			Component.For<CommonServiceUser2>()
-				.PropertiesIgnore(p => true));
+				.PropertiesIgnore(_ => true));
 
 		var item = Container.Resolve<CommonServiceUser2>();
 		Assert.Null(item.CommonService);
@@ -92,7 +92,7 @@ public class PropertyDependenciesTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Can_require_setting_properties_open_generic_via_predicate()
 	{
-		Container.Register(Component.For(typeof(GenericImpl2<>)).PropertiesRequire(p => true));
+		Container.Register(Component.For(typeof(GenericImpl2<>)).PropertiesRequire(_ => true));
 
 		Assert.Throws<HandlerException>(() => Container.Resolve<GenericImpl2<A>>());
 	}
@@ -108,7 +108,7 @@ public class PropertyDependenciesTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Can_require_setting_properties_via_predicate()
 	{
-		Container.Register(Component.For<CommonServiceUser2>().PropertiesRequire(p => true));
+		Container.Register(Component.For<CommonServiceUser2>().PropertiesRequire(_ => true));
 
 		Assert.Throws<HandlerException>(() => Container.Resolve<CommonServiceUser2>());
 	}

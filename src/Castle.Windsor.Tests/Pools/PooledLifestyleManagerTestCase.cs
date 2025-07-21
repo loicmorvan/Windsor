@@ -151,7 +151,7 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 	{
 		var count = 0;
 		Kernel.Register(Component.For<RecyclableComponent>().LifeStyle.PooledWithSize(1, null)
-			.DynamicParameters((k, d) =>
+			.DynamicParameters((_, _) =>
 			{
 				count++;
 				return delegate { count--; };
@@ -201,8 +201,8 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 		manager1.Init(null, kernel, null);
 		manager2.Init(null, kernel, null);
 
-		ThreadPool.QueueUserWorkItem(o => { manager1.CreatePool(); });
-		ThreadPool.QueueUserWorkItem(o => { manager2.CreatePool(); });
+		ThreadPool.QueueUserWorkItem(_ => { manager1.CreatePool(); });
+		ThreadPool.QueueUserWorkItem(_ => { manager2.CreatePool(); });
 
 		Thread.Sleep(TimeSpan.FromSeconds(1));
 		evt.Set();
