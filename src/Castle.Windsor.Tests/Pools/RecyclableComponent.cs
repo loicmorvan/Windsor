@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Pools;
+namespace Castle.Windsor.Tests.Pools;
 
-using Castle.Core;
-
-using CastleTests.Components;
+using Castle.Windsor.Core;
+using Castle.Windsor.Tests.Components;
 
 public class RecyclableComponent : IRecyclable
 {

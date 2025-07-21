@@ -17,9 +17,9 @@
 namespace Castle.Windsor.Tests.Config
 {
 	using Castle.Core.Resource;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.SubSystems.Configuration;
-	using Castle.MicroKernel.Tests.ClassComponents;
+	using Castle.Windsor.MicroKernel;
+	using Castle.Windsor.MicroKernel.SubSystems.Configuration;
+	using Castle.Windsor.Tests.ClassComponents;
 	using Castle.Windsor.Configuration.Interpreters;
 
 	/// <summary>

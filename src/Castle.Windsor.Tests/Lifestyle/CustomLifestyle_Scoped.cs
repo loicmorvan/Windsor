@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Lifestyle;
+namespace Castle.Windsor.Tests.Lifestyle;
 
 using System;
 
-using Castle.MicroKernel.Context;
-using Castle.MicroKernel.Lifestyle;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Lifestyle;
 
 public class CustomLifestyle_Scoped : AbstractLifestyleManager
 {

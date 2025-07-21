@@ -4,7 +4,8 @@
 
 The starting point for registering anything in the container is the container's `Register` method, with has one or more
 `IRegistration` objects as parameter. The simplest way to create those objects is using the static
-`Castle.MicroKernel.Registration.Component` class. Its `For` method returns a `ComponentRegistration` that you can use
+`Castle.Windsor.MicroKernel.Registration.Component` class. Its `For` method returns a `ComponentRegistration` that you
+can use
 to further configure the registration.
 
 :information_source: **Isolate your registration code:** It is a recommended practice to keep your registration code in

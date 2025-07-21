@@ -17,8 +17,8 @@ namespace Castle.Windsor.Tests.Interceptors;
 using System;
 using System.Reflection;
 
-using Castle.Core.Internal;
 using Castle.DynamicProxy;
+using Castle.Windsor.Core.Internal;
 
 public class DummyInterceptorSelector : IInterceptorSelector
 {

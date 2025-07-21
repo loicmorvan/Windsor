@@ -16,8 +16,8 @@ namespace Castle.Windsor.Tests.Interceptors;
 
 using System;
 
-using Castle.Core;
 using Castle.DynamicProxy;
+using Castle.Windsor.Core;
 
 [Transient]
 public class ThrowInCtorInterceptor : IInterceptor

@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Proxy;
+namespace Castle.Windsor.Windsor.Proxy;
 
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 
-using Castle.Core;
-using Castle.Core.Interceptor;
-using Castle.Core.Internal;
 using Castle.DynamicProxy;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Context;
-using Castle.MicroKernel.Proxy;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Interceptor;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Proxy;
 
 /// <summary>This implementation of <see cref = "IProxyFactory" /> relies on DynamicProxy to expose proxy capabilities.</summary>
 /// <remarks>

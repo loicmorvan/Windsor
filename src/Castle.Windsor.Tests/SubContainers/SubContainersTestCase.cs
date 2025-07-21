@@ -12,20 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.SubContainers;
+namespace Castle.Windsor.Tests.SubContainers;
 
 using System;
 using System.Collections.Generic;
 
-using Castle.Core;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Context;
-using Castle.MicroKernel.Handlers;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Tests.ClassComponents;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Handlers;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
-
-using CastleTests.Components;
 
 /// <summary>Summary description for SubContainersTestCase.</summary>
 public class SubContainersTestCase : AbstractContainerTestCase

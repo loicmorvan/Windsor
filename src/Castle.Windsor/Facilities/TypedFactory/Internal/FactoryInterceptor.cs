@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory.Internal;
+namespace Castle.Windsor.Facilities.TypedFactory.Internal;
 
-using Castle.Core;
-using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
-using Castle.MicroKernel;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Interceptor;
+using Castle.Windsor.MicroKernel;
 
 /// <summary>Legacy interceptor for old impl. of the facility.</summary>
 [Transient]

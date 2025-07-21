@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Scoped;
+namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
 using System;
 
-using Castle.Core;
+using Castle.Windsor.Core;
 
 /// <remarks>This class is not thread safe like CallContextLifetimeScope.</remarks>
 public class DefaultLifetimeScope : ILifetimeScope

@@ -16,12 +16,12 @@ namespace Castle.Windsor.Tests;
 
 using System;
 
-using Castle.Core;
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 using Castle.Windsor.Tests.Interceptors;
-
-using CastleTests.Components;
-using CastleTests.Facilities.TypedFactory;
+using Castle.Windsor.Windsor;
 
 public class ModelInterceptorsSelectorTestCase
 {

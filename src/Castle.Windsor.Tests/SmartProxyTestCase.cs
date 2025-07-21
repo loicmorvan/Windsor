@@ -21,10 +21,10 @@ namespace Castle.Windsor.Tests;
 using System;
 
 using Castle.DynamicProxy;
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Interceptors;
-
-using CastleTests.Components;
+using Castle.Windsor.Windsor;
 
 public class SmartProxyTestCase : IDisposable
 {

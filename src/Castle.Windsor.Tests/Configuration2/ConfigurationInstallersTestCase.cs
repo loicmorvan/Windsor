@@ -14,6 +14,8 @@
 
 namespace Castle.Windsor.Tests.Configuration2;
 
+using Castle.Windsor.Windsor;
+
 public class ConfigurationInstallersTestCase
 {
 	[Fact]

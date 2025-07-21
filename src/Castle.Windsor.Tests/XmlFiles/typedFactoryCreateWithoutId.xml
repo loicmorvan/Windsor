@@ -1,7 +1,7 @@
 <configuration>
 
 	<facilities>
-		<facility type="Castle.Facilities.TypedFactory.TypedFactoryFacility, Castle.Windsor">
+		<facility type="Castle.Windsor.Facilities.TypedFactory.TypedFactoryFacility, Castle.Windsor">
 
 			<factories>
 				<factory id="calculator.factory" interface="ICalculatorFactoryCreateWithoutId" creation="Create"

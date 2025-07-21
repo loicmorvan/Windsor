@@ -8,7 +8,8 @@ with some XML.
 ## Requirements
 
 `Castle.Core.dll` and `Castle.Windsor.dll` are both required. You need to add a using directive to
-`Castle.MicroKernel.Registration` in order to use this API. The examples which follow assume you have created the
+`Castle.Windsor.MicroKernel.Registration` in order to use this API. The examples which follow assume you have created
+the
 Windsor Container thusly:
 
 ```csharp

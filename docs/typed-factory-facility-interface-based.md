@@ -33,7 +33,7 @@ kernel.Register(
 );
 ```
 
-(This requires the namespace `Castle.Facilities.TypedFactory`)
+(This requires the namespace `Castle.Windsor.Facilities.TypedFactory`)
 
 :information_source: **That's right - no implementation:** Notice we specify an interface and don't provide any
 implementation. By using `AsFactory` extension method we're telling Windsor to provide its own implementation that
@@ -353,7 +353,7 @@ In addition to code the facility exposes also XML configuration.
 ```xml
 <configuration>
    <facilities>
-      <facility type="Castle.Facilities.TypedFactory.TypedFactoryFacility, Castle.Windsor">
+      <facility type="Castle.Windsor.Facilities.TypedFactory.TypedFactoryFacility, Castle.Windsor">
          <factories>
             <factory id="handlerFactory"
                interface="Acme.Crm.IHandlerFactory, Acme.Crm" selector="${mySelectorComponent}" />

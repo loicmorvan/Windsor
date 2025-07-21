@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Helpers;
+namespace Castle.Windsor.Windsor.Diagnostics.Helpers;
 
 using System.ComponentModel;
 
-using Castle.Core;
 using Castle.Core.Internal;
-using Castle.MicroKernel;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel;
 
 public static class DescriptionUtil
 {

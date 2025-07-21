@@ -14,11 +14,9 @@
 
 namespace Castle.Windsor.Tests;
 
-using Castle.MicroKernel.Registration;
-using Castle.Windsor.Installer;
-
-using CastleTests;
-using CastleTests.Components;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Windsor.Installer;
 
 public class ContainerAndGenericsInConfigTestCase : AbstractContainerTestCase
 {

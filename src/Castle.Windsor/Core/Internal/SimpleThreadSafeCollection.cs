@@ -9,11 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal;
+namespace Castle.Windsor.Core.Internal;
 
 using System.Collections.Generic;
 
-using Castle.MicroKernel.Internal;
+using Castle.Windsor.MicroKernel.Internal;
 
 public class SimpleThreadSafeCollection<T>
 {

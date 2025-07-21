@@ -8,7 +8,7 @@ handle decorated services.
 For instance suppose we are planning to run some tasks on application startup:
 
 ```csharp
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor;
 
 public void RunStartupTasks()

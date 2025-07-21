@@ -26,7 +26,8 @@ Castle Windsor framework now requires just two assemblies to run as opposed to f
 * `Castle.Core.dll` which now in addition to what was provided in previous versions contains DynamicProxy framework and
   Dictionary Adapter.
 * `Castle.Windsor.dll` - which now in addition to what was provided in previous versions contains all the types that
-  previously lived in `Castle.MicroKernel.dll` as well as several container specific types that were moved out of
+  previously lived in `Castle.Windsor.MicroKernel.dll` as well as several container specific types that were moved out
+  of
   `Castle.Core.dll`. This simplifies management and alleviates false perception that some people shared, that Windsor
   was bloated because it had four assemblies, while some other containers were distributed with smaller number of
   assemblies.

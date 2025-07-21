@@ -12,23 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Configuration;
+namespace Castle.Windsor.Tests.Config;
 
 using System.Collections.Generic;
 
-using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.Core.Resource;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Tests.ClassComponents;
-using Castle.MicroKernel.Tests.Configuration.Components;
-using Castle.Windsor;
-using Castle.Windsor.Installer;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
-
-using CastleTests;
-using CastleTests.ClassComponents;
-using CastleTests.Components;
+using Castle.Windsor.Tests.Config.Components;
+using Castle.Windsor.Windsor;
+using Castle.Windsor.Windsor.Installer;
 
 public class ConfigurationTestCase : AbstractContainerTestCase
 {
@@ -224,7 +221,7 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 					.For<IConfig>()
 					.ImplementedBy<Config>()
 					.Named("componentWithArrayDependency"));
-		
+
 		Container.Register(
 			Classes.FromAssembly(GetCurrentAssembly()).Pick().WithServiceFirstInterface());
 

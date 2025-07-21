@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Registration.Interceptors;
+namespace Castle.Windsor.Tests.Registration.Interceptors;
 
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Tests.ClassComponents;
-using Castle.MicroKernel.Tests.Registration.Interceptors.Multiple;
-using Castle.MicroKernel.Tests.Registration.Interceptors.Single;
-
-using CastleTests;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Registration.Interceptors.Multiple;
+using Castle.Windsor.Tests.Registration.Interceptors.Single;
 
 public sealed class InterceptorsTestCase : AbstractContainerTestCase
 {

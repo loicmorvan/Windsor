@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors;
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 
 using System;
 
-using Castle.Core;
 using Castle.Core.Configuration;
+using Castle.Windsor.Core;
 
 /// <summary>Uses the ConfigurationStore registered in the kernel to obtain an <see cref = "IConfiguration" /> associated with the component.</summary>
 [Serializable]

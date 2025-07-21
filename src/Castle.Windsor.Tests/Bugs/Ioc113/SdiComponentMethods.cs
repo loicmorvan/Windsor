@@ -4,7 +4,7 @@
 
 #endregion
 
-namespace Castle.MicroKernel.Tests.Bugs.Ioc113;
+namespace Castle.Windsor.Tests.Bugs.Ioc113;
 
 public enum SdiComponentMethods
 {

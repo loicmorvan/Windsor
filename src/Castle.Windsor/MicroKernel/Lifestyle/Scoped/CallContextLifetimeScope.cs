@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Scoped;
+namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
 #if FEATURE_REMOTING
 	using System.Runtime.Remoting.Messaging;
@@ -25,9 +25,9 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Security;
 
-using Castle.Core;
+using Castle.Windsor.Core;
 
-using Lock = Castle.MicroKernel.Internal.Lock;
+using Lock = Castle.Windsor.MicroKernel.Internal.Lock;
 
 /// <summary>Provides explicit lifetime scoping within logical path of execution. Used for types with <see cref = "LifestyleType.Scoped" />.</summary>
 /// <remarks>

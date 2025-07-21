@@ -46,7 +46,7 @@ To use the facility you have to register it with the container.
 You need the appropriate namespace in scope:
 
 ```csharp
-using Castle.Facilities.TypedFactory;
+using Castle.Windsor.Facilities.TypedFactory;
 ```
 
 Then you can register the facility with the container

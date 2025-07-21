@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
+namespace Castle.Windsor.MicroKernel;
 
 /// <summary>Holds the keys used by Kernel to register/request a subsystem.</summary>
 public abstract class SubSystemConstants

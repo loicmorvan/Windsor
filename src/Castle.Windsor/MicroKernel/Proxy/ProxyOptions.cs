@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Proxy;
+namespace Castle.Windsor.MicroKernel.Proxy;
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-using Castle.Core;
 using Castle.DynamicProxy;
+using Castle.Windsor.Core;
 
 /// <summary>Represents options to configure proxies.</summary>
 public class ProxyOptions

@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Scoped;
+namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
 using System;
 
-using Castle.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Context;
 
 /// <summary>Provides access to <see cref = "IScopeCache" /> held in whatever is appropriate for given scope.</summary>
 /// <remarks>

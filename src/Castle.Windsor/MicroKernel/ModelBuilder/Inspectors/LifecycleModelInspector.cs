@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors;
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 
 using System;
 using System.ComponentModel;
 using System.Linq;
 
-using Castle.Core;
-using Castle.Core.Internal;
-using Castle.MicroKernel.LifecycleConcerns;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.LifecycleConcerns;
 
 /// <summary>Inspects the type looking for interfaces that constitutes lifecycle interfaces, defined in the Castle.Model namespace.</summary>
 [Serializable]

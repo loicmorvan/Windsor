@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.TypedFactory;
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 using System;
 using System.Linq;
 
-using Castle.Facilities.TypedFactory;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Registration;
-
-using CastleTests.Components;
-using CastleTests.Facilities.TypedFactory.Factories;
+using Castle.Windsor.Facilities.TypedFactory;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
 public class TypedFactoryDependenciesTestCase : AbstractContainerTestCase
 {

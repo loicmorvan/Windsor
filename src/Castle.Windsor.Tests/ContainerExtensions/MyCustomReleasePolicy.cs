@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.ContainerExtensions;
+namespace Castle.Windsor.Tests.ContainerExtensions;
 
-using Castle.MicroKernel;
+using Castle.Windsor.MicroKernel;
 
 public class MyCustomReleasePolicy : IReleasePolicy
 {

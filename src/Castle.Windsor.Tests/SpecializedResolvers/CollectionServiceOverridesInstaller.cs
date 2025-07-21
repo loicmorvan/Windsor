@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.SpecializedResolvers;
+namespace Castle.Windsor.Tests.SpecializedResolvers;
 
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor;
-
-using CastleTests.Components;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.SubSystems.Configuration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Windsor;
 
 internal class CollectionServiceOverridesInstaller : IWindsorInstaller
 {

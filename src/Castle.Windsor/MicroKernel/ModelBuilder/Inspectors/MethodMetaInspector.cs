@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors;
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 
-using Castle.Core;
-using Castle.MicroKernel.SubSystems.Conversion;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 /// <summary>Base for inspectors that want configuration associated with methods. For each child a <see cref = "MethodMetaModel" /> is created and added to ComponentModel's methods collection</summary>
 /// <remarks>

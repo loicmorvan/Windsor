@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore;
+namespace Castle.Windsor.Facilities.AspNetCore;
 
 using System.Linq;
 
-using Castle.MicroKernel;
 using Castle.Windsor;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.Windsor;
 
 public static class WindsorContainerExtensions
 {

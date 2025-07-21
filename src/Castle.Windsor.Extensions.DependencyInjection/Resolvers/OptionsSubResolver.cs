@@ -16,9 +16,9 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers
 {
 	using System.Reflection;
 
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Context;
+	using Castle.Windsor.Core;
+	using Castle.Windsor.MicroKernel;
+	using Castle.Windsor.MicroKernel.Context;
 
 	using Microsoft.Extensions.Options;
 

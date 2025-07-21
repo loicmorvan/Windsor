@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion;
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 using System;
 using System.Collections.Generic;
 
-using Castle.Core;
 using Castle.Core.Configuration;
-using Castle.MicroKernel.Context;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Context;
 
 /// <summary>Composition of all available conversion managers</summary>
 [Serializable]

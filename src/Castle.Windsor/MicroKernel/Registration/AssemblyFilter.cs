@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration;
+namespace Castle.Windsor.MicroKernel.Registration;
 
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
-using Castle.Core.Internal;
+using Castle.Windsor.Core.Internal;
 
 public class AssemblyFilter : IAssemblyProvider
 {

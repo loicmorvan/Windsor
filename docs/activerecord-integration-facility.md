@@ -14,7 +14,7 @@ Just install the facility and add the proper configuration
 <configuration>
    <facilities>
       <facility
-         type="Castle.Facilities.ActiveRecordIntegration.ActiveRecordFacility, Castle.Facilities.ActiveRecordIntegration"
+         type="Castle.Windsor.Facilities.ActiveRecordIntegration.ActiveRecordFacility, Castle.Windsor.Facilities.ActiveRecordIntegration"
          isDebug="false"
          isWeb="false">
          <!-- Configure the namespaces for the models using Active Record Intergration -->
@@ -71,5 +71,5 @@ check [Automatic Transaction Management Facility](atm-facility.md).
 
 * `Castle.ActiveRecord.dll`
 * `Castle.Services.Transaction.dll`
-* `Castle.Facilities.ActiveRecordIntegration.dll`
-* `Castle.Facilities.AutomaticTransactionManagement.dll`
+* `Castle.Windsor.Facilities.ActiveRecordIntegration.dll`
+* `Castle.Windsor.Facilities.AutomaticTransactionManagement.dll`

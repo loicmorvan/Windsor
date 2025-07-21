@@ -20,7 +20,7 @@ namespace Castle.Bugs
 	using System.Linq;
 	using System.Reflection;
 
-	using Castle.MicroKernel;
+	using Castle.Windsor.MicroKernel;
 
 	using Microsoft.CSharp;
 
@@ -32,8 +32,8 @@ namespace Castle.Bugs
 			var csharpCode =
 				@"
                                 using System;
-                                using Castle.MicroKernel;
-                                using Castle.MicroKernel.Registration;
+                                using Castle.Windsor.MicroKernel;
+                                using Castle.Windsor.MicroKernel.Registration;
 
                                 public class ShouldNotCompile 
                                 {
@@ -51,7 +51,7 @@ namespace Castle.Bugs
 			var results = compiler.CompileAssemblyFromSource(new CompilerParameters(new[] { coreAssembly, windsorAssembly }), csharpCode);
 			Assert.True(results.Errors.HasErrors);
 			Assert.Equal("CS0452", results.Errors[0].ErrorNumber, results.Errors[0].ToString());
-			// The type 'int' must be a reference type in order to use it as parameter 'S' in the generic type or method 'Castle.MicroKernel.Registration.Component.For<S>()'
+			// The type 'int' must be a reference type in order to use it as parameter 'S' in the generic type or method 'Castle.Windsor.MicroKernel.Registration.Component.For<S>()'
 		}
 	}
 }

@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Diagnostics;
+namespace Castle.Windsor.Tests.Diagnostics;
 
-using Castle.MicroKernel;
-using Castle.MicroKernel.Registration;
-using Castle.Windsor.Diagnostics;
-
-using CastleTests.Components;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Windsor.Diagnostics;
 
 public class PotentiallyMisconfiguredComponentsDiagnosticTestCase : AbstractContainerTestCase
 {

@@ -36,9 +36,9 @@ add the facility to the application.
 While technically there's no need for that, it's a good idea to keep the project tidy.
 
 ```csharp
-using Castle.Facilities.Logging;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.SubSystems.Configuration;
+using Castle.Windsor.Facilities.Logging;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 
 public class LoggerInstaller : IWindsorInstaller
@@ -51,7 +51,7 @@ public class LoggerInstaller : IWindsorInstaller
 ```
 
 :information_source: If you're not seeing the `UseLog4Net()` method make sure you've referenced full profile (and not
-client profile) version of `Castle.Facilities.Logging`.
+client profile) version of `Castle.Windsor.Facilities.Logging`.
 
 Notice the pattern the API is using. The generic parameter specifies the type of the facility we want to add, and then
 we use a lambda to configure the facility (in this case telling it we'll be using log4net).

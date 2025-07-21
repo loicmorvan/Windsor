@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers;
+namespace Castle.Windsor.MicroKernel.Handlers;
 
 /// <summary>Might be implemented by a handler so it can expose access to dependency information which is used to construct meaningful error messages</summary>
 public interface IExposeDependencyInfo

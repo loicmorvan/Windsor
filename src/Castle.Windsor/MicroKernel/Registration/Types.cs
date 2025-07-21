@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration;
+namespace Castle.Windsor.MicroKernel.Registration;
 
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-using Castle.Core.Internal;
+using Castle.Windsor.Core.Internal;
 
 /// <summary>
 ///     Entry point to fluent way to register, by convention, multiple types. No upfront filtering is done so literally every type will be considered. That means that usually some filtering done by user

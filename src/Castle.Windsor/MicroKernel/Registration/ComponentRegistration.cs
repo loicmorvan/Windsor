@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration;
+namespace Castle.Windsor.MicroKernel.Registration;
 
 using System;
 using System.Collections;
@@ -24,18 +24,19 @@ using System.Reflection;
 
 using Castle.Core;
 using Castle.Core.Configuration;
-using Castle.Core.Internal;
 using Castle.DynamicProxy;
-using Castle.MicroKernel.ComponentActivator;
-using Castle.MicroKernel.Context;
-using Castle.MicroKernel.Handlers;
-using Castle.MicroKernel.LifecycleConcerns;
-using Castle.MicroKernel.Lifestyle.Scoped;
-using Castle.MicroKernel.ModelBuilder;
-using Castle.MicroKernel.ModelBuilder.Descriptors;
-using Castle.MicroKernel.Registration.Interceptor;
-using Castle.MicroKernel.Registration.Lifestyle;
-using Castle.MicroKernel.Registration.Proxy;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.ComponentActivator;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Handlers;
+using Castle.Windsor.MicroKernel.LifecycleConcerns;
+using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
+using Castle.Windsor.MicroKernel.ModelBuilder;
+using Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
+using Castle.Windsor.MicroKernel.Registration.Interceptor;
+using Castle.Windsor.MicroKernel.Registration.Lifestyle;
+using Castle.Windsor.MicroKernel.Registration.Proxy;
 
 /// <summary>Registration for a single type as a component with the kernel.
 ///     <para />
@@ -244,7 +245,7 @@ public class ComponentRegistration<TService> : IRegistration
 
 	/// <summary>
 	///     Allows custom dependencies to by defined dyncamically. Calling this overload is synonymous to using
-	///     <see cref = "DynamicParameters(Castle.MicroKernel.Registration.DynamicParametersDelegate)" />
+	///     <see cref = "DynamicParameters(Castle.Windsor.MicroKernel.Registration.DynamicParametersDelegate)" />
 	/// </summary>
 	/// <param name = "resolve"> The delegate used for providing dynamic parameters. </param>
 	/// <returns> </returns>
@@ -259,7 +260,7 @@ public class ComponentRegistration<TService> : IRegistration
 
 	/// <summary>
 	///     Allows custom dependencies to by defined dynamically with releasing capability. Calling this overload is synonymous to using
-	///     <see cref = "DynamicParameters(Castle.MicroKernel.Registration.DynamicParametersResolveDelegate)" />
+	///     <see cref = "DynamicParameters(Castle.Windsor.MicroKernel.Registration.DynamicParametersResolveDelegate)" />
 	/// </summary>
 	/// <param name = "resolve"> The delegate used for providing dynamic parameters. </param>
 	/// <returns> </returns>
@@ -270,7 +271,7 @@ public class ComponentRegistration<TService> : IRegistration
 
 	/// <summary>
 	///     Allows custom dependencies to by defined dynamically with releasing capability. Calling this overload is synonymous to using
-	///     <see cref = "DynamicParameters(Castle.MicroKernel.Registration.DynamicParametersWithContextResolveDelegate)" />
+	///     <see cref = "DynamicParameters(Castle.Windsor.MicroKernel.Registration.DynamicParametersWithContextResolveDelegate)" />
 	/// </summary>
 	/// <param name = "resolve"> The delegate used for providing dynamic parameters. </param>
 	/// <returns> </returns>
@@ -650,7 +651,7 @@ public class ComponentRegistration<TService> : IRegistration
 		return this;
 	}
 
-	/// <summary>Stores a set of <see cref = "LifecycleActionDelegate{T}" /> which will be invoked when the component is created and before it's returned from the container.</summary>
+	/// <summary>Stores a set of <see cref="LifecycleActionDelegate{T}" /> which will be invoked when the component is created and before it's returned from the container.</summary>
 	/// <param name = "actions"> A set of actions to be executed right after the component is created and before it's returned from the container. </param>
 	public ComponentRegistration<TService> OnCreate(params Action<TService>[] actions)
 	{

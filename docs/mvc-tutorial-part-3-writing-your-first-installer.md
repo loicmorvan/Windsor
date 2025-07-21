@@ -27,8 +27,8 @@ look like this:
 
 ```csharp
 using System.Web.Mvc;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.SubSystems.Configuration;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 
 public class ControllersInstaller : IWindsorInstaller

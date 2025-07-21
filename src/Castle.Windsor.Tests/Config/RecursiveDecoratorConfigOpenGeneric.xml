@@ -2,7 +2,7 @@
 <configuration>
 	<components>
 		<component id='int.repos'
-				   service='CastleTests.Components.IRepository`1'
+				   service='Castle.Windsor.Tests.Components.IRepository`1'
 				   type='LoggingRepositoryDecorator`1'>
 		</component>
 	</components>

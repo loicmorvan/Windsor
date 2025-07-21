@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests;
+namespace Castle.Windsor.Tests;
 
 using System;
 using System.Collections;
@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Threading;
 
 using Castle.Core.Configuration;
-using Castle.MicroKernel.SubSystems.Conversion;
+using Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 public class DefaultConversionManagerTestCase
 {
@@ -62,7 +62,7 @@ public class DefaultConversionManagerTestCase
 	{
 		Assert.Equal(typeof(DefaultConversionManagerTestCase),
 			converter.PerformConversion(
-				"CastleTests.DefaultConversionManagerTestCase, Castle.Windsor.Tests",
+				"Castle.Windsor.Tests.DefaultConversionManagerTestCase, Castle.Windsor.Tests",
 				typeof(Type)));
 	}
 

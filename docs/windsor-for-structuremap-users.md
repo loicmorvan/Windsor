@@ -169,11 +169,11 @@ public void Install(IWindsorContainer container, IConfigurationStore store)
 Windsor partitions components into a number of different namespaces. Here is a quick summary of the namespaces used so
 far.
 
- Behaviour                                                 | Required namespaces                                                                                         
------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------
- Creating a container (`new WindsorContainer().Install()`) | `Castle.Windsor`                                                                                            
- Basic installer (implementing `IWindsorInstaller`)        | `Castle.Windsor`, `Castle.MicroKernel.Registration`, `Castle.MicroKernel.SubSystems.Configuration`          
- Resolvers                                                 | `Castle.MicroKernel.Resolvers` and sub-namespaces like `SpecializedResolvers` which include `ArrayResolver` 
+ Behaviour                                                 | Required namespaces                                                                                                 
+-----------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------
+ Creating a container (`new WindsorContainer().Install()`) | `Castle.Windsor`                                                                                                    
+ Basic installer (implementing `IWindsorInstaller`)        | `Castle.Windsor`, `Castle.Windsor.MicroKernel.Registration`, `Castle.Windsor.MicroKernel.SubSystems.Configuration`  
+ Resolvers                                                 | `Castle.Windsor.MicroKernel.Resolvers` and sub-namespaces like `SpecializedResolvers` which include `ArrayResolver` 
 
 ## Lifestyle (instance scope)
 
@@ -189,7 +189,8 @@ What's called an instance scope in StructureMap, Windsor calls Lifestyle, as spe
  HttpSession  | None/Custom   | There's no direct equivalent in Windsor for this lifestyle, but implementing one is trivial 
  Hybrid       | None/Custom   | There's no direct equivalent in Windsor for this lifestyle, but implementing one is trivial 
 
-Please note that for `PerWebRequest` in Windsor you will need to install the `Castle.Facilities.AspNet.SystemWeb`
+Please note that for `PerWebRequest` in Windsor you will need to install the
+`Castle.Windsor.Facilities.AspNet.SystemWeb`
 package from NuGet.
 
 ## ConnectImplementationsToTypesClosing

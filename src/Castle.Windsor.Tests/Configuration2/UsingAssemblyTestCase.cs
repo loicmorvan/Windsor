@@ -17,8 +17,8 @@ namespace Castle.Windsor.Tests.Configuration2
 {
 	using System;
 
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.SubSystems.Conversion;
+	using Castle.Windsor.MicroKernel;
+	using Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 	public class UsingAssemblyTestCase
 	{

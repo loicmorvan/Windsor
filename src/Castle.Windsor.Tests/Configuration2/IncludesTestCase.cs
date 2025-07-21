@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Configuration2;
+namespace Castle.Windsor.Tests.Configuration2;
 
-using Castle.MicroKernel.Tests.ClassComponents;
-using Castle.Windsor;
-using Castle.Windsor.Configuration.Interpreters;
-using Castle.Windsor.Tests;
-using Castle.XmlFiles;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.XmlFiles;
+using Castle.Windsor.Windsor;
+using Castle.Windsor.Windsor.Configuration.Interpreters;
 
 public class IncludesTestCase
 {

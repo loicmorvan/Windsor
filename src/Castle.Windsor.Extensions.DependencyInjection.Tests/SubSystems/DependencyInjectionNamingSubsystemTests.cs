@@ -15,10 +15,11 @@
 
 namespace Castle.Windsor.Extensions.DependencyInjection.Tests.SubSystems;
 
-using Castle.MicroKernel;
-using Castle.MicroKernel.Registration;
 using Castle.Windsor.Extensions.DependencyInjection.SubSystems;
 using Castle.Windsor.Extensions.DependencyInjection.Tests.Components;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Windsor;
 
 using Xunit;
 

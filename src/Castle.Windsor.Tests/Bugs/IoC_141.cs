@@ -12,11 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Bugs;
+namespace Castle.Windsor.Tests.Bugs;
 
-using Castle.MicroKernel.Registration;
-
-using CastleTests;
+using Castle.Windsor.MicroKernel.Registration;
 
 public class IoC_141 : AbstractContainerTestCase
 {

@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
+namespace Castle.Windsor.MicroKernel;
 
 using System;
 
-using Castle.Core.Internal;
+using Castle.Windsor.Core.Internal;
 
 /// <summary>Exception threw by Kernel operations that failed for some reason.</summary>
 [Serializable]

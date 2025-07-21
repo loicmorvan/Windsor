@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests;
+namespace Castle.Windsor.Facilities.AspNetCore.Tests;
 
 using System;
 
-using Castle.Facilities.AspNetCore.Tests.Framework;
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.Facilities.AspNetCore.Tests.Framework;
+using Castle.Windsor.MicroKernel.Registration;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-using TestContext = Castle.Facilities.AspNetCore.Tests.Framework.TestContext;
+using TestContext = Castle.Windsor.Facilities.AspNetCore.Tests.Framework.TestContext;
 
 public abstract class WindsorRegistrationOptionsTestCase : IDisposable
 {

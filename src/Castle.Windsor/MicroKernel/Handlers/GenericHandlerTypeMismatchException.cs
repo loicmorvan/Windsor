@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers;
+namespace Castle.Windsor.MicroKernel.Handlers;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Castle.Core;
+using Castle.Windsor.Core;
 
 /// <summary>Thrown when <see cref = "DefaultGenericHandler" /> can't create proper closed version of itself due to violation of generic constraints.</summary>
 [Serializable]

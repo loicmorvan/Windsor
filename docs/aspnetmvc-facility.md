@@ -12,7 +12,7 @@ can find an explanation of lifestyles [here](aspnet-lifestyles.md).
 
 ## What do I need to set it up?
 
-First you need to install the `Castle.Facilities.AspNet.Mvc` facility from Nuget. Then you will need to add the
+First you need to install the `Castle.Windsor.Facilities.AspNet.Mvc` facility from Nuget. Then you will need to add the
 AspNetMvcFacility in your application startup.
 Below is an example of how this could work.
 

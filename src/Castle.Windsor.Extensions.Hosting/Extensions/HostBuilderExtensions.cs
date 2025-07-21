@@ -15,12 +15,13 @@
 // ReSharper disable once CheckNamespace : Microsoft namespace is intentional - suggested by Microsoft
 // ReSharper disable UnusedType.Global : TODO missing tests
 // ReSharper disable UnusedMember.Global : TODO missing tests
+
 namespace Microsoft.Extensions.Hosting
 {
 	using System;
 
-	using Castle.Windsor;
 	using Castle.Windsor.Extensions.DependencyInjection;
+	using Castle.Windsor.Windsor;
 
 	public static class HostBuilderExtensions
 	{

@@ -17,12 +17,10 @@ namespace Castle.Windsor.Tests.MicroKernel;
 using System;
 using System.Collections.Generic;
 
-using Castle.MicroKernel;
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
-
-using CastleTests;
-using CastleTests.Components;
+using Castle.Windsor.Windsor;
 
 public class ArgumentsTestCase : AbstractContainerTestCase
 {

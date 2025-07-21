@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.TestInfrastructure;
+namespace Castle.Windsor.Tests.TestInfrastructure;
 
 using System.ComponentModel;
 
-using Castle.MicroKernel.Context;
-using Castle.MicroKernel.Lifestyle.Scoped;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
 [Description("statically")]
 public class StaticScopeAccessor : IScopeAccessor

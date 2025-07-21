@@ -12,16 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.Startable;
+namespace Castle.Windsor.Tests.Facilities.Startable;
 
 using System;
 
-using Castle.Facilities.Startable;
-using Castle.MicroKernel.Registration;
-using Castle.Windsor;
-using Castle.Windsor.Tests;
-
-using CastleTests.Components;
+using Castle.Windsor.Facilities.Startable;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Windsor;
 
 public class StartableAndExceptionThrowingInstallersTestCase
 {

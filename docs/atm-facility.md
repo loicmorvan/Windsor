@@ -69,6 +69,6 @@ about it.
 
 ### Required Assemblies
 
-* `Castle.Facilities.AutomaticTransactionManagement.dll`
+* `Castle.Windsor.Facilities.AutomaticTransactionManagement.dll`
 * `Castle.Services.Transactions.dll`
 * `Castle.Core.dll`

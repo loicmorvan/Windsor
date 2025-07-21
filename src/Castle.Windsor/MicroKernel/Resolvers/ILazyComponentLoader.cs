@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Resolvers;
+namespace Castle.Windsor.MicroKernel.Resolvers;
 
 using System;
 
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Provides lazy registration capabilities to the container.</summary>
 /// <remarks>

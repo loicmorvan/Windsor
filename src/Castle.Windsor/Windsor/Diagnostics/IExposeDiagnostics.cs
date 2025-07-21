@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics;
+namespace Castle.Windsor.Windsor.Diagnostics;
 
 /// <summary>Exposes diagnostics about itself to the <see cref = "IDiagnosticsInspector{TData,TContext}" />.</summary>
 /// <typeparam name = "TData">

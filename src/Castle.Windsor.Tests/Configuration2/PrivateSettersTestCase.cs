@@ -14,7 +14,9 @@
 
 namespace Castle.Windsor.Tests.Configuration2;
 
-using Config = Castle.Windsor.Installer.Configuration;
+using Castle.Windsor.Windsor;
+
+using Config = Castle.Windsor.Windsor.Installer.Configuration;
 
 public class PrivateSettersTestCase
 {

@@ -1,10 +1,10 @@
-namespace CastleTests;
+namespace Castle.Windsor.Tests;
 
 using System;
 
-using Castle.Facilities.TypedFactory;
-using Castle.MicroKernel.Registration;
-using Castle.Windsor;
+using Castle.Windsor.Facilities.TypedFactory;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Windsor;
 
 public class LifestyleTests
 {

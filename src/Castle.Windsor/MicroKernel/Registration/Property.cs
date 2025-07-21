@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration;
+namespace Castle.Windsor.MicroKernel.Registration;
 
 using System;
 
-using Castle.Core;
+using Castle.Windsor.Core;
 
 /// <summary>Represents a key/value pair.</summary>
 public class Property

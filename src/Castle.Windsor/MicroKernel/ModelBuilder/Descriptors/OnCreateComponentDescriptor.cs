@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
-using Castle.Core;
-using Castle.MicroKernel.LifecycleConcerns;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.LifecycleConcerns;
 
 /// <summary>Adds the actions to ExtendedProperties.</summary>
 /// <typeparam name = "S"></typeparam>

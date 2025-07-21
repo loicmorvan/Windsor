@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.TypedFactory.Factories;
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
-using Castle.Facilities.TypedFactory;
+using Castle.Windsor.Facilities.TypedFactory;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
 
 [Factory(SelectorType = typeof(Component2Selector))]

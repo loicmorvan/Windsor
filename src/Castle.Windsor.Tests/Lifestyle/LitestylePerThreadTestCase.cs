@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Lifestyle;
+namespace Castle.Windsor.Tests.Lifestyle;
 
 using System;
 using System.Threading;
 
-using Castle.MicroKernel.Registration;
-using Castle.Windsor;
+using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
-
-using CastleTests.Components;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Windsor;
 
 public class LitestylePerThreadTestCase : AbstractContainerTestCase
 {

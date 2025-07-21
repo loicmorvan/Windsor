@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Activators;
+namespace Castle.Windsor.Facilities.AspNetCore.Activators;
 
 using System;
 

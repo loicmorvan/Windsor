@@ -2,10 +2,10 @@
 <configuration>
 	<components>
 		<component id="hasForwards"
-				   type="Castle.MicroKernel.Tests.ClassComponents.TwoInterfacesImpl, Castle.Windsor.Tests"
-				   service="Castle.MicroKernel.Tests.ClassComponents.ICommon, Castle.Windsor.Tests">
+				   type="Castle.Windsor.Tests.ClassComponents.TwoInterfacesImpl, Castle.Windsor.Tests"
+				   service="Castle.Windsor.Tests.ClassComponents.ICommon, Castle.Windsor.Tests">
 			<forwardedTypes>
-				<add service="Castle.MicroKernel.Tests.ClassComponents.ICommon2, Castle.Windsor.Tests"/>
+				<add service="Castle.Windsor.Tests.ClassComponents.ICommon2, Castle.Windsor.Tests"/>
 			</forwardedTypes>
 		</component>
 	</components>

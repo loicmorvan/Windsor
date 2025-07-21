@@ -1,4 +1,4 @@
-﻿namespace Castle.MicroKernel.Tests.Configuration.Components;
+﻿namespace Castle.Windsor.Tests.Config.Components;
 
 using System.Linq;
 

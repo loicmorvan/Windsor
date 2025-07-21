@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
+namespace Castle.Windsor.Core;
 
 /// <summary>Lifecycle interface. If implemented by a component, the method Initialize will be invoked by the container before making the component available to the external world.</summary>
 public interface IInitializable

@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Installer;
+namespace Castle.Windsor.Windsor.Installer;
 
 using System.Collections.Generic;
 
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.SubSystems.Configuration;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.SubSystems.Configuration;
 
 public class CompositeInstaller : IWindsorInstaller
 {

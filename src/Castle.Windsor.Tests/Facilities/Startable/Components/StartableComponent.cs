@@ -14,7 +14,7 @@
 
 namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 
-using Castle.Core;
+using Castle.Windsor.Core;
 
 [Transient]
 public class StartableComponent : IStartable

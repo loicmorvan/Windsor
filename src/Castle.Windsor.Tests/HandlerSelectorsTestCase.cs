@@ -16,10 +16,11 @@ namespace Castle.Windsor.Tests;
 
 using System;
 
-using Castle.Core;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Context;
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Windsor;
 
 public class HandlerSelectorsTestCase
 {

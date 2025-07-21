@@ -18,12 +18,13 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 	using System;
 	using System.Diagnostics;
 
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
 	using Castle.Windsor.Extensions.DependencyInjection.Extensions;
 	using Castle.Windsor.Extensions.DependencyInjection.Resolvers;
 	using Castle.Windsor.Extensions.DependencyInjection.Scope;
 	using Castle.Windsor.Extensions.DependencyInjection.SubSystems;
+	using Castle.Windsor.MicroKernel;
+	using Castle.Windsor.MicroKernel.Registration;
+	using Castle.Windsor.Windsor;
 
 	using Microsoft.Extensions.DependencyInjection;
 

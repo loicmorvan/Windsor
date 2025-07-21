@@ -16,6 +16,8 @@
 
 namespace Castle.Windsor.Tests.Configuration2;
 
+using Castle.Windsor.Windsor;
+
 public class ConfigWithStatementsTestCase
 {
 	private IWindsorContainer container;

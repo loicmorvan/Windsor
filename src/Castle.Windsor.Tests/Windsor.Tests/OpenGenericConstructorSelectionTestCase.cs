@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Windsor.Tests;
+namespace Castle.Windsor.Tests.Windsor.Tests;
 
 using System;
 using System.Collections;
 
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Registration;
 
 // Please see DefaultDependencyResolver -> HasAnyComponentInValidState -> RebuildOpenGenericHandlersWithClosedGenericSubHandlers
 // 

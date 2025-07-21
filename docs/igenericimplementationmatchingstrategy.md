@@ -58,7 +58,8 @@ should Windsor know about it, when `IRepository<Customer>` is requested?
 ## The solution
 
 The answer is, it's not up to Windsor to decide, because it simply doesn't have all the information. Windsor however
-provides an extension point: `Castle.MicroKernel.Handlers.IGenericImplementationMatchingStrategy` interface that you can
+provides an extension point: `Castle.Windsor.MicroKernel.Handlers.IGenericImplementationMatchingStrategy` interface that
+you can
 implement to supply the missing information, so that Windsor can successfully close the open generic type. The interface
 has a single method:
 

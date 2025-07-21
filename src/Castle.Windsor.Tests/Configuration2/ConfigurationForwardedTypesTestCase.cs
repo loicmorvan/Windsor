@@ -14,7 +14,8 @@
 
 namespace Castle.Windsor.Tests.Configuration2;
 
-using Castle.MicroKernel.Tests.ClassComponents;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Windsor;
 
 public class ConfigurationForwardedTypesTestCase
 {

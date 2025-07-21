@@ -26,7 +26,7 @@ that runs in a windows service outside of IIS.
 ## What do I need to set it up?
 
 You need to determine whether your webapi is hosted in or outside of IIS. Then pull down
-`Castle.Facilities.AspNet.WebApi`
+`Castle.Windsor.Facilities.AspNet.WebApi`
 into your project from NuGet.
 
 ### IIS or WebHosted

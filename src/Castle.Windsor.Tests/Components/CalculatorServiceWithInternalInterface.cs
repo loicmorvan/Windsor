@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components;
+namespace Castle.Windsor.Tests.Components;
 
 using System;
 
-using Castle.Core;
 using Castle.DynamicProxy;
+using Castle.Windsor.Core;
 
 [Interceptor(typeof(StandardInterceptor))]
 public class CalculatorServiceWithInternalInterface : ICalcService, IInternal

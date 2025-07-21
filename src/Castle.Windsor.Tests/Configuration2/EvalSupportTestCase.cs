@@ -16,9 +16,9 @@ namespace Castle.Windsor.Tests.Configuration2;
 
 using System;
 
-using Castle.Windsor.Configuration.Interpreters;
-
-using CastleTests.Components;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Windsor;
+using Castle.Windsor.Windsor.Configuration.Interpreters;
 
 public class EvalSupportTestCase
 {

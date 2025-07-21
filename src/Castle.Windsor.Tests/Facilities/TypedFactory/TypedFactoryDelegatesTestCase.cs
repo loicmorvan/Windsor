@@ -12,29 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.TypedFactory;
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 using System;
 using System.Linq;
 using System.Reflection;
 
-using Castle.Facilities.TypedFactory;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Releasers;
-using Castle.MicroKernel.Tests.ClassComponents;
-using Castle.Windsor.Tests.Facilities.TypedFactory;
+using Castle.Windsor.Facilities.TypedFactory;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Releasers;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
-
-using CastleTests.Components;
-using CastleTests.Facilities.TypedFactory.Delegates;
-using CastleTests.Interceptors;
+using Castle.Windsor.Tests.Interceptors;
 
 using HasTwoConstructors = Castle.Windsor.Tests.Facilities.TypedFactory.Delegates.HasTwoConstructors;
-using ServiceFactory = Castle.Windsor.Tests.Facilities.TypedFactory.ServiceFactory;
+using ServiceFactory = Castle.Windsor.Tests.Facilities.TypedFactory.Components.ServiceFactory;
 
 public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 {

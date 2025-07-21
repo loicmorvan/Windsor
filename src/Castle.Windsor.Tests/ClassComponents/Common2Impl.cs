@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.ClassComponents;
-
-using Castle.MicroKernel.Tests.ClassComponents;
+namespace Castle.Windsor.Tests.ClassComponents;
 
 public class Common2Impl : ICommon2;

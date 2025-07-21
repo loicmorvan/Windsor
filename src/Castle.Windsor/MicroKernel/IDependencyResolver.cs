@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
+namespace Castle.Windsor.MicroKernel;
 
 /// <summary>Implementors should use a strategy to obtain valid references to properties and/or services requested in the dependency model.</summary>
 public interface IDependencyResolver : ISubDependencyResolver

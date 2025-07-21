@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory.Internal;
+namespace Castle.Windsor.Facilities.TypedFactory.Internal;
 
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-using Castle.Core;
-using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Facilities;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Interceptor;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Facilities;
 
 [Transient]
 public class TypedFactoryInterceptor : IInterceptor, IOnBehalfAware, IDisposable

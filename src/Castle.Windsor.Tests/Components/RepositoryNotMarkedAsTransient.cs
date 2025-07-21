@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components;
+namespace Castle.Windsor.Tests.Components;
 
 //[Castle.Core.Transient] //Test passes if this attributed added
 public class RepositoryNotMarkedAsTransient<T> : IRepository<T> where T : new()

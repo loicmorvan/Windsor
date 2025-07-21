@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor;
+namespace Castle.Windsor.Windsor;
 
 using System;
 
 using Castle.Core;
-using Castle.MicroKernel;
+using Castle.Windsor.MicroKernel;
 
 /// <summary>
 ///     Implementation of <see cref = "IServiceProvider" /> and <see cref = "IServiceProviderEx" /> that uses a

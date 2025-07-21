@@ -14,8 +14,8 @@
 
 namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 
-using Castle.Core;
-using Castle.MicroKernel.Tests.ClassComponents;
+using Castle.Windsor.Core;
+using Castle.Windsor.Tests.ClassComponents;
 
 public class Startable : IStartable
 {

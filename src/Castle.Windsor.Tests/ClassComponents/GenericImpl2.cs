@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents;
-
-using CastleTests.ClassComponents;
+namespace Castle.Windsor.Tests.ClassComponents;
 
 public class GenericImpl2<T> : IGeneric<T>
 {

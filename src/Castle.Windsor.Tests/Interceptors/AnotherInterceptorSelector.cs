@@ -16,8 +16,8 @@ namespace Castle.Windsor.Tests.Interceptors;
 
 using System.Linq;
 
-using Castle.Core;
-using Castle.MicroKernel.Proxy;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Proxy;
 
 public class AnotherInterceptorSelector : IModelInterceptorsSelector
 {

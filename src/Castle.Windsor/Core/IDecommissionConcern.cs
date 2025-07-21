@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
+namespace Castle.Windsor.Core;
 
 /// <summary>Represents a concern that will be applied to a component instance during decommission phase (right before component instance is destroyed).</summary>
 public interface IDecommissionConcern

@@ -15,7 +15,6 @@
     <PackageTags>castle, windsor, inversionOfControl, DependencyInjection, aspnet, core</PackageTags>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>Castle.Windsor.Extensions.DependencyInjection</AssemblyName>
-    <RootNamespace>Castle.Windsor.Extensions.DependencyInjection</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='net9.0'">
@@ -29,6 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2024.3.0"/>
   </ItemGroup>
 </Project>

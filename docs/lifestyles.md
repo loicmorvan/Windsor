@@ -81,7 +81,7 @@ Container.Register(Component.For<MyScopedComponent>().LifestyleScoped());
 Now consider the following scenario:
 
 ```csharp
-using Castle.MicroKernel.Lifestyle;
+using Castle.Windsor.MicroKernel.Lifestyle;
 
 using (Container.BeginScope()) //extension method
 {
@@ -104,7 +104,7 @@ is executed.
 #### Custom scopes
 
 In addition to the default, `CallContext` scope, you can bind your components to any arbitrary scope you choose, by
-implementing `Castle.MicroKernel.Lifestyle.Scoped.IScopeAccessor` interface. (
+implementing `Castle.Windsor.MicroKernel.Lifestyle.Scoped.IScopeAccessor` interface. (
 see [implementing custom scope](implementing-custom-scope.md)).
 
 You then specify the scope accessor when registering your component:

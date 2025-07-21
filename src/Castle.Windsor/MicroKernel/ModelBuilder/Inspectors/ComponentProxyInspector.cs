@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors;
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-using Castle.Core;
-using Castle.Core.Internal;
-using Castle.MicroKernel.Proxy;
-using Castle.MicroKernel.SubSystems.Conversion;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.Proxy;
+using Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 /// <summary>
 ///     Inspects the component configuration and type looking for information that can influence the generation of a proxy for that component.

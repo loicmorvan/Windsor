@@ -12,21 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests;
+namespace Castle.Windsor.Tests;
 
 using System;
 
-using Castle.Core;
-using Castle.MicroKernel;
-using Castle.MicroKernel.ComponentActivator;
-using Castle.MicroKernel.Handlers;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Tests.Bugs;
-using Castle.MicroKernel.Tests.ClassComponents;
-using Castle.MicroKernel.Tests.Configuration.Components;
-
-using CastleTests.ClassComponents;
-using CastleTests.Components;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.ComponentActivator;
+using Castle.Windsor.MicroKernel.Handlers;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Bugs;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Config.Components;
 
 public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 {
@@ -60,7 +58,7 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 		var message = string.Format(
 			"Can't create component 'processor' as it has dependencies to be satisfied.{0}{0}" +
 			"'processor' is waiting for the following dependencies:{0}" +
-			"- Service 'Castle.MicroKernel.Tests.Bugs.IoC_141+IAssembler`1[[{1}]]' which was not registered.{0}",
+			"- Service 'Castle.Windsor.MicroKernel.Tests.Bugs.IoC_141+IAssembler`1[[{1}]]' which was not registered.{0}",
 			Environment.NewLine, typeof(int).AssemblyQualifiedName);
 
 		Assert.Equal(message, exception.Message);
@@ -100,7 +98,7 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 
 		var message =
 			string.Format(
-				"Instance CastleTests.Components.ADisposable of component Late bound CastleTests.Components.A is already being tracked.{0}" +
+				"Instance Castle.Windsor.Tests.Components.ADisposable of component Late bound Castle.Windsor.Tests.Components.A is already being tracked.{0}" +
 				"The factory method providing instances of the component is reusing instances, but the lifestyle of the component is Transient which requires new instance each time.{0}" +
 				"In most cases it is advised for the factory method not to be handling reuse of the instances, but to chose a lifestyle that does that appropriately.{0}" +
 				"Alternatively, if you do not wish for Windsor to track the objects coming from the factory change your registration to '.UsingFactoryMethod(yourFactory, managedExternally: true)'",

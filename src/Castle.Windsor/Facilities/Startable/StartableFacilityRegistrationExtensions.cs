@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Startable;
+namespace Castle.Windsor.Facilities.Startable;
 
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
 
-using Castle.MicroKernel.Facilities;
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Facilities;
+using Castle.Windsor.MicroKernel.Registration;
 
 public static class StartableFacilityRegistrationExtensions
 {
@@ -33,7 +33,7 @@ public static class StartableFacilityRegistrationExtensions
 	/// <param name = "registration"></param>
 	/// <param name = "startMethod">The start method.</param>
 	/// <returns></returns>
-	/// <remarks>Be sure that you first added the <see cref = "Castle.Facilities.Startable.StartableFacility" /> to the kernel, before registering this component.</remarks>
+	/// <remarks>Be sure that you first added the <see cref = "StartableFacility" /> to the kernel, before registering this component.</remarks>
 	public static ComponentRegistration<TService> StartUsingMethod<TService>(
 		this ComponentRegistration<TService> registration, string startMethod)
 		where TService : class
@@ -46,7 +46,7 @@ public static class StartableFacilityRegistrationExtensions
 	/// <param name = "registration"></param>
 	/// <param name = "methodToUse">Method to use. something like: StartUsingMethod(s => s.Start)</param>
 	/// <returns></returns>
-	/// <remarks>Be sure that you first added the <see cref = "Castle.Facilities.Startable.StartableFacility" /> to the kernel, before registering this component.</remarks>
+	/// <remarks>Be sure that you first added the <see cref = "StartableFacility" /> to the kernel, before registering this component.</remarks>
 	public static ComponentRegistration<TService> StartUsingMethod<TService>(
 		this ComponentRegistration<TService> registration, Expression<Func<TService, Action>> methodToUse)
 		where TService : class
@@ -60,7 +60,7 @@ public static class StartableFacilityRegistrationExtensions
 	/// <param name = "registration"></param>
 	/// <param name = "stopMethod">The stop method.</param>
 	/// <returns></returns>
-	/// <remarks>Be sure that you first added the <see cref = "Castle.Facilities.Startable.StartableFacility" /> to the kernel, before registering this component.</remarks>
+	/// <remarks>Be sure that you first added the <see cref = "StartableFacility" /> to the kernel, before registering this component.</remarks>
 	public static ComponentRegistration<TService> StopUsingMethod<TService>(
 		this ComponentRegistration<TService> registration, string stopMethod)
 		where TService : class
@@ -73,7 +73,7 @@ public static class StartableFacilityRegistrationExtensions
 	/// <param name = "registration"></param>
 	/// <param name = "methodToUse">Method to use. something like: StartUsingMethod(s => s.Start)</param>
 	/// <returns></returns>
-	/// <remarks>Be sure that you first added the <see cref = "Castle.Facilities.Startable.StartableFacility" /> to the kernel, before registering this component.</remarks>
+	/// <remarks>Be sure that you first added the <see cref = "StartableFacility" /> to the kernel, before registering this component.</remarks>
 	public static ComponentRegistration<TService> StopUsingMethod<TService>(
 		this ComponentRegistration<TService> registration, Expression<Func<TService, Action>> methodToUse)
 		where TService : class

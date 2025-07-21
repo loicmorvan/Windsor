@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Registration;
+namespace Castle.Windsor.Tests.Registration;
 
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Tests.ClassComponents;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
 
 public class AssignableHandlersTestCase : AbstractContainerTestCase
 {

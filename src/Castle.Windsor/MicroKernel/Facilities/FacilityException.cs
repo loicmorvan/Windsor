@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Facilities;
+namespace Castle.Windsor.MicroKernel.Facilities;
 
 using System;
 
-using Castle.Core.Internal;
+using Castle.Windsor.Core.Internal;
 
 /// <summary>Base exception to be used by facilities.</summary>
 [Serializable]

@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors;
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 
 using System;
 
-using Castle.Core;
-using Castle.Core.Internal;
-using Castle.MicroKernel.SubSystems.Conversion;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 /// <summary>Inspects the component configuration and the type looking for a definition of component activator type. The configuration preceeds whatever is defined in the component.</summary>
 /// <remarks>

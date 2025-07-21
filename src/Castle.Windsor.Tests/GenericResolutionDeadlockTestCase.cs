@@ -1,12 +1,12 @@
 ﻿#if FEATURE_THREADABORT
-namespace CastleTests
+namespace Castle.Windsor.Tests
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Threading;
 
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel.Registration;
+	using Castle.Windsor.Facilities.TypedFactory;
+	using Castle.Windsor.MicroKernel.Registration;
 	using Castle.Windsor;
 
 	public class GenericResolutionDeadlockTestCase

@@ -16,8 +16,9 @@ namespace Castle.Windsor.Tests;
 
 using System.Collections.Generic;
 
-using Castle.MicroKernel;
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Windsor;
 
 public class ContainerProblem
 {

@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests;
+namespace Castle.Windsor.Tests;
 
 using System;
 using System.Collections.Generic;
 
-using Castle.MicroKernel.Handlers;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Resolvers;
-using Castle.MicroKernel.Tests.RuntimeParameters;
-using Castle.Windsor;
-
-using CastleTests;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Handlers;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Resolvers;
+using Castle.Windsor.Tests.RuntimeParameters;
+using Castle.Windsor.Windsor.Extensions;
 
 public class RuntimeParametersTestCase : AbstractContainerTestCase
 {
@@ -62,7 +61,7 @@ public class RuntimeParametersTestCase : AbstractContainerTestCase
 			Container.Resolve<CompB>(new Arguments().AddNamed("myArgument", 123)));
 		Assert.Equal(
 			string.Format(
-				"Missing dependency.{0}Component compb has a dependency on Castle.MicroKernel.Tests.RuntimeParameters.CompC, which could not be resolved.{0}Make sure the dependency is correctly registered in the container as a service, or provided as inline argument.",
+				"Missing dependency.{0}Component compb has a dependency on Castle.Windsor.MicroKernel.Tests.RuntimeParameters.CompC, which could not be resolved.{0}Make sure the dependency is correctly registered in the container as a service, or provided as inline argument.",
 				Environment.NewLine),
 			exception.Message);
 	}
@@ -137,7 +136,7 @@ public class RuntimeParametersTestCase : AbstractContainerTestCase
 			Component.For<CompB>().Named("compb"));
 		var expectedMessage =
 			string.Format(
-				"Can't create component 'compb' as it has dependencies to be satisfied.{0}{0}'compb' is waiting for the following dependencies:{0}- Service 'Castle.MicroKernel.Tests.RuntimeParameters.CompC' which was not registered.{0}- Parameter 'myArgument' which was not provided. Did you forget to set the dependency?{0}",
+				"Can't create component 'compb' as it has dependencies to be satisfied.{0}{0}'compb' is waiting for the following dependencies:{0}- Service 'Castle.Windsor.MicroKernel.Tests.RuntimeParameters.CompC' which was not registered.{0}- Parameter 'myArgument' which was not provided. Did you forget to set the dependency?{0}",
 				Environment.NewLine);
 		var exception = Assert.Throws<HandlerException>(() => Kernel.Resolve<CompB>());
 		Assert.Equal(expectedMessage, exception.Message);

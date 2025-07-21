@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers;
+namespace Castle.Windsor.MicroKernel.Handlers;
 
 using System;
 using System.Diagnostics;
@@ -20,10 +20,10 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 
-using Castle.Core;
-using Castle.Core.Internal;
-using Castle.MicroKernel.Context;
-using Castle.MicroKernel.Resolvers;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Resolvers;
 
 /// <summary>Implements the basis of <see cref = "IHandler" /></summary>
 [Serializable]

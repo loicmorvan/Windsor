@@ -10,7 +10,6 @@
     <OutputType>Library</OutputType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>Castle.Windsor.Tests</AssemblyName>
-    <RootNamespace>CastleTests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

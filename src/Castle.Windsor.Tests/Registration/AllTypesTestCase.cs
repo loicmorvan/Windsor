@@ -12,18 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Registration;
+namespace Castle.Windsor.Tests.Registration;
 
 using System;
 using System.Linq;
 using System.Reflection;
 
-using Castle.Core;
 using Castle.Core.Internal;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Tests.ClassComponents;
-
-using CastleTests.ClassComponents;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
 
 public class AllTypesTestCase : AbstractContainerTestCase
 {
@@ -414,7 +412,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
 	{
 		Kernel.Register(
 			Classes.FromAssembly(GetCurrentAssembly())
-				.Where(Component.IsInNamespace("Castle.MicroKernel.Tests.ClassComponents"))
+				.Where(Component.IsInNamespace("Castle.Windsor.Tests.ClassComponents"))
 				.WithService.FirstInterface()
 		);
 
@@ -427,7 +425,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
 	{
 		Kernel.Register(
 			Classes.FromAssembly(GetCurrentAssembly())
-				.Where(Component.IsInNamespace("Castle.MicroKernel.Tests.AnyClass"))
+				.Where(Component.IsInNamespace("Castle.Windsor.MicroKernel.Tests.AnyClass"))
 				.WithService.FirstInterface()
 		);
 

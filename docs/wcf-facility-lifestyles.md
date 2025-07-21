@@ -10,7 +10,7 @@ If you're using sessionful binding you may want some components to live for the 
 You attach the lifestyles using extension method, so you first need to add the following using statement:
 
 ```csharp
-using Castle.Facilities.WcfIntegration;
+using Castle.Windsor.Facilities.WcfIntegration;
 ```
 
 Then you can register your component with the lifestyle:

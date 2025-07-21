@@ -14,13 +14,11 @@
 
 namespace Castle.Windsor.Tests.Handlers;
 
-using Castle.Core;
-using Castle.MicroKernel;
-using Castle.MicroKernel.ModelBuilder;
-using Castle.MicroKernel.Registration;
-
-using CastleTests;
-using CastleTests.Components;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.ModelBuilder;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
 
 public class EmptyConstructorTestCase : AbstractContainerTestCase
 {

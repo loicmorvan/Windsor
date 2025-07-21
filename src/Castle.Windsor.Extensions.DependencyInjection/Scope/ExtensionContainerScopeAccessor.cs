@@ -14,8 +14,8 @@
 
 namespace Castle.Windsor.Extensions.DependencyInjection.Scope
 {
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Lifestyle.Scoped;
+	using Castle.Windsor.MicroKernel.Context;
+	using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
 	internal class ExtensionContainerScopeAccessor : IScopeAccessor
 	{

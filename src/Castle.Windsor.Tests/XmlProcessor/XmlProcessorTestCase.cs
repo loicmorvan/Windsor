@@ -19,8 +19,8 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-using Castle.Windsor.Configuration.Interpreters;
-using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
+using Castle.Windsor.Windsor.Configuration.Interpreters;
+using Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor;
 
 /// <summary>Summary description for Class1.</summary>
 public class XmlProcessorTestCase

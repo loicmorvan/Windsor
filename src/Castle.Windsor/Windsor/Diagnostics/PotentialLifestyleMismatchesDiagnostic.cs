@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics;
+namespace Castle.Windsor.Windsor.Diagnostics;
 
 using System.Collections.Generic;
 using System.Linq;
 
-using Castle.Core;
-using Castle.MicroKernel;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
 
 public class PotentialLifestyleMismatchesDiagnostic : IPotentialLifestyleMismatchesDiagnostic
 {

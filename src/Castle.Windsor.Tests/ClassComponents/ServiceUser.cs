@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents;
+namespace Castle.Windsor.Tests.ClassComponents;
 
 using System;
 
-using CastleTests.Components;
+using Castle.Windsor.Tests.Components;
 
 public class ServiceUser
 {

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration;
+namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>The contract for all registrations with the kernel.</summary>
 public interface IRegistration

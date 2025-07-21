@@ -14,13 +14,12 @@
 
 namespace Castle.Windsor.Tests;
 
-using Castle.MicroKernel;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Releasers;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Releasers;
 using Castle.Windsor.Tests.ClassComponents;
-
-using CastleTests;
-using CastleTests.Components;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Windsor;
 
 public class LifecycledComponentsReleasePolicyTestCase
 {

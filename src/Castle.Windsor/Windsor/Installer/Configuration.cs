@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Installer;
+namespace Castle.Windsor.Windsor.Installer;
 
 using Castle.Core.Resource;
-using Castle.Windsor.Configuration.Interpreters;
+using Castle.Windsor.Windsor.Configuration.Interpreters;
 
 public static class Configuration
 {

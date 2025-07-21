@@ -16,12 +16,10 @@ namespace Castle.Windsor.Tests.Lifecycle;
 
 using System;
 
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
-
-using CastleTests;
-using CastleTests.Components;
-using CastleTests.Facilities.TypedFactory;
 
 public class DisposeTestCase : AbstractContainerTestCase
 {

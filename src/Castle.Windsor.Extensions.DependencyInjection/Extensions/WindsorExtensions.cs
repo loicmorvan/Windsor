@@ -14,9 +14,9 @@
 
 namespace Castle.Windsor.Extensions.DependencyInjection.Extensions
 {
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Registration.Lifestyle;
 	using Castle.Windsor.Extensions.DependencyInjection.Scope;
+	using Castle.Windsor.MicroKernel.Registration;
+	using Castle.Windsor.MicroKernel.Registration.Lifestyle;
 
 	public static class WindsorExtensions
 	{

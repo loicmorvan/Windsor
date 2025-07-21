@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Context;
+namespace Castle.Windsor.MicroKernel.Context;
 
 using System;
 using System.Collections.Generic;
@@ -21,11 +21,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-using Castle.Core;
-using Castle.Core.Internal;
-using Castle.MicroKernel.ComponentActivator;
-using Castle.MicroKernel.Releasers;
-using Castle.MicroKernel.SubSystems.Conversion;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.ComponentActivator;
+using Castle.Windsor.MicroKernel.Releasers;
+using Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 /// <summary>
 ///     Used during a component request, passed along to the whole process. This allow some data to be passed along the process, which is used to detected cycled dependency graphs and now it's also being

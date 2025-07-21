@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
+namespace Castle.Windsor.MicroKernel;
 
 using System;
 
-using Castle.Core;
-using Castle.MicroKernel.Context;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Context;
 
 /// <summary>The <c>ILifestyleManager</c> implements a strategy for a given lifestyle, like singleton, per-thread and transient.</summary>
 /// <remarks>The responsibility of <c>ILifestyleManager</c> is only the management of lifestyle. It should rely on <see cref = "IComponentActivator" /> to obtain a new component instance</remarks>

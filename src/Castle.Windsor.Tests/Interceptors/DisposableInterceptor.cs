@@ -16,10 +16,9 @@ namespace Castle.Windsor.Tests.Interceptors;
 
 using System;
 
-using Castle.Core;
 using Castle.DynamicProxy;
-
-using CastleTests.Facilities.TypedFactory;
+using Castle.Windsor.Core;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 
 [Transient]
 public class DisposableInterceptor : StandardInterceptor, IDisposable

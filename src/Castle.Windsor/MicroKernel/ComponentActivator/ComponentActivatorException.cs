@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ComponentActivator;
+namespace Castle.Windsor.MicroKernel.ComponentActivator;
 
 using System;
 
-using Castle.Core;
+using Castle.Windsor.Core;
 
 /// <summary>Exception thrown whe a component could not be activated. THis should come from the component activator.</summary>
 [Serializable]

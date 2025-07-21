@@ -12,19 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Proxies;
+namespace Castle.Windsor.Tests.Proxies;
 
 using System;
 
 using Castle.DynamicProxy;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Handlers;
-using Castle.MicroKernel.Registration;
-using Castle.ProxyInfrastructure;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Handlers;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 using Castle.Windsor.Tests.Interceptors;
-
-using CastleTests.Components;
-using CastleTests.Facilities.TypedFactory;
+using Castle.Windsor.Tests.ProxyInfrastructure;
 
 public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 {
@@ -110,7 +109,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 				Container.Resolve<ICalcService>());
 		Assert.Equal(
 			string.Format(
-				"Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Component 'Castle.ProxyInfrastructure.ProxyNothingHook' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
+				"Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Component 'Castle.Windsor.Tests.ProxyInfrastructure.ProxyNothingHook' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
 				Environment.NewLine,
 				typeof(CalculatorService).FullName),
 			exception.Message);

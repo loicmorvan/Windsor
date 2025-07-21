@@ -15,7 +15,8 @@
 namespace Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111;
 
 using Castle.Core.Resource;
-using Castle.Windsor.Configuration.Interpreters;
+using Castle.Windsor.Windsor;
+using Castle.Windsor.Windsor.Configuration.Interpreters;
 
 public class FACILITIES_ISSUE_111
 {
@@ -28,7 +29,7 @@ public class FACILITIES_ISSUE_111
 <configuration>
 
     <facilities>
-      <facility type=""Castle.Facilities.Startable.StartableFacility, Castle.Windsor"" />
+      <facility type=""Castle.Windsor.Facilities.Startable.StartableFacility, Castle.Windsor"" />
     </facilities>
 
 	<components>

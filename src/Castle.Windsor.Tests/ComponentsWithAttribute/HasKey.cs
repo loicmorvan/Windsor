@@ -14,7 +14,7 @@
 
 namespace Castle.Windsor.Tests.ComponentsWithAttribute;
 
-using Castle.Core;
+using Castle.Windsor.Core;
 
 [CastleComponent("key")]
 public class HasKey;

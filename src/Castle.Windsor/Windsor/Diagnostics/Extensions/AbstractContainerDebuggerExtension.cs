@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Extensions;
+namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 
 using System.Collections.Generic;
 
-using Castle.MicroKernel;
-using Castle.Windsor.Diagnostics.DebuggerViews;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
 
 public abstract class AbstractContainerDebuggerExtension : IContainerDebuggerExtension
 {

@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 
 using System;
 
-using Castle.Core;
+using Castle.Windsor.Core;
 
 public class StartableWithError : IStartable
 {

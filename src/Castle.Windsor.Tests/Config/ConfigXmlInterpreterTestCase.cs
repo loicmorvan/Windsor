@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
+namespace Castle.Windsor.Tests.Config;
 
 using System.Linq;
 
-using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.Core.Resource;
-using Castle.MicroKernel;
-using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.MicroKernel.Tests.ClassComponents;
-using Castle.Windsor.Configuration.Interpreters;
-using Castle.Windsor.Installer;
-using Castle.XmlFiles;
-
-using CastleTests.Components;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.SubSystems.Configuration;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.XmlFiles;
+using Castle.Windsor.Windsor;
+using Castle.Windsor.Windsor.Configuration.Interpreters;
+using Castle.Windsor.Windsor.Installer;
 
 public class ConfigXmlInterpreterTestCase
 {

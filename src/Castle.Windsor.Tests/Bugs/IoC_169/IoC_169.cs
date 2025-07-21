@@ -16,9 +16,10 @@ namespace Castle.Windsor.Tests.Bugs.IoC_169;
 
 using System.Reflection;
 
-using Castle.Core;
-using Castle.Facilities.Startable;
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.Core;
+using Castle.Windsor.Facilities.Startable;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Windsor;
 
 public interface IBlackboard;
 

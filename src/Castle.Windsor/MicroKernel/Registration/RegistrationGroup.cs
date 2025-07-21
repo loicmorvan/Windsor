@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration;
+namespace Castle.Windsor.MicroKernel.Registration;
 
-using Castle.MicroKernel.ModelBuilder;
-using Castle.MicroKernel.ModelBuilder.Descriptors;
+using Castle.Windsor.MicroKernel.ModelBuilder;
+using Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public abstract class RegistrationGroup<S>
 	where S : class

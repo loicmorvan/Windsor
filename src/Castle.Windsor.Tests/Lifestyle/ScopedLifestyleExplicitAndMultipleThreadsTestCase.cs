@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Lifestyle;
+namespace Castle.Windsor.Tests.Lifestyle;
 
 using System;
 using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Castle.MicroKernel.Lifestyle;
-using Castle.MicroKernel.Registration;
-
-using CastleTests.Components;
+using Castle.Windsor.MicroKernel.Lifestyle;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
 
 public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContainerTestCase
 {

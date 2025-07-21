@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Resolvers;
+namespace Castle.Windsor.MicroKernel.Resolvers;
 
 using System;
 using System.Reflection;
 
-using Castle.Core;
-using Castle.MicroKernel.Internal;
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Internal;
+using Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Lazily adds component for <see cref = "Lazy{T}" />.</summary>
 [Singleton]

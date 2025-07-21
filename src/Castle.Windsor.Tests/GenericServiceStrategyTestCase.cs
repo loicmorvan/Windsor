@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests;
+namespace Castle.Windsor.Tests;
 
 using System;
 
-using Castle.Core;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Handlers;
-using Castle.MicroKernel.Registration;
-
-using CastleTests.ClassComponents;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Handlers;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
 
 public class GenericServiceStrategyTestCase : AbstractContainerTestCase
 {

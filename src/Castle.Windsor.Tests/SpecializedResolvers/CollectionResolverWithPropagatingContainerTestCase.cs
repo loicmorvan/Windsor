@@ -12,17 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.SpecializedResolvers;
+namespace Castle.Windsor.Tests.SpecializedResolvers;
 
 using System;
 using System.Reflection;
 
-using Castle.MicroKernel.Context;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Resolvers;
-using Castle.Windsor;
-using Castle.Windsor.Installer;
-using Castle.Windsor.Proxy;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Resolvers;
+using Castle.Windsor.Windsor;
+using Castle.Windsor.Windsor.Installer;
+using Castle.Windsor.Windsor.Proxy;
 
 public class CollectionResolverWithPropagatingContainerTestCase
 	: CollectionResolverTestCase

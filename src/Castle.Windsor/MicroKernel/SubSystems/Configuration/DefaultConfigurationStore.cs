@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Configuration;
+namespace Castle.Windsor.MicroKernel.SubSystems.Configuration;
 
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ using System.Linq;
 
 using Castle.Core.Configuration;
 using Castle.Core.Resource;
-using Castle.MicroKernel.SubSystems.Resource;
+using Castle.Windsor.MicroKernel.SubSystems.Resource;
 
 /// <summary>
 ///     This implementation of <see cref = "IConfigurationStore" /> does not try to obtain an external configuration by any means. Its only purpose is to serve as a base class for subclasses that might

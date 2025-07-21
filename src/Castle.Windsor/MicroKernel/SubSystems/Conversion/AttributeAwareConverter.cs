@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion;
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 using System;
 using System.Reflection;
 
 using Castle.Core.Configuration;
-using Castle.Core.Internal;
+using Castle.Windsor.Core.Internal;
 
 /// <summary>Looks for a <see cref = "ConvertibleAttribute" /> on the type to be converted. If found, the TypeConverter defined by the attribute is used to perform the conversion.</summary>
 public class AttributeAwareConverter : AbstractTypeConverter

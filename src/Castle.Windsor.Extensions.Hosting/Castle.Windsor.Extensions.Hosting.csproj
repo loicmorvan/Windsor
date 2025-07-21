@@ -15,7 +15,6 @@
     <PackageTags>castle, windsor, inversionOfControl, DependencyInjection, aspnet, core</PackageTags>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>Castle.Windsor.Extensions.Hosting</AssemblyName>
-    <RootNamespace>Castle.Windsor.Extensions.Hosting</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">

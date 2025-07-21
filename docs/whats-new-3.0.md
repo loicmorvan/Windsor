@@ -38,7 +38,7 @@ two new lifestyles are provided out of the box:
   interface.
 
 ```csharp
-using Castle.MicroKernel.Lifestyle;
+using Castle.Windsor.MicroKernel.Lifestyle;
 // ...
 Container.Register(Component.For<A>().LifestyleScoped());
 

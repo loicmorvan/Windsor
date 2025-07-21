@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.LifecycleConcerns;
+namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
 
-using Castle.Core;
+using Castle.Windsor.Core;
 
 public class OnDestroyConcern<TComponent> : IDecommissionConcern
 {

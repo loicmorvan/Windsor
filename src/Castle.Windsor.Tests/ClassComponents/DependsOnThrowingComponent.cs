@@ -14,7 +14,7 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-using CastleTests.Components;
+using Castle.Windsor.Tests.Components;
 
 public class DependsOnThrowingComponent
 {

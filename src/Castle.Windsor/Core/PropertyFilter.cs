@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
+namespace Castle.Windsor.Core;
 
 /// <summary>
 ///     Specifies rules for designating settable properties on a component as dependencies, and controlling whether they are requred or not. This is a shortcut for most common scenarios. More

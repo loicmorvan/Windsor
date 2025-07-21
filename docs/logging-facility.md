@@ -61,7 +61,7 @@ It is also possible to configure the facility via XML. For example the same conf
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
    <facility
-      type="Castle.Facilities.Logging.LoggingFacility, Castle.Facilities.Logging"
+      type="Castle.Windsor.Facilities.Logging.LoggingFacility, Castle.Windsor.Facilities.Logging"
       customLoggerFactory="Castle.Services.Logging.Log4netIntegration.Log4netFactory, Castle.Services.Logging.Log4netIntegration"
       configFile="log4net.xml" />
 </configuration>
@@ -73,7 +73,7 @@ The full list of configuraation attributes is shown in the following example:
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
    <facility
-      type="Castle.Facilities.Logging.LoggingFacility, Castle.Facilities.Logging"
+      type="Castle.Windsor.Facilities.Logging.LoggingFacility, Castle.Windsor.Facilities.Logging"
       customLoggerFactory="<type of factory>"
       configFile="<path to configuration file (optional attribute)>"
       loggerLevel="<the loggerLevel (optional attribute)>"
@@ -106,6 +106,6 @@ container, it will be able to supply a logger instance using the `Logger` proper
 
 ## Required Assemblies
 
-* `Castle.Facilities.Logging.dll` (bundled with Windsor)
+* `Castle.Windsor.Facilities.Logging.dll` (bundled with Windsor)
 * `Castle.Core.dll` (contains the `ILogger` and `ILoggerFactory` interfaces; included as a dependency in the Windsor
   NuGet package)

@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Bugs;
+namespace Castle.Windsor.Tests.Bugs;
 
 using System;
 
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
 
 public class IoC_117
 {

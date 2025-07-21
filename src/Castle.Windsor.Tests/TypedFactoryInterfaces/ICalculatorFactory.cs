@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.TypedFactoryInterfaces;
+namespace Castle.Windsor.Tests.TypedFactoryInterfaces;
 
-using CastleTests.Components;
+using Castle.Windsor.Tests.Components;
 
 public interface ICalculatorFactory
 {

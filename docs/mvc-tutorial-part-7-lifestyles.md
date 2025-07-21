@@ -32,7 +32,8 @@ change its lifestyle to `PerWebRequest`.
 
 ### The `PerWebRequest` lifestyle
 
-Please install the `Castle.Facilities.AspNet.SystemWeb` NuGet first. To change the `ISession` lifestyle to be per web
+Please install the `Castle.Windsor.Facilities.AspNet.SystemWeb` NuGet first. To change the `ISession` lifestyle to be
+per web
 request, we need to specify that in the registration. So we need to change it to the following:
 
 ```csharp

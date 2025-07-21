@@ -17,10 +17,10 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers
 {
 	using System;
 
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Resolvers.SpecializedResolvers;
+	using Castle.Windsor.Core;
+	using Castle.Windsor.MicroKernel;
+	using Castle.Windsor.MicroKernel.Context;
+	using Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
 
 	/// <summary>Use <see name = "IKernel.ResolveAll" /> if there is no specific handler for IEnumerable service</summary>
 	public class RegisteredCollectionResolver : CollectionResolver

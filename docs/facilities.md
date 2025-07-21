@@ -94,7 +94,7 @@ Here's a partial list of facilities for Windsor offered by different other proje
   of [Sharp Architecture project](https://github.com/sharparchitecture/Sharp-Architecture), this facility may be
   registered within your web application to automatically look for and close WCF connections. This eliminates all the
   redundant code for closing the connection and aborting if any appropriate exceptions are encountered.
-* [Workflow Foundation](http://using.castleproject.org/display/Contrib/Castle.Facilities.WorkflowIntegration)
+* [Workflow Foundation](http://using.castleproject.org/display/Contrib/Castle.Windsor.Facilities.WorkflowIntegration)
 * [NServiceBus](http://ayende.com/Blog/archive/2008/07/13/Putting-the-container-to-work-Refactoring-NServiceBus-configuration.aspx)
 * [MassTransit](https://masstransit-project.com/usage/containers/castlewindsor.html)
 * [re-motion](https://www.re-motion.org/blogs/mix/archive/2009/01/21/we-have-a-facility.aspx)

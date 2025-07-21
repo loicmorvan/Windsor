@@ -16,9 +16,9 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Scope
 {
 	using System;
 
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Lifestyle.Scoped;
+	using Castle.Windsor.Core;
+	using Castle.Windsor.MicroKernel;
+	using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
 	internal abstract class ExtensionContainerScopeBase : ILifetimeScope
 	{

@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents;
+namespace Castle.Windsor.Tests.ClassComponents;
 
 using Castle.Core.Configuration;
+using Castle.Windsor.MicroKernel;
 
 public class HiperFacility : IFacility
 {

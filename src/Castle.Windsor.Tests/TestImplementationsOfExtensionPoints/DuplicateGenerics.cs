@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.TestImplementationsOfExtensionPoints;
+namespace Castle.Windsor.Tests.TestImplementationsOfExtensionPoints;
 
 using System;
 using System.Linq;
 using System.Reflection;
 
-using Castle.Core;
-using Castle.MicroKernel.Context;
-using Castle.MicroKernel.Handlers;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Handlers;
 
 public class DuplicateGenerics : IGenericImplementationMatchingStrategy
 {

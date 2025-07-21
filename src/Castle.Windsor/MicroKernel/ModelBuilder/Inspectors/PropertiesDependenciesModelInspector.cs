@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors;
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-using Castle.Core;
 using Castle.Core.Configuration;
-using Castle.MicroKernel.SubSystems.Conversion;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 /// <summary>
 ///     This implementation of <see cref = "IContributeComponentModelConstruction" /> collects all potential writable public properties exposed by the component implementation and populates the model

@@ -1,6 +1,7 @@
 # SubSystems
 
-SubSystems (`Castle.MicroKernel.ISubSystem`) are used by the container internally to handle something external to it.
+SubSystems (`Castle.Windsor.MicroKernel.ISubSystem`) are used by the container internally to handle something external
+to it.
 These are the innermost and high impact extension points. Out of the box container uses the following subsystems:
 
 ## Configuration

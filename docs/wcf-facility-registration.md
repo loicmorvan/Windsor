@@ -30,7 +30,7 @@ It is required to update the .svc file to set the Castle.Windsor factory:
 <%@ ServiceHost
   Language="C#"
   Service="MyService"
-  Factory="Castle.Facilities.WcfIntegration.DefaultServiceHostFactory, Castle.Facilities.WcfIntegration" %>
+  Factory="Castle.Windsor.Facilities.WcfIntegration.DefaultServiceHostFactory, Castle.Windsor.Facilities.WcfIntegration" %>
 ```
 
 Additionally, it is possible to load the configuration from a separate config file. For example:

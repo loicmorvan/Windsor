@@ -17,8 +17,9 @@ namespace Castle.Windsor.Tests;
 using System.Collections.Generic;
 using System.Linq;
 
-using Castle.Windsor.Installer;
-using Castle.XmlFiles;
+using Castle.Windsor.Tests.XmlFiles;
+using Castle.Windsor.Windsor;
+using Castle.Windsor.Windsor.Installer;
 
 public class ServiceOverridesStackOverflowTestCase
 {

@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests;
+namespace Castle.Windsor.Tests;
 
 using System;
 using System.Linq;
 
-using Castle.Core.Internal;
-
-using CastleTests.Components;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.Tests.Components;
 
 public class TypeComparerTestCase
 {

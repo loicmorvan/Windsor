@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory;
+namespace Castle.Windsor.Facilities.TypedFactory;
 
 using System;
 using System.ComponentModel;
 
-using Castle.Core;
 using Castle.Core.Configuration;
-using Castle.Facilities.TypedFactory.Internal;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Facilities;
-using Castle.MicroKernel.Proxy;
-using Castle.MicroKernel.Resolvers;
-using Castle.MicroKernel.SubSystems.Conversion;
-using Castle.MicroKernel.Util;
+using Castle.Windsor.Core;
+using Castle.Windsor.Facilities.TypedFactory.Internal;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Facilities;
+using Castle.Windsor.MicroKernel.Proxy;
+using Castle.Windsor.MicroKernel.Resolvers;
+using Castle.Windsor.MicroKernel.SubSystems.Conversion;
+using Castle.Windsor.MicroKernel.Util;
 
-using Component = Castle.MicroKernel.Registration.Component;
+using Component = Castle.Windsor.MicroKernel.Registration.Component;
 
 /// <summary>Provides automatically generated factories on top of interfaces or delegates that you can use to pull components out of the container without ever referencing it explicitly.</summary>
 public class TypedFactoryFacility : AbstractFacility

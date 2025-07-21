@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ComponentActivator;
+namespace Castle.Windsor.MicroKernel.ComponentActivator;
 
 using System;
 using System.Collections.Generic;
 
-using Castle.Core;
 using Castle.DynamicProxy;
-using Castle.MicroKernel.Context;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Context;
 
 /// <summary>
 ///     Abstract implementation of <see cref = "IComponentActivator" />. The implementors must only override the InternalCreate and InternalDestroy methods in order to perform their creation and

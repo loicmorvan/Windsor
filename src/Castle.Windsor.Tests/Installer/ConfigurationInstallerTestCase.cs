@@ -12,18 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Installer;
+namespace Castle.Windsor.Tests.Installer;
 
 using System;
 
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor;
-using Castle.Windsor.Installer;
-using Castle.Windsor.Tests;
-using Castle.XmlFiles;
-
-using CastleTests.Components;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.SubSystems.Configuration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.XmlFiles;
+using Castle.Windsor.Windsor;
+using Castle.Windsor.Windsor.Installer;
 
 public class ConfigurationInstallerTestCase : AbstractContainerTestCase
 {

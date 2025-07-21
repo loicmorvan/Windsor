@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Helpers;
+namespace Castle.Windsor.Windsor.Diagnostics.Helpers;
 
 using System.Collections.Generic;
 using System.Text;
 
-using Castle.Core.Internal;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Handlers;
-using Castle.Windsor.Diagnostics.DebuggerViews;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Handlers;
+using Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
 
 public class DefaultComponentViewBuilder : IComponentDebuggerExtension
 {

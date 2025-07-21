@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Proxies;
+namespace Castle.Windsor.Tests.Proxies;
 
 using Castle.DynamicProxy;
-using Castle.TypedFactoryInterfaces;
-using Castle.Windsor;
-using Castle.Windsor.Configuration.Interpreters;
-using Castle.XmlFiles;
+using Castle.Windsor.Tests.TypedFactoryInterfaces;
+using Castle.Windsor.Tests.XmlFiles;
+using Castle.Windsor.Windsor;
+using Castle.Windsor.Windsor.Configuration.Interpreters;
 
 public class TypedFactoryFacilityTestCase
 {

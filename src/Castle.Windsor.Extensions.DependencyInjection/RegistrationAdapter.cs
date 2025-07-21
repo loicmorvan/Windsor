@@ -16,8 +16,8 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 {
 	using System;
 
-	using Castle.MicroKernel.Registration;
 	using Castle.Windsor.Extensions.DependencyInjection.Extensions;
+	using Castle.Windsor.MicroKernel.Registration;
 
 	using Microsoft.Extensions.DependencyInjection;
 

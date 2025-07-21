@@ -16,7 +16,8 @@ namespace Castle.Windsor.Tests;
 
 using System;
 
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Windsor;
 
 public class ConfigureDecoratorsTestCase
 {

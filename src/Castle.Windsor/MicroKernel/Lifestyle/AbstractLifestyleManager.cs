@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle;
+namespace Castle.Windsor.MicroKernel.Lifestyle;
 
 using System;
 using System.Diagnostics;
 
-using Castle.Core;
-using Castle.MicroKernel.Context;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Context;
 
 /// <summary>Base implementation of <see cref = "ILifestyleManager" /></summary>
 [Serializable]

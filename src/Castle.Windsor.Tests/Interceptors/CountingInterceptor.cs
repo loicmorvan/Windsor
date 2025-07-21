@@ -14,8 +14,8 @@
 
 namespace Castle.Windsor.Tests.Interceptors;
 
-using Castle.Core;
 using Castle.DynamicProxy;
+using Castle.Windsor.Core;
 
 [Singleton]
 public class CountingInterceptor : IInterceptor

@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Registration.Interceptors.Multiple;
+namespace Castle.Windsor.Tests.Registration.Interceptors.Multiple;
 
 using System.Collections.Generic;
 
-using Castle.Core;
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Registration;
 
 public class InterceptorKeyInSingleCall : InterceptorsTestCaseHelper
 {

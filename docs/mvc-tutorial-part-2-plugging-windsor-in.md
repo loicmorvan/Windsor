@@ -31,7 +31,7 @@ using System;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Castle.MicroKernel;
+using Castle.Windsor.MicroKernel;
 
 public class WindsorControllerFactory : DefaultControllerFactory
 {

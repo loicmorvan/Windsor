@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration;
+namespace Castle.Windsor.MicroKernel.Registration;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-using Castle.Core;
-using Castle.MicroKernel.Lifestyle.Scoped;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
 /// <summary>Describes how to register a group of related types.</summary>
 public class BasedOnDescriptor : IRegistration

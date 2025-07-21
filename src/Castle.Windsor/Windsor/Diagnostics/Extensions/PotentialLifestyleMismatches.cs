@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Extensions;
+namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 
 using System;
 using System.Collections.Generic;
@@ -20,11 +20,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-using Castle.Core;
-using Castle.Core.Internal;
-using Castle.MicroKernel;
-using Castle.Windsor.Diagnostics.DebuggerViews;
-using Castle.Windsor.Diagnostics.Helpers;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
+using Castle.Windsor.Windsor.Diagnostics.Helpers;
 
 public class PotentialLifestyleMismatches : AbstractContainerDebuggerExtension
 {

@@ -38,7 +38,7 @@ public class PerClientCompanyScopeAccessor : IScopeAccessor
 {
     private static readonly ConcurrentDictionary<Guid, ILifetimeScope> collection = new ConcurrentDictionary<Guid, ILifetimeScope>();
 
-    public ILifetimeScope GetScope(Castle.MicroKernel.Context.CreationContext context)
+    public ILifetimeScope GetScope(Castle.Windsor.MicroKernel.Context.CreationContext context)
     {
         var companyID = ClientHelper.GetCurrentClientCompanyId();
         return collection.GetOrAdd(companyID, id => new ThreadSafeDefaultLifetimeScope());

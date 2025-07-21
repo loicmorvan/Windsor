@@ -14,10 +14,8 @@
 
 namespace Castle.Windsor.Tests.Lifecycle;
 
-using Castle.MicroKernel.Registration;
-
-using CastleTests;
-using CastleTests.Components;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
 
 public class SupportsInitializeTestCase : AbstractContainerTestCase
 {

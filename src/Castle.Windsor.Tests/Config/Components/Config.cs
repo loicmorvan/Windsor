@@ -1,6 +1,6 @@
-﻿namespace Castle.MicroKernel.Tests.Configuration.Components;
+﻿namespace Castle.Windsor.Tests.Config.Components;
 
-using Castle.MicroKernel.SubSystems.Conversion;
+using Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 /// <summary>The Config interface.</summary>
 public interface IConfig

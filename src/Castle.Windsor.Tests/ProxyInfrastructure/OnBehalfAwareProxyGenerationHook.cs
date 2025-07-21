@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ProxyInfrastructure;
+namespace Castle.Windsor.Tests.ProxyInfrastructure;
 
 using System;
 using System.Reflection;
 
-using Castle.Core;
-using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Interceptor;
 
 public class OnBehalfAwareProxyGenerationHook : IProxyGenerationHook, IOnBehalfAware
 {

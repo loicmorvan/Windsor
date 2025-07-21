@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters;
+namespace Castle.Windsor.Windsor.Configuration.Interpreters;
 
 using System;
 using System.Xml;
 
-using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.Core.Configuration.Xml;
 using Castle.Core.Resource;
-using Castle.MicroKernel;
-using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.MicroKernel.SubSystems.Conversion;
-using Castle.MicroKernel.SubSystems.Resource;
-using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.SubSystems.Configuration;
+using Castle.Windsor.MicroKernel.SubSystems.Conversion;
+using Castle.Windsor.MicroKernel.SubSystems.Resource;
+using Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor;
 
 /// <summary>
 ///     Reads the configuration from a XmlFile. Sample structure:

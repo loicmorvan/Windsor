@@ -12,20 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Registration;
+namespace Castle.Windsor.Tests.Registration;
 
 using System;
 
 using Castle.DynamicProxy;
-using Castle.MicroKernel;
-using Castle.MicroKernel.ComponentActivator;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Tests.Configuration.Components;
-using Castle.Windsor.Tests;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.ComponentActivator;
+using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
-
-using CastleTests.Components;
-using CastleTests.Facilities.TypedFactory;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Config.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 {
@@ -262,7 +260,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 
 		var exception = Assert.Throws<NotSupportedException>(() => Container.Resolve<ICameraService>());
 
-		Assert.Equal(@"Can not apply commission concerns to component Late bound CastleTests.Components.ICameraService because it appears to be a target-less proxy. Currently those are not supported.",
+		Assert.Equal(@"Can not apply commission concerns to component Late bound Castle.Windsor.Tests.Components.ICameraService because it appears to be a target-less proxy. Currently those are not supported.",
 			exception.Message);
 	}
 
@@ -448,12 +446,12 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 
 #if NET462_OR_GREATER
 			var expected =
-				"Can not instantiate proxy of class: Castle.MicroKernel.Tests.Configuration.Components.ClassWithConstructors." + Environment.NewLine +
+				"Can not instantiate proxy of class: Castle.Windsor.MicroKernel.Tests.Configuration.Components.ClassWithConstructors." + Environment.NewLine +
 				"Could not find a parameterless constructor.\r\n" +
 				"Parameter name: constructorArguments";
 #else
 		var expected =
-			"Can not instantiate proxy of class: Castle.MicroKernel.Tests.Configuration.Components.ClassWithConstructors." + Environment.NewLine +
+			"Can not instantiate proxy of class: Castle.Windsor.MicroKernel.Tests.Configuration.Components.ClassWithConstructors." + Environment.NewLine +
 			"Could not find a parameterless constructor. (Parameter 'constructorArguments')";
 #endif
 

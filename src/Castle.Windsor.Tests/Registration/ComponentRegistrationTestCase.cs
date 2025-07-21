@@ -12,25 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Registration;
+namespace Castle.Windsor.Tests.Registration;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.DynamicProxy;
-using Castle.Facilities.Startable;
-using Castle.MicroKernel.Proxy;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Tests.ClassComponents;
-using Castle.MicroKernel.Tests.Configuration.Components;
+using Castle.Windsor.Core;
+using Castle.Windsor.Facilities.Startable;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Proxy;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Config.Components;
 using Castle.Windsor.Tests.Facilities.Startable.Components;
 using Castle.Windsor.Tests.Interceptors;
-
-using CastleTests;
-using CastleTests.Components;
 
 public class ComponentRegistrationTestCase : AbstractContainerTestCase
 {
@@ -155,7 +154,7 @@ public class ComponentRegistrationTestCase : AbstractContainerTestCase
 	[Fact]
 	public void AddComponent_WithImplementationAlreadyAssigned_ThrowsException()
 	{
-		var expectedMessage = "This component has already been assigned implementation Castle.MicroKernel.Tests.ClassComponents.CustomerImpl";
+		var expectedMessage = "This component has already been assigned implementation Castle.Windsor.Tests.ClassComponents.CustomerImpl";
 		var exception = Assert.Throws<ComponentRegistrationException>(() =>
 		{
 			Kernel.Register(

@@ -13,12 +13,12 @@
 // limitations under the License.
 
 #if FEATURE_APPDOMAIN
-namespace CastleTests.Lifestyle
+namespace Castle.Windsor.Tests.Lifestyle
 {
 	using System;
-	using Castle.MicroKernel.Lifestyle;
-	using Castle.MicroKernel.Registration;
-	using CastleTests.Components;
+	using Castle.Windsor.MicroKernel.Lifestyle;
+	using Castle.Windsor.MicroKernel.Registration;
+	using Castle.Windsor.Tests.Components;
 	public class ScopedLifestyleExplicitAndMultipleAppDomainsTestCase : AbstractContainerTestCase
 	{
 		protected override void AfterContainerCreated()

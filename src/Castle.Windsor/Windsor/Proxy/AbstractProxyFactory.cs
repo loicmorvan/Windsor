@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Proxy;
+namespace Castle.Windsor.Windsor.Proxy;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Castle.Core;
-using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Context;
-using Castle.MicroKernel.Proxy;
-using Castle.MicroKernel.Resolvers;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Interceptor;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Proxy;
+using Castle.Windsor.MicroKernel.Resolvers;
 
 public abstract class AbstractProxyFactory : IProxyFactory
 {

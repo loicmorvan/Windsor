@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.MicroKernel.Internal;
+namespace Castle.Windsor.Tests.MicroKernel.Internal;
 
 using System.Threading;
 
-using Castle.MicroKernel.Internal;
+using Castle.Windsor.MicroKernel.Internal;
 
 public class SlimReadWriteLockTestCase
 {

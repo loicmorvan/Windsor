@@ -12,14 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Resolvers;
+namespace Castle.Windsor.Facilities.AspNetCore.Resolvers;
 
 using System;
 using System.Linq;
 
 using Castle.Core;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Context;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Context;
 
 using Microsoft.Extensions.DependencyInjection;
 

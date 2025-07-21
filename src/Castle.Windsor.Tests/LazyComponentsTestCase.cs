@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests;
+namespace Castle.Windsor.Tests;
 
 using System;
 using System.Reflection;
 using System.Threading;
 
-using Castle.Core;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Resolvers;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Resolvers;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 using Castle.Windsor.Tests.Lifecycle;
-
-using CastleTests.Components;
-using CastleTests.Facilities.TypedFactory;
 
 public class LazyComponentsTestCase : AbstractContainerTestCase
 {

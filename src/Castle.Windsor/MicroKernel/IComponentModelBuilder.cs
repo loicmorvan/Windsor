@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
+namespace Castle.Windsor.MicroKernel;
 
 using System;
 
-using Castle.Core;
-using Castle.MicroKernel.ModelBuilder;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.ModelBuilder;
 
 /// <summary>Implementors must construct a populated instance of ComponentModel by inspecting the component and|or the configuration.</summary>
 public interface IComponentModelBuilder

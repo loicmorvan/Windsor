@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Facilities;
 
 using System.Threading;
 
-using Castle.MicroKernel.Facilities;
+using Castle.Windsor.MicroKernel.Facilities;
 
 public class SlowlyInitFacility : AbstractFacility
 {

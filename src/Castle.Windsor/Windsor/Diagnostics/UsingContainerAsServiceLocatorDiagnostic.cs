@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics;
+namespace Castle.Windsor.Windsor.Diagnostics;
 
 using System;
 using System.Linq;
 
-using Castle.Core.Internal;
 using Castle.DynamicProxy;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Internal;
-using Castle.MicroKernel.Resolvers;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Internal;
+using Castle.Windsor.MicroKernel.Resolvers;
 
 public class UsingContainerAsServiceLocatorDiagnostic : IUsingContainerAsServiceLocatorDiagnostic
 {

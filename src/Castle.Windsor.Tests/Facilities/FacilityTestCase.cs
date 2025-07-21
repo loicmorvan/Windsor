@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities;
+namespace Castle.Windsor.Tests.Facilities;
 
 using System;
 
 using Castle.Core.Configuration;
-using Castle.Facilities.Startable;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Tests.ClassComponents;
+using Castle.Windsor.Facilities.Startable;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.Tests.ClassComponents;
 
 public class FacilityTestCase
 {
@@ -50,7 +50,7 @@ public class FacilityTestCase
 		var exception = Assert.Throws<ArgumentException>(() => kernel.AddFacility<StartableFacility>());
 
 		Assert.Equal(
-			"Facility of type 'Castle.Facilities.Startable.StartableFacility' has already been registered with the container. Only one facility of a given type can exist in the container.",
+			"Facility of type 'Castle.Windsor.Facilities.Startable.StartableFacility' has already been registered with the container. Only one facility of a given type can exist in the container.",
 			exception.Message);
 	}
 

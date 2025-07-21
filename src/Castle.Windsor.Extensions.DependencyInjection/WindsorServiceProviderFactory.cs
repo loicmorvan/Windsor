@@ -14,6 +14,8 @@
 
 namespace Castle.Windsor.Extensions.DependencyInjection
 {
+	using Castle.Windsor.Windsor;
+
 	public sealed class WindsorServiceProviderFactory : WindsorServiceProviderFactoryBase
 	{
 		public WindsorServiceProviderFactory()

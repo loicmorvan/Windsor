@@ -3,6 +3,7 @@
 	<components>
 		<component type="GenericA`1"/>
 		<component type="GenericB`1"/>
-		<component type='CastleTests.Components.A' scopeRootBinderType='CastleTests.Components.BoundComponent+Binder'/>
+		<component type='Castle.Windsor.Tests.Components.A'
+				   scopeRootBinderType='Castle.Windsor.Tests.Components.BoundComponent+Binder'/>
 	</components>
 </configuration>

@@ -1,9 +1,9 @@
-namespace Castle.MicroKernel.Tests.Bugs.Ioc113;
+namespace Castle.Windsor.Tests.Bugs.Ioc113;
 
 using System;
 using System.Collections.Generic;
 
-using Castle.Core;
+using Castle.Windsor.Core;
 
 public class StartableDisposableAndInitializableComponent : IInitializable, IDisposable, IStartable
 {

@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion;
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 using System;
 
-using Castle.Core.Internal;
+using Castle.Windsor.Core.Internal;
 
 /// <summary>Declares a type as being convertible by a <see cref = "ITypeConverter" /> and optionally defines the converter to be used</summary>
 [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Struct, Inherited = false)]

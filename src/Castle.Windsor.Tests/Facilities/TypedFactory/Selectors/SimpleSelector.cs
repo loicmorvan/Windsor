@@ -14,7 +14,7 @@
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
 
-using Castle.Facilities.TypedFactory;
+using Castle.Windsor.Facilities.TypedFactory;
 
 public class SimpleSelector : DefaultTypedFactoryComponentSelector
 {

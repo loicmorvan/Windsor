@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle;
+namespace Castle.Windsor.Tests;
 
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Resolvers.SpecializedResolvers;
-
-using CastleTests;
-using CastleTests.Components;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
+using Castle.Windsor.Tests.Components;
 
 public class CompositePatternTestCase : AbstractContainerTestCase
 {

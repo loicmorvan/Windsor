@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests;
+namespace Castle.Windsor.Tests;
 
 using System;
 using System.Reflection;
 
 using Castle.DynamicProxy;
-using Castle.MicroKernel.SubSystems.Conversion;
-using Castle.MicroKernel.Tests.ClassComponents;
-
-using CastleTests.ClassComponents;
-using CastleTests.Components;
+using Castle.Windsor.MicroKernel.SubSystems.Conversion;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
 
 public class TypeNameConverterTestCase
 {

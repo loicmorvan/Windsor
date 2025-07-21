@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
+namespace Castle.Windsor.MicroKernel;
 
-using Castle.Core;
-using Castle.MicroKernel.Context;
-using Castle.MicroKernel.Proxy;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Proxy;
 
 /// <summary>
 ///     Defines the contract used by the kernel to obtain proxies for components. The implementor must return a proxied instance that dispatch the invocation to the registered interceptors in the
@@ -45,7 +45,7 @@ public interface IProxyFactory
 	/// <returns>
 	///     <c>true</c> if an instance must be passed to
 	///     <see
-	///         cref = "Create(Castle.MicroKernel.IKernel,object,Castle.Core.ComponentModel,Castle.MicroKernel.Context.CreationContext,object[])" />
+	///         cref = "Create(Castle.Windsor.MicroKernel.IKernel,object,Castle.Windsor.Core.ComponentModel,Castle.Windsor.MicroKernel.Context.CreationContext,object[])" />
 	/// </returns>
 	bool RequiresTargetInstance(IKernel kernel, ComponentModel model);
 

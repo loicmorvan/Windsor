@@ -14,9 +14,9 @@
 
 namespace Castle.Windsor.Tests.Interceptors;
 
-using Castle.Core;
-using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Interceptor;
 
 public class InterceptorWithOnBehalf : IInterceptor, IOnBehalfAware
 {

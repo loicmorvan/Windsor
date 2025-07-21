@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests;
+namespace Castle.Windsor.Tests;
 
 using System.Collections.ObjectModel;
 
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Tests.ClassComponents;
-
-using CastleTests.ClassComponents;
-using CastleTests.Components;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
 
 public class OpenGenericsTestCase : AbstractContainerTestCase
 {
@@ -87,7 +85,7 @@ public class OpenGenericsTestCase : AbstractContainerTestCase
 	{
 		Container.Register(
 			Component.For(typeof(DoubleRepository<,>)).ImplementedBy(typeof(DoubleRepository<,>)),
-			Component.For(typeof(Castle.MicroKernel.Tests.ClassComponents.IRepository<>))
+			Component.For(typeof(ClassComponents.IRepository<>))
 				.UsingFactoryMethod((k, c) =>
 				{
 					var openType = typeof(DoubleRepository<,>);
@@ -95,7 +93,7 @@ public class OpenGenericsTestCase : AbstractContainerTestCase
 					var closedType = openType.MakeGenericType(genericArgs);
 					return k.Resolve(closedType);
 				}));
-		var repo = Container.Resolve<Castle.MicroKernel.Tests.ClassComponents.IRepository<string>>();
+		var repo = Container.Resolve<ClassComponents.IRepository<string>>();
 		Assert.Equal(default, repo.Find());
 		Assert.IsType<DoubleRepository<string, int>>(repo);
 	}

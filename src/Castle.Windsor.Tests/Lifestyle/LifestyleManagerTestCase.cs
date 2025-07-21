@@ -12,22 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Lifestyle;
+namespace Castle.Windsor.Tests.Lifestyle;
 
 using System;
 using System.Threading;
 
-using Castle.Core;
 using Castle.Core.Configuration;
-using Castle.MicroKernel.Context;
-using Castle.MicroKernel.Handlers;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Tests.ClassComponents;
-using Castle.MicroKernel.Tests.Lifestyle;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Handlers;
+using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
-
-using CastleTests.Components;
-using CastleTests.Generics;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Generics;
 
 public class LifestyleManagerTestCase : AbstractContainerTestCase
 {

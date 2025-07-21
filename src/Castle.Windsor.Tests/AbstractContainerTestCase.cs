@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests;
+namespace Castle.Windsor.Tests;
 
 using System;
 using System.Reflection;
 
-using Castle.MicroKernel;
-using Castle.Windsor;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.Windsor;
 
 public abstract class AbstractContainerTestCase : IDisposable
 {

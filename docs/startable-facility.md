@@ -12,7 +12,7 @@ of [single install call](faq.md#how-do-i-interact-with-the-container-i-mean-how-
 Following code samples assume that the kernel with registered facility is in scope
 
 ```csharp
-using Castle.Facilities.Startable;
+using Castle.Windsor.Facilities.Startable;
 IKernel container = new DefaultKernel();
 ```
 
@@ -90,7 +90,7 @@ As most facilities, you can also configure Startable Facility via XML config fil
 If you don't register the facility in code, you can register it in config file:
 
 ```xml
-<facility type="Castle.Facilities.Startable.StartableFacility, Castle.Windsor" / >
+<facility type="Castle.Windsor.Facilities.Startable.StartableFacility, Castle.Windsor" / >
 ```
 
 And register your startable components using additional startable attributes:

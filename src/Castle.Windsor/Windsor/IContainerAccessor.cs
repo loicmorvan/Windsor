@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor;
+namespace Castle.Windsor.Windsor;
 
 /// <summary>
 ///     This interface should be implemented by classes that are available in a bigger context, exposing the container to different areas in the same application.

@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
+namespace Castle.Windsor.MicroKernel;
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-using Castle.MicroKernel.Handlers;
+using Castle.Windsor.MicroKernel.Handlers;
 
 public partial class DefaultKernel
 {

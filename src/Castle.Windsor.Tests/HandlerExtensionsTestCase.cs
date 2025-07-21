@@ -17,12 +17,10 @@ namespace Castle.Windsor.Tests;
 using System.Collections.Generic;
 using System.Linq;
 
-using Castle.MicroKernel;
-using Castle.MicroKernel.Handlers;
-using Castle.MicroKernel.Registration;
-
-using CastleTests;
-using CastleTests.Components;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Handlers;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
 
 public class HandlerExtensionsTestCase : AbstractContainerTestCase
 {

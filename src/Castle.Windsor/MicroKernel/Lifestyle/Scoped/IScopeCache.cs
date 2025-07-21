@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Scoped;
+namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
 /// <summary>Represents persistence mechanism for instances of components that are supposed to be reused within scope managing the cache.</summary>
 public interface IScopeCache

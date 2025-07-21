@@ -14,7 +14,6 @@
     <PackageTags>castle, windsor, inversionOfControl, DependencyInjection</PackageTags>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>Castle.Windsor</AssemblyName>
-    <RootNamespace>Castle</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

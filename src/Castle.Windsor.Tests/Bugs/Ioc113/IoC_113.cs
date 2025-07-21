@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Bugs.Ioc113;
+namespace Castle.Windsor.Tests.Bugs.Ioc113;
 
 using System.Collections.Generic;
 
-using Castle.Facilities.Startable;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Tests.Bugs.Ioc113;
+using Castle.Windsor.Facilities.Startable;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
 
 public class IoC_113_When_resolving_initializable_disposable_and_startable_component
 {

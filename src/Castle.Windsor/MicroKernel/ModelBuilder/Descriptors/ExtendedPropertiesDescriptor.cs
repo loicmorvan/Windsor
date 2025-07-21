@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors;
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 using System.Collections;
 
-using Castle.Core;
-using Castle.Core.Internal;
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.Registration;
 
 public class ExtendedPropertiesDescriptor : IComponentModelDescriptor
 {

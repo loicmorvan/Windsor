@@ -8,7 +8,7 @@ By default only one attribute must be defined to register a facility via XML:
 
 ```xml
 <facilities>
-  <facility type="Castle.Facilities.EventWiring.EventWiringFacility, Castle.Windsor" />
+  <facility type="Castle.Windsor.Facilities.EventWiring.EventWiringFacility, Castle.Windsor" />
 </facilities>
 ```
 

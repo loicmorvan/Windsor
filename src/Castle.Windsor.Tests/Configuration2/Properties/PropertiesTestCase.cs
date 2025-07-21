@@ -14,8 +14,9 @@
 
 namespace Castle.Windsor.Tests.Configuration2.Properties;
 
-using Castle.MicroKernel.Tests.ClassComponents;
-using Castle.Windsor.Configuration.Interpreters;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Windsor;
+using Castle.Windsor.Windsor.Configuration.Interpreters;
 
 public class PropertiesTestCase
 {

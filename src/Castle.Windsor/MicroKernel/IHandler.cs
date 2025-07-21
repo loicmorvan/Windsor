@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
+namespace Castle.Windsor.MicroKernel;
 
 using System;
 
-using Castle.Core;
-using Castle.MicroKernel.Context;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Context;
 
 /// <summary>Contract for the IHandler, which manages an component state and coordinates its creation and destruction (dispatching to activators, lifestyle managers)</summary>
 public interface IHandler : ISubDependencyResolver

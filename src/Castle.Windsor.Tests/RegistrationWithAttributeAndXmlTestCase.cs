@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests;
+namespace Castle.Windsor.Tests;
 
 using Castle.Core.Resource;
-using Castle.Windsor.Installer;
-
-using CastleTests.Components;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Windsor.Installer;
 
 public class RegistrationWithAttributeAndXmlTestCase : AbstractContainerTestCase
 {

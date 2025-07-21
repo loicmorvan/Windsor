@@ -22,18 +22,20 @@ Breaking Changes:
 
 - Microsoft.Extensions.Hosting related methods have been moved from the `Castle.Windsor.Extensions.DependencyInjection`
   package to the `Castle.Windsor.Extensions.Hosting` package (@ikkentim, #625, #628)
-- Obsolete APIs in `Castle.Facilities.Logging` have been removed. Extensions methods for built-in logging factories have
+- Obsolete APIs in `Castle.Windsor.Facilities.Logging` have been removed. Extensions methods for built-in logging
+  factories have
   been added, however `LogUsing<T>` is still ideal. (@Jevonius, #636)
-	- Removed enum `Castle.Facilities.Logging.LoggerImplementation`
-	- Removed constructor `Castle.Facilities.Logging.LoggingFacility(LoggerImplementation loggingApi)`
+	- Removed enum `Castle.Windsor.Facilities.Logging.LoggerImplementation`
+	- Removed constructor `Castle.Windsor.Facilities.Logging.LoggingFacility(LoggerImplementation loggingApi)`
 	- Removed constructor
-	  `Castle.Facilities.Logging.LoggingFacility(LoggerImplementation loggingApi, string configFile)`
-	- Removed constructor `Castle.Facilities.Logging.LoggingFacility(string customLoggerFactory, string configFile)`
-	- Removed method `Castle.Facilities.Logging.LoggingFacility.LogUsing(LoggerImplementation loggingApi)`
-	- Removed method `Castle.Facilities.Logging.LoggingFacility.UseLog4Net()`
-	- Removed method `Castle.Facilities.Logging.LoggingFacility.UseLog4Net(string configFile)`
-	- Removed method `Castle.Facilities.Logging.LoggingFacility.UseNLog()`
-	- Removed method `Castle.Facilities.Logging.LoggingFacility.UseNLog(string configFile)`
+	  `Castle.Windsor.Facilities.Logging.LoggingFacility(LoggerImplementation loggingApi, string configFile)`
+	- Removed constructor
+	  `Castle.Windsor.Facilities.Logging.LoggingFacility(string customLoggerFactory, string configFile)`
+	- Removed method `Castle.Windsor.Facilities.Logging.LoggingFacility.LogUsing(LoggerImplementation loggingApi)`
+	- Removed method `Castle.Windsor.Facilities.Logging.LoggingFacility.UseLog4Net()`
+	- Removed method `Castle.Windsor.Facilities.Logging.LoggingFacility.UseLog4Net(string configFile)`
+	- Removed method `Castle.Windsor.Facilities.Logging.LoggingFacility.UseNLog()`
+	- Removed method `Castle.Windsor.Facilities.Logging.LoggingFacility.UseNLog(string configFile)`
 
 ## 5.1.2 (2022-05-17)
 
@@ -104,11 +106,12 @@ Bugfixes:
 Enhancements:
 
 - Upgraded to Castle.Core 4.2.0 to 4.3.1 (@fir3pho3nixx, #413)
-- Created Castle.Facilities.AspNetCore facility to support ASP.NET Core web applications on .NET Core and .NET
+- Created Castle.Windsor.Facilities.AspNetCore facility to support ASP.NET Core web applications on .NET Core and .NET
   Framework (@fir3pho3nixx, #120)
-- Created Castle.Facilities.AspNet.Mvc facility to support ASP.NET MVC web applications on .NET Framework (
+- Created Castle.Windsor.Facilities.AspNet.Mvc facility to support ASP.NET MVC web applications on .NET Framework (
   @fir3pho3nixx, #283)
-- Created Castle.Facilities.AspNet.WebApi facility to support ASP.NET Web API IIS and self hosted applications on .NET
+- Created Castle.Windsor.Facilities.AspNet.WebApi facility to support ASP.NET Web API IIS and self hosted applications
+  on .NET
   Framework (@fir3pho3nixx, #283)
 - Added XML documentation to BeginScope and RequireScope lifetime extensions (@jonorossi)
 - Upgraded build to use NUnit Adapters (@fir3pho3nixx, #243)
@@ -117,7 +120,8 @@ Enhancements:
 
 Breaking Changes:
 
-- Built-in System.Web support has been moved to the new Castle.Facilities.AspNet.SystemWeb facility (@fir3pho3nixx,
+- Built-in System.Web support has been moved to the new Castle.Windsor.Facilities.AspNet.SystemWeb facility (
+  @fir3pho3nixx,
   #283)
 - Removed obsolete ActAs, Parameters, Properties and ServiceOverrides methods from component registration (
   @fir3pho3nixx, #338)
@@ -222,7 +226,7 @@ Bugfixes:
 ## 3.2.1 (2013-07-22)
 
 - fixed IOC-349 - SerializationException - Type is not resolved for member "
-  Castle.MicroKernel.Lifestyle.Scoped.CallContextLifetimeScope+SerializationReference, ...
+  Castle.Windsor.MicroKernel.Lifestyle.Scoped.CallContextLifetimeScope+SerializationReference, ...
 
 ## 3.2.0 (2013-02-16)
 
@@ -840,7 +844,7 @@ and choose to only proxy members of that single interface.
 - implemented IOC-316 - Add attribute to specify default selector for a typed factory interface/delegate
 - implemented IOC-313 - Add event to be raised by the container whenever empty collection is being resolved
 - implemented IOC-312 - Add shortcut methods to API to register types from given namespace
-- fixed IOC-320 - System.ArgumentNullException at Castle.MicroKernel.Burden.Release(IReleasePolicy policy)
+- fixed IOC-320 - System.ArgumentNullException at Castle.Windsor.MicroKernel.Burden.Release(IReleasePolicy policy)
 - fixed IOC-319 - Concurrency problem when child container is used
 - fixed IOC-315 - ResolveAll should not ignore generic constraint violations on dependencies of resolved component
 - fixed IOC-314 - Parsing container configuration uses the current culture
@@ -1088,12 +1092,12 @@ generic interface)
 fix - depending on the scenario. You would either ignore it, or wrap your current method's body
 in foreach(var baseType in baseTypes)
 
-change - moved IWindsorInstaller to Castle.MicroKernel.Registration namespace
+change - moved IWindsorInstaller to Castle.Windsor.MicroKernel.Registration namespace
 impact - very low
 fixability - easy
 description -In order to improve developer experience when writing installers the interface
 was moved so that Component and AllTypes entry types for registration are already in scope.
-fix - add using Castle.MicroKernel.Registration directive.
+fix - add using Castle.Windsor.MicroKernel.Registration directive.
 
 change - Added two new overloads to ITypeConverter.PerformConversion
 impact - very low
@@ -1161,18 +1165,18 @@ revision - 3bf716cc6fc218601dab92a6dd75fe269bcb63d0
 description - To improve the internal structure several types were moved to other namespaces.
 fix - When compilation error occurs adjust namespace imports as suggested by Visual Studio
 
-change - Assembly Castle.MicroKernel.dll was merged into Castle.Windsor.dll
+change - Assembly Castle.Windsor.MicroKernel.dll was merged into Castle.Windsor.dll
 impact - high
 fixability - easy
 revision - 730b202b0ed23a6b42258a6ffd6a3e63f89501fc
 description - Since vast majority of users used Windsor, as opposed to bare MicroKernel it was
 decided it didn't make sense to maintain two containers. As result of that their assemblies
 were merged, as first step of integration between Windsor and MicroKernel.
-fix - In your projects remove reference to Castle.MicroKernel.dll. If you weren't using Windsor
+fix - In your projects remove reference to Castle.Windsor.MicroKernel.dll. If you weren't using Windsor
 add reference to Castle.Windsor.dll
-In all places where your were referencing types from Castle.MicroKernel.dll via string
+In all places where your were referencing types from Castle.Windsor.MicroKernel.dll via string
 (like xml configuration when registering facilities, or <httpModules> section on your
-web.config) update references from Castle.MicroKernel to Castle.Windsor.
+web.config) update references from Castle.Windsor.MicroKernel to Castle.Windsor.
 
 change - `ComponentRegistration<S>.Startable` public method has been removed.
 `ComponentRegistration<S>.StartUsingMethod` public method was moved to extension method.
@@ -1182,7 +1186,7 @@ fixability - trivial
 revision - 6710
 description - StartUsingMethod/StopUsingMethod belong to StartableFacility and do not make sense
 as part of generic API. Startable method was superfluous.
-fix - Remove calls to Startable(). Import namespace Castle.Facilities.Startable to use
+fix - Remove calls to Startable(). Import namespace Castle.Windsor.Facilities.Startable to use
 StartUsingMethod and StopUsingMethod as extension methods.
 
 change - DefaultProxyFactory.CreateProxyGenerationOptionsFrom protected method and
@@ -1241,7 +1245,7 @@ fix - wherever used, adjust types appropriately. To obtain actual objects, use R
 - Typed Factories will not implicitly pick default ITypedFactoryComponentSelector registered in the container anymore
 - Obsoleted all the AddComponent* methods in favor of using Installers and fluent registration API
 - ServiceSelector delegate (used in WithService.Select calls) changed signature to fix a bug: http://3.ly/eP5Q
-- moved IWindsorInstaller to Castle.MicroKernel.Registration namespace
+- moved IWindsorInstaller to Castle.Windsor.MicroKernel.Registration namespace
 - typed factories will now obey container release policy, that is if the container does not track the component, so
   won't the factory.
 - added helper methods to fluently configure logging facility using: container.AddFacility<LoggingFacility>( f = >
@@ -1485,7 +1489,7 @@ fix - wherever used, adjust types appropriately. To obtain actual objects, use R
   "DictionaryConverter should use the alternate overload of the
   PerformConversion method in order to support dictionaries that contain
   custom types"
-- Moved ProxyComponentInspector from Castle.MicroKernel to here and added
+- Moved ProxyComponentInspector from Castle.Windsor.MicroKernel to here and added
   support to supply ProxyGenerationOptions on a ComponentModel basis. This
   provides the needed ability to provide proxy options in facilities.
 - Fixed IOC-69 - DefaultDependencyResolver issue with Service Overrides.
@@ -1574,7 +1578,7 @@ fix - wherever used, adjust types appropriately. To obtain actual objects, use R
 
   <httpModules>
    ...
-   <add name="PerWebRequest" type="Castle.MicroKernel.Lifestyle.PerWebRequestLifestyleManager , Castle.MicroKernel,Version=0.0.1.7, Culture=neutral, PublicKeyToken=407dd0808d44fbdc"/>
+   <add name="PerWebRequest" type="Castle.Windsor.MicroKernel.Lifestyle.PerWebRequestLifestyleManager , Castle.Windsor.MicroKernel,Version=0.0.1.7, Culture=neutral, PublicKeyToken=407dd0808d44fbdc"/>
 
   <httpModules>
 

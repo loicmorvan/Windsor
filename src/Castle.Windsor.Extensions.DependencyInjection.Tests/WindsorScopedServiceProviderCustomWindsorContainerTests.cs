@@ -16,6 +16,8 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Tests;
 
 using System;
 
+using Castle.Windsor.Windsor;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Specification;
 

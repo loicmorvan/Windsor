@@ -14,9 +14,10 @@
 
 namespace Castle.Windsor.Tests;
 
-using Castle.Core;
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Interceptors;
+using Castle.Windsor.Windsor;
 
 public class InterceptorsSelectorTestCase
 {

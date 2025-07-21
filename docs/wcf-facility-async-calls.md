@@ -30,7 +30,7 @@ public interface IOperations
 On the client side you register your services as usual. You will also need a namespace using:
 
 ```csharp
-using Castle.Facilities.WcfIntegration;
+using Castle.Windsor.Facilities.WcfIntegration;
 ```
 
 you can then resolve your client-side proxy from the container:

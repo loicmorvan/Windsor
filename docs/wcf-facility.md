@@ -7,7 +7,8 @@ use code generation and much more.
 
 ## Installing the facility
 
-WCF Integration Facility lives in `Castle.Facilities.WcfIntegration.dll` file distributed as part of Windsor binary
+WCF Integration Facility lives in `Castle.Windsor.Facilities.WcfIntegration.dll` file distributed as part of Windsor
+binary
 package.
 
 If you're using Nuget, you'll have to download it separately using the following command:
@@ -17,7 +18,7 @@ If you're using Nuget, you'll have to download it separately using the following
 After adding reference to the facility, You can add it to the container:
 
 ```csharp
-using Castle.Facilities.WcfIntegration;
+using Castle.Windsor.Facilities.WcfIntegration;
 
 Container.AddFacility<WcfFacility>();
 ```

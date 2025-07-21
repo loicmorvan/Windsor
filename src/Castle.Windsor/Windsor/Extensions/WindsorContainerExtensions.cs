@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor;
+namespace Castle.Windsor.Windsor.Extensions;
 
 using System;
 using System.Collections.Generic;
 
-using Castle.MicroKernel;
+using Castle.Windsor.MicroKernel;
 
 public static class WindsorContainerExtensions
 {

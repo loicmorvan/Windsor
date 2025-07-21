@@ -16,14 +16,13 @@ namespace Castle.Windsor.Tests
 {
 	using System;
 
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Configuration.Interpreters;
-	using Castle.XmlFiles;
-
-	using CastleTests;
-	using CastleTests.Components;
+	using Castle.Windsor.Core;
+	using Castle.Windsor.MicroKernel;
+	using Castle.Windsor.MicroKernel.Registration;
+	using Castle.Windsor.Tests.Components;
+	using Castle.Windsor.Tests.XmlFiles;
+	using Castle.Windsor.Windsor;
+	using Castle.Windsor.Windsor.Configuration.Interpreters;
 
 	public class CircularDependencyTestCase : AbstractContainerTestCase
 	{

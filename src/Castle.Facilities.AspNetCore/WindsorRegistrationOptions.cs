@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore;
+namespace Castle.Windsor.Facilities.AspNetCore;
 
 using System.Collections.Generic;
 using System.Reflection;
 
 using Castle.Core;
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>For overriding default registration and lifestyles behaviour</summary>
 public class WindsorRegistrationOptions

@@ -14,10 +14,10 @@
 
 namespace Castle.Windsor.Tests;
 
-using Castle.Windsor.Installer;
-using Castle.XmlFiles;
-
-using CastleTests.Components;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.XmlFiles;
+using Castle.Windsor.Windsor;
+using Castle.Windsor.Windsor.Installer;
 
 public class IgnoreWireTestCase
 {

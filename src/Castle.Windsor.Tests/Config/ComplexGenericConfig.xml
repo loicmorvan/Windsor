@@ -2,7 +2,7 @@
 	<components>
 
 		<component id='logging.repository'
-				   service='CastleTests.Components.IRepository`1'
+				   service='Castle.Windsor.Tests.Components.IRepository`1'
 				   type='LoggingRepositoryDecorator`1'>
 			<parameters>
 				<inner>${generic.repository}</inner>
@@ -20,7 +20,7 @@
 		</component>
 
 		<component id='reviewer.repository'
-				   service='CastleTests.Components.IRepository`1[[IReviewer]]'
+				   service='Castle.Windsor.Tests.Components.IRepository`1[[IReviewer]]'
 				   type='ReviewerRepository'>
 			<parameters>
 				<Name>Reviewer Repository</Name>
@@ -28,7 +28,7 @@
 		</component>
 
 		<component id='generic.repository'
-				   service='CastleTests.Components.IRepository`1'
+				   service='Castle.Windsor.Tests.Components.IRepository`1'
 				   type='DemoRepository`1'>
 			<parameters>
 				<Name>Generic Repostiory</Name>
@@ -36,7 +36,7 @@
 		</component>
 
 		<component id='reviewer.logging.repository'
-				   service='CastleTests.Components.IRepository`1[[IReviewableEmployee]]'
+				   service='Castle.Windsor.Tests.Components.IRepository`1[[IReviewableEmployee]]'
 				   type='LoggingRepositoryDecorator`1[[IReviewableEmployee]]'>
 			<parameters>
 				<inner>${generic.repository.no-cache}</inner>

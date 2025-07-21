@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
+namespace Castle.Windsor.Tests.Windsor.Tests;
 
 using System.Linq;
 
-using Castle.MicroKernel.Registration;
-
-using CastleTests;
+using Castle.Windsor.MicroKernel.Registration;
 
 public class MultiServiceComponentsTestCase : AbstractContainerTestCase
 {

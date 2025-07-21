@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
+namespace Castle.Windsor.Core;
 
 using System;
 using System.Reflection;
 
-using Castle.Core.Internal;
+using Castle.Windsor.Core.Internal;
 
 /// <summary>Represents a constructor of the component that the container can use to initialize it properly.</summary>
 [Serializable]

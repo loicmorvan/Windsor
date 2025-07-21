@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests;
+namespace Castle.Windsor.Tests;
 
-using Castle.MicroKernel;
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
-
-using CastleTests.ContainerExtensions;
+using Castle.Windsor.Tests.ContainerExtensions;
 
 public class CustomSubDependencyResolversTestCase : AbstractContainerTestCase
 {

@@ -13,11 +13,11 @@
 // limitations under the License.
 
 #pragma warning disable 618
-namespace CastleTests.Bugs;
+namespace Castle.Windsor.Tests.Bugs;
 
 using Castle.Core.Configuration;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Tests.ClassComponents;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.Tests.ClassComponents;
 
 public class IoC_334
 {

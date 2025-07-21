@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Resolvers;
+namespace Castle.Windsor.MicroKernel.Resolvers;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-using Castle.Core;
-using Castle.Core.Internal;
-using Castle.MicroKernel.Context;
-using Castle.MicroKernel.Handlers;
-using Castle.MicroKernel.SubSystems.Conversion;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Handlers;
+using Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 /// <summary>Default implementation for <see cref = "IDependencyResolver" />. This implementation is quite simple, but still should be useful for 99% of situations.</summary>
 [Serializable]

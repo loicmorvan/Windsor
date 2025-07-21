@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Lifestyle;
+namespace Castle.Windsor.Tests.Lifestyle;
 
-using Castle.Core.Internal;
-using Castle.MicroKernel.Registration;
-
-using CastleTests.Components;
-using CastleTests.TestInfrastructure;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.TestInfrastructure;
 
 public class ScopedLifetyleCustomScopesTestCase : AbstractContainerTestCase
 {

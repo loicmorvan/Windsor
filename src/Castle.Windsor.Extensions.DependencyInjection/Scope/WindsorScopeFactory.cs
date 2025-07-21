@@ -17,6 +17,8 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Scope
 {
 	using System;
 
+	using Castle.Windsor.Windsor;
+
 	using Microsoft.Extensions.DependencyInjection;
 
 	internal class WindsorScopeFactory : IServiceScopeFactory

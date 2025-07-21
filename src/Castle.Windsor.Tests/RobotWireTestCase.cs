@@ -14,10 +14,10 @@
 
 namespace Castle.Windsor.Tests;
 
-using Castle.Windsor.Installer;
-using Castle.XmlFiles;
-
-using CastleTests.Components;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.XmlFiles;
+using Castle.Windsor.Windsor;
+using Castle.Windsor.Windsor.Installer;
 
 /// <summary>Check for existence of any problem, as reported http://forum.castleproject.org/posts/list/214.page</summary>
 public class RobotWireTestCase

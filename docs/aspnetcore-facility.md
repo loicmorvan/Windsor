@@ -153,7 +153,8 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
 
 ## What do I need to set it up?
 
-You will need to install the Castle.Facilities.AspNetCore nuget, after which you can add the missing code to your
+You will need to install the Castle.Windsor.Facilities.AspNetCore nuget, after which you can add the missing code to
+your
 Startup.cs.
 Here is a complete example:
 

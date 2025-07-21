@@ -1,4 +1,4 @@
-namespace CastleTests.Components;
+namespace Castle.Windsor.Tests.Components;
 
 public class ServiceImplGeneric<T> : IService
 {

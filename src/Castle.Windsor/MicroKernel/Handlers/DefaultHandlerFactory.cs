@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers;
+namespace Castle.Windsor.MicroKernel.Handlers;
 
 using System;
 
-using Castle.Core;
-using Castle.Core.Internal;
-using Castle.MicroKernel.ModelBuilder;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.ModelBuilder;
 
 [Serializable]
 public class DefaultHandlerFactory : IHandlerFactory

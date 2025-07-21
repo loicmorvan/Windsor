@@ -15,7 +15,7 @@ You will need 3 things to get this going:
 - Assembly reference to `System.Web`
 - NuGet reference for [Microsoft.Web.Infrastructure](https://www.nuget.org/packages/Microsoft.Web.Infrastructure/)
 - NuGet reference
-  for [Castle.Facilities.AspNet.SystemWeb](https://www.nuget.org/packages/Castle.Facilities.AspNet.SystemWeb/)
+  for [Castle.Windsor.Facilities.AspNet.SystemWeb](https://www.nuget.org/packages/Castle.Windsor.Facilities.AspNet.SystemWeb/)
 
 Since Windsor 3.0, `Microsoft.Web.Infrastructure` has been used to automatically register the HTTP module, however the
 HTTP module can still be manually registered in your `web.config` file:
@@ -24,7 +24,7 @@ HTTP module can still be manually registered in your `web.config` file:
 <configuration>
   <system.web>
     <httpModules>
-      <add name="PerRequestLifestyle" type="Castle.Facilities.AspNet.SystemWeb.PerWebRequestLifestyleModule, Castle.Facilities.AspNet.SystemWeb"/>
+      <add name="PerRequestLifestyle" type="Castle.Windsor.Facilities.AspNet.SystemWeb.PerWebRequestLifestyleModule, Castle.Windsor.Facilities.AspNet.SystemWeb"/>
     </httpModules>
   </system.web>
 </configuration>
@@ -61,7 +61,7 @@ facility to be specified, this performs the same function as the extension metho
     service="IService, App"
     type="MyComponent, App"
     lifestyle="scoped"
-    scopeAccessorType="Castle.Facilities.AspNet.SystemWeb.WebRequestScopeAccessor, Castle.Facilities.AspNet.SystemWeb">
+    scopeAccessorType="Castle.Windsor.Facilities.AspNet.SystemWeb.WebRequestScopeAccessor, Castle.Windsor.Facilities.AspNet.SystemWeb">
   </component>
 </components>
 ```

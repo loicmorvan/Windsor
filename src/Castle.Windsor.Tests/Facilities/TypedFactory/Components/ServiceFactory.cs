@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory;
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
 using System;
 
-using Castle.MicroKernel.Tests.ClassComponents;
+using Castle.Windsor.Tests.ClassComponents;
 
 public class ServiceFactory
 {

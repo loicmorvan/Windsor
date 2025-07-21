@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Naming;
+namespace Castle.Windsor.MicroKernel.SubSystems.Naming;
 
 using System;
 
-using Castle.Core;
+using Castle.Windsor.Core;
 
 /// <summary>Contract for SubSystem that wishes to keep and coordinate component registration.</summary>
 public interface INamingSubSystem : ISubSystem

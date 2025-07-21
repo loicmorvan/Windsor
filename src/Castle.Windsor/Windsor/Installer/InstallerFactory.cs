@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Installer;
+namespace Castle.Windsor.Windsor.Installer;
 
 using System;
 using System.Collections.Generic;
 
-using Castle.Core.Internal;
-using Castle.MicroKernel.Registration;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Helper class used by <see cref = "FromAssembly" /> to filter/order and instantiate <see cref = "IWindsorInstaller" /> implementations</summary>
 public class InstallerFactory

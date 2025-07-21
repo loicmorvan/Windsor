@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Pools;
+namespace Castle.Windsor.Tests.Pools;
 
 using System;
 
-using Castle.Core;
+using Castle.Windsor.Core;
 
 [Pooled(2, 5)]
 public class PoolableComponent1

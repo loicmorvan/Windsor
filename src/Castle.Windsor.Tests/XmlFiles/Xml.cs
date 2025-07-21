@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.XmlFiles;
+namespace Castle.Windsor.Tests.XmlFiles;
 
 using System;
 using System.IO;
@@ -22,7 +22,7 @@ using Castle.Core.Resource;
 
 public class Xml
 {
-	private static readonly string embedded = "assembly://" + typeof(Xml).GetTypeInfo().Assembly.FullName + "/CastleTests/XmlFiles/";
+	private static readonly string embedded = "assembly://" + typeof(Xml).GetTypeInfo().Assembly.FullName + "/Castle.Windsor.Tests/XmlFiles/";
 
 	public static IResource Embedded(string name)
 	{

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 
-namespace Castle.MicroKernel.Internal;
+namespace Castle.Windsor.MicroKernel.Internal;
 
 using System;
 

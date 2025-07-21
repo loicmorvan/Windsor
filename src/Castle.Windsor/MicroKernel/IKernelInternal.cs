@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
+namespace Castle.Windsor.MicroKernel;
 
 using System;
 
-using Castle.Core;
 using Castle.Core.Logging;
+using Castle.Windsor.Core;
 
 /// <summary>Extended contract of kernel, used internally.</summary>
 public interface IKernelInternal : IKernel

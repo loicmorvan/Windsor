@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.DebuggerViews;
+namespace Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
 
 using System.Diagnostics;
 

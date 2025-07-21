@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core;
+namespace Castle.Windsor.Core;
 
 using System;
 using System.Collections.Generic;
@@ -22,8 +22,8 @@ using System.Reflection;
 using System.Threading;
 
 using Castle.Core.Configuration;
-using Castle.Core.Internal;
-using Castle.MicroKernel;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel;
 
 /// <summary>Represents the collection of information and meta information collected about a component.</summary>
 [Serializable]

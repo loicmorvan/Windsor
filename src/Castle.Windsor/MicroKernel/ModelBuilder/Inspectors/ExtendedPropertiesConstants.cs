@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors;
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 
 /// <summary>Only to hold internal constants and get rid of magic numbers and hardcode names.</summary>
 internal abstract class ExtendedPropertiesConstants

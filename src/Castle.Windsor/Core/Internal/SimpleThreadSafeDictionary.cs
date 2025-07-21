@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal;
+namespace Castle.Windsor.Core.Internal;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Castle.MicroKernel.Internal;
+using Castle.Windsor.MicroKernel.Internal;
 
 /// <summary>
 ///     Simple type for thread safe adding/reading to/from keyed store. The difference between this and built in concurrent dictionary is that in this case adding is happening under a lock so never more

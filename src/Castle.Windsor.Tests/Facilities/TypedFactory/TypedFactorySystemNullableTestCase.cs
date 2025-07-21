@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.TypedFactory;
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 using System;
 
-using Castle.Facilities.TypedFactory;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Resolvers;
+using Castle.Windsor.Facilities.TypedFactory;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Resolvers;
 
 public class TypedFactorySystemNullableTestCase : AbstractContainerTestCase
 {

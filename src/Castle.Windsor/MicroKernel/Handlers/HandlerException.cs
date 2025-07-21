@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers;
+namespace Castle.Windsor.MicroKernel.Handlers;
 
 using System;
 
-using Castle.Core;
-using Castle.Core.Internal;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
 
 /// <summary>Summary description for HandlerException.</summary>
 [Serializable]

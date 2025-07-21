@@ -20,8 +20,7 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 	using System.Reflection;
 
 	using Castle.Windsor.Extensions.DependencyInjection.Scope;
-
-	using JetBrains.Annotations;
+	using Castle.Windsor.Windsor;
 
 	using Microsoft.Extensions.DependencyInjection;
 

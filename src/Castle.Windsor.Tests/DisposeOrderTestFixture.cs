@@ -17,7 +17,7 @@ namespace Castle.Windsor.Tests;
 using System;
 using System.Collections.Generic;
 
-using Castle.Core;
+using Castle.Windsor.Core;
 
 public class DisposeOrderTestFixture
 {

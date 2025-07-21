@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Tests;
+namespace Castle.Windsor.Tests;
 
-using Castle.Core.Internal;
+using Castle.Windsor.Core.Internal;
 
-public class GraphTestCase
+public class GraphNodeTests
 {
 	[Fact]
 	public void SimpleUsage()

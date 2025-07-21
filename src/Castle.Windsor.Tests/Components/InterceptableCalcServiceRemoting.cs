@@ -13,7 +13,7 @@
 // limitations under the License.
 
 #if FEATURE_REMOTING
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components
 {
 
 	using Castle.Core;

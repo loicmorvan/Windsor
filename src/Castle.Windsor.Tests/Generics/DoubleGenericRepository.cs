@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Generics;
-
-using CastleTests.Generics;
+namespace Castle.Windsor.Tests.Generics;
 
 public class DoubleGenericRepository<T1, T2> : IRepository<T1>;

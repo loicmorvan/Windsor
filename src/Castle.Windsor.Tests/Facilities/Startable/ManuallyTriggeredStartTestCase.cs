@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.Startable;
+namespace Castle.Windsor.Tests.Facilities.Startable;
 
-using Castle.Facilities.Startable;
-using Castle.MicroKernel.Handlers;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Tests.ClassComponents;
-using Castle.Windsor.Tests;
+using Castle.Windsor.Facilities.Startable;
+using Castle.Windsor.MicroKernel.Handlers;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Facilities.Startable.Components;
 
 public class ManuallyTriggeredStartTestCase : AbstractContainerTestCase

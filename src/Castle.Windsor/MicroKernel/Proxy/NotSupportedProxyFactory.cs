@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Proxy;
+namespace Castle.Windsor.MicroKernel.Proxy;
 
 using System;
 
-using Castle.Core;
-using Castle.MicroKernel.Context;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Context;
 
 /// <summary>This is a placeholder implementation of <see cref = "IProxyFactory" />.</summary>
 /// <remarks>

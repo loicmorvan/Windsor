@@ -106,7 +106,7 @@ implementation using the attribute customStore.
 
 <castle>
   <facilities>
-    <facility type="Castle.Facilities.NHibernateIntegration.NHibernateFacility, Castle.Facilities.NHibernateIntegration">
+    <facility type="Castle.Windsor.Facilities.NHibernateIntegration.NHibernateFacility, Castle.Windsor.Facilities.NHibernateIntegration">
       <factory id="nhibernate.factory">
         <settings>
           <item key="connection.provider">
@@ -309,7 +309,7 @@ In your web.config, register the module SessionWebModule:
   <system.web>
     <httpModules>
       <add name="NHibernateSessionWebModule"
-        type="Castle.Facilities.NHibernateIntegration.Components.Web.SessionWebModule, Castle.Facilities.NHibernateIntegration"/>
+        type="Castle.Windsor.Facilities.NHibernateIntegration.Components.Web.SessionWebModule, Castle.Windsor.Facilities.NHibernateIntegration"/>
     </httpModules>
   </system.web>
 </configuration>
@@ -373,6 +373,6 @@ public class BlogDao
 
 ## Required Assemblies
 
-* [Castle.Facilities.NHibernateIntegration.dll](https://github.com/castleproject/Windsor/tree/master/src/Castle.Facilities.NHibernateIntegration)
+* [Castle.Windsor.Facilities.NHibernateIntegration.dll](https://github.com/castleproject/Windsor/tree/master/src/Castle.Windsor.Facilities.NHibernateIntegration)
   was not shipped with Windsor v3, see [issue #101](https://github.com/castleproject/Windsor/issues/101) for details
 * [NHibernate assemblies](http://www.nhforge.org)

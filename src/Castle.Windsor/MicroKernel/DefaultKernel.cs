@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel;
+namespace Castle.Windsor.MicroKernel;
 
 using System;
 using System.Collections.Generic;
@@ -20,25 +20,25 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
-using Castle.Core;
-using Castle.Core.Internal;
 using Castle.Core.Logging;
-using Castle.MicroKernel.ComponentActivator;
-using Castle.MicroKernel.Context;
-using Castle.MicroKernel.Handlers;
-using Castle.MicroKernel.Lifestyle;
-using Castle.MicroKernel.Lifestyle.Scoped;
-using Castle.MicroKernel.ModelBuilder;
-using Castle.MicroKernel.ModelBuilder.Inspectors;
-using Castle.MicroKernel.Proxy;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Releasers;
-using Castle.MicroKernel.Resolvers;
-using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.MicroKernel.SubSystems.Conversion;
-using Castle.MicroKernel.SubSystems.Naming;
-using Castle.MicroKernel.SubSystems.Resource;
-using Castle.Windsor.Diagnostics;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.ComponentActivator;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Handlers;
+using Castle.Windsor.MicroKernel.Lifestyle;
+using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
+using Castle.Windsor.MicroKernel.ModelBuilder;
+using Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
+using Castle.Windsor.MicroKernel.Proxy;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Releasers;
+using Castle.Windsor.MicroKernel.Resolvers;
+using Castle.Windsor.MicroKernel.SubSystems.Configuration;
+using Castle.Windsor.MicroKernel.SubSystems.Conversion;
+using Castle.Windsor.MicroKernel.SubSystems.Naming;
+using Castle.Windsor.MicroKernel.SubSystems.Resource;
+using Castle.Windsor.Windsor.Diagnostics;
 #if FEATURE_SECURITY_PERMISSIONS
 	using System.Security.Permissions;
 #endif

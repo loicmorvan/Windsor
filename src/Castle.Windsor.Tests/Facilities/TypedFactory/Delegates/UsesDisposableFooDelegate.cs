@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
 using System;
 
-using CastleTests.Components;
+using Castle.Windsor.Tests.Components;
 
 public class UsesDisposableFooDelegate
 {
