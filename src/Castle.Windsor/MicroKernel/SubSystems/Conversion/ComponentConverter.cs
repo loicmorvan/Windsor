@@ -45,7 +45,9 @@ public class ComponentConverter : AbstractTypeConverter, IKernelDependentConvert
 				targetType.FullName));
 
 		var handler = Context.Kernel.LoadHandlerByName(componentName, targetType, null);
-		if (handler == null) throw new ConverterException(string.Format("Component '{0}' was not found in the container.", componentName));
+		if (handler == null)
+			throw new ConverterException(
+				$"Component '{componentName}' was not found in the container.");
 
 		return handler.Resolve(Context.CurrentCreationContext ?? CreationContext.CreateEmpty());
 	}

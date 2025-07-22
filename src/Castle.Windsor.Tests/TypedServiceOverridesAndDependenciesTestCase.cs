@@ -31,6 +31,7 @@ public class TypedServiceOverridesAndDependenciesTestCase : AbstractContainerTes
 			Component.For<ISimpleService2>().ImplementedBy<SimpleService2B>());
 
 		var item = Container.Resolve<A>();
+		// ReSharper disable once SuspiciousTypeConversion.Global
 		var two = (ISimpleService2)item;
 
 		Assert.Equal("b", two.Method());

@@ -47,6 +47,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 			.LifeStyle.Transient
 			.UsingFactoryMethod(() => new ComponentWithDispose()));
 		var component = Kernel.Resolve<IComponent>() as ComponentWithDispose;
+		Assert.NotNull(component);
 		Assert.False(component.Disposed);
 
 		Kernel.ReleaseComponent(component);
@@ -62,6 +63,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 			.LifeStyle.Transient
 			.UsingFactoryMethod(() => new ComponentWithDispose()));
 		var component = Kernel.Resolve<IComponent>() as ComponentWithDispose;
+		Assert.NotNull(component);
 		Assert.False(component.Disposed);
 
 		Kernel.ReleaseComponent(component);
@@ -187,8 +189,6 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 				.Interceptors<StandardInterceptor>());
 		var component = Kernel.Resolve<IComponent>();
 
-		var id = component.ID;
-
 		Assert.IsType<IProxyTargetAccessor>(component, false);
 	}
 
@@ -202,8 +202,6 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 				.UsingFactoryMethod(() => new TrivialComponent())
 				.Interceptors<StandardInterceptor>());
 		var component = Kernel.Resolve<IComponent>();
-
-		var id = component.ID;
 
 		Assert.IsType<IProxyTargetAccessor>(component, false);
 	}
@@ -299,6 +297,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 		var component = Kernel.Resolve<IComponent>() as TrivialComponentWithDependency;
 
 		Assert.True(Kernel.ReleasePolicy.HasTrack(component));
+		Assert.NotNull(component);
 		Assert.True(Kernel.ReleasePolicy.HasTrack(component.Dependency));
 	}
 
@@ -313,6 +312,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 		var component = Kernel.Resolve<IComponent>() as TrivialComponentWithDependency;
 
 		Assert.False(Kernel.ReleasePolicy.HasTrack(component));
+		Assert.NotNull(component);
 		Assert.False(Kernel.ReleasePolicy.HasTrack(component.Dependency));
 	}
 

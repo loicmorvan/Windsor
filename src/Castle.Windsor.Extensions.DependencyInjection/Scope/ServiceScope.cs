@@ -23,7 +23,7 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Scope
 
 		public ServiceScope(IDisposable windsorScope, IServiceProvider serviceProvider)
 		{
-			_scope = windsorScope ?? throw new ArgumentNullException(nameof(_scope));
+			_scope = windsorScope ?? throw new ArgumentNullException(nameof(windsorScope));
 			ServiceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
 		}
 

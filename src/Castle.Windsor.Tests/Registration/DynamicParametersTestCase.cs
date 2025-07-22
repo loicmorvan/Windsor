@@ -53,8 +53,7 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 				.LifeStyle.Transient
 				.DynamicParameters((k, d) => // dynamic parameters
 				{
-					var randomNumber = 2;
-					if (randomNumber == 2) d["customer"] = k.Resolve<ICustomer>("otherCustomer");
+					d["customer"] = k.Resolve<ICustomer>("otherCustomer");
 				}));
 
 		var component = Kernel.Resolve<CommonImplWithDependency>();
@@ -138,7 +137,7 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
 			arg1 = (string)d["arg1"];
 			arg2 = (int)d["arg2"];
 		}));
-		var component = Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2).AddNamed("arg1", "foo"));
+		Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2).AddNamed("arg1", "foo"));
 		Assert.Equal("foo", arg1);
 		Assert.Equal(2, arg2);
 	}

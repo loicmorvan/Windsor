@@ -16,28 +16,14 @@ namespace Castle.Windsor.Core.Internal;
 
 public static class Constants
 {
-	private const string defaultComponentForServiceFilter = "castle.default-component-for-service-filter";
-	private const string fallbackComponentForServiceFilter = "castle.fallback-component-for-service-filter";
-	private const string genericImplementationMatchingStrategy = "castle.generic-matching-strategy";
-	private const string genericServiceStrategy = "castle.generic-service-strategy";
+	public const string DefaultComponentForServiceFilter = "castle.default-component-for-service-filter";
+	public const string FallbackComponentForServiceFilter = "castle.fallback-component-for-service-filter";
+	public const string GenericImplementationMatchingStrategy = "castle.generic-matching-strategy";
+	public const string GenericServiceStrategy = "castle.generic-service-strategy";
 
-	private const string propertyFilters = "castle.property-filters";
-	private const string scopeAccessorType = "castle.scope-accessor-type";
-	private const string scopeRootSelector = "castle.scope-root";
-
-	public static string DefaultComponentForServiceFilter => defaultComponentForServiceFilter;
+	public const string PropertyFilters = "castle.property-filters";
+	public const string ScopeAccessorType = "castle.scope-accessor-type";
+	public const string ScopeRootSelector = "castle.scope-root";
 
 	public static string ExceptionHelpLink => "http://www.castleproject.org/";
-
-	public static string FallbackComponentForServiceFilter => fallbackComponentForServiceFilter;
-
-	public static string GenericImplementationMatchingStrategy => genericImplementationMatchingStrategy;
-
-	public static string GenericServiceStrategy => genericServiceStrategy;
-
-	public static string PropertyFilters => propertyFilters;
-
-	public static string ScopeAccessorType => scopeAccessorType;
-
-	public static string ScopeRootSelector => scopeRootSelector;
 }

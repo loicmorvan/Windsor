@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+
+namespace Castle.Windsor.Core;
 
 /// <summary>Represents a collection of ordered lifecycle concerns.</summary>
 [Serializable]
 public class LifecycleConcernsCollection
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private List<ICommissionConcern> commission;
+	private List<ICommissionConcern> _commission;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private List<IDecommissionConcern> decommission;
+	private List<IDecommissionConcern> _decommission;
 
 	/// <summary>Returns all concerns for the commission phase</summary>
 	/// <value></value>
@@ -34,8 +34,8 @@ public class LifecycleConcernsCollection
 	{
 		get
 		{
-			if (HasCommissionConcerns == false) return new ICommissionConcern[0];
-			return commission;
+			if (HasCommissionConcerns == false) return [];
+			return _commission;
 		}
 	}
 
@@ -45,40 +45,26 @@ public class LifecycleConcernsCollection
 	{
 		get
 		{
-			if (HasDecommissionConcerns == false) return new IDecommissionConcern[0];
-			return decommission;
+			if (HasDecommissionConcerns == false) return [];
+			return _decommission;
 		}
 	}
 
 	/// <summary>Gets a value indicating whether this instance has commission steps.</summary>
 	/// <value><c>true</c> if this instance has commission steps; otherwise, <c>false</c>.</value>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public bool HasCommissionConcerns => commission != null && commission.Count != 0;
+	public bool HasCommissionConcerns => _commission != null && _commission.Count != 0;
 
 	/// <summary>Gets a value indicating whether this instance has decommission steps.</summary>
 	/// <value><c>true</c> if this instance has decommission steps; otherwise, <c>false</c>.</value>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public bool HasDecommissionConcerns => decommission != null && decommission.Count != 0;
+	public bool HasDecommissionConcerns => _decommission != null && _decommission.Count != 0;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private List<ICommissionConcern> Commission
-	{
-		get
-		{
-			if (commission == null) commission = new List<ICommissionConcern>();
-			return commission;
-		}
-	}
+	private List<ICommissionConcern> Commission => _commission ??= [];
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private List<IDecommissionConcern> Decommission
-	{
-		get
-		{
-			if (decommission == null) decommission = new List<IDecommissionConcern>();
-			return decommission;
-		}
-	}
+	private List<IDecommissionConcern> Decommission => _decommission ??= [];
 
 	public void Add(ICommissionConcern concern)
 	{

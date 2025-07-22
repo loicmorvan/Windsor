@@ -24,16 +24,16 @@ namespace Castle.Windsor.Core;
 [Serializable]
 public class ConstructorCandidateCollection : IMutableCollection<ConstructorCandidate>
 {
-	private readonly SimpleSortedSet<ConstructorCandidate> ctors = new();
+	private readonly SimpleSortedSet<ConstructorCandidate> _constructors = [];
 
-	public ConstructorCandidate this[int index] => ctors[index];
+	public ConstructorCandidate this[int index] => _constructors[index];
 
-	public int Count => ctors.Count;
+	public int Count => _constructors.Count;
 
 	[DebuggerStepThrough]
 	public IEnumerator<ConstructorCandidate> GetEnumerator()
 	{
-		return ctors.GetEnumerator();
+		return _constructors.GetEnumerator();
 	}
 
 	[DebuggerStepThrough]
@@ -44,11 +44,11 @@ public class ConstructorCandidateCollection : IMutableCollection<ConstructorCand
 
 	void IMutableCollection<ConstructorCandidate>.Add(ConstructorCandidate item)
 	{
-		ctors.Add(item);
+		_constructors.Add(item);
 	}
 
 	bool IMutableCollection<ConstructorCandidate>.Remove(ConstructorCandidate item)
 	{
-		return ctors.Remove(item);
+		return _constructors.Remove(item);
 	}
 }

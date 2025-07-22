@@ -23,9 +23,9 @@ namespace Castle.Windsor.MicroKernel;
 
 public class Burden
 {
-	private Decommission decommission = Decommission.No;
+	private Decommission _decommission = Decommission.No;
 
-	private List<Burden> dependencies;
+	private List<Burden> _dependencies;
 
 	internal Burden(IHandler handler, bool requiresDecommission, bool trackedExternally)
 	{
@@ -33,14 +33,14 @@ public class Burden
 		TrackedExternally = trackedExternally;
 		if (requiresDecommission)
 		{
-			decommission = Decommission.Yes;
+			_decommission = Decommission.Yes;
 		}
 		else if (Model.Lifecycle.HasDecommissionConcerns)
 		{
 			if (Model.Implementation == typeof(LateBoundComponent) && Model.Lifecycle.DecommissionConcerns.All(IsLateBound))
-				decommission = Decommission.LateBound;
+				_decommission = Decommission.LateBound;
 			else
-				decommission = Decommission.Yes;
+				_decommission = Decommission.Yes;
 		}
 	}
 
@@ -52,14 +52,8 @@ public class Burden
 
 	public bool RequiresDecommission
 	{
-		get => decommission != Decommission.No;
-		set
-		{
-			if (value)
-				decommission = Decommission.Yes;
-			else
-				decommission = Decommission.No;
-		}
+		get => _decommission != Decommission.No;
+		set => _decommission = value ? Decommission.Yes : Decommission.No;
 	}
 
 	/// <summary>
@@ -68,14 +62,14 @@ public class Burden
 	/// </summary>
 	public bool RequiresPolicyRelease => TrackedExternally == false && RequiresDecommission;
 
-	public bool TrackedExternally { get; set; }
+	private bool TrackedExternally { get; }
 
 	public void AddChild(Burden child)
 	{
-		if (dependencies == null) dependencies = new List<Burden>(Model.Dependents.Length);
-		dependencies.Add(child);
+		_dependencies ??= new List<Burden>(Model.Dependents.Length);
+		_dependencies.Add(child);
 
-		if (child.RequiresDecommission) decommission = Decommission.Yes;
+		if (child.RequiresDecommission) _decommission = Decommission.Yes;
 	}
 
 	public bool Release()
@@ -88,7 +82,7 @@ public class Burden
 		var released = Released;
 		if (released != null) released(this);
 
-		if (dependencies != null) dependencies.ForEach(c => c.Release());
+		if (_dependencies != null) _dependencies.ForEach(c => c.Release());
 		var graphReleased = GraphReleased;
 		if (graphReleased != null) graphReleased(this);
 		return true;
@@ -98,7 +92,7 @@ public class Burden
 	{
 		ArgumentNullException.ThrowIfNull(instance);
 		Instance = instance;
-		if (decommission == Decommission.LateBound)
+		if (_decommission == Decommission.LateBound)
 			// TODO: this may need to be extended if we lazily provide any other decimmission concerns
 			RequiresDecommission = instance is IDisposable;
 	}

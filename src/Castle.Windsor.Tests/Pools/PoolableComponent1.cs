@@ -24,6 +24,6 @@ public class PoolableComponent1
 
 	public override string ToString()
 	{
-		return string.Format("{0:D}", id);
+		return $"{id:D}";
 	}
 }

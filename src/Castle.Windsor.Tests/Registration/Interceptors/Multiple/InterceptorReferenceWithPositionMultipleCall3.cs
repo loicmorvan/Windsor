@@ -21,9 +21,10 @@ namespace Castle.Windsor.Tests.Registration.Interceptors.Multiple;
 
 public class InterceptorReferenceWithPositionMultipleCall3 : InterceptorsTestCaseHelper
 {
-	public override IRegistration RegisterInterceptors<S>(ComponentRegistration<S> registration)
+	public override IRegistration RegisterInterceptors<TS>(ComponentRegistration<TS> registration)
 	{
-		return registration.Interceptors(new InterceptorReference(typeof(TestInterceptor3))).Last
+		return registration
+			.Interceptors(new InterceptorReference(typeof(TestInterceptor3))).Last
 			.Interceptors(new InterceptorReference(typeof(TestInterceptor1))).First
 			.Interceptors(new InterceptorReference(typeof(TestInterceptor2))).AtIndex(1);
 	}

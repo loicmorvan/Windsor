@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Registration;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Resources;
-
 using Castle.Core.Configuration;
+
+namespace Castle.Windsor.MicroKernel.Registration;
 #if FEATURE_SYSTEM_CONFIGURATION
 	using System.Configuration;
 #endif
@@ -200,7 +199,9 @@ public sealed class Dependency
 	{
 		var resourceManagerProperty = typeof(TResources).GetProperty("ResourceManager", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic, null, typeof(ResourceManager), Type.EmptyTypes,
 			null);
-		if (resourceManagerProperty == null) throw new ArgumentException(string.Format("Type {0} does not appear to be a correct 'resources' type. It doesn't have 'ResourceManager' property.", typeof(TResources)));
+		if (resourceManagerProperty == null)
+			throw new ArgumentException(
+				$"Type {typeof(TResources)} does not appear to be a correct 'resources' type. It doesn't have 'ResourceManager' property.");
 		ResourceManager resourceManager;
 		try
 		{

@@ -21,22 +21,15 @@ using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel.Handlers;
 
-public class DependencyInspector : IDependencyInspector
+public class DependencyInspector(StringBuilder message) : IDependencyInspector
 {
-	private readonly HashSet<IHandler> handlersChecked = new();
-
-	private readonly StringBuilder message;
-
-	public DependencyInspector(StringBuilder message)
-	{
-		this.message = message;
-	}
+	private readonly HashSet<IHandler> _handlersChecked = new();
 
 	public string Message => message.ToString();
 
 	public void Inspect(IHandler handler, DependencyModel[] missingDependencies, IKernel kernel)
 	{
-		if (handlersChecked.Add(handler) == false) return;
+		if (_handlersChecked.Add(handler) == false) return;
 		Debug.Assert(missingDependencies.Length > 0);
 		var uniqueOverrides = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 		message.AppendLine();
@@ -92,8 +85,7 @@ public class DependencyInspector : IDependencyInspector
 				message.Append("The following components also expose the service, but none of them can be resolved:");
 				foreach (var maybeDecoratedHandler in alternatives.Where(maybeDecoratedHandler => maybeDecoratedHandler != inspectingHandler))
 				{
-					var info = maybeDecoratedHandler as IExposeDependencyInfo;
-					if (info != null)
+					if (maybeDecoratedHandler is IExposeDependencyInfo info)
 					{
 						info.ObtainDependencyDetails(this);
 					}
@@ -109,8 +101,7 @@ public class DependencyInspector : IDependencyInspector
 		else
 		{
 			message.AppendFormat("- Service '{0}' which was registered but is also waiting for dependencies.", handler.ComponentModel.Name);
-			var info = handler as IExposeDependencyInfo;
-			if (info != null) info.ObtainDependencyDetails(this);
+			if (handler is IExposeDependencyInfo info) info.ObtainDependencyDetails(this);
 		}
 	}
 
@@ -131,8 +122,7 @@ public class DependencyInspector : IDependencyInspector
 			message.AppendFormat("- Component '{0}' (via override) which was registered but is also waiting for dependencies.", referenceName);
 			message.AppendLine();
 
-			var info = handler as IExposeDependencyInfo;
-			if (info != null) info.ObtainDependencyDetails(this);
+			if (handler is IExposeDependencyInfo info) info.ObtainDependencyDetails(this);
 		}
 	}
 }

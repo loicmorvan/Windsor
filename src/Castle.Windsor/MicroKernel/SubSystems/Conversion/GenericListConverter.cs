@@ -44,7 +44,8 @@ public class GenericListConverter : AbstractTypeConverter
 		{
 			var newValue = ReferenceExpressionUtil.ExtractComponentName(value);
 			var handler = Context.Kernel.LoadHandlerByName(newValue, targetType, null);
-			if (handler == null) throw new ConverterException(string.Format("Component '{0}' was not found in the container.", newValue));
+			if (handler == null)
+				throw new ConverterException($"Component '{newValue}' was not found in the container.");
 
 			return handler.Resolve(Context.CurrentCreationContext ?? CreationContext.CreateEmpty());
 		}

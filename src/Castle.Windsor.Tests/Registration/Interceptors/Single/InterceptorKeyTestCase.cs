@@ -20,7 +20,7 @@ namespace Castle.Windsor.Tests.Registration.Interceptors.Single;
 
 public class SingleInterceptorKey : InterceptorsTestCaseHelper
 {
-	public override IRegistration RegisterInterceptors<S>(ComponentRegistration<S> registration)
+	public override IRegistration RegisterInterceptors<TS>(ComponentRegistration<TS> registration)
 	{
 		return registration.Interceptors("interceptorKey");
 	}

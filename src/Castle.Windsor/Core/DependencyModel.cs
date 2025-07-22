@@ -21,50 +21,40 @@ namespace Castle.Windsor.Core;
 
 /// <summary>Represents a dependency (other component or a fixed value available through external configuration).</summary>
 [Serializable]
-public class DependencyModel
+public class DependencyModel(
+	string dependencyKey,
+	Type targetType,
+	bool isOptional,
+	bool hasDefaultValue = false,
+	object defaultValue = null)
 {
 #if DEBUG
-	protected bool initialized;
+	protected bool Initialized;
 #endif
-	protected ParameterModel parameterModel;
-	protected string reference;
-
-	/// <summary>Initializes a new instance of the <see cref = "DependencyModel" /> class.</summary>
-	/// <param name = "dependencyKey"> The dependency key. </param>
-	/// <param name = "targetType"> Type of the target. </param>
-	/// <param name = "isOptional"> if set to <c>true</c> [is optional]. </param>
-	public DependencyModel(string dependencyKey, Type targetType, bool isOptional)
-		: this(dependencyKey, targetType, isOptional, false, null)
-	{
-	}
+	protected ParameterModel ParameterModel;
+	protected string Reference;
 
 	// TODO: add configuration so that information about override is attached to the dependency
-	public DependencyModel(string dependencyKey, Type targetType, bool isOptional, bool hasDefaultValue, object defaultValue)
-	{
-		TargetType = targetType;
-		if (targetType != null && targetType.IsByRef)
-			TargetItemType = targetType.GetElementType();
-		else
-			TargetItemType = targetType;
-		DependencyKey = dependencyKey;
-		IsOptional = isOptional;
-		HasDefaultValue = hasDefaultValue;
-		DefaultValue = defaultValue;
-	}
 
-	/// <summary>The default value of this dependency. Note that <c>null</c> is a valid default value. Use <see cref = "HasDefaultValue" /> to determine whether default value was provided.</summary>
-	public object DefaultValue { get; set; }
+	/// <summary>
+	///     The default value of this dependency. Note that <c>null</c> is a valid default value. Use
+	///     <see cref="HasDefaultValue" /> to determine whether default value was provided.
+	/// </summary>
+	public object DefaultValue { get; set; } = defaultValue;
 
 	/// <summary>Gets or sets the dependency key.</summary>
 	/// <value> The dependency key. </value>
-	public string DependencyKey { get; set; }
+	public string DependencyKey { get; } = dependencyKey;
 
-	/// <summary>Specifies whether dependency has a default value (<see cref = "DefaultValue" />). Note that <c>null</c> is a valid default value.</summary>
-	public bool HasDefaultValue { get; set; }
+	/// <summary>
+	///     Specifies whether dependency has a default value (<see cref="DefaultValue" />). Note that <c>null</c> is a
+	///     valid default value.
+	/// </summary>
+	public bool HasDefaultValue { get; set; } = hasDefaultValue;
 
 	/// <summary>Gets or sets whether this dependency is optional.</summary>
 	/// <value> <c>true</c> if this dependency is optional; otherwise, <c>false</c> . </value>
-	public bool IsOptional { get; set; }
+	public bool IsOptional { get; set; } = isOptional;
 
 	public bool IsPrimitiveTypeDependency => TargetItemType.IsPrimitiveTypeOrCollection();
 
@@ -73,14 +63,14 @@ public class DependencyModel
 		get
 		{
 #if DEBUG
-			if (!initialized) throw new InvalidOperationException("Not initialized!");
+			if (!Initialized) throw new InvalidOperationException("Not initialized!");
 #endif
-			return parameterModel;
+			return ParameterModel;
 		}
 		set
 		{
-			parameterModel = value;
-			if (parameterModel != null) reference = ReferenceExpressionUtil.ExtractComponentName(parameterModel.Value);
+			ParameterModel = value;
+			if (ParameterModel != null) Reference = ReferenceExpressionUtil.ExtractComponentName(ParameterModel.Value);
 		}
 	}
 
@@ -89,21 +79,23 @@ public class DependencyModel
 		get
 		{
 #if DEBUG
-			if (!initialized) throw new InvalidOperationException("Not initialized!");
+			if (!Initialized) throw new InvalidOperationException("Not initialized!");
 #endif
-			return reference;
+			return Reference;
 		}
 	}
 
 	/// <summary>
-	///     Gets the service type of the dependency. This is the same type as <see cref = "TargetType" /> or if <see cref = "TargetType" /> is by ref, then it's the element type of the reference. (in other
-	///     words if dependency is <c>out IFoo foo</c> this will be <c>IFoo</c>, while <see cref = "TargetType" /> will be <c>&amp;IFoo</c>);
+	///     Gets the service type of the dependency. This is the same type as <see cref="TargetType" /> or if
+	///     <see cref="TargetType" /> is by ref, then it's the element type of the reference. (in other
+	///     words if dependency is <c>out IFoo foo</c> this will be <c>IFoo</c>, while <see cref="TargetType" /> will be
+	///     <c>&amp;IFoo</c>);
 	/// </summary>
-	public Type TargetItemType { get; }
+	public Type TargetItemType { get; } = targetType is { IsByRef: true } ? targetType.GetElementType() : targetType;
 
 	/// <summary>Gets the type of the target.</summary>
 	/// <value> The type of the target. </value>
-	public Type TargetType { get; }
+	public Type TargetType { get; } = targetType;
 
 	public override bool Equals(object obj)
 	{
@@ -128,17 +120,17 @@ public class DependencyModel
 	public virtual void Init(ParameterModelCollection parameters)
 	{
 #if DEBUG
-		initialized = true;
+		Initialized = true;
 #endif
 		if (parameters == null) return;
 		Parameter = ObtainParameterModelByName(parameters) ?? ObtainParameterModelByType(parameters);
 	}
 
-	/// <summary>Returns a <see cref = "T:System.String" /> that represents the current <see cref = "T:System.Object" />.</summary>
-	/// <returns> A <see cref = "T:System.String" /> that represents the current <see cref = "T:System.Object" /> . </returns>
+	/// <summary>Returns a <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.</summary>
+	/// <returns> A <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" /> . </returns>
 	public override string ToString()
 	{
-		return string.Format("Dependency '{0}' type '{1}'", DependencyKey, TargetType);
+		return $"Dependency '{DependencyKey}' type '{TargetType}'";
 	}
 
 	private ParameterModel GetParameterModelByType(Type type, ParameterModelCollection parameters)
@@ -163,7 +155,8 @@ public class DependencyModel
 			// for example it's an interceptor
 			return null;
 		var found = GetParameterModelByType(type, parameters);
-		if (found == null && type.GetTypeInfo().IsGenericType) found = GetParameterModelByType(type.GetGenericTypeDefinition(), parameters);
+		if (found == null && type.GetTypeInfo().IsGenericType)
+			found = GetParameterModelByType(type.GetGenericTypeDefinition(), parameters);
 		return found;
 	}
 }

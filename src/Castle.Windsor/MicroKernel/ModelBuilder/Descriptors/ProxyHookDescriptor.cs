@@ -18,15 +18,8 @@ using Castle.Windsor.MicroKernel.Proxy;
 
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
-public class ProxyHookDescriptor : IComponentModelDescriptor
+public class ProxyHookDescriptor(IReference<IProxyGenerationHook> hook) : IComponentModelDescriptor
 {
-	private readonly IReference<IProxyGenerationHook> hook;
-
-	public ProxyHookDescriptor(IReference<IProxyGenerationHook> hook)
-	{
-		this.hook = hook;
-	}
-
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
 		var options = model.ObtainProxyOptions();

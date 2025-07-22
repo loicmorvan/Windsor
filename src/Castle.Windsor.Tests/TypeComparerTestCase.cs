@@ -21,18 +21,13 @@ namespace Castle.Windsor.Tests;
 
 public class TypeComparerTestCase
 {
-	private readonly TypeByInheritanceDepthMostSpecificFirstComparer comparer;
-
-	public TypeComparerTestCase()
-	{
-		comparer = new TypeByInheritanceDepthMostSpecificFirstComparer();
-	}
+	private readonly TypeByInheritanceDepthMostSpecificFirstComparer _comparer = new();
 
 	[Fact]
 	public void More_specific_type_goes_first()
 	{
-		var set1 = new SimpleSortedSet<Type>(comparer) { typeof(JohnChild), typeof(JohnParent) };
-		var set2 = new SimpleSortedSet<Type>(comparer) { typeof(JohnParent), typeof(JohnChild) };
+		var set1 = new SimpleSortedSet<Type>(_comparer) { typeof(JohnChild), typeof(JohnParent) };
+		var set2 = new SimpleSortedSet<Type>(_comparer) { typeof(JohnParent), typeof(JohnChild) };
 
 		Assert.Equal(typeof(JohnChild), set1.First());
 		Assert.Equal(typeof(JohnChild), set2.First());
@@ -41,12 +36,18 @@ public class TypeComparerTestCase
 	[Fact]
 	public void More_specific_type_goes_first_three_classes()
 	{
-		var set1 = new SimpleSortedSet<Type>(comparer) { typeof(JohnChild), typeof(JohnParent), typeof(JohnGrandparent) };
-		var set2 = new SimpleSortedSet<Type>(comparer) { typeof(JohnChild), typeof(JohnGrandparent), typeof(JohnParent) };
-		var set3 = new SimpleSortedSet<Type>(comparer) { typeof(JohnParent), typeof(JohnChild), typeof(JohnGrandparent) };
-		var set4 = new SimpleSortedSet<Type>(comparer) { typeof(JohnParent), typeof(JohnGrandparent), typeof(JohnChild) };
-		var set5 = new SimpleSortedSet<Type>(comparer) { typeof(JohnGrandparent), typeof(JohnParent), typeof(JohnChild) };
-		var set6 = new SimpleSortedSet<Type>(comparer) { typeof(JohnGrandparent), typeof(JohnChild), typeof(JohnParent) };
+		var set1 = new SimpleSortedSet<Type>(_comparer)
+			{ typeof(JohnChild), typeof(JohnParent), typeof(JohnGrandparent) };
+		var set2 = new SimpleSortedSet<Type>(_comparer)
+			{ typeof(JohnChild), typeof(JohnGrandparent), typeof(JohnParent) };
+		var set3 = new SimpleSortedSet<Type>(_comparer)
+			{ typeof(JohnParent), typeof(JohnChild), typeof(JohnGrandparent) };
+		var set4 = new SimpleSortedSet<Type>(_comparer)
+			{ typeof(JohnParent), typeof(JohnGrandparent), typeof(JohnChild) };
+		var set5 = new SimpleSortedSet<Type>(_comparer)
+			{ typeof(JohnGrandparent), typeof(JohnParent), typeof(JohnChild) };
+		var set6 = new SimpleSortedSet<Type>(_comparer)
+			{ typeof(JohnGrandparent), typeof(JohnChild), typeof(JohnParent) };
 
 		Assert.Equal(typeof(JohnChild), set1.First());
 		Assert.Equal(typeof(JohnChild), set2.First());

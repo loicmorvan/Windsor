@@ -14,6 +14,7 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
+// ReSharper disable once UnusedTypeParameter
 public class DoubleRepository<T, T2> : IRepository<T>
 	where T : class
 	where T2 : struct

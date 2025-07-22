@@ -25,29 +25,29 @@ namespace Castle.Windsor.Core;
 [Serializable]
 public class PropertySetCollection : IMutableCollection<PropertySet>
 {
-	private readonly HashSet<PropertySet> properties = new();
+	private readonly HashSet<PropertySet> _properties = [];
 
-	public int Count => properties.Count;
+	public int Count => _properties.Count;
 
 	public IEnumerator<PropertySet> GetEnumerator()
 	{
-		return properties.GetEnumerator();
+		return _properties.GetEnumerator();
 	}
 
 	IEnumerator IEnumerable.GetEnumerator()
 	{
-		return properties.GetEnumerator();
+		return _properties.GetEnumerator();
 	}
 
 	void IMutableCollection<PropertySet>.Add(PropertySet property)
 	{
 		ArgumentNullException.ThrowIfNull(property);
-		properties.Add(property);
+		_properties.Add(property);
 	}
 
 	bool IMutableCollection<PropertySet>.Remove(PropertySet item)
 	{
-		return properties.Remove(item);
+		return _properties.Remove(item);
 	}
 
 	/// <summary>Finds a PropertySet the by PropertyInfo.</summary>

@@ -134,9 +134,7 @@ public static class TypedFactoryRegistrationExtensions
 		}
 
 		throw new ComponentRegistrationException(
-			string.Format(
-				"Type {0} is not an interface nor a delegate. Only interfaces and delegates may be used as typed factories.",
-				classService.Name));
+			$"Type {classService.Name} is not an interface nor a delegate. Only interfaces and delegates may be used as typed factories.");
 	}
 
 	private static ComponentRegistration<TFactory> AttachConfiguration<TFactory>(
@@ -188,13 +186,11 @@ public static class TypedFactoryRegistrationExtensions
 	{
 		if (HasOutArguments(delegateType))
 			throw new ComponentRegistrationException(
-				string.Format("Delegate type {0} can not be used as typed factory because it has 'out' arguments.",
-					delegateType));
+				$"Delegate type {delegateType} can not be used as typed factory because it has 'out' arguments.");
 		var invoke = DelegateFactory.ExtractInvokeMethod(delegateType);
 		if (invoke == null)
 			throw new ComponentRegistrationException(
-				string.Format("Delegate type {0} can not be used as typed factory because it has void return type.",
-					delegateType));
+				$"Delegate type {delegateType} can not be used as typed factory because it has void return type.");
 		var settings = new TypedFactoryConfiguration(TypedFactoryFacility.DefaultDelegateSelectorKey, typeof(TDelegate));
 		if (configuration != null) configuration.Invoke(settings);
 
@@ -212,8 +208,7 @@ public static class TypedFactoryRegistrationExtensions
 			Debug.Assert(serviceType.GetTypeInfo().IsInterface, "serviceType.IsInterface");
 			if (HasOutArguments(serviceType))
 				throw new ComponentRegistrationException(
-					string.Format("Type {0} can not be used as typed factory because it has methods with 'out' arguments.",
-						serviceType));
+					$"Type {serviceType} can not be used as typed factory because it has methods with 'out' arguments.");
 		}
 
 		var componentRegistration = AttachFactoryInterceptor(registration);

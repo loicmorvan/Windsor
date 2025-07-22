@@ -8,6 +8,6 @@ public class BFacilitiesIssue111 : IBFacilitiesIssue111
 {
 	public void Method()
 	{
-		Console.WriteLine("B: Method");
+		Console.WriteLine(@"B: Method");
 	}
 }

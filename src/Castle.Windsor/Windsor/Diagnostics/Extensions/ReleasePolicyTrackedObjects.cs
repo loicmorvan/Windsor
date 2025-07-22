@@ -30,10 +30,10 @@ public class ReleasePolicyTrackedObjects : AbstractContainerDebuggerExtension
 	public override IEnumerable<DebuggerViewItem> Attach()
 	{
 		var result = diagnostic.Inspect();
-		if (result == null) return new DebuggerViewItem[0];
+		if (result == null) return [];
 		var item = BuildItem(result);
 		if (item != null) return [item];
-		return new DebuggerViewItem[0];
+		return [];
 	}
 
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)

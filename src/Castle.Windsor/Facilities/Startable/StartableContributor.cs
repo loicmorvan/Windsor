@@ -22,15 +22,8 @@ using Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 namespace Castle.Windsor.Facilities.Startable;
 
-public class StartableContributor : IContributeComponentModelConstruction
+public class StartableContributor(ITypeConverter converter) : IContributeComponentModelConstruction
 {
-	private readonly ITypeConverter converter;
-
-	public StartableContributor(ITypeConverter converter)
-	{
-		this.converter = converter;
-	}
-
 	public void ProcessModel(IKernel kernel, ComponentModel model)
 	{
 		var startable = CheckIfComponentImplementsIStartable(model)

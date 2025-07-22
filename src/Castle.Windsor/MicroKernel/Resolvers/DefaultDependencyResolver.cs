@@ -193,7 +193,7 @@ public class DefaultDependencyResolver : IDependencyResolver
 	private bool HasAnyComponentInValidState(Type service, DependencyModel dependency, CreationContext context)
 	{
 		IHandler firstHandler;
-		if (context != null && context.IsResolving)
+		if (context is { IsResolving: true })
 			firstHandler = kernel.LoadHandlerByType(dependency.DependencyKey, service, context.AdditionalArguments);
 		else
 			firstHandler = kernel.GetHandler(service);
@@ -228,7 +228,7 @@ public class DefaultDependencyResolver : IDependencyResolver
 	private bool HasComponentInValidState(string key, DependencyModel dependency, CreationContext context)
 	{
 		IHandler handler;
-		if (context != null && context.IsResolving)
+		if (context is { IsResolving: true })
 			handler = kernel.LoadHandlerByName(key, dependency.TargetItemType, context.AdditionalArguments);
 		else
 			handler = kernel.GetHandler(key);
@@ -336,7 +336,8 @@ public class DefaultDependencyResolver : IDependencyResolver
 		catch (ConverterException e)
 		{
 			throw new DependencyResolverException(
-				string.Format("Could not convert parameter '{0}' to type '{1}'.", dependency.Parameter.Name, dependency.TargetItemType.Name), e);
+				$"Could not convert parameter '{dependency.Parameter.Name}' to type '{dependency.TargetItemType.Name}'.",
+				e);
 		}
 		finally
 		{

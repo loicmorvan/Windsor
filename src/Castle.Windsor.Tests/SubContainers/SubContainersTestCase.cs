@@ -30,7 +30,8 @@ public class SubContainersTestCase : AbstractContainerTestCase
 	[Fact]
 	public void AddChildKernelToTwoParentsThrowsException()
 	{
-		var expectedMessage = "You can not change the kernel parent once set, use the RemoveChildKernel and AddChildKernel methods together to achieve this.";
+		var expectedMessage =
+			"You can not change the kernel parent once set, use the RemoveChildKernel and AddChildKernel methods together to achieve this.";
 
 		IKernel kernel2 = new DefaultKernel();
 
@@ -254,12 +255,12 @@ public class SubContainersTestCase : AbstractContainerTestCase
 			.LifeStyle.Is(LifestyleType.Transient));
 		Kernel.AddChildKernel(subkernel2);
 
-		var templateengine1 = subkernel1.Resolve<DefaultTemplateEngine>("templateengine");
+		subkernel1.Resolve<DefaultTemplateEngine>("templateengine");
 		var spamservice1 = subkernel1.Resolve<DefaultSpamService>("spamservice");
 
 		Assert.Null(spamservice1.TemplateEngine);
 
-		var templateengine2 = subkernel2.Resolve<DefaultTemplateEngine>("templateengine");
+		subkernel2.Resolve<DefaultTemplateEngine>("templateengine");
 		var spamservice2 = subkernel2.Resolve<DefaultSpamService>("spamservice");
 
 		Assert.Same(spamservice1, spamservice2);
@@ -271,7 +272,8 @@ public class SubContainersTestCase : AbstractContainerTestCase
 	{
 		IKernel subkernel = new DefaultKernel();
 
-		Kernel.Register(Component.For(typeof(DefaultSpamService)).Named("spamservice").LifeStyle.Is(LifestyleType.Transient));
+		Kernel.Register(Component.For(typeof(DefaultSpamService)).Named("spamservice").LifeStyle
+			.Is(LifestyleType.Transient));
 		Kernel.Register(Component.For(typeof(DefaultMailSenderService)).Named("mailsender"));
 		Kernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
 
@@ -279,14 +281,14 @@ public class SubContainersTestCase : AbstractContainerTestCase
 		subkernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
 
 		var templateengine = Kernel.Resolve<DefaultTemplateEngine>("templateengine");
-		var sub_templateengine = subkernel.Resolve<DefaultTemplateEngine>("templateengine");
+		var subTemplateengine = subkernel.Resolve<DefaultTemplateEngine>("templateengine");
 
 		var spamservice = subkernel.Resolve<DefaultSpamService>("spamservice");
-		Assert.NotEqual(spamservice.TemplateEngine, sub_templateengine);
+		Assert.NotEqual(spamservice.TemplateEngine, subTemplateengine);
 		Assert.Equal(spamservice.TemplateEngine, templateengine);
 
 		spamservice = Kernel.Resolve<DefaultSpamService>("spamservice");
-		Assert.NotEqual(spamservice.TemplateEngine, sub_templateengine);
+		Assert.NotEqual(spamservice.TemplateEngine, subTemplateengine);
 		Assert.Equal(spamservice.TemplateEngine, templateengine);
 	}
 
@@ -305,21 +307,17 @@ public class SubContainersTestCase : AbstractContainerTestCase
 		handler.TryResolve(CreationContext.CreateEmpty());
 	}
 
-	/// <summary>collects events in an array list, used for ensuring we are cleaning up the parent kernel event subscriptions correctly.</summary>
-	private class EventsCollector
+	/// <summary>
+	///     collects events in an array list, used for ensuring we are cleaning up the parent kernel event subscriptions
+	///     correctly.
+	/// </summary>
+	// ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
+	private class EventsCollector(object expectedSender)
 	{
 		public const string Added = "added";
 		public const string Removed = "removed";
 
-		private readonly object expectedSender;
-
-		public EventsCollector(object expectedSender)
-		{
-			this.expectedSender = expectedSender;
-			Events = new List<string>();
-		}
-
-		public List<string> Events { get; }
+		public List<string> Events { get; } = new();
 
 		public void AddedAsChildKernel(object sender, EventArgs e)
 		{

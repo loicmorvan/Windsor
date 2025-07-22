@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel;
-
 using System;
+
+namespace Castle.Windsor.MicroKernel;
 
 /// <summary>Exception threw when a request for a component cannot be satisfied because the component does not exist in the container</summary>
 [Serializable]
@@ -48,7 +48,7 @@ public class ComponentNotFoundException : ComponentResolutionException
 	/// <summary>Initializes a new instance of the <see cref = "ComponentNotFoundException" /> class.</summary>
 	/// <param name = "service">The service.</param>
 	public ComponentNotFoundException(Type service) :
-		this(service, string.Format("No component for supporting the service {0} was found", service.FullName))
+		this(service, $"No component for supporting the service {service.FullName} was found")
 	{
 	}
 
@@ -76,14 +76,10 @@ public class ComponentNotFoundException : ComponentResolutionException
 				name, Environment.NewLine);
 		if (countOfHandlersForTheService == 0)
 			return message +
-			       string.Format(
-				       "There are no components supporting requested service '{0}'. You need to register components in order to be able to use them.",
-				       service.FullName);
+			       $"There are no components supporting requested service '{service.FullName}'. You need to register components in order to be able to use them.";
 		if (countOfHandlersForTheService == 1)
 			return message +
-			       string.Format(
-				       "There is one other component supporting requested service '{0}'. Is it what you were looking for?",
-				       service.FullName);
+			       $"There is one other component supporting requested service '{service.FullName}'. Is it what you were looking for?";
 		if (countOfHandlersForTheService > 1)
 			return message +
 			       string.Format(

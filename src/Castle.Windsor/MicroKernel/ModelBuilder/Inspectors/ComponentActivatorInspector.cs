@@ -25,14 +25,9 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 ///     activator for components.
 /// </remarks>
 [Serializable]
-public class ComponentActivatorInspector : IContributeComponentModelConstruction
+public class ComponentActivatorInspector(IConversionManager converter) : IContributeComponentModelConstruction
 {
-	private readonly IConversionManager converter;
-
-	public ComponentActivatorInspector(IConversionManager converter)
-	{
-		this.converter = converter;
-	}
+	private readonly IConversionManager _converter = converter;
 
 	/// <summary>Searches for the component activator in the configuration and, if unsuccessful look for the component activator attribute in the implementation type.</summary>
 	/// <param name = "kernel">The kernel instance</param>
@@ -53,7 +48,7 @@ public class ComponentActivatorInspector : IContributeComponentModelConstruction
 			var componentActivatorType = model.Configuration.Attributes["componentActivatorType"];
 			if (componentActivatorType == null) return false;
 
-			var customComponentActivator = converter.PerformConversion<Type>(componentActivatorType);
+			var customComponentActivator = _converter.PerformConversion<Type>(componentActivatorType);
 			ValidateComponentActivator(customComponentActivator);
 
 			model.CustomComponentActivator = customComponentActivator;

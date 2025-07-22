@@ -12,28 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-
 using Castle.Core.Configuration;
+
+namespace Castle.Windsor.Core;
 
 /// <summary>Collection of <see cref = "ParameterModel" /></summary>
 [Serializable]
-[DebuggerDisplay("Count = {dictionary.Count}")]
+[DebuggerDisplay("Count = {_dictionary.Count}")]
 public class ParameterModelCollection : IEnumerable<ParameterModel>
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-	private readonly IDictionary<string, ParameterModel> dictionary =
+	private readonly IDictionary<string, ParameterModel> _dictionary =
 		new Dictionary<string, ParameterModel>(StringComparer.OrdinalIgnoreCase);
 
 	/// <summary>Gets the count.</summary>
 	/// <value>The count.</value>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public int Count => dictionary.Count;
+	public int Count => _dictionary.Count;
 
 	/// <summary>Gets the <see cref = "ParameterModel" /> with the specified key.</summary>
 	/// <value></value>
@@ -41,8 +40,7 @@ public class ParameterModelCollection : IEnumerable<ParameterModel>
 	{
 		get
 		{
-			ParameterModel result;
-			dictionary.TryGetValue(key, out result);
+			_dictionary.TryGetValue(key, out var result);
 			return result;
 		}
 	}
@@ -52,13 +50,13 @@ public class ParameterModelCollection : IEnumerable<ParameterModel>
 	[DebuggerStepThrough]
 	IEnumerator IEnumerable.GetEnumerator()
 	{
-		return dictionary.Values.GetEnumerator();
+		return _dictionary.Values.GetEnumerator();
 	}
 
 	[DebuggerStepThrough]
 	IEnumerator<ParameterModel> IEnumerable<ParameterModel>.GetEnumerator()
 	{
-		return dictionary.Values.GetEnumerator();
+		return _dictionary.Values.GetEnumerator();
 	}
 
 	/// <summary>Adds the specified name.</summary>
@@ -85,11 +83,11 @@ public class ParameterModelCollection : IEnumerable<ParameterModel>
 	{
 		try
 		{
-			dictionary.Add(key, value);
+			_dictionary.Add(key, value);
 		}
 		catch (ArgumentException e)
 		{
-			throw new ArgumentException(string.Format("Parameter '{0}' already exists.", key), e);
+			throw new ArgumentException($"Parameter '{key}' already exists.", e);
 		}
 	}
 }

@@ -16,6 +16,7 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class DecoratedRepository2 : IRepository
 {
+	// ReSharper disable once UnusedParameter.Local
 	public DecoratedRepository2(string name)
 	{
 	}

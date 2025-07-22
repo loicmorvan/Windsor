@@ -12,11 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.ClassComponents;
 
+[UsedImplicitly]
 public class HasNestedType
 {
 	public class Nested;
 
+	// ReSharper disable once UnusedTypeParameter
+	[UsedImplicitly]
 	public class NestedGeneric<TArg>;
 }

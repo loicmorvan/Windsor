@@ -25,20 +25,22 @@ public static class DescriptionUtil
 	public static string GetComponentName(this IHandler handler)
 	{
 		var componentName = handler.ComponentModel.ComponentName;
-		if (componentName.SetByUser) return string.Format("\"{0}\" {1}", componentName.Name, handler.GetServicesDescription());
+		if (componentName.SetByUser) return $"\"{componentName.Name}\" {handler.GetServicesDescription()}";
 		return handler.GetServicesDescription();
 	}
 
 	public static string GetLifestyleDescription(this ComponentModel componentModel)
 	{
-		if (componentModel.LifestyleType == LifestyleType.Undefined) return string.Format("{0}*", LifestyleType.Singleton);
+		if (componentModel.LifestyleType == LifestyleType.Undefined) return $"{LifestyleType.Singleton}*";
 		if (componentModel.LifestyleType != LifestyleType.Custom) return componentModel.LifestyleType.ToString();
 		return componentModel.CustomLifestyle.Name;
 	}
 
 	public static string GetLifestyleDescriptionLong(this ComponentModel componentModel)
 	{
-		if (componentModel.LifestyleType == LifestyleType.Undefined) return string.Format("{0} (default lifestyle {1} will be used)", componentModel.LifestyleType, LifestyleType.Singleton);
+		if (componentModel.LifestyleType == LifestyleType.Undefined)
+			return
+				$"{componentModel.LifestyleType} (default lifestyle {LifestyleType.Singleton} will be used)";
 		if (componentModel.LifestyleType == LifestyleType.Scoped)
 		{
 			var accessorType = componentModel.GetScopeAccessorType();

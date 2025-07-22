@@ -27,15 +27,9 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 ///     with them. The Kernel might be able to set some of these properties when the component is requested.
 /// </summary>
 [Serializable]
-public class PropertiesDependenciesModelInspector : IContributeComponentModelConstruction
+public class PropertiesDependenciesModelInspector(IConversionManager converter) : IContributeComponentModelConstruction
 {
-	[NonSerialized]
-	private readonly IConversionManager converter;
-
-	public PropertiesDependenciesModelInspector(IConversionManager converter)
-	{
-		this.converter = converter;
-	}
+	[NonSerialized] private readonly IConversionManager _converter = converter;
 
 	/// <summary>Adds the properties as optional dependencies of this component.</summary>
 	/// <param name = "kernel"></param>
@@ -88,7 +82,7 @@ public class PropertiesDependenciesModelInspector : IContributeComponentModelCon
 
 		try
 		{
-			return converter.PerformConversion<PropertiesInspectionBehavior>(enumStringVal);
+			return _converter.PerformConversion<PropertiesInspectionBehavior>(enumStringVal);
 		}
 		catch (Exception)
 		{
@@ -123,7 +117,7 @@ public class PropertiesDependenciesModelInspector : IContributeComponentModelCon
 	private static bool HasParameters(PropertyInfo property)
 	{
 		var indexerParams = property.GetIndexParameters();
-		return indexerParams != null && indexerParams.Length != 0;
+		return indexerParams.Length != 0;
 	}
 
 	private static bool IsSettable(PropertyInfo property)

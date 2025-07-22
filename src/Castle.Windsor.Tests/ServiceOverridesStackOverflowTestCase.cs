@@ -17,6 +17,7 @@ using System.Linq;
 using Castle.Windsor.Tests.XmlFiles;
 using Castle.Windsor.Windsor;
 using Castle.Windsor.Windsor.Installer;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests;
 
@@ -38,14 +39,10 @@ public class ServiceOverridesStackOverflowTestCase
 	}
 }
 
-public class MessageChannel
+[UsedImplicitly]
+public class MessageChannel(IDevice root)
 {
-	public MessageChannel(IDevice root)
-	{
-		RootDevice = root;
-	}
-
-	public IDevice RootDevice { get; }
+	public IDevice RootDevice { get; } = root;
 }
 
 public interface IDevice
@@ -58,12 +55,14 @@ public abstract class BaseDevice : IDevice
 {
 	public abstract IEnumerable<IDevice> Children { get; }
 
+	// ReSharper disable once UnusedAutoPropertyAccessor.Global
 	public MessageChannel Channel { get; set; }
 }
 
+[UsedImplicitly]
 public class TestDevice : BaseDevice
 {
-	private readonly List<IDevice> children;
+	private readonly List<IDevice> _children;
 
 	public TestDevice()
 	{
@@ -71,8 +70,8 @@ public class TestDevice : BaseDevice
 
 	public TestDevice(IEnumerable<IDevice> theChildren)
 	{
-		children = new List<IDevice>(theChildren);
+		_children = new List<IDevice>(theChildren);
 	}
 
-	public override IEnumerable<IDevice> Children => children;
+	public override IEnumerable<IDevice> Children => _children;
 }

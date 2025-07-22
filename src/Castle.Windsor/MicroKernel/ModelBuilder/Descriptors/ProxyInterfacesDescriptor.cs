@@ -18,15 +18,8 @@ using Castle.Windsor.MicroKernel.Proxy;
 
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
-public class ProxyInterfacesDescriptor : IComponentModelDescriptor
+public class ProxyInterfacesDescriptor(Type[] interfaces) : IComponentModelDescriptor
 {
-	private readonly Type[] interfaces;
-
-	public ProxyInterfacesDescriptor(Type[] interfaces)
-	{
-		this.interfaces = interfaces;
-	}
-
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
 		var options = model.ObtainProxyOptions();

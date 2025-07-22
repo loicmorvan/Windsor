@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
 using System;
 using System.Xml;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
 public class IncludeElementProcessor : AbstractXmlNodeProcessor
 {
@@ -47,7 +47,7 @@ public class IncludeElementProcessor : AbstractXmlNodeProcessor
 
 		if (includeUri == null)
 			throw new ConfigurationProcessingException(
-				string.Format("Found an include node without an 'uri' attribute: {0}", element.BaseURI));
+				$"Found an include node without an 'uri' attribute: {element.BaseURI}");
 
 		var uriList = includeUri.Split(',');
 		frag = CreateFragment(element);
@@ -65,7 +65,7 @@ public class IncludeElementProcessor : AbstractXmlNodeProcessor
 			catch (Exception ex)
 			{
 				throw new ConfigurationProcessingException(
-					string.Format("Error processing include node: {0}", includeUri), ex);
+					$"Error processing include node: {includeUri}", ex);
 			}
 
 			engine.PushResource(resource);

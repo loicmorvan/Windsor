@@ -28,14 +28,9 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 ///     <para>We specifically look for <c>additionalInterfaces</c> and <c>marshalByRefProxy</c> on the component configuration or the <see cref = "ComponentProxyBehaviorAttribute" /> attribute.</para>
 /// </summary>
 [Serializable]
-public class ComponentProxyInspector : IContributeComponentModelConstruction
+public class ComponentProxyInspector(IConversionManager converter) : IContributeComponentModelConstruction
 {
-	private readonly IConversionManager converter;
-
-	public ComponentProxyInspector(IConversionManager converter)
-	{
-		this.converter = converter;
-	}
+	private readonly IConversionManager _converter = converter;
 
 	/// <summary>Searches for proxy behavior in the configuration and, if unsuccessful look for the <see cref = "ComponentProxyBehaviorAttribute" /> attribute in the implementation type.</summary>
 	public virtual void ProcessModel(IKernel kernel, ComponentModel model)
@@ -56,8 +51,8 @@ public class ComponentProxyInspector : IContributeComponentModelConstruction
 	/// <param name = "model"></param>
 	protected virtual void ReadProxyBehavior(IKernel kernel, ComponentModel model)
 	{
-		var proxyBehaviorAttribute = ReadProxyBehaviorFromType(model.Implementation);
-		if (proxyBehaviorAttribute == null) proxyBehaviorAttribute = new ComponentProxyBehaviorAttribute();
+		var proxyBehaviorAttribute =
+			ReadProxyBehaviorFromType(model.Implementation) ?? new ComponentProxyBehaviorAttribute();
 
 		ReadProxyBehaviorFromConfig(model, proxyBehaviorAttribute);
 
@@ -80,7 +75,7 @@ public class ComponentProxyInspector : IContributeComponentModelConstruction
 		foreach (var node in interfaces.Children)
 		{
 			var interfaceTypeName = node.Attributes["interface"];
-			var @interface = converter.PerformConversion<Type>(interfaceTypeName);
+			var @interface = _converter.PerformConversion<Type>(interfaceTypeName);
 			list.Add(@interface);
 		}
 

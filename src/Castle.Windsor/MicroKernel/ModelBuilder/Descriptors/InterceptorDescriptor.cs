@@ -17,7 +17,8 @@ using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
-public class InterceptorDescriptor : IComponentModelDescriptor
+public class InterceptorDescriptor(InterceptorReference[] interceptors, InterceptorDescriptor.Where where)
+	: IComponentModelDescriptor
 {
 	public enum Where
 	{
@@ -27,28 +28,18 @@ public class InterceptorDescriptor : IComponentModelDescriptor
 		Default
 	}
 
-	private readonly int insertIndex;
-	private readonly InterceptorReference[] interceptors;
-	private readonly Where where;
-
-	public InterceptorDescriptor(InterceptorReference[] interceptors, Where where)
-	{
-		this.interceptors = interceptors;
-		this.where = where;
-	}
+	private readonly int _insertIndex;
 
 	public InterceptorDescriptor(InterceptorReference[] interceptors, int insertIndex)
 		: this(interceptors, Where.Insert)
 	{
 		if (insertIndex < 0) throw new ArgumentOutOfRangeException(nameof(insertIndex), "insertIndex must be >= 0");
 
-		this.insertIndex = insertIndex;
+		_insertIndex = insertIndex;
 	}
 
-	public InterceptorDescriptor(InterceptorReference[] interceptors)
+	public InterceptorDescriptor(InterceptorReference[] interceptors) : this(interceptors, Where.Default)
 	{
-		where = Where.Default;
-		this.interceptors = interceptors;
 	}
 
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
@@ -69,7 +60,7 @@ public class InterceptorDescriptor : IComponentModelDescriptor
 					break;
 
 				case Where.Insert:
-					model.Interceptors.Insert(insertIndex, interceptor);
+					model.Interceptors.Insert(_insertIndex, interceptor);
 					break;
 
 				default:

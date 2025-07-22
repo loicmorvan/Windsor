@@ -20,29 +20,29 @@ namespace Castle.Windsor.Facilities.Startable;
 
 public class StartFlag : IStartFlagInternal
 {
-	protected readonly List<IHandler> waitList = new();
-	protected StartableFacility.StartableEvents events;
+	private readonly List<IHandler> _waitList = [];
+	protected StartableFacility.StartableEvents Events;
 
 	void IStartFlagInternal.Init(StartableFacility.StartableEvents events)
 	{
-		this.events = events;
+		Events = events;
 		Init();
 	}
 
 	public virtual void Signal()
 	{
-		events.StartableComponentRegistered -= CacheHandler;
+		Events.StartableComponentRegistered -= CacheHandler;
 		StartAll();
 	}
 
 	protected void CacheHandler(IHandler handler)
 	{
-		waitList.Add(handler);
+		_waitList.Add(handler);
 	}
 
 	protected virtual void Init()
 	{
-		events.StartableComponentRegistered += CacheHandler;
+		Events.StartableComponentRegistered += CacheHandler;
 	}
 
 	protected virtual void Start(IHandler handler)
@@ -52,8 +52,8 @@ public class StartFlag : IStartFlagInternal
 
 	protected void StartAll()
 	{
-		var array = waitList.ToArray();
-		waitList.Clear();
+		var array = _waitList.ToArray();
+		_waitList.Clear();
 		foreach (var handler in array) Start(handler);
 	}
 }

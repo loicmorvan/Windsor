@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory;
-
 using System;
-
 using Castle.Windsor.Facilities.TypedFactory;
 using Castle.Windsor.MicroKernel.Registration;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public sealed class TypedFactoryDisposeOrderTestCase : AbstractContainerTestCase
 {
@@ -36,30 +36,25 @@ public sealed class TypedFactoryDisposeOrderTestCase : AbstractContainerTestCase
 		Container.Resolve<Dependent>();
 	}
 
+	[UsedImplicitly]
 	public sealed class Dependency : IDisposable
 	{
-		private bool isDisposed;
+		private bool _isDisposed;
 
 		public void Dispose()
 		{
-			isDisposed = true;
+			_isDisposed = true;
 		}
 
 		public void Use()
 		{
-			if (isDisposed) throw new ObjectDisposedException(nameof(Dependency));
+			if (_isDisposed) throw new ObjectDisposedException(nameof(Dependency));
 		}
 	}
 
-	public sealed class Dependent : IDisposable
+	[UsedImplicitly]
+	private sealed class Dependent(Func<Dependency> factory) : IDisposable
 	{
-		private readonly Func<Dependency> factory;
-
-		public Dependent(Func<Dependency> factory)
-		{
-			this.factory = factory;
-		}
-
 		public void Dispose()
 		{
 			using var needed = factory.Invoke();

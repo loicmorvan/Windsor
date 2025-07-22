@@ -12,19 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-
 using Castle.Core.Configuration;
 using Castle.Windsor.Core.Internal;
-
 using Microsoft.Extensions.DependencyModel;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 /// <summary>Convert a type name to a Type instance.</summary>
 [Serializable]
@@ -66,7 +64,7 @@ public class TypeNameConverter : AbstractTypeConverter
 		}
 		catch (Exception ex)
 		{
-			throw new ConverterException(string.Format("Could not convert string '{0}' to a type.", value), ex);
+			throw new ConverterException($"Could not convert string '{value}' to a type.", ex);
 		}
 	}
 
@@ -79,7 +77,9 @@ public class TypeNameConverter : AbstractTypeConverter
 		type = Type.GetType(name, false, true);
 		if (type != null) return type;
 		var typeName = ParseName(name);
-		if (typeName == null) throw new ConverterException(string.Format("Could not convert string '{0}' to a type. It doesn't appear to be a valid type name.", name));
+		if (typeName == null)
+			throw new ConverterException(
+				$"Could not convert string '{name}' to a type. It doesn't appear to be a valid type name.");
 
 		InitializeAppDomainAssemblies(false);
 		type = typeName.GetType(this);
@@ -95,14 +95,12 @@ public class TypeNameConverter : AbstractTypeConverter
 				throw new ConverterException(string.Format(
 					"Could not convert string '{0}' to a type. Assembly {1} was matched, but it doesn't contain the type. Make sure that the type name was not mistyped.",
 					name, assembly.FullName));
-			throw new ConverterException(string.Format(
-				"Could not convert string '{0}' to a type. Assembly was not found. Make sure it was deployed and the name was not mistyped.",
-				name));
+			throw new ConverterException(
+				$"Could not convert string '{name}' to a type. Assembly was not found. Make sure it was deployed and the name was not mistyped.");
 		}
 
-		throw new ConverterException(string.Format(
-			"Could not convert string '{0}' to a type. Make sure assembly containing the type has been loaded into the process, or consider specifying assembly qualified name of the type.",
-			name));
+		throw new ConverterException(
+			$"Could not convert string '{name}' to a type. Make sure assembly containing the type has been loaded into the process, or consider specifying assembly qualified name of the type.");
 	}
 
 	private bool InitializeAppDomainAssemblies(bool forceLoad)
@@ -209,7 +207,7 @@ public class TypeNameConverter : AbstractTypeConverter
 	{
 		if (type.HasOne) return;
 
-		var message = new StringBuilder(string.Format("Could not uniquely identify type for '{0}'. ", value));
+		var message = new StringBuilder($"Could not uniquely identify type for '{value}'. ");
 		message.AppendLine("The following types were matched:");
 		foreach (var matchedType in type) message.AppendLine(matchedType.AssemblyQualifiedName);
 		message.AppendFormat("Provide more information ({0}) to uniquely identify the type.", missingInformation);

@@ -18,11 +18,11 @@ using Castle.Windsor.Core;
 namespace Castle.Windsor.MicroKernel;
 
 /// <summary>Default implementation of <see cref = "IKernel" />. This implementation is complete and also support a kernel hierarchy (sub containers).</summary>
-public partial class DefaultKernel
+public sealed partial class DefaultKernel
 {
-	private readonly object handlersChangedLock = new();
-	private bool handlersChanged;
-	private volatile bool handlersChangedDeferred;
+	private readonly object _handlersChangedLock = new();
+	private bool _handlersChanged;
+	private volatile bool _handlersChangedDeferred;
 
 #if FEATURE_REMOTING
 		[SecurityCritical]
@@ -34,44 +34,44 @@ public partial class DefaultKernel
 
 	public IDisposable OptimizeDependencyResolution()
 	{
-		if (handlersChangedDeferred) return null;
+		if (_handlersChangedDeferred) return null;
 
-		handlersChangedDeferred = true;
+		_handlersChangedDeferred = true;
 
 		return new OptimizeDependencyResolutionDisposable(this);
 	}
 
-	protected virtual void RaiseAddedAsChildKernel()
+	private void RaiseAddedAsChildKernel()
 	{
 		AddedAsChildKernel(this, EventArgs.Empty);
 	}
 
-	protected virtual void RaiseComponentCreated(ComponentModel model, object instance)
+	private void RaiseComponentCreated(ComponentModel model, object instance)
 	{
 		ComponentCreated(model, instance);
 	}
 
-	protected virtual void RaiseComponentDestroyed(ComponentModel model, object instance)
+	private void RaiseComponentDestroyed(ComponentModel model, object instance)
 	{
 		ComponentDestroyed(model, instance);
 	}
 
-	protected virtual void RaiseComponentModelCreated(ComponentModel model)
+	private void RaiseComponentModelCreated(ComponentModel model)
 	{
 		ComponentModelCreated(model);
 	}
 
-	protected virtual void RaiseComponentRegistered(string key, IHandler handler)
+	private void RaiseComponentRegistered(string key, IHandler handler)
 	{
 		ComponentRegistered(key, handler);
 	}
 
-	protected virtual void RaiseDependencyResolving(ComponentModel client, DependencyModel model, object dependency)
+	private void RaiseDependencyResolving(ComponentModel client, DependencyModel model, object dependency)
 	{
 		DependencyResolving(client, model, dependency);
 	}
 
-	protected virtual void RaiseHandlerRegistered(IHandler handler)
+	private void RaiseHandlerRegistered(IHandler handler)
 	{
 		var stateChanged = true;
 		while (stateChanged)
@@ -81,13 +81,13 @@ public partial class DefaultKernel
 		}
 	}
 
-	protected virtual void RaiseHandlersChanged()
+	private void RaiseHandlersChanged()
 	{
-		if (handlersChangedDeferred)
+		if (_handlersChangedDeferred)
 		{
-			lock (handlersChangedLock)
+			lock (_handlersChangedLock)
 			{
-				handlersChanged = true;
+				_handlersChanged = true;
 			}
 
 			return;
@@ -96,12 +96,12 @@ public partial class DefaultKernel
 		DoActualRaisingOfHandlersChanged();
 	}
 
-	protected virtual void RaiseRegistrationCompleted()
+	private void RaiseRegistrationCompleted()
 	{
 		RegistrationCompleted(this, EventArgs.Empty);
 	}
 
-	protected virtual void RaiseRemovedAsChildKernel()
+	private void RaiseRemovedAsChildKernel()
 	{
 		RemovedAsChildKernel(this, EventArgs.Empty);
 	}
@@ -138,30 +138,23 @@ public partial class DefaultKernel
 
 	public event ServiceDelegate EmptyCollectionResolving = delegate { };
 
-	private class OptimizeDependencyResolutionDisposable : IDisposable
+	private class OptimizeDependencyResolutionDisposable(DefaultKernel kernel) : IDisposable
 	{
-		private readonly DefaultKernel kernel;
-
-		public OptimizeDependencyResolutionDisposable(DefaultKernel kernel)
-		{
-			this.kernel = kernel;
-		}
-
 		public void Dispose()
 		{
-			lock (kernel.handlersChangedLock)
+			lock (kernel._handlersChangedLock)
 			{
 				try
 				{
-					if (kernel.handlersChanged == false) return;
+					if (kernel._handlersChanged == false) return;
 
 					kernel.DoActualRaisingOfHandlersChanged();
 					kernel.RaiseRegistrationCompleted();
-					kernel.handlersChanged = false;
+					kernel._handlersChanged = false;
 				}
 				finally
 				{
-					kernel.handlersChangedDeferred = false;
+					kernel._handlersChangedDeferred = false;
 				}
 			}
 		}

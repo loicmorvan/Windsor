@@ -17,6 +17,7 @@ using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests;
 
@@ -53,51 +54,48 @@ public class SubResolverTestCase
 		Assert.Null(kernel.Resolve<ComponentWithDependencyNotInContainer>().DependencyNotInContainer);
 	}
 
-	public class Foo
-	{
-		private int bar;
+#pragma warning disable CS9113 // Parameter is unread.
+	private class Foo(int bar);
+#pragma warning restore CS9113 // Parameter is unread.
 
-		public Foo(int bar)
-		{
-			this.bar = bar;
-		}
-	}
-
-	public class FooBarResolver : ISubDependencyResolver
+	private class FooBarResolver : ISubDependencyResolver
 	{
 		public int? Result;
 
-		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+			ComponentModel model, DependencyModel dependency)
 		{
 			return Result != null;
 		}
 
-		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+			ComponentModel model, DependencyModel dependency)
 		{
+			Assert.NotNull(Result);
+
 			return Result.Value;
 		}
 	}
 
-	public sealed class ComponentWithDependencyNotInContainer
+	[UsedImplicitly]
+	private sealed class ComponentWithDependencyNotInContainer(DependencyNotInContainer dependencyNotInContainer)
 	{
-		public ComponentWithDependencyNotInContainer(DependencyNotInContainer dependencyNotInContainer)
-		{
-			DependencyNotInContainer = dependencyNotInContainer;
-		}
-
-		public DependencyNotInContainer DependencyNotInContainer { get; }
+		public DependencyNotInContainer DependencyNotInContainer { get; } = dependencyNotInContainer;
 	}
 
-	public sealed class DependencyNotInContainer;
+	[UsedImplicitly]
+	private sealed class DependencyNotInContainer;
 
 	private sealed class NullResolver : ISubDependencyResolver
 	{
-		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+			ComponentModel model, DependencyModel dependency)
 		{
 			return true;
 		}
 
-		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
+		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+			ComponentModel model, DependencyModel dependency)
 		{
 			return null;
 		}

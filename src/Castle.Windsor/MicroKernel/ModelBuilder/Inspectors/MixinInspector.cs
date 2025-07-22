@@ -38,7 +38,7 @@ public class MixinInspector : IContributeComponentModelConstruction
 			var mixinComponent = ReferenceExpressionUtil.ExtractComponentName(value);
 			if (mixinComponent == null)
 				throw new Exception(
-					string.Format("The value for the mixin must be a reference to a component (Currently {0})", value));
+					$"The value for the mixin must be a reference to a component (Currently {value})");
 
 			mixinReferences.Add(new ComponentReference<object>(mixinComponent));
 		}

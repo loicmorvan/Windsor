@@ -17,17 +17,19 @@ using Castle.Windsor.Facilities.TypedFactory.Internal;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.ComponentActivator;
 using Castle.Windsor.MicroKernel.Context;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Facilities.TypedFactory;
 
-public class DelegateFactoryActivator : AbstractComponentActivator, IDependencyAwareActivator
+[UsedImplicitly]
+public class DelegateFactoryActivator(
+	ComponentModel model,
+	IKernelInternal kernel,
+	ComponentInstanceDelegate onCreation,
+	ComponentInstanceDelegate onDestruction)
+	: AbstractComponentActivator(model, kernel, onCreation, onDestruction), IDependencyAwareActivator
 {
-	private readonly IProxyFactoryExtension proxyFactory = new DelegateProxyFactory();
-
-	public DelegateFactoryActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
-		: base(model, kernel, onCreation, onDestruction)
-	{
-	}
+	private readonly IProxyFactoryExtension _proxyFactory = new DelegateProxyFactory();
 
 	public bool CanProvideRequiredDependencies(ComponentModel component)
 	{
@@ -41,7 +43,7 @@ public class DelegateFactoryActivator : AbstractComponentActivator, IDependencyA
 
 	protected override object InternalCreate(CreationContext context)
 	{
-		var instance = Kernel.ProxyFactory.Create(proxyFactory, Kernel, Model, context);
+		var instance = Kernel.ProxyFactory.Create(_proxyFactory, Kernel, Model, context);
 		ApplyCommissionConcerns(instance);
 		return instance;
 	}

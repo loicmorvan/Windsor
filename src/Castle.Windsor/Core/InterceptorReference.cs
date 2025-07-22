@@ -29,17 +29,17 @@ namespace Castle.Windsor.Core;
 public class InterceptorReference : IReference<IInterceptor>, IEquatable<InterceptorReference>
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly string referencedComponentName;
+	private readonly string _referencedComponentName;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly Type referencedComponentType;
+	private readonly Type _referencedComponentType;
 
 	/// <summary>Initializes a new instance of the <see cref = "InterceptorReference" /> class.</summary>
 	/// <param name = "referencedComponentName">The component key.</param>
 	public InterceptorReference(string referencedComponentName)
 	{
 		ArgumentNullException.ThrowIfNull(referencedComponentName);
-		this.referencedComponentName = referencedComponentName;
+		_referencedComponentName = referencedComponentName;
 	}
 
 	/// <summary>Initializes a new instance of the <see cref = "InterceptorReference" /> class.</summary>
@@ -47,19 +47,19 @@ public class InterceptorReference : IReference<IInterceptor>, IEquatable<Interce
 	public InterceptorReference(Type componentType)
 	{
 		ArgumentNullException.ThrowIfNull(componentType);
-		referencedComponentName = ComponentName.DefaultNameFor(componentType);
-		referencedComponentType = componentType;
+		_referencedComponentName = ComponentName.DefaultNameFor(componentType);
+		_referencedComponentType = componentType;
 	}
 
 	public bool Equals(InterceptorReference other)
 	{
 		if (other == null) return false;
-		return Equals(referencedComponentName, other.referencedComponentName);
+		return Equals(_referencedComponentName, other._referencedComponentName);
 	}
 
 	void IReference<IInterceptor>.Attach(ComponentModel component)
 	{
-		component.Dependencies.Add(new ComponentDependencyModel(referencedComponentName, ComponentType()));
+		component.Dependencies.Add(new ComponentDependencyModel(_referencedComponentName, ComponentType()));
 	}
 
 	void IReference<IInterceptor>.Detach(ComponentModel component)
@@ -80,7 +80,7 @@ public class InterceptorReference : IReference<IInterceptor>, IEquatable<Interce
 			throw new DependencyResolverException(
 				string.Format(
 					"Cycle detected - interceptor {0} wants to use itself as its interceptor. This usually signifies a bug in custom {1}",
-					handler.ComponentModel.Name, typeof(IModelInterceptorsSelector).Name));
+					handler.ComponentModel.Name, nameof(IModelInterceptorsSelector)));
 
 		var contextForInterceptor = RebuildContext(ComponentType(), context);
 		return (IInterceptor)handler.Resolve(contextForInterceptor);
@@ -94,26 +94,26 @@ public class InterceptorReference : IReference<IInterceptor>, IEquatable<Interce
 
 	public override int GetHashCode()
 	{
-		return referencedComponentName.GetHashCode();
+		return _referencedComponentName.GetHashCode();
 	}
 
 	public override string ToString()
 	{
-		return referencedComponentName;
+		return _referencedComponentName;
 	}
 
 	private Type ComponentType()
 	{
-		return referencedComponentType ?? typeof(IInterceptor);
+		return _referencedComponentType ?? typeof(IInterceptor);
 	}
 
 	private StringBuilder GetExceptionMessageOnHandlerNotFound(IKernel kernel)
 	{
-		var message = new StringBuilder(string.Format("The interceptor '{0}' could not be resolved. ", referencedComponentName));
+		var message = new StringBuilder($"The interceptor '{_referencedComponentName}' could not be resolved. ");
 		// ok so the component is missing. Now - is it missing because it's not been registered or because the reference is by type and interceptor was registered with custom name?
-		if (referencedComponentType != null)
+		if (_referencedComponentType != null)
 		{
-			var typedHandler = kernel.GetHandler(referencedComponentType);
+			var typedHandler = kernel.GetHandler(_referencedComponentType);
 			if (typedHandler != null)
 			{
 				message.AppendFormat(
@@ -129,16 +129,16 @@ public class InterceptorReference : IReference<IInterceptor>, IEquatable<Interce
 
 	private IHandler GetInterceptorHandler(IKernel kernel)
 	{
-		if (referencedComponentType != null)
+		if (_referencedComponentType != null)
 		{
 			//try old behavior first
-			var handler = kernel.GetHandler(referencedComponentType.FullName);
+			var handler = kernel.GetHandler(_referencedComponentType.FullName);
 			if (handler != null) return handler;
 			// new bahavior as a fallback
-			return kernel.GetHandler(referencedComponentType);
+			return kernel.GetHandler(_referencedComponentType);
 		}
 
-		return kernel.GetHandler(referencedComponentName);
+		return kernel.GetHandler(_referencedComponentName);
 	}
 
 	private CreationContext RebuildContext(Type handlerType, CreationContext current)

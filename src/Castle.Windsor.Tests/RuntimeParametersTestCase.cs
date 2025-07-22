@@ -25,7 +25,8 @@ namespace Castle.Windsor.Tests;
 
 public class RuntimeParametersTestCase : AbstractContainerTestCase
 {
-	private readonly Dictionary<string, object> dependencies = new() { { "cc", new CompC(12) }, { "myArgument", "ernst" } };
+	private readonly Dictionary<string, object> _dependencies = new()
+		{ { "cc", new CompC(12) }, { "myArgument", "ernst" } };
 
 	private void AssertDependencies(CompB compb)
 	{
@@ -34,9 +35,10 @@ public class RuntimeParametersTestCase : AbstractContainerTestCase
 		Assert.NotNull(compb.Compc);
 		Assert.True(compb.MyArgument != string.Empty, "MyArgument property should not be empty");
 
-		Assert.Same(dependencies["cc"], compb.Compc);
-		Assert.True("ernst".Equals(compb.MyArgument),
-			string.Format("The MyArgument property of compb should be equal to ernst, found {0}", compb.MyArgument));
+		Assert.Same(_dependencies["cc"], compb.Compc);
+		Assert.True(
+			"ernst".Equals(compb.MyArgument),
+			$"The MyArgument property of compb should be equal to ernst, found {compb.MyArgument}");
 	}
 
 	[Fact]
@@ -83,17 +85,17 @@ public class RuntimeParametersTestCase : AbstractContainerTestCase
 	public void ParametersPrecedence()
 	{
 		Container.Register(Component.For<CompA>().Named("compa"),
-			Component.For<CompB>().Named("compb").DependsOn(dependencies));
+			Component.For<CompB>().Named("compb").DependsOn(_dependencies));
 
-		var instance_with_model = Container.Resolve<CompB>();
-		Assert.Same(dependencies["cc"], instance_with_model.Compc);
+		var instanceWithModel = Container.Resolve<CompB>();
+		Assert.Same(_dependencies["cc"], instanceWithModel.Compc);
 
 		var deps2 = new Dictionary<string, object> { { "cc", new CompC(12) }, { "myArgument", "ayende" } };
 
-		var instance_with_args = Container.Resolve<CompB>(deps2);
+		var instanceWithArgs = Container.Resolve<CompB>(deps2);
 
-		Assert.Same(deps2["cc"], instance_with_args.Compc);
-		Assert.Equal("ayende", instance_with_args.MyArgument);
+		Assert.Same(deps2["cc"], instanceWithArgs.Compc);
+		Assert.Equal("ayende", instanceWithArgs.MyArgument);
 	}
 
 	[Fact]
@@ -101,7 +103,7 @@ public class RuntimeParametersTestCase : AbstractContainerTestCase
 	{
 		Container.Register(Component.For<CompA>().Named("compa"),
 			Component.For<CompB>().Named("compb"));
-		var compb = Container.Resolve<CompB>(dependencies);
+		var compb = Container.Resolve<CompB>(_dependencies);
 
 		AssertDependencies(compb);
 	}
@@ -110,7 +112,7 @@ public class RuntimeParametersTestCase : AbstractContainerTestCase
 	public void ResolveUsingParametersWithinTheHandler()
 	{
 		Container.Register(Component.For<CompA>().Named("compa"),
-			Component.For<CompB>().Named("compb").DependsOn(dependencies));
+			Component.For<CompB>().Named("compb").DependsOn(_dependencies));
 
 		var compb = Container.Resolve<CompB>();
 
@@ -125,7 +127,7 @@ public class RuntimeParametersTestCase : AbstractContainerTestCase
 			Component.For<CompC>().DependsOn(new { test = 15 }));
 		var b = Kernel.Resolve<CompB>();
 		Assert.NotNull(b);
-		Assert.Equal(15, b.Compc.test);
+		Assert.Equal(15, b.Compc.Test);
 	}
 
 	[Fact]

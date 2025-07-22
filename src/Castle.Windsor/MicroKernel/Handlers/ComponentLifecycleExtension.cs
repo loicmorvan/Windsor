@@ -12,32 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Handlers;
-
 using System.Collections.Generic;
+
+namespace Castle.Windsor.MicroKernel.Handlers;
 
 public class ComponentLifecycleExtension : IResolveExtension
 {
-	private readonly List<ComponentResolvingDelegate> resolvers = new(4);
-	private IKernel kernel;
+	private readonly List<ComponentResolvingDelegate> _resolvers = new(4);
+	private IKernel _kernel;
 
 	public void Init(IKernel kernel, IHandler handler)
 	{
-		this.kernel = kernel;
+		_kernel = kernel;
 	}
 
 	public void Intercept(ResolveInvocation invocation)
 	{
 		Releasing releasing = null;
-		if (resolvers.Count > 0)
-			foreach (var resolver in resolvers)
+		if (_resolvers.Count > 0)
+			foreach (var resolver in _resolvers)
 			{
-				var releaser = resolver(kernel, invocation.Context);
+				var releaser = resolver(_kernel, invocation.Context);
 				if (releaser != null)
 				{
 					if (releasing == null)
 					{
-						releasing = new Releasing(resolvers.Count, kernel);
+						releasing = new Releasing(_resolvers.Count, _kernel);
 						invocation.RequireDecommission();
 					}
 
@@ -55,30 +55,23 @@ public class ComponentLifecycleExtension : IResolveExtension
 
 	public void AddHandler(ComponentResolvingDelegate handler)
 	{
-		resolvers.Add(handler);
+		_resolvers.Add(handler);
 	}
 
-	private class Releasing
+	private class Releasing(int count, IKernel kernel)
 	{
-		private readonly IKernel kernel;
-		private readonly List<ComponentReleasingDelegate> releasers;
-
-		public Releasing(int count, IKernel kernel)
-		{
-			this.kernel = kernel;
-			releasers = new List<ComponentReleasingDelegate>(count);
-		}
+		private readonly List<ComponentReleasingDelegate> _releasers = new(count);
 
 		public void Add(ComponentReleasingDelegate releaser)
 		{
-			releasers.Add(releaser);
+			_releasers.Add(releaser);
 		}
 
 		public void Invoked(Burden burden)
 		{
 			burden.Releasing -= Invoked;
 
-			releasers.ForEach(r => r.Invoke(kernel));
+			_releasers.ForEach(r => r.Invoke(kernel));
 		}
 	}
 }

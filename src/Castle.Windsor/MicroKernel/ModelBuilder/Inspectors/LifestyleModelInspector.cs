@@ -30,11 +30,11 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 [Serializable]
 public class LifestyleModelInspector : IContributeComponentModelConstruction
 {
-	private readonly IConversionManager converter;
+	private readonly IConversionManager _converter;
 
 	public LifestyleModelInspector(IConversionManager converter)
 	{
-		this.converter = converter;
+		_converter = converter;
 	}
 
 	/// <summary>Searches for the lifestyle in the configuration and, if unsuccessful look for the lifestyle attribute in the implementation type.</summary>
@@ -51,7 +51,7 @@ public class LifestyleModelInspector : IContributeComponentModelConstruction
 		var lifestyleRaw = model.Configuration.Attributes["lifestyle"];
 		if (lifestyleRaw != null)
 		{
-			var lifestyleType = converter.PerformConversion<LifestyleType>(lifestyleRaw);
+			var lifestyleType = _converter.PerformConversion<LifestyleType>(lifestyleRaw);
 			model.LifestyleType = lifestyleType;
 			switch (lifestyleType)
 			{
@@ -87,7 +87,8 @@ public class LifestyleModelInspector : IContributeComponentModelConstruction
 
 					return true;
 				default:
-					throw new InvalidOperationException(string.Format("Component {0} has {1} lifestyle. This is not a valid value.", model.Name, lifestyleType));
+					throw new InvalidOperationException(
+						$"Component {model.Name} has {lifestyleType} lifestyle. This is not a valid value.");
 			}
 		}
 
@@ -140,8 +141,8 @@ public class LifestyleModelInspector : IContributeComponentModelConstruction
 		else if (model.LifestyleType == LifestyleType.Pooled)
 		{
 			var pooled = (PooledAttribute)attribute;
-			model.ExtendedProperties[ExtendedPropertiesConstants.Pool_InitialPoolSize] = pooled.InitialPoolSize;
-			model.ExtendedProperties[ExtendedPropertiesConstants.Pool_MaxPoolSize] = pooled.MaxPoolSize;
+			model.ExtendedProperties[ExtendedPropertiesConstants.PoolInitialPoolSize] = pooled.InitialPoolSize;
+			model.ExtendedProperties[ExtendedPropertiesConstants.PoolMaxPoolSize] = pooled.MaxPoolSize;
 		}
 		else if (model.LifestyleType == LifestyleType.Bound)
 		{
@@ -162,7 +163,8 @@ public class LifestyleModelInspector : IContributeComponentModelConstruction
 	protected virtual void ValidateTypeFromAttribute(Type typeFromAttribute, Type expectedInterface, string attribute)
 	{
 		if (expectedInterface.IsAssignableFrom(typeFromAttribute)) return;
-		throw new InvalidOperationException(string.Format("The Type '{0}' specified in the '{2}' attribute must implement {1}", typeFromAttribute.FullName, expectedInterface.FullName, attribute));
+		throw new InvalidOperationException(
+			$"The Type '{typeFromAttribute?.FullName}' specified in the '{attribute}' attribute must implement {expectedInterface.FullName}");
 	}
 
 	private Func<IHandler[], IHandler> ExtractBinder(Type scopeRootBinderType, string name)
@@ -188,29 +190,31 @@ public class LifestyleModelInspector : IContributeComponentModelConstruction
 
 		if (initialRaw != null)
 		{
-			var initial = converter.PerformConversion<int>(initialRaw);
-			model.ExtendedProperties[ExtendedPropertiesConstants.Pool_InitialPoolSize] = initial;
+			var initial = _converter.PerformConversion<int>(initialRaw);
+			model.ExtendedProperties[ExtendedPropertiesConstants.PoolInitialPoolSize] = initial;
 		}
 
 		if (maxRaw != null)
 		{
-			var max = converter.PerformConversion<int>(maxRaw);
-			model.ExtendedProperties[ExtendedPropertiesConstants.Pool_MaxPoolSize] = max;
+			var max = _converter.PerformConversion<int>(maxRaw);
+			model.ExtendedProperties[ExtendedPropertiesConstants.PoolMaxPoolSize] = max;
 		}
 	}
 
 	private Type GetMandatoryTypeFromAttribute(ComponentModel model, string attribute, LifestyleType lifestyleType)
 	{
 		var rawAttribute = model.Configuration.Attributes[attribute];
-		if (rawAttribute == null) throw new InvalidOperationException(string.Format("Component {0} has {1} lifestyle, but its configuration doesn't have mandatory '{2}' attribute.", model.Name, lifestyleType, attribute));
-		return converter.PerformConversion<Type>(rawAttribute);
+		if (rawAttribute == null)
+			throw new InvalidOperationException(
+				$"Component {model.Name} has {lifestyleType} lifestyle, but its configuration doesn't have mandatory '{attribute}' attribute.");
+		return _converter.PerformConversion<Type>(rawAttribute);
 	}
 
 	private Type GetTypeFromAttribute(ComponentModel model, string attribute)
 	{
 		var rawAttribute = model.Configuration.Attributes[attribute];
 		if (rawAttribute == null) return null;
-		return converter.PerformConversion<Type>(rawAttribute);
+		return _converter.PerformConversion<Type>(rawAttribute);
 	}
 
 	private bool IsBindMethod(MemberInfo methodMember, object _)

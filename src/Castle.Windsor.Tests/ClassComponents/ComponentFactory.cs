@@ -14,19 +14,14 @@
 
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
 [Singleton]
-public class ComponentFactory
+[UsedImplicitly]
+public class ComponentFactory(IKernel kernel)
 {
-	private readonly IKernel kernel;
-
-	public ComponentFactory(IKernel kernel)
-	{
-		this.kernel = kernel;
-	}
-
 	public object Create(string name)
 	{
 		return kernel.Resolve<object>(name);

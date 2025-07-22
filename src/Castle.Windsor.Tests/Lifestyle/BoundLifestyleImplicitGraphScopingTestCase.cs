@@ -149,17 +149,17 @@ public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestC
 	{
 		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel));
 		Container.Register(
-			Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<AppScreenCBA>(),
+			Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<AppScreenCba>(),
 			Component.For<B>().LifeStyle.Transient,
 			Component.For<CBA>().LifeStyle.Transient,
-			Component.For<IAppScreen>().ImplementedBy<AppScreenCBA>().LifeStyle.Transient.Named("1"),
-			Component.For<IAppScreen>().ImplementedBy<AppScreenCBA>().LifeStyle.Transient.Named("2"),
-			Component.For<IAppScreen>().ImplementedBy<AppScreenCBA>().LifeStyle.Transient.Named("3"),
+			Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("1"),
+			Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("2"),
+			Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("3"),
 			Component.For<AppHost>().LifeStyle.Transient);
 
 		var host = Container.Resolve<AppHost>();
 
-		var a = host.Screens.Cast<AppScreenCBA>().Select(s => s.Dependency.A as ADisposable).ToArray();
+		var a = host.Screens.Cast<AppScreenCba>().Select(s => s.Dependency.A as ADisposable).ToArray();
 
 		Container.Dispose();
 
@@ -171,17 +171,17 @@ public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestC
 	{
 		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel));
 		Container.Register(
-			Component.For<A>().LifeStyle.BoundTo<AppScreenCBA>(),
+			Component.For<A>().LifeStyle.BoundTo<AppScreenCba>(),
 			Component.For<B>().LifeStyle.Transient,
 			Component.For<CBA>().LifeStyle.Transient,
-			Component.For<IAppScreen>().ImplementedBy<AppScreenCBA>().LifeStyle.Transient.Named("1"),
-			Component.For<IAppScreen>().ImplementedBy<AppScreenCBA>().LifeStyle.Transient.Named("2"),
-			Component.For<IAppScreen>().ImplementedBy<AppScreenCBA>().LifeStyle.Transient.Named("3"),
+			Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("1"),
+			Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("2"),
+			Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("3"),
 			Component.For<AppHost>().LifeStyle.Transient);
 
 		var host = Container.Resolve<AppHost>();
 
-		var a = host.Screens.Cast<AppScreenCBA>().Select(s => s.Dependency.A).Distinct().ToArray();
+		var a = host.Screens.Cast<AppScreenCba>().Select(s => s.Dependency.A).Distinct().ToArray();
 
 		Assert.Equal(3, a.Length);
 	}

@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core.Internal;
-
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -25,6 +23,8 @@ using System.Reflection;
 using System.Runtime.Loader;
 using System.Text;
 
+namespace Castle.Windsor.Core.Internal;
+
 public static class ReflectionUtil
 {
 	public static readonly Type[] OpenGenericArrayInterfaces = typeof(object[]).GetInterfaces()
@@ -32,7 +32,7 @@ public static class ReflectionUtil
 		.Select(i => i.GetGenericTypeDefinition())
 		.ToArray();
 
-	private static readonly ConcurrentDictionary<ConstructorInfo, Func<object[], object>> factories = new();
+	private static readonly ConcurrentDictionary<ConstructorInfo, Func<object[], object>> Factories = new();
 
 	public static TBase CreateInstance<TBase>(this Type subtypeofTBase, params object[] ctorArgs)
 	{
@@ -43,11 +43,14 @@ public static class ReflectionUtil
 
 	public static IEnumerable<Assembly> GetApplicationAssemblies(Assembly rootAssembly)
 	{
+		if (rootAssembly.FullName == null)
+			throw new ArgumentException(
+				$"Could not determine application name for assembly \"{rootAssembly}\". Please use a different method for obtaining assemblies.");
+
 		var index = rootAssembly.FullName.IndexOfAny(['.', ',']);
 		if (index < 0)
 			throw new ArgumentException(
-				string.Format("Could not determine application name for assembly \"{0}\". Please use a different method for obtaining assemblies.",
-					rootAssembly.FullName));
+				$"Could not determine application name for assembly \"{rootAssembly.FullName}\". Please use a different method for obtaining assemblies.");
 
 		var applicationName = rootAssembly.FullName.Substring(0, index);
 		var assemblies = new HashSet<Assembly>();
@@ -106,7 +109,7 @@ public static class ReflectionUtil
 		catch (Exception e)
 		{
 			// in theory there should be no other exception kind
-			throw new Exception(string.Format("Could not load assembly {0}", assemblyName), e);
+			throw new Exception($"Could not load assembly {assemblyName}", e);
 		}
 	}
 
@@ -152,7 +155,8 @@ public static class ReflectionUtil
 		return Assembly.Load(assemblyName);
 	}
 
-	public static TAttribute[] GetAttributes<TAttribute>(this MemberInfo item, bool inherit) where TAttribute : Attribute
+	public static TAttribute[] GetAttributes<TAttribute>(this MemberInfo item, bool inherit)
+		where TAttribute : Attribute
 	{
 		return (TAttribute[])item.GetCustomAttributes(typeof(TAttribute), inherit);
 	}
@@ -162,8 +166,11 @@ public static class ReflectionUtil
 		return (TAttribute[])item.GetTypeInfo().GetCustomAttributes(typeof(TAttribute), inherit);
 	}
 
-	/// <summary>If the extended type is a Foo[] or IEnumerable{Foo} which is assignable from Foo[] this method will return typeof(Foo) otherwise <c>null</c>.</summary>
-	/// <param name = "type"></param>
+	/// <summary>
+	///     If the extended type is a Foo[] or IEnumerable{Foo} which is assignable from Foo[] this method will return
+	///     typeof(Foo) otherwise <c>null</c>.
+	/// </summary>
+	/// <param name="type"></param>
 	/// <returns></returns>
 	public static Type GetCompatibleArrayItemType(this Type type)
 	{
@@ -211,7 +218,9 @@ public static class ReflectionUtil
 		for (var i = 0; i < parameterExpressions.Length; i++)
 			parameterExpressions[i] = Expression.Convert(
 				Expression.ArrayIndex(argument, Expression.Constant(i, typeof(int))),
-				parameterInfos[i].ParameterType.IsByRef ? parameterInfos[i].ParameterType.GetElementType() : parameterInfos[i].ParameterType);
+				parameterInfos[i].ParameterType.IsByRef
+					? parameterInfos[i].ParameterType.GetElementType()
+					: parameterInfos[i].ParameterType);
 		return Expression.Lambda<Func<object[], object>>(
 			Expression.New(ctor, parameterExpressions), argument).Compile();
 	}
@@ -225,7 +234,7 @@ public static class ReflectionUtil
 			message = string.Format("Type {0} does not implement the interface {1}.", subtypeofTBase.FullName,
 				typeof(TBase).FullName);
 		else
-			message = string.Format("Type {0} does not inherit from {1}.", subtypeofTBase.FullName, typeof(TBase).FullName);
+			message = $"Type {subtypeofTBase.FullName} does not inherit from {typeof(TBase).FullName}.";
 		throw new InvalidCastException(message);
 	}
 
@@ -262,15 +271,14 @@ public static class ReflectionUtil
 			string message;
 			if (ctorArgs.Length == 0)
 			{
-				message = string.Format("Type {0} does not have a public default constructor and could not be instantiated.",
-					subtypeofTBase.FullName);
+				message =
+					$"Type {subtypeofTBase.FullName} does not have a public default constructor and could not be instantiated.";
 			}
 			else
 			{
 				var messageBuilder = new StringBuilder();
 				messageBuilder.AppendLine(
-					string.Format("Type {0} does not have a public constructor matching arguments of the following types:",
-						subtypeofTBase.FullName));
+					$"Type {subtypeofTBase.FullName} does not have a public constructor matching arguments of the following types:");
 				foreach (var type in ctorArgs.Select(o => o.GetType())) messageBuilder.AppendLine(type.FullName);
 				message = messageBuilder.ToString();
 			}
@@ -279,7 +287,7 @@ public static class ReflectionUtil
 		}
 		catch (Exception ex)
 		{
-			var message = string.Format("Could not instantiate {0}.", subtypeofTBase.FullName);
+			var message = $"Could not instantiate {subtypeofTBase.FullName}.";
 			throw new Exception(message, ex);
 		}
 	}
@@ -287,7 +295,7 @@ public static class ReflectionUtil
 	public static object Instantiate(this ConstructorInfo ctor, object[] ctorArgs)
 	{
 		Func<object[], object> factory;
-		factory = factories.GetOrAdd(ctor, BuildFactory);
+		factory = Factories.GetOrAdd(ctor, BuildFactory);
 
 		return factory.Invoke(ctorArgs);
 	}
@@ -302,7 +310,8 @@ public static class ReflectionUtil
 		return ".exe".Equals(extension, StringComparison.OrdinalIgnoreCase);
 	}
 
-	private static void AddApplicationAssemblies(Assembly assembly, HashSet<Assembly> assemblies, string applicationName)
+	private static void AddApplicationAssemblies(Assembly assembly, HashSet<Assembly> assemblies,
+		string applicationName)
 	{
 		if (assemblies.Add(assembly) == false) return;
 		foreach (var referencedAssembly in assembly.GetReferencedAssemblies())

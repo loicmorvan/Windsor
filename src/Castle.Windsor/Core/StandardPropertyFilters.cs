@@ -38,9 +38,7 @@ public class StandardPropertyFilters
 				return RequireBase;
 			default:
 				throw new ArgumentOutOfRangeException(
-					string.Format(
-						"The value {0} does not translate to a valid property filter. This is most likely a bug in the calling code.",
-						filter));
+					$"The value {filter} does not translate to a valid property filter. This is most likely a bug in the calling code.");
 		}
 	}
 

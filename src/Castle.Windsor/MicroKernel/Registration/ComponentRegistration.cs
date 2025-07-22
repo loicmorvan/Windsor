@@ -456,8 +456,7 @@ public class ComponentRegistration<TService> : IRegistration
 	{
 		if (Implementation != null && Implementation != typeof(LateBoundComponent))
 		{
-			var message = string.Format("This component has already been assigned implementation {0}",
-				Implementation.FullName);
+			var message = $"This component has already been assigned implementation {Implementation.FullName}";
 			throw new ComponentRegistrationException(message);
 		}
 
@@ -618,7 +617,7 @@ public class ComponentRegistration<TService> : IRegistration
 	{
 		if (this.name != null)
 		{
-			var message = string.Format("This component has already been assigned name '{0}'", this.name.Name);
+			var message = $"This component has already been assigned name '{this.name.Name}'";
 			throw new ComponentRegistrationException(message);
 		}
 
@@ -642,7 +641,7 @@ public class ComponentRegistration<TService> : IRegistration
 	{
 		if (this.name != null)
 		{
-			var message = string.Format("This component has already been assigned name '{0}'", this.name);
+			var message = $"This component has already been assigned name '{this.name}'";
 			throw new ComponentRegistrationException(message);
 		}
 

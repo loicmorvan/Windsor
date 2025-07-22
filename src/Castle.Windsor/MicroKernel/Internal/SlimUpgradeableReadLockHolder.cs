@@ -12,23 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Internal;
-
 using System.Threading;
+
+namespace Castle.Windsor.MicroKernel.Internal;
 
 internal class SlimUpgradeableReadLockHolder : IUpgradeableLockHolder
 {
-	private readonly ReaderWriterLockSlim locker;
-	private readonly bool wasLockAlreadySelf;
-	private SlimWriteLockHolder writerLock;
+	private readonly ReaderWriterLockSlim _locker;
+	private readonly bool _wasLockAlreadySelf;
+	private SlimWriteLockHolder _writerLock;
 
 	public SlimUpgradeableReadLockHolder(ReaderWriterLockSlim locker, bool waitForLock, bool wasLockAlreadySelf)
 	{
-		this.locker = locker;
+		_locker = locker;
 		if (wasLockAlreadySelf)
 		{
 			LockAcquired = true;
-			this.wasLockAlreadySelf = true;
+			_wasLockAlreadySelf = true;
 			return;
 		}
 
@@ -44,14 +44,14 @@ internal class SlimUpgradeableReadLockHolder : IUpgradeableLockHolder
 
 	public void Dispose()
 	{
-		if (writerLock != null && writerLock.LockAcquired)
+		if (_writerLock is { LockAcquired: true })
 		{
-			writerLock.Dispose();
-			writerLock = null;
+			_writerLock.Dispose();
+			_writerLock = null;
 		}
 
 		if (!LockAcquired) return;
-		if (!wasLockAlreadySelf) locker.ExitUpgradeableReadLock();
+		if (!_wasLockAlreadySelf) _locker.ExitUpgradeableReadLock();
 		LockAcquired = false;
 	}
 
@@ -62,10 +62,10 @@ internal class SlimUpgradeableReadLockHolder : IUpgradeableLockHolder
 
 	public ILockHolder Upgrade(bool waitForLock)
 	{
-		if (locker.IsWriteLockHeld) return NoOpLock.Lock;
+		if (_locker.IsWriteLockHeld) return NoOpLock.Lock;
 
-		writerLock = new SlimWriteLockHolder(locker, waitForLock);
-		return writerLock;
+		_writerLock = new SlimWriteLockHolder(_locker, waitForLock);
+		return _writerLock;
 	}
 
 	public bool LockAcquired { get; private set; }

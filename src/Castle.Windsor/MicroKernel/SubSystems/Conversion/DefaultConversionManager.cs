@@ -84,8 +84,7 @@ public class DefaultConversionManager : AbstractSubSystem, IConversionManager, I
 			if (converter.CanHandleType(targetType))
 				return converter.PerformConversion(value, targetType);
 
-		var message = string.Format("No converter registered to handle the type {0}",
-			targetType.FullName);
+		var message = $"No converter registered to handle the type {targetType.FullName}";
 
 		throw new ConverterException(message);
 	}
@@ -96,8 +95,7 @@ public class DefaultConversionManager : AbstractSubSystem, IConversionManager, I
 			if (converter.CanHandleType(targetType, configuration))
 				return converter.PerformConversion(configuration, targetType);
 
-		var message = string.Format("No converter registered to handle the type {0}",
-			targetType.FullName);
+		var message = $"No converter registered to handle the type {targetType.FullName}";
 
 		throw new ConverterException(message);
 	}

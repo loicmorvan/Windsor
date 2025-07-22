@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.XmlFiles;
-
 using System;
 using System.IO;
 using System.Reflection;
-
 using Castle.Core.Resource;
+
+namespace Castle.Windsor.Tests.XmlFiles;
 
 public class Xml
 {
-	private static readonly string embedded = "assembly://" + typeof(Xml).GetTypeInfo().Assembly.FullName + "/Castle.Windsor.Tests/XmlFiles/";
+	private static readonly string EmbeddedRootPath =
+		"assembly://" + typeof(Xml).GetTypeInfo().Assembly.FullName + "/Castle.Windsor.Tests/XmlFiles/";
 
 	public static IResource Embedded(string name)
 	{
@@ -33,7 +33,7 @@ public class Xml
 
 	public static string EmbeddedPath(string name)
 	{
-		return embedded + name;
+		return EmbeddedRootPath + name;
 	}
 
 	public static IResource File(string name)

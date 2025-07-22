@@ -42,7 +42,9 @@ public class LifestyleGroup<TService> : RegistrationGroup<TService>
 	public ComponentRegistration<TService> Is(LifestyleType type)
 	{
 		if (Enum.IsDefined(typeof(LifestyleType), type) == false) throw InvalidValue(type, "Not a valid lifestyle");
-		if (type == LifestyleType.Undefined) throw InvalidValue(type, string.Format("{0} is not a valid lifestyle type.", LifestyleType.Undefined));
+		if (type == LifestyleType.Undefined)
+			throw InvalidValue(type,
+				$"{LifestyleType.Undefined} is not a valid lifestyle type.");
 
 		return AddDescriptor(new LifestyleDescriptor<TService>(type));
 	}
@@ -107,9 +109,9 @@ public class LifestyleGroup<TService> : RegistrationGroup<TService>
 	public ComponentRegistration<TService> Custom(Type customLifestyleType)
 	{
 		if (customLifestyleType.Is<ILifestyleManager>() == false)
-			throw new ComponentRegistrationException(string.Format(
-				"The type {0} must implement {1} to " +
-				"be used as a custom lifestyle", customLifestyleType.FullName, typeof(ILifestyleManager).FullName));
+			throw new ComponentRegistrationException(
+				$"The type {customLifestyleType.FullName} must implement {typeof(ILifestyleManager).FullName} to " +
+				"be used as a custom lifestyle");
 
 		return AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Custom))
 			.Attribute("customLifestyleType").Eq(customLifestyleType.AssemblyQualifiedName);

@@ -12,23 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core.Internal;
-
 using System.Collections;
 using System.Collections.Generic;
 
-public class SimpleSortedSet<T> : ICollection<T>
+namespace Castle.Windsor.Core.Internal;
+
+public class SimpleSortedSet<T>(IComparer<T> comparer) : ICollection<T>
 {
-	private readonly IComparer<T> comparer;
-	private readonly List<T> items = new();
+	private readonly List<T> _items = [];
 
 	public SimpleSortedSet() : this(Comparer<T>.Default)
 	{
-	}
-
-	public SimpleSortedSet(IComparer<T> comparer)
-	{
-		this.comparer = comparer;
 	}
 
 	public SimpleSortedSet(IEnumerable<T> other, IComparer<T> comparer) : this(comparer)
@@ -36,9 +30,9 @@ public class SimpleSortedSet<T> : ICollection<T>
 		foreach (var item in other) Add(item);
 	}
 
-	public T this[int index] => items[index];
+	public T this[int index] => _items[index];
 
-	public int Count => items.Count;
+	public int Count => _items.Count;
 
 	bool ICollection<T>.IsReadOnly => false;
 
@@ -47,42 +41,42 @@ public class SimpleSortedSet<T> : ICollection<T>
 		var count = Count;
 		for (var i = 0; i < count; i++)
 		{
-			var result = comparer.Compare(item, items[i]);
+			var result = comparer.Compare(item, _items[i]);
 			if (result < 0)
 			{
-				items.Insert(i, item);
+				_items.Insert(i, item);
 				return;
 			}
 
 			if (result == 0) return;
 		}
 
-		items.Add(item);
+		_items.Add(item);
 	}
 
 	public void Clear()
 	{
-		items.Clear();
+		_items.Clear();
 	}
 
 	public bool Contains(T item)
 	{
-		return items.Contains(item);
+		return _items.Contains(item);
 	}
 
 	public void CopyTo(T[] array, int arrayIndex)
 	{
-		items.CopyTo(array, arrayIndex);
+		_items.CopyTo(array, arrayIndex);
 	}
 
 	public bool Remove(T item)
 	{
-		return items.Remove(item);
+		return _items.Remove(item);
 	}
 
 	public IEnumerator<T> GetEnumerator()
 	{
-		return items.GetEnumerator();
+		return _items.GetEnumerator();
 	}
 
 	IEnumerator IEnumerable.GetEnumerator()

@@ -18,15 +18,8 @@ using Castle.Windsor.MicroKernel.Proxy;
 
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
-public class InterceptorSelectorDescriptor : IComponentModelDescriptor
+public class InterceptorSelectorDescriptor(IReference<IInterceptorSelector> selector) : IComponentModelDescriptor
 {
-	private readonly IReference<IInterceptorSelector> selector;
-
-	public InterceptorSelectorDescriptor(IReference<IInterceptorSelector> selector)
-	{
-		this.selector = selector;
-	}
-
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
 		var options = model.ObtainProxyOptions();

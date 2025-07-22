@@ -17,17 +17,11 @@ using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
-public class DelegatingModelDescriptor : IComponentModelDescriptor
+public class DelegatingModelDescriptor(
+	Action<IKernel, ComponentModel> builder = null,
+	Action<IKernel, ComponentModel> configurer = null)
+	: IComponentModelDescriptor
 {
-	private readonly Action<IKernel, ComponentModel> builder;
-	private readonly Action<IKernel, ComponentModel> configurer;
-
-	public DelegatingModelDescriptor(Action<IKernel, ComponentModel> builder = null, Action<IKernel, ComponentModel> configurer = null)
-	{
-		this.builder = builder;
-		this.configurer = configurer;
-	}
-
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
 		if (builder == null) return;

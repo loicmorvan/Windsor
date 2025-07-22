@@ -29,27 +29,27 @@ namespace Castle.Windsor.Tests;
 
 public class SmartProxyTestCase : IDisposable
 {
-	private readonly IWindsorContainer container;
+	private readonly WindsorContainer _container;
 
 	public SmartProxyTestCase()
 	{
-		container = new WindsorContainer();
+		_container = new WindsorContainer();
 
-		container.AddFacility<MyInterceptorGreedyFacility>();
+		_container.AddFacility<MyInterceptorGreedyFacility>();
 	}
 
 	public void Dispose()
 	{
-		container.Dispose();
+		_container.Dispose();
 	}
 
 	[Fact]
 	public void ConcreteClassProxy()
 	{
-		container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
-		container.Register(Component.For(typeof(CalculatorService)).Named("key"));
+		_container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
+		_container.Register(Component.For(typeof(CalculatorService)).Named("key"));
 
-		var service = container.Resolve<CalculatorService>("key");
+		var service = _container.Resolve<CalculatorService>("key");
 
 		Assert.NotNull(service);
 #if FEATURE_REMOTING
@@ -61,10 +61,10 @@ public class SmartProxyTestCase : IDisposable
 	[Fact]
 	public void InterfaceInheritance()
 	{
-		container.Register(Component.For<StandardInterceptor>().Named("interceptor"));
-		container.Register(Component.For<ICameraService>().ImplementedBy<CameraService>());
+		_container.Register(Component.For<StandardInterceptor>().Named("interceptor"));
+		_container.Register(Component.For<ICameraService>().ImplementedBy<CameraService>());
 
-		var service = container.Resolve<ICameraService>();
+		var service = _container.Resolve<ICameraService>();
 
 		Assert.NotNull(service);
 	}
@@ -72,10 +72,10 @@ public class SmartProxyTestCase : IDisposable
 	[Fact]
 	public void InterfaceProxy()
 	{
-		container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
-		container.Register(Component.For(typeof(ICalcService)).ImplementedBy(typeof(CalculatorService)).Named("key"));
+		_container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
+		_container.Register(Component.For(typeof(ICalcService)).ImplementedBy(typeof(CalculatorService)).Named("key"));
 
-		var service = container.Resolve<ICalcService>("key");
+		var service = _container.Resolve<ICalcService>("key");
 
 		Assert.NotNull(service);
 #if FEATURE_REMOTING

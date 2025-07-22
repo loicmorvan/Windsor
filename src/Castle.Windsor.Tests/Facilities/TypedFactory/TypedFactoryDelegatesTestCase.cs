@@ -26,6 +26,7 @@ using Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
 using Castle.Windsor.Tests.Interceptors;
+using JetBrains.Annotations;
 using HasTwoConstructors = Castle.Windsor.Tests.Facilities.TypedFactory.Delegates.HasTwoConstructors;
 using ServiceFactory = Castle.Windsor.Tests.Facilities.TypedFactory.Components.ServiceFactory;
 
@@ -473,19 +474,20 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 		}
 	}
 
+	[UsedImplicitly]
 	public class SelectorWithLifecycleCounter : ITypedFactoryComponentSelector, IDisposable
 	{
-		private readonly LifecycleCounter counter;
+		private readonly LifecycleCounter _counter;
 
 		public SelectorWithLifecycleCounter(LifecycleCounter counter)
 		{
-			this.counter = counter;
+			_counter = counter;
 			counter.InstancesCreated += 1;
 		}
 
 		public void Dispose()
 		{
-			counter.InstancesDisposed += 1;
+			_counter.InstancesDisposed += 1;
 		}
 
 		public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method, Type type, object[] arguments)

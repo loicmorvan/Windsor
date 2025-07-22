@@ -13,32 +13,20 @@
 // limitations under the License.
 
 using Castle.Windsor.Core;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.RuntimeParameters;
 
 public class CompA;
 
-public class HasCustomDependency
-{
-	private CompA name;
+#pragma warning disable CS9113 // Parameter is unread.
+public class HasCustomDependency(CompA name);
 
-	public HasCustomDependency(CompA name)
-	{
-		this.name = name;
-	}
-}
-
-public class NeedClassWithCustomerDependency
-{
-	private HasCustomDependency dependency;
-
-	public NeedClassWithCustomerDependency(HasCustomDependency dependency)
-	{
-		this.dependency = dependency;
-	}
-}
+public class NeedClassWithCustomerDependency(HasCustomDependency dependency);
+#pragma warning restore CS9113 // Parameter is unread.
 
 [Transient]
+[UsedImplicitly]
 public class CompB
 {
 	public CompB(CompA ca, CompC cc, string myArgument)
@@ -47,17 +35,13 @@ public class CompB
 		MyArgument = myArgument;
 	}
 
+	// ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
 	public CompC Compc { get; set; }
 
-	public string MyArgument { get; } = string.Empty;
+	public string MyArgument { get; }
 }
 
-public class CompC
+public class CompC(int test)
 {
-	public readonly int test;
-
-	public CompC(int test)
-	{
-		this.test = test;
-	}
+	public readonly int Test = test;
 }

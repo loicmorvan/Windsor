@@ -20,19 +20,14 @@ using Castle.Windsor.MicroKernel.ModelBuilder;
 namespace Castle.Windsor.MicroKernel.Handlers;
 
 [Serializable]
-public class DefaultHandlerFactory : IHandlerFactory
+public class DefaultHandlerFactory(IKernelInternal kernel) : IHandlerFactory
 {
-	private readonly IKernelInternal kernel;
-
-	public DefaultHandlerFactory(IKernelInternal kernel)
-	{
-		this.kernel = kernel;
-	}
+	private readonly IKernelInternal _kernel = kernel;
 
 	public virtual IHandler Create(ComponentModel model)
 	{
 		var handler = CreateHandler(model);
-		handler.Init(kernel);
+		handler.Init(_kernel);
 		return handler;
 	}
 

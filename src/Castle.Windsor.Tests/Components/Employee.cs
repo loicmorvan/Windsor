@@ -23,7 +23,7 @@ public class Employee : IEmployee
 
 	public string FirstName { get; set; }
 
-	public string FullName => string.Format("{0} {1} {2}", FirstName, MiddleName, LastName);
+	public string FullName => $"{FirstName} {MiddleName} {LastName}";
 
 	public bool IsProxy { get; set; }
 

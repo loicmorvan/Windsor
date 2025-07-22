@@ -18,15 +18,8 @@ using Castle.Windsor.Core.Internal;
 
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
-public class ServicesDescriptor : IComponentModelDescriptor
+public class ServicesDescriptor(Type[] services) : IComponentModelDescriptor
 {
-	private readonly Type[] services;
-
-	public ServicesDescriptor(Type[] services)
-	{
-		this.services = services;
-	}
-
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
 		services.ForEach(model.AddService);

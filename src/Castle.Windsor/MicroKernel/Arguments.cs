@@ -29,34 +29,34 @@ public sealed class Arguments
 {
 	private static readonly ArgumentsComparer Comparer = new();
 
-	private readonly Dictionary<object, object> dictionary;
+	private readonly Dictionary<object, object> _dictionary;
 
 	/// <summary>Initializes a new instance of the <see cref = "Arguments" /> class that is empty.</summary>
 	public Arguments()
 	{
-		dictionary = new Dictionary<object, object>(Comparer);
+		_dictionary = new Dictionary<object, object>(Comparer);
 	}
 
 	/// <summary>Initializes a new instance of the <see cref = "Arguments" /> class that contains elements copied from the specified <see cref = "Arguments" />.</summary>
 	public Arguments(Arguments arguments)
 	{
-		dictionary = new Dictionary<object, object>(arguments.dictionary, Comparer);
+		_dictionary = new Dictionary<object, object>(arguments._dictionary, Comparer);
 	}
 
-	public int Count => dictionary.Count;
+	public int Count => _dictionary.Count;
 
 	public object this[object key]
 	{
 		get
 		{
 			CheckKeyType(key);
-			if (dictionary.TryGetValue(key, out var value)) return value;
+			if (_dictionary.TryGetValue(key, out var value)) return value;
 			return null;
 		}
 		set
 		{
 			CheckKeyType(key);
-			dictionary[key] = value;
+			_dictionary[key] = value;
 		}
 	}
 
@@ -67,25 +67,25 @@ public sealed class Arguments
 
 	public IEnumerator<KeyValuePair<object, object>> GetEnumerator()
 	{
-		return dictionary.GetEnumerator();
+		return _dictionary.GetEnumerator();
 	}
 
 	public void Add(object key, object value)
 	{
 		CheckKeyType(key);
-		dictionary.Add(key, value);
+		_dictionary.Add(key, value);
 	}
 
 	public bool Contains(object key)
 	{
 		CheckKeyType(key);
-		return dictionary.ContainsKey(key);
+		return _dictionary.ContainsKey(key);
 	}
 
 	public void Remove(object key)
 	{
 		CheckKeyType(key);
-		dictionary.Remove(key);
+		_dictionary.Remove(key);
 	}
 
 	/// <summary>Adds a collection of named and/or typed arguments.</summary>

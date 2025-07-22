@@ -29,47 +29,47 @@ namespace Castle.Windsor.Core;
 public sealed class ComponentModel : GraphNode
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly ConstructorCandidateCollection constructors = new();
+	private readonly ConstructorCandidateCollection _constructors = new();
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly LifecycleConcernsCollection lifecycle = new();
+	private readonly LifecycleConcernsCollection _lifecycle = new();
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly List<Type> services = new(4);
+	private readonly List<Type> _services = new(4);
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private ComponentName componentName;
+	private ComponentName _componentName;
 
 	[NonSerialized]
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private Arguments customDependencies;
+	private Arguments _customDependencies;
 
 	/// <summary>Dependencies the kernel must resolve</summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private DependencyModelCollection dependencies;
+	private DependencyModelCollection _dependencies;
 
 	[NonSerialized]
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private Arguments extendedProperties;
+	private Arguments _extendedProperties;
 
 	/// <summary>Interceptors associated</summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private InterceptorReferenceCollection interceptors;
+	private InterceptorReferenceCollection _interceptors;
 
 	/// <summary>External parameters</summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private ParameterModelCollection parameters;
+	private ParameterModelCollection _parameters;
 
 	/// <summary>All potential properties that can be setted by the kernel</summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private PropertySetCollection properties;
+	private PropertySetCollection _properties;
 
 	/// <summary>Constructs a ComponentModel</summary>
 	public ComponentModel(ComponentName name, ICollection<Type> services, Type implementation, Arguments extendedProperties)
 	{
-		componentName = Must.NotBeNull(name, "name");
+		_componentName = Must.NotBeNull(name, "name");
 		Implementation = Must.NotBeNull(implementation, "implementation");
-		this.extendedProperties = extendedProperties;
+		_extendedProperties = extendedProperties;
 		services = Must.NotBeEmpty(services, "services");
 		foreach (var type in services) AddService(type);
 	}
@@ -80,8 +80,8 @@ public sealed class ComponentModel : GraphNode
 
 	public ComponentName ComponentName
 	{
-		get => componentName;
-		internal set => componentName = Must.NotBeNull(value, "value");
+		get => _componentName;
+		internal set => _componentName = Must.NotBeNull(value, "value");
 	}
 
 	/// <summary>Gets or sets the configuration.</summary>
@@ -91,7 +91,7 @@ public sealed class ComponentModel : GraphNode
 	/// <summary>Gets the constructors candidates.</summary>
 	/// <value> The constructors. </value>
 	[DebuggerDisplay("Count = {constructors.Count}")]
-	public ConstructorCandidateCollection Constructors => constructors;
+	public ConstructorCandidateCollection Constructors => _constructors;
 
 	/// <summary>Gets or sets the custom component activator.</summary>
 	/// <value> The custom component activator. </value>
@@ -104,10 +104,10 @@ public sealed class ComponentModel : GraphNode
 	{
 		get
 		{
-			var value = customDependencies;
+			var value = _customDependencies;
 			if (value != null) return value;
 			value = new Arguments();
-			var originalValue = Interlocked.CompareExchange(ref customDependencies, value, null);
+			var originalValue = Interlocked.CompareExchange(ref _customDependencies, value, null);
 			return originalValue ?? value;
 		}
 	}
@@ -122,10 +122,10 @@ public sealed class ComponentModel : GraphNode
 	{
 		get
 		{
-			var value = dependencies;
+			var value = _dependencies;
 			if (value != null) return value;
 			value = new DependencyModelCollection();
-			var originalValue = Interlocked.CompareExchange(ref dependencies, value, null);
+			var originalValue = Interlocked.CompareExchange(ref _dependencies, value, null);
 			return originalValue ?? value;
 		}
 	}
@@ -137,23 +137,23 @@ public sealed class ComponentModel : GraphNode
 	{
 		get
 		{
-			var value = extendedProperties;
+			var value = _extendedProperties;
 			if (value != null) return value;
 			value = new Arguments();
-			var originalValue = Interlocked.CompareExchange(ref extendedProperties, value, null);
+			var originalValue = Interlocked.CompareExchange(ref _extendedProperties, value, null);
 			return originalValue ?? value;
 		}
 	}
 
-	public bool HasClassServices => services.First().GetTypeInfo().IsClass;
+	public bool HasClassServices => _services.First().GetTypeInfo().IsClass;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public bool HasCustomDependencies
 	{
 		get
 		{
-			var value = customDependencies;
-			return value != null && value.Count > 0;
+			var value = _customDependencies;
+			return value is { Count: > 0 };
 		}
 	}
 
@@ -162,8 +162,8 @@ public sealed class ComponentModel : GraphNode
 	{
 		get
 		{
-			var value = interceptors;
-			return value != null && value.HasInterceptors;
+			var value = _interceptors;
+			return value is { HasInterceptors: true };
 		}
 	}
 
@@ -172,8 +172,8 @@ public sealed class ComponentModel : GraphNode
 	{
 		get
 		{
-			var value = parameters;
-			return value != null && value.Count > 0;
+			var value = _parameters;
+			return value is { Count: > 0 };
 		}
 	}
 
@@ -191,10 +191,10 @@ public sealed class ComponentModel : GraphNode
 	{
 		get
 		{
-			var value = interceptors;
+			var value = _interceptors;
 			if (value != null) return value;
 			value = new InterceptorReferenceCollection(this);
-			var originalValue = Interlocked.CompareExchange(ref interceptors, value, null);
+			var originalValue = Interlocked.CompareExchange(ref _interceptors, value, null);
 			return originalValue ?? value;
 		}
 	}
@@ -204,7 +204,7 @@ public sealed class ComponentModel : GraphNode
 	[DebuggerDisplay(
 		"Count = {(lifecycle.commission != null ? lifecycle.commission.Count : 0) + (lifecycle.decommission != null ? lifecycle.decommission.Count : 0)}"
 	)]
-	public LifecycleConcernsCollection Lifecycle => lifecycle;
+	public LifecycleConcernsCollection Lifecycle => _lifecycle;
 
 	/// <summary>Gets or sets the lifestyle type.</summary>
 	/// <value> The type of the lifestyle. </value>
@@ -213,8 +213,8 @@ public sealed class ComponentModel : GraphNode
 	/// <summary>Sets or returns the component key</summary>
 	public string Name
 	{
-		get => componentName.Name;
-		set => componentName.SetName(value);
+		get => _componentName.Name;
+		set => _componentName.SetName(value);
 	}
 
 	/// <summary>Gets the parameter collection.</summary>
@@ -223,10 +223,10 @@ public sealed class ComponentModel : GraphNode
 	{
 		get
 		{
-			var value = parameters;
+			var value = _parameters;
 			if (value != null) return value;
 			value = new ParameterModelCollection();
-			var originalValue = Interlocked.CompareExchange(ref parameters, value, null);
+			var originalValue = Interlocked.CompareExchange(ref _parameters, value, null);
 			return originalValue ?? value;
 		}
 	}
@@ -238,10 +238,10 @@ public sealed class ComponentModel : GraphNode
 	{
 		get
 		{
-			var value = properties;
+			var value = _properties;
 			if (value != null) return value;
 			value = new PropertySetCollection();
-			var originalValue = Interlocked.CompareExchange(ref properties, value, null);
+			var originalValue = Interlocked.CompareExchange(ref _properties, value, null);
 			return originalValue ?? value;
 		}
 	}
@@ -251,12 +251,12 @@ public sealed class ComponentModel : GraphNode
 	public bool RequiresGenericArguments { get; set; }
 
 	[DebuggerDisplay("Count = {services.Count}")]
-	public IEnumerable<Type> Services => services;
+	public IEnumerable<Type> Services => _services;
 
 	internal HashSet<Type> ServicesLookup { get; } = new();
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	internal ParameterModelCollection ParametersInternal => parameters;
+	internal ParameterModelCollection ParametersInternal => _parameters;
 
 	/// <summary>Adds constructor dependency to this <see cref = "ComponentModel" /></summary>
 	/// <param name = "constructor"> </param>
@@ -281,10 +281,9 @@ public sealed class ComponentModel : GraphNode
 		if (type == null) return;
 		if (type.IsPrimitiveType())
 			throw new ArgumentException(
-				string.Format("Type {0} can not be used as a service. only classes, and interfaces can be exposed as a service.",
-					type));
+				$"Type {type} can not be used as a service. only classes, and interfaces can be exposed as a service.");
 
-		ComponentServicesUtil.AddService(services, ServicesLookup, type);
+		ComponentServicesUtil.AddService(_services, ServicesLookup, type);
 	}
 
 	/// <summary>Requires the selected property dependencies.</summary>
@@ -296,11 +295,11 @@ public sealed class ComponentModel : GraphNode
 				property.Dependency.IsOptional = false;
 	}
 
-	/// <summary>Requires the property dependencies of type <typeparamref name = "D" /> .</summary>
-	/// <typeparam name = "D"> The dependency type. </typeparam>
-	public void Requires<D>() where D : class
+	/// <summary>Requires the property dependencies of type <typeparamref name="TD" /> .</summary>
+	/// <typeparam name="TD"> The dependency type. </typeparam>
+	public void Requires<TD>() where TD : class
 	{
-		Requires(p => p.Dependency.TargetItemType == typeof(D));
+		Requires(p => p.Dependency.TargetItemType == typeof(TD));
 	}
 
 	public override string ToString()
@@ -310,12 +309,12 @@ public sealed class ComponentModel : GraphNode
 
 		string value;
 		if (Implementation == typeof(LateBoundComponent))
-			value = string.Format("late bound {0}", services[0].ToCSharpString());
+			value = $"late bound {services[0].ToCSharpString()}";
 		else if (Implementation == null)
 			value = "no impl / " + services[0].ToCSharpString();
 		else
-			value = string.Format("{0} / {1}", Implementation.ToCSharpString(), services[0].ToCSharpString());
-		if (services.Length > 1) value += string.Format(" and {0} other services", services.Length - 1);
+			value = $"{Implementation.ToCSharpString()} / {services[0].ToCSharpString()}";
+		if (services.Length > 1) value += $" and {services.Length - 1} other services";
 		return value;
 	}
 }

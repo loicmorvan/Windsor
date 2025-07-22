@@ -19,18 +19,11 @@ using Castle.Windsor.MicroKernel.Handlers;
 
 namespace Castle.Windsor.Tests;
 
-public class StubGenericImplementationMatchingStrategy : IGenericImplementationMatchingStrategy
+public class StubGenericImplementationMatchingStrategy(Func<ComponentModel, CreationContext, Type[]> result)
+	: IGenericImplementationMatchingStrategy
 {
-	private readonly Func<ComponentModel, CreationContext, Type[]> result;
-
-	public StubGenericImplementationMatchingStrategy(Func<ComponentModel, CreationContext, Type[]> result)
+	public StubGenericImplementationMatchingStrategy(params Type[] result) : this(delegate { return result; })
 	{
-		this.result = result;
-	}
-
-	public StubGenericImplementationMatchingStrategy(params Type[] result)
-	{
-		this.result = delegate { return result; };
 	}
 
 	public Type[] GetGenericArguments(ComponentModel model, CreationContext context)

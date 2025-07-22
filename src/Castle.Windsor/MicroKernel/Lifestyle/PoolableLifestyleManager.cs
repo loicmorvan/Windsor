@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Threading;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Lifestyle.Pool;
@@ -22,48 +23,41 @@ namespace Castle.Windsor.MicroKernel.Lifestyle;
 
 /// <summary>Manages a pool of objects.</summary>
 [Serializable]
-public class PoolableLifestyleManager : AbstractLifestyleManager
+public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLifestyleManager
 {
-	private static readonly object poolFactoryLock = new();
-	private readonly ThreadSafeInit init = new();
-	private readonly int initialSize;
-	private readonly int maxSize;
-	private IPool pool;
-
-	public PoolableLifestyleManager(int initialSize, int maxSize)
-	{
-		this.initialSize = initialSize;
-		this.maxSize = maxSize;
-	}
+	private static readonly Lock PoolFactoryLock = new();
+	private readonly ThreadSafeInit _init = new();
+	private readonly int _initialSize = initialSize;
+	private readonly int _maxSize = maxSize;
+	private IPool _pool;
 
 	protected IPool Pool
 	{
 		get
 		{
-			if (pool != null) return pool;
+			if (_pool != null) return _pool;
 			var initializing = false;
 			try
 			{
-				initializing = init.ExecuteThreadSafeOnce();
+				initializing = _init.ExecuteThreadSafeOnce();
 
-				if (pool == null) pool = CreatePool(initialSize, maxSize);
-				return pool;
+				return _pool ??= CreatePool(_initialSize, _maxSize);
 			}
 			finally
 			{
-				if (initializing) init.EndThreadSafeOnceSection();
+				if (initializing) _init.EndThreadSafeOnceSection();
 			}
 		}
 	}
 
 	public override void Dispose()
 	{
-		if (pool != null) pool.Dispose();
+		if (_pool != null) _pool.Dispose();
 	}
 
 	public override bool Release(object instance)
 	{
-		if (pool != null) return pool.Release(instance);
+		if (_pool != null) return _pool.Release(instance);
 		return false;
 	}
 
@@ -75,7 +69,7 @@ public class PoolableLifestyleManager : AbstractLifestyleManager
 	protected IPool CreatePool(int initialSize, int maxSize)
 	{
 		if (!Kernel.HasComponent(typeof(IPoolFactory)))
-			lock (poolFactoryLock)
+			lock (PoolFactoryLock)
 			{
 				if (!Kernel.HasComponent(typeof(IPoolFactory)))
 					Kernel.Register(Component.For<IPoolFactory>()

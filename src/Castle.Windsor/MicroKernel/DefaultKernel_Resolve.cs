@@ -19,13 +19,13 @@ using Castle.Windsor.MicroKernel.Handlers;
 
 namespace Castle.Windsor.MicroKernel;
 
-public partial class DefaultKernel
+public sealed partial class DefaultKernel
 {
 	/// <summary>Returns a component instance by the key</summary>
 	/// <param name = "key"></param>
 	/// <param name = "service"></param>
 	/// <returns></returns>
-	public virtual object Resolve(string key, Type service)
+	public object Resolve(string key, Type service)
 	{
 		return (this as IKernelInternal).Resolve(key, service, null, ReleasePolicy);
 	}
@@ -35,7 +35,7 @@ public partial class DefaultKernel
 	/// <param name = "service"></param>
 	/// <param name = "arguments"></param>
 	/// <returns></returns>
-	public virtual object Resolve(string key, Type service, Arguments arguments)
+	public object Resolve(string key, Type service, Arguments arguments)
 	{
 		return (this as IKernelInternal).Resolve(key, service, arguments, ReleasePolicy);
 	}
@@ -151,7 +151,7 @@ public partial class DefaultKernel
 		var resolved = new List<object>();
 		foreach (var handler in GetHandlers(service))
 		{
-			if (handler.IsBeingResolvedInContext(currentCreationContext)) continue;
+			if (handler.IsBeingResolvedInContext(_currentCreationContext)) continue;
 
 			try
 			{

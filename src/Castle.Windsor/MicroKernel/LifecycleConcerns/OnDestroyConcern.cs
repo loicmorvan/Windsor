@@ -16,17 +16,9 @@ using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
 
-public class OnDestroyConcern<TComponent> : IDecommissionConcern
+public class OnDestroyConcern<TComponent>(LifecycleActionDelegate<TComponent> action, IKernel kernel)
+	: IDecommissionConcern
 {
-	private readonly LifecycleActionDelegate<TComponent> action;
-	private readonly IKernel kernel;
-
-	public OnDestroyConcern(LifecycleActionDelegate<TComponent> action, IKernel kernel)
-	{
-		this.action = action;
-		this.kernel = kernel;
-	}
-
 	public void Apply(ComponentModel model, object component)
 	{
 		var item = (TComponent)component;

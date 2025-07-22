@@ -21,9 +21,11 @@ namespace Castle.Windsor.Tests.Registration.Interceptors.Multiple;
 
 public class InterceptorTypeMultipleCall : InterceptorsTestCaseHelper
 {
-	public override IRegistration RegisterInterceptors<S>(ComponentRegistration<S> registration)
+	public override IRegistration RegisterInterceptors<TS>(ComponentRegistration<TS> registration)
 	{
-		return registration.Interceptors(typeof(TestInterceptor1)).Interceptors(typeof(TestInterceptor2));
+		return registration
+			.Interceptors(typeof(TestInterceptor1))
+			.Interceptors(typeof(TestInterceptor2));
 	}
 
 	public override IEnumerable<InterceptorReference> GetExpectedInterceptorsInCorrectOrder()

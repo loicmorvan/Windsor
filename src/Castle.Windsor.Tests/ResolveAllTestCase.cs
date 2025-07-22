@@ -51,9 +51,7 @@ public class ResolveAllTestCase : AbstractContainerTestCase
 		var exception = Assert.Throws<HandlerException>(() => Container.ResolveAll<IRepository<int>>());
 
 		var expectedMessage =
-			string.Format(
-				"Generic component {0} has some generic dependencies which were not successfully closed. This often happens when generic implementation has some additional generic constraints. See inner exception for more details.",
-				typeof(CachingRepository<>).FullName);
+			$"Generic component {typeof(CachingRepository<>).FullName} has some generic dependencies which were not successfully closed. This often happens when generic implementation has some additional generic constraints. See inner exception for more details.";
 
 		Assert.Equal(expectedMessage, exception.Message);
 	}

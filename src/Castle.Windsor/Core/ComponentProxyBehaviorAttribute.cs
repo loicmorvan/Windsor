@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core;
-
 using System;
+
+namespace Castle.Windsor.Core;
 
 /// <summary>Specifies the proxying behavior for a component.</summary>
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class ComponentProxyBehaviorAttribute : Attribute
 {
-	private Type[] additionalInterfaces;
+	private Type[] _additionalInterfaces;
 
 #if FEATURE_REMOTING
 		/// <summary>
@@ -35,10 +35,10 @@ public sealed class ComponentProxyBehaviorAttribute : Attribute
 	{
 		get
 		{
-			if (additionalInterfaces != null) return additionalInterfaces;
+			if (_additionalInterfaces != null) return _additionalInterfaces;
 
 			return Type.EmptyTypes;
 		}
-		set => additionalInterfaces = value;
+		set => _additionalInterfaces = value;
 	}
 }

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// ReSharper disable UnusedTypeParameter
+// ReSharper disable UnusedType.Global
 namespace Castle.Windsor.Tests.ClassComponents;
 
 public interface ITask;

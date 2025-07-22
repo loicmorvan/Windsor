@@ -142,12 +142,11 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 	{
 		Container.Install(Configuration.FromXml(
 			new StaticContentResource(
-				string.Format(
-					@"<castle>
+				$@"<castle>
 <components>
 	<component lifestyle=""singleton""
 		id=""Id.MyClass""
-		type=""{0}"">
+		type=""{typeof(HasDictionaryDependency).AssemblyQualifiedName}"">
 		<parameters>
 			<DictionaryProperty>${{Id.dictionary}}</DictionaryProperty>
 		</parameters>
@@ -167,8 +166,7 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 		</parameters>
 	</component>
 </components>
-</castle>",
-					typeof(HasDictionaryDependency).AssemblyQualifiedName))));
+</castle>")));
 
 		var myInstance = Container.Resolve<HasDictionaryDependency>();
 		Assert.Equal(2, myInstance.DictionaryProperty.Count);

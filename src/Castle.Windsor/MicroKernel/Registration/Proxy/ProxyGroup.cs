@@ -30,7 +30,7 @@ public class ProxyGroup<S> : RegistrationGroup<S>
 
 	public ComponentRegistration<S> AdditionalInterfaces(params Type[] interfaces)
 	{
-		if (interfaces != null && interfaces.Length > 0) AddDescriptor(new ProxyInterfacesDescriptor(interfaces));
+		if (interfaces is { Length: > 0 }) AddDescriptor(new ProxyInterfacesDescriptor(interfaces));
 		return Registration;
 	}
 

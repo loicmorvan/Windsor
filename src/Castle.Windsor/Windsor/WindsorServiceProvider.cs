@@ -31,7 +31,7 @@ public class WindsorServiceProvider : IServiceProviderEx
 	public WindsorServiceProvider(IWindsorContainer container)
 	{
 		kernel = container.Kernel as IKernelInternal;
-		if (kernel == null) throw new ArgumentException(string.Format("The kernel must implement {0}", typeof(IKernelInternal)));
+		if (kernel == null) throw new ArgumentException($"The kernel must implement {typeof(IKernelInternal)}");
 	}
 
 	public IKernel Kernel => kernel;

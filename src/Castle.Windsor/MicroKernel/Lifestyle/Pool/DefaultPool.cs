@@ -23,53 +23,45 @@ namespace Castle.Windsor.MicroKernel.Lifestyle.Pool;
 using Lock = Lock;
 
 [Serializable]
-public class DefaultPool : IPool, IDisposable
+public class DefaultPool(int initialSize, int maxsize, IComponentActivator componentActivator)
+	: IPool
 {
-	private readonly Stack<Burden> available;
-	private readonly IComponentActivator componentActivator;
-	private readonly int initialSize;
-	private readonly Dictionary<object, Burden> inUse = new();
-	private readonly int maxsize;
-	private readonly Lock rwlock = Lock.Create();
-	private bool initialized;
-
-	public DefaultPool(int initialSize, int maxsize, IComponentActivator componentActivator)
-	{
-		available = new Stack<Burden>(initialSize);
-		this.initialSize = initialSize;
-		this.maxsize = maxsize;
-		this.componentActivator = componentActivator;
-	}
+	private readonly Stack<Burden> _available = new(initialSize);
+	private readonly IComponentActivator _componentActivator = componentActivator;
+	private readonly int _initialSize = initialSize;
+	private readonly Dictionary<object, Burden> _inUse = new();
+	private readonly int _maxsize = maxsize;
+	private readonly Lock _rwlock = Lock.Create();
+	private bool _initialized;
 
 	public virtual void Dispose()
 	{
-		initialized = false;
+		_initialized = false;
 
-		foreach (var burden in available) burden.Release();
-		inUse.Clear();
-		available.Clear();
+		foreach (var burden in _available) burden.Release();
+		_inUse.Clear();
+		_available.Clear();
 	}
 
 	public virtual bool Release(object instance)
 	{
-		using (rwlock.ForWriting())
+		using (_rwlock.ForWriting())
 		{
 			Burden burden;
 
-			if (initialized == false)
+			if (_initialized == false)
 			{
-				if (inUse.TryGetValue(instance, out burden)) inUse.Remove(instance);
+				_inUse.Remove(instance, out burden);
 			}
 			else
 			{
-				if (inUse.TryGetValue(instance, out burden) == false) return false;
-				inUse.Remove(instance);
+				if (_inUse.Remove(instance, out burden) == false) return false;
 
-				if (available.Count < maxsize)
+				if (_available.Count < _maxsize)
 				{
-					if (instance is IRecyclable) (instance as IRecyclable).Recycle();
+					if (instance is IRecyclable recyclable) recyclable.Recycle();
 
-					available.Push(burden);
+					_available.Push(burden);
 					return false;
 				}
 			}
@@ -77,20 +69,20 @@ public class DefaultPool : IPool, IDisposable
 
 		// Pool is full or has been disposed.
 
-		componentActivator.Destroy(instance);
+		_componentActivator.Destroy(instance);
 		return true;
 	}
 
 	public virtual object Request(CreationContext context, Func<CreationContext, Burden> creationCallback)
 	{
 		Burden burden;
-		using (rwlock.ForWriting())
+		using (_rwlock.ForWriting())
 		{
-			if (!initialized) Intitialize(creationCallback, context);
+			if (!_initialized) Intitialize(creationCallback, context);
 
-			if (available.Count != 0)
+			if (_available.Count != 0)
 			{
-				burden = available.Pop();
+				burden = _available.Pop();
 				context.AttachExistingBurden(burden);
 			}
 			else
@@ -100,7 +92,7 @@ public class DefaultPool : IPool, IDisposable
 
 			try
 			{
-				inUse.Add(burden.Instance, burden);
+				_inUse.Add(burden.Instance, burden);
 			}
 			catch (NullReferenceException)
 			{
@@ -108,7 +100,8 @@ public class DefaultPool : IPool, IDisposable
 			}
 			catch (ArgumentNullException)
 			{
-				throw new PoolException("burden returned by creationCallback does not have root instance associated with it (its Instance property is null).");
+				throw new PoolException(
+					"burden returned by creationCallback does not have root instance associated with it (its Instance property is null).");
 			}
 		}
 
@@ -117,11 +110,11 @@ public class DefaultPool : IPool, IDisposable
 
 	protected virtual void Intitialize(Func<CreationContext, Burden> createCallback, CreationContext c)
 	{
-		initialized = true;
-		for (var i = 0; i < initialSize; i++)
+		_initialized = true;
+		for (var i = 0; i < _initialSize; i++)
 		{
 			var burden = createCallback(c);
-			available.Push(burden);
+			_available.Push(burden);
 		}
 	}
 }

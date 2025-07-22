@@ -21,13 +21,17 @@ using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.XmlFiles;
 using Castle.Windsor.Windsor;
 using Castle.Windsor.Windsor.Configuration.Interpreters;
+using JetBrains.Annotations;
+
+// ReSharper disable UnusedParameter.Local
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Castle.Windsor.Tests
 {
 	public class CircularDependencyTestCase : AbstractContainerTestCase
 	{
 		[Fact]
-		public void ShouldNotGetCircularDepencyExceptionWhenResolvingTypeOnItselfWithDifferentModels()
+		public void ShouldNotGetCircularDependencyExceptionWhenResolvingTypeOnItselfWithDifferentModels()
 		{
 			var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("IOC-51.xml")));
 			Assert.NotNull(container.Resolve<object>("path.fileFinder"));
@@ -74,6 +78,7 @@ namespace Castle.Windsor.Tests
 	}
 
 	[Singleton]
+	[UsedImplicitly]
 	public class SingletonComponent
 	{
 		public static int CtorCallsCount;
@@ -87,6 +92,7 @@ namespace Castle.Windsor.Tests
 	}
 
 	[Singleton]
+	[UsedImplicitly]
 	public class SingletonPropertyComponent
 	{
 		public static int CtorCallsCount;
@@ -100,6 +106,7 @@ namespace Castle.Windsor.Tests
 	}
 
 	[Singleton]
+	[UsedImplicitly]
 	public class SingletonDependency
 	{
 		public SingletonDependency(SingletonComponent c)
@@ -108,6 +115,7 @@ namespace Castle.Windsor.Tests
 	}
 
 	[Singleton]
+	[UsedImplicitly]
 	public class SingletonPropertyDependency
 	{
 		public SingletonPropertyComponent Component { get; set; }
@@ -132,14 +140,9 @@ namespace Castle.Windsor.Tests
 			}
 		}
 
-		public class RelativeFilePath : IPathProvider
+		public class RelativeFilePath(IPathProvider basePathProvider, string extensionsPath) : IPathProvider
 		{
-			public RelativeFilePath(IPathProvider basePathProvider, string extensionsPath)
-			{
-				Path = System.IO.Path.Combine(basePathProvider.Path + "\\", extensionsPath);
-			}
-
-			public string Path { get; }
+			public string Path { get; } = System.IO.Path.Combine(basePathProvider.Path + "\\", extensionsPath);
 		}
 	}
 }

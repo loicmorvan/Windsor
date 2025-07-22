@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel;
-
 using System;
 
-public partial interface IKernel : IKernelEvents, IDisposable
+namespace Castle.Windsor.MicroKernel;
+
+public partial interface IKernel
 {
 	/// <summary>Returns the component instance by the service type</summary>
 	object Resolve(Type service);

@@ -12,32 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Registration;
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-
 using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.MicroKernel.Registration;
 
 public class AssemblyFilter : IAssemblyProvider
 {
 	private static readonly Assembly CastleWindsorDll = typeof(AssemblyFilter).GetTypeInfo().Assembly;
 
-	private readonly string directoryName;
-	private readonly string mask;
-	private Predicate<Assembly> assemblyFilter;
-	private Predicate<AssemblyName> nameFilter;
+	private readonly string _directoryName;
+	private readonly string _mask;
+	private Predicate<Assembly> _assemblyFilter;
+	private Predicate<AssemblyName> _nameFilter;
 
 	public AssemblyFilter(string directoryName, string mask = null)
 	{
 		ArgumentNullException.ThrowIfNull(directoryName);
 
-		this.directoryName = GetFullPath(directoryName);
-		this.mask = mask;
-		assemblyFilter += a => a != CastleWindsorDll;
+		_directoryName = GetFullPath(directoryName);
+		_mask = mask;
+		_assemblyFilter += a => a != CastleWindsorDll;
 	}
 
 	IEnumerable<Assembly> IAssemblyProvider.GetAssemblies()
@@ -55,7 +54,7 @@ public class AssemblyFilter : IAssemblyProvider
 	{
 		ArgumentNullException.ThrowIfNull(filter);
 
-		assemblyFilter += filter;
+		_assemblyFilter += filter;
 		return this;
 	}
 
@@ -63,7 +62,7 @@ public class AssemblyFilter : IAssemblyProvider
 	{
 		ArgumentNullException.ThrowIfNull(filter);
 
-		nameFilter += filter;
+		_nameFilter += filter;
 		return this;
 	}
 
@@ -72,7 +71,7 @@ public class AssemblyFilter : IAssemblyProvider
 		return WithKeyToken(ExtractKeyToken(publicKeyToken));
 	}
 
-	public AssemblyFilter WithKeyToken(byte[] publicKeyToken)
+	private AssemblyFilter WithKeyToken(byte[] publicKeyToken)
 	{
 		ArgumentNullException.ThrowIfNull(publicKeyToken);
 		return FilterByName(n => IsTokenEqual(n.GetPublicKeyToken(), publicKeyToken));
@@ -88,7 +87,7 @@ public class AssemblyFilter : IAssemblyProvider
 		return WithKeyToken(typeof(TTypeFromAssemblySignedWithKey).GetTypeInfo().Assembly);
 	}
 
-	public AssemblyFilter WithKeyToken(Assembly assembly)
+	private AssemblyFilter WithKeyToken(Assembly assembly)
 	{
 		return WithKeyToken(assembly.GetName().GetPublicKeyToken());
 	}
@@ -110,8 +109,8 @@ public class AssemblyFilter : IAssemblyProvider
 		catch (Exception e)
 		{
 			throw new ArgumentException(
-				string.Format("The string '{0}' does not appear to be a valid public key token. It could not be processed.",
-					keyToken), e);
+				$"The string '{keyToken}' does not appear to be a valid public key token. It could not be processed.",
+				e);
 		}
 	}
 
@@ -119,9 +118,9 @@ public class AssemblyFilter : IAssemblyProvider
 	{
 		try
 		{
-			if (Directory.Exists(directoryName) == false) return [];
-			if (string.IsNullOrEmpty(mask)) return Directory.EnumerateFiles(directoryName);
-			return Directory.EnumerateFiles(directoryName, mask);
+			if (Directory.Exists(_directoryName) == false) return [];
+			if (string.IsNullOrEmpty(_mask)) return Directory.EnumerateFiles(_directoryName);
+			return Directory.EnumerateFiles(_directoryName, _mask);
 		}
 		catch (IOException e)
 		{
@@ -134,7 +133,7 @@ public class AssemblyFilter : IAssemblyProvider
 		// based on MEF DirectoryCatalog
 		try
 		{
-			return ReflectionUtil.GetAssemblyNamed(file, nameFilter, assemblyFilter);
+			return ReflectionUtil.GetAssemblyNamed(file, _nameFilter, _assemblyFilter);
 		}
 		catch (FileNotFoundException)
 		{
@@ -158,7 +157,9 @@ public class AssemblyFilter : IAssemblyProvider
 
 	private static string GetFullPath(string path)
 	{
-		if (Path.IsPathRooted(path) == false && AppContext.BaseDirectory != null) path = Path.Combine(AppContext.BaseDirectory, path);
+		if (Path.IsPathRooted(path)) return Path.GetFullPath(path);
+		if (path != null)
+			path = Path.Combine(AppContext.BaseDirectory, path);
 		return Path.GetFullPath(path);
 	}
 

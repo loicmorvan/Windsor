@@ -13,9 +13,13 @@
 // limitations under the License.
 
 using Castle.Windsor.Tests.Components;
+using JetBrains.Annotations;
+
+// ReSharper disable UnusedParameter.Local
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
+[UsedImplicitly]
 public class DependsOnThrowingComponent
 {
 	public DependsOnThrowingComponent(ISimpleService service, ThrowsInCtor throws)

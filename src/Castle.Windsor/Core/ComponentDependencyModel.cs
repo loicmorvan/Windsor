@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core;
-
 using System;
+
+namespace Castle.Windsor.Core;
 
 [Serializable]
 public class ComponentDependencyModel : DependencyModel
@@ -31,8 +31,8 @@ public class ComponentDependencyModel : DependencyModel
 	public override void Init(ParameterModelCollection parameters)
 	{
 #if DEBUG
-		initialized = true;
+		Initialized = true;
 #endif
-		reference = DependencyKey;
+		Reference = DependencyKey;
 	}
 }

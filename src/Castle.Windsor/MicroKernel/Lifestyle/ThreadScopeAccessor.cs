@@ -24,18 +24,18 @@ namespace Castle.Windsor.MicroKernel.Lifestyle;
 [Serializable]
 public class ThreadScopeAccessor : IScopeAccessor
 {
-	private readonly SimpleThreadSafeDictionary<int, ILifetimeScope> items = new();
+	private readonly SimpleThreadSafeDictionary<int, ILifetimeScope> _items = new();
 
 	public void Dispose()
 	{
-		var values = items.EjectAllValues();
+		var values = _items.EjectAllValues();
 		foreach (var item in values.Reverse()) item.Dispose();
 	}
 
 	public ILifetimeScope GetScope(CreationContext context)
 	{
 		var currentThreadId = GetCurrentThreadId();
-		return items.GetOrAdd(currentThreadId, _ => new DefaultLifetimeScope());
+		return _items.GetOrAdd(currentThreadId, _ => new DefaultLifetimeScope());
 	}
 
 	protected virtual int GetCurrentThreadId()

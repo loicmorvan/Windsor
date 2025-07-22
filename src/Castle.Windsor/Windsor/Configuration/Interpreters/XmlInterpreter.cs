@@ -88,7 +88,9 @@ public class XmlInterpreter : AbstractInterpreter
 	{
 		foreach (XmlNode node in section)
 		{
-			if (XmlConfigurationDeserializer.IsTextNode(node)) throw new ConfigurationProcessingException(string.Format("{0} cannot contain text nodes", node.Name));
+			if (XmlConfigurationDeserializer.IsTextNode(node))
+				throw new ConfigurationProcessingException(
+					$"{node.Name} cannot contain text nodes");
 			if (node.NodeType == XmlNodeType.Element) DeserializeElement(node, store, converter);
 		}
 	}

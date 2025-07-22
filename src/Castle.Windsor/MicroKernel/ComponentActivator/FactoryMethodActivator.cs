@@ -21,15 +21,16 @@ namespace Castle.Windsor.MicroKernel.ComponentActivator;
 
 public class FactoryMethodActivator<T> : DefaultComponentActivator, IDependencyAwareActivator
 {
-	protected readonly Func<IKernel, ComponentModel, CreationContext, T> creator;
-	protected readonly bool managedExternally;
+	private readonly Func<IKernel, ComponentModel, CreationContext, T> _creator;
+	private readonly bool _managedExternally;
 
 	public FactoryMethodActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
 		: base(model, kernel, onCreation, onDestruction)
 	{
-		creator = Model.ExtendedProperties["factoryMethodDelegate"] as Func<IKernel, ComponentModel, CreationContext, T>;
-		managedExternally = (Model.ExtendedProperties["factory.managedExternally"] as bool?).GetValueOrDefault();
-		if (creator == null)
+		_creator =
+			Model.ExtendedProperties["factoryMethodDelegate"] as Func<IKernel, ComponentModel, CreationContext, T>;
+		_managedExternally = (Model.ExtendedProperties["factory.managedExternally"] as bool?).GetValueOrDefault();
+		if (_creator == null)
 			throw new ComponentActivatorException(
 				string.Format(
 					"{0} received misconfigured component model for {1}. Are you sure you registered this component with 'UsingFactoryMethod'?",
@@ -44,28 +45,29 @@ public class FactoryMethodActivator<T> : DefaultComponentActivator, IDependencyA
 
 	public bool IsManagedExternally(ComponentModel component)
 	{
-		return managedExternally;
+		return _managedExternally;
 	}
 
 	protected override void ApplyCommissionConcerns(object instance)
 	{
-		if (managedExternally) return;
+		if (_managedExternally) return;
 		base.ApplyCommissionConcerns(instance);
 	}
 
 	protected override void ApplyDecommissionConcerns(object instance)
 	{
-		if (managedExternally) return;
+		if (_managedExternally) return;
 		base.ApplyDecommissionConcerns(instance);
 	}
 
 	protected override object Instantiate(CreationContext context)
 	{
-		object instance = creator(Kernel, Model, context);
+		object instance = _creator(Kernel, Model, context);
 		if (ShouldCreateProxy(instance)) instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, context);
 		if (instance == null)
 			throw new ComponentActivatorException(
-				string.Format("Factory method creating instances of component '{0}' returned null. This is not allowed and most likely a bug in the factory method.", Model.Name), Model);
+				$"Factory method creating instances of component '{Model.Name}' returned null. This is not allowed and most likely a bug in the factory method.",
+				Model);
 		return instance;
 	}
 

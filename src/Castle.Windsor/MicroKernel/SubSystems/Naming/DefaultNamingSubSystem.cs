@@ -194,9 +194,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 			catch (ArgumentException)
 			{
 				throw new ComponentRegistrationException(
-					string.Format(
-						"Component {0} could not be registered. There is already a component with that name. Did you want to modify the existing component instead? If not, make sure you specify a unique name.",
-						name));
+					$"Component {name} could not be registered. There is already a component with that name. Did you want to modify the existing component instead? If not, make sure you specify a unique name.");
 			}
 
 			var serviceSelector = GetServiceSelector(handler);

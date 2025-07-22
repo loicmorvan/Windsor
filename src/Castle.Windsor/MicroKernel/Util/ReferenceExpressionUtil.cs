@@ -19,7 +19,7 @@ public abstract class ReferenceExpressionUtil
 	public static string BuildReference(string value)
 	{
 		if (IsReference(value)) return value;
-		return string.Format("${{{0}}}", value);
+		return $"${{{value}}}";
 	}
 
 	public static string ExtractComponentName(string value)
@@ -31,6 +31,6 @@ public abstract class ReferenceExpressionUtil
 
 	public static bool IsReference(string value)
 	{
-		return value != null && value.Length > 3 && value.StartsWith("${") && value.EndsWith("}");
+		return value is { Length: > 3 } && value.StartsWith("${") && value.EndsWith("}");
 	}
 }

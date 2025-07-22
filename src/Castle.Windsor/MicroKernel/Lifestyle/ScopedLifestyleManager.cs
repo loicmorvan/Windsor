@@ -20,23 +20,18 @@ using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
 namespace Castle.Windsor.MicroKernel.Lifestyle;
 
-public class ScopedLifestyleManager : AbstractLifestyleManager
+public class ScopedLifestyleManager(IScopeAccessor accessor) : AbstractLifestyleManager
 {
-	private IScopeAccessor accessor;
+	private IScopeAccessor _accessor = accessor;
 
 	public ScopedLifestyleManager()
 		: this(new LifetimeScopeAccessor())
 	{
 	}
 
-	public ScopedLifestyleManager(IScopeAccessor accessor)
-	{
-		this.accessor = accessor;
-	}
-
 	public override void Dispose()
 	{
-		var scope = Interlocked.Exchange(ref accessor, null);
+		var scope = Interlocked.Exchange(ref _accessor, null);
 		if (scope != null) scope.Dispose();
 	}
 
@@ -55,7 +50,7 @@ public class ScopedLifestyleManager : AbstractLifestyleManager
 
 	private ILifetimeScope GetScope(CreationContext context)
 	{
-		var localScope = accessor;
+		var localScope = _accessor;
 		if (localScope == null) throw new ObjectDisposedException("Scope was already disposed. This is most likely a bug in the calling code.");
 		var scope = localScope.GetScope(context);
 		if (scope == null)

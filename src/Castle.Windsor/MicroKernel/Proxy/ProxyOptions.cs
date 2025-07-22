@@ -15,6 +15,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
 
@@ -23,17 +24,17 @@ namespace Castle.Windsor.MicroKernel.Proxy;
 /// <summary>Represents options to configure proxies.</summary>
 public class ProxyOptions
 {
-	private IReference<IProxyGenerationHook> hook;
-	private List<Type> interfaceList;
-	private List<IReference<object>> mixInList;
+	private IReference<IProxyGenerationHook> _hook;
+	private List<Type> _interfaceList;
+	private List<IReference<object>> _mixInList;
 
-	private IReference<IInterceptorSelector> selector;
-	private readonly ComponentModel component;
+	private IReference<IInterceptorSelector> _selector;
+	private readonly ComponentModel _component;
 
 	/// <summary>Initializes a new instance of the <see cref = "ProxyOptions" /> class.</summary>
 	public ProxyOptions(ComponentModel component)
 	{
-		this.component = component;
+		_component = component;
 	}
 
 	/// <summary>Gets the additional interfaces to proxy.</summary>
@@ -42,7 +43,7 @@ public class ProxyOptions
 	{
 		get
 		{
-			if (interfaceList != null) return interfaceList.ToArray();
+			if (_interfaceList != null) return _interfaceList.ToArray();
 
 			return Type.EmptyTypes;
 		}
@@ -62,8 +63,8 @@ public class ProxyOptions
 	/// <summary>Gets or sets the proxy hook.</summary>
 	public IReference<IProxyGenerationHook> Hook
 	{
-		get => hook;
-		set => SetReferenceValue(ref hook, value);
+		get => _hook;
+		set => SetReferenceValue(ref _hook, value);
 	}
 
 	/// <summary>Gets the mix ins to integrate.</summary>
@@ -72,7 +73,7 @@ public class ProxyOptions
 	{
 		get
 		{
-			if (mixInList != null) return mixInList;
+			if (_mixInList != null) return _mixInList;
 			return [];
 		}
 	}
@@ -83,8 +84,8 @@ public class ProxyOptions
 	/// <summary>Gets or sets the interceptor selector.</summary>
 	public IReference<IInterceptorSelector> Selector
 	{
-		get => selector;
-		set => SetReferenceValue(ref selector, value);
+		get => _selector;
+		set => SetReferenceValue(ref _selector, value);
 	}
 
 	/// <summary>Adds the additional interfaces to proxy.</summary>
@@ -93,9 +94,9 @@ public class ProxyOptions
 	{
 		if (interfaces == null || interfaces.Length == 0) return;
 
-		if (interfaceList == null) interfaceList = [];
+		if (_interfaceList == null) _interfaceList = [];
 
-		interfaceList.AddRange(interfaces);
+		_interfaceList.AddRange(interfaces);
 	}
 
 	/// <summary>Adds the additional mix ins to integrate.</summary>
@@ -104,13 +105,13 @@ public class ProxyOptions
 	{
 		if (mixIns == null || mixIns.Length == 0) return;
 
-		if (mixInList == null) mixInList = [];
+		if (_mixInList == null) _mixInList = [];
 
 		foreach (var mixIn in mixIns)
 		{
 			var reference = new InstanceReference<object>(mixIn);
-			mixInList.Add(reference);
-			reference.Attach(component);
+			_mixInList.Add(reference);
+			reference.Attach(_component);
 		}
 	}
 
@@ -120,9 +121,9 @@ public class ProxyOptions
 	{
 		ArgumentNullException.ThrowIfNull(mixIn);
 
-		if (mixInList == null) mixInList = [];
-		mixInList.Add(mixIn);
-		mixIn.Attach(component);
+		if (_mixInList == null) _mixInList = [];
+		_mixInList.Add(mixIn);
+		mixIn.Attach(_component);
 	}
 
 	/// <summary>Equals the specified obj.</summary>
@@ -144,43 +145,37 @@ public class ProxyOptions
 	/// <returns> </returns>
 	public override int GetHashCode()
 	{
-		return 29 * base.GetHashCode()
-		       + GetCollectionHashCode(interfaceList)
-		       + GetCollectionHashCode(mixInList);
+		return GetCollectionHashCode(_interfaceList)
+		       + GetCollectionHashCode(_mixInList);
 	}
 
 	private bool AdditionalInterfacesAreEquals(ProxyOptions proxyOptions)
 	{
-		if (!Equals(interfaceList == null, proxyOptions.interfaceList == null)) return false;
-		if (interfaceList == null) return true; //both are null, nothing more to check
-		if (interfaceList.Count != proxyOptions.interfaceList.Count) return false;
-		for (var i = 0; i < interfaceList.Count; ++i)
-			if (!proxyOptions.interfaceList.Contains(interfaceList[i]))
-				return false;
-
-		return true;
+		if (!Equals(_interfaceList == null, proxyOptions._interfaceList == null)) return false;
+		if (_interfaceList == null) return true; //both are null, nothing more to check
+		if (proxyOptions._interfaceList != null && _interfaceList.Count != proxyOptions._interfaceList.Count)
+			return false;
+		return _interfaceList.All(t => proxyOptions._interfaceList == null || proxyOptions._interfaceList.Contains(t));
 	}
 
-	public bool RequiresProxy => interfaceList != null || mixInList != null || hook != null;
+	public bool RequiresProxy => _interfaceList != null || _mixInList != null || _hook != null;
 
 	private int GetCollectionHashCode(IEnumerable items)
 	{
-		var result = 0;
+		const int result = 0;
 
-		if (items == null) return result;
-
-		foreach (var item in items) result = 29 * result + item.GetHashCode();
-
-		return result;
+		return items == null
+			? 0
+			: items.Cast<object>().Aggregate(result, (current, item) => 29 * current + item.GetHashCode());
 	}
 
 	private bool MixInsAreEquals(ProxyOptions proxyOptions)
 	{
-		if (!Equals(mixInList == null, proxyOptions.mixInList == null)) return false;
-		if (mixInList == null) return true; //both are null, nothing more to check
-		if (mixInList.Count != proxyOptions.mixInList.Count) return false;
-		for (var i = 0; i < mixInList.Count; ++i)
-			if (!proxyOptions.mixInList.Contains(mixInList[i]))
+		if (!Equals(_mixInList == null, proxyOptions._mixInList == null)) return false;
+		if (_mixInList == null) return true; //both are null, nothing more to check
+		if (proxyOptions._mixInList != null && _mixInList.Count != proxyOptions._mixInList.Count) return false;
+		for (var i = 0; i < _mixInList.Count; ++i)
+			if (proxyOptions._mixInList != null && !proxyOptions._mixInList.Contains(_mixInList[i]))
 				return false;
 
 		return true;
@@ -188,8 +183,8 @@ public class ProxyOptions
 
 	private void SetReferenceValue<T>(ref IReference<T> reference, IReference<T> value)
 	{
-		if (reference != null) reference.Detach(component);
-		if (value != null) value.Attach(component);
+		if (reference != null) reference.Detach(_component);
+		if (value != null) value.Attach(_component);
 		reference = value;
 	}
 }

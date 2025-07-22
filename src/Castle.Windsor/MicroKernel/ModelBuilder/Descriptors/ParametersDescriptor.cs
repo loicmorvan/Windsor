@@ -18,15 +18,8 @@ using Castle.Windsor.MicroKernel.Registration;
 
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
-public class ParametersDescriptor : AbstractPropertyDescriptor
+public class ParametersDescriptor(params Parameter[] parameters) : AbstractPropertyDescriptor
 {
-	private readonly Parameter[] parameters;
-
-	public ParametersDescriptor(params Parameter[] parameters)
-	{
-		this.parameters = parameters;
-	}
-
 	public override void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
 		parameters.ForEach(p => Apply(model, p));

@@ -19,6 +19,8 @@ using Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Windsor;
 
+// ReSharper disable SuspiciousTypeConversion.Global
+
 namespace Castle.Windsor.Tests.SpecializedResolvers;
 
 public class ListResolverTestCase : AbstractContainerTestCase

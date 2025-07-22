@@ -53,7 +53,7 @@ public class PotentialLifestyleMismatches : AbstractContainerDebuggerExtension
 
 	private string GetKey(IHandler root)
 	{
-		return string.Format("\"{0}\" »{1}«", GetNameDescription(root.ComponentModel), root.ComponentModel.GetLifestyleDescription());
+		return $"\"{GetNameDescription(root.ComponentModel)}\" »{root.ComponentModel.GetLifestyleDescription()}«";
 	}
 
 	private string GetMismatchMessage(IHandler[] handlers)

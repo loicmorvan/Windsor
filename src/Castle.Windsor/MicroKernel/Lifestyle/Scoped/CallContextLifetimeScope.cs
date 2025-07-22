@@ -36,25 +36,25 @@ using Lock = Lock;
 /// </remarks>
 public class CallContextLifetimeScope : ILifetimeScope
 {
-	private static readonly ConcurrentDictionary<Guid, CallContextLifetimeScope> allScopes = new();
+	private static readonly ConcurrentDictionary<Guid, CallContextLifetimeScope> AllScopes = new();
 
 #if FEATURE_REMOTING
 		private static readonly string callContextKey = "castle.lifetime-scope-" + AppDomain.CurrentDomain.Id.ToString(CultureInfo.InvariantCulture);
 #else
-	private static readonly AsyncLocal<Guid> asyncLocal = new();
+	private static readonly AsyncLocal<Guid> AsyncLocal = new();
 #endif
 
-	private readonly Guid contextId = Guid.NewGuid();
-	private readonly CallContextLifetimeScope parentScope;
-	private readonly Lock @lock = Lock.Create();
-	private ScopeCache cache = new();
+	private readonly Guid _contextId;
+	private readonly CallContextLifetimeScope _parentScope;
+	private readonly Lock _lock = Lock.Create();
+	private ScopeCache _cache = new();
 
 	public CallContextLifetimeScope()
 	{
-		contextId = Guid.NewGuid();
-		parentScope = ObtainCurrentScope();
+		_contextId = Guid.NewGuid();
+		_parentScope = ObtainCurrentScope();
 
-		var added = allScopes.TryAdd(contextId, this);
+		var added = AllScopes.TryAdd(_contextId, this);
 		Debug.Assert(added);
 		SetCurrentScope(this);
 	}
@@ -62,18 +62,18 @@ public class CallContextLifetimeScope : ILifetimeScope
 	[SecuritySafeCritical]
 	public void Dispose()
 	{
-		using (var token = @lock.ForReadingUpgradeable())
+		using (var token = _lock.ForReadingUpgradeable())
 		{
 			// Dispose the burden cache
-			if (cache == null) return;
+			if (_cache == null) return;
 			token.Upgrade();
-			cache.Dispose();
-			cache = null;
+			_cache.Dispose();
+			_cache = null;
 
 			// Restore the parent scope (if inside one)
-			if (parentScope != null)
+			if (_parentScope != null)
 			{
-				SetCurrentScope(parentScope);
+				SetCurrentScope(_parentScope);
 			}
 			else
 			{
@@ -83,20 +83,19 @@ public class CallContextLifetimeScope : ILifetimeScope
 			}
 		}
 
-		CallContextLifetimeScope @this;
-		allScopes.TryRemove(contextId, out @this);
+		AllScopes.TryRemove(_contextId, out _);
 	}
 
 	public Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance)
 	{
-		using var token = @lock.ForReadingUpgradeable();
-		var burden = cache[model];
+		using var token = _lock.ForReadingUpgradeable();
+		var burden = _cache[model];
 		if (burden == null)
 		{
 			token.Upgrade();
 
 			burden = createInstance(delegate { });
-			cache[model] = burden;
+			_cache[model] = burden;
 		}
 
 		return burden;
@@ -108,21 +107,19 @@ public class CallContextLifetimeScope : ILifetimeScope
 #if FEATURE_REMOTING
 			CallContext.LogicalSetData(callContextKey, lifetimeScope.contextId);
 #else
-		asyncLocal.Value = lifetimeScope.contextId;
+		AsyncLocal.Value = lifetimeScope._contextId;
 #endif
 	}
 
 	[SecuritySafeCritical]
 	public static CallContextLifetimeScope ObtainCurrentScope()
 	{
-		object scopeKey;
 #if FEATURE_REMOTING
-			scopeKey = CallContext.LogicalGetData(callContextKey);
+		object	scopeKey = CallContext.LogicalGetData(callContextKey);
 #else
-		scopeKey = asyncLocal.Value;
+		object scopeKey = AsyncLocal.Value;
 #endif
-		if (!(scopeKey is Guid)) return null;
-		allScopes.TryGetValue((Guid)scopeKey, out var scope);
+		AllScopes.TryGetValue((Guid)scopeKey, out var scope);
 		return scope;
 	}
 }

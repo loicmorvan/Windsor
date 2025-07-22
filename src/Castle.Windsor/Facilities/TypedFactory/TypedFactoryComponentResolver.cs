@@ -20,11 +20,11 @@ namespace Castle.Windsor.Facilities.TypedFactory;
 /// <summary>Represents a single component to be resolved via Typed Factory</summary>
 public class TypedFactoryComponentResolver
 {
-	private readonly Type actualSelectorType;
-	protected readonly Arguments additionalArguments;
-	protected readonly string componentName;
-	protected readonly Type componentType;
-	protected readonly bool fallbackToResolveByTypeIfNameNotFound;
+	private readonly Type _actualSelectorType;
+	private readonly Arguments _additionalArguments;
+	private readonly string _componentName;
+	private readonly Type _componentType;
+	private readonly bool _fallbackToResolveByTypeIfNameNotFound;
 
 	public TypedFactoryComponentResolver(string componentName, Type componentType, Arguments additionalArguments,
 		bool fallbackToResolveByTypeIfNameNotFound, Type actualSelectorType)
@@ -33,11 +33,11 @@ public class TypedFactoryComponentResolver
 			throw new ArgumentNullException(nameof(componentType),
 				"At least one - componentName or componentType must not be null or empty");
 
-		this.componentType = componentType;
-		this.componentName = componentName;
-		this.additionalArguments = additionalArguments;
-		this.fallbackToResolveByTypeIfNameNotFound = fallbackToResolveByTypeIfNameNotFound;
-		this.actualSelectorType = actualSelectorType;
+		_componentType = componentType;
+		_componentName = componentName;
+		_additionalArguments = additionalArguments;
+		_fallbackToResolveByTypeIfNameNotFound = fallbackToResolveByTypeIfNameNotFound;
+		_actualSelectorType = actualSelectorType;
 	}
 
 	/// <summary>Resolves the component(s) from given kernel.</summary>
@@ -49,11 +49,12 @@ public class TypedFactoryComponentResolver
 		if (LoadByName(kernel))
 			try
 			{
-				return kernel.Resolve(componentName, componentType, additionalArguments, scope);
+				return kernel.Resolve(_componentName, _componentType, _additionalArguments, scope);
 			}
 			catch (ComponentNotFoundException e)
 			{
-				if (actualSelectorType == typeof(DefaultDelegateComponentSelector) && fallbackToResolveByTypeIfNameNotFound == false)
+				if (_actualSelectorType == typeof(DefaultDelegateComponentSelector) &&
+				    _fallbackToResolveByTypeIfNameNotFound == false)
 				{
 					e.Data["breakingChangeId"] = "typedFactoryFallbackToResolveByTypeIfNameNotFound";
 					e.Data["breakingChange"] = "This exception may have been caused by a breaking change between Windsor 2.5 and 3.0 See breakingchanges.txt for more details.";
@@ -68,12 +69,13 @@ public class TypedFactoryComponentResolver
 
 		// Specifically, act the same as we would if the timing was slightly different and we were not
 		// resolving within the call stack of the random component’s constructor.
-		return kernel.Resolve(componentType, additionalArguments, scope, true);
+		return kernel.Resolve(_componentType, _additionalArguments, scope, true);
 	}
 
 	private bool LoadByName(IKernelInternal kernel)
 	{
-		if (componentName == null) return false;
-		return fallbackToResolveByTypeIfNameNotFound == false || kernel.LoadHandlerByName(componentName, componentType, additionalArguments) != null;
+		if (_componentName == null) return false;
+		return _fallbackToResolveByTypeIfNameNotFound == false ||
+		       kernel.LoadHandlerByName(_componentName, _componentType, _additionalArguments) != null;
 	}
 }

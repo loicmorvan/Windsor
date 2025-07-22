@@ -20,20 +20,11 @@ using Castle.Windsor.Core.Internal;
 
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
-public class DefaultsDescriptor : IComponentModelDescriptor
+public class DefaultsDescriptor(ComponentName name, Type implementation) : IComponentModelDescriptor
 {
-	private readonly Type implementation;
-	private readonly ComponentName name;
-
-	public DefaultsDescriptor(ComponentName name, Type implementation)
-	{
-		this.name = name;
-		this.implementation = implementation;
-	}
-
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
-		if (model.Implementation == null) model.Implementation = implementation ?? FirstService(model);
+		model.Implementation ??= implementation ?? FirstService(model);
 
 		EnsureComponentName(model);
 		EnsureComponentConfiguration(kernel, model);
@@ -52,7 +43,7 @@ public class DefaultsDescriptor : IComponentModelDescriptor
 			kernel.ConfigurationStore.AddComponentConfiguration(model.Name, configuration);
 		}
 
-		if (model.Configuration == null) model.Configuration = configuration;
+		model.Configuration ??= configuration;
 	}
 
 	private void EnsureComponentName(ComponentModel model)

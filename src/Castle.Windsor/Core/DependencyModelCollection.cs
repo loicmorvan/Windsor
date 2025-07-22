@@ -22,30 +22,30 @@ namespace Castle.Windsor.Core;
 
 /// <summary>Collection of <see cref = "DependencyModel" />.</summary>
 [Serializable]
-[DebuggerDisplay("Count = {dependencies.Count}")]
+[DebuggerDisplay("Count = {_dependencies.Count}")]
 public class DependencyModelCollection : IMutableCollection<DependencyModel>
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-	private readonly List<DependencyModel> dependencies = new();
+	private readonly List<DependencyModel> _dependencies = new();
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public int Count => dependencies.Count;
+	public int Count => _dependencies.Count;
 
 	[DebuggerStepThrough]
 	public IEnumerator<DependencyModel> GetEnumerator()
 	{
-		return dependencies.GetEnumerator();
+		return _dependencies.GetEnumerator();
 	}
 
 	public void Add(DependencyModel dependencyModel)
 	{
 		ArgumentNullException.ThrowIfNull(dependencyModel);
-		dependencies.Add(dependencyModel);
+		_dependencies.Add(dependencyModel);
 	}
 
 	public bool Remove(DependencyModel dependencyModel)
 	{
-		return dependencies.Remove(dependencyModel);
+		return _dependencies.Remove(dependencyModel);
 	}
 
 	[DebuggerStepThrough]

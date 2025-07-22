@@ -199,7 +199,7 @@ public class DefaultComponentInstaller : IComponentsInstaller
 			catch (ConverterException e)
 			{
 				throw new ComponentRegistrationException(
-					string.Format("Component {0} defines invalid forwarded type.", component.Attributes["id"]), e);
+					$"Component {component.Attributes["id"]} defines invalid forwarded type.", e);
 			}
 		}
 	}

@@ -54,11 +54,11 @@ public class ConfigurationParametersInspector : IContributeComponentModelConstru
 		InspectCollections(model);
 	}
 
-	private void AddAnyServiceOverrides(ComponentModel model, IConfiguration config, ParameterModel parameter)
+	private void AddAnyServiceOverrides(ComponentModel model, IConfiguration config)
 	{
 		foreach (var item in config.Children)
 		{
-			if (item.Children.Count > 0) AddAnyServiceOverrides(model, item, parameter);
+			if (item.Children.Count > 0) AddAnyServiceOverrides(model, item);
 
 			var componentName = ReferenceExpressionUtil.ExtractComponentName(item.Value);
 			if (componentName == null) continue;
@@ -72,7 +72,7 @@ public class ConfigurationParametersInspector : IContributeComponentModelConstru
 		{
 			if (parameter.ConfigValue != null)
 				if (IsArray(parameter) || IsList(parameter))
-					AddAnyServiceOverrides(model, parameter.ConfigValue, parameter);
+					AddAnyServiceOverrides(model, parameter.ConfigValue);
 
 			if (ReferenceExpressionUtil.IsReference(parameter.Value)) model.Dependencies.Add(new DependencyModel(parameter.Name, null, false));
 		}

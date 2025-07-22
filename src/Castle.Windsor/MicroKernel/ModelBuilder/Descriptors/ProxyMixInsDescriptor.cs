@@ -19,15 +19,8 @@ using Castle.Windsor.MicroKernel.Proxy;
 
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
-public class ProxyMixInsDescriptor : IComponentModelDescriptor
+public class ProxyMixInsDescriptor(IEnumerable<IReference<object>> mixIns) : IComponentModelDescriptor
 {
-	private readonly IEnumerable<IReference<object>> mixIns;
-
-	public ProxyMixInsDescriptor(IEnumerable<IReference<object>> mixIns)
-	{
-		this.mixIns = mixIns;
-	}
-
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
 		if (!mixIns.Any()) return;

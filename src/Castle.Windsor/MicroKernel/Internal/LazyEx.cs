@@ -13,40 +13,40 @@
 // limitations under the License.
 
 
-namespace Castle.Windsor.MicroKernel.Internal;
-
 using System;
+
+namespace Castle.Windsor.MicroKernel.Internal;
 
 public class LazyEx<T> : Lazy<T>, IDisposable
 {
-	private readonly IKernel kernel;
+	private readonly IKernel _kernel;
 
 	public LazyEx(IKernel kernel, Arguments arguments)
 		: base(() => kernel.Resolve<T>(arguments))
 	{
-		this.kernel = kernel;
+		_kernel = kernel;
 	}
 
 	public LazyEx(IKernel kernel, string overrideComponentName)
 		: base(() => kernel.Resolve<T>(overrideComponentName))
 	{
-		this.kernel = kernel;
+		_kernel = kernel;
 	}
 
 	public LazyEx(IKernel kernel, string overrideComponentName, Arguments arguments)
 		: base(() => kernel.Resolve<T>(overrideComponentName, arguments))
 	{
-		this.kernel = kernel;
+		_kernel = kernel;
 	}
 
 	public LazyEx(IKernel kernel)
 		: base(kernel.Resolve<T>)
 	{
-		this.kernel = kernel;
+		_kernel = kernel;
 	}
 
 	public void Dispose()
 	{
-		if (IsValueCreated) kernel.ReleaseComponent(Value);
+		if (IsValueCreated) _kernel.ReleaseComponent(Value);
 	}
 }

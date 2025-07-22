@@ -16,15 +16,8 @@ using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
-public class ReferenceDependencyDescriptor : IComponentModelDescriptor
+public class ReferenceDependencyDescriptor(IReference<object> dependency) : IComponentModelDescriptor
 {
-	private readonly IReference<object> dependency;
-
-	public ReferenceDependencyDescriptor(IReference<object> dependency)
-	{
-		this.dependency = dependency;
-	}
-
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
 		dependency.Attach(model);

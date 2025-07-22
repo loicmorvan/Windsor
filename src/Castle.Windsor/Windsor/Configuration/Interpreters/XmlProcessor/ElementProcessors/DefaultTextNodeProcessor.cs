@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
 using System.Text.RegularExpressions;
 using System.Xml;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 #if FEATURE_SYSTEM_CONFIGURATION
 	using System.Configuration;
 #endif
@@ -79,7 +79,7 @@ public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 					else
 #endif
 				{
-					throw new XmlProcessorException(string.Format("Required configuration property {0} not found", propKey));
+					throw new XmlProcessorException($"Required configuration property {propKey} not found");
 				}
 			}
 

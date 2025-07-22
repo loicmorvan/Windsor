@@ -12,11 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
+// ReSharper disable UnusedParameter.Local
 
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Handlers;
 using Castle.Windsor.MicroKernel.Registration;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests;
 
 public class SystemNullableTestCase : AbstractContainerTestCase
 {
@@ -50,9 +53,10 @@ public class SystemNullableTestCase : AbstractContainerTestCase
 			exception.Message);
 	}
 
+	[UsedImplicitly]
 	public sealed class DependencyFromContainer;
 
-	public sealed class ComponentWithNonOptionalNullableParameter
+	private sealed class ComponentWithNonOptionalNullableParameter
 	{
 		public ComponentWithNonOptionalNullableParameter(int? nonOptionalNullableParameter, DependencyFromContainer dependencyFromContainer)
 		{

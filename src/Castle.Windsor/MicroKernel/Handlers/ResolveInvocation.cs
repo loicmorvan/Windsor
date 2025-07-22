@@ -17,20 +17,14 @@ using Castle.Windsor.MicroKernel.Context;
 
 namespace Castle.Windsor.MicroKernel.Handlers;
 
-public class ResolveInvocation
+public class ResolveInvocation(CreationContext context, bool instanceRequired)
 {
-	private Action proceed;
-
-	public ResolveInvocation(CreationContext context, bool instanceRequired)
-	{
-		Context = context;
-		InstanceRequired = instanceRequired;
-	}
+	private Action _proceed;
 
 	public Burden Burden { get; set; }
 
-	public CreationContext Context { get; private set; }
-	public bool InstanceRequired { get; private set; }
+	public CreationContext Context { get; private set; } = context;
+	public bool InstanceRequired { get; private set; } = instanceRequired;
 
 	public object ResolvedInstance { get; set; }
 
@@ -38,7 +32,7 @@ public class ResolveInvocation
 
 	public void Proceed()
 	{
-		proceed.Invoke();
+		_proceed.Invoke();
 	}
 
 	public void RequireDecommission()
@@ -48,6 +42,6 @@ public class ResolveInvocation
 
 	internal void SetProceedDelegate(Action value)
 	{
-		proceed = value;
+		_proceed = value;
 	}
 }

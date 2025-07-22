@@ -64,7 +64,7 @@ public class InterceptorInspector : IContributeComponentModelConstruction
 		var hookComponent = ReferenceExpressionUtil.ExtractComponentName(hook);
 		if (hookComponent == null)
 			throw new Exception(
-				string.Format("The value for the hook must be a reference to a component (Currently {0})", hook));
+				$"The value for the hook must be a reference to a component (Currently {hook})");
 
 		options.Hook = new ComponentReference<IProxyGenerationHook>(hookComponent);
 	}
@@ -77,7 +77,7 @@ public class InterceptorInspector : IContributeComponentModelConstruction
 		var selectorComponent = ReferenceExpressionUtil.ExtractComponentName(selector);
 		if (selectorComponent == null)
 			throw new Exception(
-				string.Format("The value for the selector must be a reference to a component (Currently {0})", selector));
+				$"The value for the selector must be a reference to a component (Currently {selector})");
 
 		options.Selector = new ComponentReference<IInterceptorSelector>(selectorComponent);
 	}
@@ -89,7 +89,7 @@ public class InterceptorInspector : IContributeComponentModelConstruction
 			var interceptorComponent = ReferenceExpressionUtil.ExtractComponentName(interceptor.Value);
 			if (interceptorComponent == null)
 				throw new Exception(
-					string.Format("The value for the interceptor must be a reference to a component (Currently {0})", interceptor.Value));
+					$"The value for the interceptor must be a reference to a component (Currently {interceptor.Value})");
 
 			var reference = new InterceptorReference(interceptorComponent);
 

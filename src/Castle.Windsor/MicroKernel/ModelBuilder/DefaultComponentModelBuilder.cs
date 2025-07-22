@@ -23,22 +23,22 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder;
 
 /// <summary>Summary description for DefaultComponentModelBuilder.</summary>
 [Serializable]
-public class DefaultComponentModelBuilder : IComponentModelBuilder
+public sealed class DefaultComponentModelBuilder : IComponentModelBuilder
 {
-	private readonly List<IContributeComponentModelConstruction> contributors = new();
-	private readonly IKernel kernel;
+	private readonly List<IContributeComponentModelConstruction> _contributors = new();
+	private readonly IKernel _kernel;
 
 	/// <summary>Initializes a new instance of the <see cref = "DefaultComponentModelBuilder" /> class.</summary>
 	/// <param name = "kernel">The kernel.</param>
 	public DefaultComponentModelBuilder(IKernel kernel)
 	{
-		this.kernel = kernel;
+		_kernel = kernel;
 		InitializeContributors();
 	}
 
 	/// <summary>Gets the contributors.</summary>
 	/// <value>The contributors.</value>
-	public IContributeComponentModelConstruction[] Contributors => contributors.ToArray();
+	public IContributeComponentModelConstruction[] Contributors => _contributors.ToArray();
 
 	/// <summary>
 	///     "To give or supply in common with others; give to a common fund or for a common purpose". The contributor should inspect the component, or even the configuration associated with the component, to
@@ -47,14 +47,14 @@ public class DefaultComponentModelBuilder : IComponentModelBuilder
 	/// <param name = "contributor"></param>
 	public void AddContributor(IContributeComponentModelConstruction contributor)
 	{
-		contributors.Add(contributor);
+		_contributors.Add(contributor);
 	}
 
 	/// <summary>Constructs a new ComponentModel by invoking the registered contributors.</summary>
 	public ComponentModel BuildModel(ComponentName name, Type[] services, Type classType, Arguments extendedProperties)
 	{
 		var model = new ComponentModel(name, services, classType, extendedProperties);
-		contributors.ForEach(c => c.ProcessModel(kernel, model));
+		_contributors.ForEach(c => c.ProcessModel(_kernel, model));
 
 		return model;
 	}
@@ -62,18 +62,17 @@ public class DefaultComponentModelBuilder : IComponentModelBuilder
 	public ComponentModel BuildModel(IComponentModelDescriptor[] customContributors)
 	{
 		var model = new ComponentModel();
-		customContributors.ForEach(c => c.BuildComponentModel(kernel, model));
+		customContributors.ForEach(c => c.BuildComponentModel(_kernel, model));
 
-		contributors.ForEach(c => c.ProcessModel(kernel, model));
+		_contributors.ForEach(c => c.ProcessModel(_kernel, model));
 
 		var metaDescriptors = default(ICollection<IMetaComponentModelDescriptor>);
 		customContributors.ForEach(c =>
 		{
-			c.ConfigureComponentModel(kernel, model);
-			var meta = c as IMetaComponentModelDescriptor;
-			if (meta != null)
+			c.ConfigureComponentModel(_kernel, model);
+			if (c is IMetaComponentModelDescriptor meta)
 			{
-				if (metaDescriptors == null) metaDescriptors = model.GetMetaDescriptors(true);
+				metaDescriptors ??= model.GetMetaDescriptors(true);
 				metaDescriptors.Add(meta);
 			}
 		});
@@ -84,13 +83,13 @@ public class DefaultComponentModelBuilder : IComponentModelBuilder
 	/// <param name = "contributor"></param>
 	public void RemoveContributor(IContributeComponentModelConstruction contributor)
 	{
-		contributors.Remove(contributor);
+		_contributors.Remove(contributor);
 	}
 
 	/// <summary>Initializes the default contributors.</summary>
-	protected virtual void InitializeContributors()
+	private void InitializeContributors()
 	{
-		var conversionManager = kernel.GetConversionManager();
+		var conversionManager = _kernel.GetConversionManager();
 		AddContributor(new GenericInspector());
 		AddContributor(new ConfigurationModelInspector());
 		AddContributor(new ConfigurationParametersInspector());

@@ -42,7 +42,7 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
 #endif
 		BindingFlags.IgnoreCase;
 
-	private ITypeConverter converter;
+	private ITypeConverter _converter;
 
 	protected virtual bool ShouldUseMetaModel => false;
 
@@ -81,8 +81,8 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
 
 				if (methods.Count == 0)
 				{
-					var message = string.Format("The class {0} has tried to expose configuration for " +
-					                            "a method named {1} which could not be found.", model.Implementation.FullName, name);
+					var message = $"The class {model.Implementation.FullName} has tried to expose configuration for " +
+					              $"a method named {name} which could not be found.";
 
 					throw new Exception(message);
 				}
@@ -112,9 +112,9 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
 	{
 		if (name == null)
 		{
-			var message = string.Format("The configuration nodes within 'methods' " +
-			                            "for the component '{0}' does not have a name. You can either name " +
-			                            "the node as the method name or provide an attribute 'name'", model.Name);
+			var message = "The configuration nodes within 'methods' " +
+			              $"for the component '{model.Name}' does not have a name. You can either name " +
+			              "the node as the method name or provide an attribute 'name'";
 
 			throw new Exception(message);
 		}
@@ -129,13 +129,12 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
 		foreach (var param in parameters)
 			try
 			{
-				types.Add(converter.PerformConversion<Type>(param));
+				types.Add(_converter.PerformConversion<Type>(param));
 			}
 			catch (Exception)
 			{
-				var message = string.Format("The signature {0} contains an entry type {1} " +
-				                            "that could not be converted to System.Type. Check the inner exception for " +
-				                            "details", signature, param);
+				var message = $"The signature {signature} contains an entry type {param} " +
+				              "that could not be converted to System.Type. Check the inner exception for " + "details";
 
 				throw new Exception(message);
 			}
@@ -145,9 +144,9 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
 
 	private void EnsureHasReferenceToConverter(IKernel kernel)
 	{
-		if (converter != null) return;
+		if (_converter != null) return;
 
-		converter = (ITypeConverter)
+		_converter = (ITypeConverter)
 			kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
 	}
 
@@ -168,7 +167,7 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
 
 		var methodInfo = implementation.GetMethod(name, AllMethods, null, ConvertSignature(signature), null);
 
-		if (methodInfo == null) return new MethodInfo[0];
+		if (methodInfo == null) return Array.Empty<MethodInfo>();
 
 		return new List<MethodInfo> { methodInfo };
 	}

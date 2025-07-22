@@ -23,8 +23,8 @@ namespace Castle.Windsor.MicroKernel.Lifestyle;
 [Serializable]
 public class SingletonLifestyleManager : AbstractLifestyleManager, IContextLifestyleManager
 {
-	private readonly ThreadSafeInit init = new();
-	private Burden cachedBurden;
+	private readonly ThreadSafeInit _init = new();
+	private Burden _cachedBurden;
 
 	public object GetContextInstance(CreationContext context)
 	{
@@ -33,31 +33,31 @@ public class SingletonLifestyleManager : AbstractLifestyleManager, IContextLifes
 
 	public override void Dispose()
 	{
-		var localInstance = cachedBurden;
+		var localInstance = _cachedBurden;
 		if (localInstance != null)
 		{
 			localInstance.Release();
-			cachedBurden = null;
+			_cachedBurden = null;
 		}
 	}
 
 	public override object Resolve(CreationContext context, IReleasePolicy releasePolicy)
 	{
 		// 1. read from cache
-		if (cachedBurden != null) return cachedBurden.Instance;
+		if (_cachedBurden != null) return _cachedBurden.Instance;
 		var initializing = false;
 		try
 		{
-			initializing = init.ExecuteThreadSafeOnce();
-			if (cachedBurden != null) return cachedBurden.Instance;
+			initializing = _init.ExecuteThreadSafeOnce();
+			if (_cachedBurden != null) return _cachedBurden.Instance;
 			var burden = CreateInstance(context, true);
-			cachedBurden = burden;
+			_cachedBurden = burden;
 			Track(burden, releasePolicy);
 			return burden.Instance;
 		}
 		finally
 		{
-			if (initializing) init.EndThreadSafeOnceSection();
+			if (initializing) _init.EndThreadSafeOnceSection();
 		}
 	}
 }

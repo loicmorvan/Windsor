@@ -26,45 +26,45 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class ServiceOverrideDescriptor : AbstractPropertyDescriptor
 {
-	private readonly object value;
+	private readonly object _value;
 
 	public ServiceOverrideDescriptor(params ServiceOverride[] overrides)
 	{
-		value = overrides;
+		_value = overrides;
 	}
 
 	public ServiceOverrideDescriptor(IDictionary dictionary)
 	{
-		value = dictionary;
+		_value = dictionary;
 	}
 
 	public override void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
-		var dictionary = value as IDictionary;
-		if (dictionary != null)
+		if (_value is IDictionary dictionary)
 			foreach (DictionaryEntry property in dictionary)
 				Apply(model, property.Key, property.Value, null);
 
-		var overrides = value as ServiceOverride[];
-		if (overrides != null) overrides.ForEach(o => Apply(model, o.DependencyKey, o.Value, o));
+		if (_value is ServiceOverride[] overrides) overrides.ForEach(o => Apply(model, o.DependencyKey, o.Value, o));
 	}
 
 	private void Apply(ComponentModel model, object dependencyKey, object dependencyValue, ServiceOverride @override)
 	{
-		if (dependencyValue is string)
-			ApplySimpleReference(model, dependencyKey, (string)dependencyValue);
-		else if (dependencyValue is IEnumerable<string>)
-			ApplyReferenceList(model, dependencyKey, (IEnumerable<string>)dependencyValue, @override);
-		else if (dependencyValue is Type)
-			ApplySimpleReference(model, dependencyKey, ComponentName.DefaultNameFor((Type)dependencyValue));
-		else if (dependencyValue is IEnumerable<Type>) ApplyReferenceList(model, dependencyKey, ((IEnumerable<Type>)dependencyValue).Select(ComponentName.DefaultNameFor), @override);
+		if (dependencyValue is string value)
+			ApplySimpleReference(model, dependencyKey, value);
+		else if (dependencyValue is IEnumerable<string> enumerable)
+			ApplyReferenceList(model, dependencyKey, enumerable, @override);
+		else if (dependencyValue is Type type)
+			ApplySimpleReference(model, dependencyKey, ComponentName.DefaultNameFor(type));
+		else if (dependencyValue is IEnumerable<Type> types)
+			ApplyReferenceList(model, dependencyKey, types.Select(ComponentName.DefaultNameFor), @override);
 	}
 
 	private void ApplyReferenceList(ComponentModel model, object name, IEnumerable<string> items, ServiceOverride serviceOverride)
 	{
 		var list = new MutableConfiguration("list");
 
-		if (serviceOverride != null && serviceOverride.Type != null) list.Attributes.Add("type", serviceOverride.Type.AssemblyQualifiedName);
+		if (serviceOverride is { Type: not null })
+			list.Attributes.Add("type", serviceOverride.Type.AssemblyQualifiedName);
 
 		foreach (var item in items)
 		{
@@ -83,7 +83,7 @@ public class ServiceOverrideDescriptor : AbstractPropertyDescriptor
 
 	private string GetNameString(object key)
 	{
-		if (key is Type) return ((Type)key).AssemblyQualifiedName;
+		if (key is Type type) return type.AssemblyQualifiedName;
 
 		return key.ToString();
 	}

@@ -172,8 +172,7 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 			Container.Resolve<HasInternalConstructor>());
 		var message =
 #if !FEATURE_REMOTING
-			string.Format("Type {0} does not have a public default constructor and could not be instantiated.",
-				typeof(HasInternalConstructor).FullName);
+			$"Type {typeof(HasInternalConstructor).FullName} does not have a public default constructor and could not be instantiated.";
 
 		exception = exception.InnerException;
 #else
@@ -197,8 +196,7 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 		Exception exception = Assert.Throws<ComponentActivatorException>(() => Container.Resolve<HasProtectedConstructor>());
 		var message =
 #if !FEATURE_REMOTING
-			string.Format("Type {0} does not have a public default constructor and could not be instantiated.",
-				typeof(HasProtectedConstructor).FullName);
+			$"Type {typeof(HasProtectedConstructor).FullName} does not have a public default constructor and could not be instantiated.";
 		exception = exception.InnerException;
 #else
 				string.Format(
@@ -225,7 +223,7 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 		                            "Alternatively consider making the setter non-public.",
 			Environment.NewLine,
 			typeof(PropertySetterThrows),
-			typeof(DoNotWireAttribute).Name);
+			nameof(DoNotWireAttribute));
 
 		Assert.Equal(message, exception.Message);
 	}

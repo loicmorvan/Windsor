@@ -48,7 +48,7 @@ public abstract class AbstractProxyFactory : IProxyFactory
 		if (model.HasInterceptors) return true;
 
 		var options = model.ObtainProxyOptions(false);
-		if (options != null && options.RequiresProxy) return true;
+		if (options is { RequiresProxy: true }) return true;
 		if (selectors != null && selectors.Any(s => s.HasInterceptors(model))) return true;
 
 		return false;
@@ -92,7 +92,7 @@ public abstract class AbstractProxyFactory : IProxyFactory
 				{
 					var message = string.Format(
 						"An interceptor registered for {0} doesn't implement the {1} interface",
-						model.Name, typeof(IInterceptor).Name);
+						model.Name, nameof(IInterceptor));
 
 					throw new DependencyResolverException(message);
 				}

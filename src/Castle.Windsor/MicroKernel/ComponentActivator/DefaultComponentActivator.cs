@@ -275,7 +275,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
 						property.Property.Name,
 						instance.GetType().Name,
 						Model.Name,
-						typeof(DoNotWireAttribute).Name,
+						nameof(DoNotWireAttribute),
 						Environment.NewLine);
 				throw new ComponentActivatorException(message, ex, Model);
 			}
@@ -293,7 +293,9 @@ public class DefaultComponentActivator : AbstractComponentActivator
 			catch (Exception e)
 			{
 				if (property.Dependency.IsOptional == false) throw;
-				Kernel.Logger.Warn(string.Format("Exception when resolving optional dependency {0} on component {1}.", property.Dependency, Model.Name), e);
+				Kernel.Logger.Warn(
+					$"Exception when resolving optional dependency {property.Dependency} on component {Model.Name}.",
+					e);
 			}
 
 		return null;

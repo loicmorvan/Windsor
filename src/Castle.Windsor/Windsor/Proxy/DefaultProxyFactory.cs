@@ -133,14 +133,14 @@ public class DefaultProxyFactory : AbstractProxyFactory, IDeserializationCallbac
 		if (proxyOptions.Hook != null)
 		{
 			var hook = proxyOptions.Hook.Resolve(kernel, context);
-			if (hook != null && hook is IOnBehalfAware) ((IOnBehalfAware)hook).SetInterceptedComponentModel(model);
+			if (hook is IOnBehalfAware) ((IOnBehalfAware)hook).SetInterceptedComponentModel(model);
 			proxyGenOptions.Hook = hook;
 		}
 
 		if (proxyOptions.Selector != null)
 		{
 			var selector = proxyOptions.Selector.Resolve(kernel, context);
-			if (selector != null && selector is IOnBehalfAware) ((IOnBehalfAware)selector).SetInterceptedComponentModel(model);
+			if (selector is IOnBehalfAware) ((IOnBehalfAware)selector).SetInterceptedComponentModel(model);
 			proxyGenOptions.Selector = selector;
 		}
 #if FEATURE_REMOTING

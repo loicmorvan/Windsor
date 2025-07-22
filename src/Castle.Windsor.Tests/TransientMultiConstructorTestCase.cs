@@ -17,6 +17,8 @@ using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 
+// ReSharper disable UnusedParameter.Local
+
 namespace Castle.Windsor.Tests;
 
 public class TransientMultiConstructorTestCase
@@ -27,11 +29,9 @@ public class TransientMultiConstructorTestCase
 		var container = new DefaultKernel();
 		((IKernel)container).Register(Component.For(typeof(AnyClass)).Named("AnyClass"));
 
-		var arguments1 = new Arguments();
-		arguments1.Add("integer", 1);
+		var arguments1 = new Arguments { { "integer", 1 } };
 
-		var arguments2 = new Arguments();
-		arguments2.Add("datetime", DateTime.Now.AddDays(1));
+		var arguments2 = new Arguments { { "datetime", DateTime.Now.AddDays(1) } };
 
 		var a = container.Resolve(typeof(AnyClass), arguments1);
 		var b = container.Resolve(typeof(AnyClass), arguments2);
@@ -47,11 +47,9 @@ public class TransientMultiConstructorTestCase
 		var one = new Tester1("AnyString");
 		var two = new Tester2(1);
 
-		var arguments1 = new Arguments();
-		arguments1.Add("test1", one);
+		var arguments1 = new Arguments { { "test1", one } };
 
-		var arguments2 = new Arguments();
-		arguments2.Add("test2", two);
+		var arguments2 = new Arguments { { "test2", two } };
 
 		var a = container.Resolve(typeof(AnyClassWithReference), arguments1);
 		var b = container.Resolve(typeof(AnyClassWithReference), arguments2);
@@ -79,24 +77,14 @@ public class AnyClass
 	}
 }
 
-public class Tester1
+public class Tester1(string bar)
 {
-	public string bar;
-
-	public Tester1(string bar)
-	{
-		this.bar = bar;
-	}
+	public string Bar = bar;
 }
 
-public class Tester2
+public class Tester2(int foo)
 {
-	public int foo;
-
-	public Tester2(int foo)
-	{
-		this.foo = foo;
-	}
+	public int Foo = foo;
 }
 
 [Transient]

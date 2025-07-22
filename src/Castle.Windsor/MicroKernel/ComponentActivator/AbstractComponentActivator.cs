@@ -72,7 +72,8 @@ public abstract class AbstractComponentActivator : IComponentActivator
 		instance = ProxyUtil.GetUnproxiedInstance(instance);
 		if (instance == null)
 			// see http://issues.castleproject.org/issue/IOC-332 for details
-			throw new NotSupportedException(string.Format("Can not apply commission concerns to component {0} because it appears to be a target-less proxy. Currently those are not supported.", Model.Name));
+			throw new NotSupportedException(
+				$"Can not apply commission concerns to component {Model.Name} because it appears to be a target-less proxy. Currently those are not supported.");
 		ApplyConcerns(Model.Lifecycle.CommissionConcerns, instance);
 	}
 

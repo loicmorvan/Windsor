@@ -16,26 +16,22 @@ using Castle.DynamicProxy;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Interceptor;
 using Castle.Windsor.MicroKernel;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Facilities.TypedFactory.Internal;
 
 /// <summary>Legacy interceptor for old impl. of the facility.</summary>
 [Transient]
-public class FactoryInterceptor : IInterceptor, IOnBehalfAware
+[UsedImplicitly]
+public class FactoryInterceptor(IKernel kernel) : IInterceptor, IOnBehalfAware
 {
-	private readonly IKernel kernel;
-	private FactoryEntry entry;
-
-	public FactoryInterceptor(IKernel kernel)
-	{
-		this.kernel = kernel;
-	}
+	private FactoryEntry _entry;
 
 	public void Intercept(IInvocation invocation)
 	{
 		var name = invocation.Method.Name;
 		var args = invocation.Arguments;
-		if (name.Equals(entry.CreationMethod))
+		if (name.Equals(_entry.CreationMethod))
 		{
 			if (args.Length == 0 || args[0] == null)
 			{
@@ -48,7 +44,7 @@ public class FactoryInterceptor : IInterceptor, IOnBehalfAware
 			return;
 		}
 
-		if (name.Equals(entry.DestructionMethod))
+		if (name.Equals(_entry.DestructionMethod))
 			if (args.Length == 1)
 			{
 				kernel.ReleaseComponent(args[0]);
@@ -61,6 +57,6 @@ public class FactoryInterceptor : IInterceptor, IOnBehalfAware
 
 	public void SetInterceptedComponentModel(ComponentModel target)
 	{
-		entry = (FactoryEntry)target.ExtendedProperties["typed.fac.entry"];
+		_entry = (FactoryEntry)target.ExtendedProperties["typed.fac.entry"];
 	}
 }

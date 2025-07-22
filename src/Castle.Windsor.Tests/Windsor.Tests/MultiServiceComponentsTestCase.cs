@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Windsor.Tests;
-
 using System.Linq;
-
 using Castle.Windsor.MicroKernel.Registration;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.Windsor.Tests;
 
 public class MultiServiceComponentsTestCase : AbstractContainerTestCase
 {
@@ -118,25 +118,26 @@ public class MultiServiceComponentsTestCase : AbstractContainerTestCase
 		Assert.Single(repos);
 	}
 
-	public interface IRepository;
+	private interface IRepository;
 
-	public interface IRepository<T> : IRepository;
+	// ReSharper disable once UnusedTypeParameter
+	private interface IRepository<T> : IRepository;
 
-	public interface IUserRepository : IRepository<User>;
+	private interface IUserRepository : IRepository<User>;
 
 	public class MyRepository : IUserRepository;
 
+	[UsedImplicitly]
 	public class User;
 
-	public class MyRepository2 : IUserRepository
-	{
-		public MyRepository2(User user)
-		{
-		}
-	}
+#pragma warning disable CS9113
+	public class MyRepository2(User user) : IUserRepository;
+#pragma warning restore CS9113
 
-	public class ServiceUsingRepository
+	[UsedImplicitly]
+	private class ServiceUsingRepository
 	{
+		// ReSharper disable once UnusedParameter.Local
 		public ServiceUsingRepository(IRepository repos)
 		{
 		}

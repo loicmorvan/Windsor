@@ -12,8 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// ReSharper disable UnusedParameter.Local
+// ReSharper disable UnusedMember.Global
+
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.ClassComponents;
 
+[UsedImplicitly]
 public class HasTwoConstructors4
 {
 	public HasTwoConstructors4(string text, SimpleComponent1 x, SimpleComponent2 y)

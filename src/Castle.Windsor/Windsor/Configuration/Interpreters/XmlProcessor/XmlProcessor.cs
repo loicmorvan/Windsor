@@ -62,7 +62,7 @@ public class XmlProcessor
 		}
 		catch (Exception ex)
 		{
-			var message = string.Format("Error processing node {0}, inner content {1}", node.Name, node.InnerXml);
+			var message = $"Error processing node {node.Name}, inner content {node.InnerXml}";
 
 			throw new ConfigurationProcessingException(message, ex);
 		}
@@ -95,7 +95,7 @@ public class XmlProcessor
 		}
 		catch (Exception ex)
 		{
-			var message = string.Format("Error processing node resource {0}", resource);
+			var message = $"Error processing node resource {resource}";
 
 			throw new ConfigurationProcessingException(message, ex);
 		}

@@ -21,7 +21,7 @@ namespace Castle.Windsor.Tests.Registration.Interceptors.Multiple;
 
 public class InterceptorReferenceAnywhereMultipleCall : InterceptorsTestCaseHelper
 {
-	public override IRegistration RegisterInterceptors<S>(ComponentRegistration<S> registration)
+	public override IRegistration RegisterInterceptors<TS>(ComponentRegistration<TS> registration)
 	{
 		return registration.Interceptors(new InterceptorReference(typeof(TestInterceptor1))).Anywhere
 			.Interceptors(new InterceptorReference(typeof(TestInterceptor2))).Anywhere;

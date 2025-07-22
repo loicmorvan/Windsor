@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core.Internal;
-
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-public class ComponentServicesUtil
+namespace Castle.Windsor.Core.Internal;
+
+public static class ComponentServicesUtil
 {
-	private static readonly TypeByInheritanceDepthMostSpecificFirstComparer comparer = new();
+	private static readonly TypeByInheritanceDepthMostSpecificFirstComparer Comparer = new();
 
 	public static void AddService(IList<Type> existingServices, HashSet<Type> lookup, Type newService)
 	{
@@ -34,7 +34,7 @@ public class ComponentServicesUtil
 
 		if (newService.GetTypeInfo().IsClass == false)
 			throw new ArgumentException(
-				string.Format("Type {0} is not a class nor an interface, and those are the only values allowed.", newService));
+				$"Type {newService} is not a class nor an interface, and those are the only values allowed.");
 		var count = existingServices.Count;
 		for (var i = 0; i < count; i++)
 		{
@@ -44,7 +44,7 @@ public class ComponentServicesUtil
 				lookup.Add(newService);
 			}
 
-			var result = comparer.Compare(newService, existingServices[i]);
+			var result = Comparer.Compare(newService, existingServices[i]);
 			if (result < 0)
 			{
 				existingServices.Insert(i, newService);

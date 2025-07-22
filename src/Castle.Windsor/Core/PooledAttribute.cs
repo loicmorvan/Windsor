@@ -12,25 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core;
-
 using System;
+
+namespace Castle.Windsor.Core;
 
 /// <summary>Indicates that the target components wants a pooled lifestyle.</summary>
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class PooledAttribute : LifestyleAttribute
 {
-	private static readonly int Initial_PoolSize = 5;
-	private static readonly int Max_PoolSize = 15;
-
-	/// <summary>Initializes a new instance of the <see cref = "PooledAttribute" /> class using the default initial pool size (5) and the max pool size (15).</summary>
-	public PooledAttribute() : this(Initial_PoolSize, Max_PoolSize)
+	/// <summary>
+	///     Initializes a new instance of the <see cref="PooledAttribute" /> class using the default initial pool size (5)
+	///     and the max pool size (15).
+	/// </summary>
+	public PooledAttribute() : this(5, 15)
 	{
 	}
 
-	/// <summary>Initializes a new instance of the <see cref = "PooledAttribute" /> class.</summary>
-	/// <param name = "initialPoolSize">Initial size of the pool.</param>
-	/// <param name = "maxPoolSize">Max pool size.</param>
+	/// <summary>Initializes a new instance of the <see cref="PooledAttribute" /> class.</summary>
+	/// <param name="initialPoolSize">Initial size of the pool.</param>
+	/// <param name="maxPoolSize">Max pool size.</param>
 	public PooledAttribute(int initialPoolSize, int maxPoolSize) : base(LifestyleType.Pooled)
 	{
 		InitialPoolSize = initialPoolSize;

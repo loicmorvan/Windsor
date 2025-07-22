@@ -18,28 +18,22 @@ using Castle.Windsor.Core;
 namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
 /// <remarks>This class is not thread safe like CallContextLifetimeScope.</remarks>
-public class DefaultLifetimeScope : ILifetimeScope
+public class DefaultLifetimeScope(IScopeCache scopeCache = null, Action<Burden> onAfterCreated = null)
+	: ILifetimeScope
 {
-	private static readonly Action<Burden> emptyOnAfterCreated = delegate { };
-	private readonly Action<Burden> onAfterCreated;
-	private readonly IScopeCache scopeCache;
-
-	public DefaultLifetimeScope(IScopeCache scopeCache = null, Action<Burden> onAfterCreated = null)
-	{
-		this.scopeCache = scopeCache ?? new ScopeCache();
-		this.onAfterCreated = onAfterCreated ?? emptyOnAfterCreated;
-	}
+	private static readonly Action<Burden> EmptyOnAfterCreated = delegate { };
+	private readonly Action<Burden> _onAfterCreated = onAfterCreated ?? EmptyOnAfterCreated;
+	private readonly IScopeCache _scopeCache = scopeCache ?? new ScopeCache();
 
 	public void Dispose()
 	{
-		var disposableCache = scopeCache as IDisposable;
-		if (disposableCache != null) disposableCache.Dispose();
+		if (_scopeCache is IDisposable disposableCache) disposableCache.Dispose();
 	}
 
 	public Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance)
 	{
-		var burden = scopeCache[model];
-		if (burden == null) scopeCache[model] = burden = createInstance(onAfterCreated);
+		var burden = _scopeCache[model];
+		if (burden == null) _scopeCache[model] = burden = createInstance(_onAfterCreated);
 		return burden;
 	}
 }

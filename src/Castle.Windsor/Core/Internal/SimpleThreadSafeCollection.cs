@@ -9,49 +9,48 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core.Internal;
-
 using System.Collections.Generic;
-
 using Castle.Windsor.MicroKernel.Internal;
+
+namespace Castle.Windsor.Core.Internal;
 
 public class SimpleThreadSafeCollection<T>
 {
-	private readonly List<T> implementation = new();
-	private readonly Lock @lock = Lock.Create();
+	private readonly List<T> _implementation = [];
+	private readonly Lock _lock = Lock.Create();
 
 	public int Count
 	{
 		get
 		{
-			using (@lock.ForReading())
+			using (_lock.ForReading())
 			{
-				return implementation.Count;
+				return _implementation.Count;
 			}
 		}
 	}
 
 	public void Add(T item)
 	{
-		using (@lock.ForWriting())
+		using (_lock.ForWriting())
 		{
-			implementation.Add(item);
+			_implementation.Add(item);
 		}
 	}
 
 	public bool Remove(T item)
 	{
-		using (@lock.ForWriting())
+		using (_lock.ForWriting())
 		{
-			return implementation.Remove(item);
+			return _implementation.Remove(item);
 		}
 	}
 
 	public T[] ToArray()
 	{
-		using (@lock.ForReading())
+		using (_lock.ForReading())
 		{
-			return implementation.ToArray();
+			return _implementation.ToArray();
 		}
 	}
 }
