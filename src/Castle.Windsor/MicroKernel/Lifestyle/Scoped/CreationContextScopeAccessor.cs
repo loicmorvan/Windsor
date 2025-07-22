@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
-
 using System;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Context;
+
+namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
 public class CreationContextScopeAccessor : IScopeAccessor
 {

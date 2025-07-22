@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel;
-
 using System;
-
 using Castle.Windsor.Core;
+
+namespace Castle.Windsor.MicroKernel;
 
 /// <summary>Policy managing lifetime of components, and in particular their release process.</summary>
 public interface IReleasePolicy : IDisposable

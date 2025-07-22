@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
 using Castle.Core;
 using Castle.Windsor.Windsor;
+
+namespace Castle.Windsor.MicroKernel;
 
 /// <summary>
 ///     Represents a collection of named and typed arguments used for dependencies resolved via <see cref = "IWindsorContainer.Resolve{T}(Castle.Windsor.MicroKernel.Arguments)" /> See:

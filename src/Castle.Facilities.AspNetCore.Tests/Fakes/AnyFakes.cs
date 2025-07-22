@@ -13,16 +13,13 @@
 // limitations under the License.
 
 
-namespace Castle.Facilities.AspNetCore.Tests.Fakes;
-
 using System;
 using System.Threading.Tasks;
-
 using Castle.Windsor.MicroKernel.Lifestyle;
-
 using JetBrains.Annotations;
-
 using Microsoft.AspNetCore.Http;
+
+namespace Castle.Facilities.AspNetCore.Tests.Fakes;
 
 public class AnyComponent;
 

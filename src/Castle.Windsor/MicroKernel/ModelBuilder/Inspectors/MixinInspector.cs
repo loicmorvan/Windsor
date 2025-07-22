@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Proxy;
 using Castle.Windsor.MicroKernel.Util;
+
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 
 [Serializable]
 public class MixinInspector : IContributeComponentModelConstruction

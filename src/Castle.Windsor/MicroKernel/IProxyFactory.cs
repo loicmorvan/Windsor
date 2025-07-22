@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Proxy;
+
+namespace Castle.Windsor.MicroKernel;
 
 /// <summary>
 ///     Defines the contract used by the kernel to obtain proxies for components. The implementor must return a proxied instance that dispatch the invocation to the registered interceptors in the

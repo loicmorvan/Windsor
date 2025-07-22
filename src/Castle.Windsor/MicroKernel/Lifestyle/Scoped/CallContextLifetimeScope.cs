@@ -12,6 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Security;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Internal;
+
 namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
 #if FEATURE_REMOTING
@@ -20,14 +27,7 @@ namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 #if !FEATURE_REMOTING
 using System.Threading;
 #endif
-using System;
-using System.Collections.Concurrent;
-using System.Diagnostics;
-using System.Security;
-
-using Castle.Windsor.Core;
-
-using Lock = Castle.Windsor.MicroKernel.Internal.Lock;
+using Lock = Lock;
 
 /// <summary>Provides explicit lifetime scoping within logical path of execution. Used for types with <see cref = "LifestyleType.Scoped" />.</summary>
 /// <remarks>

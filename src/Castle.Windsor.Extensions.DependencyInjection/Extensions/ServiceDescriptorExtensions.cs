@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Windsor.MicroKernel.Registration;
+using ServiceDescriptor = Microsoft.Extensions.DependencyInjection.ServiceDescriptor;
+
 namespace Castle.Windsor.Extensions.DependencyInjection.Extensions
 {
-	using Castle.Windsor.MicroKernel.Registration;
-
-	using ServiceDescriptor = Microsoft.Extensions.DependencyInjection.ServiceDescriptor;
+	using ServiceDescriptor = ServiceDescriptor;
 
 	public static class ServiceDescriptorExtensions
 	{

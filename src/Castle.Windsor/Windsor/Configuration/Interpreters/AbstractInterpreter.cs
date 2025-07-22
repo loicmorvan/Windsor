@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Configuration.Interpreters;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.Core.Configuration;
 using Castle.Core.Resource;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.SubSystems.Configuration;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters;
 
 /// <summary>Provides common methods for those who wants to implement <see cref = "IConfigurationInterpreter" /></summary>
 public abstract class AbstractInterpreter : IConfigurationInterpreter

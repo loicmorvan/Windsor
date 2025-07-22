@@ -12,15 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs;
-
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
+using JetBrains.Annotations;
 
-public class IoC_102
+namespace Castle.Windsor.Tests.Bugs;
+
+public class IoC102
 {
 	[Fact]
-	public void ComponentResolutionOrderForKernelAndDpendencyResolverIsTheSame()
+	public void ComponentResolutionOrderForKernelAndDependencyResolverIsTheSame()
 	{
 		var container = new WindsorContainer()
 			.Register(
@@ -57,13 +58,9 @@ public class IoC_102
 		}
 	}
 
-	public class Consumer
+	[UsedImplicitly]
+	public class Consumer(IReader reader)
 	{
-		public IReader Reader;
-
-		public Consumer(IReader reader)
-		{
-			Reader = reader;
-		}
+		public readonly IReader Reader = reader;
 	}
 }

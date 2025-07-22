@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Registration;
-
 using System;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Core.Internal;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
+
+namespace Castle.Windsor.Tests.Registration;
 
 public class AllTypesTestCase : AbstractContainerTestCase
 {

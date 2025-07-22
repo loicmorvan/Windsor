@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Proxies;
-
 using System;
 using System.Linq;
-
 using Castle.Core;
 using Castle.DynamicProxy;
 using Castle.Windsor.MicroKernel.Registration;
@@ -26,6 +23,8 @@ using Castle.Windsor.Tests.Interceptors;
 using Castle.Windsor.Tests.ProxyInfrastructure;
 using Castle.Windsor.Tests.XmlFiles;
 using Castle.Windsor.Windsor.Installer;
+
+namespace Castle.Windsor.Tests.Proxies;
 
 public class ProxyBehaviorTestCase : AbstractContainerTestCase
 {

@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Interceptors;
-
 using System;
-
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
+
+namespace Castle.Windsor.Tests.Interceptors;
 
 [Transient]
 public class ThrowInCtorInterceptor : IInterceptor

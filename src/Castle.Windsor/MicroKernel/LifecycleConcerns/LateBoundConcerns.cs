@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
-
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
-
 using Castle.Windsor.Core;
+
+namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
 
 /// <summary>Lifetime concern that works for components that don't have their actual type determined upfront</summary>
 [Serializable]

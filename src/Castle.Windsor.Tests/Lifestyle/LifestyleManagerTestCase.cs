@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Lifestyle;
-
 using System;
 using System.Threading;
-
 using Castle.Core.Configuration;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Context;
@@ -25,6 +22,8 @@ using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Generics;
+
+namespace Castle.Windsor.Tests.Lifestyle;
 
 public class LifestyleManagerTestCase : AbstractContainerTestCase
 {
@@ -132,11 +131,11 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
 		TestHandlersLifestyleWithService(typeof(TrivialComponent), LifestyleType.Transient, false);
 
 		TestLifestyleAndSameness(typeof(PerThreadComponent), LifestyleType.Transient, true, false);
-		TestLifestyleAndSameness(typeof(SingletonComponent), LifestyleType.Transient, true, false);
+		TestLifestyleAndSameness(typeof(Components.SingletonComponent), LifestyleType.Transient, true, false);
 		TestLifestyleAndSameness(typeof(TransientComponent), LifestyleType.Singleton, true, true);
 
 		TestLifestyleWithServiceAndSameness(typeof(PerThreadComponent), LifestyleType.Transient, true, false);
-		TestLifestyleWithServiceAndSameness(typeof(SingletonComponent), LifestyleType.Transient, true, false);
+		TestLifestyleWithServiceAndSameness(typeof(Components.SingletonComponent), LifestyleType.Transient, true, false);
 		TestLifestyleWithServiceAndSameness(typeof(TransientComponent), LifestyleType.Singleton, true, true);
 	}
 
@@ -147,7 +146,7 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
 		var handler = Kernel.GetHandler("a");
 		Assert.Equal(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
 
-		Kernel.Register(Component.For(typeof(SingletonComponent)).Named("b"));
+		Kernel.Register(Component.For(typeof(Components.SingletonComponent)).Named("b"));
 		handler = Kernel.GetHandler("b");
 		Assert.Equal(LifestyleType.Singleton, handler.ComponentModel.LifestyleType);
 
@@ -180,7 +179,7 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
 		var confignode = new MutableConfiguration("component");
 		confignode.Attributes.Add("lifestyle", "transient");
 		Kernel.ConfigurationStore.AddComponentConfiguration("a", confignode);
-		Kernel.Register(Component.For(typeof(SingletonComponent)).Named("a"));
+		Kernel.Register(Component.For(typeof(Components.SingletonComponent)).Named("a"));
 		var handler = Kernel.GetHandler("a");
 		Assert.Equal(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
 	}
@@ -188,7 +187,7 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Lifestyle_from_fluent_registration_overwrites_attribute()
 	{
-		Kernel.Register(Component.For<SingletonComponent>().Named("a").LifeStyle.Transient);
+		Kernel.Register(Component.For<Components.SingletonComponent>().Named("a").LifeStyle.Transient);
 		var handler = Kernel.GetHandler("a");
 		Assert.Equal(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
 	}
@@ -233,7 +232,7 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
 	[Fact]
 	public void TestSingleton()
 	{
-		Kernel.Register(Component.For<IComponent>().ImplementedBy(typeof(SingletonComponent)).Named("a"));
+		Kernel.Register(Component.For<IComponent>().ImplementedBy(typeof(Components.SingletonComponent)).Named("a"));
 
 		var handler = Kernel.GetHandler("a");
 

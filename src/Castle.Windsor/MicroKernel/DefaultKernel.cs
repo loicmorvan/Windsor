@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Core.Logging;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
@@ -39,6 +36,8 @@ using Castle.Windsor.MicroKernel.SubSystems.Conversion;
 using Castle.Windsor.MicroKernel.SubSystems.Naming;
 using Castle.Windsor.MicroKernel.SubSystems.Resource;
 using Castle.Windsor.Windsor.Diagnostics;
+
+namespace Castle.Windsor.MicroKernel;
 #if FEATURE_SECURITY_PERMISSIONS
 	using System.Security.Permissions;
 #endif

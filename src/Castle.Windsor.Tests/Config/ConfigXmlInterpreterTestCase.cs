@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Config;
-
 using System.Linq;
-
 using Castle.Core.Configuration;
 using Castle.Core.Resource;
 using Castle.Windsor.Core;
@@ -27,6 +24,8 @@ using Castle.Windsor.Tests.XmlFiles;
 using Castle.Windsor.Windsor;
 using Castle.Windsor.Windsor.Configuration.Interpreters;
 using Castle.Windsor.Windsor.Installer;
+
+namespace Castle.Windsor.Tests.Config;
 
 public class ConfigXmlInterpreterTestCase
 {

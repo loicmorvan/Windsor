@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor;
-
 using System;
 using System.Xml;
-
 using Castle.Core.Resource;
 using Castle.Windsor.MicroKernel.SubSystems.Resource;
 using Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor;
 
 /// <summary>Pendent</summary>
 public class XmlProcessor

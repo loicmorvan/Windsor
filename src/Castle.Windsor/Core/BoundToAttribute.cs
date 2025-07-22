@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core;
-
 using System;
-
 using Castle.Windsor.MicroKernel;
+
+namespace Castle.Windsor.Core;
 
 /// <summary>
 ///     Indicates that the target components wants instance lifetime and reuse scope to be bound to another component further up the object graph. Good scenario for this would be unit of work bound to a

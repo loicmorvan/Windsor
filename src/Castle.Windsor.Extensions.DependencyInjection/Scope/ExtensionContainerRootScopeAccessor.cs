@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
+
 namespace Castle.Windsor.Extensions.DependencyInjection.Scope
 {
-	using System;
-
-	using Castle.Windsor.MicroKernel.Context;
-	using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
-
 	internal class ExtensionContainerRootScopeAccessor : IScopeAccessor
 	{
 		public ILifetimeScope GetScope(CreationContext context)

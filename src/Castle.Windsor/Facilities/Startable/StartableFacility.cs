@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Facilities.Startable;
-
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Facilities;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.SubSystems.Conversion;
 using Castle.Windsor.Windsor;
+
+namespace Castle.Windsor.Facilities.Startable;
 
 public partial class StartableFacility : AbstractFacility
 {

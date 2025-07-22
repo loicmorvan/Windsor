@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel;
-
 using System;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.Windsor;
+
+namespace Castle.Windsor.MicroKernel;
 
 /// <summary>Represents a delegate which holds basic information about a component.</summary>
 /// <param name = "key">Key which identifies the component</param>

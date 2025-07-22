@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.Tests.Interceptors;
+
+namespace Castle.Windsor.Tests.Components;
 
 /// <summary>Summary description for CalculatorServiceWithAttributes.</summary>
 [Interceptor(typeof(ResultModifierInterceptor))]

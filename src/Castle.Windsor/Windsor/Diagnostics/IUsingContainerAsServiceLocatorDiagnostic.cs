@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Diagnostics;
-
 using Castle.Windsor.MicroKernel;
+
+namespace Castle.Windsor.Windsor.Diagnostics;
 
 /// <summary>
 ///     Detects components that are not extending Windsor's infrastructure yet depend on the container which usually means they use the container as service locator which is a bad practice and should be

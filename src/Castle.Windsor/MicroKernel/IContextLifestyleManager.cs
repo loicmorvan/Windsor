@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel;
-
 using Castle.Windsor.MicroKernel.Context;
+
+namespace Castle.Windsor.MicroKernel;
 
 public interface IContextLifestyleManager
 {

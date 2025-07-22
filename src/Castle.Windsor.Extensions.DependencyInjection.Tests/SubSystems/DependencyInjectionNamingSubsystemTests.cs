@@ -13,15 +13,14 @@
 // limitations under the License.
 
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Tests.SubSystems;
-
 using Castle.Windsor.Extensions.DependencyInjection.SubSystems;
 using Castle.Windsor.Extensions.DependencyInjection.Tests.Components;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
-
 using Xunit;
+
+namespace Castle.Windsor.Extensions.DependencyInjection.Tests.SubSystems;
 
 public class DependencyInjectionNamingSubsystemTests
 {

@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Windsor.Tests;
-
 using System.Linq;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.Facilities.Startable;
 using Castle.Windsor.MicroKernel.Lifestyle;
@@ -26,6 +23,8 @@ using Castle.Windsor.Tests.Generics;
 using Castle.Windsor.Tests.XmlFiles;
 using Castle.Windsor.Windsor.Configuration.Interpreters;
 using Castle.Windsor.Windsor.Installer;
+
+namespace Castle.Windsor.Tests.Windsor.Tests;
 
 public class XmlConfigStructureTestCase : AbstractContainerTestCase
 {

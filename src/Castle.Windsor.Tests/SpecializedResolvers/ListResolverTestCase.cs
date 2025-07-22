@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.SpecializedResolvers;
-
 using System.Linq;
-
 using Castle.DynamicProxy;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Windsor;
+
+namespace Castle.Windsor.Tests.SpecializedResolvers;
 
 public class ListResolverTestCase : AbstractContainerTestCase
 {

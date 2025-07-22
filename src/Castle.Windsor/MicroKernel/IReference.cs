@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Context;
+
+namespace Castle.Windsor.MicroKernel;
 
 /// <summary>Represents obtained just in time object.</summary>
 /// <typeparam name = "T"></typeparam>

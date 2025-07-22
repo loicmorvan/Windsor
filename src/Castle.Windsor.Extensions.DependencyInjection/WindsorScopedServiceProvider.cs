@@ -13,41 +13,39 @@
 // limitations under the License.
 
 
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using Castle.Windsor.Extensions.DependencyInjection.Scope;
+using Castle.Windsor.Windsor;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace Castle.Windsor.Extensions.DependencyInjection
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Reflection;
-
-	using Castle.Windsor.Extensions.DependencyInjection.Scope;
-	using Castle.Windsor.Windsor;
-
-	using Microsoft.Extensions.DependencyInjection;
-
 	internal class WindsorScopedServiceProvider : IServiceProvider, ISupportRequiredService, IDisposable
 	{
-		private readonly IWindsorContainer container;
-		private readonly ExtensionContainerScopeBase scope;
-		private bool disposing;
+		private readonly IWindsorContainer _container;
+		private readonly ExtensionContainerScopeBase _scope;
+		private bool _disposing;
 
 		public WindsorScopedServiceProvider(IWindsorContainer container)
 		{
-			this.container = container;
-			scope = ExtensionContainerScopeCache.Current;
+			_container = container;
+			_scope = ExtensionContainerScopeCache.Current;
 		}
 
 		public void Dispose()
 		{
-			if (scope is not ExtensionContainerRootScope) return;
-			if (disposing) return;
-			disposing = true;
-			scope?.Dispose();
-			container.Dispose();
+			if (_scope is not ExtensionContainerRootScope) return;
+			if (_disposing) return;
+			_disposing = true;
+			_scope?.Dispose();
+			_container.Dispose();
 		}
 
 		public object GetService(Type serviceType)
 		{
-			using (_ = new ForcedScope(scope))
+			using (_ = new ForcedScope(_scope))
 			{
 				return ResolveInstanceOrNull(serviceType, true);
 			}
@@ -55,7 +53,7 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 
 		public object GetRequiredService(Type serviceType)
 		{
-			using (_ = new ForcedScope(scope))
+			using (_ = new ForcedScope(_scope))
 			{
 				return ResolveInstanceOrNull(serviceType, false);
 			}
@@ -63,17 +61,18 @@ namespace Castle.Windsor.Extensions.DependencyInjection
 
 		private object ResolveInstanceOrNull(Type serviceType, bool isOptional)
 		{
-			if (container.Kernel.HasComponent(serviceType)) return container.Resolve(serviceType);
+			if (_container.Kernel.HasComponent(serviceType)) return _container.Resolve(serviceType);
 
-			if (serviceType.GetTypeInfo().IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+			if (serviceType.GetTypeInfo().IsGenericType &&
+			    serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
 			{
-				var allObjects = container.ResolveAll(serviceType.GenericTypeArguments[0]);
+				var allObjects = _container.ResolveAll(serviceType.GenericTypeArguments[0]);
 				return allObjects;
 			}
 
 			if (isOptional) return null;
 
-			return container.Resolve(serviceType);
+			return _container.Resolve(serviceType);
 		}
 	}
 }

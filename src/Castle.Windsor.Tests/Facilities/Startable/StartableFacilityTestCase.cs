@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.Startable;
-
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-
 using Castle.Core.Configuration;
 using Castle.Windsor.Core;
 using Castle.Windsor.Facilities.Startable;
@@ -26,6 +23,8 @@ using Castle.Windsor.MicroKernel.ModelBuilder;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Facilities.Startable.Components;
+
+namespace Castle.Windsor.Tests.Facilities.Startable;
 
 public class StartableFacilityTestCase
 {

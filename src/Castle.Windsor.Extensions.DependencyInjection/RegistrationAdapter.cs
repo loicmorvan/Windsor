@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using Castle.Windsor.Extensions.DependencyInjection.Extensions;
+using Castle.Windsor.MicroKernel.Registration;
+using Microsoft.Extensions.DependencyInjection;
+using ServiceDescriptor = Microsoft.Extensions.DependencyInjection.ServiceDescriptor;
+
 namespace Castle.Windsor.Extensions.DependencyInjection
 {
-	using System;
-
-	using Castle.Windsor.Extensions.DependencyInjection.Extensions;
-	using Castle.Windsor.MicroKernel.Registration;
-
-	using Microsoft.Extensions.DependencyInjection;
-
-	using ServiceDescriptor = Microsoft.Extensions.DependencyInjection.ServiceDescriptor;
+	using ServiceDescriptor = ServiceDescriptor;
 
 	internal class RegistrationAdapter
 	{

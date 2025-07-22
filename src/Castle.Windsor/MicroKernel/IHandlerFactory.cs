@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel;
-
 using Castle.Windsor.Core;
+
+namespace Castle.Windsor.MicroKernel;
 
 /// <summary>Extension point to allow the developer to use his implementation of <see cref = "IHandler" /></summary>
 public interface IHandlerFactory

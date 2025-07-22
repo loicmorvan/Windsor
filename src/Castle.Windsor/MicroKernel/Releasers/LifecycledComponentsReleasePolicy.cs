@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security;
+using Castle.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.Internal;
+using Castle.Windsor.Windsor.Diagnostics;
+
 namespace Castle.Windsor.MicroKernel.Releasers;
 
 #if FEATURE_PERFCOUNTERS
 	using System.Diagnostics;
 #endif
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-
-using Castle.Core;
-using Castle.Windsor.Core.Internal;
-using Castle.Windsor.Windsor.Diagnostics;
-
-using Lock = Castle.Windsor.MicroKernel.Internal.Lock;
+using Lock = Lock;
 
 /// <summary>Tracks all components requiring decomission (<see cref = "Burden.RequiresPolicyRelease" />)</summary>
 [Serializable]

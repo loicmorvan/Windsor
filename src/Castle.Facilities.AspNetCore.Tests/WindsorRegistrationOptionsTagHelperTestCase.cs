@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests;
-
 using System;
-
 using Castle.Facilities.AspNetCore.Tests.Framework;
 using Castle.Windsor.MicroKernel.Registration;
-
 using Microsoft.AspNetCore.Razor.TagHelpers;
+
+namespace Castle.Facilities.AspNetCore.Tests;
 
 public abstract class WindsorRegistrationOptionsTagHelperTestCase
 {

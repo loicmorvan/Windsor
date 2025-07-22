@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Facilities.TypedFactory;
-
 using System;
-
 using Castle.Windsor.MicroKernel;
+
+namespace Castle.Windsor.Facilities.TypedFactory;
 
 /// <summary>Represents a single component to be resolved via Typed Factory</summary>
 public class TypedFactoryComponentResolver

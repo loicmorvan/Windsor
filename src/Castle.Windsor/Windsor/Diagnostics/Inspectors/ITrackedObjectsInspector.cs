@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Diagnostics.Inspectors;
-
 using System.Collections.Generic;
-
 using Castle.Windsor.MicroKernel;
+
+namespace Castle.Windsor.Windsor.Diagnostics.Inspectors;
 
 public interface ITrackedObjectsInspector : IDiagnosticsSource<IEnumerable<KeyValuePair<IHandler, object[]>>>;

@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Lifestyle.Pool;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Internal;
 
-using Lock = Castle.Windsor.MicroKernel.Internal.Lock;
+namespace Castle.Windsor.MicroKernel.Lifestyle.Pool;
+
+using Lock = Lock;
 
 [Serializable]
 public class DefaultPool : IPool, IDisposable

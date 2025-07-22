@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Proxy;
-
 using Castle.Windsor.Core;
+
+namespace Castle.Windsor.MicroKernel.Proxy;
 
 /// <summary>Select the appropriate interceptors based on the application specific business logic</summary>
 public interface IModelInterceptorsSelector

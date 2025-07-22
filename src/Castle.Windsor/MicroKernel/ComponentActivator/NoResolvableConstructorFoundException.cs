@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.ComponentActivator;
-
 using System;
-
 using Castle.Windsor.Core;
+
+namespace Castle.Windsor.MicroKernel.ComponentActivator;
 
 /// <summary>Exception thrown when component has no resolvable constructor that can be used to create an instance.</summary>
 [Serializable]

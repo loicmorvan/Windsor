@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
-
 using System;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 using Castle.Windsor.MicroKernel.SubSystems.Conversion;
+
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 
 /// <summary>Inspects the component configuration and the type looking for a definition of lifestyle type. The configuration preceeds whatever is defined in the component.</summary>
 /// <remarks>

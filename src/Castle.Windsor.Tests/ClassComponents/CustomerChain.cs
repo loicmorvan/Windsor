@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents;
-
 using System;
+
+namespace Castle.Windsor.Tests.ClassComponents;
 
 public class CustomerChain1 : CustomerImpl
 {
-	public ICustomer CustomerBase;
+	public readonly ICustomer CustomerBase;
 
 	public CustomerChain1(ICustomer customer)
 	{

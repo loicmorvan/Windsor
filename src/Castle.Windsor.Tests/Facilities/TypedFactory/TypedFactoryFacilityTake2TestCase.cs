@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory;
-
 using System;
 using System.Linq;
-
 using Castle.Windsor.Facilities.TypedFactory;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
@@ -27,6 +24,8 @@ using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
 using Castle.Windsor.Tests.Interceptors;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 {

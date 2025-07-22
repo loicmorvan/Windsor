@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Pools;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel;
@@ -29,6 +26,8 @@ using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Windsor;
+
+namespace Castle.Windsor.Tests.Pools;
 
 public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 {

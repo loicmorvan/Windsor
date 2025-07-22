@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using System;
-
 using Castle.Windsor.Core;
+
+namespace Castle.Windsor.Tests.Components;
 
 [Transient]
 public class InitializableDisposableComponent : IInitializable, IDisposable

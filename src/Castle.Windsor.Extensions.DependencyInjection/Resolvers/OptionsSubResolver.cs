@@ -12,23 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Reflection;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Context;
+using Microsoft.Extensions.Options;
+
 namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers
 {
-	using System.Reflection;
-
-	using Castle.Windsor.Core;
-	using Castle.Windsor.MicroKernel;
-	using Castle.Windsor.MicroKernel.Context;
-
-	using Microsoft.Extensions.Options;
-
 	internal class OptionsSubResolver : ISubDependencyResolver
 	{
-		private readonly IKernel kernel;
+		private readonly IKernel _kernel;
 
 		public OptionsSubResolver(IKernel kernel)
 		{
-			this.kernel = kernel;
+			_kernel = kernel;
 		}
 
 		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
@@ -40,7 +38,7 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers
 
 		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
 		{
-			return kernel.Resolve(dependency.TargetType);
+			return _kernel.Resolve(dependency.TargetType);
 		}
 	}
 }

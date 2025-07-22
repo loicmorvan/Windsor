@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Lifestyle;
-
 using System;
 using System.Threading;
-
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
+
+namespace Castle.Windsor.MicroKernel.Lifestyle;
 
 public class ScopedLifestyleManager : AbstractLifestyleManager
 {

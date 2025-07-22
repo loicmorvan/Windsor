@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Diagnostics;
-
 using System.Collections;
 using System.Collections.Generic;
-
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.Windsor.Diagnostics.Extensions;
+
+namespace Castle.Windsor.Windsor.Diagnostics;
 
 public partial class DefaultDiagnosticsSubSystem : IDiagnosticsHost, IContainerDebuggerExtensionHost
 {
@@ -55,6 +54,6 @@ public partial class DefaultDiagnosticsSubSystem : IDiagnosticsHost, IContainerD
 		Add(new DuplicatedDependenciesDebuggerExtension());
 		Add(new UsingContainerAsServiceLocator());
 		Add(new ReleasePolicyTrackedObjects());
-		Add(new Facilities());
+		Add(new Extensions.Facilities());
 	}
 }

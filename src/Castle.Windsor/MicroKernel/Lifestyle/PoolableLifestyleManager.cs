@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Lifestyle;
-
 using System;
-
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Lifestyle.Pool;
 using Castle.Windsor.MicroKernel.Registration;
+
+namespace Castle.Windsor.MicroKernel.Lifestyle;
 
 /// <summary>Manages a pool of objects.</summary>
 [Serializable]

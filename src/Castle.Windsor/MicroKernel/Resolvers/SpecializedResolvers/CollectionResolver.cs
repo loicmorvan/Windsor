@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Context;
+
+namespace Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
 
 /// <summary>More generic alternative to <see cref = "ArrayResolver" /> and <see cref = "ListResolver" />. It supports arrays as well as any generic interface type assignable from arrays.</summary>
 /// <remarks>The collection instance that is provided is read only, even for interfaces like <see cref = "IList{T}" /></remarks>

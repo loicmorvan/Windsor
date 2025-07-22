@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
 using Castle.Core.Configuration;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.Util;
+
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class ServiceOverrideDescriptor : AbstractPropertyDescriptor
 {

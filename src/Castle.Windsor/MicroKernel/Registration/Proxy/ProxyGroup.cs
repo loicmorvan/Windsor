@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Registration.Proxy;
-
 using System;
-
 using Castle.DynamicProxy;
 using Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
+
+namespace Castle.Windsor.MicroKernel.Registration.Proxy;
 
 public class ProxyGroup<S> : RegistrationGroup<S>
 	where S : class

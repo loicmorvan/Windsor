@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Facilities.Startable;
-
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
-
 using Castle.Windsor.MicroKernel.Facilities;
 using Castle.Windsor.MicroKernel.Registration;
+
+namespace Castle.Windsor.Facilities.Startable;
 
 public static class StartableFacilityRegistrationExtensions
 {

@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor;
-
 using System;
 using System.Reflection;
-
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor.Installer;
+
+namespace Castle.Windsor.Windsor;
 
 /// <summary>The <c>IWindsorContainer</c> interface exposes all the functionality that Windsor implements.</summary>
 public interface IWindsorContainer : IDisposable

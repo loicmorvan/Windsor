@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Internal;
-
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Handlers;
+
+namespace Castle.Windsor.MicroKernel.Internal;
 
 public class LazyServiceStrategy : IGenericServiceStrategy
 {

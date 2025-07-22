@@ -12,13 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs;
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedParameter.Local
 
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
 
-public class IoC_138
+namespace Castle.Windsor.Tests.Bugs;
+
+public class IoC138
 {
 	[Fact]
 	public void TestResolveSubComponentInConstructorWithParameters()

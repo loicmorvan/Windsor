@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core;
-
 using System;
 using System.Reflection;
-
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Util;
+
+namespace Castle.Windsor.Core;
 
 /// <summary>Represents a dependency (other component or a fixed value available through external configuration).</summary>
 [Serializable]

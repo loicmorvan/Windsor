@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory;
-
 using System;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Windsor.Facilities.TypedFactory;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
@@ -29,9 +26,13 @@ using Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
 using Castle.Windsor.Tests.Interceptors;
-
 using HasTwoConstructors = Castle.Windsor.Tests.Facilities.TypedFactory.Delegates.HasTwoConstructors;
 using ServiceFactory = Castle.Windsor.Tests.Facilities.TypedFactory.Components.ServiceFactory;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
+
+using HasTwoConstructors = HasTwoConstructors;
+using ServiceFactory = ServiceFactory;
 
 public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 {

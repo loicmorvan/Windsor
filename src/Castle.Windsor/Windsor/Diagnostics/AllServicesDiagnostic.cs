@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Diagnostics;
-
 using System;
 using System.Linq;
-
 using Castle.Windsor.MicroKernel;
+
+namespace Castle.Windsor.Windsor.Diagnostics;
 
 public class AllServicesDiagnostic : IAllServicesDiagnostic
 {

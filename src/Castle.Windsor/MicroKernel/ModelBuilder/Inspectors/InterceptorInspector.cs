@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
-
 using System;
-
 using Castle.Core.Configuration;
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Proxy;
 using Castle.Windsor.MicroKernel.Util;
+
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 
 /// <summary>Inspect the component for <c>InterceptorAttribute</c> and the configuration for the interceptors node</summary>
 [Serializable]

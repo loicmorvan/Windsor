@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Windsor.Windsor;
+
 namespace Castle.Windsor.Extensions.DependencyInjection
 {
-	using Castle.Windsor.Windsor;
-
 	public sealed class WindsorServiceProviderFactory : WindsorServiceProviderFactoryBase
 	{
 		public WindsorServiceProviderFactory()

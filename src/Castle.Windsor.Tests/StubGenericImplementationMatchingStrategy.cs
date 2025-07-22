@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Handlers;
+
+namespace Castle.Windsor.Tests;
 
 public class StubGenericImplementationMatchingStrategy : IGenericImplementationMatchingStrategy
 {

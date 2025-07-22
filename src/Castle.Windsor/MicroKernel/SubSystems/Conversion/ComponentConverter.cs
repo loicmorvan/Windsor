@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
-
 using System;
-
 using Castle.Core.Configuration;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Util;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 [Serializable]
 public class ComponentConverter : AbstractTypeConverter, IKernelDependentConverter

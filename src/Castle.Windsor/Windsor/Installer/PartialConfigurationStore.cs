@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Installer;
-
 using System;
-
 using Castle.Core.Configuration;
 using Castle.Core.Resource;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.SubSystems.Configuration;
+
+namespace Castle.Windsor.Windsor.Installer;
 
 internal class PartialConfigurationStore : IConfigurationStore, IDisposable
 {

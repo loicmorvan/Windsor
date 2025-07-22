@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
-
 using System;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 
 /// <summary>
 ///     This implementation of <see cref = "IContributeComponentModelConstruction" /> collects all available constructors and populates them in the model as candidates. The Kernel will pick up one of the

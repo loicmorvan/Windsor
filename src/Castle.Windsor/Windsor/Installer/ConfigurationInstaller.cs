@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Installer;
-
 using System;
-
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor.Windsor.Configuration;
+
+namespace Castle.Windsor.Windsor.Installer;
 
 /// <summary>Delegate to provide environment name.</summary>
 /// <returns>The environment name.</returns>

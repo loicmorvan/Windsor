@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma warning disable 618
-namespace Castle.Windsor.Tests.Bugs;
-
 using Castle.Core.Configuration;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.Tests.ClassComponents;
 
-public class IoC_334
+#pragma warning disable 618
+namespace Castle.Windsor.Tests.Bugs;
+
+public class IoC334
 {
 	[Fact]
 	public void FacilityConfig_is_not_null()

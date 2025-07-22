@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor;
-
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Xml;
-
 using Castle.Core.Resource;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.SubSystems.Resource;
 using Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor;
 
 public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 {

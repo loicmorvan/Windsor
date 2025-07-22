@@ -12,25 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore;
-
 using System.Collections.Generic;
 using System.Reflection;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
+
+namespace Castle.Facilities.AspNetCore;
 
 /// <summary>For overriding default registration and lifestyles behaviour</summary>
 public class WindsorRegistrationOptions
 {
-	internal List<(Assembly, LifestyleType)> ControllerAssemblyRegistrations = new();
+	internal readonly List<(Assembly, LifestyleType)> ControllerAssemblyRegistrations = [];
 
-	internal List<IRegistration> ControllerComponentRegistrations = new();
-	private Assembly entryAssembly;
-	internal List<(Assembly, LifestyleType)> TagHelperAssemblyRegistrations = new();
-	internal List<IRegistration> TagHelperComponentRegistrations = new();
-	internal List<(Assembly, LifestyleType)> ViewComponentAssemblyRegistrations = new();
-	internal List<IRegistration> ViewComponentComponentRegistrations = new();
+	internal readonly List<IRegistration> ControllerComponentRegistrations = [];
+	private Assembly _entryAssembly;
+	internal readonly List<(Assembly, LifestyleType)> TagHelperAssemblyRegistrations = [];
+	internal readonly List<IRegistration> TagHelperComponentRegistrations = [];
+	internal readonly List<(Assembly, LifestyleType)> ViewComponentAssemblyRegistrations = [];
+	internal readonly List<IRegistration> ViewComponentComponentRegistrations = [];
 
 	internal Assembly EntryAssembly
 	{
@@ -38,14 +37,14 @@ public class WindsorRegistrationOptions
 		{
 			try
 			{
-				entryAssembly = entryAssembly ?? Assembly.GetEntryAssembly();
+				_entryAssembly = _entryAssembly ?? Assembly.GetEntryAssembly();
 			}
 			catch
 			{
-				entryAssembly = entryAssembly ?? Assembly.GetCallingAssembly();
+				_entryAssembly = _entryAssembly ?? Assembly.GetCallingAssembly();
 			}
 
-			return entryAssembly;
+			return _entryAssembly;
 		}
 	}
 
@@ -61,7 +60,7 @@ public class WindsorRegistrationOptions
 	/// </returns>
 	public WindsorRegistrationOptions UseEntryAssembly(Assembly entryAssembly)
 	{
-		this.entryAssembly = entryAssembly;
+		_entryAssembly = entryAssembly;
 		return this;
 	}
 

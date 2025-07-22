@@ -12,53 +12,48 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Castle.Facilities.AspNetCore.Tests.Fakes;
 using Castle.Facilities.AspNetCore.Tests.Framework;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
-using TestContext = Castle.Facilities.AspNetCore.Tests.Framework.TestContext;
+namespace Castle.Facilities.AspNetCore.Tests;
+
+using TestContext = TestContext;
 
 public class WindsorRegistrationExtensionsTestCase : IDisposable
 {
-	private readonly TestContext testContext;
-
-	public WindsorRegistrationExtensionsTestCase()
-	{
-		testContext = TestContextFactory.Get();
-	}
+	private readonly TestContext _testContext = TestContextFactory.Get();
 
 	public void Dispose()
 	{
-		testContext?.Dispose();
+		_testContext?.Dispose();
 	}
 
 	[InlineData(typeof(ControllerWindsorOnly))]
 	[InlineData(typeof(TagHelperWindsorOnly))]
 	[InlineData(typeof(ViewComponentWindsorOnly))]
 	[Theory]
-	public void Should_resolve_WindsorOnly_Controllers_TagHelpers_and_ViewComponents_from_WindsorContainer(Type serviceType)
+	public void Should_resolve_WindsorOnly_Controllers_TagHelpers_and_ViewComponents_from_WindsorContainer(
+		Type serviceType)
 	{
-		testContext.WindsorContainer.Resolve(serviceType);
+		_testContext.WindsorContainer.Resolve(serviceType);
 	}
 
 	[InlineData(typeof(ControllerServiceProviderOnly))]
 	[InlineData(typeof(TagHelperServiceProviderOnly))]
 	[InlineData(typeof(ViewComponentServiceProviderOnly))]
 	[Theory]
-	public void Should_resolve_ServiceProviderOnly_Controllers_TagHelpers_and_ViewComponents_from_ServiceProvider(Type serviceType)
+	public void Should_resolve_ServiceProviderOnly_Controllers_TagHelpers_and_ViewComponents_from_ServiceProvider(
+		Type serviceType)
 	{
-		testContext.ServiceProvider.GetRequiredService(serviceType);
+		_testContext.ServiceProvider.GetRequiredService(serviceType);
 	}
 
 
@@ -69,29 +64,34 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	[InlineData(typeof(TagHelperServiceProviderOnly))]
 	[InlineData(typeof(ViewComponentServiceProviderOnly))]
 	[Theory]
-	public void Should_resolve_ServiceProviderOnly_and_CrossWired_Controllers_TagHelpers_and_ViewComponents_from_WindsorContainer_and_ServiceProvider(Type serviceType)
+	public void
+		Should_resolve_ServiceProviderOnly_and_CrossWired_Controllers_TagHelpers_and_ViewComponents_from_WindsorContainer_and_ServiceProvider(
+			Type serviceType)
 	{
-		testContext.WindsorContainer.Resolve(serviceType);
-		testContext.ServiceProvider.GetRequiredService(serviceType);
+		_testContext.WindsorContainer.Resolve(serviceType);
+		_testContext.ServiceProvider.GetRequiredService(serviceType);
 	}
 
 	[InlineData(typeof(CrossWiredScoped))]
 	[InlineData(typeof(CrossWiredSingleton))]
 	[Theory]
-	public void Should_resolve_CrossWired_Singleton_and_Scoped_as_same_instance_from_WindsorContainer_and_ServiceProvider(Type serviceType)
+	public void
+		Should_resolve_CrossWired_Singleton_and_Scoped_as_same_instance_from_WindsorContainer_and_ServiceProvider(
+			Type serviceType)
 	{
-		var instanceA = testContext.WindsorContainer.Resolve(serviceType);
-		var instanceB = testContext.ServiceProvider.GetRequiredService(serviceType);
+		var instanceA = _testContext.WindsorContainer.Resolve(serviceType);
+		var instanceB = _testContext.ServiceProvider.GetRequiredService(serviceType);
 
 		Assert.Equal(instanceB, instanceA);
 	}
 
 	[InlineData(typeof(CrossWiredTransient))]
 	[Theory]
-	public void Should_resolve_CrossWired_Transient_as_different_instances_from_WindsorContainer_and_ServiceProvider(Type serviceType)
+	public void Should_resolve_CrossWired_Transient_as_different_instances_from_WindsorContainer_and_ServiceProvider(
+		Type serviceType)
 	{
-		var instanceA = testContext.WindsorContainer.Resolve(serviceType);
-		var instanceB = testContext.ServiceProvider.GetRequiredService(serviceType);
+		var instanceA = _testContext.WindsorContainer.Resolve(serviceType);
+		var instanceB = _testContext.ServiceProvider.GetRequiredService(serviceType);
 
 		Assert.NotEqual(instanceB, instanceA);
 	}
@@ -99,10 +99,11 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	[InlineData(typeof(CrossWiredSingletonDisposable))]
 	[InlineData(typeof(WindsorOnlySingletonDisposable))]
 	[Theory]
-	public void Should_not_Dispose_CrossWired_or_WindsorOnly_Singleton_disposables_when_Disposing_Windsor_Scope(Type serviceType)
+	public void Should_not_Dispose_CrossWired_or_WindsorOnly_Singleton_disposables_when_Disposing_Windsor_Scope(
+		Type serviceType)
 	{
-		var singleton = (IDisposableObservable)testContext.WindsorContainer.Resolve(serviceType);
-		testContext.DisposeWindsorScope();
+		var singleton = (IDisposableObservable)_testContext.WindsorContainer.Resolve(serviceType);
+		_testContext.DisposeWindsorScope();
 
 		Assert.False(singleton.Disposed);
 		Assert.Equal(0, singleton.DisposedCount);
@@ -112,8 +113,8 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	[Theory]
 	public void Should_Dispose_WindsorOnly_Singleton_disposables_only_when_Disposing_WindsorContainer(Type serviceType)
 	{
-		var singleton = (IDisposableObservable)testContext.WindsorContainer.Resolve(serviceType);
-		testContext.DisposeWindsorContainer();
+		var singleton = (IDisposableObservable)_testContext.WindsorContainer.Resolve(serviceType);
+		_testContext.DisposeWindsorContainer();
 
 		Assert.True(singleton.Disposed);
 		Assert.Equal(1, singleton.DisposedCount);
@@ -121,10 +122,12 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 
 	[InlineData(typeof(CrossWiredSingletonDisposable))]
 	[Theory]
-	public void Should_not_Dispose_CrossWired_Singleton_disposables_when_Disposing_WindsorContainer_because_it_is_tracked_by_the_ServiceProvider(Type serviceType)
+	public void
+		Should_not_Dispose_CrossWired_Singleton_disposables_when_Disposing_WindsorContainer_because_it_is_tracked_by_the_ServiceProvider(
+			Type serviceType)
 	{
-		var singleton = (IDisposableObservable)testContext.WindsorContainer.Resolve(serviceType);
-		testContext.DisposeWindsorContainer();
+		var singleton = (IDisposableObservable)_testContext.WindsorContainer.Resolve(serviceType);
+		_testContext.DisposeWindsorContainer();
 
 		Assert.False(singleton.Disposed);
 		Assert.Equal(0, singleton.DisposedCount);
@@ -133,10 +136,11 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	[InlineData(typeof(CrossWiredSingletonDisposable))]
 	[InlineData(typeof(ServiceProviderOnlySingletonDisposable))]
 	[Theory]
-	public void Should_Dispose_CrossWired_and_ServiceProviderOnly_Singleton_disposables_when_Disposing_ServiceProvider(Type serviceType)
+	public void Should_Dispose_CrossWired_and_ServiceProviderOnly_Singleton_disposables_when_Disposing_ServiceProvider(
+		Type serviceType)
 	{
-		var singleton = (IDisposableObservable)testContext.ServiceProvider.GetRequiredService(serviceType);
-		testContext.DisposeServiceProvider();
+		var singleton = (IDisposableObservable)_testContext.ServiceProvider.GetRequiredService(serviceType);
+		_testContext.DisposeServiceProvider();
 
 		Assert.True(singleton.Disposed);
 		Assert.Equal(1, singleton.DisposedCount);
@@ -146,8 +150,8 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	[Theory]
 	public void Should_Dispose_WindsorOnly_Scoped_disposables_when_Disposing_Windsor_Scope(Type serviceType)
 	{
-		var singleton = (IDisposableObservable)testContext.WindsorContainer.Resolve(serviceType);
-		testContext.DisposeWindsorScope();
+		var singleton = (IDisposableObservable)_testContext.WindsorContainer.Resolve(serviceType);
+		_testContext.DisposeWindsorScope();
 
 		Assert.True(singleton.Disposed);
 		Assert.Equal(1, singleton.DisposedCount);
@@ -155,10 +159,12 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 
 	[InlineData(typeof(CrossWiredScopedDisposable))]
 	[Theory]
-	public void Should_not_Dispose_CrossWired_Scoped_disposables_when_Disposing_Windsor_Scope_because_it_is_tracked_by_the_ServiceProvider(Type serviceType)
+	public void
+		Should_not_Dispose_CrossWired_Scoped_disposables_when_Disposing_Windsor_Scope_because_it_is_tracked_by_the_ServiceProvider(
+			Type serviceType)
 	{
-		var singleton = (IDisposableObservable)testContext.WindsorContainer.Resolve(serviceType);
-		testContext.DisposeWindsorScope();
+		var singleton = (IDisposableObservable)_testContext.WindsorContainer.Resolve(serviceType);
+		_testContext.DisposeWindsorScope();
 
 		Assert.False(singleton.Disposed);
 		Assert.Equal(0, singleton.DisposedCount);
@@ -167,10 +173,11 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	[InlineData(typeof(CrossWiredScopedDisposable))]
 	[InlineData(typeof(CrossWiredTransientDisposable))]
 	[Theory]
-	public void Should_Dispose_CrossWired_Scoped_and_Transient_disposables_when_Disposing_ServiceProvider_Scope(Type serviceType)
+	public void Should_Dispose_CrossWired_Scoped_and_Transient_disposables_when_Disposing_ServiceProvider_Scope(
+		Type serviceType)
 	{
 		IDisposableObservable scoped;
-		using (var serviceProviderScope = testContext.ServiceProvider.CreateScope())
+		using (var serviceProviderScope = _testContext.ServiceProvider.CreateScope())
 		{
 			scoped = (IDisposableObservable)serviceProviderScope.ServiceProvider.GetRequiredService(serviceType);
 		}
@@ -181,10 +188,12 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 
 	[InlineData(typeof(CrossWiredTransientDisposable))]
 	[Theory]
-	public void Should_not_Dispose_CrossWired_Transient_disposables_when_Disposing_Windsor_Scope_because_is_tracked_by_the_ServiceProvider(Type serviceType)
+	public void
+		Should_not_Dispose_CrossWired_Transient_disposables_when_Disposing_Windsor_Scope_because_is_tracked_by_the_ServiceProvider(
+			Type serviceType)
 	{
-		var singleton = (IDisposableObservable)testContext.WindsorContainer.Resolve(serviceType);
-		testContext.DisposeWindsorScope();
+		var singleton = (IDisposableObservable)_testContext.WindsorContainer.Resolve(serviceType);
+		_testContext.DisposeWindsorScope();
 
 		Assert.False(singleton.Disposed);
 		Assert.Equal(0, singleton.DisposedCount);
@@ -193,11 +202,12 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	[InlineData(typeof(CrossWiredSingletonDisposable))]
 	[InlineData(typeof(ServiceProviderOnlySingletonDisposable))]
 	[Theory]
-	public void Should_not_Dispose_CrossWired_or_ServiceOnly_Singleton_disposables_when_Disposing_ServiceProviderScope(Type serviceType)
+	public void Should_not_Dispose_CrossWired_or_ServiceOnly_Singleton_disposables_when_Disposing_ServiceProviderScope(
+		Type serviceType)
 	{
 		IDisposableObservable singleton;
 
-		using (var serviceProviderScope = testContext.ServiceProvider.CreateScope())
+		using (var serviceProviderScope = _testContext.ServiceProvider.CreateScope())
 		{
 			singleton = (IDisposableObservable)serviceProviderScope.ServiceProvider.GetRequiredService(serviceType);
 		}
@@ -212,9 +222,9 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	[Theory]
 	public void Should_resolve_Composite_Singleton_from_WindsorContainer(Type compositeType)
 	{
-		testContext.WindsorContainer.Register(Component.For(compositeType).LifestyleSingleton());
+		_testContext.WindsorContainer.Register(Component.For(compositeType).LifestyleSingleton());
 
-		testContext.WindsorContainer.Resolve(compositeType);
+		_testContext.WindsorContainer.Resolve(compositeType);
 	}
 
 	[InlineData(typeof(CompositeTagHelper))]
@@ -223,9 +233,9 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	[Theory]
 	public void Should_resolve_Composite_Scoped_from_WindsorContainer(Type compositeType)
 	{
-		testContext.WindsorContainer.Register(Component.For(compositeType).LifestyleScoped());
+		_testContext.WindsorContainer.Register(Component.For(compositeType).LifestyleScoped());
 
-		testContext.WindsorContainer.Resolve(compositeType);
+		_testContext.WindsorContainer.Resolve(compositeType);
 	}
 
 	[InlineData(typeof(CompositeTagHelper))]
@@ -234,9 +244,9 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	[Theory]
 	public void Should_resolve_Composite_Transient_from_WindsorContainer(Type compositeType)
 	{
-		testContext.WindsorContainer.Register(Component.For(compositeType).LifestyleTransient());
+		_testContext.WindsorContainer.Register(Component.For(compositeType).LifestyleTransient());
 
-		testContext.WindsorContainer.Resolve(compositeType);
+		_testContext.WindsorContainer.Resolve(compositeType);
 	}
 
 	[InlineData(typeof(CompositeTagHelper))]
@@ -245,9 +255,9 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	[Theory]
 	public void Should_resolve_Composite_Singleton_CrossWired_from_ServiceProvider(Type compositeType)
 	{
-		testContext.WindsorContainer.Register(Component.For(compositeType).CrossWired().LifestyleSingleton());
+		_testContext.WindsorContainer.Register(Component.For(compositeType).CrossWired().LifestyleSingleton());
 
-		using var sp = testContext.ServiceCollection.BuildServiceProvider();
+		using var sp = _testContext.ServiceCollection.BuildServiceProvider();
 		sp.GetRequiredService(compositeType);
 	}
 
@@ -257,9 +267,9 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	[Theory]
 	public void Should_resolve_Composite_Scoped_CrossWired_from_ServiceProvider(Type compositeType)
 	{
-		testContext.WindsorContainer.Register(Component.For(compositeType).CrossWired().LifestyleScoped());
+		_testContext.WindsorContainer.Register(Component.For(compositeType).CrossWired().LifestyleScoped());
 
-		using var sp = testContext.ServiceCollection.BuildServiceProvider();
+		using var sp = _testContext.ServiceCollection.BuildServiceProvider();
 		sp.GetRequiredService(compositeType);
 	}
 
@@ -269,20 +279,20 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	[Theory]
 	public void Should_resolve_Composite_Transient_CrossWired_from_ServiceProvider(Type compositeType)
 	{
-		testContext.WindsorContainer.Register(Component.For(compositeType).CrossWired().LifestyleTransient());
+		_testContext.WindsorContainer.Register(Component.For(compositeType).CrossWired().LifestyleTransient());
 
-		using var sp = testContext.ServiceCollection.BuildServiceProvider();
+		using var sp = _testContext.ServiceCollection.BuildServiceProvider();
 		sp.GetRequiredService(compositeType);
 	}
 
 	[Fact]
 	public void Should_resolve_Multiple_Transient_CrossWired_from_ServiceProvider()
 	{
-		testContext.WindsorContainer.Register(Types.FromAssemblyContaining<AuthorisationHandlerOne>()
+		_testContext.WindsorContainer.Register(Types.FromAssemblyContaining<AuthorisationHandlerOne>()
 			.BasedOn<IAuthorizationHandler>().WithServiceBase()
 			.LifestyleTransient().Configure(c => c.CrossWired()));
 
-		using var sp = testContext.ServiceCollection.BuildServiceProvider();
+		using var sp = _testContext.ServiceCollection.BuildServiceProvider();
 		var services = sp.GetServices<IAuthorizationHandler>();
 
 		var authorizationHandlers = services as IAuthorizationHandler[] ?? services.ToArray();
@@ -304,8 +314,9 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 		{
 			var componentRegistration = Component.For<AnyComponent>().CrossWired();
 			componentRegistration.LifeStyle.Is(unsupportedLifestyleType);
-			if (unsupportedLifestyleType == LifestyleType.Custom) componentRegistration.LifestyleCustom<AnyComponentWithLifestyleManager>();
-			testContext.WindsorContainer.Register(componentRegistration);
+			if (unsupportedLifestyleType == LifestyleType.Custom)
+				componentRegistration.LifestyleCustom<AnyComponentWithLifestyleManager>();
+			_testContext.WindsorContainer.Register(componentRegistration);
 		});
 	}
 
@@ -319,20 +330,23 @@ public class WindsorRegistrationExtensionsTestCase : IDisposable
 	[Fact] // https://github.com/castleproject/Windsor/issues/411
 	public void Should_resolve_IMiddleware_from_Windsor()
 	{
-		testContext.WindsorContainer.GetFacility<AspNetCoreFacility>().RegistersMiddlewareInto(testContext.ApplicationBuilder);
+		_testContext.WindsorContainer.GetFacility<AspNetCoreFacility>()
+			.RegistersMiddlewareInto(_testContext.ApplicationBuilder);
 
-		testContext.WindsorContainer.Register(Component.For<AnyMiddleware>().LifestyleScoped().AsMiddleware());
+		_testContext.WindsorContainer.Register(Component.For<AnyMiddleware>().LifestyleScoped().AsMiddleware());
 
-		testContext.WindsorContainer.Resolve<AnyMiddleware>();
+		_testContext.WindsorContainer.Resolve<AnyMiddleware>();
 	}
 
 	[Fact] // https://github.com/castleproject/Windsor/issues/411
 	public void Should_resolve_IMiddleware_from_Windsor_with_custom_dependencies()
 	{
-		testContext.WindsorContainer.GetFacility<AspNetCoreFacility>().RegistersMiddlewareInto(testContext.ApplicationBuilder);
+		_testContext.WindsorContainer.GetFacility<AspNetCoreFacility>()
+			.RegistersMiddlewareInto(_testContext.ApplicationBuilder);
 
-		testContext.WindsorContainer.Register(Component.For<AnyMiddleware>().DependsOn(Dependency.OnValue<AnyComponent>(new AnyComponent())).LifestyleScoped().AsMiddleware());
+		_testContext.WindsorContainer.Register(Component.For<AnyMiddleware>()
+			.DependsOn(Dependency.OnValue<AnyComponent>(new AnyComponent())).LifestyleScoped().AsMiddleware());
 
-		testContext.WindsorContainer.Resolve<AnyMiddleware>();
+		_testContext.WindsorContainer.Resolve<AnyMiddleware>();
 	}
 }

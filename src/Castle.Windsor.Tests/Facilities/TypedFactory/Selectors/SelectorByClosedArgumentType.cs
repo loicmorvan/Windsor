@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
-
 using System;
 using System.Reflection;
-
 using Castle.Windsor.Facilities.TypedFactory;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
 
 public class SelectorByClosedArgumentType : DefaultTypedFactoryComponentSelector
 {

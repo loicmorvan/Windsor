@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Diagnostics;
-
 using System;
 using System.Linq;
-
 using Castle.DynamicProxy;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Internal;
 using Castle.Windsor.MicroKernel.Resolvers;
 
+namespace Castle.Windsor.Windsor.Diagnostics;
+
 public class UsingContainerAsServiceLocatorDiagnostic : IUsingContainerAsServiceLocatorDiagnostic
 {
-	public static Type[] ContainerTypes =
+	public static readonly Type[] ContainerTypes =
 	[
 		typeof(IKernel),
 		typeof(IWindsorContainer),
@@ -35,7 +34,7 @@ public class UsingContainerAsServiceLocatorDiagnostic : IUsingContainerAsService
 		typeof(WindsorContainer)
 	];
 
-	public static Predicate<IHandler>[] ExceptionsToTheRule =
+	public static readonly Predicate<IHandler>[] ExceptionsToTheRule =
 	[
 		h => h.ComponentModel.Implementation.Is<IInterceptor>(),
 		h => h.ComponentModel.Services.Any(s => s.Is<ILazyComponentLoader>()),

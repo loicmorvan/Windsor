@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
-
 using System.Collections.Generic;
 using System.Linq;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Proxy;
+
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class ProxyMixInsDescriptor : IComponentModelDescriptor
 {

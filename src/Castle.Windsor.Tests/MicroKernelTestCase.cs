@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Handlers;
@@ -25,6 +22,8 @@ using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.MicroKernel;
 using Castle.Windsor.Windsor.Proxy;
+
+namespace Castle.Windsor.Tests;
 
 public class MicroKernelTestCase : AbstractContainerTestCase
 {

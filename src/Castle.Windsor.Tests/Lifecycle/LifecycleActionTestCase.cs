@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Lifecycle;
-
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Generics;
+
+namespace Castle.Windsor.Tests.Lifecycle;
 
 public class LifecycleActionTestCase : AbstractContainerTestCase
 {

@@ -12,18 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Contributors;
-
 using System;
 using System.Linq;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.LifecycleConcerns;
 using Castle.Windsor.MicroKernel.Lifestyle;
 using Castle.Windsor.MicroKernel.ModelBuilder;
-
 using Microsoft.Extensions.DependencyInjection;
+
+namespace Castle.Facilities.AspNetCore.Contributors;
 
 public class CrossWiringComponentModelContributor : IContributeComponentModelConstruction
 {

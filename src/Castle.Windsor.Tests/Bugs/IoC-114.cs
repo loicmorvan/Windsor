@@ -12,11 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs;
+// ReSharper disable MemberCanBePrivate.Global
 
 using Castle.Windsor.MicroKernel.Registration;
 
-public class IoC_114 : AbstractContainerTestCase
+namespace Castle.Windsor.Tests.Bugs;
+
+public class IoC114 : AbstractContainerTestCase
 {
 	[Fact]
 	public void UsingPropertyWithPrivateSetter()
@@ -37,6 +39,7 @@ public class IoC_114 : AbstractContainerTestCase
 
 	public class Service2 : IService2
 	{
+		// ReSharper disable once UnusedAutoPropertyAccessor.Local
 		public IService1 S { get; private set; }
 	}
 }

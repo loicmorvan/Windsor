@@ -14,18 +14,16 @@
 
 // ReSharper disable UnusedTypeParameter
 // ReSharper disable MemberCanBeProtected.Global
-namespace Castle.Facilities.AspNetCore.Tests.Fakes;
 
 using System;
-
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
-
 using JetBrains.Annotations;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
+
+namespace Castle.Facilities.AspNetCore.Tests.Fakes;
 
 [UsedImplicitly]
 public class OpenOptions;
@@ -46,14 +44,14 @@ public interface IWeakReferenceObservable
 
 public class ServiceProviderOnlyTransient : IWeakReferenceObservable
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public ServiceProviderOnlyTransient()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public class ServiceProviderOnlyTransientGeneric<T> : ServiceProviderOnlyTransient;
@@ -72,14 +70,14 @@ public class ServiceProviderOnlyTransientDisposable : ServiceProviderOnlyTransie
 
 public class ServiceProviderOnlyScoped : IWeakReferenceObservable
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public ServiceProviderOnlyScoped()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public class ServiceProviderOnlyScopedGeneric<T> : ServiceProviderOnlyScoped;
@@ -98,14 +96,14 @@ public class ServiceProviderOnlyScopedDisposable : ServiceProviderOnlyScoped, ID
 
 public class ServiceProviderOnlySingleton : IWeakReferenceObservable
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public ServiceProviderOnlySingleton()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public class ServiceProviderOnlySingletonGeneric<T> : ServiceProviderOnlySingleton;
@@ -124,14 +122,14 @@ public class ServiceProviderOnlySingletonDisposable : ServiceProviderOnlySinglet
 
 public class WindsorOnlyTransient : IWeakReferenceObservable
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public WindsorOnlyTransient()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public class WindsorOnlyTransientGeneric<T> : WindsorOnlyTransient;
@@ -150,14 +148,14 @@ public class WindsorOnlyTransientDisposable : WindsorOnlyTransient, IDisposable,
 
 public class WindsorOnlyScoped : IWeakReferenceObservable
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public WindsorOnlyScoped()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public class WindsorOnlyScopedGeneric<T> : WindsorOnlyScoped;
@@ -176,14 +174,14 @@ public class WindsorOnlyScopedDisposable : WindsorOnlyScoped, IDisposable, IDisp
 
 public class WindsorOnlySingleton : IWeakReferenceObservable
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public WindsorOnlySingleton()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public class WindsorOnlySingletonGeneric<T> : WindsorOnlySingleton;
@@ -202,14 +200,14 @@ public class WindsorOnlySingletonDisposable : WindsorOnlySingleton, IDisposable,
 
 public class CrossWiredTransient : IWeakReferenceObservable
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public CrossWiredTransient()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public class CrossWiredTransientGeneric<T> : CrossWiredTransient;
@@ -228,14 +226,14 @@ public class CrossWiredTransientDisposable : CrossWiredTransient, IDisposable, I
 
 public class CrossWiredScoped : IWeakReferenceObservable
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public CrossWiredScoped()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public class CrossWiredScopedGeneric<T> : CrossWiredScoped;
@@ -254,14 +252,14 @@ public class CrossWiredScopedDisposable : CrossWiredScoped, IDisposable, IDispos
 
 public class CrossWiredSingleton : IWeakReferenceObservable
 {
-	private readonly WeakReference reference;
+	private readonly WeakReference _reference;
 
 	public CrossWiredSingleton()
 	{
-		reference = new WeakReference(this, false);
+		_reference = new WeakReference(this, false);
 	}
 
-	public bool HasReference => reference.IsAlive;
+	public bool HasReference => _reference.IsAlive;
 }
 
 public class CrossWiredSingletonGeneric<T> : CrossWiredSingleton;
@@ -329,7 +327,8 @@ public class ModelInstaller
 	{
 		container.Register(Component.For<CrossWiredTransient>().CrossWired().LifestyleTransient());
 		container.Register(Component.For<CrossWiredTransientGeneric<OpenOptions>>().CrossWired().LifestyleTransient());
-		container.Register(Component.For<CrossWiredTransientGeneric<ClosedOptions>>().CrossWired().LifestyleTransient());
+		container.Register(Component.For<CrossWiredTransientGeneric<ClosedOptions>>().CrossWired()
+			.LifestyleTransient());
 		container.Register(Component.For<CrossWiredTransientDisposable>().CrossWired().LifestyleTransient());
 
 		container.Register(Component.For<CrossWiredScoped>().CrossWired().LifestyleScoped());
@@ -339,7 +338,8 @@ public class ModelInstaller
 
 		container.Register(Component.For<CrossWiredSingleton>().CrossWired().LifestyleSingleton());
 		container.Register(Component.For<CrossWiredSingletonGeneric<OpenOptions>>().CrossWired().LifestyleSingleton());
-		container.Register(Component.For<CrossWiredSingletonGeneric<ClosedOptions>>().CrossWired().LifestyleSingleton());
+		container.Register(Component.For<CrossWiredSingletonGeneric<ClosedOptions>>().CrossWired()
+			.LifestyleSingleton());
 		container.Register(Component.For<CrossWiredSingletonDisposable>().CrossWired().LifestyleSingleton());
 
 		container.Register(Component.For<OpenOptions>().CrossWired().LifestyleSingleton());

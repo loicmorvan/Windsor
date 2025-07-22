@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Facilities.TypedFactory.Internal;
-
 using System;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Handlers;
+
+namespace Castle.Windsor.Facilities.TypedFactory.Internal;
 
 public class DelegateServiceStrategy : IGenericServiceStrategy
 {

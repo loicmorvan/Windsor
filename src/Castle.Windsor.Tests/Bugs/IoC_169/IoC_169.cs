@@ -12,14 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs.IoC_169;
+// ReSharper disable UnusedParameter.Local
 
 using System.Reflection;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.Facilities.Startable;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
+
+namespace Castle.Windsor.Tests.Bugs.IoC_169;
 
 public interface IBlackboard;
 
@@ -55,7 +56,7 @@ public class Blackboard : AbstractBlackboard
 
 public interface IServiceWithoutImplementation;
 
-public class IoC_169
+public class IoC169
 {
 	[Fact]
 	public void BulkRegistrations_WhenRegistrationMatchesNoInstancesOfService_StopsStartableFacilityFromWorking()

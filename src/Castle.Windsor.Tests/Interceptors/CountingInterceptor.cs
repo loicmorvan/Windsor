@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Interceptors;
-
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
+
+namespace Castle.Windsor.Tests.Interceptors;
 
 [Singleton]
 public class CountingInterceptor : IInterceptor

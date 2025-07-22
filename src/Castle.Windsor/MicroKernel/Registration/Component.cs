@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Registration;
-
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-
 using Castle.Windsor.Core;
+
+namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Factory for creating <see cref = "ComponentRegistration" /> objects. Use static methods on the class to fluently build registration.</summary>
 public static class Component

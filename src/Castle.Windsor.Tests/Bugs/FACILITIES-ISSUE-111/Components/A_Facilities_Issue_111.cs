@@ -1,16 +1,17 @@
+using System;
+using Castle.Windsor.Core;
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111.Components;
 
-using System;
-
-using Castle.Windsor.Core;
-
-public class A_Facilities_Issue_111 : IA_Facilities_Issue_111, IStartable
+[UsedImplicitly]
+public class AFacilitiesIssue111 : IAFacilitiesIssue111, IStartable
 {
-	private IB_Facilities_Issue_111[] ibs;
+	private IBFacilitiesIssue111[] _ibs;
 
-	public A_Facilities_Issue_111(IB_Facilities_Issue_111[] ibs)
+	public AFacilitiesIssue111(IBFacilitiesIssue111[] ibs)
 	{
-		this.ibs = ibs;
+		_ibs = ibs;
 	}
 
 	public void Method()

@@ -16,11 +16,11 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Scope
 {
 	internal class ExtensionContainerScope : ExtensionContainerScopeBase
 	{
-		private readonly ExtensionContainerScopeBase parent;
+		private readonly ExtensionContainerScopeBase _parent;
 
-		protected ExtensionContainerScope()
+		private ExtensionContainerScope()
 		{
-			parent = ExtensionContainerScopeCache.Current;
+			_parent = ExtensionContainerScopeCache.Current;
 		}
 
 		internal override ExtensionContainerScopeBase RootScope { get; set; }
@@ -35,7 +35,8 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Scope
 
 		public override void Dispose()
 		{
-			if (ExtensionContainerScopeCache.current.Value == this) ExtensionContainerScopeCache.current.Value = parent;
+			if (ExtensionContainerScopeCache.Current == this)
+				ExtensionContainerScopeCache.Current = _parent;
 			base.Dispose();
 		}
 	}

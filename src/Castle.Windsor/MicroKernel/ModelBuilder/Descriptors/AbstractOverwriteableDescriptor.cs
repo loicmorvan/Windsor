@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
-
 using Castle.Core.Configuration;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
+
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public abstract class AbstractOverwriteableDescriptor<TService> : IComponentModelDescriptor
 	where TService : class

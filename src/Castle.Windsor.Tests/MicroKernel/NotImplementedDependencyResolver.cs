@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.MicroKernel;
-
 using System;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Context;
+
+namespace Castle.Windsor.Tests.MicroKernel;
 
 public class NotImplementedDependencyResolver : IDependencyResolver
 {

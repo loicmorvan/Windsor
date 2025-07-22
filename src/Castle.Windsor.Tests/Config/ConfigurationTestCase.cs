@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Config;
-
 using System.Collections.Generic;
-
 using Castle.Core.Configuration;
 using Castle.Core.Resource;
 using Castle.Windsor.Core;
@@ -26,6 +23,8 @@ using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Config.Components;
 using Castle.Windsor.Windsor;
 using Castle.Windsor.Windsor.Installer;
+
+namespace Castle.Windsor.Tests.Config;
 
 public class ConfigurationTestCase : AbstractContainerTestCase
 {
@@ -219,7 +218,7 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 			.Register(
 				Component
 					.For<IConfig>()
-					.ImplementedBy<Config>()
+					.ImplementedBy<Components.Config>()
 					.Named("componentWithArrayDependency"));
 
 		Container.Register(

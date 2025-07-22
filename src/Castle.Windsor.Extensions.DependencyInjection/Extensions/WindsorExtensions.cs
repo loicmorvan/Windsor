@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Windsor.Extensions.DependencyInjection.Scope;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Registration.Lifestyle;
+
 namespace Castle.Windsor.Extensions.DependencyInjection.Extensions
 {
-	using Castle.Windsor.Extensions.DependencyInjection.Scope;
-	using Castle.Windsor.MicroKernel.Registration;
-	using Castle.Windsor.MicroKernel.Registration.Lifestyle;
-
 	public static class WindsorExtensions
 	{
 		/// <summary>Scopes the lifestyle of the component to a scope started by <see name = "IServiceScopeFactory.CreateScope" /></summary>

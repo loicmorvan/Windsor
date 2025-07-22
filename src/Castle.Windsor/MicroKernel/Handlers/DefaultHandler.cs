@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Handlers;
-
 using System;
 using System.Text;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.ComponentActivator;
 using Castle.Windsor.MicroKernel.Context;
+
+namespace Castle.Windsor.MicroKernel.Handlers;
 
 /// <summary>Summary description for DefaultHandler.</summary>
 [Serializable]

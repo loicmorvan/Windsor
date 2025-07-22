@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using System;
+
+namespace Castle.Windsor.Tests.Components;
 
 public class LoggingRepositoryDecorator<T> : IRepository<T>
 {
-	public IRepository<T> inner;
+	public readonly IRepository<T> inner;
 
 	public LoggingRepositoryDecorator()
 	{

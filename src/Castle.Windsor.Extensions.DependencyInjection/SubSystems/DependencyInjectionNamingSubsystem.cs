@@ -13,15 +13,14 @@
 // limitations under the License.
 
 
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.SubSystems.Naming;
+
 namespace Castle.Windsor.Extensions.DependencyInjection.SubSystems
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Reflection;
-
-	using Castle.Windsor.MicroKernel;
-	using Castle.Windsor.MicroKernel.SubSystems.Naming;
-
 	/// <summary>Naming subsystem based on DefaultNamingSubSystem but GetHandlers returns handlers in registration order</summary>
 	public class DependencyInjectionNamingSubsystem : DefaultNamingSubSystem
 	{

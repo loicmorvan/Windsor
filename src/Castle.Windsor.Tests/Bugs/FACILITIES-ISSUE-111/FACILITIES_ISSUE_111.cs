@@ -12,52 +12,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111;
-
 using Castle.Core.Resource;
 using Castle.Windsor.Windsor;
 using Castle.Windsor.Windsor.Configuration.Interpreters;
 
-public class FACILITIES_ISSUE_111
+namespace Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111;
+
+public class FacilitiesIssue111
 {
-	private readonly IResource setupResource;
+	private readonly IResource _setupResource = new StaticContentResource(
+		"""
+		<?xml version="1.0" encoding="utf-8" ?>
 
-	public FACILITIES_ISSUE_111()
-	{
-		setupResource = new StaticContentResource(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
+		<configuration>
 
-<configuration>
+		    <facilities>
+		      <facility type="Castle.Windsor.Facilities.Startable.StartableFacility, Castle.Windsor" />
+		    </facilities>
 
-    <facilities>
-      <facility type=""Castle.Windsor.Facilities.Startable.StartableFacility, Castle.Windsor"" />
-    </facilities>
+			<components>
 
-	<components>
+				<!--if this line is uncommented (and the serviceB declared below commented), serviceA is resolved correctly -->
+				<!--<component id="ServiceB" type="StartableFacilityTest.B, StartableFacilityTest" service="StartableFacilityTest.IB, StartableFacilityTest" />-->
 
-		<!--if this line is uncommented (and the serviceB declared below commented), serviceA is resolved correctly -->
-		<!--<component id=""ServiceB"" type=""StartableFacilityTest.B, StartableFacilityTest"" service=""StartableFacilityTest.IB, StartableFacilityTest"" />-->
+				<component id="ServiceA" type="Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111.Components.AFacilitiesIssue111, Castle.Windsor.Tests" service="Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111.Components.IAFacilitiesIssue111, Castle.Windsor.Tests">
+					<parameters>
+						<ibs>
+							<array>
+								<item>${ServiceB}</item>
+							</array>
+						</ibs>
+					</parameters>
+				</component>
 
-		<component id=""ServiceA"" type=""Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111.Components.A_Facilities_Issue_111, Castle.Windsor.Tests"" service=""Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111.Components.IA_Facilities_Issue_111, Castle.Windsor.Tests"">
-			<parameters>
-				<ibs>
-					<array>
-						<item>${ServiceB}</item>
-					</array>
-				</ibs>
-			</parameters>
-		</component>
+				<component id="ServiceB" type="Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111.Components.BFacilitiesIssue111, Castle.Windsor.Tests" service="Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111.Components.IBFacilitiesIssue111, Castle.Windsor.Tests" />
 
-		<component id=""ServiceB"" type=""Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111.Components.B_Facilities_Issue_111, Castle.Windsor.Tests"" service=""Castle.Windsor.Tests.Bugs.FACILITIES_ISSUE_111.Components.IB_Facilities_Issue_111, Castle.Windsor.Tests"" />
+			</components>
 
-	</components>
-
-</configuration>
-");
-	}
+		</configuration>
+		""");
 
 	[Fact]
 	public void Registering_IStartable_Out_Of_Order_On_Array_Should_Not_Throw_Exception()
 	{
-		new WindsorContainer(new XmlInterpreter(setupResource));
+		using var container = new WindsorContainer(new XmlInterpreter(_setupResource));
 	}
 }

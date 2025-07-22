@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.ComponentActivator;
-
 using Castle.Windsor.Core;
+
+namespace Castle.Windsor.MicroKernel.ComponentActivator;
 
 /// <summary>Implemented by <see cref = "IComponentActivator" /> which don't necessarily need dependencies from the container to activate new instances of the component.</summary>
 public interface IDependencyAwareActivator

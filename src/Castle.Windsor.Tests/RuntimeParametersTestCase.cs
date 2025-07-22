@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Handlers;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.Resolvers;
 using Castle.Windsor.Tests.RuntimeParameters;
 using Castle.Windsor.Windsor.Extensions;
+
+namespace Castle.Windsor.Tests;
 
 public class RuntimeParametersTestCase : AbstractContainerTestCase
 {

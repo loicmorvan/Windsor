@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Registration;
-
 using System;
-
 using Castle.DynamicProxy;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.ComponentActivator;
@@ -24,6 +21,8 @@ using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Config.Components;
 using Castle.Windsor.Tests.Facilities.TypedFactory;
+
+namespace Castle.Windsor.Tests.Registration;
 
 public class UsingFactoryMethodTestCase : AbstractContainerTestCase
 {

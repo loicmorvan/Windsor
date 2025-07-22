@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Registration;
-
 using Castle.Windsor.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor.Windsor;
+
+namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>The contract to install components in the container.</summary>
 public interface IWindsorInstaller

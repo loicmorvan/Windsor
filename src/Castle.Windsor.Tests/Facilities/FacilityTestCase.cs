@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities;
-
 using System;
-
 using Castle.Core.Configuration;
 using Castle.Windsor.Facilities.Startable;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.Tests.ClassComponents;
+
+namespace Castle.Windsor.Tests.Facilities;
 
 public class FacilityTestCase
 {

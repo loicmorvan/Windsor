@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.Startable;
-
 using Castle.Windsor.Facilities.Startable;
 using Castle.Windsor.MicroKernel.Handlers;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
-using Castle.Windsor.Tests.Facilities.Startable.Components;
+
+namespace Castle.Windsor.Tests.Facilities.Startable;
 
 public class ManuallyTriggeredStartTestCase : AbstractContainerTestCase
 {
@@ -26,58 +25,58 @@ public class ManuallyTriggeredStartTestCase : AbstractContainerTestCase
 	public void Can_manually_trigger_start()
 	{
 		var flag = new StartFlag();
-		Startable.Started = false;
+		Components.Startable.Started = false;
 		Container.AddFacility<StartableFacility>(f => f.DeferredStart(flag));
-		Container.Register(Component.For<Startable>(),
+		Container.Register(Component.For<Components.Startable>(),
 			Component.For<ICustomer>().ImplementedBy<CustomerImpl>());
 
-		Assert.False(Startable.Started);
+		Assert.False(Components.Startable.Started);
 
 		flag.Signal();
 
-		Assert.True(Startable.Started);
+		Assert.True(Components.Startable.Started);
 	}
 
 	[Fact]
 	public void Can_manually_trigger_start_only_once()
 	{
 		var flag = new StartFlag();
-		Startable.Started = false;
+		Components.Startable.Started = false;
 		Container.AddFacility<StartableFacility>(f => f.DeferredStart(flag));
-		Container.Register(Component.For<Startable>().LifestyleTransient(),
+		Container.Register(Component.For<Components.Startable>().LifestyleTransient(),
 			Component.For<ICustomer>().ImplementedBy<CustomerImpl>());
 
 		flag.Signal();
-		Startable.Started = false;
+		Components.Startable.Started = false;
 		flag.Signal();
-		Assert.False(Startable.Started);
+		Assert.False(Components.Startable.Started);
 	}
 
 	[Fact]
 	public void Can_manually_trigger_start_when_using_Install()
 	{
 		var flag = new StartFlag();
-		Startable.Started = false;
+		Components.Startable.Started = false;
 		Container.AddFacility<StartableFacility>(f => f.DeferredStart(flag));
 		Container.Install(
-			new ActionBasedInstaller(c => c.Register(Component.For<Startable>(),
+			new ActionBasedInstaller(c => c.Register(Component.For<Components.Startable>(),
 				Component.For<ICustomer>().ImplementedBy<CustomerImpl>()))
 		);
 
-		Assert.False(Startable.Started);
+		Assert.False(Components.Startable.Started);
 
 		flag.Signal();
 
-		Assert.True(Startable.Started);
+		Assert.True(Components.Startable.Started);
 	}
 
 	[Fact]
 	public void Manually_triggered_start_throws_on_missing_dependencies()
 	{
 		var flag = new StartFlag();
-		Startable.Started = false;
+		Components.Startable.Started = false;
 		Container.AddFacility<StartableFacility>(f => f.DeferredStart(flag));
-		Container.Register(Component.For<Startable>());
+		Container.Register(Component.For<Components.Startable>());
 
 		Assert.Throws<HandlerException>(() =>
 			flag.Signal()

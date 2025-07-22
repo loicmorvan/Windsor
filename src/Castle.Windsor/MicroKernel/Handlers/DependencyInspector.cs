@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Handlers;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-
 using Castle.Windsor.Core;
+
+namespace Castle.Windsor.MicroKernel.Handlers;
 
 public class DependencyInspector : IDependencyInspector
 {

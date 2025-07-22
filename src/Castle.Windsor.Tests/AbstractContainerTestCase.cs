@@ -12,35 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
 using System.Reflection;
-
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.Windsor;
 
+namespace Castle.Windsor.Tests;
+
 public abstract class AbstractContainerTestCase : IDisposable
 {
-	private WindsorContainer container;
+	private WindsorContainer _container;
 
-	public AbstractContainerTestCase()
+	protected AbstractContainerTestCase()
 	{
 		Init();
 	}
 
-	protected IWindsorContainer Container => container;
+	protected IWindsorContainer Container => _container;
 
-	protected IKernel Kernel => container.Kernel;
+	protected IKernel Kernel => _container.Kernel;
 
 	public void Dispose()
 	{
-		container.Dispose();
+		_container.Dispose();
 	}
 
 	private void Init()
 	{
-		container = BuildContainer();
+		_container = BuildContainer();
 		AfterContainerCreated();
 	}
 

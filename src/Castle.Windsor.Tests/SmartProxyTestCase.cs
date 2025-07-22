@@ -12,19 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using Castle.DynamicProxy;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Interceptors;
+using Castle.Windsor.Windsor;
+
 namespace Castle.Windsor.Tests;
 
 #if FEATURE_REMOTING
 	using System.Runtime.Remoting;
 #endif
 
-using System;
 
-using Castle.DynamicProxy;
-using Castle.Windsor.MicroKernel.Registration;
-using Castle.Windsor.Tests.Components;
-using Castle.Windsor.Tests.Interceptors;
-using Castle.Windsor.Windsor;
 
 public class SmartProxyTestCase : IDisposable
 {

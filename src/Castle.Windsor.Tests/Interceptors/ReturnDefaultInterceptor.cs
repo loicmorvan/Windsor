@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Interceptors;
-
 using System;
 using System.Reflection;
-
 using Castle.DynamicProxy;
+
+namespace Castle.Windsor.Tests.Interceptors;
 
 public class ReturnDefaultInterceptor : IInterceptor
 {

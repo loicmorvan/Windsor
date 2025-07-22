@@ -12,29 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore;
-
 using System;
-
 using Castle.Facilities.AspNetCore.Contributors;
 using Castle.Windsor.MicroKernel.Facilities;
 using Castle.Windsor.Windsor;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+
+namespace Castle.Facilities.AspNetCore;
 
 public class AspNetCoreFacility : AbstractFacility
 {
 	internal const string IsCrossWiredIntoServiceCollectionKey = "windsor-registration-is-also-registered-in-service-collection";
 	internal const string IsRegisteredAsMiddlewareIntoApplicationBuilderKey = "windsor-registration-is-also-registered-as-middleware";
 
-	private CrossWiringComponentModelContributor crossWiringComponentModelContributor;
-	private MiddlewareComponentModelContributor middlewareComponentModelContributor;
+	private CrossWiringComponentModelContributor _crossWiringComponentModelContributor;
+	private MiddlewareComponentModelContributor _middlewareComponentModelContributor;
 
 	protected override void Init()
 	{
-		Kernel.ComponentModelBuilder.AddContributor(crossWiringComponentModelContributor ??
+		Kernel.ComponentModelBuilder.AddContributor(_crossWiringComponentModelContributor ??
 		                                            throw new InvalidOperationException(
 			                                            "Please call `Container.AddFacility<AspNetCoreFacility>(f => f.CrossWiresInto(services));` first. This should happen before any cross wiring registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md"));
 	}
@@ -48,7 +46,7 @@ public class AspNetCoreFacility : AbstractFacility
 	/// </param>
 	public void CrossWiresInto(IServiceCollection services)
 	{
-		crossWiringComponentModelContributor = new CrossWiringComponentModelContributor(services);
+		_crossWiringComponentModelContributor = new CrossWiringComponentModelContributor(services);
 	}
 
 	/// <summary>
@@ -60,7 +58,9 @@ public class AspNetCoreFacility : AbstractFacility
 	/// </param>
 	public void RegistersMiddlewareInto(IApplicationBuilder applicationBuilder)
 	{
-		middlewareComponentModelContributor = new MiddlewareComponentModelContributor(crossWiringComponentModelContributor.Services, applicationBuilder);
-		Kernel.ComponentModelBuilder.AddContributor(middlewareComponentModelContributor); // Happens after Init() in Startup.Configure(IApplicationBuilder, ...)
+		_middlewareComponentModelContributor =
+			new MiddlewareComponentModelContributor(_crossWiringComponentModelContributor.Services, applicationBuilder);
+		Kernel.ComponentModelBuilder.AddContributor(
+			_middlewareComponentModelContributor); // Happens after Init() in Startup.Configure(IApplicationBuilder, ...)
 	}
 }

@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using System.Linq;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
+
+namespace Castle.Windsor.Tests.Components;
 
 [BoundTo(typeof(Binder))]
 public class BoundComponent : IComponent

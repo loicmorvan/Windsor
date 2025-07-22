@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Configuration2.Properties;
-
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Windsor;
 using Castle.Windsor.Windsor.Configuration.Interpreters;
+
+namespace Castle.Windsor.Tests.Configuration2.Properties;
 
 public class PropertiesTestCase
 {

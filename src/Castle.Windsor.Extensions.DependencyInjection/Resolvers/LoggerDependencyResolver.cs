@@ -13,21 +13,20 @@
 // limitations under the License.
 
 
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Context;
+using Microsoft.Extensions.Logging;
+
 namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers
 {
-	using Castle.Windsor.Core;
-	using Castle.Windsor.MicroKernel;
-	using Castle.Windsor.MicroKernel.Context;
-
-	using Microsoft.Extensions.Logging;
-
 	public class LoggerDependencyResolver : ISubDependencyResolver
 	{
-		private readonly IKernel kernel;
+		private readonly IKernel _kernel;
 
 		public LoggerDependencyResolver(IKernel kernel)
 		{
-			this.kernel = kernel;
+			_kernel = kernel;
 		}
 
 		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
@@ -37,7 +36,7 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers
 
 		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
 		{
-			var factory = kernel.Resolve<ILoggerFactory>();
+			var factory = _kernel.Resolve<ILoggerFactory>();
 			return factory.CreateLogger(RegistrationAdapter.OriginalComponentName(model.Name));
 		}
 	}

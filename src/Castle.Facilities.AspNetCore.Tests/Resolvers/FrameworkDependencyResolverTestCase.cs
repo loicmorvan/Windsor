@@ -12,40 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests.Resolvers;
-
 using System;
-
 using Castle.Facilities.AspNetCore.Resolvers;
 using Castle.Facilities.AspNetCore.Tests.Fakes;
 using Castle.Facilities.AspNetCore.Tests.Framework;
-
 using Microsoft.Extensions.DependencyInjection;
 
-using TestContext = Castle.Facilities.AspNetCore.Tests.Framework.TestContext;
+namespace Castle.Facilities.AspNetCore.Tests.Resolvers;
+
+using TestContext = TestContext;
 
 public class FrameworkDependencyResolverTestCase : IDisposable
 {
-	private readonly FrameworkDependencyResolver frameworkDependencyResolver;
+	private readonly FrameworkDependencyResolver _frameworkDependencyResolver;
 
-	private readonly TestContext testContext;
+	private readonly TestContext _testContext;
 
 	public FrameworkDependencyResolverTestCase()
 	{
-		testContext = TestContextFactory.Get();
-		frameworkDependencyResolver = new FrameworkDependencyResolver(testContext.ServiceCollection);
-		frameworkDependencyResolver.AcceptServiceProvider(testContext.ServiceProvider);
+		_testContext = TestContextFactory.Get();
+		_frameworkDependencyResolver = new FrameworkDependencyResolver(_testContext.ServiceCollection);
+		_frameworkDependencyResolver.AcceptServiceProvider(_testContext.ServiceProvider);
 	}
 
 	public void Dispose()
 	{
-		testContext.Dispose();
+		_testContext.Dispose();
 	}
 
 	[Fact]
 	public void Should_not_match_null()
 	{
-		Assert.False(frameworkDependencyResolver.HasMatchingType(null));
+		Assert.False(_frameworkDependencyResolver.HasMatchingType(null));
 	}
 
 	[InlineData(typeof(ServiceProviderOnlyTransient))]
@@ -66,7 +64,7 @@ public class FrameworkDependencyResolverTestCase : IDisposable
 	[Theory]
 	public void Should_match_ServiceProvider_services(Type serviceType)
 	{
-		Assert.True(frameworkDependencyResolver.HasMatchingType(serviceType));
+		Assert.True(_frameworkDependencyResolver.HasMatchingType(serviceType));
 	}
 
 	[InlineData(typeof(CrossWiredTransient))]
@@ -87,7 +85,7 @@ public class FrameworkDependencyResolverTestCase : IDisposable
 	[Theory]
 	public void Should_match_CrossWired_services(Type serviceType)
 	{
-		Assert.True(frameworkDependencyResolver.HasMatchingType(serviceType));
+		Assert.True(_frameworkDependencyResolver.HasMatchingType(serviceType));
 	}
 
 	[InlineData(typeof(WindsorOnlyTransient))]
@@ -108,7 +106,7 @@ public class FrameworkDependencyResolverTestCase : IDisposable
 	[Theory]
 	public void Should_not_match_WindsorOnly_services(Type serviceType)
 	{
-		Assert.True(!frameworkDependencyResolver.HasMatchingType(serviceType));
+		Assert.True(!_frameworkDependencyResolver.HasMatchingType(serviceType));
 	}
 
 	[InlineData(typeof(ServiceProviderOnlyTransient))]
@@ -129,7 +127,7 @@ public class FrameworkDependencyResolverTestCase : IDisposable
 	[Theory]
 	public void Should_resolve_all_ServiceProviderOnly_services_from_ServiceProvider(Type serviceType)
 	{
-		testContext.ServiceProvider.GetRequiredService(serviceType);
+		_testContext.ServiceProvider.GetRequiredService(serviceType);
 	}
 
 	[InlineData(typeof(CrossWiredTransient))]
@@ -150,7 +148,7 @@ public class FrameworkDependencyResolverTestCase : IDisposable
 	[Theory]
 	public void Should_resolve_all_CrossWiredOnly_services_from_ServiceProvider(Type serviceType)
 	{
-		testContext.ServiceProvider.GetRequiredService(serviceType);
+		_testContext.ServiceProvider.GetRequiredService(serviceType);
 	}
 
 	[InlineData(typeof(ControllerCrossWired))]
@@ -163,8 +161,10 @@ public class FrameworkDependencyResolverTestCase : IDisposable
 	[InlineData(typeof(TagHelperServiceProviderOnly))]
 	[InlineData(typeof(ViewComponentServiceProviderOnly))]
 	[Theory]
-	public void Should_resolve_ServiceProviderOnly_and_WindsorOnly_and_CrossWired_registered_Controllers_TagHelpers_and_ViewComponents_from_WindsorContainer(Type serviceType)
+	public void
+		Should_resolve_ServiceProviderOnly_and_WindsorOnly_and_CrossWired_registered_Controllers_TagHelpers_and_ViewComponents_from_WindsorContainer(
+			Type serviceType)
 	{
-		testContext.WindsorContainer.Resolve(serviceType);
+		_testContext.WindsorContainer.Resolve(serviceType);
 	}
 }

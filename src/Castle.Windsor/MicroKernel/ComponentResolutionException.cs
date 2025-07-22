@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel;
-
 using System;
-
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.MicroKernel;
 
 /// <summary>Exception thrown when resolution process for a component was unsuccessful at some point for whatever reason.</summary>
 [Serializable]

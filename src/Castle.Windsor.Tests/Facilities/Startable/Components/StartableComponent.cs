@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.Startable.Components;
-
 using Castle.Windsor.Core;
+
+namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 
 [Transient]
 public class StartableComponent : IStartable

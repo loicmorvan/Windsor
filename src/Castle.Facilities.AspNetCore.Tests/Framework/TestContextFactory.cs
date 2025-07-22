@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests.Framework;
-
 using System;
-
 using Castle.Facilities.AspNetCore.Tests.Framework.Builders;
 using Castle.Windsor.MicroKernel.Lifestyle;
+
+namespace Castle.Facilities.AspNetCore.Tests.Framework;
 
 public class TestContextFactory
 {

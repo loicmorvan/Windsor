@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs;
-
 using System;
-
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 
-public class IoC_117
+namespace Castle.Windsor.Tests.Bugs;
+
+public class IoC117
 {
 	[Fact]
 	public void Public_property_with_Protected_setter_causes_Object_Reference_exception()

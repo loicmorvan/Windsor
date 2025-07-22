@@ -12,15 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.SubSystems.Configuration;
@@ -30,6 +27,8 @@ using Castle.Windsor.Windsor.Configuration.Interpreters;
 using Castle.Windsor.Windsor.Diagnostics;
 using Castle.Windsor.Windsor.Installer;
 using Castle.Windsor.Windsor.Proxy;
+
+namespace Castle.Windsor.Windsor;
 
 /// <summary>Implementation of <see cref = "IWindsorContainer" /> which delegates to <see cref = "IKernel" /> implementation.</summary>
 [Serializable]

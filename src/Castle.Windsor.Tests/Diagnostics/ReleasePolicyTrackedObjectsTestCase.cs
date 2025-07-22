@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Diagnostics;
-
 using System;
 using System.Collections;
 using System.Linq;
-
 using Castle.Windsor.Facilities.TypedFactory;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
@@ -27,6 +24,8 @@ using Castle.Windsor.Tests.ContainerExtensions;
 using Castle.Windsor.Windsor.Diagnostics;
 using Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
 using Castle.Windsor.Windsor.Diagnostics.Extensions;
+
+namespace Castle.Windsor.Tests.Diagnostics;
 
 public class ReleasePolicyTrackedObjectsTestCase : AbstractContainerTestCase
 {

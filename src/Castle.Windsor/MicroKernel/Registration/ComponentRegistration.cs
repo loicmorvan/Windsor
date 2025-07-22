@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Registration;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,7 +19,6 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.DynamicProxy;
@@ -37,6 +34,8 @@ using Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 using Castle.Windsor.MicroKernel.Registration.Interceptor;
 using Castle.Windsor.MicroKernel.Registration.Lifestyle;
 using Castle.Windsor.MicroKernel.Registration.Proxy;
+
+namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Registration for a single type as a component with the kernel.
 ///     <para />

@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
-
 using Castle.Windsor.Core;
+
+namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
 
 public class OnCreatedConcern<TComponent> : ICommissionConcern
 {

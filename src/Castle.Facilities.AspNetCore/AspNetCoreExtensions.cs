@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore;
-
 using System;
 using System.Collections.Generic;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+
+namespace Castle.Facilities.AspNetCore;
 
 internal static class AspNetCoreExtensions
 {
@@ -34,11 +33,12 @@ internal static class AspNetCoreExtensions
 
 	private sealed class RequestScopingStartupFilter : IStartupFilter
 	{
-		private readonly Func<IEnumerable<IDisposable>> requestScopeProvider;
+		private readonly Func<IEnumerable<IDisposable>> _requestScopeProvider;
 
 		public RequestScopingStartupFilter(Func<IEnumerable<IDisposable>> requestScopeProvider)
 		{
-			this.requestScopeProvider = requestScopeProvider ?? throw new ArgumentNullException(nameof(requestScopeProvider));
+			_requestScopeProvider =
+				requestScopeProvider ?? throw new ArgumentNullException(nameof(requestScopeProvider));
 		}
 
 		public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> nextFilter)
@@ -55,7 +55,7 @@ internal static class AspNetCoreExtensions
 		{
 			builder.Use(async (_, next) =>
 			{
-				var scopes = requestScopeProvider();
+				var scopes = _requestScopeProvider();
 				try
 				{
 					await next();

@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using Castle.Windsor.MicroKernel.SubSystems.Conversion;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.XmlFiles;
 using Castle.Windsor.Windsor;
 using Castle.Windsor.Windsor.Configuration.Interpreters;
+
+namespace Castle.Windsor.Tests;
 
 public class PropertiesInspectionBehaviorTestCase
 {
