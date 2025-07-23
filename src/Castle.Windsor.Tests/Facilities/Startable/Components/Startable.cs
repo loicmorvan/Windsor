@@ -14,13 +14,16 @@
 
 using Castle.Windsor.Core;
 using Castle.Windsor.Tests.ClassComponents;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 
+[UsedImplicitly]
 public class Startable : IStartable
 {
 	public static bool Started;
 
+	// ReSharper disable once UnusedParameter.Local
 	public Startable(ICustomer customer)
 	{
 	}

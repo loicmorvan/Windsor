@@ -27,7 +27,7 @@ public static class ReferenceTracker
 	///         debug mode when the active solution configuration is Debug.)
 	///     </para>
 	/// </summary>
-	public static ReferenceTracker<T> Track<T>([UsedImplicitly] Func<T> getInstanceToTrack) where T : class
+	public static ReferenceTracker<T> Track<T>([InstantHandle] Func<T> getInstanceToTrack) where T : class
 	{
 		return ReferenceTracker<T>.Track(getInstanceToTrack);
 	}

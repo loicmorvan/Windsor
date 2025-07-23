@@ -15,6 +15,8 @@
 using System;
 using Castle.Windsor.Tests.ClassComponents;
 
+// ReSharper disable UnusedParameter.Local
+
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
 public class ServiceWithMultipleCtors

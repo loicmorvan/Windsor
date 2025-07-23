@@ -16,6 +16,8 @@ using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
 
+// ReSharper disable UnusedParameter.Local
+
 namespace Castle.Windsor.Tests;
 
 [PerThread]
@@ -28,19 +30,13 @@ public interface IC
 
 public class CImpl : IC
 {
-	private R _r;
-
-	public CImpl()
-	{
-		N = null;
-	}
-
 	public R R
 	{
-		set => _r = value;
+		// ReSharper disable once ValueParameterNotUsed
+		set { }
 	}
 
-	public IN N { get; set; }
+	public IN N { get; set; } = null;
 }
 
 public interface IN
@@ -51,13 +47,8 @@ public interface IN
 [Transient]
 public class Dn : IN
 {
-	private ISp _sp;
-	private IWm _vm;
-
 	public Dn(IWm vm, ISp sp)
 	{
-		_vm = vm;
-		_sp = sp;
 		Cs = new Bs();
 	}
 

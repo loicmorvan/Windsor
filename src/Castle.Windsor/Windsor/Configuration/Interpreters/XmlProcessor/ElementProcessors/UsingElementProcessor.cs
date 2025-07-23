@@ -27,7 +27,7 @@ public class UsingElementProcessor : AbstractXmlNodeProcessor
 
 		// that's it, at this point we just load the assembly into the appdomain so that it becomes
 		// available to type matching system.
-		var assembly = ReflectionUtil.GetAssemblyNamed(assemblyName);
+		ReflectionUtil.GetAssemblyNamed(assemblyName);
 		RemoveItSelf(nodeList.Current);
 	}
 }

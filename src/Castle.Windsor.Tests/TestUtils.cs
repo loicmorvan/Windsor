@@ -12,18 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests;
 
 public static class TestUtils
 {
-	public static void AssertNoFirstChanceExceptions(Action action)
+	public static void AssertNoFirstChanceExceptions([InstantHandle] Action action)
 	{
 		var firstChanceExceptions = new List<Exception>();
 
@@ -45,7 +46,8 @@ public static class TestUtils
 			var message = new StringBuilder();
 			for (var i = 0; i < firstChanceExceptions.Count; i++)
 			{
-				message.Append("First-chance exception ").Append(i + 1).Append(" of ").Append(firstChanceExceptions.Count).AppendLine(":");
+				message.Append("First-chance exception ").Append(i + 1).Append(" of ")
+					.Append(firstChanceExceptions.Count).AppendLine(":");
 				message.AppendLine(firstChanceExceptions[i].ToString());
 				message.AppendLine();
 			}

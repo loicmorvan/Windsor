@@ -12,10 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 
+[UsedImplicitly]
 public class StartableComponentCustomDependencies : StartableComponent
 {
+	// ReSharper disable once UnusedParameter.Local
 	public StartableComponentCustomDependencies(int config)
 	{
 	}

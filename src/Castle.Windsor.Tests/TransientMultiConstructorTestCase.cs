@@ -27,7 +27,7 @@ public class TransientMultiConstructorTestCase
 	public void TransientMultiConstructorTest()
 	{
 		var container = new DefaultKernel();
-		((IKernel)container).Register(Component.For(typeof(AnyClass)).Named("AnyClass"));
+		container.Register(Component.For(typeof(AnyClass)).Named("AnyClass"));
 
 		var arguments1 = new Arguments { { "integer", 1 } };
 
@@ -43,7 +43,7 @@ public class TransientMultiConstructorTestCase
 	public void TransientMultipleConstructorNonValueTypeTest()
 	{
 		var container = new DefaultKernel();
-		((IKernel)container).Register(Component.For(typeof(AnyClassWithReference)).Named("AnyClass"));
+		container.Register(Component.For(typeof(AnyClassWithReference)).Named("AnyClass"));
 		var one = new Tester1("AnyString");
 		var two = new Tester2(1);
 

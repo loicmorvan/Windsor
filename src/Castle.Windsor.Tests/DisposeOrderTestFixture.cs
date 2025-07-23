@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using Castle.Windsor.Core;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests;
 
@@ -58,30 +59,25 @@ public class DisposeOrderTestFixture
 		bool IsInitialized { get; }
 	}
 
-	private class MyComponent : IMyComponent
+	[UsedImplicitly]
+	private class MyComponent(IMyService service) : IMyComponent
 	{
-		private readonly IMyService _service;
-
-		public MyComponent(IMyService service)
-		{
-			_service = service;
-		}
-
 		public bool IsInitialized { get; private set; }
 
 		public void Dispose()
 		{
 			IsInitialized = false;
-			_service.IsInUse = false;
+			service.IsInUse = false;
 		}
 
 		public void Initialize()
 		{
-			_service.IsInUse = true;
+			service.IsInUse = true;
 			IsInitialized = true;
 		}
 	}
 
+	[UsedImplicitly]
 	private class MyService : IMyService
 	{
 		private bool _inUse;

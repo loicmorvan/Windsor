@@ -67,7 +67,7 @@ public class FacilityTestCase
 	{
 		Assert.False(_facility.Terminated);
 
-		var facility = _kernel.GetFacilities()[0];
+		_ = _kernel.GetFacilities()[0];
 
 		Assert.True(_facility.Initialized);
 		Assert.False(_facility.Terminated);

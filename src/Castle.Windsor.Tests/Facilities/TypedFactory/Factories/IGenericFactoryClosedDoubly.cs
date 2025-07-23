@@ -16,4 +16,5 @@ using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
+// ReSharper disable once PossibleInterfaceMemberAmbiguity : This is not a good practice...
 public interface IGenericFactoryClosedDoubly : IGenericFactory<IDummyComponent>, IGenericFactory<IProtocolHandler>;

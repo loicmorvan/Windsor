@@ -76,7 +76,7 @@ public class DependencyGraphTestCase : AbstractContainerTestCase
 			Component.For<APropCtor>().Interceptors<CountingInterceptor>().LifeStyle.Transient,
 			Component.For<A>().Interceptors<CountingInterceptor>().LifeStyle.Transient,
 			Component.For<A2>().Interceptors<CountingInterceptor>().LifeStyle.Transient);
-		var item = Kernel.Resolve<APropCtor>();
+		Kernel.Resolve<APropCtor>();
 	}
 
 	[Fact]

@@ -14,4 +14,5 @@
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
+// ReSharper disable once UnusedTypeParameter
 public interface IDummyComponent<T>;

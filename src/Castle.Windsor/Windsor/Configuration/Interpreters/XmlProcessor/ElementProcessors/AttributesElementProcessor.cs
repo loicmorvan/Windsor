@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
 using System.Xml;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
 public class AttributesElementProcessor : AbstractXmlNodeProcessor
 {
@@ -45,7 +45,7 @@ public class AttributesElementProcessor : AbstractXmlNodeProcessor
 
 			if (IgnoreNode(childNodes.Current)) continue;
 
-			var elem = GetNodeAsElement(element, childNodes.Current);
+			GetNodeAsElement(element, childNodes.Current);
 
 			AppendElementAsAttribute(element.ParentNode, childNodes.Current as XmlElement);
 		}

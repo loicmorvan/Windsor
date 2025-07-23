@@ -68,7 +68,9 @@ public class MixinDependencyTestCase : AbstractContainerTestCase
 				.Interceptors<CollectInvocationsInterceptor>());
 
 		var proxy = Container.Resolve<IUse<IComponent>>();
-		var id = (proxy as IComponent).Id; // to trigger interception;
+		// ReSharper disable once UnusedVariable
+		// ReSharper disable once SuspiciousTypeConversion.Global
+		var id = ((IComponent)proxy).Id; // to trigger interception;
 		var interceptor = Container.Resolve<CollectInvocationsInterceptor>();
 		var mixin = interceptor.Invocations.Single().InvocationTarget;
 		Assert.Same(mixin, proxy.Dependency);

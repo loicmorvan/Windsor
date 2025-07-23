@@ -17,16 +17,13 @@ using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
 
+// ReSharper disable UnusedParameter.Local
+
 namespace Castle.Windsor.Tests;
 
 public class CustomActivatorTestCase : IDisposable
 {
-	private readonly IKernel _kernel;
-
-	public CustomActivatorTestCase()
-	{
-		_kernel = new DefaultKernel();
-	}
+	private readonly IKernel _kernel = new DefaultKernel();
 
 	public void Dispose()
 	{
@@ -84,20 +81,14 @@ public class ClassWithPrimitiveDependencyFactory
 
 public class ClassWithPrimitiveDependency
 {
-	private int _dependency;
-
 	public ClassWithPrimitiveDependency(int dependency)
 	{
-		_dependency = dependency;
 	}
 }
 
 public class ClassWithServiceDependency
 {
-	private IService _dependency;
-
 	public ClassWithServiceDependency(IService dependency)
 	{
-		_dependency = dependency;
 	}
 }

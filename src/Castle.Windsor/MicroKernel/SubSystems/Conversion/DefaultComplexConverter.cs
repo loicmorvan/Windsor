@@ -99,8 +99,6 @@ public class DefaultComplexConverter : AbstractTypeConverter
 	/// <returns></returns>
 	private object[] ConvertConstructorParameters(ConstructorInfo constructor, IConfiguration configuration)
 	{
-		var conversionManager = ConversionManager;
-
 		var parameters = constructor.GetParameters();
 		var parameterValues = new object[parameters.Length];
 
@@ -130,8 +128,6 @@ public class DefaultComplexConverter : AbstractTypeConverter
 	/// <param name = "configuration">The configuration.</param>
 	private void ConvertPropertyValues(object instance, Type type, IConfiguration configuration)
 	{
-		var conversionManager = ConversionManager;
-
 		foreach (var propConfig in configuration.Children)
 		{
 			var property =

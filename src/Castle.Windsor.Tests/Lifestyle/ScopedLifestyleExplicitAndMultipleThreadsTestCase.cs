@@ -89,7 +89,6 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
 			var instance = default(A);
 			var instanceFromOtherThread = default(A);
 			instance = Container.Resolve<A>();
-			var initialThreadId = Thread.CurrentThread.ManagedThreadId;
 			var task = Task.Factory.StartNew(() => { instanceFromOtherThread = Container.Resolve<A>(); });
 			await task;
 			Assert.Same(instance, instanceFromOtherThread);

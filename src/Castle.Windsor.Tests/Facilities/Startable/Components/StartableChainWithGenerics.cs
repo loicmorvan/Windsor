@@ -14,6 +14,8 @@
 
 using Castle.Windsor.Core;
 
+// ReSharper disable UnusedParameter.Local
+
 namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 
 public class StartableChainParent : IStartable
@@ -56,6 +58,7 @@ public class StartableChainDependency : IStartable
 	}
 }
 
+// ReSharper disable once UnusedTypeParameter
 public class StartableChainGeneric<T>
 {
 	public static int Createcount;

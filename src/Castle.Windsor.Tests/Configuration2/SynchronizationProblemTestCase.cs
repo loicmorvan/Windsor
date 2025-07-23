@@ -75,7 +75,7 @@ public class SynchronizationProblemTestCase : IDisposable
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(DateTime.Now.Ticks + " ---------------------------" + Environment.NewLine + ex);
+				Console.WriteLine(DateTime.Now.Ticks + @" ---------------------------" + Environment.NewLine + ex);
 			}
 	}
 }

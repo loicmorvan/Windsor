@@ -16,11 +16,9 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
 public class Bar
 {
-	private readonly Baz _baz;
-
+	// ReSharper disable once UnusedParameter.Local
 	public Bar(Baz baz, string name)
 	{
-		_baz = baz;
 		Name = name;
 	}
 

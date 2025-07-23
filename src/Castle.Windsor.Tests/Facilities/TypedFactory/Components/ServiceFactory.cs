@@ -14,9 +14,13 @@
 
 using System;
 using Castle.Windsor.Tests.ClassComponents;
+using JetBrains.Annotations;
+
+// ReSharper disable UnusedParameter.Local
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
+[UsedImplicitly]
 public class ServiceFactory
 {
 	public ServiceFactory(Func<ServiceRedirect> factory, Func<SimpleComponent1> factory2)

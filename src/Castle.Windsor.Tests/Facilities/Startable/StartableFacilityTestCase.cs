@@ -247,7 +247,6 @@ public class StartableFacilityTestCase
 
 		var dependencies = new Dictionary<string, object> { { "config", 1 } };
 		_kernel.Register(Component.For<StartableComponentCustomDependencies>().DependsOn(dependencies));
-		;
 
 		Assert.True(_startableCreatedBeforeResolved, "Component was not properly started");
 

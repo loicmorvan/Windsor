@@ -60,11 +60,11 @@ public class TypedFactoryAndSubContainersTestCase : AbstractContainerTestCase
 		var childContainer = new WindsorContainer();
 		Container.AddChildContainer(childContainer);
 
-		var factory = childContainer.Resolve<IGenericFactory<A>>();
+		childContainer.Resolve<IGenericFactory<A>>();
 		Container.RemoveChildContainer(childContainer);
 		childContainer.Dispose();
 
-		factory = Container.Resolve<IGenericFactory<A>>();
+		var factory = Container.Resolve<IGenericFactory<A>>();
 
 
 		factory.Create();

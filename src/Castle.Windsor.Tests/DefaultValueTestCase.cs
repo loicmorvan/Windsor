@@ -100,6 +100,7 @@ public class DefaultValueTestCase : AbstractContainerTestCase
 
 	private sealed class HasCtorWithOptionalInterfaceParameter
 	{
+		// ReSharper disable once UnusedParameter.Local
 		public HasCtorWithOptionalInterfaceParameter(IEqualityComparer<int> comparer = null)
 		{
 		}
