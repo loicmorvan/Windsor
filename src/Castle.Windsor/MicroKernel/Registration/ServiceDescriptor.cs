@@ -12,26 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Registration;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
 using Castle.DynamicProxy.Internal;
+
+namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Describes how to select a types service.</summary>
 public class ServiceDescriptor
 {
 	public delegate IEnumerable<Type> ServiceSelector(Type type, Type[] baseTypes);
 
-	private readonly BasedOnDescriptor basedOnDescriptor;
-	private ServiceSelector serviceSelector;
+	private readonly BasedOnDescriptor _basedOnDescriptor;
+	private ServiceSelector _serviceSelector;
 
 	internal ServiceDescriptor(BasedOnDescriptor basedOnDescriptor)
 	{
-		this.basedOnDescriptor = basedOnDescriptor;
+		_basedOnDescriptor = basedOnDescriptor;
 	}
 
 	/// <summary>Uses all interfaces implemented by the type (or its base types) as well as their base interfaces.</summary>
@@ -111,8 +110,8 @@ public class ServiceDescriptor
 	/// <returns></returns>
 	public BasedOnDescriptor Select(ServiceSelector selector)
 	{
-		serviceSelector += selector;
-		return basedOnDescriptor;
+		_serviceSelector += selector;
+		return _basedOnDescriptor;
 	}
 
 	/// <summary>Assigns the supplied service types.</summary>
@@ -133,12 +132,12 @@ public class ServiceDescriptor
 	internal ICollection<Type> GetServices(Type type, Type[] baseType)
 	{
 		var services = new HashSet<Type>();
-		if (serviceSelector != null)
-			foreach (ServiceSelector selector in serviceSelector.GetInvocationList())
+		if (_serviceSelector != null)
+			foreach (ServiceSelector selector in _serviceSelector.GetInvocationList())
 			{
 				var selected = selector(type, baseType);
 				if (selected != null)
-					foreach (var service in selected.Select(WorkaroundCLRBug))
+					foreach (var service in selected.Select(WorkaroundClrBug))
 						services.Add(service);
 			}
 
@@ -174,7 +173,7 @@ public class ServiceDescriptor
 	/// <summary>This is a workaround for a CLR bug in which GetInterfaces() returns interfaces with no implementations.</summary>
 	/// <param name = "serviceType">Type of the service.</param>
 	/// <returns></returns>
-	private static Type WorkaroundCLRBug(Type serviceType)
+	private static Type WorkaroundClrBug(Type serviceType)
 	{
 		if (!serviceType.GetTypeInfo().IsInterface) return serviceType;
 		// This is a workaround for a CLR bug in

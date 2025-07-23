@@ -24,16 +24,16 @@ namespace Castle.Windsor.Windsor.Diagnostics;
 
 public class DuplicatedDependenciesDiagnostic : IDuplicatedDependenciesDiagnostic
 {
-	private readonly IKernel kernel;
+	private readonly IKernel _kernel;
 
 	public DuplicatedDependenciesDiagnostic(IKernel kernel)
 	{
-		this.kernel = kernel;
+		_kernel = kernel;
 	}
 
 	public Tuple<IHandler, DependencyDuplicate[]>[] Inspect()
 	{
-		var allHandlers = kernel.GetAssignableHandlers(typeof(object));
+		var allHandlers = _kernel.GetAssignableHandlers(typeof(object));
 		var result = new List<Tuple<IHandler, DependencyDuplicate[]>>();
 		foreach (var handler in allHandlers)
 		{

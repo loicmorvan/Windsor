@@ -27,7 +27,7 @@ namespace Castle.Windsor.Extensions.DependencyInjection.SubSystems
 		private IHandler[] GetHandlersInRegisterOrderNoLock(Type service)
 		{
 			var handlers = new List<IHandler>();
-			foreach (var handler in name2Handler.Values)
+			foreach (var handler in Name2Handler.Values)
 			{
 				if (handler.Supports(service) == false) continue;
 
@@ -40,19 +40,19 @@ namespace Castle.Windsor.Extensions.DependencyInjection.SubSystems
 		public override IHandler[] GetHandlers(Type service)
 		{
 			ArgumentNullException.ThrowIfNull(service);
-			if (filters != null)
+			if (Filters != null)
 			{
 				var filtersOpinion = GetFiltersOpinion(service);
 				if (filtersOpinion != null) return filtersOpinion;
 			}
 
 			IHandler[] result;
-			using var locker = @lock.ForReadingUpgradeable();
-			if (handlerListsByTypeCache.TryGetValue(service, out result)) return result;
+			using var locker = Lock.ForReadingUpgradeable();
+			if (HandlerListsByTypeCache.TryGetValue(service, out result)) return result;
 			result = GetHandlersInRegisterOrderNoLock(service);
 
 			locker.Upgrade();
-			handlerListsByTypeCache[service] = result;
+			HandlerListsByTypeCache[service] = result;
 
 			return result;
 		}
@@ -60,7 +60,7 @@ namespace Castle.Windsor.Extensions.DependencyInjection.SubSystems
 		public override IHandler GetHandler(Type service)
 		{
 			ArgumentNullException.ThrowIfNull(service);
-			if (selectors != null)
+			if (Selectors != null)
 			{
 				var selectorsOpinion = GetSelectorsOpinion(null, service);
 				if (selectorsOpinion != null) return selectorsOpinion;

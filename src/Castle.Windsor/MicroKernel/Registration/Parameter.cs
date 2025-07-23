@@ -12,35 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Registration;
-
 using Castle.Core.Configuration;
+
+namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Represents a configuration parameter.</summary>
 public class Parameter
 {
-	private readonly object value;
+	private readonly object _value;
 
 	internal Parameter(string key, string value)
 	{
 		Key = key;
-		this.value = value;
+		_value = value;
 	}
 
 	internal Parameter(string key, IConfiguration configNode)
 	{
 		Key = key;
-		value = configNode;
+		_value = configNode;
 	}
 
 	/// <summary>Gets the parameter configuration.</summary>
-	public IConfiguration ConfigNode => value as IConfiguration;
+	public IConfiguration ConfigNode => _value as IConfiguration;
 
 	/// <summary>Gets the parameter key.</summary>
 	public string Key { get; }
 
 	/// <summary>Gets the parameter value.</summary>
-	public string Value => value as string;
+	public string Value => _value as string;
 
 	/// <summary>Create a <see cref = "ParameterKey" /> with key.</summary>
 	/// <param name = "key">The parameter key.</param>

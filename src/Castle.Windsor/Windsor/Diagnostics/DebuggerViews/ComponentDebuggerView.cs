@@ -24,13 +24,13 @@ namespace Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
 public class ComponentDebuggerView
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly IComponentDebuggerExtension[] extension;
+	private readonly IComponentDebuggerExtension[] _extension;
 
 	public ComponentDebuggerView(IHandler handler, string description, params IComponentDebuggerExtension[] defaultExtension)
 	{
 		Name = handler.GetComponentName();
 		Description = description;
-		extension = defaultExtension.Concat(GetExtensions(handler)).ToArray();
+		_extension = defaultExtension.Concat(GetExtensions(handler)).ToArray();
 	}
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -39,7 +39,7 @@ public class ComponentDebuggerView
 	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
 	public object[] Extensions
 	{
-		get { return extension.SelectMany(e => e.Attach()).ToArray(); }
+		get { return _extension.SelectMany(e => e.Attach()).ToArray(); }
 	}
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]

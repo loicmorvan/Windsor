@@ -19,7 +19,7 @@ using Castle.Windsor.Windsor;
 
 namespace Castle.Windsor.Tests;
 
-public class KernelEvents_EmptyCollectionResolving_TestCase : AbstractContainerTestCase
+public class KernelEventsEmptyCollectionResolvingTestCase : AbstractContainerTestCase
 {
 	[Fact]
 	public void Event_NOT_raised_when_non_empty_collection_is_resolved()

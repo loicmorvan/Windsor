@@ -71,15 +71,15 @@ public class GenericServiceStrategyTestCase : AbstractContainerTestCase
 
 internal class DelegatingServiceStrategy : IGenericServiceStrategy
 {
-	private readonly Func<Type, ComponentModel, bool> supports;
+	private readonly Func<Type, ComponentModel, bool> _supports;
 
 	public DelegatingServiceStrategy(Func<Type, ComponentModel, bool> supports)
 	{
-		this.supports = supports;
+		_supports = supports;
 	}
 
 	public bool Supports(Type service, ComponentModel component)
 	{
-		return supports.Invoke(service, component);
+		return _supports.Invoke(service, component);
 	}
 }

@@ -27,28 +27,26 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 
 public class PotentialLifestyleMismatches : AbstractContainerDebuggerExtension
 {
-	private const string name = "Potential lifestyle mismatches";
-	private IPotentialLifestyleMismatchesDiagnostic diagnostic;
-
-	public static string Name => name;
+	public const string Name = "Potential lifestyle mismatches";
+	private IPotentialLifestyleMismatchesDiagnostic _diagnostic;
 
 	public override IEnumerable<DebuggerViewItem> Attach()
 	{
-		var mismatches = diagnostic.Inspect();
+		var mismatches = _diagnostic.Inspect();
 		if (mismatches.Length == 0) return [];
 
 		Array.Sort(mismatches, (f, s) => f[0].ComponentModel.Name.CompareTo(s[0].ComponentModel.Name));
 		var items = mismatches.ConvertAll(MismatchedComponentView);
 		return
 		[
-			new DebuggerViewItem(name, "Count = " + mismatches.Length, items)
+			new DebuggerViewItem(Name, "Count = " + mismatches.Length, items)
 		];
 	}
 
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
 	{
-		diagnostic = new PotentialLifestyleMismatchesDiagnostic(kernel);
-		diagnosticsHost.AddDiagnostic(diagnostic);
+		_diagnostic = new PotentialLifestyleMismatchesDiagnostic(kernel);
+		diagnosticsHost.AddDiagnostic(_diagnostic);
 	}
 
 	private string GetKey(IHandler root)

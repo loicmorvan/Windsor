@@ -21,13 +21,13 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public class TypedFactoryObsoleteApiTestCase : AbstractContainerTestCase
 {
-	private TypedFactoryFacility facility;
+	private TypedFactoryFacility _facility;
 
 	[Fact]
 	public void Factory1()
 	{
 #pragma warning disable 0618 //call to obsolete method
-		facility.AddTypedFactoryEntry(
+		_facility.AddTypedFactoryEntry(
 			new FactoryEntry(
 				"protocolHandlerFactory", typeof(IProtocolHandlerFactory1), "Create", "Release"));
 #pragma warning restore
@@ -51,7 +51,7 @@ public class TypedFactoryObsoleteApiTestCase : AbstractContainerTestCase
 	public void Factory2()
 	{
 #pragma warning disable 0618 //call to obsolete method
-		facility.AddTypedFactoryEntry(
+		_facility.AddTypedFactoryEntry(
 			new FactoryEntry(
 				"protocolHandlerFactory", typeof(IProtocolHandlerFactory2), "Create", "Release"));
 #pragma warning restore
@@ -79,7 +79,7 @@ public class TypedFactoryObsoleteApiTestCase : AbstractContainerTestCase
 	public void Factory3()
 	{
 #pragma warning disable 0618 //call to obsolete method
-		facility.AddTypedFactoryEntry(
+		_facility.AddTypedFactoryEntry(
 			new FactoryEntry(
 				"compFactory", typeof(IComponentFactory1), "Construct", ""));
 #pragma warning restore
@@ -100,7 +100,7 @@ public class TypedFactoryObsoleteApiTestCase : AbstractContainerTestCase
 	public void Factory4()
 	{
 #pragma warning disable 0618 //call to obsolete method
-		facility.AddTypedFactoryEntry(
+		_facility.AddTypedFactoryEntry(
 			new FactoryEntry(
 				"compFactory", typeof(IComponentFactory2), "Construct", ""));
 #pragma warning restore
@@ -123,7 +123,7 @@ public class TypedFactoryObsoleteApiTestCase : AbstractContainerTestCase
 
 	protected override void AfterContainerCreated()
 	{
-		facility = new TypedFactoryFacility();
-		Container.AddFacility(facility);
+		_facility = new TypedFactoryFacility();
+		Container.AddFacility(_facility);
 	}
 }

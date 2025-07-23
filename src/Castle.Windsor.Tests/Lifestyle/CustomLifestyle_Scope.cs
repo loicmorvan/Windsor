@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Lifestyle;
-
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Handlers;
 
-public class CustomLifestyle_Scope : IResolveExtension
+namespace Castle.Windsor.Tests.Lifestyle;
+
+public class CustomLifestyleScope : IResolveExtension
 {
 	public void Init(IKernel kernel, IHandler handler)
 	{
@@ -25,7 +25,7 @@ public class CustomLifestyle_Scope : IResolveExtension
 
 	public void Intercept(ResolveInvocation invocation)
 	{
-		using (new CustomLifestyle_InstanceScope())
+		using (new CustomLifestyleInstanceScope())
 		{
 			invocation.Proceed();
 		}

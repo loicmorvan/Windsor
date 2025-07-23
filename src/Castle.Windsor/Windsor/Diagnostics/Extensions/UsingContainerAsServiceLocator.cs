@@ -22,25 +22,25 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 
 public class UsingContainerAsServiceLocator : AbstractContainerDebuggerExtension
 {
-	private const string name = "Potential Service Locator usages";
+	private const string Name = "Potential Service Locator usages";
 
-	private IUsingContainerAsServiceLocatorDiagnostic diagnostic;
+	private IUsingContainerAsServiceLocatorDiagnostic _diagnostic;
 
 	public override IEnumerable<DebuggerViewItem> Attach()
 	{
-		var handlers = diagnostic.Inspect();
+		var handlers = _diagnostic.Inspect();
 		if (handlers.Length == 0) return [];
 		Array.Sort(handlers, (f, s) => f.ComponentModel.Name.CompareTo(s.ComponentModel.Name));
 		var items = handlers.ConvertAll(DefaultComponentView);
 		return
 		[
-			new DebuggerViewItem(name, "Count = " + items.Length, items)
+			new DebuggerViewItem(Name, "Count = " + items.Length, items)
 		];
 	}
 
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
 	{
-		diagnostic = new UsingContainerAsServiceLocatorDiagnostic(kernel);
-		diagnosticsHost.AddDiagnostic(diagnostic);
+		_diagnostic = new UsingContainerAsServiceLocatorDiagnostic(kernel);
+		diagnosticsHost.AddDiagnostic(_diagnostic);
 	}
 }

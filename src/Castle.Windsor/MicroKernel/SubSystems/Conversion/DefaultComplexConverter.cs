@@ -12,19 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
-
 using System;
 using System.Globalization;
 using System.Reflection;
-
 using Castle.Core.Configuration;
 using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 [Serializable]
 public class DefaultComplexConverter : AbstractTypeConverter
 {
-	private IConversionManager conversionManager;
+	private IConversionManager _conversionManager;
 
 	/// <summary>Gets the conversion manager.</summary>
 	/// <value>The conversion manager.</value>
@@ -32,8 +31,8 @@ public class DefaultComplexConverter : AbstractTypeConverter
 	{
 		get
 		{
-			if (conversionManager == null) conversionManager = Context.Kernel.GetConversionManager();
-			return conversionManager;
+			if (_conversionManager == null) _conversionManager = Context.Kernel.GetConversionManager();
+			return _conversionManager;
 		}
 	}
 

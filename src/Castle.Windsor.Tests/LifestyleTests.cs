@@ -1,10 +1,9 @@
-namespace Castle.Windsor.Tests;
-
 using System;
-
 using Castle.Windsor.Facilities.TypedFactory;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
+
+namespace Castle.Windsor.Tests;
 
 public class LifestyleTests
 {
@@ -57,17 +56,17 @@ public class LifestyleTests
 
 	public class InterfaceImpl : IInterface, IDisposable
 	{
-		private bool disposed;
+		private bool _disposed;
 
 		public void Dispose()
 		{
-			disposed = true;
+			_disposed = true;
 			Console.WriteLine(Environment.StackTrace);
 		}
 
 		public void Do()
 		{
-			if (disposed) throw new NotSupportedException();
+			if (_disposed) throw new NotSupportedException();
 		}
 	}
 }

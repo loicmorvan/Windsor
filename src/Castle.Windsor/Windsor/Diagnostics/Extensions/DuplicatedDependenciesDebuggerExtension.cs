@@ -23,26 +23,25 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 
 public class DuplicatedDependenciesDebuggerExtension : AbstractContainerDebuggerExtension
 {
-	private const string name = "Components with potentially duplicated dependencies";
-	private DuplicatedDependenciesDiagnostic diagnostic;
+	private const string Name = "Components with potentially duplicated dependencies";
 
-	public static string Name => name;
+	private DuplicatedDependenciesDiagnostic _diagnostic;
 
 	public override IEnumerable<DebuggerViewItem> Attach()
 	{
-		var result = diagnostic.Inspect();
+		var result = _diagnostic.Inspect();
 		if (result.Length == 0) return [];
 		var items = BuildItems(result);
 		return
 		[
-			new DebuggerViewItem(name, "Count = " + items.Length, items)
+			new DebuggerViewItem(Name, "Count = " + items.Length, items)
 		];
 	}
 
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
 	{
-		diagnostic = new DuplicatedDependenciesDiagnostic(kernel);
-		diagnosticsHost.AddDiagnostic<IDuplicatedDependenciesDiagnostic>(diagnostic);
+		_diagnostic = new DuplicatedDependenciesDiagnostic(kernel);
+		diagnosticsHost.AddDiagnostic<IDuplicatedDependenciesDiagnostic>(_diagnostic);
 	}
 
 	private ComponentDebuggerView[] BuildItems(Tuple<IHandler, DependencyDuplicate[]>[] results)
@@ -61,7 +60,8 @@ public class DuplicatedDependenciesDebuggerExtension : AbstractContainerDebugger
 
 	private DebuggerViewItemWithDetails MismatchView(DependencyDuplicate input)
 	{
-		return new DebuggerViewItemWithDetails(Description(input.Dependency1), Description(input.Dependency2), diagnostic.GetDetails(input));
+		return new DebuggerViewItemWithDetails(Description(input.Dependency1), Description(input.Dependency2),
+			_diagnostic.GetDetails(input));
 	}
 
 	private static string Description(DependencyModel dependencyModel)

@@ -26,19 +26,19 @@ namespace Castle.Windsor.Windsor;
 /// </summary>
 public class WindsorServiceProvider : IServiceProviderEx
 {
-	private readonly IKernelInternal kernel;
+	private readonly IKernelInternal _kernel;
 
 	public WindsorServiceProvider(IWindsorContainer container)
 	{
-		kernel = container.Kernel as IKernelInternal;
-		if (kernel == null) throw new ArgumentException($"The kernel must implement {typeof(IKernelInternal)}");
+		_kernel = container.Kernel as IKernelInternal;
+		if (_kernel == null) throw new ArgumentException($"The kernel must implement {typeof(IKernelInternal)}");
 	}
 
-	public IKernel Kernel => kernel;
+	public IKernel Kernel => _kernel;
 
 	public object GetService(Type serviceType)
 	{
-		if (kernel.LoadHandlerByType(null, serviceType, null) != null) return kernel.Resolve(serviceType);
+		if (_kernel.LoadHandlerByType(null, serviceType, null) != null) return _kernel.Resolve(serviceType);
 		return null;
 	}
 

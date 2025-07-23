@@ -21,16 +21,16 @@ namespace Castle.Windsor.Windsor.Diagnostics;
 
 public class PotentialLifestyleMismatchesDiagnostic : IPotentialLifestyleMismatchesDiagnostic
 {
-	private readonly IKernel kernel;
+	private readonly IKernel _kernel;
 
 	public PotentialLifestyleMismatchesDiagnostic(IKernel kernel)
 	{
-		this.kernel = kernel;
+		_kernel = kernel;
 	}
 
 	public IHandler[][] Inspect()
 	{
-		var allHandlers = kernel.GetAssignableHandlers(typeof(object));
+		var allHandlers = _kernel.GetAssignableHandlers(typeof(object));
 		var handlersByComponentModel = allHandlers.ToDictionary(h => h.ComponentModel);
 
 		var items = new List<MismatchedLifestyleDependency>();
@@ -70,7 +70,7 @@ public class PotentialLifestyleMismatchesDiagnostic : IPotentialLifestyleMismatc
 
 	private class MismatchedLifestyleDependency
 	{
-		private readonly HashSet<ComponentModel> checkedComponents;
+		private readonly HashSet<ComponentModel> _checkedComponents;
 
 		public MismatchedLifestyleDependency(IHandler handler, MismatchedLifestyleDependency parent = null)
 		{
@@ -78,9 +78,9 @@ public class PotentialLifestyleMismatchesDiagnostic : IPotentialLifestyleMismatc
 			Parent = parent;
 
 			if (parent == null)
-				checkedComponents = [handler.ComponentModel];
+				_checkedComponents = [handler.ComponentModel];
 			else
-				checkedComponents = [parent.Handler.ComponentModel];
+				_checkedComponents = [parent.Handler.ComponentModel];
 		}
 
 		public IHandler Handler { get; }
@@ -89,7 +89,7 @@ public class PotentialLifestyleMismatchesDiagnostic : IPotentialLifestyleMismatc
 
 		public bool Checked(ComponentModel component)
 		{
-			return checkedComponents.Add(component) == false;
+			return _checkedComponents.Add(component) == false;
 		}
 
 		public IHandler[] GetHandlers()

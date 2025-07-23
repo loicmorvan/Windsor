@@ -19,16 +19,16 @@ namespace Castle.Windsor.Windsor.Diagnostics;
 
 public class PotentiallyMisconfiguredComponentsDiagnostic : IPotentiallyMisconfiguredComponentsDiagnostic
 {
-	private readonly IKernel kernel;
+	private readonly IKernel _kernel;
 
 	public PotentiallyMisconfiguredComponentsDiagnostic(IKernel kernel)
 	{
-		this.kernel = kernel;
+		_kernel = kernel;
 	}
 
 	public IHandler[] Inspect()
 	{
-		var allHandlers = kernel.GetAssignableHandlers(typeof(object));
+		var allHandlers = _kernel.GetAssignableHandlers(typeof(object));
 		var waitingHandlers = allHandlers.Where(IsWaitingForDependencies).ToArray();
 		return waitingHandlers;
 	}

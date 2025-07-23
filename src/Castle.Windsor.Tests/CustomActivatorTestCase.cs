@@ -21,56 +21,56 @@ namespace Castle.Windsor.Tests;
 
 public class CustomActivatorTestCase : IDisposable
 {
-	private readonly IKernel kernel;
+	private readonly IKernel _kernel;
 
 	public CustomActivatorTestCase()
 	{
-		kernel = new DefaultKernel();
+		_kernel = new DefaultKernel();
 	}
 
 	public void Dispose()
 	{
-		kernel.Dispose();
+		_kernel.Dispose();
 	}
 
 	[Fact]
 	public void Can_resolve_component_with_primitive_dependency_via_factory()
 	{
-		kernel.Register(
+		_kernel.Register(
 			Component.For<ClassWithPrimitiveDependency>()
 				.UsingFactoryMethod(() => new ClassWithPrimitiveDependency(2)));
 
-		kernel.Resolve<ClassWithPrimitiveDependency>();
+		_kernel.Resolve<ClassWithPrimitiveDependency>();
 	}
 
 	[Fact]
 	public void Can_resolve_component_with_primitive_dependency_via_instance()
 	{
-		kernel.Register(
+		_kernel.Register(
 			Component.For<ClassWithPrimitiveDependency>()
 				.Instance(new ClassWithPrimitiveDependency(2)));
 
-		kernel.Resolve<ClassWithPrimitiveDependency>();
+		_kernel.Resolve<ClassWithPrimitiveDependency>();
 	}
 
 	[Fact]
 	public void Can_resolve_component_with_service_dependency_via_factory()
 	{
-		kernel.Register(
+		_kernel.Register(
 			Component.For<ClassWithServiceDependency>()
 				.UsingFactoryMethod(() => new ClassWithServiceDependency(null)));
 
-		kernel.Resolve<ClassWithServiceDependency>();
+		_kernel.Resolve<ClassWithServiceDependency>();
 	}
 
 	[Fact]
 	public void Can_resolve_component_with_service_dependency_via_instance()
 	{
-		kernel.Register(
+		_kernel.Register(
 			Component.For<ClassWithServiceDependency>()
 				.Instance(new ClassWithServiceDependency(null)));
 
-		kernel.Resolve<ClassWithServiceDependency>();
+		_kernel.Resolve<ClassWithServiceDependency>();
 	}
 }
 
@@ -84,20 +84,20 @@ public class ClassWithPrimitiveDependencyFactory
 
 public class ClassWithPrimitiveDependency
 {
-	private int dependency;
+	private int _dependency;
 
 	public ClassWithPrimitiveDependency(int dependency)
 	{
-		this.dependency = dependency;
+		_dependency = dependency;
 	}
 }
 
 public class ClassWithServiceDependency
 {
-	private IService dependency;
+	private IService _dependency;
 
 	public ClassWithServiceDependency(IService dependency)
 	{
-		this.dependency = dependency;
+		_dependency = dependency;
 	}
 }

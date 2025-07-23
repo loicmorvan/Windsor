@@ -18,7 +18,7 @@ namespace Castle.Windsor.Tests.Interceptors;
 
 public class ResultModifierInterceptor : IInterceptor
 {
-	private readonly int? returnValue;
+	private readonly int? _returnValue;
 
 	public ResultModifierInterceptor()
 	{
@@ -26,7 +26,7 @@ public class ResultModifierInterceptor : IInterceptor
 
 	public ResultModifierInterceptor(int returnValue)
 	{
-		this.returnValue = returnValue;
+		_returnValue = returnValue;
 	}
 
 	public void Intercept(IInvocation invocation)
@@ -35,13 +35,13 @@ public class ResultModifierInterceptor : IInterceptor
 		{
 			invocation.Proceed();
 			var result = invocation.ReturnValue;
-			if (!returnValue.HasValue)
+			if (!_returnValue.HasValue)
 			{
 				invocation.ReturnValue = (int)result + 1;
 				return;
 			}
 
-			invocation.ReturnValue = returnValue.Value;
+			invocation.ReturnValue = _returnValue.Value;
 			return;
 		}
 

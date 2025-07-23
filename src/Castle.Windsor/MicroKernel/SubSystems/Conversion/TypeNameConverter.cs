@@ -28,23 +28,23 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 [Serializable]
 public class TypeNameConverter : AbstractTypeConverter
 {
-	private static readonly Assembly mscorlib = typeof(object).GetTypeInfo().Assembly;
+	private static readonly Assembly Mscorlib = typeof(object).GetTypeInfo().Assembly;
 
-	private readonly HashSet<Assembly> assemblies = new();
+	private readonly HashSet<Assembly> _assemblies = new();
 
-	private readonly IDictionary<string, MultiType> fullName2Type =
+	private readonly IDictionary<string, MultiType> _fullName2Type =
 		new Dictionary<string, MultiType>(StringComparer.OrdinalIgnoreCase);
 
-	private readonly IDictionary<string, MultiType> justName2Type =
+	private readonly IDictionary<string, MultiType> _justName2Type =
 		new Dictionary<string, MultiType>(StringComparer.OrdinalIgnoreCase);
 
-	private readonly ITypeNameParser parser;
+	private readonly ITypeNameParser _parser;
 
 	public TypeNameConverter(ITypeNameParser parser)
 	{
 		ArgumentNullException.ThrowIfNull(parser);
 
-		this.parser = parser;
+		_parser = parser;
 	}
 
 	public override bool CanHandleType(Type type)
@@ -90,7 +90,8 @@ public class TypeNameConverter : AbstractTypeConverter
 		if (assemblyName != null)
 		{
 			var namePart = assemblyName + ", Version=";
-			var assembly = assemblies.FirstOrDefault(a => a.FullName.StartsWith(namePart, StringComparison.OrdinalIgnoreCase));
+			var assembly =
+				_assemblies.FirstOrDefault(a => a.FullName.StartsWith(namePart, StringComparison.OrdinalIgnoreCase));
 			if (assembly != null)
 				throw new ConverterException(string.Format(
 					"Could not convert string '{0}' to a type. Assembly {1} was matched, but it doesn't contain the type. Make sure that the type name was not mistyped.",
@@ -107,7 +108,7 @@ public class TypeNameConverter : AbstractTypeConverter
 	{
 		var anyAssemblyAdded = false;
 
-		if (assemblies.Count == 0)
+		if (_assemblies.Count == 0)
 		{
 			var context = DependencyContext.Default;
 			var dependencies = context.RuntimeLibraries
@@ -120,7 +121,7 @@ public class TypeNameConverter : AbstractTypeConverter
 
 				var assembly = Assembly.Load(assemblyName);
 
-				assemblies.Add(assembly);
+				_assemblies.Add(assembly);
 				Scan(assembly);
 				anyAssemblyAdded = true;
 			}
@@ -131,7 +132,7 @@ public class TypeNameConverter : AbstractTypeConverter
 
 	protected virtual bool ShouldSkipAssembly(Assembly assembly)
 	{
-		return assembly == mscorlib || assembly.FullName.StartsWith("System");
+		return assembly == Mscorlib || assembly.FullName.StartsWith("System");
 	}
 
 	protected virtual bool ShouldSkipAssembly(AssemblyName assemblyName)
@@ -149,8 +150,8 @@ public class TypeNameConverter : AbstractTypeConverter
 			var exportedTypes = assembly.GetAvailableTypes();
 			foreach (var type in exportedTypes)
 			{
-				Insert(fullName2Type, type.FullName, type);
-				Insert(justName2Type, type.Name, type);
+				Insert(_fullName2Type, type.FullName, type);
+				Insert(_justName2Type, type.Name, type);
 			}
 		}
 		catch (NotSupportedException)
@@ -173,7 +174,7 @@ public class TypeNameConverter : AbstractTypeConverter
 
 	private TypeName ParseName(string name)
 	{
-		return parser.Parse(name);
+		return _parser.Parse(name);
 	}
 
 	public override object PerformConversion(IConfiguration configuration, Type targetType)
@@ -183,12 +184,12 @@ public class TypeNameConverter : AbstractTypeConverter
 
 	public Type GetTypeByFullName(string fullName)
 	{
-		return GetUniqueType(fullName, fullName2Type, "assembly qualified name");
+		return GetUniqueType(fullName, _fullName2Type, "assembly qualified name");
 	}
 
 	public Type GetTypeByName(string justName)
 	{
-		return GetUniqueType(justName, justName2Type, "full name, or assembly qualified name");
+		return GetUniqueType(justName, _justName2Type, "full name, or assembly qualified name");
 	}
 
 	private Type GetUniqueType(string name, IDictionary<string, MultiType> map, string description)
@@ -216,28 +217,28 @@ public class TypeNameConverter : AbstractTypeConverter
 
 	private class MultiType : IEnumerable<Type>
 	{
-		private readonly LinkedList<Type> inner = new();
+		private readonly LinkedList<Type> _inner = new();
 
 		public MultiType(Type type)
 		{
-			inner.AddFirst(type);
+			_inner.AddFirst(type);
 		}
 
-		public bool HasOne => inner.Count == 1;
+		public bool HasOne => _inner.Count == 1;
 
 		public IEnumerator<Type> GetEnumerator()
 		{
-			return inner.GetEnumerator();
+			return _inner.GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return ((IEnumerable)inner).GetEnumerator();
+			return ((IEnumerable)_inner).GetEnumerator();
 		}
 
 		public MultiType AddInnerType(Type type)
 		{
-			inner.AddLast(type);
+			_inner.AddLast(type);
 			return this;
 		}
 	}

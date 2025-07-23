@@ -20,12 +20,12 @@ namespace Castle.Windsor.Windsor.Diagnostics;
 
 public class TrackedInstancesEventArgs : EventArgs
 {
-	private readonly List<Burden> burdens = new();
+	private readonly List<Burden> _burdens = new();
 
-	public Burden[] Items => burdens.ToArray();
+	public Burden[] Items => _burdens.ToArray();
 
 	public void AddRange(IEnumerable<Burden> burden)
 	{
-		burdens.AddRange(burden);
+		_burdens.AddRange(burden);
 	}
 }

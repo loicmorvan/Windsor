@@ -32,7 +32,7 @@ namespace Castle.Windsor.Windsor.Installer;
 /// <summary>Default <see cref = "IComponentsInstaller" /> implementation.</summary>
 public class DefaultComponentInstaller : IComponentsInstaller
 {
-	private string assemblyName;
+	private string _assemblyName;
 
 	/// <summary>Perform installation.</summary>
 	/// <param name = "container">Target container</param>
@@ -67,10 +67,10 @@ public class DefaultComponentInstaller : IComponentsInstaller
 			return;
 		}
 
-		assemblyName = installer.Attributes["assembly"];
-		if (string.IsNullOrEmpty(assemblyName) == false)
+		_assemblyName = installer.Attributes["assembly"];
+		if (string.IsNullOrEmpty(_assemblyName) == false)
 		{
-			var assembly = ReflectionUtil.GetAssemblyNamed(assemblyName);
+			var assembly = ReflectionUtil.GetAssemblyNamed(_assemblyName);
 			if (assemblies.Contains(assembly)) return;
 			assemblies.Add(assembly);
 

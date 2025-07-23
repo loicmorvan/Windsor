@@ -12,40 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Pools;
-
 using System.Threading;
-
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 
+namespace Castle.Windsor.Tests.Pools;
+
 public class MultithreadedPooledTestCase
 {
-	private readonly ManualResetEvent startEvent = new(false);
-	private readonly ManualResetEvent stopEvent = new(false);
-	private IKernel kernel;
+	private readonly ManualResetEvent _startEvent = new(false);
+	private readonly ManualResetEvent _stopEvent = new(false);
+	private IKernel _kernel;
 
 	private void ExecuteMethodUntilSignal()
 	{
-		startEvent.WaitOne(int.MaxValue);
+		_startEvent.WaitOne(int.MaxValue);
 
-		while (!stopEvent.WaitOne(1))
+		while (!_stopEvent.WaitOne(1))
 		{
-			var instance = kernel.Resolve<PoolableComponent1>("a");
+			var instance = _kernel.Resolve<PoolableComponent1>("a");
 
 			Assert.NotNull(instance);
 
 			Thread.Sleep(1 * 500);
 
-			kernel.ReleaseComponent(instance);
+			_kernel.ReleaseComponent(instance);
 		}
 	}
 
 	[Fact]
 	public void Multithreaded()
 	{
-		kernel = new DefaultKernel();
-		kernel.Register(Component.For(typeof(PoolableComponent1)).Named("a"));
+		_kernel = new DefaultKernel();
+		_kernel.Register(Component.For(typeof(PoolableComponent1)).Named("a"));
 
 		const int threadCount = 15;
 
@@ -57,10 +56,10 @@ public class MultithreadedPooledTestCase
 			threads[i].Start();
 		}
 
-		startEvent.Set();
+		_startEvent.Set();
 
 		Thread.CurrentThread.Join(3 * 1000);
 
-		stopEvent.Set();
+		_stopEvent.Set();
 	}
 }

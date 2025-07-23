@@ -21,12 +21,12 @@ namespace Castle.Windsor.Tests.Diagnostics;
 
 public class PotentiallyMisconfiguredComponentsDiagnosticTestCase : AbstractContainerTestCase
 {
-	private IPotentiallyMisconfiguredComponentsDiagnostic diagnostic;
+	private IPotentiallyMisconfiguredComponentsDiagnostic _diagnostic;
 
 	protected override void AfterContainerCreated()
 	{
 		var host = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IDiagnosticsHost;
-		diagnostic = host.GetDiagnostic<IPotentiallyMisconfiguredComponentsDiagnostic>();
+		_diagnostic = host.GetDiagnostic<IPotentiallyMisconfiguredComponentsDiagnostic>();
 	}
 
 	[Fact]
@@ -34,7 +34,7 @@ public class PotentiallyMisconfiguredComponentsDiagnosticTestCase : AbstractCont
 	{
 		Container.Register(Component.For<A>(), Component.For<B>(), Component.For<C>());
 
-		var handlers = diagnostic.Inspect();
+		var handlers = _diagnostic.Inspect();
 
 		Assert.Empty(handlers);
 	}
@@ -44,7 +44,7 @@ public class PotentiallyMisconfiguredComponentsDiagnosticTestCase : AbstractCont
 	{
 		Container.Register(Component.For<B>(), Component.For<C>());
 
-		var handlers = diagnostic.Inspect();
+		var handlers = _diagnostic.Inspect();
 
 		Assert.Equal(2, handlers.Length);
 	}

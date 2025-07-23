@@ -12,24 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
-
 using System;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
 public class UsesFooDelegate
 {
-	private int counter;
+	private int _counter;
 
 	public UsesFooDelegate(Func<int, Foo> myFooFactory)
 	{
 		Factory = myFooFactory;
-		counter = 0;
+		_counter = 0;
 	}
 
 	public Func<int, Foo> Factory { get; }
 
 	public Foo GetFoo()
 	{
-		return Factory(++counter);
+		return Factory(++_counter);
 	}
 }

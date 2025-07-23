@@ -22,31 +22,31 @@ namespace Castle.Windsor.Tests.Facilities;
 
 public class FacilityTestCase
 {
-	private static readonly string facilityKey = typeof(HiperFacility).FullName;
-	private readonly HiperFacility facility;
-	private readonly IKernel kernel;
+	private static readonly string FacilityKey = typeof(HiperFacility).FullName;
+	private readonly HiperFacility _facility;
+	private readonly IKernel _kernel;
 
 	public FacilityTestCase()
 	{
-		kernel = new DefaultKernel();
+		_kernel = new DefaultKernel();
 
 		IConfiguration confignode = new MutableConfiguration("facility");
-		IConfiguration facilityConf = new MutableConfiguration(facilityKey);
+		IConfiguration facilityConf = new MutableConfiguration(FacilityKey);
 		confignode.Children.Add(facilityConf);
-		kernel.ConfigurationStore.AddFacilityConfiguration(facilityKey, confignode);
+		_kernel.ConfigurationStore.AddFacilityConfiguration(FacilityKey, confignode);
 
-		facility = new HiperFacility();
+		_facility = new HiperFacility();
 
-		Assert.False(facility.Initialized);
-		kernel.AddFacility(facility);
+		Assert.False(_facility.Initialized);
+		_kernel.AddFacility(_facility);
 	}
 
 	[Fact]
 	public void Cant_have_two_instances_of_any_facility_type()
 	{
-		kernel.AddFacility<StartableFacility>();
+		_kernel.AddFacility<StartableFacility>();
 
-		var exception = Assert.Throws<ArgumentException>(() => kernel.AddFacility<StartableFacility>());
+		var exception = Assert.Throws<ArgumentException>(() => _kernel.AddFacility<StartableFacility>());
 
 		Assert.Equal(
 			"Facility of type 'Castle.Windsor.Facilities.Startable.StartableFacility' has already been registered with the container. Only one facility of a given type can exist in the container.",
@@ -56,26 +56,26 @@ public class FacilityTestCase
 	[Fact]
 	public void Creation()
 	{
-		var facility = kernel.GetFacilities()[0];
+		var facility = _kernel.GetFacilities()[0];
 
 		Assert.NotNull(facility);
-		Assert.Same(this.facility, facility);
+		Assert.Same(_facility, facility);
 	}
 
 	[Fact]
 	public void LifeCycle()
 	{
-		Assert.False(this.facility.Terminated);
+		Assert.False(_facility.Terminated);
 
-		var facility = kernel.GetFacilities()[0];
+		var facility = _kernel.GetFacilities()[0];
 
-		Assert.True(this.facility.Initialized);
-		Assert.False(this.facility.Terminated);
+		Assert.True(_facility.Initialized);
+		Assert.False(_facility.Terminated);
 
-		kernel.Dispose();
+		_kernel.Dispose();
 
-		Assert.True(this.facility.Initialized);
-		Assert.True(this.facility.Terminated);
+		Assert.True(_facility.Initialized);
+		Assert.True(_facility.Terminated);
 	}
 
 	[Fact]
@@ -83,7 +83,7 @@ public class FacilityTestCase
 	{
 		StartableFacility facility = null;
 
-		kernel.AddFacility<StartableFacility>(f => facility = f);
+		_kernel.AddFacility<StartableFacility>(f => facility = f);
 
 		Assert.NotNull(facility);
 	}

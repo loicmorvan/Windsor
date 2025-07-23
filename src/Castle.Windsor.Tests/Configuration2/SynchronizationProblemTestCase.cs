@@ -22,20 +22,22 @@ namespace Castle.Windsor.Tests.Configuration2;
 
 public class SynchronizationProblemTestCase : IDisposable
 {
-	private readonly WindsorContainer container;
-	private readonly ManualResetEvent startEvent = new(false);
-	private readonly ManualResetEvent stopEvent = new(false);
+	private readonly WindsorContainer _container;
+	private readonly ManualResetEvent _startEvent = new(false);
+	private readonly ManualResetEvent _stopEvent = new(false);
 
 	public SynchronizationProblemTestCase()
 	{
-		container = new WindsorContainer(new XmlInterpreter(ConfigHelper.ResolveConfigPath("Configuration2/synchtest_config.xml")));
+		_container =
+			new WindsorContainer(
+				new XmlInterpreter(ConfigHelper.ResolveConfigPath("Configuration2/synchtest_config.xml")));
 
-		container.Resolve(typeof(ComponentWithConfigs));
+		_container.Resolve(typeof(ComponentWithConfigs));
 	}
 
 	public void Dispose()
 	{
-		container.Dispose();
+		_container.Dispose();
 	}
 
 	[Fact]
@@ -51,21 +53,21 @@ public class SynchronizationProblemTestCase : IDisposable
 			threads[i].Start();
 		}
 
-		startEvent.Set();
+		_startEvent.Set();
 
 		Thread.CurrentThread.Join(10 * 2000);
 
-		stopEvent.Set();
+		_stopEvent.Set();
 	}
 
 	private void ExecuteMethodUntilSignal()
 	{
-		startEvent.WaitOne(int.MaxValue);
+		_startEvent.WaitOne(int.MaxValue);
 
-		while (!stopEvent.WaitOne(1))
+		while (!_stopEvent.WaitOne(1))
 			try
 			{
-				var comp = (ComponentWithConfigs)container.Resolve(typeof(ComponentWithConfigs));
+				var comp = (ComponentWithConfigs)_container.Resolve(typeof(ComponentWithConfigs));
 
 				Assert.Equal(AppContext.BaseDirectory, comp.Name);
 				Assert.Equal(90, comp.Port);

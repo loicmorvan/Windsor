@@ -12,23 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
-
 using System.Diagnostics;
+
+namespace Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
 
 public class MasterDetailsDebuggerViewItem
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly string masterDescription;
+	private readonly string _masterDescription;
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly string masterName;
+	private readonly string _masterName;
 
 	public MasterDetailsDebuggerViewItem(object master, string masterDescription, string masterName, object[] details)
 	{
 		AMaster = master;
-		this.masterDescription = masterDescription;
-		this.masterName = masterName;
+		_masterDescription = masterDescription;
+		_masterName = masterName;
 		Details = details;
 	}
 

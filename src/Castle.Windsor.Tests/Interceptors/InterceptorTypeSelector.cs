@@ -21,15 +21,15 @@ namespace Castle.Windsor.Tests.Interceptors;
 
 public class InterceptorTypeSelector : IInterceptorSelector
 {
-	private readonly Type interceptorType;
+	private readonly Type _interceptorType;
 
 	public InterceptorTypeSelector(Type interceptorType)
 	{
-		this.interceptorType = interceptorType;
+		_interceptorType = interceptorType;
 	}
 
 	public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
 	{
-		return interceptors.Where(i => i.GetType() == interceptorType).ToArray();
+		return interceptors.Where(i => i.GetType() == _interceptorType).ToArray();
 	}
 }

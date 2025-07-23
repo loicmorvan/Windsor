@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
 using System.Xml;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
 public class DefinedProcessingInstructionProcessor : AbstractXmlNodeProcessor
 {
-	private static readonly XmlNodeType[] acceptNodes = [XmlNodeType.ProcessingInstruction];
+	private static readonly XmlNodeType[] AcceptNodes = [XmlNodeType.ProcessingInstruction];
 
-	public override XmlNodeType[] AcceptNodeTypes => acceptNodes;
+	public override XmlNodeType[] AcceptNodeTypes => AcceptNodes;
 
 	public override string Name => "define";
 

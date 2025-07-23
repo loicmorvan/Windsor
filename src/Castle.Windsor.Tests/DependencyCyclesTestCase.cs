@@ -48,7 +48,7 @@ public class DependencyCyclesTestCase : AbstractContainerTestCase
 	public void Can_detect_and_report_cycle_where_container_has_lazy_loaders()
 	{
 		Container.Register(
-			Component.For<ILazyComponentLoader>().ImplementedBy<ABLoader>(),
+			Component.For<ILazyComponentLoader>().ImplementedBy<AbLoader>(),
 			Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>());
 
 		var exception = Assert.Throws<CircularDependencyException>(() => Container.Resolve<IEmptyService>());

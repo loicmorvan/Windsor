@@ -18,15 +18,15 @@ namespace Castle.Windsor.Windsor.Diagnostics;
 
 public class AllComponentsDiagnostic : IAllComponentsDiagnostic
 {
-	private readonly IKernel kernel;
+	private readonly IKernel _kernel;
 
 	public AllComponentsDiagnostic(IKernel kernel)
 	{
-		this.kernel = kernel;
+		_kernel = kernel;
 	}
 
 	public IHandler[] Inspect()
 	{
-		return kernel.GetAssignableHandlers(typeof(object));
+		return _kernel.GetAssignableHandlers(typeof(object));
 	}
 }

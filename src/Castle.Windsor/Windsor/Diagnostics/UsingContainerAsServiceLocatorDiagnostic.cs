@@ -41,16 +41,16 @@ public class UsingContainerAsServiceLocatorDiagnostic : IUsingContainerAsService
 		h => h.ComponentModel.Implementation == typeof(LazyEx<>)
 	];
 
-	private readonly IKernel kernel;
+	private readonly IKernel _kernel;
 
 	public UsingContainerAsServiceLocatorDiagnostic(IKernel kernel)
 	{
-		this.kernel = kernel;
+		_kernel = kernel;
 	}
 
 	public IHandler[] Inspect()
 	{
-		var allHandlers = kernel.GetAssignableHandlers(typeof(object));
+		var allHandlers = _kernel.GetAssignableHandlers(typeof(object));
 		var handlersWithContainerDependency = allHandlers.Where(HasDependencyOnTheContainer);
 		return handlersWithContainerDependency
 			.Where(h => ExceptionsToTheRule.Any(e => e(h)) == false)

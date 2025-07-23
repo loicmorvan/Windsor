@@ -34,30 +34,30 @@ namespace Castle.Windsor.Tests;
 
 public class InterceptorsTestCase : IDisposable
 {
-	private readonly ManualResetEvent startEvent = new(false);
-	private readonly ManualResetEvent stopEvent = new(false);
+	private readonly ManualResetEvent _startEvent = new(false);
+	private readonly ManualResetEvent _stopEvent = new(false);
 
-	private IWindsorContainer container;
-	private CalculatorService service;
+	private IWindsorContainer _container;
+	private CalculatorService _service;
 
 	public InterceptorsTestCase()
 	{
-		container = new WindsorContainer();
-		container.AddFacility<MyInterceptorGreedyFacility>();
+		_container = new WindsorContainer();
+		_container.AddFacility<MyInterceptorGreedyFacility>();
 	}
 
 	public void Dispose()
 	{
-		container.Dispose();
+		_container.Dispose();
 	}
 
 	[Fact]
 	public void InterfaceProxy()
 	{
-		container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
-		container.Register(Component.For(typeof(ICalcService)).ImplementedBy(typeof(CalculatorService)).Named("key"));
+		_container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
+		_container.Register(Component.For(typeof(ICalcService)).ImplementedBy(typeof(CalculatorService)).Named("key"));
 
-		var service = container.Resolve<ICalcService>("key");
+		var service = _container.Resolve<ICalcService>("key");
 
 		Assert.NotNull(service);
 		Assert.Equal(5, service.Sum(2, 2));
@@ -66,21 +66,22 @@ public class InterceptorsTestCase : IDisposable
 	[Fact]
 	public void Interface_that_depends_on_service_it_is_intercepting()
 	{
-		container.Register(Component.For<InterceptorThatCauseStackOverflow>(),
+		_container.Register(Component.For<InterceptorThatCauseStackOverflow>(),
 			Component.For<ICameraService>().ImplementedBy<CameraService>().Interceptors<InterceptorThatCauseStackOverflow>(),
 			//because it has no interceptors, it is okay to resolve it...
 			Component.For<ICameraService>().ImplementedBy<CameraService>().Named("okay to resolve"));
 
-		container.Resolve<ICameraService>();
+		_container.Resolve<ICameraService>();
 	}
 
 	[Fact]
 	public void InterfaceProxyWithLifecycle()
 	{
-		container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
-		container.Register(Component.For(typeof(ICalcService)).ImplementedBy(typeof(CalculatorServiceWithLifecycle)).Named("key"));
+		_container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
+		_container.Register(Component.For(typeof(ICalcService)).ImplementedBy(typeof(CalculatorServiceWithLifecycle))
+			.Named("key"));
 
-		var service = container.Resolve<ICalcService>("key");
+		var service = _container.Resolve<ICalcService>("key");
 
 		Assert.NotNull(service);
 		Assert.True(service.Initialized);
@@ -88,7 +89,7 @@ public class InterceptorsTestCase : IDisposable
 
 		Assert.False(service.Disposed);
 
-		container.Release(service);
+		_container.Release(service);
 
 		Assert.True(service.Disposed);
 	}
@@ -96,71 +97,71 @@ public class InterceptorsTestCase : IDisposable
 	[Fact]
 	public void ClassProxy()
 	{
-		container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
-		container.Register(Component.For(typeof(CalculatorService)).Named("key"));
+		_container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
+		_container.Register(Component.For(typeof(CalculatorService)).Named("key"));
 
-		service = container.Resolve<CalculatorService>("key");
+		_service = _container.Resolve<CalculatorService>("key");
 
-		Assert.NotNull(service);
-		Assert.Equal(5, service.Sum(2, 2));
+		Assert.NotNull(_service);
+		Assert.Equal(5, _service.Sum(2, 2));
 	}
 
 	[Fact]
 	public void Xml_validComponent_resolves_correctly()
 	{
-		container.Install(XmlResource("interceptors.xml"));
-		service = container.Resolve<CalculatorService>("ValidComponent");
+		_container.Install(XmlResource("interceptors.xml"));
+		_service = _container.Resolve<CalculatorService>("ValidComponent");
 
-		Assert.NotNull(service);
-		Assert.Equal(5, service.Sum(2, 2));
+		Assert.NotNull(_service);
+		Assert.Equal(5, _service.Sum(2, 2));
 	}
 
 	[Fact]
 	public void Xml_multiple_interceptors_resolves_correctly()
 	{
-		container.Install(XmlResource("interceptorsMultiple.xml"));
-		service = container.Resolve<CalculatorService>("component");
+		_container.Install(XmlResource("interceptorsMultiple.xml"));
+		_service = _container.Resolve<CalculatorService>("component");
 
-		Assert.NotNull(service);
-		Assert.Equal(10, service.Sum(2, 2));
+		Assert.NotNull(_service);
+		Assert.Equal(10, _service.Sum(2, 2));
 	}
 
 	[Fact]
 	public void Xml_Component_With_Non_Existing_Interceptor_throws()
 	{
-		container.Install(XmlResource("interceptors.xml"));
+		_container.Install(XmlResource("interceptors.xml"));
 		Assert.Throws<HandlerException>(() =>
-			container.Resolve<CalculatorService>("ComponentWithNonExistingInterceptor"));
+			_container.Resolve<CalculatorService>("ComponentWithNonExistingInterceptor"));
 	}
 
 	[Fact]
 	public void Xml_Component_With_Non_invalid_Interceptor_throws()
 	{
 		Assert.Throws<Exception>(() =>
-			container.Install(XmlResource("interceptorsInvalid.xml")));
+			_container.Install(XmlResource("interceptorsInvalid.xml")));
 	}
 
 	[Fact]
 	public void Xml_mixin()
 	{
-		container.Install(XmlResource("mixins.xml"));
-		service = container.Resolve<CalculatorService>("ValidComponent");
+		_container.Install(XmlResource("mixins.xml"));
+		_service = _container.Resolve<CalculatorService>("ValidComponent");
 
-		Assert.IsType<ISimpleMixIn>(service, false);
+		Assert.IsType<ISimpleMixIn>(_service, false);
 
-		((ISimpleMixIn)service).DoSomething();
+		((ISimpleMixIn)_service).DoSomething();
 	}
 
 	[Fact]
 	public void Xml_additionalInterfaces()
 	{
-		container.Install(XmlResource("additionalInterfaces.xml"));
-		service = container.Resolve<CalculatorService>("ValidComponent");
+		_container.Install(XmlResource("additionalInterfaces.xml"));
+		_service = _container.Resolve<CalculatorService>("ValidComponent");
 
-		Assert.IsType<ISimpleMixIn>(service, false);
+		Assert.IsType<ISimpleMixIn>(_service, false);
 
 		Assert.Throws<NotImplementedException>(() =>
-			((ISimpleMixIn)service).DoSomething());
+			((ISimpleMixIn)_service).DoSomething());
 	}
 
 	[Fact]
@@ -169,8 +170,8 @@ public class InterceptorsTestCase : IDisposable
 		ProxyAllHook.Instances = 0;
 		SelectAllSelector.Calls = 0;
 		SelectAllSelector.Instances = 0;
-		container.Install(XmlResource("interceptorsWithHookAndSelector.xml"));
-		var model = container.Kernel.GetHandler("ValidComponent").ComponentModel;
+		_container.Install(XmlResource("interceptorsWithHookAndSelector.xml"));
+		var model = _container.Kernel.GetHandler("ValidComponent").ComponentModel;
 		var options = model.ObtainProxyOptions(false);
 
 		Assert.NotNull(options);
@@ -179,13 +180,13 @@ public class InterceptorsTestCase : IDisposable
 		Assert.Equal(0, SelectAllSelector.Instances);
 		Assert.Equal(0, ProxyAllHook.Instances);
 
-		service = container.Resolve<CalculatorService>("ValidComponent");
+		_service = _container.Resolve<CalculatorService>("ValidComponent");
 
 		Assert.Equal(1, SelectAllSelector.Instances);
 		Assert.Equal(0, SelectAllSelector.Calls);
 		Assert.Equal(1, ProxyAllHook.Instances);
 
-		service.Sum(2, 2);
+		_service.Sum(2, 2);
 
 		Assert.Equal(1, SelectAllSelector.Calls);
 	}
@@ -193,10 +194,10 @@ public class InterceptorsTestCase : IDisposable
 	[Fact]
 	public void OnBehalfOfTest()
 	{
-		container.Register(Component.For(typeof(InterceptorWithOnBehalf)).Named("interceptor"));
-		container.Register(Component.For(typeof(CalculatorService)).Named("key"));
+		_container.Register(Component.For(typeof(InterceptorWithOnBehalf)).Named("interceptor"));
+		_container.Register(Component.For(typeof(CalculatorService)).Named("key"));
 
-		var service = container.Resolve<CalculatorService>("key");
+		var service = _container.Resolve<CalculatorService>("key");
 
 		Assert.NotNull(service);
 		Assert.Equal(4, service.Sum(2, 2));
@@ -209,10 +210,10 @@ public class InterceptorsTestCase : IDisposable
 	[Fact]
 	public void OpenGenericInterceporIsUsedAsClosedGenericInterceptor()
 	{
-		container.Register(Component.For(typeof(GenericInterceptor<>)));
-		container.Register(Component.For(typeof(CalculatorService)).Interceptors<GenericInterceptor<object>>());
+		_container.Register(Component.For(typeof(GenericInterceptor<>)));
+		_container.Register(Component.For(typeof(CalculatorService)).Interceptors<GenericInterceptor<object>>());
 
-		var service = container.Resolve<CalculatorService>();
+		var service = _container.Resolve<CalculatorService>();
 
 		Assert.NotNull(service);
 		Assert.Equal(4, service.Sum(2, 2));
@@ -221,10 +222,10 @@ public class InterceptorsTestCase : IDisposable
 	[Fact]
 	public void ClosedGenericInterceptor()
 	{
-		container.Register(Component.For(typeof(GenericInterceptor<object>)));
-		container.Register(Component.For(typeof(CalculatorService)).Interceptors<GenericInterceptor<object>>());
+		_container.Register(Component.For(typeof(GenericInterceptor<object>)));
+		_container.Register(Component.For(typeof(CalculatorService)).Interceptors<GenericInterceptor<object>>());
 
-		var service = container.Resolve<CalculatorService>();
+		var service = _container.Resolve<CalculatorService>();
 
 		Assert.NotNull(service);
 		Assert.Equal(4, service.Sum(2, 2));
@@ -233,12 +234,12 @@ public class InterceptorsTestCase : IDisposable
 	[Fact]
 	public void ClassProxyWithAttributes()
 	{
-		container = new WindsorContainer(); // So we wont use the facilities
+		_container = new WindsorContainer(); // So we wont use the facilities
 
-		container.Register(Component.For<ResultModifierInterceptor>(),
+		_container.Register(Component.For<ResultModifierInterceptor>(),
 			Component.For<CalculatorServiceWithAttributes>());
 
-		var service = container.Resolve<CalculatorServiceWithAttributes>();
+		var service = _container.Resolve<CalculatorServiceWithAttributes>();
 
 		Assert.NotNull(service);
 		Assert.Equal(5, service.Sum(2, 2));
@@ -247,10 +248,10 @@ public class InterceptorsTestCase : IDisposable
 	[Fact]
 	public void Multithreaded()
 	{
-		container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
-		container.Register(Component.For(typeof(CalculatorService)).Named("key"));
+		_container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
+		_container.Register(Component.For(typeof(CalculatorService)).Named("key"));
 
-		service = container.Resolve<CalculatorService>("key");
+		_service = _container.Resolve<CalculatorService>("key");
 
 		const int threadCount = 10;
 
@@ -262,35 +263,35 @@ public class InterceptorsTestCase : IDisposable
 			threads[i].Start();
 		}
 
-		startEvent.Set();
+		_startEvent.Set();
 
 		Thread.CurrentThread.Join(2000);
 
-		stopEvent.Set();
+		_stopEvent.Set();
 	}
 
 	[Fact]
 	public void AutomaticallyOmitTarget()
 	{
-		container.Register(
+		_container.Register(
 			Component.For<ICalcService>()
 				.Interceptors(InterceptorReference.ForType<ReturnDefaultInterceptor>()).Last,
 			Component.For<ReturnDefaultInterceptor>()
 		);
 
-		var calcService = container.Resolve<ICalcService>();
+		var calcService = _container.Resolve<ICalcService>();
 		Assert.Equal(0, calcService.Sum(1, 2));
 	}
 
 	private void ExecuteMethodUntilSignal()
 	{
-		startEvent.WaitOne(int.MaxValue);
+		_startEvent.WaitOne(int.MaxValue);
 
-		while (!stopEvent.WaitOne(1))
+		while (!_stopEvent.WaitOne(1))
 		{
-			Assert.Equal(5, service.Sum(2, 2));
-			Assert.Equal(6, service.Sum(3, 2));
-			Assert.Equal(8, service.Sum(3, 4));
+			Assert.Equal(5, _service.Sum(2, 2));
+			Assert.Equal(6, _service.Sum(3, 2));
+			Assert.Equal(8, _service.Sum(3, 4));
 		}
 	}
 

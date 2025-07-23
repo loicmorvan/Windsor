@@ -12,42 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor;
-
 using System.Collections.Generic;
 using System.Xml;
 
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor;
+
 public class DefaultXmlProcessorNodeList : IXmlProcessorNodeList
 {
-	private readonly IList<XmlNode> nodes;
+	private readonly IList<XmlNode> _nodes;
 
 	public DefaultXmlProcessorNodeList(XmlNode node)
 	{
-		nodes = new List<XmlNode>();
-		nodes.Add(node);
+		_nodes = new List<XmlNode>();
+		_nodes.Add(node);
 	}
 
 	public DefaultXmlProcessorNodeList(IList<XmlNode> nodes)
 	{
-		this.nodes = nodes;
+		_nodes = nodes;
 	}
 
 	public DefaultXmlProcessorNodeList(XmlNodeList nodes)
 	{
-		this.nodes = CloneNodeList(nodes);
+		_nodes = CloneNodeList(nodes);
 	}
 
-	public int Count => nodes.Count;
+	public int Count => _nodes.Count;
 
-	public XmlNode Current => nodes[CurrentPosition];
+	public XmlNode Current => _nodes[CurrentPosition];
 
 	public int CurrentPosition { get; set; } = -1;
 
-	public bool HasCurrent => CurrentPosition < nodes.Count;
+	public bool HasCurrent => CurrentPosition < _nodes.Count;
 
 	public bool MoveNext()
 	{
-		return ++CurrentPosition < nodes.Count;
+		return ++CurrentPosition < _nodes.Count;
 	}
 
 	/// <summary>Make a shallow copy of the nodeList.</summary>

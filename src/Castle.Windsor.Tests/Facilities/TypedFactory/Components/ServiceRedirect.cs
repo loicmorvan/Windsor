@@ -16,10 +16,10 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
 public class ServiceRedirect
 {
-	private readonly ServiceWithMultipleCtors serviceWithMultipleCtors;
+	private readonly ServiceWithMultipleCtors _serviceWithMultipleCtors;
 
 	public ServiceRedirect(ServiceWithMultipleCtors serviceWithMultipleCtors)
 	{
-		this.serviceWithMultipleCtors = serviceWithMultipleCtors;
+		_serviceWithMultipleCtors = serviceWithMultipleCtors;
 	}
 }

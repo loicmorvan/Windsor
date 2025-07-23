@@ -138,26 +138,26 @@ public class HandlerFilterTestCase : AbstractContainerTestCase
 
 	private class DelegatingFilter : IHandlersFilter
 	{
-		private readonly Func<IHandler, bool> filter;
-		private readonly Type typeToFilter;
+		private readonly Func<IHandler, bool> _filter;
+		private readonly Type _typeToFilter;
 
 		public DelegatingFilter(Type typeToFilter, Func<IHandler, bool> filter = null)
 		{
-			this.typeToFilter = typeToFilter;
-			this.filter = filter ?? (_ => true);
+			_typeToFilter = typeToFilter;
+			_filter = filter ?? (_ => true);
 		}
 
 		public IHandler[] HandlersAsked { get; private set; }
 
 		public bool HasOpinionAbout(Type service)
 		{
-			return service == typeToFilter;
+			return service == _typeToFilter;
 		}
 
 		public IHandler[] SelectHandlers(Type service, IHandler[] handlers)
 		{
 			HandlersAsked = handlers;
-			return handlers.Where(filter).ToArray();
+			return handlers.Where(_filter).ToArray();
 		}
 	}
 

@@ -20,12 +20,14 @@ namespace Castle.Windsor.Tests.Configuration2.Properties;
 
 public class PropertiesTestCase
 {
-	private IWindsorContainer container;
+	private IWindsorContainer _container;
 
 	[Fact]
 	public void CorrectEval()
 	{
-		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_properties.xml"));
+		_container =
+			new WindsorContainer(
+				ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_properties.xml"));
 
 		AssertConfiguration();
 	}
@@ -34,13 +36,17 @@ public class PropertiesTestCase
 	public void MissingProperties()
 	{
 		Assert.Throws<ConfigurationProcessingException>(() =>
-			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_missing_properties.xml")));
+			_container =
+				new WindsorContainer(
+					ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_missing_properties.xml")));
 	}
 
 	[Fact]
 	public void PropertiesAndDefines()
 	{
-		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_properties_and_defines.xml"));
+		_container =
+			new WindsorContainer(
+				ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_properties_and_defines.xml"));
 
 		AssertConfiguration();
 	}
@@ -48,7 +54,9 @@ public class PropertiesTestCase
 	[Fact]
 	public void PropertiesAndDefines2()
 	{
-		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_properties_and_defines2.xml"));
+		_container =
+			new WindsorContainer(
+				ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_properties_and_defines2.xml"));
 
 		AssertConfiguration();
 	}
@@ -56,7 +64,9 @@ public class PropertiesTestCase
 	[Fact]
 	public void PropertiesAndIncludes()
 	{
-		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_properties_and_includes.xml"));
+		_container =
+			new WindsorContainer(
+				ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_properties_and_includes.xml"));
 
 		AssertConfiguration();
 	}
@@ -64,7 +74,9 @@ public class PropertiesTestCase
 	[Fact]
 	public void PropertiesWithinProperties()
 	{
-		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/properties_using_properties.xml"));
+		_container =
+			new WindsorContainer(
+				ConfigHelper.ResolveConfigPath("Configuration2/Properties/properties_using_properties.xml"));
 
 		AssertConfiguration();
 	}
@@ -72,9 +84,11 @@ public class PropertiesTestCase
 	[Fact]
 	public void SilentProperties()
 	{
-		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_silent_properties.xml"));
+		_container =
+			new WindsorContainer(
+				ConfigHelper.ResolveConfigPath("Configuration2/Properties/config_with_silent_properties.xml"));
 
-		var store = container.Kernel.ConfigurationStore;
+		var store = _container.Kernel.ConfigurationStore;
 
 		Assert.Single(store.GetFacilities());
 		Assert.Single(store.GetComponents());
@@ -94,7 +108,7 @@ public class PropertiesTestCase
 
 	private void AssertConfiguration()
 	{
-		var store = container.Kernel.ConfigurationStore;
+		var store = _container.Kernel.ConfigurationStore;
 
 		Assert.Equal(3, store.GetFacilities().Length);
 		Assert.Equal(2, store.GetComponents().Length);

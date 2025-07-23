@@ -23,12 +23,12 @@ namespace Castle.Windsor.Tests.Diagnostics;
 
 public class AllServicesDiagnosticTestCase : AbstractContainerTestCase
 {
-	private IAllServicesDiagnostic diagnostic;
+	private IAllServicesDiagnostic _diagnostic;
 
 	protected override void AfterContainerCreated()
 	{
 		var host = (IDiagnosticsHost)Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
-		diagnostic = host.GetDiagnostic<IAllServicesDiagnostic>();
+		_diagnostic = host.GetDiagnostic<IAllServicesDiagnostic>();
 	}
 
 	[Fact]
@@ -38,7 +38,7 @@ public class AllServicesDiagnosticTestCase : AbstractContainerTestCase
 			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
 			Component.For<A>());
 
-		var services = diagnostic.Inspect();
+		var services = _diagnostic.Inspect();
 		Assert.Equal(2, services.Count);
 		Assert.Equal(2, services[typeof(IEmptyService)].Count());
 		Assert.Single(services[typeof(A)]);
@@ -51,7 +51,7 @@ public class AllServicesDiagnosticTestCase : AbstractContainerTestCase
 		Container.Resolve<GenericImpl1<A>>();
 		Container.Resolve<GenericImpl1<B>>();
 
-		var services = diagnostic.Inspect();
+		var services = _diagnostic.Inspect();
 		Assert.Equal(1, services.Count);
 		Assert.True(services.Contains(typeof(GenericImpl1<>)));
 	}
@@ -63,7 +63,7 @@ public class AllServicesDiagnosticTestCase : AbstractContainerTestCase
 			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
 			Component.For<A>());
 
-		var services = diagnostic.Inspect();
+		var services = _diagnostic.Inspect();
 		Assert.Equal(3, services.Count);
 	}
 }

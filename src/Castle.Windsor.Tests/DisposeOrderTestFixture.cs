@@ -60,11 +60,11 @@ public class DisposeOrderTestFixture
 
 	private class MyComponent : IMyComponent
 	{
-		private readonly IMyService service;
+		private readonly IMyService _service;
 
 		public MyComponent(IMyService service)
 		{
-			this.service = service;
+			_service = service;
 		}
 
 		public bool IsInitialized { get; private set; }
@@ -72,31 +72,31 @@ public class DisposeOrderTestFixture
 		public void Dispose()
 		{
 			IsInitialized = false;
-			service.IsInUse = false;
+			_service.IsInUse = false;
 		}
 
 		public void Initialize()
 		{
-			service.IsInUse = true;
+			_service.IsInUse = true;
 			IsInitialized = true;
 		}
 	}
 
 	private class MyService : IMyService
 	{
-		private bool inUse;
+		private bool _inUse;
 
 		public bool IsInUse
 		{
 			get
 			{
 				if (IsInitialized == false) throw new Exception("Service must be initialized !!!");
-				return inUse;
+				return _inUse;
 			}
 			set
 			{
 				if (IsInitialized == false) throw new Exception("Service must be initialized !!!");
-				inUse = value;
+				_inUse = value;
 			}
 		}
 

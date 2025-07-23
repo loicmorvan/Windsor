@@ -21,11 +21,11 @@ namespace Castle.Windsor.Tests.ContainerExtensions;
 
 public class BadDependencyResolver : ISubDependencyResolver
 {
-	private readonly IKernel kernel;
+	private readonly IKernel _kernel;
 
 	public BadDependencyResolver(IKernel kernel)
 	{
-		this.kernel = kernel;
+		_kernel = kernel;
 	}
 
 	public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
@@ -37,6 +37,6 @@ public class BadDependencyResolver : ISubDependencyResolver
 	public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
 		DependencyModel dependency)
 	{
-		return kernel.Resolve<IBookStore>();
+		return _kernel.Resolve<IBookStore>();
 	}
 }

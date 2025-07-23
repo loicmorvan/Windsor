@@ -102,15 +102,15 @@ public class ConfigurationInstallerTestCase : AbstractContainerTestCase
 
 internal class Installer : IWindsorInstaller
 {
-	private readonly Action<IWindsorContainer> install;
+	private readonly Action<IWindsorContainer> _install;
 
 	public Installer(Action<IWindsorContainer> install)
 	{
-		this.install = install;
+		_install = install;
 	}
 
 	public void Install(IWindsorContainer container, IConfigurationStore store)
 	{
-		install(container);
+		_install(container);
 	}
 }

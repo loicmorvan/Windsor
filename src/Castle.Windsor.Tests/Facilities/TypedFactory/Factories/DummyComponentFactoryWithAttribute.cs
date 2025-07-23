@@ -18,4 +18,4 @@ using Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
 [Factory(SelectorType = typeof(Component2Selector))]
-public interface IDummyComponentFactoryWithAttribute_implementingType : IDummyComponentFactory;
+public interface IDummyComponentFactoryWithAttributeImplementingType : IDummyComponentFactory;

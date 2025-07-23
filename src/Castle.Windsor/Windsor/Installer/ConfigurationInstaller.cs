@@ -25,21 +25,21 @@ public delegate string EnvironmentDelegate();
 
 public class ConfigurationInstaller : IWindsorInstaller
 {
-	private readonly IConfigurationInterpreter interpreter;
-	private EnvironmentDelegate environment;
+	private readonly IConfigurationInterpreter _interpreter;
+	private EnvironmentDelegate _environment;
 
 	/// <summary>Initializes a new instance of the ConfigurationInstaller class.</summary>
 	public ConfigurationInstaller(IConfigurationInterpreter interpreter)
 	{
 		ArgumentNullException.ThrowIfNull(interpreter);
-		this.interpreter = interpreter;
+		_interpreter = interpreter;
 	}
 
 	void IWindsorInstaller.Install(IWindsorContainer container, IConfigurationStore store)
 	{
-		if (environment != null) interpreter.EnvironmentName = environment();
+		if (_environment != null) _interpreter.EnvironmentName = _environment();
 
-		interpreter.ProcessResource(interpreter.Source, store, container.Kernel);
+		_interpreter.ProcessResource(_interpreter.Source, store, container.Kernel);
 	}
 
 	/// <summary>Sets the configuration environment name.</summary>
@@ -55,7 +55,7 @@ public class ConfigurationInstaller : IWindsorInstaller
 	/// <returns></returns>
 	public ConfigurationInstaller Environment(EnvironmentDelegate environment)
 	{
-		this.environment = environment;
+		_environment = environment;
 		return this;
 	}
 }

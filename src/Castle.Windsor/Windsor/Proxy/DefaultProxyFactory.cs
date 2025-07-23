@@ -34,8 +34,7 @@ namespace Castle.Windsor.Windsor.Proxy;
 [Serializable]
 public class DefaultProxyFactory : AbstractProxyFactory, IDeserializationCallback
 {
-	[NonSerialized]
-	protected ProxyGenerator generator;
+	[NonSerialized] protected ProxyGenerator Generator;
 
 	/// <summary>Constructs a DefaultProxyFactory</summary>
 	public DefaultProxyFactory() : this(new ProxyGenerator())
@@ -49,12 +48,12 @@ public class DefaultProxyFactory : AbstractProxyFactory, IDeserializationCallbac
 
 	public DefaultProxyFactory(ProxyGenerator generator)
 	{
-		this.generator = generator;
+		Generator = generator;
 	}
 
 	public void OnDeserialization(object sender)
 	{
-		generator = new ProxyGenerator();
+		Generator = new ProxyGenerator();
 	}
 
 	public override object Create(IProxyFactoryExtension customFactory, IKernel kernel, ComponentModel model, CreationContext context,
@@ -65,7 +64,7 @@ public class DefaultProxyFactory : AbstractProxyFactory, IDeserializationCallbac
 		var proxyGenOptions = CreateProxyGenerationOptionsFrom(proxyOptions, kernel, context, model);
 
 		CustomizeOptions(proxyGenOptions, kernel, model, constructorArguments);
-		var builder = generator.ProxyBuilder;
+		var builder = Generator.ProxyBuilder;
 		var proxy = customFactory.Generate(builder, proxyGenOptions, interceptors, model, context);
 
 		CustomizeProxy(proxy, proxyGenOptions, kernel, model);
@@ -102,11 +101,14 @@ public class DefaultProxyFactory : AbstractProxyFactory, IDeserializationCallbac
 			var firstService = model.Services.First();
 			var additionalInterfaces = model.Services.Skip(1).Concat(interfaces).ToArray();
 			if (proxyOptions.OmitTarget)
-				proxy = generator.CreateInterfaceProxyWithoutTarget(firstService, additionalInterfaces, proxyGenOptions, interceptors);
+				proxy = Generator.CreateInterfaceProxyWithoutTarget(firstService, additionalInterfaces, proxyGenOptions,
+					interceptors);
 			else if (proxyOptions.AllowChangeTarget)
-				proxy = generator.CreateInterfaceProxyWithTargetInterface(firstService, additionalInterfaces, target, proxyGenOptions, interceptors);
+				proxy = Generator.CreateInterfaceProxyWithTargetInterface(firstService, additionalInterfaces, target,
+					proxyGenOptions, interceptors);
 			else
-				proxy = generator.CreateInterfaceProxyWithTarget(firstService, additionalInterfaces, target, proxyGenOptions, interceptors);
+				proxy = Generator.CreateInterfaceProxyWithTarget(firstService, additionalInterfaces, target,
+					proxyGenOptions, interceptors);
 		}
 		else
 		{
@@ -119,7 +121,8 @@ public class DefaultProxyFactory : AbstractProxyFactory, IDeserializationCallbac
 				.SkipWhile(s => s.GetTypeInfo().IsClass)
 				.Concat(interfaces)
 				.ToArray();
-			proxy = generator.CreateClassProxy(classToProxy, additionalInterfaces, proxyGenOptions, constructorArguments, interceptors);
+			proxy = Generator.CreateClassProxy(classToProxy, additionalInterfaces, proxyGenOptions,
+				constructorArguments, interceptors);
 		}
 
 		CustomizeProxy(proxy, proxyGenOptions, kernel, model);

@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Registration;
-
 using System;
-
 using Castle.Core.Configuration;
+
+namespace Castle.Windsor.MicroKernel.Registration;
 
 #region Node
 
@@ -42,19 +41,19 @@ public abstract class Node
 /// <summary>Represents a configuration attribute.</summary>
 public class Attrib : Node
 {
-	private readonly string value;
+	private readonly string _value;
 
 	internal Attrib(string name, string value)
 		: base(name)
 	{
-		this.value = value;
+		_value = value;
 	}
 
 	/// <summary>Applies the configuration node.</summary>
 	/// <param name = "configuration">The configuration.</param>
 	public override void ApplyTo(IConfiguration configuration)
 	{
-		configuration.Attributes.Add(Name, value);
+		configuration.Attributes.Add(Name, _value);
 	}
 
 	/// <summary>Create a <see cref = "NamedAttribute" /> with name.</summary>
@@ -73,11 +72,11 @@ public class Attrib : Node
 /// <summary>Represents a named attribute.</summary>
 public class NamedAttribute
 {
-	private readonly string name;
+	private readonly string _name;
 
 	internal NamedAttribute(string name)
 	{
-		this.name = name;
+		_name = name;
 	}
 
 	/// <summary>Builds the <see cref = "Attribute" /> with name/value.</summary>
@@ -85,7 +84,7 @@ public class NamedAttribute
 	/// <returns>The new <see cref = "SimpleChild" /></returns>
 	public Attrib Eq(string value)
 	{
-		return new Attrib(name, value);
+		return new Attrib(_name, value);
 	}
 
 	/// <summary>Builds the <see cref = "Attribute" /> with name/value.</summary>
@@ -94,7 +93,7 @@ public class NamedAttribute
 	public Attrib Eq(object value)
 	{
 		var valueStr = value != null ? value.ToString() : string.Empty;
-		return new Attrib(name, valueStr);
+		return new Attrib(_name, valueStr);
 	}
 }
 
@@ -175,19 +174,19 @@ public class NamedChild : Node
 /// <summary>Represents a simple child node.</summary>
 public class SimpleChild : Node
 {
-	private readonly string value;
+	private readonly string _value;
 
 	internal SimpleChild(string name, string value)
 		: base(name)
 	{
-		this.value = value;
+		_value = value;
 	}
 
 	/// <summary>Applies the configuration node.</summary>
 	/// <param name = "configuration">The configuration.</param>
 	public override void ApplyTo(IConfiguration configuration)
 	{
-		var node = new MutableConfiguration(Name, value);
+		var node = new MutableConfiguration(Name, _value);
 		configuration.Children.Add(node);
 	}
 }
@@ -199,12 +198,12 @@ public class SimpleChild : Node
 /// <summary>Represents a complex child node.</summary>
 public class ComplexChild : Node
 {
-	private readonly IConfiguration configNode;
+	private readonly IConfiguration _configNode;
 
 	internal ComplexChild(string name, IConfiguration configNode)
 		: base(name)
 	{
-		this.configNode = configNode;
+		_configNode = configNode;
 	}
 
 	/// <summary>Applies the configuration node.</summary>
@@ -212,7 +211,7 @@ public class ComplexChild : Node
 	public override void ApplyTo(IConfiguration configuration)
 	{
 		var node = new MutableConfiguration(Name);
-		node.Children.Add(configNode);
+		node.Children.Add(_configNode);
 		configuration.Children.Add(node);
 	}
 }
@@ -224,12 +223,12 @@ public class ComplexChild : Node
 /// <summary>Represents a compound child node.</summary>
 public class CompoundChild : Node
 {
-	private readonly Node[] childNodes;
+	private readonly Node[] _childNodes;
 
 	internal CompoundChild(string name, Node[] childNodes)
 		: base(name)
 	{
-		this.childNodes = childNodes;
+		_childNodes = childNodes;
 	}
 
 	/// <summary>Applies the configuration node.</summary>
@@ -237,7 +236,7 @@ public class CompoundChild : Node
 	public override void ApplyTo(IConfiguration configuration)
 	{
 		var node = new MutableConfiguration(Name);
-		foreach (var childNode in childNodes) childNode.ApplyTo(node);
+		foreach (var childNode in _childNodes) childNode.ApplyTo(node);
 		configuration.Children.Add(node);
 	}
 }

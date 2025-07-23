@@ -22,27 +22,25 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 
 public class AllComponents : AbstractContainerDebuggerExtension
 {
-	private const string name = "All components";
+	public const string Name = "All components";
 
-	private IAllComponentsDiagnostic diagnostic;
-
-	public static string Name => name;
+	private IAllComponentsDiagnostic _diagnostic;
 
 	public override IEnumerable<DebuggerViewItem> Attach()
 	{
-		var handlers = diagnostic.Inspect();
+		var handlers = _diagnostic.Inspect();
 
 		var items = handlers.ConvertAll(DefaultComponentView);
-		Array.Sort(items, (c1, c2) => c1.Name.CompareTo(c2.Name));
+		Array.Sort(items, (c1, c2) => string.Compare(c1.Name, c2.Name, StringComparison.Ordinal));
 		return
 		[
-			new DebuggerViewItem(name, "Count = " + items.Length, items)
+			new DebuggerViewItem(Name, "Count = " + items.Length, items)
 		];
 	}
 
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
 	{
-		diagnostic = new AllComponentsDiagnostic(kernel);
-		diagnosticsHost.AddDiagnostic(diagnostic);
+		_diagnostic = new AllComponentsDiagnostic(kernel);
+		diagnosticsHost.AddDiagnostic(_diagnostic);
 	}
 }

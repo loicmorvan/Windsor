@@ -22,27 +22,25 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 
 public class PotentiallyMisconfiguredComponents : AbstractContainerDebuggerExtension
 {
-	private const string name = "Potentially misconfigured components";
-	private IPotentiallyMisconfiguredComponentsDiagnostic diagnostic;
-
-	public static string Name => name;
+	public const string Name = "Potentially misconfigured components";
+	private IPotentiallyMisconfiguredComponentsDiagnostic _diagnostic;
 
 	public override IEnumerable<DebuggerViewItem> Attach()
 	{
-		var handlers = diagnostic.Inspect();
+		var handlers = _diagnostic.Inspect();
 		if (handlers.Length == 0) return [];
 
 		Array.Sort(handlers, (f, s) => f.ComponentModel.Name.CompareTo(s.ComponentModel.Name));
 		var items = handlers.ConvertAll(DefaultComponentView);
 		return
 		[
-			new DebuggerViewItem(name, "Count = " + items.Length, items)
+			new DebuggerViewItem(Name, "Count = " + items.Length, items)
 		];
 	}
 
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
 	{
-		diagnostic = new PotentiallyMisconfiguredComponentsDiagnostic(kernel);
-		diagnosticsHost.AddDiagnostic(diagnostic);
+		_diagnostic = new PotentiallyMisconfiguredComponentsDiagnostic(kernel);
+		diagnosticsHost.AddDiagnostic(_diagnostic);
 	}
 }

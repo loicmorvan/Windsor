@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.SubSystems.Resource;
-
 using System;
 using System.Collections.Generic;
-
 using Castle.Core.Resource;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Resource;
 
 /// <summary>Pendent</summary>
 public class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 {
-	private readonly List<IResourceFactory> resourceFactories = new();
+	private readonly List<IResourceFactory> _resourceFactories = new();
 
 	public DefaultResourceSubSystem()
 	{
@@ -47,7 +46,7 @@ public class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 	{
 		ArgumentNullException.ThrowIfNull(uri);
 
-		foreach (var resFactory in resourceFactories)
+		foreach (var resFactory in _resourceFactories)
 			if (resFactory.Accept(uri))
 				return resFactory.Create(uri);
 
@@ -60,7 +59,7 @@ public class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 		ArgumentNullException.ThrowIfNull(uri);
 		ArgumentNullException.ThrowIfNull(basePath);
 
-		foreach (var resFactory in resourceFactories)
+		foreach (var resFactory in _resourceFactories)
 			if (resFactory.Accept(uri))
 				return resFactory.Create(uri, basePath);
 
@@ -72,7 +71,7 @@ public class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 	{
 		ArgumentNullException.ThrowIfNull(resourceFactory);
 
-		resourceFactories.Add(resourceFactory);
+		_resourceFactories.Add(resourceFactory);
 	}
 
 	protected virtual void InitDefaultResourceFactories()

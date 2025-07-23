@@ -23,26 +23,26 @@ namespace Castle.Windsor.Tests;
 
 public class GraphTestCase : IDisposable
 {
-	private readonly IKernel kernel;
+	private readonly IKernel _kernel;
 
 	public GraphTestCase()
 	{
-		kernel = new DefaultKernel();
+		_kernel = new DefaultKernel();
 	}
 
 	public void Dispose()
 	{
-		kernel.Dispose();
+		_kernel.Dispose();
 	}
 
 	[Fact]
 	public void TopologicalSortOnComponents()
 	{
-		kernel.Register(Component.For(typeof(A)).Named("a"));
-		kernel.Register(Component.For(typeof(B)).Named("b"));
-		kernel.Register(Component.For(typeof(C)).Named("c"));
+		_kernel.Register(Component.For(typeof(A)).Named("a"));
+		_kernel.Register(Component.For(typeof(B)).Named("b"));
+		_kernel.Register(Component.For(typeof(C)).Named("c"));
 
-		var nodes = kernel.GraphNodes;
+		var nodes = _kernel.GraphNodes;
 
 		Assert.NotNull(nodes);
 		Assert.Equal(3, nodes.Length);

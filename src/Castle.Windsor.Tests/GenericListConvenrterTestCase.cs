@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System.Collections.Generic;
-
 using Castle.Core.Resource;
 using Castle.Windsor.Windsor.Installer;
+
+namespace Castle.Windsor.Tests;
 
 public class GenericListConvenrterTestCase : AbstractContainerTestCase
 {
@@ -58,12 +57,12 @@ public interface IMyObject
 
 public class MyObject : IMyObject
 {
-	protected readonly IDictionary<int, IList<string>> stuff;
+	protected readonly IDictionary<int, IList<string>> Stuff;
 
 	public MyObject(IDictionary<int, IList<string>> stuff)
 	{
-		this.stuff = stuff;
+		Stuff = stuff;
 	}
 
-	public virtual int Count => stuff.Count;
+	public virtual int Count => Stuff.Count;
 }

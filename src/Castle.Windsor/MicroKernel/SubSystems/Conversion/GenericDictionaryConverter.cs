@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
-
 using Castle.Core.Configuration;
 using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 [Serializable]
 public class GenericDictionaryConverter : AbstractTypeConverter
@@ -65,11 +64,11 @@ public class GenericDictionaryConverter : AbstractTypeConverter
 
 	private class DictionaryHelper<TKey, TValue> : IGenericCollectionConverterHelper
 	{
-		private readonly GenericDictionaryConverter parent;
+		private readonly GenericDictionaryConverter _parent;
 
 		public DictionaryHelper(GenericDictionaryConverter parent)
 		{
-			this.parent = parent;
+			_parent = parent;
 		}
 
 		public object ConvertConfigurationToCollection(IConfiguration configuration)
@@ -85,29 +84,35 @@ public class GenericDictionaryConverter : AbstractTypeConverter
 
 				var convertKeyTo = typeof(TKey);
 
-				if (itemConfig.Attributes["keyType"] != null) convertKeyTo = parent.Context.Composition.PerformConversion<Type>(itemConfig.Attributes["keyType"]);
+				if (itemConfig.Attributes["keyType"] != null)
+					convertKeyTo =
+						_parent.Context.Composition.PerformConversion<Type>(itemConfig.Attributes["keyType"]);
 
 				if (convertKeyTo.Is<TKey>() == false)
 					throw new ArgumentException(
 						string.Format("Could not create dictionary<{0},{1}> because {2} is not assignable to key type {0}", typeof(TKey),
 							typeof(TValue), convertKeyTo));
 
-				var key = (TKey)parent.Context.Composition.PerformConversion(keyValue, convertKeyTo);
+				var key = (TKey)_parent.Context.Composition.PerformConversion(keyValue, convertKeyTo);
 
 				// Preparing the value
 
 				var convertValueTo = typeof(TValue);
 
-				if (itemConfig.Attributes["valueType"] != null) convertValueTo = parent.Context.Composition.PerformConversion<Type>(itemConfig.Attributes["valueType"]);
+				if (itemConfig.Attributes["valueType"] != null)
+					convertValueTo =
+						_parent.Context.Composition.PerformConversion<Type>(itemConfig.Attributes["valueType"]);
 
 				if (convertValueTo.Is<TValue>() == false)
 					throw new ArgumentException(
 						string.Format("Could not create dictionary<{0},{1}> because {2} is not assignable to value type {1}",
 							typeof(TKey), typeof(TValue), convertValueTo));
 				if (itemConfig.Children.Count == 1)
-					dict.Add(key, (TValue)parent.Context.Composition.PerformConversion(itemConfig.Children[0], convertValueTo));
+					dict.Add(key,
+						(TValue)_parent.Context.Composition.PerformConversion(itemConfig.Children[0], convertValueTo));
 				else
-					dict.Add(key, (TValue)parent.Context.Composition.PerformConversion(itemConfig.Value, convertValueTo));
+					dict.Add(key,
+						(TValue)_parent.Context.Composition.PerformConversion(itemConfig.Value, convertValueTo));
 			}
 
 			return dict;

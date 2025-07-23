@@ -28,20 +28,20 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Configuration;
 [Serializable]
 public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 {
-	private readonly IDictionary<string, IConfiguration> childContainers = new Dictionary<string, IConfiguration>();
-	private readonly IDictionary<string, IConfiguration> components = new Dictionary<string, IConfiguration>();
-	private readonly IDictionary<string, IConfiguration> facilities = new Dictionary<string, IConfiguration>();
-	private readonly ICollection<IConfiguration> installers = new List<IConfiguration>();
-	private readonly object syncLock = new();
+	private readonly IDictionary<string, IConfiguration> _childContainers = new Dictionary<string, IConfiguration>();
+	private readonly IDictionary<string, IConfiguration> _components = new Dictionary<string, IConfiguration>();
+	private readonly IDictionary<string, IConfiguration> _facilities = new Dictionary<string, IConfiguration>();
+	private readonly ICollection<IConfiguration> _installers = new List<IConfiguration>();
+	private readonly object _syncLock = new();
 
 	/// <summary>Adds the child container configuration.</summary>
 	/// <param name = "key">The key.</param>
 	/// <param name = "config">The config.</param>
 	public void AddChildContainerConfiguration(string key, IConfiguration config)
 	{
-		lock (syncLock)
+		lock (_syncLock)
 		{
-			childContainers[key] = config;
+			_childContainers[key] = config;
 		}
 	}
 
@@ -50,9 +50,9 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	/// <param name = "config">Configuration node</param>
 	public void AddComponentConfiguration(string key, IConfiguration config)
 	{
-		lock (syncLock)
+		lock (_syncLock)
 		{
-			components[key] = config;
+			_components[key] = config;
 		}
 	}
 
@@ -61,17 +61,17 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	/// <param name = "config">Configuration node</param>
 	public void AddFacilityConfiguration(string key, IConfiguration config)
 	{
-		lock (syncLock)
+		lock (_syncLock)
 		{
-			facilities[key] = config;
+			_facilities[key] = config;
 		}
 	}
 
 	public void AddInstallerConfiguration(IConfiguration config)
 	{
-		lock (syncLock)
+		lock (_syncLock)
 		{
-			installers.Add(config);
+			_installers.Add(config);
 		}
 	}
 
@@ -80,10 +80,10 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	/// <returns></returns>
 	public IConfiguration GetChildContainerConfiguration(string key)
 	{
-		lock (syncLock)
+		lock (_syncLock)
 		{
 			IConfiguration value;
-			childContainers.TryGetValue(key, out value);
+			_childContainers.TryGetValue(key, out value);
 			return value;
 		}
 	}
@@ -93,10 +93,10 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	/// <returns></returns>
 	public IConfiguration GetComponentConfiguration(string key)
 	{
-		lock (syncLock)
+		lock (_syncLock)
 		{
 			IConfiguration value;
-			components.TryGetValue(key, out value);
+			_components.TryGetValue(key, out value);
 			return value;
 		}
 	}
@@ -105,9 +105,9 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	/// <returns></returns>
 	public IConfiguration[] GetComponents()
 	{
-		lock (syncLock)
+		lock (_syncLock)
 		{
-			return components.Values.ToArray();
+			return _components.Values.ToArray();
 		}
 	}
 
@@ -115,9 +115,9 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	/// <returns></returns>
 	public IConfiguration[] GetConfigurationForChildContainers()
 	{
-		lock (syncLock)
+		lock (_syncLock)
 		{
-			return childContainers.Values.ToArray();
+			return _childContainers.Values.ToArray();
 		}
 	}
 
@@ -125,9 +125,9 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	/// <returns></returns>
 	public IConfiguration[] GetFacilities()
 	{
-		lock (syncLock)
+		lock (_syncLock)
 		{
-			return facilities.Values.ToArray();
+			return _facilities.Values.ToArray();
 		}
 	}
 
@@ -136,19 +136,19 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	/// <returns></returns>
 	public IConfiguration GetFacilityConfiguration(string key)
 	{
-		lock (syncLock)
+		lock (_syncLock)
 		{
 			IConfiguration value;
-			facilities.TryGetValue(key, out value);
+			_facilities.TryGetValue(key, out value);
 			return value;
 		}
 	}
 
 	public IConfiguration[] GetInstallers()
 	{
-		lock (syncLock)
+		lock (_syncLock)
 		{
-			return installers.ToArray();
+			return _installers.ToArray();
 		}
 	}
 

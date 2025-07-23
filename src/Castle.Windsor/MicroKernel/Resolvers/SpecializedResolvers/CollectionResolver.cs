@@ -24,13 +24,13 @@ namespace Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
 /// <remarks>The collection instance that is provided is read only, even for interfaces like <see cref = "IList{T}" /></remarks>
 public class CollectionResolver : ISubDependencyResolver
 {
-	protected readonly bool allowEmptyCollections;
-	protected readonly IKernel kernel;
+	protected readonly bool AllowEmptyCollections;
+	protected readonly IKernel Kernel;
 
 	public CollectionResolver(IKernel kernel, bool allowEmptyCollections = false)
 	{
-		this.kernel = kernel;
-		this.allowEmptyCollections = allowEmptyCollections;
+		Kernel = kernel;
+		AllowEmptyCollections = allowEmptyCollections;
 	}
 
 	public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
@@ -48,12 +48,12 @@ public class CollectionResolver : ISubDependencyResolver
 	public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
 		DependencyModel dependency)
 	{
-		return kernel.ResolveAll(GetItemType(dependency.TargetItemType), context.AdditionalArguments);
+		return Kernel.ResolveAll(GetItemType(dependency.TargetItemType), context.AdditionalArguments);
 	}
 
 	protected virtual bool CanSatisfy(Type itemType)
 	{
-		return allowEmptyCollections || kernel.HasComponent(itemType);
+		return AllowEmptyCollections || Kernel.HasComponent(itemType);
 	}
 
 	protected virtual Type GetItemType(Type targetItemType)

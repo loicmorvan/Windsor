@@ -20,17 +20,17 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 
 public class Facilities : IContainerDebuggerExtension
 {
-	private IKernel kernel;
+	private IKernel _kernel;
 
 	public IEnumerable<DebuggerViewItem> Attach()
 	{
-		var facilities = kernel.GetFacilities();
+		var facilities = _kernel.GetFacilities();
 		if (facilities.Length == 0) yield break;
 		yield return new DebuggerViewItem("Facilities", "Count = " + facilities.Length, facilities);
 	}
 
 	public void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
 	{
-		this.kernel = kernel;
+		_kernel = kernel;
 	}
 }

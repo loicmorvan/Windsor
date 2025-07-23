@@ -24,7 +24,7 @@ namespace Castle.Windsor.Windsor.Diagnostics;
 [DebuggerDisplay("")]
 internal class KernelDebuggerProxy
 {
-	private readonly IEnumerable<IContainerDebuggerExtension> extensions;
+	private readonly IEnumerable<IContainerDebuggerExtension> _extensions;
 
 	public KernelDebuggerProxy(IWindsorContainer container) : this(container.Kernel)
 	{
@@ -33,7 +33,7 @@ internal class KernelDebuggerProxy
 	public KernelDebuggerProxy(IKernel kernel)
 	{
 		ArgumentNullException.ThrowIfNull(kernel);
-		extensions =
+		_extensions =
 			(IEnumerable<IContainerDebuggerExtension>)(kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as
 				IContainerDebuggerExtensionHost) ?? [];
 	}
@@ -42,6 +42,6 @@ internal class KernelDebuggerProxy
 	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
 	public DebuggerViewItem[] Extensions
 	{
-		get { return extensions.SelectMany(e => e.Attach()).ToArray(); }
+		get { return _extensions.SelectMany(e => e.Attach()).ToArray(); }
 	}
 }

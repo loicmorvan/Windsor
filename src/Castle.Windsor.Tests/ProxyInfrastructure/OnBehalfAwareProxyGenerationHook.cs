@@ -22,26 +22,26 @@ namespace Castle.Windsor.Tests.ProxyInfrastructure;
 
 public class OnBehalfAwareProxyGenerationHook : IProxyGenerationHook, IOnBehalfAware
 {
-	public static ComponentModel target;
+	public static ComponentModel Target;
 
 	public void SetInterceptedComponentModel(ComponentModel target)
 	{
-		OnBehalfAwareProxyGenerationHook.target = target;
+		Target = target;
 	}
 
 	public void MethodsInspected()
 	{
-		Assert.NotNull(target);
+		Assert.NotNull(Target);
 	}
 
 	public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
 	{
-		Assert.NotNull(target);
+		Assert.NotNull(Target);
 	}
 
 	public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
 	{
-		Assert.NotNull(target);
+		Assert.NotNull(Target);
 		return false;
 	}
 }

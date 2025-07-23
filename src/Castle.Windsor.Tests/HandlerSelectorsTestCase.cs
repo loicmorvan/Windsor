@@ -91,11 +91,11 @@ public class HandlerSelectorsTestCase
 
 	public class PeopleWatcher
 	{
-		private Person p;
+		private Person _p;
 
 		public PeopleWatcher(Person p)
 		{
-			this.p = p;
+			_p = p;
 		}
 	}
 

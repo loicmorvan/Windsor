@@ -107,13 +107,13 @@ public class HandlerExtensionsTestCase : AbstractContainerTestCase
 
 public class ReturnAExtension : IResolveExtension
 {
-	private readonly A a;
-	private readonly bool proceed;
+	private readonly A _a;
+	private readonly bool _proceed;
 
 	public ReturnAExtension(A a, bool proceed = false)
 	{
-		this.a = a;
-		this.proceed = proceed;
+		_a = a;
+		_proceed = proceed;
 	}
 
 	public void Init(IKernel kernel, IHandler handler)
@@ -122,8 +122,8 @@ public class ReturnAExtension : IResolveExtension
 
 	public void Intercept(ResolveInvocation invocation)
 	{
-		if (proceed) invocation.Proceed();
-		invocation.ResolvedInstance = a;
+		if (_proceed) invocation.Proceed();
+		invocation.ResolvedInstance = _a;
 	}
 }
 

@@ -22,14 +22,12 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 
 public class ReleasePolicyTrackedObjects : AbstractContainerDebuggerExtension
 {
-	private const string name = "Objects tracked by release policy";
-	private TrackedComponentsDiagnostic diagnostic;
-
-	public static string Name => name;
+	public const string Name = "Objects tracked by release policy";
+	private TrackedComponentsDiagnostic _diagnostic;
 
 	public override IEnumerable<DebuggerViewItem> Attach()
 	{
-		var result = diagnostic.Inspect();
+		var result = _diagnostic.Inspect();
 		if (result == null) return [];
 		var item = BuildItem(result);
 		if (item != null) return [item];
@@ -38,8 +36,8 @@ public class ReleasePolicyTrackedObjects : AbstractContainerDebuggerExtension
 
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
 	{
-		diagnostic = new TrackedComponentsDiagnostic();
-		diagnosticsHost.AddDiagnostic<ITrackedComponentsDiagnostic>(diagnostic);
+		_diagnostic = new TrackedComponentsDiagnostic();
+		diagnosticsHost.AddDiagnostic<ITrackedComponentsDiagnostic>(_diagnostic);
 	}
 
 	private DebuggerViewItem BuildItem(ILookup<IHandler, object> results)
@@ -59,6 +57,6 @@ public class ReleasePolicyTrackedObjects : AbstractContainerDebuggerExtension
 		}
 
 		items.Sort((f, s) => f.Name.CompareTo(s.Name));
-		return new DebuggerViewItem(name, "Count = " + totalCount, items.ToArray());
+		return new DebuggerViewItem(Name, "Count = " + totalCount, items.ToArray());
 	}
 }

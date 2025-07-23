@@ -12,32 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Registration;
-
 using System;
 using System.Collections.Generic;
+
+namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Describes the source of types to register.</summary>
 public abstract class FromDescriptor : IRegistration
 {
-	private readonly Predicate<Type> additionalFilters;
-	private readonly IList<BasedOnDescriptor> criterias;
-	private bool allowMultipleMatches;
+	private readonly Predicate<Type> _additionalFilters;
+	private readonly IList<BasedOnDescriptor> _criterias;
+	private bool _allowMultipleMatches;
 
 	protected FromDescriptor(Predicate<Type> additionalFilters)
 	{
-		this.additionalFilters = additionalFilters;
-		allowMultipleMatches = false;
-		criterias = new List<BasedOnDescriptor>();
+		_additionalFilters = additionalFilters;
+		_allowMultipleMatches = false;
+		_criterias = new List<BasedOnDescriptor>();
 	}
 
 	void IRegistration.Register(IKernelInternal kernel)
 	{
-		if (criterias.Count == 0) return;
+		if (_criterias.Count == 0) return;
 
 		foreach (var type in SelectedTypes(kernel))
-		foreach (var criteria in criterias)
-			if (criteria.TryRegister(type, kernel) && !allowMultipleMatches)
+		foreach (var criteria in _criterias)
+			if (criteria.TryRegister(type, kernel) && !_allowMultipleMatches)
 				break;
 	}
 
@@ -46,7 +46,7 @@ public abstract class FromDescriptor : IRegistration
 	/// <summary>Allows a type to be registered multiple times.</summary>
 	public FromDescriptor AllowMultipleMatches()
 	{
-		allowMultipleMatches = true;
+		_allowMultipleMatches = true;
 		return this;
 	}
 
@@ -79,8 +79,8 @@ public abstract class FromDescriptor : IRegistration
 	/// <returns> The descriptor for the type. </returns>
 	public BasedOnDescriptor BasedOn(IEnumerable<Type> basedOn)
 	{
-		var descriptor = new BasedOnDescriptor(basedOn, this, additionalFilters);
-		criterias.Add(descriptor);
+		var descriptor = new BasedOnDescriptor(basedOn, this, _additionalFilters);
+		_criterias.Add(descriptor);
 		return descriptor;
 	}
 
@@ -147,8 +147,8 @@ public abstract class FromDescriptor : IRegistration
 	/// <returns> The descriptor for the type. </returns>
 	public BasedOnDescriptor Where(Predicate<Type> accepted)
 	{
-		var descriptor = new BasedOnDescriptor([typeof(object)], this, additionalFilters).If(accepted);
-		criterias.Add(descriptor);
+		var descriptor = new BasedOnDescriptor([typeof(object)], this, _additionalFilters).If(accepted);
+		_criterias.Add(descriptor);
 		return descriptor;
 	}
 }

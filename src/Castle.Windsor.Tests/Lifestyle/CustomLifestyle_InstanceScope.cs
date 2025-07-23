@@ -19,30 +19,29 @@ using Castle.Windsor.MicroKernel;
 
 namespace Castle.Windsor.Tests.Lifestyle;
 
-public class CustomLifestyle_InstanceScope : IDisposable
+public class CustomLifestyleInstanceScope : IDisposable
 {
-	[ThreadStatic]
-	private static Stack<CustomLifestyle_InstanceScope> localScopes;
+	[ThreadStatic] private static Stack<CustomLifestyleInstanceScope> _localScopes;
 
-	public CustomLifestyle_InstanceScope()
+	public CustomLifestyleInstanceScope()
 	{
-		if (localScopes == null) localScopes = new Stack<CustomLifestyle_InstanceScope>();
-		localScopes.Push(this);
+		if (_localScopes == null) _localScopes = new Stack<CustomLifestyleInstanceScope>();
+		_localScopes.Push(this);
 	}
 
 	public IDictionary<ComponentModel, Burden> Cache { get; } = new Dictionary<ComponentModel, Burden>();
 
-	public static CustomLifestyle_InstanceScope Current
+	public static CustomLifestyleInstanceScope Current
 	{
 		get
 		{
-			if (localScopes == null || localScopes.Count == 0) return null;
-			return localScopes.Peek();
+			if (_localScopes == null || _localScopes.Count == 0) return null;
+			return _localScopes.Peek();
 		}
 	}
 
 	public void Dispose()
 	{
-		localScopes.Pop();
+		_localScopes.Pop();
 	}
 }

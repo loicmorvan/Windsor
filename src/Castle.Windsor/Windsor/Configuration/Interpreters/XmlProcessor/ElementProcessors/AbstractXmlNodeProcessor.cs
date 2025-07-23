@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
 using System;
 using System.Xml;
 
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
+
 public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
 {
-	private static readonly XmlNodeType[] acceptNodes = [XmlNodeType.Element];
+	private static readonly XmlNodeType[] AcceptNodes = [XmlNodeType.Element];
 
 	public abstract string Name { get; }
 
-	public virtual XmlNodeType[] AcceptNodeTypes => acceptNodes;
+	public virtual XmlNodeType[] AcceptNodeTypes => AcceptNodes;
 
 	public abstract void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine);
 

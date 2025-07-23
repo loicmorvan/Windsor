@@ -42,7 +42,7 @@ public class InstallerTestCase : AbstractContainerTestCase
 		Assert.True(child1.Kernel.HasComponent("child_calcservice"));
 
 		var calcservice = container.Resolve<ICalcService>("calcservice");
-		var child_calcservice = child1.Resolve<ICalcService>();
-		Assert.NotEqual(calcservice, child_calcservice);
+		var childCalcservice = child1.Resolve<ICalcService>();
+		Assert.NotEqual(calcservice, childCalcservice);
 	}
 }

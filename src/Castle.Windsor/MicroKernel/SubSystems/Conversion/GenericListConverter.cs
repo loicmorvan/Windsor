@@ -73,11 +73,11 @@ public class GenericListConverter : AbstractTypeConverter
 
 	private class ListHelper<T> : IGenericCollectionConverterHelper
 	{
-		private readonly GenericListConverter parent;
+		private readonly GenericListConverter _parent;
 
 		public ListHelper(GenericListConverter parent)
 		{
-			this.parent = parent;
+			_parent = parent;
 		}
 
 		public object ConvertConfigurationToCollection(IConfiguration configuration)
@@ -85,7 +85,7 @@ public class GenericListConverter : AbstractTypeConverter
 			var list = new List<T>();
 			foreach (var itemConfig in configuration.Children)
 			{
-				var item = parent.Context.Composition.PerformConversion<T>(itemConfig);
+				var item = _parent.Context.Composition.PerformConversion<T>(itemConfig);
 				list.Add(item);
 			}
 

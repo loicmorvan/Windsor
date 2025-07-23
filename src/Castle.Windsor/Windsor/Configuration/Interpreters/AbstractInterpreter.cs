@@ -33,7 +33,7 @@ public abstract class AbstractInterpreter : IConfigurationInterpreter
 	protected static readonly string InstallersNodeName = "installers";
 	protected static readonly string InstallNodeName = "install";
 
-	private readonly Stack<IResource> resourceStack = new();
+	private readonly Stack<IResource> _resourceStack = new();
 
 	protected AbstractInterpreter(IResource source)
 	{
@@ -62,21 +62,21 @@ public abstract class AbstractInterpreter : IConfigurationInterpreter
 
 	protected void PushResource(IResource resource)
 	{
-		resourceStack.Push(resource);
+		_resourceStack.Push(resource);
 	}
 
 	protected void PopResource()
 	{
-		resourceStack.Pop();
+		_resourceStack.Pop();
 	}
 
 	protected IResource CurrentResource
 	{
 		get
 		{
-			if (resourceStack.Count == 0) return null;
+			if (_resourceStack.Count == 0) return null;
 
-			return resourceStack.Peek();
+			return _resourceStack.Peek();
 		}
 	}
 

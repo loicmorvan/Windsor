@@ -23,33 +23,33 @@ namespace Castle.Windsor.Windsor.Diagnostics.Helpers;
 
 public class DefaultComponentViewBuilder : IComponentDebuggerExtension
 {
-	private readonly IHandler handler;
+	private readonly IHandler _handler;
 
 	public DefaultComponentViewBuilder(IHandler handler)
 	{
-		this.handler = handler;
+		_handler = handler;
 	}
 
 	public IEnumerable<object> Attach()
 	{
 		yield return new DebuggerViewItem("Implementation", GetImplementation());
-		foreach (var service in handler.ComponentModel.Services) yield return new DebuggerViewItem("Service", service);
+		foreach (var service in _handler.ComponentModel.Services) yield return new DebuggerViewItem("Service", service);
 		yield return GetStatus();
-		yield return new DebuggerViewItem("Lifestyle", handler.ComponentModel.GetLifestyleDescriptionLong());
+		yield return new DebuggerViewItem("Lifestyle", _handler.ComponentModel.GetLifestyleDescriptionLong());
 		if (HasInterceptors())
 		{
-			var interceptors = handler.ComponentModel.Interceptors;
+			var interceptors = _handler.ComponentModel.Interceptors;
 			var value = interceptors.ToArray();
 			yield return new DebuggerViewItem("Interceptors", "Count = " + value.Length, value);
 		}
 
-		yield return new DebuggerViewItem("Name", handler.ComponentModel.Name);
-		yield return new DebuggerViewItem("Raw handler/component", handler);
+		yield return new DebuggerViewItem("Name", _handler.ComponentModel.Name);
+		yield return new DebuggerViewItem("Raw handler/component", _handler);
 	}
 
 	private object GetImplementation()
 	{
-		var implementation = handler.ComponentModel.Implementation;
+		var implementation = _handler.ComponentModel.Implementation;
 		if (implementation != typeof(LateBoundComponent)) return implementation;
 
 		return LateBoundComponent.Instance;
@@ -57,8 +57,10 @@ public class DefaultComponentViewBuilder : IComponentDebuggerExtension
 
 	private object GetStatus()
 	{
-		if (handler.CurrentState == HandlerState.Valid) return new DebuggerViewItem("Status", "All required dependencies can be resolved.");
-		return new DebuggerViewItemWithDetails("Status", "This component may not resolve properly.", GetStatusDetails(handler as IExposeDependencyInfo));
+		if (_handler.CurrentState == HandlerState.Valid)
+			return new DebuggerViewItem("Status", "All required dependencies can be resolved.");
+		return new DebuggerViewItemWithDetails("Status", "This component may not resolve properly.",
+			GetStatusDetails(_handler as IExposeDependencyInfo));
 	}
 
 	private string GetStatusDetails(IExposeDependencyInfo info)
@@ -73,6 +75,6 @@ public class DefaultComponentViewBuilder : IComponentDebuggerExtension
 
 	private bool HasInterceptors()
 	{
-		return handler.ComponentModel.HasInterceptors;
+		return _handler.ComponentModel.HasInterceptors;
 	}
 }

@@ -24,25 +24,25 @@ namespace Castle.Windsor.Windsor.Installer;
 
 public class AssemblyInstaller : IWindsorInstaller
 {
-	private readonly Assembly assembly;
-	private readonly InstallerFactory factory;
+	private readonly Assembly _assembly;
+	private readonly InstallerFactory _factory;
 
 	public AssemblyInstaller(Assembly assembly, InstallerFactory factory)
 	{
 		ArgumentNullException.ThrowIfNull(assembly);
 		ArgumentNullException.ThrowIfNull(factory);
-		this.assembly = assembly;
-		this.factory = factory;
+		_assembly = assembly;
+		_factory = factory;
 	}
 
 	public void Install(IWindsorContainer container, IConfigurationStore store)
 	{
-		var installerTypes = factory.Select(FilterInstallerTypes(assembly.GetAvailableTypes()));
+		var installerTypes = _factory.Select(FilterInstallerTypes(_assembly.GetAvailableTypes()));
 		if (installerTypes == null) return;
 
 		foreach (var installerType in installerTypes)
 		{
-			var installer = factory.CreateInstance(installerType);
+			var installer = _factory.CreateInstance(installerType);
 			installer.Install(container, store);
 		}
 	}

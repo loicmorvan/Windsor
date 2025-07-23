@@ -207,21 +207,21 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 		evt.Set();
 		Thread.Sleep(TimeSpan.FromSeconds(1));
 
-		Assert.Equal(0, kernel.parallelCount);
+		Assert.Equal(0, kernel.ParallelCount);
 	}
 
 	public class DisposableMockObject : IDisposable
 	{
-		private readonly Action disposeAction;
+		private readonly Action _disposeAction;
 
 		public DisposableMockObject(Action disposeAction)
 		{
-			this.disposeAction = disposeAction;
+			_disposeAction = disposeAction;
 		}
 
 		public void Dispose()
 		{
-			disposeAction();
+			_disposeAction();
 		}
 	}
 
@@ -240,14 +240,14 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 
 	private sealed class ParallelAccessAwareKernel : IKernel
 	{
-		private readonly AutoResetEvent evt;
+		private readonly AutoResetEvent _evt;
 
-		public int parallelCount;
-		private bool registered;
+		public int ParallelCount;
+		private bool _registered;
 
 		public ParallelAccessAwareKernel(AutoResetEvent evt)
 		{
-			this.evt = evt;
+			_evt = evt;
 		}
 
 		public void Dispose()
@@ -340,15 +340,15 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 
 		public bool HasComponent(Type service)
 		{
-			return registered;
+			return _registered;
 		}
 
 		public IKernel Register(params IRegistration[] registrations)
 		{
-			Interlocked.Increment(ref parallelCount);
-			evt.WaitOne();
-			registered = true;
-			Interlocked.CompareExchange(ref parallelCount, 0, 1);
+			Interlocked.Increment(ref ParallelCount);
+			_evt.WaitOne();
+			_registered = true;
+			Interlocked.CompareExchange(ref ParallelCount, 0, 1);
 			return null;
 		}
 

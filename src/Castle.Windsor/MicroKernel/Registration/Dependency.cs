@@ -26,11 +26,11 @@ namespace Castle.Windsor.MicroKernel.Registration;
 
 public sealed class Dependency
 {
-	private readonly object item;
+	private readonly object _item;
 
 	internal Dependency(object item)
 	{
-		this.item = item;
+		_item = item;
 	}
 
 	/// <summary>
@@ -185,7 +185,7 @@ public sealed class Dependency
 
 	internal bool Accept<TItem>(ICollection<TItem> items) where TItem : class
 	{
-		var castItem = item as TItem;
+		var castItem = _item as TItem;
 		if (castItem != null)
 		{
 			items.Add(castItem);

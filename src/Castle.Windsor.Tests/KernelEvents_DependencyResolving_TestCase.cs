@@ -21,10 +21,10 @@ using Castle.Windsor.Tests.ClassComponents;
 
 namespace Castle.Windsor.Tests;
 
-public class KernelEvents_DependencyResolving_TestCase : AbstractContainerTestCase
+public class KernelEventsDependencyResolvingTestCase : AbstractContainerTestCase
 {
-	private ComponentModel expectedClient;
-	private List<DependencyModel> expectedModels;
+	private ComponentModel _expectedClient;
+	private List<DependencyModel> _expectedModels;
 
 	protected override void AfterContainerCreated()
 	{
@@ -33,8 +33,8 @@ public class KernelEvents_DependencyResolving_TestCase : AbstractContainerTestCa
 
 	private void AssertEvent(ComponentModel client, DependencyModel model, object dependency)
 	{
-		Assert.Equal(expectedClient, client);
-		Assert.Contains(model, expectedModels);
+		Assert.Equal(_expectedClient, client);
+		Assert.Contains(model, _expectedModels);
 		Assert.NotNull(dependency);
 	}
 
@@ -51,8 +51,8 @@ public class KernelEvents_DependencyResolving_TestCase : AbstractContainerTestCa
 		Assert.NotNull(mailservice);
 		Assert.NotNull(templateengine);
 
-		expectedClient = Kernel.GetHandler("spamservice").ComponentModel;
-		expectedModels =
+		_expectedClient = Kernel.GetHandler("spamservice").ComponentModel;
+		_expectedModels =
 			new List<DependencyModel>(
 				Kernel.GetHandler("spamservice").ComponentModel.Constructors.Single().Dependencies);
 
@@ -75,9 +75,10 @@ public class KernelEvents_DependencyResolving_TestCase : AbstractContainerTestCa
 		Assert.NotNull(mailservice);
 		Assert.NotNull(templateengine);
 
-		expectedClient = Kernel.GetHandler("spamservice").ComponentModel;
-		expectedModels = new List<DependencyModel>();
-		foreach (var prop in Kernel.GetHandler("spamservice").ComponentModel.Properties) expectedModels.Add(prop.Dependency);
+		_expectedClient = Kernel.GetHandler("spamservice").ComponentModel;
+		_expectedModels = new List<DependencyModel>();
+		foreach (var prop in Kernel.GetHandler("spamservice").ComponentModel.Properties)
+			_expectedModels.Add(prop.Dependency);
 
 		var spamservice = Kernel.Resolve<DefaultSpamService>("spamservice");
 
@@ -100,9 +101,10 @@ public class KernelEvents_DependencyResolving_TestCase : AbstractContainerTestCa
 
 		Kernel.Register(Component.For(typeof(ICustomer)).ImplementedBy(typeof(CustomerImpl)).Named("customer"));
 
-		expectedClient = Kernel.GetHandler("customer").ComponentModel;
-		expectedModels = new List<DependencyModel>();
-		foreach (var prop in Kernel.GetHandler("customer").ComponentModel.Properties) expectedModels.Add(prop.Dependency);
+		_expectedClient = Kernel.GetHandler("customer").ComponentModel;
+		_expectedModels = new List<DependencyModel>();
+		foreach (var prop in Kernel.GetHandler("customer").ComponentModel.Properties)
+			_expectedModels.Add(prop.Dependency);
 
 		var customer = Kernel.Resolve<ICustomer>("customer");
 

@@ -25,12 +25,12 @@ namespace Castle.Windsor.Tests.Diagnostics;
 
 public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContainerTestCase
 {
-	private IUsingContainerAsServiceLocatorDiagnostic diagnostic;
+	private IUsingContainerAsServiceLocatorDiagnostic _diagnostic;
 
 	protected override void AfterContainerCreated()
 	{
 		var host = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IDiagnosticsHost;
-		diagnostic = host.GetDiagnostic<IUsingContainerAsServiceLocatorDiagnostic>();
+		_diagnostic = host.GetDiagnostic<IUsingContainerAsServiceLocatorDiagnostic>();
 	}
 
 	[Theory]
@@ -46,7 +46,7 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContaine
 		Container.Register(Component.For(generic),
 			Component.For<A>());
 
-		var serviceLocators = diagnostic.Inspect();
+		var serviceLocators = _diagnostic.Inspect();
 		Assert.Single(serviceLocators);
 	}
 
@@ -63,7 +63,7 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContaine
 		Container.Register(Component.For(generic),
 			Component.For<A>());
 
-		var serviceLocators = diagnostic.Inspect();
+		var serviceLocators = _diagnostic.Inspect();
 		Assert.Single(serviceLocators);
 	}
 
@@ -76,7 +76,7 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContaine
 			Component.For<B>().Interceptors("a"),
 			Component.For<A>().Interceptors("b"));
 
-		var serviceLocators = diagnostic.Inspect();
+		var serviceLocators = _diagnostic.Inspect();
 		Assert.Empty(serviceLocators);
 	}
 
@@ -90,7 +90,7 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContaine
 
 		Container.Resolve<Lazy<B>>(); // to trigger lazy registration of lazy
 
-		var serviceLocators = diagnostic.Inspect();
+		var serviceLocators = _diagnostic.Inspect();
 		Assert.Empty(serviceLocators);
 	}
 
@@ -100,7 +100,7 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContaine
 		Container.Register(Component.For<B>(),
 			Component.For<A>());
 
-		var serviceLocators = diagnostic.Inspect();
+		var serviceLocators = _diagnostic.Inspect();
 		Assert.Empty(serviceLocators);
 	}
 }

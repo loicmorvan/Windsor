@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Registration;
-
 using System;
 using System.Collections.Generic;
+
+namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Represents a service override.</summary>
 public class ServiceOverride
@@ -74,16 +74,16 @@ public class ServiceOverride
 /// <summary>Represents a service override key.</summary>
 public class ServiceOverrideKey
 {
-	private readonly object key;
+	private readonly object _key;
 
 	internal ServiceOverrideKey(string key)
 	{
-		this.key = key;
+		_key = key;
 	}
 
 	internal ServiceOverrideKey(Type key)
 	{
-		this.key = key;
+		_key = key;
 	}
 
 	/// <summary>Builds the <see cref = "ServiceOverride" /> with key/value.</summary>
@@ -91,7 +91,7 @@ public class ServiceOverrideKey
 	/// <returns>The new <see cref = "ServiceOverride" /></returns>
 	public ServiceOverride Eq(string value)
 	{
-		return new ServiceOverride(key, value);
+		return new ServiceOverride(_key, value);
 	}
 
 	/// <summary>Builds the <see cref = "ServiceOverride" /> with key/values.</summary>
@@ -99,16 +99,16 @@ public class ServiceOverrideKey
 	/// <returns>The new <see cref = "ServiceOverride" /></returns>
 	public ServiceOverride Eq(params string[] value)
 	{
-		return new ServiceOverride(key, value);
+		return new ServiceOverride(_key, value);
 	}
 
 	/// <summary>Builds the <see cref = "ServiceOverride" /> with key/values.</summary>
 	/// <param name = "value">The service override values.</param>
 	/// <returns>The new <see cref = "ServiceOverride" /></returns>
-	/// <typeparam name = "V">The value type.</typeparam>
-	public ServiceOverride Eq<V>(params string[] value)
+	/// <typeparam name = "TV">The value type.</typeparam>
+	public ServiceOverride Eq<TV>(params string[] value)
 	{
-		return new ServiceOverride(key, value, typeof(V));
+		return new ServiceOverride(_key, value, typeof(TV));
 	}
 
 	/// <summary>Builds the <see cref = "ServiceOverride" /> with key/values.</summary>
@@ -116,25 +116,25 @@ public class ServiceOverrideKey
 	/// <returns>The new <see cref = "ServiceOverride" /></returns>
 	public ServiceOverride Eq(IEnumerable<string> value)
 	{
-		return new ServiceOverride(key, value);
+		return new ServiceOverride(_key, value);
 	}
 
 	/// <summary>Builds the <see cref = "ServiceOverride" /> with key/values.</summary>
 	/// <param name = "value">The service override values.</param>
 	/// <returns>The new <see cref = "ServiceOverride" /></returns>
-	/// <typeparam name = "V">The value type.</typeparam>
-	public ServiceOverride Eq<V>(IEnumerable<string> value)
+	/// <typeparam name = "TV">The value type.</typeparam>
+	public ServiceOverride Eq<TV>(IEnumerable<string> value)
 	{
-		return new ServiceOverride(key, value, typeof(V));
+		return new ServiceOverride(_key, value, typeof(TV));
 	}
 
 	public ServiceOverride Eq(params Type[] componentTypes)
 	{
-		return new ServiceOverride(key, componentTypes);
+		return new ServiceOverride(_key, componentTypes);
 	}
 
-	public ServiceOverride Eq<V>(params Type[] componentTypes)
+	public ServiceOverride Eq<TV>(params Type[] componentTypes)
 	{
-		return new ServiceOverride(key, componentTypes, typeof(V));
+		return new ServiceOverride(_key, componentTypes, typeof(TV));
 	}
 }

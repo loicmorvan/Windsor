@@ -28,7 +28,7 @@ public interface IC
 
 public class CImpl : IC
 {
-	private R r;
+	private R _r;
 
 	public CImpl()
 	{
@@ -37,7 +37,7 @@ public class CImpl : IC
 
 	public R R
 	{
-		set => r = value;
+		set => _r = value;
 	}
 
 	public IN N { get; set; }
@@ -45,31 +45,31 @@ public class CImpl : IC
 
 public interface IN
 {
-	IS CS { get; }
+	IS Cs { get; }
 }
 
 [Transient]
-public class DN : IN
+public class Dn : IN
 {
-	private ISP sp;
-	private IWM vm;
+	private ISp _sp;
+	private IWm _vm;
 
-	public DN(IWM vm, ISP sp)
+	public Dn(IWm vm, ISp sp)
 	{
-		this.vm = vm;
-		this.sp = sp;
-		CS = new BS();
+		_vm = vm;
+		_sp = sp;
+		Cs = new Bs();
 	}
 
-	public IS CS { get; }
+	public IS Cs { get; }
 }
 
-public interface IWM
+public interface IWm
 {
 	void A(IN n);
 }
 
-public class WM : IWM
+public class Wm : IWm
 {
 	public void A(IN n)
 	{
@@ -79,21 +79,21 @@ public class WM : IWM
 
 public interface IS
 {
-	ISP SP { get; set; }
+	ISp Sp { get; set; }
 }
 
 [Transient]
-public class BS : IS
+public class Bs : IS
 {
-	public ISP SP { get; set; }
+	public ISp Sp { get; set; }
 }
 
-public interface ISP
+public interface ISp
 {
 	void Save(IS s);
 }
 
-public class SP : ISP
+public class Sp : ISp
 {
 	public void Save(IS s)
 	{
@@ -107,10 +107,10 @@ public class ContainerProblem2
 	{
 		IWindsorContainer container = new WindsorContainer();
 
-		container.Register(Component.For(typeof(IS)).ImplementedBy(typeof(BS)).Named("BS"));
+		container.Register(Component.For(typeof(IS)).ImplementedBy(typeof(Bs)).Named("BS"));
 		container.Register(Component.For(typeof(IC)).ImplementedBy(typeof(CImpl)).Named("C"));
-		container.Register(Component.For(typeof(IWM)).ImplementedBy(typeof(WM)).Named("WM"));
-		container.Register(Component.For(typeof(ISP)).ImplementedBy(typeof(SP)).Named("SP"));
+		container.Register(Component.For(typeof(IWm)).ImplementedBy(typeof(Wm)).Named("WM"));
+		container.Register(Component.For(typeof(ISp)).ImplementedBy(typeof(Sp)).Named("SP"));
 
 		//TODO: dead code - why is it here?
 		// ComponentModel model = new ComponentModel("R", typeof(R), typeof(R));

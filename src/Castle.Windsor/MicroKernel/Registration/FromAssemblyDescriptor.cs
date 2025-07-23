@@ -12,42 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Registration;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
 using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Selects a set of types from an assembly.</summary>
 public class FromAssemblyDescriptor : FromDescriptor
 {
-	protected readonly IEnumerable<Assembly> assemblies;
-	protected bool nonPublicTypes;
+	protected readonly IEnumerable<Assembly> Assemblies;
+	protected bool NonPublicTypes;
 
 	protected internal FromAssemblyDescriptor(Assembly assembly, Predicate<Type> additionalFilters) : base(additionalFilters)
 	{
-		assemblies = [assembly];
+		Assemblies = [assembly];
 	}
 
 	protected internal FromAssemblyDescriptor(IEnumerable<Assembly> assemblies, Predicate<Type> additionalFilters)
 		: base(additionalFilters)
 	{
-		this.assemblies = assemblies;
+		Assemblies = assemblies;
 	}
 
 	/// <summary>When called also non-public types will be scanned.</summary>
 	/// <remarks>Usually it is not recommended to register non-public types in the container so think twice before using this option.</remarks>
 	public FromAssemblyDescriptor IncludeNonPublicTypes()
 	{
-		nonPublicTypes = true;
+		NonPublicTypes = true;
 		return this;
 	}
 
 	protected override IEnumerable<Type> SelectedTypes(IKernel kernel)
 	{
-		return assemblies.SelectMany(a => a.GetAvailableTypesOrdered(nonPublicTypes));
+		return Assemblies.SelectMany(a => a.GetAvailableTypesOrdered(NonPublicTypes));
 	}
 }

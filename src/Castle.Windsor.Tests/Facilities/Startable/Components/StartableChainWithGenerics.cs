@@ -18,17 +18,17 @@ namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 
 public class StartableChainParent : IStartable
 {
-	public static int createcount;
-	public static int startcount;
+	public static int Createcount;
+	public static int Startcount;
 
 	public StartableChainParent(StartableChainDependency item1, StartableChainGeneric<string> item2)
 	{
-		++createcount;
+		++Createcount;
 	}
 
 	public void Start()
 	{
-		++startcount;
+		++Startcount;
 	}
 
 	public void Stop()
@@ -38,17 +38,17 @@ public class StartableChainParent : IStartable
 
 public class StartableChainDependency : IStartable
 {
-	public static int createcount;
-	public static int startcount;
+	public static int Createcount;
+	public static int Startcount;
 
 	public StartableChainDependency(StartableChainGeneric<string> item)
 	{
-		++createcount;
+		++Createcount;
 	}
 
 	public void Start()
 	{
-		++startcount;
+		++Startcount;
 	}
 
 	public void Stop()
@@ -58,10 +58,10 @@ public class StartableChainDependency : IStartable
 
 public class StartableChainGeneric<T>
 {
-	public static int createcount;
+	public static int Createcount;
 
 	public StartableChainGeneric()
 	{
-		++createcount;
+		++Createcount;
 	}
 }

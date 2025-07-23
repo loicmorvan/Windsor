@@ -24,11 +24,10 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 [Serializable]
 public class DefaultConversionManager : AbstractSubSystem, IConversionManager, ITypeConverterContext
 {
-	[ThreadStatic]
-	private static Stack<Tuple<ComponentModel, CreationContext>> slot;
+	[ThreadStatic] private static Stack<Tuple<ComponentModel, CreationContext>> _slot;
 
-	private readonly IList<ITypeConverter> converters = new List<ITypeConverter>();
-	private readonly IList<ITypeConverter> standAloneConverters = new List<ITypeConverter>();
+	private readonly IList<ITypeConverter> _converters = new List<ITypeConverter>();
+	private readonly IList<ITypeConverter> _standAloneConverters = new List<ITypeConverter>();
 
 	public DefaultConversionManager()
 	{
@@ -39,9 +38,9 @@ public class DefaultConversionManager : AbstractSubSystem, IConversionManager, I
 	{
 		get
 		{
-			if (slot == null) slot = new Stack<Tuple<ComponentModel, CreationContext>>();
+			if (_slot == null) _slot = new Stack<Tuple<ComponentModel, CreationContext>>();
 
-			return slot;
+			return _slot;
 		}
 	}
 
@@ -49,9 +48,9 @@ public class DefaultConversionManager : AbstractSubSystem, IConversionManager, I
 	{
 		converter.Context = this;
 
-		converters.Add(converter);
+		_converters.Add(converter);
 
-		if (converter is not IKernelDependentConverter) standAloneConverters.Add(converter);
+		if (converter is not IKernelDependentConverter) _standAloneConverters.Add(converter);
 	}
 
 	public ITypeConverterContext Context
@@ -62,7 +61,7 @@ public class DefaultConversionManager : AbstractSubSystem, IConversionManager, I
 
 	public bool CanHandleType(Type type)
 	{
-		foreach (var converter in converters)
+		foreach (var converter in _converters)
 			if (converter.CanHandleType(type))
 				return true;
 
@@ -71,7 +70,7 @@ public class DefaultConversionManager : AbstractSubSystem, IConversionManager, I
 
 	public bool CanHandleType(Type type, IConfiguration configuration)
 	{
-		foreach (var converter in converters)
+		foreach (var converter in _converters)
 			if (converter.CanHandleType(type, configuration))
 				return true;
 
@@ -80,7 +79,7 @@ public class DefaultConversionManager : AbstractSubSystem, IConversionManager, I
 
 	public object PerformConversion(string value, Type targetType)
 	{
-		foreach (var converter in converters)
+		foreach (var converter in _converters)
 			if (converter.CanHandleType(targetType))
 				return converter.PerformConversion(value, targetType);
 
@@ -91,7 +90,7 @@ public class DefaultConversionManager : AbstractSubSystem, IConversionManager, I
 
 	public object PerformConversion(IConfiguration configuration, Type targetType)
 	{
-		foreach (var converter in converters)
+		foreach (var converter in _converters)
 			if (converter.CanHandleType(targetType, configuration))
 				return converter.PerformConversion(configuration, targetType);
 

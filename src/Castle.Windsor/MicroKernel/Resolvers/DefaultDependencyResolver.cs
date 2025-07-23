@@ -28,10 +28,10 @@ namespace Castle.Windsor.MicroKernel.Resolvers;
 [Serializable]
 public class DefaultDependencyResolver : IDependencyResolver
 {
-	private readonly IList<ISubDependencyResolver> subResolvers = new List<ISubDependencyResolver>();
-	private ITypeConverter converter;
-	private DependencyDelegate dependencyResolvingDelegate;
-	private IKernelInternal kernel;
+	private readonly IList<ISubDependencyResolver> _subResolvers = new List<ISubDependencyResolver>();
+	private ITypeConverter _converter;
+	private DependencyDelegate _dependencyResolvingDelegate;
+	private IKernelInternal _kernel;
 
 	/// <summary>Registers a sub resolver instance</summary>
 	/// <param name = "subResolver">The subresolver instance</param>
@@ -39,7 +39,7 @@ public class DefaultDependencyResolver : IDependencyResolver
 	{
 		ArgumentNullException.ThrowIfNull(subResolver);
 
-		subResolvers.Add(subResolver);
+		_subResolvers.Add(subResolver);
 	}
 
 	/// <summary>Initializes this instance with the specified dependency delegate.</summary>
@@ -47,16 +47,16 @@ public class DefaultDependencyResolver : IDependencyResolver
 	/// <param name = "dependencyDelegate">The dependency delegate.</param>
 	public void Initialize(IKernelInternal kernel, DependencyDelegate dependencyDelegate)
 	{
-		this.kernel = kernel;
-		converter = kernel.GetConversionManager();
-		dependencyResolvingDelegate = dependencyDelegate;
+		_kernel = kernel;
+		_converter = kernel.GetConversionManager();
+		_dependencyResolvingDelegate = dependencyDelegate;
 	}
 
 	/// <summary>Unregisters a sub resolver instance previously registered</summary>
 	/// <param name = "subResolver">The subresolver instance</param>
 	public void RemoveSubResolver(ISubDependencyResolver subResolver)
 	{
-		subResolvers.Remove(subResolver);
+		_subResolvers.Remove(subResolver);
 	}
 
 	/// <summary>Returns true if the resolver is able to satisfy the specified dependency.</summary>
@@ -127,7 +127,7 @@ public class DefaultDependencyResolver : IDependencyResolver
 			}
 		}
 
-		dependencyResolvingDelegate(model, dependency, value);
+		_dependencyResolvingDelegate(model, dependency, value);
 		return value;
 	}
 
@@ -156,7 +156,7 @@ public class DefaultDependencyResolver : IDependencyResolver
 	{
 		if (dependency.ReferencedComponentName != null) return ResolveFromKernelByName(context, model, dependency);
 		if (dependency.Parameter != null) return ResolveFromParameter(context, model, dependency);
-		if (typeof(IKernel).IsAssignableFrom(dependency.TargetItemType)) return kernel;
+		if (typeof(IKernel).IsAssignableFrom(dependency.TargetItemType)) return _kernel;
 		if (dependency.TargetItemType.IsPrimitiveType())
 			// we can shortcircuit it here, since we know we won't find any components for value type service as those are not legal.
 			return null;
@@ -179,7 +179,7 @@ public class DefaultDependencyResolver : IDependencyResolver
 	private bool CanResolveFromHandler(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
 		DependencyModel dependency)
 	{
-		var handler = kernel.GetHandler(model.Name);
+		var handler = _kernel.GetHandler(model.Name);
 		var b = handler != null && handler != contextHandlerResolver && handler.CanResolve(context, contextHandlerResolver, model, dependency);
 		return b;
 	}
@@ -187,22 +187,23 @@ public class DefaultDependencyResolver : IDependencyResolver
 	private bool CanResolveFromSubResolvers(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
 		DependencyModel dependency)
 	{
-		return subResolvers.Count > 0 && subResolvers.Any(s => s.CanResolve(context, contextHandlerResolver, model, dependency));
+		return _subResolvers.Count > 0 &&
+		       _subResolvers.Any(s => s.CanResolve(context, contextHandlerResolver, model, dependency));
 	}
 
 	private bool HasAnyComponentInValidState(Type service, DependencyModel dependency, CreationContext context)
 	{
 		IHandler firstHandler;
 		if (context is { IsResolving: true })
-			firstHandler = kernel.LoadHandlerByType(dependency.DependencyKey, service, context.AdditionalArguments);
+			firstHandler = _kernel.LoadHandlerByType(dependency.DependencyKey, service, context.AdditionalArguments);
 		else
-			firstHandler = kernel.GetHandler(service);
+			firstHandler = _kernel.GetHandler(service);
 		if (firstHandler == null) return false;
 		if (context == null || firstHandler.IsBeingResolvedInContext(context) == false)
 			if (IsHandlerInValidState(firstHandler))
 				return true;
 
-		var handlers = kernel.GetHandlers(service);
+		var handlers = _kernel.GetHandlers(service);
 		var nonResolvingHandlers = handlers.Where(handler => handler.IsBeingResolvedInContext(context) == false).ToList();
 		RebuildOpenGenericHandlersWithClosedGenericSubHandlers(service, context, nonResolvingHandlers);
 		return nonResolvingHandlers.Any(handler => IsHandlerInValidState(handler));
@@ -229,9 +230,9 @@ public class DefaultDependencyResolver : IDependencyResolver
 	{
 		IHandler handler;
 		if (context is { IsResolving: true })
-			handler = kernel.LoadHandlerByName(key, dependency.TargetItemType, context.AdditionalArguments);
+			handler = _kernel.LoadHandlerByName(key, dependency.TargetItemType, context.AdditionalArguments);
 		else
-			handler = kernel.GetHandler(key);
+			handler = _kernel.GetHandler(key);
 		return IsHandlerInValidState(handler) && handler.IsBeingResolvedInContext(context) == false;
 	}
 
@@ -245,7 +246,7 @@ public class DefaultDependencyResolver : IDependencyResolver
 		}
 
 		// 2 - check with the model's handler, if not the same as the parent resolver
-		var handler = kernel.GetHandler(model.Name);
+		var handler = _kernel.GetHandler(model.Name);
 		if (handler != contextHandlerResolver && handler.CanResolve(context, contextHandlerResolver, model, dependency))
 		{
 			value = handler.Resolve(context, contextHandlerResolver, model, dependency);
@@ -260,10 +261,10 @@ public class DefaultDependencyResolver : IDependencyResolver
 		}
 
 		// 4 - check within subresolvers
-		if (subResolvers.Count > 0)
-			for (var index = 0; index < subResolvers.Count; index++)
+		if (_subResolvers.Count > 0)
+			for (var index = 0; index < _subResolvers.Count; index++)
 			{
-				var subResolver = subResolvers[index];
+				var subResolver = _subResolvers[index];
 				if (subResolver.CanResolve(context, contextHandlerResolver, model, dependency))
 				{
 					value = subResolver.Resolve(context, contextHandlerResolver, model, dependency);
@@ -278,7 +279,8 @@ public class DefaultDependencyResolver : IDependencyResolver
 
 	private object ResolveFromKernelByName(CreationContext context, ComponentModel model, DependencyModel dependency)
 	{
-		var handler = kernel.LoadHandlerByName(dependency.ReferencedComponentName, dependency.TargetItemType, context.AdditionalArguments);
+		var handler = _kernel.LoadHandlerByName(dependency.ReferencedComponentName, dependency.TargetItemType,
+			context.AdditionalArguments);
 
 		// never (famous last words) this should really happen as we're the good guys and we call CanResolve before trying to resolve but let's be safe.
 		if (handler == null)
@@ -325,13 +327,13 @@ public class DefaultDependencyResolver : IDependencyResolver
 
 	private object ResolveFromParameter(CreationContext context, ComponentModel model, DependencyModel dependency)
 	{
-		converter.Context.Push(model, context);
+		_converter.Context.Push(model, context);
 		try
 		{
 			if (dependency.Parameter.Value != null || dependency.Parameter.ConfigValue == null)
-				return converter.PerformConversion(dependency.Parameter.Value, dependency.TargetItemType);
+				return _converter.PerformConversion(dependency.Parameter.Value, dependency.TargetItemType);
 			else
-				return converter.PerformConversion(dependency.Parameter.ConfigValue, dependency.TargetItemType);
+				return _converter.PerformConversion(dependency.Parameter.ConfigValue, dependency.TargetItemType);
 		}
 		catch (ConverterException e)
 		{
@@ -341,7 +343,7 @@ public class DefaultDependencyResolver : IDependencyResolver
 		}
 		finally
 		{
-			converter.Context.Pop();
+			_converter.Context.Pop();
 		}
 	}
 
@@ -351,7 +353,8 @@ public class DefaultDependencyResolver : IDependencyResolver
 		// by key than a linear search
 		try
 		{
-			handler = kernel.LoadHandlerByType(dependency.DependencyKey, dependency.TargetItemType, context.AdditionalArguments);
+			handler = _kernel.LoadHandlerByType(dependency.DependencyKey, dependency.TargetItemType,
+				context.AdditionalArguments);
 		}
 		catch (HandlerException)
 		{
@@ -367,7 +370,7 @@ public class DefaultDependencyResolver : IDependencyResolver
 		IHandler[] handlers;
 		try
 		{
-			handlers = kernel.GetHandlers(dependency.TargetItemType);
+			handlers = _kernel.GetHandlers(dependency.TargetItemType);
 		}
 		catch (HandlerException)
 		{

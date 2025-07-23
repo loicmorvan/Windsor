@@ -23,24 +23,24 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 
 public class AllServices : AbstractContainerDebuggerExtension
 {
-	private const string name = "All services";
-	private IAllServicesDiagnostic diagnostic;
+	private const string Name = "All services";
+	private IAllServicesDiagnostic _diagnostic;
 
 	public override IEnumerable<DebuggerViewItem> Attach()
 	{
-		var map = diagnostic.Inspect();
+		var map = _diagnostic.Inspect();
 		var items = map.Select(p => BuildServiceView(p, p.Key.ToCSharpString())).ToArray();
 		Array.Sort(items, (i1, i2) => i1.Name.CompareTo(i2.Name));
 		return
 		[
-			new DebuggerViewItem(name, "Count = " + items.Length, items)
+			new DebuggerViewItem(Name, "Count = " + items.Length, items)
 		];
 	}
 
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
 	{
-		diagnostic = new AllServicesDiagnostic(kernel);
-		diagnosticsHost.AddDiagnostic(diagnostic);
+		_diagnostic = new AllServicesDiagnostic(kernel);
+		diagnosticsHost.AddDiagnostic(_diagnostic);
 	}
 
 	private DebuggerViewItem BuildServiceView(IEnumerable<IHandler> handlers, string name)

@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
-
 using System;
 using System.Globalization;
-
 using Castle.Core.Configuration;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 /// <summary>Implements all standard conversions.</summary>
 [Serializable]
 public class PrimitiveConverter : AbstractTypeConverter
 {
-	private readonly Type[] types =
+	private readonly Type[] _types =
 	[
 		typeof(char),
 		typeof(DateTime),
@@ -44,7 +43,7 @@ public class PrimitiveConverter : AbstractTypeConverter
 
 	public override bool CanHandleType(Type type)
 	{
-		return Array.IndexOf(types, type) != -1;
+		return Array.IndexOf(_types, type) != -1;
 	}
 
 	public override object PerformConversion(string value, Type targetType)

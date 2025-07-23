@@ -12,50 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
-
 using System;
 using System.Linq;
 
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
+
 public class TypeName
 {
-	private readonly string assemblyQualifiedName;
-	private readonly TypeName[] genericTypes;
-	private readonly string @namespace;
+	private readonly string _assemblyQualifiedName;
+	private readonly TypeName[] _genericTypes;
+	private readonly string _namespace;
 
 	public TypeName(string @namespace, string name, TypeName[] genericTypes)
 	{
 		Name = name;
-		this.genericTypes = genericTypes;
-		this.@namespace = @namespace;
+		_genericTypes = genericTypes;
+		_namespace = @namespace;
 	}
 
 	public TypeName(string assemblyQualifiedName)
 	{
-		this.assemblyQualifiedName = assemblyQualifiedName;
+		_assemblyQualifiedName = assemblyQualifiedName;
 	}
 
 	private string FullName
 	{
 		get
 		{
-			if (HasNamespace) return @namespace + "." + Name;
+			if (HasNamespace) return _namespace + "." + Name;
 			throw new InvalidOperationException("Namespace was not defined.");
 		}
 	}
 
-	private bool HasGenericParameters => genericTypes.Length > 0;
+	private bool HasGenericParameters => _genericTypes.Length > 0;
 
-	private bool HasNamespace => string.IsNullOrEmpty(@namespace) == false;
+	private bool HasNamespace => string.IsNullOrEmpty(_namespace) == false;
 
-	private bool IsAssemblyQualified => assemblyQualifiedName != null;
+	private bool IsAssemblyQualified => _assemblyQualifiedName != null;
 
 	private string Name { get; }
 
 	public string ExtractAssemblyName()
 	{
 		if (IsAssemblyQualified == false) return null;
-		var tokens = assemblyQualifiedName.Split([','], StringSplitOptions.None);
+		var tokens = _assemblyQualifiedName.Split([','], StringSplitOptions.None);
 		var indexOfVersion = Array.FindLastIndex(tokens, s => s.TrimStart(' ').StartsWith("Version="));
 		if (indexOfVersion <= 0) return tokens.Last().Trim();
 		return tokens[indexOfVersion - 1].Trim();
@@ -64,7 +64,7 @@ public class TypeName
 	public Type GetType(TypeNameConverter converter)
 	{
 		ArgumentNullException.ThrowIfNull(converter);
-		if (IsAssemblyQualified) return Type.GetType(assemblyQualifiedName, false, true);
+		if (IsAssemblyQualified) return Type.GetType(_assemblyQualifiedName, false, true);
 
 		Type type;
 		if (HasNamespace)
@@ -74,8 +74,8 @@ public class TypeName
 
 		if (!HasGenericParameters) return type;
 
-		var genericArgs = new Type[genericTypes.Length];
-		for (var i = 0; i < genericArgs.Length; i++) genericArgs[i] = genericTypes[i].GetType(converter);
+		var genericArgs = new Type[_genericTypes.Length];
+		for (var i = 0; i < genericArgs.Length; i++) genericArgs[i] = _genericTypes[i].GetType(converter);
 
 		return type.MakeGenericType(genericArgs);
 	}

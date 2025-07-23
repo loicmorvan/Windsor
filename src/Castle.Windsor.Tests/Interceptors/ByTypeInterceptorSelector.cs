@@ -23,11 +23,11 @@ namespace Castle.Windsor.Tests.Interceptors;
 
 public class ByTypeInterceptorSelector : IModelInterceptorsSelector
 {
-	private readonly Type interceptorType;
+	private readonly Type _interceptorType;
 
 	public ByTypeInterceptorSelector(Type interceptorType)
 	{
-		this.interceptorType = interceptorType;
+		_interceptorType = interceptorType;
 	}
 
 	public bool HasInterceptors(ComponentModel model)
@@ -39,7 +39,7 @@ public class ByTypeInterceptorSelector : IModelInterceptorsSelector
 	{
 		return
 		[
-			new InterceptorReference(interceptorType)
+			new InterceptorReference(_interceptorType)
 		];
 	}
 }

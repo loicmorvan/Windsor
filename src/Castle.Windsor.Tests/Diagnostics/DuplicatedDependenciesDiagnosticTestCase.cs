@@ -22,12 +22,12 @@ namespace Castle.Windsor.Tests.Diagnostics;
 
 public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCase
 {
-	private IDuplicatedDependenciesDiagnostic diagnostic;
+	private IDuplicatedDependenciesDiagnostic _diagnostic;
 
 	protected override void AfterContainerCreated()
 	{
 		var host = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IDiagnosticsHost;
-		diagnostic = host.GetDiagnostic<IDuplicatedDependenciesDiagnostic>();
+		_diagnostic = host.GetDiagnostic<IDuplicatedDependenciesDiagnostic>();
 	}
 
 	[Fact]
@@ -35,7 +35,7 @@ public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCas
 	{
 		Container.Register(Component.For<HasObjectPropertyAndTypedCtorParameterWithSameName>());
 
-		var result = diagnostic.Inspect();
+		var result = _diagnostic.Inspect();
 		Assert.NotEmpty(result);
 	}
 
@@ -44,7 +44,7 @@ public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCas
 	{
 		Container.Register(Component.For<HasTwoConstructors>());
 
-		var result = diagnostic.Inspect();
+		var result = _diagnostic.Inspect();
 		Assert.NotEmpty(result);
 	}
 
@@ -52,7 +52,7 @@ public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCas
 	public void Can_detect_components_having_duplicated_dependencies_same_type_different_name()
 	{
 		Container.Register(Component.For<HasPropertyAndCtorParameterSameTypeDifferentName>());
-		var result = diagnostic.Inspect();
+		var result = _diagnostic.Inspect();
 		Assert.NotEmpty(result);
 	}
 
@@ -60,7 +60,7 @@ public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCas
 	public void Can_detect_components_having_duplicated_dependencies_same_type_via_constructor()
 	{
 		Container.Register(Component.For<TwoEmptyServiceDependenciesConstructor>());
-		var result = diagnostic.Inspect();
+		var result = _diagnostic.Inspect();
 		Assert.NotEmpty(result);
 	}
 
@@ -68,7 +68,7 @@ public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCas
 	public void Can_detect_components_having_duplicated_dependencies_same_type_via_properties()
 	{
 		Container.Register(Component.For<TwoEmptyServiceDependenciesProperty>());
-		var result = diagnostic.Inspect();
+		var result = _diagnostic.Inspect();
 		Assert.NotEmpty(result);
 	}
 
@@ -78,7 +78,7 @@ public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCas
 		Container.Register(Component.For<HasObjectPropertyAndTypedCtorParameterDifferentName>()
 			.DependsOn(Dependency.OnComponent(typeof(object), typeof(EmptyService2Impl1)),
 				Dependency.OnComponent(typeof(IEmptyService), typeof(EmptyService2Impl1))));
-		var result = diagnostic.Inspect();
+		var result = _diagnostic.Inspect();
 		Assert.NotEmpty(result);
 	}
 
@@ -86,7 +86,7 @@ public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCas
 	public void Can_detect_multiple_dependencies_between_properties_and_constructors()
 	{
 		Container.Register(Component.For<ThreeEmptyServiceDependenciesPropertyAndManyCtors>());
-		var result = diagnostic.Inspect();
+		var result = _diagnostic.Inspect();
 		Assert.NotEmpty(result);
 	}
 }

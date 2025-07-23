@@ -17,22 +17,22 @@ using Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 namespace Castle.Windsor.MicroKernel.Registration;
 
-public abstract class RegistrationGroup<S>
-	where S : class
+public abstract class RegistrationGroup<TS>
+	where TS : class
 {
-	public RegistrationGroup(ComponentRegistration<S> registration)
+	public RegistrationGroup(ComponentRegistration<TS> registration)
 	{
 		Registration = registration;
 	}
 
-	public ComponentRegistration<S> Registration { get; }
+	public ComponentRegistration<TS> Registration { get; }
 
-	protected ComponentRegistration<S> AddAttributeDescriptor(string name, string value)
+	protected ComponentRegistration<TS> AddAttributeDescriptor(string name, string value)
 	{
-		return Registration.AddDescriptor(new AttributeDescriptor<S>(name, value));
+		return Registration.AddDescriptor(new AttributeDescriptor<TS>(name, value));
 	}
 
-	protected ComponentRegistration<S> AddDescriptor(IComponentModelDescriptor descriptor)
+	protected ComponentRegistration<TS> AddDescriptor(IComponentModelDescriptor descriptor)
 	{
 		return Registration.AddDescriptor(descriptor);
 	}

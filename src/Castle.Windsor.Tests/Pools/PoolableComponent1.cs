@@ -20,10 +20,10 @@ namespace Castle.Windsor.Tests.Pools;
 [Pooled(2, 5)]
 public class PoolableComponent1
 {
-	private readonly Guid id = Guid.NewGuid();
+	private readonly Guid _id = Guid.NewGuid();
 
 	public override string ToString()
 	{
-		return $"{id:D}";
+		return $"{_id:D}";
 	}
 }

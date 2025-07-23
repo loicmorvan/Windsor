@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
 using System.Collections.Generic;
 using System.Xml;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
 internal enum StatementState
 {
@@ -30,9 +30,9 @@ public class IfProcessingInstructionProcessor : AbstractXmlNodeProcessor
 	private static readonly string ElsifPiName = "elsif";
 	private static readonly string EndPiName = "end";
 	private static readonly string IfPiName = "if";
-	private static readonly XmlNodeType[] acceptNodes = [XmlNodeType.ProcessingInstruction];
+	private static readonly XmlNodeType[] AcceptNodes = [XmlNodeType.ProcessingInstruction];
 
-	public override XmlNodeType[] AcceptNodeTypes => acceptNodes;
+	public override XmlNodeType[] AcceptNodeTypes => AcceptNodes;
 
 	public override string Name => IfPiName;
 

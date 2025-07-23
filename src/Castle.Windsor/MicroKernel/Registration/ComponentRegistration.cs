@@ -44,14 +44,14 @@ namespace Castle.Windsor.MicroKernel.Registration;
 public class ComponentRegistration<TService> : IRegistration
 	where TService : class
 {
-	private readonly List<IComponentModelDescriptor> descriptors = [];
-	private readonly List<Type> potentialServices = [];
-	private readonly HashSet<Type> potentialServicesLookup = [];
+	private readonly List<IComponentModelDescriptor> _descriptors = [];
+	private readonly List<Type> _potentialServices = [];
+	private readonly HashSet<Type> _potentialServicesLookup = [];
 
-	private bool ifComponentRegisteredIgnore;
-	private ComponentName name;
-	private bool registered;
-	private bool registerNewServicesOnly;
+	private bool _ifComponentRegisteredIgnore;
+	private ComponentName _name;
+	private bool _registered;
+	private bool _registerNewServicesOnly;
 
 	/// <summary>Initializes a new instance of the <see cref = "ComponentRegistration{TService}" /> class.</summary>
 	public ComponentRegistration() : this(typeof(TService))
@@ -87,8 +87,8 @@ public class ComponentRegistration<TService> : IRegistration
 	{
 		get
 		{
-			if (name == null) return null;
-			return name.Name;
+			if (_name == null) return null;
+			return _name.Name;
 		}
 	}
 
@@ -96,9 +96,9 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <value> The proxy. </value>
 	public ProxyGroup<TService> Proxy => new(this);
 
-	protected internal IList<Type> Services => potentialServices;
+	protected internal IList<Type> Services => _potentialServices;
 
-	protected internal int ServicesCount => potentialServices.Count;
+	protected internal int ServicesCount => _potentialServices.Count;
 
 	internal bool IsOverWrite { get; private set; }
 
@@ -106,8 +106,8 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <param name = "kernel"> The kernel. </param>
 	void IRegistration.Register(IKernelInternal kernel)
 	{
-		if (registered) return;
-		registered = true;
+		if (_registered) return;
+		_registered = true;
 		var services = FilterServices(kernel);
 		if (services.Length == 0) return;
 
@@ -143,7 +143,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> AddDescriptor(IComponentModelDescriptor descriptor)
 	{
-		descriptors.Add(descriptor);
+		_descriptors.Add(descriptor);
 		var componentDescriptor = descriptor as AbstractOverwriteableDescriptor<TService>;
 		if (componentDescriptor != null) componentDescriptor.Registration = this;
 		return this;
@@ -389,7 +389,8 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> Forward(IEnumerable<Type> types)
 	{
-		foreach (var type in types) ComponentServicesUtil.AddService(potentialServices, potentialServicesLookup, type);
+		foreach (var type in types)
+			ComponentServicesUtil.AddService(_potentialServices, _potentialServicesLookup, type);
 		return this;
 	}
 
@@ -615,15 +616,15 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <remarks>Names have to be globally unique in the scope of the container.</remarks>
 	public ComponentRegistration<TService> Named(string name)
 	{
-		if (this.name != null)
+		if (_name != null)
 		{
-			var message = $"This component has already been assigned name '{this.name.Name}'";
+			var message = $"This component has already been assigned name '{_name.Name}'";
 			throw new ComponentRegistrationException(message);
 		}
 
 		if (name == null) return this;
 
-		this.name = new ComponentName(name, true);
+		_name = new ComponentName(name, true);
 		return this;
 	}
 
@@ -639,13 +640,13 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <remarks>Names have to be globally unique in the scope of the container.</remarks>
 	public ComponentRegistration<TService> NamedAutomatically(string name)
 	{
-		if (this.name != null)
+		if (_name != null)
 		{
-			var message = $"This component has already been assigned name '{this.name}'";
+			var message = $"This component has already been assigned name '{_name}'";
 			throw new ComponentRegistrationException(message);
 		}
 
-		this.name = new ComponentName(name, false);
+		_name = new ComponentName(name, false);
 		return this;
 	}
 
@@ -698,7 +699,7 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <returns> </returns>
 	public ComponentRegistration<TService> OnlyNewServices()
 	{
-		registerNewServicesOnly = true;
+		_registerNewServicesOnly = true;
 		return this;
 	}
 
@@ -780,7 +781,8 @@ public class ComponentRegistration<TService> : IRegistration
 		if (managedExternally) ExtendedProperties(Property.ForKey("factory.managedExternally").Eq(managedExternally));
 
 		if (Implementation == null &&
-		    (potentialServices.First().GetTypeInfo().IsClass == false || potentialServices.First().GetTypeInfo().IsSealed == false))
+		    (_potentialServices.First().GetTypeInfo().IsClass == false ||
+		     _potentialServices.First().GetTypeInfo().IsSealed == false))
 			Implementation = typeof(LateBoundComponent);
 		return this;
 	}
@@ -797,13 +799,13 @@ public class ComponentRegistration<TService> : IRegistration
 
 	internal void RegisterOptionally()
 	{
-		ifComponentRegisteredIgnore = true;
+		_ifComponentRegisteredIgnore = true;
 	}
 
 	private Type[] FilterServices(IKernel kernel)
 	{
-		var services = new List<Type>(potentialServices);
-		if (registerNewServicesOnly) services.RemoveAll(kernel.HasComponent);
+		var services = new List<Type>(_potentialServices);
+		if (_registerNewServicesOnly) services.RemoveAll(kernel.HasComponent);
 		return services.ToArray();
 	}
 
@@ -812,15 +814,15 @@ public class ComponentRegistration<TService> : IRegistration
 		var list = new List<IComponentModelDescriptor>
 		{
 			new ServicesDescriptor(services),
-			new DefaultsDescriptor(name, Implementation)
+			new DefaultsDescriptor(_name, Implementation)
 		};
-		list.AddRange(descriptors);
+		list.AddRange(_descriptors);
 		return list.ToArray();
 	}
 
 	private bool SkipRegistration(IKernelInternal internalKernel, ComponentModel componentModel)
 	{
-		return ifComponentRegisteredIgnore && internalKernel.HasComponent(componentModel.Name);
+		return _ifComponentRegisteredIgnore && internalKernel.HasComponent(componentModel.Name);
 	}
 
 	/// <summary>

@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
 using System.Xml;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
 public class DefaultElementProcessor : AbstractXmlNodeProcessor
 {
 	private const string IncludeAttrName = "includeUri";
-	private static readonly IncludeElementProcessor includeProcessor = new();
-	private static readonly DefaultTextNodeProcessor textProcessor = new();
+	private static readonly IncludeElementProcessor IncludeProcessor = new();
+	private static readonly DefaultTextNodeProcessor TextProcessor = new();
 
 	public override string Name => "";
 
@@ -43,7 +43,7 @@ public class DefaultElementProcessor : AbstractXmlNodeProcessor
 	{
 		ProcessIncludeAttribute(element, engine);
 
-		foreach (XmlAttribute att in element.Attributes) textProcessor.ProcessString(att, att.Value, engine);
+		foreach (XmlAttribute att in element.Attributes) TextProcessor.ProcessString(att, att.Value, engine);
 	}
 
 	private static void ProcessIncludeAttribute(XmlElement element, IXmlProcessorEngine engine)
@@ -54,7 +54,7 @@ public class DefaultElementProcessor : AbstractXmlNodeProcessor
 		// removing the include attribute from the element
 		element.Attributes.RemoveNamedItem(IncludeAttrName);
 
-		var includeContent = includeProcessor.ProcessInclude(element, include.Value, engine);
+		var includeContent = IncludeProcessor.ProcessInclude(element, include.Value, engine);
 
 		if (includeContent != null) element.PrependChild(includeContent);
 	}

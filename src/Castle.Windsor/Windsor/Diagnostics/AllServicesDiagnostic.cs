@@ -20,16 +20,16 @@ namespace Castle.Windsor.Windsor.Diagnostics;
 
 public class AllServicesDiagnostic : IAllServicesDiagnostic
 {
-	private readonly IKernel kernel;
+	private readonly IKernel _kernel;
 
 	public AllServicesDiagnostic(IKernel kernel)
 	{
-		this.kernel = kernel;
+		_kernel = kernel;
 	}
 
 	public ILookup<Type, IHandler> Inspect()
 	{
-		return kernel.GetAssignableHandlers(typeof(object))
+		return _kernel.GetAssignableHandlers(typeof(object))
 			.SelectMany(handler => handler.ComponentModel.Services, (handler, service) => new { handler, service })
 			.ToLookup(g => g.service, g => g.handler);
 	}

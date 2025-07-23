@@ -12,25 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
-
 using System;
-
 using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
 public class UsesDisposableFooDelegate
 {
-	private readonly Func<int, DisposableFoo> myFooFactory;
-	private int counter;
+	private readonly Func<int, DisposableFoo> _myFooFactory;
+	private int _counter;
 
 	public UsesDisposableFooDelegate(Func<int, DisposableFoo> myFooFactory)
 	{
-		this.myFooFactory = myFooFactory;
-		counter = 0;
+		_myFooFactory = myFooFactory;
+		_counter = 0;
 	}
 
 	public DisposableFoo GetFoo()
 	{
-		return myFooFactory(++counter);
+		return _myFooFactory(++_counter);
 	}
 }

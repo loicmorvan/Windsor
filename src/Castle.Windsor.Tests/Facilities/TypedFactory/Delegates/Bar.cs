@@ -16,11 +16,11 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
 public class Bar
 {
-	private readonly Baz baz;
+	private readonly Baz _baz;
 
 	public Bar(Baz baz, string name)
 	{
-		this.baz = baz;
+		_baz = baz;
 		Name = name;
 	}
 
