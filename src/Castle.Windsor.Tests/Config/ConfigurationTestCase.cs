@@ -107,7 +107,7 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 </configuration>";
 
 		Container.Install(Configuration.FromXml(new StaticContentResource(config)));
-		var stringsList = Container.Resolve<List<string>>("list");
+		Container.Resolve<List<string>>("list");
 		var stringToListDictionary = Container.Resolve<Dictionary<string, List<string>>>("stringToListDictionary");
 		Assert.NotNull(stringToListDictionary);
 		Assert.Equal(2, stringToListDictionary.Count);
@@ -368,7 +368,9 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 		var instance = Kernel.Resolve<ClassWithListConstructor>("key");
 		Assert.NotNull(instance.Services);
 		Assert.Equal(2, instance.Services.Count);
+		Assert.NotNull(instance.Services[0]);
 		Assert.Equal("CommonImpl1", instance.Services[0].GetType().Name);
+		Assert.NotNull(instance.Services[1]);
 		Assert.Equal("CommonImpl2", instance.Services[1].GetType().Name);
 	}
 

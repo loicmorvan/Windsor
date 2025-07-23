@@ -19,5 +19,5 @@ namespace Castle.Windsor.Tests.Components;
 [Scoped]
 public class ScopedComponent : IComponent
 {
-	public int ID => GetHashCode();
+	public int Id => GetHashCode();
 }

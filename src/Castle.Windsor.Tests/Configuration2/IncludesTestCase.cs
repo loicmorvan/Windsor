@@ -21,12 +21,12 @@ namespace Castle.Windsor.Tests.Configuration2;
 
 public class IncludesTestCase
 {
-	private IWindsorContainer container;
+	private IWindsorContainer _container;
 
 	[Fact]
 	public void AssemblyResourceAndIncludes()
 	{
-		container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("hasResourceIncludes.xml")));
+		_container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("hasResourceIncludes.xml")));
 
 		AssertConfiguration();
 	}
@@ -34,7 +34,7 @@ public class IncludesTestCase
 	[Fact]
 	public void FileResourceAndIncludes()
 	{
-		container = new WindsorContainer(new XmlInterpreter(Xml.File("hasFileIncludes.xml")));
+		_container = new WindsorContainer(new XmlInterpreter(Xml.File("hasFileIncludes.xml")));
 
 		AssertConfiguration();
 	}
@@ -42,7 +42,8 @@ public class IncludesTestCase
 	[Fact]
 	public void FileResourceAndRelativeIncludes()
 	{
-		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_include_relative.xml"));
+		_container =
+			new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_include_relative.xml"));
 
 		AssertConfiguration();
 	}
@@ -50,14 +51,15 @@ public class IncludesTestCase
 	[Fact]
 	public void FileResourceAndRelativeIncludes2()
 	{
-		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_include_relative2.xml"));
+		_container =
+			new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_include_relative2.xml"));
 
 		AssertConfiguration();
 	}
 
 	private void AssertConfiguration()
 	{
-		var store = container.Kernel.ConfigurationStore;
+		var store = _container.Kernel.ConfigurationStore;
 
 		Assert.Equal(2, store.GetFacilities().Length);
 		Assert.Equal(2, store.GetComponents().Length);

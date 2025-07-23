@@ -43,8 +43,8 @@ public class MixinDependencyTestCase : AbstractContainerTestCase
 		var outerProxy = (UseChain<IComponent>)Container.Resolve<IUse<IComponent>>();
 		var innerProxy = outerProxy.Next;
 
-		var id = (outerProxy as IComponent).ID; // to trigger interception;
-		id = (innerProxy as IComponent).ID; // to trigger interception;
+		var id = (outerProxy as IComponent).Id; // to trigger interception;
+		id = (innerProxy as IComponent).Id; // to trigger interception;
 
 		var outerMixin = ((outerProxy as IProxyTargetAccessor).GetInterceptors()[0] as CollectInvocationsInterceptor).Invocations[0].InvocationTarget;
 		var innerMixin = ((innerProxy as IProxyTargetAccessor).GetInterceptors()[0] as CollectInvocationsInterceptor).Invocations[0].InvocationTarget;
@@ -68,7 +68,7 @@ public class MixinDependencyTestCase : AbstractContainerTestCase
 				.Interceptors<CollectInvocationsInterceptor>());
 
 		var proxy = Container.Resolve<IUse<IComponent>>();
-		var id = (proxy as IComponent).ID; // to trigger interception;
+		var id = (proxy as IComponent).Id; // to trigger interception;
 		var interceptor = Container.Resolve<CollectInvocationsInterceptor>();
 		var mixin = interceptor.Invocations.Single().InvocationTarget;
 		Assert.Same(mixin, proxy.Dependency);

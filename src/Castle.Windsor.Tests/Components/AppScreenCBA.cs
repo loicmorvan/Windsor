@@ -17,5 +17,5 @@ namespace Castle.Windsor.Tests.Components;
 public class AppScreenCba : IAppScreen
 {
 	// ReSharper disable once UnusedAutoPropertyAccessor.Global
-	public CBA Dependency { get; set; }
+	public Cba Dependency { get; set; }
 }

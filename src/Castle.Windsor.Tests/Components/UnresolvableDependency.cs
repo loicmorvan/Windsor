@@ -14,13 +14,10 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class UnresolvalbeDependencyWithAdditionalServiceConstructor : IDependency
+public class UnresolvableDependency : IDependency
 {
-	public UnresolvalbeDependencyWithAdditionalServiceConstructor(A a)
-	{
-	}
-
-	public UnresolvalbeDependencyWithAdditionalServiceConstructor(IEmptyService dep)
+	// ReSharper disable once UnusedParameter.Local
+	public UnresolvableDependency(A a)
 	{
 	}
 }

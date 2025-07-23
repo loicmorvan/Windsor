@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using System;
+
+namespace Castle.Windsor.Tests.Components;
 
 public class ComponentWithDispose : IComponent, IDisposable
 {
 	public bool Disposed { get; private set; }
 
-	public int ID => 42;
+	public int Id => 42;
 
 	public void Dispose()
 	{

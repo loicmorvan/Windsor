@@ -25,13 +25,13 @@ public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestC
 	public void Scoped_component_created_for_outermost_sub_graph()
 	{
 		Container.Register(
-			Component.For<A>().LifeStyle.BoundTo<CBA>(),
+			Component.For<A>().LifeStyle.BoundTo<Cba>(),
 			Component.For<B>().LifeStyle.Transient,
-			Component.For<CBA>().ImplementedBy<CBADecorator>().LifeStyle.Transient,
-			Component.For<CBA>().LifeStyle.Transient);
+			Component.For<Cba>().ImplementedBy<CbaDecorator>().LifeStyle.Transient,
+			Component.For<Cba>().LifeStyle.Transient);
 
-		var cba = Container.Resolve<CBA>();
-		var inner = ((CBADecorator)cba).Inner;
+		var cba = Container.Resolve<Cba>();
+		var inner = ((CbaDecorator)cba).Inner;
 
 		Assert.Same(cba.A, inner.A);
 	}
@@ -40,11 +40,11 @@ public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestC
 	public void Scoped_component_disposable_not_tracked()
 	{
 		Container.Register(
-			Component.For<A>().ImplementedBy<ADisposable>().LifestyleBoundTo<CBA>(),
+			Component.For<A>().ImplementedBy<ADisposable>().LifestyleBoundTo<Cba>(),
 			Component.For<B>().LifeStyle.Transient,
-			Component.For<CBA>().LifeStyle.Transient);
+			Component.For<Cba>().LifeStyle.Transient);
 
-		var cba = Container.Resolve<CBA>();
+		var cba = Container.Resolve<Cba>();
 
 		Assert.False(Kernel.ReleasePolicy.HasTrack(cba.A));
 	}
@@ -53,11 +53,11 @@ public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestC
 	public void Scoped_component_disposable_root_tracked()
 	{
 		Container.Register(
-			Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<CBA>(),
+			Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<Cba>(),
 			Component.For<B>().LifeStyle.Transient,
-			Component.For<CBA>().LifeStyle.Transient);
+			Component.For<Cba>().LifeStyle.Transient);
 
-		var cba = Container.Resolve<CBA>();
+		var cba = Container.Resolve<Cba>();
 
 		Assert.True(Kernel.ReleasePolicy.HasTrack(cba));
 	}
@@ -66,11 +66,11 @@ public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestC
 	public void Scoped_component_doesnt_unnecessarily_force_root_to_be_tracked()
 	{
 		Container.Register(
-			Component.For<A>().LifeStyle.BoundTo<CBA>(),
+			Component.For<A>().LifeStyle.BoundTo<Cba>(),
 			Component.For<B>().LifeStyle.Transient,
-			Component.For<CBA>().LifeStyle.Transient);
+			Component.For<Cba>().LifeStyle.Transient);
 
-		var cba = Container.Resolve<CBA>();
+		var cba = Container.Resolve<Cba>();
 
 		Assert.False(Kernel.ReleasePolicy.HasTrack(cba));
 		Assert.False(Kernel.ReleasePolicy.HasTrack(cba.B));
@@ -80,11 +80,11 @@ public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestC
 	public void Scoped_component_doesnt_unnecessarily_get_tracked()
 	{
 		Container.Register(
-			Component.For<A>().LifeStyle.BoundTo<CBA>(),
+			Component.For<A>().LifeStyle.BoundTo<Cba>(),
 			Component.For<B>().LifeStyle.Transient,
-			Component.For<CBA>().LifeStyle.Transient);
+			Component.For<Cba>().LifeStyle.Transient);
 
-		var cba = Container.Resolve<CBA>();
+		var cba = Container.Resolve<Cba>();
 
 		Assert.False(Kernel.ReleasePolicy.HasTrack(cba.A));
 	}
@@ -93,11 +93,11 @@ public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestC
 	public void Scoped_component_not_released_prematurely()
 	{
 		Container.Register(
-			Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<CBA>(),
+			Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<Cba>(),
 			Component.For<B>().ImplementedBy<BDisposable>().LifeStyle.Transient,
-			Component.For<CBA>().LifeStyle.Transient);
+			Component.For<Cba>().LifeStyle.Transient);
 
-		var cba = Container.Resolve<CBA>();
+		var cba = Container.Resolve<Cba>();
 
 		var b = (BDisposable)cba.B;
 		var wasADisposedAtTheTimeWhenDisposingB = false;
@@ -113,11 +113,11 @@ public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestC
 	public void Scoped_component_not_released_prematurely_interdependencies()
 	{
 		Container.Register(
-			Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<CBA>(),
-			Component.For<B>().ImplementedBy<BDisposable>().LifeStyle.BoundTo<CBA>(),
-			Component.For<CBA>().LifeStyle.Transient);
+			Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<Cba>(),
+			Component.For<B>().ImplementedBy<BDisposable>().LifeStyle.BoundTo<Cba>(),
+			Component.For<Cba>().LifeStyle.Transient);
 
-		var cba = Container.Resolve<CBA>();
+		var cba = Container.Resolve<Cba>();
 
 		var b = (BDisposable)cba.B;
 		var wasADisposedAtTheTimeWhenDisposingB = false;
@@ -132,12 +132,12 @@ public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestC
 	public void Scoped_component_not_reused_across_resolves()
 	{
 		Container.Register(
-			Component.For<A>().LifeStyle.BoundTo<CBA>(),
+			Component.For<A>().LifeStyle.BoundTo<Cba>(),
 			Component.For<B>().LifeStyle.Transient,
-			Component.For<CBA>().LifeStyle.Transient);
+			Component.For<Cba>().LifeStyle.Transient);
 
-		var one = Container.Resolve<CBA>();
-		var two = Container.Resolve<CBA>();
+		var one = Container.Resolve<Cba>();
+		var two = Container.Resolve<Cba>();
 
 		Assert.NotSame(one.A, two.A);
 		Assert.NotSame(one.B.A, two.B.A);
@@ -151,7 +151,7 @@ public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestC
 		Container.Register(
 			Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<AppScreenCba>(),
 			Component.For<B>().LifeStyle.Transient,
-			Component.For<CBA>().LifeStyle.Transient,
+			Component.For<Cba>().LifeStyle.Transient,
 			Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("1"),
 			Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("2"),
 			Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("3"),
@@ -173,7 +173,7 @@ public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestC
 		Container.Register(
 			Component.For<A>().LifeStyle.BoundTo<AppScreenCba>(),
 			Component.For<B>().LifeStyle.Transient,
-			Component.For<CBA>().LifeStyle.Transient,
+			Component.For<Cba>().LifeStyle.Transient,
 			Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("1"),
 			Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("2"),
 			Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("3"),
@@ -190,11 +190,11 @@ public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestC
 	public void Scoped_component_released_when_releasing_root_disposable()
 	{
 		Container.Register(
-			Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<CBA>(),
+			Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<Cba>(),
 			Component.For<B>().LifeStyle.Transient,
-			Component.For<CBA>().LifeStyle.Transient);
+			Component.For<Cba>().LifeStyle.Transient);
 
-		var cba = Container.Resolve<CBA>();
+		var cba = Container.Resolve<Cba>();
 		var a = (ADisposable)cba.A;
 
 		Container.Release(cba);
@@ -206,11 +206,11 @@ public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestC
 	public void Scoped_component_reused()
 	{
 		Container.Register(
-			Component.For<A>().LifestyleBoundTo<CBA>(),
+			Component.For<A>().LifestyleBoundTo<Cba>(),
 			Component.For<B>().LifeStyle.Transient,
-			Component.For<CBA>().LifeStyle.Transient);
+			Component.For<Cba>().LifeStyle.Transient);
 
-		var cba = Container.Resolve<CBA>();
+		var cba = Container.Resolve<Cba>();
 
 		Assert.Same(cba.A, cba.B.A);
 	}
@@ -219,13 +219,13 @@ public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestC
 	public void Scoped_nearest_component_created_for_innermost_sub_graph()
 	{
 		Container.Register(
-			Component.For<A>().LifeStyle.BoundToNearest<CBA>(),
+			Component.For<A>().LifeStyle.BoundToNearest<Cba>(),
 			Component.For<B>().LifeStyle.Transient,
-			Component.For<CBA>().ImplementedBy<CBADecorator>().LifeStyle.Transient,
-			Component.For<CBA>().LifeStyle.Transient);
+			Component.For<Cba>().ImplementedBy<CbaDecorator>().LifeStyle.Transient,
+			Component.For<Cba>().LifeStyle.Transient);
 
-		var cba = Container.Resolve<CBA>();
-		var inner = ((CBADecorator)cba).Inner;
+		var cba = Container.Resolve<Cba>();
+		var inner = ((CbaDecorator)cba).Inner;
 
 		Assert.NotSame(cba.A, inner.A);
 	}
@@ -234,11 +234,11 @@ public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestC
 	public void Scoped_nearest_component_reused_in_subgraph()
 	{
 		Container.Register(
-			Component.For<A>().LifestyleBoundToNearest<CBA>(),
+			Component.For<A>().LifestyleBoundToNearest<Cba>(),
 			Component.For<B>().LifeStyle.Transient,
-			Component.For<CBA>().LifeStyle.Transient);
+			Component.For<Cba>().LifeStyle.Transient);
 
-		var cba = Container.Resolve<CBA>();
+		var cba = Container.Resolve<Cba>();
 
 		Assert.Same(cba.A, cba.B.A);
 	}

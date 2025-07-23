@@ -29,7 +29,7 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 		Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel, true));
 		Container.Register(
 			Component.For<IDependency>().ImplementedBy<ResolvableDependency>(),
-			Component.For<IDependency>().ImplementedBy<UnresolvalbeDependencyWithPrimitiveConstructor>(),
+			Component.For<IDependency>().ImplementedBy<UnresolvableDependencyWithPrimitiveConstructor>(),
 			Component.For<IDependOnArray>().ImplementedBy<DependsOnArray>()
 		);
 
@@ -40,7 +40,7 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 			string.Format(
 				"Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Service '{2}' which was not registered.{0}- Parameter 'str' which was not provided. Did you forget to set the dependency?{0}",
 				Environment.NewLine,
-				typeof(UnresolvalbeDependencyWithPrimitiveConstructor).FullName,
+				typeof(UnresolvableDependencyWithPrimitiveConstructor).FullName,
 				typeof(A).FullName);
 
 		Assert.Equal(message, exception.Message);
@@ -52,7 +52,7 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 		Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel, true));
 		Container.Register(
 			Component.For<IDependency>().ImplementedBy<ResolvableDependency>(),
-			Component.For<IDependency>().ImplementedBy<UnresolvalbeDependencyWithAdditionalServiceConstructor>(),
+			Component.For<IDependency>().ImplementedBy<UnresolvableDependencyWithAdditionalServiceConstructor>(),
 			Component.For<IDependOnArray>().ImplementedBy<DependsOnArray>()
 		);
 
@@ -63,7 +63,7 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 			string.Format(
 				"Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Service '{2}' which was not registered.{0}- Service '{3}' which was not registered.{0}",
 				Environment.NewLine,
-				typeof(UnresolvalbeDependencyWithAdditionalServiceConstructor).FullName,
+				typeof(UnresolvableDependencyWithAdditionalServiceConstructor).FullName,
 				typeof(A).FullName,
 				typeof(IEmptyService).FullName);
 
@@ -76,7 +76,7 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 		Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
 		Container.Register(
 			Component.For<IDependency>().ImplementedBy<ResolvableDependency>(),
-			Component.For<IDependency>().ImplementedBy<UnresolvalbeDependency>(),
+			Component.For<IDependency>().ImplementedBy<UnresolvableDependency>(),
 			Component.For<IDependOnArray>().ImplementedBy<DependsOnArray>()
 		);
 
@@ -87,7 +87,7 @@ public class ArrayResolverTestCase : AbstractContainerTestCase
 			string.Format(
 				"Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Service '{2}' which was not registered.{0}",
 				Environment.NewLine,
-				typeof(UnresolvalbeDependency).FullName,
+				typeof(UnresolvableDependency).FullName,
 				typeof(A).FullName);
 
 		Assert.Equal(message, exception.Message);

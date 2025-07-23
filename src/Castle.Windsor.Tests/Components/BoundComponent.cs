@@ -21,7 +21,7 @@ namespace Castle.Windsor.Tests.Components;
 [BoundTo(typeof(Binder))]
 public class BoundComponent : IComponent
 {
-	public int ID => GetHashCode();
+	public int Id => GetHashCode();
 
 	public class Binder
 	{

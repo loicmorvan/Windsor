@@ -13,12 +13,14 @@
 // limitations under the License.
 
 using System;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.Components;
 
+[UsedImplicitly]
 public class LoggingRepositoryDecorator<T> : IRepository<T>
 {
-	public readonly IRepository<T> inner;
+	public readonly IRepository<T> Inner;
 
 	public LoggingRepositoryDecorator()
 	{
@@ -26,12 +28,12 @@ public class LoggingRepositoryDecorator<T> : IRepository<T>
 
 	public LoggingRepositoryDecorator(IRepository<T> inner)
 	{
-		this.inner = inner;
+		Inner = inner;
 	}
 
 	public T Get(int id)
 	{
-		Console.WriteLine("Getting {0}", id);
-		return inner.Get(id);
+		Console.WriteLine(@"Getting {0}", id);
+		return Inner.Get(id);
 	}
 }

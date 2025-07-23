@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.Startable;
-
 using System;
-
 using Castle.Windsor.Facilities.Startable;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Windsor;
+
+namespace Castle.Windsor.Tests.Facilities.Startable;
 
 public class StartableAndExceptionThrowingInstallersTestCase
 {
@@ -52,7 +51,7 @@ public class StartableAndExceptionThrowingInstallersTestCase
 	[Bug("IOC-311")]
 	public void StartableComponentShouldNotStartIfExceptionThrownByInstaller()
 	{
-		UsesIEmptyService.instancesCreated = 0;
+		UsesIEmptyService.InstancesCreated = 0;
 		using var container = new WindsorContainer();
 		container.AddFacility<StartableFacility>(f => f.DeferredStart());
 		Assert.Throws<NotImplementedException>(() =>
@@ -70,6 +69,6 @@ public class StartableAndExceptionThrowingInstallersTestCase
 		// being implemented by a using() block or something similar
 		// via OptimizeDependencyResolutionDisposable.Dispose()
 
-		Assert.Equal(0, UsesIEmptyService.instancesCreated);
+		Assert.Equal(0, UsesIEmptyService.InstancesCreated);
 	}
 }

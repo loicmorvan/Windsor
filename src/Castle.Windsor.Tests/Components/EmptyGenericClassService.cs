@@ -14,4 +14,5 @@
 
 namespace Castle.Windsor.Tests.Components;
 
+// ReSharper disable once UnusedTypeParameter
 public class EmptyGenericClassService<T>;

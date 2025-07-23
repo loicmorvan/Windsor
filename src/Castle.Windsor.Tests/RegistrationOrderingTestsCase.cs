@@ -22,9 +22,9 @@ public class RegistrationOrderingTestsCase : AbstractContainerTestCase
 	[Fact]
 	public void CtorSourceOrderDoesNotMatter()
 	{
-		Container.Register(Component.For<D_DB>());
+		Container.Register(Component.For<DDb>());
 
-		Assert.NotNull(Container.Resolve<D_DB>());
+		Assert.NotNull(Container.Resolve<DDb>());
 	}
 
 	[Fact]

@@ -12,13 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.Components;
 
-using System;
-
+[UsedImplicitly]
 public class ThrowsInCtorWithDisposableDependency
 {
-	public ThrowsInCtorWithDisposableDependency(ISimpleService depedency)
+	public ThrowsInCtorWithDisposableDependency(ISimpleService dependency)
 	{
 		throw new Exception("Booooo!");
 	}

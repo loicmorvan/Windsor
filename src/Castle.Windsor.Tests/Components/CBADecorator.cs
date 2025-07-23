@@ -14,12 +14,7 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class CBADecorator : CBA
+public class CbaDecorator(Cba inner, A a, B b) : Cba(a, b)
 {
-	public CBADecorator(CBA inner, A a, B b) : base(a, b)
-	{
-		Inner = inner;
-	}
-
-	public CBA Inner { get; private set; }
+	public Cba Inner { get; private set; } = inner;
 }

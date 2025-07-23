@@ -23,5 +23,5 @@ public class TrivialComponentWithDependency : IComponent
 
 	public ISimpleService Dependency { get; private set; }
 
-	public int ID => 0;
+	public int Id => 0;
 }

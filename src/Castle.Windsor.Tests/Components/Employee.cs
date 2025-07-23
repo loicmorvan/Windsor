@@ -16,10 +16,9 @@ namespace Castle.Windsor.Tests.Components;
 
 public class Employee : IEmployee
 {
-	private string ntLogin;
 	public string Email { get; set; }
 
-	public string EmployeeID { get; set; }
+	public string EmployeeId { get; set; }
 
 	public string FirstName { get; set; }
 
@@ -33,17 +32,10 @@ public class Employee : IEmployee
 
 	public string MiddleName { get; set; }
 
-	public string NTLogin
-	{
-		get
-		{
-			if (ntLogin.Length > 0) return ntLogin;
-			return ntLogin;
-		}
-	}
+	public string NtLogin { get; private set; }
 
-	public void SetNTLogin(string ntLogin)
+	public void SetNtLogin(string ntLogin)
 	{
-		this.ntLogin = ntLogin;
+		NtLogin = ntLogin;
 	}
 }

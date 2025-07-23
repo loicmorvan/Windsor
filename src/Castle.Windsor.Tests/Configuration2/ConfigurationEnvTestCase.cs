@@ -38,15 +38,8 @@ public class ConfigurationEnvTestCase
 	}
 }
 
-internal class CustomEnv : IEnvironmentInfo
+internal class CustomEnv(bool isDevelopment) : IEnvironmentInfo
 {
-	private readonly bool isDevelopment;
-
-	public CustomEnv(bool isDevelopment)
-	{
-		this.isDevelopment = isDevelopment;
-	}
-
 	public string GetEnvironmentName()
 	{
 		return isDevelopment ? "devel" : "test";

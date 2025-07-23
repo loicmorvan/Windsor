@@ -14,12 +14,6 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class ItemService : IItemService
-{
-	private IBookStore bookStore;
-
-	public ItemService(IBookStore bookStore)
-	{
-		this.bookStore = bookStore;
-	}
-}
+#pragma warning disable CS9113 // Parameter is unread.
+public class ItemService(IBookStore bookStore) : IItemService;
+#pragma warning restore CS9113 // Parameter is unread.

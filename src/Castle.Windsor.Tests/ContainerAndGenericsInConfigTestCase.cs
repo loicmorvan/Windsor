@@ -61,7 +61,7 @@ public class ContainerAndGenericsInConfigTestCase : AbstractContainerTestCase
 		var repository = Container.Resolve<IRepository<int>>("int.repos");
 
 		Assert.IsType<LoggingRepositoryDecorator<int>>(repository);
-		Assert.IsType<DemoRepository<int>>(((LoggingRepositoryDecorator<int>)repository).inner);
+		Assert.IsType<DemoRepository<int>>(((LoggingRepositoryDecorator<int>)repository).Inner);
 	}
 
 	[Fact]
@@ -71,8 +71,8 @@ public class ContainerAndGenericsInConfigTestCase : AbstractContainerTestCase
 		var repos = Container.Resolve<IRepository<int>>();
 
 		Assert.IsType<LoggingRepositoryDecorator<int>>(repos);
-		Assert.IsType<DemoRepository<int>>(((LoggingRepositoryDecorator<int>)repos).inner);
-		Assert.Equal("second", ((DemoRepository<int>)((LoggingRepositoryDecorator<int>)repos).inner).Name);
+		Assert.IsType<DemoRepository<int>>(((LoggingRepositoryDecorator<int>)repos).Inner);
+		Assert.Equal("second", ((DemoRepository<int>)((LoggingRepositoryDecorator<int>)repos).Inner).Name);
 	}
 
 	[Fact]
@@ -83,7 +83,7 @@ public class ContainerAndGenericsInConfigTestCase : AbstractContainerTestCase
 		var repository = Container.Resolve<IRepository<IEmployee>>();
 		Assert.IsType<LoggingRepositoryDecorator<IEmployee>>(repository);
 
-		var inner = ((LoggingRepositoryDecorator<IEmployee>)repository).inner;
+		var inner = ((LoggingRepositoryDecorator<IEmployee>)repository).Inner;
 		Assert.IsType<DemoRepository<IEmployee>>(inner);
 
 		var actualInner = (DemoRepository<IEmployee>)inner;
@@ -99,7 +99,7 @@ public class ContainerAndGenericsInConfigTestCase : AbstractContainerTestCase
 		var repos = Container.Resolve<IRepository<string>>();
 		Assert.IsType<LoggingRepositoryDecorator<string>>(repos);
 
-		Assert.Equal("second", ((DemoRepository<string>)((LoggingRepositoryDecorator<string>)repos).inner).Name);
+		Assert.Equal("second", ((DemoRepository<string>)((LoggingRepositoryDecorator<string>)repos).Inner).Name);
 	}
 
 	[Fact]
@@ -109,7 +109,7 @@ public class ContainerAndGenericsInConfigTestCase : AbstractContainerTestCase
 
 		var repository = Container.Resolve<IRepository<int>>();
 
-		Assert.Null(((LoggingRepositoryDecorator<int>)repository).inner);
+		Assert.Null(((LoggingRepositoryDecorator<int>)repository).Inner);
 	}
 
 	[Fact]
@@ -119,7 +119,7 @@ public class ContainerAndGenericsInConfigTestCase : AbstractContainerTestCase
 
 		var repository = Container.Resolve<IRepository<int>>();
 
-		Assert.Null(((LoggingRepositoryDecorator<int>)repository).inner);
+		Assert.Null(((LoggingRepositoryDecorator<int>)repository).Inner);
 	}
 
 	[Fact]
@@ -169,7 +169,7 @@ public class ContainerAndGenericsInConfigTestCase : AbstractContainerTestCase
 
 		Assert.IsType<LoggingRepositoryDecorator<IReviewableEmployee>>(repository);
 
-		var inner = ((LoggingRepositoryDecorator<IReviewableEmployee>)repository).inner;
+		var inner = ((LoggingRepositoryDecorator<IReviewableEmployee>)repository).Inner;
 		Assert.IsType<DemoRepository<IReviewableEmployee>>(inner);
 
 		var actualInner = (DemoRepository<IReviewableEmployee>)inner;

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// ReSharper disable UnusedMember.Global
 namespace Castle.Windsor.Tests.Components;
 
 /// <summary>Summary description for IReviewableEmployee.</summary>
@@ -19,6 +20,6 @@ public interface IReviewableEmployee : IEmployee
 {
 	IReviewer Reviewer { get; set; }
 
-	string ReviewerID { get; }
+	string ReviewerId { get; }
 	int SalaryThird { get; set; }
 }

@@ -16,6 +16,7 @@ namespace Castle.Windsor.Tests.Components;
 
 public class HasInternalConstructor
 {
+	// ReSharper disable once UnusedParameter.Local
 	internal HasInternalConstructor(EmptyClass empty)
 	{
 	}

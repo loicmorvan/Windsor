@@ -12,18 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.Components;
 
-public class D_DB
+[UsedImplicitly]
+public class DDb
 {
-	public D_DB(B b)
+	public DDb(B b)
 	{
 		B = b;
 	}
 
-	public D_DB()
+	public DDb()
 	{
 	}
 
+	// ReSharper disable once UnusedAutoPropertyAccessor.Global
 	public B B { get; private set; }
 }

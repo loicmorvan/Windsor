@@ -12,19 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using System.Collections.Generic;
 using System.Linq;
 
-public class CompositeEmptyService2 : IEmptyService2
+namespace Castle.Windsor.Tests.Components;
+
+public class CompositeEmptyService2(IEnumerable<IEmptyService2> inner) : IEmptyService2
 {
-	private readonly IEnumerable<IEmptyService2> inner;
-
-	public CompositeEmptyService2(IEnumerable<IEmptyService2> inner)
-	{
-		this.inner = inner;
-	}
-
 	public IEmptyService2[] Inner => inner.ToArray();
 }

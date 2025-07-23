@@ -45,13 +45,13 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerT
 	[Fact]
 	public void Can_detect_singleton_depending_on_transient_directly_and_indirectly()
 	{
-		Container.Register(Component.For<CBA>().LifeStyle.Singleton,
+		Container.Register(Component.For<Cba>().LifeStyle.Singleton,
 			Component.For<B>().LifeStyle.Singleton,
 			Component.For<A>().LifeStyle.Transient);
 
 		var items = diagnostic.Inspect();
 		Assert.Equal(3, items.Length);
-		var cbaMismatches = items.Where(i => i.First().ComponentModel.Services.Single() == typeof(CBA)).ToArray();
+		var cbaMismatches = items.Where(i => i.First().ComponentModel.Services.Single() == typeof(Cba)).ToArray();
 		Assert.Equal(2, cbaMismatches.Length);
 	}
 
@@ -80,13 +80,13 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerT
 	[Fact]
 	public void Can_detect_singleton_depending_on_two_transients_directly_and_indirectly()
 	{
-		Container.Register(Component.For<CBA>().LifeStyle.Singleton,
+		Container.Register(Component.For<Cba>().LifeStyle.Singleton,
 			Component.For<B>().LifeStyle.Transient,
 			Component.For<A>().LifeStyle.Transient);
 
 		var items = diagnostic.Inspect();
 		Assert.Equal(2, items.Length);
-		var cbaMismatches = items.Where(i => i.First().ComponentModel.Services.Single() == typeof(CBA)).ToArray();
+		var cbaMismatches = items.Where(i => i.First().ComponentModel.Services.Single() == typeof(Cba)).ToArray();
 		Assert.Equal(2, cbaMismatches.Length);
 	}
 

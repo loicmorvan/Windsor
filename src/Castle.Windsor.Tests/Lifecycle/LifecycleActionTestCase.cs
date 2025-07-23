@@ -46,7 +46,7 @@ public class LifecycleActionTestCase : AbstractContainerTestCase
 	[Fact]
 	public void CanModify_when_transient()
 	{
-		MyService2.staticname = "";
+		MyService2.Staticname = "";
 		Container.Register(Component.For<IService2>().ImplementedBy<MyService2>()
 			.LifeStyle.Transient.OnCreate((_, instance) => instance.Name += "a"));
 		var service = Container.Resolve<IService2>();
@@ -58,7 +58,7 @@ public class LifecycleActionTestCase : AbstractContainerTestCase
 	[Fact]
 	public void CanModify_when_transient_multiple_ordered()
 	{
-		MyService2.staticname = "";
+		MyService2.Staticname = "";
 		Container.Register(Component.For<IService2>().ImplementedBy<MyService2>()
 			.LifeStyle.Transient.OnCreate((_, instance) => instance.Name += "a",
 				(_, instance) => instance.Name += "b"));

@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using System;
 
+namespace Castle.Windsor.Tests.Components;
+
+// ReSharper disable once UnusedTypeParameter
 public class DisposableGeneric<T> : IDisposable
 {
 	public bool Disposed { get; private set; }

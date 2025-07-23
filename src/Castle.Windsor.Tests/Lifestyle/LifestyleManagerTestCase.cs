@@ -218,7 +218,7 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
 		Assert.NotNull(instance2);
 
 		Assert.True(instance1.Equals(instance2));
-		Assert.True(instance1.ID == instance2.ID);
+		Assert.True(instance1.Id == instance2.Id);
 
 		var thread = new Thread(OtherThread);
 		thread.Start();
@@ -226,7 +226,7 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
 
 		Assert.NotNull(instance3);
 		Assert.True(!instance1.Equals(instance3));
-		Assert.True(instance1.ID != instance3.ID);
+		Assert.True(instance1.Id != instance3.Id);
 	}
 
 	[Fact]
@@ -243,7 +243,7 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
 		Assert.NotNull(instance2);
 
 		Assert.True(instance1.Equals(instance2));
-		Assert.True(instance1.ID == instance2.ID);
+		Assert.True(instance1.Id == instance2.Id);
 	}
 
 	[Fact]
@@ -277,6 +277,6 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
 		Assert.NotNull(instance2);
 
 		Assert.True(!instance1.Equals(instance2));
-		Assert.True(instance1.ID != instance2.ID);
+		Assert.True(instance1.Id != instance2.Id);
 	}
 }

@@ -16,16 +16,16 @@ namespace Castle.Windsor.Tests.Components;
 
 public class MyService2 : IService2
 {
-	public static string staticname;
+	public static string Staticname;
 
 	static MyService2()
 	{
-		staticname = string.Empty;
+		Staticname = string.Empty;
 	}
 
 	public string Name
 	{
-		get => staticname;
-		set => staticname = value;
+		get => Staticname;
+		set => Staticname = value;
 	}
 }

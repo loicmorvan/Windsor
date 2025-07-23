@@ -19,18 +19,14 @@ namespace Castle.Windsor.Tests.Configuration2;
 
 public class ConfigurationForwardedTypesTestCase
 {
-	private readonly IWindsorContainer container;
-
-	public ConfigurationForwardedTypesTestCase()
-	{
-		container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_forwarded_types.xml"));
-	}
+	private readonly WindsorContainer _container =
+		new(ConfigHelper.ResolveConfigPath("Configuration2/config_with_forwarded_types.xml"));
 
 	[Fact]
 	public void Component_with_forwarded_types()
 	{
-		var first = container.Resolve<ICommon>("hasForwards");
-		var second = container.Resolve<ICommon2>();
+		var first = _container.Resolve<ICommon>("hasForwards");
+		var second = _container.Resolve<ICommon2>();
 		Assert.Same(first, second);
 	}
 }

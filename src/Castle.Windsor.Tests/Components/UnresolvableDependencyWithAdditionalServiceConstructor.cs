@@ -12,11 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// ReSharper disable UnusedParameter.Local
 namespace Castle.Windsor.Tests.Components;
 
-public class UnresolvalbeDependency : IDependency
+public class UnresolvableDependencyWithAdditionalServiceConstructor : IDependency
 {
-	public UnresolvalbeDependency(A a)
+	public UnresolvableDependencyWithAdditionalServiceConstructor(A a)
+	{
+	}
+
+	public UnresolvableDependencyWithAdditionalServiceConstructor(IEmptyService dep)
 	{
 	}
 }

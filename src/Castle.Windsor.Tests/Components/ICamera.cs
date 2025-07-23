@@ -12,11 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// ReSharper disable UnusedMember.Global
 namespace Castle.Windsor.Tests.Components;
+
 
 public interface ICamera
 {
-	string IPNumber { get; set; }
+	string IpNumber { get; set; }
 	int Id { get; }
 	string Name { get; set; }
 }
