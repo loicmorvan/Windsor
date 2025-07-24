@@ -27,9 +27,4 @@ public class XmlProcessorException : Exception
 	{
 	}
 
-#if FEATURE_SERIALIZATION
-		public XmlProcessorException(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-		}
-#endif
 }

@@ -30,10 +30,4 @@ public class ConfigurationProcessingException : Exception
 		this.SetUp();
 	}
 
-#if FEATURE_SERIALIZATION
-		public ConfigurationProcessingException(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-			ExceptionHelper.SetUp(this);
-		}
-#endif
 }

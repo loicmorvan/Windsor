@@ -14,4 +14,5 @@
 
 namespace Castle.Windsor.Tests.Generics;
 
+// ReSharper disable once UnusedTypeParameter
 public class ARepository<T> : IARepository;

@@ -70,28 +70,10 @@ public static class ReflectionUtil
 		try
 		{
 			Assembly assembly;
-#if FEATURE_ASSEMBLIES
-				if (IsAssemblyFile(assemblyName))
-				{
-					if (Path.GetDirectoryName(assemblyName) == AppContext.BaseDirectory)
-					{
-						assembly = Assembly.Load(Path.GetFileNameWithoutExtension(assemblyName));
-					}
-					else
-					{
-						assembly = Assembly.LoadFile(assemblyName);
-					}
-				}
-				else
-				{
-					assembly = Assembly.Load(assemblyName);
-				}
-#else
 			if (IsAssemblyFile(assemblyName))
 				assembly = Assembly.Load(AssemblyLoadContext.GetAssemblyName(assemblyName));
 			else
 				assembly = Assembly.Load(new AssemblyName(assemblyName));
-#endif
 			return assembly;
 		}
 		catch (FileNotFoundException)
@@ -118,17 +100,17 @@ public static class ReflectionUtil
 	{
 		var assemblyName = GetAssemblyName(filePath);
 		if (nameFilter != null)
-			foreach (Predicate<AssemblyName> predicate in nameFilter.GetInvocationList())
-				if (predicate(assemblyName) == false)
-					return null;
+			if (nameFilter.GetInvocationList().Cast<Predicate<AssemblyName>>()
+			    .Any(predicate => predicate(assemblyName) == false))
+				return null;
 
 		var assembly = LoadAssembly(assemblyName);
-		if (assemblyFilter != null)
-			foreach (Predicate<Assembly> predicate in assemblyFilter.GetInvocationList())
-				if (predicate(assembly) == false)
-					return null;
+		if (assemblyFilter == null) return assembly;
 
-		return assembly;
+		return assemblyFilter.GetInvocationList().Cast<Predicate<Assembly>>()
+			.Any(predicate => predicate(assembly) == false)
+			? null
+			: assembly;
 	}
 
 	public static Type[] GetAvailableTypes(this Assembly assembly, bool includeNonExported = false)
@@ -219,7 +201,7 @@ public static class ReflectionUtil
 			parameterExpressions[i] = Expression.Convert(
 				Expression.ArrayIndex(argument, Expression.Constant(i, typeof(int))),
 				parameterInfos[i].ParameterType.IsByRef
-					? parameterInfos[i].ParameterType.GetElementType()
+					? parameterInfos[i].ParameterType.GetElementType() ?? throw new Exception()
 					: parameterInfos[i].ParameterType);
 		return Expression.Lambda<Func<object[], object>>(
 			Expression.New(ctor, parameterExpressions), argument).Compile();
@@ -241,18 +223,7 @@ public static class ReflectionUtil
 	private static AssemblyName GetAssemblyName(string filePath)
 	{
 		AssemblyName assemblyName;
-#if FEATURE_ASSEMBLIES
-			try
-			{
-				assemblyName = AssemblyName.GetAssemblyName(filePath);
-			}
-			catch (ArgumentException)
-			{
-				assemblyName = new AssemblyName { CodeBase = filePath };
-			}
-#else
 		assemblyName = AssemblyLoadContext.GetAssemblyName(filePath);
-#endif
 		return assemblyName;
 	}
 

@@ -12,23 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core.Internal;
-
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+
+namespace Castle.Windsor.Core.Internal;
 
 public abstract class TopologicalSortAlgo
 {
-	public static IVertex[] Sort(IVertex[] graphNodes)
+	public static IVertex[] Sort(IEnumerable<IVertex> graphNodes)
 	{
-		var colors = new ColorsSet(graphNodes);
+		var enumerable = graphNodes as IVertex[] ?? graphNodes.ToArray();
+
+		var colors = new ColorsSet(enumerable);
 		var discovery = new TimestampSet();
 		var finish = new TimestampSet();
 		var list = new LinkedList<IVertex>();
 
 		var time = 0;
 
-		foreach (var node in graphNodes)
+		foreach (var node in enumerable)
 			if (colors.ColorOf(node) == VertexColor.White)
 				Visit(node, colors, discovery, finish, list, ref time);
 

@@ -24,13 +24,6 @@ public sealed partial class DefaultKernel
 	private bool _handlersChanged;
 	private volatile bool _handlersChangedDeferred;
 
-#if FEATURE_REMOTING
-		[SecurityCritical]
-		public override object InitializeLifetimeService()
-		{
-			return null;
-		}
-#endif
 
 	public IDisposable OptimizeDependencyResolution()
 	{

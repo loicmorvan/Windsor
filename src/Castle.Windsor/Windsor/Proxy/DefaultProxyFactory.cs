@@ -146,12 +146,6 @@ public class DefaultProxyFactory : AbstractProxyFactory, IDeserializationCallbac
 			if (selector is IOnBehalfAware) ((IOnBehalfAware)selector).SetInterceptedComponentModel(model);
 			proxyGenOptions.Selector = selector;
 		}
-#if FEATURE_REMOTING
-			if (proxyOptions.UseMarshalByRefAsBaseClass)
-			{
-				proxyGenOptions.BaseTypeForInterfaceProxy = typeof(MarshalByRefObject);
-			}
-#endif
 		foreach (var mixInReference in proxyOptions.MixIns)
 		{
 			var mixIn = mixInReference.Resolve(kernel, context);

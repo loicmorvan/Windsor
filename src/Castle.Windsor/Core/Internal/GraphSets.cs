@@ -35,7 +35,7 @@ internal class ColorsSet
 {
 	private readonly IDictionary<IVertex, VertexColor> _items = new Dictionary<IVertex, VertexColor>();
 
-	public ColorsSet(IVertex[] items)
+	public ColorsSet(IEnumerable<IVertex> items)
 	{
 		foreach (var item in items) Set(item, VertexColor.White);
 	}

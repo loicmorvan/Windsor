@@ -22,8 +22,9 @@ public class DefaultLifetimeScope(IScopeCache scopeCache = null, Action<Burden> 
 	: ILifetimeScope
 {
 	private static readonly Action<Burden> EmptyOnAfterCreated = delegate { };
-	private readonly Action<Burden> _onAfterCreated = onAfterCreated ?? EmptyOnAfterCreated;
 	private readonly IScopeCache _scopeCache = scopeCache ?? new ScopeCache();
+
+	internal Action<Burden> OnAfterCreated { get; set; } = onAfterCreated ?? EmptyOnAfterCreated;
 
 	public void Dispose()
 	{
@@ -33,7 +34,7 @@ public class DefaultLifetimeScope(IScopeCache scopeCache = null, Action<Burden> 
 	public Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance)
 	{
 		var burden = _scopeCache[model];
-		if (burden == null) _scopeCache[model] = burden = createInstance(_onAfterCreated);
+		if (burden == null) _scopeCache[model] = burden = createInstance(OnAfterCreated);
 		return burden;
 	}
 }

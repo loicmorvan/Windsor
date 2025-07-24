@@ -46,14 +46,6 @@ namespace Castle.Windsor.Windsor.Configuration.Interpreters;
 /// </summary>
 public class XmlInterpreter : AbstractInterpreter
 {
-#if FEATURE_SYSTEM_CONFIGURATION
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "XmlInterpreter" /> class.
-		/// </summary>
-		public XmlInterpreter()
-		{
-		}
-#endif
 
 	/// <summary>Initializes a new instance of the <see cref = "XmlInterpreter" /> class.</summary>
 	/// <param name = "filename">The filename.</param>

@@ -17,9 +17,6 @@ namespace Castle.Windsor.Tests.Components;
 using System;
 
 public class MarshalCalculatorService :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
 	ICalcService
 {
 	public int Sum(int x, int y)

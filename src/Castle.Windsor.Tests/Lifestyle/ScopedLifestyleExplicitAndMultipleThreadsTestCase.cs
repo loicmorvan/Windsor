@@ -29,58 +29,6 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
 		Container.Register(Component.For<A>().LifestyleScoped());
 	}
 
-#if FEATURE_REMOTING //async delegates depend on Remoting https://github.com/dotnet/corefx/issues/5940 
-		[Fact]
-		public void Context_is_passed_onto_the_next_thread_Begin_End_Invoke()
-		{
-			using (Container.BeginScope())
-			{
-				var instance = default(A);
-				var instanceFromOtherThread = default(A);
-				instance = Container.Resolve<A>();
-				var initialThreadId = Thread.CurrentThread.ManagedThreadId;
-				Action action = () =>
-				{
-					Assert.NotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
-					instanceFromOtherThread = Container.Resolve<A>();
-				};
-
-				var result = action.BeginInvoke(null, null);
-				result.AsyncWaitHandle.WaitOne();
-				Assert.Same(instance, instanceFromOtherThread);
-			}
-		}
-
-		[Fact]
-		public void Context_is_NOT_visible_in_unrelated_thread_Begin_End_Invoke()
-		{
-			var startLock = new ManualResetEvent(false);
-			var resolvedLock = new ManualResetEvent(false);
-			var instanceFromOtherThread = default(A);
-			var initialThreadId = Thread.CurrentThread.ManagedThreadId;
-			Action action = () =>
-			{
-				using (Container.BeginScope())
-				{
-					startLock.WaitOne();
-					Assert.NotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
-					instanceFromOtherThread = Container.Resolve<A>();
-					resolvedLock.Set();
-				}
-			};
-			var result = action.BeginInvoke(null, null);
-			using (Container.BeginScope())
-			{
-				startLock.Set();
-				var instance = Container.Resolve<A>();
-				resolvedLock.WaitOne();
-
-				result.AsyncWaitHandle.WaitOne();
-				Assert.NotSame(instance, instanceFromOtherThread);
-			}
-		}
-#endif
-
 	[Fact]
 	public async Task Context_is_passed_onto_the_next_thread_TPL()
 	{

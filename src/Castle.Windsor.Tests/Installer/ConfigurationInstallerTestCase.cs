@@ -24,44 +24,6 @@ namespace Castle.Windsor.Tests.Installer;
 
 public class ConfigurationInstallerTestCase : AbstractContainerTestCase
 {
-#if FEATURE_SYSTEM_CONFIGURATION
-		[Fact]
-		public void Can_reference_components_from_app_config_in_component_node()
-		{
-			Container.Install(Configuration.FromAppConfig());
-
-			var item = Container.Resolve<ClassWithArguments>();
-			Assert.Equal("a string", item.Arg1);
-			Assert.Equal(42, item.Arg2);
-		}
-
-		[Fact]
-		public void InstallComponents_FromAppConfig_ComponentsInstalled()
-		{
-			Container.Install(Configuration.FromAppConfig());
-
-			Assert.True(Container.Kernel.HasComponent(typeof(ICalcService)));
-			Assert.True(Container.Kernel.HasComponent("calcservice"));
-		}
-
-		[Fact]
-		public void InstallComponents_FromMultiple_ComponentsInstalled()
-		{
-			Container.Install(
-				Configuration.FromAppConfig(),
-				Configuration.FromXml(Xml.Embedded("ignoreprop.xml")),
-				Configuration.FromXml(Xml.Embedded("robotwireconfig.xml"))
-				);
-
-			Assert.True(Container.Kernel.HasComponent(typeof(ICalcService)));
-			Assert.True(Container.Kernel.HasComponent("calcservice"));
-			Assert.True(Container.Kernel.HasComponent(typeof(ClassWithDoNotWireProperties)));
-			Assert.True(Container.Kernel.HasComponent("server"));
-			Assert.True(Container.Kernel.HasComponent(typeof(Robot)));
-			Assert.True(Container.Kernel.HasComponent("robot"));
-		}
-#endif
-
 	[Fact]
 	public void InstallComponents_FromXmlFileWithEnvironment_ComponentsInstalled()
 	{

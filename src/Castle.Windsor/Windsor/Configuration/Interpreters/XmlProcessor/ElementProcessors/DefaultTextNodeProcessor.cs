@@ -16,9 +16,6 @@ using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-#if FEATURE_SYSTEM_CONFIGURATION
-	using System.Configuration;
-#endif
 
 public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 {
@@ -69,15 +66,6 @@ public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 			}
 			else if (IsRequiredProperty(propRef))
 			{
-#if FEATURE_SYSTEM_CONFIGURATION
-					// fallback to reading from appSettings
-					var appSetting = ConfigurationManager.AppSettings[propKey];
-					if (appSetting != null)
-					{
-						AppendChild(fragment, appSetting);
-					}
-					else
-#endif
 				{
 					throw new XmlProcessorException($"Required configuration property {propKey} not found");
 				}

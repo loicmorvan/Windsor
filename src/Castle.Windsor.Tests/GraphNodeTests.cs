@@ -34,7 +34,7 @@ public class GraphNodeTests
 	{
 		GraphNode alone = new TestGraphNode("alone");
 
-		var nodes = TopologicalSortAlgo.Sort(new[] { alone });
+		var nodes = TopologicalSortAlgo.Sort([alone]);
 
 		Assert.Same(alone, nodes[0]);
 	}
@@ -51,7 +51,7 @@ public class GraphNodeTests
 		second.AddDependent(third);
 
 		var nodes =
-			TopologicalSortAlgo.Sort(new[] { alone, second, first, third });
+			TopologicalSortAlgo.Sort([alone, second, first, third]);
 
 		Assert.Same(first, nodes[0]);
 		Assert.Same(second, nodes[1]);
@@ -88,8 +88,7 @@ public class GraphNodeTests
 
 		var nodes =
 			TopologicalSortAlgo.Sort(
-				new[]
-					{ shirt, tie, jacket, belt, watch, undershorts, pants, shoes, socks });
+				[shirt, tie, jacket, belt, watch, undershorts, pants, shoes, socks]);
 
 		Assert.Same(socks, nodes[0]);
 		Assert.Same(undershorts, nodes[1]);
@@ -105,10 +104,8 @@ public class GraphNodeTests
 
 public class TestGraphNode : GraphNode
 {
+	// ReSharper disable once UnusedParameter.Local
 	public TestGraphNode(string name)
 	{
-		Name = name;
 	}
-
-	public string Name { get; }
 }

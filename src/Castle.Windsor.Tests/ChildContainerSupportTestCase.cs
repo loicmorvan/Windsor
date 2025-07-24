@@ -114,19 +114,4 @@ public class ChildContainerSupportTestCase : AbstractContainerTestCase
 
 		Assert.NotNull(b);
 	}
-
-#if FEATURE_SYSTEM_CONFIGURATION
-		[Fact]
-		public void StartWithParentContainer()
-		{
-			IWindsorContainer childcontainer = new WindsorContainer(Container, new XmlInterpreter());
-
-			Assert.Equal(Container, childcontainer.Parent);
-
-			childcontainer.Register(Component.For(typeof(B)).Named("B"));
-			var b = childcontainer.Resolve<B>("B");
-
-			Assert.NotNull(b);
-		}
-#endif
 }

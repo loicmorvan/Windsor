@@ -56,11 +56,4 @@ public class ComponentResolutionException : Exception
 		Component = component;
 	}
 
-#if FEATURE_SERIALIZATION
-		public ComponentResolutionException(SerializationInfo info, StreamingContext context)
-			: base(info, context)
-		{
-			ExceptionHelper.SetUp(this);
-		}
-#endif
 }

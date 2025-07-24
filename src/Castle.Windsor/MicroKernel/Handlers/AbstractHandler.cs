@@ -27,9 +27,6 @@ namespace Castle.Windsor.MicroKernel.Handlers;
 /// <summary>Implements the basis of <see cref = "IHandler" /></summary>
 [Serializable]
 public abstract class AbstractHandler :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
 	IHandler, IExposeDependencyInfo, IDisposable
 {
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]

@@ -19,9 +19,6 @@ namespace Castle.Windsor.Tests.Components;
 
 [Transient]
 public class CalculatorServiceWithLifecycle :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
 	ICalcService, IInitializable, IDisposable
 {
 	public int Sum(int x, int y)

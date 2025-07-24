@@ -37,9 +37,6 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
 	private static readonly BindingFlags AllMethods =
 		BindingFlags.Public | BindingFlags.NonPublic |
 		BindingFlags.Instance | BindingFlags.Static |
-#if FEATURE_REMOTING
-			BindingFlags.IgnoreReturn |
-#endif
 		BindingFlags.IgnoreCase;
 
 	private ITypeConverter _converter;

@@ -24,33 +24,3 @@ project:
 https://ci.appveyor.com/nuget/windsor-qkry8n2r6yak
 ```
 
-## Building
-
-### Conditional Compilation Symbols
-
-The following conditional compilation symbols are currently defined for Windsor:
-
- Symbol                             | .NET 4.6.2         | .NET Standard / 6 
-------------------------------------|--------------------|-------------------
- `FEATURE_APPDOMAIN`                | :white_check_mark: | :no_entry_sign:   
- `FEATURE_ASSEMBLIES`               | :white_check_mark: | :no_entry_sign:   
- `FEATURE_PERFCOUNTERS`             | :white_check_mark: | :no_entry_sign:   
- `FEATURE_REMOTING`                 | :white_check_mark: | :no_entry_sign:   
- `FEATURE_SECURITY_PERMISSIONS`     | :white_check_mark: | :no_entry_sign:   
- `FEATURE_SERIALIZATION`            | :white_check_mark: | :no_entry_sign:   
- `FEATURE_SYSTEM_CONFIGURATION`     | :white_check_mark: | :no_entry_sign:   
-
-* `FEATURE_APPDOMAIN` - enables support for features that make use of an AppDomain in the host.
-* `FEATURE_ASSEMBLIES` - uses `AssemblyName.GetAssemblyName()` and `Assembly.LoadFile()`.
-* `FEATURE_PERFCOUNTERS` - enables code that uses Windows Performance Counters.
-* `FEATURE_REMOTING` - supports remoting on various types including inheriting from `MarshalByRefObject`.
-* `FEATURE_SECURITY_PERMISSIONS` - enables the use of CAS and `Security[Critical|SafeCritical|Transparent]`.
-* `FEATURE_SERIALIZATION` - enables support for serialization of dynamic proxies and other types.
-* `FEATURE_SYSTEM_CONFIGURATION` - enables features that use `System.Configuration` and the `ConfigurationManager`.
-
-The following conditional compilation symbols are defined for tests only under .NET 4.6.2:
-
-* `FEATURE_CODEDOM` - enables code that uses `System.CodeDom`.
-* `FEATURE_CONSOLETRACELISTENER` - enables code that requires `System.Diagnostics.ConsoleTraceListener`.
-* `FEATURE_THREADABORT` - enables code that uses `Thread.Abort()`.
-* `FEATURE_WPF` - enables code that uses `PresentationCore.dll`.

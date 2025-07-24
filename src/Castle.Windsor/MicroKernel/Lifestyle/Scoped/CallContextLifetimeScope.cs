@@ -21,12 +21,7 @@ using Castle.Windsor.MicroKernel.Internal;
 
 namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
-#if FEATURE_REMOTING
-	using System.Runtime.Remoting.Messaging;
-#endif
-#if !FEATURE_REMOTING
 using System.Threading;
-#endif
 using Lock = Lock;
 
 /// <summary>Provides explicit lifetime scoping within logical path of execution. Used for types with <see cref = "LifestyleType.Scoped" />.</summary>
@@ -38,11 +33,7 @@ public class CallContextLifetimeScope : ILifetimeScope
 {
 	private static readonly ConcurrentDictionary<Guid, CallContextLifetimeScope> AllScopes = new();
 
-#if FEATURE_REMOTING
-		private static readonly string callContextKey = "castle.lifetime-scope-" + AppDomain.CurrentDomain.Id.ToString(CultureInfo.InvariantCulture);
-#else
 	private static readonly AsyncLocal<Guid> AsyncLocal = new();
-#endif
 
 	private readonly Guid _contextId;
 	private readonly CallContextLifetimeScope _parentScope;
@@ -75,12 +66,6 @@ public class CallContextLifetimeScope : ILifetimeScope
 			{
 				SetCurrentScope(_parentScope);
 			}
-			else
-			{
-#if FEATURE_REMOTING
-					CallContext.FreeNamedDataSlot(callContextKey);
-#endif
-			}
 		}
 
 		AllScopes.TryRemove(_contextId, out _);
@@ -104,21 +89,13 @@ public class CallContextLifetimeScope : ILifetimeScope
 	[SecuritySafeCritical]
 	private static void SetCurrentScope(CallContextLifetimeScope lifetimeScope)
 	{
-#if FEATURE_REMOTING
-			CallContext.LogicalSetData(callContextKey, lifetimeScope.contextId);
-#else
 		AsyncLocal.Value = lifetimeScope._contextId;
-#endif
 	}
 
 	[SecuritySafeCritical]
 	public static CallContextLifetimeScope ObtainCurrentScope()
 	{
-#if FEATURE_REMOTING
-		object	scopeKey = CallContext.LogicalGetData(callContextKey);
-#else
 		object scopeKey = AsyncLocal.Value;
-#endif
 		AllScopes.TryGetValue((Guid)scopeKey, out var scope);
 		return scope;
 	}

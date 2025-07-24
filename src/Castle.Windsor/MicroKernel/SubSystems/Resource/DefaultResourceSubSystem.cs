@@ -79,8 +79,5 @@ public class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 		RegisterResourceFactory(new AssemblyResourceFactory());
 		RegisterResourceFactory(new UncResourceFactory());
 		RegisterResourceFactory(new FileResourceFactory());
-#if FEATURE_SYSTEM_CONFIGURATION
-			RegisterResourceFactory(new ConfigResourceFactory());
-#endif
 	}
 }

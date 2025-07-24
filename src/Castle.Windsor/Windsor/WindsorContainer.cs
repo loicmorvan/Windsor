@@ -35,9 +35,6 @@ namespace Castle.Windsor.Windsor;
 [DebuggerDisplay("{Name,nq}")]
 [DebuggerTypeProxy(typeof(KernelDebuggerProxy))]
 public class WindsorContainer :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
 	IWindsorContainer
 {
 	private const string CastleUnicode = "\uD83C\uDFF0";
@@ -504,10 +501,6 @@ public class WindsorContainer :
 	private static string MakeUniqueName()
 	{
 		var sb = new StringBuilder();
-#if FEATURE_APPDOMAIN
-			sb.Append(AppDomain.CurrentDomain.FriendlyName);
-			sb.Append(" ");
-#endif
 		sb.Append(CastleUnicode);
 		sb.Append(" ");
 		sb.Append(Interlocked.Increment(ref _instanceCount));

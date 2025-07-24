@@ -20,9 +20,6 @@ namespace Castle.Windsor.Tests.Components;
 /// <summary>Summary description for CalculatorServiceWithAttributes.</summary>
 [Interceptor(typeof(ResultModifierInterceptor))]
 public class CalculatorServiceWithAttributes
-#if FEATURE_REMOTING
-		: MarshalByRefObject
-#endif
 {
 	public virtual int Sum(int x, int y)
 	{

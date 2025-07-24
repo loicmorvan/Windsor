@@ -39,17 +39,11 @@ using Castle.Windsor.MicroKernel.SubSystems.Resource;
 using Castle.Windsor.Windsor.Diagnostics;
 
 namespace Castle.Windsor.MicroKernel;
-#if FEATURE_SECURITY_PERMISSIONS
-	using System.Security.Permissions;
-#endif
 
 /// <summary>Default implementation of <see cref = "IKernel" />. This implementation is complete and also support a kernel hierarchy (sub containers).</summary>
 [Serializable]
 [DebuggerTypeProxy(typeof(KernelDebuggerProxy))]
 public sealed partial class DefaultKernel :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
 	IKernelInternal
 {
 	[ThreadStatic] private static CreationContext _currentCreationContext;
@@ -91,13 +85,6 @@ public sealed partial class DefaultKernel :
 		Resolver = resolver;
 		Resolver.Initialize(this, RaiseDependencyResolving);
 
-#if FEATURE_SECURITY_PERMISSIONS
-			if (new SecurityPermission(SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy).IsGranted())
-			{
-				Logger = new TraceLogger("Castle.Windsor", LoggerLevel.Warn);
-			}
-			else
-#endif
 		{
 			Logger = NullLogger.Instance;
 		}
@@ -108,19 +95,6 @@ public sealed partial class DefaultKernel :
 		: this(new DefaultDependencyResolver(), proxyFactory)
 	{
 	}
-
-#if FEATURE_SERIALIZATION
-		[SecurityCritical]
-		public DefaultKernel(SerializationInfo info, StreamingContext context)
-		{
-			var members = FormatterServices.GetSerializableMembers(GetType(), context);
-			var kernelmembers = (object[])info.GetValue("members", typeof(object[]));
-
-			FormatterServices.PopulateObjectMembers(this, members, kernelmembers);
-
-			HandlerRegistered += (HandlerDelegate)info.GetValue("HandlerRegisteredEvent", typeof(Delegate));
-		}
-#endif
 
 	public IComponentModelBuilder ComponentModelBuilder { get; set; }
 
@@ -186,19 +160,6 @@ public sealed partial class DefaultKernel :
 
 	private INamingSubSystem NamingSubSystem { get; set; }
 
-#if FEATURE_SERIALIZATION
-		[SecurityCritical]
-		public void GetObjectData(SerializationInfo info, StreamingContext context)
-		{
-			var members = FormatterServices.GetSerializableMembers(GetType(), context);
-
-			var kernelmembers = FormatterServices.GetObjectData(this, members);
-
-			info.AddValue("members", kernelmembers, typeof(object[]));
-
-			info.AddValue("HandlerRegisteredEvent", HandlerRegistered);
-		}
-#endif
 
 	/// <summary>Starts the process of component disposal.</summary>
 	public void Dispose()

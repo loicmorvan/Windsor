@@ -18,19 +18,8 @@ using System;
 
 [Serializable]
 public abstract class AbstractSubSystem :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
 	ISubSystem
 {
-#if FEATURE_REMOTING
-		[SecurityCritical]
-		public override object InitializeLifetimeService()
-		{
-			return null;
-		}
-#endif
-
 	public virtual void Init(IKernelInternal kernel)
 	{
 		Kernel = kernel;

@@ -17,9 +17,6 @@ namespace Castle.Windsor.Tests.Components;
 using System.Text;
 
 public class GenericToStringServiceImpl<T> :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
 	IGenericToStringService<T> where T : class
 {
 	public string ToString(params T[] instances)

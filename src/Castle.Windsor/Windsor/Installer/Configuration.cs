@@ -19,16 +19,6 @@ using Castle.Windsor.Windsor.Configuration.Interpreters;
 
 public static class Configuration
 {
-#if FEATURE_SYSTEM_CONFIGURATION
-		/// <summary>
-		///   Installs all the components from the App.Config file.
-		/// </summary>
-		/// <returns></returns>
-		public static ConfigurationInstaller FromAppConfig()
-		{
-			return new ConfigurationInstaller(new XmlInterpreter());
-		}
-#endif
 
 	/// <summary>Installs all the component from the xml configuration.</summary>
 	/// <param name = "resource">The xml configuration resource.</param>

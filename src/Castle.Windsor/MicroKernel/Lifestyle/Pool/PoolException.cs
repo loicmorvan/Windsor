@@ -26,10 +26,4 @@ public class PoolException : Exception
 		this.SetUp();
 	}
 
-#if FEATURE_SERIALIZATION
-		public PoolException(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-			ExceptionHelper.SetUp(this);
-		}
-#endif
 }

@@ -52,19 +52,6 @@ public class ComponentNotFoundException : ComponentResolutionException
 	{
 	}
 
-#if FEATURE_SERIALIZATION
-		/// <summary>
-		///   Initializes a new instance of the
-		///   <see cref = "ComponentNotFoundException" />
-		///   class.
-		/// </summary>
-		/// <param name = "info">The object that holds the serialized object data.</param>
-		/// <param name = "context">The contextual information about the source or destination.</param>
-		public ComponentNotFoundException(SerializationInfo info, StreamingContext context)
-			: base(info, context)
-		{
-		}
-#endif
 
 	public string Name { get; private set; }
 	public Type Service { get; private set; }

@@ -32,9 +32,6 @@ namespace Castle.Windsor.MicroKernel.Context;
 /// </summary>
 [Serializable]
 public class CreationContext :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
 	ISubDependencyResolver
 {
 	private readonly ITypeConverter _converter;

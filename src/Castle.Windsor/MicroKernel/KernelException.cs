@@ -37,15 +37,4 @@ public class KernelException : Exception
 		this.SetUp();
 	}
 
-#if FEATURE_SERIALIZATION
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "KernelException" /> class.
-		/// </summary>
-		/// <param name = "info">The object that holds the serialized object data.</param>
-		/// <param name = "context">The contextual information about the source or destination.</param>
-		public KernelException(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-			ExceptionHelper.SetUp(this);
-		}
-#endif
 }

@@ -16,9 +16,6 @@ namespace Castle.Windsor.Core.Internal;
 
 [Serializable]
 public class GraphNode :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
 	IVertex
 {
 	private SimpleThreadSafeCollection<GraphNode> _outgoing;

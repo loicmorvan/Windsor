@@ -34,12 +34,6 @@ public class NoResolvableConstructorFoundException : ComponentActivatorException
 	{
 	}
 
-#if FEATURE_SERIALIZATION
-		public NoResolvableConstructorFoundException(SerializationInfo info, StreamingContext context)
-			: base(info, context)
-		{
-		}
-#endif
 
 	public Type Type { get; }
 }

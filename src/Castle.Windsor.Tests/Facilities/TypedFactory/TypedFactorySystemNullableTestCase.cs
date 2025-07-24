@@ -12,13 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory;
+// ReSharper disable UnusedParameter.Local
 
 using System;
-
 using Castle.Windsor.Facilities.TypedFactory;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.Resolvers;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public class TypedFactorySystemNullableTestCase : AbstractContainerTestCase
 {
@@ -55,6 +57,7 @@ public class TypedFactorySystemNullableTestCase : AbstractContainerTestCase
 			exception.Message);
 	}
 
+	[UsedImplicitly]
 	public sealed class DependencyFromContainer;
 
 	public sealed class ComponentWithNonOptionalNullableParameter

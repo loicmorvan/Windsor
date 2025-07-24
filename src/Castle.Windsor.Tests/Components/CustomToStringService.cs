@@ -17,9 +17,6 @@ namespace Castle.Windsor.Tests.Components;
 using System.Text;
 
 public class CustomToStringService :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
 	IGenericToStringService<StringBuilder>
 {
 	public string ToString(params StringBuilder[] instances)

@@ -22,21 +22,6 @@ namespace Castle.Windsor.Tests.Registration;
 
 public class DependsOnTestCase : AbstractContainerTestCase
 {
-#if FEATURE_SYSTEM_CONFIGURATION
-		[Fact]
-		public void Can_register_configuration_parameters_from_appSettings_inline()
-		{
-			Container.Register(Component.For<ClassWithArguments>()
-				                   .DependsOn(
-					                   Dependency.OnAppSettingsValue("arg1"),
-					                   Dependency.OnAppSettingsValue("arg2", "number")));
-
-			var obj = Container.Resolve<ClassWithArguments>();
-
-			Assert.Equal("a string", obj.Arg1);
-			Assert.Equal(42, obj.Arg2);
-		}
-#endif
 
 	[Fact]
 	public void can_register_value_from_a_resource_file_with_type()

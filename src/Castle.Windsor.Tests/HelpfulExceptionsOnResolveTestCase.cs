@@ -171,18 +171,9 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 		Exception exception = Assert.Throws<ComponentActivatorException>(() =>
 			Container.Resolve<HasInternalConstructor>());
 		var message =
-#if !FEATURE_REMOTING
 			$"Type {typeof(HasInternalConstructor).FullName} does not have a public default constructor and could not be instantiated.";
 
 		exception = exception.InnerException;
-#else
-				string.Format(
-					"Could not find a public constructor for type {1}.{0}" +
-					"Windsor by default cannot instantiate types that don't expose public constructors.{0}" +
-					"To expose the type as a service add public constructor, or use custom component activator.",
-					Environment.NewLine,
-					typeof(HasInternalConstructor).FullName);
-#endif
 		Assert.Equal(message, exception.Message);
 	}
 
@@ -195,17 +186,8 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
 
 		Exception exception = Assert.Throws<ComponentActivatorException>(() => Container.Resolve<HasProtectedConstructor>());
 		var message =
-#if !FEATURE_REMOTING
 			$"Type {typeof(HasProtectedConstructor).FullName} does not have a public default constructor and could not be instantiated.";
 		exception = exception.InnerException;
-#else
-				string.Format(
-					"Could not find a public constructor for type {1}.{0}" +
-					"Windsor by default cannot instantiate types that don't expose public constructors.{0}" +
-					"To expose the type as a service add public constructor, or use custom component activator.",
-					Environment.NewLine,
-					typeof(HasProtectedConstructor).FullName);
-#endif
 		Assert.Equal(message, exception.Message);
 	}
 

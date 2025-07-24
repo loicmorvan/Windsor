@@ -48,11 +48,6 @@ public abstract class AbstractInterpreter : IConfigurationInterpreter
 	{
 	}
 
-#if FEATURE_SYSTEM_CONFIGURATION
-		public AbstractInterpreter() : this(new ConfigResource())
-		{
-		}
-#endif
 
 	/// <summary>Should obtain the contents from the resource, interpret it and populate the <see cref = "IConfigurationStore" /> accordingly.</summary>
 	/// <param name = "resource"></param>

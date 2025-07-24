@@ -52,14 +52,6 @@ public class ProxyOptions
 	/// <summary>Determines if the proxied component can change targets.</summary>
 	public bool AllowChangeTarget { get; set; }
 
-#if FEATURE_REMOTING
-		/// <summary>
-		/// 	Determines if the interface proxied component should inherit 
-		/// 	from <see cref="MarshalByRefObject" />
-		/// </summary>
-		public bool UseMarshalByRefAsBaseClass { get; set; }
-#endif
-
 	/// <summary>Gets or sets the proxy hook.</summary>
 	public IReference<IProxyGenerationHook> Hook
 	{
@@ -132,13 +124,12 @@ public class ProxyOptions
 	public override bool Equals(object obj)
 	{
 		if (this == obj) return true;
-		var proxyOptions = obj as ProxyOptions;
-		if (proxyOptions == null) return false;
+		if (obj is not ProxyOptions proxyOptions) return false;
 		if (!Equals(Hook, proxyOptions.Hook)) return false;
 		if (!Equals(Selector, proxyOptions.Selector)) return false;
 		if (!Equals(OmitTarget, proxyOptions.OmitTarget)) return false;
-		if (!AdditionalInterfacesAreEquals(proxyOptions)) return false;
-		return MixInsAreEquals(proxyOptions);
+		return AdditionalInterfacesAreEquals(proxyOptions) &&
+		       MixInsAreEquals(proxyOptions);
 	}
 
 	/// <summary>Gets the hash code.</summary>

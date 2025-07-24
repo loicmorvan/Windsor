@@ -20,9 +20,6 @@ using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Context;
 
 namespace Castle.Windsor.MicroKernel.ComponentActivator;
-#if FEATURE_REMOTING
-	using System.Security.Permissions;
-#endif
 
 /// <summary>
 ///     Standard implementation of <see cref = "IComponentActivator" />. Handles the selection of the best constructor, fills the writable properties the component exposes, run the commission and
@@ -34,9 +31,6 @@ public class DefaultComponentActivator : AbstractComponentActivator
 {
 	internal const string InstanceStash = "castle.component-activator-instance";
 
-#if FEATURE_REMOTING
-		private readonly bool useFastCreateInstance;
-#endif
 
 	/// <summary>Initializes a new instance of the <see cref = "DefaultComponentActivator" /> class.</summary>
 	/// <param name = "model"> </param>
@@ -46,9 +40,6 @@ public class DefaultComponentActivator : AbstractComponentActivator
 	public DefaultComponentActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
 		: base(model, kernel, onCreation, onDestruction)
 	{
-#if FEATURE_REMOTING
-			useFastCreateInstance = !model.Implementation.IsContextful && new SecurityPermission(SecurityPermissionFlag.SerializationFormatter).IsGranted();
-#endif
 	}
 
 	protected override object InternalCreate(CreationContext context)
@@ -120,13 +111,6 @@ public class DefaultComponentActivator : AbstractComponentActivator
 		object instance;
 		try
 		{
-#if FEATURE_REMOTING
-				if (useFastCreateInstance)
-				{
-					instance = FastCreateInstance(implType, arguments, constructor);
-				}
-				else
-#endif
 			{
 				instance = implType.CreateInstance<object>(arguments);
 			}
@@ -145,27 +129,6 @@ public class DefaultComponentActivator : AbstractComponentActivator
 
 		return instance;
 	}
-
-#if FEATURE_REMOTING
-		[SecuritySafeCritical]
-		private object FastCreateInstance(Type implType, object[] arguments, ConstructorCandidate constructor)
-		{
-			if (constructor == null || constructor.Constructor == null)
-			{
-				throw new ComponentActivatorException(
-					string.Format(
-						"Could not find a public constructor for type {0}.{1}" +
-						"Windsor by default cannot instantiate types that don't expose public constructors.{1}" +
-						"To expose the type as a service add public constructor, or use custom component activator.",
-						implType,
-						Environment.NewLine), Model);
-			}
-			var instance = FormatterServices.GetUninitializedObject(implType);
-
-			constructor.Constructor.Invoke(instance, arguments);
-			return instance;
-		}
-#endif
 
 	protected virtual ConstructorCandidate SelectEligibleConstructor(CreationContext context)
 	{

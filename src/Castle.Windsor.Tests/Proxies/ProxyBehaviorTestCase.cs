@@ -197,29 +197,4 @@ public class ProxyBehaviorTestCase : AbstractContainerTestCase
 
 		Assert.IsType<ICommon2>(common, false);
 	}
-
-#if FEATURE_REMOTING
-		[Fact]
-		public void RequestMarshalByRefProxyWithAttribute()
-		{
-			Container.Register(Component.For<StandardInterceptor>(),
-			                   Component.For<ICalcService>().ImplementedBy<CalculatorServiceWithMarshalByRefProxyBehavior>());
-
-			var calcService = Container.Resolve<ICalcService>();
-
-			Assert.IsNotType<CalculatorServiceWithMarshalByRefProxyBehavior>(calcService,
-			                                                                       "Service proxy should not expose CalculatorServiceWithMarshalByRefProxyBehavior");
-			Assert.IsType<MarshalByRefObject>(calcService, "Service proxy should expose MarshalByRefObject");
-			Assert.IsNotType<IDisposable>(calcService, "Service proxy should expose the IDisposable interface");
-		}
-
-		[Fact]
-		public void InternalInterfaceIgnoredByProxy()
-		{
-			Container.Install(
-				Configuration.FromXml(Xml.Embedded("proxyBehavior.xml")));
-
-			Container.Resolve<object>("hasInternalInterface");
-		}
-#endif
 }

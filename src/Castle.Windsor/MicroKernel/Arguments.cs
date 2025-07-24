@@ -21,7 +21,8 @@ using Castle.Windsor.Windsor;
 namespace Castle.Windsor.MicroKernel;
 
 /// <summary>
-///     Represents a collection of named and typed arguments used for dependencies resolved via <see cref = "IWindsorContainer.Resolve{T}(Castle.Windsor.MicroKernel.Arguments)" /> See:
+///     Represents a collection of named and typed arguments used for dependencies resolved via
+///     <see cref="IWindsorContainer.Resolve{T}(Castle.Windsor.MicroKernel.Arguments)" /> See:
 ///     https://github.com/castleproject/Windsor/blob/master/docs/arguments.md
 /// </summary>
 public sealed class Arguments
@@ -31,13 +32,16 @@ public sealed class Arguments
 
 	private readonly Dictionary<object, object> _dictionary;
 
-	/// <summary>Initializes a new instance of the <see cref = "Arguments" /> class that is empty.</summary>
+	/// <summary>Initializes a new instance of the <see cref="Arguments" /> class that is empty.</summary>
 	public Arguments()
 	{
 		_dictionary = new Dictionary<object, object>(Comparer);
 	}
 
-	/// <summary>Initializes a new instance of the <see cref = "Arguments" /> class that contains elements copied from the specified <see cref = "Arguments" />.</summary>
+	/// <summary>
+	///     Initializes a new instance of the <see cref="Arguments" /> class that contains elements copied from the
+	///     specified <see cref="Arguments" />.
+	/// </summary>
 	public Arguments(Arguments arguments)
 	{
 		_dictionary = new Dictionary<object, object>(arguments._dictionary, Comparer);
@@ -102,7 +106,7 @@ public sealed class Arguments
 		return this;
 	}
 
-	/// <summary>Adds a collection of named arguments, <see cref = "Dictionary{TKey,TValue}" /> implements this interface.</summary>
+	/// <summary>Adds a collection of named arguments, <see cref="Dictionary{TKey,TValue}" /> implements this interface.</summary>
 	public Arguments AddNamed(IEnumerable<KeyValuePair<string, object>> arguments)
 	{
 		foreach (var item in arguments) AddNamed(item.Key, item.Value);
@@ -144,25 +148,34 @@ public sealed class Arguments
 		return this;
 	}
 
-	/// <summary>Initializes a new instance of the <see cref = "Arguments" /> class and adds a collection of named arguments, <see cref = "Dictionary{TKey,TValue}" /> implements this interface.</summary>
+	/// <summary>
+	///     Initializes a new instance of the <see cref="Arguments" /> class and adds a collection of named arguments,
+	///     <see cref="Dictionary{TKey,TValue}" /> implements this interface.
+	/// </summary>
 	public static Arguments FromNamed(IEnumerable<KeyValuePair<string, object>> arguments)
 	{
 		return new Arguments().AddNamed(arguments);
 	}
 
-	/// <summary>Initializes a new instance of the <see cref = "Arguments" /> class and adds a collection of named arguments from public properties of a standard or anonymous type.</summary>
+	/// <summary>
+	///     Initializes a new instance of the <see cref="Arguments" /> class and adds a collection of named arguments from
+	///     public properties of a standard or anonymous type.
+	/// </summary>
 	public static Arguments FromProperties(object instance)
 	{
 		return new Arguments().AddProperties(instance);
 	}
 
-	/// <summary>Initializes a new instance of the <see cref = "Arguments" /> class and adds a collection of typed arguments, <see cref = "Dictionary{TKey,TValue}" /> implements this interface.</summary>
+	/// <summary>
+	///     Initializes a new instance of the <see cref="Arguments" /> class and adds a collection of typed arguments,
+	///     <see cref="Dictionary{TKey,TValue}" /> implements this interface.
+	/// </summary>
 	public static Arguments FromTyped(IEnumerable<KeyValuePair<Type, object>> arguments)
 	{
 		return new Arguments().AddTyped(arguments);
 	}
 
-	/// <summary>Initializes a new instance of the <see cref = "Arguments" /> class and adds a collection of typed arguments.</summary>
+	/// <summary>Initializes a new instance of the <see cref="Arguments" /> class and adds a collection of typed arguments.</summary>
 	public static Arguments FromTyped(IEnumerable<object> arguments)
 	{
 		return new Arguments().AddTyped(arguments);
@@ -170,18 +183,19 @@ public sealed class Arguments
 
 	private void CheckKeyType(object key)
 	{
-		if (key is not string && key is not Type) throw new ArgumentException($"The argument '{key}' should be of type string or System.Type.");
+		if (key is not string && key is not Type)
+			throw new ArgumentException($"The argument '{key}' should be of type string or System.Type.");
 	}
 
 	private sealed class ArgumentsComparer : IEqualityComparer<object>
 	{
-		public new bool Equals(object x, object y)
+		bool IEqualityComparer<object>.Equals(object x, object y)
 		{
 			if (x is string a) return StringComparer.OrdinalIgnoreCase.Equals(a, y as string);
-			return object.Equals(x, y);
+			return Equals(x, y);
 		}
 
-		public int GetHashCode(object obj)
+		int IEqualityComparer<object>.GetHashCode(object obj)
 		{
 			if (obj is string str) return StringComparer.OrdinalIgnoreCase.GetHashCode(str);
 			return obj.GetHashCode();

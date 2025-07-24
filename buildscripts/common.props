@@ -35,10 +35,6 @@
 		<ContentTargetFolders>.</ContentTargetFolders>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)'=='net462'">
-		<DefineConstants>$(DefineConstants);FEATURE_PERFCOUNTERS;FEATURE_REMOTING;FEATURE_SECURITY_PERMISSIONS;FEATURE_SYSTEM_CONFIGURATION;FEATURE_SERIALIZATION;FEATURE_APPDOMAIN;FEATURE_CODEDOM;FEATURE_ASSEMBLIES</DefineConstants>
-	</PropertyGroup>
-
 	<ItemGroup>
 		<Content Include="..\..\README.md" Pack="true" PackagePath="\"/>
 		<Content Include="..\..\CHANGELOG.md"/>

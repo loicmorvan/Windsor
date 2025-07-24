@@ -20,9 +20,6 @@ using System.Resources;
 using Castle.Core.Configuration;
 
 namespace Castle.Windsor.MicroKernel.Registration;
-#if FEATURE_SYSTEM_CONFIGURATION
-	using System.Configuration;
-#endif
 
 public sealed class Dependency
 {
@@ -57,31 +54,6 @@ public sealed class Dependency
 		return Parameter.ForKey(dependencyName).Eq(value);
 	}
 
-#if FEATURE_SYSTEM_CONFIGURATION
-		/// <summary>
-		/// Specifies that value from application configuration file's appSettings section named <paramref name = "settingName" /> should be used to satisfy dependencies matched by
-		///     <paramref name = "dependencyName" />. The value is provided as a string and will be converted to appropriate type when resolving.
-		/// </summary>
-		/// <param name = "dependencyName"> </param>
-		/// <param name = "settingName"> </param>
-		/// <returns> </returns>
-		public static Parameter OnAppSettingsValue(string dependencyName, string settingName)
-		{
-			var value = ConfigurationManager.AppSettings.Get(settingName);
-			return Parameter.ForKey(dependencyName).Eq(value);
-		}
-
-		/// <summary>
-		/// Specifies that value from application configuration file's appSettings section named <paramref name = "name" /> should be used to satisfy dependencies matched by <paramref name = "name" />. The value
-		/// is provided as a string and will be converted to appropriate type when resolving.
-		/// </summary>
-		/// <param name = "name"> </param>
-		/// <returns> </returns>
-		public static Parameter OnAppSettingsValue(string name)
-		{
-			return OnAppSettingsValue(name, name);
-		}
-#endif
 
 	/// <summary>Specifies that component registered with <paramref name = "componentName" /> should be used to satisfy dependencies matched by <paramref name = "dependencyName" /></summary>
 	public static ServiceOverride OnComponent(string dependencyName, string componentName)

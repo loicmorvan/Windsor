@@ -32,10 +32,5 @@ public class ComponentActivatorException : ComponentResolutionException
 		ComponentModel = componentModel;
 	}
 
-#if FEATURE_SERIALIZATION
-		public ComponentActivatorException(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-		}
-#endif
 	public ComponentModel ComponentModel { get; private set; }
 }

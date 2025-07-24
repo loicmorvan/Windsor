@@ -32,10 +32,4 @@ public class FacilityException : Exception
 		this.SetUp();
 	}
 
-#if FEATURE_SERIALIZATION
-		public FacilityException(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-			ExceptionHelper.SetUp(this);
-		}
-#endif
 }

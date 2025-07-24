@@ -62,13 +62,6 @@ public class ComponentProxyInspector(IConversionManager converter) : IContribute
 	private void ReadProxyBehaviorFromConfig(ComponentModel model, ComponentProxyBehaviorAttribute behavior)
 	{
 		if (model.Configuration == null) return;
-#if FEATURE_REMOTING
-			var mbrProxy = model.Configuration.Attributes["marshalByRefProxy"];
-			if (mbrProxy != null)
-			{
-				behavior.UseMarshalByRefProxy = converter.PerformConversion<bool?>(mbrProxy).GetValueOrDefault(false);
-			}
-#endif
 		var interfaces = model.Configuration.Children["additionalInterfaces"];
 		if (interfaces == null) return;
 		var list = new List<Type>(behavior.AdditionalInterfaces);
@@ -85,13 +78,6 @@ public class ComponentProxyInspector(IConversionManager converter) : IContribute
 	private static void ApplyProxyBehavior(ComponentProxyBehaviorAttribute behavior, ComponentModel model)
 	{
 		var options = model.ObtainProxyOptions();
-#if FEATURE_REMOTING
-			if (behavior.UseMarshalByRefProxy)
-			{
-				EnsureComponentRegisteredWithInterface(model);
-			}
-			options.UseMarshalByRefAsBaseClass = behavior.UseMarshalByRefProxy;
-#endif
 		options.AddAdditionalInterfaces(behavior.AdditionalInterfaces);
 		if (model.Implementation.GetTypeInfo().IsInterface) options.OmitTarget = true;
 	}

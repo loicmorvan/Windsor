@@ -22,22 +22,6 @@ namespace Castle.Windsor.Tests;
 
 public class CreatingContainerTestCase
 {
-#if FEATURE_SYSTEM_CONFIGURATION
-		[Fact]
-		public void With_config_section()
-		{
-			var sectionName = "config://castle/";//trailing slash is required
-
-			var uri = new CustomUri(sectionName);
-
-			Assert.Equal("config", uri.Scheme);
-			Assert.Equal("castle", uri.Host);
-
-			var container = new WindsorContainer(sectionName);
-
-			container.Resolve<ICalcService>("calcservice");
-		}
-#endif
 
 	[Fact]
 	public void With_configuration_file()

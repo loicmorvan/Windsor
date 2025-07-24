@@ -21,10 +21,6 @@ using Castle.Windsor.Windsor;
 
 namespace Castle.Windsor.Tests;
 
-#if FEATURE_REMOTING
-	using System.Runtime.Remoting;
-#endif
-
 
 
 public class SmartProxyTestCase : IDisposable
@@ -52,9 +48,6 @@ public class SmartProxyTestCase : IDisposable
 		var service = _container.Resolve<CalculatorService>("key");
 
 		Assert.NotNull(service);
-#if FEATURE_REMOTING
-			Assert.False(RemotingServices.IsTransparentProxy(service));
-#endif
 		Assert.Equal(5, service.Sum(2, 2));
 	}
 
@@ -78,9 +71,6 @@ public class SmartProxyTestCase : IDisposable
 		var service = _container.Resolve<ICalcService>("key");
 
 		Assert.NotNull(service);
-#if FEATURE_REMOTING
-			Assert.False(RemotingServices.IsTransparentProxy(service));
-#endif
 		Assert.Equal(5, service.Sum(2, 2));
 	}
 }
