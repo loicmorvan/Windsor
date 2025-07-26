@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Castle.Windsor.Core;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 
 // ReSharper disable UnusedParameter.Local
 
@@ -20,51 +21,52 @@ namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 
 public class StartableChainParent : IStartable
 {
-	public static int Createcount;
-	public static int Startcount;
+	private readonly LifecycleCounter _lifecycleCounter;
 
-	public StartableChainParent(StartableChainDependency item1, StartableChainGeneric<string> item2)
+	public StartableChainParent(StartableChainDependency item1, StartableChainGeneric<string> item2,
+		LifecycleCounter lifecycleCounter)
 	{
-		++Createcount;
+		_lifecycleCounter = lifecycleCounter;
+		_lifecycleCounter.Increment("Create");
 	}
 
 	public void Start()
 	{
-		++Startcount;
+		_lifecycleCounter.Increment("Start");
 	}
 
 	public void Stop()
 	{
+		_lifecycleCounter.Increment("Stop");
 	}
 }
 
 public class StartableChainDependency : IStartable
 {
-	public static int Createcount;
-	public static int Startcount;
+	private readonly LifecycleCounter _lifecycleCounter;
 
-	public StartableChainDependency(StartableChainGeneric<string> item)
+	public StartableChainDependency(StartableChainGeneric<string> item, LifecycleCounter lifecycleCounter)
 	{
-		++Createcount;
+		_lifecycleCounter = lifecycleCounter;
+		_lifecycleCounter.Increment("Create");
 	}
 
 	public void Start()
 	{
-		++Startcount;
+		_lifecycleCounter.Increment("Start");
 	}
 
 	public void Stop()
 	{
+		_lifecycleCounter.Increment("Stop");
 	}
 }
 
 // ReSharper disable once UnusedTypeParameter
 public class StartableChainGeneric<T>
 {
-	public static int Createcount;
-
-	public StartableChainGeneric()
+	public StartableChainGeneric(LifecycleCounter lifecycleCounter)
 	{
-		++Createcount;
+		lifecycleCounter.Increment("Create");
 	}
 }

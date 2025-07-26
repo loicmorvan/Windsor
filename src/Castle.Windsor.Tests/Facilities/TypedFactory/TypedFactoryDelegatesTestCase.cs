@@ -423,11 +423,11 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 			Component.For<Func<Foo>>().LifeStyle.Transient.AsFactory(x => x.SelectedWith<SelectorWithLifecycleCounter>()));
 		var factory = Container.Resolve<Func<Foo>>();
 
-		Assert.Equal(1, counter.InstancesCreated);
+		Assert.Equal(1, counter["Create"]);
 
 		Container.Release(factory);
 
-		Assert.Equal(1, counter.InstancesDisposed);
+		Assert.Equal(1, counter["Dispose"]);
 	}
 
 	[Fact]
@@ -482,12 +482,12 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 		public SelectorWithLifecycleCounter(LifecycleCounter counter)
 		{
 			_counter = counter;
-			counter.InstancesCreated += 1;
+			counter.Increment("Create");
 		}
 
 		public void Dispose()
 		{
-			_counter.InstancesDisposed += 1;
+			_counter.Increment("Dispose");
 		}
 
 		public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method, Type type, object[] arguments)

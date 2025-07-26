@@ -37,7 +37,7 @@ public class LifecycledComponentsReleasePolicyComponentTrackingTestCase : Abstra
 			windsorContainer.Resolve<HasCtorDependency>();
 		}
 
-		Assert.Equal(1, lifecycleCounter.InstancesDisposed);
+		Assert.Equal(1, lifecycleCounter["Dispose"]);
 	}
 
 	[Fact]

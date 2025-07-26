@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Castle.Windsor.Core;
 
@@ -66,7 +67,8 @@ public static class Component
 	/// <summary>Creates a component registration for the service type.</summary>
 	/// <typeparam name = "TService">The service type.</typeparam>
 	/// <returns>The component registration.</returns>
-	public static ComponentRegistration<TService> For<TService>()
+	public static ComponentRegistration<TService> For<
+		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TService>()
 		where TService : class
 	{
 		return new ComponentRegistration<TService>();

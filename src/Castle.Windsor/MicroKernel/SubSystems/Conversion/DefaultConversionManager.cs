@@ -22,7 +22,7 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 /// <summary>Composition of all available conversion managers</summary>
 [Serializable]
-public class DefaultConversionManager : AbstractSubSystem, IConversionManager, ITypeConverterContext
+public sealed class DefaultConversionManager : AbstractSubSystem, IConversionManager, ITypeConverterContext
 {
 	[ThreadStatic] private static Stack<Tuple<ComponentModel, CreationContext>> _slot;
 
@@ -143,7 +143,7 @@ public class DefaultConversionManager : AbstractSubSystem, IConversionManager, I
 
 	public ITypeConverter Composition => this;
 
-	protected virtual void InitDefaultConverters()
+	private void InitDefaultConverters()
 	{
 		Add(new PrimitiveConverter());
 		Add(new TimeSpanConverter());

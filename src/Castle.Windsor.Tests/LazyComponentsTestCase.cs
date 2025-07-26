@@ -233,11 +233,11 @@ public class LazyComponentsTestCase : AbstractContainerTestCase
 
 		var lazy = Container.Resolve<Lazy<DisposeTestCase.Disposable>>();
 
-		Assert.Equal(0, counter.InstancesDisposed);
+		Assert.Equal(0, counter["Dispose"]);
 		var value = lazy.Value;
 
 		Container.Release(lazy);
-		Assert.Equal(1, counter.InstancesDisposed);
+		Assert.Equal(1, counter["Dispose"]);
 	}
 
 	[Fact]

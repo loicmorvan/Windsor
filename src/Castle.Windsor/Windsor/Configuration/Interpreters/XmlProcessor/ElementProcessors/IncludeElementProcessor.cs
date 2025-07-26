@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Diagnostics;
 using System.Xml;
 
 namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
@@ -22,13 +23,16 @@ public class IncludeElementProcessor : AbstractXmlNodeProcessor
 	public override string Name => "include";
 
 	/// <summary>
-	///     Accepts the specified node. Check if node has the same name as the processor and the node.NodeType is in the AcceptNodeTypes List NOTE: since the BatchRegistrationFacility already uses an include
-	///     element we will distinguish between both by looking for the presence of an uri attribute we should revisit this later by using xml-namespaces
+	///     Accepts the specified node. Check if node has the same name as the processor and the node.NodeType is in the
+	///     AcceptNodeTypes List NOTE: since the BatchRegistrationFacility already uses an include
+	///     element we will distinguish between both by looking for the presence of an uri attribute we should revisit this
+	///     later by using xml-namespaces
 	/// </summary>
-	/// <param name = "node">The node.</param>
+	/// <param name="node">The node.</param>
 	/// <returns></returns>
 	public override bool Accept(XmlNode node)
 	{
+		Debug.Assert(node.Attributes != null);
 		return node.Attributes.GetNamedItem("uri") != null && base.Accept(node);
 	}
 
@@ -36,6 +40,7 @@ public class IncludeElementProcessor : AbstractXmlNodeProcessor
 	{
 		var element = nodeList.Current as XmlElement;
 
+		Debug.Assert(element != null);
 		var result = ProcessInclude(element, element.GetAttribute("uri"), engine);
 
 		ReplaceItself(result, element);
@@ -43,14 +48,12 @@ public class IncludeElementProcessor : AbstractXmlNodeProcessor
 
 	public XmlNode ProcessInclude(XmlElement element, string includeUri, IXmlProcessorEngine engine)
 	{
-		XmlDocumentFragment frag = null;
-
 		if (includeUri == null)
 			throw new ConfigurationProcessingException(
 				$"Found an include node without an 'uri' attribute: {element.BaseURI}");
 
 		var uriList = includeUri.Split(',');
-		frag = CreateFragment(element);
+		var frag = CreateFragment(element);
 
 		foreach (var uri in uriList)
 		{
@@ -75,9 +78,14 @@ public class IncludeElementProcessor : AbstractXmlNodeProcessor
 			engine.PopResource();
 
 			if (element.GetAttribute("preserve-wrapper") == "yes")
+			{
 				AppendChild(frag, doc.DocumentElement);
+			}
 			else
+			{
+				Debug.Assert(doc.DocumentElement != null);
 				AppendChild(frag, doc.DocumentElement.ChildNodes);
+			}
 		}
 
 		return frag;

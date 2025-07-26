@@ -89,16 +89,6 @@ public class HandlerSelectorsTestCase
 		event Action<string> OnSomethingInterestingToWatch;
 	}
 
-	public class PeopleWatcher
-	{
-		private Person _p;
-
-		public PeopleWatcher(Person p)
-		{
-			_p = p;
-		}
-	}
-
 	public class Person
 	{
 		public readonly IWatcher Watcher;

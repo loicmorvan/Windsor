@@ -26,12 +26,12 @@ public class DisposableInterceptor : StandardInterceptor, IDisposable
 
 	public DisposableInterceptor(LifecycleCounter counter)
 	{
-		counter.InstancesCreated += 1;
+		counter.Increment("Create");
 		_counter = counter;
 	}
 
 	public void Dispose()
 	{
-		_counter.InstancesDisposed += 1;
+		_counter.Increment("Dispose");
 	}
 }

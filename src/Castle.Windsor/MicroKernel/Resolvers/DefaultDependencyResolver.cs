@@ -274,7 +274,7 @@ public class DefaultDependencyResolver : IDependencyResolver
 
 		// 5 - normal flow, checking against the kernel
 		value = ResolveFromKernel(context, model, dependency);
-		return value is object;
+		return value != null;
 	}
 
 	private object ResolveFromKernelByName(CreationContext context, ComponentModel model, DependencyModel dependency)

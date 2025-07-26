@@ -662,11 +662,10 @@ public class ComponentRegistration<TService> : IRegistration
 	/// <param name = "actions"> A set of actions to be executed right after the component is created and before it's returned from the container. </param>
 	public ComponentRegistration<TService> OnCreate(params LifecycleActionDelegate<TService>[] actions)
 	{
-		if (actions != null && actions.Length != 0)
-		{
-			var action = (LifecycleActionDelegate<TService>)Delegate.Combine(actions);
-			AddDescriptor(new OnCreateComponentDescriptor<TService>(action));
-		}
+		if (actions == null || actions.Length == 0) return this;
+
+		var action = (LifecycleActionDelegate<TService>)Delegate.Combine(actions.Cast<Delegate>().ToArray());
+		AddDescriptor(new OnCreateComponentDescriptor<TService>(action));
 
 		return this;
 	}
@@ -688,7 +687,7 @@ public class ComponentRegistration<TService> : IRegistration
 	{
 		if (actions != null && actions.Length != 0)
 		{
-			var action = (LifecycleActionDelegate<TService>)Delegate.Combine(actions);
+			var action = (LifecycleActionDelegate<TService>)Delegate.Combine(actions.Cast<Delegate>().ToArray());
 			AddDescriptor(new OnDestroyComponentDescriptor<TService>(action));
 		}
 
@@ -778,7 +777,7 @@ public class ComponentRegistration<TService> : IRegistration
 		Activator<FactoryMethodActivator<TImpl>>()
 			.ExtendedProperties(Property.ForKey("factoryMethodDelegate").Eq(factoryMethod));
 
-		if (managedExternally) ExtendedProperties(Property.ForKey("factory.managedExternally").Eq(managedExternally));
+		if (managedExternally) ExtendedProperties(Property.ForKey("factory.managedExternally").Eq(true));
 
 		if (Implementation == null &&
 		    (_potentialServices.First().GetTypeInfo().IsClass == false ||

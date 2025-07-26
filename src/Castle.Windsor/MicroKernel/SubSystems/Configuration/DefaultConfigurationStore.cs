@@ -154,7 +154,8 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 
 	public IResource GetResource(string resourceUri, IResource resource)
 	{
-		if (resourceUri.IndexOf(Uri.SchemeDelimiter) == -1) return resource.CreateRelative(resourceUri);
+		if (resourceUri.IndexOf(Uri.SchemeDelimiter, StringComparison.Ordinal) == -1)
+			return resource.CreateRelative(resourceUri);
 
 		var subSystem = (IResourceSubSystem)Kernel.GetSubSystem(SubSystemConstants.ResourceKey);
 

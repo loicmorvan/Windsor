@@ -174,7 +174,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 		var mixin = (ISimpleService)calculator;
 		mixin.Operation();
 		Container.Release(mixin);
-		Assert.Equal(1, Container.Resolve<LifecycleCounter>().InstancesDisposed);
+		Assert.Equal(1, Container.Resolve<LifecycleCounter>()["Dispose"]);
 	}
 
 	[Fact]

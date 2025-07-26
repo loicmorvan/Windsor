@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
+using System.Diagnostics;
 using System.Xml;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
 public class ChooseElementProcessor : AbstractStatementElementProcessor
 {
@@ -29,13 +30,14 @@ public class ChooseElementProcessor : AbstractStatementElementProcessor
 
 		var fragment = CreateFragment(element);
 
+		Debug.Assert(element != null);
 		foreach (XmlNode child in element.ChildNodes)
 		{
 			if (IgnoreNode(child)) continue;
 
 			var elem = GetNodeAsElement(element, child);
 
-			var found = false;
+			bool found;
 
 			if (elem.Name == WhenElemName)
 				found = ProcessStatement(elem, engine);

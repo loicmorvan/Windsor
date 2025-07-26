@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
 using System.Xml;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
 public abstract class AbstractStatementElementProcessor : AbstractXmlNodeProcessor
 {
@@ -31,13 +31,9 @@ public abstract class AbstractStatementElementProcessor : AbstractXmlNodeProcess
 		    element.HasAttribute(NotDefinedAttrName))
 			throw new XmlProcessorException("'if' elements expects a non empty defined or not-defined attribute");
 
-		var processContents = false;
-
 		if (element.HasAttribute(DefinedAttrName))
-			processContents = engine.HasFlag(element.GetAttribute(DefinedAttrName));
-		else
-			processContents = !engine.HasFlag(element.GetAttribute(NotDefinedAttrName));
+			return engine.HasFlag(element.GetAttribute(DefinedAttrName));
 
-		return processContents;
+		return !engine.HasFlag(element.GetAttribute(NotDefinedAttrName));
 	}
 }

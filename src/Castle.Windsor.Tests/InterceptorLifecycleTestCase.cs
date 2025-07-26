@@ -32,10 +32,10 @@ public class InterceptorLifecycleTestCase : AbstractContainerTestCase
 
 		var a = Container.Resolve<A>();
 
-		Assert.Equal(1, counter.InstancesCreated);
+		Assert.Equal(1, counter["Create"]);
 
 		Container.Release(a);
 
-		Assert.Equal(1, counter.InstancesDisposed);
+		Assert.Equal(1, counter["Dispose"]);
 	}
 }

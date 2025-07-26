@@ -15,6 +15,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -81,17 +82,21 @@ public class TypeNameConverter : AbstractTypeConverter
 			throw new ConverterException(
 				$"Could not convert string '{name}' to a type. It doesn't appear to be a valid type name.");
 
-		InitializeAppDomainAssemblies(false);
+		InitializeAppDomainAssemblies();
 		type = typeName.GetType(this);
 		if (type != null) return type;
-		if (InitializeAppDomainAssemblies(true)) type = typeName.GetType(this);
+		if (InitializeAppDomainAssemblies()) type = typeName.GetType(this);
 		if (type != null) return type;
 		var assemblyName = typeName.ExtractAssemblyName();
 		if (assemblyName != null)
 		{
 			var namePart = assemblyName + ", Version=";
 			var assembly =
-				_assemblies.FirstOrDefault(a => a.FullName.StartsWith(namePart, StringComparison.OrdinalIgnoreCase));
+				_assemblies.FirstOrDefault(a =>
+				{
+					Debug.Assert(a.FullName != null);
+					return a.FullName.StartsWith(namePart, StringComparison.OrdinalIgnoreCase);
+				});
 			if (assembly != null)
 				throw new ConverterException(string.Format(
 					"Could not convert string '{0}' to a type. Assembly {1} was matched, but it doesn't contain the type. Make sure that the type name was not mistyped.",
@@ -104,7 +109,7 @@ public class TypeNameConverter : AbstractTypeConverter
 			$"Could not convert string '{name}' to a type. Make sure assembly containing the type has been loaded into the process, or consider specifying assembly qualified name of the type.");
 	}
 
-	private bool InitializeAppDomainAssemblies(bool forceLoad)
+	private bool InitializeAppDomainAssemblies()
 	{
 		var anyAssemblyAdded = false;
 
@@ -132,6 +137,7 @@ public class TypeNameConverter : AbstractTypeConverter
 
 	protected virtual bool ShouldSkipAssembly(Assembly assembly)
 	{
+		Debug.Assert(assembly.FullName != null);
 		return assembly == Mscorlib || assembly.FullName.StartsWith("System");
 	}
 
@@ -236,10 +242,9 @@ public class TypeNameConverter : AbstractTypeConverter
 			return ((IEnumerable)_inner).GetEnumerator();
 		}
 
-		public MultiType AddInnerType(Type type)
+		public void AddInnerType(Type type)
 		{
 			_inner.AddLast(type);
-			return this;
 		}
 	}
 }

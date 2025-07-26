@@ -12,25 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 public class TypeNameParser : ITypeNameParser
 {
 	public TypeName Parse(string name)
 	{
-		var isPotentiallyFullyQualifiedName = false;
-		if (name.IndexOf(',') != -1) isPotentiallyFullyQualifiedName = true;
+		var isPotentiallyFullyQualifiedName = name.IndexOf(',') != -1;
 		var genericIndex = name.IndexOf('`');
 		var genericTypes = new TypeName[] { };
 		if (genericIndex > -1)
 		{
-			var start = name.IndexOf("[[", genericIndex);
+			var start = name.IndexOf("[[", genericIndex, StringComparison.Ordinal);
 			if (start != -1)
 			{
-				int count;
 				var countString = name.Substring(genericIndex + 1, start - genericIndex - 1);
-				if (int.TryParse(countString, out count) == false) return null;
-				genericTypes = ParseNames(name.Substring(start + 2, name.LastIndexOf("]]") - 2 - start), count);
+				if (int.TryParse(countString, out var count) == false) return null;
+				genericTypes =
+					ParseNames(name.Substring(start + 2, name.LastIndexOf("]]", StringComparison.Ordinal) - 2 - start),
+						count);
 				if (genericTypes == null) return null;
 				isPotentiallyFullyQualifiedName = false;
 				name = name.Substring(0, start);

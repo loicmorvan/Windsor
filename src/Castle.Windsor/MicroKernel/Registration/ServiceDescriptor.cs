@@ -47,7 +47,10 @@ public class ServiceDescriptor
 		return Select((_, b) => b);
 	}
 
-	/// <summary>Uses all interfaces that have names matched by implementation type name. Matches Foo to IFoo, SuperFooExtended to IFoo and IFooExtended etc</summary>
+	/// <summary>
+	///     Uses all interfaces that have names matched by implementation type name. Matches Foo to IFoo, SuperFooExtended
+	///     to IFoo and IFooExtended etc
+	/// </summary>
 	/// <returns></returns>
 	public BasedOnDescriptor DefaultInterfaces()
 	{
@@ -56,7 +59,10 @@ public class ServiceDescriptor
 				.Where(i => type.Name.Contains(GetInterfaceName(i))));
 	}
 
-	/// <summary>Uses the first interface of a type. This method has non-deterministic behavior when type implements more than one interface!</summary>
+	/// <summary>
+	///     Uses the first interface of a type. This method has non-deterministic behavior when type implements more than
+	///     one interface!
+	/// </summary>
 	/// <returns></returns>
 	public BasedOnDescriptor FirstInterface()
 	{
@@ -70,10 +76,12 @@ public class ServiceDescriptor
 	}
 
 	/// <summary>
-	///     Uses <paramref name = "implements" /> to lookup the sub interface. For example: if you have IService and IProductService : ISomeInterface, IService, ISomeOtherInterface. When you call
-	///     FromInterface(typeof(IService)) then IProductService will be used. Useful when you want to register _all_ your services and but not want to specify all of them.
+	///     Uses <paramref name="implements" /> to lookup the sub interface. For example: if you have IService and
+	///     IProductService : ISomeInterface, IService, ISomeOtherInterface. When you call
+	///     FromInterface(typeof(IService)) then IProductService will be used. Useful when you want to register _all_ your
+	///     services and but not want to specify all of them.
 	/// </summary>
-	/// <param name = "implements"></param>
+	/// <param name="implements"></param>
 	/// <returns></returns>
 	public BasedOnDescriptor FromInterface(Type implements)
 	{
@@ -106,7 +114,7 @@ public class ServiceDescriptor
 	}
 
 	/// <summary>Assigns a custom service selection strategy.</summary>
-	/// <param name = "selector"></param>
+	/// <param name="selector"></param>
 	/// <returns></returns>
 	public BasedOnDescriptor Select(ServiceSelector selector)
 	{
@@ -115,7 +123,7 @@ public class ServiceDescriptor
 	}
 
 	/// <summary>Assigns the supplied service types.</summary>
-	/// <param name = "types"></param>
+	/// <param name="types"></param>
 	/// <returns></returns>
 	public BasedOnDescriptor Select(IEnumerable<Type> types)
 	{
@@ -132,14 +140,16 @@ public class ServiceDescriptor
 	internal ICollection<Type> GetServices(Type type, Type[] baseType)
 	{
 		var services = new HashSet<Type>();
-		if (_serviceSelector != null)
-			foreach (ServiceSelector selector in _serviceSelector.GetInvocationList())
-			{
-				var selected = selector(type, baseType);
-				if (selected != null)
-					foreach (var service in selected.Select(WorkaroundClrBug))
-						services.Add(service);
-			}
+		if (_serviceSelector == null) return services;
+
+		foreach (var selector in _serviceSelector.GetInvocationList().Cast<ServiceSelector>())
+		{
+			var selected = selector(type, baseType);
+			if (selected == null) continue;
+
+			foreach (var service in selected.Select(WorkaroundClrBug))
+				services.Add(service);
+		}
 
 		return services;
 	}
@@ -147,7 +157,8 @@ public class ServiceDescriptor
 	private void AddFromInterface(Type type, Type implements, ICollection<Type> matches)
 	{
 		foreach (var @interface in GetTopLevelInterfaces(type))
-			if (@interface.GetTypeInfo().GetInterface(implements.FullName, false) != null)
+			if (@interface.GetTypeInfo()
+				    .GetInterface(implements.FullName ?? throw new InvalidOperationException(), false) != null)
 				matches.Add(@interface);
 	}
 
@@ -171,7 +182,7 @@ public class ServiceDescriptor
 	}
 
 	/// <summary>This is a workaround for a CLR bug in which GetInterfaces() returns interfaces with no implementations.</summary>
-	/// <param name = "serviceType">Type of the service.</param>
+	/// <param name="serviceType">Type of the service.</param>
 	/// <returns></returns>
 	private static Type WorkaroundClrBug(Type serviceType)
 	{
@@ -182,7 +193,8 @@ public class ServiceDescriptor
 		if (serviceType.GetTypeInfo().IsGenericType && serviceType.DeclaringType == null)
 		{
 			var shouldUseGenericTypeDefinition = false;
-			foreach (var argument in serviceType.GetGenericArguments()) shouldUseGenericTypeDefinition |= argument.IsGenericParameter;
+			foreach (var argument in serviceType.GetGenericArguments())
+				shouldUseGenericTypeDefinition |= argument.IsGenericParameter;
 			if (shouldUseGenericTypeDefinition) return serviceType.GetGenericTypeDefinition();
 		}
 

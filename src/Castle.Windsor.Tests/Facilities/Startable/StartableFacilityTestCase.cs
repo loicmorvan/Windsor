@@ -23,6 +23,7 @@ using Castle.Windsor.MicroKernel.ModelBuilder;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Facilities.Startable.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 
 namespace Castle.Windsor.Tests.Facilities.Startable;
 
@@ -165,34 +166,48 @@ public class StartableFacilityTestCase
 	}
 
 	/// <summary>
-	///     This test has one startable component dependent on another, and both are dependent on a third generic component - all are singletons. We need to make sure we only get one instance of each
+	///     This test has one startable component dependent on another, and both are dependent on a third generic component -
+	///     all are singletons. We need to make sure we only get one instance of each
 	///     component created.
 	/// </summary>
 	[Fact]
 	public void TestStartableChainWithGenerics()
 	{
+		var parentLifecycle = new LifecycleCounter();
+		var dependencyLifecycle = new LifecycleCounter();
+		var genericLifecycle = new LifecycleCounter();
+
 		_kernel.AddFacility<StartableFacility>();
 
 		// Add parent. This has a dependency so won't be started yet.
-		_kernel.Register(Component.For(typeof(StartableChainParent)).Named("chainparent"));
+		_kernel.Register(
+			Component
+				.For(typeof(StartableChainParent))
+				.DependsOn(Arguments.FromTyped([parentLifecycle])));
 
-		Assert.Equal(0, StartableChainDependency.Startcount);
-		Assert.Equal(0, StartableChainDependency.Createcount);
+		Assert.Equal(0, parentLifecycle["Start"]);
+		Assert.Equal(0, parentLifecycle["Create"]);
 
 		// Add generic dependency. This is not startable so won't get created. 
-		_kernel.Register(Component.For(typeof(StartableChainGeneric<>)).Named("chaingeneric"));
+		_kernel.Register(
+			Component
+				.For(typeof(StartableChainGeneric<>))
+				.DependsOn(Arguments.FromTyped([genericLifecycle])));
 
-		Assert.Equal(0, StartableChainDependency.Startcount);
-		Assert.Equal(0, StartableChainDependency.Createcount);
+		Assert.Equal(0, genericLifecycle["Start"]);
+		Assert.Equal(0, genericLifecycle["Create"]);
 
 		// Add dependency. This will satisfy the dependency so everything will start.
-		_kernel.Register(Component.For(typeof(StartableChainDependency)).Named("chaindependency"));
+		_kernel.Register(
+			Component
+				.For(typeof(StartableChainDependency))
+				.DependsOn(Arguments.FromTyped([dependencyLifecycle])));
 
-		Assert.Equal(1, StartableChainParent.Startcount);
-		Assert.Equal(1, StartableChainParent.Createcount);
-		Assert.Equal(1, StartableChainDependency.Startcount);
-		Assert.Equal(1, StartableChainDependency.Createcount);
-		Assert.Equal(1, StartableChainGeneric<string>.Createcount);
+		Assert.Equal(1, parentLifecycle["Start"]);
+		Assert.Equal(1, parentLifecycle["Create"]);
+		Assert.Equal(1, dependencyLifecycle["Start"]);
+		Assert.Equal(1, dependencyLifecycle["Create"]);
+		Assert.Equal(1, genericLifecycle["Create"]);
 	}
 
 	[Fact]

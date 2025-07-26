@@ -128,10 +128,10 @@ public class ModelInterceptorsSelectorTestCase
 			Component.For<A>().LifeStyle.Transient);
 
 		var a = container.Resolve<A>();
-		Assert.Equal(1, counter.InstancesCreated);
+		Assert.Equal(1, counter["Create"]);
 
 		container.Release(a);
-		Assert.Equal(1, counter.InstancesDisposed);
+		Assert.Equal(1, counter["Dispose"]);
 	}
 }
 

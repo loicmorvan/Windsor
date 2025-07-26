@@ -12,10 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+
 namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public class LifecycleCounter
 {
-	public int InstancesCreated;
-	public int InstancesDisposed;
+	private readonly Dictionary<string, int> _countersByKeys = new();
+
+	public int this[string key] => _countersByKeys.TryGetValue(key, out var value) ? value : 0;
+
+	public void Increment(string key)
+	{
+		_countersByKeys[key] = _countersByKeys.TryGetValue(key, out var value) ? value + 1 : 1;
+	}
 }

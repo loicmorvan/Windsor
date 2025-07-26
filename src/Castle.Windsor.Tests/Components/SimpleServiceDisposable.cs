@@ -21,7 +21,7 @@ public sealed class SimpleServiceDisposable(LifecycleCounter lifecycleCounter) :
 {
 	public void Dispose()
 	{
-		lifecycleCounter.InstancesDisposed++;
+		lifecycleCounter.Increment("Dispose");
 	}
 
 	public void Operation()

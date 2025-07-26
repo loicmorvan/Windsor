@@ -41,7 +41,7 @@ public class FailureCleanUpTestCase
 		);
 
 		Assert.Throws<ComponentActivatorException>(() => _container.Resolve<ThrowsInCtorWithDisposableDependency>());
-		Assert.Equal(1, _container.Resolve<LifecycleCounter>().InstancesDisposed);
+		Assert.Equal(1, _container.Resolve<LifecycleCounter>()["Dispose"]);
 	}
 
 	[Fact]
@@ -55,7 +55,7 @@ public class FailureCleanUpTestCase
 		);
 
 		Assert.Throws<ComponentActivatorException>(() => _container.Resolve<DependsOnThrowingComponent>());
-		Assert.Equal(1, _container.Resolve<LifecycleCounter>().InstancesDisposed);
+		Assert.Equal(1, _container.Resolve<LifecycleCounter>()["Dispose"]);
 	}
 
 	[Fact]

@@ -32,11 +32,11 @@ public class DisposeTestCase : AbstractContainerTestCase
 
 		var service = Container.Resolve<ISimpleService>();
 
-		Assert.Equal(0, counter.InstancesDisposed);
+		Assert.Equal(0, counter["Dispose"]);
 
 		Container.Release(service);
 
-		Assert.Equal(1, counter.InstancesDisposed);
+		Assert.Equal(1, counter["Dispose"]);
 	}
 
 	[Fact]
@@ -65,7 +65,7 @@ public class DisposeTestCase : AbstractContainerTestCase
 		var service = Container.Resolve<ISimpleService>();
 		Container.Release(service);
 
-		Assert.Equal(1, Container.Resolve<LifecycleCounter>().InstancesDisposed);
+		Assert.Equal(1, Container.Resolve<LifecycleCounter>()["Dispose"]);
 	}
 
 	[Fact]
@@ -110,7 +110,7 @@ public class DisposeTestCase : AbstractContainerTestCase
 
 		Container.Dispose();
 
-		Assert.Equal(1, counter.InstancesDisposed);
+		Assert.Equal(1, counter["Dispose"]);
 		tracker.AssertNoLongerReferenced();
 	}
 
@@ -184,7 +184,7 @@ public class DisposeTestCase : AbstractContainerTestCase
 	{
 		public void Dispose()
 		{
-			counter.InstancesDisposed += 1;
+			counter.Increment("Dispose");
 		}
 	}
 }

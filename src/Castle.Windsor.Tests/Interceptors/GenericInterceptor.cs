@@ -16,6 +16,7 @@ using Castle.DynamicProxy;
 
 namespace Castle.Windsor.Tests.Interceptors;
 
+// ReSharper disable once UnusedTypeParameter
 public class GenericInterceptor<T> : IInterceptor
 {
 	public void Intercept(IInvocation invocation)

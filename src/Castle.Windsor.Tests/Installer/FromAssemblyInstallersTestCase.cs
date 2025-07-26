@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Installer;
-
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor.Installer;
+
+namespace Castle.Windsor.Tests.Installer;
 
 public class FromAssemblyInstallersTestCase : AbstractContainerTestCase
 {
@@ -173,7 +173,8 @@ public class FromAssemblyInstallersTestCase : AbstractContainerTestCase
 		var location = AppContext.BaseDirectory;
 
 		var fullName = GetType().GetTypeInfo().Assembly.FullName;
-		var index = fullName.IndexOf("PublicKeyToken=");
+		Debug.Assert(fullName != null);
+		var index = fullName.IndexOf("PublicKeyToken=", StringComparison.Ordinal);
 		if (index == -1) Assert.Fail("Assembly is not signed so no way to test this.");
 		var publicKeyToken = fullName.Substring(index + "PublicKeyToken=".Length, 16);
 		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).WithKeyToken(publicKeyToken)));

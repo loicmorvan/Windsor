@@ -19,7 +19,7 @@ using Castle.Core.Resource;
 namespace Castle.Windsor.MicroKernel.SubSystems.Resource;
 
 /// <summary>Pendent</summary>
-public class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
+public sealed class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 {
 	private readonly List<IResourceFactory> _resourceFactories = new();
 
@@ -74,7 +74,7 @@ public class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 		_resourceFactories.Add(resourceFactory);
 	}
 
-	protected virtual void InitDefaultResourceFactories()
+	private void InitDefaultResourceFactories()
 	{
 		RegisterResourceFactory(new AssemblyResourceFactory());
 		RegisterResourceFactory(new UncResourceFactory());

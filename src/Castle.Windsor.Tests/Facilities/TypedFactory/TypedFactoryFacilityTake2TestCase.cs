@@ -500,7 +500,7 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 
 		Container.Release(factory);
 
-		Assert.Equal(1, Container.Resolve<LifecycleCounter>().InstancesDisposed);
+		Assert.Equal(1, Container.Resolve<LifecycleCounter>()["Dispose"]);
 	}
 
 	[Fact]

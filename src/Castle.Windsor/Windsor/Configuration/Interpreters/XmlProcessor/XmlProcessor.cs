@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Diagnostics;
 using System.Xml;
 using Castle.Core.Resource;
 using Castle.Windsor.MicroKernel.SubSystems.Resource;
@@ -21,7 +22,7 @@ using Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProc
 namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor;
 
 /// <summary>Pendent</summary>
-public class XmlProcessor
+public sealed class XmlProcessor
 {
 	private readonly IXmlProcessorEngine _engine;
 
@@ -50,7 +51,7 @@ public class XmlProcessor
 	{
 		try
 		{
-			if (node.NodeType == XmlNodeType.Document) node = (node as XmlDocument).DocumentElement;
+			if (node is XmlDocument xmlDocument) node = xmlDocument.DocumentElement;
 
 			_engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(node));
 
@@ -62,6 +63,7 @@ public class XmlProcessor
 		}
 		catch (Exception ex)
 		{
+			Debug.Assert(node != null);
 			var message = $"Error processing node {node.Name}, inner content {node.InnerXml}";
 
 			throw new ConfigurationProcessingException(message, ex);
@@ -101,12 +103,12 @@ public class XmlProcessor
 		}
 	}
 
-	protected void AddElementProcessor(Type t)
+	private void AddElementProcessor(Type t)
 	{
 		_engine.AddNodeProcessor(t);
 	}
 
-	protected virtual void RegisterProcessors()
+	private void RegisterProcessors()
 	{
 		AddElementProcessor(typeof(IfElementProcessor));
 		AddElementProcessor(typeof(DefineElementProcessor));

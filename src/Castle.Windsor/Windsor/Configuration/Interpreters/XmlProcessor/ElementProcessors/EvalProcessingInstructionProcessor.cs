@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Diagnostics;
 using System.Xml;
 
 namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
@@ -31,6 +32,7 @@ public class EvalProcessingInstructionProcessor : AbstractXmlNodeProcessor
 
 		var fragment = CreateFragment(node);
 
+		Debug.Assert(node != null);
 		var expression = node.Data;
 
 		// We don't have an expression evaluator right now, so expression will 
@@ -38,8 +40,10 @@ public class EvalProcessingInstructionProcessor : AbstractXmlNodeProcessor
 
 		object evaluated = "";
 
-		if (string.Compare(expression, "$basedirectory", true) == 0) evaluated = AppContext.BaseDirectory;
+		if (string.Compare(expression, "$basedirectory", StringComparison.OrdinalIgnoreCase) == 0)
+			evaluated = AppContext.BaseDirectory;
 
+		Debug.Assert(node.OwnerDocument != null);
 		fragment.AppendChild(node.OwnerDocument.CreateTextNode(evaluated.ToString()));
 
 		ReplaceNode(node.ParentNode, fragment, node);
