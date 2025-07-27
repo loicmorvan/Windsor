@@ -23,12 +23,3 @@ public class CustomerImpl : ICustomer
 
 	public virtual int Age { get; set; }
 }
-
-public class ExtendedCustomer
-{
-	public string Name { get; set; }
-
-	public string Address { get; set; }
-
-	public int Age { get; set; }
-}

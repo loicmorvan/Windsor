@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 
@@ -62,39 +61,5 @@ public class TransientMultiConstructorTestCase
 		b = container.Resolve(typeof(AnyClassWithReference), arguments2);
 
 		Assert.NotSame(a, b);
-	}
-}
-
-[Transient]
-public class AnyClass
-{
-	public AnyClass(int integer)
-	{
-	}
-
-	public AnyClass(DateTime datetime)
-	{
-	}
-}
-
-public class Tester1(string bar)
-{
-	public string Bar = bar;
-}
-
-public class Tester2(int foo)
-{
-	public int Foo = foo;
-}
-
-[Transient]
-public class AnyClassWithReference
-{
-	public AnyClassWithReference(Tester1 test1)
-	{
-	}
-
-	public AnyClassWithReference(Tester2 test2)
-	{
 	}
 }

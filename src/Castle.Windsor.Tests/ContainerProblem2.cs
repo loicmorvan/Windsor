@@ -12,84 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
 
 // ReSharper disable UnusedParameter.Local
 
 namespace Castle.Windsor.Tests;
-
-[PerThread]
-public class R;
-
-public interface IC
-{
-	IN N { get; set; }
-}
-
-public class CImpl : IC
-{
-	public R R
-	{
-		// ReSharper disable once ValueParameterNotUsed
-		set { }
-	}
-
-	public IN N { get; set; } = null;
-}
-
-public interface IN
-{
-	IS Cs { get; }
-}
-
-[Transient]
-public class Dn : IN
-{
-	public Dn(IWm vm, ISp sp)
-	{
-		Cs = new Bs();
-	}
-
-	public IS Cs { get; }
-}
-
-public interface IWm
-{
-	void A(IN n);
-}
-
-public class Wm : IWm
-{
-	public void A(IN n)
-	{
-		//...
-	}
-}
-
-public interface IS
-{
-	ISp Sp { get; set; }
-}
-
-[Transient]
-public class Bs : IS
-{
-	public ISp Sp { get; set; }
-}
-
-public interface ISp
-{
-	void Save(IS s);
-}
-
-public class Sp : ISp
-{
-	public void Save(IS s)
-	{
-	}
-}
 
 public class ContainerProblem2
 {

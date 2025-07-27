@@ -101,11 +101,3 @@ public class GraphNodeTests
 		Assert.Same(jacket, nodes[8]);
 	}
 }
-
-public class TestGraphNode : GraphNode
-{
-	// ReSharper disable once UnusedParameter.Local
-	public TestGraphNode(string name)
-	{
-	}
-}

@@ -17,6 +17,4 @@ namespace Castle.Windsor.Core;
 using System.Collections.Generic;
 using System.Reflection;
 
-public delegate PropertySet PropertySetBuilder(PropertyInfo property, bool isOptional);
-
 public delegate PropertySet[] PropertyDependencyFilter(ComponentModel model, ICollection<PropertyInfo> properties, PropertySetBuilder buildDependencyCallback);

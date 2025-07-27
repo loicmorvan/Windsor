@@ -15,7 +15,6 @@
 using System;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
-using Castle.Windsor.Tests.Components;
 
 // ReSharper disable UnusedParameter.Local
 
@@ -68,27 +67,5 @@ public class CustomActivatorTestCase : IDisposable
 				.Instance(new ClassWithServiceDependency(null)));
 
 		_kernel.Resolve<ClassWithServiceDependency>();
-	}
-}
-
-public class ClassWithPrimitiveDependencyFactory
-{
-	public ClassWithPrimitiveDependency Create()
-	{
-		return new ClassWithPrimitiveDependency(2);
-	}
-}
-
-public class ClassWithPrimitiveDependency
-{
-	public ClassWithPrimitiveDependency(int dependency)
-	{
-	}
-}
-
-public class ClassWithServiceDependency
-{
-	public ClassWithServiceDependency(IService dependency)
-	{
 	}
 }

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
@@ -133,30 +132,4 @@ public class ModelInterceptorsSelectorTestCase
 		container.Release(a);
 		Assert.Equal(1, counter["Dispose"]);
 	}
-}
-
-public interface IWatcher
-{
-	event Action<string> OnSomethingInterestingToWatch;
-}
-
-public class BirdWatcher : IWatcher
-{
-	public event Action<string> OnSomethingInterestingToWatch = delegate { };
-}
-
-public class Person
-{
-	public readonly IWatcher Watcher;
-
-	public Person(IWatcher watcher)
-	{
-		Watcher = watcher;
-	}
-}
-
-public enum InterceptorKind
-{
-	None,
-	Dummy
 }

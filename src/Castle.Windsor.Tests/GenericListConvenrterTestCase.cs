@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using Castle.Core.Resource;
 using Castle.Windsor.Windsor.Installer;
 
@@ -48,21 +47,4 @@ public class GenericListConvenrterTestCase : AbstractContainerTestCase
 
 		Assert.Equal(1, item.Count);
 	}
-}
-
-public interface IMyObject
-{
-	int Count { get; }
-}
-
-public class MyObject : IMyObject
-{
-	protected readonly IDictionary<int, IList<string>> Stuff;
-
-	public MyObject(IDictionary<int, IList<string>> stuff)
-	{
-		Stuff = stuff;
-	}
-
-	public virtual int Count => Stuff.Count;
 }

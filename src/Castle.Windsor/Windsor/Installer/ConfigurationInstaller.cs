@@ -19,10 +19,6 @@ using Castle.Windsor.Windsor.Configuration;
 
 namespace Castle.Windsor.Windsor.Installer;
 
-/// <summary>Delegate to provide environment name.</summary>
-/// <returns>The environment name.</returns>
-public delegate string EnvironmentDelegate();
-
 public class ConfigurationInstaller : IWindsorInstaller
 {
 	private readonly IConfigurationInterpreter _interpreter;

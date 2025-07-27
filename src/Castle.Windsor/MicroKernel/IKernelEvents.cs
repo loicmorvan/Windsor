@@ -13,36 +13,9 @@
 // limitations under the License.
 
 using System;
-using Castle.Windsor.Core;
 using Castle.Windsor.Windsor;
 
 namespace Castle.Windsor.MicroKernel;
-
-/// <summary>Represents a delegate which holds basic information about a component.</summary>
-/// <param name = "key">Key which identifies the component</param>
-/// <param name = "handler">handler that holds this component and is capable of creating an instance of it.</param>
-public delegate void ComponentDataDelegate(string key, IHandler handler);
-
-/// <summary>Represents a delegate which holds basic information about a component and its instance.</summary>
-/// <param name = "model">Component meta information</param>
-/// <param name = "instance">Component instance</param>
-public delegate void ComponentInstanceDelegate(ComponentModel model, object instance);
-
-/// <summary>Represents a delegate which holds the information about the component</summary>
-public delegate void ComponentModelDelegate(ComponentModel model);
-
-/// <summary>Represents a delegate which holds the information about a service.</summary>
-public delegate void ServiceDelegate(Type service);
-
-/// <summary>Represents a delegate which holds a handler</summary>
-/// <param name = "handler">handler that holds a component and is capable of creating an instance of it.</param>
-/// <param name = "stateChanged"></param>
-public delegate void HandlerDelegate(IHandler handler, ref bool stateChanged);
-
-public delegate void HandlersChangedDelegate(ref bool stateChanged);
-
-/// <summary>Represents a delegate which holds dependency resolving information.</summary>
-public delegate void DependencyDelegate(ComponentModel client, DependencyModel model, object dependency);
 
 /// <summary>Summary description for IKernelEvents.</summary>
 public interface IKernelEvents

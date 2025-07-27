@@ -17,13 +17,6 @@ using System.Xml;
 
 namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
-internal enum StatementState
-{
-	Init,
-	Collect,
-	Finished
-}
-
 public class IfProcessingInstructionProcessor : AbstractXmlNodeProcessor
 {
 	private static readonly string ElsePiName = "else";

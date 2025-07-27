@@ -16,11 +16,6 @@ using Castle.DynamicProxy;
 
 namespace Castle.Windsor.Tests.Interceptors;
 
-public class CallReporter
-{
-	public bool WasCalled;
-}
-
 public class WasCalledInterceptor(CallReporter reporter) : StandardInterceptor
 {
 	protected override void PreProceed(IInvocation invocation)

@@ -19,7 +19,6 @@ using Castle.Core.Configuration;
 using Castle.Windsor.Core;
 using Castle.Windsor.Facilities.Startable;
 using Castle.Windsor.MicroKernel;
-using Castle.Windsor.MicroKernel.ModelBuilder;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Facilities.Startable.Components;
@@ -286,49 +285,5 @@ public class StartableFacilityTestCase
 		Assert.True(c.StartCalled);
 		_kernel.ReleaseComponent(c);
 		Assert.True(c.StopCalled);
-	}
-}
-
-[Transient]
-public class WithOverloads
-{
-	public bool StartCalled { get; set; }
-	public bool StopCalled { get; set; }
-
-	public void Start()
-	{
-		StartCalled = true;
-	}
-
-	public void Start(int fake)
-	{
-	}
-
-	public void Stop()
-	{
-		StopCalled = true;
-	}
-
-	public void Stop(string fake)
-	{
-	}
-}
-
-public class AddDependency : IComponentModelDescriptor
-{
-	private readonly DependencyModel _dependency;
-
-	public AddDependency(DependencyModel dependency)
-	{
-		_dependency = dependency;
-	}
-
-	public void BuildComponentModel(IKernel kernel, ComponentModel model)
-	{
-		model.Dependencies.Add(_dependency);
-	}
-
-	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-	{
 	}
 }

@@ -37,11 +37,3 @@ public class ConfigurationEnvTestCase
 		Assert.Equal("Hammett", prop.Name);
 	}
 }
-
-internal class CustomEnv(bool isDevelopment) : IEnvironmentInfo
-{
-	public string GetEnvironmentName()
-	{
-		return isDevelopment ? "devel" : "test";
-	}
-}

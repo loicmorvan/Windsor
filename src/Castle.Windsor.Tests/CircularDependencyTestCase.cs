@@ -13,15 +13,12 @@
 // limitations under the License.
 
 using System;
-using System.Reflection;
-using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.XmlFiles;
 using Castle.Windsor.Windsor;
 using Castle.Windsor.Windsor.Configuration.Interpreters;
-using JetBrains.Annotations;
 
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -77,72 +74,7 @@ namespace Castle.Windsor.Tests
 		}
 	}
 
-	[Singleton]
-	[UsedImplicitly]
-	public class SingletonComponent
-	{
-		public static int CtorCallsCount;
-
-		public SingletonComponent()
-		{
-			CtorCallsCount++;
-		}
-
-		public SingletonDependency Dependency { get; set; }
-	}
-
-	[Singleton]
-	[UsedImplicitly]
-	public class SingletonPropertyComponent
-	{
-		public static int CtorCallsCount;
-
-		public SingletonPropertyComponent()
-		{
-			CtorCallsCount++;
-		}
-
-		public SingletonPropertyDependency Dependency { get; set; }
-	}
-
-	[Singleton]
-	[UsedImplicitly]
-	public class SingletonDependency
-	{
-		public SingletonDependency(SingletonComponent c)
-		{
-		}
-	}
-
-	[Singleton]
-	[UsedImplicitly]
-	public class SingletonPropertyDependency
-	{
-		public SingletonPropertyComponent Component { get; set; }
-	}
-
 	namespace IOC51
 	{
-		public interface IPathProvider
-		{
-			string Path { get; }
-		}
-
-		public class AssemblyPath : IPathProvider
-		{
-			public string Path
-			{
-				get
-				{
-					var uriPath = new Uri(typeof(AssemblyPath).GetTypeInfo().Assembly.Location);
-					return uriPath.LocalPath;
-				}
-			}
-		}
-
-		public class RelativeFilePath(IPathProvider basePathProvider, string extensionsPath) : IPathProvider
-		{
-			public string Path { get; } = System.IO.Path.Combine(basePathProvider.Path + "\\", extensionsPath);
-		}
 	}
 }

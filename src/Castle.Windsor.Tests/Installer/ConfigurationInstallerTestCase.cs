@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.MicroKernel.Registration;
-using Castle.Windsor.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.XmlFiles;
-using Castle.Windsor.Windsor;
 using Castle.Windsor.Windsor.Installer;
 
 namespace Castle.Windsor.Tests.Installer;
@@ -59,20 +56,5 @@ public class ConfigurationInstallerTestCase : AbstractContainerTestCase
 
 		var camera = Container.Resolve<ICamera>();
 		Assert.Equal("from configuration", camera.Name);
-	}
-}
-
-internal class Installer : IWindsorInstaller
-{
-	private readonly Action<IWindsorContainer> _install;
-
-	public Installer(Action<IWindsorContainer> install)
-	{
-		_install = install;
-	}
-
-	public void Install(IWindsorContainer container, IConfigurationStore store)
-	{
-		_install(container);
 	}
 }

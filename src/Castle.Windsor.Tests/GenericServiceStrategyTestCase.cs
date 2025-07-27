@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
-using Castle.Windsor.MicroKernel.Handlers;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 
@@ -66,20 +63,5 @@ public class GenericServiceStrategyTestCase : AbstractContainerTestCase
 			.ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((_, _) => false)));
 
 		Assert.Throws<ComponentNotFoundException>(() => Container.Resolve<IGeneric<int>>());
-	}
-}
-
-internal class DelegatingServiceStrategy : IGenericServiceStrategy
-{
-	private readonly Func<Type, ComponentModel, bool> _supports;
-
-	public DelegatingServiceStrategy(Func<Type, ComponentModel, bool> supports)
-	{
-		_supports = supports;
-	}
-
-	public bool Supports(Type service, ComponentModel component)
-	{
-		return _supports.Invoke(service, component);
 	}
 }

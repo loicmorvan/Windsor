@@ -14,7 +14,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Handlers;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
@@ -102,50 +101,5 @@ public class HandlerExtensionsTestCase : AbstractContainerTestCase
 		Kernel.Register(AddResolveExtensions(componentRegistration, new ReturnAExtension(a, true)));
 		var resolvedA = Kernel.Resolve<A>();
 		Assert.Same(a, resolvedA);
-	}
-}
-
-public class ReturnAExtension : IResolveExtension
-{
-	private readonly A _a;
-	private readonly bool _proceed;
-
-	public ReturnAExtension(A a, bool proceed = false)
-	{
-		_a = a;
-		_proceed = proceed;
-	}
-
-	public void Init(IKernel kernel, IHandler handler)
-	{
-	}
-
-	public void Intercept(ResolveInvocation invocation)
-	{
-		if (_proceed) invocation.Proceed();
-		invocation.ResolvedInstance = _a;
-	}
-}
-
-public class CollectItemsExtension : IResolveExtension, IReleaseExtension
-{
-	public IList<object> ReleasedItems { get; } = new List<object>();
-
-	public IList<object> ResolvedItems { get; } = new List<object>();
-
-	public void Intercept(ReleaseInvocation invocation)
-	{
-		invocation.Proceed();
-		ReleasedItems.Add(invocation.Instance);
-	}
-
-	public void Init(IKernel kernel, IHandler handler)
-	{
-	}
-
-	public void Intercept(ResolveInvocation invocation)
-	{
-		invocation.Proceed();
-		ResolvedItems.Add(invocation.ResolvedInstance);
 	}
 }

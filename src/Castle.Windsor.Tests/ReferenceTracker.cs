@@ -85,7 +85,7 @@ public readonly struct ReferenceTracker<T> where T : class
 	///         (See <see cref="Track" />.)
 	///     </para>
 	/// </summary>
-	public void AssertStillReferencedAndDo(Action<T> action)
+	public void AssertStillReferencedAndDo([InstantHandle] Action<T> action)
 	{
 		ArgumentNullException.ThrowIfNull(action);
 

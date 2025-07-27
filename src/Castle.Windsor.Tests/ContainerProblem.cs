@@ -14,9 +14,6 @@
 
 namespace Castle.Windsor.Tests;
 
-using System.Collections.Generic;
-
-using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
 
@@ -35,23 +32,5 @@ public class ContainerProblem
 		// IChild child = (IChild)container["child"];
 		// IParent parent = (IParent) container["parent"];
 		container.Resolve<IParent>("parent");
-	}
-}
-
-public interface IParent : IList<IChild>;
-
-public interface IChild;
-
-public class Child : IChild
-{
-	public Child(IParent parent)
-	{
-	}
-}
-
-public class Parent : List<IChild>, IParent
-{
-	public Parent(IKernel kernel)
-	{
 	}
 }

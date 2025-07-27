@@ -18,11 +18,3 @@
 namespace Castle.Windsor.Tests.ClassComponents;
 
 public interface IMapper<T>;
-
-public class CommonImpl1Mapper : IMapper<CommonImpl1>;
-
-public class CommonImpl2Mapper : IMapper<CommonImpl2>;
-
-public interface IGenericMapper<T>;
-
-public class GenericMapper<T> : IGenericMapper<IGenericClassWithParameter<T>>;

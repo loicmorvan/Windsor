@@ -12,12 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using System.Linq;
 using Castle.Windsor.Tests.XmlFiles;
 using Castle.Windsor.Windsor;
 using Castle.Windsor.Windsor.Installer;
-using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests;
 
@@ -37,41 +35,4 @@ public class ServiceOverridesStackOverflowTestCase
 		Assert.Same(array[0], container.Resolve<IDevice>("device2"));
 		Assert.Same(array[1], container.Resolve<IDevice>("device3"));
 	}
-}
-
-[UsedImplicitly]
-public class MessageChannel(IDevice root)
-{
-	public IDevice RootDevice { get; } = root;
-}
-
-public interface IDevice
-{
-	MessageChannel Channel { get; }
-	IEnumerable<IDevice> Children { get; }
-}
-
-public abstract class BaseDevice : IDevice
-{
-	public abstract IEnumerable<IDevice> Children { get; }
-
-	// ReSharper disable once UnusedAutoPropertyAccessor.Global
-	public MessageChannel Channel { get; set; }
-}
-
-[UsedImplicitly]
-public class TestDevice : BaseDevice
-{
-	private readonly List<IDevice> _children;
-
-	public TestDevice()
-	{
-	}
-
-	public TestDevice(IEnumerable<IDevice> theChildren)
-	{
-		_children = new List<IDevice>(theChildren);
-	}
-
-	public override IEnumerable<IDevice> Children => _children;
 }

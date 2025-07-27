@@ -32,18 +32,3 @@ public class PrivateSettersTestCase
 		Assert.Equal(1234, item.Port);
 	}
 }
-
-public interface IMyConfiguration
-{
-	int Port { get; }
-}
-
-public class MyConfiguration : IMyConfiguration
-{
-	public MyConfiguration(int port)
-	{
-		Port = port;
-	}
-
-	public int Port { get; }
-}

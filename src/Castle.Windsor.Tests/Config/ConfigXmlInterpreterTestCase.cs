@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System.Linq;
-using Castle.Core.Configuration;
 using Castle.Core.Resource;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
@@ -162,20 +161,5 @@ public class ConfigXmlInterpreterTestCase
 </castle>"));
 
 		Assert.Throws<ConfigurationProcessingException>(() => { new WindsorContainer().Install(facilityConfig); });
-	}
-}
-
-public class DummyFacility : IFacility
-{
-	public void Init(IKernel kernel, IConfiguration facilityConfig)
-	{
-		Assert.NotNull(facilityConfig);
-		var childItem = facilityConfig.Children["item"];
-		Assert.NotNull(childItem);
-		Assert.Equal("value", childItem.Value);
-	}
-
-	public void Terminate()
-	{
 	}
 }
