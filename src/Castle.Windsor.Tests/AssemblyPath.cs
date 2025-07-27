@@ -1,8 +1,10 @@
 using System;
 using System.Reflection;
+using JetBrains.Annotations;
 
-namespace Castle.Windsor.Tests.IOC51;
+namespace Castle.Windsor.Tests;
 
+[UsedImplicitly]
 public class AssemblyPath : IPathProvider
 {
     public string Path

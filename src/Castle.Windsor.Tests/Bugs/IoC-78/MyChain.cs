@@ -6,6 +6,7 @@ public class MyChain : IChain
     {
     }
 
+    // ReSharper disable once UnusedParameter.Local
     public MyChain(IChain chain)
     {
     }

@@ -43,6 +43,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 		AssertIsProxy(calculator);
 		Assert.IsType<ISimpleMixIn>(calculator, false);
 
+		// ReSharper disable once SuspiciousTypeConversion.Global
 		var mixin = (ISimpleMixIn)calculator;
 		mixin.DoSomething();
 	}
@@ -59,6 +60,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 		AssertIsProxy(calculator);
 		Assert.IsType<ISimpleMixIn>(calculator, false);
 
+		// ReSharper disable once SuspiciousTypeConversion.Global
 		var mixin = (ISimpleMixIn)calculator;
 		mixin.DoSomething();
 	}
@@ -74,6 +76,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 		AssertIsProxy(calculator);
 		Assert.IsType<ISimpleMixIn>(calculator, false);
 
+		// ReSharper disable once SuspiciousTypeConversion.Global
 		var mixin = (ISimpleMixIn)calculator;
 		mixin.DoSomething();
 	}
@@ -89,6 +92,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 		AssertIsProxy(calculator);
 		Assert.IsType<ISimpleMixIn>(calculator, false);
 
+		// ReSharper disable once SuspiciousTypeConversion.Global
 		var mixin = (ISimpleMixIn)calculator;
 		mixin.DoSomething();
 	}
@@ -171,6 +175,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 		AssertIsProxy(calculator);
 		Assert.IsType<ISimpleService>(calculator, false);
 
+		// ReSharper disable once SuspiciousTypeConversion.Global
 		var mixin = (ISimpleService)calculator;
 		mixin.Operation();
 		Container.Release(mixin);

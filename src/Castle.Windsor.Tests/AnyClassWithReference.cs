@@ -1,5 +1,8 @@
 using Castle.Windsor.Core;
 
+// ReSharper disable UnusedParameter.Local
+// ReSharper disable UnusedMember.Global
+
 namespace Castle.Windsor.Tests;
 
 [Transient]

@@ -10,6 +10,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace Castle.Windsor.Core.Internal;
@@ -43,5 +44,5 @@ public class GraphNode :
 		}
 	}
 
-	IVertex[] IVertex.Adjacencies => Dependents;
+	IReadOnlyList<IVertex> IVertex.Adjacencies => Dependents;
 }

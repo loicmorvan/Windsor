@@ -14,30 +14,28 @@
 
 using System.Diagnostics;
 
+// ReSharper disable NotAccessedField.Local
+// ReSharper disable UnusedMember.Local
+
 namespace Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
 
-public class MasterDetailsDebuggerViewItem
+public class MasterDetailsDebuggerViewItem(object master, string masterDescription, string masterName, object[] details)
 {
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly string _masterDescription;
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private readonly string _masterDescription = masterDescription;
 
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly string _masterName;
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private readonly string _masterName = masterName;
 
-	public MasterDetailsDebuggerViewItem(object master, string masterDescription, string masterName, object[] details)
-	{
-		AMaster = master;
-		_masterDescription = masterDescription;
-		_masterName = masterName;
-		Details = details;
-	}
+    /// <summary>
+    ///     Stupid name, but debugger views in Visual Studio display items in alphabetical order so if we want to have that
+    ///     item on top its name must be alphabetically before <see cref="Details" />
+    /// </summary>
+    [DebuggerDisplay("{masterDescription,nq}", Name = "{masterName,nq}")]
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
+    // ReSharper disable once UnusedMember.Global
+    public object AMaster { get; } = master;
 
-	/// <summary>
-	///     Stupid name, but debugger views in Visual Studio display items in alphabetical order so if we want to have that item on top its name must be alphabetically before <see cref = "Details" />
-	/// </summary>
-	[DebuggerDisplay("{masterDescription,nq}", Name = "{masterName,nq}")]
-	public object AMaster { get; }
-
-	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-	public object[] Details { get; }
+    [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    public object[] Details { get; } = details;
 }

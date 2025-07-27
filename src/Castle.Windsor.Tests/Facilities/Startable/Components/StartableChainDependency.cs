@@ -7,6 +7,7 @@ public class StartableChainDependency : IStartable
 {
     private readonly LifecycleCounter _lifecycleCounter;
 
+    // ReSharper disable once UnusedParameter.Local
     public StartableChainDependency(StartableChainGeneric<string> item, LifecycleCounter lifecycleCounter)
     {
         _lifecycleCounter = lifecycleCounter;

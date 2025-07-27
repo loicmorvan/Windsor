@@ -23,58 +23,53 @@ using Castle.Windsor.Windsor.Configuration.Interpreters;
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace Castle.Windsor.Tests
+namespace Castle.Windsor.Tests;
+
+public class CircularDependencyTestCase : AbstractContainerTestCase
 {
-	public class CircularDependencyTestCase : AbstractContainerTestCase
-	{
-		[Fact]
-		public void ShouldNotGetCircularDependencyExceptionWhenResolvingTypeOnItselfWithDifferentModels()
-		{
-			var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("IOC-51.xml")));
-			Assert.NotNull(container.Resolve<object>("path.fileFinder"));
-		}
+    [Fact]
+    public void ShouldNotGetCircularDependencyExceptionWhenResolvingTypeOnItselfWithDifferentModels()
+    {
+        var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("IOC-51.xml")));
+        Assert.NotNull(container.Resolve<object>("path.fileFinder"));
+    }
 
-		[Fact]
-		public void ShouldNotSetTheViewControllerProperty()
-		{
-			Container.Register(Component.For<IController>().ImplementedBy<Controller>().Named("controller"),
-				Component.For<IView>().ImplementedBy<View>().Named("view"));
-			var controller = Container.Resolve<Controller>("controller");
-			Assert.NotNull(controller.View);
-			Assert.Null(controller.View.Controller);
-		}
+    [Fact]
+    public void ShouldNotSetTheViewControllerProperty()
+    {
+        Container.Register(Component.For<IController>().ImplementedBy<Controller>().Named("controller"),
+            Component.For<IView>().ImplementedBy<View>().Named("view"));
+        var controller = Container.Resolve<Controller>("controller");
+        Assert.NotNull(controller.View);
+        Assert.Null(controller.View.Controller);
+    }
 
-		[Fact]
-		public void Should_not_try_to_instantiate_singletons_twice_when_circular_dependency()
-		{
-			SingletonComponent.CtorCallsCount = 0;
-			Container.Register(Component.For<SingletonComponent>(),
-				Component.For<SingletonDependency>());
+    [Fact]
+    public void Should_not_try_to_instantiate_singletons_twice_when_circular_dependency()
+    {
+        SingletonComponent.CtorCallsCount = 0;
+        Container.Register(Component.For<SingletonComponent>(),
+            Component.For<SingletonDependency>());
 
-			var component = Container.Resolve<SingletonComponent>();
-			Assert.NotNull(component.Dependency);
-			Assert.Equal(1, SingletonComponent.CtorCallsCount);
-		}
+        var component = Container.Resolve<SingletonComponent>();
+        Assert.NotNull(component.Dependency);
+        Assert.Equal(1, SingletonComponent.CtorCallsCount);
+    }
 
-		[Fact]
-		public void ThrowsACircularDependencyException2()
-		{
-			Container.Register(Component.For<CompA>().Named("compA"),
-				Component.For<CompB>().Named("compB"),
-				Component.For<CompC>().Named("compC"),
-				Component.For<CompD>().Named("compD"));
+    [Fact]
+    public void ThrowsACircularDependencyException2()
+    {
+        Container.Register(Component.For<CompA>().Named("compA"),
+            Component.For<CompB>().Named("compB"),
+            Component.For<CompC>().Named("compC"),
+            Component.For<CompD>().Named("compD"));
 
-			var exception =
-				Assert.Throws<CircularDependencyException>(() => Container.Resolve<CompA>("compA"));
-			var expectedMessage =
-				string.Format(
-					"Dependency cycle has been detected when trying to resolve component 'compA'.{0}The resolution tree that resulted in the cycle is the following:{0}Component 'compA' resolved as dependency of{0}	component 'compD' resolved as dependency of{0}	component 'compC' resolved as dependency of{0}	component 'compB' resolved as dependency of{0}	component 'compA' which is the root component being resolved.{0}",
-					Environment.NewLine);
-			Assert.Equal(expectedMessage, exception.Message);
-		}
-	}
-
-	namespace IOC51
-	{
-	}
+        var exception =
+            Assert.Throws<CircularDependencyException>(() => Container.Resolve<CompA>("compA"));
+        var expectedMessage =
+            string.Format(
+                "Dependency cycle has been detected when trying to resolve component 'compA'.{0}The resolution tree that resulted in the cycle is the following:{0}Component 'compA' resolved as dependency of{0}	component 'compD' resolved as dependency of{0}	component 'compC' resolved as dependency of{0}	component 'compB' resolved as dependency of{0}	component 'compA' which is the root component being resolved.{0}",
+                Environment.NewLine);
+        Assert.Equal(expectedMessage, exception.Message);
+    }
 }

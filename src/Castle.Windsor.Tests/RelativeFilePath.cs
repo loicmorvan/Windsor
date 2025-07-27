@@ -1,4 +1,4 @@
-namespace Castle.Windsor.Tests.IOC51;
+namespace Castle.Windsor.Tests;
 
 public class RelativeFilePath(IPathProvider basePathProvider, string extensionsPath) : IPathProvider
 {
