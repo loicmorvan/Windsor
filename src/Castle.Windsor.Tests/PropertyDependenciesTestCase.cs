@@ -39,7 +39,7 @@ public class PropertyDependenciesTestCase : AbstractContainerTestCase
 	public void Can_opt_out_of_setting_properties_open_generic_via_enum()
 	{
 		Container.Register(Component.For(typeof(GenericImpl2<>))
-			.DependsOn(Dependency.OnValue(typeof(int), 5))
+			.DependsOn(Dependency.OnValue<int>(5))
 			.Properties(PropertyFilter.IgnoreAll));
 
 		var item = Container.Resolve<GenericImpl2<A>>();
@@ -50,7 +50,7 @@ public class PropertyDependenciesTestCase : AbstractContainerTestCase
 	public void Can_opt_out_of_setting_properties_open_generic_via_predicate()
 	{
 		Container.Register(Component.For(typeof(GenericImpl2<>))
-			.DependsOn(Dependency.OnValue(typeof(int), 5))
+			.DependsOn(Dependency.OnValue<int>(5))
 			.PropertiesIgnore(_ => true));
 
 		var item = Container.Resolve<GenericImpl2<A>>();

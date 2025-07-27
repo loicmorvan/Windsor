@@ -49,7 +49,7 @@ public class RuntimeParametersTestCase : AbstractContainerTestCase
 			Component.For<HasCustomDependency>().DependsOn(new Dictionary<object, object> { { "name", new CompA() } }));
 
 		Assert.Equal(HandlerState.Valid, kernel.GetHandler(typeof(HasCustomDependency)).CurrentState);
-		Assert.NotNull(kernel.Resolve(typeof(NeedClassWithCustomerDependency)));
+		Assert.NotNull(kernel.Resolve<NeedClassWithCustomerDependency>());
 	}
 
 	[Fact]

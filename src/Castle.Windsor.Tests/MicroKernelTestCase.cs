@@ -52,8 +52,8 @@ public class MicroKernelTestCase : AbstractContainerTestCase
 	public void AddClassThatHasTwoParametersOfSameTypeAndNoOverloads()
 	{
 		Kernel.Register(Component.For(typeof(ClassWithTwoParametersWithSameType)).Named("test"));
-		Kernel.Register(Component.For<ICommon>().ImplementedBy(typeof(CommonImpl1)).Named("test2"));
-		var resolved = Kernel.Resolve(typeof(ClassWithTwoParametersWithSameType));
+		Kernel.Register(Component.For<ICommon>().ImplementedBy<CommonImpl1>().Named("test2"));
+		var resolved = Kernel.Resolve<ClassWithTwoParametersWithSameType>();
 		Assert.NotNull(resolved);
 	}
 
@@ -200,7 +200,7 @@ public class MicroKernelTestCase : AbstractContainerTestCase
 	{
 		Kernel.Register(Component.For<ICommon>()
 			.ImplementedBy<CommonImplWithDependency>()
-			.DynamicParameters((_, d) => d.AddTyped(typeof(ICustomer), new CustomerImpl()))
+			.DynamicParameters((_, d) => d.AddTyped<ICustomer>(new CustomerImpl()))
 		);
 
 		var services = Kernel.ResolveAll<ICommon>();
@@ -210,7 +210,7 @@ public class MicroKernelTestCase : AbstractContainerTestCase
 	[Fact]
 	public void ResolveAll_resolves_when_dependency_provideded_inline()
 	{
-		Kernel.Register(Component.For<ICommon>().ImplementedBy(typeof(CommonImplWithDependency)).Named("test"));
+		Kernel.Register(Component.For<ICommon>().ImplementedBy<CommonImplWithDependency>().Named("test"));
 		var services = Kernel.ResolveAll<ICommon>(new Arguments().AddNamed("customer", new CustomerImpl()));
 		Assert.Single(services);
 	}

@@ -155,7 +155,7 @@ public class TypedParametersTestCase : AbstractContainerTestCase
 		Kernel.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)).Named("default"));
 		Kernel.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)).Named("non-default"));
 		Kernel.Register(Component.For(typeof(UsesIGeneric<>))
-			.DependsOn(ServiceOverride.ForKey(typeof(IGeneric<string>)).Eq("non-default")));
+			.DependsOn(ServiceOverride.ForKey<IGeneric<string>>().Eq("non-default")));
 
 		var item = Kernel.Resolve<UsesIGeneric<string>>();
 
@@ -173,7 +173,7 @@ public class TypedParametersTestCase : AbstractContainerTestCase
 				.DependsOn(Property.ForKey("value").Eq(2)),
 			Component.For(typeof(UsesIGeneric<>))
 				.DependsOn(ServiceOverride.ForKey(typeof(IGeneric<>)).Eq("non-default-open"),
-					ServiceOverride.ForKey(typeof(IGeneric<int>)).Eq("non-default-int"))
+					ServiceOverride.ForKey<IGeneric<int>>().Eq("non-default-int"))
 		);
 
 		var withString = Kernel.Resolve<UsesIGeneric<string>>();

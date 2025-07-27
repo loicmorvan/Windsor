@@ -91,7 +91,7 @@ public class PropertiesDependenciesModelInspector(IConversionManager converter) 
 					"Error on properties inspection. Could not convert the inspectionBehavior attribute value into an expected enum value. " +
 					"Value found is '{0}' while possible values are '{1}'",
 					enumStringVal,
-					string.Join(", ", Enum.GetNames(typeof(PropertiesInspectionBehavior))));
+					string.Join(", ", Enum.GetNames<PropertiesInspectionBehavior>()));
 
 			throw new ConverterException(message);
 		}

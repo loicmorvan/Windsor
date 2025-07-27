@@ -33,17 +33,17 @@ public class ModelInstaller
     public static void RegisterServiceCollection(IServiceCollection services)
     {
         services.AddTransient<ServiceProviderOnlyTransient>();
-        services.AddTransient(typeof(ServiceProviderOnlyTransientGeneric<OpenOptions>));
+        services.AddTransient<ServiceProviderOnlyTransientGeneric<OpenOptions>>();
         services.AddTransient<ServiceProviderOnlyTransientGeneric<ClosedOptions>>();
         services.AddTransient<ServiceProviderOnlyTransientDisposable>();
 
         services.AddScoped<ServiceProviderOnlyScoped>();
-        services.AddScoped(typeof(ServiceProviderOnlyScopedGeneric<OpenOptions>));
+        services.AddScoped<ServiceProviderOnlyScopedGeneric<OpenOptions>>();
         services.AddScoped<ServiceProviderOnlyScopedGeneric<ClosedOptions>>();
         services.AddScoped<ServiceProviderOnlyScopedDisposable>();
 
         services.AddSingleton<ServiceProviderOnlySingleton>();
-        services.AddSingleton(typeof(ServiceProviderOnlySingletonGeneric<OpenOptions>));
+        services.AddSingleton<ServiceProviderOnlySingletonGeneric<OpenOptions>>();
         services.AddSingleton<ServiceProviderOnlySingletonGeneric<ClosedOptions>>();
         services.AddSingleton<ServiceProviderOnlySingletonDisposable>();
 

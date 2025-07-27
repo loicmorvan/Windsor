@@ -168,8 +168,7 @@ public class TypeNameConverter : AbstractTypeConverter
 
 	private void Insert(IDictionary<string, MultiType> collection, string key, Type value)
 	{
-		MultiType existing;
-		if (collection.TryGetValue(key, out existing) == false)
+		if (collection.TryGetValue(key, out var existing) == false)
 		{
 			collection[key] = new MultiType(value);
 			return;
@@ -200,8 +199,7 @@ public class TypeNameConverter : AbstractTypeConverter
 
 	private Type GetUniqueType(string name, IDictionary<string, MultiType> map, string description)
 	{
-		MultiType type;
-		if (map.TryGetValue(name, out type))
+		if (map.TryGetValue(name, out var type))
 		{
 			EnsureUnique(type, name, description);
 			return type.Single();

@@ -30,8 +30,7 @@ public class CustomLifestyleScoped : AbstractLifestyleManager
 		var scope = CustomLifestyleInstanceScope.Current;
 		if (scope == null) throw new InvalidOperationException("Scope is null");
 
-		Burden instance;
-		if (scope.Cache.TryGetValue(Model, out instance) == false)
+		if (scope.Cache.TryGetValue(Model, out var instance) == false)
 		{
 			instance = base.CreateInstance(context, trackedExternally);
 			scope.Cache[Model] = instance;

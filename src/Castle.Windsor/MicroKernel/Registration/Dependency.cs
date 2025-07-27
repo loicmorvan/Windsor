@@ -108,7 +108,7 @@ public sealed class Dependency
 	public static ServiceOverride OnComponentCollection<TCollectionDependencyType>(params string[] componentNames)
 		where TCollectionDependencyType : IEnumerable
 	{
-		return ServiceOverride.ForKey(typeof(TCollectionDependencyType)).Eq(componentNames);
+		return ServiceOverride.ForKey<TCollectionDependencyType>().Eq(componentNames);
 	}
 
 	/// <summary>
@@ -134,7 +134,7 @@ public sealed class Dependency
 	public static ServiceOverride OnComponentCollection<TCollectionDependencyType>(params Type[] componentTypes)
 		where TCollectionDependencyType : IEnumerable
 	{
-		return ServiceOverride.ForKey(typeof(TCollectionDependencyType)).Eq(componentTypes);
+		return ServiceOverride.ForKey<TCollectionDependencyType>().Eq(componentTypes);
 	}
 
 	/// <summary>Specifies that value <paramref name = "value" /> should be used to satisfy dependencies matched by <paramref name = "dependencyName" /></summary>
@@ -157,8 +157,7 @@ public sealed class Dependency
 
 	internal bool Accept<TItem>(ICollection<TItem> items) where TItem : class
 	{
-		var castItem = _item as TItem;
-		if (castItem != null)
+		if (_item is TItem castItem)
 		{
 			items.Add(castItem);
 			return true;

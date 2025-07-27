@@ -52,7 +52,7 @@ public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLi
 
 	public override void Dispose()
 	{
-		if (_pool != null) _pool.Dispose();
+		_pool?.Dispose();
 	}
 
 	public override bool Release(object instance)

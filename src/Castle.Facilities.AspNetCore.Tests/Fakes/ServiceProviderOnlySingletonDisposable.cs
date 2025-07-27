@@ -2,7 +2,8 @@ using System;
 
 namespace Castle.Facilities.AspNetCore.Tests.Fakes;
 
-public class ServiceProviderOnlySingletonDisposable : ServiceProviderOnlySingleton, IDisposable, IDisposableObservable
+public sealed class ServiceProviderOnlySingletonDisposable : ServiceProviderOnlySingleton, IDisposable,
+    IDisposableObservable
 {
     public void Dispose()
     {

@@ -32,7 +32,7 @@ public class SynchronizationProblemTestCase : IDisposable
 			new WindsorContainer(
 				new XmlInterpreter(ConfigHelper.ResolveConfigPath("Configuration2/synchtest_config.xml")));
 
-		_container.Resolve(typeof(ComponentWithConfigs));
+		_container.Resolve<ComponentWithConfigs>();
 	}
 
 	public void Dispose()
@@ -67,7 +67,7 @@ public class SynchronizationProblemTestCase : IDisposable
 		while (!_stopEvent.WaitOne(1))
 			try
 			{
-				var comp = (ComponentWithConfigs)_container.Resolve(typeof(ComponentWithConfigs));
+				var comp = _container.Resolve<ComponentWithConfigs>();
 
 				Assert.Equal(AppContext.BaseDirectory, comp.Name);
 				Assert.Equal(90, comp.Port);

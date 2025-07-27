@@ -19,18 +19,11 @@ using Castle.Windsor.MicroKernel;
 
 namespace Castle.Windsor.Windsor.Diagnostics;
 
-public class PotentialLifestyleMismatchesDiagnostic : IPotentialLifestyleMismatchesDiagnostic
+public class PotentialLifestyleMismatchesDiagnostic(IKernel kernel) : IPotentialLifestyleMismatchesDiagnostic
 {
-    private readonly IKernel _kernel;
-
-    public PotentialLifestyleMismatchesDiagnostic(IKernel kernel)
-    {
-        _kernel = kernel;
-    }
-
     public IHandler[][] Inspect()
     {
-        var allHandlers = _kernel.GetAssignableHandlers(typeof(object));
+        var allHandlers = kernel.GetAssignableHandlers(typeof(object));
         var handlersByComponentModel = allHandlers.ToDictionary(h => h.ComponentModel);
 
         var items = new List<MismatchedLifestyleDependency>();
@@ -42,7 +35,7 @@ public class PotentialLifestyleMismatchesDiagnostic : IPotentialLifestyleMismatc
         return items.Select(m => m.GetHandlers()).ToArray();
     }
 
-    private IEnumerable<MismatchedLifestyleDependency> GetMismatch(MismatchedLifestyleDependency parent,
+    private static IEnumerable<MismatchedLifestyleDependency> GetMismatch(MismatchedLifestyleDependency parent,
         ComponentModel component,
         IDictionary<ComponentModel, IHandler> model2Handler)
     {
@@ -67,7 +60,7 @@ public class PotentialLifestyleMismatchesDiagnostic : IPotentialLifestyleMismatc
         }
     }
 
-    private IEnumerable<MismatchedLifestyleDependency> GetMismatches(IHandler handler,
+    private static IEnumerable<MismatchedLifestyleDependency> GetMismatches(IHandler handler,
         IDictionary<ComponentModel, IHandler> model2Handler)
     {
         if (IsSingleton(handler) == false)
@@ -85,10 +78,10 @@ public class PotentialLifestyleMismatchesDiagnostic : IPotentialLifestyleMismatc
         }
     }
 
-    private bool IsSingleton(IHandler component)
+    private static bool IsSingleton(IHandler component)
     {
         var lifestyle = component.ComponentModel.LifestyleType;
-        return lifestyle == LifestyleType.Undefined || lifestyle == LifestyleType.Singleton;
+        return lifestyle is LifestyleType.Undefined or LifestyleType.Singleton;
     }
 
     private class MismatchedLifestyleDependency
@@ -110,8 +103,10 @@ public class PotentialLifestyleMismatchesDiagnostic : IPotentialLifestyleMismatc
             }
         }
 
+        // ReSharper disable once MemberCanBePrivate.Local
         public IHandler Handler { get; }
 
+        // ReSharper disable once MemberCanBePrivate.Local
         public MismatchedLifestyleDependency Parent { get; }
 
         public bool Checked(ComponentModel component)
@@ -133,10 +128,7 @@ public class PotentialLifestyleMismatchesDiagnostic : IPotentialLifestyleMismatc
 
         private void BuildHandlersList(List<IHandler> handlers)
         {
-            if (Parent != null)
-            {
-                Parent.BuildHandlersList(handlers);
-            }
+            Parent?.BuildHandlersList(handlers);
 
             handlers.Add(Handler);
         }

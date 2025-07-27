@@ -130,8 +130,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 			if (selectorsOpinion != null) return selectorsOpinion;
 		}
 
-		IHandler value;
-		HandlerByNameCache.TryGetValue(name, out value);
+		HandlerByNameCache.TryGetValue(name, out var value);
 		return value;
 	}
 
@@ -144,8 +143,10 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 			if (selectorsOpinion != null) return selectorsOpinion;
 		}
 
-		IHandler handler;
-		if (HandlerByServiceCache.TryGetValue(service, out handler)) return handler;
+		if (HandlerByServiceCache.TryGetValue(service, out var handler))
+		{
+			return handler;
+		}
 
 		if (service.GetTypeInfo().IsGenericType && service.GetTypeInfo().IsGenericTypeDefinition == false)
 		{
@@ -170,9 +171,12 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 			if (filtersOpinion != null) return filtersOpinion;
 		}
 
-		IHandler[] result;
 		using var locker = Lock.ForReadingUpgradeable();
-		if (HandlerListsByTypeCache.TryGetValue(service, out result)) return result;
+		if (HandlerListsByTypeCache.TryGetValue(service, out var result))
+		{
+			return result;
+		}
+
 		result = GetHandlersNoLock(service);
 
 		locker.Upgrade();
@@ -201,8 +205,8 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 			foreach (var service in handler.ComponentModel.Services)
 			{
 				var handlerForService = serviceSelector(service);
-				HandlerWithPriority previous;
-				if (Service2Handler.TryGetValue(service, out previous) == false || handlerForService.Triumphs(previous))
+				if (Service2Handler.TryGetValue(service, out var previous) == false ||
+				    handlerForService.Triumphs(previous))
 					Service2Handler[service] = handlerForService;
 			}
 
@@ -212,9 +216,11 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 
 	protected IHandler[] GetAssignableHandlersNoFiltering(Type service)
 	{
-		IHandler[] result;
 		using var locker = Lock.ForReadingUpgradeable();
-		if (_assignableHandlerListsByTypeCache.TryGetValue(service, out result)) return result;
+		if (_assignableHandlerListsByTypeCache.TryGetValue(service, out var result))
+		{
+			return result;
+		}
 
 		locker.Upgrade();
 		if (_assignableHandlerListsByTypeCache.TryGetValue(service, out result)) return result;

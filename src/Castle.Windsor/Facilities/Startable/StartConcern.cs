@@ -27,9 +27,9 @@ public class StartConcern : ICommissionConcern
 
 	public void Apply(ComponentModel model, object component)
 	{
-		if (component is IStartable)
+		if (component is IStartable startable)
 		{
-			(component as IStartable).Start();
+			startable.Start();
 		}
 		else if (model.Configuration != null)
 		{

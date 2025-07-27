@@ -22,43 +22,36 @@ using Castle.Windsor.MicroKernel.Resolvers;
 
 namespace Castle.Windsor.Windsor.Diagnostics;
 
-public class UsingContainerAsServiceLocatorDiagnostic : IUsingContainerAsServiceLocatorDiagnostic
+public class UsingContainerAsServiceLocatorDiagnostic(IKernel kernel) : IUsingContainerAsServiceLocatorDiagnostic
 {
-	public static readonly Type[] ContainerTypes =
-	[
-		typeof(IKernel),
-		typeof(IWindsorContainer),
-		typeof(IKernelEvents),
-		typeof(IKernelInternal),
-		typeof(DefaultKernel),
-		typeof(WindsorContainer)
-	];
+    private static readonly Type[] ContainerTypes =
+    [
+        typeof(IKernel),
+        typeof(IWindsorContainer),
+        typeof(IKernelEvents),
+        typeof(IKernelInternal),
+        typeof(DefaultKernel),
+        typeof(WindsorContainer)
+    ];
 
-	public static readonly Predicate<IHandler>[] ExceptionsToTheRule =
-	[
-		h => h.ComponentModel.Implementation.Is<IInterceptor>(),
-		h => h.ComponentModel.Services.Any(s => s.Is<ILazyComponentLoader>()),
-		h => h.ComponentModel.Implementation == typeof(LazyEx<>)
-	];
+    private static readonly Predicate<IHandler>[] ExceptionsToTheRule =
+    [
+        h => h.ComponentModel.Implementation.Is<IInterceptor>(),
+        h => h.ComponentModel.Services.Any(s => s.Is<ILazyComponentLoader>()),
+        h => h.ComponentModel.Implementation == typeof(LazyEx<>)
+    ];
 
-	private readonly IKernel _kernel;
+    public IHandler[] Inspect()
+    {
+        var allHandlers = kernel.GetAssignableHandlers(typeof(object));
+        var handlersWithContainerDependency = allHandlers.Where(HasDependencyOnTheContainer);
+        return handlersWithContainerDependency
+            .Where(h => ExceptionsToTheRule.Any(e => e(h)) == false)
+            .ToArray();
+    }
 
-	public UsingContainerAsServiceLocatorDiagnostic(IKernel kernel)
-	{
-		_kernel = kernel;
-	}
-
-	public IHandler[] Inspect()
-	{
-		var allHandlers = _kernel.GetAssignableHandlers(typeof(object));
-		var handlersWithContainerDependency = allHandlers.Where(HasDependencyOnTheContainer);
-		return handlersWithContainerDependency
-			.Where(h => ExceptionsToTheRule.Any(e => e(h)) == false)
-			.ToArray();
-	}
-
-	private bool HasDependencyOnTheContainer(IHandler handler)
-	{
-		return handler.ComponentModel.Dependencies.Any(d => ContainerTypes.Any(c => c == d.TargetItemType));
-	}
+    private static bool HasDependencyOnTheContainer(IHandler handler)
+    {
+        return handler.ComponentModel.Dependencies.Any(d => ContainerTypes.Any(c => c == d.TargetItemType));
+    }
 }

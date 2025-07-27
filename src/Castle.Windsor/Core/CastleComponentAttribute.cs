@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core;
-
 using System;
 using System.Reflection;
+
+namespace Castle.Windsor.Core;
 
 /// <summary>
 ///     This attribute is useful only when you want to register all components on an assembly as a batch process. By doing so, the batch register will look for this attribute to distinguish components
@@ -54,7 +54,7 @@ public class CastleComponentAttribute : LifestyleAttribute
 
 	public static CastleComponentAttribute GetDefaultsFor(Type type)
 	{
-		var attribute = (CastleComponentAttribute)type.GetTypeInfo().GetCustomAttribute(typeof(CastleComponentAttribute));
+		var attribute = type.GetTypeInfo().GetCustomAttribute<CastleComponentAttribute>();
 		if (attribute != null)
 		{
 			if (attribute.ServicesSpecifiedExplicitly == false) attribute.Services = [type];

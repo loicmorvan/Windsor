@@ -66,7 +66,7 @@ public class SmartProxyTestCase : IDisposable
 	public void InterfaceProxy()
 	{
 		_container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
-		_container.Register(Component.For(typeof(ICalcService)).ImplementedBy(typeof(CalculatorService)).Named("key"));
+		_container.Register(Component.For(typeof(ICalcService)).ImplementedBy<CalculatorService>().Named("key"));
 
 		var service = _container.Resolve<ICalcService>("key");
 

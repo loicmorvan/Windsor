@@ -203,7 +203,7 @@ public class ServiceOverridesTestCase : AbstractContainerTestCase
 			Component.For<IEmptyService>()
 				.ImplementedBy<EmptyServiceB>(),
 			Component.For<UsesIEmptyService>()
-				.DependsOn(Property.ForKey("emptyService").Is(typeof(EmptyServiceB)))
+				.DependsOn(Property.ForKey("emptyService").Is<EmptyServiceB>())
 		);
 
 		var service = Kernel.Resolve<UsesIEmptyService>();

@@ -392,10 +392,12 @@ public class ComponentRegistrationTestCase : AbstractContainerTestCase
 	[Fact]
 	public void AddComponent_CustomDependenciesDictionary_WorksFine()
 	{
-		var customDependencies = new Dictionary<string, object>();
-		customDependencies["Name"] = "Caption Hook";
-		customDependencies["Address"] = "Fairyland";
-		customDependencies["Age"] = 45;
+		var customDependencies = new Dictionary<string, object>
+		{
+			["Name"] = "Caption Hook",
+			["Address"] = "Fairyland",
+			["Age"] = 45
+		};
 
 		Kernel.Register(
 			Component.For<ICustomer>()

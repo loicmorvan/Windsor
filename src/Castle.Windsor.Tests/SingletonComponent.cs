@@ -14,5 +14,6 @@ public class SingletonComponent
         CtorCallsCount++;
     }
 
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
     public SingletonDependency Dependency { get; set; }
 }

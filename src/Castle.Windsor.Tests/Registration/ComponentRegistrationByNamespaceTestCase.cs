@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Registration;
-
 using System.Linq;
-
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
-
 using RootNamespace;
+
+namespace Castle.Windsor.Tests.Registration;
 
 public class ComponentRegistrationByNamespaceTestCase : AbstractContainerTestCase
 {
@@ -52,7 +50,7 @@ public class ComponentRegistrationByNamespaceTestCase : AbstractContainerTestCas
 	[Fact]
 	public void Registreting_by_namespace_no_subnamespaces_by_type_short()
 	{
-		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).InSameNamespaceAs(typeof(RootComponent)));
+		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).InSameNamespaceAs<RootComponent>());
 
 		Assert.Equal(1, ComponentsCount());
 	}
@@ -88,7 +86,7 @@ public class ComponentRegistrationByNamespaceTestCase : AbstractContainerTestCas
 	public void Registreting_by_namespace_with_subnamespaces_by_type_short()
 	{
 		Kernel.Register(
-			Classes.FromAssembly(GetCurrentAssembly()).InSameNamespaceAs(typeof(RootComponent), true));
+			Classes.FromAssembly(GetCurrentAssembly()).InSameNamespaceAs<RootComponent>(true));
 
 		Assert.Equal(2, ComponentsCount());
 	}

@@ -14,7 +14,7 @@
 
 namespace Castle.Windsor.Windsor.Diagnostics;
 
-public interface IDiagnosticsInspector<in TData, TContext>
+public interface IDiagnosticsInspector<in TData, in TContext>
 {
 	void Inspect(TData data, TContext context);
 }

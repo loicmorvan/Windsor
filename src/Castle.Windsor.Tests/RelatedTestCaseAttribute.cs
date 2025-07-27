@@ -12,19 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
 
-[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true)]
-public class RelatedTestCaseAttribute : Attribute
-{
-	public RelatedTestCaseAttribute(Type relatedTestCaseType, string descriptoin = null)
-	{
-		RelatedTestCaseType = relatedTestCaseType;
-		Descriptoin = descriptoin;
-	}
+// ReSharper disable UnusedMember.Global
 
-	public string Descriptoin { get; set; }
-	public Type RelatedTestCaseType { get; set; }
+namespace Castle.Windsor.Tests;
+
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true)]
+public class RelatedTestCaseAttribute(Type relatedTestCaseType, string description = null) : Attribute
+{
+    public string Description { get; set; } = description;
+    public Type RelatedTestCaseType { get; set; } = relatedTestCaseType;
 }

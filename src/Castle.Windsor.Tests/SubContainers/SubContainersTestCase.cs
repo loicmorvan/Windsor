@@ -54,7 +54,7 @@ public class SubContainersTestCase : AbstractContainerTestCase
 		childContainer.Register(Component.For(typeof(UsesIEmptyService)).Named("component"));
 
 		container.Register(
-			Component.For(typeof(IEmptyService)).ImplementedBy(typeof(EmptyServiceA)).Named("service1"));
+			Component.For(typeof(IEmptyService)).ImplementedBy<EmptyServiceA>().Named("service1"));
 
 		childContainer.Resolve<UsesIEmptyService>();
 	}

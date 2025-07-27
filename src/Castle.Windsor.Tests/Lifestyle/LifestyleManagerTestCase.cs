@@ -90,7 +90,7 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
     {
         Assert.Throws<ArgumentOutOfRangeException>(() =>
             Kernel.Register(Component.For<IComponent>()
-                .ImplementedBy(typeof(TrivialComponent))
+                .ImplementedBy<TrivialComponent>()
                 .Named("a")
                 .LifeStyle.Is(LifestyleType.Undefined)));
     }
@@ -211,7 +211,7 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
     [Fact]
     public void TestPerThread()
     {
-        Kernel.Register(Component.For<IComponent>().ImplementedBy(typeof(PerThreadComponent)).Named("a"));
+        Kernel.Register(Component.For<IComponent>().ImplementedBy<PerThreadComponent>().Named("a"));
 
         var handler = Kernel.GetHandler("a");
 
@@ -229,14 +229,14 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
         thread.Join();
 
         Assert.NotNull(_instance3);
-        Assert.True(!instance1.Equals(_instance3));
+        Assert.False(instance1.Equals(_instance3));
         Assert.True(instance1.Id != _instance3.Id);
     }
 
     [Fact]
     public void TestSingleton()
     {
-        Kernel.Register(Component.For<IComponent>().ImplementedBy(typeof(Components.SingletonComponent)).Named("a"));
+        Kernel.Register(Component.For<IComponent>().ImplementedBy<Components.SingletonComponent>().Named("a"));
 
         var handler = Kernel.GetHandler("a");
 
@@ -270,7 +270,7 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
     [Fact]
     public void TestTransient()
     {
-        Kernel.Register(Component.For<IComponent>().ImplementedBy(typeof(TransientComponent)).Named("a"));
+        Kernel.Register(Component.For<IComponent>().ImplementedBy<TransientComponent>().Named("a"));
 
         var handler = Kernel.GetHandler("a");
 
@@ -280,7 +280,7 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
         Assert.NotNull(instance1);
         Assert.NotNull(instance2);
 
-        Assert.True(!instance1.Equals(instance2));
+        Assert.False(instance1.Equals(instance2));
         Assert.True(instance1.Id != instance2.Id);
     }
 }

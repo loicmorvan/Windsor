@@ -26,10 +26,10 @@ public class ContainerProblem2
 	{
 		IWindsorContainer container = new WindsorContainer();
 
-		container.Register(Component.For(typeof(IS)).ImplementedBy(typeof(Bs)).Named("BS"));
-		container.Register(Component.For(typeof(IC)).ImplementedBy(typeof(CImpl)).Named("C"));
-		container.Register(Component.For(typeof(IWm)).ImplementedBy(typeof(Wm)).Named("WM"));
-		container.Register(Component.For(typeof(ISp)).ImplementedBy(typeof(Sp)).Named("SP"));
+		container.Register(Component.For(typeof(IS)).ImplementedBy<Bs>().Named("BS"));
+		container.Register(Component.For(typeof(IC)).ImplementedBy<CImpl>().Named("C"));
+		container.Register(Component.For(typeof(IWm)).ImplementedBy<Wm>().Named("WM"));
+		container.Register(Component.For(typeof(ISp)).ImplementedBy<Sp>().Named("SP"));
 
 		//TODO: dead code - why is it here?
 		// ComponentModel model = new ComponentModel("R", typeof(R), typeof(R));

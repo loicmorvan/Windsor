@@ -63,7 +63,7 @@ public class HandlerFilterTestCase : AbstractContainerTestCase
 
 		Container.Kernel.AddHandlersFilter(new DelegatingFilter(typeof(ISomeTask), _ => false));
 
-		var instances = Container.ResolveAll(typeof(ISomeTask));
+		var instances = Container.ResolveAll<ISomeTask>();
 
 		Assert.Empty(instances);
 	}
@@ -94,7 +94,7 @@ public class HandlerFilterTestCase : AbstractContainerTestCase
 
 		Container.Kernel.AddHandlersFilter(new FilterThatRemovedFourthTaskAndOrdersTheRest());
 
-		var instances = Container.ResolveAll(typeof(ISomeTask));
+		var instances = Container.ResolveAll<ISomeTask>();
 
 		Assert.Equal(4, instances.Length);
 	}
@@ -106,7 +106,7 @@ public class HandlerFilterTestCase : AbstractContainerTestCase
 
 		Container.Kernel.AddHandlersFilter(new FailIfCalled());
 
-		Container.ResolveAll(typeof(IUnimportantService));
+		Container.ResolveAll<IUnimportantService>();
 	}
 
 	private class FailIfCalled : IHandlersFilter

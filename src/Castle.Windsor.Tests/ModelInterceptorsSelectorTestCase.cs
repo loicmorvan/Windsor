@@ -101,7 +101,7 @@ public class ModelInterceptorsSelectorTestCase
 		var container = new WindsorContainer();
 		container.Register(Component.For<WasCalledInterceptor>()).Register(
 			Component.For<CallReporter>().Instance(reporter),
-			Component.For(typeof(IWatcher)).ImplementedBy(typeof(BirdWatcher)).Named("bird.watcher").LifeStyle.Is(
+			Component.For(typeof(IWatcher)).ImplementedBy<BirdWatcher>().Named("bird.watcher").LifeStyle.Is(
 				LifestyleType.Transient)).Register(Component.For(typeof(Person)).LifeStyle.Is(LifestyleType.Transient));
 		var selector = new WatcherInterceptorSelector();
 		container.Kernel.ProxyFactory.AddInterceptorSelector(selector);

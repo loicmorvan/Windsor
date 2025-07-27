@@ -47,7 +47,7 @@ public class AssemblyInstaller : IWindsorInstaller
 		}
 	}
 
-	private IEnumerable<Type> FilterInstallerTypes(IEnumerable<Type> types)
+	private static IEnumerable<Type> FilterInstallerTypes(IEnumerable<Type> types)
 	{
 		return types.Where(t => t.GetTypeInfo().IsClass &&
 		                        t.GetTypeInfo().IsAbstract == false &&

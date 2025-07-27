@@ -85,8 +85,7 @@ public static class StartableFacilityRegistrationExtensions
 
 	private static TExpression EnsureIs<TExpression>(Expression expression) where TExpression : Expression
 	{
-		var casted = expression as TExpression;
-		if (casted == null)
+		if (expression is not TExpression casted)
 			throw new FacilityException(
 				"Unexpected shape of expression. Expected direct call to method, something like 'x => x.Foo'");
 

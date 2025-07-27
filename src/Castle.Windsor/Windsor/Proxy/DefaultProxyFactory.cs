@@ -32,9 +32,9 @@ namespace Castle.Windsor.Windsor.Proxy;
 ///     virtual,
 /// </remarks>
 [Serializable]
-public class DefaultProxyFactory : AbstractProxyFactory, IDeserializationCallback
+public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactory, IDeserializationCallback
 {
-	[NonSerialized] protected ProxyGenerator Generator;
+	[NonSerialized] protected ProxyGenerator Generator = generator;
 
 	/// <summary>Constructs a DefaultProxyFactory</summary>
 	public DefaultProxyFactory() : this(new ProxyGenerator())
@@ -44,11 +44,6 @@ public class DefaultProxyFactory : AbstractProxyFactory, IDeserializationCallbac
 	public DefaultProxyFactory(bool disableSignedModule)
 		: this(new ProxyGenerator(disableSignedModule))
 	{
-	}
-
-	public DefaultProxyFactory(ProxyGenerator generator)
-	{
-		Generator = generator;
 	}
 
 	public void OnDeserialization(object sender)
@@ -72,7 +67,7 @@ public class DefaultProxyFactory : AbstractProxyFactory, IDeserializationCallbac
 		return proxy;
 	}
 
-	private void ReleaseHook(ProxyGenerationOptions proxyGenOptions, IKernel kernel)
+	private static void ReleaseHook(ProxyGenerationOptions proxyGenOptions, IKernel kernel)
 	{
 		if (proxyGenOptions.Hook == null) return;
 		kernel.ReleaseComponent(proxyGenOptions.Hook);
@@ -136,14 +131,22 @@ public class DefaultProxyFactory : AbstractProxyFactory, IDeserializationCallbac
 		if (proxyOptions.Hook != null)
 		{
 			var hook = proxyOptions.Hook.Resolve(kernel, context);
-			if (hook is IOnBehalfAware) ((IOnBehalfAware)hook).SetInterceptedComponentModel(model);
+			if (hook is IOnBehalfAware aware)
+			{
+				aware.SetInterceptedComponentModel(model);
+			}
+
 			proxyGenOptions.Hook = hook;
 		}
 
 		if (proxyOptions.Selector != null)
 		{
 			var selector = proxyOptions.Selector.Resolve(kernel, context);
-			if (selector is IOnBehalfAware) ((IOnBehalfAware)selector).SetInterceptedComponentModel(model);
+			if (selector is IOnBehalfAware aware)
+			{
+				aware.SetInterceptedComponentModel(model);
+			}
+
 			proxyGenOptions.Selector = selector;
 		}
 		foreach (var mixInReference in proxyOptions.MixIns)

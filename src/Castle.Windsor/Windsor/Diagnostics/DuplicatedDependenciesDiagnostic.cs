@@ -22,126 +22,145 @@ using Castle.Windsor.MicroKernel;
 
 namespace Castle.Windsor.Windsor.Diagnostics;
 
-public class DuplicatedDependenciesDiagnostic : IDuplicatedDependenciesDiagnostic
+public class DuplicatedDependenciesDiagnostic(IKernel kernel) : IDuplicatedDependenciesDiagnostic
 {
-	private readonly IKernel _kernel;
+    public Tuple<IHandler, DependencyDuplicate[]>[] Inspect()
+    {
+        var allHandlers = kernel.GetAssignableHandlers(typeof(object));
 
-	public DuplicatedDependenciesDiagnostic(IKernel kernel)
-	{
-		_kernel = kernel;
-	}
+        return (
+            from handler in allHandlers
+            let duplicateDependencies = FindDuplicateDependenciesFor(handler)
+            where duplicateDependencies.Length > 0
+            select new Tuple<IHandler, DependencyDuplicate[]>(handler, duplicateDependencies)).ToArray();
+    }
 
-	public Tuple<IHandler, DependencyDuplicate[]>[] Inspect()
-	{
-		var allHandlers = _kernel.GetAssignableHandlers(typeof(object));
-		var result = new List<Tuple<IHandler, DependencyDuplicate[]>>();
-		foreach (var handler in allHandlers)
-		{
-			var duplicateDependencies = FindDuplicateDependenciesFor(handler);
-			if (duplicateDependencies.Length > 0) result.Add(new Tuple<IHandler, DependencyDuplicate[]>(handler, duplicateDependencies));
-		}
+    public static string GetDetails(DependencyDuplicate duplicates)
+    {
+        var details = new StringBuilder();
+        Describe(details, duplicates.Dependency1);
+        details.Append(" duplicates ");
+        Describe(details, duplicates.Dependency2);
+        // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
+        switch (duplicates.Reason)
+        {
+            case DependencyDuplicationReason.Name:
+                details.Append(", they both have the same name.");
+                break;
+            case DependencyDuplicationReason.Type:
+                details.Append(", they both have the same type.");
+                break;
+            case DependencyDuplicationReason.NameAndType:
+                details.Append(", they both have the same name and type.");
+                break;
+            case DependencyDuplicationReason.Reference:
+                details.Append(", they both reference the same component " +
+                               duplicates.Dependency1.ReferencedComponentName);
+                break;
+        }
 
-		return result.ToArray();
-	}
+        return details.ToString();
+    }
 
-	public string GetDetails(DependencyDuplicate duplicates)
-	{
-		var details = new StringBuilder();
-		Describe(details, duplicates.Dependency1);
-		details.Append(" duplicates ");
-		Describe(details, duplicates.Dependency2);
-		switch (duplicates.Reason)
-		{
-			case DependencyDuplicationReason.Name:
-				details.Append(", they both have the same name.");
-				break;
-			case DependencyDuplicationReason.Type:
-				details.Append(", they both have the same type.");
-				break;
-			case DependencyDuplicationReason.NameAndType:
-				details.Append(", they both have the same name and type.");
-				break;
-			case DependencyDuplicationReason.Reference:
-				details.Append(", they both reference the same component " + duplicates.Dependency1.ReferencedComponentName);
-				break;
-		}
+    private static void CollectDuplicatesBetween(IReadOnlyList<DependencyModel> array,
+        ICollection<DependencyDuplicate> duplicates)
+    {
+        for (var i = 0; i < array.Count; i++)
+        for (var j = i + 1; j < array.Count; j++)
+        {
+            var reason = IsDuplicate(array[i], array[j]);
+            if (reason != DependencyDuplicationReason.Unspecified)
+            {
+                duplicates.Add(new DependencyDuplicate(array[i], array[j], reason));
+            }
+        }
+    }
 
-		return details.ToString();
-	}
+    private static void CollectDuplicatesBetweenConstructorParameters(ConstructorCandidateCollection constructors,
+        ICollection<DependencyDuplicate> duplicates)
+    {
+        foreach (var constructor in constructors)
+        {
+            CollectDuplicatesBetween(constructor.Dependencies, duplicates);
+        }
+    }
 
-	private void CollectDuplicatesBetween(IReadOnlyList<DependencyModel> array,
-		ICollection<DependencyDuplicate> duplicates)
-	{
-		for (var i = 0; i < array.Count; i++)
-		for (var j = i + 1; j < array.Count; j++)
-		{
-			var reason = IsDuplicate(array[i], array[j]);
-			if (reason != DependencyDuplicationReason.Unspecified) duplicates.Add(new DependencyDuplicate(array[i], array[j], reason));
-		}
-	}
+    private static void CollectDuplicatesBetweenProperties(DependencyModel[] properties,
+        ICollection<DependencyDuplicate> duplicates)
+    {
+        CollectDuplicatesBetween(properties, duplicates);
+    }
 
-	private void CollectDuplicatesBetweenConstructorParameters(ConstructorCandidateCollection constructors, ICollection<DependencyDuplicate> duplicates)
-	{
-		foreach (var constructor in constructors) CollectDuplicatesBetween(constructor.Dependencies, duplicates);
-	}
+    private static void CollectDuplicatesBetweenPropertiesAndConstructors(ConstructorCandidateCollection constructors,
+        DependencyModel[] properties, ICollection<DependencyDuplicate> duplicates)
+    {
+        foreach (var constructor in constructors)
+        foreach (var dependency in constructor.Dependencies)
+        foreach (var property in properties)
+        {
+            var reason = IsDuplicate(property, dependency);
+            if (reason != DependencyDuplicationReason.Unspecified)
+            {
+                duplicates.Add(new DependencyDuplicate(property, dependency, reason));
+            }
+        }
+    }
 
-	private void CollectDuplicatesBetweenProperties(DependencyModel[] properties, ICollection<DependencyDuplicate> duplicates)
-	{
-		CollectDuplicatesBetween(properties, duplicates);
-	}
+    private static DependencyDuplicate[] FindDuplicateDependenciesFor(IHandler handler)
+    {
+        // TODO: handler non-default activators
+        // NOTE: how exactly? We don't have enough context to know, other than via the well known activators that we ship with
+        //		 but we can only inspect the type here...
+        var duplicates = new HashSet<DependencyDuplicate>();
+        var properties = handler.ComponentModel.Properties
+            .Select(p => p.Dependency)
+            .OrderBy(d => d.ToString())
+            .ToArray();
+        var constructors = handler.ComponentModel.Constructors;
+        CollectDuplicatesBetweenProperties(properties, duplicates);
+        CollectDuplicatesBetweenConstructorParameters(constructors, duplicates);
+        CollectDuplicatesBetweenPropertiesAndConstructors(constructors, properties, duplicates);
+        return duplicates.ToArray();
+    }
 
-	private void CollectDuplicatesBetweenPropertiesAndConstructors(ConstructorCandidateCollection constructors, DependencyModel[] properties, ICollection<DependencyDuplicate> duplicates)
-	{
-		foreach (var constructor in constructors)
-		foreach (var dependency in constructor.Dependencies)
-		foreach (var property in properties)
-		{
-			var reason = IsDuplicate(property, dependency);
-			if (reason != DependencyDuplicationReason.Unspecified) duplicates.Add(new DependencyDuplicate(property, dependency, reason));
-		}
-	}
+    private static DependencyDuplicationReason IsDuplicate(DependencyModel foo, DependencyModel bar)
+    {
+        if (foo.ReferencedComponentName != null || bar.ReferencedComponentName != null)
+        {
+            if (string.Equals(foo.ReferencedComponentName, bar.ReferencedComponentName,
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                return DependencyDuplicationReason.Reference;
+            }
+        }
 
-	private DependencyDuplicate[] FindDuplicateDependenciesFor(IHandler handler)
-	{
-		// TODO: handler non-default activators
-		// NOTE: how exactly? We don't have enough context to know, other than via the well known activators that we ship with
-		//		 but we can only inspect the type here...
-		var duplicates = new HashSet<DependencyDuplicate>();
-		var properties = handler.ComponentModel.Properties
-			.Select(p => p.Dependency)
-			.OrderBy(d => d.ToString())
-			.ToArray();
-		var constructors = handler.ComponentModel.Constructors;
-		CollectDuplicatesBetweenProperties(properties, duplicates);
-		CollectDuplicatesBetweenConstructorParameters(constructors, duplicates);
-		CollectDuplicatesBetweenPropertiesAndConstructors(constructors, properties, duplicates);
-		return duplicates.ToArray();
-	}
+        if (string.Equals(foo.DependencyKey, bar.DependencyKey, StringComparison.OrdinalIgnoreCase))
+        {
+            return foo.TargetItemType == bar.TargetItemType
+                ? DependencyDuplicationReason.NameAndType
+                : DependencyDuplicationReason.Name;
+        }
 
-	private DependencyDuplicationReason IsDuplicate(DependencyModel foo, DependencyModel bar)
-	{
-		if (foo.ReferencedComponentName != null || bar.ReferencedComponentName != null)
-			if (string.Equals(foo.ReferencedComponentName, bar.ReferencedComponentName, StringComparison.OrdinalIgnoreCase))
-				return DependencyDuplicationReason.Reference;
+        return foo.TargetItemType == bar.TargetItemType
+            ? DependencyDuplicationReason.Type
+            : 0;
+    }
 
-		if (string.Equals(foo.DependencyKey, bar.DependencyKey, StringComparison.OrdinalIgnoreCase))
-		{
-			if (foo.TargetItemType == bar.TargetItemType) return DependencyDuplicationReason.NameAndType;
-			return DependencyDuplicationReason.Name;
-		}
+    private static void Describe(StringBuilder details, DependencyModel dependency)
+    {
+        switch (dependency)
+        {
+            case PropertyDependencyModel:
+                details.Append("Property ");
+                break;
+            case ConstructorDependencyModel:
+                details.Append("Constructor parameter ");
+                break;
+            default:
+                details.Append("Dependency ");
+                break;
+        }
 
-		if (foo.TargetItemType == bar.TargetItemType) return DependencyDuplicationReason.Type;
-		return 0;
-	}
-
-	private static void Describe(StringBuilder details, DependencyModel dependency)
-	{
-		if (dependency is PropertyDependencyModel)
-			details.Append("Property ");
-		else if (dependency is ConstructorDependencyModel)
-			details.Append("Constructor parameter ");
-		else
-			details.Append("Dependency ");
-		details.Append(dependency.TargetItemType.ToCSharpString() + " " + dependency.DependencyKey);
-	}
+        details.Append(dependency.TargetItemType.ToCSharpString() + " " + dependency.DependencyKey);
+    }
 }

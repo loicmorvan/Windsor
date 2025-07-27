@@ -24,13 +24,11 @@ public class DelegatingModelDescriptor(
 {
 	public void BuildComponentModel(IKernel kernel, ComponentModel model)
 	{
-		if (builder == null) return;
-		builder(kernel, model);
+		builder?.Invoke(kernel, model);
 	}
 
 	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
 	{
-		if (configurer == null) return;
-		configurer(kernel, model);
+		configurer?.Invoke(kernel, model);
 	}
 }

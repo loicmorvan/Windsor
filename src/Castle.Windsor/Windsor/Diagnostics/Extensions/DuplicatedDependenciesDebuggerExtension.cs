@@ -61,7 +61,7 @@ public class DuplicatedDependenciesDebuggerExtension : AbstractContainerDebugger
 	private DebuggerViewItemWithDetails MismatchView(DependencyDuplicate input)
 	{
 		return new DebuggerViewItemWithDetails(Description(input.Dependency1), Description(input.Dependency2),
-			_diagnostic.GetDetails(input));
+			DuplicatedDependenciesDiagnostic.GetDetails(input));
 	}
 
 	private static string Description(DependencyModel dependencyModel)

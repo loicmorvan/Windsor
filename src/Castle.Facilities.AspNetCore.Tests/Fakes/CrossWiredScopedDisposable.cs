@@ -2,7 +2,7 @@ using System;
 
 namespace Castle.Facilities.AspNetCore.Tests.Fakes;
 
-public class CrossWiredScopedDisposable : CrossWiredScoped, IDisposable, IDisposableObservable
+public sealed class CrossWiredScopedDisposable : CrossWiredScoped, IDisposable, IDisposableObservable
 {
     public void Dispose()
     {

@@ -35,7 +35,7 @@ public static class WindsorContainerExtensions
 	/// <summary>Returns a component instance by the service.</summary>
 	public static T Resolve<T>(this IWindsorContainer container, IEnumerable<KeyValuePair<string, object>> arguments)
 	{
-		return (T)container.Kernel.Resolve(typeof(T), new Arguments().AddNamed(arguments));
+		return container.Kernel.Resolve<T>(new Arguments().AddNamed(arguments));
 	}
 
 	/// <summary>Returns a component instance by the key.</summary>
@@ -53,6 +53,6 @@ public static class WindsorContainerExtensions
 	/// <summary>Resolve all valid components that match this type.</summary>
 	public static T[] ResolveAll<T>(this IWindsorContainer container, IEnumerable<KeyValuePair<string, object>> arguments)
 	{
-		return (T[])container.ResolveAll(typeof(T), new Arguments().AddNamed(arguments));
+		return container.ResolveAll<T>(new Arguments().AddNamed(arguments));
 	}
 }

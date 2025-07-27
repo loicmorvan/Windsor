@@ -32,8 +32,7 @@ public partial class DefaultDiagnosticsSubSystem :
 
 	public TDiagnostic GetDiagnostic<TDiagnostic>() where TDiagnostic : IDiagnostic<object>
 	{
-		IDiagnostic<object> value;
-		_diagnostics.TryGetValue(typeof(TDiagnostic), out value);
+		_diagnostics.TryGetValue(typeof(TDiagnostic), out var value);
 		return (TDiagnostic)value;
 	}
 

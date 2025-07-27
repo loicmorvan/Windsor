@@ -41,7 +41,11 @@ public class LifestyleGroup<TService> : RegistrationGroup<TService>
 	/// <returns> </returns>
 	public ComponentRegistration<TService> Is(LifestyleType type)
 	{
-		if (Enum.IsDefined(typeof(LifestyleType), type) == false) throw InvalidValue(type, "Not a valid lifestyle");
+		if (Enum.IsDefined(type) == false)
+		{
+			throw InvalidValue(type, "Not a valid lifestyle");
+		}
+
 		if (type == LifestyleType.Undefined)
 			throw InvalidValue(type,
 				$"{LifestyleType.Undefined} is not a valid lifestyle type.");

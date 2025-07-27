@@ -99,7 +99,7 @@ public class KernelEventsDependencyResolvingTestCase : AbstractContainerTestCase
 
 		Kernel.ConfigurationStore.AddComponentConfiguration("customer", config);
 
-		Kernel.Register(Component.For(typeof(ICustomer)).ImplementedBy(typeof(CustomerImpl)).Named("customer"));
+		Kernel.Register(Component.For(typeof(ICustomer)).ImplementedBy<CustomerImpl>().Named("customer"));
 
 		_expectedClient = Kernel.GetHandler("customer").ComponentModel;
 		_expectedModels = new List<DependencyModel>();

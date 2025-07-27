@@ -46,9 +46,12 @@ namespace Castle.Windsor.Extensions.DependencyInjection.SubSystems
 				if (filtersOpinion != null) return filtersOpinion;
 			}
 
-			IHandler[] result;
 			using var locker = Lock.ForReadingUpgradeable();
-			if (HandlerListsByTypeCache.TryGetValue(service, out result)) return result;
+			if (HandlerListsByTypeCache.TryGetValue(service, out var result))
+			{
+				return result;
+			}
+
 			result = GetHandlersInRegisterOrderNoLock(service);
 
 			locker.Upgrade();

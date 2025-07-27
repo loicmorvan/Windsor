@@ -32,8 +32,8 @@ public class TransientMultiConstructorTestCase
 
 		var arguments2 = new Arguments { { "datetime", DateTime.Now.AddDays(1) } };
 
-		var a = container.Resolve(typeof(AnyClass), arguments1);
-		var b = container.Resolve(typeof(AnyClass), arguments2);
+		var a = container.Resolve<AnyClass>(arguments1);
+		var b = container.Resolve<AnyClass>(arguments2);
 
 		Assert.NotSame(a, b);
 	}
@@ -50,15 +50,15 @@ public class TransientMultiConstructorTestCase
 
 		var arguments2 = new Arguments { { "test2", two } };
 
-		var a = container.Resolve(typeof(AnyClassWithReference), arguments1);
-		var b = container.Resolve(typeof(AnyClassWithReference), arguments2);
+		var a = container.Resolve<AnyClassWithReference>(arguments1);
+		var b = container.Resolve<AnyClassWithReference>(arguments2);
 
 		Assert.NotSame(a, b);
 
 		// multi resolve test
 
-		a = container.Resolve(typeof(AnyClassWithReference), arguments1);
-		b = container.Resolve(typeof(AnyClassWithReference), arguments2);
+		a = container.Resolve<AnyClassWithReference>(arguments1);
+		b = container.Resolve<AnyClassWithReference>(arguments2);
 
 		Assert.NotSame(a, b);
 	}

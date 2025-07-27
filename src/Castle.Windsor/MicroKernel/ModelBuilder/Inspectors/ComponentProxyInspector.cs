@@ -61,8 +61,7 @@ public class ComponentProxyInspector(IConversionManager converter) : IContribute
 
 	private void ReadProxyBehaviorFromConfig(ComponentModel model, ComponentProxyBehaviorAttribute behavior)
 	{
-		if (model.Configuration == null) return;
-		var interfaces = model.Configuration.Children["additionalInterfaces"];
+		var interfaces = model.Configuration?.Children["additionalInterfaces"];
 		if (interfaces == null) return;
 		var list = new List<Type>(behavior.AdditionalInterfaces);
 		foreach (var node in interfaces.Children)

@@ -93,13 +93,15 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 	{
 		var processor = GetProcessor(nodeList.Current);
 
-		if (processor != null) processor.Process(nodeList, this);
+		processor?.Process(nodeList, this);
 	}
 
 	public XmlElement GetProperty(string key)
 	{
-		XmlElement property;
-		if (!_properties.TryGetValue(key, out property)) return null;
+		if (!_properties.TryGetValue(key, out var property))
+		{
+			return null;
+		}
 
 		return property.CloneNode(true) as XmlElement;
 	}
@@ -173,12 +175,13 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 
 	private IXmlNodeProcessor GetProcessor(XmlNode node)
 	{
-		IDictionary<string, IXmlNodeProcessor> processors;
-		if (!_nodeProcessors.TryGetValue(node.NodeType, out processors)) return null;
+		if (!_nodeProcessors.TryGetValue(node.NodeType, out var processors))
+		{
+			return null;
+		}
 
 		// sometimes nodes with the same name will not accept a processor
-		IXmlNodeProcessor processor;
-		if (!processors.TryGetValue(node.Name, out processor) || !processor.Accept(node))
+		if (!processors.TryGetValue(node.Name, out var processor) || !processor.Accept(node))
 			if (node.NodeType == XmlNodeType.Element)
 				processor = _defaultElementProcessor;
 
@@ -187,8 +190,7 @@ public class DefaultXmlProcessorEngine : IXmlProcessorEngine
 
 	private void RegisterProcessor(XmlNodeType type, IXmlNodeProcessor processor)
 	{
-		IDictionary<string, IXmlNodeProcessor> typeProcessors;
-		if (!_nodeProcessors.TryGetValue(type, out typeProcessors))
+		if (!_nodeProcessors.TryGetValue(type, out var typeProcessors))
 		{
 			typeProcessors = new Dictionary<string, IXmlNodeProcessor>();
 			_nodeProcessors[type] = typeProcessors;

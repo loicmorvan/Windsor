@@ -28,8 +28,11 @@ public class TypedFactoryCachingInspector : IContributeComponentModelConstructio
 {
 	void IContributeComponentModelConstruction.ProcessModel(IKernel kernel, ComponentModel model)
 	{
-		if (model.Configuration == null) return;
-		if (model.Configuration.Attributes[TypedFactoryFacility.IsFactoryKey] == null) return;
+		if (model.Configuration?.Attributes[TypedFactoryFacility.IsFactoryKey] == null)
+		{
+			return;
+		}
+
 		if (model.Services.Any(s => s.GetTypeInfo().IsGenericTypeDefinition)) return;
 		BuildCache(model);
 	}

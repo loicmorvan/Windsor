@@ -82,7 +82,7 @@ public class Burden
 		var released = Released;
 		if (released != null) released(this);
 
-		if (_dependencies != null) _dependencies.ForEach(c => c.Release());
+		_dependencies?.ForEach(c => c.Release());
 		var graphReleased = GraphReleased;
 		if (graphReleased != null) graphReleased(this);
 		return true;

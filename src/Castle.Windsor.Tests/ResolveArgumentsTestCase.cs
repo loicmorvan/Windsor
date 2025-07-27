@@ -48,13 +48,13 @@ public class ResolveArgumentsTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Can_Resolve_using_Type_and_Arguments_as_Properties()
 	{
-		Container.Resolve(typeof(Service), Arguments.FromProperties(new { Dependency = new Dependency() }));
+		Container.Resolve<Service>(Arguments.FromProperties(new { Dependency = new Dependency() }));
 	}
 
 	[Fact]
 	public void Can_ResolveAll_using_Type_and_Arguments_as_Properties()
 	{
-		Container.ResolveAll(typeof(IDependencyWithManyImplementations),
+		Container.ResolveAll<IDependencyWithManyImplementations>(
 			Arguments.FromProperties(new { Dependency = new Dependency() }));
 	}
 
@@ -76,14 +76,14 @@ public class ResolveArgumentsTestCase : AbstractContainerTestCase
 	public void Can_Resolve_using_Type_and_Arguments_as_Dictionary()
 	{
 		var dictionary = new Dictionary<string, object> { { "dependency", new Dependency() } };
-		Container.Resolve(typeof(Service), Arguments.FromNamed(dictionary));
+		Container.Resolve<Service>(Arguments.FromNamed(dictionary));
 	}
 
 	[Fact]
 	public void Can_ResolveAll_using_Type_and_Arguments_as_Dictionary()
 	{
 		var dictionary = new Dictionary<string, object> { { "dependency", new Dependency() } };
-		Container.ResolveAll(typeof(IDependencyWithManyImplementations), new Arguments().AddNamed(dictionary));
+		Container.ResolveAll<IDependencyWithManyImplementations>(new Arguments().AddNamed(dictionary));
 	}
 
 	[Fact]
@@ -123,7 +123,7 @@ public class ResolveArgumentsTestCase : AbstractContainerTestCase
 	{
 		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object>
 			{ { "dependency", new Dependency() } };
-		Container.Resolve(typeof(Service), new Arguments().AddNamed(readOnlyDictionary));
+		Container.Resolve<Service>(new Arguments().AddNamed(readOnlyDictionary));
 	}
 
 	[Fact]
@@ -131,7 +131,7 @@ public class ResolveArgumentsTestCase : AbstractContainerTestCase
 	{
 		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object>
 			{ { "dependency", new Dependency() } };
-		Container.ResolveAll(typeof(IDependencyWithManyImplementations), new Arguments().AddNamed(readOnlyDictionary));
+		Container.ResolveAll<IDependencyWithManyImplementations>(new Arguments().AddNamed(readOnlyDictionary));
 	}
 
 	[Fact]
@@ -139,7 +139,7 @@ public class ResolveArgumentsTestCase : AbstractContainerTestCase
 	{
 		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object>
 			{ { "dependency", new Dependency() } };
-		Container.Resolve(typeof(Service), readOnlyDictionary);
+		Container.Resolve<Service>(readOnlyDictionary);
 	}
 
 	[Fact]
@@ -147,7 +147,7 @@ public class ResolveArgumentsTestCase : AbstractContainerTestCase
 	{
 		IReadOnlyDictionary<string, object> readOnlyDictionary = new Dictionary<string, object>
 			{ { "dependency", new Dependency() } };
-		Container.ResolveAll(typeof(IDependencyWithManyImplementations), readOnlyDictionary);
+		Container.ResolveAll<IDependencyWithManyImplementations>(readOnlyDictionary);
 	}
 
 	[Fact]
@@ -165,13 +165,13 @@ public class ResolveArgumentsTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Can_Resolve_using_Type_and_Arguments_as_TypedComponents()
 	{
-		Container.Resolve(typeof(Service), new Arguments().AddTyped(new Dependency()));
+		Container.Resolve<Service>(new Arguments().AddTyped(new Dependency()));
 	}
 
 	[Fact]
 	public void Can_ResolveAll_using_Type_and_Arguments_as_TypedComponents()
 	{
-		Container.Resolve(typeof(IDependencyWithManyImplementations), new Arguments().AddTyped(new Dependency()));
+		Container.Resolve<IDependencyWithManyImplementations>(new Arguments().AddTyped(new Dependency()));
 	}
 
 	private class Dependency;

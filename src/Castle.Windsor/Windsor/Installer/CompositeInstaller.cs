@@ -20,7 +20,7 @@ namespace Castle.Windsor.Windsor.Installer;
 
 public class CompositeInstaller : IWindsorInstaller
 {
-	private readonly HashSet<IWindsorInstaller> _installers = new();
+	private readonly HashSet<IWindsorInstaller> _installers = [];
 
 	public void Install(IWindsorContainer container, IConfigurationStore store)
 	{

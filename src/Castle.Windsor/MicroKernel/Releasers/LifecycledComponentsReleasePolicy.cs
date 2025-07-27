@@ -193,8 +193,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 	public static ITrackedComponentsDiagnostic GetTrackedComponentsDiagnostic(IKernel kernel)
 	{
 		var diagnosticsHost = (IDiagnosticsHost)kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
-		if (diagnosticsHost == null) return null;
-		return diagnosticsHost.GetDiagnostic<ITrackedComponentsDiagnostic>();
+		return diagnosticsHost?.GetDiagnostic<ITrackedComponentsDiagnostic>();
 	}
 
 	/// <summary>Creates new <see cref = "ITrackedComponentsPerformanceCounter" /> from given <see cref = "IPerformanceMetricsFactory" />.</summary>

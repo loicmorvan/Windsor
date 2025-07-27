@@ -83,14 +83,7 @@ public class ComponentRegistration<TService> : IRegistration
 	///     If not set, the <see cref = "Type.FullName" /> of the <see cref = "Implementation" /> will be used as the key to register the component.
 	/// </summary>
 	/// <value> The name. </value>
-	public string Name
-	{
-		get
-		{
-			if (_name == null) return null;
-			return _name.Name;
-		}
-	}
+	public string Name => _name?.Name;
 
 	/// <summary>Set proxy for this component.</summary>
 	/// <value> The proxy. </value>
@@ -144,8 +137,11 @@ public class ComponentRegistration<TService> : IRegistration
 	public ComponentRegistration<TService> AddDescriptor(IComponentModelDescriptor descriptor)
 	{
 		_descriptors.Add(descriptor);
-		var componentDescriptor = descriptor as AbstractOverwriteableDescriptor<TService>;
-		if (componentDescriptor != null) componentDescriptor.Registration = this;
+		if (descriptor is AbstractOverwriteableDescriptor<TService> componentDescriptor)
+		{
+			componentDescriptor.Registration = this;
+		}
+
 		return this;
 	}
 

@@ -180,8 +180,7 @@ public class CreationContext :
 
 	public object GetContextualProperty(object key)
 	{
-		if (_extendedProperties == null) return null;
-		return _extendedProperties[key];
+		return _extendedProperties?[key];
 	}
 
 	/// <summary>Method used by handlers to test whether they are being resolved in the context.</summary>
@@ -264,8 +263,11 @@ public class CreationContext :
 		_handlerStack.Pop();
 
 		if (trackContext) _resolutionStack.Pop();
-		if (burden == null) return;
-		if (burden.Instance == null) return;
+		if (burden?.Instance == null)
+		{
+			return;
+		}
+
 		if (burden.RequiresPolicyRelease == false) return;
 		if (_resolutionStack.Count != 0)
 		{
@@ -344,9 +346,7 @@ public class CreationContext :
 
 		public object GetContextualProperty(object key)
 		{
-			if (_extendedProperties == null) return null;
-
-			var value = _extendedProperties[key];
+			var value = _extendedProperties?[key];
 			return value;
 		}
 

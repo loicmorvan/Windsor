@@ -141,8 +141,11 @@ public class DefaultComponentActivator : AbstractComponentActivator
 		var winnerPoints = 0;
 		foreach (var candidate in Model.Constructors)
 		{
-			int candidatePoints;
-			if (CheckCtorCandidate(candidate, context, out candidatePoints) == false) continue;
+			if (CheckCtorCandidate(candidate, context, out var candidatePoints) == false)
+			{
+				continue;
+			}
+
 			if (BestScoreSoFar(candidatePoints, winnerPoints, winnerCandidate))
 			{
 				if (BestPossibleScore(candidate, candidatePoints))

@@ -19,31 +19,36 @@ using Castle.Windsor.MicroKernel;
 namespace Castle.Windsor.Windsor;
 
 /// <summary>
-///     Implementation of <see cref = "IServiceProvider" /> and <see cref = "IServiceProviderEx" /> that uses a
+///     Implementation of <see cref="IServiceProvider" /> and <see cref="IServiceProviderEx" /> that uses a
 ///     <see
-///         cref = "IWindsorContainer" />
-///     or <see cref = "IKernel" /> as its component's source.
+///         cref="IWindsorContainer" />
+///     or <see cref="IKernel" /> as its component's source.
 /// </summary>
 public class WindsorServiceProvider : IServiceProviderEx
 {
-	private readonly IKernelInternal _kernel;
+    private readonly IKernelInternal _kernel;
 
-	public WindsorServiceProvider(IWindsorContainer container)
-	{
-		_kernel = container.Kernel as IKernelInternal;
-		if (_kernel == null) throw new ArgumentException($"The kernel must implement {typeof(IKernelInternal)}");
-	}
+    public WindsorServiceProvider(IWindsorContainer container)
+    {
+        _kernel = container.Kernel as IKernelInternal;
+        if (_kernel == null)
+        {
+            throw new ArgumentException($"The kernel must implement {typeof(IKernelInternal)}");
+        }
+    }
 
-	public IKernel Kernel => _kernel;
+    // ReSharper disable once UnusedMember.Global
+    public IKernel Kernel => _kernel;
 
-	public object GetService(Type serviceType)
-	{
-		if (_kernel.LoadHandlerByType(null, serviceType, null) != null) return _kernel.Resolve(serviceType);
-		return null;
-	}
+    public object GetService(Type serviceType)
+    {
+        return _kernel.LoadHandlerByType(null, serviceType, null) != null
+            ? _kernel.Resolve(serviceType)
+            : null;
+    }
 
-	public T GetService<T>() where T : class
-	{
-		return (T)GetService(typeof(T));
-	}
+    public T GetService<T>() where T : class
+    {
+        return (T)GetService(typeof(T));
+    }
 }

@@ -30,8 +30,10 @@ public class MyCustomerActivator : AbstractComponentActivator
 
 	protected override object InternalCreate(CreationContext context)
 	{
-		var customer = new CustomerImpl();
-		customer.Name = "James Bond";
+		var customer = new CustomerImpl
+		{
+			Name = "James Bond"
+		};
 		return customer;
 	}
 

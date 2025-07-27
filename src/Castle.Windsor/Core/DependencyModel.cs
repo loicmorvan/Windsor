@@ -101,8 +101,11 @@ public class DependencyModel(
 	{
 		if (ReferenceEquals(null, obj)) return false;
 		if (ReferenceEquals(this, obj)) return true;
-		var other = obj as DependencyModel;
-		if (other == null) return false;
+		if (obj is not DependencyModel other)
+		{
+			return false;
+		}
+
 		return other.TargetType == TargetType &&
 		       Equals(other.DependencyKey, DependencyKey);
 	}

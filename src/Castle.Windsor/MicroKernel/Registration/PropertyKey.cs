@@ -66,9 +66,9 @@ public class PropertyKey
 
     private ServiceOverrideKey GetServiceOverrideKey()
     {
-        if (Key is Type)
+        if (Key is Type key)
         {
-            return ServiceOverride.ForKey((Type)Key);
+            return ServiceOverride.ForKey(key);
         }
 
         return ServiceOverride.ForKey((string)Key);

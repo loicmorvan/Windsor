@@ -32,7 +32,7 @@ public class ScopedLifestyleManager(IScopeAccessor accessor) : AbstractLifestyle
 	public override void Dispose()
 	{
 		var scope = Interlocked.Exchange(ref _accessor, null);
-		if (scope != null) scope.Dispose();
+		scope?.Dispose();
 	}
 
 	public override object Resolve(CreationContext context, IReleasePolicy releasePolicy)

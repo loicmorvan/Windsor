@@ -180,7 +180,7 @@ public class LifestyleModelInspector : IContributeComponentModelConstruction
 		var instance = scopeRootBinderType.CreateInstance<object>();
 
 		var methodInfo = (MethodInfo)filterMethod;
-		return (Func<IHandler[], IHandler>)methodInfo.CreateDelegate(typeof(Func<IHandler[], IHandler>), instance);
+		return methodInfo.CreateDelegate<Func<IHandler[], IHandler>>(instance);
 	}
 
 	private void ExtractPoolConfig(ComponentModel model)

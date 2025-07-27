@@ -28,10 +28,7 @@ public class ScopeCache : IScopeCache, IDisposable
 	public void Dispose()
 	{
 		var localCache = Interlocked.Exchange(ref _cache, null);
-		if (localCache == null)
-			// that should never happen but Dispose in general is expected to be safe to call so... let's obey the rules
-			return;
-		localCache.Values.Reverse().ForEach(b => b.Release());
+		localCache?.Values.Reverse().ForEach(b => b.Release());
 	}
 
 	public Burden this[object id]

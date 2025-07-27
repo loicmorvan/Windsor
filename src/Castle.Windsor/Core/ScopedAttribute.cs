@@ -12,19 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core;
-
 using System;
+
+namespace Castle.Windsor.Core;
 
 /// <summary>Indicates that the target components wants a scoped lifestyle.</summary>
 [AttributeUsage(AttributeTargets.Class)]
 public class ScopedAttribute : LifestyleAttribute
 {
-	/// <summary>Initializes a new instance of the <see cref = "ScopedAttribute" /> class.</summary>
+	/// <summary>Initializes a new instance of the <see cref="ScopedAttribute" /> class.</summary>
 	public ScopedAttribute()
 		: base(LifestyleType.Scoped)
 	{
 	}
 
+	// ReSharper disable once UnusedAutoPropertyAccessor.Global
 	public Type ScopeAccessorType { get; set; }
 }

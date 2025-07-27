@@ -104,11 +104,16 @@ public class StartableFacilityTestCase
 	{
 		_kernel.ComponentCreated += OnNoInterfaceStartableComponentStarted;
 
-		var compNode = new MutableConfiguration("component");
-		compNode.Attributes["id"] = "b";
-		compNode.Attributes["startable"] = "true";
-		compNode.Attributes["startMethod"] = "Start";
-		compNode.Attributes["stopMethod"] = "Stop";
+		var compNode = new MutableConfiguration("component")
+		{
+			Attributes =
+			{
+				["id"] = "b",
+				["startable"] = "true",
+				["startMethod"] = "Start",
+				["stopMethod"] = "Stop"
+			}
+		};
 
 		_kernel.ConfigurationStore.AddComponentConfiguration("b", compNode);
 

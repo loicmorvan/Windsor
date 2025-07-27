@@ -34,7 +34,7 @@ public class UnsatisfiedDependenciesTestCase : AbstractContainerTestCase
 
 		Kernel.ConfigurationStore.AddComponentConfiguration("key", config);
 
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy(typeof(CommonImpl1)).Named("common1"));
+		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("common1"));
 		Kernel.Register(Component.For(typeof(CommonServiceUser3)).Named("key"));
 		var exception =
 			Assert.Throws<HandlerException>(() => Kernel.Resolve<CommonServiceUser3>("key"));
@@ -57,8 +57,8 @@ public class UnsatisfiedDependenciesTestCase : AbstractContainerTestCase
 
 		Kernel.ConfigurationStore.AddComponentConfiguration("key", config);
 
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy(typeof(CommonImpl1)).Named("common1"));
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy(typeof(CommonImpl2)).Named("common2"));
+		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("common1"));
+		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl2>().Named("common2"));
 		Kernel.Register(Component.For(typeof(CommonServiceUser)).Named("key"));
 		var instance = Kernel.Resolve<CommonServiceUser>("key");
 
@@ -75,24 +75,24 @@ public class UnsatisfiedDependenciesTestCase : AbstractContainerTestCase
 		config1.Children.Add(parameters1);
 		parameters1.Children.Add(new MutableConfiguration("inner", "${repository2}"));
 		Kernel.ConfigurationStore.AddComponentConfiguration("repository1", config1);
-		Kernel.Register(Component.For(typeof(IRepository)).ImplementedBy(typeof(Repository1)).Named("repository1"));
+		Kernel.Register(Component.For(typeof(IRepository)).ImplementedBy<Repository1>().Named("repository1"));
 
 		var config2 = new MutableConfiguration("component");
 		var parameters2 = new MutableConfiguration("parameters");
 		config2.Children.Add(parameters2);
 		parameters2.Children.Add(new MutableConfiguration("inner", "${repository3}"));
 		Kernel.ConfigurationStore.AddComponentConfiguration("repository2", config2);
-		Kernel.Register(Component.For(typeof(IRepository)).ImplementedBy(typeof(Repository2)).Named("repository2"));
+		Kernel.Register(Component.For(typeof(IRepository)).ImplementedBy<Repository2>().Named("repository2"));
 
 		var config3 = new MutableConfiguration("component");
 		var parameters3 = new MutableConfiguration("parameters");
 		config3.Children.Add(parameters3);
 		parameters3.Children.Add(new MutableConfiguration("inner", "${decoratedRepository}"));
 		Kernel.ConfigurationStore.AddComponentConfiguration("repository3", config3);
-		Kernel.Register(Component.For(typeof(IRepository)).ImplementedBy(typeof(Repository3)).Named("repository3"));
+		Kernel.Register(Component.For(typeof(IRepository)).ImplementedBy<Repository3>().Named("repository3"));
 
 		Kernel.Register(
-			Component.For(typeof(IRepository)).ImplementedBy(typeof(DecoratedRepository)).Named("decoratedRepository"));
+			Component.For(typeof(IRepository)).ImplementedBy<DecoratedRepository>().Named("decoratedRepository"));
 
 		var instance = Kernel.Resolve<IRepository>();
 
@@ -141,7 +141,7 @@ public class UnsatisfiedDependenciesTestCase : AbstractContainerTestCase
 
 		Kernel.ConfigurationStore.AddComponentConfiguration("key", config);
 
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy(typeof(CommonImpl1)).Named("common1"));
+		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("common1"));
 		Kernel.Register(Component.For(typeof(CommonServiceUser)).Named("key"));
 		var exception =
 			Assert.Throws<HandlerException>(() => Kernel.Resolve<CommonServiceUser>("key"));

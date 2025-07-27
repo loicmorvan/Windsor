@@ -26,7 +26,7 @@ public class LifetimeScopeAccessor : IScopeAccessor
 	public void Dispose()
 	{
 		var scope = Scope.ObtainCurrentScope();
-		if (scope != null) scope.Dispose();
+		scope?.Dispose();
 	}
 
 	public ILifetimeScope GetScope(CreationContext context)

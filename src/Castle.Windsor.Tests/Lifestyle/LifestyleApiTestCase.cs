@@ -41,7 +41,7 @@ public class LifestyleApiTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Many_component_custom()
 	{
-		LifestyleMany(c => c.LifestyleCustom(typeof(CustomLifestyleManager)), LifestyleType.Custom);
+		LifestyleMany(c => c.LifestyleCustom<CustomLifestyleManager>(), LifestyleType.Custom);
 	}
 
 	[Fact]
@@ -89,7 +89,7 @@ public class LifestyleApiTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Single_component_custom()
 	{
-		LifestyleSingle(c => c.LifestyleCustom(typeof(CustomLifestyleManager)), LifestyleType.Custom);
+		LifestyleSingle(c => c.LifestyleCustom<CustomLifestyleManager>(), LifestyleType.Custom);
 	}
 
 	[Fact]

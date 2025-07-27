@@ -76,8 +76,8 @@ public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCas
 	public void Can_detect_components_having_duplicated_dependencies_via_service_override()
 	{
 		Container.Register(Component.For<HasObjectPropertyAndTypedCtorParameterDifferentName>()
-			.DependsOn(Dependency.OnComponent(typeof(object), typeof(EmptyService2Impl1)),
-				Dependency.OnComponent(typeof(IEmptyService), typeof(EmptyService2Impl1))));
+			.DependsOn(Dependency.OnComponent<object, EmptyService2Impl1>(),
+				Dependency.OnComponent<IEmptyService, EmptyService2Impl1>()));
 		var result = _diagnostic.Inspect();
 		Assert.NotEmpty(result);
 	}

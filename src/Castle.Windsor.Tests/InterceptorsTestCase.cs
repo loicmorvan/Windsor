@@ -50,7 +50,7 @@ public class InterceptorsTestCase : IDisposable
 	public void InterfaceProxy()
 	{
 		_container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
-		_container.Register(Component.For(typeof(ICalcService)).ImplementedBy(typeof(CalculatorService)).Named("key"));
+		_container.Register(Component.For(typeof(ICalcService)).ImplementedBy<CalculatorService>().Named("key"));
 
 		var service = _container.Resolve<ICalcService>("key");
 
@@ -73,7 +73,7 @@ public class InterceptorsTestCase : IDisposable
 	public void InterfaceProxyWithLifecycle()
 	{
 		_container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
-		_container.Register(Component.For(typeof(ICalcService)).ImplementedBy(typeof(CalculatorServiceWithLifecycle))
+		_container.Register(Component.For(typeof(ICalcService)).ImplementedBy<CalculatorServiceWithLifecycle>()
 			.Named("key"));
 
 		var service = _container.Resolve<ICalcService>("key");

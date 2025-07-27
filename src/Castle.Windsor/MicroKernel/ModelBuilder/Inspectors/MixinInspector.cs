@@ -25,9 +25,7 @@ public class MixinInspector : IContributeComponentModelConstruction
 {
 	public void ProcessModel(IKernel kernel, ComponentModel model)
 	{
-		if (model.Configuration == null) return;
-
-		var mixins = model.Configuration.Children["mixins"];
+		var mixins = model.Configuration?.Children["mixins"];
 		if (mixins == null) return;
 
 		var mixinReferences = new List<ComponentReference<object>>();

@@ -396,7 +396,7 @@ public sealed partial class DefaultKernel :
 
 		var token = OptimizeDependencyResolution();
 		foreach (var registration in registrations) registration.Register(this);
-		if (token != null) token.Dispose();
+		token?.Dispose();
 		return this;
 	}
 
@@ -410,7 +410,7 @@ public sealed partial class DefaultKernel :
 		}
 		else
 		{
-			if (Parent != null) Parent.ReleaseComponent(instance);
+			Parent?.ReleaseComponent(instance);
 		}
 	}
 
@@ -525,9 +525,8 @@ public sealed partial class DefaultKernel :
 	private void DisposeHandler(IHandler handler)
 	{
 		var disposable = handler as IDisposable;
-		if (disposable == null) return;
 
-		disposable.Dispose();
+		disposable?.Dispose();
 	}
 
 	void IKernelInternal.RaiseEventsOnHandlerCreated(IHandler handler)

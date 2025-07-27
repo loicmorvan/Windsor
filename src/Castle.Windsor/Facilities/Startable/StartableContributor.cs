@@ -74,9 +74,7 @@ public class StartableContributor(ITypeConverter converter) : IContributeCompone
 
 	private bool HasStartableAttributeSet(ComponentModel model)
 	{
-		if (model.Configuration == null) return false;
-
-		var startable = model.Configuration.Attributes["startable"];
+		var startable = model.Configuration?.Attributes["startable"];
 		if (startable != null) return converter.PerformConversion<bool>(startable);
 
 		return false;

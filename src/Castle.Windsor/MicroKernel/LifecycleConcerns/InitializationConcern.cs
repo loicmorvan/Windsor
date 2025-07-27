@@ -30,6 +30,6 @@ public class InitializationConcern : ICommissionConcern
 	public void Apply(ComponentModel model, object component)
 	{
 		var initable = component as IInitializable;
-		if (initable != null) initable.Initialize();
+		initable?.Initialize();
 	}
 }

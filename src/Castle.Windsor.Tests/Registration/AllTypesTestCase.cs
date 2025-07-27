@@ -29,7 +29,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
 	{
 		Kernel.Register(Classes
 			.FromAssembly(GetCurrentAssembly())
-			.BasedOn(typeof(ICommon))
+			.BasedOn<ICommon>()
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(ICommon));
@@ -44,7 +44,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
 	{
 		Kernel.Register(Classes
 			.FromThisAssembly()
-			.BasedOn(typeof(ICommon))
+			.BasedOn<ICommon>()
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(ICommon));
@@ -57,7 +57,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
 	[Fact]
 	public void RegisterAssemblyTypesFromThisAssembly_BasedOn_RegisteredInContainer()
 	{
-		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn(typeof(ICommon)));
+		Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<ICommon>());
 
 		var handlers = Kernel.GetHandlers(typeof(ICommon));
 		Assert.Empty(handlers);
@@ -473,7 +473,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
 	{
 		Kernel.Register(Classes
 			.FromAssembly(GetCurrentAssembly())
-			.BasedOn(typeof(ICommon))
+			.BasedOn<ICommon>()
 			.OrBasedOn(typeof(ICommon2))
 		);
 
@@ -492,7 +492,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
 	{
 		Kernel.Register(Classes
 			.FromAssembly(GetCurrentAssembly())
-			.BasedOn(typeof(ICommon))
+			.BasedOn<ICommon>()
 			.OrBasedOn(typeof(ICommon2))
 			.WithServiceBase()
 		);
@@ -509,7 +509,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
 	{
 		Kernel.Register(Classes
 			.FromAssembly(GetCurrentAssembly())
-			.BasedOn(typeof(ICommon))
+			.BasedOn<ICommon>()
 			.OrBasedOn(typeof(ICommon2))
 			.OrBasedOn(typeof(IValidator<>))
 			.WithServiceBase()

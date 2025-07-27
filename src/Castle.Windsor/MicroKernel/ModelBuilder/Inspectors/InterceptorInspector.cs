@@ -45,9 +45,7 @@ public class InterceptorInspector : IContributeComponentModelConstruction
 
 	protected virtual void CollectFromConfiguration(ComponentModel model)
 	{
-		if (model.Configuration == null) return;
-
-		var interceptors = model.Configuration.Children["interceptors"];
+		var interceptors = model.Configuration?.Children["interceptors"];
 		if (interceptors == null) return;
 
 		CollectInterceptors(model, interceptors);

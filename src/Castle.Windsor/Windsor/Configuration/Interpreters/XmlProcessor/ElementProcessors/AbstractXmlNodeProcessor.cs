@@ -68,9 +68,10 @@ public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
 	/// <returns>child node as XmlElement</returns>
 	protected XmlElement GetNodeAsElement(XmlElement element, XmlNode child)
 	{
-		var result = child as XmlElement;
-
-		if (result == null) throw new XmlProcessorException("{0} expects XmlElement found {1}", element.Name, child.NodeType);
+		if (child is not XmlElement result)
+		{
+			throw new XmlProcessorException("{0} expects XmlElement found {1}", element.Name, child.NodeType);
+		}
 
 		return result;
 	}

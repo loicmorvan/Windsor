@@ -22,7 +22,7 @@ namespace Castle.Facilities.AspNetCore.Tests.Resolvers;
 
 using TestContext = TestContext;
 
-public class FrameworkDependencyResolverTestCase : IDisposable
+public sealed class FrameworkDependencyResolverTestCase : IDisposable
 {
 	private readonly FrameworkDependencyResolver _frameworkDependencyResolver;
 
@@ -106,7 +106,7 @@ public class FrameworkDependencyResolverTestCase : IDisposable
 	[Theory]
 	public void Should_not_match_WindsorOnly_services(Type serviceType)
 	{
-		Assert.True(!_frameworkDependencyResolver.HasMatchingType(serviceType));
+		Assert.False(_frameworkDependencyResolver.HasMatchingType(serviceType));
 	}
 
 	[InlineData(typeof(ServiceProviderOnlyTransient))]

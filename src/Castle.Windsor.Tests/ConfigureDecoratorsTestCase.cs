@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using System;
-
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
+
+namespace Castle.Windsor.Tests;
 
 public class ConfigureDecoratorsTestCase
 {
@@ -57,10 +56,10 @@ public class ConfigureDecoratorsTestCase
 		grandParent.AddChildContainer(parent);
 		parent.AddChildContainer(child);
 		grandParent.Register(
-			Component.For(typeof(IDoNothingService)).ImplementedBy(typeof(DoNothingServiceDecorator)).Named(
+			Component.For(typeof(IDoNothingService)).ImplementedBy<DoNothingServiceDecorator>().Named(
 				"DoNothingServiceDecorator"));
 		grandParent.Register(
-			Component.For(typeof(IDoNothingService)).ImplementedBy(typeof(DoNothingService)).Named("DoNothingService"));
+			Component.For(typeof(IDoNothingService)).ImplementedBy<DoNothingService>().Named("DoNothingService"));
 		var service = child.Resolve<IDoNothingService>();
 		Assert.NotNull(service);
 		Assert.IsType<DoNothingServiceDecorator>(service);
@@ -73,12 +72,12 @@ public class ConfigureDecoratorsTestCase
 		var child = new WindsorContainer();
 		parent.AddChildContainer(child);
 		parent.Register(
-			Component.For(typeof(IDoNothingService)).ImplementedBy(typeof(DoNothingServiceDecorator)).Named(
+			Component.For(typeof(IDoNothingService)).ImplementedBy<DoNothingServiceDecorator>().Named(
 				"DoNothingServiceDecorator"));
 		parent.Register(
-			Component.For(typeof(IDoNothingService)).ImplementedBy(typeof(DoNothingService)).Named("DoNothingService"));
+			Component.For(typeof(IDoNothingService)).ImplementedBy<DoNothingService>().Named("DoNothingService"));
 		child.Register(
-			Component.For(typeof(IDoSomethingService)).ImplementedBy(typeof(DoSomethingService)).Named("DoSometingService"));
+			Component.For(typeof(IDoSomethingService)).ImplementedBy<DoSomethingService>().Named("DoSometingService"));
 		var service = child.Resolve<IDoNothingService>();
 		Assert.NotNull(service);
 		Assert.IsType<DoNothingServiceDecorator>(service);

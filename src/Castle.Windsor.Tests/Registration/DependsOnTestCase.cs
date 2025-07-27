@@ -230,7 +230,7 @@ public class DependsOnTestCase : AbstractContainerTestCase
 			Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
 			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
 			Component.For<UsesIEmptyService>()
-				.DependsOn(Dependency.OnComponent(typeof(IEmptyService), typeof(EmptyServiceB))));
+				.DependsOn(Dependency.OnComponent<IEmptyService, EmptyServiceB>()));
 
 		var obj = Container.Resolve<UsesIEmptyService>();
 
@@ -256,8 +256,8 @@ public class DependsOnTestCase : AbstractContainerTestCase
 	{
 		Container.Register(Component.For<ClassWithArguments>()
 			.DependsOn(
-				Dependency.OnValue(typeof(string), "a string"),
-				Dependency.OnValue(typeof(int), 42)));
+				Dependency.OnValue<string>("a string"),
+				Dependency.OnValue<int>(42)));
 
 		var obj = Container.Resolve<ClassWithArguments>();
 

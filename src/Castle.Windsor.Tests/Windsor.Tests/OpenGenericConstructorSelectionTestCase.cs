@@ -38,7 +38,7 @@ public class OpenGenericConstructorSelectionTestCase : AbstractContainerTestCase
 	{
 		Container.Register(Component.For(typeof(IOpenGeneric<>)).ImplementedBy(typeof(OpenGeneric<>)));
 		Container.Register(Component.For(typeof(IClosedGenericArrayList<ArrayList>))
-			.ImplementedBy(typeof(ClosedGenericArrayList)));
+			.ImplementedBy<ClosedGenericArrayList>());
 		Container.Register(Component.For(typeof(Control)));
 		Container.Resolve<Control>();
 	}

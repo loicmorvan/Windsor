@@ -138,7 +138,7 @@ public static class Component
 	public static Predicate<Type> HasAttribute<TAttribute>(Predicate<TAttribute> filter) where TAttribute : Attribute
 	{
 		return type => HasAttribute<TAttribute>(type) &&
-		               filter((TAttribute)type.GetTypeInfo().GetCustomAttribute(typeof(TAttribute)));
+		               filter(type.GetTypeInfo().GetCustomAttribute<TAttribute>());
 	}
 
 	/// <summary>Determines if the component is a Castle component, that is - if it has a <see cref = "CastleComponentAttribute" />.</summary>

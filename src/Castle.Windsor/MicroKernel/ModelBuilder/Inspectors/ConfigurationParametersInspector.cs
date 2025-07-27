@@ -29,9 +29,7 @@ public class ConfigurationParametersInspector : IContributeComponentModelConstru
 	/// <param name = "model"></param>
 	public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 	{
-		if (model.Configuration == null) return;
-
-		var parameters = model.Configuration.Children["parameters"];
+		var parameters = model.Configuration?.Children["parameters"];
 		if (parameters == null) return;
 
 		foreach (var parameter in parameters.Children)

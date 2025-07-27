@@ -43,6 +43,6 @@ public class CustomDependencyDescriptor : IComponentModelDescriptor
 			foreach (var property in _arguments)
 				model.CustomDependencies[property.Key] = property.Value;
 
-		if (_properties != null) _properties.ForEach(p => model.CustomDependencies[p.Key] = p.Value);
+		_properties?.ForEach(p => model.CustomDependencies[p.Key] = p.Value);
 	}
 }

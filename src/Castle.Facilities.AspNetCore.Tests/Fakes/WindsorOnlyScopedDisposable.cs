@@ -2,7 +2,7 @@ using System;
 
 namespace Castle.Facilities.AspNetCore.Tests.Fakes;
 
-public class WindsorOnlyScopedDisposable : WindsorOnlyScoped, IDisposable, IDisposableObservable
+public sealed class WindsorOnlyScopedDisposable : WindsorOnlyScoped, IDisposable, IDisposableObservable
 {
     public void Dispose()
     {

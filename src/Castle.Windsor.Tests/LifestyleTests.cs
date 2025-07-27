@@ -30,7 +30,7 @@ public class LifestyleTests
 		using var container = new WindsorContainer();
 		container.AddFacility<TypedFactoryFacility>();
 		container.Register(Component.For<IFactory>().AsFactory(),
-			Component.For(typeof(IInterface)).ImplementedBy(typeof(InterfaceImpl)).LifeStyle.Transient);
+			Component.For(typeof(IInterface)).ImplementedBy<InterfaceImpl>().LifeStyle.Transient);
 
 		IFactory childFactory;
 		using (var childContainer = new WindsorContainer())

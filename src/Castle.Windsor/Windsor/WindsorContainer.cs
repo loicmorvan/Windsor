@@ -41,7 +41,7 @@ public sealed class WindsorContainer :
 
     private static int _instanceCount;
     private readonly Dictionary<string, IWindsorContainer> _childContainers = new(StringComparer.OrdinalIgnoreCase);
-    private readonly object _childContainersLocker = new();
+    private readonly Lock _childContainersLocker = new();
 
     private IWindsorContainer _parent;
 
@@ -188,19 +188,23 @@ public sealed class WindsorContainer :
         {
             if (value == null)
             {
-                if (_parent != null)
+                if (_parent == null)
                 {
-                    _parent.RemoveChildContainer(this);
-                    _parent = null;
+                    return;
                 }
+
+                _parent.RemoveChildContainer(this);
+                _parent = null;
             }
             else
             {
-                if (value != _parent)
+                if (value == _parent)
                 {
-                    _parent = value;
-                    _parent.AddChildContainer(this);
+                    return;
                 }
+
+                _parent = value;
+                _parent.AddChildContainer(this);
             }
         }
     }
@@ -267,8 +271,7 @@ public sealed class WindsorContainer :
     {
         lock (_childContainersLocker)
         {
-            IWindsorContainer windsorContainer;
-            _childContainers.TryGetValue(name, out windsorContainer);
+            _childContainers.TryGetValue(name, out var windsorContainer);
             return windsorContainer;
         }
     }
@@ -304,8 +307,7 @@ public sealed class WindsorContainer :
 
         var scope = new DefaultComponentInstaller();
 
-        var internalKernel = Kernel as IKernelInternal;
-        if (internalKernel == null)
+        if (Kernel is not IKernelInternal internalKernel)
         {
             Install(installers, scope);
         }
@@ -313,10 +315,7 @@ public sealed class WindsorContainer :
         {
             var token = internalKernel.OptimizeDependencyResolution();
             Install(installers, scope);
-            if (token != null)
-            {
-                token.Dispose();
-            }
+            token?.Dispose();
         }
 
         return this;
@@ -423,7 +422,7 @@ public sealed class WindsorContainer :
     /// <returns></returns>
     public T Resolve<T>(Arguments arguments)
     {
-        return (T)Kernel.Resolve(typeof(T), arguments);
+        return Kernel.Resolve<T>(arguments);
     }
 
     /// <summary>Returns a component instance by the key</summary>
@@ -432,7 +431,7 @@ public sealed class WindsorContainer :
     /// <returns></returns>
     public T Resolve<T>(string key, Arguments arguments)
     {
-        return (T)Kernel.Resolve(key, typeof(T), arguments);
+        return Kernel.Resolve<T>(key, arguments);
     }
 
     /// <summary>Returns a component instance by the service</summary>
@@ -487,10 +486,7 @@ public sealed class WindsorContainer :
 
     private void RunInstaller()
     {
-        if (Installer != null)
-        {
-            Installer.SetUp(this, Kernel.ConfigurationStore);
-        }
+        Installer?.SetUp(this, Kernel.ConfigurationStore);
     }
 
     private void Install(IWindsorInstaller[] installers, DefaultComponentInstaller scope)
@@ -523,7 +519,7 @@ public sealed class WindsorContainer :
     {
         var sb = new StringBuilder();
         sb.Append(CastleUnicode);
-        sb.Append(" ");
+        sb.Append(' ');
         sb.Append(Interlocked.Increment(ref _instanceCount));
         return sb.ToString();
     }

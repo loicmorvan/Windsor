@@ -28,7 +28,7 @@ public class LazyLoadingTestCase : AbstractContainerTestCase
 	public void Can_Lazily_resolve_component()
 	{
 		Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LoaderForDefaultImplementations>());
-		var service = Container.Resolve("foo", typeof(IHasDefaultImplementation));
+		var service = Container.Resolve<IHasDefaultImplementation>("foo");
 		Assert.NotNull(service);
 		Assert.IsType<Implementation>(service);
 	}

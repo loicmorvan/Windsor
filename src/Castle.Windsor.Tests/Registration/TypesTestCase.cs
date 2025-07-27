@@ -26,7 +26,7 @@ public class TypesTestCase : AbstractContainerTestCase
 	public void Based_on_interface_types_registered()
 	{
 		Container.Register(Types.FromAssembly(GetCurrentAssembly())
-			.BasedOn(typeof(ICommon))
+			.BasedOn<ICommon>()
 		);
 
 		var handlers = Kernel.GetHandlers(typeof(ICommon));
@@ -42,7 +42,7 @@ public class TypesTestCase : AbstractContainerTestCase
 		Container.Register(
 			Component.For<ReturnDefaultInterceptor>(),
 			Types.FromAssembly(GetCurrentAssembly())
-				.BasedOn(typeof(ISimpleService))
+				.BasedOn<ISimpleService>()
 				.If(t => t.GetTypeInfo().IsInterface)
 				.Configure(t => t.Interceptors<ReturnDefaultInterceptor>())
 		);

@@ -30,7 +30,6 @@ public class DisposalConcern : IDecommissionConcern
 	public void Apply(ComponentModel model, object component)
 	{
 		var disposable = component as IDisposable;
-		if (disposable == null) return;
-		disposable.Dispose();
+		disposable?.Dispose();
 	}
 }

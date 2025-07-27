@@ -32,9 +32,9 @@ public class TypedFactoryObsoleteApiTestCase : AbstractContainerTestCase
 				"protocolHandlerFactory", typeof(IProtocolHandlerFactory1), "Create", "Release"));
 #pragma warning restore
 		Container.Register(
-			Component.For(typeof(IProtocolHandler)).ImplementedBy(typeof(MirandaProtocolHandler)).Named("miranda"));
+			Component.For(typeof(IProtocolHandler)).ImplementedBy<MirandaProtocolHandler>().Named("miranda"));
 		Container.Register(
-			Component.For(typeof(IProtocolHandler)).ImplementedBy(typeof(MessengerProtocolHandler)).Named("messenger"));
+			Component.For(typeof(IProtocolHandler)).ImplementedBy<MessengerProtocolHandler>().Named("messenger"));
 
 		var factory = Container.Resolve<IProtocolHandlerFactory1>("protocolHandlerFactory");
 
@@ -56,9 +56,9 @@ public class TypedFactoryObsoleteApiTestCase : AbstractContainerTestCase
 				"protocolHandlerFactory", typeof(IProtocolHandlerFactory2), "Create", "Release"));
 #pragma warning restore
 		Container.Register(
-			Component.For(typeof(IProtocolHandler)).ImplementedBy(typeof(MirandaProtocolHandler)).Named("miranda"));
+			Component.For(typeof(IProtocolHandler)).ImplementedBy<MirandaProtocolHandler>().Named("miranda"));
 		Container.Register(
-			Component.For(typeof(IProtocolHandler)).ImplementedBy(typeof(MessengerProtocolHandler)).Named("messenger"));
+			Component.For(typeof(IProtocolHandler)).ImplementedBy<MessengerProtocolHandler>().Named("messenger"));
 
 		var factory = Container.Resolve<IProtocolHandlerFactory2>("protocolHandlerFactory");
 
@@ -83,8 +83,8 @@ public class TypedFactoryObsoleteApiTestCase : AbstractContainerTestCase
 			new FactoryEntry(
 				"compFactory", typeof(IComponentFactory1), "Construct", ""));
 #pragma warning restore
-		Container.Register(Component.For(typeof(IDummyComponent)).ImplementedBy(typeof(Component1)).Named("comp1"));
-		Container.Register(Component.For(typeof(IDummyComponent)).ImplementedBy(typeof(Component2)).Named("comp2"));
+		Container.Register(Component.For(typeof(IDummyComponent)).ImplementedBy<Component1>().Named("comp1"));
+		Container.Register(Component.For(typeof(IDummyComponent)).ImplementedBy<Component2>().Named("comp2"));
 
 		var factory = Container.Resolve<IComponentFactory1>("compFactory");
 		Assert.NotNull(factory);
@@ -105,8 +105,8 @@ public class TypedFactoryObsoleteApiTestCase : AbstractContainerTestCase
 				"compFactory", typeof(IComponentFactory2), "Construct", ""));
 #pragma warning restore
 
-		Container.Register(Component.For(typeof(IDummyComponent)).ImplementedBy(typeof(Component1)).Named("comp1"));
-		Container.Register(Component.For(typeof(IDummyComponent)).ImplementedBy(typeof(Component2)).Named("comp2"));
+		Container.Register(Component.For(typeof(IDummyComponent)).ImplementedBy<Component1>().Named("comp1"));
+		Container.Register(Component.For(typeof(IDummyComponent)).ImplementedBy<Component2>().Named("comp2"));
 
 		var factory = Container.Resolve<IComponentFactory2>("compFactory");
 

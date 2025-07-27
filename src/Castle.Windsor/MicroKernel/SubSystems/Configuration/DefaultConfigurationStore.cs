@@ -82,8 +82,7 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	{
 		lock (_syncLock)
 		{
-			IConfiguration value;
-			_childContainers.TryGetValue(key, out value);
+			_childContainers.TryGetValue(key, out var value);
 			return value;
 		}
 	}
@@ -95,8 +94,7 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	{
 		lock (_syncLock)
 		{
-			IConfiguration value;
-			_components.TryGetValue(key, out value);
+			_components.TryGetValue(key, out var value);
 			return value;
 		}
 	}
@@ -138,8 +136,7 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	{
 		lock (_syncLock)
 		{
-			IConfiguration value;
-			_facilities.TryGetValue(key, out value);
+			_facilities.TryGetValue(key, out var value);
 			return value;
 		}
 	}

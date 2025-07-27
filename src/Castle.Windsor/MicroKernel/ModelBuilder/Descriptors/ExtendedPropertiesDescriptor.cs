@@ -44,6 +44,6 @@ public class ExtendedPropertiesDescriptor : IComponentModelDescriptor
 			foreach (DictionaryEntry property in _dictionary)
 				model.ExtendedProperties[property.Key] = property.Value;
 
-		if (_properties != null) _properties.ForEach(p => model.ExtendedProperties[p.Key] = p.Value);
+		_properties?.ForEach(p => model.ExtendedProperties[p.Key] = p.Value);
 	}
 }

@@ -16,7 +16,7 @@ public class IoC169
 
         container.AddFacility(new StartableFacility());
 
-        container.Register(Component.For(typeof(IBlackboard)).ImplementedBy(typeof(Blackboard)).Named("blackboard"));
+        container.Register(Component.For(typeof(IBlackboard)).ImplementedBy<Blackboard>().Named("blackboard"));
 
         var registrations = Classes.FromAssembly(GetType().GetTypeInfo().Assembly)
             .BasedOn<IServiceWithoutImplementation>()

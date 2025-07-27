@@ -30,7 +30,7 @@ using Castle.Windsor.Windsor.Configuration.Interpreters;
 namespace Castle.Windsor.Windsor.Installer;
 
 /// <summary>Default <see cref="IComponentsInstaller" /> implementation.</summary>
-public class DefaultComponentInstaller : IComponentsInstaller
+public sealed class DefaultComponentInstaller : IComponentsInstaller
 {
     private string _assemblyName;
 
@@ -46,7 +46,7 @@ public class DefaultComponentInstaller : IComponentsInstaller
         SetUpChildContainers(store.GetConfigurationForChildContainers(), container);
     }
 
-    protected virtual void SetUpInstallers(IConfiguration[] installers, IWindsorContainer container,
+    private void SetUpInstallers(IConfiguration[] installers, IWindsorContainer container,
         IConversionManager converter)
     {
         var instances = new Dictionary<Type, IWindsorInstaller>();
@@ -110,7 +110,7 @@ public class DefaultComponentInstaller : IComponentsInstaller
         }
     }
 
-    private void GetAssemblyInstallers(Dictionary<Type, IWindsorInstaller> cache, Assembly assembly)
+    private static void GetAssemblyInstallers(Dictionary<Type, IWindsorInstaller> cache, Assembly assembly)
     {
         var types = assembly.GetAvailableTypes();
         foreach (var type in InstallerTypes(types))
@@ -119,12 +119,12 @@ public class DefaultComponentInstaller : IComponentsInstaller
         }
     }
 
-    private IEnumerable<Type> InstallerTypes(IEnumerable<Type> types)
+    private static IEnumerable<Type> InstallerTypes(IEnumerable<Type> types)
     {
         return types.Where(IsInstaller);
     }
 
-    private bool IsInstaller(Type type)
+    private static bool IsInstaller(Type type)
     {
         return type.GetTypeInfo().IsClass &&
                type.GetTypeInfo().IsAbstract == false &&
@@ -132,16 +132,18 @@ public class DefaultComponentInstaller : IComponentsInstaller
                type.Is<IWindsorInstaller>();
     }
 
-    private void AddInstaller(Dictionary<Type, IWindsorInstaller> cache, Type type)
+    private static void AddInstaller(Dictionary<Type, IWindsorInstaller> cache, Type type)
     {
-        if (cache.ContainsKey(type) == false)
+        if (cache.ContainsKey(type))
         {
-            var installerInstance = type.CreateInstance<IWindsorInstaller>();
-            cache.Add(type, installerInstance);
+            return;
         }
+
+        var installerInstance = type.CreateInstance<IWindsorInstaller>();
+        cache.Add(type, installerInstance);
     }
 
-    protected virtual void SetUpFacilities(IConfiguration[] configurations, IWindsorContainer container,
+    private static void SetUpFacilities(IConfiguration[] configurations, IWindsorContainer container,
         IConversionManager converter)
     {
         foreach (var facility in configurations)
@@ -154,7 +156,7 @@ public class DefaultComponentInstaller : IComponentsInstaller
         }
     }
 
-    private void AssertImplementsService(IConfiguration id, Type service, Type implementation)
+    private static void AssertImplementsService(IConfiguration id, Type service, Type implementation)
     {
         if (service == null)
         {
@@ -166,17 +168,18 @@ public class DefaultComponentInstaller : IComponentsInstaller
             implementation = implementation.MakeGenericType(service.GetGenericArguments());
         }
 
-        if (!service.IsAssignableFrom(implementation))
+        if (service.IsAssignableFrom(implementation))
         {
-            var message = string.Format("Could not set up component '{0}'. Type '{1}' does not implement service '{2}'",
-                id.Attributes["id"],
-                implementation.AssemblyQualifiedName,
-                service.AssemblyQualifiedName);
-            throw new ComponentRegistrationException(message);
+            return;
         }
+
+        Debug.Assert(implementation != null);
+        var message =
+            $"Could not set up component '{id.Attributes["id"]}'. Type '{implementation.AssemblyQualifiedName}' does not implement service '{service.AssemblyQualifiedName}'";
+        throw new ComponentRegistrationException(message);
     }
 
-    protected virtual void SetUpComponents(IConfiguration[] configurations, IWindsorContainer container,
+    private static void SetUpComponents(IConfiguration[] configurations, IWindsorContainer container,
         IConversionManager converter)
     {
         foreach (var component in configurations)
@@ -215,25 +218,19 @@ public class DefaultComponentInstaller : IComponentsInstaller
 
     private static string GetName(CastleComponentAttribute defaults, IConfiguration component)
     {
-        if (component.Attributes["id-automatic"] != bool.TrueString)
-        {
-            return component.Attributes["id"];
-        }
-
-        return defaults.Name;
+        return component.Attributes["id-automatic"] != bool.TrueString
+            ? component.Attributes["id"]
+            : defaults.Name;
     }
 
-    private Type GetType(IConversionManager converter, string typeName)
+    private static Type GetType(IConversionManager converter, string typeName)
     {
-        if (typeName == null)
-        {
-            return null;
-        }
-
-        return converter.PerformConversion<Type>(typeName);
+        return typeName == null
+            ? null
+            : converter.PerformConversion<Type>(typeName);
     }
 
-    private void CollectAdditionalServices(IConfiguration component, IConversionManager converter,
+    private static void CollectAdditionalServices(IConfiguration component, IConversionManager converter,
         ICollection<Type> services)
     {
         var forwardedTypes = component.Children["forwardedTypes"];
@@ -242,9 +239,9 @@ public class DefaultComponentInstaller : IComponentsInstaller
             return;
         }
 
-        foreach (var forwardedType in forwardedTypes.Children)
+        foreach (var forwardedServiceTypeName in forwardedTypes.Children.Select(forwardedType =>
+                     forwardedType.Attributes["service"]))
         {
-            var forwardedServiceTypeName = forwardedType.Attributes["service"];
             try
             {
                 services.Add(converter.PerformConversion<Type>(forwardedServiceTypeName));
@@ -266,7 +263,9 @@ public class DefaultComponentInstaller : IComponentsInstaller
             Debug.Assert(id != null);
 
             // ReSharper disable once ObjectCreationAsStatement : WTF is that?
+#pragma warning disable CA1806
             new WindsorContainer(id, parentContainer,
+#pragma warning restore CA1806
                 new XmlInterpreter(new StaticContentResource(childContainerConfig.Value)));
         }
     }

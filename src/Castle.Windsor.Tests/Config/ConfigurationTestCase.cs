@@ -362,8 +362,8 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 		Kernel.ConfigurationStore.AddComponentConfiguration("key", confignode);
 		Kernel.Register(Component.For(typeof(ClassWithListConstructor)).Named("key"));
 
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy(typeof(CommonImpl1)).Named("commonservice1"));
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy(typeof(CommonImpl2)).Named("commonservice2"));
+		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("commonservice1"));
+		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl2>().Named("commonservice2"));
 
 		var instance = Kernel.Resolve<ClassWithListConstructor>("key");
 		Assert.NotNull(instance.Services);
@@ -405,7 +405,7 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 		confignode.Attributes.Add("customLifestyleType", "CustomLifestyleManager");
 
 		Kernel.ConfigurationStore.AddComponentConfiguration(key, confignode);
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy(typeof(CommonImpl1)).Named(key));
+		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named(key));
 
 		var instance = Kernel.Resolve<ICommon>(key);
 		var handler = Kernel.GetHandler(key);
@@ -427,8 +427,8 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 
 		Kernel.ConfigurationStore.AddComponentConfiguration("commonserviceuser", confignode);
 
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy(typeof(CommonImpl1)).Named("commonservice1"));
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy(typeof(CommonImpl2)).Named("commonservice2"));
+		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("commonservice1"));
+		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl2>().Named("commonservice2"));
 		Kernel.Register(Component.For(typeof(CommonServiceUser)).Named("commonserviceuser"));
 
 		var instance = Kernel.Resolve<CommonServiceUser>("commonserviceuser");
@@ -449,8 +449,8 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 
 		Kernel.ConfigurationStore.AddComponentConfiguration("commonserviceuser", confignode);
 
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy(typeof(CommonImpl1)).Named("commonservice1"));
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy(typeof(CommonImpl2)).Named("commonservice2"));
+		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("commonservice1"));
+		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl2>().Named("commonservice2"));
 
 		Kernel.Register(Component.For(typeof(CommonServiceUser2)).Named("commonserviceuser"));
 

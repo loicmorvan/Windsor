@@ -30,7 +30,7 @@ public class IoC117
 
 		try
 		{
-			var p = (Presenter)kernel.Resolve(typeof(Presenter));
+			var p = kernel.Resolve<Presenter>();
 			Assert.NotNull(p);
 		}
 		catch (NullReferenceException)
