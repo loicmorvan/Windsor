@@ -57,7 +57,7 @@ public class ComponentDebuggerView
 		return new ComponentDebuggerView(handler, description, extensions);
 	}
 
-	public static ComponentDebuggerView BuildRawFor(IHandler handler, string description, object[] items)
+	public static ComponentDebuggerView BuildRawFor(IHandler handler, string description, IEnumerable<object> items)
 	{
 		return new ComponentDebuggerView(handler, description, new ComponentDebuggerExtension(items));
 	}

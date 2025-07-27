@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using System.Linq;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
@@ -29,6 +30,7 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerT
 	protected override void AfterContainerCreated()
 	{
 		var host = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IDiagnosticsHost;
+		Debug.Assert(host != null);
 		_diagnostic = host.GetDiagnostic<IPotentialLifestyleMismatchesDiagnostic>();
 	}
 

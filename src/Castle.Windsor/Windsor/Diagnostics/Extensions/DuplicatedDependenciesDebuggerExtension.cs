@@ -54,7 +54,7 @@ public class DuplicatedDependenciesDebuggerExtension : AbstractContainerDebugger
 		var handler = input.Item1;
 		var mismatches = input.Item2;
 		var items = mismatches.ConvertAll(MismatchView);
-		Array.Sort(items, (c1, c2) => c1.Name.CompareTo(c2.Name));
+		Array.Sort(items, (c1, c2) => string.Compare(c1.Name, c2.Name, StringComparison.Ordinal));
 		return ComponentDebuggerView.BuildRawFor(handler, "Count = " + mismatches.Length, items);
 	}
 

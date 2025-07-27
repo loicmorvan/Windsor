@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Windsor.MicroKernel;
@@ -56,7 +57,7 @@ public class ReleasePolicyTrackedObjects : AbstractContainerDebuggerExtension
 			items.Add(item);
 		}
 
-		items.Sort((f, s) => f.Name.CompareTo(s.Name));
+		items.Sort((f, s) => string.Compare(f.Name, s.Name, StringComparison.Ordinal));
 		return new DebuggerViewItem(Name, "Count = " + totalCount, items.ToArray());
 	}
 }

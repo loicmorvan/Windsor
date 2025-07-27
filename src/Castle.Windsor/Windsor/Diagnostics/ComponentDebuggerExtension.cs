@@ -16,17 +16,10 @@ using System.Collections.Generic;
 
 namespace Castle.Windsor.Windsor.Diagnostics;
 
-public class ComponentDebuggerExtension : IComponentDebuggerExtension
+public class ComponentDebuggerExtension(IEnumerable<object> items) : IComponentDebuggerExtension
 {
-	private readonly object[] _items;
-
-	public ComponentDebuggerExtension(object[] items)
-	{
-		_items = items;
-	}
-
 	public IEnumerable<object> Attach()
 	{
-		return _items;
+		return items;
 	}
 }

@@ -29,191 +29,245 @@ using Castle.Windsor.Windsor.Configuration.Interpreters;
 
 namespace Castle.Windsor.Windsor.Installer;
 
-/// <summary>Default <see cref = "IComponentsInstaller" /> implementation.</summary>
+/// <summary>Default <see cref="IComponentsInstaller" /> implementation.</summary>
 public class DefaultComponentInstaller : IComponentsInstaller
 {
-	private string _assemblyName;
+    private string _assemblyName;
 
-	/// <summary>Perform installation.</summary>
-	/// <param name = "container">Target container</param>
-	/// <param name = "store">Configuration store</param>
-	public void SetUp(IWindsorContainer container, IConfigurationStore store)
-	{
-		var converter = container.Kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey) as IConversionManager;
-		SetUpInstallers(store.GetInstallers(), container, converter);
-		SetUpFacilities(store.GetFacilities(), container, converter);
-		SetUpComponents(store.GetComponents(), container, converter);
-		SetUpChildContainers(store.GetConfigurationForChildContainers(), container);
-	}
+    /// <summary>Perform installation.</summary>
+    /// <param name="container">Target container</param>
+    /// <param name="store">Configuration store</param>
+    public void SetUp(IWindsorContainer container, IConfigurationStore store)
+    {
+        var converter = container.Kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey) as IConversionManager;
+        SetUpInstallers(store.GetInstallers(), container, converter);
+        SetUpFacilities(store.GetFacilities(), container, converter);
+        SetUpComponents(store.GetComponents(), container, converter);
+        SetUpChildContainers(store.GetConfigurationForChildContainers(), container);
+    }
 
-	protected virtual void SetUpInstallers(IConfiguration[] installers, IWindsorContainer container,
-		IConversionManager converter)
-	{
-		var instances = new Dictionary<Type, IWindsorInstaller>();
-		var assemblies = new HashSet<Assembly>();
-		foreach (var installer in installers) AddInstaller(installer, instances, converter, assemblies);
+    protected virtual void SetUpInstallers(IConfiguration[] installers, IWindsorContainer container,
+        IConversionManager converter)
+    {
+        var instances = new Dictionary<Type, IWindsorInstaller>();
+        var assemblies = new HashSet<Assembly>();
+        foreach (var installer in installers)
+        {
+            AddInstaller(installer, instances, converter, assemblies);
+        }
 
-		if (instances.Count != 0) container.Install(instances.Values.ToArray());
-	}
+        if (instances.Count != 0)
+        {
+            container.Install(instances.Values.ToArray());
+        }
+    }
 
-	private void AddInstaller(IConfiguration installer, Dictionary<Type, IWindsorInstaller> cache,
-		IConversionManager conversionManager, ICollection<Assembly> assemblies)
-	{
-		var typeName = installer.Attributes["type"];
-		if (string.IsNullOrEmpty(typeName) == false)
-		{
-			var type = conversionManager.PerformConversion<Type>(typeName);
-			AddInstaller(cache, type);
-			return;
-		}
+    private void AddInstaller(IConfiguration installer, Dictionary<Type, IWindsorInstaller> cache,
+        IConversionManager conversionManager, ICollection<Assembly> assemblies)
+    {
+        var typeName = installer.Attributes["type"];
+        if (string.IsNullOrEmpty(typeName) == false)
+        {
+            var type = conversionManager.PerformConversion<Type>(typeName);
+            AddInstaller(cache, type);
+            return;
+        }
 
-		_assemblyName = installer.Attributes["assembly"];
-		if (string.IsNullOrEmpty(_assemblyName) == false)
-		{
-			var assembly = ReflectionUtil.GetAssemblyNamed(_assemblyName);
-			if (assemblies.Contains(assembly)) return;
-			assemblies.Add(assembly);
+        _assemblyName = installer.Attributes["assembly"];
+        if (string.IsNullOrEmpty(_assemblyName) == false)
+        {
+            var assembly = ReflectionUtil.GetAssemblyNamed(_assemblyName);
+            if (assemblies.Contains(assembly))
+            {
+                return;
+            }
 
-			GetAssemblyInstallers(cache, assembly);
-			return;
-		}
+            assemblies.Add(assembly);
 
-		var directory = installer.Attributes["directory"];
-		var mask = installer.Attributes["fileMask"];
-		var token = installer.Attributes["publicKeyToken"];
-		Debug.Assert(directory != null);
-		var assemblyFilter = new AssemblyFilter(directory, mask);
-		if (token != null) assemblyFilter.WithKeyToken(token);
+            GetAssemblyInstallers(cache, assembly);
+            return;
+        }
 
-		foreach (var assembly in ReflectionUtil.GetAssemblies(assemblyFilter))
-		{
-			if (assemblies.Contains(assembly)) continue;
-			assemblies.Add(assembly);
-			GetAssemblyInstallers(cache, assembly);
-		}
-	}
+        var directory = installer.Attributes["directory"];
+        var mask = installer.Attributes["fileMask"];
+        var token = installer.Attributes["publicKeyToken"];
+        Debug.Assert(directory != null);
+        var assemblyFilter = new AssemblyFilter(directory, mask);
+        if (token != null)
+        {
+            assemblyFilter.WithKeyToken(token);
+        }
 
-	private void GetAssemblyInstallers(Dictionary<Type, IWindsorInstaller> cache, Assembly assembly)
-	{
-		var types = assembly.GetAvailableTypes();
-		foreach (var type in InstallerTypes(types)) AddInstaller(cache, type);
-	}
+        foreach (var assembly in ReflectionUtil.GetAssemblies(assemblyFilter))
+        {
+            if (assemblies.Contains(assembly))
+            {
+                continue;
+            }
 
-	private IEnumerable<Type> InstallerTypes(IEnumerable<Type> types)
-	{
-		return types.Where(IsInstaller);
-	}
+            assemblies.Add(assembly);
+            GetAssemblyInstallers(cache, assembly);
+        }
+    }
 
-	private bool IsInstaller(Type type)
-	{
-		return type.GetTypeInfo().IsClass &&
-		       type.GetTypeInfo().IsAbstract == false &&
-		       type.GetTypeInfo().IsGenericTypeDefinition == false &&
-		       type.Is<IWindsorInstaller>();
-	}
+    private void GetAssemblyInstallers(Dictionary<Type, IWindsorInstaller> cache, Assembly assembly)
+    {
+        var types = assembly.GetAvailableTypes();
+        foreach (var type in InstallerTypes(types))
+        {
+            AddInstaller(cache, type);
+        }
+    }
 
-	private void AddInstaller(Dictionary<Type, IWindsorInstaller> cache, Type type)
-	{
-		if (cache.ContainsKey(type) == false)
-		{
-			var installerInstance = type.CreateInstance<IWindsorInstaller>();
-			cache.Add(type, installerInstance);
-		}
-	}
+    private IEnumerable<Type> InstallerTypes(IEnumerable<Type> types)
+    {
+        return types.Where(IsInstaller);
+    }
 
-	protected virtual void SetUpFacilities(IConfiguration[] configurations, IWindsorContainer container, IConversionManager converter)
-	{
-		foreach (var facility in configurations)
-		{
-			var type = converter.PerformConversion<Type>(facility.Attributes["type"]);
-			var facilityInstance = type.CreateInstance<IFacility>();
-			Debug.Assert(facilityInstance != null);
+    private bool IsInstaller(Type type)
+    {
+        return type.GetTypeInfo().IsClass &&
+               type.GetTypeInfo().IsAbstract == false &&
+               type.GetTypeInfo().IsGenericTypeDefinition == false &&
+               type.Is<IWindsorInstaller>();
+    }
 
-			container.AddFacility(facilityInstance);
-		}
-	}
+    private void AddInstaller(Dictionary<Type, IWindsorInstaller> cache, Type type)
+    {
+        if (cache.ContainsKey(type) == false)
+        {
+            var installerInstance = type.CreateInstance<IWindsorInstaller>();
+            cache.Add(type, installerInstance);
+        }
+    }
 
-	private void AssertImplementsService(IConfiguration id, Type service, Type implementation)
-	{
-		if (service == null) return;
-		if (service.GetTypeInfo().IsGenericTypeDefinition) implementation = implementation.MakeGenericType(service.GetGenericArguments());
-		if (!service.IsAssignableFrom(implementation))
-		{
-			var message = string.Format("Could not set up component '{0}'. Type '{1}' does not implement service '{2}'",
-				id.Attributes["id"],
-				implementation.AssemblyQualifiedName,
-				service.AssemblyQualifiedName);
-			throw new ComponentRegistrationException(message);
-		}
-	}
+    protected virtual void SetUpFacilities(IConfiguration[] configurations, IWindsorContainer container,
+        IConversionManager converter)
+    {
+        foreach (var facility in configurations)
+        {
+            var type = converter.PerformConversion<Type>(facility.Attributes["type"]);
+            var facilityInstance = type.CreateInstance<IFacility>();
+            Debug.Assert(facilityInstance != null);
 
-	protected virtual void SetUpComponents(IConfiguration[] configurations, IWindsorContainer container, IConversionManager converter)
-	{
-		foreach (var component in configurations)
-		{
-			var implementation = GetType(converter, component.Attributes["type"]);
-			var firstService = GetType(converter, component.Attributes["service"]);
-			var services = new HashSet<Type>();
-			if (firstService != null) services.Add(firstService);
-			CollectAdditionalServices(component, converter, services);
+            container.AddFacility(facilityInstance);
+        }
+    }
 
-			var name = default(string);
-			if (implementation != null)
-			{
-				AssertImplementsService(component, firstService, implementation);
-				var defaults = CastleComponentAttribute.GetDefaultsFor(implementation);
-				if (defaults.ServicesSpecifiedExplicitly && services.Count == 0) defaults.Services.ForEach(s => services.Add(s));
-				name = GetName(defaults, component);
-			}
+    private void AssertImplementsService(IConfiguration id, Type service, Type implementation)
+    {
+        if (service == null)
+        {
+            return;
+        }
 
-			if (services.Count == 0 && implementation == null) continue;
+        if (service.GetTypeInfo().IsGenericTypeDefinition)
+        {
+            implementation = implementation.MakeGenericType(service.GetGenericArguments());
+        }
 
-			container.Register(Component.For(services).ImplementedBy(implementation).Named(name));
-		}
-	}
+        if (!service.IsAssignableFrom(implementation))
+        {
+            var message = string.Format("Could not set up component '{0}'. Type '{1}' does not implement service '{2}'",
+                id.Attributes["id"],
+                implementation.AssemblyQualifiedName,
+                service.AssemblyQualifiedName);
+            throw new ComponentRegistrationException(message);
+        }
+    }
 
-	private static string GetName(CastleComponentAttribute defaults, IConfiguration component)
-	{
-		if (component.Attributes["id-automatic"] != bool.TrueString) return component.Attributes["id"];
-		return defaults.Name;
-	}
+    protected virtual void SetUpComponents(IConfiguration[] configurations, IWindsorContainer container,
+        IConversionManager converter)
+    {
+        foreach (var component in configurations)
+        {
+            var implementation = GetType(converter, component.Attributes["type"]);
+            var firstService = GetType(converter, component.Attributes["service"]);
+            var services = new HashSet<Type>();
+            if (firstService != null)
+            {
+                services.Add(firstService);
+            }
 
-	private Type GetType(IConversionManager converter, string typeName)
-	{
-		if (typeName == null) return null;
-		return converter.PerformConversion<Type>(typeName);
-	}
+            CollectAdditionalServices(component, converter, services);
 
-	private void CollectAdditionalServices(IConfiguration component, IConversionManager converter, ICollection<Type> services)
-	{
-		var forwardedTypes = component.Children["forwardedTypes"];
-		if (forwardedTypes == null) return;
+            var name = default(string);
+            if (implementation != null)
+            {
+                AssertImplementsService(component, firstService, implementation);
+                var defaults = CastleComponentAttribute.GetDefaultsFor(implementation);
+                if (defaults.ServicesSpecifiedExplicitly && services.Count == 0)
+                {
+                    defaults.Services.ForEach(s => services.Add(s));
+                }
 
-		foreach (var forwardedType in forwardedTypes.Children)
-		{
-			var forwardedServiceTypeName = forwardedType.Attributes["service"];
-			try
-			{
-				services.Add(converter.PerformConversion<Type>(forwardedServiceTypeName));
-			}
-			catch (ConverterException e)
-			{
-				throw new ComponentRegistrationException(
-					$"Component {component.Attributes["id"]} defines invalid forwarded type.", e);
-			}
-		}
-	}
+                name = GetName(defaults, component);
+            }
 
-	private static void SetUpChildContainers(IConfiguration[] configurations, IWindsorContainer parentContainer)
-	{
-		foreach (var childContainerConfig in configurations)
-		{
-			var id = childContainerConfig.Attributes["name"];
+            if (services.Count == 0 && implementation == null)
+            {
+                continue;
+            }
 
-			Debug.Assert(id != null);
+            container.Register(Component.For(services).ImplementedBy(implementation).Named(name));
+        }
+    }
 
-			new WindsorContainer(id, parentContainer,
-				new XmlInterpreter(new StaticContentResource(childContainerConfig.Value)));
-		}
-	}
+    private static string GetName(CastleComponentAttribute defaults, IConfiguration component)
+    {
+        if (component.Attributes["id-automatic"] != bool.TrueString)
+        {
+            return component.Attributes["id"];
+        }
+
+        return defaults.Name;
+    }
+
+    private Type GetType(IConversionManager converter, string typeName)
+    {
+        if (typeName == null)
+        {
+            return null;
+        }
+
+        return converter.PerformConversion<Type>(typeName);
+    }
+
+    private void CollectAdditionalServices(IConfiguration component, IConversionManager converter,
+        ICollection<Type> services)
+    {
+        var forwardedTypes = component.Children["forwardedTypes"];
+        if (forwardedTypes == null)
+        {
+            return;
+        }
+
+        foreach (var forwardedType in forwardedTypes.Children)
+        {
+            var forwardedServiceTypeName = forwardedType.Attributes["service"];
+            try
+            {
+                services.Add(converter.PerformConversion<Type>(forwardedServiceTypeName));
+            }
+            catch (ConverterException e)
+            {
+                throw new ComponentRegistrationException(
+                    $"Component {component.Attributes["id"]} defines invalid forwarded type.", e);
+            }
+        }
+    }
+
+    private static void SetUpChildContainers(IConfiguration[] configurations, IWindsorContainer parentContainer)
+    {
+        foreach (var childContainerConfig in configurations)
+        {
+            var id = childContainerConfig.Attributes["name"];
+
+            Debug.Assert(id != null);
+
+            // ReSharper disable once ObjectCreationAsStatement : WTF is that?
+            new WindsorContainer(id, parentContainer,
+                new XmlInterpreter(new StaticContentResource(childContainerConfig.Value)));
+        }
+    }
 }

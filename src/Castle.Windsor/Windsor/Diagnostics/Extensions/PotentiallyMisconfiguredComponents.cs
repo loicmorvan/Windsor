@@ -30,7 +30,8 @@ public class PotentiallyMisconfiguredComponents : AbstractContainerDebuggerExten
 		var handlers = _diagnostic.Inspect();
 		if (handlers.Length == 0) return [];
 
-		Array.Sort(handlers, (f, s) => f.ComponentModel.Name.CompareTo(s.ComponentModel.Name));
+		Array.Sort(handlers,
+			(f, s) => string.Compare(f.ComponentModel.Name, s.ComponentModel.Name, StringComparison.Ordinal));
 		var items = handlers.ConvertAll(DefaultComponentView);
 		return
 		[

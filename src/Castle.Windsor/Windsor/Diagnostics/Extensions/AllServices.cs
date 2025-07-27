@@ -30,7 +30,7 @@ public class AllServices : AbstractContainerDebuggerExtension
 	{
 		var map = _diagnostic.Inspect();
 		var items = map.Select(p => BuildServiceView(p, p.Key.ToCSharpString())).ToArray();
-		Array.Sort(items, (i1, i2) => i1.Name.CompareTo(i2.Name));
+		Array.Sort(items, (i1, i2) => string.Compare(i1.Name, i2.Name, StringComparison.Ordinal));
 		return
 		[
 			new DebuggerViewItem(Name, "Count = " + items.Length, items)

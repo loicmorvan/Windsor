@@ -69,10 +69,11 @@ public class DuplicatedDependenciesDiagnostic : IDuplicatedDependenciesDiagnosti
 		return details.ToString();
 	}
 
-	private void CollectDuplicatesBetween(DependencyModel[] array, ICollection<DependencyDuplicate> duplicates)
+	private void CollectDuplicatesBetween(IReadOnlyList<DependencyModel> array,
+		ICollection<DependencyDuplicate> duplicates)
 	{
-		for (var i = 0; i < array.Length; i++)
-		for (var j = i + 1; j < array.Length; j++)
+		for (var i = 0; i < array.Count; i++)
+		for (var j = i + 1; j < array.Count; j++)
 		{
 			var reason = IsDuplicate(array[i], array[j]);
 			if (reason != DependencyDuplicationReason.Unspecified) duplicates.Add(new DependencyDuplicate(array[i], array[j], reason));

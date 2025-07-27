@@ -21,7 +21,7 @@ using Castle.Windsor.MicroKernel;
 namespace Castle.Windsor.Windsor.Diagnostics;
 
 public partial class DefaultDiagnosticsSubSystem :
-	AbstractSubSystem, IDiagnosticsHost
+	AbstractSubSystem
 {
 	private readonly IDictionary<Type, IDiagnostic<object>> _diagnostics = new Dictionary<Type, IDiagnostic<object>>();
 
@@ -39,6 +39,7 @@ public partial class DefaultDiagnosticsSubSystem :
 
 	public override void Terminate()
 	{
+		// ReSharper disable once SuspiciousTypeConversion.Global
 		_diagnostics.Values.OfType<IDisposable>().ForEach(e => e.Dispose());
 	}
 }

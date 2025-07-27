@@ -35,7 +35,8 @@ public class PotentialLifestyleMismatches : AbstractContainerDebuggerExtension
 		var mismatches = _diagnostic.Inspect();
 		if (mismatches.Length == 0) return [];
 
-		Array.Sort(mismatches, (f, s) => f[0].ComponentModel.Name.CompareTo(s[0].ComponentModel.Name));
+		Array.Sort(mismatches,
+			(f, s) => string.Compare(f[0].ComponentModel.Name, s[0].ComponentModel.Name, StringComparison.Ordinal));
 		var items = mismatches.ConvertAll(MismatchedComponentView);
 		return
 		[

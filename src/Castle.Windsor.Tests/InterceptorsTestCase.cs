@@ -149,6 +149,7 @@ public class InterceptorsTestCase : IDisposable
 
 		Assert.IsType<ISimpleMixIn>(_service, false);
 
+		// ReSharper disable once SuspiciousTypeConversion.Global
 		((ISimpleMixIn)_service).DoSomething();
 	}
 
@@ -161,6 +162,7 @@ public class InterceptorsTestCase : IDisposable
 		Assert.IsType<ISimpleMixIn>(_service, false);
 
 		Assert.Throws<NotImplementedException>(() =>
+			// ReSharper disable once SuspiciousTypeConversion.Global
 			((ISimpleMixIn)_service).DoSomething());
 	}
 
