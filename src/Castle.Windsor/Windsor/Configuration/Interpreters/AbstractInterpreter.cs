@@ -18,109 +18,107 @@ using Castle.Core.Configuration;
 using Castle.Core.Resource;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.SubSystems.Configuration;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Windsor.Configuration.Interpreters;
 
-/// <summary>Provides common methods for those who wants to implement <see cref = "IConfigurationInterpreter" /></summary>
+/// <summary>Provides common methods for those who wants to implement <see cref="IConfigurationInterpreter" /></summary>
 public abstract class AbstractInterpreter : IConfigurationInterpreter
 {
-	protected static readonly string ContainersNodeName = "containers";
-	protected static readonly string ContainerNodeName = "container";
-	protected static readonly string FacilitiesNodeName = "facilities";
-	protected static readonly string FacilityNodeName = "facility";
-	protected static readonly string ComponentsNodeName = "components";
-	protected static readonly string ComponentNodeName = "component";
-	protected static readonly string InstallersNodeName = "installers";
-	protected static readonly string InstallNodeName = "install";
+    protected const string ContainersNodeName = "containers";
+    protected const string ContainerNodeName = "container";
+    protected const string FacilitiesNodeName = "facilities";
+    protected const string FacilityNodeName = "facility";
+    protected const string ComponentsNodeName = "components";
+    protected const string ComponentNodeName = "component";
+    protected const string InstallersNodeName = "installers";
+    protected const string InstallNodeName = "install";
 
-	private readonly Stack<IResource> _resourceStack = new();
+    private readonly Stack<IResource> _resourceStack = new();
 
-	protected AbstractInterpreter(IResource source)
-	{
-		if (source == null) throw new ArgumentNullException(nameof(source), "IResource is null");
+    protected AbstractInterpreter(IResource source)
+    {
+        Source = source ?? throw new ArgumentNullException(nameof(source), "IResource is null");
 
-		Source = source;
+        PushResource(source);
+    }
 
-		PushResource(source);
-	}
+    protected AbstractInterpreter(string filename) : this(new FileResource(filename))
+    {
+    }
 
-	public AbstractInterpreter(string filename) : this(new FileResource(filename))
-	{
-	}
+    [PublicAPI] protected IResource CurrentResource => _resourceStack.Count == 0 ? null : _resourceStack.Peek();
 
 
-	/// <summary>Should obtain the contents from the resource, interpret it and populate the <see cref = "IConfigurationStore" /> accordingly.</summary>
-	/// <param name = "resource"></param>
-	/// <param name = "store"></param>
-	/// <param name = "kernel"></param>
-	public abstract void ProcessResource(IResource resource, IConfigurationStore store, IKernel kernel);
+    /// <summary>
+    ///     Should obtain the contents from the resource, interpret it and populate the <see cref="IConfigurationStore" />
+    ///     accordingly.
+    /// </summary>
+    /// <param name="resource"></param>
+    /// <param name="store"></param>
+    /// <param name="kernel"></param>
+    public abstract void ProcessResource(IResource resource, IConfigurationStore store, IKernel kernel);
 
-	protected void PushResource(IResource resource)
-	{
-		_resourceStack.Push(resource);
-	}
+    /// <summary>Exposes the reference to <see cref="IResource" /> which the interpreter is likely to hold</summary>
+    /// <value></value>
+    public IResource Source { get; }
 
-	protected void PopResource()
-	{
-		_resourceStack.Pop();
-	}
+    /// <summary>Gets or sets the name of the environment.</summary>
+    /// <value>The name of the environment.</value>
+    public string EnvironmentName { get; set; }
 
-	protected IResource CurrentResource
-	{
-		get
-		{
-			if (_resourceStack.Count == 0) return null;
+    [PublicAPI]
+    protected void PushResource(IResource resource)
+    {
+        _resourceStack.Push(resource);
+    }
 
-			return _resourceStack.Peek();
-		}
-	}
+    [PublicAPI]
+    protected void PopResource()
+    {
+        _resourceStack.Pop();
+    }
 
-	/// <summary>Exposes the reference to <see cref = "IResource" /> which the interpreter is likely to hold</summary>
-	/// <value></value>
-	public IResource Source { get; }
+    protected static void AddChildContainerConfig(string name, IConfiguration childContainer, IConfigurationStore store)
+    {
+        AssertValidId(name);
 
-	/// <summary>Gets or sets the name of the environment.</summary>
-	/// <value>The name of the environment.</value>
-	public string EnvironmentName { get; set; }
+        // TODO: Use import collection on type attribute (if it exists)
 
-	protected static void AddChildContainerConfig(string name, IConfiguration childContainer, IConfigurationStore store)
-	{
-		AssertValidId(name);
+        store.AddChildContainerConfiguration(name, childContainer);
+    }
 
-		// TODO: Use import collection on type attribute (if it exists)
+    protected static void AddFacilityConfig(string id, IConfiguration facility, IConfigurationStore store)
+    {
+        AssertValidId(id);
 
-		store.AddChildContainerConfiguration(name, childContainer);
-	}
+        // TODO: Use import collection on type attribute (if it exists)
 
-	protected static void AddFacilityConfig(string id, IConfiguration facility, IConfigurationStore store)
-	{
-		AssertValidId(id);
+        store.AddFacilityConfiguration(id, facility);
+    }
 
-		// TODO: Use import collection on type attribute (if it exists)
+    protected static void AddComponentConfig(string id, IConfiguration component, IConfigurationStore store)
+    {
+        AssertValidId(id);
 
-		store.AddFacilityConfiguration(id, facility);
-	}
+        // TODO: Use import collection on type and service attribute (if they exist)
 
-	protected static void AddComponentConfig(string id, IConfiguration component, IConfigurationStore store)
-	{
-		AssertValidId(id);
+        store.AddComponentConfiguration(id, component);
+    }
 
-		// TODO: Use import collection on type and service attribute (if they exist)
+    protected static void AddInstallerConfig(IConfiguration installer, IConfigurationStore store)
+    {
+        store.AddInstallerConfiguration(installer);
+    }
 
-		store.AddComponentConfiguration(id, component);
-	}
+    private static void AssertValidId(string id)
+    {
+        if (!string.IsNullOrEmpty(id))
+        {
+            return;
+        }
 
-	protected static void AddInstallerConfig(IConfiguration installer, IConfigurationStore store)
-	{
-		store.AddInstallerConfiguration(installer);
-	}
-
-	private static void AssertValidId(string id)
-	{
-		if (string.IsNullOrEmpty(id))
-		{
-			const string message = "Component or Facility was declared without a proper 'id' or 'type' attribute.";
-			throw new ConfigurationProcessingException(message);
-		}
-	}
+        const string message = "Component or Facility was declared without a proper 'id' or 'type' attribute.";
+        throw new ConfigurationProcessingException(message);
+    }
 }
