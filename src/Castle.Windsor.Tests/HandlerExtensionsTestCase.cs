@@ -17,6 +17,7 @@ using System.Linq;
 using Castle.Windsor.MicroKernel.Handlers;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 
 namespace Castle.Windsor.Tests;
 
@@ -63,7 +64,9 @@ public class HandlerExtensionsTestCase : AbstractContainerTestCase
 	public void Can_proceed_and_inspect_released_value_on_singleton()
 	{
 		var collector = new CollectItemsExtension();
-		Kernel.Register(WithReleaseExtensions(Component.For<DisposableFoo>(), collector));
+		Kernel.Register(
+			Component.For<LifecycleCounter>(),
+			WithReleaseExtensions(Component.For<DisposableFoo>(), collector));
 		var a = Kernel.Resolve<DisposableFoo>();
 		Kernel.Dispose();
 		Assert.Single(collector.ReleasedItems);
@@ -71,10 +74,12 @@ public class HandlerExtensionsTestCase : AbstractContainerTestCase
 	}
 
 	[Fact]
-	public void Can_proceed_and_inspect_released_value_on_transinet()
+	public void Can_proceed_and_inspect_released_value_on_transient()
 	{
 		var collector = new CollectItemsExtension();
-		Kernel.Register(WithReleaseExtensions(Component.For<DisposableFoo>().LifeStyle.Transient, collector));
+		Kernel.Register(
+			Component.For<LifecycleCounter>(),
+			WithReleaseExtensions(Component.For<DisposableFoo>().LifeStyle.Transient, collector));
 		var a = Kernel.Resolve<DisposableFoo>();
 		Kernel.ReleaseComponent(a);
 		Assert.Single(collector.ReleasedItems);

@@ -11,16 +11,16 @@ public class StartableChainDependency : IStartable
     public StartableChainDependency(StartableChainGeneric<string> item, LifecycleCounter lifecycleCounter)
     {
         _lifecycleCounter = lifecycleCounter;
-        _lifecycleCounter.Increment("Create");
+        _lifecycleCounter.Increment();
     }
 
     public void Start()
     {
-        _lifecycleCounter.Increment("Start");
+        _lifecycleCounter.Increment();
     }
 
     public void Stop()
     {
-        _lifecycleCounter.Increment("Stop");
+        _lifecycleCounter.Increment();
     }
 }

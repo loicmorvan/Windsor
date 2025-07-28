@@ -7,6 +7,6 @@ public class StartableChainGeneric<T>
 {
     public StartableChainGeneric(LifecycleCounter lifecycleCounter)
     {
-        lifecycleCounter.Increment("Create");
+        lifecycleCounter.Increment();
     }
 }

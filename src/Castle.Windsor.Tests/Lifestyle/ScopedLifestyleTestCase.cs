@@ -14,221 +14,231 @@
 
 using System;
 using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Lifestyle;
 using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 using Castle.Windsor.Windsor;
 
 namespace Castle.Windsor.Tests.Lifestyle;
 
 public class ScopedLifestyleTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void Can_apply_scoped_lifestyle_via_attribute()
-	{
-		Container.Register(Component.For<ScopedComponent>());
+    [Fact]
+    public void Can_apply_scoped_lifestyle_via_attribute()
+    {
+        Container.Register(Component.For<ScopedComponent>());
 
-		var handler = Kernel.GetHandler(typeof(ScopedComponent));
-		Assert.Equal(LifestyleType.Scoped, handler.ComponentModel.LifestyleType);
-	}
+        var handler = Kernel.GetHandler(typeof(ScopedComponent));
+        Assert.Equal(LifestyleType.Scoped, handler.ComponentModel.LifestyleType);
+    }
 
-	[Fact]
-	public void Can_create_scope_without_using_container_or_kernel()
-	{
-		Container.Register(Component.For<A>().LifeStyle.Scoped());
-		using (new CallContextLifetimeScope())
-		{
-			Container.Resolve<A>();
-		}
-	}
+    [Fact]
+    public void Can_create_scope_without_using_container_or_kernel()
+    {
+        Container.Register(Component.For<A>().LifeStyle.Scoped());
+        using (new CallContextLifetimeScope())
+        {
+            Container.Resolve<A>();
+        }
+    }
 
-	[Fact]
-	public void Ending_scope_releases_component()
-	{
-		DisposableFoo.ResetDisposedCount();
+    [Fact]
+    public void Ending_scope_releases_component()
+    {
+        var counter = new LifecycleCounter();
 
-		Container.Register(Component.For<DisposableFoo>().LifestyleScoped());
+        Container.Register(Component.For<DisposableFoo>().LifestyleScoped().DependsOn(Arguments.FromTyped([counter])));
 
-		using (Container.BeginScope())
-		{
-			Container.Resolve<DisposableFoo>();
-		}
+        using (Container.BeginScope())
+        {
+            Container.Resolve<DisposableFoo>();
+        }
 
-		Assert.Equal(1, DisposableFoo.DisposedCount);
-	}
+        Assert.Equal(1, counter["Dispose"]);
+    }
 
-	[Fact]
-	public void Resolve_scoped_component_within_a_scope_successful()
-	{
-		Container.Register(Component.For<A>().LifeStyle.Scoped());
-		using (Container.BeginScope())
-		{
-			Container.Resolve<A>();
-		}
-	}
+    [Fact]
+    public void Resolve_scoped_component_within_a_scope_successful()
+    {
+        Container.Register(Component.For<A>().LifeStyle.Scoped());
+        using (Container.BeginScope())
+        {
+            Container.Resolve<A>();
+        }
+    }
 
-	[Fact]
-	public void Resolve_scoped_component_within_a_scope_successful_registered_via_attribute()
-	{
-		Container.Register(Component.For<ScopedComponent>());
-		using (Container.BeginScope())
-		{
-			Container.Resolve<ScopedComponent>();
-		}
-	}
+    [Fact]
+    public void Resolve_scoped_component_within_a_scope_successful_registered_via_attribute()
+    {
+        Container.Register(Component.For<ScopedComponent>());
+        using (Container.BeginScope())
+        {
+            Container.Resolve<ScopedComponent>();
+        }
+    }
 
-	[Fact]
-	public void Resolve_scoped_component_without_a_scope_throws_helpful_exception()
-	{
-		Container.Register(Component.For<A>().LifeStyle.Scoped());
+    [Fact]
+    public void Resolve_scoped_component_without_a_scope_throws_helpful_exception()
+    {
+        Container.Register(Component.For<A>().LifeStyle.Scoped());
 
-		var exception = Assert.Throws<InvalidOperationException>(() =>
-			Container.Resolve<A>());
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            Container.Resolve<A>());
 
-		Assert.Equal(
-			"Scope was not available. Did you forget to call container.BeginScope()?",
-			exception.Message);
-	}
+        Assert.Equal(
+            "Scope was not available. Did you forget to call container.BeginScope()?",
+            exception.Message);
+    }
 
-	[Fact]
-	public void Scoped_component_instance_is_reused_within_the_scope()
-	{
-		Container.Register(Component.For<A>().LifeStyle.Scoped());
+    [Fact]
+    public void Scoped_component_instance_is_reused_within_the_scope()
+    {
+        Container.Register(Component.For<A>().LifeStyle.Scoped());
 
-		using (Container.BeginScope())
-		{
-			var a1 = Container.Resolve<A>();
-			var a2 = Container.Resolve<A>();
-			Assert.Same(a1, a2);
-		}
-	}
+        using (Container.BeginScope())
+        {
+            var a1 = Container.Resolve<A>();
+            var a2 = Container.Resolve<A>();
+            Assert.Same(a1, a2);
+        }
+    }
 
-	[Fact]
-	public void Scoped_component_is_bound_to_the_innermost_scope()
-	{
-		DisposableFoo.ResetDisposedCount();
+    [Fact]
+    public void Scoped_component_is_bound_to_the_innermost_scope()
+    {
+        var counter = new LifecycleCounter();
 
-		Container.Register(Component.For<DisposableFoo>().LifeStyle.Scoped());
+        Container.Register(Component.For<DisposableFoo>().LifeStyle.Scoped().DependsOn(Arguments.FromTyped([counter])));
 
-		using (Container.BeginScope())
-		{
-			using (Container.BeginScope())
-			{
-				Container.Resolve<DisposableFoo>();
-				Assert.Equal(0, DisposableFoo.DisposedCount);
-			}
+        using (Container.BeginScope())
+        {
+            using (Container.BeginScope())
+            {
+                Container.Resolve<DisposableFoo>();
+                Assert.Equal(0, counter["Dispose"]);
+            }
 
-			Assert.Equal(1, DisposableFoo.DisposedCount);
-		}
+            Assert.Equal(1, counter["Dispose"]);
+        }
 
-		Assert.Equal(1, DisposableFoo.DisposedCount);
-	}
+        Assert.Equal(1, counter["Dispose"]);
+    }
 
-	[Fact]
-	public void Scoped_component_is_not_released_by_call_to_container_Release()
-	{
-		DisposableFoo foo;
-		DisposableFoo.ResetDisposedCount();
+    [Fact]
+    public void Scoped_component_is_not_released_by_call_to_container_Release()
+    {
+        var counter = new LifecycleCounter();
 
-		Container.Register(Component.For<DisposableFoo>().LifeStyle.Scoped());
+        Container.Register(Component.For<DisposableFoo>().LifeStyle.Scoped().DependsOn(Arguments.FromTyped([counter])));
 
-		using (Container.BeginScope())
-		{
-			foo = Container.Resolve<DisposableFoo>();
-			Container.Release(foo);
-			Assert.Equal(0, DisposableFoo.DisposedCount);
-		}
-	}
+        using (Container.BeginScope())
+        {
+            var foo = Container.Resolve<DisposableFoo>();
+            Container.Release(foo);
+            Assert.Equal(0, counter["Dispose"]);
+        }
+    }
 
-	[Fact]
-	public void Scoped_component_is_not_tracked_by_the_release_policy()
-	{
-		DisposableFoo foo;
-		DisposableFoo.ResetDisposedCount();
+    [Fact]
+    public void Scoped_component_is_not_tracked_by_the_release_policy()
+    {
+        Container.Register(
+            Component.For<LifecycleCounter>(),
+            Component.For<DisposableFoo>().LifeStyle.Scoped());
 
-		Container.Register(Component.For<DisposableFoo>().LifeStyle.Scoped());
+        using (Container.BeginScope())
+        {
+            var foo = Container.Resolve<DisposableFoo>();
+            Assert.False(Kernel.ReleasePolicy.HasTrack(foo));
+        }
+    }
 
-		using (Container.BeginScope())
-		{
-			foo = Container.Resolve<DisposableFoo>();
-			Assert.False(Kernel.ReleasePolicy.HasTrack(foo));
-		}
-	}
+    [Fact]
+    public void Transient_depending_on_scoped_component_is_not_tracked_by_the_container()
+    {
+        Container.Register(
+            Component.For<LifecycleCounter>(),
+            Component.For<DisposableFoo>().LifeStyle.Scoped(),
+            Component.For<UsesDisposableFoo>().LifeStyle.Transient);
 
-	[Fact]
-	public void Transient_depending_on_scoped_component_is_not_tracked_by_the_container()
-	{
-		Container.Register(Component.For<DisposableFoo>().LifeStyle.Scoped(),
-			Component.For<UsesDisposableFoo>().LifeStyle.Transient);
+        using (Container.BeginScope())
+        {
+            ReferenceTracker
+                .Track(() => Container.Resolve<UsesDisposableFoo>())
+                .AssertNoLongerReferenced();
+        }
+    }
 
-		using (Container.BeginScope())
-		{
-			ReferenceTracker
-				.Track(() => Container.Resolve<UsesDisposableFoo>())
-				.AssertNoLongerReferenced();
-		}
-	}
+    [Fact]
+    public void Transient_depending_on_scoped_component_is_not_tracked_by_the_release_policy()
+    {
+        Container.Register(
+            Component.For<LifecycleCounter>(),
+            Component.For<DisposableFoo>().LifeStyle.Scoped(),
+            Component.For<UsesDisposableFoo>().LifeStyle.Transient);
 
-	[Fact]
-	public void Transient_depending_on_scoped_component_is_not_tracked_by_the_release_policy()
-	{
-		Container.Register(Component.For<DisposableFoo>().LifeStyle.Scoped(),
-			Component.For<UsesDisposableFoo>().LifeStyle.Transient);
+        using (Container.BeginScope())
+        {
+            var udf = Container.Resolve<UsesDisposableFoo>();
+            Assert.False(Kernel.ReleasePolicy.HasTrack(udf));
+        }
+    }
 
-		using (Container.BeginScope())
-		{
-			var udf = Container.Resolve<UsesDisposableFoo>();
-			Assert.False(Kernel.ReleasePolicy.HasTrack(udf));
-		}
-	}
+    [Fact]
+    public void Requiring_scope_without_parent_scope_begins_new_scope()
+    {
+        Container.Register(Component.For<A>().LifeStyle.Scoped());
+        using var scope = Container.RequireScope();
+        Container.Resolve<A>();
+        Assert.NotNull(scope);
+    }
 
-	[Fact]
-	public void Requiring_scope_without_parent_scope_begins_new_scope()
-	{
-		Container.Register(Component.For<A>().LifeStyle.Scoped());
-		using var scope = Container.RequireScope();
-		Container.Resolve<A>();
-		Assert.NotNull(scope);
-	}
+    [Fact]
+    public void Requiring_scope_within_parent_scope_uses_parent_scope()
+    {
+        Container.Register(Component.For<A>().LifeStyle.Scoped());
+        using (Container.BeginScope())
+        {
+            var a = Container.Resolve<A>();
+            using (var scope = Container.RequireScope())
+            {
+                var aa = Container.Resolve<A>();
+                Assert.Same(a, aa);
+                Assert.Null(scope);
+            }
+        }
+    }
 
-	[Fact]
-	public void Requiring_scope_within_parent_scope_uses_parent_scope()
-	{
-		Container.Register(Component.For<A>().LifeStyle.Scoped());
-		using (Container.BeginScope())
-		{
-			var a = Container.Resolve<A>();
-			using (var scope = Container.RequireScope())
-			{
-				var aa = Container.Resolve<A>();
-				Assert.Same(a, aa);
-				Assert.Null(scope);
-			}
-		}
-	}
+    [Fact]
+    [Bug("IOC-319")]
+    public void Nested_container_and_scope_used_together_dont_cause_components_to_be_released_twice()
+    {
+        var counter = new LifecycleCounter();
 
-	[Fact]
-	[Bug("IOC-319")]
-	public void Nested_container_and_scope_used_together_dont_cause_components_to_be_released_twice()
-	{
-		DisposableFoo.ResetDisposedCount();
-		Container.Register(Component.For<IWindsorContainer>().LifeStyle.Scoped()
-			.UsingFactoryMethod(k =>
-			{
-				var container = new WindsorContainer();
-				container.Register(Component.For<DisposableFoo>().LifestyleScoped());
+        Container.Register(
+            Component.For<IWindsorContainer>().LifeStyle.Scoped()
+                .UsingFactoryMethod(k =>
+                {
+                    var container = new WindsorContainer();
+                    container.Register(
+                        Component
+                            .For<DisposableFoo>()
+                            .DependsOn(Arguments.FromTyped([counter]))
+                            .LifestyleScoped());
 
-				k.AddChildKernel(container.Kernel);
-				return container;
-			}));
-		using (Container.BeginScope())
-		{
-			var child = Container.Resolve<IWindsorContainer>();
-			child.Resolve<DisposableFoo>();
-		}
+                    k.AddChildKernel(container.Kernel);
+                    return container;
+                }));
+        using (Container.BeginScope())
+        {
+            var child = Container.Resolve<IWindsorContainer>();
+            child.Resolve<DisposableFoo>();
+        }
 
-		Assert.Equal(1, DisposableFoo.DisposedCount);
-	}
+        Assert.Equal(1, counter["Dispose"]);
+    }
 }

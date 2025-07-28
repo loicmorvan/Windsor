@@ -13,17 +13,23 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public class LifecycleCounter
 {
-	private readonly Dictionary<string, int> _countersByKeys = new();
+    private readonly Dictionary<string, int> _countersByKeys = new();
 
-	public int this[string key] => _countersByKeys.TryGetValue(key, out var value) ? value : 0;
+    public int this[string key] => _countersByKeys.TryGetValue(key, out var value) ? value : 0;
 
-	public void Increment(string key)
-	{
-		_countersByKeys[key] = _countersByKeys.TryGetValue(key, out var value) ? value + 1 : 1;
-	}
+    public void Increment([CallerMemberName] string key = null)
+    {
+        if (key == null)
+        {
+            return;
+        }
+
+        _countersByKeys[key] = _countersByKeys.TryGetValue(key, out var value) ? value + 1 : 1;
+    }
 }
