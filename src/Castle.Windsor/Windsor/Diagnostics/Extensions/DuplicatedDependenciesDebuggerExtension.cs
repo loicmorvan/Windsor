@@ -58,7 +58,7 @@ public class DuplicatedDependenciesDebuggerExtension : AbstractContainerDebugger
 		return ComponentDebuggerView.BuildRawFor(handler, "Count = " + mismatches.Length, items);
 	}
 
-	private DebuggerViewItemWithDetails MismatchView(DependencyDuplicate input)
+	private static DebuggerViewItemWithDetails MismatchView(DependencyDuplicate input)
 	{
 		return new DebuggerViewItemWithDetails(Description(input.Dependency1), Description(input.Dependency2),
 			DuplicatedDependenciesDiagnostic.GetDetails(input));

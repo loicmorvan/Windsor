@@ -14,4 +14,4 @@
 
 namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
 
-public delegate void LifecycleActionDelegate<T>(IKernel kernel, T item);
+public delegate void LifecycleActionDelegate<in T>(IKernel kernel, T item);

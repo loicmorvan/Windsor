@@ -116,9 +116,8 @@ public class InterceptorReference : IReference<IInterceptor>, IEquatable<Interce
 			var typedHandler = kernel.GetHandler(_referencedComponentType);
 			if (typedHandler != null)
 			{
-				message.AppendFormat(
-					"Component '{0}' matching the type specified was found in the container. Did you mean to use it? If so, please specify the reference via name, or register the interceptor without specifying its name.",
-					typedHandler.ComponentModel.Name);
+				message.Append(
+					$"Component '{typedHandler.ComponentModel.Name}' matching the type specified was found in the container. Did you mean to use it? If so, please specify the reference via name, or register the interceptor without specifying its name.");
 				return message;
 			}
 		}

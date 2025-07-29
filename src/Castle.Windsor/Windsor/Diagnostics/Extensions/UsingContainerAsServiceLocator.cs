@@ -22,26 +22,30 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 
 public class UsingContainerAsServiceLocator : AbstractContainerDebuggerExtension
 {
-	private const string Name = "Potential Service Locator usages";
+    private const string Name = "Potential Service Locator usages";
 
-	private IUsingContainerAsServiceLocatorDiagnostic _diagnostic;
+    private UsingContainerAsServiceLocatorDiagnostic _diagnostic;
 
-	public override IEnumerable<DebuggerViewItem> Attach()
-	{
-		var handlers = _diagnostic.Inspect();
-		if (handlers.Length == 0) return [];
-		Array.Sort(handlers,
-			(f, s) => string.Compare(f.ComponentModel.Name, s.ComponentModel.Name, StringComparison.Ordinal));
-		var items = handlers.ConvertAll(DefaultComponentView);
-		return
-		[
-			new DebuggerViewItem(Name, "Count = " + items.Length, items)
-		];
-	}
+    public override IEnumerable<DebuggerViewItem> Attach()
+    {
+        var handlers = _diagnostic.Inspect();
+        if (handlers.Length == 0)
+        {
+            return [];
+        }
 
-	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
-	{
-		_diagnostic = new UsingContainerAsServiceLocatorDiagnostic(kernel);
-		diagnosticsHost.AddDiagnostic(_diagnostic);
-	}
+        Array.Sort(handlers,
+            (f, s) => string.Compare(f.ComponentModel.Name, s.ComponentModel.Name, StringComparison.Ordinal));
+        var items = handlers.ConvertAll(DefaultComponentView);
+        return
+        [
+            new DebuggerViewItem(Name, "Count = " + items.Length, items)
+        ];
+    }
+
+    public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
+    {
+        _diagnostic = new UsingContainerAsServiceLocatorDiagnostic(kernel);
+        diagnosticsHost.AddDiagnostic<IUsingContainerAsServiceLocatorDiagnostic>(_diagnostic);
+    }
 }

@@ -44,206 +44,247 @@ namespace Castle.Windsor.Windsor.Configuration.Interpreters;
 ///     &lt;/configuration&gt;
 ///   </code>
 /// </summary>
-public class XmlInterpreter : AbstractInterpreter
+public sealed class XmlInterpreter : AbstractInterpreter
 {
-
-	/// <summary>Initializes a new instance of the <see cref = "XmlInterpreter" /> class.</summary>
-	/// <param name = "filename">The filename.</param>
+    /// <summary>Initializes a new instance of the <see cref="XmlInterpreter" /> class.</summary>
+    /// <param name="filename">The filename.</param>
 	public XmlInterpreter(string filename) : base(filename)
-	{
-	}
+    {
+    }
 
-	/// <summary>Initializes a new instance of the <see cref = "XmlInterpreter" /> class.</summary>
-	/// <param name = "source">The source.</param>
+    /// <summary>Initializes a new instance of the <see cref="XmlInterpreter" /> class.</summary>
+    /// <param name="source">The source.</param>
 	public XmlInterpreter(IResource source) : base(source)
-	{
-	}
+    {
+    }
 
-	public override void ProcessResource(IResource source, IConfigurationStore store, IKernel kernel)
-	{
-		var resourceSubSystem = kernel.GetSubSystem(SubSystemConstants.ResourceKey) as IResourceSubSystem;
-		var processor = new XmlProcessor.XmlProcessor(EnvironmentName, resourceSubSystem);
+    public override void ProcessResource(IResource source, IConfigurationStore store, IKernel kernel)
+    {
+        var resourceSubSystem = kernel.GetSubSystem(SubSystemConstants.ResourceKey) as IResourceSubSystem;
+        var processor = new XmlProcessor.XmlProcessor(EnvironmentName, resourceSubSystem);
 
-		try
-		{
-			var element = processor.Process(source);
-			var converter = kernel.GetConversionManager();
-			Deserialize(element, store, converter);
-		}
-		catch (XmlProcessorException e)
-		{
-			throw new ConfigurationProcessingException("Unable to process xml resource.", e);
-		}
-	}
+        try
+        {
+            var element = processor.Process(source);
+            var converter = kernel.GetConversionManager();
+            Deserialize(element, store, converter);
+        }
+        catch (XmlProcessorException e)
+        {
+            throw new ConfigurationProcessingException("Unable to process xml resource.", e);
+        }
+    }
 
-	protected static void Deserialize(XmlNode section, IConfigurationStore store, IConversionManager converter)
-	{
-		foreach (XmlNode node in section)
-		{
-			if (XmlConfigurationDeserializer.IsTextNode(node))
-				throw new ConfigurationProcessingException(
-					$"{node.Name} cannot contain text nodes");
-			if (node.NodeType == XmlNodeType.Element) DeserializeElement(node, store, converter);
-		}
-	}
+    private static void Deserialize(XmlNode section, IConfigurationStore store, IConversionManager converter)
+    {
+        foreach (XmlNode node in section)
+        {
+            if (XmlConfigurationDeserializer.IsTextNode(node))
+            {
+                throw new ConfigurationProcessingException(
+                    $"{node.Name} cannot contain text nodes");
+            }
 
-	private static void AssertNodeName(XmlNode node, IEquatable<string> expectedName)
-	{
-		if (expectedName.Equals(node.Name)) return;
+            if (node.NodeType == XmlNodeType.Element)
+            {
+                DeserializeElement(node, store, converter);
+            }
+        }
+    }
 
-		var message = string.Format("Unexpected node under '{0}': Expected '{1}' but found '{2}'", expectedName,
-			expectedName, node.Name);
+    private static void AssertNodeName(XmlNode node, IEquatable<string> expectedName)
+    {
+        if (expectedName.Equals(node.Name))
+        {
+            return;
+        }
 
-		throw new ConfigurationProcessingException(message);
-	}
+        var message = $"Unexpected node under '{expectedName}': Expected '{expectedName}' but found '{node.Name}'";
 
-	private static void DeserializeComponent(XmlNode node, IConfigurationStore store, IConversionManager converter)
-	{
-		var config = XmlConfigurationDeserializer.GetDeserializedNode(node);
-		var id = config.Attributes["id"];
-		if (string.IsNullOrEmpty(id))
-		{
-			var type = converter.PerformConversion<Type>(config.Attributes["type"]);
-			id = ComponentName.DefaultNameFor(type);
-			config.Attributes["id"] = id;
-			config.Attributes.Add("id-automatic", bool.TrueString);
-		}
+        throw new ConfigurationProcessingException(message);
+    }
 
-		AddComponentConfig(id, config, store);
-	}
+    private static void DeserializeComponent(XmlNode node, IConfigurationStore store, IConversionManager converter)
+    {
+        var config = XmlConfigurationDeserializer.GetDeserializedNode(node);
+        var id = config.Attributes["id"];
+        if (string.IsNullOrEmpty(id))
+        {
+            var type = converter.PerformConversion<Type>(config.Attributes["type"]);
+            id = ComponentName.DefaultNameFor(type);
+            config.Attributes["id"] = id;
+            config.Attributes.Add("id-automatic", bool.TrueString);
+        }
 
-	private static void DeserializeComponents(XmlNodeList nodes, IConfigurationStore store, IConversionManager converter)
-	{
-		foreach (XmlNode node in nodes)
-		{
-			if (node.NodeType != XmlNodeType.Element) continue;
+        AddComponentConfig(id, config, store);
+    }
 
-			AssertNodeName(node, ComponentNodeName);
-			DeserializeComponent(node, store, converter);
-		}
-	}
+    private static void DeserializeComponents(XmlNodeList nodes, IConfigurationStore store,
+        IConversionManager converter)
+    {
+        foreach (XmlNode node in nodes)
+        {
+            if (node.NodeType != XmlNodeType.Element)
+            {
+                continue;
+            }
 
-	private static void DeserializeContainer(XmlNode node, IConfigurationStore store)
-	{
-		var config = XmlConfigurationDeserializer.GetDeserializedNode(node);
-		IConfiguration newConfig = new MutableConfiguration(config.Name, node.InnerXml);
+            AssertNodeName(node, ComponentNodeName);
+            DeserializeComponent(node, store, converter);
+        }
+    }
 
-		// Copy all attributes
-		var allKeys = config.Attributes.AllKeys;
+    private static void DeserializeContainer(XmlNode node, IConfigurationStore store)
+    {
+        var config = XmlConfigurationDeserializer.GetDeserializedNode(node);
+        var newConfig = new MutableConfiguration(config.Name, node.InnerXml);
 
-		foreach (var key in allKeys) newConfig.Attributes.Add(key, config.Attributes[key]);
+        // Copy all attributes
+        var allKeys = config.Attributes.AllKeys;
 
-		// Copy all children
-		newConfig.Children.AddRange(config.Children);
+        foreach (var key in allKeys)
+        {
+            newConfig.Attributes.Add(key, config.Attributes[key]);
+        }
 
-		var name = GetRequiredAttributeValue(config, "name");
-		AddChildContainerConfig(name, newConfig, store);
-	}
+        // Copy all children
+        newConfig.Children.AddRange(config.Children);
 
-	private static void DeserializeContainers(XmlNodeList nodes, IConfigurationStore store)
-	{
-		foreach (XmlNode node in nodes)
-		{
-			if (node.NodeType != XmlNodeType.Element) continue;
+        var name = GetRequiredAttributeValue(config, "name");
+        AddChildContainerConfig(name, newConfig, store);
+    }
 
-			AssertNodeName(node, ContainerNodeName);
-			DeserializeContainer(node, store);
-		}
-	}
+    private static void DeserializeContainers(XmlNodeList nodes, IConfigurationStore store)
+    {
+        foreach (XmlNode node in nodes)
+        {
+            if (node.NodeType != XmlNodeType.Element)
+            {
+                continue;
+            }
 
-	private static void DeserializeElement(XmlNode node, IConfigurationStore store, IConversionManager converter)
-	{
-		if (ContainersNodeName.Equals(node.Name))
-		{
-			DeserializeContainers(node.ChildNodes, store);
-		}
-		else if (FacilitiesNodeName.Equals(node.Name))
-		{
-			DeserializeFacilities(node.ChildNodes, store, converter);
-		}
-		else if (InstallersNodeName.Equals(node.Name))
-		{
-			DeserializeInstallers(node.ChildNodes, store);
-		}
-		else if (ComponentsNodeName.Equals(node.Name))
-		{
-			DeserializeComponents(node.ChildNodes, store, converter);
-		}
-		else
-		{
-			var message = string.Format(
-				"Configuration parser encountered <{0}>, but it was expecting to find " +
-				"<{1}>, <{2}> or <{3}>. There might be either a typo on <{0}> or " +
-				"you might have forgotten to nest it properly.",
-				node.Name, InstallersNodeName, FacilitiesNodeName, ComponentsNodeName);
-			throw new ConfigurationProcessingException(message);
-		}
-	}
+            AssertNodeName(node, ContainerNodeName);
+            DeserializeContainer(node, store);
+        }
+    }
 
-	private static void DeserializeFacilities(XmlNodeList nodes, IConfigurationStore store, IConversionManager converter)
-	{
-		foreach (XmlNode node in nodes)
-		{
-			if (node.NodeType != XmlNodeType.Element) continue;
+    private static void DeserializeElement(XmlNode node, IConfigurationStore store, IConversionManager converter)
+    {
+        switch (node.Name)
+        {
+            case ContainersNodeName:
+                DeserializeContainers(node.ChildNodes, store);
+                break;
+            case FacilitiesNodeName:
+                DeserializeFacilities(node.ChildNodes, store, converter);
+                break;
+            case InstallersNodeName:
+                DeserializeInstallers(node.ChildNodes, store);
+                break;
+            case ComponentsNodeName:
+                DeserializeComponents(node.ChildNodes, store, converter);
+                break;
+            default:
+            {
+                var message = string.Format(
+                    "Configuration parser encountered <{0}>, but it was expecting to find " +
+                    "<{1}>, <{2}> or <{3}>. There might be either a typo on <{0}> or " +
+                    "you might have forgotten to nest it properly.",
+                    node.Name, InstallersNodeName, FacilitiesNodeName, ComponentsNodeName);
+                throw new ConfigurationProcessingException(message);
+            }
+        }
+    }
 
-			AssertNodeName(node, FacilityNodeName);
-			DeserializeFacility(node, store, converter);
-		}
-	}
+    private static void DeserializeFacilities(XmlNodeList nodes, IConfigurationStore store,
+        IConversionManager converter)
+    {
+        foreach (XmlNode node in nodes)
+        {
+            if (node.NodeType != XmlNodeType.Element)
+            {
+                continue;
+            }
 
-	private static void DeserializeFacility(XmlNode node, IConfigurationStore store, IConversionManager converter)
-	{
-		var config = XmlConfigurationDeserializer.GetDeserializedNode(node);
-		ThrowIfFacilityConfigurationHasIdAttribute(config);
-		var typeName = GetRequiredAttributeValue(config, "type");
-		var type = converter.PerformConversion<Type>(typeName);
-		AddFacilityConfig(type.FullName, config, store);
-	}
+            AssertNodeName(node, FacilityNodeName);
+            DeserializeFacility(node, store, converter);
+        }
+    }
 
-	private static void DeserializeInstaller(XmlNode node, IConfigurationStore store)
-	{
-		var config = XmlConfigurationDeserializer.GetDeserializedNode(node);
-		var type = config.Attributes["type"];
-		var assembly = config.Attributes["assembly"];
-		var directory = config.Attributes["directory"];
-		var attributesCount = 0;
-		if (string.IsNullOrEmpty(type) == false) attributesCount++;
-		if (string.IsNullOrEmpty(assembly) == false) attributesCount++;
-		if (string.IsNullOrEmpty(directory) == false) attributesCount++;
-		if (attributesCount != 1)
-			throw new ConfigurationProcessingException(
-				"install must have exactly one of the following attributes defined: 'type', 'assembly' or 'directory'.");
-		AddInstallerConfig(config, store);
-	}
+    private static void DeserializeFacility(XmlNode node, IConfigurationStore store, IConversionManager converter)
+    {
+        var config = XmlConfigurationDeserializer.GetDeserializedNode(node);
+        ThrowIfFacilityConfigurationHasIdAttribute(config);
+        var typeName = GetRequiredAttributeValue(config, "type");
+        var type = converter.PerformConversion<Type>(typeName);
+        AddFacilityConfig(type.FullName, config, store);
+    }
 
-	private static void DeserializeInstallers(XmlNodeList nodes, IConfigurationStore store)
-	{
-		foreach (XmlNode node in nodes)
-		{
-			if (node.NodeType != XmlNodeType.Element) continue;
+    private static void DeserializeInstaller(XmlNode node, IConfigurationStore store)
+    {
+        var config = XmlConfigurationDeserializer.GetDeserializedNode(node);
+        var type = config.Attributes["type"];
+        var assembly = config.Attributes["assembly"];
+        var directory = config.Attributes["directory"];
+        var attributesCount = 0;
+        if (string.IsNullOrEmpty(type) == false)
+        {
+            attributesCount++;
+        }
 
-			AssertNodeName(node, InstallNodeName);
-			DeserializeInstaller(node, store);
-		}
-	}
+        if (string.IsNullOrEmpty(assembly) == false)
+        {
+            attributesCount++;
+        }
 
-	private static string GetRequiredAttributeValue(IConfiguration configuration, string attributeName)
-	{
-		var value = configuration.Attributes[attributeName];
+        if (string.IsNullOrEmpty(directory) == false)
+        {
+            attributesCount++;
+        }
 
-		if (string.IsNullOrEmpty(value))
-		{
-			var message = string.Format("{0} elements expects required non blank attribute {1}",
-				configuration.Name, attributeName);
+        if (attributesCount != 1)
+        {
+            throw new ConfigurationProcessingException(
+                "install must have exactly one of the following attributes defined: 'type', 'assembly' or 'directory'.");
+        }
 
-			throw new ConfigurationProcessingException(message);
-		}
+        AddInstallerConfig(config, store);
+    }
 
-		return value;
-	}
+    private static void DeserializeInstallers(XmlNodeList nodes, IConfigurationStore store)
+    {
+        foreach (XmlNode node in nodes)
+        {
+            if (node.NodeType != XmlNodeType.Element)
+            {
+                continue;
+            }
 
-	private static void ThrowIfFacilityConfigurationHasIdAttribute(IConfiguration config)
-	{
-		if (config.Attributes["id"] != null) throw new ConfigurationProcessingException("The 'id' attribute has been removed from facility configurations, please remove it from your configuration.");
-	}
+            AssertNodeName(node, InstallNodeName);
+            DeserializeInstaller(node, store);
+        }
+    }
+
+    private static string GetRequiredAttributeValue(IConfiguration configuration, string attributeName)
+    {
+        var value = configuration.Attributes[attributeName];
+
+        if (!string.IsNullOrEmpty(value))
+        {
+            return value;
+        }
+
+        var message = $"{configuration.Name} elements expects required non blank attribute {attributeName}";
+
+        throw new ConfigurationProcessingException(message);
+    }
+
+    private static void ThrowIfFacilityConfigurationHasIdAttribute(IConfiguration config)
+    {
+        if (config.Attributes["id"] != null)
+        {
+            throw new ConfigurationProcessingException(
+                "The 'id' attribute has been removed from facility configurations, please remove it from your configuration.");
+        }
+    }
 }

@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-
 using Castle.Core.Configuration;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 [Serializable]
 public class DictionaryConverter : AbstractTypeConverter
@@ -69,14 +68,9 @@ public class DictionaryConverter : AbstractTypeConverter
 
 			if (itemConfig.Attributes["valueType"] != null) convertValueTo = Context.Composition.PerformConversion<Type>(itemConfig.Attributes["valueType"]);
 
-			object value;
-
-			if (itemConfig.Children.Count == 0)
-				value = Context.Composition.PerformConversion(
-					itemConfig, convertValueTo);
-			else
-				value = Context.Composition.PerformConversion(
-					itemConfig.Children[0], convertValueTo);
+			var value = Context.Composition.PerformConversion(itemConfig.Children.Count == 0
+				? itemConfig
+				: itemConfig.Children[0], convertValueTo);
 
 			dict.Add(key, value);
 		}

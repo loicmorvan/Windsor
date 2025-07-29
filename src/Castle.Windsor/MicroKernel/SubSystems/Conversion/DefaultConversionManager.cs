@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Castle.Core.Configuration;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Context;
@@ -24,138 +25,112 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 [Serializable]
 public sealed class DefaultConversionManager : AbstractSubSystem, IConversionManager, ITypeConverterContext
 {
-	[ThreadStatic] private static Stack<Tuple<ComponentModel, CreationContext>> _slot;
+    [ThreadStatic] private static Stack<Tuple<ComponentModel, CreationContext>> _slot;
 
-	private readonly IList<ITypeConverter> _converters = new List<ITypeConverter>();
-	private readonly IList<ITypeConverter> _standAloneConverters = new List<ITypeConverter>();
+    private readonly List<ITypeConverter> _converters = [];
+    private readonly List<ITypeConverter> _standAloneConverters = [];
 
-	public DefaultConversionManager()
-	{
-		InitDefaultConverters();
-	}
+    public DefaultConversionManager()
+    {
+        InitDefaultConverters();
+    }
 
-	private Stack<Tuple<ComponentModel, CreationContext>> CurrentStack
-	{
-		get
-		{
-			if (_slot == null) _slot = new Stack<Tuple<ComponentModel, CreationContext>>();
+    private static Stack<Tuple<ComponentModel, CreationContext>> CurrentStack =>
+        _slot ??= new Stack<Tuple<ComponentModel, CreationContext>>();
 
-			return _slot;
-		}
-	}
+    public void Add(ITypeConverter converter)
+    {
+        converter.Context = this;
 
-	public void Add(ITypeConverter converter)
-	{
-		converter.Context = this;
+        _converters.Add(converter);
 
-		_converters.Add(converter);
+        if (converter is not IKernelDependentConverter)
+        {
+            _standAloneConverters.Add(converter);
+        }
+    }
 
-		if (converter is not IKernelDependentConverter) _standAloneConverters.Add(converter);
-	}
+    public ITypeConverterContext Context
+    {
+        get => this;
+        set => throw new NotImplementedException();
+    }
 
-	public ITypeConverterContext Context
-	{
-		get => this;
-		set => throw new NotImplementedException();
-	}
+    public bool CanHandleType(Type type)
+    {
+        return _converters.Any(converter => converter.CanHandleType(type));
+    }
 
-	public bool CanHandleType(Type type)
-	{
-		foreach (var converter in _converters)
-			if (converter.CanHandleType(type))
-				return true;
+    public bool CanHandleType(Type type, IConfiguration configuration)
+    {
+        return _converters.Any(converter => converter.CanHandleType(type, configuration));
+    }
 
-		return false;
-	}
+    public object PerformConversion(string value, Type targetType)
+    {
+        foreach (var converter in _converters.Where(converter => converter.CanHandleType(targetType)))
+        {
+            return converter.PerformConversion(value, targetType);
+        }
 
-	public bool CanHandleType(Type type, IConfiguration configuration)
-	{
-		foreach (var converter in _converters)
-			if (converter.CanHandleType(type, configuration))
-				return true;
+        var message = $"No converter registered to handle the type {targetType.FullName}";
 
-		return false;
-	}
+        throw new ConverterException(message);
+    }
 
-	public object PerformConversion(string value, Type targetType)
-	{
-		foreach (var converter in _converters)
-			if (converter.CanHandleType(targetType))
-				return converter.PerformConversion(value, targetType);
+    public object PerformConversion(IConfiguration configuration, Type targetType)
+    {
+        foreach (var converter in _converters.Where(converter => converter.CanHandleType(targetType, configuration)))
+        {
+            return converter.PerformConversion(configuration, targetType);
+        }
 
-		var message = $"No converter registered to handle the type {targetType.FullName}";
+        var message = $"No converter registered to handle the type {targetType.FullName}";
 
-		throw new ConverterException(message);
-	}
+        throw new ConverterException(message);
+    }
 
-	public object PerformConversion(IConfiguration configuration, Type targetType)
-	{
-		foreach (var converter in _converters)
-			if (converter.CanHandleType(targetType, configuration))
-				return converter.PerformConversion(configuration, targetType);
+    public TTarget PerformConversion<TTarget>(string value)
+    {
+        return (TTarget)PerformConversion(value, typeof(TTarget));
+    }
 
-		var message = $"No converter registered to handle the type {targetType.FullName}";
+    public TTarget PerformConversion<TTarget>(IConfiguration configuration)
+    {
+        return (TTarget)PerformConversion(configuration, typeof(TTarget));
+    }
 
-		throw new ConverterException(message);
-	}
+    IKernelInternal ITypeConverterContext.Kernel => Kernel;
 
-	public TTarget PerformConversion<TTarget>(string value)
-	{
-		return (TTarget)PerformConversion(value, typeof(TTarget));
-	}
+    public void Push(ComponentModel model, CreationContext context)
+    {
+        CurrentStack.Push(new Tuple<ComponentModel, CreationContext>(model, context));
+    }
 
-	public TTarget PerformConversion<TTarget>(IConfiguration configuration)
-	{
-		return (TTarget)PerformConversion(configuration, typeof(TTarget));
-	}
+    public void Pop()
+    {
+        CurrentStack.Pop();
+    }
 
-	IKernelInternal ITypeConverterContext.Kernel => Kernel;
+    public ComponentModel CurrentModel => CurrentStack.Count == 0 ? null : CurrentStack.Peek().Item1;
 
-	public void Push(ComponentModel model, CreationContext context)
-	{
-		CurrentStack.Push(new Tuple<ComponentModel, CreationContext>(model, context));
-	}
+    public CreationContext CurrentCreationContext => CurrentStack.Count == 0 ? null : CurrentStack.Peek().Item2;
 
-	public void Pop()
-	{
-		CurrentStack.Pop();
-	}
+    public ITypeConverter Composition => this;
 
-	public ComponentModel CurrentModel
-	{
-		get
-		{
-			if (CurrentStack.Count == 0) return null;
-
-			return CurrentStack.Peek().Item1;
-		}
-	}
-
-	public CreationContext CurrentCreationContext
-	{
-		get
-		{
-			if (CurrentStack.Count == 0) return null;
-
-			return CurrentStack.Peek().Item2;
-		}
-	}
-
-	public ITypeConverter Composition => this;
-
-	private void InitDefaultConverters()
-	{
-		Add(new PrimitiveConverter());
-		Add(new TimeSpanConverter());
-		Add(new TypeNameConverter(new TypeNameParser()));
-		Add(new EnumConverter());
-		Add(new ListConverter());
-		Add(new DictionaryConverter());
-		Add(new GenericDictionaryConverter());
-		Add(new GenericListConverter());
-		Add(new ArrayConverter());
-		Add(new ComponentConverter());
-		Add(new AttributeAwareConverter());
-		Add(new ComponentModelConverter());
-	}
+    private void InitDefaultConverters()
+    {
+        Add(new PrimitiveConverter());
+        Add(new TimeSpanConverter());
+        Add(new TypeNameConverter(new TypeNameParser()));
+        Add(new EnumConverter());
+        Add(new ListConverter());
+        Add(new DictionaryConverter());
+        Add(new GenericDictionaryConverter());
+        Add(new GenericListConverter());
+        Add(new ArrayConverter());
+        Add(new ComponentConverter());
+        Add(new AttributeAwareConverter());
+        Add(new ComponentModelConverter());
+    }
 }

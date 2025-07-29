@@ -18,110 +18,115 @@ using System.Xml;
 using Castle.Core.Resource;
 using Castle.Windsor.MicroKernel.SubSystems.Resource;
 using Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor;
 
 /// <summary>Pendent</summary>
 public sealed class XmlProcessor
 {
-	private readonly IXmlProcessorEngine _engine;
+    private readonly DefaultXmlProcessorEngine _engine;
 
-	/// <summary>Initializes a new instance of the <see cref = "XmlProcessor" /> class.</summary>
-	public XmlProcessor() : this(null)
-	{
-	}
+    /// <summary>Initializes a new instance of the <see cref="XmlProcessor" /> class.</summary>
+    public XmlProcessor() : this(null)
+    {
+    }
 
-	/// <summary>Initializes a new instance of the <see cref = "XmlProcessor" /> class.</summary>
-	/// <param name = "environmentName">Name of the environment.</param>
-	/// <param name = "resourceSubSystem">The resource sub system.</param>
-	public XmlProcessor(string environmentName, IResourceSubSystem resourceSubSystem)
-	{
-		_engine = new DefaultXmlProcessorEngine(environmentName, resourceSubSystem);
-		RegisterProcessors();
-	}
+    /// <summary>Initializes a new instance of the <see cref="XmlProcessor" /> class.</summary>
+    /// <param name="environmentName">Name of the environment.</param>
+    /// <param name="resourceSubSystem">The resource sub system.</param>
+    public XmlProcessor(string environmentName, IResourceSubSystem resourceSubSystem)
+    {
+        _engine = new DefaultXmlProcessorEngine(environmentName, resourceSubSystem);
+        RegisterProcessors();
+    }
 
-	/// <summary>Initializes a new instance of the <see cref = "XmlProcessor" /> class.</summary>
-	public XmlProcessor(string environmentName)
-	{
-		_engine = new DefaultXmlProcessorEngine(environmentName);
-		RegisterProcessors();
-	}
+    /// <summary>Initializes a new instance of the <see cref="XmlProcessor" /> class.</summary>
+    [PublicAPI]
+    public XmlProcessor(string environmentName)
+    {
+        _engine = new DefaultXmlProcessorEngine(environmentName);
+        RegisterProcessors();
+    }
 
-	public XmlNode Process(XmlNode node)
-	{
-		try
-		{
-			if (node is XmlDocument xmlDocument) node = xmlDocument.DocumentElement;
+    public XmlNode Process(XmlNode node)
+    {
+        try
+        {
+            if (node is XmlDocument xmlDocument)
+            {
+                node = xmlDocument.DocumentElement;
+            }
 
-			_engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(node));
+            _engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(node));
 
-			return node;
-		}
-		catch (ConfigurationProcessingException)
-		{
-			throw;
-		}
-		catch (Exception ex)
-		{
-			Debug.Assert(node != null);
-			var message = $"Error processing node {node.Name}, inner content {node.InnerXml}";
+            return node;
+        }
+        catch (ConfigurationProcessingException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            Debug.Assert(node != null);
+            var message = $"Error processing node {node.Name}, inner content {node.InnerXml}";
 
-			throw new ConfigurationProcessingException(message, ex);
-		}
-	}
+            throw new ConfigurationProcessingException(message, ex);
+        }
+    }
 
-	public XmlNode Process(IResource resource)
-	{
-		try
-		{
-			using (resource)
-			{
-				var doc = new XmlDocument();
-				using (var stream = resource.GetStreamReader())
-				{
-					doc.Load(stream);
-				}
+    public XmlNode Process(IResource resource)
+    {
+        try
+        {
+            using (resource)
+            {
+                var doc = new XmlDocument();
+                using (var stream = resource.GetStreamReader())
+                {
+                    doc.Load(stream);
+                }
 
-				_engine.PushResource(resource);
+                _engine.PushResource(resource);
 
-				var element = Process(doc.DocumentElement);
+                var element = Process(doc.DocumentElement);
 
-				_engine.PopResource();
+                _engine.PopResource();
 
-				return element;
-			}
-		}
-		catch (ConfigurationProcessingException)
-		{
-			throw;
-		}
-		catch (Exception ex)
-		{
-			var message = $"Error processing node resource {resource}";
+                return element;
+            }
+        }
+        catch (ConfigurationProcessingException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            var message = $"Error processing node resource {resource}";
 
-			throw new ConfigurationProcessingException(message, ex);
-		}
-	}
+            throw new ConfigurationProcessingException(message, ex);
+        }
+    }
 
-	private void AddElementProcessor(Type t)
-	{
-		_engine.AddNodeProcessor(t);
-	}
+    private void AddElementProcessor(Type t)
+    {
+        _engine.AddNodeProcessor(t);
+    }
 
-	private void RegisterProcessors()
-	{
-		AddElementProcessor(typeof(IfElementProcessor));
-		AddElementProcessor(typeof(DefineElementProcessor));
-		AddElementProcessor(typeof(UndefElementProcessor));
-		AddElementProcessor(typeof(ChooseElementProcessor));
-		AddElementProcessor(typeof(PropertiesElementProcessor));
-		AddElementProcessor(typeof(AttributesElementProcessor));
-		AddElementProcessor(typeof(IncludeElementProcessor));
-		AddElementProcessor(typeof(IfProcessingInstructionProcessor));
-		AddElementProcessor(typeof(DefinedProcessingInstructionProcessor));
-		AddElementProcessor(typeof(UndefProcessingInstructionProcessor));
-		AddElementProcessor(typeof(DefaultTextNodeProcessor));
-		AddElementProcessor(typeof(EvalProcessingInstructionProcessor));
-		AddElementProcessor(typeof(UsingElementProcessor));
-	}
+    private void RegisterProcessors()
+    {
+        AddElementProcessor(typeof(IfElementProcessor));
+        AddElementProcessor(typeof(DefineElementProcessor));
+        AddElementProcessor(typeof(UndefElementProcessor));
+        AddElementProcessor(typeof(ChooseElementProcessor));
+        AddElementProcessor(typeof(PropertiesElementProcessor));
+        AddElementProcessor(typeof(AttributesElementProcessor));
+        AddElementProcessor(typeof(IncludeElementProcessor));
+        AddElementProcessor(typeof(IfProcessingInstructionProcessor));
+        AddElementProcessor(typeof(DefinedProcessingInstructionProcessor));
+        AddElementProcessor(typeof(UndefProcessingInstructionProcessor));
+        AddElementProcessor(typeof(DefaultTextNodeProcessor));
+        AddElementProcessor(typeof(EvalProcessingInstructionProcessor));
+        AddElementProcessor(typeof(UsingElementProcessor));
+    }
 }

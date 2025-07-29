@@ -132,13 +132,13 @@ public class CreationContext :
 
 	public void BuildCycleMessageFor(IHandler duplicateHandler, StringBuilder message)
 	{
-		message.AppendFormat("Component '{0}'", duplicateHandler.ComponentModel.Name);
+		message.Append($"Component '{duplicateHandler.ComponentModel.Name}'");
 
 		foreach (var handlerOnTheStack in _handlerStack)
 		{
 			message.AppendFormat(" resolved as dependency of");
 			message.AppendLine();
-			message.AppendFormat("\tcomponent '{0}'", handlerOnTheStack.ComponentModel.Name);
+			message.Append($"\tcomponent '{handlerOnTheStack.ComponentModel.Name}'");
 		}
 
 		message.AppendLine(" which is the root component being resolved.");

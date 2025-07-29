@@ -41,7 +41,7 @@ public class ReleasePolicyTrackedObjects : AbstractContainerDebuggerExtension
 		diagnosticsHost.AddDiagnostic<ITrackedComponentsDiagnostic>(_diagnostic);
 	}
 
-	private DebuggerViewItem BuildItem(ILookup<IHandler, object> results)
+	private static DebuggerViewItem BuildItem(ILookup<IHandler, object> results)
 	{
 		var totalCount = 0;
 		var items = new List<DebuggerViewItem>();

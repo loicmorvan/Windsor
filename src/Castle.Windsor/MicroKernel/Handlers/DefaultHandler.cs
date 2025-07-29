@@ -101,8 +101,8 @@ public class DefaultHandler : AbstractHandler
 			}
 
 			var message = new StringBuilder();
-			message.AppendFormat("Dependency cycle has been detected when trying to resolve component '{0}'.",
-				ComponentModel.Name);
+			message.Append(
+				$"Dependency cycle has been detected when trying to resolve component '{ComponentModel.Name}'.");
 			message.AppendLine();
 			message.AppendLine("The resolution tree that resulted in the cycle is the following:");
 			context.BuildCycleMessageFor(this, message);

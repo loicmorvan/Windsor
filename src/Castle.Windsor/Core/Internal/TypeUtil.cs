@@ -12,183 +12,199 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core.Internal;
-
 using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 
+namespace Castle.Windsor.Core.Internal;
+
 public static class TypeUtil
 {
-	/// <summary>
-	///     Indicates whether the type is explicitly marked as nullable. Currently only detects nullable value types via <see cref = "Nullable{T}" />, but could be expanded to detect C# nullable reference
-	///     types.
-	/// </summary>
-	internal static bool IsNullable(this Type type)
-	{
-		// For now, only detects nullable value types. Detecting nullable reference types is complicated.
-		// Spec: https://github.com/dotnet/roslyn/blob/version-3.2.0/docs/features/nullable-metadata.md
-		// Reflection API proposal: https://github.com/dotnet/runtime/issues/29723
+    /// <summary>
+    ///     Indicates whether the type is explicitly marked as nullable. Currently only detects nullable value types via
+    ///     <see cref="Nullable{T}" />, but could be expanded to detect C# nullable reference
+    ///     types.
+    /// </summary>
+    internal static bool IsNullable(this Type type)
+    {
+        // For now, only detects nullable value types. Detecting nullable reference types is complicated.
+        // Spec: https://github.com/dotnet/roslyn/blob/version-3.2.0/docs/features/nullable-metadata.md
+        // Reflection API proposal: https://github.com/dotnet/runtime/issues/29723
 
-		return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
-	}
+        return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+    }
 
-	/// <summary>
-	///     Checks if given <paramref name = "type" /> is a primitive type or collection of primitive types. Value types, <see cref = "string" /> are considered primitive and can not be registered as
-	///     components in Windsor
-	/// </summary>
-	/// <param name = "type"> </param>
-	/// <returns> </returns>
-	public static bool IsPrimitiveTypeOrCollection(this Type type)
-	{
-		if (type.IsPrimitiveType()) return true;
+    /// <summary>
+    ///     Checks if given <paramref name="type" /> is a primitive type or collection of primitive types. Value types,
+    ///     <see cref="string" /> are considered primitive and can not be registered as
+    ///     components in Windsor
+    /// </summary>
+    /// <param name="type"> </param>
+    /// <returns> </returns>
+    public static bool IsPrimitiveTypeOrCollection(this Type type)
+    {
+        if (type.IsPrimitiveType())
+        {
+            return true;
+        }
 
-		var itemType = type.GetCompatibleArrayItemType();
-		return itemType != null && itemType.IsPrimitiveTypeOrCollection();
-	}
+        var itemType = type.GetCompatibleArrayItemType();
+        return itemType != null && itemType.IsPrimitiveTypeOrCollection();
+    }
 
-	/// <summary>Checkis if given <paramref name = "type" /> is a primitive type. Value types and <see cref = "string" /> are considered primitive and can not be registered as components in Windsor</summary>
-	/// <param name = "type"> </param>
-	/// <returns> </returns>
-	public static bool IsPrimitiveType(this Type type)
-	{
-		return type == null || type.GetTypeInfo().IsValueType || type == typeof(string);
-	}
+    /// <summary>
+    ///     Checkis if given <paramref name="type" /> is a primitive type. Value types and <see cref="string" /> are
+    ///     considered primitive and can not be registered as components in Windsor
+    /// </summary>
+    /// <param name="type"> </param>
+    /// <returns> </returns>
+    public static bool IsPrimitiveType(this Type type)
+    {
+        return type == null || type.GetTypeInfo().IsValueType || type == typeof(string);
+    }
 
-	public static string ToCSharpString(this Type type)
-	{
-		try
-		{
-			var name = new StringBuilder();
-			ToCSharpString(type, name);
-			return name.ToString();
-		}
-		catch (Exception)
-		{
-			// in case we messed up something...
-			return type.Name;
-		}
-	}
+    public static string ToCSharpString(this Type type)
+    {
+        try
+        {
+            var name = new StringBuilder();
+            ToCSharpString(type, name);
+            return name.ToString();
+        }
+        catch (Exception)
+        {
+            // in case we messed up something...
+            return type.Name;
+        }
+    }
 
-	/// <summary>
-	///     Calls <see cref = "Type.MakeGenericType" /> and if a generic constraint is violated returns <c>null</c> instead of throwing
-	///     <see
-	///         cref = "ArgumentException" />
-	///     .
-	/// </summary>
-	/// <param name = "openGeneric"> </param>
-	/// <param name = "arguments"> </param>
-	/// <returns> </returns>
-	[DebuggerHidden]
-	public static Type TryMakeGenericType(this Type openGeneric, Type[] arguments)
-	{
-		try
-		{
-			return openGeneric.MakeGenericType(arguments);
-		}
-		catch (ArgumentException)
-		{
-			// Any element of typeArguments does not satisfy the constraints specified for the corresponding type parameter of the current generic type.
-			// NOTE: We try and catch because there's no public API to reliably, and robustly test for that upfront
-			// there's RuntimeTypeHandle.SatisfiesConstraints method but it's internal. 
-			return null;
-		}
-		catch (TypeLoadException e)
-		{
-			//Yeah, this exception is undocumented, yet it does get thrown in some cases (I was unable to reproduce it reliably)
-			var message = new StringBuilder();
-#if NET462_OR_GREATER
-				var hasAssembliesFromGac = openGeneric.GetTypeInfo().Assembly.GlobalAssemblyCache;
-#endif
-			message.AppendLine("This was unexpected! Looks like you hit a really weird bug in .NET (yes, it's really not Windsor's fault).");
-			message.AppendLine("We were just about to make a generic version of " + openGeneric.AssemblyQualifiedName + " with the following generic arguments:");
-			foreach (var argument in arguments)
-			{
-				message.AppendLine("\t" + argument.AssemblyQualifiedName);
-#if NET462_OR_GREATER
-					if (hasAssembliesFromGac == false)
-					{
-						hasAssembliesFromGac = argument.GetTypeInfo().Assembly.GlobalAssemblyCache;
-					}
-#endif
-			}
+    /// <summary>
+    ///     Calls <see cref="Type.MakeGenericType" /> and if a generic constraint is violated returns <c>null</c> instead of
+    ///     throwing
+    ///     <see
+    ///         cref="ArgumentException" />
+    ///     .
+    /// </summary>
+    /// <param name="openGeneric"> </param>
+    /// <param name="arguments"> </param>
+    /// <returns> </returns>
+    [DebuggerHidden]
+    public static Type TryMakeGenericType(this Type openGeneric, Type[] arguments)
+    {
+        try
+        {
+            return openGeneric.MakeGenericType(arguments);
+        }
+        catch (ArgumentException)
+        {
+            // Any element of typeArguments does not satisfy the constraints specified for the corresponding type parameter of the current generic type.
+            // NOTE: We try and catch because there's no public API to reliably, and robustly test for that upfront
+            // there's RuntimeTypeHandle.SatisfiesConstraints method but it's internal. 
+            return null;
+        }
+        catch (TypeLoadException e)
+        {
+            //Yeah, this exception is undocumented, yet it does get thrown in some cases (I was unable to reproduce it reliably)
+            var message = new StringBuilder();
+            message.AppendLine(
+                "This was unexpected! Looks like you hit a really weird bug in .NET (yes, it's really not Windsor's fault).");
+            message.AppendLine("We were just about to make a generic version of " + openGeneric.AssemblyQualifiedName +
+                               " with the following generic arguments:");
+            foreach (var argument in arguments)
+            {
+                message.AppendLine("\t" + argument.AssemblyQualifiedName);
+            }
 
-			if (Debugger.IsAttached) message.AppendLine("It look like your debugger is attached. Try running the code without the debugger. It's likely it will work correctly.");
-			message.AppendLine("If you're running the code inside your IDE try rebuilding your code (Clean, then Build) and make sure you don't have conflicting versions of referenced assemblies.");
-#if NET462_OR_GREATER
-				if (hasAssembliesFromGac)
-				{
-					message.AppendLine("Notice that some assemblies involved were coming from GAC.");
-				}
-#endif
-			message.AppendLine("If you tried all of the above and the issue still persists try asking on StackOverflow or castle users group.");
-			throw new ArgumentException(message.ToString(), e);
-		}
-	}
+            if (Debugger.IsAttached)
+            {
+                message.AppendLine(
+                    "It look like your debugger is attached. Try running the code without the debugger. It's likely it will work correctly.");
+            }
 
-	private static void AppendGenericParameters(StringBuilder name, Type[] genericArguments, int skip, int take)
-	{
-		if (take == 0) return;
+            message.AppendLine(
+                "If you're running the code inside your IDE try rebuilding your code (Clean, then Build) and make sure you don't have conflicting versions of referenced assemblies.");
 
-		name.Append("<");
+            message.AppendLine(
+                "If you tried all of the above and the issue still persists try asking on StackOverflow or castle users group.");
+            throw new ArgumentException(message.ToString(), e);
+        }
+    }
 
-		for (var i = skip; i < skip + take; i++)
-		{
-			if (i > skip) name.Append(", ");
-			ToCSharpString(genericArguments[i], name);
-		}
+    private static void AppendGenericParameters(StringBuilder name, Type[] genericArguments, int skip, int take)
+    {
+        if (take == 0)
+        {
+            return;
+        }
 
-		name.Append(">");
-	}
+        name.Append('<');
 
-	private static void ToCSharpString(Type type, StringBuilder name, Type startType = null)
-	{
-		var inheritedGenericArgs = 0;
+        for (var i = skip; i < skip + take; i++)
+        {
+            if (i > skip)
+            {
+                name.Append(", ");
+            }
 
-		if (startType == null) startType = type;
+            ToCSharpString(genericArguments[i], name);
+        }
 
-		if (type.IsArray)
-		{
-			var elementType = type.GetElementType();
-			ToCSharpString(elementType, name);
-			name.Append(type.Name.Substring(elementType.Name.Length));
-			return;
-		}
+        name.Append('>');
+    }
 
-		if (type.IsGenericParameter)
-		{
-			//NOTE: this has to go before type.IsNested because nested generic type is also a generic parameter and otherwise we'd have stack overflow
-			name.Append(type.Name);
-			return;
-		}
+    private static void ToCSharpString(Type type, StringBuilder name, Type startType = null)
+    {
+        var inheritedGenericArgs = 0;
 
-		if (type.IsNested)
-		{
-			var declaringType = type.DeclaringType;
+        startType ??= type;
 
-			if (declaringType.GetTypeInfo().IsGenericType) inheritedGenericArgs = declaringType.GetGenericArguments().Length;
+        if (type.IsArray)
+        {
+            var elementType = type.GetElementType();
+            ToCSharpString(elementType, name);
+            Debug.Assert(elementType != null);
+            name.Append(type.Name.AsSpan(elementType.Name.Length));
+            return;
+        }
 
-			ToCSharpString(declaringType, name, startType);
-			//                                  ^^^^^^^^^
-			// This forwards the innermost type to the formatting of the enclosing type
-			// so that if it is generic, the type arguments can still be retrieved.
-			// (type.DeclaringType returns a generic type definition and thus loses the args.)
-			name.Append(".");
-		}
+        if (type.IsGenericParameter)
+        {
+            //NOTE: this has to go before type.IsNested because nested generic type is also a generic parameter and otherwise we'd have stack overflow
+            name.Append(type.Name);
+            return;
+        }
 
-		if (type.GetTypeInfo().IsGenericType == false)
-		{
-			name.Append(type.Name);
-			return;
-		}
+        if (type.IsNested)
+        {
+            var declaringType = type.DeclaringType;
 
-		name.Append(type.Name.Split('`')[0]);
+            Debug.Assert(declaringType != null);
+            if (declaringType.GetTypeInfo().IsGenericType)
+            {
+                inheritedGenericArgs = declaringType.GetGenericArguments().Length;
+            }
 
-		// Given a (CLS-compliant) nested type Outer<A>.Inner<B>, Inner really has two generic parameters;
-		// it inherits all those of the enclosing type. So for formatting purposes, we need to figure out
-		// how many *additional* type parameters Inner declares itself, then only append those:
-		var ownGenericArgs = type.GetGenericArguments().Length - inheritedGenericArgs;
-		AppendGenericParameters(name, startType.GetGenericArguments(), inheritedGenericArgs, ownGenericArgs);
-	}
+            ToCSharpString(declaringType, name, startType);
+            //                                  ^^^^^^^^^
+            // This forwards the innermost type to the formatting of the enclosing type
+            // so that if it is generic, the type arguments can still be retrieved.
+            // (type.DeclaringType returns a generic type definition and thus loses the args.)
+            name.Append('.');
+        }
+
+        if (type.GetTypeInfo().IsGenericType == false)
+        {
+            name.Append(type.Name);
+            return;
+        }
+
+        name.Append(type.Name.Split('`')[0]);
+
+        // Given a (CLS-compliant) nested type Outer<A>.Inner<B>, Inner really has two generic parameters;
+        // it inherits all those of the enclosing type. So for formatting purposes, we need to figure out
+        // how many *additional* type parameters Inner declares itself, then only append those:
+        var ownGenericArgs = type.GetGenericArguments().Length - inheritedGenericArgs;
+        AppendGenericParameters(name, startType.GetGenericArguments(), inheritedGenericArgs, ownGenericArgs);
+    }
 }

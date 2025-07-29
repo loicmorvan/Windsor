@@ -27,8 +27,8 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 
 public class PotentialLifestyleMismatches : AbstractContainerDebuggerExtension
 {
-	public const string Name = "Potential lifestyle mismatches";
-	private IPotentialLifestyleMismatchesDiagnostic _diagnostic;
+	private const string Name = "Potential lifestyle mismatches";
+	private PotentialLifestyleMismatchesDiagnostic _diagnostic;
 
 	public override IEnumerable<DebuggerViewItem> Attach()
 	{
@@ -47,28 +47,31 @@ public class PotentialLifestyleMismatches : AbstractContainerDebuggerExtension
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
 	{
 		_diagnostic = new PotentialLifestyleMismatchesDiagnostic(kernel);
-		diagnosticsHost.AddDiagnostic(_diagnostic);
+		diagnosticsHost.AddDiagnostic<IPotentialLifestyleMismatchesDiagnostic>(_diagnostic);
 	}
 
-	private string GetKey(IHandler root)
+	private static string GetKey(IHandler root)
 	{
 		return $"\"{GetNameDescription(root.ComponentModel)}\" »{root.ComponentModel.GetLifestyleDescription()}«";
 	}
 
-	private string GetMismatchMessage(IHandler[] handlers)
+	private static string GetMismatchMessage(IHandler[] handlers)
 	{
 		var message = new StringBuilder();
 		Debug.Assert(handlers.Length > 1);
 		var root = handlers.First();
 		var last = handlers.Last();
-		message.AppendFormat("Component '{0}' with lifestyle {1} ", GetNameDescription(root.ComponentModel), root.ComponentModel.GetLifestyleDescription());
-		message.AppendFormat("depends on '{0}' with lifestyle {1}", GetNameDescription(last.ComponentModel), last.ComponentModel.GetLifestyleDescription());
+		message.Append(
+			$"Component '{GetNameDescription(root.ComponentModel)}' with lifestyle {root.ComponentModel.GetLifestyleDescription()} ");
+		message.Append(
+			$"depends on '{GetNameDescription(last.ComponentModel)}' with lifestyle {last.ComponentModel.GetLifestyleDescription()}");
 
 		for (var i = 1; i < handlers.Length - 1; i++)
 		{
 			var via = handlers[i];
 			message.AppendLine();
-			message.AppendFormat("\tvia '{0}' with lifestyle {1}", GetNameDescription(via.ComponentModel), via.ComponentModel.GetLifestyleDescription());
+			message.Append(
+				$"\tvia '{GetNameDescription(via.ComponentModel)}' with lifestyle {via.ComponentModel.GetLifestyleDescription()}");
 		}
 
 		message.AppendLine();
@@ -77,17 +80,16 @@ public class PotentialLifestyleMismatches : AbstractContainerDebuggerExtension
 		return message.ToString();
 	}
 
-	private string GetName(IHandler[] handlers, IHandler root)
+	private static string GetName(IHandler[] handlers, IHandler root)
 	{
 		var indirect = handlers.Length > 2 ? "indirectly " : string.Empty;
-		return string.Format("\"{0}\" »{1}« {2}depends on", GetNameDescription(root.ComponentModel), root.ComponentModel.GetLifestyleDescription(),
-			indirect);
+		return
+			$"\"{GetNameDescription(root.ComponentModel)}\" »{root.ComponentModel.GetLifestyleDescription()}« {indirect}depends on";
 	}
 
-	private string GetNameDescription(ComponentModel componentModel)
+	private static string GetNameDescription(ComponentModel componentModel)
 	{
-		if (componentModel.ComponentName.SetByUser) return componentModel.ComponentName.Name;
-		return componentModel.ToString();
+		return componentModel.ComponentName.SetByUser ? componentModel.ComponentName.Name : componentModel.ToString();
 	}
 
 	private object MismatchedComponentView(IHandler[] handlers)

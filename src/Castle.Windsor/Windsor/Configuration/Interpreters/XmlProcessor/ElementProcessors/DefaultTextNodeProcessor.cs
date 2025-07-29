@@ -12,16 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
-public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
+public partial class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 {
-	/// <summary>Properties names can contain a-zA-Z0-9_. i.e. #!{ my_node_name } || #{ my.node.name } spaces are trimmed</summary>
-	private static readonly Regex PropertyValidationRegExp = new(@"(\#!?\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled);
-
 	private static readonly XmlNodeType[] AcceptNodes = [XmlNodeType.CDATA, XmlNodeType.Text];
 
 	public override XmlNodeType[] AcceptNodeTypes => AcceptNodes;
@@ -32,6 +30,7 @@ public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 	{
 		var node = nodeList.Current as XmlCharacterData;
 
+		Debug.Assert(node != null);
 		ProcessString(node, node.Value, engine);
 	}
 
@@ -45,7 +44,7 @@ public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 
 		Match match;
 		var pos = 0;
-		while ((match = PropertyValidationRegExp.Match(value, pos)).Success)
+		while ((match = GetPropertyValidationRegex().Match(value, pos)).Success)
 		{
 			if (pos < match.Index) AppendChild(fragment, value.Substring(pos, match.Index - pos));
 
@@ -74,23 +73,31 @@ public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 			pos = match.Index + match.Length;
 		}
 
-		// Appending anything left
-		if (pos > 0 && pos < value.Length) AppendChild(fragment, value.Substring(pos, value.Length - pos));
-
-		// we only process when there was at least one match
-		// even when the fragment contents is empty since
-		// that could mean that there was a match but the property
-		// reference was a silent property
-		if (pos > 0)
+		switch (pos)
 		{
-			if (node.NodeType == XmlNodeType.Attribute)
-				node.Value = fragment.InnerText.Trim();
-			else
-				ReplaceNode(node.ParentNode, fragment, node);
+			// Appending anything left
+			case > 0 when pos < value.Length:
+				AppendChild(fragment, value[pos..]);
+				break;
+			// we only process when there was at least one match
+			// even when the fragment contents is empty since
+			// that could mean that there was a match but the property
+			// reference was a silent property
+			case <= 0:
+				return;
+		}
+
+		if (node.NodeType == XmlNodeType.Attribute)
+		{
+			node.Value = fragment.InnerText.Trim();
+		}
+		else
+		{
+			ReplaceNode(node.ParentNode, fragment, node);
 		}
 	}
 
-	private bool IsRequiredProperty(string propRef)
+	private static bool IsRequiredProperty(string propRef)
 	{
 		return propRef.StartsWith("#{");
 	}
@@ -100,7 +107,11 @@ public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 		for (var i = srcElement.Attributes.Count - 1; i > -1; i--)
 		{
 			var importedAttr = ImportNode(targetElement, srcElement.Attributes[i]) as XmlAttribute;
+			Debug.Assert(importedAttr != null);
 			targetElement.Attributes.Append(importedAttr);
 		}
 	}
+
+	[GeneratedRegex(@"(\#!?\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled)]
+	private static partial Regex GetPropertyValidationRegex();
 }

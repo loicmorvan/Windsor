@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
+using System.Diagnostics;
 using System.Xml;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
 public class PropertiesElementProcessor : AbstractXmlNodeProcessor
 {
@@ -37,7 +38,8 @@ public class PropertiesElementProcessor : AbstractXmlNodeProcessor
 	{
 		var element = nodeList.Current as XmlElement;
 
-		IXmlProcessorNodeList childNodes = new DefaultXmlProcessorNodeList(element.ChildNodes);
+		Debug.Assert(element != null);
+		var childNodes = new DefaultXmlProcessorNodeList(element.ChildNodes);
 
 		while (childNodes.MoveNext())
 		{

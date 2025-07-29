@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
 using System.Xml;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
 public class DefineElementProcessor : AbstractXmlNodeProcessor
 {
-	private static readonly string FlagAttrName = "flag";
+	private const string FlagAttrName = "flag";
 
 	public override string Name => "define";
 

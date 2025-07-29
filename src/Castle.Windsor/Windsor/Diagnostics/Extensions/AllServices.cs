@@ -24,7 +24,7 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 public class AllServices : AbstractContainerDebuggerExtension
 {
 	private const string Name = "All services";
-	private IAllServicesDiagnostic _diagnostic;
+	private AllServicesDiagnostic _diagnostic;
 
 	public override IEnumerable<DebuggerViewItem> Attach()
 	{
@@ -40,7 +40,7 @@ public class AllServices : AbstractContainerDebuggerExtension
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
 	{
 		_diagnostic = new AllServicesDiagnostic(kernel);
-		diagnosticsHost.AddDiagnostic(_diagnostic);
+		diagnosticsHost.AddDiagnostic<IAllServicesDiagnostic>(_diagnostic);
 	}
 
 	private DebuggerViewItem BuildServiceView(IEnumerable<IHandler> handlers, string name)

@@ -33,7 +33,7 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
 		Debug.Assert(missingDependencies.Length > 0);
 		var uniqueOverrides = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 		message.AppendLine();
-		message.AppendFormat("'{0}' is waiting for the following dependencies:", handler.ComponentModel.Name);
+		message.Append($"'{handler.ComponentModel.Name}' is waiting for the following dependencies:");
 		message.AppendLine();
 		foreach (var dependency in missingDependencies)
 			if (dependency.ReferencedComponentName != null)
@@ -55,7 +55,7 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
 	private void InspectParameterDependency(DependencyModel dependency)
 	{
 		var key = dependency.DependencyKey;
-		message.AppendFormat("- Parameter '{0}' which was not provided. Did you forget to set the dependency?", key);
+		message.Append($"- Parameter '{key}' which was not provided. Did you forget to set the dependency?");
 		message.AppendLine();
 	}
 
@@ -65,13 +65,13 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
 		var handler = kernel.GetHandler(type);
 		if (handler == null)
 		{
-			message.AppendFormat("- Service '{0}' which was not registered.", type.FullName ?? type.Name);
+			message.Append($"- Service '{type.FullName ?? type.Name}' which was not registered.");
 			message.AppendLine();
 		}
 		else if (handler == inspectingHandler)
 		{
 			var alternatives = kernel.GetHandlers(type);
-			message.AppendFormat("- Service '{0}' which points back to the component itself.", type.FullName ?? type.Name);
+			message.Append($"- Service '{type.FullName ?? type.Name}' which points back to the component itself.");
 			message.AppendLine();
 			message.Append("A dependency cannot be satisfied by the component itself, did you forget to ");
 			if (alternatives.Length == 1)
@@ -92,15 +92,16 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
 					else
 					{
 						message.AppendLine();
-						message.AppendFormat("'{0}' is registered and is matching the required service, but cannot be resolved.",
-							maybeDecoratedHandler.ComponentModel.Name);
+						message.Append(
+							$"'{maybeDecoratedHandler.ComponentModel.Name}' is registered and is matching the required service, but cannot be resolved.");
 					}
 				}
 			}
 		}
 		else
 		{
-			message.AppendFormat("- Service '{0}' which was registered but is also waiting for dependencies.", handler.ComponentModel.Name);
+			message.Append(
+				$"- Service '{handler.ComponentModel.Name}' which was registered but is also waiting for dependencies.");
 			if (handler is IExposeDependencyInfo info) info.ObtainDependencyDetails(this);
 		}
 	}
@@ -112,14 +113,14 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
 		//TODO: what about self dependency?
 		if (handler == null)
 		{
-			message.AppendFormat(
-				"- Component '{0}' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.",
-				referenceName);
+			message.Append(
+				$"- Component '{referenceName}' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.");
 			message.AppendLine();
 		}
 		else
 		{
-			message.AppendFormat("- Component '{0}' (via override) which was registered but is also waiting for dependencies.", referenceName);
+			message.Append(
+				$"- Component '{referenceName}' (via override) which was registered but is also waiting for dependencies.");
 			message.AppendLine();
 
 			if (handler is IExposeDependencyInfo info) info.ObtainDependencyDetails(this);

@@ -15,22 +15,24 @@
 using System.Collections.Generic;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 
 public abstract class AbstractContainerDebuggerExtension : IContainerDebuggerExtension
 {
-	public abstract IEnumerable<DebuggerViewItem> Attach();
+    public abstract IEnumerable<DebuggerViewItem> Attach();
 
-	public abstract void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost);
+    public abstract void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost);
 
-	protected ComponentDebuggerView DefaultComponentView(IHandler handler)
-	{
-		return DefaultComponentView(handler, null);
-	}
+    protected static ComponentDebuggerView DefaultComponentView(IHandler handler)
+    {
+        return DefaultComponentView(handler, null);
+    }
 
-	protected ComponentDebuggerView DefaultComponentView(IHandler handler, string description)
-	{
-		return ComponentDebuggerView.BuildFor(handler, description);
-	}
+    [PublicAPI]
+    protected static ComponentDebuggerView DefaultComponentView(IHandler handler, string description)
+    {
+        return ComponentDebuggerView.BuildFor(handler, description);
+    }
 }

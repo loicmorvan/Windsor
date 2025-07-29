@@ -13,7 +13,9 @@
 // limitations under the License.
 
 using System;
+using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using Castle.Core.Configuration;
 using Castle.Windsor.Core.Internal;
@@ -23,166 +25,188 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 [Serializable]
 public class DefaultComplexConverter : AbstractTypeConverter
 {
-	private IConversionManager _conversionManager;
+    private IConversionManager _conversionManager;
 
-	/// <summary>Gets the conversion manager.</summary>
-	/// <value>The conversion manager.</value>
-	private IConversionManager ConversionManager
-	{
-		get
-		{
-			if (_conversionManager == null) _conversionManager = Context.Kernel.GetConversionManager();
-			return _conversionManager;
-		}
-	}
+    /// <summary>Gets the conversion manager.</summary>
+    /// <value>The conversion manager.</value>
+    private IConversionManager ConversionManager => _conversionManager ??= Context.Kernel.GetConversionManager();
 
-	/// <summary>Creates the target type instance.</summary>
-	/// <param name = "type">The type.</param>
-	/// <param name = "configuration">The configuration.</param>
-	/// <returns></returns>
-	private object CreateInstance(Type type, IConfiguration configuration)
-	{
-		type = ObtainImplementation(type, configuration);
+    /// <summary>Creates the target type instance.</summary>
+    /// <param name="type">The type.</param>
+    /// <param name="configuration">The configuration.</param>
+    /// <returns></returns>
+    private object CreateInstance(Type type, IConfiguration configuration)
+    {
+        type = ObtainImplementation(type, configuration);
 
-		var constructor = ChooseConstructor(type);
+        var constructor = ChooseConstructor(type);
 
-		object[] args = null;
-		if (constructor != null) args = ConvertConstructorParameters(constructor, configuration);
+        object[] args = null;
+        if (constructor != null)
+        {
+            args = ConvertConstructorParameters(constructor, configuration);
+        }
 
-		var instance = type.CreateInstance<object>(args);
-		return instance;
-	}
+        var instance = type.CreateInstance<object>(args);
+        return instance;
+    }
 
-	private Type ObtainImplementation(Type type, IConfiguration configuration)
-	{
-		var typeNode = configuration.Attributes["type"];
+    private Type ObtainImplementation(Type type, IConfiguration configuration)
+    {
+        var typeNode = configuration.Attributes["type"];
 
-		if (string.IsNullOrEmpty(typeNode))
-		{
-			if (type.GetTypeInfo().IsInterface) throw new ConverterException("A type attribute must be specified for interfaces");
+        if (string.IsNullOrEmpty(typeNode))
+        {
+            if (type.GetTypeInfo().IsInterface)
+            {
+                throw new ConverterException("A type attribute must be specified for interfaces");
+            }
 
-			return type;
-		}
+            return type;
+        }
 
-		var implType = Context.Composition.PerformConversion<Type>(typeNode);
-		if (!type.IsAssignableFrom(implType))
-		{
-			var message = string.Format("Type {0} is not assignable to {1}",
-				implType.FullName, type.FullName);
+        var implType = Context.Composition.PerformConversion<Type>(typeNode);
+        if (type.IsAssignableFrom(implType))
+        {
+            return implType;
+        }
 
-			throw new ConverterException(message);
-		}
+        Debug.Assert(implType != null);
+        var message = $"Type {implType.FullName} is not assignable to {type.FullName}";
 
-		return implType;
-	}
+        throw new ConverterException(message);
+    }
 
-	/// <summary>Chooses the first non default constructor. Throws an exception if more than one non default constructor is found</summary>
-	/// <param name = "type"></param>
-	/// <returns>The chosen constructor, or <c>null</c> if none was found</returns>
-	private ConstructorInfo ChooseConstructor(Type type)
-	{
-		ConstructorInfo chosen = null;
-		var constructors = type.GetConstructors();
-		foreach (var candidate in constructors)
-		{
-			if (candidate.GetParameters().Length == 0) continue;
-			if (chosen != null) throw new ConverterException("Classes with more than one non-default constructor are not supported.");
-			chosen = candidate;
-		}
+    /// <summary>
+    ///     Chooses the first non default constructor. Throws an exception if more than one non default constructor is
+    ///     found
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns>The chosen constructor, or <c>null</c> if none was found</returns>
+    private static ConstructorInfo ChooseConstructor(Type type)
+    {
+        ConstructorInfo chosen = null;
+        var constructors = type.GetConstructors();
+        foreach (var candidate in constructors)
+        {
+            if (candidate.GetParameters().Length == 0)
+            {
+                continue;
+            }
 
-		return chosen;
-	}
+            if (chosen != null)
+            {
+                throw new ConverterException("Classes with more than one non-default constructor are not supported.");
+            }
 
-	/// <summary>Converts the constructor parameters.</summary>
-	/// <param name = "constructor">The constructor.</param>
-	/// <param name = "configuration">The configuration.</param>
-	/// <returns></returns>
-	private object[] ConvertConstructorParameters(ConstructorInfo constructor, IConfiguration configuration)
-	{
-		var parameters = constructor.GetParameters();
-		var parameterValues = new object[parameters.Length];
+            chosen = candidate;
+        }
 
-		for (int i = 0, n = parameters.Length; i < n; ++i)
-		{
-			var parameter = parameters[i];
+        return chosen;
+    }
 
-			var paramConfig = FindChildIgnoreCase(configuration, parameter.Name);
-			if (paramConfig == null)
-				throw new ConverterException(string.Format("Child '{0}' missing in {1} element.", parameter.Name,
-					configuration.Name));
+    /// <summary>Converts the constructor parameters.</summary>
+    /// <param name="constructor">The constructor.</param>
+    /// <param name="configuration">The configuration.</param>
+    /// <returns></returns>
+    private object[] ConvertConstructorParameters(ConstructorInfo constructor, IConfiguration configuration)
+    {
+        var parameters = constructor.GetParameters();
+        var parameterValues = new object[parameters.Length];
 
-			var paramType = parameter.ParameterType;
-			if (!ConversionManager.CanHandleType(paramType))
-				throw new ConverterException(string.Format("No converter found for child '{0}' in {1} element (type: {2}).",
-					parameter.Name, configuration.Name, paramType.Name));
+        for (int i = 0, n = parameters.Length; i < n; ++i)
+        {
+            var parameter = parameters[i];
 
-			parameterValues[i] = ConvertChildParameter(paramConfig, paramType);
-		}
+            var paramConfig = FindChildIgnoreCase(configuration, parameter.Name);
+            if (paramConfig == null)
+            {
+                throw new ConverterException(string.Format("Child '{0}' missing in {1} element.", parameter.Name,
+                    configuration.Name));
+            }
 
-		return parameterValues;
-	}
+            var paramType = parameter.ParameterType;
+            if (!ConversionManager.CanHandleType(paramType))
+            {
+                throw new ConverterException(string.Format(
+                    "No converter found for child '{0}' in {1} element (type: {2}).",
+                    parameter.Name, configuration.Name, paramType.Name));
+            }
 
-	/// <summary>Converts the property values.</summary>
-	/// <param name = "instance">The instance.</param>
-	/// <param name = "type">The type.</param>
-	/// <param name = "configuration">The configuration.</param>
-	private void ConvertPropertyValues(object instance, Type type, IConfiguration configuration)
-	{
-		foreach (var propConfig in configuration.Children)
-		{
-			var property =
-				type.GetProperty(propConfig.Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
-			if (property == null || !property.CanWrite) continue;
+            parameterValues[i] = ConvertChildParameter(paramConfig, paramType);
+        }
 
-			var propType = property.PropertyType;
-			if (!ConversionManager.CanHandleType(propType))
-				throw new ConverterException(string.Format("No converter found for child '{0}' in {1} element (type: {2}).",
-					property.Name, configuration.Name, propType.Name));
+        return parameterValues;
+    }
 
-			var val = ConvertChildParameter(propConfig, propType);
-			property.SetValue(instance, val, null);
-		}
-	}
+    /// <summary>Converts the property values.</summary>
+    /// <param name="instance">The instance.</param>
+    /// <param name="type">The type.</param>
+    /// <param name="configuration">The configuration.</param>
+    private void ConvertPropertyValues(object instance, Type type, IConfiguration configuration)
+    {
+        foreach (var propConfig in configuration.Children)
+        {
+            var property =
+                type.GetProperty(propConfig.Name,
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+            if (property == null || !property.CanWrite)
+            {
+                continue;
+            }
 
-	private object ConvertChildParameter(IConfiguration config, Type type)
-	{
-		if (config.Value == null && config.Children.Count != 0) return Context.Composition.PerformConversion(config, type);
+            var propType = property.PropertyType;
+            if (!ConversionManager.CanHandleType(propType))
+            {
+                throw new ConverterException(string.Format(
+                    "No converter found for child '{0}' in {1} element (type: {2}).",
+                    property.Name, configuration.Name, propType.Name));
+            }
 
-		return Context.Composition.PerformConversion(config.Value, type);
-	}
+            var val = ConvertChildParameter(propConfig, propType);
+            property.SetValue(instance, val, null);
+        }
+    }
 
-	/// <summary>Finds the child (case insensitive).</summary>
-	/// <param name = "config">The config.</param>
-	/// <param name = "name">The name.</param>
-	/// <returns></returns>
-	private IConfiguration FindChildIgnoreCase(IConfiguration config, string name)
-	{
-		foreach (var child in config.Children)
-			if (CultureInfo.CurrentCulture.CompareInfo.Compare(child.Name, name, CompareOptions.IgnoreCase) == 0)
-				return child;
+    private object ConvertChildParameter(IConfiguration config, Type type)
+    {
+        if (config.Value == null && config.Children.Count != 0)
+        {
+            return Context.Composition.PerformConversion(config, type);
+        }
 
-		return null;
-	}
+        return Context.Composition.PerformConversion(config.Value, type);
+    }
 
-	#region ITypeConverter Member
+    /// <summary>Finds the child (case insensitive).</summary>
+    /// <param name="config">The config.</param>
+    /// <param name="name">The name.</param>
+    /// <returns></returns>
+    private static IConfiguration FindChildIgnoreCase(IConfiguration config, string name)
+    {
+        return config.Children.FirstOrDefault(child =>
+            CultureInfo.CurrentCulture.CompareInfo.Compare(child.Name, name, CompareOptions.IgnoreCase) == 0);
+    }
 
-	public override bool CanHandleType(Type type)
-	{
-		return type.GetTypeInfo().IsPrimitive == false;
-	}
+    #region ITypeConverter Member
 
-	public override object PerformConversion(IConfiguration configuration, Type targetType)
-	{
-		var instance = CreateInstance(targetType, configuration);
-		ConvertPropertyValues(instance, targetType, configuration);
+    public override bool CanHandleType(Type type)
+    {
+        return type.GetTypeInfo().IsPrimitive == false;
+    }
 
-		return instance;
-	}
+    public override object PerformConversion(IConfiguration configuration, Type targetType)
+    {
+        var instance = CreateInstance(targetType, configuration);
+        ConvertPropertyValues(instance, targetType, configuration);
 
-	public override object PerformConversion(string value, Type targetType)
-	{
-		throw new NotImplementedException();
-	}
+        return instance;
+    }
 
-	#endregion
+    public override object PerformConversion(string value, Type targetType)
+    {
+        throw new NotImplementedException();
+    }
+
+    #endregion
 }

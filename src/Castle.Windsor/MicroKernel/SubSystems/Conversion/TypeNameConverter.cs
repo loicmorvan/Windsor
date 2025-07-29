@@ -215,7 +215,7 @@ public class TypeNameConverter : AbstractTypeConverter
 		var message = new StringBuilder($"Could not uniquely identify type for '{value}'. ");
 		message.AppendLine("The following types were matched:");
 		foreach (var matchedType in type) message.AppendLine(matchedType.AssemblyQualifiedName);
-		message.AppendFormat("Provide more information ({0}) to uniquely identify the type.", missingInformation);
+		message.Append($"Provide more information ({missingInformation}) to uniquely identify the type.");
 		throw new ConverterException(message.ToString());
 	}
 

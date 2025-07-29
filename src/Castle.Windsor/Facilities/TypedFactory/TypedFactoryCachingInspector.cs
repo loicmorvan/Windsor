@@ -21,58 +21,74 @@ using Castle.Windsor.Facilities.TypedFactory.Internal;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.ModelBuilder;
 using Castle.Windsor.MicroKernel.Util;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Facilities.TypedFactory;
 
+[PublicAPI]
 public class TypedFactoryCachingInspector : IContributeComponentModelConstruction
 {
-	void IContributeComponentModelConstruction.ProcessModel(IKernel kernel, ComponentModel model)
-	{
-		if (model.Configuration?.Attributes[TypedFactoryFacility.IsFactoryKey] == null)
-		{
-			return;
-		}
+    void IContributeComponentModelConstruction.ProcessModel(IKernel kernel, ComponentModel model)
+    {
+        if (model.Configuration?.Attributes[TypedFactoryFacility.IsFactoryKey] == null)
+        {
+            return;
+        }
 
-		if (model.Services.Any(s => s.GetTypeInfo().IsGenericTypeDefinition)) return;
-		BuildCache(model);
-	}
+        if (model.Services.Any(s => s.GetTypeInfo().IsGenericTypeDefinition))
+        {
+            return;
+        }
 
-	public virtual void BuildCache(ComponentModel model)
-	{
-		var map = new Dictionary<MethodInfo, FactoryMethod>(new SimpleMethodEqualityComparer());
-		foreach (var service in model.Services) BuildHandlersMap(service, map);
+        BuildCache(model);
+    }
 
-		model.ExtendedProperties[TypedFactoryFacility.FactoryMapCacheKey] = map;
-	}
+    [PublicAPI]
+    public virtual void BuildCache(ComponentModel model)
+    {
+        var map = new Dictionary<MethodInfo, FactoryMethod>(new SimpleMethodEqualityComparer());
+        foreach (var service in model.Services)
+        {
+            BuildHandlersMap(service, map);
+        }
 
-	private void BuildHandlersMap(Type service, Dictionary<MethodInfo, FactoryMethod> map)
-	{
-		if (service == null) return;
+        model.ExtendedProperties[TypedFactoryFacility.FactoryMapCacheKey] = map;
+    }
 
-		if (service.Equals(typeof(IDisposable)))
-		{
-			var method = service.GetMethods()[0];
-			map[method] = FactoryMethod.Dispose;
-			return;
-		}
+    private static void BuildHandlersMap(Type service, Dictionary<MethodInfo, FactoryMethod> map)
+    {
+        if (service == null)
+        {
+            return;
+        }
 
-		var methods = service.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
-		foreach (var method in methods)
-		{
-			if (IsReleaseMethod(method))
-			{
-				map[method] = FactoryMethod.Release;
-				continue;
-			}
+        if (service == typeof(IDisposable))
+        {
+            var method = service.GetMethods()[0];
+            map[method] = FactoryMethod.Dispose;
+            return;
+        }
 
-			map[method] = FactoryMethod.Resolve;
-		}
+        var methods = service.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
+        foreach (var method in methods)
+        {
+            if (IsReleaseMethod(method))
+            {
+                map[method] = FactoryMethod.Release;
+                continue;
+            }
 
-		foreach (var @interface in service.GetInterfaces()) BuildHandlersMap(@interface, map);
-	}
+            map[method] = FactoryMethod.Resolve;
+        }
 
-	private bool IsReleaseMethod(MethodInfo methodInfo)
-	{
-		return methodInfo.ReturnType == typeof(void);
-	}
+        foreach (var @interface in service.GetInterfaces())
+        {
+            BuildHandlersMap(@interface, map);
+        }
+    }
+
+    private static bool IsReleaseMethod(MethodInfo methodInfo)
+    {
+        return methodInfo.ReturnType == typeof(void);
+    }
 }

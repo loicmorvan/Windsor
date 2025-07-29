@@ -16,25 +16,20 @@ using Castle.Windsor.Core;
 
 namespace Castle.Windsor.Windsor.Diagnostics;
 
-public class DependencyDuplicate
+public class DependencyDuplicate(
+	DependencyModel dependency1,
+	DependencyModel dependency2,
+	DependencyDuplicationReason reason)
 {
-	public DependencyDuplicate(DependencyModel dependency1, DependencyModel dependency2, DependencyDuplicationReason reason)
-	{
-		Dependency1 = dependency1;
-		Dependency2 = dependency2;
-		Reason = reason;
-	}
-
-	public DependencyModel Dependency1 { get; }
-	public DependencyModel Dependency2 { get; }
-	public DependencyDuplicationReason Reason { get; }
+	public DependencyModel Dependency1 { get; } = dependency1;
+	public DependencyModel Dependency2 { get; } = dependency2;
+	public DependencyDuplicationReason Reason { get; } = reason;
 
 	public override bool Equals(object obj)
 	{
 		if (ReferenceEquals(null, obj)) return false;
 		if (ReferenceEquals(this, obj)) return true;
-		if (obj.GetType() != GetType()) return false;
-		return Equals((DependencyDuplicate)obj);
+		return obj.GetType() == GetType() && Equals((DependencyDuplicate)obj);
 	}
 
 	public override int GetHashCode()
@@ -48,7 +43,7 @@ public class DependencyDuplicate
 		}
 	}
 
-	protected bool Equals(DependencyDuplicate other)
+	private bool Equals(DependencyDuplicate other)
 	{
 		return Equals(Dependency1, other.Dependency1) && Equals(Dependency2, other.Dependency2) && Reason.Equals(other.Reason);
 	}

@@ -22,9 +22,9 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 
 public class AllComponents : AbstractContainerDebuggerExtension
 {
-	public const string Name = "All components";
+	private const string Name = "All components";
 
-	private IAllComponentsDiagnostic _diagnostic;
+	private AllComponentsDiagnostic _diagnostic;
 
 	public override IEnumerable<DebuggerViewItem> Attach()
 	{
@@ -41,6 +41,6 @@ public class AllComponents : AbstractContainerDebuggerExtension
 	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
 	{
 		_diagnostic = new AllComponentsDiagnostic(kernel);
-		diagnosticsHost.AddDiagnostic(_diagnostic);
+		diagnosticsHost.AddDiagnostic<IAllComponentsDiagnostic>(_diagnostic);
 	}
 }

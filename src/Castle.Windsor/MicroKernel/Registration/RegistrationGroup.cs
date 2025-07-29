@@ -14,26 +14,22 @@
 
 using Castle.Windsor.MicroKernel.ModelBuilder;
 using Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Registration;
 
-public abstract class RegistrationGroup<TS>
-	where TS : class
+public abstract class RegistrationGroup<TS>(ComponentRegistration<TS> registration)
+    where TS : class
 {
-	public RegistrationGroup(ComponentRegistration<TS> registration)
-	{
-		Registration = registration;
-	}
+    [PublicAPI] public ComponentRegistration<TS> Registration { get; } = registration;
 
-	public ComponentRegistration<TS> Registration { get; }
+    protected ComponentRegistration<TS> AddAttributeDescriptor(string name, string value)
+    {
+        return Registration.AddDescriptor(new AttributeDescriptor<TS>(name, value));
+    }
 
-	protected ComponentRegistration<TS> AddAttributeDescriptor(string name, string value)
-	{
-		return Registration.AddDescriptor(new AttributeDescriptor<TS>(name, value));
-	}
-
-	protected ComponentRegistration<TS> AddDescriptor(IComponentModelDescriptor descriptor)
-	{
-		return Registration.AddDescriptor(descriptor);
-	}
+    protected ComponentRegistration<TS> AddDescriptor(IComponentModelDescriptor descriptor)
+    {
+        return Registration.AddDescriptor(descriptor);
+    }
 }

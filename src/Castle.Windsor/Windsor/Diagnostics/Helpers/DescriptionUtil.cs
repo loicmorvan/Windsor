@@ -17,45 +17,68 @@ using Castle.Core.Internal;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Windsor.Diagnostics.Helpers;
 
 public static class DescriptionUtil
 {
-	public static string GetComponentName(this IHandler handler)
-	{
-		var componentName = handler.ComponentModel.ComponentName;
-		if (componentName.SetByUser) return $"\"{componentName.Name}\" {handler.GetServicesDescription()}";
-		return handler.GetServicesDescription();
-	}
+    public static string GetComponentName(this IHandler handler)
+    {
+        var componentName = handler.ComponentModel.ComponentName;
+        return componentName.SetByUser
+            ? $"\"{componentName.Name}\" {handler.GetServicesDescription()}"
+            : handler.GetServicesDescription();
+    }
 
-	public static string GetLifestyleDescription(this ComponentModel componentModel)
-	{
-		if (componentModel.LifestyleType == LifestyleType.Undefined) return $"{LifestyleType.Singleton}*";
-		if (componentModel.LifestyleType != LifestyleType.Custom) return componentModel.LifestyleType.ToString();
-		return componentModel.CustomLifestyle.Name;
-	}
+    public static string GetLifestyleDescription(this ComponentModel componentModel)
+    {
+        if (componentModel.LifestyleType == LifestyleType.Undefined)
+        {
+            return $"{LifestyleType.Singleton}*";
+        }
 
-	public static string GetLifestyleDescriptionLong(this ComponentModel componentModel)
-	{
-		if (componentModel.LifestyleType == LifestyleType.Undefined)
-			return
-				$"{componentModel.LifestyleType} (default lifestyle {LifestyleType.Singleton} will be used)";
-		if (componentModel.LifestyleType == LifestyleType.Scoped)
-		{
-			var accessorType = componentModel.GetScopeAccessorType();
-			if (accessorType == null) return "Scoped explicitly";
-			var description = accessorType.GetAttribute<DescriptionAttribute>();
-			if (description != null) return "Scoped " + description.Description;
-			return "Scoped via " + accessorType.ToCSharpString();
-		}
+        return componentModel.LifestyleType != LifestyleType.Custom
+            ? componentModel.LifestyleType.ToString()
+            : componentModel.CustomLifestyle.Name;
+    }
 
-		if (componentModel.LifestyleType != LifestyleType.Custom) return componentModel.LifestyleType.ToString();
-		return "Custom: " + componentModel.CustomLifestyle.Name;
-	}
+    public static string GetLifestyleDescriptionLong(this ComponentModel componentModel)
+    {
+        switch (componentModel.LifestyleType)
+        {
+            case LifestyleType.Undefined:
+                return
+                    $"{componentModel.LifestyleType} (default lifestyle {LifestyleType.Singleton} will be used)";
+            case LifestyleType.Scoped:
+            {
+                var accessorType = componentModel.GetScopeAccessorType();
+                if (accessorType == null)
+                {
+                    return "Scoped explicitly";
+                }
 
-	public static string GetServicesDescription(this IHandler handler)
-	{
-		return handler.ComponentModel.ToString();
-	}
+                var description = accessorType.GetAttribute<DescriptionAttribute>();
+                if (description != null)
+                {
+                    return "Scoped " + description.Description;
+                }
+
+                return "Scoped via " + accessorType.ToCSharpString();
+            }
+        }
+
+        if (componentModel.LifestyleType != LifestyleType.Custom)
+        {
+            return componentModel.LifestyleType.ToString();
+        }
+
+        return "Custom: " + componentModel.CustomLifestyle.Name;
+    }
+
+    [PublicAPI]
+    public static string GetServicesDescription(this IHandler handler)
+    {
+        return handler.ComponentModel.ToString();
+    }
 }

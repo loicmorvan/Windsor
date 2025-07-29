@@ -19,64 +19,76 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 public class TypeName
 {
-	private readonly string _assemblyQualifiedName;
-	private readonly TypeName[] _genericTypes;
-	private readonly string _namespace;
+    private readonly string _assemblyQualifiedName;
+    private readonly TypeName[] _genericTypes;
+    private readonly string _namespace;
 
-	public TypeName(string @namespace, string name, TypeName[] genericTypes)
-	{
-		Name = name;
-		_genericTypes = genericTypes;
-		_namespace = @namespace;
-	}
+    public TypeName(string @namespace, string name, TypeName[] genericTypes)
+    {
+        Name = name;
+        _genericTypes = genericTypes;
+        _namespace = @namespace;
+    }
 
-	public TypeName(string assemblyQualifiedName)
-	{
-		_assemblyQualifiedName = assemblyQualifiedName;
-	}
+    public TypeName(string assemblyQualifiedName)
+    {
+        _assemblyQualifiedName = assemblyQualifiedName;
+    }
 
-	private string FullName
-	{
-		get
-		{
-			if (HasNamespace) return _namespace + "." + Name;
-			throw new InvalidOperationException("Namespace was not defined.");
-		}
-	}
+    private string FullName
+    {
+        get
+        {
+            if (HasNamespace)
+            {
+                return _namespace + "." + Name;
+            }
 
-	private bool HasGenericParameters => _genericTypes.Length > 0;
+            throw new InvalidOperationException("Namespace was not defined.");
+        }
+    }
 
-	private bool HasNamespace => string.IsNullOrEmpty(_namespace) == false;
+    private bool HasGenericParameters => _genericTypes.Length > 0;
 
-	private bool IsAssemblyQualified => _assemblyQualifiedName != null;
+    private bool HasNamespace => string.IsNullOrEmpty(_namespace) == false;
 
-	private string Name { get; }
+    private bool IsAssemblyQualified => _assemblyQualifiedName != null;
 
-	public string ExtractAssemblyName()
-	{
-		if (IsAssemblyQualified == false) return null;
-		var tokens = _assemblyQualifiedName.Split([','], StringSplitOptions.None);
-		var indexOfVersion = Array.FindLastIndex(tokens, s => s.TrimStart(' ').StartsWith("Version="));
-		if (indexOfVersion <= 0) return tokens.Last().Trim();
-		return tokens[indexOfVersion - 1].Trim();
-	}
+    private string Name { get; }
 
-	public Type GetType(TypeNameConverter converter)
-	{
-		ArgumentNullException.ThrowIfNull(converter);
-		if (IsAssemblyQualified) return Type.GetType(_assemblyQualifiedName, false, true);
+    public string ExtractAssemblyName()
+    {
+        if (IsAssemblyQualified == false)
+        {
+            return null;
+        }
 
-		Type type;
-		if (HasNamespace)
-			type = converter.GetTypeByFullName(FullName);
-		else
-			type = converter.GetTypeByName(Name);
+        var tokens = _assemblyQualifiedName.Split([','], StringSplitOptions.None);
+        var indexOfVersion = Array.FindLastIndex(tokens, s => s.TrimStart(' ').StartsWith("Version="));
+        return indexOfVersion <= 0 ? tokens.Last().Trim() : tokens[indexOfVersion - 1].Trim();
+    }
 
-		if (!HasGenericParameters) return type;
+    public Type GetType(TypeNameConverter converter)
+    {
+        ArgumentNullException.ThrowIfNull(converter);
+        if (IsAssemblyQualified)
+        {
+            return Type.GetType(_assemblyQualifiedName, false, true);
+        }
 
-		var genericArgs = new Type[_genericTypes.Length];
-		for (var i = 0; i < genericArgs.Length; i++) genericArgs[i] = _genericTypes[i].GetType(converter);
+        var type = HasNamespace ? converter.GetTypeByFullName(FullName) : converter.GetTypeByName(Name);
 
-		return type.MakeGenericType(genericArgs);
-	}
+        if (!HasGenericParameters)
+        {
+            return type;
+        }
+
+        var genericArgs = new Type[_genericTypes.Length];
+        for (var i = 0; i < genericArgs.Length; i++)
+        {
+            genericArgs[i] = _genericTypes[i].GetType(converter);
+        }
+
+        return type.MakeGenericType(genericArgs);
+    }
 }
