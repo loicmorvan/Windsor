@@ -14,26 +14,23 @@
 
 using Castle.Windsor.Core;
 using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 
 [UsedImplicitly]
-public class Startable : IStartable
+#pragma warning disable CS9113 // Parameter is unread.
+public class Startable(ICustomer customer, LifecycleCounter counter) : IStartable
+#pragma warning restore CS9113 // Parameter is unread.
 {
-	public static bool Started;
+    public void Start()
+    {
+        counter.Increment();
+    }
 
-	// ReSharper disable once UnusedParameter.Local
-	public Startable(ICustomer customer)
-	{
-	}
-
-	public void Start()
-	{
-		Started = true;
-	}
-
-	public void Stop()
-	{
-	}
+    public void Stop()
+    {
+        counter.Increment();
+    }
 }
