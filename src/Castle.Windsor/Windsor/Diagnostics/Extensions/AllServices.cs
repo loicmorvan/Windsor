@@ -40,7 +40,7 @@ public class AllServices : AbstractContainerDebuggerExtension
         diagnosticsHost.AddDiagnostic<IAllServicesDiagnostic>(_diagnostic);
     }
 
-    private DebuggerViewItem BuildServiceView(IEnumerable<IHandler> handlers, string name)
+    private static DebuggerViewItem BuildServiceView(IEnumerable<IHandler> handlers, string name)
     {
         var components = handlers.Select(DefaultComponentView).ToArray();
         return new DebuggerViewItem(name, "Count = " + components.Length, components);

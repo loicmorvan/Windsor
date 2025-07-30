@@ -235,10 +235,7 @@ public sealed partial class DefaultKernel :
         where T : IFacility, new()
     {
         var facility = new T();
-        if (onCreate != null)
-        {
-            onCreate(facility);
-        }
+        onCreate?.Invoke(facility);
 
         return AddFacility(facility);
     }
@@ -393,12 +390,7 @@ public sealed partial class DefaultKernel :
             return true;
         }
 
-        if (Parent != null)
-        {
-            return Parent.HasComponent(name);
-        }
-
-        return false;
+        return Parent != null && Parent.HasComponent(name);
     }
 
     public bool HasComponent(Type serviceType)
@@ -413,12 +405,7 @@ public sealed partial class DefaultKernel :
             return true;
         }
 
-        if (Parent != null)
-        {
-            return Parent.HasComponent(serviceType);
-        }
-
-        return false;
+        return Parent != null && Parent.HasComponent(serviceType);
     }
 
     /// <summary>
@@ -601,11 +588,13 @@ public sealed partial class DefaultKernel :
                 foreach (var loader in ResolveAll<ILazyComponentLoader>())
                 {
                     var registration = loader.Load(name, service, arguments);
-                    if (registration != null)
+                    if (registration == null)
                     {
-                        registration.Register(this);
-                        return GetHandler(name);
+                        continue;
                     }
+
+                    registration.Register(this);
+                    return GetHandler(name);
                 }
 
                 return null;
@@ -646,11 +635,13 @@ public sealed partial class DefaultKernel :
                 foreach (var loader in ResolveAll<ILazyComponentLoader>())
                 {
                     var registration = loader.Load(name, service, arguments);
-                    if (registration != null)
+                    if (registration == null)
                     {
-                        registration.Register(this);
-                        return GetHandler(service);
+                        continue;
                     }
+
+                    registration.Register(this);
+                    return GetHandler(service);
                 }
 
                 return null;
@@ -665,22 +656,18 @@ public sealed partial class DefaultKernel :
     private static IScopeAccessor CreateScopeAccessor(ComponentModel model)
     {
         var scopeAccessorType = model.GetScopeAccessorType();
-        if (scopeAccessorType == null)
-        {
-            return new LifetimeScopeAccessor();
-        }
-
-        return scopeAccessorType.CreateInstance<IScopeAccessor>();
+        return scopeAccessorType == null
+            ? new LifetimeScopeAccessor()
+            : scopeAccessorType.CreateInstance<IScopeAccessor>();
     }
 
-    private IScopeAccessor CreateScopeAccessorForBoundLifestyle(ComponentModel model)
+    private static CreationContextScopeAccessor CreateScopeAccessorForBoundLifestyle(ComponentModel model)
     {
         var selector = (Func<IHandler[], IHandler>)model.ExtendedProperties[Constants.ScopeRootSelector];
         if (selector == null)
         {
             throw new ComponentRegistrationException(
-                string.Format("Component {0} has lifestyle {1} but it does not specify mandatory 'scopeRootSelector'.",
-                    model.Name, LifestyleType.Bound));
+                $"Component {model.Name} has lifestyle {LifestyleType.Bound} but it does not specify mandatory 'scopeRootSelector'.");
         }
 
         return new CreationContextScopeAccessor(model, selector);
@@ -694,7 +681,7 @@ public sealed partial class DefaultKernel :
     }
 
     /// <remarks>It is the responsibility of the kernel to ensure that handler is only ever disposed once.</remarks>
-    private void DisposeHandler(IHandler handler)
+    private static void DisposeHandler(IHandler handler)
     {
         var disposable = handler as IDisposable;
 
@@ -738,7 +725,7 @@ public sealed partial class DefaultKernel :
         }
     }
 
-    private IHandler WrapParentHandler(IHandler parentHandler)
+    private ParentHandlerWrapper WrapParentHandler(IHandler parentHandler)
     {
         if (parentHandler == null)
         {

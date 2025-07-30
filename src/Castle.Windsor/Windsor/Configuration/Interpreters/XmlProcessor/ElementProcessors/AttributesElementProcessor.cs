@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using System.Xml;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
@@ -37,6 +39,7 @@ public class AttributesElementProcessor : AbstractXmlNodeProcessor
     {
         var element = nodeList.Current as XmlElement;
 
+        Debug.Assert(element != null, nameof(element) + " != null");
         var childNodes = new DefaultXmlProcessorNodeList(element.ChildNodes);
 
         while (childNodes.MoveNext())
@@ -56,12 +59,15 @@ public class AttributesElementProcessor : AbstractXmlNodeProcessor
         RemoveItSelf(element);
     }
 
-    protected void AppendElementAsAttribute(XmlNode parentElement, XmlElement element)
+    [PublicAPI]
+    protected static void AppendElementAsAttribute(XmlNode parentElement, XmlElement element)
     {
+        Debug.Assert(parentElement.OwnerDocument != null);
         var attribute = parentElement.OwnerDocument.CreateAttribute(element.Name);
 
         attribute.Value = element.InnerText;
 
+        Debug.Assert(parentElement.Attributes != null);
         parentElement.Attributes.Append(attribute);
     }
 }

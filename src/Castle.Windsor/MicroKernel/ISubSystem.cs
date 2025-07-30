@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.MicroKernel;
 
 /// <summary>A subsystem is used by the MicroKernel to deal with a specific concern.</summary>
@@ -22,5 +24,6 @@ public interface ISubSystem
 	void Init(IKernelInternal kernel);
 
 	/// <summary>Should perform the termination of the subsystem instance.</summary>
+	[PublicAPI]
 	void Terminate();
 }

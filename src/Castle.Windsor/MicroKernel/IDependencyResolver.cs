@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.MicroKernel;
 
 /// <summary>
@@ -31,5 +33,6 @@ public interface IDependencyResolver : ISubDependencyResolver
 
 	/// <summary>Unregisters a sub resolver instance previously registered</summary>
 	/// <param name="subResolver">The subresolver instance</param>
+	[PublicAPI]
 	void RemoveSubResolver(ISubDependencyResolver subResolver);
 }

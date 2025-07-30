@@ -19,8 +19,8 @@ namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.Element
 
 public class ChooseElementProcessor : AbstractStatementElementProcessor
 {
-    private static readonly string OtherwiseElemName = "otherwise";
-    private static readonly string WhenElemName = "when";
+    private const string OtherwiseElemName = "otherwise";
+    private const string WhenElemName = "when";
 
     public override string Name => "choose";
 
@@ -56,16 +56,18 @@ public class ChooseElementProcessor : AbstractStatementElementProcessor
                     element.Name, elem.Name);
             }
 
-            if (found)
+            if (!found)
             {
-                if (elem.ChildNodes.Count > 0)
-                {
-                    MoveChildNodes(fragment, elem);
-                    engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(fragment.ChildNodes));
-                }
-
-                break;
+                continue;
             }
+
+            if (elem.ChildNodes.Count > 0)
+            {
+                MoveChildNodes(fragment, elem);
+                engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(fragment.ChildNodes));
+            }
+
+            break;
         }
 
         ReplaceItself(fragment, element);

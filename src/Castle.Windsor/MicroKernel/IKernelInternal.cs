@@ -14,50 +14,52 @@
 
 using Castle.Core.Logging;
 using Castle.Windsor.Core;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel;
 
 /// <summary>Extended contract of kernel, used internally.</summary>
 public interface IKernelInternal : IKernel
 {
-	/// <summary>
-	///     Internal logger used by the container (not just <see cref="IKernelInternal" /> implementation itself but also
-	///     other classes too) to log information about what's happening in the container.
-	/// </summary>
-	ILogger Logger { get; set; }
+    /// <summary>
+    ///     Internal logger used by the container (not just <see cref="IKernelInternal" /> implementation itself but also
+    ///     other classes too) to log information about what's happening in the container.
+    /// </summary>
+    [PublicAPI]
+    ILogger Logger { get; set; }
 
-	/// <summary>Adds a custom made <see cref="ComponentModel" />. Used by facilities.</summary>
-	/// <param name="model"> </param>
-	IHandler AddCustomComponent(ComponentModel model);
+    /// <summary>Adds a custom made <see cref="ComponentModel" />. Used by facilities.</summary>
+    /// <param name="model"> </param>
+    IHandler AddCustomComponent(ComponentModel model);
 
-	/// <summary>
-	///     Constructs an implementation of <see cref="IComponentActivator" /> for the given <see cref="ComponentModel" />
-	/// </summary>
-	/// <param name="model"> </param>
-	/// <returns> </returns>
-	IComponentActivator CreateComponentActivator(ComponentModel model);
+    /// <summary>
+    ///     Constructs an implementation of <see cref="IComponentActivator" /> for the given <see cref="ComponentModel" />
+    /// </summary>
+    /// <param name="model"> </param>
+    /// <returns> </returns>
+    IComponentActivator CreateComponentActivator(ComponentModel model);
 
-	ILifestyleManager CreateLifestyleManager(ComponentModel model, IComponentActivator activator);
+    ILifestyleManager CreateLifestyleManager(ComponentModel model, IComponentActivator activator);
 
-	IHandler LoadHandlerByName(string key, Type service, Arguments arguments);
+    IHandler LoadHandlerByName(string key, Type service, Arguments arguments);
 
-	IHandler LoadHandlerByType(string key, Type service, Arguments arguments);
+    IHandler LoadHandlerByType(string key, Type service, Arguments arguments);
 
-	IDisposable OptimizeDependencyResolution();
+    IDisposable OptimizeDependencyResolution();
 
-	object Resolve(Type service, Arguments arguments, IReleasePolicy policy, bool ignoreParentContext = false);
+    object Resolve(Type service, Arguments arguments, IReleasePolicy policy, bool ignoreParentContext = false);
 
-	/// <summary>Returns a component instance by the key</summary>
-	/// <param name="key"> </param>
-	/// <param name="service"> </param>
-	/// <param name="arguments"> </param>
-	/// <param name="policy"> </param>
-	/// <returns> </returns>
-	object Resolve(string key, Type service, Arguments arguments, IReleasePolicy policy);
+    /// <summary>Returns a component instance by the key</summary>
+    /// <param name="key"> </param>
+    /// <param name="service"> </param>
+    /// <param name="arguments"> </param>
+    /// <param name="policy"> </param>
+    /// <returns> </returns>
+    object Resolve(string key, Type service, Arguments arguments, IReleasePolicy policy);
 
-	Array ResolveAll(Type service, Arguments arguments, IReleasePolicy policy);
+    Array ResolveAll(Type service, Arguments arguments, IReleasePolicy policy);
 
-	IHandler CreateHandler(ComponentModel model);
+    IHandler CreateHandler(ComponentModel model);
 
-	void RaiseEventsOnHandlerCreated(IHandler handler);
+    void RaiseEventsOnHandlerCreated(IHandler handler);
 }

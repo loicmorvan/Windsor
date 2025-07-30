@@ -108,7 +108,7 @@ public partial class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
         return propRef.StartsWith("#{");
     }
 
-    private void MoveAttributes(XmlElement targetElement, XmlElement srcElement)
+    private static void MoveAttributes(XmlElement targetElement, XmlElement srcElement)
     {
         for (var i = srcElement.Attributes.Count - 1; i > -1; i--)
         {

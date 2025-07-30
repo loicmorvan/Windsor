@@ -14,6 +14,7 @@
 
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.ModelBuilder;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel;
 
@@ -23,7 +24,7 @@ namespace Castle.Windsor.MicroKernel;
 /// </summary>
 public interface IComponentModelBuilder
 {
-    IContributeComponentModelConstruction[] Contributors { get; }
+    [PublicAPI] IContributeComponentModelConstruction[] Contributors { get; }
 
     /// <summary>
     ///     "To give or supply in common with others; give to a common fund or for a common purpose". The contributor should
@@ -39,5 +40,6 @@ public interface IComponentModelBuilder
 
     /// <summary>Removes the specified contributor</summary>
     /// <param name="contributor"></param>
+    [PublicAPI]
     void RemoveContributor(IContributeComponentModelConstruction contributor);
 }

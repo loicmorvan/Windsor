@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Windsor;
 
 /// <summary>
@@ -22,6 +24,7 @@ namespace Castle.Windsor.Windsor;
 ///         expose the configured container
 ///     </para>
 /// </summary>
+[PublicAPI]
 public interface IContainerAccessor
 {
     IWindsorContainer Container { get; }

@@ -15,6 +15,7 @@
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.LifecycleConcerns;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel;
 
@@ -78,13 +79,11 @@ public class Burden
         }
     }
 
+    [PublicAPI]
     public bool Release()
     {
         var releasing = Releasing;
-        if (releasing != null)
-        {
-            releasing(this);
-        }
+        releasing?.Invoke(this);
 
         if (Handler.Release(this) == false)
         {
@@ -92,17 +91,11 @@ public class Burden
         }
 
         var released = Released;
-        if (released != null)
-        {
-            released(this);
-        }
+        released?.Invoke(this);
 
         _dependencies?.ForEach(c => c.Release());
         var graphReleased = GraphReleased;
-        if (graphReleased != null)
-        {
-            graphReleased(this);
-        }
+        graphReleased?.Invoke(this);
 
         return true;
     }
@@ -118,7 +111,7 @@ public class Burden
         }
     }
 
-    private bool IsLateBound(IDecommissionConcern arg)
+    private static bool IsLateBound(IDecommissionConcern arg)
     {
         return arg is LateBoundConcerns<IDecommissionConcern>;
     }

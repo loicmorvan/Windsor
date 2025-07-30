@@ -144,6 +144,7 @@ public class DefaultDependencyResolver : IDependencyResolver
         return value;
     }
 
+    [PublicAPI]
     protected virtual bool CanResolveFromKernel(CreationContext context, ComponentModel model,
         DependencyModel dependency)
     {

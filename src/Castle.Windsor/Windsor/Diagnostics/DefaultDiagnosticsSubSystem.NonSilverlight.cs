@@ -15,9 +15,11 @@
 using System.Collections;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.Windsor.Diagnostics.Extensions;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Windsor.Diagnostics;
 
+[PublicAPI]
 public partial class DefaultDiagnosticsSubSystem : IDiagnosticsHost, IContainerDebuggerExtensionHost
 {
     private readonly IList<IContainerDebuggerExtension> _extensions = new List<IContainerDebuggerExtension>();

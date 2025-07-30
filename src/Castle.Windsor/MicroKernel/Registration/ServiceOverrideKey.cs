@@ -1,3 +1,5 @@
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Represents a service override key.</summary>
@@ -43,6 +45,7 @@ public class ServiceOverrideKey
     /// <summary>Builds the <see cref="ServiceOverride" /> with key/values.</summary>
     /// <param name="value">The service override values.</param>
     /// <returns>The new <see cref="ServiceOverride" /></returns>
+    [PublicAPI]
     public ServiceOverride Eq(IEnumerable<string> value)
     {
         return new ServiceOverride(_key, value);
@@ -52,6 +55,7 @@ public class ServiceOverrideKey
     /// <param name="value">The service override values.</param>
     /// <returns>The new <see cref="ServiceOverride" /></returns>
     /// <typeparam name="TV">The value type.</typeparam>
+    [PublicAPI]
     public ServiceOverride Eq<TV>(IEnumerable<string> value)
     {
         return new ServiceOverride(_key, value, typeof(TV));
@@ -62,6 +66,7 @@ public class ServiceOverrideKey
         return new ServiceOverride(_key, componentTypes);
     }
 
+    [PublicAPI]
     public ServiceOverride Eq<TV>(params Type[] componentTypes)
     {
         return new ServiceOverride(_key, componentTypes, typeof(TV));

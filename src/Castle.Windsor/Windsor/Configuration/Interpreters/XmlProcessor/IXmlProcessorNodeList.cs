@@ -18,12 +18,7 @@ namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor;
 
 public interface IXmlProcessorNodeList
 {
-    int Count { get; }
     XmlNode Current { get; }
-
-    int CurrentPosition { get; set; }
-
-    bool HasCurrent { get; }
 
     bool MoveNext();
 }

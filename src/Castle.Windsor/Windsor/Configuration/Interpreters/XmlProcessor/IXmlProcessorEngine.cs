@@ -21,7 +21,6 @@ public interface IXmlProcessorEngine
 {
     void AddFlag(string flag);
 
-    void AddNodeProcessor(Type type);
 
     void AddProperty(XmlElement element);
 
@@ -35,7 +34,6 @@ public interface IXmlProcessorEngine
 
     bool HasFlag(string flag);
 
-    bool HasProperty(string name);
 
     bool HasSpecialProcessor(XmlNode node);
 

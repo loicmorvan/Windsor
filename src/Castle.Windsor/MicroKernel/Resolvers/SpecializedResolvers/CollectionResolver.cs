@@ -15,6 +15,7 @@
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Context;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
 
@@ -25,16 +26,11 @@ namespace Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
 /// <remarks>
 ///     The collection instance that is provided is read only, even for interfaces like <see cref="IList{T}" />
 /// </remarks>
-public class CollectionResolver : ISubDependencyResolver
+public class CollectionResolver(IKernel kernel, bool allowEmptyCollections = false) : ISubDependencyResolver
 {
-    protected readonly bool AllowEmptyCollections;
-    protected readonly IKernel Kernel;
+    [PublicAPI] protected readonly bool AllowEmptyCollections = allowEmptyCollections;
 
-    public CollectionResolver(IKernel kernel, bool allowEmptyCollections = false)
-    {
-        Kernel = kernel;
-        AllowEmptyCollections = allowEmptyCollections;
-    }
+    protected readonly IKernel Kernel = kernel;
 
     public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
         ComponentModel model,
@@ -58,6 +54,7 @@ public class CollectionResolver : ISubDependencyResolver
         return Kernel.ResolveAll(GetItemType(dependency.TargetItemType), context.AdditionalArguments);
     }
 
+    [PublicAPI]
     protected virtual bool CanSatisfy(Type itemType)
     {
         return AllowEmptyCollections || Kernel.HasComponent(itemType);
@@ -68,6 +65,7 @@ public class CollectionResolver : ISubDependencyResolver
         return targetItemType.GetCompatibleArrayItemType();
     }
 
+    [PublicAPI]
     protected virtual bool HasParameter(DependencyModel dependency)
     {
         return dependency.Parameter != null;

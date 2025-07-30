@@ -18,19 +18,14 @@ namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.Element
 
 public abstract class AbstractStatementElementProcessor : AbstractXmlNodeProcessor
 {
-    private static readonly string DefinedAttrName = "defined";
-    private static readonly string NotDefinedAttrName = "not-defined";
+    private const string DefinedAttrName = "defined";
+    private const string NotDefinedAttrName = "not-defined";
 
-    protected bool ProcessStatement(XmlElement element, IXmlProcessorEngine engine)
+    protected static bool ProcessStatement(XmlElement element, IXmlProcessorEngine engine)
     {
         if (!element.HasAttribute(DefinedAttrName) &&
-            !element.HasAttribute(NotDefinedAttrName))
-        {
-            throw new XmlProcessorException("'if' elements expects a non empty defined or not-defined attribute");
-        }
-
-        if (element.HasAttribute(DefinedAttrName) &&
-            element.HasAttribute(NotDefinedAttrName))
+            !element.HasAttribute(NotDefinedAttrName) || (element.HasAttribute(DefinedAttrName) &&
+                                                          element.HasAttribute(NotDefinedAttrName)))
         {
             throw new XmlProcessorException("'if' elements expects a non empty defined or not-defined attribute");
         }

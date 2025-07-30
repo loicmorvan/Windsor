@@ -15,6 +15,7 @@
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor.Windsor.Configuration;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Windsor.Installer;
 
@@ -51,6 +52,7 @@ public class ConfigurationInstaller : IWindsorInstaller
     /// <summary>Set the configuration environment strategy.</summary>
     /// <param name="environment">The environment strategy.</param>
     /// <returns></returns>
+    [PublicAPI]
     public ConfigurationInstaller Environment(EnvironmentDelegate environment)
     {
         _environment = environment;

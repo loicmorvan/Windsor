@@ -46,12 +46,13 @@ public class DuplicatedDependenciesDebuggerExtension : AbstractContainerDebugger
         diagnosticsHost.AddDiagnostic<IDuplicatedDependenciesDiagnostic>(_diagnostic);
     }
 
-    private ComponentDebuggerView[] BuildItems(Tuple<IHandler, DependencyDuplicate[]>[] results)
+    private static ComponentDebuggerView[] BuildItems(Tuple<IHandler, DependencyDuplicate[]>[] results)
     {
         return results.ConvertAll(ComponentWithDuplicateDependenciesView);
     }
 
-    private ComponentDebuggerView ComponentWithDuplicateDependenciesView(Tuple<IHandler, DependencyDuplicate[]> input)
+    private static ComponentDebuggerView ComponentWithDuplicateDependenciesView(
+        Tuple<IHandler, DependencyDuplicate[]> input)
     {
         var handler = input.Item1;
         var mismatches = input.Item2;

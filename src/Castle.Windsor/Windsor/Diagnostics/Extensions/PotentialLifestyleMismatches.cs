@@ -92,7 +92,7 @@ public class PotentialLifestyleMismatches : AbstractContainerDebuggerExtension
         return componentModel.ComponentName.SetByUser ? componentModel.ComponentName.Name : componentModel.ToString();
     }
 
-    private object MismatchedComponentView(IHandler[] handlers)
+    private static object MismatchedComponentView(IHandler[] handlers)
     {
         return new DebuggerViewItemWithDetails(GetName(handlers, handlers.First()),
             GetKey(handlers.Last()),

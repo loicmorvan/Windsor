@@ -21,6 +21,7 @@ using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Proxy;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Windsor.Proxy;
 
@@ -31,6 +32,7 @@ namespace Castle.Windsor.Windsor.Proxy;
 ///     virtual,
 /// </remarks>
 [Serializable]
+[PublicAPI]
 public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactory, IDeserializationCallback
 {
     [NonSerialized] protected ProxyGenerator Generator = generator;
@@ -176,11 +178,13 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
         return proxyGenOptions;
     }
 
+    [PublicAPI]
     protected virtual void CustomizeProxy(object proxy, ProxyGenerationOptions options, IKernel kernel,
         ComponentModel model)
     {
     }
 
+    [PublicAPI]
     protected virtual void CustomizeOptions(ProxyGenerationOptions options, IKernel kernel, ComponentModel model,
         object[] arguments)
     {

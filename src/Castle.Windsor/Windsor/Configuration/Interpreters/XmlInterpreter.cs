@@ -91,7 +91,7 @@ public sealed class XmlInterpreter : AbstractInterpreter
         }
     }
 
-    private static void AssertNodeName(XmlNode node, IEquatable<string> expectedName)
+    private static void AssertNodeName(XmlNode node, string expectedName)
     {
         if (expectedName.Equals(node.Name))
         {

@@ -164,6 +164,7 @@ public interface IWindsorContainer : IDisposable
     /// <param name="service"></param>
     /// <param name="arguments">Arguments to resolve the service.</param>
     /// <returns></returns>
+    [PublicAPI]
     object Resolve(string key, Type service, Arguments arguments);
 
     /// <summary>Resolve all valid components that match this type.</summary>
@@ -181,6 +182,7 @@ public interface IWindsorContainer : IDisposable
     ///     <param name="service">the service to match</param>
     ///     <param name="arguments">Arguments to resolve the service.</param>
     /// </summary>
+    [PublicAPI]
     Array ResolveAll(Type service, Arguments arguments);
 
     /// <summary>

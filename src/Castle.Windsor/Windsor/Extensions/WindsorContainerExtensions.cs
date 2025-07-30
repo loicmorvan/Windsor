@@ -13,12 +13,14 @@
 // limitations under the License.
 
 using Castle.Windsor.MicroKernel;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Windsor.Extensions;
 
 public static class WindsorContainerExtensions
 {
     /// <summary>Returns a component instance by the service.</summary>
+    [PublicAPI]
     public static object Resolve(this IWindsorContainer container, Type service,
         IEnumerable<KeyValuePair<string, object>> arguments)
     {
@@ -26,6 +28,7 @@ public static class WindsorContainerExtensions
     }
 
     /// <summary>Returns a component instance by the key.</summary>
+    [PublicAPI]
     public static object Resolve(this IWindsorContainer container, string key, Type service,
         IEnumerable<KeyValuePair<string, object>> arguments)
     {
@@ -39,6 +42,7 @@ public static class WindsorContainerExtensions
     }
 
     /// <summary>Returns a component instance by the key.</summary>
+    [PublicAPI]
     public static T Resolve<T>(this IWindsorContainer container, string key,
         IEnumerable<KeyValuePair<string, object>> arguments)
     {
@@ -46,6 +50,7 @@ public static class WindsorContainerExtensions
     }
 
     /// <summary>Resolve all valid components that match this type by passing dependencies as arguments.</summary>
+    [PublicAPI]
     public static Array ResolveAll(this IWindsorContainer container, Type service,
         IEnumerable<KeyValuePair<string, object>> arguments)
     {
@@ -53,6 +58,7 @@ public static class WindsorContainerExtensions
     }
 
     /// <summary>Resolve all valid components that match this type.</summary>
+    [PublicAPI]
     public static T[] ResolveAll<T>(this IWindsorContainer container,
         IEnumerable<KeyValuePair<string, object>> arguments)
     {

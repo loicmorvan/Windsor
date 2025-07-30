@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using System.Xml;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 
@@ -37,7 +39,7 @@ public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
         return node.Name == Name && Array.IndexOf(AcceptNodeTypes, node.NodeType) != -1;
     }
 
-    protected void AppendChild(XmlNode element, XmlNodeList nodes)
+    protected static void AppendChild(XmlNode element, XmlNodeList nodes)
     {
         var childNodes = new DefaultXmlProcessorNodeList(nodes);
 
@@ -47,23 +49,26 @@ public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
         }
     }
 
-    protected void AppendChild(XmlNode element, string text)
+    protected static void AppendChild(XmlNode element, string text)
     {
         AppendChild(element, CreateText(element, text));
     }
 
-    protected void AppendChild(XmlNode element, XmlNode child)
+    protected static void AppendChild(XmlNode element, XmlNode child)
     {
         element.AppendChild(ImportNode(element, child));
     }
 
-    protected XmlDocumentFragment CreateFragment(XmlNode parentNode)
+    protected static XmlDocumentFragment CreateFragment(XmlNode parentNode)
     {
+        Debug.Assert(parentNode.OwnerDocument != null);
         return parentNode.OwnerDocument.CreateDocumentFragment();
     }
 
-    protected XmlText CreateText(XmlNode node, string content)
+    [PublicAPI]
+    protected static XmlText CreateText(XmlNode node, string content)
     {
+        Debug.Assert(node.OwnerDocument != null);
         return node.OwnerDocument.CreateTextNode(content);
     }
 
@@ -74,7 +79,7 @@ public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
     /// <param name="element">Parent node</param>
     /// <param name="child">Node to be converted</param>
     /// <returns>child node as XmlElement</returns>
-    protected XmlElement GetNodeAsElement(XmlElement element, XmlNode child)
+    protected static XmlElement GetNodeAsElement(XmlElement element, XmlNode child)
     {
         if (child is not XmlElement result)
         {
@@ -84,7 +89,7 @@ public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
         return result;
     }
 
-    protected string GetRequiredAttribute(XmlElement element, string attribute)
+    protected static string GetRequiredAttribute(XmlElement element, string attribute)
     {
         var attValue = element.GetAttribute(attribute).Trim();
 
@@ -96,44 +101,47 @@ public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
         return attValue;
     }
 
+    [PublicAPI]
     protected virtual bool IgnoreNode(XmlNode node)
     {
-        return node.NodeType == XmlNodeType.Comment ||
-               node.NodeType == XmlNodeType.Entity ||
-               node.NodeType == XmlNodeType.EntityReference;
+        return node.NodeType is XmlNodeType.Comment or XmlNodeType.Entity or XmlNodeType.EntityReference;
     }
 
-    protected XmlNode ImportNode(XmlNode targetElement, XmlNode node)
+    protected static XmlNode ImportNode(XmlNode targetElement, XmlNode node)
     {
+        Debug.Assert(targetElement.OwnerDocument != null);
         return targetElement.OwnerDocument == node.OwnerDocument
             ? node
             : targetElement.OwnerDocument.ImportNode(node, true);
     }
 
-    protected bool IsTextNode(XmlNode node)
+    [PublicAPI]
+    protected static bool IsTextNode(XmlNode node)
     {
-        return node.NodeType == XmlNodeType.Text || node.NodeType == XmlNodeType.CDATA;
+        return node.NodeType is XmlNodeType.Text or XmlNodeType.CDATA;
     }
 
-    protected void MoveChildNodes(XmlDocumentFragment fragment, XmlElement element)
+    [PublicAPI]
+    protected static void MoveChildNodes(XmlDocumentFragment fragment, XmlElement element)
     {
         while (element.ChildNodes.Count > 0)
         {
-            fragment.AppendChild(element.ChildNodes[0]);
+            fragment.AppendChild(element.ChildNodes[0] ?? throw new InvalidOperationException());
         }
     }
 
-    protected void RemoveItSelf(XmlNode node)
+    protected static void RemoveItSelf(XmlNode node)
     {
+        Debug.Assert(node.ParentNode != null);
         node.ParentNode.RemoveChild(node);
     }
 
-    protected void ReplaceItself(XmlNode newNode, XmlNode oldNode)
+    protected static void ReplaceItself(XmlNode newNode, XmlNode oldNode)
     {
         ReplaceNode(oldNode.ParentNode, newNode, oldNode);
     }
 
-    protected void ReplaceNode(XmlNode element, XmlNode newNode, XmlNode oldNode)
+    protected static void ReplaceNode(XmlNode element, XmlNode newNode, XmlNode oldNode)
     {
         if (newNode == oldNode)
         {

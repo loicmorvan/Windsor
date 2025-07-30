@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Castle.Windsor.Windsor;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel;
 
@@ -23,6 +24,7 @@ public interface IKernelEvents
     event ComponentDataDelegate ComponentRegistered;
 
     /// <summary>Event fired after the ComponentModel is created. Allows customizations that may affect the handler.</summary>
+    [PublicAPI]
     event ComponentModelDelegate ComponentModelCreated;
 
     /// <summary>Event fired when the kernel was added as child of another kernel.</summary>
@@ -35,6 +37,7 @@ public interface IKernelEvents
     event ComponentInstanceDelegate ComponentCreated;
 
     /// <summary>Event fired when a component instance destroyed.</summary>
+    [PublicAPI]
     event ComponentInstanceDelegate ComponentDestroyed;
 
     /// <summary>Event fired when a new handler is registered (it might be in a valid or waiting dependency state)</summary>

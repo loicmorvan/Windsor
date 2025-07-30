@@ -15,34 +15,33 @@
 using System.Diagnostics;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.Windsor.Diagnostics.Helpers;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
 
 [DebuggerDisplay("{Description,nq}", Name = "{name,nq}")]
-public class ComponentDebuggerView
+[method: PublicAPI]
+public class ComponentDebuggerView(
+    IHandler handler,
+    string description,
+    params IComponentDebuggerExtension[] defaultExtension)
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private readonly IComponentDebuggerExtension[] _extension;
-
-    public ComponentDebuggerView(IHandler handler, string description,
-        params IComponentDebuggerExtension[] defaultExtension)
-    {
-        Name = handler.GetComponentName();
-        Description = description;
-        _extension = defaultExtension.Concat(GetExtensions(handler)).ToArray();
-    }
+    private readonly IComponentDebuggerExtension[] _extension =
+        defaultExtension.Concat(GetExtensions(handler)).ToArray();
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    public string Description { get; }
+    public string Description { get; } = description;
 
     [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    [PublicAPI]
     public object[] Extensions
     {
         get { return _extension.SelectMany(e => e.Attach()).ToArray(); }
     }
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    public string Name { get; }
+    public string Name { get; } = handler.GetComponentName();
 
     public static ComponentDebuggerView BuildFor(IHandler handler, string description = null)
     {
@@ -52,6 +51,7 @@ public class ComponentDebuggerView
             extensions.ToArray());
     }
 
+    [PublicAPI]
     public static ComponentDebuggerView BuildRawFor(IHandler handler, string description,
         IComponentDebuggerExtension[] extensions)
     {

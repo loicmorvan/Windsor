@@ -15,11 +15,13 @@
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Context;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel;
 
 public interface IProxyFactoryExtension
 {
+    [PublicAPI]
     object Generate(IProxyBuilder builder, ProxyGenerationOptions options, IInterceptor[] interceptors,
         ComponentModel model, CreationContext context);
 }

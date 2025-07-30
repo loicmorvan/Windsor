@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Diagnostics;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
 
@@ -26,9 +27,11 @@ public class DebuggerViewItemWithDetails(
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public object Description { get; } = description;
 
+    [PublicAPI]
     public string Details { get; private set; } = details;
 
     [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    [PublicAPI]
     public IEnumerable<object> Items { get; set; } = items;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

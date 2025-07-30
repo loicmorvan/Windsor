@@ -15,6 +15,7 @@
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Proxy;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel;
 
@@ -52,6 +53,7 @@ public interface IProxyFactory
     ///     <see
     ///         cref="Create(Castle.Windsor.MicroKernel.IKernel,object,Castle.Windsor.Core.ComponentModel,Castle.Windsor.MicroKernel.Context.CreationContext,object[])" />
     /// </returns>
+    [PublicAPI]
     bool RequiresTargetInstance(IKernel kernel, ComponentModel model);
 
     /// <summary>Determines whatever we need to create a proxy for this model</summary>

@@ -15,6 +15,7 @@
 using Castle.Core.Resource;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.SubSystems.Configuration;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Windsor.Configuration;
 
@@ -23,6 +24,7 @@ public interface IConfigurationInterpreter
 {
     /// <summary>Gets or sets the name of the environment.</summary>
     /// <value>The name of the environment.</value>
+    [PublicAPI]
     string EnvironmentName { get; set; }
 
     /// <summary>Exposes the reference to <see cref="IResource" /> which the interpreter is likely to hold</summary>

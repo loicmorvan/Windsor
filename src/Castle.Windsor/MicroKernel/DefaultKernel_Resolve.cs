@@ -128,13 +128,14 @@ public sealed partial class DefaultKernel
     object IKernelInternal.Resolve(string key, Type service, Arguments arguments, IReleasePolicy policy)
     {
         var handler = (this as IKernelInternal).LoadHandlerByName(key, service, arguments);
-        if (handler == null)
+        if (handler != null)
         {
-            var otherHandlers = GetHandlers(service).Length;
-            throw new ComponentNotFoundException(key, service, otherHandlers);
+            return ResolveComponent(handler, service ?? typeof(object), arguments, policy);
         }
 
-        return ResolveComponent(handler, service ?? typeof(object), arguments, policy);
+        var otherHandlers = GetHandlers(service).Length;
+        throw new ComponentNotFoundException(key, service, otherHandlers);
+
     }
 
     object IKernelInternal.Resolve(Type service, Arguments arguments, IReleasePolicy policy, bool ignoreParentContext)

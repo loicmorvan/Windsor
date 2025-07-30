@@ -16,6 +16,7 @@ using System.Reflection;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.SubSystems.Configuration;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel;
 
@@ -37,6 +38,7 @@ public partial interface IKernel : IKernelEvents, IDisposable
 	GraphNode[] GraphNodes { get; }
 
 	/// <summary>Returns the implementation of <see cref="IHandlerFactory" /></summary>
+	[PublicAPI]
 	IHandlerFactory HandlerFactory { get; }
 
 	/// <summary>Returns the parent kernel</summary>

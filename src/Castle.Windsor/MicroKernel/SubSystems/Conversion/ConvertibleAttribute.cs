@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Castle.Windsor.Core.Internal;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
@@ -24,19 +25,20 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 public class ConvertibleAttribute : Attribute
 {
     /// <summary>Defines the <see cref="DefaultComplexConverter " /> to be used to convert the type</summary>
-	public ConvertibleAttribute() : this(typeof(DefaultComplexConverter))
+    public ConvertibleAttribute() : this(typeof(DefaultComplexConverter))
     {
     }
 
     /// <summary>Defines the <see cref="ITypeConverter" /> to be used to convert the type</summary>
     /// <param name="converterType"></param>
-	public ConvertibleAttribute(Type converterType)
+    [PublicAPI]
+    public ConvertibleAttribute(Type converterType)
     {
         if (converterType.Is<ITypeConverter>() == false)
         {
             throw new ArgumentException(
-                string.Format("ConverterType {0} does not implement {1} interface", converterType.FullName,
-                    typeof(ITypeConverter).FullName), nameof(converterType));
+                $"ConverterType {converterType.FullName} does not implement {typeof(ITypeConverter).FullName} interface",
+                nameof(converterType));
         }
 
         ConverterType = converterType;

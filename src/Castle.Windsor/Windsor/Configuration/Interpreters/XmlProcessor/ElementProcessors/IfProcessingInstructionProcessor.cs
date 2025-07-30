@@ -66,7 +66,7 @@ public class IfProcessingInstructionProcessor : AbstractXmlNodeProcessor
                 }
                 else if (nestedLevels == 0)
                 {
-                    if (pi.Name == ElsePiName || pi.Name == ElsifPiName)
+                    if (pi.Name is ElsePiName or ElsifPiName)
                     {
                         ProcessElseElement(pi, engine, ref state);
                         continue;
@@ -113,7 +113,8 @@ public class IfProcessingInstructionProcessor : AbstractXmlNodeProcessor
         }
     }
 
-    private void ProcessElseElement(XmlProcessingInstruction pi, IXmlProcessorEngine engine, ref StatementState state)
+    private static void ProcessElseElement(XmlProcessingInstruction pi, IXmlProcessorEngine engine,
+        ref StatementState state)
     {
         AssertData(pi, pi.Name == ElsifPiName);
 

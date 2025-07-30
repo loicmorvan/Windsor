@@ -1,4 +1,5 @@
 using Castle.Windsor.Core;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Registration;
 
@@ -11,6 +12,7 @@ public class PropertyKey
     }
 
     /// <summary>The property key key.</summary>
+    [PublicAPI]
     public object Key { get; }
 
     /// <summary>Builds the <see cref="Property" /> with key/value.</summary>

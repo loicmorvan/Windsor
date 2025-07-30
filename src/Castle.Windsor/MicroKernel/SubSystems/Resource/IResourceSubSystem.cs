@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Castle.Core.Resource;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.SubSystems.Resource;
 
@@ -22,13 +23,16 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Resource;
 /// </summary>
 public interface IResourceSubSystem : ISubSystem
 {
+    [PublicAPI]
     IResource CreateResource(CustomUri uri);
 
+    [PublicAPI]
     IResource CreateResource(CustomUri uri, string basePath);
 
     IResource CreateResource(string resource);
 
     IResource CreateResource(string resource, string basePath);
 
+    [PublicAPI]
     void RegisterResourceFactory(IResourceFactory resourceFactory);
 }

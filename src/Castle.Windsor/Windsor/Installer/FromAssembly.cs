@@ -16,6 +16,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Registration;
+using JetBrains.Annotations;
 
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -66,6 +67,7 @@ public static class FromAssembly
     ///     <see cref="IWindsorContainer.Install" /> can install them.
     /// </summary>
     /// <returns> </returns>
+    [PublicAPI]
     public static IWindsorInstaller Containing<T>(InstallerFactory installerFactory)
     {
         return Containing(typeof(T), installerFactory);
@@ -117,6 +119,7 @@ public static class FromAssembly
     ///     assemblies will be ignored.
     /// </remarks>
     [MethodImpl(MethodImplOptions.NoInlining)]
+    [PublicAPI]
     public static IWindsorInstaller InThisApplication()
     {
         return InThisApplication(Assembly.GetCallingAssembly());
@@ -142,6 +145,7 @@ public static class FromAssembly
     ///     assemblies will be ignored.
     /// </remarks>
     [MethodImpl(MethodImplOptions.NoInlining)]
+    [PublicAPI]
     public static IWindsorInstaller InThisApplication(InstallerFactory installerFactory)
     {
         var assembly = Assembly.GetCallingAssembly();
@@ -193,6 +197,7 @@ public static class FromAssembly
     ///     <see cref="IWindsorContainer.Install" /> can install them.
     /// </summary>
     /// <returns> </returns>
+    [PublicAPI]
     public static IWindsorInstaller Named(string assemblyName, InstallerFactory installerFactory)
     {
         var assembly = ReflectionUtil.GetAssemblyNamed(assemblyName);
@@ -218,6 +223,7 @@ public static class FromAssembly
     /// </summary>
     /// <returns> </returns>
     [MethodImpl(MethodImplOptions.NoInlining)]
+    [PublicAPI]
     public static IWindsorInstaller This(InstallerFactory installerFactory)
     {
         return Instance(Assembly.GetCallingAssembly(), installerFactory);

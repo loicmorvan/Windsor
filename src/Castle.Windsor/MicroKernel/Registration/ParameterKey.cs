@@ -1,4 +1,5 @@
 using Castle.Core.Configuration;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Registration;
 
@@ -11,6 +12,7 @@ public class ParameterKey
     }
 
     /// <summary>The parameter key name.</summary>
+    [PublicAPI]
     public string Name { get; }
 
     /// <summary>Builds the <see cref="Parameter" /> with key/value.</summary>

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Security;
 using Castle.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.Windsor.Diagnostics;
@@ -205,18 +204,5 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
     {
         var diagnosticsHost = (IDiagnosticsHost)kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
         return diagnosticsHost?.GetDiagnostic<ITrackedComponentsDiagnostic>();
-    }
-
-    /// <summary>
-    ///     Creates new <see cref="ITrackedComponentsPerformanceCounter" /> from given
-    ///     <see cref="IPerformanceMetricsFactory" />.
-    /// </summary>
-    /// <param name="perfMetricsFactory"></param>
-    /// <returns></returns>
-    [SecuritySafeCritical]
-    public static ITrackedComponentsPerformanceCounter GetTrackedComponentsPerformanceCounter(
-        IPerformanceMetricsFactory perfMetricsFactory)
-    {
-        return NullPerformanceCounter.Instance;
     }
 }

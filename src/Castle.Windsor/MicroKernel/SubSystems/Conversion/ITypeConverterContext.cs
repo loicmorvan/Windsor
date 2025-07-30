@@ -14,6 +14,7 @@
 
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Context;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
@@ -22,7 +23,9 @@ public interface ITypeConverterContext
     ITypeConverter Composition { get; }
 
     CreationContext CurrentCreationContext { get; }
-    ComponentModel CurrentModel { get; }
+
+    [PublicAPI] ComponentModel CurrentModel { get; }
+
     IKernelInternal Kernel { get; }
 
     void Pop();
