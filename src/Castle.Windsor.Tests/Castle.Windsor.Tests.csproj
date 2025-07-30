@@ -4,14 +4,6 @@
         <TargetFramework>net9.0</TargetFramework>
     </PropertyGroup>
 
-    <Import Project="..\..\buildscripts\common.props"/>
-
-    <PropertyGroup>
-        <OutputType>Library</OutputType>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <AssemblyName>Castle.Windsor.Tests</AssemblyName>
-    </PropertyGroup>
-
     <ItemGroup>
         <EmbeddedResource Include=".\*.xml">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

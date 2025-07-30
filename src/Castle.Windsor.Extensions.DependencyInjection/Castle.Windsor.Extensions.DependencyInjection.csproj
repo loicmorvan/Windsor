@@ -4,29 +4,21 @@
         <TargetFramework>net9.0</TargetFramework>
     </PropertyGroup>
 
-    <Import Project="..\..\buildscripts\common.props"/>
-
     <PropertyGroup>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageId>Castle.Windsor.Extensions.DependencyInjection</PackageId>
         <Title>Castle Windsor extension for .NET Extensions DependencyInjection</Title>
         <Description>Allows to use Castle Windsor as a container using IServiceProvider</Description>
         <PackageTags>castle, windsor, inversionOfControl, DependencyInjection, aspnet, core</PackageTags>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <AssemblyName>Castle.Windsor.Extensions.DependencyInjection</AssemblyName>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)'=='net9.0'">
+    <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0"/>
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0"/>
         <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2025.2.0"/>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Castle.Windsor\Castle.Windsor.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="JetBrains.Annotations" Version="2025.2.0"/>
     </ItemGroup>
 </Project>

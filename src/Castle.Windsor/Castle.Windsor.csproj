@@ -4,21 +4,12 @@
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
 
-  <Import Project="..\..\buildscripts\common.props"/>
-
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId>Castle.Windsor</PackageId>
     <Title>Castle Windsor</Title>
     <Description>Castle Windsor is best of breed, mature Inversion of Control container available for .NET.</Description>
     <PackageTags>castle, windsor, inversionOfControl, DependencyInjection</PackageTags>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <AssemblyName>Castle.Windsor</AssemblyName>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="..\..\buildscripts\CommonAssemblyInfo.cs"/>
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="[5.1.0,6.0)"/>

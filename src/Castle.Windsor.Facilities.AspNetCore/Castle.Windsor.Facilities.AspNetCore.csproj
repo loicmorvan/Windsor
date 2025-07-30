@@ -4,16 +4,11 @@
         <TargetFramework>net9.0</TargetFramework>
     </PropertyGroup>
 
-    <Import Project="..\..\buildscripts\common.props"/>
-
     <PropertyGroup>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageId>Castle.Windsor.Facilities.AspNetCore</PackageId>
         <Title>Castle Windsor ASP.NET Core facility</Title>
         <Description>Castle Windsor ASP.NET Core facility lets you easily add windsor to aspnet core apps.</Description>
         <PackageTags>castle, windsor, inversionOfControl, DependencyInjection, aspnet, core</PackageTags>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <AssemblyName>Castle.Windsor.Facilities.AspNetCore</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>

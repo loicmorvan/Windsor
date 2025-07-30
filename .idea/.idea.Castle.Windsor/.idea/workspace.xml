@@ -7,13 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/DirectoryBuild.props" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Castle.Windsor.sln" beforeDir="false" afterPath="$PROJECT_DIR$/Castle.Windsor.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Castle.Windsor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Castle.Windsor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/Helpers/DescriptionUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/Helpers/DescriptionUtil.cs" afterDir="false" />
-    </list>
+    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -411,7 +405,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753817994228</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Improved code consistency and fixed remaining formatting issues.">
+      <option name="closed" value="true" />
+      <created>1753907783989</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1753907783989</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -445,7 +447,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Keep only .NET 6." />
     <MESSAGE value="Missing file?" />
     <MESSAGE value="Switched to .NET 9." />
     <MESSAGE value="Full cleanup." />
@@ -470,7 +471,8 @@
     <MESSAGE value="Fixes" />
     <MESSAGE value="Some fixes." />
     <MESSAGE value="More fixes." />
-    <option name="LAST_COMMIT_MESSAGE" value="More fixes." />
+    <MESSAGE value="Improved code consistency and fixed remaining formatting issues." />
+    <option name="LAST_COMMIT_MESSAGE" value="Improved code consistency and fixed remaining formatting issues." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -494,27 +496,14 @@
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/Castle.Windsor.Tests/Diagnostics/AllComponentsDiagnosticTestCase.cs</url>
-          <line>31</line>
-          <properties documentPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Diagnostics/AllComponentsDiagnosticTestCase.cs" containingFunctionPresentation="Method 'AfterContainerCreated'">
-            <startOffsets>
-              <option value="1197" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1258" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/DefaultDiagnosticsSubSystem.cs</url>
-          <line>34</line>
+          <line>31</line>
           <properties documentPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/DefaultDiagnosticsSubSystem.cs" containingFunctionPresentation="Method 'GetDiagnostic'">
             <startOffsets>
-              <option value="1265" />
+              <option value="1231" />
             </startOffsets>
             <endOffsets>
-              <option value="1326" />
+              <option value="1292" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="13" />

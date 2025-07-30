@@ -19,9 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Castle Build", "Castle Buil
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Castle.Windsor.Facilities", "Castle.Windsor.Facilities", "{7935AFF5-BF6D-4D59-8D66-058B6557F70F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Castle.Facilities.AspNetCore", "src\Castle.Facilities.AspNetCore\Castle.Facilities.AspNetCore.csproj", "{B7A06282-CE20-4C9E-B050-6954F3537ED0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Castle.Windsor.Facilities.AspNetCore", "src\Castle.Windsor.Facilities.AspNetCore\Castle.Windsor.Facilities.AspNetCore.csproj", "{B7A06282-CE20-4C9E-B050-6954F3537ED0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Castle.Facilities.AspNetCore.Tests", "src\Castle.Facilities.AspNetCore.Tests\Castle.Facilities.AspNetCore.Tests.csproj", "{EC869097-F284-47BB-8FF0-ED480C5068A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Castle.Windsor.Facilities.AspNetCore.Tests", "src\Castle.Windsor.Facilities.AspNetCore.Tests\Castle.Windsor.Facilities.AspNetCore.Tests.csproj", "{EC869097-F284-47BB-8FF0-ED480C5068A4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Castle Docs", "Castle Docs", "{FA3002E0-EEAC-44D4-80BC-5D9A38974976}"
 EndProject
@@ -35,7 +35,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildScripts", "BuildScript
 	ProjectSection(SolutionItems) = preProject
 		buildscripts\CastleKey.snk = buildscripts\CastleKey.snk
 		buildscripts\common.props = buildscripts\common.props
-		buildscripts\CommonAssemblyInfo.cs = buildscripts\CommonAssemblyInfo.cs
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Castle.Windsor.Extensions.Hosting", "src\Castle.Windsor.Extensions.Hosting\Castle.Windsor.Extensions.Hosting.csproj", "{4F123B9A-F9B3-4F81-A0EC-8C8DEF03298A}"
@@ -43,6 +42,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_msbuild", "_msbuild", "{59A6E10F-3834-4914-BD38-7D32FFD4F2F3}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
+		buildscripts\common.props = buildscripts\common.props
+		buildscripts\CastleKey.snk = buildscripts\CastleKey.snk
 	EndProjectSection
 EndProject
 Global
