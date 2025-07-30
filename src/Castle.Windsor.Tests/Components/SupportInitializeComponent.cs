@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.ComponentModel;
 using Castle.Windsor.Core;
 
@@ -21,18 +20,26 @@ namespace Castle.Windsor.Tests.Components;
 [Transient]
 public class SupportInitializeComponent : ISupportInitialize
 {
-	public bool InitBegun { get; private set; }
-	public bool InitEnded { get; private set; }
+    public bool InitBegun { get; private set; }
+    public bool InitEnded { get; private set; }
 
-	public void BeginInit()
-	{
-		if (InitEnded) throw new InvalidOperationException("Can't Begin init after it ended");
-		InitBegun = true;
-	}
+    public void BeginInit()
+    {
+        if (InitEnded)
+        {
+            throw new InvalidOperationException("Can't Begin init after it ended");
+        }
 
-	public void EndInit()
-	{
-		if (InitBegun == false) throw new InvalidOperationException("Can't End init before it begins");
-		InitEnded = true;
-	}
+        InitBegun = true;
+    }
+
+    public void EndInit()
+    {
+        if (InitBegun == false)
+        {
+            throw new InvalidOperationException("Can't End init before it begins");
+        }
+
+        InitEnded = true;
+    }
 }

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using System.Text;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel;
@@ -23,53 +22,60 @@ namespace Castle.Windsor.Windsor.Diagnostics.Helpers;
 
 public class DefaultComponentViewBuilder(IHandler handler) : IComponentDebuggerExtension
 {
-	public IEnumerable<object> Attach()
-	{
-		yield return new DebuggerViewItem("Implementation", GetImplementation());
-		foreach (var service in handler.ComponentModel.Services)
-		{
-			yield return new DebuggerViewItem("Service", service);
-		}
+    public IEnumerable<object> Attach()
+    {
+        yield return new DebuggerViewItem("Implementation", GetImplementation());
+        foreach (var service in handler.ComponentModel.Services)
+        {
+            yield return new DebuggerViewItem("Service", service);
+        }
 
-		yield return GetStatus();
-		yield return new DebuggerViewItem("Lifestyle", handler.ComponentModel.GetLifestyleDescriptionLong());
-		if (HasInterceptors())
-		{
-			var interceptors = handler.ComponentModel.Interceptors;
-			var value = interceptors.ToArray();
-			yield return new DebuggerViewItem("Interceptors", "Count = " + value.Length, value);
-		}
+        yield return GetStatus();
+        yield return new DebuggerViewItem("Lifestyle", handler.ComponentModel.GetLifestyleDescriptionLong());
+        if (HasInterceptors())
+        {
+            var interceptors = handler.ComponentModel.Interceptors;
+            var value = interceptors.ToArray();
+            yield return new DebuggerViewItem("Interceptors", "Count = " + value.Length, value);
+        }
 
-		yield return new DebuggerViewItem("Name", handler.ComponentModel.Name);
-		yield return new DebuggerViewItem("Raw handler/component", handler);
-	}
+        yield return new DebuggerViewItem("Name", handler.ComponentModel.Name);
+        yield return new DebuggerViewItem("Raw handler/component", handler);
+    }
 
-	private object GetImplementation()
-	{
-		var implementation = handler.ComponentModel.Implementation;
-		return implementation != typeof(LateBoundComponent) ? implementation : LateBoundComponent.Instance;
-	}
+    private object GetImplementation()
+    {
+        var implementation = handler.ComponentModel.Implementation;
+        return implementation != typeof(LateBoundComponent) ? implementation : LateBoundComponent.Instance;
+    }
 
-	private object GetStatus()
-	{
-		if (handler.CurrentState == HandlerState.Valid)
-			return new DebuggerViewItem("Status", "All required dependencies can be resolved.");
-		return new DebuggerViewItemWithDetails("Status", "This component may not resolve properly.",
-			GetStatusDetails(handler as IExposeDependencyInfo));
-	}
+    private object GetStatus()
+    {
+        if (handler.CurrentState == HandlerState.Valid)
+        {
+            return new DebuggerViewItem("Status", "All required dependencies can be resolved.");
+        }
 
-	private static string GetStatusDetails(IExposeDependencyInfo info)
-	{
-		var message = new StringBuilder("Some dependencies of this component could not be statically resolved.");
-		if (info == null) return message.ToString();
-		var inspector = new DependencyInspector(message);
-		info.ObtainDependencyDetails(inspector);
+        return new DebuggerViewItemWithDetails("Status", "This component may not resolve properly.",
+            GetStatusDetails(handler as IExposeDependencyInfo));
+    }
 
-		return inspector.Message;
-	}
+    private static string GetStatusDetails(IExposeDependencyInfo info)
+    {
+        var message = new StringBuilder("Some dependencies of this component could not be statically resolved.");
+        if (info == null)
+        {
+            return message.ToString();
+        }
 
-	private bool HasInterceptors()
-	{
-		return handler.ComponentModel.HasInterceptors;
-	}
+        var inspector = new DependencyInspector(message);
+        info.ObtainDependencyDetails(inspector);
+
+        return inspector.Message;
+    }
+
+    private bool HasInterceptors()
+    {
+        return handler.ComponentModel.HasInterceptors;
+    }
 }

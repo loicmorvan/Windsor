@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor;
-
 using System.Xml;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor;
 
 public interface IXmlNodeProcessor
 {
-	XmlNodeType[] AcceptNodeTypes { get; }
-	string Name { get; }
+    XmlNodeType[] AcceptNodeTypes { get; }
+    string Name { get; }
 
-	bool Accept(XmlNode node);
+    bool Accept(XmlNode node);
 
-	void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine);
+    void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine);
 }

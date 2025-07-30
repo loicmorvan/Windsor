@@ -17,7 +17,7 @@ namespace Castle.Windsor.Tests.ClassComponents;
 public class CustomerValidator : IValidator<ICustomer>
 {
 	/// <summary></summary>
-	/// <param name = "customer"></param>
+	/// <param name="customer"></param>
 	/// <returns></returns>
 	public bool IsValid(ICustomer customer)
 	{

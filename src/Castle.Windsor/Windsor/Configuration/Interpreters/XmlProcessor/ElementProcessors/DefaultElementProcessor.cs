@@ -18,44 +18,57 @@ namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.Element
 
 public class DefaultElementProcessor : AbstractXmlNodeProcessor
 {
-	private const string IncludeAttrName = "includeUri";
-	private static readonly IncludeElementProcessor IncludeProcessor = new();
-	private static readonly DefaultTextNodeProcessor TextProcessor = new();
+    private const string IncludeAttrName = "includeUri";
+    private static readonly IncludeElementProcessor IncludeProcessor = new();
+    private static readonly DefaultTextNodeProcessor TextProcessor = new();
 
-	public override string Name => "";
+    public override string Name => "";
 
-	/// <summary>Processes the specified node list.</summary>
-	/// <param name = "nodeList">The node list.</param>
-	/// <param name = "engine">The engine.</param>
-	public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
-	{
-		var element = (XmlElement)nodeList.Current;
+    /// <summary>Processes the specified node list.</summary>
+    /// <param name="nodeList">The node list.</param>
+    /// <param name="engine">The engine.</param>
+    public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
+    {
+        var element = (XmlElement)nodeList.Current;
 
-		ProcessAttributes(element, engine);
+        ProcessAttributes(element, engine);
 
-		engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(element.ChildNodes));
-	}
+        engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(element.ChildNodes));
+    }
 
-	/// <summary>Processes element attributes. if the attribute is include will append to the element all contents from the file. if the attribute has a property reference the reference will be expanded</summary>
-	/// <param name = "element">The element.</param>
-	/// <param name = "engine"></param>
-	private static void ProcessAttributes(XmlElement element, IXmlProcessorEngine engine)
-	{
-		ProcessIncludeAttribute(element, engine);
+    /// <summary>
+    ///     Processes element attributes. if the attribute is include will append to the element all contents from the
+    ///     file. if the attribute has a property reference the reference will be expanded
+    /// </summary>
+    /// <param name="element">The element.</param>
+    /// <param name="engine"></param>
+    private static void ProcessAttributes(XmlElement element, IXmlProcessorEngine engine)
+    {
+        ProcessIncludeAttribute(element, engine);
 
-		foreach (XmlAttribute att in element.Attributes) TextProcessor.ProcessString(att, att.Value, engine);
-	}
+        foreach (XmlAttribute att in element.Attributes)
+        {
+            TextProcessor.ProcessString(att, att.Value, engine);
+        }
+    }
 
-	private static void ProcessIncludeAttribute(XmlElement element, IXmlProcessorEngine engine)
-	{
-		var include = element.Attributes[IncludeAttrName];
+    private static void ProcessIncludeAttribute(XmlElement element, IXmlProcessorEngine engine)
+    {
+        var include = element.Attributes[IncludeAttrName];
 
-		if (include == null) return;
-		// removing the include attribute from the element
-		element.Attributes.RemoveNamedItem(IncludeAttrName);
+        if (include == null)
+        {
+            return;
+        }
 
-		var includeContent = IncludeProcessor.ProcessInclude(element, include.Value, engine);
+        // removing the include attribute from the element
+        element.Attributes.RemoveNamedItem(IncludeAttrName);
 
-		if (includeContent != null) element.PrependChild(includeContent);
-	}
+        var includeContent = IncludeProcessor.ProcessInclude(element, include.Value, engine);
+
+        if (includeContent != null)
+        {
+            element.PrependChild(includeContent);
+        }
+    }
 }

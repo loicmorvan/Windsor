@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel;
@@ -21,25 +20,24 @@ namespace Castle.Windsor.MicroKernel;
 [Serializable]
 public class CircularDependencyException : ComponentResolutionException
 {
-	/// <summary>Initializes a new instance of the <see cref = "CircularDependencyException" /> class.</summary>
-	/// <param name = "message">The message.</param>
+	/// <summary>Initializes a new instance of the <see cref="CircularDependencyException" /> class.</summary>
+	/// <param name="message">The message.</param>
 	public CircularDependencyException(string message) : base(message)
 	{
 	}
 
-	/// <summary>Initializes a new instance of the <see cref = "CircularDependencyException" /> class.</summary>
-	/// <param name = "message">The message.</param>
-	/// <param name = "innerException">The inner exception.</param>
+	/// <summary>Initializes a new instance of the <see cref="CircularDependencyException" /> class.</summary>
+	/// <param name="message">The message.</param>
+	/// <param name="innerException">The inner exception.</param>
 	public CircularDependencyException(string message, Exception innerException) : base(message, innerException)
 	{
 	}
 
-	/// <summary>Initializes a new instance of the <see cref = "CircularDependencyException" /> class.</summary>
-	/// <param name = "message"></param>
-	/// <param name = "component"></param>
+	/// <summary>Initializes a new instance of the <see cref="CircularDependencyException" /> class.</summary>
+	/// <param name="message"></param>
+	/// <param name="component"></param>
 	public CircularDependencyException(string message, ComponentModel component)
 		: base(message, component)
 	{
 	}
-
 }

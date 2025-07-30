@@ -12,49 +12,46 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Castle.Windsor.Core.Internal;
 
 namespace Castle.Windsor.Core;
 
-/// <summary>Collection of <see cref = "PropertySet" /></summary>
+/// <summary>Collection of <see cref="PropertySet" /></summary>
 [Serializable]
 public class PropertySetCollection : IMutableCollection<PropertySet>
 {
-	private readonly HashSet<PropertySet> _properties = [];
+    private readonly HashSet<PropertySet> _properties = [];
 
-	public int Count => _properties.Count;
+    public int Count => _properties.Count;
 
-	public IEnumerator<PropertySet> GetEnumerator()
-	{
-		return _properties.GetEnumerator();
-	}
+    public IEnumerator<PropertySet> GetEnumerator()
+    {
+        return _properties.GetEnumerator();
+    }
 
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return _properties.GetEnumerator();
-	}
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return _properties.GetEnumerator();
+    }
 
-	void IMutableCollection<PropertySet>.Add(PropertySet property)
-	{
-		ArgumentNullException.ThrowIfNull(property);
-		_properties.Add(property);
-	}
+    void IMutableCollection<PropertySet>.Add(PropertySet property)
+    {
+        ArgumentNullException.ThrowIfNull(property);
+        _properties.Add(property);
+    }
 
-	bool IMutableCollection<PropertySet>.Remove(PropertySet item)
-	{
-		return _properties.Remove(item);
-	}
+    bool IMutableCollection<PropertySet>.Remove(PropertySet item)
+    {
+        return _properties.Remove(item);
+    }
 
-	/// <summary>Finds a PropertySet the by PropertyInfo.</summary>
-	/// <param name = "info">The info.</param>
-	/// <returns></returns>
-	public PropertySet FindByPropertyInfo(PropertyInfo info)
-	{
-		return this.FirstOrDefault(prop => info == prop.Property);
-	}
+    /// <summary>Finds a PropertySet the by PropertyInfo.</summary>
+    /// <param name="info">The info.</param>
+    /// <returns></returns>
+    public PropertySet FindByPropertyInfo(PropertyInfo info)
+    {
+        return this.FirstOrDefault(prop => info == prop.Property);
+    }
 }

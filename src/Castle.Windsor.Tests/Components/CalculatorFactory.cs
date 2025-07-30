@@ -20,8 +20,8 @@ namespace Castle.Windsor.Tests.Components;
 [Interceptor(typeof(StandardInterceptor))]
 public class CalculatorFactory
 {
-	public virtual ICalcService Create()
-	{
-		return new CalculatorService();
-	}
+    public virtual ICalcService Create()
+    {
+        return new CalculatorService();
+    }
 }

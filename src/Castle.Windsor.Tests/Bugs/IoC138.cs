@@ -24,39 +24,39 @@ namespace Castle.Windsor.Tests.Bugs;
 
 public class IoC138
 {
-	[Fact]
-	public void TestResolveSubComponentInConstructorWithParameters()
-	{
-		var container = new WindsorContainer();
-		ServiceLocator.Container = container;
-		container.Register(Component.For<UsesServiceLocator>().Named("A"),
-			Component.For<DependsOnStringTest2>().Named("B"));
+    [Fact]
+    public void TestResolveSubComponentInConstructorWithParameters()
+    {
+        var container = new WindsorContainer();
+        ServiceLocator.Container = container;
+        container.Register(Component.For<UsesServiceLocator>().Named("A"),
+            Component.For<DependsOnStringTest2>().Named("B"));
 
-		var component = container.Resolve<UsesServiceLocator>(
-			new Arguments { { "test", "bla" } });
+        var component = container.Resolve<UsesServiceLocator>(
+            new Arguments { { "test", "bla" } });
 
-		Assert.NotNull(component.Other);
-	}
+        Assert.NotNull(component.Other);
+    }
 
-	public class DependsOnStringTest2
-	{
-		public DependsOnStringTest2(string test2)
-		{
-		}
-	}
+    public class DependsOnStringTest2
+    {
+        public DependsOnStringTest2(string test2)
+        {
+        }
+    }
 
-	public static class ServiceLocator
-	{
-		public static IWindsorContainer Container { get; set; }
-	}
+    public static class ServiceLocator
+    {
+        public static IWindsorContainer Container { get; set; }
+    }
 
-	public class UsesServiceLocator
-	{
-		public UsesServiceLocator(string test)
-		{
-			Other = ServiceLocator.Container.Resolve<DependsOnStringTest2>(new Arguments { { "test2", "bla" } });
-		}
+    public class UsesServiceLocator
+    {
+        public UsesServiceLocator(string test)
+        {
+            Other = ServiceLocator.Container.Resolve<DependsOnStringTest2>(new Arguments { { "test2", "bla" } });
+        }
 
-		public DependsOnStringTest2 Other { get; }
-	}
+        public DependsOnStringTest2 Other { get; }
+    }
 }

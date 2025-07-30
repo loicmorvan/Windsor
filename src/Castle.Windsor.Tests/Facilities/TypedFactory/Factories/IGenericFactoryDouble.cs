@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
 public interface IGenericFactoryDouble<T1, T2> : IGenericFactory<T1>
 {
-	T2 Create2();
+    T2 Create2();
 }

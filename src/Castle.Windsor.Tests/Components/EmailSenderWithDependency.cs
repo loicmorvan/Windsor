@@ -16,8 +16,8 @@ namespace Castle.Windsor.Tests.Components;
 
 public class EmailSenderWithDependency : IAlarmSender
 {
-	// ReSharper disable once UnusedParameter.Local
-	public EmailSenderWithDependency(A dependency)
-	{
-	}
+    // ReSharper disable once UnusedParameter.Local
+    public EmailSenderWithDependency(A dependency)
+    {
+    }
 }

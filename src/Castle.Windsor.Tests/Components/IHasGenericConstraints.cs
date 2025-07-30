@@ -16,8 +16,8 @@ namespace Castle.Windsor.Tests.Components;
 
 // ReSharper disable once UnusedTypeParameter
 public interface IHasGenericConstraints<T1, T2>
-	where T1 : EmptyBase
-	where T2 : class
+    where T1 : EmptyBase
+    where T2 : class
 {
-	T1 Property { get; set; }
+    T1 Property { get; set; }
 }

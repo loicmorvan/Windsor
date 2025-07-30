@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
@@ -28,146 +27,166 @@ namespace Castle.Windsor.Core;
 [Serializable]
 public class InterceptorReference : IReference<IInterceptor>, IEquatable<InterceptorReference>
 {
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly string _referencedComponentName;
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private readonly string _referencedComponentName;
 
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly Type _referencedComponentType;
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private readonly Type _referencedComponentType;
 
-	/// <summary>Initializes a new instance of the <see cref = "InterceptorReference" /> class.</summary>
-	/// <param name = "referencedComponentName">The component key.</param>
-	public InterceptorReference(string referencedComponentName)
-	{
-		ArgumentNullException.ThrowIfNull(referencedComponentName);
-		_referencedComponentName = referencedComponentName;
-	}
+    /// <summary>Initializes a new instance of the <see cref="InterceptorReference" /> class.</summary>
+    /// <param name="referencedComponentName">The component key.</param>
+    public InterceptorReference(string referencedComponentName)
+    {
+        ArgumentNullException.ThrowIfNull(referencedComponentName);
+        _referencedComponentName = referencedComponentName;
+    }
 
-	/// <summary>Initializes a new instance of the <see cref = "InterceptorReference" /> class.</summary>
-	/// <param name = "componentType">Type of the interceptor to use. This will reference the default component (ie. one with no explicitly assigned name) implemented by given type.</param>
-	public InterceptorReference(Type componentType)
-	{
-		ArgumentNullException.ThrowIfNull(componentType);
-		_referencedComponentName = ComponentName.DefaultNameFor(componentType);
-		_referencedComponentType = componentType;
-	}
+    /// <summary>Initializes a new instance of the <see cref="InterceptorReference" /> class.</summary>
+    /// <param name="componentType">
+    ///     Type of the interceptor to use. This will reference the default component (ie. one with no
+    ///     explicitly assigned name) implemented by given type.
+    /// </param>
+    public InterceptorReference(Type componentType)
+    {
+        ArgumentNullException.ThrowIfNull(componentType);
+        _referencedComponentName = ComponentName.DefaultNameFor(componentType);
+        _referencedComponentType = componentType;
+    }
 
-	public bool Equals(InterceptorReference other)
-	{
-		if (other == null) return false;
-		return Equals(_referencedComponentName, other._referencedComponentName);
-	}
+    public bool Equals(InterceptorReference other)
+    {
+        if (other == null)
+        {
+            return false;
+        }
 
-	void IReference<IInterceptor>.Attach(ComponentModel component)
-	{
-		component.Dependencies.Add(new ComponentDependencyModel(_referencedComponentName, ComponentType()));
-	}
+        return Equals(_referencedComponentName, other._referencedComponentName);
+    }
 
-	void IReference<IInterceptor>.Detach(ComponentModel component)
-	{
-		throw new NotSupportedException();
-	}
+    void IReference<IInterceptor>.Attach(ComponentModel component)
+    {
+        component.Dependencies.Add(new ComponentDependencyModel(_referencedComponentName, ComponentType()));
+    }
 
-	IInterceptor IReference<IInterceptor>.Resolve(IKernel kernel, CreationContext context)
-	{
-		var handler = GetInterceptorHandler(kernel);
-		if (handler == null)
-		{
-			var message = GetExceptionMessageOnHandlerNotFound(kernel);
-			throw new DependencyResolverException(message.ToString());
-		}
+    void IReference<IInterceptor>.Detach(ComponentModel component)
+    {
+        throw new NotSupportedException();
+    }
 
-		if (handler.IsBeingResolvedInContext(context))
-			throw new DependencyResolverException(
-				string.Format(
-					"Cycle detected - interceptor {0} wants to use itself as its interceptor. This usually signifies a bug in custom {1}",
-					handler.ComponentModel.Name, nameof(IModelInterceptorsSelector)));
+    IInterceptor IReference<IInterceptor>.Resolve(IKernel kernel, CreationContext context)
+    {
+        var handler = GetInterceptorHandler(kernel);
+        if (handler == null)
+        {
+            var message = GetExceptionMessageOnHandlerNotFound(kernel);
+            throw new DependencyResolverException(message.ToString());
+        }
 
-		var contextForInterceptor = RebuildContext(ComponentType(), context);
-		return (IInterceptor)handler.Resolve(contextForInterceptor);
-	}
+        if (handler.IsBeingResolvedInContext(context))
+        {
+            throw new DependencyResolverException(
+                string.Format(
+                    "Cycle detected - interceptor {0} wants to use itself as its interceptor. This usually signifies a bug in custom {1}",
+                    handler.ComponentModel.Name, nameof(IModelInterceptorsSelector)));
+        }
 
-	public override bool Equals(object obj)
-	{
-		if (ReferenceEquals(this, obj)) return true;
-		return Equals(obj as InterceptorReference);
-	}
+        var contextForInterceptor = RebuildContext(ComponentType(), context);
+        return (IInterceptor)handler.Resolve(contextForInterceptor);
+    }
 
-	public override int GetHashCode()
-	{
-		return _referencedComponentName.GetHashCode();
-	}
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
 
-	public override string ToString()
-	{
-		return _referencedComponentName;
-	}
+        return Equals(obj as InterceptorReference);
+    }
 
-	private Type ComponentType()
-	{
-		return _referencedComponentType ?? typeof(IInterceptor);
-	}
+    public override int GetHashCode()
+    {
+        return _referencedComponentName.GetHashCode();
+    }
 
-	private StringBuilder GetExceptionMessageOnHandlerNotFound(IKernel kernel)
-	{
-		var message = new StringBuilder($"The interceptor '{_referencedComponentName}' could not be resolved. ");
-		// ok so the component is missing. Now - is it missing because it's not been registered or because the reference is by type and interceptor was registered with custom name?
-		if (_referencedComponentType != null)
-		{
-			var typedHandler = kernel.GetHandler(_referencedComponentType);
-			if (typedHandler != null)
-			{
-				message.Append(
-					$"Component '{typedHandler.ComponentModel.Name}' matching the type specified was found in the container. Did you mean to use it? If so, please specify the reference via name, or register the interceptor without specifying its name.");
-				return message;
-			}
-		}
+    public override string ToString()
+    {
+        return _referencedComponentName;
+    }
 
-		message.Append("Did you forget to register it?");
-		return message;
-	}
+    private Type ComponentType()
+    {
+        return _referencedComponentType ?? typeof(IInterceptor);
+    }
 
-	private IHandler GetInterceptorHandler(IKernel kernel)
-	{
-		if (_referencedComponentType != null)
-		{
-			//try old behavior first
-			var handler = kernel.GetHandler(_referencedComponentType.FullName);
-			if (handler != null) return handler;
-			// new bahavior as a fallback
-			return kernel.GetHandler(_referencedComponentType);
-		}
+    private StringBuilder GetExceptionMessageOnHandlerNotFound(IKernel kernel)
+    {
+        var message = new StringBuilder($"The interceptor '{_referencedComponentName}' could not be resolved. ");
+        // ok so the component is missing. Now - is it missing because it's not been registered or because the reference is by type and interceptor was registered with custom name?
+        if (_referencedComponentType != null)
+        {
+            var typedHandler = kernel.GetHandler(_referencedComponentType);
+            if (typedHandler != null)
+            {
+                message.Append(
+                    $"Component '{typedHandler.ComponentModel.Name}' matching the type specified was found in the container. Did you mean to use it? If so, please specify the reference via name, or register the interceptor without specifying its name.");
+                return message;
+            }
+        }
 
-		return kernel.GetHandler(_referencedComponentName);
-	}
+        message.Append("Did you forget to register it?");
+        return message;
+    }
 
-	private CreationContext RebuildContext(Type handlerType, CreationContext current)
-	{
-		if (handlerType.GetTypeInfo().ContainsGenericParameters) return current;
+    private IHandler GetInterceptorHandler(IKernel kernel)
+    {
+        if (_referencedComponentType != null)
+        {
+            //try old behavior first
+            var handler = kernel.GetHandler(_referencedComponentType.FullName);
+            if (handler != null)
+            {
+                return handler;
+            }
 
-		return new CreationContext(handlerType, current, true);
-	}
+            // new bahavior as a fallback
+            return kernel.GetHandler(_referencedComponentType);
+        }
 
-	/// <summary>Gets an <see cref = "InterceptorReference" /> for the component key.</summary>
-	/// <param name = "key">The component key.</param>
-	/// <returns>The <see cref = "InterceptorReference" /></returns>
-	public static InterceptorReference ForKey(string key)
-	{
-		return new InterceptorReference(key);
-	}
+        return kernel.GetHandler(_referencedComponentName);
+    }
 
-	/// <summary>Gets an <see cref = "InterceptorReference" /> for the service.</summary>
-	/// <param name = "service">The service.</param>
-	/// <returns>The <see cref = "InterceptorReference" /></returns>
-	public static InterceptorReference ForType(Type service)
-	{
-		return new InterceptorReference(service);
-	}
+    private CreationContext RebuildContext(Type handlerType, CreationContext current)
+    {
+        if (handlerType.GetTypeInfo().ContainsGenericParameters)
+        {
+            return current;
+        }
 
-	/// <summary>Gets an <see cref = "InterceptorReference" /> for the service.</summary>
-	/// <typeparam name = "T">The service type.</typeparam>
-	/// <returns>The <see cref = "InterceptorReference" /></returns>
-	public static InterceptorReference ForType<T>()
-	{
-		return new InterceptorReference(typeof(T));
-	}
+        return new CreationContext(handlerType, current, true);
+    }
+
+    /// <summary>Gets an <see cref="InterceptorReference" /> for the component key.</summary>
+    /// <param name="key">The component key.</param>
+    /// <returns>The <see cref="InterceptorReference" /></returns>
+    public static InterceptorReference ForKey(string key)
+    {
+        return new InterceptorReference(key);
+    }
+
+    /// <summary>Gets an <see cref="InterceptorReference" /> for the service.</summary>
+    /// <param name="service">The service.</param>
+    /// <returns>The <see cref="InterceptorReference" /></returns>
+    public static InterceptorReference ForType(Type service)
+    {
+        return new InterceptorReference(service);
+    }
+
+    /// <summary>Gets an <see cref="InterceptorReference" /> for the service.</summary>
+    /// <typeparam name="T">The service type.</typeparam>
+    /// <returns>The <see cref="InterceptorReference" /></returns>
+    public static InterceptorReference ForType<T>()
+    {
+        return new InterceptorReference(typeof(T));
+    }
 }

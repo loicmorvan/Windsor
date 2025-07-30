@@ -12,47 +12,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel.Handlers;
 
-/// <summary>Thrown when <see cref = "DefaultGenericHandler" /> can't create proper closed version of itself due to violation of generic constraints.</summary>
+/// <summary>
+///     Thrown when <see cref="DefaultGenericHandler" /> can't create proper closed version of itself due to violation
+///     of generic constraints.
+/// </summary>
 [Serializable]
 public class GenericHandlerTypeMismatchException : HandlerException
 {
-	/// <summary>Initializes a new instance of the <see cref = "HandlerException" /> class.</summary>
-	/// <param name = "message">The message.</param>
-	/// <param name = "name"></param>
+    /// <summary>Initializes a new instance of the <see cref="HandlerException" /> class.</summary>
+    /// <param name="message">The message.</param>
+    /// <param name="name"></param>
 	public GenericHandlerTypeMismatchException(string message, ComponentName name) : base(message, name)
-	{
-	}
+    {
+    }
 
-	/// <summary>Initializes a new instance of the <see cref = "HandlerException" /> class.</summary>
-	/// <param name = "message">The message.</param>
-	/// <param name = "name"></param>
-	/// <param name = "innerException"></param>
+    /// <summary>Initializes a new instance of the <see cref="HandlerException" /> class.</summary>
+    /// <param name="message">The message.</param>
+    /// <param name="name"></param>
+    /// <param name="innerException"></param>
 	public GenericHandlerTypeMismatchException(string message, ComponentName name, Exception innerException)
-		: base(message, name, innerException)
-	{
-	}
+        : base(message, name, innerException)
+    {
+    }
 
-	public GenericHandlerTypeMismatchException(IEnumerable<Type> argumentsUsed, ComponentModel componentModel, DefaultGenericHandler handler)
-		: base(BuildMessage(argumentsUsed.Select(a => a.FullName).ToArray(), componentModel, handler), componentModel.ComponentName)
-	{
-	}
+    public GenericHandlerTypeMismatchException(IEnumerable<Type> argumentsUsed, ComponentModel componentModel,
+        DefaultGenericHandler handler)
+        : base(BuildMessage(argumentsUsed.Select(a => a.FullName).ToArray(), componentModel, handler),
+            componentModel.ComponentName)
+    {
+    }
 
 
-	private static string BuildMessage(string[] argumentsUsed, ComponentModel componentModel, DefaultGenericHandler handler)
-	{
-		var message = string.Format(
-			"Types {0} don't satisfy generic constraints of implementation type {1} of component '{2}'.",
-			string.Join(", ", argumentsUsed), componentModel.Implementation.FullName, handler.ComponentModel.Name);
-		if (handler.ImplementationMatchingStrategy == null) return message + " This is most likely a bug in your code.";
-		return message + string.Format("this is likely a bug in the {0} used ({1})",
-			nameof(IGenericImplementationMatchingStrategy),
-			handler.ImplementationMatchingStrategy);
-	}
+    private static string BuildMessage(string[] argumentsUsed, ComponentModel componentModel,
+        DefaultGenericHandler handler)
+    {
+        var message = string.Format(
+            "Types {0} don't satisfy generic constraints of implementation type {1} of component '{2}'.",
+            string.Join(", ", argumentsUsed), componentModel.Implementation.FullName, handler.ComponentModel.Name);
+        if (handler.ImplementationMatchingStrategy == null)
+        {
+            return message + " This is most likely a bug in your code.";
+        }
+
+        return message + string.Format("this is likely a bug in the {0} used ({1})",
+            nameof(IGenericImplementationMatchingStrategy),
+            handler.ImplementationMatchingStrategy);
+    }
 }

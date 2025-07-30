@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Proxy;
 using Castle.Windsor.MicroKernel.Util;
@@ -23,26 +21,35 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 [Serializable]
 public class MixinInspector : IContributeComponentModelConstruction
 {
-	public void ProcessModel(IKernel kernel, ComponentModel model)
-	{
-		var mixins = model.Configuration?.Children["mixins"];
-		if (mixins == null) return;
+    public void ProcessModel(IKernel kernel, ComponentModel model)
+    {
+        var mixins = model.Configuration?.Children["mixins"];
+        if (mixins == null)
+        {
+            return;
+        }
 
-		var mixinReferences = new List<ComponentReference<object>>();
-		foreach (var mixin in mixins.Children)
-		{
-			var value = mixin.Value;
+        var mixinReferences = new List<ComponentReference<object>>();
+        foreach (var mixin in mixins.Children)
+        {
+            var value = mixin.Value;
 
-			var mixinComponent = ReferenceExpressionUtil.ExtractComponentName(value);
-			if (mixinComponent == null)
-				throw new Exception(
-					$"The value for the mixin must be a reference to a component (Currently {value})");
+            var mixinComponent = ReferenceExpressionUtil.ExtractComponentName(value);
+            if (mixinComponent == null)
+            {
+                throw new Exception(
+                    $"The value for the mixin must be a reference to a component (Currently {value})");
+            }
 
-			mixinReferences.Add(new ComponentReference<object>(mixinComponent));
-		}
+            mixinReferences.Add(new ComponentReference<object>(mixinComponent));
+        }
 
-		if (mixinReferences.Count == 0) return;
-		var options = model.ObtainProxyOptions();
-		mixinReferences.ForEach(options.AddMixinReference);
-	}
+        if (mixinReferences.Count == 0)
+        {
+            return;
+        }
+
+        var options = model.ObtainProxyOptions();
+        mixinReferences.ForEach(options.AddMixinReference);
+    }
 }

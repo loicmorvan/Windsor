@@ -19,11 +19,11 @@ namespace Castle.Windsor.Tests.Pools;
 
 public class RecyclableComponent : IRecyclable
 {
-	public ISimpleService Dependency { get; set; }
-	public int RecycledCount { get; private set; }
+    public ISimpleService Dependency { get; set; }
+    public int RecycledCount { get; private set; }
 
-	public void Recycle()
-	{
-		RecycledCount++;
-	}
+    public void Recycle()
+    {
+        RecycledCount++;
+    }
 }

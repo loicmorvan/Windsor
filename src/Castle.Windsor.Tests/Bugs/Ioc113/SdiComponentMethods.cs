@@ -8,9 +8,9 @@ namespace Castle.Windsor.Tests.Bugs.Ioc113;
 
 public enum SdiComponentMethods
 {
-	Initialize,
-	Start,
-	DoSomething,
-	Stop,
-	Dispose
+    Initialize,
+    Start,
+    DoSomething,
+    Stop,
+    Dispose
 }

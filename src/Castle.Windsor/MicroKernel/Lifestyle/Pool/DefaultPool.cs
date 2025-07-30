@@ -12,109 +12,118 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Context;
-using Castle.Windsor.MicroKernel.Internal;
+using Lock = Castle.Windsor.MicroKernel.Internal.Lock;
 
 namespace Castle.Windsor.MicroKernel.Lifestyle.Pool;
 
-using Lock = Lock;
-
 [Serializable]
 public class DefaultPool(int initialSize, int maxsize, IComponentActivator componentActivator)
-	: IPool
+    : IPool
 {
-	private readonly Stack<Burden> _available = new(initialSize);
-	private readonly IComponentActivator _componentActivator = componentActivator;
-	private readonly int _initialSize = initialSize;
-	private readonly Dictionary<object, Burden> _inUse = new();
-	private readonly int _maxsize = maxsize;
-	private readonly Lock _rwlock = Lock.Create();
-	private bool _initialized;
+    private readonly Stack<Burden> _available = new(initialSize);
+    private readonly IComponentActivator _componentActivator = componentActivator;
+    private readonly int _initialSize = initialSize;
+    private readonly Dictionary<object, Burden> _inUse = new();
+    private readonly int _maxsize = maxsize;
+    private readonly Lock _rwlock = Lock.Create();
+    private bool _initialized;
 
-	public virtual void Dispose()
-	{
-		_initialized = false;
+    public virtual void Dispose()
+    {
+        _initialized = false;
 
-		foreach (var burden in _available) burden.Release();
-		_inUse.Clear();
-		_available.Clear();
-	}
+        foreach (var burden in _available)
+        {
+            burden.Release();
+        }
 
-	public virtual bool Release(object instance)
-	{
-		using (_rwlock.ForWriting())
-		{
-			Burden burden;
+        _inUse.Clear();
+        _available.Clear();
+    }
 
-			if (_initialized == false)
-			{
-				_inUse.Remove(instance, out burden);
-			}
-			else
-			{
-				if (_inUse.Remove(instance, out burden) == false) return false;
+    public virtual bool Release(object instance)
+    {
+        using (_rwlock.ForWriting())
+        {
+            Burden burden;
 
-				if (_available.Count < _maxsize)
-				{
-					if (instance is IRecyclable recyclable) recyclable.Recycle();
+            if (_initialized == false)
+            {
+                _inUse.Remove(instance, out burden);
+            }
+            else
+            {
+                if (_inUse.Remove(instance, out burden) == false)
+                {
+                    return false;
+                }
 
-					_available.Push(burden);
-					return false;
-				}
-			}
-		}
+                if (_available.Count < _maxsize)
+                {
+                    if (instance is IRecyclable recyclable)
+                    {
+                        recyclable.Recycle();
+                    }
 
-		// Pool is full or has been disposed.
+                    _available.Push(burden);
+                    return false;
+                }
+            }
+        }
 
-		_componentActivator.Destroy(instance);
-		return true;
-	}
+        // Pool is full or has been disposed.
 
-	public virtual object Request(CreationContext context, Func<CreationContext, Burden> creationCallback)
-	{
-		Burden burden;
-		using (_rwlock.ForWriting())
-		{
-			if (!_initialized) Intitialize(creationCallback, context);
+        _componentActivator.Destroy(instance);
+        return true;
+    }
 
-			if (_available.Count != 0)
-			{
-				burden = _available.Pop();
-				context.AttachExistingBurden(burden);
-			}
-			else
-			{
-				burden = creationCallback.Invoke(context);
-			}
+    public virtual object Request(CreationContext context, Func<CreationContext, Burden> creationCallback)
+    {
+        Burden burden;
+        using (_rwlock.ForWriting())
+        {
+            if (!_initialized)
+            {
+                Intitialize(creationCallback, context);
+            }
 
-			try
-			{
-				_inUse.Add(burden.Instance, burden);
-			}
-			catch (NullReferenceException)
-			{
-				throw new PoolException("creationCallback didn't return a valid burden");
-			}
-			catch (ArgumentNullException)
-			{
-				throw new PoolException(
-					"burden returned by creationCallback does not have root instance associated with it (its Instance property is null).");
-			}
-		}
+            if (_available.Count != 0)
+            {
+                burden = _available.Pop();
+                context.AttachExistingBurden(burden);
+            }
+            else
+            {
+                burden = creationCallback.Invoke(context);
+            }
 
-		return burden.Instance;
-	}
+            try
+            {
+                _inUse.Add(burden.Instance, burden);
+            }
+            catch (NullReferenceException)
+            {
+                throw new PoolException("creationCallback didn't return a valid burden");
+            }
+            catch (ArgumentNullException)
+            {
+                throw new PoolException(
+                    "burden returned by creationCallback does not have root instance associated with it (its Instance property is null).");
+            }
+        }
 
-	protected virtual void Intitialize(Func<CreationContext, Burden> createCallback, CreationContext c)
-	{
-		_initialized = true;
-		for (var i = 0; i < _initialSize; i++)
-		{
-			var burden = createCallback(c);
-			_available.Push(burden);
-		}
-	}
+        return burden.Instance;
+    }
+
+    protected virtual void Intitialize(Func<CreationContext, Burden> createCallback, CreationContext c)
+    {
+        _initialized = true;
+        for (var i = 0; i < _initialSize; i++)
+        {
+            var burden = createCallback(c);
+            _available.Push(burden);
+        }
+    }
 }

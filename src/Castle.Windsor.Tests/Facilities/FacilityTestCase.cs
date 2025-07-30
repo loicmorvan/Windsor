@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Core.Configuration;
 using Castle.Windsor.Facilities.Startable;
 using Castle.Windsor.MicroKernel;
@@ -22,69 +21,69 @@ namespace Castle.Windsor.Tests.Facilities;
 
 public class FacilityTestCase
 {
-	private static readonly string FacilityKey = typeof(HiperFacility).FullName;
-	private readonly HiperFacility _facility;
-	private readonly IKernel _kernel;
+    private static readonly string FacilityKey = typeof(HiperFacility).FullName;
+    private readonly HiperFacility _facility;
+    private readonly IKernel _kernel;
 
-	public FacilityTestCase()
-	{
-		_kernel = new DefaultKernel();
+    public FacilityTestCase()
+    {
+        _kernel = new DefaultKernel();
 
-		IConfiguration confignode = new MutableConfiguration("facility");
-		IConfiguration facilityConf = new MutableConfiguration(FacilityKey);
-		confignode.Children.Add(facilityConf);
-		_kernel.ConfigurationStore.AddFacilityConfiguration(FacilityKey, confignode);
+        IConfiguration confignode = new MutableConfiguration("facility");
+        IConfiguration facilityConf = new MutableConfiguration(FacilityKey);
+        confignode.Children.Add(facilityConf);
+        _kernel.ConfigurationStore.AddFacilityConfiguration(FacilityKey, confignode);
 
-		_facility = new HiperFacility();
+        _facility = new HiperFacility();
 
-		Assert.False(_facility.Initialized);
-		_kernel.AddFacility(_facility);
-	}
+        Assert.False(_facility.Initialized);
+        _kernel.AddFacility(_facility);
+    }
 
-	[Fact]
-	public void Cant_have_two_instances_of_any_facility_type()
-	{
-		_kernel.AddFacility<StartableFacility>();
+    [Fact]
+    public void Cant_have_two_instances_of_any_facility_type()
+    {
+        _kernel.AddFacility<StartableFacility>();
 
-		var exception = Assert.Throws<ArgumentException>(() => _kernel.AddFacility<StartableFacility>());
+        var exception = Assert.Throws<ArgumentException>(() => _kernel.AddFacility<StartableFacility>());
 
-		Assert.Equal(
-			"Facility of type 'Castle.Windsor.Facilities.Startable.StartableFacility' has already been registered with the container. Only one facility of a given type can exist in the container.",
-			exception.Message);
-	}
+        Assert.Equal(
+            "Facility of type 'Castle.Windsor.Facilities.Startable.StartableFacility' has already been registered with the container. Only one facility of a given type can exist in the container.",
+            exception.Message);
+    }
 
-	[Fact]
-	public void Creation()
-	{
-		var facility = _kernel.GetFacilities()[0];
+    [Fact]
+    public void Creation()
+    {
+        var facility = _kernel.GetFacilities()[0];
 
-		Assert.NotNull(facility);
-		Assert.Same(_facility, facility);
-	}
+        Assert.NotNull(facility);
+        Assert.Same(_facility, facility);
+    }
 
-	[Fact]
-	public void LifeCycle()
-	{
-		Assert.False(_facility.Terminated);
+    [Fact]
+    public void LifeCycle()
+    {
+        Assert.False(_facility.Terminated);
 
-		_ = _kernel.GetFacilities()[0];
+        _ = _kernel.GetFacilities()[0];
 
-		Assert.True(_facility.Initialized);
-		Assert.False(_facility.Terminated);
+        Assert.True(_facility.Initialized);
+        Assert.False(_facility.Terminated);
 
-		_kernel.Dispose();
+        _kernel.Dispose();
 
-		Assert.True(_facility.Initialized);
-		Assert.True(_facility.Terminated);
-	}
+        Assert.True(_facility.Initialized);
+        Assert.True(_facility.Terminated);
+    }
 
-	[Fact]
-	public void OnCreationCallback()
-	{
-		StartableFacility facility = null;
+    [Fact]
+    public void OnCreationCallback()
+    {
+        StartableFacility facility = null;
 
-		_kernel.AddFacility<StartableFacility>(f => facility = f);
+        _kernel.AddFacility<StartableFacility>(f => facility = f);
 
-		Assert.NotNull(facility);
-	}
+        Assert.NotNull(facility);
+    }
 }

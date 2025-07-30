@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel.ComponentActivator;
@@ -21,19 +20,20 @@ namespace Castle.Windsor.MicroKernel.ComponentActivator;
 [Serializable]
 public class NoResolvableConstructorFoundException : ComponentActivatorException
 {
-	public NoResolvableConstructorFoundException(Type type, ComponentModel componentModel)
-		: base(
-			$"Could not find resolvable constructor for {type.FullName}. Make sure all required dependencies are provided.",
-			componentModel)
-	{
-		Type = type;
-	}
+    public NoResolvableConstructorFoundException(Type type, ComponentModel componentModel)
+        : base(
+            $"Could not find resolvable constructor for {type.FullName}. Make sure all required dependencies are provided.",
+            componentModel)
+    {
+        Type = type;
+    }
 
-	public NoResolvableConstructorFoundException(string message, Exception innerException, ComponentModel componentModel)
-		: base(message, innerException, componentModel)
-	{
-	}
+    public NoResolvableConstructorFoundException(string message, Exception innerException,
+        ComponentModel componentModel)
+        : base(message, innerException, componentModel)
+    {
+    }
 
 
-	public Type Type { get; }
+    public Type Type { get; }
 }

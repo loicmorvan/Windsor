@@ -87,12 +87,12 @@ Lifestyle: Scoped per window
 Another problem which is kind of related to the above is scoping the lifetime of these components.
 
 * Should it behave like transient, and be scoped by the root component?
-	* Another problem that arises is how do we make sure we don't release the component too soon. In the diagram above
-	  `A` instance should be released only after the last of three objects referencing it. That means we might need to
-	  employ some sorts of reference counting. That however might not be reliable solution and it raises another set of
-	  questions - let's assume `B` is a simple transient that requires no decommission. Should we be tracking it
-	  thought, because it has a graphed dependency? Or should we ignore it, and track only `Root` and `C` which let's
-	  assume have some decommission and count only those two references?
+    * Another problem that arises is how do we make sure we don't release the component too soon. In the diagram above
+      `A` instance should be released only after the last of three objects referencing it. That means we might need to
+      employ some sorts of reference counting. That however might not be reliable solution and it raises another set of
+      questions - let's assume `B` is a simple transient that requires no decommission. Should we be tracking it
+      thought, because it has a graphed dependency? Or should we ignore it, and track only `Root` and `C` which let's
+      assume have some decommission and count only those two references?
 
 ## Explicit scoping
 

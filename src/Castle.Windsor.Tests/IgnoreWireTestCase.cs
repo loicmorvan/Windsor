@@ -21,15 +21,15 @@ namespace Castle.Windsor.Tests;
 
 public class IgnoreWireTestCase
 {
-	[Fact]
-	public void TestIgnoreAttribute()
-	{
-		var container = new WindsorContainer();
-		container.Install(Configuration.FromXml(Xml.Embedded("ignoreprop.xml")));
+    [Fact]
+    public void TestIgnoreAttribute()
+    {
+        var container = new WindsorContainer();
+        container.Install(Configuration.FromXml(Xml.Embedded("ignoreprop.xml")));
 
-		var server = container.Resolve<ClassWithDoNotWireProperties>();
+        var server = container.Resolve<ClassWithDoNotWireProperties>();
 
-		Assert.Equal(0, server.Port);
-		Assert.Null(server.Host);
-	}
+        Assert.Equal(0, server.Port);
+        Assert.Null(server.Host);
+    }
 }

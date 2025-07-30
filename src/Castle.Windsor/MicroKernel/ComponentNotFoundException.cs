@@ -12,67 +12,78 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace Castle.Windsor.MicroKernel;
 
-/// <summary>Exception threw when a request for a component cannot be satisfied because the component does not exist in the container</summary>
+/// <summary>
+///     Exception threw when a request for a component cannot be satisfied because the component does not exist in the
+///     container
+/// </summary>
 [Serializable]
 public class ComponentNotFoundException : ComponentResolutionException
 {
-	public ComponentNotFoundException(string name, Type service, int countOfHandlersForTheService)
-		: base(BuildMessage(name, service, countOfHandlersForTheService))
-	{
-		Name = name;
-		Service = service;
-	}
+    public ComponentNotFoundException(string name, Type service, int countOfHandlersForTheService)
+        : base(BuildMessage(name, service, countOfHandlersForTheService))
+    {
+        Name = name;
+        Service = service;
+    }
 
-	/// <summary>Initializes a new instance of the <see cref = "ComponentNotFoundException" /> class.</summary>
-	/// <param name = "name">The name.</param>
-	/// <param name = "message">Exception message.</param>
-	public ComponentNotFoundException(string name, string message)
-		: base(message)
-	{
-		Name = name;
-	}
+    /// <summary>Initializes a new instance of the <see cref="ComponentNotFoundException" /> class.</summary>
+    /// <param name="name">The name.</param>
+    /// <param name="message">Exception message.</param>
+    public ComponentNotFoundException(string name, string message)
+        : base(message)
+    {
+        Name = name;
+    }
 
-	/// <summary>Initializes a new instance of the <see cref = "ComponentNotFoundException" /> class.</summary>
-	/// <param name = "service">The service.</param>
-	/// <param name = "message">Exception message.</param>
-	public ComponentNotFoundException(Type service, string message)
-		: base(message)
-	{
-		Service = service;
-	}
+    /// <summary>Initializes a new instance of the <see cref="ComponentNotFoundException" /> class.</summary>
+    /// <param name="service">The service.</param>
+    /// <param name="message">Exception message.</param>
+    public ComponentNotFoundException(Type service, string message)
+        : base(message)
+    {
+        Service = service;
+    }
 
-	/// <summary>Initializes a new instance of the <see cref = "ComponentNotFoundException" /> class.</summary>
-	/// <param name = "service">The service.</param>
-	public ComponentNotFoundException(Type service) :
-		this(service, $"No component for supporting the service {service.FullName} was found")
-	{
-	}
+    /// <summary>Initializes a new instance of the <see cref="ComponentNotFoundException" /> class.</summary>
+    /// <param name="service">The service.</param>
+    public ComponentNotFoundException(Type service) :
+        this(service, $"No component for supporting the service {service.FullName} was found")
+    {
+    }
 
 
-	public string Name { get; private set; }
-	public Type Service { get; private set; }
+    public string Name { get; private set; }
+    public Type Service { get; private set; }
 
-	private static string BuildMessage(string name, Type service, int countOfHandlersForTheService)
-	{
-		var message =
-			string.Format("Requested component named '{0}' was not found in the container. Did you forget to register it?{1}",
-				name, Environment.NewLine);
-		if (countOfHandlersForTheService == 0)
-			return message +
-			       $"There are no components supporting requested service '{service.FullName}'. You need to register components in order to be able to use them.";
-		if (countOfHandlersForTheService == 1)
-			return message +
-			       $"There is one other component supporting requested service '{service.FullName}'. Is it what you were looking for?";
-		if (countOfHandlersForTheService > 1)
-			return message +
-			       string.Format(
-				       "There are {0} other components supporting requested service '{1}'. Were you looking for any of them?",
-				       countOfHandlersForTheService, service.FullName);
-		// this should never happen but if someone passes us wrong information we just ignore it
-		return message;
-	}
+    private static string BuildMessage(string name, Type service, int countOfHandlersForTheService)
+    {
+        var message =
+            string.Format(
+                "Requested component named '{0}' was not found in the container. Did you forget to register it?{1}",
+                name, Environment.NewLine);
+        if (countOfHandlersForTheService == 0)
+        {
+            return message +
+                   $"There are no components supporting requested service '{service.FullName}'. You need to register components in order to be able to use them.";
+        }
+
+        if (countOfHandlersForTheService == 1)
+        {
+            return message +
+                   $"There is one other component supporting requested service '{service.FullName}'. Is it what you were looking for?";
+        }
+
+        if (countOfHandlersForTheService > 1)
+        {
+            return message +
+                   string.Format(
+                       "There are {0} other components supporting requested service '{1}'. Were you looking for any of them?",
+                       countOfHandlersForTheService, service.FullName);
+        }
+
+        // this should never happen but if someone passes us wrong information we just ignore it
+        return message;
+    }
 }

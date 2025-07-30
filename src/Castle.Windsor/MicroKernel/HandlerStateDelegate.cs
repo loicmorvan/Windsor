@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.MicroKernel;
 
-using System;
-
 public delegate void HandlerStateDelegate(object source, EventArgs args);

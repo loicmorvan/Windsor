@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
 
@@ -20,7 +19,7 @@ namespace Castle.Windsor.Tests.Registration.Interceptors;
 
 public abstract class InterceptorsTestCaseHelper
 {
-	public abstract IEnumerable<InterceptorReference> GetExpectedInterceptorsInCorrectOrder();
+    public abstract IEnumerable<InterceptorReference> GetExpectedInterceptorsInCorrectOrder();
 
-	public abstract IRegistration RegisterInterceptors<T>(ComponentRegistration<T> registration) where T : class;
+    public abstract IRegistration RegisterInterceptors<T>(ComponentRegistration<T> registration) where T : class;
 }

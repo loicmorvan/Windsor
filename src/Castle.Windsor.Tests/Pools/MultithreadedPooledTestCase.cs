@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Threading;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 
@@ -20,46 +19,46 @@ namespace Castle.Windsor.Tests.Pools;
 
 public class MultithreadedPooledTestCase
 {
-	private readonly ManualResetEvent _startEvent = new(false);
-	private readonly ManualResetEvent _stopEvent = new(false);
-	private IKernel _kernel;
+    private readonly ManualResetEvent _startEvent = new(false);
+    private readonly ManualResetEvent _stopEvent = new(false);
+    private IKernel _kernel;
 
-	private void ExecuteMethodUntilSignal()
-	{
-		_startEvent.WaitOne(int.MaxValue);
+    private void ExecuteMethodUntilSignal()
+    {
+        _startEvent.WaitOne(int.MaxValue);
 
-		while (!_stopEvent.WaitOne(1))
-		{
-			var instance = _kernel.Resolve<PoolableComponent1>("a");
+        while (!_stopEvent.WaitOne(1))
+        {
+            var instance = _kernel.Resolve<PoolableComponent1>("a");
 
-			Assert.NotNull(instance);
+            Assert.NotNull(instance);
 
-			Thread.Sleep(1 * 500);
+            Thread.Sleep(1 * 500);
 
-			_kernel.ReleaseComponent(instance);
-		}
-	}
+            _kernel.ReleaseComponent(instance);
+        }
+    }
 
-	[Fact]
-	public void Multithreaded()
-	{
-		_kernel = new DefaultKernel();
-		_kernel.Register(Component.For(typeof(PoolableComponent1)).Named("a"));
+    [Fact]
+    public void Multithreaded()
+    {
+        _kernel = new DefaultKernel();
+        _kernel.Register(Component.For(typeof(PoolableComponent1)).Named("a"));
 
-		const int threadCount = 15;
+        const int threadCount = 15;
 
-		var threads = new Thread[threadCount];
+        var threads = new Thread[threadCount];
 
-		for (var i = 0; i < threadCount; i++)
-		{
-			threads[i] = new Thread(ExecuteMethodUntilSignal);
-			threads[i].Start();
-		}
+        for (var i = 0; i < threadCount; i++)
+        {
+            threads[i] = new Thread(ExecuteMethodUntilSignal);
+            threads[i].Start();
+        }
 
-		_startEvent.Set();
+        _startEvent.Set();
 
-		Thread.CurrentThread.Join(3 * 1000);
+        Thread.CurrentThread.Join(3 * 1000);
 
-		_stopEvent.Set();
-	}
+        _stopEvent.Set();
+    }
 }

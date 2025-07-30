@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Represents a service override key.</summary>

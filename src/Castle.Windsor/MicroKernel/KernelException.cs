@@ -12,29 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel;
-
-using System;
-
 using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.MicroKernel;
 
 /// <summary>Exception threw by Kernel operations that failed for some reason.</summary>
 [Serializable]
 public class KernelException : Exception
 {
-	/// <summary>Initializes a new instance of the <see cref = "KernelException" /> class.</summary>
-	/// <param name = "message">The message.</param>
+	/// <summary>Initializes a new instance of the <see cref="KernelException" /> class.</summary>
+	/// <param name="message">The message.</param>
 	public KernelException(string message) : base(message)
 	{
 		this.SetUp();
 	}
 
-	/// <summary>Initializes a new instance of the <see cref = "KernelException" /> class.</summary>
-	/// <param name = "message">The message.</param>
-	/// <param name = "innerException">The inner exception.</param>
+	/// <summary>Initializes a new instance of the <see cref="KernelException" /> class.</summary>
+	/// <param name="message">The message.</param>
+	/// <param name="innerException">The inner exception.</param>
 	public KernelException(string message, Exception innerException) : base(message, innerException)
 	{
 		this.SetUp();
 	}
-
 }

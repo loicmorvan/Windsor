@@ -18,12 +18,12 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class ReferenceDependencyDescriptor(IReference<object> dependency) : IComponentModelDescriptor
 {
-	public void BuildComponentModel(IKernel kernel, ComponentModel model)
-	{
-		dependency.Attach(model);
-	}
+    public void BuildComponentModel(IKernel kernel, ComponentModel model)
+    {
+        dependency.Attach(model);
+    }
 
-	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-	{
-	}
+    public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+    {
+    }
 }

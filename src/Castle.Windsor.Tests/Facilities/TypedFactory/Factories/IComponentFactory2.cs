@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
 public interface IComponentFactory2
 {
-	object Construct(string key);
+    object Construct(string key);
 }

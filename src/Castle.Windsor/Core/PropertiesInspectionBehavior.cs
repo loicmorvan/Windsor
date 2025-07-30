@@ -16,8 +16,8 @@ namespace Castle.Windsor.Core;
 
 public enum PropertiesInspectionBehavior
 {
-	Undefined,
-	None,
-	All,
-	DeclaredOnly
+    Undefined,
+    None,
+    All,
+    DeclaredOnly
 }

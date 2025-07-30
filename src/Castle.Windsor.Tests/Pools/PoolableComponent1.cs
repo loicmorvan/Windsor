@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core;
 
 namespace Castle.Windsor.Tests.Pools;
@@ -20,10 +19,10 @@ namespace Castle.Windsor.Tests.Pools;
 [Pooled(2, 5)]
 public class PoolableComponent1
 {
-	private readonly Guid _id = Guid.NewGuid();
+    private readonly Guid _id = Guid.NewGuid();
 
-	public override string ToString()
-	{
-		return $"{_id:D}";
-	}
+    public override string ToString()
+    {
+        return $"{_id:D}";
+    }
 }

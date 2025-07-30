@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Proxy;
 
@@ -20,13 +19,13 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class ProxyInterfacesDescriptor(Type[] interfaces) : IComponentModelDescriptor
 {
-	public void BuildComponentModel(IKernel kernel, ComponentModel model)
-	{
-		var options = model.ObtainProxyOptions();
-		options.AddAdditionalInterfaces(interfaces);
-	}
+    public void BuildComponentModel(IKernel kernel, ComponentModel model)
+    {
+        var options = model.ObtainProxyOptions();
+        options.AddAdditionalInterfaces(interfaces);
+    }
 
-	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-	{
-	}
+    public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+    {
+    }
 }

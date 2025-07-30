@@ -21,97 +21,97 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public class ExternalConfigurationTestCase : AbstractContainerTestCase
 {
-	protected override void AfterContainerCreated()
-	{
-		var path = ConfigHelper.ResolveConfigPath("Facilities/TypedFactory/typedFactory_castle_config.xml");
+    protected override void AfterContainerCreated()
+    {
+        var path = ConfigHelper.ResolveConfigPath("Facilities/TypedFactory/typedFactory_castle_config.xml");
 
-		Container.Install(Configuration.FromXmlFile(path));
+        Container.Install(Configuration.FromXmlFile(path));
 
-		Container.Register(
-			Component.For<IProtocolHandler>().ImplementedBy<MirandaProtocolHandler>().Named("miranda"),
-			Component.For<IProtocolHandler>().ImplementedBy<MessengerProtocolHandler>().Named("messenger"),
-			Component.For<IDummyComponent>().ImplementedBy<Component1>().Named("comp1"),
-			Component.For<IDummyComponent>().ImplementedBy<Component2>().Named("comp2"));
-	}
+        Container.Register(
+            Component.For<IProtocolHandler>().ImplementedBy<MirandaProtocolHandler>().Named("miranda"),
+            Component.For<IProtocolHandler>().ImplementedBy<MessengerProtocolHandler>().Named("messenger"),
+            Component.For<IDummyComponent>().ImplementedBy<Component1>().Named("comp1"),
+            Component.For<IDummyComponent>().ImplementedBy<Component2>().Named("comp2"));
+    }
 
-	[Fact]
-	public void Factory1()
-	{
-		var factory = Container.Resolve<IProtocolHandlerFactory1>("protocolFac1");
+    [Fact]
+    public void Factory1()
+    {
+        var factory = Container.Resolve<IProtocolHandlerFactory1>("protocolFac1");
 
-		var handler = factory.Create();
+        var handler = factory.Create();
 
-		Assert.NotNull(handler);
+        Assert.NotNull(handler);
 
-		factory.Release(handler);
-	}
+        factory.Release(handler);
+    }
 
-	[Fact]
-	public void Factory2()
-	{
-		var factory = Container.Resolve<IProtocolHandlerFactory2>("protocolFac2");
+    [Fact]
+    public void Factory2()
+    {
+        var factory = Container.Resolve<IProtocolHandlerFactory2>("protocolFac2");
 
-		var handler = factory.Create("miranda");
-		Assert.NotNull(handler);
-		Assert.IsType<MirandaProtocolHandler>(handler);
+        var handler = factory.Create("miranda");
+        Assert.NotNull(handler);
+        Assert.IsType<MirandaProtocolHandler>(handler);
 
-		factory.Release(handler);
+        factory.Release(handler);
 
-		handler = factory.Create("messenger");
-		Assert.NotNull(handler);
-		Assert.IsType<MessengerProtocolHandler>(handler);
+        handler = factory.Create("messenger");
+        Assert.NotNull(handler);
+        Assert.IsType<MessengerProtocolHandler>(handler);
 
-		factory.Release(handler);
-	}
+        factory.Release(handler);
+    }
 
-	[Fact]
-	public void Factory3()
-	{
-		var factory = Container.Resolve<IComponentFactory1>("compFactory1");
+    [Fact]
+    public void Factory3()
+    {
+        var factory = Container.Resolve<IComponentFactory1>("compFactory1");
 
-		var comp1 = factory.Construct();
-		Assert.NotNull(comp1);
+        var comp1 = factory.Construct();
+        Assert.NotNull(comp1);
 
-		var comp2 = factory.Construct();
-		Assert.NotNull(comp2);
-	}
+        var comp2 = factory.Construct();
+        Assert.NotNull(comp2);
+    }
 
-	[Fact]
-	public void Factory4()
-	{
-		var factory = Container.Resolve<IComponentFactory2>("compFactory2");
+    [Fact]
+    public void Factory4()
+    {
+        var factory = Container.Resolve<IComponentFactory2>("compFactory2");
 
-		var comp1 = (IDummyComponent)factory.Construct("comp1");
-		Assert.IsType<Component1>(comp1);
-		Assert.NotNull(comp1);
+        var comp1 = (IDummyComponent)factory.Construct("comp1");
+        Assert.IsType<Component1>(comp1);
+        Assert.NotNull(comp1);
 
-		var comp2 = (IDummyComponent)factory.Construct("comp2");
-		Assert.IsType<Component2>(comp2);
-		Assert.NotNull(comp2);
-	}
+        var comp2 = (IDummyComponent)factory.Construct("comp2");
+        Assert.IsType<Component2>(comp2);
+        Assert.NotNull(comp2);
+    }
 
-	[Fact]
-	public void No_Creation_Or_Destruction_methods_defined()
-	{
-		var factory = Container.Resolve<IComponentFactory1>("NoCreationOrDestructionDefined");
+    [Fact]
+    public void No_Creation_Or_Destruction_methods_defined()
+    {
+        var factory = Container.Resolve<IComponentFactory1>("NoCreationOrDestructionDefined");
 
-		Assert.NotNull(factory);
+        Assert.NotNull(factory);
 
-		var comp1 = factory.Construct();
-		Assert.NotNull(comp1);
+        var comp1 = factory.Construct();
+        Assert.NotNull(comp1);
 
-		var comp2 = factory.Construct();
-		Assert.NotNull(comp2);
-	}
+        var comp2 = factory.Construct();
+        Assert.NotNull(comp2);
+    }
 
-	[Fact]
-	public void Selector_in_xml()
-	{
-		Container.Register(
-			Component.For<IDummyComponent>().ImplementedBy<Component1>(),
-			Component.For<IDummyComponent>().ImplementedBy<Component2>().Named("one"));
-		var factory = Container.Resolve<IComponentFactory1>("HasOneSelector");
-		var dummyComponent = factory.Construct();
-		Assert.IsType<Component2>(dummyComponent);
-	}
+    [Fact]
+    public void Selector_in_xml()
+    {
+        Container.Register(
+            Component.For<IDummyComponent>().ImplementedBy<Component1>(),
+            Component.For<IDummyComponent>().ImplementedBy<Component2>().Named("one"));
+        var factory = Container.Resolve<IComponentFactory1>("HasOneSelector");
+        var dummyComponent = factory.Construct();
+        Assert.IsType<Component2>(dummyComponent);
+    }
 }

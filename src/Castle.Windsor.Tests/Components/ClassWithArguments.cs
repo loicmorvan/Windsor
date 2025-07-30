@@ -16,13 +16,13 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ClassWithArguments
 {
-	public ClassWithArguments(string arg1, int arg2)
-	{
-		Arg1 = arg1;
-		Arg2 = arg2;
-	}
+    public ClassWithArguments(string arg1, int arg2)
+    {
+        Arg1 = arg1;
+        Arg2 = arg2;
+    }
 
-	public string Arg1 { get; }
+    public string Arg1 { get; }
 
-	public int Arg2 { get; }
+    public int Arg2 { get; }
 }

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Reflection;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Context;
@@ -28,8 +27,8 @@ public class CollectionResolverWithPropagatingContainerTestCase
     : CollectionResolverTestCase
 {
     /// <summary>Build a container, where all <see cref="CreationContext" /> are propagating.</summary>
-	/// <returns>A Castle Windsor container</returns>
-	protected override WindsorContainer BuildContainer()
+    /// <returns>A Castle Windsor container</returns>
+    protected override WindsorContainer BuildContainer()
     {
         return
             new WindsorContainer(

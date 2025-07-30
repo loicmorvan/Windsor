@@ -14,21 +14,18 @@
 
 namespace Castle.Windsor.MicroKernel.Util;
 
-using System;
-using System.Collections.Generic;
-
 [Serializable]
 public class SimpleTypeEqualityComparer : IEqualityComparer<Type>
 {
-	public static SimpleTypeEqualityComparer Instance { get; } = new();
+    public static SimpleTypeEqualityComparer Instance { get; } = new();
 
-	public bool Equals(Type x, Type y)
-	{
-		return ReferenceEquals(x, y);
-	}
+    public bool Equals(Type x, Type y)
+    {
+        return ReferenceEquals(x, y);
+    }
 
-	public int GetHashCode(Type obj)
-	{
-		return obj.GetHashCode();
-	}
+    public int GetHashCode(Type obj)
+    {
+        return obj.GetHashCode();
+    }
 }

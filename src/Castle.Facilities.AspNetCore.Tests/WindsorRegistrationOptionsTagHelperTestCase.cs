@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Facilities.AspNetCore.Tests.Framework;
 using Castle.Windsor.MicroKernel.Registration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -21,25 +20,25 @@ namespace Castle.Facilities.AspNetCore.Tests;
 
 public abstract class WindsorRegistrationOptionsTagHelperTestCase
 {
-	[Theory]
-	[InlineData(typeof(OverrideTagHelper))]
-	public void WindsorRegistrationOptionsForAssembliesTagHelperTestCase(Type optionsResolvableType)
-	{
-		using var testContext = TestContextFactory.Get(opts => opts
-			.UseEntryAssembly(typeof(Uri).Assembly)
-			.RegisterTagHelpers(typeof(OverrideTagHelper).Assembly));
-		testContext.WindsorContainer.Resolve(optionsResolvableType);
-	}
+    [Theory]
+    [InlineData(typeof(OverrideTagHelper))]
+    public void WindsorRegistrationOptionsForAssembliesTagHelperTestCase(Type optionsResolvableType)
+    {
+        using var testContext = TestContextFactory.Get(opts => opts
+            .UseEntryAssembly(typeof(Uri).Assembly)
+            .RegisterTagHelpers(typeof(OverrideTagHelper).Assembly));
+        testContext.WindsorContainer.Resolve(optionsResolvableType);
+    }
 
-	[Theory]
-	[InlineData(typeof(OverrideTagHelper))]
-	public void WindsorRegistrationOptionsForComponentsTagHelperTestCase(Type optionsResolvableType)
-	{
-		using var testContext = TestContextFactory.Get(opts => opts
-			.UseEntryAssembly(typeof(Uri).Assembly)
-			.RegisterTagHelpers(Component.For<OverrideTagHelper>().LifestyleScoped().Named("tag-helpers")));
-		testContext.WindsorContainer.Resolve(optionsResolvableType);
-	}
+    [Theory]
+    [InlineData(typeof(OverrideTagHelper))]
+    public void WindsorRegistrationOptionsForComponentsTagHelperTestCase(Type optionsResolvableType)
+    {
+        using var testContext = TestContextFactory.Get(opts => opts
+            .UseEntryAssembly(typeof(Uri).Assembly)
+            .RegisterTagHelpers(Component.For<OverrideTagHelper>().LifestyleScoped().Named("tag-helpers")));
+        testContext.WindsorContainer.Resolve(optionsResolvableType);
+    }
 
-	private class OverrideTagHelper : TagHelper;
+    private class OverrideTagHelper : TagHelper;
 }

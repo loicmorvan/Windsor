@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Castle.Core.Configuration;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
@@ -26,65 +23,86 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class ServiceOverrideDescriptor : AbstractPropertyDescriptor
 {
-	private readonly object _value;
+    private readonly object _value;
 
-	public ServiceOverrideDescriptor(params ServiceOverride[] overrides)
-	{
-		_value = overrides;
-	}
+    public ServiceOverrideDescriptor(params ServiceOverride[] overrides)
+    {
+        _value = overrides;
+    }
 
-	public ServiceOverrideDescriptor(IDictionary dictionary)
-	{
-		_value = dictionary;
-	}
+    public ServiceOverrideDescriptor(IDictionary dictionary)
+    {
+        _value = dictionary;
+    }
 
-	public override void BuildComponentModel(IKernel kernel, ComponentModel model)
-	{
-		if (_value is IDictionary dictionary)
-			foreach (DictionaryEntry property in dictionary)
-				Apply(model, property.Key, property.Value, null);
+    public override void BuildComponentModel(IKernel kernel, ComponentModel model)
+    {
+        if (_value is IDictionary dictionary)
+        {
+            foreach (DictionaryEntry property in dictionary)
+            {
+                Apply(model, property.Key, property.Value, null);
+            }
+        }
 
-		if (_value is ServiceOverride[] overrides) overrides.ForEach(o => Apply(model, o.DependencyKey, o.Value, o));
-	}
+        if (_value is ServiceOverride[] overrides)
+        {
+            overrides.ForEach(o => Apply(model, o.DependencyKey, o.Value, o));
+        }
+    }
 
-	private void Apply(ComponentModel model, object dependencyKey, object dependencyValue, ServiceOverride @override)
-	{
-		if (dependencyValue is string value)
-			ApplySimpleReference(model, dependencyKey, value);
-		else if (dependencyValue is IEnumerable<string> enumerable)
-			ApplyReferenceList(model, dependencyKey, enumerable, @override);
-		else if (dependencyValue is Type type)
-			ApplySimpleReference(model, dependencyKey, ComponentName.DefaultNameFor(type));
-		else if (dependencyValue is IEnumerable<Type> types)
-			ApplyReferenceList(model, dependencyKey, types.Select(ComponentName.DefaultNameFor), @override);
-	}
+    private void Apply(ComponentModel model, object dependencyKey, object dependencyValue, ServiceOverride @override)
+    {
+        if (dependencyValue is string value)
+        {
+            ApplySimpleReference(model, dependencyKey, value);
+        }
+        else if (dependencyValue is IEnumerable<string> enumerable)
+        {
+            ApplyReferenceList(model, dependencyKey, enumerable, @override);
+        }
+        else if (dependencyValue is Type type)
+        {
+            ApplySimpleReference(model, dependencyKey, ComponentName.DefaultNameFor(type));
+        }
+        else if (dependencyValue is IEnumerable<Type> types)
+        {
+            ApplyReferenceList(model, dependencyKey, types.Select(ComponentName.DefaultNameFor), @override);
+        }
+    }
 
-	private void ApplyReferenceList(ComponentModel model, object name, IEnumerable<string> items, ServiceOverride serviceOverride)
-	{
-		var list = new MutableConfiguration("list");
+    private void ApplyReferenceList(ComponentModel model, object name, IEnumerable<string> items,
+        ServiceOverride serviceOverride)
+    {
+        var list = new MutableConfiguration("list");
 
-		if (serviceOverride is { Type: not null })
-			list.Attributes.Add("type", serviceOverride.Type.AssemblyQualifiedName);
+        if (serviceOverride is { Type: not null })
+        {
+            list.Attributes.Add("type", serviceOverride.Type.AssemblyQualifiedName);
+        }
 
-		foreach (var item in items)
-		{
-			var reference = ReferenceExpressionUtil.BuildReference(item);
-			list.Children.Add(new MutableConfiguration("item", reference));
-		}
+        foreach (var item in items)
+        {
+            var reference = ReferenceExpressionUtil.BuildReference(item);
+            list.Children.Add(new MutableConfiguration("item", reference));
+        }
 
-		AddParameter(model, GetNameString(name), list);
-	}
+        AddParameter(model, GetNameString(name), list);
+    }
 
-	private void ApplySimpleReference(ComponentModel model, object dependencyName, string componentKey)
-	{
-		var reference = ReferenceExpressionUtil.BuildReference(componentKey);
-		AddParameter(model, GetNameString(dependencyName), reference);
-	}
+    private void ApplySimpleReference(ComponentModel model, object dependencyName, string componentKey)
+    {
+        var reference = ReferenceExpressionUtil.BuildReference(componentKey);
+        AddParameter(model, GetNameString(dependencyName), reference);
+    }
 
-	private string GetNameString(object key)
-	{
-		if (key is Type type) return type.AssemblyQualifiedName;
+    private string GetNameString(object key)
+    {
+        if (key is Type type)
+        {
+            return type.AssemblyQualifiedName;
+        }
 
-		return key.ToString();
-	}
+        return key.ToString();
+    }
 }

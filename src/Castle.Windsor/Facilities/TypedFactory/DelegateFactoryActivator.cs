@@ -23,33 +23,33 @@ namespace Castle.Windsor.Facilities.TypedFactory;
 
 [UsedImplicitly]
 public class DelegateFactoryActivator(
-	ComponentModel model,
-	IKernelInternal kernel,
-	ComponentInstanceDelegate onCreation,
-	ComponentInstanceDelegate onDestruction)
-	: AbstractComponentActivator(model, kernel, onCreation, onDestruction), IDependencyAwareActivator
+    ComponentModel model,
+    IKernelInternal kernel,
+    ComponentInstanceDelegate onCreation,
+    ComponentInstanceDelegate onDestruction)
+    : AbstractComponentActivator(model, kernel, onCreation, onDestruction), IDependencyAwareActivator
 {
-	private readonly IProxyFactoryExtension _proxyFactory = new DelegateProxyFactory();
+    private readonly IProxyFactoryExtension _proxyFactory = new DelegateProxyFactory();
 
-	public bool CanProvideRequiredDependencies(ComponentModel component)
-	{
-		return true;
-	}
+    public bool CanProvideRequiredDependencies(ComponentModel component)
+    {
+        return true;
+    }
 
-	public bool IsManagedExternally(ComponentModel component)
-	{
-		return false;
-	}
+    public bool IsManagedExternally(ComponentModel component)
+    {
+        return false;
+    }
 
-	protected override object InternalCreate(CreationContext context)
-	{
-		var instance = Kernel.ProxyFactory.Create(_proxyFactory, Kernel, Model, context);
-		ApplyCommissionConcerns(instance);
-		return instance;
-	}
+    protected override object InternalCreate(CreationContext context)
+    {
+        var instance = Kernel.ProxyFactory.Create(_proxyFactory, Kernel, Model, context);
+        ApplyCommissionConcerns(instance);
+        return instance;
+    }
 
-	protected override void InternalDestroy(object instance)
-	{
-		ApplyDecommissionConcerns(instance);
-	}
+    protected override void InternalDestroy(object instance)
+    {
+        ApplyDecommissionConcerns(instance);
+    }
 }

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Reflection;
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
@@ -22,248 +21,313 @@ using Castle.Windsor.MicroKernel.Context;
 namespace Castle.Windsor.MicroKernel.ComponentActivator;
 
 /// <summary>
-///     Standard implementation of <see cref = "IComponentActivator" />. Handles the selection of the best constructor, fills the writable properties the component exposes, run the commission and
+///     Standard implementation of <see cref="IComponentActivator" />. Handles the selection of the best constructor, fills
+///     the writable properties the component exposes, run the commission and
 ///     decommission lifecycles, etc.
 /// </summary>
-/// <remarks>Custom implementors can just override the <c>CreateInstance</c> method. Please note however that the activator is responsible for the proxy creation when needed.</remarks>
+/// <remarks>
+///     Custom implementors can just override the <c>CreateInstance</c> method. Please note however that the activator
+///     is responsible for the proxy creation when needed.
+/// </remarks>
 [Serializable]
 public class DefaultComponentActivator : AbstractComponentActivator
 {
-	internal const string InstanceStash = "castle.component-activator-instance";
+    internal const string InstanceStash = "castle.component-activator-instance";
 
 
-	/// <summary>Initializes a new instance of the <see cref = "DefaultComponentActivator" /> class.</summary>
-	/// <param name = "model"> </param>
-	/// <param name = "kernel"> </param>
-	/// <param name = "onCreation"> </param>
-	/// <param name = "onDestruction"> </param>
-	public DefaultComponentActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
-		: base(model, kernel, onCreation, onDestruction)
-	{
-	}
+    /// <summary>Initializes a new instance of the <see cref="DefaultComponentActivator" /> class.</summary>
+    /// <param name="model"> </param>
+    /// <param name="kernel"> </param>
+    /// <param name="onCreation"> </param>
+    /// <param name="onDestruction"> </param>
+    public DefaultComponentActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation,
+        ComponentInstanceDelegate onDestruction)
+        : base(model, kernel, onCreation, onDestruction)
+    {
+    }
 
-	protected override object InternalCreate(CreationContext context)
-	{
-		var instance = Instantiate(context);
-		context.SetContextualProperty(InstanceStash, instance);
+    protected override object InternalCreate(CreationContext context)
+    {
+        var instance = Instantiate(context);
+        context.SetContextualProperty(InstanceStash, instance);
 
-		SetUpProperties(instance, context);
+        SetUpProperties(instance, context);
 
-		ApplyCommissionConcerns(instance);
+        ApplyCommissionConcerns(instance);
 
-		return instance;
-	}
+        return instance;
+    }
 
-	protected override void InternalDestroy(object instance)
-	{
-		ApplyDecommissionConcerns(instance);
-	}
+    protected override void InternalDestroy(object instance)
+    {
+        ApplyDecommissionConcerns(instance);
+    }
 
-	protected virtual object Instantiate(CreationContext context)
-	{
-		var candidate = SelectEligibleConstructor(context);
+    protected virtual object Instantiate(CreationContext context)
+    {
+        var candidate = SelectEligibleConstructor(context);
 
-		var arguments = CreateConstructorArguments(candidate, context);
+        var arguments = CreateConstructorArguments(candidate, context);
 
-		return CreateInstance(context, candidate, arguments);
-	}
+        return CreateInstance(context, candidate, arguments);
+    }
 
-	protected virtual object CreateInstance(CreationContext context, ConstructorCandidate constructor, object[] arguments)
-	{
-		object instance = null;
+    protected virtual object CreateInstance(CreationContext context, ConstructorCandidate constructor,
+        object[] arguments)
+    {
+        object instance = null;
 
-		var implType = Model.Implementation;
+        var implType = Model.Implementation;
 
-		var createProxy = Kernel.ProxyFactory.ShouldCreateProxy(Model);
+        var createProxy = Kernel.ProxyFactory.ShouldCreateProxy(Model);
 
-		if (createProxy == false && Model.Implementation.GetTypeInfo().IsAbstract)
-			throw new ComponentRegistrationException(
-				string.Format(
-					"Type {0} is abstract.{2} As such, it is not possible to instantiate it as implementation of service '{1}'. Did you forget to proxy it?",
-					Model.Implementation.FullName,
-					Model.Name,
-					Environment.NewLine));
+        if (createProxy == false && Model.Implementation.GetTypeInfo().IsAbstract)
+        {
+            throw new ComponentRegistrationException(
+                string.Format(
+                    "Type {0} is abstract.{2} As such, it is not possible to instantiate it as implementation of service '{1}'. Did you forget to proxy it?",
+                    Model.Implementation.FullName,
+                    Model.Name,
+                    Environment.NewLine));
+        }
 
-		var createInstance = true;
-		if (createProxy) createInstance = Kernel.ProxyFactory.RequiresTargetInstance(Kernel, Model);
+        var createInstance = true;
+        if (createProxy)
+        {
+            createInstance = Kernel.ProxyFactory.RequiresTargetInstance(Kernel, Model);
+        }
 
-		if (createInstance) instance = CreateInstanceCore(constructor, arguments, implType);
+        if (createInstance)
+        {
+            instance = CreateInstanceCore(constructor, arguments, implType);
+        }
 
-		if (createProxy)
-			try
-			{
-				instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, context, arguments);
-			}
-			catch (Exception ex)
-			{
-				if (arguments != null)
-					foreach (var argument in arguments)
-						Kernel.ReleaseComponent(argument);
+        if (createProxy)
+        {
+            try
+            {
+                instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, context, arguments);
+            }
+            catch (Exception ex)
+            {
+                if (arguments != null)
+                {
+                    foreach (var argument in arguments)
+                    {
+                        Kernel.ReleaseComponent(argument);
+                    }
+                }
 
-				throw new ComponentActivatorException("ComponentActivator: could not proxy " + Model.Implementation.FullName, ex, Model);
-			}
+                throw new ComponentActivatorException(
+                    "ComponentActivator: could not proxy " + Model.Implementation.FullName, ex, Model);
+            }
+        }
 
-		return instance;
-	}
+        return instance;
+    }
 
-	protected object CreateInstanceCore(ConstructorCandidate constructor, object[] arguments, Type implType)
-	{
-		object instance;
-		try
-		{
-			{
-				instance = implType.CreateInstance<object>(arguments);
-			}
-		}
-		catch (Exception ex)
-		{
-			if (arguments != null)
-				foreach (var argument in arguments)
-					Kernel.ReleaseComponent(argument);
+    protected object CreateInstanceCore(ConstructorCandidate constructor, object[] arguments, Type implType)
+    {
+        object instance;
+        try
+        {
+            {
+                instance = implType.CreateInstance<object>(arguments);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (arguments != null)
+            {
+                foreach (var argument in arguments)
+                {
+                    Kernel.ReleaseComponent(argument);
+                }
+            }
 
-			if (ex is ComponentActivatorException) throw;
+            if (ex is ComponentActivatorException)
+            {
+                throw;
+            }
 
-			throw new ComponentActivatorException(
-				"ComponentActivator: could not instantiate " + Model.Implementation.FullName, ex, Model);
-		}
+            throw new ComponentActivatorException(
+                "ComponentActivator: could not instantiate " + Model.Implementation.FullName, ex, Model);
+        }
 
-		return instance;
-	}
+        return instance;
+    }
 
-	protected virtual ConstructorCandidate SelectEligibleConstructor(CreationContext context)
-	{
-		if (Model.Constructors.Count == 0)
-			// This is required by some facilities
-			return null;
+    protected virtual ConstructorCandidate SelectEligibleConstructor(CreationContext context)
+    {
+        if (Model.Constructors.Count == 0)
+            // This is required by some facilities
+        {
+            return null;
+        }
 
-		if (Model.Constructors.Count == 1) return Model.Constructors[0];
-		ConstructorCandidate winnerCandidate = null;
-		var winnerPoints = 0;
-		foreach (var candidate in Model.Constructors)
-		{
-			if (CheckCtorCandidate(candidate, context, out var candidatePoints) == false)
-			{
-				continue;
-			}
+        if (Model.Constructors.Count == 1)
+        {
+            return Model.Constructors[0];
+        }
 
-			if (BestScoreSoFar(candidatePoints, winnerPoints, winnerCandidate))
-			{
-				if (BestPossibleScore(candidate, candidatePoints))
-					//since the constructors are sorted greedier first, we know there's no way any other .ctor is going to beat us here
-					return candidate;
-				winnerCandidate = candidate;
-				winnerPoints = candidatePoints;
-			}
-		}
+        ConstructorCandidate winnerCandidate = null;
+        var winnerPoints = 0;
+        foreach (var candidate in Model.Constructors)
+        {
+            if (CheckCtorCandidate(candidate, context, out var candidatePoints) == false)
+            {
+                continue;
+            }
 
-		if (winnerCandidate == null) throw new NoResolvableConstructorFoundException(Model.Implementation, Model);
+            if (BestScoreSoFar(candidatePoints, winnerPoints, winnerCandidate))
+            {
+                if (BestPossibleScore(candidate, candidatePoints))
+                    //since the constructors are sorted greedier first, we know there's no way any other .ctor is going to beat us here
+                {
+                    return candidate;
+                }
 
-		return winnerCandidate;
-	}
+                winnerCandidate = candidate;
+                winnerPoints = candidatePoints;
+            }
+        }
 
-	private static bool BestScoreSoFar(int candidatePoints, int winnerPoints, ConstructorCandidate winnerCandidate)
-	{
-		return winnerCandidate == null || winnerPoints < candidatePoints;
-	}
+        if (winnerCandidate == null)
+        {
+            throw new NoResolvableConstructorFoundException(Model.Implementation, Model);
+        }
 
-	private static bool BestPossibleScore(ConstructorCandidate candidate, int candidatePoints)
-	{
-		return candidatePoints == candidate.Dependencies.Length * 100;
-	}
+        return winnerCandidate;
+    }
 
-	private bool CheckCtorCandidate(ConstructorCandidate candidate, CreationContext context, out int candidatePoints)
-	{
-		candidatePoints = 0;
-		foreach (var dependency in candidate.Dependencies)
-			if (CanSatisfyDependency(context, dependency))
-			{
-				candidatePoints += 100;
-			}
-			else if (dependency.HasDefaultValue)
-			{
-				candidatePoints += 1;
-			}
-			else
-			{
-				candidatePoints = 0;
-				return false;
-			}
+    private static bool BestScoreSoFar(int candidatePoints, int winnerPoints, ConstructorCandidate winnerCandidate)
+    {
+        return winnerCandidate == null || winnerPoints < candidatePoints;
+    }
 
-		return true;
-	}
+    private static bool BestPossibleScore(ConstructorCandidate candidate, int candidatePoints)
+    {
+        return candidatePoints == candidate.Dependencies.Length * 100;
+    }
 
-	protected virtual bool CanSatisfyDependency(CreationContext context, DependencyModel dependency)
-	{
-		return Kernel.Resolver.CanResolve(context, context.Handler, Model, dependency);
-	}
+    private bool CheckCtorCandidate(ConstructorCandidate candidate, CreationContext context, out int candidatePoints)
+    {
+        candidatePoints = 0;
+        foreach (var dependency in candidate.Dependencies)
+        {
+            if (CanSatisfyDependency(context, dependency))
+            {
+                candidatePoints += 100;
+            }
+            else if (dependency.HasDefaultValue)
+            {
+                candidatePoints += 1;
+            }
+            else
+            {
+                candidatePoints = 0;
+                return false;
+            }
+        }
 
-	protected virtual object[] CreateConstructorArguments(ConstructorCandidate constructor, CreationContext context)
-	{
-		if (constructor == null) return null;
+        return true;
+    }
 
-		var dependencyCount = constructor.Dependencies.Length;
-		if (dependencyCount == 0) return null;
+    protected virtual bool CanSatisfyDependency(CreationContext context, DependencyModel dependency)
+    {
+        return Kernel.Resolver.CanResolve(context, context.Handler, Model, dependency);
+    }
 
-		var arguments = new object[dependencyCount];
-		try
-		{
-			for (var i = 0; i < dependencyCount; i++) arguments[i] = Kernel.Resolver.Resolve(context, context.Handler, Model, constructor.Dependencies[i]);
-			return arguments;
-		}
-		catch
-		{
-			foreach (var argument in arguments) Kernel.ReleaseComponent(argument);
-			throw;
-		}
-	}
+    protected virtual object[] CreateConstructorArguments(ConstructorCandidate constructor, CreationContext context)
+    {
+        if (constructor == null)
+        {
+            return null;
+        }
 
-	protected virtual void SetUpProperties(object instance, CreationContext context)
-	{
-		instance = ProxyUtil.GetUnproxiedInstance(instance);
-		var resolver = Kernel.Resolver;
-		foreach (var property in Model.Properties)
-		{
-			var value = ObtainPropertyValue(context, property, resolver);
-			if (value == null) continue;
+        var dependencyCount = constructor.Dependencies.Length;
+        if (dependencyCount == 0)
+        {
+            return null;
+        }
 
-			var setMethod = property.Property.GetSetMethod();
-			try
-			{
-				setMethod.Invoke(instance, [value]);
-			}
-			catch (Exception ex)
-			{
-				var message =
-					string.Format(
-						"Error setting property {1}.{0} in component {2}. See inner exception for more information.{4}" +
-						"If you don't want Windsor to set this property you can do it by either decorating it with {3} or via registration API.{4}" +
-						"Alternatively consider making the setter non-public.",
-						property.Property.Name,
-						instance.GetType().Name,
-						Model.Name,
-						nameof(DoNotWireAttribute),
-						Environment.NewLine);
-				throw new ComponentActivatorException(message, ex, Model);
-			}
-		}
-	}
+        var arguments = new object[dependencyCount];
+        try
+        {
+            for (var i = 0; i < dependencyCount; i++)
+            {
+                arguments[i] = Kernel.Resolver.Resolve(context, context.Handler, Model, constructor.Dependencies[i]);
+            }
 
-	private object ObtainPropertyValue(CreationContext context, PropertySet property, IDependencyResolver resolver)
-	{
-		if (property.Dependency.IsOptional == false ||
-		    resolver.CanResolve(context, context.Handler, Model, property.Dependency))
-			try
-			{
-				return resolver.Resolve(context, context.Handler, Model, property.Dependency);
-			}
-			catch (Exception e)
-			{
-				if (property.Dependency.IsOptional == false) throw;
-				Kernel.Logger.Warn(
-					$"Exception when resolving optional dependency {property.Dependency} on component {Model.Name}.",
-					e);
-			}
+            return arguments;
+        }
+        catch
+        {
+            foreach (var argument in arguments)
+            {
+                Kernel.ReleaseComponent(argument);
+            }
 
-		return null;
-	}
+            throw;
+        }
+    }
+
+    protected virtual void SetUpProperties(object instance, CreationContext context)
+    {
+        instance = ProxyUtil.GetUnproxiedInstance(instance);
+        var resolver = Kernel.Resolver;
+        foreach (var property in Model.Properties)
+        {
+            var value = ObtainPropertyValue(context, property, resolver);
+            if (value == null)
+            {
+                continue;
+            }
+
+            var setMethod = property.Property.GetSetMethod();
+            try
+            {
+                setMethod.Invoke(instance, [value]);
+            }
+            catch (Exception ex)
+            {
+                var message =
+                    string.Format(
+                        "Error setting property {1}.{0} in component {2}. See inner exception for more information.{4}" +
+                        "If you don't want Windsor to set this property you can do it by either decorating it with {3} or via registration API.{4}" +
+                        "Alternatively consider making the setter non-public.",
+                        property.Property.Name,
+                        instance.GetType().Name,
+                        Model.Name,
+                        nameof(DoNotWireAttribute),
+                        Environment.NewLine);
+                throw new ComponentActivatorException(message, ex, Model);
+            }
+        }
+    }
+
+    private object ObtainPropertyValue(CreationContext context, PropertySet property, IDependencyResolver resolver)
+    {
+        if (property.Dependency.IsOptional == false ||
+            resolver.CanResolve(context, context.Handler, Model, property.Dependency))
+        {
+            try
+            {
+                return resolver.Resolve(context, context.Handler, Model, property.Dependency);
+            }
+            catch (Exception e)
+            {
+                if (property.Dependency.IsOptional == false)
+                {
+                    throw;
+                }
+
+                Kernel.Logger.Warn(
+                    $"Exception when resolving optional dependency {property.Dependency} on component {Model.Name}.",
+                    e);
+            }
+        }
+
+        return null;
+    }
 }

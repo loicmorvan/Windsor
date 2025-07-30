@@ -16,8 +16,8 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
 public class ServiceRedirect
 {
-	// ReSharper disable once UnusedParameter.Local
-	public ServiceRedirect(ServiceWithMultipleCtors serviceWithMultipleCtors)
-	{
-	}
+    // ReSharper disable once UnusedParameter.Local
+    public ServiceRedirect(ServiceWithMultipleCtors serviceWithMultipleCtors)
+    {
+    }
 }

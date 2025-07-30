@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Linq;
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
@@ -23,23 +21,23 @@ namespace Castle.Windsor.Tests.Interceptors;
 
 public class ByTypeInterceptorSelector : IModelInterceptorsSelector
 {
-	private readonly Type _interceptorType;
+    private readonly Type _interceptorType;
 
-	public ByTypeInterceptorSelector(Type interceptorType)
-	{
-		_interceptorType = interceptorType;
-	}
+    public ByTypeInterceptorSelector(Type interceptorType)
+    {
+        _interceptorType = interceptorType;
+    }
 
-	public bool HasInterceptors(ComponentModel model)
-	{
-		return model.Services.All(s => s.Is<IInterceptor>() == false);
-	}
+    public bool HasInterceptors(ComponentModel model)
+    {
+        return model.Services.All(s => s.Is<IInterceptor>() == false);
+    }
 
-	public InterceptorReference[] SelectInterceptors(ComponentModel model, InterceptorReference[] interceptors)
-	{
-		return
-		[
-			new InterceptorReference(_interceptorType)
-		];
-	}
+    public InterceptorReference[] SelectInterceptors(ComponentModel model, InterceptorReference[] interceptors)
+    {
+        return
+        [
+            new InterceptorReference(_interceptorType)
+        ];
+    }
 }

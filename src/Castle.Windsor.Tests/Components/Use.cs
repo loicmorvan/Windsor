@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class Use<T>(T dependency) : IUse<T>
 {
-	public T Dependency { get; } = dependency;
+    public T Dependency { get; } = dependency;
 }

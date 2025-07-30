@@ -12,82 +12,80 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Castle.Core.Configuration;
 
 namespace Castle.Windsor.Core;
 
-/// <summary>Collection of <see cref = "ParameterModel" /></summary>
+/// <summary>Collection of <see cref="ParameterModel" /></summary>
 [Serializable]
 [DebuggerDisplay("Count = {_dictionary.Count}")]
 public class ParameterModelCollection : IEnumerable<ParameterModel>
 {
-	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-	private readonly IDictionary<string, ParameterModel> _dictionary =
-		new Dictionary<string, ParameterModel>(StringComparer.OrdinalIgnoreCase);
+    [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    private readonly IDictionary<string, ParameterModel> _dictionary =
+        new Dictionary<string, ParameterModel>(StringComparer.OrdinalIgnoreCase);
 
-	/// <summary>Gets the count.</summary>
-	/// <value>The count.</value>
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public int Count => _dictionary.Count;
+    /// <summary>Gets the count.</summary>
+    /// <value>The count.</value>
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public int Count => _dictionary.Count;
 
-	/// <summary>Gets the <see cref = "ParameterModel" /> with the specified key.</summary>
-	/// <value></value>
-	public ParameterModel this[string key]
-	{
-		get
-		{
-			_dictionary.TryGetValue(key, out var result);
-			return result;
-		}
-	}
+    /// <summary>Gets the <see cref="ParameterModel" /> with the specified key.</summary>
+    /// <value></value>
+    public ParameterModel this[string key]
+    {
+        get
+        {
+            _dictionary.TryGetValue(key, out var result);
+            return result;
+        }
+    }
 
-	/// <summary>Returns an enumerator that can iterate through a collection.</summary>
-	/// <returns>An <see cref = "T:System.Collections.IEnumerator" /> that can be used to iterate through the collection.</returns>
-	[DebuggerStepThrough]
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return _dictionary.Values.GetEnumerator();
-	}
+    /// <summary>Returns an enumerator that can iterate through a collection.</summary>
+    /// <returns>An <see cref="T:System.Collections.IEnumerator" /> that can be used to iterate through the collection.</returns>
+    [DebuggerStepThrough]
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return _dictionary.Values.GetEnumerator();
+    }
 
-	[DebuggerStepThrough]
-	IEnumerator<ParameterModel> IEnumerable<ParameterModel>.GetEnumerator()
-	{
-		return _dictionary.Values.GetEnumerator();
-	}
+    [DebuggerStepThrough]
+    IEnumerator<ParameterModel> IEnumerable<ParameterModel>.GetEnumerator()
+    {
+        return _dictionary.Values.GetEnumerator();
+    }
 
-	/// <summary>Adds the specified name.</summary>
-	/// <param name = "name">The name.</param>
-	/// <param name = "value">The value.</param>
-	public void Add(string name, string value)
-	{
-		Add(name, new ParameterModel(name, value));
-	}
+    /// <summary>Adds the specified name.</summary>
+    /// <param name="name">The name.</param>
+    /// <param name="value">The value.</param>
+    public void Add(string name, string value)
+    {
+        Add(name, new ParameterModel(name, value));
+    }
 
-	/// <summary>Adds the specified name.</summary>
-	/// <param name = "name">The name.</param>
-	/// <param name = "configNode">The config node.</param>
-	public void Add(string name, IConfiguration configNode)
-	{
-		Add(name, new ParameterModel(name, configNode));
-	}
+    /// <summary>Adds the specified name.</summary>
+    /// <param name="name">The name.</param>
+    /// <param name="configNode">The config node.</param>
+    public void Add(string name, IConfiguration configNode)
+    {
+        Add(name, new ParameterModel(name, configNode));
+    }
 
-	/// <summary>Adds the specified key.</summary>
-	/// <remarks>Not implemented</remarks>
-	/// <param name = "key">The key.</param>
-	/// <param name = "value">The value.</param>
-	private void Add(string key, ParameterModel value)
-	{
-		try
-		{
-			_dictionary.Add(key, value);
-		}
-		catch (ArgumentException e)
-		{
-			throw new ArgumentException($"Parameter '{key}' already exists.", e);
-		}
-	}
+    /// <summary>Adds the specified key.</summary>
+    /// <remarks>Not implemented</remarks>
+    /// <param name="key">The key.</param>
+    /// <param name="value">The value.</param>
+    private void Add(string key, ParameterModel value)
+    {
+        try
+        {
+            _dictionary.Add(key, value);
+        }
+        catch (ArgumentException e)
+        {
+            throw new ArgumentException($"Parameter '{key}' already exists.", e);
+        }
+    }
 }

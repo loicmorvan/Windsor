@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ACycleProp
 {
-	public BCycleProp Prop { get; set; }
+    public BCycleProp Prop { get; set; }
 }

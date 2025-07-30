@@ -20,15 +20,20 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class ParametersDescriptor(params Parameter[] parameters) : AbstractPropertyDescriptor
 {
-	public override void BuildComponentModel(IKernel kernel, ComponentModel model)
-	{
-		parameters.ForEach(p => Apply(model, p));
-	}
+    public override void BuildComponentModel(IKernel kernel, ComponentModel model)
+    {
+        parameters.ForEach(p => Apply(model, p));
+    }
 
-	private void Apply(ComponentModel model, Parameter parameter)
-	{
-		if (parameter.Value != null)
-			AddParameter(model, parameter.Key, parameter.Value);
-		else if (parameter.ConfigNode != null) AddParameter(model, parameter.Key, parameter.ConfigNode);
-	}
+    private void Apply(ComponentModel model, Parameter parameter)
+    {
+        if (parameter.Value != null)
+        {
+            AddParameter(model, parameter.Key, parameter.Value);
+        }
+        else if (parameter.ConfigNode != null)
+        {
+            AddParameter(model, parameter.Key, parameter.ConfigNode);
+        }
+    }
 }

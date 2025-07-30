@@ -13,74 +13,79 @@
 // limitations under the License.
 
 using System.Collections;
-using System.Collections.Generic;
 
 namespace Castle.Windsor.Core.Internal;
 
 public class SimpleSortedSet<T>(IComparer<T> comparer) : ICollection<T>
 {
-	private readonly List<T> _items = [];
+    private readonly List<T> _items = [];
 
-	public SimpleSortedSet() : this(Comparer<T>.Default)
-	{
-	}
+    public SimpleSortedSet() : this(Comparer<T>.Default)
+    {
+    }
 
-	public SimpleSortedSet(IEnumerable<T> other, IComparer<T> comparer) : this(comparer)
-	{
-		foreach (var item in other) Add(item);
-	}
+    public SimpleSortedSet(IEnumerable<T> other, IComparer<T> comparer) : this(comparer)
+    {
+        foreach (var item in other)
+        {
+            Add(item);
+        }
+    }
 
-	public T this[int index] => _items[index];
+    public T this[int index] => _items[index];
 
-	public int Count => _items.Count;
+    public int Count => _items.Count;
 
-	bool ICollection<T>.IsReadOnly => false;
+    bool ICollection<T>.IsReadOnly => false;
 
-	public void Add(T item)
-	{
-		var count = Count;
-		for (var i = 0; i < count; i++)
-		{
-			var result = comparer.Compare(item, _items[i]);
-			if (result < 0)
-			{
-				_items.Insert(i, item);
-				return;
-			}
+    public void Add(T item)
+    {
+        var count = Count;
+        for (var i = 0; i < count; i++)
+        {
+            var result = comparer.Compare(item, _items[i]);
+            if (result < 0)
+            {
+                _items.Insert(i, item);
+                return;
+            }
 
-			if (result == 0) return;
-		}
+            if (result == 0)
+            {
+                return;
+            }
+        }
 
-		_items.Add(item);
-	}
+        _items.Add(item);
+    }
 
-	public void Clear()
-	{
-		_items.Clear();
-	}
+    public void Clear()
+    {
+        _items.Clear();
+    }
 
-	public bool Contains(T item)
-	{
-		return _items.Contains(item);
-	}
+    public bool Contains(T item)
+    {
+        return _items.Contains(item);
+    }
 
-	public void CopyTo(T[] array, int arrayIndex)
-	{
-		_items.CopyTo(array, arrayIndex);
-	}
+    public void CopyTo(T[] array, int arrayIndex)
+    {
+        _items.CopyTo(array, arrayIndex);
+    }
 
-	public bool Remove(T item)
-	{
-		return _items.Remove(item);
-	}
+    public bool Remove(T item)
+    {
+        return _items.Remove(item);
+    }
 
-	public IEnumerator<T> GetEnumerator()
-	{
-		return _items.GetEnumerator();
-	}
+    public IEnumerator<T> GetEnumerator()
+    {
+        return _items.GetEnumerator();
+    }
 
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return GetEnumerator();
-	}
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 }

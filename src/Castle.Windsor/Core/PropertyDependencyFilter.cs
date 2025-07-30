@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core;
-
-using System.Collections.Generic;
 using System.Reflection;
 
-public delegate PropertySet[] PropertyDependencyFilter(ComponentModel model, ICollection<PropertyInfo> properties, PropertySetBuilder buildDependencyCallback);
+namespace Castle.Windsor.Core;
+
+public delegate PropertySet[] PropertyDependencyFilter(ComponentModel model, ICollection<PropertyInfo> properties,
+    PropertySetBuilder buildDependencyCallback);

@@ -14,19 +14,17 @@
 
 namespace Castle.Windsor.Core;
 
-using System;
-
 /// <summary>Indicates that the target components wants a custom lifestyle.</summary>
 [AttributeUsage(AttributeTargets.Class)]
 public class CustomLifestyleAttribute : LifestyleAttribute
 {
-	/// <summary>Initializes a new instance of the <see cref = "CustomLifestyleAttribute" /> class.</summary>
-	/// <param name = "customLifestyleType">The custom lifestyle type.</param>
+    /// <summary>Initializes a new instance of the <see cref="CustomLifestyleAttribute" /> class.</summary>
+    /// <param name="customLifestyleType">The custom lifestyle type.</param>
 	public CustomLifestyleAttribute(Type customLifestyleType)
-		: base(LifestyleType.Custom)
-	{
-		CustomLifestyleType = customLifestyleType;
-	}
+        : base(LifestyleType.Custom)
+    {
+        CustomLifestyleType = customLifestyleType;
+    }
 
-	public Type CustomLifestyleType { get; }
+    public Type CustomLifestyleType { get; }
 }

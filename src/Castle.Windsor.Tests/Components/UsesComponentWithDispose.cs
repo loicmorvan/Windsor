@@ -16,10 +16,10 @@ namespace Castle.Windsor.Tests.Components;
 
 public class UsesComponentWithDispose
 {
-	public UsesComponentWithDispose(ComponentWithDispose cwd)
-	{
-		Disposable = cwd;
-	}
+    public UsesComponentWithDispose(ComponentWithDispose cwd)
+    {
+        Disposable = cwd;
+    }
 
-	public ComponentWithDispose Disposable { get; }
+    public ComponentWithDispose Disposable { get; }
 }

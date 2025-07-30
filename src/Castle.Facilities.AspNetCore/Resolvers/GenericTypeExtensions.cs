@@ -1,5 +1,3 @@
-using System;
-
 namespace Castle.Facilities.AspNetCore.Resolvers;
 
 internal static class GenericTypeExtensions

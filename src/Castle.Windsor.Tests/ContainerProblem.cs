@@ -12,25 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests;
-
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
 
+namespace Castle.Windsor.Tests;
+
 public class ContainerProblem
 {
-	[Fact]
-	public void CausesStackOverflow()
-	{
-		IWindsorContainer container = new WindsorContainer();
+    [Fact]
+    public void CausesStackOverflow()
+    {
+        IWindsorContainer container = new WindsorContainer();
 
-		container.Register(Component.For<IChild>().ImplementedBy<Child>().Named("child"));
-		container.Register(Component.For<IParent>().ImplementedBy<Parent>().Named("parent"));
+        container.Register(Component.For<IChild>().ImplementedBy<Child>().Named("child"));
+        container.Register(Component.For<IParent>().ImplementedBy<Parent>().Named("parent"));
 
-		// child or parent will cause a stack overflow...?
+        // child or parent will cause a stack overflow...?
 
-		// IChild child = (IChild)container["child"];
-		// IParent parent = (IParent) container["parent"];
-		container.Resolve<IParent>("parent");
-	}
+        // IChild child = (IChild)container["child"];
+        // IParent parent = (IParent) container["parent"];
+        container.Resolve<IParent>("parent");
+    }
 }

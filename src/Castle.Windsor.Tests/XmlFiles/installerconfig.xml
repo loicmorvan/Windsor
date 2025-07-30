@@ -1,35 +1,35 @@
 <configuration>
 
-	<components>
+    <components>
 
-		<component id="calcservice"
-				   service="ICalcService"
-				   type="CalculatorService">
-			<item>value1</item>
-		</component>
+        <component id="calcservice"
+                   service="ICalcService"
+                   type="CalculatorService">
+            <item>value1</item>
+        </component>
 
-	</components>
+    </components>
 
-	<containers>
+    <containers>
 
-		<container name="child1">
+        <container name="child1">
 
-			<configuration>
+            <configuration>
 
-				<components>
+                <components>
 
-					<component id="child_calcservice"
-							   service="ICalcService"
-							   type="CalculatorService">
-						<item>value2</item>
-					</component>
+                    <component id="child_calcservice"
+                               service="ICalcService"
+                               type="CalculatorService">
+                        <item>value2</item>
+                    </component>
 
-				</components>
+                </components>
 
-			</configuration>
+            </configuration>
 
-		</container>
+        </container>
 
-	</containers>
+    </containers>
 
 </configuration>

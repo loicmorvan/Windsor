@@ -14,20 +14,18 @@
 
 namespace Castle.Windsor.Tests.ProxyInfrastructure;
 
-using System;
-
 public class DisposableHook : ProxyAllHook, IDisposable
 {
-	public static int InstancesCreated;
-	public static int InstancesDisposed;
+    public static int InstancesCreated;
+    public static int InstancesDisposed;
 
-	public DisposableHook()
-	{
-		InstancesCreated++;
-	}
+    public DisposableHook()
+    {
+        InstancesCreated++;
+    }
 
-	public void Dispose()
-	{
-		InstancesDisposed++;
-	}
+    public void Dispose()
+    {
+        InstancesDisposed++;
+    }
 }

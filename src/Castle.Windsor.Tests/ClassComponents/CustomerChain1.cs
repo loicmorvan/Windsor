@@ -16,10 +16,10 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class CustomerChain1 : CustomerImpl
 {
-	public readonly ICustomer CustomerBase;
+    public readonly ICustomer CustomerBase;
 
-	public CustomerChain1(ICustomer customer)
-	{
-		CustomerBase = customer;
-	}
+    public CustomerChain1(ICustomer customer)
+    {
+        CustomerBase = customer;
+    }
 }

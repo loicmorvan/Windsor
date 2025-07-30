@@ -17,7 +17,7 @@ namespace Castle.Windsor.MicroKernel.Registration;
 /// <summary>The contract for all registrations with the kernel.</summary>
 public interface IRegistration
 {
-	/// <summary>Performs the registration in the <see cref = "IKernel" />.</summary>
-	/// <param name = "kernel">The kernel.</param>
+	/// <summary>Performs the registration in the <see cref="IKernel" />.</summary>
+	/// <param name="kernel">The kernel.</param>
 	void Register(IKernelInternal kernel);
 }

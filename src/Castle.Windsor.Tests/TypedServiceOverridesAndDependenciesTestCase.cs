@@ -22,83 +22,83 @@ namespace Castle.Windsor.Tests;
 
 public class TypedServiceOverridesAndDependenciesTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void Mixin_picks_component_implemented_by_that_type()
-	{
-		Container.Register(Component.For<A>()
-				.Proxy.MixIns(x => x.Component<SimpleService2B>()),
-			Component.For<ISimpleService2>().ImplementedBy<SimpleService2A>(),
-			Component.For<ISimpleService2>().ImplementedBy<SimpleService2B>());
+    [Fact]
+    public void Mixin_picks_component_implemented_by_that_type()
+    {
+        Container.Register(Component.For<A>()
+                .Proxy.MixIns(x => x.Component<SimpleService2B>()),
+            Component.For<ISimpleService2>().ImplementedBy<SimpleService2A>(),
+            Component.For<ISimpleService2>().ImplementedBy<SimpleService2B>());
 
-		var item = Container.Resolve<A>();
-		// ReSharper disable once SuspiciousTypeConversion.Global
-		var two = (ISimpleService2)item;
+        var item = Container.Resolve<A>();
+        // ReSharper disable once SuspiciousTypeConversion.Global
+        var two = (ISimpleService2)item;
 
-		Assert.Equal("b", two.Method());
-	}
+        Assert.Equal("b", two.Method());
+    }
 
-	[Fact]
-	public void Picks_component_implemented_by_that_type()
-	{
-		Container.Register(Component.For<CommonServiceUser>()
-				.DependsOn(Dependency.OnComponent<ICommon, CommonImpl2>()),
-			Component.For<ICommon>().ImplementedBy<CommonImpl1>(),
-			Component.For<ICommon>().ImplementedBy<CommonImpl2>());
+    [Fact]
+    public void Picks_component_implemented_by_that_type()
+    {
+        Container.Register(Component.For<CommonServiceUser>()
+                .DependsOn(Dependency.OnComponent<ICommon, CommonImpl2>()),
+            Component.For<ICommon>().ImplementedBy<CommonImpl1>(),
+            Component.For<ICommon>().ImplementedBy<CommonImpl2>());
 
-		var item = Container.Resolve<CommonServiceUser>();
-		Assert.IsType<CommonImpl2>(item.CommonService);
-	}
+        var item = Container.Resolve<CommonServiceUser>();
+        Assert.IsType<CommonImpl2>(item.CommonService);
+    }
 
-	[Fact]
-	public void Picks_component_implemented_by_that_type_open_generic()
-	{
-		Container.Register(Component.For(typeof(UsesIGeneric<>))
-				.DependsOn(Dependency.OnComponent(typeof(IGeneric<>), typeof(GenericImpl2<>))),
-			Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)),
-			Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)));
+    [Fact]
+    public void Picks_component_implemented_by_that_type_open_generic()
+    {
+        Container.Register(Component.For(typeof(UsesIGeneric<>))
+                .DependsOn(Dependency.OnComponent(typeof(IGeneric<>), typeof(GenericImpl2<>))),
+            Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)),
+            Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)));
 
-		var item = Container.Resolve<UsesIGeneric<A>>();
-		Assert.IsType<GenericImpl2<A>>(item.Dependency);
-	}
+        var item = Container.Resolve<UsesIGeneric<A>>();
+        Assert.IsType<GenericImpl2<A>>(item.Dependency);
+    }
 
-	[Fact]
-	public void Picks_component_implemented_by_that_type_open_generic_if_matching_closed_registered()
-	{
-		Container.Register(Component.For(typeof(UsesIGeneric<>))
-				.DependsOn(Dependency.OnComponent(typeof(IGeneric<>), typeof(GenericImpl2<>))),
-			Component.For<IGeneric<A>>().ImplementedBy<GenericImpl3<A>>(),
-			Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)),
-			Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)));
+    [Fact]
+    public void Picks_component_implemented_by_that_type_open_generic_if_matching_closed_registered()
+    {
+        Container.Register(Component.For(typeof(UsesIGeneric<>))
+                .DependsOn(Dependency.OnComponent(typeof(IGeneric<>), typeof(GenericImpl2<>))),
+            Component.For<IGeneric<A>>().ImplementedBy<GenericImpl3<A>>(),
+            Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)),
+            Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)));
 
-		var item = Container.Resolve<UsesIGeneric<A>>();
-		Assert.IsType<GenericImpl2<A>>(item.Dependency);
-	}
+        var item = Container.Resolve<UsesIGeneric<A>>();
+        Assert.IsType<GenericImpl2<A>>(item.Dependency);
+    }
 
-	[Fact]
-	public void Picks_component_implemented_by_that_type_with_default_name_if_multiple()
-	{
-		Container.Register(Component.For<CommonServiceUser>()
-				.DependsOn(Dependency.OnComponent<ICommon, CommonImpl2>()),
-			Component.For<ICommon>().ImplementedBy<CommonImpl1>(),
-			Component.For<ICommon>().ImplementedBy<CommonImpl2>().Named("something"),
-			Component.For<ICommon>().ImplementedBy<CommonImpl2>());
+    [Fact]
+    public void Picks_component_implemented_by_that_type_with_default_name_if_multiple()
+    {
+        Container.Register(Component.For<CommonServiceUser>()
+                .DependsOn(Dependency.OnComponent<ICommon, CommonImpl2>()),
+            Component.For<ICommon>().ImplementedBy<CommonImpl1>(),
+            Component.For<ICommon>().ImplementedBy<CommonImpl2>().Named("something"),
+            Component.For<ICommon>().ImplementedBy<CommonImpl2>());
 
-		var item = Container.Resolve<CommonServiceUser>();
-		Assert.IsType<CommonImpl2>(item.CommonService);
+        var item = Container.Resolve<CommonServiceUser>();
+        Assert.IsType<CommonImpl2>(item.CommonService);
 
-		var default2 = Container.Resolve<ICommon>(ComponentName.DefaultNameFor(typeof(CommonImpl2)));
+        var default2 = Container.Resolve<ICommon>(ComponentName.DefaultNameFor(typeof(CommonImpl2)));
 
-		Assert.Same(default2, item.CommonService);
-	}
+        Assert.Same(default2, item.CommonService);
+    }
 
-	[Fact]
-	public void Throws_if_component_implemented_by_that_type_non_default_name()
-	{
-		Container.Register(Component.For<CommonServiceUser>()
-				.DependsOn(Dependency.OnComponent<ICommon, CommonImpl2>()),
-			Component.For<ICommon>().ImplementedBy<CommonImpl1>(),
-			Component.For<ICommon>().ImplementedBy<CommonImpl2>().Named("two"));
+    [Fact]
+    public void Throws_if_component_implemented_by_that_type_non_default_name()
+    {
+        Container.Register(Component.For<CommonServiceUser>()
+                .DependsOn(Dependency.OnComponent<ICommon, CommonImpl2>()),
+            Component.For<ICommon>().ImplementedBy<CommonImpl1>(),
+            Component.For<ICommon>().ImplementedBy<CommonImpl2>().Named("two"));
 
-		Assert.Throws<HandlerException>(() => Container.Resolve<CommonServiceUser>());
-	}
+        Assert.Throws<HandlerException>(() => Container.Resolve<CommonServiceUser>());
+    }
 }

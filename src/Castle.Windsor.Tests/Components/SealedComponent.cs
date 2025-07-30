@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public sealed class SealedComponent : IComponent
 {
-	public int Id => 0;
+    public int Id => 0;
 }

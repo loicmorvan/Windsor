@@ -12,10 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections;
 using System.Diagnostics;
-using System.Linq;
 using Castle.Windsor.Facilities.TypedFactory;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;

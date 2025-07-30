@@ -12,23 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class DelegatingModelDescriptor(
-	Action<IKernel, ComponentModel> builder = null,
-	Action<IKernel, ComponentModel> configurer = null)
-	: IComponentModelDescriptor
+    Action<IKernel, ComponentModel> builder = null,
+    Action<IKernel, ComponentModel> configurer = null)
+    : IComponentModelDescriptor
 {
-	public void BuildComponentModel(IKernel kernel, ComponentModel model)
-	{
-		builder?.Invoke(kernel, model);
-	}
+    public void BuildComponentModel(IKernel kernel, ComponentModel model)
+    {
+        builder?.Invoke(kernel, model);
+    }
 
-	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-	{
-		configurer?.Invoke(kernel, model);
-	}
+    public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+    {
+        configurer?.Invoke(kernel, model);
+    }
 }

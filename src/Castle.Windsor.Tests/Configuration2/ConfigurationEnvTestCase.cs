@@ -20,20 +20,20 @@ namespace Castle.Windsor.Tests.Configuration2;
 
 public class ConfigurationEnvTestCase
 {
-	[Fact]
-	public void AssertDefineIsSetBasedOnEnvironmentInformation()
-	{
-		var configPath = ConfigHelper.ResolveConfigPath("Configuration2/env_config.xml");
-		var container = new WindsorContainer(new XmlInterpreter(configPath), new CustomEnv(true));
+    [Fact]
+    public void AssertDefineIsSetBasedOnEnvironmentInformation()
+    {
+        var configPath = ConfigHelper.ResolveConfigPath("Configuration2/env_config.xml");
+        var container = new WindsorContainer(new XmlInterpreter(configPath), new CustomEnv(true));
 
-		var prop = container.Resolve<ComponentWithStringProperty>("component");
+        var prop = container.Resolve<ComponentWithStringProperty>("component");
 
-		Assert.Equal("John Doe", prop.Name);
+        Assert.Equal("John Doe", prop.Name);
 
-		container = new WindsorContainer(new XmlInterpreter(configPath), new CustomEnv(false));
+        container = new WindsorContainer(new XmlInterpreter(configPath), new CustomEnv(false));
 
-		prop = container.Resolve<ComponentWithStringProperty>("component");
+        prop = container.Resolve<ComponentWithStringProperty>("component");
 
-		Assert.Equal("Hammett", prop.Name);
-	}
+        Assert.Equal("Hammett", prop.Name);
+    }
 }

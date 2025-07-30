@@ -22,34 +22,34 @@ namespace Castle.Windsor.Tests.Windsor.Tests;
 
 public class LifecycledComponentsReleasePolicyComponentTrackingTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void Disposable_singleton_as_dependency_of_non_disposable_transient_is_decommissionsed_with_container()
-	{
-		var lifecycleCounter = new LifecycleCounter();
+    [Fact]
+    public void Disposable_singleton_as_dependency_of_non_disposable_transient_is_decommissionsed_with_container()
+    {
+        var lifecycleCounter = new LifecycleCounter();
 
-		using (var windsorContainer = new WindsorContainer())
-		{
-			windsorContainer.Register(
-				Component.For<LifecycleCounter>().Instance(lifecycleCounter),
-				Component.For<HasCtorDependency>().LifeStyle.Transient,
-				Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>());
+        using (var windsorContainer = new WindsorContainer())
+        {
+            windsorContainer.Register(
+                Component.For<LifecycleCounter>().Instance(lifecycleCounter),
+                Component.For<HasCtorDependency>().LifeStyle.Transient,
+                Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>());
 
-			windsorContainer.Resolve<HasCtorDependency>();
-		}
+            windsorContainer.Resolve<HasCtorDependency>();
+        }
 
-		Assert.Equal(1, lifecycleCounter["Dispose"]);
-	}
+        Assert.Equal(1, lifecycleCounter["Dispose"]);
+    }
 
-	[Fact]
-	public void Non_disposable_transient_with_disposable_singleton_as_dependency_is_not_tracked()
-	{
-		Container.Register(
-			Component.For<LifecycleCounter>(),
-			Component.For<HasCtorDependency>().LifeStyle.Transient,
-			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>());
+    [Fact]
+    public void Non_disposable_transient_with_disposable_singleton_as_dependency_is_not_tracked()
+    {
+        Container.Register(
+            Component.For<LifecycleCounter>(),
+            Component.For<HasCtorDependency>().LifeStyle.Transient,
+            Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>());
 
-		var root = Container.Resolve<HasCtorDependency>();
+        var root = Container.Resolve<HasCtorDependency>();
 
-		Assert.False(Kernel.ReleasePolicy.HasTrack(root));
-	}
+        Assert.False(Kernel.ReleasePolicy.HasTrack(root));
+    }
 }

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.MicroKernel;
 
 namespace Castle.Windsor.Facilities.TypedFactory;
@@ -20,62 +19,71 @@ namespace Castle.Windsor.Facilities.TypedFactory;
 /// <summary>Represents a single component to be resolved via Typed Factory</summary>
 public class TypedFactoryComponentResolver
 {
-	private readonly Type _actualSelectorType;
-	private readonly Arguments _additionalArguments;
-	private readonly string _componentName;
-	private readonly Type _componentType;
-	private readonly bool _fallbackToResolveByTypeIfNameNotFound;
+    private readonly Type _actualSelectorType;
+    private readonly Arguments _additionalArguments;
+    private readonly string _componentName;
+    private readonly Type _componentType;
+    private readonly bool _fallbackToResolveByTypeIfNameNotFound;
 
-	public TypedFactoryComponentResolver(string componentName, Type componentType, Arguments additionalArguments,
-		bool fallbackToResolveByTypeIfNameNotFound, Type actualSelectorType)
-	{
-		if (string.IsNullOrEmpty(componentName) && componentType == null)
-			throw new ArgumentNullException(nameof(componentType),
-				"At least one - componentName or componentType must not be null or empty");
+    public TypedFactoryComponentResolver(string componentName, Type componentType, Arguments additionalArguments,
+        bool fallbackToResolveByTypeIfNameNotFound, Type actualSelectorType)
+    {
+        if (string.IsNullOrEmpty(componentName) && componentType == null)
+        {
+            throw new ArgumentNullException(nameof(componentType),
+                "At least one - componentName or componentType must not be null or empty");
+        }
 
-		_componentType = componentType;
-		_componentName = componentName;
-		_additionalArguments = additionalArguments;
-		_fallbackToResolveByTypeIfNameNotFound = fallbackToResolveByTypeIfNameNotFound;
-		_actualSelectorType = actualSelectorType;
-	}
+        _componentType = componentType;
+        _componentName = componentName;
+        _additionalArguments = additionalArguments;
+        _fallbackToResolveByTypeIfNameNotFound = fallbackToResolveByTypeIfNameNotFound;
+        _actualSelectorType = actualSelectorType;
+    }
 
-	/// <summary>Resolves the component(s) from given kernel.</summary>
-	/// <param name = "kernel"></param>
-	/// <param name = "scope"></param>
-	/// <returns>Resolved component(s).</returns>
-	public virtual object Resolve(IKernelInternal kernel, IReleasePolicy scope)
-	{
-		if (LoadByName(kernel))
-			try
-			{
-				return kernel.Resolve(_componentName, _componentType, _additionalArguments, scope);
-			}
-			catch (ComponentNotFoundException e)
-			{
-				if (_actualSelectorType == typeof(DefaultDelegateComponentSelector) &&
-				    _fallbackToResolveByTypeIfNameNotFound == false)
-				{
-					e.Data["breakingChangeId"] = "typedFactoryFallbackToResolveByTypeIfNameNotFound";
-					e.Data["breakingChange"] = "This exception may have been caused by a breaking change between Windsor 2.5 and 3.0 See breakingchanges.txt for more details.";
-				}
+    /// <summary>Resolves the component(s) from given kernel.</summary>
+    /// <param name="kernel"></param>
+    /// <param name="scope"></param>
+    /// <returns>Resolved component(s).</returns>
+    public virtual object Resolve(IKernelInternal kernel, IReleasePolicy scope)
+    {
+        if (LoadByName(kernel))
+        {
+            try
+            {
+                return kernel.Resolve(_componentName, _componentType, _additionalArguments, scope);
+            }
+            catch (ComponentNotFoundException e)
+            {
+                if (_actualSelectorType == typeof(DefaultDelegateComponentSelector) &&
+                    _fallbackToResolveByTypeIfNameNotFound == false)
+                {
+                    e.Data["breakingChangeId"] = "typedFactoryFallbackToResolveByTypeIfNameNotFound";
+                    e.Data["breakingChange"] =
+                        "This exception may have been caused by a breaking change between Windsor 2.5 and 3.0 See breakingchanges.txt for more details.";
+                }
 
-				throw;
-			}
+                throw;
+            }
+        }
 
-		// Ignore thread-static parent context call stack tracking. Factory-resolved components
-		// are already tracked by the factory itself and should not be added as burdens just because
-		// we happen to be resolving in the call stack of some random component’s constructor.
+        // Ignore thread-static parent context call stack tracking. Factory-resolved components
+        // are already tracked by the factory itself and should not be added as burdens just because
+        // we happen to be resolving in the call stack of some random component’s constructor.
 
-		// Specifically, act the same as we would if the timing was slightly different and we were not
-		// resolving within the call stack of the random component’s constructor.
-		return kernel.Resolve(_componentType, _additionalArguments, scope, true);
-	}
+        // Specifically, act the same as we would if the timing was slightly different and we were not
+        // resolving within the call stack of the random component’s constructor.
+        return kernel.Resolve(_componentType, _additionalArguments, scope, true);
+    }
 
-	private bool LoadByName(IKernelInternal kernel)
-	{
-		if (_componentName == null) return false;
-		return _fallbackToResolveByTypeIfNameNotFound == false ||
-		       kernel.LoadHandlerByName(_componentName, _componentType, _additionalArguments) != null;
-	}
+    private bool LoadByName(IKernelInternal kernel)
+    {
+        if (_componentName == null)
+        {
+            return false;
+        }
+
+        return _fallbackToResolveByTypeIfNameNotFound == false ||
+               kernel.LoadHandlerByName(_componentName, _componentType, _additionalArguments) != null;
+    }
 }

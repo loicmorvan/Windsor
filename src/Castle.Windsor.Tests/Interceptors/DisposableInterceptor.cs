@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
 using Castle.Windsor.Tests.Facilities.TypedFactory;
@@ -22,16 +21,16 @@ namespace Castle.Windsor.Tests.Interceptors;
 [Transient]
 public class DisposableInterceptor : StandardInterceptor, IDisposable
 {
-	private readonly LifecycleCounter _counter;
+    private readonly LifecycleCounter _counter;
 
-	public DisposableInterceptor(LifecycleCounter counter)
-	{
-		counter.Increment();
-		_counter = counter;
-	}
+    public DisposableInterceptor(LifecycleCounter counter)
+    {
+        counter.Increment();
+        _counter = counter;
+    }
 
-	public void Dispose()
-	{
-		_counter.Increment();
-	}
+    public void Dispose()
+    {
+        _counter.Increment();
+    }
 }

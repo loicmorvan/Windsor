@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.Components;
@@ -20,15 +19,15 @@ namespace Castle.Windsor.Tests.Components;
 [UsedImplicitly]
 public class DictionaryCache<T> : ICache<T>
 {
-	private readonly Dictionary<string, object> _hash = new();
+    private readonly Dictionary<string, object> _hash = new();
 
-	public T Get(string key)
-	{
-		return (T)_hash[key];
-	}
+    public T Get(string key)
+    {
+        return (T)_hash[key];
+    }
 
-	public void Put(string key, T item)
-	{
-		_hash[key] = item;
-	}
+    public void Put(string key, T item)
+    {
+        _hash[key] = item;
+    }
 }

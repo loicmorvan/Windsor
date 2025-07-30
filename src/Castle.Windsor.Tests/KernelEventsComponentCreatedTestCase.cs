@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
@@ -22,30 +21,31 @@ namespace Castle.Windsor.Tests;
 
 public class KernelEventsComponentCreatedTestCase : AbstractContainerTestCase
 {
-	private readonly IList<KeyValuePair<ComponentModel, object>> _list =
-		new List<KeyValuePair<ComponentModel, object>>();
+    private readonly IList<KeyValuePair<ComponentModel, object>> _list =
+        new List<KeyValuePair<ComponentModel, object>>();
 
-	protected override void AfterContainerCreated()
-	{
-		_list.Clear();
-		Container.Kernel.ComponentCreated += Kernel_ComponentCreated;
-	}
+    protected override void AfterContainerCreated()
+    {
+        _list.Clear();
+        Container.Kernel.ComponentCreated += Kernel_ComponentCreated;
+    }
 
-	private void Kernel_ComponentCreated(ComponentModel model, object instance)
-	{
-		_list.Add(new KeyValuePair<ComponentModel, object>(model, instance));
-	}
+    private void Kernel_ComponentCreated(ComponentModel model, object instance)
+    {
+        _list.Add(new KeyValuePair<ComponentModel, object>(model, instance));
+    }
 
 
-	[Fact]
-	public void Event_raised_for_component_with_interceptor()
-	{
-		Container.Register(
-			Component.For<IInterceptor>().ImplementedBy<StandardInterceptor>().LifestyleTransient(),
-			Component.For<IService>().ImplementedBy<MyService>().Interceptors<StandardInterceptor>().LifestyleTransient());
+    [Fact]
+    public void Event_raised_for_component_with_interceptor()
+    {
+        Container.Register(
+            Component.For<IInterceptor>().ImplementedBy<StandardInterceptor>().LifestyleTransient(),
+            Component.For<IService>().ImplementedBy<MyService>().Interceptors<StandardInterceptor>()
+                .LifestyleTransient());
 
-		var service = Container.Resolve<IService>();
-		Assert.NotEmpty(_list);
-		Assert.Contains(_list, t => t.Value == service);
-	}
+        var service = Container.Resolve<IService>();
+        Assert.NotEmpty(_list);
+        Assert.Contains(_list, t => t.Value == service);
+    }
 }

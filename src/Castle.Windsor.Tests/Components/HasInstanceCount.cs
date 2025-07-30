@@ -16,16 +16,16 @@ namespace Castle.Windsor.Tests.Components;
 
 public class HasInstanceCount
 {
-	public HasInstanceCount()
-	{
-		// doesn't need to be thread safe
-		InstancesCreated++;
-	}
+    public HasInstanceCount()
+    {
+        // doesn't need to be thread safe
+        InstancesCreated++;
+    }
 
-	public static int InstancesCreated { get; private set; }
+    public static int InstancesCreated { get; private set; }
 
-	public static void ResetInstancesCreated()
-	{
-		InstancesCreated = 0;
-	}
+    public static void ResetInstancesCreated()
+    {
+        InstancesCreated = 0;
+    }
 }

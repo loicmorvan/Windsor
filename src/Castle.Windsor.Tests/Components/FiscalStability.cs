@@ -16,6 +16,6 @@ namespace Castle.Windsor.Tests.Components;
 
 public enum FiscalStability
 {
-	DirtFarmer,
-	MrMoneyBags
+    DirtFarmer,
+    MrMoneyBags
 }

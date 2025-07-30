@@ -19,22 +19,25 @@ namespace Castle.Windsor.Facilities.Startable;
 
 public class StopConcern : IDecommissionConcern
 {
-	protected StopConcern()
-	{
-	}
+    protected StopConcern()
+    {
+    }
 
-	public static StopConcern Instance { get; } = new();
+    public static StopConcern Instance { get; } = new();
 
-	public void Apply(ComponentModel model, object component)
-	{
-		if (component is IStartable startable)
-		{
-			startable.Stop();
-		}
-		else if (model.Configuration != null)
-		{
-			var stopMethod = model.ExtendedProperties["Castle.StartableFacility.StopMethod"] as MethodInfo;
-			if (stopMethod != null) stopMethod.Invoke(component, null);
-		}
-	}
+    public void Apply(ComponentModel model, object component)
+    {
+        if (component is IStartable startable)
+        {
+            startable.Stop();
+        }
+        else if (model.Configuration != null)
+        {
+            var stopMethod = model.ExtendedProperties["Castle.StartableFacility.StopMethod"] as MethodInfo;
+            if (stopMethod != null)
+            {
+                stopMethod.Invoke(component, null);
+            }
+        }
+    }
 }

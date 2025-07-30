@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Core.Configuration;
 using Castle.Core.Resource;
 using Castle.Windsor.MicroKernel;

@@ -24,56 +24,57 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Tests.SubSystems;
 
 public class DependencyInjectionNamingSubsystemTests
 {
-	[Fact]
-	public void Can_Decoration_Resolve_When_Named()
-	{
-		var container = new WindsorContainer();
+    [Fact]
+    public void Can_Decoration_Resolve_When_Named()
+    {
+        var container = new WindsorContainer();
 
-		var target = new DependencyInjectionNamingSubsystem();
-		container.Kernel.AddSubSystem(SubSystemConstants.NamingKey, target);
+        var target = new DependencyInjectionNamingSubsystem();
+        container.Kernel.AddSubSystem(SubSystemConstants.NamingKey, target);
 
-		container.Register(Component.For<IUserService>().ImplementedBy<DecoratedUserService>().Named(nameof(DecoratedUserService)),
-			Component.For<IUserService>().ImplementedBy<UserService>().Named(nameof(UserService))
-		);
+        container.Register(
+            Component.For<IUserService>().ImplementedBy<DecoratedUserService>().Named(nameof(DecoratedUserService)),
+            Component.For<IUserService>().ImplementedBy<UserService>().Named(nameof(UserService))
+        );
 
-		var actualDecoratedUserService = container.Resolve<IUserService>(nameof(DecoratedUserService));
-		Assert.NotNull(actualDecoratedUserService);
-		var actualUserService = container.Resolve<IUserService>(nameof(UserService));
-		Assert.NotNull(actualUserService);
-	}
+        var actualDecoratedUserService = container.Resolve<IUserService>(nameof(DecoratedUserService));
+        Assert.NotNull(actualDecoratedUserService);
+        var actualUserService = container.Resolve<IUserService>(nameof(UserService));
+        Assert.NotNull(actualUserService);
+    }
 
-	[Fact]
-	public void Can_Decorator_Resolve_Decorated_Class()
-	{
-		var container = new WindsorContainer();
+    [Fact]
+    public void Can_Decorator_Resolve_Decorated_Class()
+    {
+        var container = new WindsorContainer();
 
-		var target = new DependencyInjectionNamingSubsystem();
-		container.Kernel.AddSubSystem(SubSystemConstants.NamingKey, target);
+        var target = new DependencyInjectionNamingSubsystem();
+        container.Kernel.AddSubSystem(SubSystemConstants.NamingKey, target);
 
-		container.Register(Component.For<IUserService>().ImplementedBy<DecoratedUserService>(),
-			Component.For<IUserService>().ImplementedBy<UserService>()
-		);
+        container.Register(Component.For<IUserService>().ImplementedBy<DecoratedUserService>(),
+            Component.For<IUserService>().ImplementedBy<UserService>()
+        );
 
-		var actual = container.Resolve<IUserService>();
-		Assert.NotNull(actual);
-		Assert.IsType<DecoratedUserService>(actual);
-		Assert.NotNull(((DecoratedUserService)actual).UserService);
-	}
+        var actual = container.Resolve<IUserService>();
+        Assert.NotNull(actual);
+        Assert.IsType<DecoratedUserService>(actual);
+        Assert.NotNull(((DecoratedUserService)actual).UserService);
+    }
 
-	[Fact]
-	public void Can_Decorator_Resolve_Decorated_Class_When_Registered_Consecutively()
-	{
-		var container = new WindsorContainer();
+    [Fact]
+    public void Can_Decorator_Resolve_Decorated_Class_When_Registered_Consecutively()
+    {
+        var container = new WindsorContainer();
 
-		var target = new DependencyInjectionNamingSubsystem();
-		container.Kernel.AddSubSystem(SubSystemConstants.NamingKey, target);
+        var target = new DependencyInjectionNamingSubsystem();
+        container.Kernel.AddSubSystem(SubSystemConstants.NamingKey, target);
 
-		container.Register(Component.For<IUserService>().ImplementedBy<DecoratedUserService>());
-		container.Register(Component.For<IUserService>().ImplementedBy<UserService>());
+        container.Register(Component.For<IUserService>().ImplementedBy<DecoratedUserService>());
+        container.Register(Component.For<IUserService>().ImplementedBy<UserService>());
 
-		var actual = container.Resolve<IUserService>();
-		Assert.NotNull(actual);
-		Assert.IsType<DecoratedUserService>(actual);
-		Assert.NotNull(((DecoratedUserService)actual).UserService);
-	}
+        var actual = container.Resolve<IUserService>();
+        Assert.NotNull(actual);
+        Assert.IsType<DecoratedUserService>(actual);
+        Assert.NotNull(((DecoratedUserService)actual).UserService);
+    }
 }

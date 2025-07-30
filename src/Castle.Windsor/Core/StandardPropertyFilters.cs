@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Castle.Windsor.Core.Internal;
 
@@ -22,110 +19,126 @@ namespace Castle.Windsor.Core;
 
 public class StandardPropertyFilters
 {
-	public static PropertyDependencyFilter Create(PropertyFilter filter)
-	{
-		switch (filter)
-		{
-			case PropertyFilter.Default:
-				return Default;
-			case PropertyFilter.IgnoreAll:
-				return IgnoreAll;
-			case PropertyFilter.IgnoreBase:
-				return IgnoreBase;
-			case PropertyFilter.RequireAll:
-				return RequireAll;
-			case PropertyFilter.RequireBase:
-				return RequireBase;
-			default:
-				throw new ArgumentOutOfRangeException(
-					$"The value {filter} does not translate to a valid property filter. This is most likely a bug in the calling code.");
-		}
-	}
+    public static PropertyDependencyFilter Create(PropertyFilter filter)
+    {
+        switch (filter)
+        {
+            case PropertyFilter.Default:
+                return Default;
+            case PropertyFilter.IgnoreAll:
+                return IgnoreAll;
+            case PropertyFilter.IgnoreBase:
+                return IgnoreBase;
+            case PropertyFilter.RequireAll:
+                return RequireAll;
+            case PropertyFilter.RequireBase:
+                return RequireBase;
+            default:
+                throw new ArgumentOutOfRangeException(
+                    $"The value {filter} does not translate to a valid property filter. This is most likely a bug in the calling code.");
+        }
+    }
 
-	public static PropertySet[] Default(ComponentModel model, ICollection<PropertyInfo> properties, PropertySetBuilder propertySetBuilder)
-	{
-		var props = properties.Select(p => propertySetBuilder(p, true)).ToArray();
-		properties.Clear();
-		return props;
-	}
+    public static PropertySet[] Default(ComponentModel model, ICollection<PropertyInfo> properties,
+        PropertySetBuilder propertySetBuilder)
+    {
+        var props = properties.Select(p => propertySetBuilder(p, true)).ToArray();
+        properties.Clear();
+        return props;
+    }
 
-	public static PropertyDependencyFilter FromObsoleteFunction(Func<ComponentModel, PropertyInfo, bool> filter, bool isRequired)
-	{
-		return (model, properties, callback) =>
-		{
-			var props = properties.ToArray()
-				.Where(p => filter(model, p))
-				.Select(p =>
-				{
-					properties.Remove(p);
-					return callback(p, isRequired == false);
-				}).ToArray();
-			return props;
-		};
-	}
+    public static PropertyDependencyFilter FromObsoleteFunction(Func<ComponentModel, PropertyInfo, bool> filter,
+        bool isRequired)
+    {
+        return (model, properties, callback) =>
+        {
+            var props = properties.ToArray()
+                .Where(p => filter(model, p))
+                .Select(p =>
+                {
+                    properties.Remove(p);
+                    return callback(p, isRequired == false);
+                }).ToArray();
+            return props;
+        };
+    }
 
-	public static ICollection<PropertyDependencyFilter> GetPropertyFilters(ComponentModel componentModel, bool createIfMissing)
-	{
-		var filters = (ICollection<PropertyDependencyFilter>)componentModel.ExtendedProperties[Constants.PropertyFilters];
-		if (filters == null && createIfMissing)
-		{
-			filters = new List<PropertyDependencyFilter>(4);
-			componentModel.ExtendedProperties[Constants.PropertyFilters] = filters;
-		}
+    public static ICollection<PropertyDependencyFilter> GetPropertyFilters(ComponentModel componentModel,
+        bool createIfMissing)
+    {
+        var filters =
+            (ICollection<PropertyDependencyFilter>)componentModel.ExtendedProperties[Constants.PropertyFilters];
+        if (filters == null && createIfMissing)
+        {
+            filters = new List<PropertyDependencyFilter>(4);
+            componentModel.ExtendedProperties[Constants.PropertyFilters] = filters;
+        }
 
-		return filters;
-	}
+        return filters;
+    }
 
-	public static PropertySet[] IgnoreAll(ComponentModel model, ICollection<PropertyInfo> properties, PropertySetBuilder propertySetBuilder)
-	{
-		properties.Clear();
-		return [];
-	}
+    public static PropertySet[] IgnoreAll(ComponentModel model, ICollection<PropertyInfo> properties,
+        PropertySetBuilder propertySetBuilder)
+    {
+        properties.Clear();
+        return [];
+    }
 
-	public static PropertySet[] IgnoreBase(ComponentModel model, ICollection<PropertyInfo> properties, PropertySetBuilder propertySetBuilder)
-	{
-		var baseProperties = properties.Where(p => p.DeclaringType != model.Implementation).ToArray();
-		foreach (var baseProperty in baseProperties) properties.Remove(baseProperty);
-		return [];
-	}
+    public static PropertySet[] IgnoreBase(ComponentModel model, ICollection<PropertyInfo> properties,
+        PropertySetBuilder propertySetBuilder)
+    {
+        var baseProperties = properties.Where(p => p.DeclaringType != model.Implementation).ToArray();
+        foreach (var baseProperty in baseProperties)
+        {
+            properties.Remove(baseProperty);
+        }
 
-	public static PropertyDependencyFilter IgnoreSelected(Func<ComponentModel, PropertyInfo, bool> selector)
-	{
-		return (model, properties, _) =>
-		{
-			foreach (var property in properties.ToArray())
-				if (selector(model, property))
-					properties.Remove(property);
+        return [];
+    }
 
-			return [];
-		};
-	}
+    public static PropertyDependencyFilter IgnoreSelected(Func<ComponentModel, PropertyInfo, bool> selector)
+    {
+        return (model, properties, _) =>
+        {
+            foreach (var property in properties.ToArray())
+            {
+                if (selector(model, property))
+                {
+                    properties.Remove(property);
+                }
+            }
 
-	public static PropertySet[] RequireAll(ComponentModel model, ICollection<PropertyInfo> properties, PropertySetBuilder propertySetBuilder)
-	{
-		var props = properties.Select(p => propertySetBuilder(p, false)).ToArray();
-		properties.Clear();
-		return props;
-	}
+            return [];
+        };
+    }
 
-	public static PropertySet[] RequireBase(ComponentModel model, ICollection<PropertyInfo> properties, PropertySetBuilder propertySetBuilder)
-	{
-		var baseProperties = properties.Where(p => p.DeclaringType != model.Implementation).ToArray();
-		return baseProperties
-			.Select(p =>
-			{
-				properties.Remove(p);
-				return propertySetBuilder(p, false);
-			}).ToArray();
-	}
+    public static PropertySet[] RequireAll(ComponentModel model, ICollection<PropertyInfo> properties,
+        PropertySetBuilder propertySetBuilder)
+    {
+        var props = properties.Select(p => propertySetBuilder(p, false)).ToArray();
+        properties.Clear();
+        return props;
+    }
 
-	public static PropertyDependencyFilter RequireSelected(Func<ComponentModel, PropertyInfo, bool> selector)
-	{
-		return (model, properties, callback) => properties.ToArray().Where(property => selector(model, property))
-			.Select(p =>
-			{
-				properties.Remove(p);
-				return callback(p, false);
-			}).ToArray();
-	}
+    public static PropertySet[] RequireBase(ComponentModel model, ICollection<PropertyInfo> properties,
+        PropertySetBuilder propertySetBuilder)
+    {
+        var baseProperties = properties.Where(p => p.DeclaringType != model.Implementation).ToArray();
+        return baseProperties
+            .Select(p =>
+            {
+                properties.Remove(p);
+                return propertySetBuilder(p, false);
+            }).ToArray();
+    }
+
+    public static PropertyDependencyFilter RequireSelected(Func<ComponentModel, PropertyInfo, bool> selector)
+    {
+        return (model, properties, callback) => properties.ToArray().Where(property => selector(model, property))
+            .Select(p =>
+            {
+                properties.Remove(p);
+                return callback(p, false);
+            }).ToArray();
+    }
 }

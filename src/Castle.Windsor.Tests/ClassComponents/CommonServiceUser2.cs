@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class CommonServiceUser2
 {
-	public ICommon CommonService { get; set; }
+    public ICommon CommonService { get; set; }
 }

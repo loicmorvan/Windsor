@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor.Installer;
@@ -23,185 +21,197 @@ namespace Castle.Windsor.Tests.Installer;
 
 public class FromAssemblyInstallersTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void Can_install_from_assembly_by_assembly()
-	{
-		Container.Install(FromAssembly.Instance(typeof(FromAssemblyInstallersTestCase).GetTypeInfo().Assembly));
-		Container.Resolve<object>("Customer-by-CustomerInstaller");
-	}
+    [Fact]
+    public void Can_install_from_assembly_by_assembly()
+    {
+        Container.Install(FromAssembly.Instance(typeof(FromAssemblyInstallersTestCase).GetTypeInfo().Assembly));
+        Container.Resolve<object>("Customer-by-CustomerInstaller");
+    }
 
-	[Fact]
-	public void Can_install_from_assembly_by_directory_simple()
-	{
-		var location = AppContext.BaseDirectory;
-		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location)));
-		Container.Resolve<object>("Customer-by-CustomerInstaller");
-	}
+    [Fact]
+    public void Can_install_from_assembly_by_directory_simple()
+    {
+        var location = AppContext.BaseDirectory;
+        Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location)));
+        Container.Resolve<object>("Customer-by-CustomerInstaller");
+    }
 
-	[Fact]
-	public void Can_install_from_assembly_by_name()
-	{
-		Container.Install(FromAssembly.Named("Castle.Windsor.Tests"));
-	}
+    [Fact]
+    public void Can_install_from_assembly_by_name()
+    {
+        Container.Install(FromAssembly.Named("Castle.Windsor.Tests"));
+    }
 
-	[Fact]
-	public void Can_install_from_assembly_by_type()
-	{
-		Container.Install(FromAssembly.Containing(GetType()));
-	}
+    [Fact]
+    public void Can_install_from_assembly_by_type()
+    {
+        Container.Install(FromAssembly.Containing(GetType()));
+    }
 
-	[Fact]
-	public void Can_install_from_assembly_by_application()
-	{
-		Container.Install(FromAssembly.InThisApplication(GetCurrentAssembly(), new FilterAssembliesInstallerFactory(t => t.GetTypeInfo().Assembly != typeof(IWindsorInstaller).GetTypeInfo().Assembly)));
-	}
+    [Fact]
+    public void Can_install_from_assembly_by_application()
+    {
+        Container.Install(FromAssembly.InThisApplication(GetCurrentAssembly(),
+            new FilterAssembliesInstallerFactory(t =>
+                t.GetTypeInfo().Assembly != typeof(IWindsorInstaller).GetTypeInfo().Assembly)));
+    }
 
-	[Fact]
-	public void Can_install_from_assembly_by_type_generic()
-	{
-		Container.Install(FromAssembly.Containing<FromAssemblyInstallersTestCase>());
-	}
+    [Fact]
+    public void Can_install_from_assembly_by_type_generic()
+    {
+        Container.Install(FromAssembly.Containing<FromAssemblyInstallersTestCase>());
+    }
 
-	[Fact]
-	public void Can_install_from_calling_assembly1()
-	{
-		Container.Install(FromAssembly.Instance(GetCurrentAssembly()));
-	}
+    [Fact]
+    public void Can_install_from_calling_assembly1()
+    {
+        Container.Install(FromAssembly.Instance(GetCurrentAssembly()));
+    }
 
-	[Fact]
-	public void Can_install_from_calling_assembly2()
-	{
-		Container.Install(FromAssembly.This());
-	}
+    [Fact]
+    public void Can_install_from_calling_assembly2()
+    {
+        Container.Install(FromAssembly.This());
+    }
 
-	[Fact]
-	public void Install_from_assembly_by_directory_ignores_non_existing_path()
-	{
-		var location = Path.Combine(AppContext.BaseDirectory, Guid.NewGuid().ToString("N"));
+    [Fact]
+    public void Install_from_assembly_by_directory_ignores_non_existing_path()
+    {
+        var location = Path.Combine(AppContext.BaseDirectory, Guid.NewGuid().ToString("N"));
 
-		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location)));
+        Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location)));
 
-		Assert.Empty(Container.Kernel.GraphNodes);
-	}
+        Assert.Empty(Container.Kernel.GraphNodes);
+    }
 
-	[Fact]
-	public void Install_from_assembly_by_directory_executes_assembly_condition()
-	{
-		var location = AppContext.BaseDirectory;
-		var called = false;
-		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).FilterByAssembly(_ =>
-		{
-			called = true;
-			return true;
-		})));
+    [Fact]
+    public void Install_from_assembly_by_directory_executes_assembly_condition()
+    {
+        var location = AppContext.BaseDirectory;
+        var called = false;
+        Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).FilterByAssembly(_ =>
+        {
+            called = true;
+            return true;
+        })));
 
-		Assert.True(called);
-		Assert.True(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
-	}
+        Assert.True(called);
+        Assert.True(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
+    }
 
-	[Fact]
-	public void Install_from_assembly_by_directory_empty_name_searches_currentDirectory()
-	{
-		var called = false;
-		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(string.Empty).FilterByAssembly(_ =>
-		{
-			called = true;
-			return true;
-		})));
+    [Fact]
+    public void Install_from_assembly_by_directory_empty_name_searches_currentDirectory()
+    {
+        var called = false;
+        Container.Install(FromAssembly.InDirectory(new AssemblyFilter(string.Empty).FilterByAssembly(_ =>
+        {
+            called = true;
+            return true;
+        })));
 
-		Assert.True(called);
-		Assert.True(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
-	}
+        Assert.True(called);
+        Assert.True(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
+    }
 
-	[Fact]
-	public void Install_from_assembly_by_directory_executes_name_condition()
-	{
-		var location = AppContext.BaseDirectory;
-		var byNameCalled = false;
-		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).FilterByName(_ =>
-		{
-			byNameCalled = true;
-			return true;
-		})));
+    [Fact]
+    public void Install_from_assembly_by_directory_executes_name_condition()
+    {
+        var location = AppContext.BaseDirectory;
+        var byNameCalled = false;
+        Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).FilterByName(_ =>
+        {
+            byNameCalled = true;
+            return true;
+        })));
 
-		Assert.True(byNameCalled);
-		Assert.True(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
-	}
+        Assert.True(byNameCalled);
+        Assert.True(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
+    }
 
-	[Fact]
-	public void Install_from_assembly_by_directory_obeys_assembly_condition()
-	{
-		var location = AppContext.BaseDirectory;
-		var called = false;
-		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).FilterByAssembly(_ =>
-		{
-			called = true;
-			return false;
-		})));
+    [Fact]
+    public void Install_from_assembly_by_directory_obeys_assembly_condition()
+    {
+        var location = AppContext.BaseDirectory;
+        var called = false;
+        Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).FilterByAssembly(_ =>
+        {
+            called = true;
+            return false;
+        })));
 
-		Assert.True(called);
-		Assert.False(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
-	}
+        Assert.True(called);
+        Assert.False(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
+    }
 
-	[Fact]
-	public void Install_from_assembly_by_directory_obeys_name_condition()
-	{
-		var location = AppContext.BaseDirectory;
-		var byNameCalled = false;
-		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).FilterByName(_ =>
-		{
-			byNameCalled = true;
-			return false;
-		})));
+    [Fact]
+    public void Install_from_assembly_by_directory_obeys_name_condition()
+    {
+        var location = AppContext.BaseDirectory;
+        var byNameCalled = false;
+        Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).FilterByName(_ =>
+        {
+            byNameCalled = true;
+            return false;
+        })));
 
-		Assert.True(byNameCalled);
-		Assert.False(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
-	}
+        Assert.True(byNameCalled);
+        Assert.False(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
+    }
 
-	[Fact]
-	public void Install_from_assembly_by_directory_with_fake_key_as_string_does_not_install()
-	{
-		var location = AppContext.BaseDirectory;
+    [Fact]
+    public void Install_from_assembly_by_directory_with_fake_key_as_string_does_not_install()
+    {
+        var location = AppContext.BaseDirectory;
 
-		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).WithKeyToken("1234123412341234")));
-		Assert.False(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
-	}
+        Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).WithKeyToken("1234123412341234")));
+        Assert.False(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
+    }
 
-	[Fact]
-	public void Install_from_assembly_by_directory_with_key_as_string_installs()
-	{
-		var location = AppContext.BaseDirectory;
+    [Fact]
+    public void Install_from_assembly_by_directory_with_key_as_string_installs()
+    {
+        var location = AppContext.BaseDirectory;
 
-		var fullName = GetType().GetTypeInfo().Assembly.FullName;
-		Debug.Assert(fullName != null);
-		var index = fullName.IndexOf("PublicKeyToken=", StringComparison.Ordinal);
-		if (index == -1) Assert.Fail("Assembly is not signed so no way to test this.");
-		var publicKeyToken = fullName.Substring(index + "PublicKeyToken=".Length, 16);
-		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).WithKeyToken(publicKeyToken)));
-		Assert.True(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
-	}
+        var fullName = GetType().GetTypeInfo().Assembly.FullName;
+        Debug.Assert(fullName != null);
+        var index = fullName.IndexOf("PublicKeyToken=", StringComparison.Ordinal);
+        if (index == -1)
+        {
+            Assert.Fail("Assembly is not signed so no way to test this.");
+        }
 
-	[Fact]
-	public void Install_from_assembly_by_directory_with_key_installs()
-	{
-		var location = AppContext.BaseDirectory;
+        var publicKeyToken = fullName.Substring(index + "PublicKeyToken=".Length, 16);
+        Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).WithKeyToken(publicKeyToken)));
+        Assert.True(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
+    }
 
-		var publicKeyToken = GetType().GetTypeInfo().Assembly.GetName().GetPublicKeyToken();
-		if (publicKeyToken == null || publicKeyToken.Length == 0) Assert.Fail("Assembly is not signed so no way to test this.");
+    [Fact]
+    public void Install_from_assembly_by_directory_with_key_installs()
+    {
+        var location = AppContext.BaseDirectory;
 
-		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).WithKeyToken(GetType())));
-		Assert.True(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
-	}
+        var publicKeyToken = GetType().GetTypeInfo().Assembly.GetName().GetPublicKeyToken();
+        if (publicKeyToken == null || publicKeyToken.Length == 0)
+        {
+            Assert.Fail("Assembly is not signed so no way to test this.");
+        }
 
-	[Fact]
-	public void Install_from_assembly_by_directory_with_mscorlib_key_does_not_install()
-	{
-		var location = AppContext.BaseDirectory;
+        Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).WithKeyToken(GetType())));
+        Assert.True(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
+    }
 
-		var publicKeyToken = GetType().GetTypeInfo().Assembly.GetName().GetPublicKeyToken();
-		if (publicKeyToken == null || publicKeyToken.Length == 0) Assert.Fail("Assembly is not signed so no way to test this.");
+    [Fact]
+    public void Install_from_assembly_by_directory_with_mscorlib_key_does_not_install()
+    {
+        var location = AppContext.BaseDirectory;
 
-		Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).WithKeyToken<object>()));
-		Assert.False(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
-	}
+        var publicKeyToken = GetType().GetTypeInfo().Assembly.GetName().GetPublicKeyToken();
+        if (publicKeyToken == null || publicKeyToken.Length == 0)
+        {
+            Assert.Fail("Assembly is not signed so no way to test this.");
+        }
+
+        Container.Install(FromAssembly.InDirectory(new AssemblyFilter(location).WithKeyToken<object>()));
+        Assert.False(Container.Kernel.HasComponent("Customer-by-CustomerInstaller"));
+    }
 }

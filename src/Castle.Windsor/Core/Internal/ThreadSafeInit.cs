@@ -12,36 +12,56 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Threading;
-
 namespace Castle.Windsor.Core.Internal;
 
 public sealed class ThreadSafeInit
 {
-	// We are free to use negative values here, as ManagedTreadId is guaranteed to be always > 0
-	// http://www.netframeworkdev.com/net-base-class-library/threadmanagedthreadid-18626.shtml
-	// the ids can be recycled as mentioned, but that does not affect us since at any given point in time
-	// there can be no two threads with the same managed id, and that's all we care about
-	private const int Initialized = int.MinValue + 1;
-	private const int NotInitialized = int.MinValue;
-	private int _state = NotInitialized;
+    // We are free to use negative values here, as ManagedTreadId is guaranteed to be always > 0
+    // http://www.netframeworkdev.com/net-base-class-library/threadmanagedthreadid-18626.shtml
+    // the ids can be recycled as mentioned, but that does not affect us since at any given point in time
+    // there can be no two threads with the same managed id, and that's all we care about
+    private const int Initialized = int.MinValue + 1;
+    private const int NotInitialized = int.MinValue;
+    private int _state = NotInitialized;
 
-	public void EndThreadSafeOnceSection()
-	{
-		if (_state == Initialized) return;
-		if (_state == Thread.CurrentThread.ManagedThreadId) _state = Initialized;
-	}
+    public void EndThreadSafeOnceSection()
+    {
+        if (_state == Initialized)
+        {
+            return;
+        }
 
-	public bool ExecuteThreadSafeOnce()
-	{
-		if (_state == Initialized) return false;
-		var inProgressByThisThread = Thread.CurrentThread.ManagedThreadId;
-		var preexistingState = Interlocked.CompareExchange(ref _state, inProgressByThisThread, NotInitialized);
-		if (preexistingState == NotInitialized) return true;
-		if (preexistingState == Initialized || preexistingState == inProgressByThisThread) return false;
-		var spinWait = new SpinWait();
-		while (_state != Initialized) spinWait.SpinOnce();
+        if (_state == Thread.CurrentThread.ManagedThreadId)
+        {
+            _state = Initialized;
+        }
+    }
 
-		return false;
-	}
+    public bool ExecuteThreadSafeOnce()
+    {
+        if (_state == Initialized)
+        {
+            return false;
+        }
+
+        var inProgressByThisThread = Thread.CurrentThread.ManagedThreadId;
+        var preexistingState = Interlocked.CompareExchange(ref _state, inProgressByThisThread, NotInitialized);
+        if (preexistingState == NotInitialized)
+        {
+            return true;
+        }
+
+        if (preexistingState == Initialized || preexistingState == inProgressByThisThread)
+        {
+            return false;
+        }
+
+        var spinWait = new SpinWait();
+        while (_state != Initialized)
+        {
+            spinWait.SpinOnce();
+        }
+
+        return false;
+    }
 }

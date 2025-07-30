@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.MicroKernel.Handlers;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
@@ -22,70 +21,70 @@ namespace Castle.Windsor.Tests.Proxies;
 
 public class InterceptorDependenciesTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void Can_depend_on_the_same_interceptor_multiple_times_typed()
-	{
-		Container.Register(
-			Component.For<CountingInterceptor>(),
-			Component.For<CalculatorService>()
-				.Interceptors<CountingInterceptor, CountingInterceptor>()
-				.Interceptors<CountingInterceptor, CountingInterceptor>());
+    [Fact]
+    public void Can_depend_on_the_same_interceptor_multiple_times_typed()
+    {
+        Container.Register(
+            Component.For<CountingInterceptor>(),
+            Component.For<CalculatorService>()
+                .Interceptors<CountingInterceptor, CountingInterceptor>()
+                .Interceptors<CountingInterceptor, CountingInterceptor>());
 
-		var calc = Container.Resolve<CalculatorService>();
-		var interceptor = Container.Resolve<CountingInterceptor>();
+        var calc = Container.Resolve<CalculatorService>();
+        var interceptor = Container.Resolve<CountingInterceptor>();
 
-		calc.Sum(24, 42);
+        calc.Sum(24, 42);
 
-		Assert.Equal(4, interceptor.InterceptedCallsCount);
-	}
+        Assert.Equal(4, interceptor.InterceptedCallsCount);
+    }
 
-	[Fact]
-	public void Can_depend_on_the_same_interceptor_multiple_times_named()
-	{
-		Container.Register(
-			Component.For<CountingInterceptor>().Named("counting"),
-			Component.For<CalculatorService>()
-				.Interceptors("counting", "counting")
-				.Interceptors("counting", "counting"));
+    [Fact]
+    public void Can_depend_on_the_same_interceptor_multiple_times_named()
+    {
+        Container.Register(
+            Component.For<CountingInterceptor>().Named("counting"),
+            Component.For<CalculatorService>()
+                .Interceptors("counting", "counting")
+                .Interceptors("counting", "counting"));
 
-		var calc = Container.Resolve<CalculatorService>();
-		var interceptor = Container.Resolve<CountingInterceptor>();
+        var calc = Container.Resolve<CalculatorService>();
+        var interceptor = Container.Resolve<CountingInterceptor>();
 
-		calc.Sum(24, 42);
+        calc.Sum(24, 42);
 
-		Assert.Equal(4, interceptor.InterceptedCallsCount);
-	}
+        Assert.Equal(4, interceptor.InterceptedCallsCount);
+    }
 
-	[Fact]
-	public void Missing_interceptor_by_name_throws_corrent_exception()
-	{
-		Container.Register(Component.For<A>().Interceptors("fooInterceptor"));
-		var exception =
-			Assert.Throws<HandlerException>(() =>
-				Container.Resolve<A>());
-		var message =
-			string.Format(
-				"Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Component 'fooInterceptor' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
-				Environment.NewLine,
-				typeof(A).FullName);
+    [Fact]
+    public void Missing_interceptor_by_name_throws_corrent_exception()
+    {
+        Container.Register(Component.For<A>().Interceptors("fooInterceptor"));
+        var exception =
+            Assert.Throws<HandlerException>(() =>
+                Container.Resolve<A>());
+        var message =
+            string.Format(
+                "Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Component 'fooInterceptor' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
+                Environment.NewLine,
+                typeof(A).FullName);
 
-		Assert.Equal(message, exception.Message);
-	}
+        Assert.Equal(message, exception.Message);
+    }
 
-	[Fact]
-	public void Missing_interceptor_by_type_throws_corrent_exception()
-	{
-		Container.Register(Component.For<A>().Interceptors<ReturnDefaultInterceptor>());
-		var exception =
-			Assert.Throws<HandlerException>(() =>
-				Container.Resolve<A>());
-		var message =
-			string.Format(
-				"Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Component '{2}' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
-				Environment.NewLine,
-				typeof(A).FullName,
-				typeof(ReturnDefaultInterceptor).FullName);
+    [Fact]
+    public void Missing_interceptor_by_type_throws_corrent_exception()
+    {
+        Container.Register(Component.For<A>().Interceptors<ReturnDefaultInterceptor>());
+        var exception =
+            Assert.Throws<HandlerException>(() =>
+                Container.Resolve<A>());
+        var message =
+            string.Format(
+                "Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Component '{2}' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
+                Environment.NewLine,
+                typeof(A).FullName,
+                typeof(ReturnDefaultInterceptor).FullName);
 
-		Assert.Equal(message, exception.Message);
-	}
+        Assert.Equal(message, exception.Message);
+    }
 }

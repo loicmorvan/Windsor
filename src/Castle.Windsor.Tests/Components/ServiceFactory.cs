@@ -16,11 +16,11 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ServiceFactory
 {
-	public static bool CreateWasCalled;
+    public static bool CreateWasCalled;
 
-	public ServiceImplementation Create()
-	{
-		CreateWasCalled = true;
-		return new ServiceImplementation(12);
-	}
+    public ServiceImplementation Create()
+    {
+        CreateWasCalled = true;
+        return new ServiceImplementation(12);
+    }
 }

@@ -14,9 +14,7 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-using System.Collections.Generic;
-
 public class CollectionDepAsProperty
 {
-	public ICollection<IEmptyService> Services { get; set; }
+    public ICollection<IEmptyService> Services { get; set; }
 }

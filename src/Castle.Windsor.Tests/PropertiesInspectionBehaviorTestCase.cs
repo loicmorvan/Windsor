@@ -22,34 +22,34 @@ namespace Castle.Windsor.Tests;
 
 public class PropertiesInspectionBehaviorTestCase
 {
-	[Fact]
-	public void InvalidOption()
-	{
-		var expectedMessage =
-			"Error on properties inspection. Could not convert the inspectionBehavior attribute value into an expected enum value. Value found is 'Invalid' while possible values are 'Undefined, None, All, DeclaredOnly'";
-		var exception = Assert.Throws<ConverterException>(() =>
-			new WindsorContainer(new XmlInterpreter(Xml.Embedded("propertyInspectionBehaviorInvalid.xml"))));
-		Assert.Equal(exception.Message, expectedMessage);
-	}
+    [Fact]
+    public void InvalidOption()
+    {
+        var expectedMessage =
+            "Error on properties inspection. Could not convert the inspectionBehavior attribute value into an expected enum value. Value found is 'Invalid' while possible values are 'Undefined, None, All, DeclaredOnly'";
+        var exception = Assert.Throws<ConverterException>(() =>
+            new WindsorContainer(new XmlInterpreter(Xml.Embedded("propertyInspectionBehaviorInvalid.xml"))));
+        Assert.Equal(exception.Message, expectedMessage);
+    }
 
-	[Fact]
-	public void PropertiesInspectionTestCase()
-	{
-		var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("propertyInspectionBehavior.xml")));
+    [Fact]
+    public void PropertiesInspectionTestCase()
+    {
+        var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("propertyInspectionBehavior.xml")));
 
-		var comp = container.Resolve<ExtendedComponentWithProperties>("comp1");
-		Assert.Null(comp.Prop1);
-		Assert.Equal(0, comp.Prop2);
-		Assert.Equal(0, comp.Prop3);
+        var comp = container.Resolve<ExtendedComponentWithProperties>("comp1");
+        Assert.Null(comp.Prop1);
+        Assert.Equal(0, comp.Prop2);
+        Assert.Equal(0, comp.Prop3);
 
-		comp = container.Resolve<ExtendedComponentWithProperties>("comp2"); // All
-		Assert.NotNull(comp.Prop1);
-		Assert.Equal(1, comp.Prop2);
-		Assert.Equal(2, comp.Prop3);
+        comp = container.Resolve<ExtendedComponentWithProperties>("comp2"); // All
+        Assert.NotNull(comp.Prop1);
+        Assert.Equal(1, comp.Prop2);
+        Assert.Equal(2, comp.Prop3);
 
-		comp = container.Resolve<ExtendedComponentWithProperties>("comp3"); // DeclaredOnly
-		Assert.Null(comp.Prop1);
-		Assert.Equal(0, comp.Prop2);
-		Assert.Equal(2, comp.Prop3);
-	}
+        comp = container.Resolve<ExtendedComponentWithProperties>("comp3"); // DeclaredOnly
+        Assert.Null(comp.Prop1);
+        Assert.Equal(0, comp.Prop2);
+        Assert.Equal(2, comp.Prop3);
+    }
 }

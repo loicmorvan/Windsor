@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Linq;
 using System.Reflection;
 using Castle.Windsor.Core;
 
@@ -22,9 +20,10 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 [Serializable]
 public class GenericInspector : IContributeComponentModelConstruction
 {
-	public void ProcessModel(IKernel kernel, ComponentModel model)
-	{
-		model.RequiresGenericArguments = (model.Implementation != null && model.Implementation.GetTypeInfo().IsGenericTypeDefinition) ||
-		                                 model.Services.Any(s => s.GetTypeInfo().IsGenericTypeDefinition);
-	}
+    public void ProcessModel(IKernel kernel, ComponentModel model)
+    {
+        model.RequiresGenericArguments =
+            (model.Implementation != null && model.Implementation.GetTypeInfo().IsGenericTypeDefinition) ||
+            model.Services.Any(s => s.GetTypeInfo().IsGenericTypeDefinition);
+    }
 }

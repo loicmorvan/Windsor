@@ -20,47 +20,47 @@ namespace Castle.Windsor.Tests.Bugs;
 
 public class IoC102
 {
-	[Fact]
-	public void ComponentResolutionOrderForKernelAndDependencyResolverIsTheSame()
-	{
-		var container = new WindsorContainer()
-			.Register(
-				Component.For<IReader>()
-					.ImplementedBy<AlphaReader>(),
-				Component.For<IReader>()
-					.ImplementedBy<BetaReader>(),
-				Component.For<Consumer>()
-			);
+    [Fact]
+    public void ComponentResolutionOrderForKernelAndDependencyResolverIsTheSame()
+    {
+        var container = new WindsorContainer()
+            .Register(
+                Component.For<IReader>()
+                    .ImplementedBy<AlphaReader>(),
+                Component.For<IReader>()
+                    .ImplementedBy<BetaReader>(),
+                Component.For<Consumer>()
+            );
 
-		var consumer = container.Resolve<Consumer>();
-		var reader2 = container.Resolve<IReader>();
-		Assert.Same(reader2, consumer.Reader);
-	}
+        var consumer = container.Resolve<Consumer>();
+        var reader2 = container.Resolve<IReader>();
+        Assert.Same(reader2, consumer.Reader);
+    }
 
-	public interface IReader
-	{
-		string Read();
-	}
+    public interface IReader
+    {
+        string Read();
+    }
 
-	public class AlphaReader : IReader
-	{
-		public string Read()
-		{
-			return "Alpha";
-		}
-	}
+    public class AlphaReader : IReader
+    {
+        public string Read()
+        {
+            return "Alpha";
+        }
+    }
 
-	public class BetaReader : IReader
-	{
-		public string Read()
-		{
-			return "Beta";
-		}
-	}
+    public class BetaReader : IReader
+    {
+        public string Read()
+        {
+            return "Beta";
+        }
+    }
 
-	[UsedImplicitly]
-	public class Consumer(IReader reader)
-	{
-		public readonly IReader Reader = reader;
-	}
+    [UsedImplicitly]
+    public class Consumer(IReader reader)
+    {
+        public readonly IReader Reader = reader;
+    }
 }

@@ -18,33 +18,33 @@ namespace Castle.Windsor.Tests.Interceptors;
 
 public class ResultModifierInterceptor : IInterceptor
 {
-	private readonly int? _returnValue;
+    private readonly int? _returnValue;
 
-	public ResultModifierInterceptor()
-	{
-	}
+    public ResultModifierInterceptor()
+    {
+    }
 
-	public ResultModifierInterceptor(int returnValue)
-	{
-		_returnValue = returnValue;
-	}
+    public ResultModifierInterceptor(int returnValue)
+    {
+        _returnValue = returnValue;
+    }
 
-	public void Intercept(IInvocation invocation)
-	{
-		if (invocation.Method.Name.Equals("Sum"))
-		{
-			invocation.Proceed();
-			var result = invocation.ReturnValue;
-			if (!_returnValue.HasValue)
-			{
-				invocation.ReturnValue = (int)result + 1;
-				return;
-			}
+    public void Intercept(IInvocation invocation)
+    {
+        if (invocation.Method.Name.Equals("Sum"))
+        {
+            invocation.Proceed();
+            var result = invocation.ReturnValue;
+            if (!_returnValue.HasValue)
+            {
+                invocation.ReturnValue = (int)result + 1;
+                return;
+            }
 
-			invocation.ReturnValue = _returnValue.Value;
-			return;
-		}
+            invocation.ReturnValue = _returnValue.Value;
+            return;
+        }
 
-		invocation.Proceed();
-	}
+        invocation.Proceed();
+    }
 }

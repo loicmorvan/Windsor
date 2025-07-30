@@ -19,9 +19,9 @@ namespace Castle.Windsor.Tests.ClassComponents;
 [UsedImplicitly]
 public class HasNestedType
 {
-	public class Nested;
+    public class Nested;
 
-	// ReSharper disable once UnusedTypeParameter
-	[UsedImplicitly]
-	public class NestedGeneric<TArg>;
+    // ReSharper disable once UnusedTypeParameter
+    [UsedImplicitly]
+    public class NestedGeneric<TArg>;
 }

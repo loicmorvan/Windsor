@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public interface IService
 {
-	string Name { get; set; }
+    string Name { get; set; }
 }

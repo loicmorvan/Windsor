@@ -14,6 +14,7 @@
 
 // ReSharper disable UnusedTypeParameter
 // ReSharper disable UnusedType.Global
+
 namespace Castle.Windsor.Tests.ClassComponents;
 
 public interface ITask;

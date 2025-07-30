@@ -16,8 +16,8 @@ using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel;
 
-/// <summary>Extension point to allow the developer to use his implementation of <see cref = "IHandler" /></summary>
+/// <summary>Extension point to allow the developer to use his implementation of <see cref="IHandler" /></summary>
 public interface IHandlerFactory
 {
-	IHandler Create(ComponentModel model);
+    IHandler Create(ComponentModel model);
 }

@@ -18,15 +18,15 @@ using Castle.Windsor.MicroKernel.LifecycleConcerns;
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class OnDestroyComponentDescriptor<TS>(LifecycleActionDelegate<TS> action)
-	: IComponentModelDescriptor, IMetaComponentModelDescriptor
-	where TS : class
+    : IComponentModelDescriptor, IMetaComponentModelDescriptor
+    where TS : class
 {
-	public void BuildComponentModel(IKernel kernel, ComponentModel model)
-	{
-	}
+    public void BuildComponentModel(IKernel kernel, ComponentModel model)
+    {
+    }
 
-	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-	{
-		model.Lifecycle.AddFirst(new OnDestroyConcern<TS>(action, kernel));
-	}
+    public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+    {
+        model.Lifecycle.AddFirst(new OnDestroyConcern<TS>(action, kernel));
+    }
 }

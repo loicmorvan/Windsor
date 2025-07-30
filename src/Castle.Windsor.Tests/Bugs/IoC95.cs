@@ -21,13 +21,13 @@ namespace Castle.Windsor.Tests.Bugs;
 
 public class IoC95
 {
-	[Fact]
-	public void AddingComponentToRootKernelWhenChildKernelHasStartableFacility()
-	{
-		IKernel kernel = new DefaultKernel();
-		IKernel childKernel = new DefaultKernel();
-		kernel.AddChildKernel(childKernel);
-		childKernel.AddFacility(new StartableFacility());
-		kernel.Register(Component.For(typeof(A)).Named("string")); // exception here
-	}
+    [Fact]
+    public void AddingComponentToRootKernelWhenChildKernelHasStartableFacility()
+    {
+        IKernel kernel = new DefaultKernel();
+        IKernel childKernel = new DefaultKernel();
+        kernel.AddChildKernel(childKernel);
+        childKernel.AddFacility(new StartableFacility());
+        kernel.Register(Component.For(typeof(A)).Named("string")); // exception here
+    }
 }

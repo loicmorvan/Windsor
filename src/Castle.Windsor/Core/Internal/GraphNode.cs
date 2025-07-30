@@ -9,40 +9,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Threading;
-
 namespace Castle.Windsor.Core.Internal;
 
 [Serializable]
 public class GraphNode :
-	IVertex
+    IVertex
 {
-	private SimpleThreadSafeCollection<GraphNode> _outgoing;
+    private SimpleThreadSafeCollection<GraphNode> _outgoing;
 
-	public void AddDependent(GraphNode node)
-	{
-		var collection = _outgoing;
-		if (collection == null)
-		{
-			var @new = new SimpleThreadSafeCollection<GraphNode>();
-			collection = Interlocked.CompareExchange(ref _outgoing, @new, null) ?? @new;
-		}
+    /// <summary>The nodes that this node depends on</summary>
+    public GraphNode[] Dependents
+    {
+        get
+        {
+            var collection = _outgoing;
+            if (collection == null)
+            {
+                return [];
+            }
 
-		collection.Add(node);
-	}
+            return collection.ToArray();
+        }
+    }
 
-	/// <summary>The nodes that this node depends on</summary>
-	public GraphNode[] Dependents
-	{
-		get
-		{
-			var collection = _outgoing;
-			if (collection == null) return [];
-			return collection.ToArray();
-		}
-	}
+    IReadOnlyList<IVertex> IVertex.Adjacencies => Dependents;
 
-	IReadOnlyList<IVertex> IVertex.Adjacencies => Dependents;
+    public void AddDependent(GraphNode node)
+    {
+        var collection = _outgoing;
+        if (collection == null)
+        {
+            var @new = new SimpleThreadSafeCollection<GraphNode>();
+            collection = Interlocked.CompareExchange(ref _outgoing, @new, null) ?? @new;
+        }
+
+        collection.Add(node);
+    }
 }

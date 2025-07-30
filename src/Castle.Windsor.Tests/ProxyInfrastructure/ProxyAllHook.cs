@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Reflection;
 using Castle.DynamicProxy;
 
@@ -20,23 +19,23 @@ namespace Castle.Windsor.Tests.ProxyInfrastructure;
 
 public class ProxyAllHook : IProxyGenerationHook
 {
-	public static int Instances;
+    public static int Instances;
 
-	public ProxyAllHook()
-	{
-		Instances++;
-	}
+    public ProxyAllHook()
+    {
+        Instances++;
+    }
 
-	public void MethodsInspected()
-	{
-	}
+    public void MethodsInspected()
+    {
+    }
 
-	public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
-	{
-	}
+    public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
+    {
+    }
 
-	public bool ShouldInterceptMethod(Type type, MethodInfo memberInfo)
-	{
-		return true;
-	}
+    public bool ShouldInterceptMethod(Type type, MethodInfo memberInfo)
+    {
+        return true;
+    }
 }

@@ -18,7 +18,7 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
 public interface IDummyComponentFactory
 {
-	IDummyComponent CreateDummyComponent();
+    IDummyComponent CreateDummyComponent();
 
-	IDummyComponent GetSecondComponent();
+    IDummyComponent GetSecondComponent();
 }

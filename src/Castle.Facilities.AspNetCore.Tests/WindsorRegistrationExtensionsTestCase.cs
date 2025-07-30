@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Castle.Facilities.AspNetCore.Tests.Fakes;
 using Castle.Facilities.AspNetCore.Tests.Framework;
 using Castle.Windsor.Core;

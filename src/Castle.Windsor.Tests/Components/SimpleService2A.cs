@@ -16,8 +16,8 @@ namespace Castle.Windsor.Tests.Components;
 
 public class SimpleService2A : ISimpleService2
 {
-	public string Method()
-	{
-		return "a";
-	}
+    public string Method()
+    {
+        return "a";
+    }
 }

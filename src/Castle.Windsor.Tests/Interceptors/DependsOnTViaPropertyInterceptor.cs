@@ -18,5 +18,5 @@ namespace Castle.Windsor.Tests.Interceptors;
 
 public class DependsOnTViaPropertyInterceptor<T> : StandardInterceptor
 {
-	public T Tee { get; set; }
+    public T Tee { get; set; }
 }

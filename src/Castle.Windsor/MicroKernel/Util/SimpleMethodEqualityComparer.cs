@@ -12,23 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Util;
-
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+
+namespace Castle.Windsor.MicroKernel.Util;
 
 [Serializable]
 public class SimpleMethodEqualityComparer : IEqualityComparer<MethodInfo>
 {
-	public bool Equals(MethodInfo x, MethodInfo y)
-	{
-		return ReferenceEquals(x, y);
-	}
+    public bool Equals(MethodInfo x, MethodInfo y)
+    {
+        return ReferenceEquals(x, y);
+    }
 
-	public int GetHashCode(MethodInfo obj)
-	{
-		return RuntimeHelpers.GetHashCode(obj);
-	}
+    public int GetHashCode(MethodInfo obj)
+    {
+        return RuntimeHelpers.GetHashCode(obj);
+    }
 }

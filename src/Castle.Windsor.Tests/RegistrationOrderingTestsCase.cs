@@ -19,60 +19,60 @@ namespace Castle.Windsor.Tests;
 
 public class RegistrationOrderingTestsCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void CtorSourceOrderDoesNotMatter()
-	{
-		Container.Register(Component.For<DDb>());
+    [Fact]
+    public void CtorSourceOrderDoesNotMatter()
+    {
+        Container.Register(Component.For<DDb>());
 
-		Assert.NotNull(Container.Resolve<DDb>());
-	}
+        Assert.NotNull(Container.Resolve<DDb>());
+    }
 
-	[Fact]
-	public void LoadingInSequence()
-	{
-		Container.Register(Component.For<A>(),
-			Component.For<B>(),
-			Component.For<C>());
+    [Fact]
+    public void LoadingInSequence()
+    {
+        Container.Register(Component.For<A>(),
+            Component.For<B>(),
+            Component.For<C>());
 
-		Assert.NotNull(Container.Resolve<C>());
-		Assert.NotNull(Container.Resolve<B>());
-		Assert.NotNull(Container.Resolve<A>());
-	}
+        Assert.NotNull(Container.Resolve<C>());
+        Assert.NotNull(Container.Resolve<B>());
+        Assert.NotNull(Container.Resolve<A>());
+    }
 
-	[Fact]
-	public void LoadingOutOfSequence()
-	{
-		Container.Register(Component.For<C>(),
-			Component.For<B>(),
-			Component.For<A>());
+    [Fact]
+    public void LoadingOutOfSequence()
+    {
+        Container.Register(Component.For<C>(),
+            Component.For<B>(),
+            Component.For<A>());
 
-		Assert.NotNull(Container.Resolve<C>());
-		Assert.NotNull(Container.Resolve<B>());
-		Assert.NotNull(Container.Resolve<A>());
-	}
+        Assert.NotNull(Container.Resolve<C>());
+        Assert.NotNull(Container.Resolve<B>());
+        Assert.NotNull(Container.Resolve<A>());
+    }
 
-	[Fact]
-	public void LoadingOutOfSequenceWithExtraLoad()
-	{
-		Container.Register(Component.For<C>(),
-			Component.For<B>(),
-			Component.For<A>(),
-			Component.For<object>());
+    [Fact]
+    public void LoadingOutOfSequenceWithExtraLoad()
+    {
+        Container.Register(Component.For<C>(),
+            Component.For<B>(),
+            Component.For<A>(),
+            Component.For<object>());
 
-		Assert.NotNull(Container.Resolve<C>());
-		Assert.NotNull(Container.Resolve<B>());
-		Assert.NotNull(Container.Resolve<A>());
-	}
+        Assert.NotNull(Container.Resolve<C>());
+        Assert.NotNull(Container.Resolve<B>());
+        Assert.NotNull(Container.Resolve<A>());
+    }
 
-	[Fact]
-	public void LoadingPartiallyInSequence()
-	{
-		Container.Register(Component.For<B>(),
-			Component.For<C>(),
-			Component.For<A>());
+    [Fact]
+    public void LoadingPartiallyInSequence()
+    {
+        Container.Register(Component.For<B>(),
+            Component.For<C>(),
+            Component.For<A>());
 
-		Assert.NotNull(Container.Resolve<C>());
-		Assert.NotNull(Container.Resolve<B>());
-		Assert.NotNull(Container.Resolve<A>());
-	}
+        Assert.NotNull(Container.Resolve<C>());
+        Assert.NotNull(Container.Resolve<B>());
+        Assert.NotNull(Container.Resolve<A>());
+    }
 }

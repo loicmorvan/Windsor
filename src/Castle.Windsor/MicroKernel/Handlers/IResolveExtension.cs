@@ -16,7 +16,7 @@ namespace Castle.Windsor.MicroKernel.Handlers;
 
 public interface IResolveExtension
 {
-	void Init(IKernel kernel, IHandler handler);
+    void Init(IKernel kernel, IHandler handler);
 
-	void Intercept(ResolveInvocation invocation);
+    void Intercept(ResolveInvocation invocation);
 }

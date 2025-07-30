@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Lifestyle;
@@ -21,21 +20,24 @@ namespace Castle.Windsor.Tests.Lifestyle;
 
 public class CustomLifestyleScoped : AbstractLifestyleManager
 {
-	public override void Dispose()
-	{
-	}
+    public override void Dispose()
+    {
+    }
 
-	protected override Burden CreateInstance(CreationContext context, bool trackedExternally)
-	{
-		var scope = CustomLifestyleInstanceScope.Current;
-		if (scope == null) throw new InvalidOperationException("Scope is null");
+    protected override Burden CreateInstance(CreationContext context, bool trackedExternally)
+    {
+        var scope = CustomLifestyleInstanceScope.Current;
+        if (scope == null)
+        {
+            throw new InvalidOperationException("Scope is null");
+        }
 
-		if (scope.Cache.TryGetValue(Model, out var instance) == false)
-		{
-			instance = base.CreateInstance(context, trackedExternally);
-			scope.Cache[Model] = instance;
-		}
+        if (scope.Cache.TryGetValue(Model, out var instance) == false)
+        {
+            instance = base.CreateInstance(context, trackedExternally);
+            scope.Cache[Model] = instance;
+        }
 
-		return instance;
-	}
+        return instance;
+    }
 }

@@ -20,40 +20,40 @@ namespace Castle.Windsor.Tests.Lifestyle;
 
 public class ScopedLifestyleExplicitAndNestingTestCase : AbstractContainerTestCase
 {
-	protected override void AfterContainerCreated()
-	{
-		Container.Register(Component.For<A>().LifestyleScoped());
-	}
+    protected override void AfterContainerCreated()
+    {
+        Container.Register(Component.For<A>().LifestyleScoped());
+    }
 
-	[Fact]
-	public void Inner_scope_should_not_cause_outer_one_to_drop_cache()
-	{
-		using (Container.BeginScope())
-		{
-			var before = Container.Resolve<A>();
-			using (Container.BeginScope())
-			{
-				Container.Resolve<A>();
-			}
+    [Fact]
+    public void Inner_scope_should_not_cause_outer_one_to_drop_cache()
+    {
+        using (Container.BeginScope())
+        {
+            var before = Container.Resolve<A>();
+            using (Container.BeginScope())
+            {
+                Container.Resolve<A>();
+            }
 
-			var after = Container.Resolve<A>();
-			Assert.Same(before, after);
-		}
-	}
+            var after = Container.Resolve<A>();
+            Assert.Same(before, after);
+        }
+    }
 
-	[Fact]
-	public void Inner_scope_should_not_cause_outer_one_to_prematurely_release_components()
-	{
-		Container.Register(Component.For<ADisposable>().LifestyleScoped());
-		using (Container.BeginScope())
-		{
-			var outer = Container.Resolve<ADisposable>();
-			using (Container.BeginScope())
-			{
-				Container.Resolve<ADisposable>();
-			}
+    [Fact]
+    public void Inner_scope_should_not_cause_outer_one_to_prematurely_release_components()
+    {
+        Container.Register(Component.For<ADisposable>().LifestyleScoped());
+        using (Container.BeginScope())
+        {
+            var outer = Container.Resolve<ADisposable>();
+            using (Container.BeginScope())
+            {
+                Container.Resolve<ADisposable>();
+            }
 
-			Assert.False(outer.Disposed);
-		}
-	}
+            Assert.False(outer.Disposed);
+        }
+    }
 }

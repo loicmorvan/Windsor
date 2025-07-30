@@ -16,12 +16,12 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ReviewerRepository : DemoRepository<IReviewer>
 {
-	public new ICache<IReviewer> Cache { get; set; }
+    public new ICache<IReviewer> Cache { get; set; }
 
-	public new string Name { get; set; }
+    public new string Name { get; set; }
 
-	public new IReviewer Get(int id)
-	{
-		return null;
-	}
+    public new IReviewer Get(int id)
+    {
+        return null;
+    }
 }

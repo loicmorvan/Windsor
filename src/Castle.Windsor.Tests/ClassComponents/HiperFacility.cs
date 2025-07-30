@@ -12,26 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents;
-
 using Castle.Core.Configuration;
 using Castle.Windsor.MicroKernel;
 
+namespace Castle.Windsor.Tests.ClassComponents;
+
 public class HiperFacility : IFacility
 {
-	public bool Initialized { get; private set; }
-	public bool Terminated { get; private set; }
+    public bool Initialized { get; private set; }
+    public bool Terminated { get; private set; }
 
-	public void Init(IKernel kernel, IConfiguration facilityConfig)
-	{
-		Assert.NotNull(kernel);
-		Assert.NotNull(facilityConfig);
+    public void Init(IKernel kernel, IConfiguration facilityConfig)
+    {
+        Assert.NotNull(kernel);
+        Assert.NotNull(facilityConfig);
 
-		Initialized = true;
-	}
+        Initialized = true;
+    }
 
-	public void Terminate()
-	{
-		Terminated = true;
-	}
+    public void Terminate()
+    {
+        Terminated = true;
+    }
 }

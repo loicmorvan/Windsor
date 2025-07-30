@@ -16,10 +16,10 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public sealed class CustomerImpl2 : CustomerImpl
 {
-	public CustomerImpl2(string name, string address, int age)
-	{
-		Name = name;
-		Address = address;
-		Age = age;
-	}
+    public CustomerImpl2(string name, string address, int age)
+    {
+        Name = name;
+        Address = address;
+        Age = age;
+    }
 }

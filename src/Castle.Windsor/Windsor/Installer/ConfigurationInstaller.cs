@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor.Windsor.Configuration;
@@ -21,37 +20,40 @@ namespace Castle.Windsor.Windsor.Installer;
 
 public class ConfigurationInstaller : IWindsorInstaller
 {
-	private readonly IConfigurationInterpreter _interpreter;
-	private EnvironmentDelegate _environment;
+    private readonly IConfigurationInterpreter _interpreter;
+    private EnvironmentDelegate _environment;
 
-	/// <summary>Initializes a new instance of the ConfigurationInstaller class.</summary>
-	public ConfigurationInstaller(IConfigurationInterpreter interpreter)
-	{
-		ArgumentNullException.ThrowIfNull(interpreter);
-		_interpreter = interpreter;
-	}
+    /// <summary>Initializes a new instance of the ConfigurationInstaller class.</summary>
+    public ConfigurationInstaller(IConfigurationInterpreter interpreter)
+    {
+        ArgumentNullException.ThrowIfNull(interpreter);
+        _interpreter = interpreter;
+    }
 
-	void IWindsorInstaller.Install(IWindsorContainer container, IConfigurationStore store)
-	{
-		if (_environment != null) _interpreter.EnvironmentName = _environment();
+    void IWindsorInstaller.Install(IWindsorContainer container, IConfigurationStore store)
+    {
+        if (_environment != null)
+        {
+            _interpreter.EnvironmentName = _environment();
+        }
 
-		_interpreter.ProcessResource(_interpreter.Source, store, container.Kernel);
-	}
+        _interpreter.ProcessResource(_interpreter.Source, store, container.Kernel);
+    }
 
-	/// <summary>Sets the configuration environment name.</summary>
-	/// <param name = "environmentName">The environment name.</param>
-	/// <returns></returns>
-	public ConfigurationInstaller Environment(string environmentName)
-	{
-		return Environment(() => environmentName);
-	}
+    /// <summary>Sets the configuration environment name.</summary>
+    /// <param name="environmentName">The environment name.</param>
+    /// <returns></returns>
+    public ConfigurationInstaller Environment(string environmentName)
+    {
+        return Environment(() => environmentName);
+    }
 
-	/// <summary>Set the configuration environment strategy.</summary>
-	/// <param name = "environment">The environment strategy.</param>
-	/// <returns></returns>
-	public ConfigurationInstaller Environment(EnvironmentDelegate environment)
-	{
-		_environment = environment;
-		return this;
-	}
+    /// <summary>Set the configuration environment strategy.</summary>
+    /// <param name="environment">The environment strategy.</param>
+    /// <returns></returns>
+    public ConfigurationInstaller Environment(EnvironmentDelegate environment)
+    {
+        _environment = environment;
+        return this;
+    }
 }

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 
@@ -22,19 +21,19 @@ namespace Castle.Windsor.MicroKernel.Handlers;
 [Serializable]
 public class HandlerException : Exception
 {
-	/// <summary>Initializes a new instance of the <see cref = "HandlerException" /> class.</summary>
-	/// <param name = "message">The message.</param>
-	/// <param name = "name"></param>
+	/// <summary>Initializes a new instance of the <see cref="HandlerException" /> class.</summary>
+	/// <param name="message">The message.</param>
+	/// <param name="name"></param>
 	public HandlerException(string message, ComponentName name) : base(message)
 	{
 		this.SetUp();
 		Name = name;
 	}
 
-	/// <summary>Initializes a new instance of the <see cref = "HandlerException" /> class.</summary>
-	/// <param name = "message">The message.</param>
-	/// <param name = "name"></param>
-	/// <param name = "innerException"></param>
+	/// <summary>Initializes a new instance of the <see cref="HandlerException" /> class.</summary>
+	/// <param name="message">The message.</param>
+	/// <param name="name"></param>
+	/// <param name="innerException"></param>
 	public HandlerException(string message, ComponentName name, Exception innerException)
 		: base(message, innerException)
 	{

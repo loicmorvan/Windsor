@@ -1,5 +1,3 @@
-using System;
-
 namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Represents a named attribute.</summary>

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Core.Logging;
 using Castle.Windsor.Core;
 
@@ -21,15 +20,20 @@ namespace Castle.Windsor.MicroKernel;
 /// <summary>Extended contract of kernel, used internally.</summary>
 public interface IKernelInternal : IKernel
 {
-	/// <summary>Internal logger used by the container (not just <see cref = "IKernelInternal" /> implementation itself but also other classes too) to log information about what's happening in the container.</summary>
+	/// <summary>
+	///     Internal logger used by the container (not just <see cref="IKernelInternal" /> implementation itself but also
+	///     other classes too) to log information about what's happening in the container.
+	/// </summary>
 	ILogger Logger { get; set; }
 
-	/// <summary>Adds a custom made <see cref = "ComponentModel" />. Used by facilities.</summary>
-	/// <param name = "model"> </param>
+	/// <summary>Adds a custom made <see cref="ComponentModel" />. Used by facilities.</summary>
+	/// <param name="model"> </param>
 	IHandler AddCustomComponent(ComponentModel model);
 
-	/// <summary>Constructs an implementation of <see cref = "IComponentActivator" /> for the given <see cref = "ComponentModel" /></summary>
-	/// <param name = "model"> </param>
+	/// <summary>
+	///     Constructs an implementation of <see cref="IComponentActivator" /> for the given <see cref="ComponentModel" />
+	/// </summary>
+	/// <param name="model"> </param>
 	/// <returns> </returns>
 	IComponentActivator CreateComponentActivator(ComponentModel model);
 
@@ -44,10 +48,10 @@ public interface IKernelInternal : IKernel
 	object Resolve(Type service, Arguments arguments, IReleasePolicy policy, bool ignoreParentContext = false);
 
 	/// <summary>Returns a component instance by the key</summary>
-	/// <param name = "key"> </param>
-	/// <param name = "service"> </param>
-	/// <param name = "arguments"> </param>
-	/// <param name = "policy"> </param>
+	/// <param name="key"> </param>
+	/// <param name="service"> </param>
+	/// <param name="arguments"> </param>
+	/// <param name="policy"> </param>
 	/// <returns> </returns>
 	object Resolve(string key, Type service, Arguments arguments, IReleasePolicy policy);
 

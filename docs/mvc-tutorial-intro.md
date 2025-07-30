@@ -21,8 +21,8 @@ So far the following parts were published:
   factory
 * [Part Three - Writing Your First Installer](mvc-tutorial-part-3-writing-your-first-installer.md) discusses writing
   Windsor installer
-	* [Part Three (a) - Testing Your First Installer](mvc-tutorial-part-3a-testing-your-first-installer.md) discusses
-	  testing Windsor installers (validating conventions)
+    * [Part Three (a) - Testing Your First Installer](mvc-tutorial-part-3a-testing-your-first-installer.md) discusses
+      testing Windsor installers (validating conventions)
 * [Part Four - Putting It All Together](mvc-tutorial-part-4-putting-it-all-together.md) discusses using all elements
   from previous parts to get a working application
 

@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Threading;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Windsor;
 using Castle.Windsor.Windsor.Configuration.Interpreters;
@@ -22,60 +20,62 @@ namespace Castle.Windsor.Tests.Configuration2;
 
 public class SynchronizationProblemTestCase : IDisposable
 {
-	private readonly WindsorContainer _container;
-	private readonly ManualResetEvent _startEvent = new(false);
-	private readonly ManualResetEvent _stopEvent = new(false);
+    private readonly WindsorContainer _container;
+    private readonly ManualResetEvent _startEvent = new(false);
+    private readonly ManualResetEvent _stopEvent = new(false);
 
-	public SynchronizationProblemTestCase()
-	{
-		_container =
-			new WindsorContainer(
-				new XmlInterpreter(ConfigHelper.ResolveConfigPath("Configuration2/synchtest_config.xml")));
+    public SynchronizationProblemTestCase()
+    {
+        _container =
+            new WindsorContainer(
+                new XmlInterpreter(ConfigHelper.ResolveConfigPath("Configuration2/synchtest_config.xml")));
 
-		_container.Resolve<ComponentWithConfigs>();
-	}
+        _container.Resolve<ComponentWithConfigs>();
+    }
 
-	public void Dispose()
-	{
-		_container.Dispose();
-	}
+    public void Dispose()
+    {
+        _container.Dispose();
+    }
 
-	[Fact]
-	public void ResolveWithConfigTest()
-	{
-		const int threadCount = 50;
+    [Fact]
+    public void ResolveWithConfigTest()
+    {
+        const int threadCount = 50;
 
-		var threads = new Thread[threadCount];
+        var threads = new Thread[threadCount];
 
-		for (var i = 0; i < threadCount; i++)
-		{
-			threads[i] = new Thread(ExecuteMethodUntilSignal);
-			threads[i].Start();
-		}
+        for (var i = 0; i < threadCount; i++)
+        {
+            threads[i] = new Thread(ExecuteMethodUntilSignal);
+            threads[i].Start();
+        }
 
-		_startEvent.Set();
+        _startEvent.Set();
 
-		Thread.CurrentThread.Join(10 * 2000);
+        Thread.CurrentThread.Join(10 * 2000);
 
-		_stopEvent.Set();
-	}
+        _stopEvent.Set();
+    }
 
-	private void ExecuteMethodUntilSignal()
-	{
-		_startEvent.WaitOne(int.MaxValue);
+    private void ExecuteMethodUntilSignal()
+    {
+        _startEvent.WaitOne(int.MaxValue);
 
-		while (!_stopEvent.WaitOne(1))
-			try
-			{
-				var comp = _container.Resolve<ComponentWithConfigs>();
+        while (!_stopEvent.WaitOne(1))
+        {
+            try
+            {
+                var comp = _container.Resolve<ComponentWithConfigs>();
 
-				Assert.Equal(AppContext.BaseDirectory, comp.Name);
-				Assert.Equal(90, comp.Port);
-				Assert.Single(comp.Dict);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(DateTime.Now.Ticks + @" ---------------------------" + Environment.NewLine + ex);
-			}
-	}
+                Assert.Equal(AppContext.BaseDirectory, comp.Name);
+                Assert.Equal(90, comp.Port);
+                Assert.Single(comp.Dict);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now.Ticks + @" ---------------------------" + Environment.NewLine + ex);
+            }
+        }
+    }
 }

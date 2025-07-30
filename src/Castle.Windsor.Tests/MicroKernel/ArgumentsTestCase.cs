@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
@@ -23,100 +21,100 @@ namespace Castle.Windsor.Tests.MicroKernel;
 
 public class ArgumentsTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void Any_type_as_key_is_not_supported()
-	{
-		var arguments = new Arguments();
+    [Fact]
+    public void Any_type_as_key_is_not_supported()
+    {
+        var arguments = new Arguments();
 
-		Assert.Throws<ArgumentException>(delegate { arguments.Add(123, 321); });
-		Assert.Throws<ArgumentException>(delegate { arguments.Add(new object(), "value"); });
-	}
+        Assert.Throws<ArgumentException>(delegate { arguments.Add(123, 321); });
+        Assert.Throws<ArgumentException>(delegate { arguments.Add(new object(), "value"); });
+    }
 
-	[Fact]
-	[Bug("IOC-147")]
-	public void Can_have_dictionary_as_inline_dependency()
-	{
-		var container = new WindsorContainer();
-		container.Register(Component.For<HasDictionaryDependency>());
+    [Fact]
+    [Bug("IOC-147")]
+    public void Can_have_dictionary_as_inline_dependency()
+    {
+        var container = new WindsorContainer();
+        container.Register(Component.For<HasDictionaryDependency>());
 
-		var dictionaryProperty = new Dictionary<string, string>();
+        var dictionaryProperty = new Dictionary<string, string>();
 
-		var obj = container.Resolve<HasDictionaryDependency>(Arguments.FromProperties(new { dictionaryProperty }));
-		Assert.Same(dictionaryProperty, obj.DictionaryProperty);
-	}
+        var obj = container.Resolve<HasDictionaryDependency>(Arguments.FromProperties(new { dictionaryProperty }));
+        Assert.Same(dictionaryProperty, obj.DictionaryProperty);
+    }
 
-	[Fact]
-	[Bug("IOC-142")]
-	public void Can_satisfy_nullable_property_dependency()
-	{
-		Container.Register(Component.For<HasNullableIntProperty>());
+    [Fact]
+    [Bug("IOC-142")]
+    public void Can_satisfy_nullable_property_dependency()
+    {
+        Container.Register(Component.For<HasNullableIntProperty>());
 
-		var arguments = new Arguments().AddNamed("SomeVal", 5);
-		var s = Container.Resolve<HasNullableIntProperty>(arguments);
+        var arguments = new Arguments().AddNamed("SomeVal", 5);
+        var s = Container.Resolve<HasNullableIntProperty>(arguments);
 
-		Assert.NotNull(s.SomeVal);
-	}
+        Assert.NotNull(s.SomeVal);
+    }
 
-	[Fact]
-	[Bug("IOC-142")]
-	public void Can_satisfy_nullable_ctor_dependency()
-	{
-		Container.Register(Component.For<HasNullableDoubleConstructor>());
+    [Fact]
+    [Bug("IOC-142")]
+    public void Can_satisfy_nullable_ctor_dependency()
+    {
+        Container.Register(Component.For<HasNullableDoubleConstructor>());
 
-		var s = Container.Resolve<HasNullableDoubleConstructor>(new Arguments().AddNamed("foo", 5d));
-		Assert.NotNull(s);
-	}
+        var s = Container.Resolve<HasNullableDoubleConstructor>(new Arguments().AddNamed("foo", 5d));
+        Assert.NotNull(s);
+    }
 
-	[Fact]
-	[Bug("IOC-92")]
-	public void Can_mix_hashtable_parameters_and_configuration_parameters()
-	{
-		Container.Register(
-			Component.For<HasStringAndIntDependency>()
-				.DependsOn(Parameter.ForKey("x").Eq("abc"))
-		);
+    [Fact]
+    [Bug("IOC-92")]
+    public void Can_mix_hashtable_parameters_and_configuration_parameters()
+    {
+        Container.Register(
+            Component.For<HasStringAndIntDependency>()
+                .DependsOn(Parameter.ForKey("x").Eq("abc"))
+        );
 
-		Container.Resolve<HasStringAndIntDependency>(new Arguments().AddNamed("y", 1));
-	}
+        Container.Resolve<HasStringAndIntDependency>(new Arguments().AddNamed("y", 1));
+    }
 
-	[Fact]
-	public void Handles_Type_as_key()
-	{
-		var arguments = new Arguments();
-		var key = typeof(object);
-		var value = new object();
+    [Fact]
+    public void Handles_Type_as_key()
+    {
+        var arguments = new Arguments();
+        var key = typeof(object);
+        var value = new object();
 
-		arguments.Add(key, value);
+        arguments.Add(key, value);
 
-		Assert.Equal(1, arguments.Count);
-		Assert.True(arguments.Contains(key));
-		Assert.Same(value, arguments[key]);
-	}
+        Assert.Equal(1, arguments.Count);
+        Assert.True(arguments.Contains(key));
+        Assert.Same(value, arguments[key]);
+    }
 
-	[Fact]
-	public void Handles_string_as_key()
-	{
-		var arguments = new Arguments();
-		var key = "Foo";
-		var value = new object();
+    [Fact]
+    public void Handles_string_as_key()
+    {
+        var arguments = new Arguments();
+        var key = "Foo";
+        var value = new object();
 
-		arguments.Add(key, value);
+        arguments.Add(key, value);
 
-		Assert.Equal(1, arguments.Count);
-		Assert.True(arguments.Contains(key));
-		Assert.Same(value, arguments[key]);
-	}
+        Assert.Equal(1, arguments.Count);
+        Assert.True(arguments.Contains(key));
+        Assert.Same(value, arguments[key]);
+    }
 
-	[Fact]
-	public void Handles_string_as_key_case_insensitive()
-	{
-		var arguments = new Arguments();
-		var key = "foo";
-		var value = new object();
+    [Fact]
+    public void Handles_string_as_key_case_insensitive()
+    {
+        var arguments = new Arguments();
+        var key = "foo";
+        var value = new object();
 
-		arguments.Add(key, value);
+        arguments.Add(key, value);
 
-		Assert.True(arguments.Contains(key.ToLower()));
-		Assert.True(arguments.Contains(key.ToUpper()));
-	}
+        Assert.True(arguments.Contains(key.ToLower()));
+        Assert.True(arguments.Contains(key.ToUpper()));
+    }
 }

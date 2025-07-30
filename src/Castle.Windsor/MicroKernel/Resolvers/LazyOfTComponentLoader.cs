@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Reflection;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Internal;
@@ -20,18 +19,30 @@ using Castle.Windsor.MicroKernel.Registration;
 
 namespace Castle.Windsor.MicroKernel.Resolvers;
 
-/// <summary>Lazily adds component for <see cref = "Lazy{T}" />.</summary>
+/// <summary>Lazily adds component for <see cref="Lazy{T}" />.</summary>
 [Singleton]
 public class LazyOfTComponentLoader : ILazyComponentLoader
 {
-	public IRegistration Load(string name, Type service, Arguments arguments)
-	{
-		if (service == null) return null;
-		if (service.GetTypeInfo().IsGenericType == false) return null;
-		if (service.GetGenericTypeDefinition() != typeof(Lazy<>)) return null;
-		return Component.For(typeof(Lazy<>))
-			.ImplementedBy(typeof(LazyEx<>), LazyServiceStrategy.Instance)
-			.LifeStyle.Transient
-			.NamedAutomatically("castle-auto-lazy");
-	}
+    public IRegistration Load(string name, Type service, Arguments arguments)
+    {
+        if (service == null)
+        {
+            return null;
+        }
+
+        if (service.GetTypeInfo().IsGenericType == false)
+        {
+            return null;
+        }
+
+        if (service.GetGenericTypeDefinition() != typeof(Lazy<>))
+        {
+            return null;
+        }
+
+        return Component.For(typeof(Lazy<>))
+            .ImplementedBy(typeof(LazyEx<>), LazyServiceStrategy.Instance)
+            .LifeStyle.Transient
+            .NamedAutomatically("castle-auto-lazy");
+    }
 }

@@ -21,26 +21,26 @@ namespace Castle.Windsor.Tests;
 
 public class ContainerProblem2
 {
-	[Fact]
-	public void CausesStackOverflow()
-	{
-		IWindsorContainer container = new WindsorContainer();
+    [Fact]
+    public void CausesStackOverflow()
+    {
+        IWindsorContainer container = new WindsorContainer();
 
-		container.Register(Component.For(typeof(IS)).ImplementedBy<Bs>().Named("BS"));
-		container.Register(Component.For(typeof(IC)).ImplementedBy<CImpl>().Named("C"));
-		container.Register(Component.For(typeof(IWm)).ImplementedBy<Wm>().Named("WM"));
-		container.Register(Component.For(typeof(ISp)).ImplementedBy<Sp>().Named("SP"));
+        container.Register(Component.For(typeof(IS)).ImplementedBy<Bs>().Named("BS"));
+        container.Register(Component.For(typeof(IC)).ImplementedBy<CImpl>().Named("C"));
+        container.Register(Component.For(typeof(IWm)).ImplementedBy<Wm>().Named("WM"));
+        container.Register(Component.For(typeof(ISp)).ImplementedBy<Sp>().Named("SP"));
 
-		//TODO: dead code - why is it here?
-		// ComponentModel model = new ComponentModel("R", typeof(R), typeof(R));
-		// model.LifestyleType = LifestyleType.Custom;
-		// model.CustomLifestyle = typeof(PerThreadLifestyleManager);
+        //TODO: dead code - why is it here?
+        // ComponentModel model = new ComponentModel("R", typeof(R), typeof(R));
+        // model.LifestyleType = LifestyleType.Custom;
+        // model.CustomLifestyle = typeof(PerThreadLifestyleManager);
 
-		// container.Kernel.AddCustomComponent(model);
-		// container.Kernel.AddComponent("R", typeof(R), LifestyleType.Thread);
-		container.Kernel.Register(Component.For(typeof(R)).Named("R"));
+        // container.Kernel.AddCustomComponent(model);
+        // container.Kernel.AddComponent("R", typeof(R), LifestyleType.Thread);
+        container.Kernel.Register(Component.For(typeof(R)).Named("R"));
 
-		var c = container.Resolve<IC>("C");
-		Assert.NotNull(c);
-	}
+        var c = container.Resolve<IC>("C");
+        Assert.NotNull(c);
+    }
 }

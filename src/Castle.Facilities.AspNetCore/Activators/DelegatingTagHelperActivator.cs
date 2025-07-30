@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -21,27 +20,27 @@ namespace Castle.Facilities.AspNetCore.Activators;
 
 internal sealed class DelegatingTagHelperActivator : ITagHelperActivator
 {
-	private readonly Predicate<Type> _customCreatorSelector;
-	private readonly Func<Type, object> _customTagHelperCreator;
-	private readonly ITagHelperActivator _defaultTagHelperActivator;
+    private readonly Predicate<Type> _customCreatorSelector;
+    private readonly Func<Type, object> _customTagHelperCreator;
+    private readonly ITagHelperActivator _defaultTagHelperActivator;
 
-	public DelegatingTagHelperActivator(
-		Predicate<Type> customCreatorSelector,
-		Func<Type, object> customTagHelperCreator,
-		ITagHelperActivator defaultTagHelperActivator)
-	{
-		_customCreatorSelector =
-			customCreatorSelector ?? throw new ArgumentNullException(nameof(customCreatorSelector));
-		_customTagHelperCreator =
-			customTagHelperCreator ?? throw new ArgumentNullException(nameof(customTagHelperCreator));
-		_defaultTagHelperActivator = defaultTagHelperActivator ??
-		                             throw new ArgumentNullException(nameof(defaultTagHelperActivator));
-	}
+    public DelegatingTagHelperActivator(
+        Predicate<Type> customCreatorSelector,
+        Func<Type, object> customTagHelperCreator,
+        ITagHelperActivator defaultTagHelperActivator)
+    {
+        _customCreatorSelector =
+            customCreatorSelector ?? throw new ArgumentNullException(nameof(customCreatorSelector));
+        _customTagHelperCreator =
+            customTagHelperCreator ?? throw new ArgumentNullException(nameof(customTagHelperCreator));
+        _defaultTagHelperActivator = defaultTagHelperActivator ??
+                                     throw new ArgumentNullException(nameof(defaultTagHelperActivator));
+    }
 
-	public TTagHelper Create<TTagHelper>(ViewContext context) where TTagHelper : ITagHelper
-	{
-		return _customCreatorSelector(typeof(TTagHelper))
-			? (TTagHelper)_customTagHelperCreator(typeof(TTagHelper))
-			: _defaultTagHelperActivator.Create<TTagHelper>(context);
-	}
+    public TTagHelper Create<TTagHelper>(ViewContext context) where TTagHelper : ITagHelper
+    {
+        return _customCreatorSelector(typeof(TTagHelper))
+            ? (TTagHelper)_customTagHelperCreator(typeof(TTagHelper))
+            : _defaultTagHelperActivator.Create<TTagHelper>(context);
+    }
 }

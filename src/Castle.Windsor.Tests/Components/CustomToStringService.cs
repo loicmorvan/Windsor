@@ -12,17 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using System.Text;
 
+namespace Castle.Windsor.Tests.Components;
+
 public class CustomToStringService :
-	IGenericToStringService<StringBuilder>
+    IGenericToStringService<StringBuilder>
 {
-	public string ToString(params StringBuilder[] instances)
-	{
-		var result = new StringBuilder();
-		foreach (var instance in instances) result.Append(instance.Length.ToString());
-		return result.ToString();
-	}
+    public string ToString(params StringBuilder[] instances)
+    {
+        var result = new StringBuilder();
+        foreach (var instance in instances)
+        {
+            result.Append(instance.Length.ToString());
+        }
+
+        return result.ToString();
+    }
 }

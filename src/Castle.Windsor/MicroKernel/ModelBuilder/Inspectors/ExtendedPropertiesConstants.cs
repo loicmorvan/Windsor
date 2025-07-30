@@ -17,9 +17,9 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 /// <summary>Only to hold internal constants and get rid of magic numbers and hardcode names.</summary>
 internal abstract class ExtendedPropertiesConstants
 {
-	public const int PoolDefaultInitialPoolSize = 5;
-	public const int PoolDefaultMaxPoolSize = 15;
+    public const int PoolDefaultInitialPoolSize = 5;
+    public const int PoolDefaultMaxPoolSize = 15;
 
-	public const string PoolInitialPoolSize = "pool.initial.pool.size";
-	public const string PoolMaxPoolSize = "pool.max.pool.size";
+    public const string PoolInitialPoolSize = "pool.initial.pool.size";
+    public const string PoolMaxPoolSize = "pool.max.pool.size";
 }

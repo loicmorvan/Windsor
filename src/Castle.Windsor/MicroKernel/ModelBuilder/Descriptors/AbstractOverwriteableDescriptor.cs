@@ -19,22 +19,22 @@ using Castle.Windsor.MicroKernel.Registration;
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public abstract class AbstractOverwriteableDescriptor<TService> : IComponentModelDescriptor
-	where TService : class
+    where TService : class
 {
-	protected bool IsOverWrite => Registration.IsOverWrite;
+    protected bool IsOverWrite => Registration.IsOverWrite;
 
-	internal ComponentRegistration<TService> Registration { private get; set; }
+    internal ComponentRegistration<TService> Registration { private get; set; }
 
-	public virtual void BuildComponentModel(IKernel kernel, ComponentModel model)
-	{
-		ApplyToConfiguration(kernel, model.Configuration);
-	}
+    public virtual void BuildComponentModel(IKernel kernel, ComponentModel model)
+    {
+        ApplyToConfiguration(kernel, model.Configuration);
+    }
 
-	public virtual void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-	{
-	}
+    public virtual void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+    {
+    }
 
-	protected virtual void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
-	{
-	}
+    protected virtual void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
+    {
+    }
 }

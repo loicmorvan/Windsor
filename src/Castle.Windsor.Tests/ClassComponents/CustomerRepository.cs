@@ -16,8 +16,8 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class CustomerRepository : IRepository<ICustomer>
 {
-	public ICustomer Find()
-	{
-		return new CustomerImpl();
-	}
+    public ICustomer Find()
+    {
+        return new CustomerImpl();
+    }
 }

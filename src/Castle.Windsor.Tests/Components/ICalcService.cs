@@ -16,8 +16,8 @@ namespace Castle.Windsor.Tests.Components;
 
 public interface ICalcService
 {
-	bool Disposed { get; }
-	bool Initialized { get; }
+    bool Disposed { get; }
+    bool Initialized { get; }
 
-	int Sum(int x, int y);
+    int Sum(int x, int y);
 }

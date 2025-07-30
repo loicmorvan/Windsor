@@ -19,17 +19,17 @@ namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 [Transient]
 public class StartableComponent : IStartable
 {
-	public bool Started { get; private set; }
+    public bool Started { get; private set; }
 
-	public bool Stopped { get; private set; }
+    public bool Stopped { get; private set; }
 
-	public void Start()
-	{
-		Started = true;
-	}
+    public void Start()
+    {
+        Started = true;
+    }
 
-	public void Stop()
-	{
-		Stopped = true;
-	}
+    public void Stop()
+    {
+        Stopped = true;
+    }
 }

@@ -12,38 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
-
-using System;
-
 using Castle.Core.Configuration;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 [Serializable]
 public class TimeSpanConverter : AbstractTypeConverter
 {
-	public override bool CanHandleType(Type type)
-	{
-		return type == typeof(TimeSpan);
-	}
+    public override bool CanHandleType(Type type)
+    {
+        return type == typeof(TimeSpan);
+    }
 
-	public override object PerformConversion(string value, Type targetType)
-	{
-		try
-		{
-			return TimeSpan.Parse(value);
-		}
-		catch (Exception ex)
-		{
-			var message = string.Format(
-				"Could not convert from '{0}' to {1}",
-				value, targetType.FullName);
+    public override object PerformConversion(string value, Type targetType)
+    {
+        try
+        {
+            return TimeSpan.Parse(value);
+        }
+        catch (Exception ex)
+        {
+            var message = string.Format(
+                "Could not convert from '{0}' to {1}",
+                value, targetType.FullName);
 
-			throw new ConverterException(message, ex);
-		}
-	}
+            throw new ConverterException(message, ex);
+        }
+    }
 
-	public override object PerformConversion(IConfiguration configuration, Type targetType)
-	{
-		return PerformConversion(configuration.Value, targetType);
-	}
+    public override object PerformConversion(IConfiguration configuration, Type targetType)
+    {
+        return PerformConversion(configuration.Value, targetType);
+    }
 }

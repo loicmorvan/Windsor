@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Diagnostics;
 using System.Xml;
 
@@ -20,74 +19,76 @@ namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.Element
 
 public class IncludeElementProcessor : AbstractXmlNodeProcessor
 {
-	public override string Name => "include";
+    public override string Name => "include";
 
-	/// <summary>
-	///     Accepts the specified node. Check if node has the same name as the processor and the node.NodeType is in the
-	///     AcceptNodeTypes List NOTE: since the BatchRegistrationFacility already uses an include
-	///     element we will distinguish between both by looking for the presence of an uri attribute we should revisit this
-	///     later by using xml-namespaces
-	/// </summary>
-	/// <param name="node">The node.</param>
-	/// <returns></returns>
-	public override bool Accept(XmlNode node)
-	{
-		Debug.Assert(node.Attributes != null);
-		return node.Attributes.GetNamedItem("uri") != null && base.Accept(node);
-	}
+    /// <summary>
+    ///     Accepts the specified node. Check if node has the same name as the processor and the node.NodeType is in the
+    ///     AcceptNodeTypes List NOTE: since the BatchRegistrationFacility already uses an include
+    ///     element we will distinguish between both by looking for the presence of an uri attribute we should revisit this
+    ///     later by using xml-namespaces
+    /// </summary>
+    /// <param name="node">The node.</param>
+    /// <returns></returns>
+    public override bool Accept(XmlNode node)
+    {
+        Debug.Assert(node.Attributes != null);
+        return node.Attributes.GetNamedItem("uri") != null && base.Accept(node);
+    }
 
-	public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
-	{
-		var element = nodeList.Current as XmlElement;
+    public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
+    {
+        var element = nodeList.Current as XmlElement;
 
-		Debug.Assert(element != null);
-		var result = ProcessInclude(element, element.GetAttribute("uri"), engine);
+        Debug.Assert(element != null);
+        var result = ProcessInclude(element, element.GetAttribute("uri"), engine);
 
-		ReplaceItself(result, element);
-	}
+        ReplaceItself(result, element);
+    }
 
-	public XmlNode ProcessInclude(XmlElement element, string includeUri, IXmlProcessorEngine engine)
-	{
-		if (includeUri == null)
-			throw new ConfigurationProcessingException(
-				$"Found an include node without an 'uri' attribute: {element.BaseURI}");
+    public XmlNode ProcessInclude(XmlElement element, string includeUri, IXmlProcessorEngine engine)
+    {
+        if (includeUri == null)
+        {
+            throw new ConfigurationProcessingException(
+                $"Found an include node without an 'uri' attribute: {element.BaseURI}");
+        }
 
-		var uriList = includeUri.Split(',');
-		var frag = CreateFragment(element);
+        var uriList = includeUri.Split(',');
+        var frag = CreateFragment(element);
 
-		foreach (var uri in uriList)
-		{
-			using var resource = engine.GetResource(uri);
-			var doc = new XmlDocument();
+        foreach (var uri in uriList)
+        {
+            using var resource = engine.GetResource(uri);
+            var doc = new XmlDocument();
 
-			try
-			{
-				using var stream = resource.GetStreamReader();
-				doc.Load(stream);
-			}
-			catch (Exception ex)
-			{
-				throw new ConfigurationProcessingException(
-					$"Error processing include node: {includeUri}", ex);
-			}
+            try
+            {
+                using var stream = resource.GetStreamReader();
+                doc.Load(stream);
+            }
+            catch (Exception ex)
+            {
+                throw new ConfigurationProcessingException(
+                    $"Error processing include node: {includeUri}", ex);
+            }
 
-			engine.PushResource(resource);
+            engine.PushResource(resource);
 
-			engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(doc.DocumentElement));
+            engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(doc.DocumentElement));
 
-			engine.PopResource();
+            engine.PopResource();
 
-			if (element.GetAttribute("preserve-wrapper") == "yes")
-			{
-				AppendChild(frag, doc.DocumentElement);
-			}
-			else
-			{
-				Debug.Assert(doc.DocumentElement != null);
-				AppendChild(frag, doc.DocumentElement.ChildNodes);
-			}
-		}
+            if (element.GetAttribute("preserve-wrapper") == "yes")
+            {
+                AppendChild(frag, doc.DocumentElement);
+            }
+            else
+            {
+                Debug.Assert(doc.DocumentElement != null);
+                AppendChild(frag, doc.DocumentElement.ChildNodes);
+            }
+        }
 
-		return frag;
-	}
+        return frag;
+    }
 }

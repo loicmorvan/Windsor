@@ -14,23 +14,26 @@
 
 namespace Castle.Windsor.Core.Internal;
 
-using System;
-using System.Collections.Generic;
-
 internal static class EnumerableExtensions
 {
-	public static TResult[] ConvertAll<T, TResult>(this T[] items, Func<T, TResult> converter)
-	{
-		var count = items.Length;
-		var results = new TResult[count];
+    public static TResult[] ConvertAll<T, TResult>(this T[] items, Func<T, TResult> converter)
+    {
+        var count = items.Length;
+        var results = new TResult[count];
 
-		for (var i = 0; i < count; i++) results[i] = converter(items[i]);
+        for (var i = 0; i < count; i++)
+        {
+            results[i] = converter(items[i]);
+        }
 
-		return results;
-	}
+        return results;
+    }
 
-	public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
-	{
-		foreach (var item in items) action(item);
-	}
+    public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
+    {
+        foreach (var item in items)
+        {
+            action(item);
+        }
+    }
 }

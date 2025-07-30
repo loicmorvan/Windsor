@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
 public interface IGenericComponentsFactory
 {
-	T CreateGeneric<T>();
+    T CreateGeneric<T>();
 
-	T CreateGeneric<T, TA>(TA arg);
+    T CreateGeneric<T, TA>(TA arg);
 }

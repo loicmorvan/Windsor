@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public interface ISomeService
 {
-	void SomeOperation();
+    void SomeOperation();
 }

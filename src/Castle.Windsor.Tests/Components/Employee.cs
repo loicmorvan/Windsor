@@ -16,26 +16,26 @@ namespace Castle.Windsor.Tests.Components;
 
 public class Employee : IEmployee
 {
-	public string Email { get; set; }
+    public string Email { get; set; }
 
-	public string EmployeeId { get; set; }
+    public string EmployeeId { get; set; }
 
-	public string FirstName { get; set; }
+    public string FirstName { get; set; }
 
-	public string FullName => $"{FirstName} {MiddleName} {LastName}";
+    public string FullName => $"{FirstName} {MiddleName} {LastName}";
 
-	public bool IsProxy { get; set; }
+    public bool IsProxy { get; set; }
 
-	public bool IsSupervisor { get; set; }
+    public bool IsSupervisor { get; set; }
 
-	public string LastName { get; set; }
+    public string LastName { get; set; }
 
-	public string MiddleName { get; set; }
+    public string MiddleName { get; set; }
 
-	public string NtLogin { get; private set; }
+    public string NtLogin { get; private set; }
 
-	public void SetNtLogin(string ntLogin)
-	{
-		NtLogin = ntLogin;
-	}
+    public void SetNtLogin(string ntLogin)
+    {
+        NtLogin = ntLogin;
+    }
 }

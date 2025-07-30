@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Reflection;
 using Castle.Windsor.Core;
 
@@ -24,36 +22,40 @@ namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
 [Serializable]
 public abstract class LateBoundConcerns<TConcern>
 {
-	private Dictionary<Type, TConcern> _concerns;
-	private ConcurrentDictionary<Type, List<TConcern>> _concernsCache;
+    private Dictionary<Type, TConcern> _concerns;
+    private ConcurrentDictionary<Type, List<TConcern>> _concernsCache;
 
-	public bool HasConcerns => _concerns != null;
+    public bool HasConcerns => _concerns != null;
 
-	public void AddConcern<TForType>(TConcern lifecycleConcern)
-	{
-		if (_concerns == null)
-		{
-			_concerns = new Dictionary<Type, TConcern>(2);
-			_concernsCache = new ConcurrentDictionary<Type, List<TConcern>>(2, 2);
-		}
+    public void AddConcern<TForType>(TConcern lifecycleConcern)
+    {
+        if (_concerns == null)
+        {
+            _concerns = new Dictionary<Type, TConcern>(2);
+            _concernsCache = new ConcurrentDictionary<Type, List<TConcern>>(2, 2);
+        }
 
-		_concerns.Add(typeof(TForType), lifecycleConcern);
-	}
+        _concerns.Add(typeof(TForType), lifecycleConcern);
+    }
 
-	public abstract void Apply(ComponentModel model, object component);
+    public abstract void Apply(ComponentModel model, object component);
 
-	private List<TConcern> BuildConcernCache(Type type)
-	{
-		var componentConcerns = new List<TConcern>(_concerns.Count);
-		foreach (var concern in _concerns)
-			if (concern.Key.GetTypeInfo().IsAssignableFrom(type))
-				componentConcerns.Add(concern.Value);
+    private List<TConcern> BuildConcernCache(Type type)
+    {
+        var componentConcerns = new List<TConcern>(_concerns.Count);
+        foreach (var concern in _concerns)
+        {
+            if (concern.Key.GetTypeInfo().IsAssignableFrom(type))
+            {
+                componentConcerns.Add(concern.Value);
+            }
+        }
 
-		return componentConcerns;
-	}
+        return componentConcerns;
+    }
 
-	protected List<TConcern> GetComponentConcerns(Type type)
-	{
-		return _concernsCache.GetOrAdd(type, BuildConcernCache);
-	}
+    protected List<TConcern> GetComponentConcerns(Type type)
+    {
+        return _concernsCache.GetOrAdd(type, BuildConcernCache);
+    }
 }

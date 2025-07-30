@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public interface ISimpleService2
 {
-	string Method();
+    string Method();
 }

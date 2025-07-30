@@ -14,22 +14,24 @@
 
 namespace Castle.Windsor.Facilities.TypedFactory;
 
-using System;
-
-/// <summary>Specifies default configuration for a typed factory. All Selector* properties are mutually exclusive, that is you're only meant to set one.</summary>
+/// <summary>
+///     Specifies default configuration for a typed factory. All Selector* properties are mutually exclusive, that is
+///     you're only meant to set one.
+/// </summary>
 [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Delegate)]
 public class FactoryAttribute : Attribute
 {
-	/// <summary>Specifies component to use as selector for given factory. This works like any named service override.</summary>
-	public string SelectorComponentName { get; set; }
+    /// <summary>Specifies component to use as selector for given factory. This works like any named service override.</summary>
+    public string SelectorComponentName { get; set; }
 
-	/// <summary>Specifies component to use as selector for given factory. This works like any typed service override.</summary>
-	public Type SelectorComponentType { get; set; }
+    /// <summary>Specifies component to use as selector for given factory. This works like any typed service override.</summary>
+    public Type SelectorComponentType { get; set; }
 
-	/// <summary>
-	///     Specifies type of the selector to use for given factory. The type will be instantiated using default constructor. It must implement
-	///     <see
-	///         cref = "ITypedFactoryComponentSelector" />
-	/// </summary>
-	public Type SelectorType { get; set; }
+    /// <summary>
+    ///     Specifies type of the selector to use for given factory. The type will be instantiated using default constructor.
+    ///     It must implement
+    ///     <see
+    ///         cref="ITypedFactoryComponentSelector" />
+    /// </summary>
+    public Type SelectorType { get; set; }
 }

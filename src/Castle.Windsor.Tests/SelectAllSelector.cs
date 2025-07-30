@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Reflection;
 using Castle.DynamicProxy;
 
@@ -20,17 +19,17 @@ namespace Castle.Windsor.Tests;
 
 public class SelectAllSelector : IInterceptorSelector
 {
-	public static int Instances;
-	public static int Calls;
+    public static int Instances;
+    public static int Calls;
 
-	public SelectAllSelector()
-	{
-		Instances++;
-	}
+    public SelectAllSelector()
+    {
+        Instances++;
+    }
 
-	public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
-	{
-		Calls++;
-		return interceptors;
-	}
+    public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
+    {
+        Calls++;
+        return interceptors;
+    }
 }

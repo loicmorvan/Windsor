@@ -16,5 +16,5 @@ namespace Castle.Windsor.Windsor.Diagnostics;
 
 public interface IPerformanceMetricsFactory
 {
-	ITrackedComponentsPerformanceCounter CreateInstancesTrackedByReleasePolicyCounter(string name);
+    ITrackedComponentsPerformanceCounter CreateInstancesTrackedByReleasePolicyCounter(string name);
 }

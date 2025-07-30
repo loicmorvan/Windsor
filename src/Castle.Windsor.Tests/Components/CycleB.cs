@@ -19,7 +19,7 @@ namespace Castle.Windsor.Tests.Components;
 [UsedImplicitly]
 public class CycleB
 {
-	public CycleB(CycleA a)
-	{
-	}
+    public CycleB(CycleA a)
+    {
+    }
 }

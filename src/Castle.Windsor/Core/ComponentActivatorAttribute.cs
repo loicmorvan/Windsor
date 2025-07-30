@@ -14,14 +14,12 @@
 
 namespace Castle.Windsor.Core;
 
-using System;
-
 /// <summary>Associates a custom activator with a component</summary>
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class ComponentActivatorAttribute : Attribute
 {
-	/// <summary>Initializes a new instance of the <see cref = "ComponentActivatorAttribute" /> class.</summary>
-	/// <param name = "componentActivatorType">Type of the component activator.</param>
+	/// <summary>Initializes a new instance of the <see cref="ComponentActivatorAttribute" /> class.</summary>
+	/// <param name="componentActivatorType">Type of the component activator.</param>
 	public ComponentActivatorAttribute(Type componentActivatorType)
 	{
 		ComponentActivatorType = componentActivatorType;

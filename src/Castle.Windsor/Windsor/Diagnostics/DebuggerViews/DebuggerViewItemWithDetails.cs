@@ -12,26 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
 
 [DebuggerDisplay("{Description,nq}", Name = "{name,nq}")]
 public class DebuggerViewItemWithDetails(
-	string name,
-	string description,
-	string details,
-	params IEnumerable<object> items)
+    string name,
+    string description,
+    string details,
+    params IEnumerable<object> items)
 {
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public object Description { get; } = description;
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public object Description { get; } = description;
 
-	public string Details { get; private set; } = details;
+    public string Details { get; private set; } = details;
 
-	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-	public IEnumerable<object> Items { get; set; } = items;
+    [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    public IEnumerable<object> Items { get; set; } = items;
 
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public string Name { get; } = name;
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public string Name { get; } = name;
 }

@@ -20,7 +20,7 @@ namespace Castle.Windsor.Tests.ComponentsWithAttribute;
 [CastleComponent("keyAndType", typeof(ISimpleService))]
 public class HasKeyAndType : ISimpleService
 {
-	public void Operation()
-	{
-	}
+    public void Operation()
+    {
+    }
 }

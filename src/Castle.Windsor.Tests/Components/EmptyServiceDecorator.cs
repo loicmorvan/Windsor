@@ -16,10 +16,10 @@ namespace Castle.Windsor.Tests.Components;
 
 public class EmptyServiceDecorator : IEmptyService
 {
-	public EmptyServiceDecorator(IEmptyService other)
-	{
-		Other = other;
-	}
+    public EmptyServiceDecorator(IEmptyService other)
+    {
+        Other = other;
+    }
 
-	public IEmptyService Other { get; private set; }
+    public IEmptyService Other { get; private set; }
 }

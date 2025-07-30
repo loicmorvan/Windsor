@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public interface ISimpleMixIn
 {
-	void DoSomething();
+    void DoSomething();
 }

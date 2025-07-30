@@ -16,12 +16,12 @@ namespace Castle.Windsor.Tests.Components;
 
 public class TrivialComponentWithDependency : IComponent
 {
-	public TrivialComponentWithDependency(ISimpleService dependency)
-	{
-		Dependency = dependency;
-	}
+    public TrivialComponentWithDependency(ISimpleService dependency)
+    {
+        Dependency = dependency;
+    }
 
-	public ISimpleService Dependency { get; private set; }
+    public ISimpleService Dependency { get; private set; }
 
-	public int Id => 0;
+    public int Id => 0;
 }

@@ -16,19 +16,19 @@ namespace Castle.Windsor.Tests.Components;
 
 public class CacheResultFinder<T> : IResultFinder<T>
 {
-	public CacheResultFinder()
-	{
-	}
+    public CacheResultFinder()
+    {
+    }
 
-	public CacheResultFinder(IResultFinder<T> finder)
-	{
-		Finder = finder;
-	}
+    public CacheResultFinder(IResultFinder<T> finder)
+    {
+        Finder = finder;
+    }
 
-	public IResultFinder<T> Finder { get; }
+    public IResultFinder<T> Finder { get; }
 
-	public T Process(ISpecification specification)
-	{
-		return default;
-	}
+    public T Process(ISpecification specification)
+    {
+        return default;
+    }
 }

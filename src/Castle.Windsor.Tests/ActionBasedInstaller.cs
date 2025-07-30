@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor.Windsor;
@@ -21,8 +20,8 @@ namespace Castle.Windsor.Tests;
 
 internal class ActionBasedInstaller(Action<IWindsorContainer> install) : IWindsorInstaller
 {
-	public void Install(IWindsorContainer container, IConfigurationStore store)
-	{
-		install(container);
-	}
+    public void Install(IWindsorContainer container, IConfigurationStore store)
+    {
+        install(container);
+    }
 }

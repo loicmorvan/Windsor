@@ -14,13 +14,11 @@
 
 namespace Castle.Windsor.Core;
 
-using System;
-
 /// <summary>Indicates that the target components wants a transient lifestyle.</summary>
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class TransientAttribute : LifestyleAttribute
 {
-	/// <summary>Initializes a new instance of the <see cref = "TransientAttribute" /> class.</summary>
+	/// <summary>Initializes a new instance of the <see cref="TransientAttribute" /> class.</summary>
 	public TransientAttribute() : base(LifestyleType.Transient)
 	{
 	}

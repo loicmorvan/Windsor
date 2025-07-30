@@ -16,10 +16,10 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class GenericWithTDependency<T> : IGeneric<T>
 {
-	public GenericWithTDependency(T dependency)
-	{
-		Dependency = dependency;
-	}
+    public GenericWithTDependency(T dependency)
+    {
+        Dependency = dependency;
+    }
 
-	public T Dependency { get; private set; }
+    public T Dependency { get; private set; }
 }

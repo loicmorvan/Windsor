@@ -14,11 +14,10 @@
 
 namespace Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
 
-using System;
-
 /// <summary>Handle dependencies of services in the format of typed arrays.</summary>
 /// <remarks>
-///     This is a complimentary <see cref = "ISubDependencyResolver" /> implementation that is capable of satisfying dependencies of services as typed arrays.
+///     This is a complimentary <see cref="ISubDependencyResolver" /> implementation that is capable of satisfying
+///     dependencies of services as typed arrays.
 ///     <para>Note that it will take precedence over service override for arrays defined on the configuration.</para>
 /// </remarks>
 /// <example>
@@ -39,19 +38,23 @@ using System;
 /// </example>
 public class ArrayResolver : CollectionResolver
 {
-	public ArrayResolver(IKernel kernel)
-		: base(kernel)
-	{
-	}
+    public ArrayResolver(IKernel kernel)
+        : base(kernel)
+    {
+    }
 
-	public ArrayResolver(IKernel kernel, bool allowEmptyArray)
-		: base(kernel, allowEmptyArray)
-	{
-	}
+    public ArrayResolver(IKernel kernel, bool allowEmptyArray)
+        : base(kernel, allowEmptyArray)
+    {
+    }
 
-	protected override Type GetItemType(Type targetItemType)
-	{
-		if (targetItemType.IsArray) return targetItemType.GetElementType();
-		return null;
-	}
+    protected override Type GetItemType(Type targetItemType)
+    {
+        if (targetItemType.IsArray)
+        {
+            return targetItemType.GetElementType();
+        }
+
+        return null;
+    }
 }

@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
 
@@ -21,15 +19,15 @@ namespace Castle.Windsor.Tests.Interceptors;
 
 public class InterceptorTypeSelector : IInterceptorSelector
 {
-	private readonly Type _interceptorType;
+    private readonly Type _interceptorType;
 
-	public InterceptorTypeSelector(Type interceptorType)
-	{
-		_interceptorType = interceptorType;
-	}
+    public InterceptorTypeSelector(Type interceptorType)
+    {
+        _interceptorType = interceptorType;
+    }
 
-	public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
-	{
-		return interceptors.Where(i => i.GetType() == _interceptorType).ToArray();
-	}
+    public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
+    {
+        return interceptors.Where(i => i.GetType() == _interceptorType).ToArray();
+    }
 }

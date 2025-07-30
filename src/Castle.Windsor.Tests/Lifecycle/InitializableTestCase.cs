@@ -19,49 +19,49 @@ namespace Castle.Windsor.Tests.Lifecycle;
 
 public class InitializableTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void Initializable_components_are_not_tracked()
-	{
-		Container.Register(Component.For<ISimpleService>()
-			.ImplementedBy<SimpleServiceInitializable>()
-			.LifeStyle.Transient);
+    [Fact]
+    public void Initializable_components_are_not_tracked()
+    {
+        Container.Register(Component.For<ISimpleService>()
+            .ImplementedBy<SimpleServiceInitializable>()
+            .LifeStyle.Transient);
 
-		ReferenceTracker
-			.Track(() => Container.Resolve<ISimpleService>())
-			.AssertNoLongerReferenced();
-	}
+        ReferenceTracker
+            .Track(() => Container.Resolve<ISimpleService>())
+            .AssertNoLongerReferenced();
+    }
 
-	[Fact]
-	public void Initializable_components_for_non_initializable_service_get_initialized_when_resolved()
-	{
-		Container.Register(Component.For<ISimpleService>()
-			.ImplementedBy<SimpleServiceInitializable>()
-			.LifeStyle.Transient);
+    [Fact]
+    public void Initializable_components_for_non_initializable_service_get_initialized_when_resolved()
+    {
+        Container.Register(Component.For<ISimpleService>()
+            .ImplementedBy<SimpleServiceInitializable>()
+            .LifeStyle.Transient);
 
-		var server = (SimpleServiceInitializable)Container.Resolve<ISimpleService>();
+        var server = (SimpleServiceInitializable)Container.Resolve<ISimpleService>();
 
-		Assert.True(server.IsInitialized);
-	}
+        Assert.True(server.IsInitialized);
+    }
 
-	[Fact]
-	public void Initializable_components_for_non_initializable_service_get_initialized_when_resolved_via_factoryMethod()
-	{
-		Container.Register(Component.For<ISimpleService>()
-			.UsingFactoryMethod(() => new SimpleServiceInitializable())
-			.LifeStyle.Transient);
+    [Fact]
+    public void Initializable_components_for_non_initializable_service_get_initialized_when_resolved_via_factoryMethod()
+    {
+        Container.Register(Component.For<ISimpleService>()
+            .UsingFactoryMethod(() => new SimpleServiceInitializable())
+            .LifeStyle.Transient);
 
-		var server = (SimpleServiceInitializable)Container.Resolve<ISimpleService>();
+        var server = (SimpleServiceInitializable)Container.Resolve<ISimpleService>();
 
-		Assert.True(server.IsInitialized);
-	}
+        Assert.True(server.IsInitialized);
+    }
 
-	[Fact]
-	public void Initializable_components_get_initialized_when_resolved()
-	{
-		Container.Register(Component.For<InitializableComponent>());
+    [Fact]
+    public void Initializable_components_get_initialized_when_resolved()
+    {
+        Container.Register(Component.For<InitializableComponent>());
 
-		var server = Container.Resolve<InitializableComponent>();
+        var server = Container.Resolve<InitializableComponent>();
 
-		Assert.True(server.IsInitialized);
-	}
+        Assert.True(server.IsInitialized);
+    }
 }

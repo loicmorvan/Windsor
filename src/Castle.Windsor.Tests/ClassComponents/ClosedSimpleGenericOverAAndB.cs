@@ -18,13 +18,13 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class ClosedSimpleGenericOverAAndB : ISimpleGeneric<A>, ISimpleGeneric<B>
 {
-	A ISimpleGeneric<A>.Operation()
-	{
-		return new A();
-	}
+    A ISimpleGeneric<A>.Operation()
+    {
+        return new A();
+    }
 
-	B ISimpleGeneric<B>.Operation()
-	{
-		return new B(new A());
-	}
+    B ISimpleGeneric<B>.Operation()
+    {
+        return new B(new A());
+    }
 }

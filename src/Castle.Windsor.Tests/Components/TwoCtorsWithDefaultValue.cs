@@ -16,17 +16,17 @@ namespace Castle.Windsor.Tests.Components;
 
 public class TwoCtorsWithDefaultValue
 {
-	public TwoCtorsWithDefaultValue(string name = "Stefan Mucha")
-	{
-		Name = name;
-	}
+    public TwoCtorsWithDefaultValue(string name = "Stefan Mucha")
+    {
+        Name = name;
+    }
 
-	public TwoCtorsWithDefaultValue(int age = 100)
-	{
-		Age = age;
-	}
+    public TwoCtorsWithDefaultValue(int age = 100)
+    {
+        Age = age;
+    }
 
-	public int Age { get; }
+    public int Age { get; }
 
-	public string Name { get; }
+    public string Name { get; }
 }

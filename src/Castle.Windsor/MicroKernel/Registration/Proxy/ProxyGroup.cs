@@ -12,54 +12,57 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.DynamicProxy;
 using Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 namespace Castle.Windsor.MicroKernel.Registration.Proxy;
 
 public class ProxyGroup<TS> : RegistrationGroup<TS>
-	where TS : class
+    where TS : class
 {
-	public ProxyGroup(ComponentRegistration<TS> registration)
-		: base(registration)
-	{
-	}
+    public ProxyGroup(ComponentRegistration<TS> registration)
+        : base(registration)
+    {
+    }
 
-	public ComponentRegistration<TS> AsMarshalByRefClass =>
-		AddAttributeDescriptor("marshalByRefProxy", bool.TrueString);
+    public ComponentRegistration<TS> AsMarshalByRefClass =>
+        AddAttributeDescriptor("marshalByRefProxy", bool.TrueString);
 
-	public ComponentRegistration<TS> AdditionalInterfaces(params Type[] interfaces)
-	{
-		if (interfaces is { Length: > 0 }) AddDescriptor(new ProxyInterfacesDescriptor(interfaces));
-		return Registration;
-	}
+    public ComponentRegistration<TS> AdditionalInterfaces(params Type[] interfaces)
+    {
+        if (interfaces is { Length: > 0 })
+        {
+            AddDescriptor(new ProxyInterfacesDescriptor(interfaces));
+        }
 
-	public ComponentRegistration<TS> Hook(IProxyGenerationHook hook)
-	{
-		return Hook(r => r.Instance(hook));
-	}
+        return Registration;
+    }
 
-	public ComponentRegistration<TS> Hook(Action<ItemRegistration<IProxyGenerationHook>> hookRegistration)
-	{
-		var hook = new ItemRegistration<IProxyGenerationHook>();
-		hookRegistration.Invoke(hook);
+    public ComponentRegistration<TS> Hook(IProxyGenerationHook hook)
+    {
+        return Hook(r => r.Instance(hook));
+    }
 
-		AddDescriptor(new ProxyHookDescriptor(hook.Item));
-		return Registration;
-	}
+    public ComponentRegistration<TS> Hook(Action<ItemRegistration<IProxyGenerationHook>> hookRegistration)
+    {
+        var hook = new ItemRegistration<IProxyGenerationHook>();
+        hookRegistration.Invoke(hook);
 
-	public ComponentRegistration<TS> MixIns(params object[] mixIns)
-	{
-		return MixIns(r => r.Objects(mixIns));
-	}
+        AddDescriptor(new ProxyHookDescriptor(hook.Item));
+        return Registration;
+    }
 
-	public ComponentRegistration<TS> MixIns(Action<MixinRegistration> mixinRegistration)
-	{
-		var mixins = new MixinRegistration();
-		mixinRegistration.Invoke(mixins);
+    public ComponentRegistration<TS> MixIns(params object[] mixIns)
+    {
+        return MixIns(r => r.Objects(mixIns));
+    }
 
-		AddDescriptor(new ProxyMixInsDescriptor(mixins));
-		return Registration;
-	}
+    public ComponentRegistration<TS> MixIns(Action<MixinRegistration> mixinRegistration)
+    {
+        var mixins = new MixinRegistration();
+        mixinRegistration.Invoke(mixins);
+
+        AddDescriptor(new ProxyMixInsDescriptor(mixins));
+        return Registration;
+    }
 }

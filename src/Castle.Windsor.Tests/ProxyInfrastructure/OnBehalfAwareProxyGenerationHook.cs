@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Reflection;
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
@@ -22,26 +21,26 @@ namespace Castle.Windsor.Tests.ProxyInfrastructure;
 
 public class OnBehalfAwareProxyGenerationHook : IProxyGenerationHook, IOnBehalfAware
 {
-	public static ComponentModel Target;
+    public static ComponentModel Target;
 
-	public void SetInterceptedComponentModel(ComponentModel target)
-	{
-		Target = target;
-	}
+    public void SetInterceptedComponentModel(ComponentModel target)
+    {
+        Target = target;
+    }
 
-	public void MethodsInspected()
-	{
-		Assert.NotNull(Target);
-	}
+    public void MethodsInspected()
+    {
+        Assert.NotNull(Target);
+    }
 
-	public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
-	{
-		Assert.NotNull(Target);
-	}
+    public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
+    {
+        Assert.NotNull(Target);
+    }
 
-	public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
-	{
-		Assert.NotNull(Target);
-		return false;
-	}
+    public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
+    {
+        Assert.NotNull(Target);
+        return false;
+    }
 }

@@ -14,14 +14,12 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-using System.Collections.Generic;
-
 public class AppHost
 {
-	public AppHost(IEnumerable<IAppScreen> screens)
-	{
-		Screens = screens;
-	}
+    public AppHost(IEnumerable<IAppScreen> screens)
+    {
+        Screens = screens;
+    }
 
-	public IEnumerable<IAppScreen> Screens { get; }
+    public IEnumerable<IAppScreen> Screens { get; }
 }

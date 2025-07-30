@@ -17,12 +17,12 @@ namespace Castle.Windsor.Tests.Components;
 // ReSharper disable once UnusedType.Global
 public class AlarmGeneratorWithDependency
 {
-	// ReSharper disable once UnusedParameter.Local
-	public AlarmGeneratorWithDependency(IAlarmSender sender, A dependency)
-	{
-		Sender = sender;
-	}
+    // ReSharper disable once UnusedParameter.Local
+    public AlarmGeneratorWithDependency(IAlarmSender sender, A dependency)
+    {
+        Sender = sender;
+    }
 
-	// ReSharper disable once UnusedAutoPropertyAccessor.Global
-	public IAlarmSender Sender { get; }
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
+    public IAlarmSender Sender { get; }
 }

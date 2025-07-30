@@ -23,21 +23,22 @@ namespace Castle.Windsor.Tests.Components;
 /// <summary>Summary description for MyCustomerActivator.</summary>
 public class MyCustomerActivator : AbstractComponentActivator
 {
-	public MyCustomerActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
-		: base(model, kernel, onCreation, onDestruction)
-	{
-	}
+    public MyCustomerActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation,
+        ComponentInstanceDelegate onDestruction)
+        : base(model, kernel, onCreation, onDestruction)
+    {
+    }
 
-	protected override object InternalCreate(CreationContext context)
-	{
-		var customer = new CustomerImpl
-		{
-			Name = "James Bond"
-		};
-		return customer;
-	}
+    protected override object InternalCreate(CreationContext context)
+    {
+        var customer = new CustomerImpl
+        {
+            Name = "James Bond"
+        };
+        return customer;
+    }
 
-	protected override void InternalDestroy(object instance)
-	{
-	}
+    protected override void InternalDestroy(object instance)
+    {
+    }
 }

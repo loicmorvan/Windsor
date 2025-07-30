@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.DynamicProxy;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
@@ -21,56 +20,54 @@ using Castle.Windsor.Windsor;
 
 namespace Castle.Windsor.Tests;
 
-
-
 public class SmartProxyTestCase : IDisposable
 {
-	private readonly WindsorContainer _container;
+    private readonly WindsorContainer _container;
 
-	public SmartProxyTestCase()
-	{
-		_container = new WindsorContainer();
+    public SmartProxyTestCase()
+    {
+        _container = new WindsorContainer();
 
-		_container.AddFacility<MyInterceptorGreedyFacility>();
-	}
+        _container.AddFacility<MyInterceptorGreedyFacility>();
+    }
 
-	public void Dispose()
-	{
-		_container.Dispose();
-	}
+    public void Dispose()
+    {
+        _container.Dispose();
+    }
 
-	[Fact]
-	public void ConcreteClassProxy()
-	{
-		_container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
-		_container.Register(Component.For(typeof(CalculatorService)).Named("key"));
+    [Fact]
+    public void ConcreteClassProxy()
+    {
+        _container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
+        _container.Register(Component.For(typeof(CalculatorService)).Named("key"));
 
-		var service = _container.Resolve<CalculatorService>("key");
+        var service = _container.Resolve<CalculatorService>("key");
 
-		Assert.NotNull(service);
-		Assert.Equal(5, service.Sum(2, 2));
-	}
+        Assert.NotNull(service);
+        Assert.Equal(5, service.Sum(2, 2));
+    }
 
-	[Fact]
-	public void InterfaceInheritance()
-	{
-		_container.Register(Component.For<StandardInterceptor>().Named("interceptor"));
-		_container.Register(Component.For<ICameraService>().ImplementedBy<CameraService>());
+    [Fact]
+    public void InterfaceInheritance()
+    {
+        _container.Register(Component.For<StandardInterceptor>().Named("interceptor"));
+        _container.Register(Component.For<ICameraService>().ImplementedBy<CameraService>());
 
-		var service = _container.Resolve<ICameraService>();
+        var service = _container.Resolve<ICameraService>();
 
-		Assert.NotNull(service);
-	}
+        Assert.NotNull(service);
+    }
 
-	[Fact]
-	public void InterfaceProxy()
-	{
-		_container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
-		_container.Register(Component.For(typeof(ICalcService)).ImplementedBy<CalculatorService>().Named("key"));
+    [Fact]
+    public void InterfaceProxy()
+    {
+        _container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
+        _container.Register(Component.For(typeof(ICalcService)).ImplementedBy<CalculatorService>().Named("key"));
 
-		var service = _container.Resolve<ICalcService>("key");
+        var service = _container.Resolve<ICalcService>("key");
 
-		Assert.NotNull(service);
-		Assert.Equal(5, service.Sum(2, 2));
-	}
+        Assert.NotNull(service);
+        Assert.Equal(5, service.Sum(2, 2));
+    }
 }

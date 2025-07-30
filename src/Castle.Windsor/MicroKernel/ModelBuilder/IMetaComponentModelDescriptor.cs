@@ -18,8 +18,8 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder;
 
 public interface IMetaComponentModelDescriptor
 {
-	/// <summary>Contribute to component model after standard <see cref = "IContributeComponentModelConstruction" /> run.</summary>
-	/// <param name = "kernel"> </param>
-	/// <param name = "model"> </param>
+	/// <summary>Contribute to component model after standard <see cref="IContributeComponentModelConstruction" /> run.</summary>
+	/// <param name="kernel"> </param>
+	/// <param name="model"> </param>
 	void ConfigureComponentModel(IKernel kernel, ComponentModel model);
 }

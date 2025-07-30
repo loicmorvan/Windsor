@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Linq;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
@@ -23,203 +21,203 @@ namespace Castle.Windsor.Tests;
 
 public class HandlerFilterTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void Filter_gets_all_assignable_handlers_not_exiplicitly_registered_for_given_service()
-	{
-		Container.Register(Component.For<Task5>(),
-			Component.For<Task3>(),
-			Component.For<Task2>(),
-			Component.For<Task4>(),
-			Component.For<Task1>());
+    [Fact]
+    public void Filter_gets_all_assignable_handlers_not_exiplicitly_registered_for_given_service()
+    {
+        Container.Register(Component.For<Task5>(),
+            Component.For<Task3>(),
+            Component.For<Task2>(),
+            Component.For<Task4>(),
+            Component.For<Task1>());
 
-		Container.Kernel.AddHandlersFilter(new ReturnAllHandlersFilter());
+        Container.Kernel.AddHandlersFilter(new ReturnAllHandlersFilter());
 
-		var instances = Container.ResolveAll<ISomeTask>();
+        var instances = Container.ResolveAll<ISomeTask>();
 
-		Assert.Equal(5, instances.Length);
-	}
+        Assert.Equal(5, instances.Length);
+    }
 
-	[Fact]
-	public void Filter_gets_open_generic_handlers_when_generic_service_requested()
-	{
-		Container.Register(Component.For<IGeneric<A>>().ImplementedBy<GenericImpl1<A>>(),
-			Component.For(typeof(GenericImpl2<>)));
-		var filter = new DelegatingFilter(typeof(IGeneric<A>));
-		Kernel.AddHandlersFilter(filter);
+    [Fact]
+    public void Filter_gets_open_generic_handlers_when_generic_service_requested()
+    {
+        Container.Register(Component.For<IGeneric<A>>().ImplementedBy<GenericImpl1<A>>(),
+            Component.For(typeof(GenericImpl2<>)));
+        var filter = new DelegatingFilter(typeof(IGeneric<A>));
+        Kernel.AddHandlersFilter(filter);
 
-		Container.ResolveAll<IGeneric<A>>();
+        Container.ResolveAll<IGeneric<A>>();
 
-		Assert.Equal(2, filter.HandlersAsked.Length);
-	}
+        Assert.Equal(2, filter.HandlersAsked.Length);
+    }
 
-	[Fact]
-	public void Filter_returning_empty_collection_respected()
-	{
-		Container.Register(Component.For<ISomeTask>().ImplementedBy<Task5>(),
-			Component.For<ISomeTask>().ImplementedBy<Task4>(),
-			Component.For<ISomeTask>().ImplementedBy<Task3>(),
-			Component.For<ISomeTask>().ImplementedBy<Task2>(),
-			Component.For<ISomeTask>().ImplementedBy<Task1>());
+    [Fact]
+    public void Filter_returning_empty_collection_respected()
+    {
+        Container.Register(Component.For<ISomeTask>().ImplementedBy<Task5>(),
+            Component.For<ISomeTask>().ImplementedBy<Task4>(),
+            Component.For<ISomeTask>().ImplementedBy<Task3>(),
+            Component.For<ISomeTask>().ImplementedBy<Task2>(),
+            Component.For<ISomeTask>().ImplementedBy<Task1>());
 
-		Container.Kernel.AddHandlersFilter(new DelegatingFilter(typeof(ISomeTask), _ => false));
+        Container.Kernel.AddHandlersFilter(new DelegatingFilter(typeof(ISomeTask), _ => false));
 
-		var instances = Container.ResolveAll<ISomeTask>();
+        var instances = Container.ResolveAll<ISomeTask>();
 
-		Assert.Empty(instances);
-	}
+        Assert.Empty(instances);
+    }
 
-	[Fact]
-	public void HandlerFilterGetsCalledLikeExpected()
-	{
-		Container.Register(Component.For<ISomeService>().ImplementedBy<FirstImplementation>(),
-			Component.For<ISomeService>().ImplementedBy<SecondImplementation>(),
-			Component.For<ISomeService>().ImplementedBy<ThirdImplementation>());
+    [Fact]
+    public void HandlerFilterGetsCalledLikeExpected()
+    {
+        Container.Register(Component.For<ISomeService>().ImplementedBy<FirstImplementation>(),
+            Component.For<ISomeService>().ImplementedBy<SecondImplementation>(),
+            Component.For<ISomeService>().ImplementedBy<ThirdImplementation>());
 
-		var filter = new TestHandlersFilter();
-		Container.Kernel.AddHandlersFilter(filter);
+        var filter = new TestHandlersFilter();
+        Container.Kernel.AddHandlersFilter(filter);
 
-		Container.ResolveAll<ISomeService>();
+        Container.ResolveAll<ISomeService>();
 
-		Assert.True(filter.OpinionWasChecked, "Filter's opinion should have been checked once for each handler");
-	}
+        Assert.True(filter.OpinionWasChecked, "Filter's opinion should have been checked once for each handler");
+    }
 
-	[Fact]
-	public void HandlerFiltersPrioritizationAndOrderingIsRespected()
-	{
-		Container.Register(Component.For<ISomeTask>().ImplementedBy<Task5>(),
-			Component.For<ISomeTask>().ImplementedBy<Task3>(),
-			Component.For<ISomeTask>().ImplementedBy<Task2>(),
-			Component.For<ISomeTask>().ImplementedBy<Task4>(),
-			Component.For<ISomeTask>().ImplementedBy<Task1>());
+    [Fact]
+    public void HandlerFiltersPrioritizationAndOrderingIsRespected()
+    {
+        Container.Register(Component.For<ISomeTask>().ImplementedBy<Task5>(),
+            Component.For<ISomeTask>().ImplementedBy<Task3>(),
+            Component.For<ISomeTask>().ImplementedBy<Task2>(),
+            Component.For<ISomeTask>().ImplementedBy<Task4>(),
+            Component.For<ISomeTask>().ImplementedBy<Task1>());
 
-		Container.Kernel.AddHandlersFilter(new FilterThatRemovedFourthTaskAndOrdersTheRest());
+        Container.Kernel.AddHandlersFilter(new FilterThatRemovedFourthTaskAndOrdersTheRest());
 
-		var instances = Container.ResolveAll<ISomeTask>();
+        var instances = Container.ResolveAll<ISomeTask>();
 
-		Assert.Equal(4, instances.Length);
-	}
+        Assert.Equal(4, instances.Length);
+    }
 
-	[Fact]
-	public void SelectionMethodIsNeverCalledOnFilterWhenItDoesNotHaveAnOpinionForThatService()
-	{
-		Container.Register(Component.For<IUnimportantService>().ImplementedBy<UnimportantImpl>());
+    [Fact]
+    public void SelectionMethodIsNeverCalledOnFilterWhenItDoesNotHaveAnOpinionForThatService()
+    {
+        Container.Register(Component.For<IUnimportantService>().ImplementedBy<UnimportantImpl>());
 
-		Container.Kernel.AddHandlersFilter(new FailIfCalled());
+        Container.Kernel.AddHandlersFilter(new FailIfCalled());
 
-		Container.ResolveAll<IUnimportantService>();
-	}
+        Container.ResolveAll<IUnimportantService>();
+    }
 
-	private class FailIfCalled : IHandlersFilter
-	{
-		public bool HasOpinionAbout(Type service)
-		{
-			return false;
-		}
+    private class FailIfCalled : IHandlersFilter
+    {
+        public bool HasOpinionAbout(Type service)
+        {
+            return false;
+        }
 
-		public IHandler[] SelectHandlers(Type service, IHandler[] handlers)
-		{
-			Assert.Fail($"SelectHandlers was called with {service}");
-			return null; //< could not compile without returning anything
-		}
-	}
+        public IHandler[] SelectHandlers(Type service, IHandler[] handlers)
+        {
+            Assert.Fail($"SelectHandlers was called with {service}");
+            return null; //< could not compile without returning anything
+        }
+    }
 
-	private class ReturnAllHandlersFilter : IHandlersFilter
-	{
-		public bool HasOpinionAbout(Type service)
-		{
-			return true;
-		}
+    private class ReturnAllHandlersFilter : IHandlersFilter
+    {
+        public bool HasOpinionAbout(Type service)
+        {
+            return true;
+        }
 
-		public IHandler[] SelectHandlers(Type service, IHandler[] handlers)
-		{
-			return handlers;
-		}
-	}
+        public IHandler[] SelectHandlers(Type service, IHandler[] handlers)
+        {
+            return handlers;
+        }
+    }
 
-	private class DelegatingFilter : IHandlersFilter
-	{
-		private readonly Func<IHandler, bool> _filter;
-		private readonly Type _typeToFilter;
+    private class DelegatingFilter : IHandlersFilter
+    {
+        private readonly Func<IHandler, bool> _filter;
+        private readonly Type _typeToFilter;
 
-		public DelegatingFilter(Type typeToFilter, Func<IHandler, bool> filter = null)
-		{
-			_typeToFilter = typeToFilter;
-			_filter = filter ?? (_ => true);
-		}
+        public DelegatingFilter(Type typeToFilter, Func<IHandler, bool> filter = null)
+        {
+            _typeToFilter = typeToFilter;
+            _filter = filter ?? (_ => true);
+        }
 
-		public IHandler[] HandlersAsked { get; private set; }
+        public IHandler[] HandlersAsked { get; private set; }
 
-		public bool HasOpinionAbout(Type service)
-		{
-			return service == _typeToFilter;
-		}
+        public bool HasOpinionAbout(Type service)
+        {
+            return service == _typeToFilter;
+        }
 
-		public IHandler[] SelectHandlers(Type service, IHandler[] handlers)
-		{
-			HandlersAsked = handlers;
-			return handlers.Where(_filter).ToArray();
-		}
-	}
+        public IHandler[] SelectHandlers(Type service, IHandler[] handlers)
+        {
+            HandlersAsked = handlers;
+            return handlers.Where(_filter).ToArray();
+        }
+    }
 
-	private class FilterThatRemovedFourthTaskAndOrdersTheRest : IHandlersFilter
-	{
-		public bool HasOpinionAbout(Type service)
-		{
-			return service == typeof(ISomeTask);
-		}
+    private class FilterThatRemovedFourthTaskAndOrdersTheRest : IHandlersFilter
+    {
+        public bool HasOpinionAbout(Type service)
+        {
+            return service == typeof(ISomeTask);
+        }
 
-		public IHandler[] SelectHandlers(Type service, IHandler[] handlers)
-		{
-			return handlers
-				.Where(h => h.ComponentModel.Implementation != typeof(Task4))
-				.OrderBy(h => h.ComponentModel.Implementation.Name)
-				.ToArray();
-		}
-	}
+        public IHandler[] SelectHandlers(Type service, IHandler[] handlers)
+        {
+            return handlers
+                .Where(h => h.ComponentModel.Implementation != typeof(Task4))
+                .OrderBy(h => h.ComponentModel.Implementation.Name)
+                .ToArray();
+        }
+    }
 
-	private class FirstImplementation : ISomeService;
+    private class FirstImplementation : ISomeService;
 
-	private interface ISomeService;
+    private interface ISomeService;
 
-	private interface ISomeTask;
+    private interface ISomeTask;
 
-	private interface IUnimportantService;
+    private interface IUnimportantService;
 
-	private class SecondImplementation : ISomeService;
+    private class SecondImplementation : ISomeService;
 
-	private class Task1 : ISomeTask;
+    private class Task1 : ISomeTask;
 
-	private class Task2 : ISomeTask;
+    private class Task2 : ISomeTask;
 
-	private class Task3 : ISomeTask;
+    private class Task3 : ISomeTask;
 
-	private class Task4 : ISomeTask;
+    private class Task4 : ISomeTask;
 
-	private class Task5 : ISomeTask;
+    private class Task5 : ISomeTask;
 
-	private class TestHandlersFilter : IHandlersFilter
-	{
-		public bool OpinionWasChecked { get; set; }
+    private class TestHandlersFilter : IHandlersFilter
+    {
+        public bool OpinionWasChecked { get; set; }
 
-		public bool HasOpinionAbout(Type service)
-		{
-			Assert.False(OpinionWasChecked);
+        public bool HasOpinionAbout(Type service)
+        {
+            Assert.False(OpinionWasChecked);
 
-			var wasExpectedService = service == typeof(ISomeService);
-			Assert.True(wasExpectedService);
+            var wasExpectedService = service == typeof(ISomeService);
+            Assert.True(wasExpectedService);
 
-			OpinionWasChecked = true;
+            OpinionWasChecked = true;
 
-			return wasExpectedService;
-		}
+            return wasExpectedService;
+        }
 
-		public IHandler[] SelectHandlers(Type service, IHandler[] handlers)
-		{
-			return handlers;
-		}
-	}
+        public IHandler[] SelectHandlers(Type service, IHandler[] handlers)
+        {
+            return handlers;
+        }
+    }
 
-	private class ThirdImplementation : ISomeService;
+    private class ThirdImplementation : ISomeService;
 
-	private class UnimportantImpl : IUnimportantService;
+    private class UnimportantImpl : IUnimportantService;
 }

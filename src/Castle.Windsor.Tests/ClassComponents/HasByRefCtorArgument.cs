@@ -18,10 +18,10 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class HasByRefCtorArgument
 {
-	public HasByRefCtorArgument(ref A a)
-	{
-		A = a;
-	}
+    public HasByRefCtorArgument(ref A a)
+    {
+        A = a;
+    }
 
-	public A A { get; private set; }
+    public A A { get; private set; }
 }

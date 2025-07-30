@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
 using Castle.Windsor.Core;
 using JetBrains.Annotations;
 
@@ -21,92 +19,111 @@ namespace Castle.Windsor.Tests;
 
 public class DisposeOrderTestFixture
 {
-	[Fact]
-	public void Dictionary_enumerates_from_oldest_to_latest()
-	{
-		var expected1 = new[] { 1, 2, 4, 3 };
+    [Fact]
+    public void Dictionary_enumerates_from_oldest_to_latest()
+    {
+        var expected1 = new[] { 1, 2, 4, 3 };
 
-		var dictionary1 = new Dictionary<int, object>();
-		foreach (var key in expected1) dictionary1[key] = new object();
-		var index = 0;
-		foreach (var keyValuePair in dictionary1)
-		{
-			Assert.Equal(expected1[index], keyValuePair.Key);
-			index++;
-		}
+        var dictionary1 = new Dictionary<int, object>();
+        foreach (var key in expected1)
+        {
+            dictionary1[key] = new object();
+        }
 
-		var expected2 = new[] { 4, 1, 2, 3 };
+        var index = 0;
+        foreach (var keyValuePair in dictionary1)
+        {
+            Assert.Equal(expected1[index], keyValuePair.Key);
+            index++;
+        }
 
-		var dictionary2 = new Dictionary<int, object>();
-		foreach (var key in expected2) dictionary2[key] = new object();
+        var expected2 = new[] { 4, 1, 2, 3 };
 
-		index = 0;
-		foreach (var keyValuePair in dictionary2)
-		{
-			Assert.Equal(expected2[index], keyValuePair.Key);
-			index++;
-		}
-	}
+        var dictionary2 = new Dictionary<int, object>();
+        foreach (var key in expected2)
+        {
+            dictionary2[key] = new object();
+        }
 
-	private interface IMyComponent : IInitializable, IDisposable
-	{
-		bool IsInitialized { get; }
-	}
+        index = 0;
+        foreach (var keyValuePair in dictionary2)
+        {
+            Assert.Equal(expected2[index], keyValuePair.Key);
+            index++;
+        }
+    }
 
-	private interface IMyService : IInitializable, IDisposable
-	{
-		bool IsInUse { get; set; }
-		bool IsInitialized { get; }
-	}
+    private interface IMyComponent : IInitializable, IDisposable
+    {
+        bool IsInitialized { get; }
+    }
 
-	[UsedImplicitly]
-	private class MyComponent(IMyService service) : IMyComponent
-	{
-		public bool IsInitialized { get; private set; }
+    private interface IMyService : IInitializable, IDisposable
+    {
+        bool IsInUse { get; set; }
+        bool IsInitialized { get; }
+    }
 
-		public void Dispose()
-		{
-			IsInitialized = false;
-			service.IsInUse = false;
-		}
+    [UsedImplicitly]
+    private class MyComponent(IMyService service) : IMyComponent
+    {
+        public bool IsInitialized { get; private set; }
 
-		public void Initialize()
-		{
-			service.IsInUse = true;
-			IsInitialized = true;
-		}
-	}
+        public void Dispose()
+        {
+            IsInitialized = false;
+            service.IsInUse = false;
+        }
 
-	[UsedImplicitly]
-	private class MyService : IMyService
-	{
-		private bool _inUse;
+        public void Initialize()
+        {
+            service.IsInUse = true;
+            IsInitialized = true;
+        }
+    }
 
-		public bool IsInUse
-		{
-			get
-			{
-				if (IsInitialized == false) throw new Exception("Service must be initialized !!!");
-				return _inUse;
-			}
-			set
-			{
-				if (IsInitialized == false) throw new Exception("Service must be initialized !!!");
-				_inUse = value;
-			}
-		}
+    [UsedImplicitly]
+    private class MyService : IMyService
+    {
+        private bool _inUse;
 
-		public bool IsInitialized { get; private set; }
+        public bool IsInUse
+        {
+            get
+            {
+                if (IsInitialized == false)
+                {
+                    throw new Exception("Service must be initialized !!!");
+                }
 
-		public void Dispose()
-		{
-			if (IsInUse) throw new Exception("Cannot dispose : service is still in use !!!");
-			IsInitialized = false;
-		}
+                return _inUse;
+            }
+            set
+            {
+                if (IsInitialized == false)
+                {
+                    throw new Exception("Service must be initialized !!!");
+                }
 
-		public void Initialize()
-		{
-			IsInitialized = true;
-		}
-	}
+                _inUse = value;
+            }
+        }
+
+        public bool IsInitialized { get; private set; }
+
+        public void Dispose()
+        {
+            if (IsInUse)
+            {
+                throw new Exception("Cannot dispose : service is still in use !!!");
+            }
+
+            IsInitialized = false;
+        }
+
+        public void Initialize()
+        {
+            IsInitialized = true;
+        }
+    }
 }

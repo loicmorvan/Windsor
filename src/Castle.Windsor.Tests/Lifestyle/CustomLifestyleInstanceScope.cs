@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 
@@ -21,27 +19,35 @@ namespace Castle.Windsor.Tests.Lifestyle;
 
 public class CustomLifestyleInstanceScope : IDisposable
 {
-	[ThreadStatic] private static Stack<CustomLifestyleInstanceScope> _localScopes;
+    [ThreadStatic] private static Stack<CustomLifestyleInstanceScope> _localScopes;
 
-	public CustomLifestyleInstanceScope()
-	{
-		if (_localScopes == null) _localScopes = new Stack<CustomLifestyleInstanceScope>();
-		_localScopes.Push(this);
-	}
+    public CustomLifestyleInstanceScope()
+    {
+        if (_localScopes == null)
+        {
+            _localScopes = new Stack<CustomLifestyleInstanceScope>();
+        }
 
-	public IDictionary<ComponentModel, Burden> Cache { get; } = new Dictionary<ComponentModel, Burden>();
+        _localScopes.Push(this);
+    }
 
-	public static CustomLifestyleInstanceScope Current
-	{
-		get
-		{
-			if (_localScopes == null || _localScopes.Count == 0) return null;
-			return _localScopes.Peek();
-		}
-	}
+    public IDictionary<ComponentModel, Burden> Cache { get; } = new Dictionary<ComponentModel, Burden>();
 
-	public void Dispose()
-	{
-		_localScopes.Pop();
-	}
+    public static CustomLifestyleInstanceScope Current
+    {
+        get
+        {
+            if (_localScopes == null || _localScopes.Count == 0)
+            {
+                return null;
+            }
+
+            return _localScopes.Peek();
+        }
+    }
+
+    public void Dispose()
+    {
+        _localScopes.Pop();
+    }
 }

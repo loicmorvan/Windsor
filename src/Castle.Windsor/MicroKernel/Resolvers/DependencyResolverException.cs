@@ -12,28 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.Resolvers;
-
-using System;
-
 using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.MicroKernel.Resolvers;
 
 [Serializable]
 public class DependencyResolverException : Exception
 {
-	/// <summary>Initializes a new instance of the <see cref = "DependencyResolverException" /> class.</summary>
-	/// <param name = "message">The message.</param>
-	/// <param name = "innerException">The inner exception.</param>
+	/// <summary>Initializes a new instance of the <see cref="DependencyResolverException" /> class.</summary>
+	/// <param name="message">The message.</param>
+	/// <param name="innerException">The inner exception.</param>
 	public DependencyResolverException(string message, Exception innerException) : base(message, innerException)
 	{
 		this.SetUp();
 	}
 
-	/// <summary>Initializes a new instance of the <see cref = "DependencyResolverException" /> class.</summary>
-	/// <param name = "message">The message.</param>
+	/// <summary>Initializes a new instance of the <see cref="DependencyResolverException" /> class.</summary>
+	/// <param name="message">The message.</param>
 	public DependencyResolverException(string message) : base(message)
 	{
 		this.SetUp();
 	}
-
 }

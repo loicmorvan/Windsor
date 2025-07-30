@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Globalization;
 using Castle.Core.Configuration;
 
@@ -22,50 +21,53 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 [Serializable]
 public class PrimitiveConverter : AbstractTypeConverter
 {
-	private readonly Type[] _types =
-	[
-		typeof(char),
-		typeof(DateTime),
-		typeof(decimal),
-		typeof(bool),
-		typeof(short),
-		typeof(int),
-		typeof(long),
-		typeof(ushort),
-		typeof(uint),
-		typeof(ulong),
-		typeof(byte),
-		typeof(sbyte),
-		typeof(float),
-		typeof(double),
-		typeof(string)
-	];
+    private readonly Type[] _types =
+    [
+        typeof(char),
+        typeof(DateTime),
+        typeof(decimal),
+        typeof(bool),
+        typeof(short),
+        typeof(int),
+        typeof(long),
+        typeof(ushort),
+        typeof(uint),
+        typeof(ulong),
+        typeof(byte),
+        typeof(sbyte),
+        typeof(float),
+        typeof(double),
+        typeof(string)
+    ];
 
-	public override bool CanHandleType(Type type)
-	{
-		return Array.IndexOf(_types, type) != -1;
-	}
+    public override bool CanHandleType(Type type)
+    {
+        return Array.IndexOf(_types, type) != -1;
+    }
 
-	public override object PerformConversion(string value, Type targetType)
-	{
-		if (targetType == typeof(string)) return value;
+    public override object PerformConversion(string value, Type targetType)
+    {
+        if (targetType == typeof(string))
+        {
+            return value;
+        }
 
-		try
-		{
-			return Convert.ChangeType(value, targetType, CultureInfo.InvariantCulture);
-		}
-		catch (Exception ex)
-		{
-			var message = string.Format(
-				"Could not convert from '{0}' to {1}",
-				value, targetType.FullName);
+        try
+        {
+            return Convert.ChangeType(value, targetType, CultureInfo.InvariantCulture);
+        }
+        catch (Exception ex)
+        {
+            var message = string.Format(
+                "Could not convert from '{0}' to {1}",
+                value, targetType.FullName);
 
-			throw new ConverterException(message, ex);
-		}
-	}
+            throw new ConverterException(message, ex);
+        }
+    }
 
-	public override object PerformConversion(IConfiguration configuration, Type targetType)
-	{
-		return PerformConversion(configuration.Value, targetType);
-	}
+    public override object PerformConversion(IConfiguration configuration, Type targetType)
+    {
+        return PerformConversion(configuration.Value, targetType);
+    }
 }

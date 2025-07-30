@@ -14,13 +14,11 @@
 
 namespace Castle.Windsor.Core.Internal;
 
-using System.Collections.Generic;
-
 public interface IMutableCollection<T> : IEnumerable<T>
 {
-	int Count { get; }
+    int Count { get; }
 
-	void Add(T item);
+    void Add(T item);
 
-	bool Remove(T item);
+    bool Remove(T item);
 }

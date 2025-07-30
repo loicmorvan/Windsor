@@ -21,40 +21,40 @@ namespace Castle.Windsor.Tests.Installer;
 
 public class ConfigurationInstallerTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void InstallComponents_FromXmlFileWithEnvironment_ComponentsInstalled()
-	{
-		Container.Install(
-			Configuration.FromXmlFile(
-					ConfigHelper.ResolveConfigPath("Configuration2/env_config.xml"))
-				.Environment("devel")
-		);
+    [Fact]
+    public void InstallComponents_FromXmlFileWithEnvironment_ComponentsInstalled()
+    {
+        Container.Install(
+            Configuration.FromXmlFile(
+                    ConfigHelper.ResolveConfigPath("Configuration2/env_config.xml"))
+                .Environment("devel")
+        );
 
-		var prop = Container.Resolve<ComponentWithStringProperty>("component");
+        var prop = Container.Resolve<ComponentWithStringProperty>("component");
 
-		Assert.Equal("John Doe", prop.Name);
-	}
+        Assert.Equal("John Doe", prop.Name);
+    }
 
-	[Fact]
-	public void InstallComponents_FromXmlFile_ComponentsInstalled()
-	{
-		Container.Install(
-			Configuration.FromXml(Xml.Embedded("installerconfig.xml")));
+    [Fact]
+    public void InstallComponents_FromXmlFile_ComponentsInstalled()
+    {
+        Container.Install(
+            Configuration.FromXml(Xml.Embedded("installerconfig.xml")));
 
-		Assert.True(Container.Kernel.HasComponent(typeof(ICalcService)));
-		Assert.True(Container.Kernel.HasComponent("calcservice"));
-	}
+        Assert.True(Container.Kernel.HasComponent(typeof(ICalcService)));
+        Assert.True(Container.Kernel.HasComponent("calcservice"));
+    }
 
-	[Fact]
-	public void InstallComponents_FromXmlFile_first_and_from_code()
-	{
-		Container.Install(
-			Configuration.FromXml(Xml.Embedded("justConfiguration.xml")),
-			new Installer(c => c.Register(Component.For<ICamera>()
-				.ImplementedBy<Camera>()
-				.Named("camera"))));
+    [Fact]
+    public void InstallComponents_FromXmlFile_first_and_from_code()
+    {
+        Container.Install(
+            Configuration.FromXml(Xml.Embedded("justConfiguration.xml")),
+            new Installer(c => c.Register(Component.For<ICamera>()
+                .ImplementedBy<Camera>()
+                .Named("camera"))));
 
-		var camera = Container.Resolve<ICamera>();
-		Assert.Equal("from configuration", camera.Name);
-	}
+        var camera = Container.Resolve<ICamera>();
+        Assert.Equal("from configuration", camera.Name);
+    }
 }

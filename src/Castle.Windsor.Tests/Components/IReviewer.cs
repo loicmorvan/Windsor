@@ -17,6 +17,6 @@ namespace Castle.Windsor.Tests.Components;
 /// <summary>Summary description for IReviewer.</summary>
 public interface IReviewer : IEmployee
 {
-	// This interface is a registered component
-	// IIReviewableEmployeeList Employees { get; set; }
+    // This interface is a registered component
+    // IIReviewableEmployeeList Employees { get; set; }
 }

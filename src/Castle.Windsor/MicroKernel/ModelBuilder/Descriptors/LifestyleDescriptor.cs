@@ -18,10 +18,13 @@ using Castle.Windsor.Core;
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class LifestyleDescriptor<TS>(LifestyleType lifestyle) : AbstractOverwriteableDescriptor<TS>
-	where TS : class
+    where TS : class
 {
-	protected override void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
-	{
-		if (configuration.Attributes["lifestyle"] == null || IsOverWrite) configuration.Attributes["lifestyle"] = lifestyle.ToString();
-	}
+    protected override void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
+    {
+        if (configuration.Attributes["lifestyle"] == null || IsOverWrite)
+        {
+            configuration.Attributes["lifestyle"] = lifestyle.ToString();
+        }
+    }
 }

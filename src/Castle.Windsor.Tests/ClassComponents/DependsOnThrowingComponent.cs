@@ -22,7 +22,7 @@ namespace Castle.Windsor.Tests.ClassComponents;
 [UsedImplicitly]
 public class DependsOnThrowingComponent
 {
-	public DependsOnThrowingComponent(ISimpleService service, ThrowsInCtor throws)
-	{
-	}
+    public DependsOnThrowingComponent(ISimpleService service, ThrowsInCtor throws)
+    {
+    }
 }

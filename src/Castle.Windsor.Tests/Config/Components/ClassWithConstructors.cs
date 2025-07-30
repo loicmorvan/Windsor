@@ -17,17 +17,17 @@ namespace Castle.Windsor.Tests.Config.Components;
 /// <summary>Summary description for ClassWithConstructors.</summary>
 public class ClassWithConstructors
 {
-	public ClassWithConstructors(string host)
-	{
-		Host = host;
-	}
+    public ClassWithConstructors(string host)
+    {
+        Host = host;
+    }
 
-	public ClassWithConstructors(string[] hosts)
-	{
-		Hosts = hosts;
-	}
+    public ClassWithConstructors(string[] hosts)
+    {
+        Hosts = hosts;
+    }
 
-	public string Host { get; }
+    public string Host { get; }
 
-	public string[] Hosts { get; }
+    public string[] Hosts { get; }
 }

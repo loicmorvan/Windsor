@@ -17,18 +17,18 @@ namespace Castle.Windsor.Tests.Components;
 /// <summary>Summary description for IEmployee.</summary>
 public interface IEmployee
 {
-	string Email { get; set; }
-	string EmployeeId { get; set; }
+    string Email { get; set; }
+    string EmployeeId { get; set; }
 
-	string FirstName { get; set; }
+    string FirstName { get; set; }
 
-	string FullName { get; }
-	bool IsProxy { get; set; }
+    string FullName { get; }
+    bool IsProxy { get; set; }
 
-	bool IsSupervisor { get; set; }
-	string LastName { get; set; }
-	string MiddleName { get; set; }
-	string NtLogin { get; }
+    bool IsSupervisor { get; set; }
+    string LastName { get; set; }
+    string MiddleName { get; set; }
+    string NtLogin { get; }
 
-	void SetNtLogin(string ntLogin);
+    void SetNtLogin(string ntLogin);
 }

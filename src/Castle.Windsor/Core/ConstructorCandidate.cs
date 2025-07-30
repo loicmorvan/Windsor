@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Reflection;
 using Castle.Windsor.Core.Internal;
 
@@ -22,42 +21,50 @@ namespace Castle.Windsor.Core;
 [Serializable]
 public class ConstructorCandidate : IComparable<ConstructorCandidate>
 {
-	/// <summary>Initializes a new instance of the <see cref = "ConstructorCandidate" /> class.</summary>
-	/// <param name = "constructorInfo">The constructor info.</param>
-	/// <param name = "dependencies">The dependencies.</param>
+    /// <summary>Initializes a new instance of the <see cref="ConstructorCandidate" /> class.</summary>
+    /// <param name="constructorInfo">The constructor info.</param>
+    /// <param name="dependencies">The dependencies.</param>
 	public ConstructorCandidate(ConstructorInfo constructorInfo, ConstructorDependencyModel[] dependencies)
-	{
-		Constructor = constructorInfo;
-		Dependencies = dependencies;
-		dependencies.ForEach(InitParameter);
-	}
+    {
+        Constructor = constructorInfo;
+        Dependencies = dependencies;
+        dependencies.ForEach(InitParameter);
+    }
 
-	/// <summary>Gets the ConstructorInfo (from reflection).</summary>
-	/// <value>The constructor.</value>
-	public ConstructorInfo Constructor { get; }
+    /// <summary>Gets the ConstructorInfo (from reflection).</summary>
+    /// <value>The constructor.</value>
+    public ConstructorInfo Constructor { get; }
 
-	/// <summary>Gets the dependencies this constructor candidate exposes.</summary>
-	/// <value>The dependencies.</value>
-	public ConstructorDependencyModel[] Dependencies { get; }
+    /// <summary>Gets the dependencies this constructor candidate exposes.</summary>
+    /// <value>The dependencies.</value>
+    public ConstructorDependencyModel[] Dependencies { get; }
 
-	int IComparable<ConstructorCandidate>.CompareTo(ConstructorCandidate other)
-	{
-		// we sort greedier first
-		var value = other.Dependencies.Length - Dependencies.Length;
-		if (value != 0) return value;
-		for (var index = 0; index < Dependencies.Length; index++)
-		{
-			var mine = Dependencies[index];
-			var othr = other.Dependencies[index];
-			value = string.Compare(mine.TargetItemType.FullName, othr.TargetItemType.FullName, StringComparison.OrdinalIgnoreCase);
-			if (value != 0) return value;
-		}
+    int IComparable<ConstructorCandidate>.CompareTo(ConstructorCandidate other)
+    {
+        // we sort greedier first
+        var value = other.Dependencies.Length - Dependencies.Length;
+        if (value != 0)
+        {
+            return value;
+        }
 
-		return 0;
-	}
+        for (var index = 0; index < Dependencies.Length; index++)
+        {
+            var mine = Dependencies[index];
+            var othr = other.Dependencies[index];
+            value = string.Compare(mine.TargetItemType.FullName, othr.TargetItemType.FullName,
+                StringComparison.OrdinalIgnoreCase);
+            if (value != 0)
+            {
+                return value;
+            }
+        }
 
-	private void InitParameter(ConstructorDependencyModel parameter)
-	{
-		parameter.SetParentConstructor(this);
-	}
+        return 0;
+    }
+
+    private void InitParameter(ConstructorDependencyModel parameter)
+    {
+        parameter.SetParentConstructor(this);
+    }
 }

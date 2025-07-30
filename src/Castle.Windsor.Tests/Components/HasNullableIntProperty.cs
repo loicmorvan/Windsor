@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class HasNullableIntProperty
 {
-	public int? SomeVal { get; set; }
+    public int? SomeVal { get; set; }
 }

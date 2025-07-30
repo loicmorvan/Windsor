@@ -15,17 +15,16 @@
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Scope
-{
-	internal class ExtensionContainerScopeAccessor : IScopeAccessor
-	{
-		public ILifetimeScope GetScope(CreationContext context)
-		{
-			return ExtensionContainerScopeCache.Current;
-		}
+namespace Castle.Windsor.Extensions.DependencyInjection.Scope;
 
-		public void Dispose()
-		{
-		}
-	}
+internal class ExtensionContainerScopeAccessor : IScopeAccessor
+{
+    public ILifetimeScope GetScope(CreationContext context)
+    {
+        return ExtensionContainerScopeCache.Current;
+    }
+
+    public void Dispose()
+    {
+    }
 }

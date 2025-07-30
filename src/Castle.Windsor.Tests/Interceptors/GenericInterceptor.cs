@@ -19,8 +19,8 @@ namespace Castle.Windsor.Tests.Interceptors;
 // ReSharper disable once UnusedTypeParameter
 public class GenericInterceptor<T> : IInterceptor
 {
-	public void Intercept(IInvocation invocation)
-	{
-		invocation.Proceed();
-	}
+    public void Intercept(IInvocation invocation)
+    {
+        invocation.Proceed();
+    }
 }

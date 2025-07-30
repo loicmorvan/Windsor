@@ -25,17 +25,17 @@ Breaking Changes:
 - Obsolete APIs in `Castle.Windsor.Facilities.Logging` have been removed. Extensions methods for built-in logging
   factories have
   been added, however `LogUsing<T>` is still ideal. (@Jevonius, #636)
-	- Removed enum `Castle.Windsor.Facilities.Logging.LoggerImplementation`
-	- Removed constructor `Castle.Windsor.Facilities.Logging.LoggingFacility(LoggerImplementation loggingApi)`
-	- Removed constructor
-	  `Castle.Windsor.Facilities.Logging.LoggingFacility(LoggerImplementation loggingApi, string configFile)`
-	- Removed constructor
-	  `Castle.Windsor.Facilities.Logging.LoggingFacility(string customLoggerFactory, string configFile)`
-	- Removed method `Castle.Windsor.Facilities.Logging.LoggingFacility.LogUsing(LoggerImplementation loggingApi)`
-	- Removed method `Castle.Windsor.Facilities.Logging.LoggingFacility.UseLog4Net()`
-	- Removed method `Castle.Windsor.Facilities.Logging.LoggingFacility.UseLog4Net(string configFile)`
-	- Removed method `Castle.Windsor.Facilities.Logging.LoggingFacility.UseNLog()`
-	- Removed method `Castle.Windsor.Facilities.Logging.LoggingFacility.UseNLog(string configFile)`
+    - Removed enum `Castle.Windsor.Facilities.Logging.LoggerImplementation`
+    - Removed constructor `Castle.Windsor.Facilities.Logging.LoggingFacility(LoggerImplementation loggingApi)`
+    - Removed constructor
+      `Castle.Windsor.Facilities.Logging.LoggingFacility(LoggerImplementation loggingApi, string configFile)`
+    - Removed constructor
+      `Castle.Windsor.Facilities.Logging.LoggingFacility(string customLoggerFactory, string configFile)`
+    - Removed method `Castle.Windsor.Facilities.Logging.LoggingFacility.LogUsing(LoggerImplementation loggingApi)`
+    - Removed method `Castle.Windsor.Facilities.Logging.LoggingFacility.UseLog4Net()`
+    - Removed method `Castle.Windsor.Facilities.Logging.LoggingFacility.UseLog4Net(string configFile)`
+    - Removed method `Castle.Windsor.Facilities.Logging.LoggingFacility.UseNLog()`
+    - Removed method `Castle.Windsor.Facilities.Logging.LoggingFacility.UseNLog(string configFile)`
 
 ## 5.1.2 (2022-05-17)
 
@@ -60,13 +60,13 @@ Bugfixes:
 Bugfixes:
 
 - .NET Extensions' DependencyInjection:
-	- Change WindsorServiceProviderFactory to follow SOLID behaviour (@generik0, #540)
-	- Fix "An item with the same key has already been added" exception related to scoped lifestyle (@generik0, #547)
-	- Fix issue using existing container with ASP.NET (@robertcoltheart, #548)
-	- Extra extensions for BasedOnDescriptor (@ltines, #554)
-	- Use generic registration instead of reflection (@robertcoltheart, #555)
-	- Use the container from the method call, not the root container (@generik0, #558)
-	- Add InvalidateCache to DependencyInjectionNamingSubsystem (@generik0, @twenzel, #556)
+    - Change WindsorServiceProviderFactory to follow SOLID behaviour (@generik0, #540)
+    - Fix "An item with the same key has already been added" exception related to scoped lifestyle (@generik0, #547)
+    - Fix issue using existing container with ASP.NET (@robertcoltheart, #548)
+    - Extra extensions for BasedOnDescriptor (@ltines, #554)
+    - Use generic registration instead of reflection (@robertcoltheart, #555)
+    - Use the container from the method call, not the root container (@generik0, #558)
+    - Add InvalidateCache to DependencyInjectionNamingSubsystem (@generik0, @twenzel, #556)
 
 ## 5.1.0-beta001 (2020-06-17)
 
@@ -134,20 +134,20 @@ Breaking Changes:
 - Removed deprecated member `LifestyleHandlerType` on `CustomLifestyleAttribute` (@fir3pho3nixx, #338)
 - Removed Event Wiring, Factory Support and Synchronize facilities (@jonorossi, #403)
 - Arguments class and Resolve overloads refactor (@fir3pho3nixx, @jonorossi, #444)
-	- Removed `WindsorContainer.Resolve(object/IDictionary)` overloads in favour of new
-	  `WindsorContainer.Resolve(Arguments)`
-	- Reworked `Arguments` class, including to no longer implement `IDictionary`
-	- Removed `IArgumentsComparer[]` constructors from `Arguments`
-	- Added `WindsorContainer.Resolve(IEnumerable<KeyValuePair<string, object>>)` extension methods
-	- Changed `CreationContext.AdditionalArguments` to use `Arguments` instead of `IDictionary`
-	- Replaced `ComponentDependencyRegistrationExtensions(Insert, InsertAnonymous, InsertTyped, InsertTypedCollection)`
-	  with `Add`, `AddNamed` and `AddTyped` `Arguments` instance methods
-	- Changed `ComponentRegistration.DependsOn` and `ComponentRegistration.DynamicParameters` to use `Arguments` via
-	  `DynamicParametersDelegate`
-	- Added `ComponentRegistration.DependsOn(Arguments)` overload
-	- Changed `ComponentModel` `CustomDependencies` and `ExtendedProperties` to use `Arguments` instead of `IDictionary`
-	- Changed `IComponentModelBuilder.BuildModel` to use `Arguments` instead of `IDictionary`
-	- Changed `ILazyComponentLoader.Load` to use `Arguments` instead of `IDictionary`
+    - Removed `WindsorContainer.Resolve(object/IDictionary)` overloads in favour of new
+      `WindsorContainer.Resolve(Arguments)`
+    - Reworked `Arguments` class, including to no longer implement `IDictionary`
+    - Removed `IArgumentsComparer[]` constructors from `Arguments`
+    - Added `WindsorContainer.Resolve(IEnumerable<KeyValuePair<string, object>>)` extension methods
+    - Changed `CreationContext.AdditionalArguments` to use `Arguments` instead of `IDictionary`
+    - Replaced `ComponentDependencyRegistrationExtensions(Insert, InsertAnonymous, InsertTyped, InsertTypedCollection)`
+      with `Add`, `AddNamed` and `AddTyped` `Arguments` instance methods
+    - Changed `ComponentRegistration.DependsOn` and `ComponentRegistration.DynamicParameters` to use `Arguments` via
+      `DynamicParametersDelegate`
+    - Added `ComponentRegistration.DependsOn(Arguments)` overload
+    - Changed `ComponentModel` `CustomDependencies` and `ExtendedProperties` to use `Arguments` instead of `IDictionary`
+    - Changed `IComponentModelBuilder.BuildModel` to use `Arguments` instead of `IDictionary`
+    - Changed `ILazyComponentLoader.Load` to use `Arguments` instead of `IDictionary`
 
 ## 4.1.1 (2018-10-15)
 
@@ -1263,9 +1263,9 @@ fix - wherever used, adjust types appropriately. To obtain actual objects, use R
   well.
 - added ability to load assemblies from designated directory (with fair bit of optional filtering using new
   AssemblyFilter class). It works in three places:
-	- AllTypes.FromAssemblyInDirectory() - picks assemblies for registration
-	- FromAssembly.InDirectory() - installs installers from assemblies in the directory
-	- <install directory="" /> - installs installers from assemblies in directory via XML
+    - AllTypes.FromAssemblyInDirectory() - picks assemblies for registration
+    - FromAssembly.InDirectory() - installs installers from assemblies in the directory
+    - <install directory="" /> - installs installers from assemblies in directory via XML
 - TypedFactoryFacility - added ability to configure factory inline: Component.For<IFooFactory>().AsFactory(f =>
   f.SelectedWith("selectorKey"))
 - Changed IModelInterceptorSelector's signature and behavior (see breakingChanges.txt for details)
@@ -1300,10 +1300,10 @@ fix - wherever used, adjust types appropriately. To obtain actual objects, use R
   all conditions will be checked. This is a minor breaking change from previous behavior where last call would win.
 - added typed arguments (specified by type rather than by name).
   It works for:
-	- call site (Resolve with Dictionary, specifying System.Type as value of key. A helper class 'Arguments' should be
-	  used for this.)
-	- DynamicParameters - there's an extension method Insert that should make using it nicer
-	- fluent Api (DependsOn(Property.ForKey<string>().Eq("typed"))
+    - call site (Resolve with Dictionary, specifying System.Type as value of key. A helper class 'Arguments' should be
+      used for this.)
+    - DynamicParameters - there's an extension method Insert that should make using it nicer
+    - fluent Api (DependsOn(Property.ForKey<string>().Eq("typed"))
 - added 'Insert' extension method on IDictionary, specifically so simplify usage in DynamicParameters method and similar
   situations. It behaves like IDictionary's indexer setter
 - added 'Arguments' class to carry inline arguments (typed or named) for components. It is recommended to use this class
@@ -1318,14 +1318,14 @@ fix - wherever used, adjust types appropriately. To obtain actual objects, use R
   This fixed a regression bug introduced in v2.1, and brings the behavior back to what it was in v2.0.
 - added support for specifying interceptorsSelector, proxyHook and mixins from config (see new tests for example). This
   also means some small impact breaking changes:
-	- DefaultProxyFactory.CreateProxyGenerationOptionsFrom protected method has changed signature - it now also takes
-	  IKernel and CreationContext, to be used by IReferences to do resolve (see below)
-	- DefaultProxyFactory.CustomizeProxy protected virtual method has changed signature, for the same reason as above
-	- ProxyOption's properties changed types:
-	  Selector, from IInterceptorSelector to IReference<IInterceptorSelector>
-	  Hook from IProxyHook to IReference<IProxyHook>
-	  MixIns from object[] to IEnumerable<IReference<object>>
-	  IReference abstraction allows to use components resolved from the container, similar to InterceptorReferences.
+    - DefaultProxyFactory.CreateProxyGenerationOptionsFrom protected method has changed signature - it now also takes
+      IKernel and CreationContext, to be used by IReferences to do resolve (see below)
+    - DefaultProxyFactory.CustomizeProxy protected virtual method has changed signature, for the same reason as above
+    - ProxyOption's properties changed types:
+      Selector, from IInterceptorSelector to IReference<IInterceptorSelector>
+      Hook from IProxyHook to IReference<IProxyHook>
+      MixIns from object[] to IEnumerable<IReference<object>>
+      IReference abstraction allows to use components resolved from the container, similar to InterceptorReferences.
 - Moved several types from Core:
   ComponentActivatorAttribute
   ComponentProxyBehaviorAttribute
@@ -1368,10 +1368,10 @@ fix - wherever used, adjust types appropriately. To obtain actual objects, use R
 ## 2.1.0 (2010-01-12)
 
 - Moved the logging facility project into the Windsor project:
-	- Applied Tom Allard's patch fixing FACILITIES-93: "Extra constructors on LoggingFacility"
-	- Added test case supplied by chris ortman
-	- Register base logger and factory when using extended logger.
-	- Fixed FACILITIES-77 - ILoggerFactory instance creation requires constructor with one argument
+    - Applied Tom Allard's patch fixing FACILITIES-93: "Extra constructors on LoggingFacility"
+    - Added test case supplied by chris ortman
+    - Register base logger and factory when using extended logger.
+    - Fixed FACILITIES-77 - ILoggerFactory instance creation requires constructor with one argument
 - simplified API for attaching interceptors.
 - added support for forwarded types in XML config
 - added WithParameters method to fluent registration that enables inspecting and modifying arguments passed to Resolve
@@ -1507,26 +1507,26 @@ fix - wherever used, adjust types appropriately. To obtain actual objects, use R
 - Applied Jeff Brown's patch fixing IOC-54: "Empty component parameter values cause runtime exception during component
   resolution."
 - Applied patch by Bill Pierce that
-	- Introduces the WebUserControlComponentActivator
-	- Introduces the KeySearchNamingSubSystem
-	- Allows you to associate a custom component activator using
-		1. componentActivatorType on component node
-		2. ComponentActivatorAttribute
-	- Allows you to create and configure child containers through the configuration, using
-	  <configuration>
-	  <containers>
-	  <container name="child1">
-	  <configuration>
-	  <facilities>
-	  ...
-	  </facilities>
-	  <components>
-	  ...
-	  </components>
-	  </configuration>
-	  </container>
-	  </containers>
-	  </configuration>
+    - Introduces the WebUserControlComponentActivator
+    - Introduces the KeySearchNamingSubSystem
+    - Allows you to associate a custom component activator using
+        1. componentActivatorType on component node
+        2. ComponentActivatorAttribute
+    - Allows you to create and configure child containers through the configuration, using
+      <configuration>
+      <containers>
+      <container name="child1">
+      <configuration>
+      <facilities>
+      ...
+      </facilities>
+      <components>
+      ...
+      </components>
+      </configuration>
+      </container>
+      </containers>
+      </configuration>
 - Applied AndyD's patch fixing IOC-52: "Remote access to generic components"
 - Fixed IOC-45: "Proxying a component that has an interface that is extended from another interface throws an exception"
 - Applied patch by Ernst Naezer fixing IOC-37: "Resolving with arguments in Windsor"
@@ -1543,10 +1543,10 @@ fix - wherever used, adjust types appropriately. To obtain actual objects, use R
 - Fixed issue where KeyAlreadyAdded exception would be throw for components accepting two parameters of the same type,
   without overrides
 - Fixed IOC-36
-	- "Transient components with multliple constructors throw unresolved dependency exceptions."
-	- Removed best candidate reference, as the kernel is dynamic it should not cache best constructors as components can
-	  be added or removed at any time
-	- Removed Points from candidates, as in a multithreaded scenario this would lead to failures
+    - "Transient components with multliple constructors throw unresolved dependency exceptions."
+    - Removed best candidate reference, as the kernel is dynamic it should not cache best constructors as components can
+      be added or removed at any time
+    - Removed Points from candidates, as in a multithreaded scenario this would lead to failures
 - Fixed IOC-34: "Cannot use types having their own base type as constructor argument". See revision r2787
 - IOC-32, Support generic collections.
   Supported collections are: ICollection<T>, IList<T>, List<T>, IDictionary<K,V>, Dictionary<K,V>, IEnumerable<T>
@@ -1564,9 +1564,9 @@ fix - wherever used, adjust types appropriately. To obtain actual objects, use R
 
 - Dependencies can be resolved now in three levels:
 
-	* CreationContext (which now implements ISubDependencyResolver)
-	* IHandler (which now implements ISubDependencyResolver)
-	* IKernel which is the normal flow
+    * CreationContext (which now implements ISubDependencyResolver)
+    * IHandler (which now implements ISubDependencyResolver)
+    * IKernel which is the normal flow
 
 - Implemented IoC-29 using a different approach
 
@@ -1591,10 +1591,10 @@ fix - wherever used, adjust types appropriately. To obtain actual objects, use R
   Now users can add an 'inspectionBehavior' attribute to the component node that defines
   the inspection strategy. Possible values are
 
-	- None: No properties inspection should happen
-	- All: All properties will be inspected and collected (on the class and on the superclasses).
-	  This is the default behavior
-	- DeclaredOnly: Only properties specified on type are checked (superclasses will be ignored)
+    - None: No properties inspection should happen
+    - All: All properties will be inspected and collected (on the class and on the superclasses).
+      This is the default behavior
+    - DeclaredOnly: Only properties specified on type are checked (superclasses will be ignored)
 
 - Added overload to ITypeConvertor that accept the current node configuration as well as the type in CanHandleType()
 
@@ -1614,8 +1614,8 @@ fix - wherever used, adjust types appropriately. To obtain actual objects, use R
 
   The side effects are:
 
-	- when a subscriber is requested it won't be wired automatically.
-	- There no much sense in having a subscriber with a lifestyle other than singleton
+    - when a subscriber is requested it won't be wired automatically.
+    - There no much sense in having a subscriber with a lifestyle other than singleton
 
   I'm still evaluating this idea. Sometimes wiring only when the subscriber is requested
   might make sense, but supporting both approaches is kinda hard.
@@ -1749,22 +1749,22 @@ fix - wherever used, adjust types appropriately. To obtain actual objects, use R
 - IResource introduced (FileResource, AssemblyResource, ConfigResource and UncResource)
   which are accessible through Uris:
 
-	- FileResource:  
-	  file://pathtofile
-	  (For example: file://c:\mydir\file.txt)
+    - FileResource:  
+      file://pathtofile
+      (For example: file://c:\mydir\file.txt)
 
-	- AssemblyResource:  
-	  assembly://AssemblyName/ExtendingNamespace/filename
-	  (For example: assembly://Castle.Windsor.Tests/Configuration2/include1.xml)
+    - AssemblyResource:  
+      assembly://AssemblyName/ExtendingNamespace/filename
+      (For example: assembly://Castle.Windsor.Tests/Configuration2/include1.xml)
 
-	- ConfigResource:  
-	  config://sectioname
-	  (For example: config://castle will fetch the
-	  <configuration><castle> entry in the configuration)
+    - ConfigResource:  
+      config://sectioname
+      (For example: config://castle will fetch the
+      <configuration><castle> entry in the configuration)
 
-	- UncResource:  
-	  \\server\file
-	  (For example: \\mysharedplace\myconfig.xml)
+    - UncResource:  
+      \\server\file
+      (For example: \\mysharedplace\myconfig.xml)
 
 - IResource, IResourceFactory and IResourceSubSystem introduced
 

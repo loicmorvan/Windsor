@@ -19,8 +19,8 @@ namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 [UsedImplicitly]
 public class StartableComponentCustomDependencies : StartableComponent
 {
-	// ReSharper disable once UnusedParameter.Local
-	public StartableComponentCustomDependencies(int config)
-	{
-	}
+    // ReSharper disable once UnusedParameter.Local
+    public StartableComponentCustomDependencies(int config)
+    {
+    }
 }

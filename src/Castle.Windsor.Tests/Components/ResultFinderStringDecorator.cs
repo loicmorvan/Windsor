@@ -16,15 +16,15 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ResultFinderStringDecorator : IResultFinder<string>
 {
-	public ResultFinderStringDecorator(IResultFinder<string> finder)
-	{
-		Finder = finder;
-	}
+    public ResultFinderStringDecorator(IResultFinder<string> finder)
+    {
+        Finder = finder;
+    }
 
-	public IResultFinder<string> Finder { get; }
+    public IResultFinder<string> Finder { get; }
 
-	public string Process(ISpecification specification)
-	{
-		return string.Empty;
-	}
+    public string Process(ISpecification specification)
+    {
+        return string.Empty;
+    }
 }

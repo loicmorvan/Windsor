@@ -23,32 +23,34 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public class TypedFactorySelectorsTestCase : AbstractContainerTestCase
 {
-	protected override void AfterContainerCreated()
-	{
-		Container.AddFacility<TypedFactoryFacility>();
-	}
+    protected override void AfterContainerCreated()
+    {
+        Container.AddFacility<TypedFactoryFacility>();
+    }
 
-	[Fact]
-	public void Explicitly_specified_name_fails_if_not_present()
-	{
-		Container.Register(Component.For<A>(),
-			Component.For<A>().Named("name"),
-			Component.For<IGenericFactory<A>>().AsFactory(x => x.SelectedWith(new WithNameSelector("non existing name"))));
+    [Fact]
+    public void Explicitly_specified_name_fails_if_not_present()
+    {
+        Container.Register(Component.For<A>(),
+            Component.For<A>().Named("name"),
+            Component.For<IGenericFactory<A>>()
+                .AsFactory(x => x.SelectedWith(new WithNameSelector("non existing name"))));
 
-		var factory = Container.Resolve<IGenericFactory<A>>();
+        var factory = Container.Resolve<IGenericFactory<A>>();
 
-		Assert.Throws<ComponentNotFoundException>(() => factory.Create());
-	}
+        Assert.Throws<ComponentNotFoundException>(() => factory.Create());
+    }
 
-	[Fact]
-	public void Implicitly_specified_name_falls_back_if_not_present()
-	{
-		Container.Register(Component.For<A>(),
-			Component.For<A>().Named("name"),
-			Component.For<IGenericFactory<A>>().AsFactory(x => x.SelectedWith(new WithNameSelector("non existing name"))));
+    [Fact]
+    public void Implicitly_specified_name_falls_back_if_not_present()
+    {
+        Container.Register(Component.For<A>(),
+            Component.For<A>().Named("name"),
+            Component.For<IGenericFactory<A>>()
+                .AsFactory(x => x.SelectedWith(new WithNameSelector("non existing name"))));
 
-		var factory = Container.Resolve<IGenericFactory<A>>();
+        var factory = Container.Resolve<IGenericFactory<A>>();
 
-		Assert.Throws<ComponentNotFoundException>(() => factory.Create());
-	}
+        Assert.Throws<ComponentNotFoundException>(() => factory.Create());
+    }
 }

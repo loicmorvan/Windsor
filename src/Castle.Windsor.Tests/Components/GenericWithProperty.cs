@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class GenericWithProperty<T>
 {
-	public T Dependency { get; set; }
+    public T Dependency { get; set; }
 }

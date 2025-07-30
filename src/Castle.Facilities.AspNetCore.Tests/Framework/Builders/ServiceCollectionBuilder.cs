@@ -19,10 +19,10 @@ namespace Castle.Facilities.AspNetCore.Tests.Framework.Builders;
 
 public class ServiceCollectionBuilder
 {
-	public static ServiceCollection New()
-	{
-		var serviceCollection = new ServiceCollection();
-		ModelInstaller.RegisterServiceCollection(serviceCollection);
-		return serviceCollection;
-	}
+    public static ServiceCollection New()
+    {
+        var serviceCollection = new ServiceCollection();
+        ModelInstaller.RegisterServiceCollection(serviceCollection);
+        return serviceCollection;
+    }
 }

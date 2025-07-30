@@ -19,8 +19,8 @@ namespace Castle.Windsor.Tests.Components;
 
 public class CustomTestLifestyleAttribute : CustomLifestyleAttribute
 {
-	public CustomTestLifestyleAttribute()
-		: base(typeof(CustomLifestyleManager))
-	{
-	}
+    public CustomTestLifestyleAttribute()
+        : base(typeof(CustomLifestyleManager))
+    {
+    }
 }

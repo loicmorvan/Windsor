@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Diagnostics;
 using System.Reflection;
 using Castle.Windsor.Core;
@@ -26,57 +25,81 @@ namespace Castle.Windsor.Facilities.TypedFactory.Internal;
 [Singleton]
 public class DelegateFactory : ILazyComponentLoader
 {
-	public IRegistration Load(string name, Type service, Arguments arguments)
-	{
-		if (service == null) return null;
+    public IRegistration Load(string name, Type service, Arguments arguments)
+    {
+        if (service == null)
+        {
+            return null;
+        }
 
-		var invoke = ExtractInvokeMethod(service);
-		if (invoke == null) return null;
-		if (invoke.ReturnType.IsPrimitiveTypeOrCollection()) return null;
+        var invoke = ExtractInvokeMethod(service);
+        if (invoke == null)
+        {
+            return null;
+        }
 
-		if (service.GetTypeInfo().IsGenericType) service = service.GetGenericTypeDefinition();
+        if (invoke.ReturnType.IsPrimitiveTypeOrCollection())
+        {
+            return null;
+        }
 
-		return Component.For(service)
-			.ImplementedBy(service, DelegateServiceStrategy.Instance)
-			.NamedAutomatically(GetName(service))
-			.LifeStyle.Transient
-			.Interceptors(new InterceptorReference(TypedFactoryFacility.InterceptorKey)).Last
-			.Activator<DelegateFactoryActivator>()
-			.DynamicParameters((k, args) =>
-			{
-				var selector = k.Resolve<ITypedFactoryComponentSelector>(TypedFactoryFacility.DefaultDelegateSelectorKey);
-				args.AddTyped(selector);
-				return k2 => k2.ReleaseComponent(selector);
-			})
-			.AddAttributeDescriptor(TypedFactoryFacility.IsFactoryKey, bool.TrueString);
-	}
+        if (service.GetTypeInfo().IsGenericType)
+        {
+            service = service.GetGenericTypeDefinition();
+        }
 
-	protected string GetName(Type service)
-	{
-		var defaultName = ComponentName.DefaultNameFor(service);
-		if (string.IsNullOrEmpty(defaultName)) return "auto-factory: " + Guid.NewGuid();
-		return "auto-factory: " + defaultName;
-	}
+        return Component.For(service)
+            .ImplementedBy(service, DelegateServiceStrategy.Instance)
+            .NamedAutomatically(GetName(service))
+            .LifeStyle.Transient
+            .Interceptors(new InterceptorReference(TypedFactoryFacility.InterceptorKey)).Last
+            .Activator<DelegateFactoryActivator>()
+            .DynamicParameters((k, args) =>
+            {
+                var selector =
+                    k.Resolve<ITypedFactoryComponentSelector>(TypedFactoryFacility.DefaultDelegateSelectorKey);
+                args.AddTyped(selector);
+                return k2 => k2.ReleaseComponent(selector);
+            })
+            .AddAttributeDescriptor(TypedFactoryFacility.IsFactoryKey, bool.TrueString);
+    }
 
-	public static MethodInfo ExtractInvokeMethod(Type service)
-	{
-		if (!service.Is<MulticastDelegate>()) return null;
+    protected string GetName(Type service)
+    {
+        var defaultName = ComponentName.DefaultNameFor(service);
+        if (string.IsNullOrEmpty(defaultName))
+        {
+            return "auto-factory: " + Guid.NewGuid();
+        }
 
-		var invoke = GetInvokeMethod(service);
-		if (!HasReturn(invoke)) return null;
+        return "auto-factory: " + defaultName;
+    }
 
-		return invoke;
-	}
+    public static MethodInfo ExtractInvokeMethod(Type service)
+    {
+        if (!service.Is<MulticastDelegate>())
+        {
+            return null;
+        }
 
-	protected static MethodInfo GetInvokeMethod(Type @delegate)
-	{
-		var invoke = @delegate.GetMethod("Invoke");
-		Debug.Assert(invoke != null);
-		return invoke;
-	}
+        var invoke = GetInvokeMethod(service);
+        if (!HasReturn(invoke))
+        {
+            return null;
+        }
 
-	protected static bool HasReturn(MethodInfo invoke)
-	{
-		return invoke.ReturnType != typeof(void);
-	}
+        return invoke;
+    }
+
+    protected static MethodInfo GetInvokeMethod(Type @delegate)
+    {
+        var invoke = @delegate.GetMethod("Invoke");
+        Debug.Assert(invoke != null);
+        return invoke;
+    }
+
+    protected static bool HasReturn(MethodInfo invoke)
+    {
+        return invoke.ReturnType != typeof(void);
+    }
 }

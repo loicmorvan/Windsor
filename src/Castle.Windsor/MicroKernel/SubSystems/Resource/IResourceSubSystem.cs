@@ -12,20 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.SubSystems.Resource;
-
 using Castle.Core.Resource;
 
-/// <summary>An implementation of <c>a</c> should be able to return instances of <see cref = "IResource" /> for a given resource identifier.</summary>
+namespace Castle.Windsor.MicroKernel.SubSystems.Resource;
+
+/// <summary>
+///     An implementation of <c>a</c> should be able to return instances of <see cref="IResource" /> for a given
+///     resource identifier.
+/// </summary>
 public interface IResourceSubSystem : ISubSystem
 {
-	IResource CreateResource(CustomUri uri);
+    IResource CreateResource(CustomUri uri);
 
-	IResource CreateResource(CustomUri uri, string basePath);
+    IResource CreateResource(CustomUri uri, string basePath);
 
-	IResource CreateResource(string resource);
+    IResource CreateResource(string resource);
 
-	IResource CreateResource(string resource, string basePath);
+    IResource CreateResource(string resource, string basePath);
 
-	void RegisterResourceFactory(IResourceFactory resourceFactory);
+    void RegisterResourceFactory(IResourceFactory resourceFactory);
 }

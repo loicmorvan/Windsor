@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
 using Castle.Core.Resource;
 
 namespace Castle.Windsor.MicroKernel.SubSystems.Resource;
@@ -21,63 +19,71 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Resource;
 /// <summary>Pendent</summary>
 public sealed class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 {
-	private readonly List<IResourceFactory> _resourceFactories = new();
+    private readonly List<IResourceFactory> _resourceFactories = new();
 
-	public DefaultResourceSubSystem()
-	{
-		InitDefaultResourceFactories();
-	}
+    public DefaultResourceSubSystem()
+    {
+        InitDefaultResourceFactories();
+    }
 
-	public IResource CreateResource(string resource)
-	{
-		ArgumentNullException.ThrowIfNull(resource);
+    public IResource CreateResource(string resource)
+    {
+        ArgumentNullException.ThrowIfNull(resource);
 
-		return CreateResource(new CustomUri(resource));
-	}
+        return CreateResource(new CustomUri(resource));
+    }
 
-	public IResource CreateResource(string resource, string basePath)
-	{
-		ArgumentNullException.ThrowIfNull(resource);
+    public IResource CreateResource(string resource, string basePath)
+    {
+        ArgumentNullException.ThrowIfNull(resource);
 
-		return CreateResource(new CustomUri(resource), basePath);
-	}
+        return CreateResource(new CustomUri(resource), basePath);
+    }
 
-	public IResource CreateResource(CustomUri uri)
-	{
-		ArgumentNullException.ThrowIfNull(uri);
+    public IResource CreateResource(CustomUri uri)
+    {
+        ArgumentNullException.ThrowIfNull(uri);
 
-		foreach (var resFactory in _resourceFactories)
-			if (resFactory.Accept(uri))
-				return resFactory.Create(uri);
+        foreach (var resFactory in _resourceFactories)
+        {
+            if (resFactory.Accept(uri))
+            {
+                return resFactory.Create(uri);
+            }
+        }
 
-		throw new KernelException("No Resource factory was able to " +
-		                          "deal with Uri " + uri);
-	}
+        throw new KernelException("No Resource factory was able to " +
+                                  "deal with Uri " + uri);
+    }
 
-	public IResource CreateResource(CustomUri uri, string basePath)
-	{
-		ArgumentNullException.ThrowIfNull(uri);
-		ArgumentNullException.ThrowIfNull(basePath);
+    public IResource CreateResource(CustomUri uri, string basePath)
+    {
+        ArgumentNullException.ThrowIfNull(uri);
+        ArgumentNullException.ThrowIfNull(basePath);
 
-		foreach (var resFactory in _resourceFactories)
-			if (resFactory.Accept(uri))
-				return resFactory.Create(uri, basePath);
+        foreach (var resFactory in _resourceFactories)
+        {
+            if (resFactory.Accept(uri))
+            {
+                return resFactory.Create(uri, basePath);
+            }
+        }
 
-		throw new KernelException("No Resource factory was able to " +
-		                          "deal with Uri " + uri);
-	}
+        throw new KernelException("No Resource factory was able to " +
+                                  "deal with Uri " + uri);
+    }
 
-	public void RegisterResourceFactory(IResourceFactory resourceFactory)
-	{
-		ArgumentNullException.ThrowIfNull(resourceFactory);
+    public void RegisterResourceFactory(IResourceFactory resourceFactory)
+    {
+        ArgumentNullException.ThrowIfNull(resourceFactory);
 
-		_resourceFactories.Add(resourceFactory);
-	}
+        _resourceFactories.Add(resourceFactory);
+    }
 
-	private void InitDefaultResourceFactories()
-	{
-		RegisterResourceFactory(new AssemblyResourceFactory());
-		RegisterResourceFactory(new UncResourceFactory());
-		RegisterResourceFactory(new FileResourceFactory());
-	}
+    private void InitDefaultResourceFactories()
+    {
+        RegisterResourceFactory(new AssemblyResourceFactory());
+        RegisterResourceFactory(new UncResourceFactory());
+        RegisterResourceFactory(new FileResourceFactory());
+    }
 }

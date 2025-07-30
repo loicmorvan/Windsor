@@ -17,6 +17,6 @@ namespace Castle.Windsor.MicroKernel.Proxy;
 /// <summary>Holds the keys used by the proxy factories.</summary>
 public abstract class ProxyConstants
 {
-	/// <summary>Key used to supply custom proxy options.</summary>
-	public static readonly string ProxyOptionsKey = "proxy.options";
+    /// <summary>Key used to supply custom proxy options.</summary>
+    public static readonly string ProxyOptionsKey = "proxy.options";
 }

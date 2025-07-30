@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ExtendedComponentWithProperties : ComponentWithProperties
 {
-	public int Prop3 { get; set; }
+    public int Prop3 { get; set; }
 }

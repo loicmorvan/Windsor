@@ -18,5 +18,5 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
 public interface IGenericFactoryWithGenericMethod<T>
 {
-	T1 Create<T1>() where T1 : IDummyComponent<T>;
+    T1 Create<T1>() where T1 : IDummyComponent<T>;
 }

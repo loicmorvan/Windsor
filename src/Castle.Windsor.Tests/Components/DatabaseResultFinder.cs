@@ -16,19 +16,19 @@ namespace Castle.Windsor.Tests.Components;
 
 public class DatabaseResultFinder<T> : IResultFinder<T>
 {
-	public DatabaseResultFinder()
-	{
-	}
+    public DatabaseResultFinder()
+    {
+    }
 
-	public DatabaseResultFinder(IResultFinder<T> finder)
-	{
-		Finder = finder;
-	}
+    public DatabaseResultFinder(IResultFinder<T> finder)
+    {
+        Finder = finder;
+    }
 
-	public IResultFinder<T> Finder { get; }
+    public IResultFinder<T> Finder { get; }
 
-	public T Process(ISpecification specification)
-	{
-		return default;
-	}
+    public T Process(ISpecification specification)
+    {
+        return default;
+    }
 }

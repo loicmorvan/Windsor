@@ -20,7 +20,7 @@ namespace Castle.Windsor.Tests.ComponentsWithAttribute;
 [CastleComponent(typeof(ISimpleService))]
 public class HasType : ISimpleService, IMarkerInterface
 {
-	public void Operation()
-	{
-	}
+    public void Operation()
+    {
+    }
 }

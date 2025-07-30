@@ -14,18 +14,16 @@
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
-using System;
-
 public class UsesBarDelegateTwoConstructors
 {
-	public UsesBarDelegateTwoConstructors(Func<Bar> barFactory)
-	{
-		BarFactory = barFactory;
-	}
+    public UsesBarDelegateTwoConstructors(Func<Bar> barFactory)
+    {
+        BarFactory = barFactory;
+    }
 
-	public UsesBarDelegateTwoConstructors()
-	{
-	}
+    public UsesBarDelegateTwoConstructors()
+    {
+    }
 
-	public Func<Bar> BarFactory { get; private set; }
+    public Func<Bar> BarFactory { get; private set; }
 }

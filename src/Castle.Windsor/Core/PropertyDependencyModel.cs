@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core;
-
-using System;
 using System.Reflection;
+
+namespace Castle.Windsor.Core;
 
 [Serializable]
 public class PropertyDependencyModel : DependencyModel
 {
-	public PropertyDependencyModel(PropertyInfo property, bool isOptional) : base(property.Name, property.PropertyType, isOptional)
-	{
-		Property = property;
-	}
+    public PropertyDependencyModel(PropertyInfo property, bool isOptional) : base(property.Name, property.PropertyType,
+        isOptional)
+    {
+        Property = property;
+    }
 
-	public PropertyInfo Property { get; private set; }
+    public PropertyInfo Property { get; private set; }
 }

@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Castle.Core.Configuration;
 using Castle.Windsor.Core;
@@ -23,110 +20,137 @@ using Castle.Windsor.MicroKernel.SubSystems.Conversion;
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 
 /// <summary>
-///     This implementation of <see cref = "IContributeComponentModelConstruction" /> collects all potential writable public properties exposed by the component implementation and populates the model
+///     This implementation of <see cref="IContributeComponentModelConstruction" /> collects all potential writable public
+///     properties exposed by the component implementation and populates the model
 ///     with them. The Kernel might be able to set some of these properties when the component is requested.
 /// </summary>
 [Serializable]
 public class PropertiesDependenciesModelInspector(IConversionManager converter) : IContributeComponentModelConstruction
 {
-	[NonSerialized] private readonly IConversionManager _converter = converter;
+    [NonSerialized] private readonly IConversionManager _converter = converter;
 
-	/// <summary>Adds the properties as optional dependencies of this component.</summary>
-	/// <param name = "kernel"></param>
-	/// <param name = "model"></param>
-	public virtual void ProcessModel(IKernel kernel, ComponentModel model)
-	{
-		InspectProperties(model);
-	}
+    /// <summary>Adds the properties as optional dependencies of this component.</summary>
+    /// <param name="kernel"></param>
+    /// <param name="model"></param>
+    public virtual void ProcessModel(IKernel kernel, ComponentModel model)
+    {
+        InspectProperties(model);
+    }
 
-	protected virtual void InspectProperties(ComponentModel model)
-	{
-		var targetType = model.Implementation;
+    protected virtual void InspectProperties(ComponentModel model)
+    {
+        var targetType = model.Implementation;
 
-		if (model.InspectionBehavior == PropertiesInspectionBehavior.Undefined) model.InspectionBehavior = GetInspectionBehaviorFromTheConfiguration(model.Configuration);
+        if (model.InspectionBehavior == PropertiesInspectionBehavior.Undefined)
+        {
+            model.InspectionBehavior = GetInspectionBehaviorFromTheConfiguration(model.Configuration);
+        }
 
-		if (model.InspectionBehavior == PropertiesInspectionBehavior.None)
-			// Nothing to be inspected
-			return;
+        if (model.InspectionBehavior == PropertiesInspectionBehavior.None)
+            // Nothing to be inspected
+        {
+            return;
+        }
 
-		var properties = GetProperties(model, targetType);
-		if (properties.Count == 0) return;
-		var filters = StandardPropertyFilters.GetPropertyFilters(model, false);
-		if (filters == null)
-			properties.ForEach(p => model.AddProperty(BuildDependency(p, true)));
-		else
-			foreach (var filter in filters.Concat([StandardPropertyFilters.Create(PropertyFilter.Default)]))
-			{
-				var dependencies = filter.Invoke(model, properties, BuildDependency);
-				if (dependencies != null)
-					foreach (var dependency in dependencies)
-						model.AddProperty(dependency);
+        var properties = GetProperties(model, targetType);
+        if (properties.Count == 0)
+        {
+            return;
+        }
 
-				if (properties.Count == 0) return;
-			}
-	}
+        var filters = StandardPropertyFilters.GetPropertyFilters(model, false);
+        if (filters == null)
+        {
+            properties.ForEach(p => model.AddProperty(BuildDependency(p, true)));
+        }
+        else
+        {
+            foreach (var filter in filters.Concat([StandardPropertyFilters.Create(PropertyFilter.Default)]))
+            {
+                var dependencies = filter.Invoke(model, properties, BuildDependency);
+                if (dependencies != null)
+                {
+                    foreach (var dependency in dependencies)
+                    {
+                        model.AddProperty(dependency);
+                    }
+                }
 
-	private PropertySet BuildDependency(PropertyInfo property, bool isOptional)
-	{
-		var dependency = new PropertyDependencyModel(property, isOptional);
-		return new PropertySet(property, dependency);
-	}
+                if (properties.Count == 0)
+                {
+                    return;
+                }
+            }
+        }
+    }
 
-	private PropertiesInspectionBehavior GetInspectionBehaviorFromTheConfiguration(IConfiguration config)
-	{
-		if (config == null || config.Attributes["inspectionBehavior"] == null)
-			// return default behavior
-			return PropertiesInspectionBehavior.All;
+    private PropertySet BuildDependency(PropertyInfo property, bool isOptional)
+    {
+        var dependency = new PropertyDependencyModel(property, isOptional);
+        return new PropertySet(property, dependency);
+    }
 
-		var enumStringVal = config.Attributes["inspectionBehavior"];
+    private PropertiesInspectionBehavior GetInspectionBehaviorFromTheConfiguration(IConfiguration config)
+    {
+        if (config == null || config.Attributes["inspectionBehavior"] == null)
+            // return default behavior
+        {
+            return PropertiesInspectionBehavior.All;
+        }
 
-		try
-		{
-			return _converter.PerformConversion<PropertiesInspectionBehavior>(enumStringVal);
-		}
-		catch (Exception)
-		{
-			var message =
-				string.Format(
-					"Error on properties inspection. Could not convert the inspectionBehavior attribute value into an expected enum value. " +
-					"Value found is '{0}' while possible values are '{1}'",
-					enumStringVal,
-					string.Join(", ", Enum.GetNames<PropertiesInspectionBehavior>()));
+        var enumStringVal = config.Attributes["inspectionBehavior"];
 
-			throw new ConverterException(message);
-		}
-	}
+        try
+        {
+            return _converter.PerformConversion<PropertiesInspectionBehavior>(enumStringVal);
+        }
+        catch (Exception)
+        {
+            var message =
+                string.Format(
+                    "Error on properties inspection. Could not convert the inspectionBehavior attribute value into an expected enum value. " +
+                    "Value found is '{0}' while possible values are '{1}'",
+                    enumStringVal,
+                    string.Join(", ", Enum.GetNames<PropertiesInspectionBehavior>()));
 
-	private List<PropertyInfo> GetProperties(ComponentModel model, Type targetType)
-	{
-		BindingFlags bindingFlags;
-		if (model.InspectionBehavior == PropertiesInspectionBehavior.DeclaredOnly)
-			bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-		else // if (model.InspectionBehavior == PropertiesInspectionBehavior.All) or Undefined
-			bindingFlags = BindingFlags.Public | BindingFlags.Instance;
+            throw new ConverterException(message);
+        }
+    }
 
-		var properties = targetType.GetProperties(bindingFlags);
-		return properties.Where(IsValidPropertyDependency).ToList();
-	}
+    private List<PropertyInfo> GetProperties(ComponentModel model, Type targetType)
+    {
+        BindingFlags bindingFlags;
+        if (model.InspectionBehavior == PropertiesInspectionBehavior.DeclaredOnly)
+        {
+            bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+        }
+        else // if (model.InspectionBehavior == PropertiesInspectionBehavior.All) or Undefined
+        {
+            bindingFlags = BindingFlags.Public | BindingFlags.Instance;
+        }
 
-	private static bool HasDoNotWireAttribute(PropertyInfo property)
-	{
-		return property.IsDefined(typeof(DoNotWireAttribute));
-	}
+        var properties = targetType.GetProperties(bindingFlags);
+        return properties.Where(IsValidPropertyDependency).ToList();
+    }
 
-	private static bool HasParameters(PropertyInfo property)
-	{
-		var indexerParams = property.GetIndexParameters();
-		return indexerParams.Length != 0;
-	}
+    private static bool HasDoNotWireAttribute(PropertyInfo property)
+    {
+        return property.IsDefined(typeof(DoNotWireAttribute));
+    }
 
-	private static bool IsSettable(PropertyInfo property)
-	{
-		return property.CanWrite && property.GetSetMethod() != null;
-	}
+    private static bool HasParameters(PropertyInfo property)
+    {
+        var indexerParams = property.GetIndexParameters();
+        return indexerParams.Length != 0;
+    }
 
-	private static bool IsValidPropertyDependency(PropertyInfo property)
-	{
-		return IsSettable(property) && HasParameters(property) == false && HasDoNotWireAttribute(property) == false;
-	}
+    private static bool IsSettable(PropertyInfo property)
+    {
+        return property.CanWrite && property.GetSetMethod() != null;
+    }
+
+    private static bool IsValidPropertyDependency(PropertyInfo property)
+    {
+        return IsSettable(property) && HasParameters(property) == false && HasDoNotWireAttribute(property) == false;
+    }
 }

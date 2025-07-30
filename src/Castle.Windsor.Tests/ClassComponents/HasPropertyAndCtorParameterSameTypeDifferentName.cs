@@ -18,10 +18,10 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class HasPropertyAndCtorParameterSameTypeDifferentName
 {
-	public HasPropertyAndCtorParameterSameTypeDifferentName(IEmptyService emptyService)
-	{
-		SomeService = emptyService;
-	}
+    public HasPropertyAndCtorParameterSameTypeDifferentName(IEmptyService emptyService)
+    {
+        SomeService = emptyService;
+    }
 
-	public IEmptyService SomeService { get; set; }
+    public IEmptyService SomeService { get; set; }
 }

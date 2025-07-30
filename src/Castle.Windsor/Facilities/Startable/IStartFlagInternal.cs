@@ -16,5 +16,5 @@ namespace Castle.Windsor.Facilities.Startable;
 
 public interface IStartFlagInternal
 {
-	void Init(StartableFacility.StartableEvents events);
+    void Init(StartableFacility.StartableEvents events);
 }

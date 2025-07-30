@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Lifestyle;
@@ -25,37 +24,42 @@ namespace Castle.Facilities.AspNetCore.Contributors;
 
 public class MiddlewareComponentModelContributor : IContributeComponentModelConstruction
 {
-	private readonly IApplicationBuilder _applicationBuilder;
-	private readonly IServiceCollection _services;
-	private IServiceProvider _provider;
+    private readonly IApplicationBuilder _applicationBuilder;
+    private readonly IServiceCollection _services;
+    private IServiceProvider _provider;
 
-	public MiddlewareComponentModelContributor(IServiceCollection services, IApplicationBuilder applicationBuilder)
-	{
-		_services = services ?? throw new ArgumentNullException(nameof(services));
-		_applicationBuilder = applicationBuilder ??
-		                      throw new InvalidOperationException(
-			                      "Please call `Container.GetFacility<AspNetCoreFacility>(f => f.RegistersMiddlewareInto(applicationBuilder));` first. This should happen before any middleware registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md");
-	}
+    public MiddlewareComponentModelContributor(IServiceCollection services, IApplicationBuilder applicationBuilder)
+    {
+        _services = services ?? throw new ArgumentNullException(nameof(services));
+        _applicationBuilder = applicationBuilder ??
+                              throw new InvalidOperationException(
+                                  "Please call `Container.GetFacility<AspNetCoreFacility>(f => f.RegistersMiddlewareInto(applicationBuilder));` first. This should happen before any middleware registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md");
+    }
 
-	public void ProcessModel(IKernel kernel, ComponentModel model)
-	{
-		if (model.Configuration.Attributes.Get(AspNetCoreFacility.IsRegisteredAsMiddlewareIntoApplicationBuilderKey) == bool.TrueString)
-			foreach (var service in model.Services)
-				_applicationBuilder.Use(async (context, next) =>
-				{
-					var windsorScope = kernel.BeginScope();
-					var serviceProviderScope =
-						(_provider = _provider ?? _services.BuildServiceProvider()).CreateScope();
-					try
-					{
-						var middleware = (IMiddleware)kernel.Resolve(service);
-						await middleware.InvokeAsync(context, async _ => await next());
-					}
-					finally
-					{
-						serviceProviderScope.Dispose();
-						windsorScope.Dispose();
-					}
-				});
-	}
+    public void ProcessModel(IKernel kernel, ComponentModel model)
+    {
+        if (model.Configuration.Attributes.Get(AspNetCoreFacility.IsRegisteredAsMiddlewareIntoApplicationBuilderKey) ==
+            bool.TrueString)
+        {
+            foreach (var service in model.Services)
+            {
+                _applicationBuilder.Use(async (context, next) =>
+                {
+                    var windsorScope = kernel.BeginScope();
+                    var serviceProviderScope =
+                        (_provider = _provider ?? _services.BuildServiceProvider()).CreateScope();
+                    try
+                    {
+                        var middleware = (IMiddleware)kernel.Resolve(service);
+                        await middleware.InvokeAsync(context, async _ => await next());
+                    }
+                    finally
+                    {
+                        serviceProviderScope.Dispose();
+                        windsorScope.Dispose();
+                    }
+                });
+            }
+        }
+    }
 }

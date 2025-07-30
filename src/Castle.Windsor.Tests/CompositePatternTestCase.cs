@@ -20,21 +20,21 @@ namespace Castle.Windsor.Tests;
 
 public class CompositePatternTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void Can_resolve_composite_based_solely_on_conventions()
-	{
-		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel));
-		Container.Register(
-			Component.For<IEmptyService2>()
-				.ImplementedBy<CompositeEmptyService2>()
-				.LifeStyle.Transient,
-			Classes.FromAssembly(GetCurrentAssembly())
-				.BasedOn<IEmptyService2>()
-				.WithService.Base()
-				.Configure(c => c.LifestyleTransient()));
+    [Fact]
+    public void Can_resolve_composite_based_solely_on_conventions()
+    {
+        Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel));
+        Container.Register(
+            Component.For<IEmptyService2>()
+                .ImplementedBy<CompositeEmptyService2>()
+                .LifeStyle.Transient,
+            Classes.FromAssembly(GetCurrentAssembly())
+                .BasedOn<IEmptyService2>()
+                .WithService.Base()
+                .Configure(c => c.LifestyleTransient()));
 
-		var obj = Container.Resolve<IEmptyService2>();
-		Assert.IsType<CompositeEmptyService2>(obj);
-		Assert.Equal(5, ((CompositeEmptyService2)obj).Inner.Length);
-	}
+        var obj = Container.Resolve<IEmptyService2>();
+        Assert.IsType<CompositeEmptyService2>(obj);
+        Assert.Equal(5, ((CompositeEmptyService2)obj).Inner.Length);
+    }
 }

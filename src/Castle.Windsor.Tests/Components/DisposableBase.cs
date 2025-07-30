@@ -14,15 +14,17 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-using System;
-
 public abstract class DisposableBase : IDisposable
 {
-	public bool IsDisposed { get; private set; }
+    public bool IsDisposed { get; private set; }
 
-	public void Dispose()
-	{
-		if (IsDisposed) throw new Exception("Already disposed");
-		IsDisposed = true;
-	}
+    public void Dispose()
+    {
+        if (IsDisposed)
+        {
+            throw new Exception("Already disposed");
+        }
+
+        IsDisposed = true;
+    }
 }

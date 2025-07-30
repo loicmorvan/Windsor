@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 
@@ -22,44 +21,44 @@ namespace Castle.Windsor.Tests;
 
 public class TransientMultiConstructorTestCase
 {
-	[Fact]
-	public void TransientMultiConstructorTest()
-	{
-		var container = new DefaultKernel();
-		container.Register(Component.For(typeof(AnyClass)).Named("AnyClass"));
+    [Fact]
+    public void TransientMultiConstructorTest()
+    {
+        var container = new DefaultKernel();
+        container.Register(Component.For(typeof(AnyClass)).Named("AnyClass"));
 
-		var arguments1 = new Arguments { { "integer", 1 } };
+        var arguments1 = new Arguments { { "integer", 1 } };
 
-		var arguments2 = new Arguments { { "datetime", DateTime.Now.AddDays(1) } };
+        var arguments2 = new Arguments { { "datetime", DateTime.Now.AddDays(1) } };
 
-		var a = container.Resolve<AnyClass>(arguments1);
-		var b = container.Resolve<AnyClass>(arguments2);
+        var a = container.Resolve<AnyClass>(arguments1);
+        var b = container.Resolve<AnyClass>(arguments2);
 
-		Assert.NotSame(a, b);
-	}
+        Assert.NotSame(a, b);
+    }
 
-	[Fact]
-	public void TransientMultipleConstructorNonValueTypeTest()
-	{
-		var container = new DefaultKernel();
-		container.Register(Component.For(typeof(AnyClassWithReference)).Named("AnyClass"));
-		var one = new Tester1("AnyString");
-		var two = new Tester2(1);
+    [Fact]
+    public void TransientMultipleConstructorNonValueTypeTest()
+    {
+        var container = new DefaultKernel();
+        container.Register(Component.For(typeof(AnyClassWithReference)).Named("AnyClass"));
+        var one = new Tester1("AnyString");
+        var two = new Tester2(1);
 
-		var arguments1 = new Arguments { { "test1", one } };
+        var arguments1 = new Arguments { { "test1", one } };
 
-		var arguments2 = new Arguments { { "test2", two } };
+        var arguments2 = new Arguments { { "test2", two } };
 
-		var a = container.Resolve<AnyClassWithReference>(arguments1);
-		var b = container.Resolve<AnyClassWithReference>(arguments2);
+        var a = container.Resolve<AnyClassWithReference>(arguments1);
+        var b = container.Resolve<AnyClassWithReference>(arguments2);
 
-		Assert.NotSame(a, b);
+        Assert.NotSame(a, b);
 
-		// multi resolve test
+        // multi resolve test
 
-		a = container.Resolve<AnyClassWithReference>(arguments1);
-		b = container.Resolve<AnyClassWithReference>(arguments2);
+        a = container.Resolve<AnyClassWithReference>(arguments1);
+        b = container.Resolve<AnyClassWithReference>(arguments2);
 
-		Assert.NotSame(a, b);
-	}
+        Assert.NotSame(a, b);
+    }
 }

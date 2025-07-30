@@ -16,10 +16,10 @@ namespace Castle.Windsor.Tests.Components;
 
 public class MyService : IService
 {
-	public MyService()
-	{
-		Name = string.Empty;
-	}
+    public MyService()
+    {
+        Name = string.Empty;
+    }
 
-	public string Name { get; set; }
+    public string Name { get; set; }
 }

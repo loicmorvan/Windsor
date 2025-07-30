@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System.Collections;
-using System.Collections.Generic;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.Windsor.Diagnostics.Extensions;
 
@@ -21,39 +20,39 @@ namespace Castle.Windsor.Windsor.Diagnostics;
 
 public partial class DefaultDiagnosticsSubSystem : IDiagnosticsHost, IContainerDebuggerExtensionHost
 {
-	private readonly IList<IContainerDebuggerExtension> _extensions = new List<IContainerDebuggerExtension>();
+    private readonly IList<IContainerDebuggerExtension> _extensions = new List<IContainerDebuggerExtension>();
 
-	public void Add(IContainerDebuggerExtension item)
-	{
-		item.Init(Kernel, this);
-		_extensions.Add(item);
-	}
+    public void Add(IContainerDebuggerExtension item)
+    {
+        item.Init(Kernel, this);
+        _extensions.Add(item);
+    }
 
-	public IEnumerator<IContainerDebuggerExtension> GetEnumerator()
-	{
-		return _extensions.GetEnumerator();
-	}
+    public IEnumerator<IContainerDebuggerExtension> GetEnumerator()
+    {
+        return _extensions.GetEnumerator();
+    }
 
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return GetEnumerator();
-	}
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 
-	public override void Init(IKernelInternal kernel)
-	{
-		base.Init(kernel);
-		InitStandardExtensions();
-	}
+    public override void Init(IKernelInternal kernel)
+    {
+        base.Init(kernel);
+        InitStandardExtensions();
+    }
 
-	protected virtual void InitStandardExtensions()
-	{
-		Add(new AllComponents());
-		Add(new AllServices());
-		Add(new PotentiallyMisconfiguredComponents());
-		Add(new PotentialLifestyleMismatches());
-		Add(new DuplicatedDependenciesDebuggerExtension());
-		Add(new UsingContainerAsServiceLocator());
-		Add(new ReleasePolicyTrackedObjects());
-		Add(new Extensions.Facilities());
-	}
+    protected virtual void InitStandardExtensions()
+    {
+        Add(new AllComponents());
+        Add(new AllServices());
+        Add(new PotentiallyMisconfiguredComponents());
+        Add(new PotentialLifestyleMismatches());
+        Add(new DuplicatedDependenciesDebuggerExtension());
+        Add(new UsingContainerAsServiceLocator());
+        Add(new ReleasePolicyTrackedObjects());
+        Add(new Extensions.Facilities());
+    }
 }

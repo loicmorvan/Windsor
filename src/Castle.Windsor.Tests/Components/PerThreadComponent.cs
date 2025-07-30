@@ -20,5 +20,5 @@ namespace Castle.Windsor.Tests.Components;
 [PerThread]
 public class PerThreadComponent : IComponent
 {
-	public int Id => GetHashCode();
+    public int Id => GetHashCode();
 }

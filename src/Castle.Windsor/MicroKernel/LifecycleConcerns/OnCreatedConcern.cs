@@ -17,11 +17,11 @@ using Castle.Windsor.Core;
 namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
 
 public class OnCreatedConcern<TComponent>(LifecycleActionDelegate<TComponent> action, IKernel kernel)
-	: ICommissionConcern
+    : ICommissionConcern
 {
-	public void Apply(ComponentModel model, object component)
-	{
-		var item = (TComponent)component;
-		action(kernel, item);
-	}
+    public void Apply(ComponentModel model, object component)
+    {
+        var item = (TComponent)component;
+        action(kernel, item);
+    }
 }

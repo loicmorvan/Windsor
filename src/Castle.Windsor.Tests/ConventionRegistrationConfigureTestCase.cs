@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Linq;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor.Tests.Components;
@@ -21,66 +20,68 @@ namespace Castle.Windsor.Tests;
 
 public class ConventionRegistrationConfigureTestCase : AbstractContainerTestCase
 {
-	protected override void AfterContainerCreated()
-	{
-		// because some IEmptyService depend on collections
-		Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel));
-	}
+    protected override void AfterContainerCreated()
+    {
+        // because some IEmptyService depend on collections
+        Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel));
+    }
 
-	[Fact]
-	public void ConfigureIf_can_be_applied_multiple_times()
-	{
-		Container.Register(Classes.FromAssembly(GetCurrentAssembly())
-			.BasedOn<IEmptyService>()
-			.ConfigureIf(r => r.Implementation.Name.EndsWith("A"), r => r.Named("A"))
-			.ConfigureIf(r => r.Implementation.Name.EndsWith("B"), r => r.Named("B")));
+    [Fact]
+    public void ConfigureIf_can_be_applied_multiple_times()
+    {
+        Container.Register(Classes.FromAssembly(GetCurrentAssembly())
+            .BasedOn<IEmptyService>()
+            .ConfigureIf(r => r.Implementation.Name.EndsWith("A"), r => r.Named("A"))
+            .ConfigureIf(r => r.Implementation.Name.EndsWith("B"), r => r.Named("B")));
 
-		var a = Container.Resolve<IEmptyService>("a");
-		var b = Container.Resolve<IEmptyService>("b");
+        var a = Container.Resolve<IEmptyService>("a");
+        var b = Container.Resolve<IEmptyService>("b");
 
-		Assert.IsType<EmptyServiceA>(a);
-		Assert.IsType<EmptyServiceB>(b);
-	}
+        Assert.IsType<EmptyServiceA>(a);
+        Assert.IsType<EmptyServiceB>(b);
+    }
 
-	[Fact]
-	public void ConfigureIf_configures_all_matching_components()
-	{
-		Container.Register(Classes.FromAssembly(GetCurrentAssembly())
-			.BasedOn<IEmptyService>()
-			.ConfigureIf(r => char.IsUpper(r.Implementation.Name.Last()), r => r.Named(r.Implementation.Name.Last().ToString())));
+    [Fact]
+    public void ConfigureIf_configures_all_matching_components()
+    {
+        Container.Register(Classes.FromAssembly(GetCurrentAssembly())
+            .BasedOn<IEmptyService>()
+            .ConfigureIf(r => char.IsUpper(r.Implementation.Name.Last()),
+                r => r.Named(r.Implementation.Name.Last().ToString())));
 
-		var a = Container.Resolve<IEmptyService>("a");
-		var b = Container.Resolve<IEmptyService>("b");
+        var a = Container.Resolve<IEmptyService>("a");
+        var b = Container.Resolve<IEmptyService>("b");
 
-		Assert.IsType<EmptyServiceA>(a);
-		Assert.IsType<EmptyServiceB>(b);
-	}
+        Assert.IsType<EmptyServiceA>(a);
+        Assert.IsType<EmptyServiceB>(b);
+    }
 
-	[Fact]
-	public void ConfigureIf_configures_matching_components()
-	{
-		Container.Register(Classes.FromAssembly(GetCurrentAssembly())
-			.BasedOn<IEmptyService>()
-			.ConfigureIf(r => r.Implementation.Name.EndsWith("A"), r => r.Named("A")));
+    [Fact]
+    public void ConfigureIf_configures_matching_components()
+    {
+        Container.Register(Classes.FromAssembly(GetCurrentAssembly())
+            .BasedOn<IEmptyService>()
+            .ConfigureIf(r => r.Implementation.Name.EndsWith("A"), r => r.Named("A")));
 
-		var a = Container.Resolve<IEmptyService>("a");
+        var a = Container.Resolve<IEmptyService>("a");
 
-		Assert.IsType<EmptyServiceA>(a);
-	}
+        Assert.IsType<EmptyServiceA>(a);
+    }
 
-	[Fact]
-	public void ConfigureIf_configures_matching_components_and_alternative_configuration_configures_the_rest()
-	{
-		var number = 0;
-		Container.Register(Classes.FromAssembly(GetCurrentAssembly())
-			.BasedOn<IEmptyService>()
-			.WithService.Base()
-			.ConfigureIf(r => r.Implementation.Name.EndsWith("A"), r => r.Named("A"), r => r.Named((++number).ToString())));
+    [Fact]
+    public void ConfigureIf_configures_matching_components_and_alternative_configuration_configures_the_rest()
+    {
+        var number = 0;
+        Container.Register(Classes.FromAssembly(GetCurrentAssembly())
+            .BasedOn<IEmptyService>()
+            .WithService.Base()
+            .ConfigureIf(r => r.Implementation.Name.EndsWith("A"), r => r.Named("A"),
+                r => r.Named((++number).ToString())));
 
-		var a = Container.Resolve<IEmptyService>("a");
-		Assert.IsType<EmptyServiceA>(a);
+        var a = Container.Resolve<IEmptyService>("a");
+        Assert.IsType<EmptyServiceA>(a);
 
-		Container.Resolve<IEmptyService>("1");
-		Container.Resolve<IEmptyService>("2");
-	}
+        Container.Resolve<IEmptyService>("1");
+        Container.Resolve<IEmptyService>("2");
+    }
 }

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 
@@ -20,22 +19,22 @@ namespace Castle.Windsor.Tests.Bugs;
 
 public class IoC117
 {
-	[Fact]
-	public void Public_property_with_Protected_setter_causes_Object_Reference_exception()
-	{
-		IKernel kernel = new DefaultKernel();
+    [Fact]
+    public void Public_property_with_Protected_setter_causes_Object_Reference_exception()
+    {
+        IKernel kernel = new DefaultKernel();
 
-		kernel.Register(Component.For<Presenter>());
-		kernel.Register(Component.For<View>());
+        kernel.Register(Component.For<Presenter>());
+        kernel.Register(Component.For<View>());
 
-		try
-		{
-			var p = kernel.Resolve<Presenter>();
-			Assert.NotNull(p);
-		}
-		catch (NullReferenceException)
-		{
-			Assert.Fail("Should not have thrown a NullReferenceException");
-		}
-	}
+        try
+        {
+            var p = kernel.Resolve<Presenter>();
+            Assert.NotNull(p);
+        }
+        catch (NullReferenceException)
+        {
+            Assert.Fail("Should not have thrown a NullReferenceException");
+        }
+    }
 }

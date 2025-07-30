@@ -16,10 +16,10 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class UsesSimpleComponent1
 {
-	public UsesSimpleComponent1(SimpleComponent1 dependency)
-	{
-		Dependency = dependency;
-	}
+    public UsesSimpleComponent1(SimpleComponent1 dependency)
+    {
+        Dependency = dependency;
+    }
 
-	public SimpleComponent1 Dependency { get; }
+    public SimpleComponent1 Dependency { get; }
 }

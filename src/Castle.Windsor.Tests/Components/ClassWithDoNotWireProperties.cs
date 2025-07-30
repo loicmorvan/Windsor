@@ -18,9 +18,7 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ClassWithDoNotWireProperties
 {
-	[DoNotWire]
-	public string Host { get; set; }
+    [DoNotWire] public string Host { get; set; }
 
-	[DoNotWire]
-	public int Port { get; set; }
+    [DoNotWire] public int Port { get; set; }
 }

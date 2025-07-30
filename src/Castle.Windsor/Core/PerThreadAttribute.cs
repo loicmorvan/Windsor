@@ -14,13 +14,11 @@
 
 namespace Castle.Windsor.Core;
 
-using System;
-
 /// <summary>Indicates that the target components wants a per thread lifestyle.</summary>
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class PerThreadAttribute : LifestyleAttribute
 {
-	/// <summary>Initializes a new instance of the <see cref = "PerThreadAttribute" /> class.</summary>
+	/// <summary>Initializes a new instance of the <see cref="PerThreadAttribute" /> class.</summary>
 	public PerThreadAttribute() : base(LifestyleType.Thread)
 	{
 	}

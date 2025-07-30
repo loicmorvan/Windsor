@@ -18,12 +18,12 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class TwoEmptyServiceDependenciesConstructor
 {
-	public TwoEmptyServiceDependenciesConstructor(IEmptyService one, IEmptyService two)
-	{
-		One = one;
-		Two = two;
-	}
+    public TwoEmptyServiceDependenciesConstructor(IEmptyService one, IEmptyService two)
+    {
+        One = one;
+        Two = two;
+    }
 
-	public IEmptyService One { get; private set; }
-	public IEmptyService Two { get; private set; }
+    public IEmptyService One { get; private set; }
+    public IEmptyService Two { get; private set; }
 }

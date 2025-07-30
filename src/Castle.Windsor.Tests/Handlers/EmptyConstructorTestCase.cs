@@ -22,47 +22,47 @@ namespace Castle.Windsor.Tests.Handlers;
 
 public class EmptyConstructorTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void Component_With_Explicit_Required_Dependency_Will_Be_Marked_Waiting()
-	{
-		Container.Register(Component.For<AProp>()
-			.AddDescriptor(new ExplicitRequiredDependencyDescriptor()));
+    [Fact]
+    public void Component_With_Explicit_Required_Dependency_Will_Be_Marked_Waiting()
+    {
+        Container.Register(Component.For<AProp>()
+            .AddDescriptor(new ExplicitRequiredDependencyDescriptor()));
 
-		var handler = Container.Kernel.GetHandler(typeof(AProp));
-		Assert.Equal(HandlerState.WaitingDependency, handler.CurrentState);
-	}
+        var handler = Container.Kernel.GetHandler(typeof(AProp));
+        Assert.Equal(HandlerState.WaitingDependency, handler.CurrentState);
+    }
 
-	[Fact]
-	public void Component_With_Required_Properies_Will_Be_Marked_Waiting()
-	{
-		Container.Register(Component.For<AProp>()
-			.AddDescriptor(new RequirePropertyDescriptor()));
+    [Fact]
+    public void Component_With_Required_Properies_Will_Be_Marked_Waiting()
+    {
+        Container.Register(Component.For<AProp>()
+            .AddDescriptor(new RequirePropertyDescriptor()));
 
-		var handler = Container.Kernel.GetHandler(typeof(AProp));
-		Assert.Equal(HandlerState.WaitingDependency, handler.CurrentState);
-	}
+        var handler = Container.Kernel.GetHandler(typeof(AProp));
+        Assert.Equal(HandlerState.WaitingDependency, handler.CurrentState);
+    }
 
-	private class ExplicitRequiredDependencyDescriptor : IComponentModelDescriptor
-	{
-		public void BuildComponentModel(IKernel kernel, ComponentModel model)
-		{
-			model.Dependencies.Add(new DependencyModel("", typeof(B), false));
-		}
+    private class ExplicitRequiredDependencyDescriptor : IComponentModelDescriptor
+    {
+        public void BuildComponentModel(IKernel kernel, ComponentModel model)
+        {
+            model.Dependencies.Add(new DependencyModel("", typeof(B), false));
+        }
 
-		public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-		{
-		}
-	}
+        public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+        {
+        }
+    }
 
-	private class RequirePropertyDescriptor : IComponentModelDescriptor
-	{
-		public void BuildComponentModel(IKernel kernel, ComponentModel model)
-		{
-		}
+    private class RequirePropertyDescriptor : IComponentModelDescriptor
+    {
+        public void BuildComponentModel(IKernel kernel, ComponentModel model)
+        {
+        }
 
-		public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-		{
-			model.Requires<A>();
-		}
-	}
+        public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+        {
+            model.Requires<A>();
+        }
+    }
 }

@@ -16,14 +16,14 @@ namespace Castle.Windsor.Tests.Components;
 
 public class UsesIEmptyService
 {
-	public static int InstancesCreated;
+    public static int InstancesCreated;
 
 
-	public UsesIEmptyService(IEmptyService emptyService)
-	{
-		InstancesCreated++;
-		EmptyService = emptyService;
-	}
+    public UsesIEmptyService(IEmptyService emptyService)
+    {
+        InstancesCreated++;
+        EmptyService = emptyService;
+    }
 
-	public IEmptyService EmptyService { get; private set; }
+    public IEmptyService EmptyService { get; private set; }
 }

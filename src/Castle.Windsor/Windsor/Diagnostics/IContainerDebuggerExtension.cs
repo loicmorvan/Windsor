@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
 
@@ -20,7 +19,7 @@ namespace Castle.Windsor.Windsor.Diagnostics;
 
 public interface IContainerDebuggerExtension
 {
-	IEnumerable<DebuggerViewItem> Attach();
+    IEnumerable<DebuggerViewItem> Attach();
 
-	void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost);
+    void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost);
 }

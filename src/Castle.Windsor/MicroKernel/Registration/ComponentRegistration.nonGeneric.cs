@@ -14,14 +14,14 @@
 
 namespace Castle.Windsor.MicroKernel.Registration;
 
-using System;
-
-/// <summary>A non-generic <see cref = "ComponentRegistration{S}" />.
+/// <summary>
+///     A non-generic <see cref="ComponentRegistration{S}" />.
 ///     <para />
-///     You can create a new registration with the <see cref = "Component" /> factory.</summary>
+///     You can create a new registration with the <see cref="Component" /> factory.
+/// </summary>
 public class ComponentRegistration : ComponentRegistration<object>
 {
-	public ComponentRegistration(params Type[] serviceTypes) : base(serviceTypes)
-	{
-	}
+    public ComponentRegistration(params Type[] serviceTypes) : base(serviceTypes)
+    {
+    }
 }

@@ -12,23 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-
 namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Selects an existing set of types to register.</summary>
 public class FromTypesDescriptor : FromDescriptor
 {
-	private readonly IEnumerable<Type> _types;
+    private readonly IEnumerable<Type> _types;
 
-	internal FromTypesDescriptor(IEnumerable<Type> types, Predicate<Type> additionalFilters) : base(additionalFilters)
-	{
-		_types = types;
-	}
+    internal FromTypesDescriptor(IEnumerable<Type> types, Predicate<Type> additionalFilters) : base(additionalFilters)
+    {
+        _types = types;
+    }
 
-	protected override IEnumerable<Type> SelectedTypes(IKernel kernel)
-	{
-		return _types;
-	}
+    protected override IEnumerable<Type> SelectedTypes(IKernel kernel)
+    {
+        return _types;
+    }
 }

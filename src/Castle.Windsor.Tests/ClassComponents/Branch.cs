@@ -16,10 +16,10 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class Branch
 {
-	public Branch(Leaf leaf)
-	{
-		Leaf = leaf;
-	}
+    public Branch(Leaf leaf)
+    {
+        Leaf = leaf;
+    }
 
-	public Leaf Leaf { get; }
+    public Leaf Leaf { get; }
 }

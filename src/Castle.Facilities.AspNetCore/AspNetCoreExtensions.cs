@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,49 +20,53 @@ namespace Castle.Facilities.AspNetCore;
 
 internal static class AspNetCoreExtensions
 {
-	public static void AddRequestScopingMiddleware(this IServiceCollection services, Func<IEnumerable<IDisposable>> requestScopeProvider)
-	{
-		ArgumentNullException.ThrowIfNull(services);
+    public static void AddRequestScopingMiddleware(this IServiceCollection services,
+        Func<IEnumerable<IDisposable>> requestScopeProvider)
+    {
+        ArgumentNullException.ThrowIfNull(services);
 
-		ArgumentNullException.ThrowIfNull(requestScopeProvider);
+        ArgumentNullException.ThrowIfNull(requestScopeProvider);
 
-		services.AddSingleton<IStartupFilter>(new RequestScopingStartupFilter(requestScopeProvider));
-	}
+        services.AddSingleton<IStartupFilter>(new RequestScopingStartupFilter(requestScopeProvider));
+    }
 
-	private sealed class RequestScopingStartupFilter : IStartupFilter
-	{
-		private readonly Func<IEnumerable<IDisposable>> _requestScopeProvider;
+    private sealed class RequestScopingStartupFilter : IStartupFilter
+    {
+        private readonly Func<IEnumerable<IDisposable>> _requestScopeProvider;
 
-		public RequestScopingStartupFilter(Func<IEnumerable<IDisposable>> requestScopeProvider)
-		{
-			_requestScopeProvider =
-				requestScopeProvider ?? throw new ArgumentNullException(nameof(requestScopeProvider));
-		}
+        public RequestScopingStartupFilter(Func<IEnumerable<IDisposable>> requestScopeProvider)
+        {
+            _requestScopeProvider =
+                requestScopeProvider ?? throw new ArgumentNullException(nameof(requestScopeProvider));
+        }
 
-		public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> nextFilter)
-		{
-			return builder =>
-			{
-				ConfigureRequestScoping(builder);
+        public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> nextFilter)
+        {
+            return builder =>
+            {
+                ConfigureRequestScoping(builder);
 
-				nextFilter(builder);
-			};
-		}
+                nextFilter(builder);
+            };
+        }
 
-		private void ConfigureRequestScoping(IApplicationBuilder builder)
-		{
-			builder.Use(async (_, next) =>
-			{
-				var scopes = _requestScopeProvider();
-				try
-				{
-					await next();
-				}
-				finally
-				{
-					foreach (var scope in scopes) scope.Dispose();
-				}
-			});
-		}
-	}
+        private void ConfigureRequestScoping(IApplicationBuilder builder)
+        {
+            builder.Use(async (_, next) =>
+            {
+                var scopes = _requestScopeProvider();
+                try
+                {
+                    await next();
+                }
+                finally
+                {
+                    foreach (var scope in scopes)
+                    {
+                        scope.Dispose();
+                    }
+                }
+            });
+        }
+    }
 }

@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
 public class ComponentWithOptionalParameter
 {
-	public string Parameter { get; set; }
+    public string Parameter { get; set; }
 }

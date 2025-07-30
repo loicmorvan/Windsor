@@ -20,21 +20,21 @@ namespace Castle.Windsor.Tests;
 
 public class WindsorServiceProviderTextCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void Can_windsor_service_provider_resolve_services()
-	{
-		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
-		var provider = new WindsorServiceProvider(Container);
-		var service = provider.GetService<IEmptyService>();
-		Assert.NotNull(service);
-	}
+    [Fact]
+    public void Can_windsor_service_provider_resolve_services()
+    {
+        Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
+        var provider = new WindsorServiceProvider(Container);
+        var service = provider.GetService<IEmptyService>();
+        Assert.NotNull(service);
+    }
 
-	[Fact]
-	[Bug("IOC-323")]
-	public void Can_windsor_service_provider_return_null_when_service_not_found()
-	{
-		var provider = new WindsorServiceProvider(Container);
-		var service = provider.GetService<IEmptyService>();
-		Assert.Null(service);
-	}
+    [Fact]
+    [Bug("IOC-323")]
+    public void Can_windsor_service_provider_return_null_when_service_not_found()
+    {
+        var provider = new WindsorServiceProvider(Container);
+        var service = provider.GetService<IEmptyService>();
+        Assert.Null(service);
+    }
 }

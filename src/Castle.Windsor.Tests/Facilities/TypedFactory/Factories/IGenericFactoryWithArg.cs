@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
 public interface IGenericFactoryWithArg<TService, TArg>
 {
-	TService Create(TArg arg);
+    TService Create(TArg arg);
 }

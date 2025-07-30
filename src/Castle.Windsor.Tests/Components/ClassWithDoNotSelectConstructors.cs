@@ -18,15 +18,15 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ClassWithDoNotSelectConstructors
 {
-	public ClassWithDoNotSelectConstructors()
-	{
-	}
+    public ClassWithDoNotSelectConstructors()
+    {
+    }
 
-	[DoNotSelect]
-	public ClassWithDoNotSelectConstructors(string dependency)
-	{
-		Dependency = dependency;
-	}
+    [DoNotSelect]
+    public ClassWithDoNotSelectConstructors(string dependency)
+    {
+        Dependency = dependency;
+    }
 
-	public string Dependency { get; private set; }
+    public string Dependency { get; private set; }
 }

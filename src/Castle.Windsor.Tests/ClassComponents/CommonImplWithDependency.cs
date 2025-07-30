@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class CommonImplWithDependency(ICustomer customer) : ICommonSub2
 {
-	public readonly ICustomer Customer = customer;
+    public readonly ICustomer Customer = customer;
 }

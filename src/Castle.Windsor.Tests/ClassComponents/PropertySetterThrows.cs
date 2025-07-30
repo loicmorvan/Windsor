@@ -14,12 +14,10 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-using System;
-
 public class PropertySetterThrows
 {
-	public ICommon CommonService
-	{
-		set => throw new InvalidOperationException("Kaboom!");
-	}
+    public ICommon CommonService
+    {
+        set => throw new InvalidOperationException("Kaboom!");
+    }
 }

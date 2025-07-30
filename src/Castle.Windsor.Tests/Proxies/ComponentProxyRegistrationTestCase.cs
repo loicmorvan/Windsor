@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.DynamicProxy;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Handlers;
@@ -26,253 +25,254 @@ namespace Castle.Windsor.Tests.Proxies;
 
 public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 {
-	private void AssertIsProxy(object o)
-	{
-		Assert.IsType<IProxyTargetAccessor>(o, false);
-	}
+    private void AssertIsProxy(object o)
+    {
+        Assert.IsType<IProxyTargetAccessor>(o, false);
+    }
 
-	[Fact]
-	public void AddComponent_WithMixIn_AddsMixin()
-	{
-		Container.Register(Component.For<ICalcService>()
-			.ImplementedBy<CalculatorService>()
-			.Proxy.MixIns(new SimpleMixIn())
-		);
+    [Fact]
+    public void AddComponent_WithMixIn_AddsMixin()
+    {
+        Container.Register(Component.For<ICalcService>()
+            .ImplementedBy<CalculatorService>()
+            .Proxy.MixIns(new SimpleMixIn())
+        );
 
-		var calculator = Container.Resolve<ICalcService>();
-		AssertIsProxy(calculator);
-		Assert.IsType<ISimpleMixIn>(calculator, false);
+        var calculator = Container.Resolve<ICalcService>();
+        AssertIsProxy(calculator);
+        Assert.IsType<ISimpleMixIn>(calculator, false);
 
-		// ReSharper disable once SuspiciousTypeConversion.Global
-		var mixin = (ISimpleMixIn)calculator;
-		mixin.DoSomething();
-	}
+        // ReSharper disable once SuspiciousTypeConversion.Global
+        var mixin = (ISimpleMixIn)calculator;
+        mixin.DoSomething();
+    }
 
-	[Fact]
-	public void AddComponent_With_instance_given_MixIn()
-	{
-		Container.Register(
-			Component.For<ICalcService>()
-				.ImplementedBy<CalculatorService>()
-				.Proxy.MixIns(m => m.Objects(new SimpleMixIn())));
+    [Fact]
+    public void AddComponent_With_instance_given_MixIn()
+    {
+        Container.Register(
+            Component.For<ICalcService>()
+                .ImplementedBy<CalculatorService>()
+                .Proxy.MixIns(m => m.Objects(new SimpleMixIn())));
 
-		var calculator = Container.Resolve<ICalcService>();
-		AssertIsProxy(calculator);
-		Assert.IsType<ISimpleMixIn>(calculator, false);
+        var calculator = Container.Resolve<ICalcService>();
+        AssertIsProxy(calculator);
+        Assert.IsType<ISimpleMixIn>(calculator, false);
 
-		// ReSharper disable once SuspiciousTypeConversion.Global
-		var mixin = (ISimpleMixIn)calculator;
-		mixin.DoSomething();
-	}
+        // ReSharper disable once SuspiciousTypeConversion.Global
+        var mixin = (ISimpleMixIn)calculator;
+        mixin.DoSomething();
+    }
 
-	[Fact]
-	public void AddComponent_With_named_component_MixIn()
-	{
-		Container.Register(
-			Component.For<ICalcService>().ImplementedBy<CalculatorService>().Proxy.MixIns(m => m.Component("other")),
-			Component.For<ISimpleMixIn>().ImplementedBy<SimpleMixIn>().Named("other"));
+    [Fact]
+    public void AddComponent_With_named_component_MixIn()
+    {
+        Container.Register(
+            Component.For<ICalcService>().ImplementedBy<CalculatorService>().Proxy.MixIns(m => m.Component("other")),
+            Component.For<ISimpleMixIn>().ImplementedBy<SimpleMixIn>().Named("other"));
 
-		var calculator = Container.Resolve<ICalcService>();
-		AssertIsProxy(calculator);
-		Assert.IsType<ISimpleMixIn>(calculator, false);
+        var calculator = Container.Resolve<ICalcService>();
+        AssertIsProxy(calculator);
+        Assert.IsType<ISimpleMixIn>(calculator, false);
 
-		// ReSharper disable once SuspiciousTypeConversion.Global
-		var mixin = (ISimpleMixIn)calculator;
-		mixin.DoSomething();
-	}
+        // ReSharper disable once SuspiciousTypeConversion.Global
+        var mixin = (ISimpleMixIn)calculator;
+        mixin.DoSomething();
+    }
 
-	[Fact]
-	public void AddComponent_With_typed_component_MixIn()
-	{
-		Container.Register(
-			Component.For<ICalcService>().ImplementedBy<CalculatorService>().Proxy.MixIns(m => m.Component<SimpleMixIn>()),
-			Component.For<ISimpleMixIn>().ImplementedBy<SimpleMixIn>());
+    [Fact]
+    public void AddComponent_With_typed_component_MixIn()
+    {
+        Container.Register(
+            Component.For<ICalcService>().ImplementedBy<CalculatorService>().Proxy
+                .MixIns(m => m.Component<SimpleMixIn>()),
+            Component.For<ISimpleMixIn>().ImplementedBy<SimpleMixIn>());
 
-		var calculator = Container.Resolve<ICalcService>();
-		AssertIsProxy(calculator);
-		Assert.IsType<ISimpleMixIn>(calculator, false);
+        var calculator = Container.Resolve<ICalcService>();
+        AssertIsProxy(calculator);
+        Assert.IsType<ISimpleMixIn>(calculator, false);
 
-		// ReSharper disable once SuspiciousTypeConversion.Global
-		var mixin = (ISimpleMixIn)calculator;
-		mixin.DoSomething();
-	}
+        // ReSharper disable once SuspiciousTypeConversion.Global
+        var mixin = (ISimpleMixIn)calculator;
+        mixin.DoSomething();
+    }
 
-	[Fact]
-	public void Missing_dependency_on_hook_statically_detected()
-	{
-		Container.Register(Component.For<ICalcService>()
-			.ImplementedBy<CalculatorService>()
-			.Proxy.Hook(h => h.Service<ProxyNothingHook>()));
+    [Fact]
+    public void Missing_dependency_on_hook_statically_detected()
+    {
+        Container.Register(Component.For<ICalcService>()
+            .ImplementedBy<CalculatorService>()
+            .Proxy.Hook(h => h.Service<ProxyNothingHook>()));
 
-		var calc = Container.Kernel.GetHandler(typeof(ICalcService));
-		Assert.Equal(HandlerState.WaitingDependency, calc.CurrentState);
+        var calc = Container.Kernel.GetHandler(typeof(ICalcService));
+        Assert.Equal(HandlerState.WaitingDependency, calc.CurrentState);
 
-		var exception =
-			Assert.Throws<HandlerException>(() =>
-				Container.Resolve<ICalcService>());
-		Assert.Equal(
-			string.Format(
-				"Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Component 'Castle.Windsor.Tests.ProxyInfrastructure.ProxyNothingHook' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
-				Environment.NewLine,
-				typeof(CalculatorService).FullName),
-			exception.Message);
-	}
+        var exception =
+            Assert.Throws<HandlerException>(() =>
+                Container.Resolve<ICalcService>());
+        Assert.Equal(
+            string.Format(
+                "Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Component 'Castle.Windsor.Tests.ProxyInfrastructure.ProxyNothingHook' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
+                Environment.NewLine,
+                typeof(CalculatorService).FullName),
+            exception.Message);
+    }
 
-	[Fact]
-	public void Missing_dependency_on_mixin_statically_detected()
-	{
-		Container.Register(Component.For<ICalcService>()
-			.ImplementedBy<CalculatorService>()
-			.Proxy.MixIns(m => m.Component<A>()));
+    [Fact]
+    public void Missing_dependency_on_mixin_statically_detected()
+    {
+        Container.Register(Component.For<ICalcService>()
+            .ImplementedBy<CalculatorService>()
+            .Proxy.MixIns(m => m.Component<A>()));
 
-		var calc = Container.Kernel.GetHandler(typeof(ICalcService));
-		Assert.Equal(HandlerState.WaitingDependency, calc.CurrentState);
+        var calc = Container.Kernel.GetHandler(typeof(ICalcService));
+        Assert.Equal(HandlerState.WaitingDependency, calc.CurrentState);
 
-		var exception =
-			Assert.Throws<HandlerException>(() =>
-				Container.Resolve<ICalcService>());
-		var message = string.Format(
-			"Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Component '{2}' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
-			Environment.NewLine,
-			typeof(CalculatorService).FullName,
-			typeof(A).FullName);
-		Assert.Equal(message, exception.Message);
-	}
+        var exception =
+            Assert.Throws<HandlerException>(() =>
+                Container.Resolve<ICalcService>());
+        var message = string.Format(
+            "Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Component '{2}' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
+            Environment.NewLine,
+            typeof(CalculatorService).FullName,
+            typeof(A).FullName);
+        Assert.Equal(message, exception.Message);
+    }
 
-	[Fact]
-	public void Missing_dependency_on_selector_statically_detected()
-	{
-		Container.Register(Component.For<ICalcService>()
-			.ImplementedBy<CalculatorService>()
-			.SelectInterceptorsWith(s => s.Service<DummyInterceptorSelector>()));
+    [Fact]
+    public void Missing_dependency_on_selector_statically_detected()
+    {
+        Container.Register(Component.For<ICalcService>()
+            .ImplementedBy<CalculatorService>()
+            .SelectInterceptorsWith(s => s.Service<DummyInterceptorSelector>()));
 
-		var calc = Container.Kernel.GetHandler(typeof(ICalcService));
-		Assert.Equal(HandlerState.WaitingDependency, calc.CurrentState);
+        var calc = Container.Kernel.GetHandler(typeof(ICalcService));
+        Assert.Equal(HandlerState.WaitingDependency, calc.CurrentState);
 
-		var exception =
-			Assert.Throws<HandlerException>(() =>
-				Container.Resolve<ICalcService>());
-		var message = string.Format(
-			"Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Component 'Castle.Windsor.Tests.Interceptors.DummyInterceptorSelector' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
-			Environment.NewLine,
-			typeof(CalculatorService).FullName);
+        var exception =
+            Assert.Throws<HandlerException>(() =>
+                Container.Resolve<ICalcService>());
+        var message = string.Format(
+            "Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Component 'Castle.Windsor.Tests.Interceptors.DummyInterceptorSelector' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
+            Environment.NewLine,
+            typeof(CalculatorService).FullName);
 
-		Assert.Equal(message, exception.Message);
-	}
+        Assert.Equal(message, exception.Message);
+    }
 
-	[Fact]
-	public void Releasing_MixIn_releases_all_parts()
-	{
-		Container.Register(
-			Component.For<LifecycleCounter>(),
-			Component.For<ICalcService>()
-				.ImplementedBy<CalculatorService>().Proxy.MixIns(m => m.Component<SimpleServiceDisposable>())
-				.LifeStyle.Transient,
-			Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>()
-				.LifeStyle.Transient);
+    [Fact]
+    public void Releasing_MixIn_releases_all_parts()
+    {
+        Container.Register(
+            Component.For<LifecycleCounter>(),
+            Component.For<ICalcService>()
+                .ImplementedBy<CalculatorService>().Proxy.MixIns(m => m.Component<SimpleServiceDisposable>())
+                .LifeStyle.Transient,
+            Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>()
+                .LifeStyle.Transient);
 
-		var calculator = Container.Resolve<ICalcService>();
-		AssertIsProxy(calculator);
-		Assert.IsType<ISimpleService>(calculator, false);
+        var calculator = Container.Resolve<ICalcService>();
+        AssertIsProxy(calculator);
+        Assert.IsType<ISimpleService>(calculator, false);
 
-		// ReSharper disable once SuspiciousTypeConversion.Global
-		var mixin = (ISimpleService)calculator;
-		mixin.Operation();
-		Container.Release(mixin);
-		Assert.Equal(1, Container.Resolve<LifecycleCounter>()["Dispose"]);
-	}
+        // ReSharper disable once SuspiciousTypeConversion.Global
+        var mixin = (ISimpleService)calculator;
+        mixin.Operation();
+        Container.Release(mixin);
+        Assert.Equal(1, Container.Resolve<LifecycleCounter>()["Dispose"]);
+    }
 
-	[Fact]
-	public void can_atach_hook_as_instance_simple()
-	{
-		var interceptor = new ResultModifierInterceptor(5);
-		var hook = new ProxyNothingHook();
-		Container.Register(Component.For<ResultModifierInterceptor>().Instance(interceptor),
-			Component.For<ICalcService>()
-				.ImplementedBy<CalculatorService>()
-				.Interceptors<ResultModifierInterceptor>()
-				.Proxy.Hook(hook));
+    [Fact]
+    public void can_atach_hook_as_instance_simple()
+    {
+        var interceptor = new ResultModifierInterceptor(5);
+        var hook = new ProxyNothingHook();
+        Container.Register(Component.For<ResultModifierInterceptor>().Instance(interceptor),
+            Component.For<ICalcService>()
+                .ImplementedBy<CalculatorService>()
+                .Interceptors<ResultModifierInterceptor>()
+                .Proxy.Hook(hook));
 
-		var calculator = Container.Resolve<ICalcService>();
-		AssertIsProxy(calculator);
-		Assert.Equal(4, calculator.Sum(2, 2));
-	}
+        var calculator = Container.Resolve<ICalcService>();
+        AssertIsProxy(calculator);
+        Assert.Equal(4, calculator.Sum(2, 2));
+    }
 
-	[Fact]
-	public void can_atach_hook_as_instance_simple_via_nested_closure()
-	{
-		var interceptor = new ResultModifierInterceptor(5);
-		var hook = new ProxyNothingHook();
-		Container.Register(Component.For<ResultModifierInterceptor>().Instance(interceptor),
-			Component.For<ICalcService>()
-				.ImplementedBy<CalculatorService>()
-				.Interceptors<ResultModifierInterceptor>()
-				.Proxy.Hook(h => h.Instance(hook)));
+    [Fact]
+    public void can_atach_hook_as_instance_simple_via_nested_closure()
+    {
+        var interceptor = new ResultModifierInterceptor(5);
+        var hook = new ProxyNothingHook();
+        Container.Register(Component.For<ResultModifierInterceptor>().Instance(interceptor),
+            Component.For<ICalcService>()
+                .ImplementedBy<CalculatorService>()
+                .Interceptors<ResultModifierInterceptor>()
+                .Proxy.Hook(h => h.Instance(hook)));
 
-		var calculator = Container.Resolve<ICalcService>();
-		AssertIsProxy(calculator);
-		Assert.Equal(4, calculator.Sum(2, 2));
-	}
+        var calculator = Container.Resolve<ICalcService>();
+        AssertIsProxy(calculator);
+        Assert.Equal(4, calculator.Sum(2, 2));
+    }
 
-	[Fact]
-	public void can_atach_hook_as_named_service()
-	{
-		var interceptor = new ResultModifierInterceptor(5);
-		Container.Register(Component.For<ResultModifierInterceptor>().Instance(interceptor),
-			Component.For<ProxyNothingHook>().Named("hook"),
-			Component.For<ICalcService>()
-				.ImplementedBy<CalculatorService>()
-				.Interceptors<ResultModifierInterceptor>()
-				.Proxy.Hook(h => h.Service("hook")));
+    [Fact]
+    public void can_atach_hook_as_named_service()
+    {
+        var interceptor = new ResultModifierInterceptor(5);
+        Container.Register(Component.For<ResultModifierInterceptor>().Instance(interceptor),
+            Component.For<ProxyNothingHook>().Named("hook"),
+            Component.For<ICalcService>()
+                .ImplementedBy<CalculatorService>()
+                .Interceptors<ResultModifierInterceptor>()
+                .Proxy.Hook(h => h.Service("hook")));
 
-		var calculator = Container.Resolve<ICalcService>();
-		AssertIsProxy(calculator);
-		Assert.Equal(4, calculator.Sum(2, 2));
-	}
+        var calculator = Container.Resolve<ICalcService>();
+        AssertIsProxy(calculator);
+        Assert.Equal(4, calculator.Sum(2, 2));
+    }
 
-	[Fact]
-	public void can_atach_hook_as_typed_service()
-	{
-		var interceptor = new ResultModifierInterceptor(5);
-		Container.Register(Component.For<ResultModifierInterceptor>().Instance(interceptor),
-			Component.For<ProxyNothingHook>(),
-			Component.For<ICalcService>()
-				.ImplementedBy<CalculatorService>()
-				.Interceptors<ResultModifierInterceptor>()
-				.Proxy.Hook(h => h.Service<ProxyNothingHook>()));
+    [Fact]
+    public void can_atach_hook_as_typed_service()
+    {
+        var interceptor = new ResultModifierInterceptor(5);
+        Container.Register(Component.For<ResultModifierInterceptor>().Instance(interceptor),
+            Component.For<ProxyNothingHook>(),
+            Component.For<ICalcService>()
+                .ImplementedBy<CalculatorService>()
+                .Interceptors<ResultModifierInterceptor>()
+                .Proxy.Hook(h => h.Service<ProxyNothingHook>()));
 
-		var calculator = Container.Resolve<ICalcService>();
-		AssertIsProxy(calculator);
-		Assert.Equal(4, calculator.Sum(2, 2));
-	}
+        var calculator = Container.Resolve<ICalcService>();
+        AssertIsProxy(calculator);
+        Assert.Equal(4, calculator.Sum(2, 2));
+    }
 
-	[Fact]
-	public void can_proxy_interfaces_with_no_impl_given_just_a_hook()
-	{
-		Container.Register(Component.For<ICalcService>()
-			.Proxy.Hook(h => h.Instance(new ProxyNothingHook())));
+    [Fact]
+    public void can_proxy_interfaces_with_no_impl_given_just_a_hook()
+    {
+        Container.Register(Component.For<ICalcService>()
+            .Proxy.Hook(h => h.Instance(new ProxyNothingHook())));
 
-		var calculator = Container.Resolve<ICalcService>();
-		AssertIsProxy(calculator);
-	}
+        var calculator = Container.Resolve<ICalcService>();
+        AssertIsProxy(calculator);
+    }
 
-	[Fact]
-	public void hook_gets_disposed_after_proxy_is_created()
-	{
-		DisposableHook.InstancesCreated = 0;
-		DisposableHook.InstancesDisposed = 0;
-		var interceptor = new ResultModifierInterceptor(5);
-		Container.Register(Component.For<ResultModifierInterceptor>().Instance(interceptor),
-			Component.For<DisposableHook>().Named("hook").LifeStyle.Transient,
-			Component.For<ICalcService>()
-				.ImplementedBy<CalculatorService>()
-				.Interceptors<ResultModifierInterceptor>()
-				.Proxy.Hook(h => h.Service("hook")));
+    [Fact]
+    public void hook_gets_disposed_after_proxy_is_created()
+    {
+        DisposableHook.InstancesCreated = 0;
+        DisposableHook.InstancesDisposed = 0;
+        var interceptor = new ResultModifierInterceptor(5);
+        Container.Register(Component.For<ResultModifierInterceptor>().Instance(interceptor),
+            Component.For<DisposableHook>().Named("hook").LifeStyle.Transient,
+            Component.For<ICalcService>()
+                .ImplementedBy<CalculatorService>()
+                .Interceptors<ResultModifierInterceptor>()
+                .Proxy.Hook(h => h.Service("hook")));
 
-		var calculator = Container.Resolve<ICalcService>();
-		AssertIsProxy(calculator);
+        var calculator = Container.Resolve<ICalcService>();
+        AssertIsProxy(calculator);
 
-		Assert.Equal(1, DisposableHook.InstancesCreated);
-		Assert.Equal(1, DisposableHook.InstancesDisposed);
-	}
+        Assert.Equal(1, DisposableHook.InstancesCreated);
+        Assert.Equal(1, DisposableHook.InstancesDisposed);
+    }
 }

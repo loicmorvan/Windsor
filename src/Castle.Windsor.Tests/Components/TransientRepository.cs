@@ -19,8 +19,8 @@ namespace Castle.Windsor.Tests.Components;
 [Transient]
 public class TransientRepository<T> : IRepository<T> where T : new()
 {
-	public T Get(int id)
-	{
-		return new T();
-	}
+    public T Get(int id)
+    {
+        return new T();
+    }
 }

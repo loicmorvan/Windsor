@@ -21,66 +21,66 @@ namespace Castle.Windsor.Tests.Configuration2;
 
 public class IncludesTestCase
 {
-	private IWindsorContainer _container;
+    private IWindsorContainer _container;
 
-	[Fact]
-	public void AssemblyResourceAndIncludes()
-	{
-		_container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("hasResourceIncludes.xml")));
+    [Fact]
+    public void AssemblyResourceAndIncludes()
+    {
+        _container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("hasResourceIncludes.xml")));
 
-		AssertConfiguration();
-	}
+        AssertConfiguration();
+    }
 
-	[Fact]
-	public void FileResourceAndIncludes()
-	{
-		_container = new WindsorContainer(new XmlInterpreter(Xml.File("hasFileIncludes.xml")));
+    [Fact]
+    public void FileResourceAndIncludes()
+    {
+        _container = new WindsorContainer(new XmlInterpreter(Xml.File("hasFileIncludes.xml")));
 
-		AssertConfiguration();
-	}
+        AssertConfiguration();
+    }
 
-	[Fact]
-	public void FileResourceAndRelativeIncludes()
-	{
-		_container =
-			new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_include_relative.xml"));
+    [Fact]
+    public void FileResourceAndRelativeIncludes()
+    {
+        _container =
+            new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_include_relative.xml"));
 
-		AssertConfiguration();
-	}
+        AssertConfiguration();
+    }
 
-	[Fact]
-	public void FileResourceAndRelativeIncludes2()
-	{
-		_container =
-			new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_include_relative2.xml"));
+    [Fact]
+    public void FileResourceAndRelativeIncludes2()
+    {
+        _container =
+            new WindsorContainer(ConfigHelper.ResolveConfigPath("Configuration2/config_with_include_relative2.xml"));
 
-		AssertConfiguration();
-	}
+        AssertConfiguration();
+    }
 
-	private void AssertConfiguration()
-	{
-		var store = _container.Kernel.ConfigurationStore;
+    private void AssertConfiguration()
+    {
+        var store = _container.Kernel.ConfigurationStore;
 
-		Assert.Equal(2, store.GetFacilities().Length);
-		Assert.Equal(2, store.GetComponents().Length);
+        Assert.Equal(2, store.GetFacilities().Length);
+        Assert.Equal(2, store.GetComponents().Length);
 
-		var config = store.GetFacilityConfiguration(typeof(NoopFacility).FullName);
-		var childItem = config.Children["item"];
-		Assert.NotNull(childItem);
-		Assert.Equal("value", childItem.Value);
+        var config = store.GetFacilityConfiguration(typeof(NoopFacility).FullName);
+        var childItem = config.Children["item"];
+        Assert.NotNull(childItem);
+        Assert.Equal("value", childItem.Value);
 
-		config = store.GetFacilityConfiguration(typeof(Noop2Facility).FullName);
-		Assert.NotNull(config);
-		Assert.Equal("value within CDATA section", config.Value);
+        config = store.GetFacilityConfiguration(typeof(Noop2Facility).FullName);
+        Assert.NotNull(config);
+        Assert.Equal("value within CDATA section", config.Value);
 
-		config = store.GetComponentConfiguration("testidcomponent1");
-		childItem = config.Children["item"];
-		Assert.NotNull(childItem);
-		Assert.Equal("value1", childItem.Value);
+        config = store.GetComponentConfiguration("testidcomponent1");
+        childItem = config.Children["item"];
+        Assert.NotNull(childItem);
+        Assert.Equal("value1", childItem.Value);
 
-		config = store.GetComponentConfiguration("testidcomponent2");
-		childItem = config.Children["item"];
-		Assert.NotNull(childItem);
-		Assert.Equal("value2", childItem.Value);
-	}
+        config = store.GetComponentConfiguration("testidcomponent2");
+        childItem = config.Children["item"];
+        Assert.NotNull(childItem);
+        Assert.Equal("value2", childItem.Value);
+    }
 }

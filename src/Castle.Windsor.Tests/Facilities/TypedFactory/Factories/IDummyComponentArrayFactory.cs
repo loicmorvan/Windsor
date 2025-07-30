@@ -18,5 +18,5 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
 public interface IDummyComponentArrayFactory
 {
-	IDummyComponent[] All();
+    IDummyComponent[] All();
 }

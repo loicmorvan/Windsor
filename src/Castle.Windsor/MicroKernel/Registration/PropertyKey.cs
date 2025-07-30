@@ -1,4 +1,3 @@
-using System;
 using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel.Registration;

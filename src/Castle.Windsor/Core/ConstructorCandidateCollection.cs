@@ -12,43 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Castle.Windsor.Core.Internal;
 
 namespace Castle.Windsor.Core;
 
-/// <summary>Collection of <see cref = "ConstructorCandidate" /></summary>
+/// <summary>Collection of <see cref="ConstructorCandidate" /></summary>
 [Serializable]
 public class ConstructorCandidateCollection : IMutableCollection<ConstructorCandidate>
 {
-	private readonly SimpleSortedSet<ConstructorCandidate> _constructors = [];
+    private readonly SimpleSortedSet<ConstructorCandidate> _constructors = [];
 
-	public ConstructorCandidate this[int index] => _constructors[index];
+    public ConstructorCandidate this[int index] => _constructors[index];
 
-	public int Count => _constructors.Count;
+    public int Count => _constructors.Count;
 
-	[DebuggerStepThrough]
-	public IEnumerator<ConstructorCandidate> GetEnumerator()
-	{
-		return _constructors.GetEnumerator();
-	}
+    [DebuggerStepThrough]
+    public IEnumerator<ConstructorCandidate> GetEnumerator()
+    {
+        return _constructors.GetEnumerator();
+    }
 
-	[DebuggerStepThrough]
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return GetEnumerator();
-	}
+    [DebuggerStepThrough]
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 
-	void IMutableCollection<ConstructorCandidate>.Add(ConstructorCandidate item)
-	{
-		_constructors.Add(item);
-	}
+    void IMutableCollection<ConstructorCandidate>.Add(ConstructorCandidate item)
+    {
+        _constructors.Add(item);
+    }
 
-	bool IMutableCollection<ConstructorCandidate>.Remove(ConstructorCandidate item)
-	{
-		return _constructors.Remove(item);
-	}
+    bool IMutableCollection<ConstructorCandidate>.Remove(ConstructorCandidate item)
+    {
+        return _constructors.Remove(item);
+    }
 }

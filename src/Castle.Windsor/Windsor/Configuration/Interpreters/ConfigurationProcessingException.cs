@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core.Internal;
 
 namespace Castle.Windsor.Windsor.Configuration.Interpreters;
@@ -20,14 +19,13 @@ namespace Castle.Windsor.Windsor.Configuration.Interpreters;
 [Serializable]
 public class ConfigurationProcessingException : Exception
 {
-	public ConfigurationProcessingException(string message) : base(message)
-	{
-		this.SetUp();
-	}
+    public ConfigurationProcessingException(string message) : base(message)
+    {
+        this.SetUp();
+    }
 
-	public ConfigurationProcessingException(string message, Exception innerException) : base(message, innerException)
-	{
-		this.SetUp();
-	}
-
+    public ConfigurationProcessingException(string message, Exception innerException) : base(message, innerException)
+    {
+        this.SetUp();
+    }
 }

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel;
@@ -23,34 +22,34 @@ namespace Castle.Windsor.Tests;
 
 public class GraphTestCase : IDisposable
 {
-	private readonly IKernel _kernel;
+    private readonly IKernel _kernel;
 
-	public GraphTestCase()
-	{
-		_kernel = new DefaultKernel();
-	}
+    public GraphTestCase()
+    {
+        _kernel = new DefaultKernel();
+    }
 
-	public void Dispose()
-	{
-		_kernel.Dispose();
-	}
+    public void Dispose()
+    {
+        _kernel.Dispose();
+    }
 
-	[Fact]
-	public void TopologicalSortOnComponents()
-	{
-		_kernel.Register(Component.For(typeof(A)).Named("a"));
-		_kernel.Register(Component.For(typeof(B)).Named("b"));
-		_kernel.Register(Component.For(typeof(C)).Named("c"));
+    [Fact]
+    public void TopologicalSortOnComponents()
+    {
+        _kernel.Register(Component.For(typeof(A)).Named("a"));
+        _kernel.Register(Component.For(typeof(B)).Named("b"));
+        _kernel.Register(Component.For(typeof(C)).Named("c"));
 
-		var nodes = _kernel.GraphNodes;
+        var nodes = _kernel.GraphNodes;
 
-		Assert.NotNull(nodes);
-		Assert.Equal(3, nodes.Length);
+        Assert.NotNull(nodes);
+        Assert.Equal(3, nodes.Length);
 
-		var vertices = TopologicalSortAlgo.Sort(nodes);
+        var vertices = TopologicalSortAlgo.Sort(nodes);
 
-		Assert.Equal("c", (vertices[0] as ComponentModel).Name);
-		Assert.Equal("b", (vertices[1] as ComponentModel).Name);
-		Assert.Equal("a", (vertices[2] as ComponentModel).Name);
-	}
+        Assert.Equal("c", (vertices[0] as ComponentModel).Name);
+        Assert.Equal("b", (vertices[1] as ComponentModel).Name);
+        Assert.Equal("a", (vertices[2] as ComponentModel).Name);
+    }
 }

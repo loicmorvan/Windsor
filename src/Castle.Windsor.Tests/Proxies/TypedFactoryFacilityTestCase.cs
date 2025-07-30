@@ -22,31 +22,31 @@ namespace Castle.Windsor.Tests.Proxies;
 
 public class TypedFactoryFacilityTestCase
 {
-	[Fact]
-	public void TypedFactory_CreateMethodHasNoId_WorksFine()
-	{
-		var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("typedFactoryCreateWithoutId.xml")));
+    [Fact]
+    public void TypedFactory_CreateMethodHasNoId_WorksFine()
+    {
+        var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("typedFactoryCreateWithoutId.xml")));
 
-		var calcFactory = container.Resolve<ICalculatorFactoryCreateWithoutId>();
-		Assert.NotNull(calcFactory);
+        var calcFactory = container.Resolve<ICalculatorFactoryCreateWithoutId>();
+        Assert.NotNull(calcFactory);
 
-		var calculator = calcFactory.Create();
-		Assert.NotNull(calculator);
-		Assert.Equal(3, calculator.Sum(1, 2));
-	}
+        var calculator = calcFactory.Create();
+        Assert.NotNull(calculator);
+        Assert.Equal(3, calculator.Sum(1, 2));
+    }
 
-	[Fact]
-	public void TypedFactory_WithProxies_WorksFine()
-	{
-		var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("typedFactory.xml")));
+    [Fact]
+    public void TypedFactory_WithProxies_WorksFine()
+    {
+        var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("typedFactory.xml")));
 
-		var calcFactory = container.Resolve<ICalculatorFactory>();
-		Assert.NotNull(calcFactory);
+        var calcFactory = container.Resolve<ICalculatorFactory>();
+        Assert.NotNull(calcFactory);
 
-		var calculator = calcFactory.Create("default");
-		Assert.IsType<IProxyTargetAccessor>(calculator, false);
-		Assert.Equal(3, calculator.Sum(1, 2));
+        var calculator = calcFactory.Create("default");
+        Assert.IsType<IProxyTargetAccessor>(calculator, false);
+        Assert.Equal(3, calculator.Sum(1, 2));
 
-		calcFactory.Release(calculator);
-	}
+        calcFactory.Release(calculator);
+    }
 }

@@ -16,14 +16,14 @@ namespace Castle.Windsor.Tests.Components;
 
 public class CtorWithDefaultValueAndDefault
 {
-	public CtorWithDefaultValueAndDefault(string name = "Stefan Mucha")
-	{
-		Name = name;
-	}
+    public CtorWithDefaultValueAndDefault(string name = "Stefan Mucha")
+    {
+        Name = name;
+    }
 
-	public CtorWithDefaultValueAndDefault()
-	{
-	}
+    public CtorWithDefaultValueAndDefault()
+    {
+    }
 
-	public string Name { get; }
+    public string Name { get; }
 }

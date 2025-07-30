@@ -22,19 +22,19 @@ namespace Castle.Windsor.Tests;
 /// <summary>Check for existence of any problem, as reported http://forum.castleproject.org/posts/list/214.page</summary>
 public class RobotWireTestCase
 {
-	[Fact]
-	public void WireTest()
-	{
-		var container = new WindsorContainer();
-		container.Install(Configuration.FromXml(Xml.Embedded("robotwireconfig.xml")));
+    [Fact]
+    public void WireTest()
+    {
+        var container = new WindsorContainer();
+        container.Install(Configuration.FromXml(Xml.Embedded("robotwireconfig.xml")));
 
-		var robot = container.Resolve<Robot>();
+        var robot = container.Resolve<Robot>();
 
-		Assert.NotNull(robot);
-		Assert.NotNull(robot.Left);
-		Assert.NotNull(robot.Right);
+        Assert.NotNull(robot);
+        Assert.NotNull(robot.Left);
+        Assert.NotNull(robot.Right);
 
-		Assert.Equal("PlasmaGunArm", robot.Left.GetType().Name);
-		Assert.Equal("HumanArm", robot.Right.GetType().Name);
-	}
+        Assert.Equal("PlasmaGunArm", robot.Left.GetType().Name);
+        Assert.Equal("HumanArm", robot.Right.GetType().Name);
+    }
 }

@@ -14,9 +14,7 @@
 
 namespace Castle.Windsor.Windsor.Diagnostics;
 
-using System.Collections.Generic;
-
 public interface IComponentDebuggerExtension
 {
-	IEnumerable<object> Attach();
+    IEnumerable<object> Attach();
 }

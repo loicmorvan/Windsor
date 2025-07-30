@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Reflection;
 using Castle.Windsor.Facilities.TypedFactory;
 using Castle.Windsor.MicroKernel;
@@ -22,20 +21,20 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
 
 public class SelectorByClosedArgumentType : DefaultTypedFactoryComponentSelector
 {
-	public SelectorByClosedArgumentType()
-	{
-		FallbackToResolveByTypeIfNameNotFound = true;
-	}
+    public SelectorByClosedArgumentType()
+    {
+        FallbackToResolveByTypeIfNameNotFound = true;
+    }
 
-	protected override Arguments GetArguments(MethodInfo method, object[] arguments)
-	{
-		//a condition checking if it's actually a method we want to be in should go here
-		return new Arguments().AddTyped(arguments);
-	}
+    protected override Arguments GetArguments(MethodInfo method, object[] arguments)
+    {
+        //a condition checking if it's actually a method we want to be in should go here
+        return new Arguments().AddTyped(arguments);
+    }
 
-	protected override Type GetComponentType(MethodInfo method, object[] arguments)
-	{
-		//a condition checking if it's actually a method we want to be in should go here
-		return typeof(GenericComponent<>).MakeGenericType(arguments[0].GetType());
-	}
+    protected override Type GetComponentType(MethodInfo method, object[] arguments)
+    {
+        //a condition checking if it's actually a method we want to be in should go here
+        return typeof(GenericComponent<>).MakeGenericType(arguments[0].GetType());
+    }
 }

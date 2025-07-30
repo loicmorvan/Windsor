@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Context;
@@ -21,32 +20,32 @@ namespace Castle.Windsor.Tests.MicroKernel;
 
 public class NotImplementedDependencyResolver : IDependencyResolver
 {
-	public IKernel Kernel { get; set; }
+    public IKernel Kernel { get; set; }
 
-	public void Initialize(IKernelInternal kernel, DependencyDelegate resolving)
-	{
-		Kernel = kernel;
-	}
+    public void Initialize(IKernelInternal kernel, DependencyDelegate resolving)
+    {
+        Kernel = kernel;
+    }
 
-	public void AddSubResolver(ISubDependencyResolver subResolver)
-	{
-		throw new NotImplementedException();
-	}
+    public void AddSubResolver(ISubDependencyResolver subResolver)
+    {
+        throw new NotImplementedException();
+    }
 
-	public void RemoveSubResolver(ISubDependencyResolver subResolver)
-	{
-		throw new NotImplementedException();
-	}
+    public void RemoveSubResolver(ISubDependencyResolver subResolver)
+    {
+        throw new NotImplementedException();
+    }
 
-	public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
-		DependencyModel dependency)
-	{
-		throw new NotImplementedException();
-	}
+    public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+        DependencyModel dependency)
+    {
+        throw new NotImplementedException();
+    }
 
-	public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
-		DependencyModel dependency)
-	{
-		throw new NotImplementedException();
-	}
+    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+        DependencyModel dependency)
+    {
+        throw new NotImplementedException();
+    }
 }

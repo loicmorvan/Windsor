@@ -19,15 +19,15 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
 
 public class WithNameSelector : DefaultTypedFactoryComponentSelector
 {
-	private readonly string _name;
+    private readonly string _name;
 
-	public WithNameSelector(string name)
-	{
-		_name = name;
-	}
+    public WithNameSelector(string name)
+    {
+        _name = name;
+    }
 
-	protected override string GetComponentName(MethodInfo method, object[] arguments)
-	{
-		return _name;
-	}
+    protected override string GetComponentName(MethodInfo method, object[] arguments)
+    {
+        return _name;
+    }
 }

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Windsor;
 using Castle.Windsor.Windsor.Configuration.Interpreters;
@@ -21,13 +20,15 @@ namespace Castle.Windsor.Tests.Configuration2;
 
 public class EvalSupportTestCase
 {
-	[Fact]
-	public void AssertBaseDirectoryIsCorrectlyEvaluated()
-	{
-		var container = new WindsorContainer(new XmlInterpreter(ConfigHelper.ResolveConfigPath("Configuration2/eval_config.xml")), new CustomEnv(true));
+    [Fact]
+    public void AssertBaseDirectoryIsCorrectlyEvaluated()
+    {
+        var container =
+            new WindsorContainer(new XmlInterpreter(ConfigHelper.ResolveConfigPath("Configuration2/eval_config.xml")),
+                new CustomEnv(true));
 
-		var prop = container.Resolve<ComponentWithStringProperty>("component");
+        var prop = container.Resolve<ComponentWithStringProperty>("component");
 
-		Assert.Equal(AppContext.BaseDirectory, prop.Name);
-	}
+        Assert.Equal(AppContext.BaseDirectory, prop.Name);
+    }
 }

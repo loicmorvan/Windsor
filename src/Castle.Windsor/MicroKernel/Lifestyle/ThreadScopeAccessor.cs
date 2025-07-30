@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Linq;
-using System.Threading;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
@@ -24,22 +21,25 @@ namespace Castle.Windsor.MicroKernel.Lifestyle;
 [Serializable]
 public class ThreadScopeAccessor : IScopeAccessor
 {
-	private readonly SimpleThreadSafeDictionary<int, ILifetimeScope> _items = new();
+    private readonly SimpleThreadSafeDictionary<int, ILifetimeScope> _items = new();
 
-	public void Dispose()
-	{
-		var values = _items.EjectAllValues();
-		foreach (var item in values.Reverse()) item.Dispose();
-	}
+    public void Dispose()
+    {
+        var values = _items.EjectAllValues();
+        foreach (var item in values.Reverse())
+        {
+            item.Dispose();
+        }
+    }
 
-	public ILifetimeScope GetScope(CreationContext context)
-	{
-		var currentThreadId = GetCurrentThreadId();
-		return _items.GetOrAdd(currentThreadId, _ => new DefaultLifetimeScope());
-	}
+    public ILifetimeScope GetScope(CreationContext context)
+    {
+        var currentThreadId = GetCurrentThreadId();
+        return _items.GetOrAdd(currentThreadId, _ => new DefaultLifetimeScope());
+    }
 
-	protected virtual int GetCurrentThreadId()
-	{
-		return Thread.CurrentThread.ManagedThreadId;
-	}
+    protected virtual int GetCurrentThreadId()
+    {
+        return Thread.CurrentThread.ManagedThreadId;
+    }
 }

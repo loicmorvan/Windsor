@@ -19,7 +19,7 @@ namespace Castle.Windsor.Tests.Components;
 [UsedImplicitly]
 public class CompC
 {
-	public CompC(CompD compD)
-	{
-	}
+    public CompC(CompD compD)
+    {
+    }
 }

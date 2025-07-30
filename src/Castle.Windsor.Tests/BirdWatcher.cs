@@ -1,5 +1,3 @@
-using System;
-
 namespace Castle.Windsor.Tests;
 
 public class BirdWatcher : IWatcher

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using Castle.Core.Configuration;
 using Castle.Core.Resource;
 using Castle.Windsor.Core;
@@ -28,12 +27,12 @@ namespace Castle.Windsor.Tests.Config;
 
 public class ConfigurationTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	[Bug("https://github.com/castleproject/Windsor/issues/574")]
-	public void DictionaryWithReferencedProperty()
-	{
-		var config =
-			@"
+    [Fact]
+    [Bug("https://github.com/castleproject/Windsor/issues/574")]
+    public void DictionaryWithReferencedProperty()
+    {
+        var config =
+            @"
 <configuration>
 	<properties>
 		<value1>Property Value 1</value1>
@@ -53,20 +52,20 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 	</components>
 </configuration>";
 
-		Container.Install(Configuration.FromXml(new StaticContentResource(config)));
-		var stringToStringDictionary = Container.Resolve<Dictionary<string, string>>("stringToStringDictionary");
-		Assert.NotNull(stringToStringDictionary);
-		Assert.Equal(2, stringToStringDictionary.Count);
-		Assert.Equal("Property Value 1", stringToStringDictionary["Key 1"]);
-		Assert.Equal("Property Value 2", stringToStringDictionary["Key 2"]);
-	}
+        Container.Install(Configuration.FromXml(new StaticContentResource(config)));
+        var stringToStringDictionary = Container.Resolve<Dictionary<string, string>>("stringToStringDictionary");
+        Assert.NotNull(stringToStringDictionary);
+        Assert.Equal(2, stringToStringDictionary.Count);
+        Assert.Equal("Property Value 1", stringToStringDictionary["Key 1"]);
+        Assert.Equal("Property Value 2", stringToStringDictionary["Key 2"]);
+    }
 
-	[Fact]
-	[Bug("https://github.com/castleproject/Windsor/issues/574")]
-	public void DictionaryWithReferencedList()
-	{
-		var config =
-			@"
+    [Fact]
+    [Bug("https://github.com/castleproject/Windsor/issues/574")]
+    public void DictionaryWithReferencedList()
+    {
+        var config =
+            @"
 <configuration>
     <facilities>
     </facilities>
@@ -106,21 +105,21 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 	</components>
 </configuration>";
 
-		Container.Install(Configuration.FromXml(new StaticContentResource(config)));
-		Container.Resolve<List<string>>("list");
-		var stringToListDictionary = Container.Resolve<Dictionary<string, List<string>>>("stringToListDictionary");
-		Assert.NotNull(stringToListDictionary);
-		Assert.Equal(2, stringToListDictionary.Count);
-	}
+        Container.Install(Configuration.FromXml(new StaticContentResource(config)));
+        Container.Resolve<List<string>>("list");
+        var stringToListDictionary = Container.Resolve<Dictionary<string, List<string>>>("stringToListDictionary");
+        Assert.NotNull(stringToListDictionary);
+        Assert.Equal(2, stringToListDictionary.Count);
+    }
 
-	[Fact]
-	[Bug("IOC-155")]
-	public void Type_not_implementing_service_should_throw()
-	{
-		var exception = Assert.Throws<ComponentRegistrationException>(() =>
-			Container.Install(Configuration.FromXml(
-				new StaticContentResource(
-					@"<castle>
+    [Fact]
+    [Bug("IOC-155")]
+    public void Type_not_implementing_service_should_throw()
+    {
+        var exception = Assert.Throws<ComponentRegistrationException>(() =>
+            Container.Install(Configuration.FromXml(
+                new StaticContentResource(
+                    @"<castle>
 <components>
     <component
         service=""EmptyServiceA""
@@ -128,21 +127,21 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 </components>
 </castle>"))));
 
-		var expected = string.Format("Could not set up component '{0}'. Type '{1}' does not implement service '{2}'",
-			typeof(IEmptyService).FullName,
-			typeof(IEmptyService).AssemblyQualifiedName,
-			typeof(EmptyServiceA).AssemblyQualifiedName);
+        var expected = string.Format("Could not set up component '{0}'. Type '{1}' does not implement service '{2}'",
+            typeof(IEmptyService).FullName,
+            typeof(IEmptyService).AssemblyQualifiedName,
+            typeof(EmptyServiceA).AssemblyQualifiedName);
 
-		Assert.Equal(expected, exception.Message);
-	}
+        Assert.Equal(expected, exception.Message);
+    }
 
-	[Fact]
-	[Bug("IOC-197")]
-	public void DictionaryAsParameterInXml()
-	{
-		Container.Install(Configuration.FromXml(
-			new StaticContentResource(
-				$@"<castle>
+    [Fact]
+    [Bug("IOC-197")]
+    public void DictionaryAsParameterInXml()
+    {
+        Container.Install(Configuration.FromXml(
+            new StaticContentResource(
+                $@"<castle>
 <components>
 	<component lifestyle=""singleton""
 		id=""Id.MyClass""
@@ -168,16 +167,16 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 </components>
 </castle>")));
 
-		var myInstance = Container.Resolve<HasDictionaryDependency>();
-		Assert.Equal(2, myInstance.DictionaryProperty.Count);
-	}
+        var myInstance = Container.Resolve<HasDictionaryDependency>();
+        Assert.Equal(2, myInstance.DictionaryProperty.Count);
+    }
 
-	[Fact]
-	[Bug("IOC-73")]
-	public void ShouldNotThrowCircularDependencyException()
-	{
-		var config =
-			@"
+    [Fact]
+    [Bug("IOC-73")]
+    public void ShouldNotThrowCircularDependencyException()
+    {
+        var config =
+            @"
 <configuration>
     <facilities>
     </facilities>
@@ -201,262 +200,262 @@ public class ConfigurationTestCase : AbstractContainerTestCase
     </components>
 </configuration>";
 
-		Container.Install(Configuration.FromXml(new StaticContentResource(config)));
-		var user = Container.Resolve<UsesIEmptyService>();
-		Assert.NotNull(user.EmptyService);
-	}
-
-	[Fact]
-	public void Can_properly_populate_array_dependency_from_xml_config_when_registering_by_convention()
-	{
-		Container
-			.Install(
-				Configuration
-					.FromXmlFile("config/ComponentWithArrayDependency.config"))
-			.Register(
-				Component
-					.For<IConfig>()
-					.ImplementedBy<Components.Config>()
-					.Named("componentWithArrayDependency"));
-
-		Container.Register(
-			Classes.FromAssembly(GetCurrentAssembly()).Pick().WithServiceFirstInterface());
-
-		var configDependency = Container.Resolve<IClassWithConfigDependency>();
-
-		Assert.Equal("value", configDependency.GetName());
-		Assert.Equal("3.24.23.33", configDependency.GetServerIp("Database"));
-	}
-
-	[Fact]
-	[Bug("IOC-142")]
-	public void Can_satisfy_nullable_ctor_dependency()
-	{
-		var container = new WindsorContainer();
-		var configuration = new MutableConfiguration("parameters");
-		configuration.CreateChild("foo", "5");
-		container.Register(Component.For<HasNullableDoubleConstructor>().Configuration(configuration));
-
-		container.Resolve<HasNullableDoubleConstructor>();
-	}
-
-	[Fact]
-	[Bug("IOC-142")]
-	public void Can_satisfy_nullable_property_dependency()
-	{
-		var container = new WindsorContainer();
-		var configuration = new MutableConfiguration("parameters");
-		configuration.CreateChild("SomeVal", "5");
-		container.Register(Component.For<HasNullableIntProperty>().Configuration(configuration));
-
-		var s = container.Resolve<HasNullableIntProperty>();
-		Assert.NotNull(s.SomeVal);
-	}
-
-	[Fact]
-	public void ComplexConfigurationParameter()
-	{
-		var key = "key";
-		var value1 = "value1";
-		var value2 = "value2";
-
-		var confignode = new MutableConfiguration(key);
-
-		IConfiguration parameters = new MutableConfiguration("parameters");
-		confignode.Children.Add(parameters);
-
-		IConfiguration complexParam = new MutableConfiguration("complexparam");
-		parameters.Children.Add(complexParam);
-
-		IConfiguration complexNode = new MutableConfiguration("complexparametertype");
-		complexParam.Children.Add(complexNode);
-
-		complexNode.Children.Add(new MutableConfiguration("mandatoryvalue", value1));
-		complexNode.Children.Add(new MutableConfiguration("optionalvalue", value2));
-
-		Kernel.ConfigurationStore.AddComponentConfiguration(key, confignode);
-		Kernel.Register(Component.For(typeof(ClassWithComplexParameter)).Named(key));
-
-		var instance = Kernel.Resolve<ClassWithComplexParameter>(key);
-
-		Assert.NotNull(instance);
-		Assert.NotNull(instance.ComplexParam);
-		Assert.Equal(value1, instance.ComplexParam.MandatoryValue);
-		Assert.Equal(value2, instance.ComplexParam.OptionalValue);
-	}
-
-	[Fact]
-	public void ConstructorWithArrayParameter()
-	{
-		var confignode = new MutableConfiguration("key");
-
-		IConfiguration parameters = new MutableConfiguration("parameters");
-		confignode.Children.Add(parameters);
-
-		IConfiguration hosts = new MutableConfiguration("hosts");
-		parameters.Children.Add(hosts);
-		IConfiguration array = new MutableConfiguration("array");
-		hosts.Children.Add(array);
-		array.Children.Add(new MutableConfiguration("item", "castle"));
-		array.Children.Add(new MutableConfiguration("item", "uol"));
-		array.Children.Add(new MutableConfiguration("item", "folha"));
-
-		Kernel.ConfigurationStore.AddComponentConfiguration("key", confignode);
-
-		Kernel.Register(Component.For(typeof(ClassWithConstructors)).Named("key"));
+        Container.Install(Configuration.FromXml(new StaticContentResource(config)));
+        var user = Container.Resolve<UsesIEmptyService>();
+        Assert.NotNull(user.EmptyService);
+    }
+
+    [Fact]
+    public void Can_properly_populate_array_dependency_from_xml_config_when_registering_by_convention()
+    {
+        Container
+            .Install(
+                Configuration
+                    .FromXmlFile("config/ComponentWithArrayDependency.config"))
+            .Register(
+                Component
+                    .For<IConfig>()
+                    .ImplementedBy<Components.Config>()
+                    .Named("componentWithArrayDependency"));
+
+        Container.Register(
+            Classes.FromAssembly(GetCurrentAssembly()).Pick().WithServiceFirstInterface());
+
+        var configDependency = Container.Resolve<IClassWithConfigDependency>();
+
+        Assert.Equal("value", configDependency.GetName());
+        Assert.Equal("3.24.23.33", configDependency.GetServerIp("Database"));
+    }
+
+    [Fact]
+    [Bug("IOC-142")]
+    public void Can_satisfy_nullable_ctor_dependency()
+    {
+        var container = new WindsorContainer();
+        var configuration = new MutableConfiguration("parameters");
+        configuration.CreateChild("foo", "5");
+        container.Register(Component.For<HasNullableDoubleConstructor>().Configuration(configuration));
+
+        container.Resolve<HasNullableDoubleConstructor>();
+    }
+
+    [Fact]
+    [Bug("IOC-142")]
+    public void Can_satisfy_nullable_property_dependency()
+    {
+        var container = new WindsorContainer();
+        var configuration = new MutableConfiguration("parameters");
+        configuration.CreateChild("SomeVal", "5");
+        container.Register(Component.For<HasNullableIntProperty>().Configuration(configuration));
+
+        var s = container.Resolve<HasNullableIntProperty>();
+        Assert.NotNull(s.SomeVal);
+    }
+
+    [Fact]
+    public void ComplexConfigurationParameter()
+    {
+        var key = "key";
+        var value1 = "value1";
+        var value2 = "value2";
+
+        var confignode = new MutableConfiguration(key);
+
+        IConfiguration parameters = new MutableConfiguration("parameters");
+        confignode.Children.Add(parameters);
+
+        IConfiguration complexParam = new MutableConfiguration("complexparam");
+        parameters.Children.Add(complexParam);
+
+        IConfiguration complexNode = new MutableConfiguration("complexparametertype");
+        complexParam.Children.Add(complexNode);
+
+        complexNode.Children.Add(new MutableConfiguration("mandatoryvalue", value1));
+        complexNode.Children.Add(new MutableConfiguration("optionalvalue", value2));
+
+        Kernel.ConfigurationStore.AddComponentConfiguration(key, confignode);
+        Kernel.Register(Component.For(typeof(ClassWithComplexParameter)).Named(key));
+
+        var instance = Kernel.Resolve<ClassWithComplexParameter>(key);
+
+        Assert.NotNull(instance);
+        Assert.NotNull(instance.ComplexParam);
+        Assert.Equal(value1, instance.ComplexParam.MandatoryValue);
+        Assert.Equal(value2, instance.ComplexParam.OptionalValue);
+    }
+
+    [Fact]
+    public void ConstructorWithArrayParameter()
+    {
+        var confignode = new MutableConfiguration("key");
+
+        IConfiguration parameters = new MutableConfiguration("parameters");
+        confignode.Children.Add(parameters);
+
+        IConfiguration hosts = new MutableConfiguration("hosts");
+        parameters.Children.Add(hosts);
+        IConfiguration array = new MutableConfiguration("array");
+        hosts.Children.Add(array);
+        array.Children.Add(new MutableConfiguration("item", "castle"));
+        array.Children.Add(new MutableConfiguration("item", "uol"));
+        array.Children.Add(new MutableConfiguration("item", "folha"));
+
+        Kernel.ConfigurationStore.AddComponentConfiguration("key", confignode);
+
+        Kernel.Register(Component.For(typeof(ClassWithConstructors)).Named("key"));
 
-		var instance = Kernel.Resolve<ClassWithConstructors>("key");
-		Assert.NotNull(instance);
-		Assert.Null(instance.Host);
-		Assert.Equal("castle", instance.Hosts[0]);
-		Assert.Equal("uol", instance.Hosts[1]);
-		Assert.Equal("folha", instance.Hosts[2]);
-	}
+        var instance = Kernel.Resolve<ClassWithConstructors>("key");
+        Assert.NotNull(instance);
+        Assert.Null(instance.Host);
+        Assert.Equal("castle", instance.Hosts[0]);
+        Assert.Equal("uol", instance.Hosts[1]);
+        Assert.Equal("folha", instance.Hosts[2]);
+    }
 
-	[Fact]
-	public void ConstructorWithArrayParameterAndCustomType()
-	{
-		var confignode = new MutableConfiguration("key");
+    [Fact]
+    public void ConstructorWithArrayParameterAndCustomType()
+    {
+        var confignode = new MutableConfiguration("key");
 
-		IConfiguration parameters = new MutableConfiguration("parameters");
-		confignode.Children.Add(parameters);
+        IConfiguration parameters = new MutableConfiguration("parameters");
+        confignode.Children.Add(parameters);
 
-		IConfiguration services = new MutableConfiguration("services");
-		parameters.Children.Add(services);
-		var array = new MutableConfiguration("array");
-		services.Children.Add(array);
+        IConfiguration services = new MutableConfiguration("services");
+        parameters.Children.Add(services);
+        var array = new MutableConfiguration("array");
+        services.Children.Add(array);
 
-		array.Children.Add(new MutableConfiguration("item", "${commonservice1}"));
-		array.Children.Add(new MutableConfiguration("item", "${commonservice2}"));
+        array.Children.Add(new MutableConfiguration("item", "${commonservice1}"));
+        array.Children.Add(new MutableConfiguration("item", "${commonservice2}"));
 
-		Kernel.ConfigurationStore.AddComponentConfiguration("key", confignode);
+        Kernel.ConfigurationStore.AddComponentConfiguration("key", confignode);
 
-		Kernel.Register(Component.For<ClassWithArrayConstructor>().Named("key"),
-			Component.For<ICommon>().ImplementedBy<CommonImpl1>().Named("commonservice1"),
-			Component.For<ICommon>().ImplementedBy<CommonImpl2>().Named("commonservice2"));
+        Kernel.Register(Component.For<ClassWithArrayConstructor>().Named("key"),
+            Component.For<ICommon>().ImplementedBy<CommonImpl1>().Named("commonservice1"),
+            Component.For<ICommon>().ImplementedBy<CommonImpl2>().Named("commonservice2"));
 
-		var instance = Kernel.Resolve<ClassWithArrayConstructor>("key");
-		Assert.NotNull(instance.Services);
-		Assert.Equal(2, instance.Services.Length);
-		Assert.Equal("CommonImpl1", instance.Services[0].GetType().Name);
-		Assert.Equal("CommonImpl2", instance.Services[1].GetType().Name);
-	}
+        var instance = Kernel.Resolve<ClassWithArrayConstructor>("key");
+        Assert.NotNull(instance.Services);
+        Assert.Equal(2, instance.Services.Length);
+        Assert.Equal("CommonImpl1", instance.Services[0].GetType().Name);
+        Assert.Equal("CommonImpl2", instance.Services[1].GetType().Name);
+    }
 
-	[Fact]
-	public void ConstructorWithListParameterAndCustomType()
-	{
-		var confignode = new MutableConfiguration("key");
+    [Fact]
+    public void ConstructorWithListParameterAndCustomType()
+    {
+        var confignode = new MutableConfiguration("key");
 
-		IConfiguration parameters = new MutableConfiguration("parameters");
-		confignode.Children.Add(parameters);
+        IConfiguration parameters = new MutableConfiguration("parameters");
+        confignode.Children.Add(parameters);
 
-		IConfiguration services = new MutableConfiguration("services");
-		parameters.Children.Add(services);
-		var list = new MutableConfiguration("list");
-		services.Children.Add(list);
-		list.Attributes.Add("type", "ICommon");
+        IConfiguration services = new MutableConfiguration("services");
+        parameters.Children.Add(services);
+        var list = new MutableConfiguration("list");
+        services.Children.Add(list);
+        list.Attributes.Add("type", "ICommon");
 
-		list.Children.Add(new MutableConfiguration("item", "${commonservice1}"));
-		list.Children.Add(new MutableConfiguration("item", "${commonservice2}"));
+        list.Children.Add(new MutableConfiguration("item", "${commonservice1}"));
+        list.Children.Add(new MutableConfiguration("item", "${commonservice2}"));
 
-		Kernel.ConfigurationStore.AddComponentConfiguration("key", confignode);
-		Kernel.Register(Component.For(typeof(ClassWithListConstructor)).Named("key"));
+        Kernel.ConfigurationStore.AddComponentConfiguration("key", confignode);
+        Kernel.Register(Component.For(typeof(ClassWithListConstructor)).Named("key"));
 
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("commonservice1"));
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl2>().Named("commonservice2"));
+        Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("commonservice1"));
+        Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl2>().Named("commonservice2"));
 
-		var instance = Kernel.Resolve<ClassWithListConstructor>("key");
-		Assert.NotNull(instance.Services);
-		Assert.Equal(2, instance.Services.Count);
-		Assert.NotNull(instance.Services[0]);
-		Assert.Equal("CommonImpl1", instance.Services[0].GetType().Name);
-		Assert.NotNull(instance.Services[1]);
-		Assert.Equal("CommonImpl2", instance.Services[1].GetType().Name);
-	}
+        var instance = Kernel.Resolve<ClassWithListConstructor>("key");
+        Assert.NotNull(instance.Services);
+        Assert.Equal(2, instance.Services.Count);
+        Assert.NotNull(instance.Services[0]);
+        Assert.Equal("CommonImpl1", instance.Services[0].GetType().Name);
+        Assert.NotNull(instance.Services[1]);
+        Assert.Equal("CommonImpl2", instance.Services[1].GetType().Name);
+    }
 
-	[Fact]
-	public void ConstructorWithStringParameters()
-	{
-		var confignode = new MutableConfiguration("key");
+    [Fact]
+    public void ConstructorWithStringParameters()
+    {
+        var confignode = new MutableConfiguration("key");
 
-		IConfiguration parameters = new MutableConfiguration("parameters");
-		confignode.Children.Add(parameters);
+        IConfiguration parameters = new MutableConfiguration("parameters");
+        confignode.Children.Add(parameters);
 
-		parameters.Children.Add(new MutableConfiguration("host", "castleproject.org"));
+        parameters.Children.Add(new MutableConfiguration("host", "castleproject.org"));
 
-		Kernel.ConfigurationStore.AddComponentConfiguration("key", confignode);
+        Kernel.ConfigurationStore.AddComponentConfiguration("key", confignode);
 
-		Kernel.Register(Component.For<ClassWithConstructors>().Named("key"));
+        Kernel.Register(Component.For<ClassWithConstructors>().Named("key"));
 
-		var instance = Kernel.Resolve<ClassWithConstructors>("key");
-		Assert.NotNull(instance);
-		Assert.NotNull(instance.Host);
-		Assert.Equal("castleproject.org", instance.Host);
-	}
+        var instance = Kernel.Resolve<ClassWithConstructors>("key");
+        Assert.NotNull(instance);
+        Assert.NotNull(instance.Host);
+        Assert.Equal("castleproject.org", instance.Host);
+    }
 
-	[Fact]
-	public void CustomLifestyleManager()
-	{
-		var key = "key";
+    [Fact]
+    public void CustomLifestyleManager()
+    {
+        var key = "key";
 
-		var confignode = new MutableConfiguration(key);
-		confignode.Attributes.Add("lifestyle", "custom");
+        var confignode = new MutableConfiguration(key);
+        confignode.Attributes.Add("lifestyle", "custom");
 
-		confignode.Attributes.Add("customLifestyleType", "CustomLifestyleManager");
+        confignode.Attributes.Add("customLifestyleType", "CustomLifestyleManager");
 
-		Kernel.ConfigurationStore.AddComponentConfiguration(key, confignode);
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named(key));
+        Kernel.ConfigurationStore.AddComponentConfiguration(key, confignode);
+        Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named(key));
 
-		var instance = Kernel.Resolve<ICommon>(key);
-		var handler = Kernel.GetHandler(key);
+        var instance = Kernel.Resolve<ICommon>(key);
+        var handler = Kernel.GetHandler(key);
 
-		Assert.NotNull(instance);
-		Assert.Equal(LifestyleType.Custom, handler.ComponentModel.LifestyleType);
-		Assert.Equal(typeof(CustomLifestyleManager), handler.ComponentModel.CustomLifestyle);
-	}
+        Assert.NotNull(instance);
+        Assert.Equal(LifestyleType.Custom, handler.ComponentModel.LifestyleType);
+        Assert.Equal(typeof(CustomLifestyleManager), handler.ComponentModel.CustomLifestyle);
+    }
 
-	[Fact]
-	public void ServiceOverride()
-	{
-		var confignode = new MutableConfiguration("key");
+    [Fact]
+    public void ServiceOverride()
+    {
+        var confignode = new MutableConfiguration("key");
 
-		IConfiguration parameters = new MutableConfiguration("parameters");
-		confignode.Children.Add(parameters);
+        IConfiguration parameters = new MutableConfiguration("parameters");
+        confignode.Children.Add(parameters);
 
-		parameters.Children.Add(new MutableConfiguration("common", "${commonservice2}"));
+        parameters.Children.Add(new MutableConfiguration("common", "${commonservice2}"));
 
-		Kernel.ConfigurationStore.AddComponentConfiguration("commonserviceuser", confignode);
+        Kernel.ConfigurationStore.AddComponentConfiguration("commonserviceuser", confignode);
 
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("commonservice1"));
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl2>().Named("commonservice2"));
-		Kernel.Register(Component.For(typeof(CommonServiceUser)).Named("commonserviceuser"));
+        Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("commonservice1"));
+        Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl2>().Named("commonservice2"));
+        Kernel.Register(Component.For(typeof(CommonServiceUser)).Named("commonserviceuser"));
 
-		var instance = Kernel.Resolve<CommonServiceUser>("commonserviceuser");
+        var instance = Kernel.Resolve<CommonServiceUser>("commonserviceuser");
 
-		Assert.NotNull(instance);
-		Assert.Equal(typeof(CommonImpl2), instance.CommonService.GetType());
-	}
+        Assert.NotNull(instance);
+        Assert.Equal(typeof(CommonImpl2), instance.CommonService.GetType());
+    }
 
-	[Fact]
-	public void ServiceOverrideUsingProperties()
-	{
-		var confignode = new MutableConfiguration("key");
+    [Fact]
+    public void ServiceOverrideUsingProperties()
+    {
+        var confignode = new MutableConfiguration("key");
 
-		IConfiguration parameters = new MutableConfiguration("parameters");
-		confignode.Children.Add(parameters);
+        IConfiguration parameters = new MutableConfiguration("parameters");
+        confignode.Children.Add(parameters);
 
-		parameters.Children.Add(new MutableConfiguration("CommonService", "${commonservice2}"));
+        parameters.Children.Add(new MutableConfiguration("CommonService", "${commonservice2}"));
 
-		Kernel.ConfigurationStore.AddComponentConfiguration("commonserviceuser", confignode);
+        Kernel.ConfigurationStore.AddComponentConfiguration("commonserviceuser", confignode);
 
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("commonservice1"));
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl2>().Named("commonservice2"));
+        Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("commonservice1"));
+        Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl2>().Named("commonservice2"));
 
-		Kernel.Register(Component.For(typeof(CommonServiceUser2)).Named("commonserviceuser"));
+        Kernel.Register(Component.For(typeof(CommonServiceUser2)).Named("commonserviceuser"));
 
-		var instance = Kernel.Resolve<CommonServiceUser2>("commonserviceuser");
+        var instance = Kernel.Resolve<CommonServiceUser2>("commonserviceuser");
 
-		Assert.NotNull(instance);
-		Assert.Equal(typeof(CommonImpl2), instance.CommonService.GetType());
-	}
+        Assert.NotNull(instance);
+        Assert.Equal(typeof(CommonImpl2), instance.CommonService.GetType());
+    }
 }

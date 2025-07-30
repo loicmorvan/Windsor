@@ -20,17 +20,17 @@ namespace Castle.Windsor.Tests;
 
 public class ReportedProblemTestCase
 {
-	private readonly WindsorContainer _container = new();
+    private readonly WindsorContainer _container = new();
 
-	[Fact]
-	public void StackOverflowProblem()
-	{
-		_container.Register(Component.For<Employee>());
-		_container.Register(Component.For<Reviewer>());
-		_container.Register(Component.For<ReviewableEmployee>());
+    [Fact]
+    public void StackOverflowProblem()
+    {
+        _container.Register(Component.For<Employee>());
+        _container.Register(Component.For<Reviewer>());
+        _container.Register(Component.For<ReviewableEmployee>());
 
-		Assert.NotNull(_container.Resolve<ReviewableEmployee>());
-		Assert.NotNull(_container.Resolve<Reviewer>());
-		Assert.NotNull(_container.Resolve<Employee>());
-	}
+        Assert.NotNull(_container.Resolve<ReviewableEmployee>());
+        Assert.NotNull(_container.Resolve<Reviewer>());
+        Assert.NotNull(_container.Resolve<Employee>());
+    }
 }

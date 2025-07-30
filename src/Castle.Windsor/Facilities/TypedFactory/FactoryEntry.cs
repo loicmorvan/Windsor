@@ -12,34 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Facilities.TypedFactory;
-
-using System;
 using System.ComponentModel;
 using System.Reflection;
+
+namespace Castle.Windsor.Facilities.TypedFactory;
 
 /// <summary>Legacy class from old impl. of the facility. Do not use it.</summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class FactoryEntry
 {
-	public FactoryEntry(string id, Type factoryInterface, string creationMethod, string destructionMethod)
-	{
-		if (string.IsNullOrEmpty(id)) throw new ArgumentNullException(nameof(id));
-		ArgumentNullException.ThrowIfNull(factoryInterface);
-		if (!factoryInterface.GetTypeInfo().IsInterface) throw new ArgumentException("factoryInterface must be an interface");
-		if (string.IsNullOrEmpty(creationMethod)) throw new ArgumentNullException(nameof(creationMethod));
+    public FactoryEntry(string id, Type factoryInterface, string creationMethod, string destructionMethod)
+    {
+        if (string.IsNullOrEmpty(id))
+        {
+            throw new ArgumentNullException(nameof(id));
+        }
 
-		Id = id;
-		FactoryInterface = factoryInterface;
-		CreationMethod = creationMethod;
-		DestructionMethod = destructionMethod;
-	}
+        ArgumentNullException.ThrowIfNull(factoryInterface);
+        if (!factoryInterface.GetTypeInfo().IsInterface)
+        {
+            throw new ArgumentException("factoryInterface must be an interface");
+        }
 
-	public string CreationMethod { get; }
+        if (string.IsNullOrEmpty(creationMethod))
+        {
+            throw new ArgumentNullException(nameof(creationMethod));
+        }
 
-	public string DestructionMethod { get; }
+        Id = id;
+        FactoryInterface = factoryInterface;
+        CreationMethod = creationMethod;
+        DestructionMethod = destructionMethod;
+    }
 
-	public Type FactoryInterface { get; }
+    public string CreationMethod { get; }
 
-	public string Id { get; }
+    public string DestructionMethod { get; }
+
+    public Type FactoryInterface { get; }
+
+    public string Id { get; }
 }

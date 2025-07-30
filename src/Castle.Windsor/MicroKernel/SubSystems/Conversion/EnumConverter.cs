@@ -12,44 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
-
-using System;
 using System.Reflection;
-
 using Castle.Core.Configuration;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 /// <summary>Converts a string representation to an enum value</summary>
 [Serializable]
 public class EnumConverter : AbstractTypeConverter
 {
-	public override bool CanHandleType(Type type)
-	{
-		return type.GetTypeInfo().IsEnum;
-	}
+    public override bool CanHandleType(Type type)
+    {
+        return type.GetTypeInfo().IsEnum;
+    }
 
-	public override object PerformConversion(string value, Type targetType)
-	{
-		try
-		{
-			return Enum.Parse(targetType, value, true);
-		}
-		catch (ConverterException)
-		{
-			throw;
-		}
-		catch (Exception ex)
-		{
-			var message = string.Format(
-				"Could not convert from '{0}' to {1}.",
-				value, targetType.FullName);
+    public override object PerformConversion(string value, Type targetType)
+    {
+        try
+        {
+            return Enum.Parse(targetType, value, true);
+        }
+        catch (ConverterException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            var message = string.Format(
+                "Could not convert from '{0}' to {1}.",
+                value, targetType.FullName);
 
-			throw new ConverterException(message, ex);
-		}
-	}
+            throw new ConverterException(message, ex);
+        }
+    }
 
-	public override object PerformConversion(IConfiguration configuration, Type targetType)
-	{
-		return PerformConversion(configuration.Value, targetType);
-	}
+    public override object PerformConversion(IConfiguration configuration, Type targetType)
+    {
+        return PerformConversion(configuration.Value, targetType);
+    }
 }

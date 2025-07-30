@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Core.Configuration;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Util;
@@ -22,38 +21,49 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 [Serializable]
 public class ComponentConverter : AbstractTypeConverter, IKernelDependentConverter
 {
-	public override bool CanHandleType(Type type, IConfiguration configuration)
-	{
-		if (configuration.Value != null) return ReferenceExpressionUtil.IsReference(configuration.Value);
+    public override bool CanHandleType(Type type, IConfiguration configuration)
+    {
+        if (configuration.Value != null)
+        {
+            return ReferenceExpressionUtil.IsReference(configuration.Value);
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public override bool CanHandleType(Type type)
-	{
-		if (Context.Kernel == null) return false;
+    public override bool CanHandleType(Type type)
+    {
+        if (Context.Kernel == null)
+        {
+            return false;
+        }
 
-		return Context.Kernel.HasComponent(type);
-	}
+        return Context.Kernel.HasComponent(type);
+    }
 
-	public override object PerformConversion(string value, Type targetType)
-	{
-		var componentName = ReferenceExpressionUtil.ExtractComponentName(value);
-		if (componentName == null)
-			throw new ConverterException(string.Format("Could not convert expression '{0}' to type '{1}'. Expecting a reference override like ${{some key}}",
-				value,
-				targetType.FullName));
+    public override object PerformConversion(string value, Type targetType)
+    {
+        var componentName = ReferenceExpressionUtil.ExtractComponentName(value);
+        if (componentName == null)
+        {
+            throw new ConverterException(string.Format(
+                "Could not convert expression '{0}' to type '{1}'. Expecting a reference override like ${{some key}}",
+                value,
+                targetType.FullName));
+        }
 
-		var handler = Context.Kernel.LoadHandlerByName(componentName, targetType, null);
-		if (handler == null)
-			throw new ConverterException(
-				$"Component '{componentName}' was not found in the container.");
+        var handler = Context.Kernel.LoadHandlerByName(componentName, targetType, null);
+        if (handler == null)
+        {
+            throw new ConverterException(
+                $"Component '{componentName}' was not found in the container.");
+        }
 
-		return handler.Resolve(Context.CurrentCreationContext ?? CreationContext.CreateEmpty());
-	}
+        return handler.Resolve(Context.CurrentCreationContext ?? CreationContext.CreateEmpty());
+    }
 
-	public override object PerformConversion(IConfiguration configuration, Type targetType)
-	{
-		return PerformConversion(configuration.Value, targetType);
-	}
+    public override object PerformConversion(IConfiguration configuration, Type targetType)
+    {
+        return PerformConversion(configuration.Value, targetType);
+    }
 }

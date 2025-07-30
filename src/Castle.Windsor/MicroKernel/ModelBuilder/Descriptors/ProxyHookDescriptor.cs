@@ -20,13 +20,13 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class ProxyHookDescriptor(IReference<IProxyGenerationHook> hook) : IComponentModelDescriptor
 {
-	public void BuildComponentModel(IKernel kernel, ComponentModel model)
-	{
-		var options = model.ObtainProxyOptions();
-		options.Hook = hook;
-	}
+    public void BuildComponentModel(IKernel kernel, ComponentModel model)
+    {
+        var options = model.ObtainProxyOptions();
+        options.Hook = hook;
+    }
 
-	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-	{
-	}
+    public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+    {
+    }
 }

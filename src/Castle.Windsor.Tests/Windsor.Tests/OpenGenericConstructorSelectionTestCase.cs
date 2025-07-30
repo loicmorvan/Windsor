@@ -31,38 +31,38 @@ namespace Castle.Windsor.Tests.Windsor.Tests;
 
 public class OpenGenericConstructorSelectionTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	[Bug("https://github.com/castleproject/Windsor/issues/136")]
-	public void
-		Resolves_using_most_greedy_constructor_when_having_open_generic_container_registrations_with_inferred_generic_parameters()
-	{
-		Container.Register(Component.For(typeof(IOpenGeneric<>)).ImplementedBy(typeof(OpenGeneric<>)));
-		Container.Register(Component.For(typeof(IClosedGenericArrayList<ArrayList>))
-			.ImplementedBy<ClosedGenericArrayList>());
-		Container.Register(Component.For(typeof(Control)));
-		Container.Resolve<Control>();
-	}
+    [Fact]
+    [Bug("https://github.com/castleproject/Windsor/issues/136")]
+    public void
+        Resolves_using_most_greedy_constructor_when_having_open_generic_container_registrations_with_inferred_generic_parameters()
+    {
+        Container.Register(Component.For(typeof(IOpenGeneric<>)).ImplementedBy(typeof(OpenGeneric<>)));
+        Container.Register(Component.For(typeof(IClosedGenericArrayList<ArrayList>))
+            .ImplementedBy<ClosedGenericArrayList>());
+        Container.Register(Component.For(typeof(Control)));
+        Container.Resolve<Control>();
+    }
 
-	private class Control
-	{
-		// Least Greedy has no parameters, should NOT be chosen.
+    private class Control
+    {
+        // Least Greedy has no parameters, should NOT be chosen.
 
-		// Most greedy has parameter, should be chosen.
-		public Control(IOpenGeneric<ArrayList> param)
-		{
-		}
-	}
+        // Most greedy has parameter, should be chosen.
+        public Control(IOpenGeneric<ArrayList> param)
+        {
+        }
+    }
 
-	private class OpenGeneric<T> : IOpenGeneric<T>
-	{
-		public OpenGeneric(IClosedGenericArrayList<T> param)
-		{
-		}
-	}
+    private class OpenGeneric<T> : IOpenGeneric<T>
+    {
+        public OpenGeneric(IClosedGenericArrayList<T> param)
+        {
+        }
+    }
 
-	private class ClosedGenericArrayList : IClosedGenericArrayList<ArrayList>;
+    private class ClosedGenericArrayList : IClosedGenericArrayList<ArrayList>;
 
-	private interface IOpenGeneric<T>;
+    private interface IOpenGeneric<T>;
 
-	private interface IClosedGenericArrayList<T>;
+    private interface IClosedGenericArrayList<T>;
 }

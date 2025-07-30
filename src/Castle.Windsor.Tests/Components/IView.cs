@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Components;
 
 public interface IView
 {
-	IController Controller { get; set; }
+    IController Controller { get; set; }
 
-	void Display();
+    void Display();
 }

@@ -14,32 +14,30 @@
 
 namespace Castle.Windsor.MicroKernel.Registration.Proxy;
 
-using System;
-
 public class ItemRegistration<TItem>
 {
-	internal IReference<TItem> Item { get; private set; }
+    internal IReference<TItem> Item { get; private set; }
 
-	public ItemRegistration<TItem> Instance(TItem instance)
-	{
-		Item = new InstanceReference<TItem>(instance);
-		return this;
-	}
+    public ItemRegistration<TItem> Instance(TItem instance)
+    {
+        Item = new InstanceReference<TItem>(instance);
+        return this;
+    }
 
-	public ItemRegistration<TItem> Service<TService>() where TService : TItem
-	{
-		return Service(typeof(TService));
-	}
+    public ItemRegistration<TItem> Service<TService>() where TService : TItem
+    {
+        return Service(typeof(TService));
+    }
 
-	public ItemRegistration<TItem> Service(Type serviceType)
-	{
-		Item = new ComponentReference<TItem>(serviceType);
-		return this;
-	}
+    public ItemRegistration<TItem> Service(Type serviceType)
+    {
+        Item = new ComponentReference<TItem>(serviceType);
+        return this;
+    }
 
-	public ItemRegistration<TItem> Service(string name)
-	{
-		Item = new ComponentReference<TItem>(name);
-		return this;
-	}
+    public ItemRegistration<TItem> Service(string name)
+    {
+        Item = new ComponentReference<TItem>(name);
+        return this;
+    }
 }

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Windsor;
@@ -21,46 +20,46 @@ namespace Castle.Windsor.Tests;
 
 public class KernelEventsEmptyCollectionResolvingTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void Event_NOT_raised_when_non_empty_collection_is_resolved()
-	{
-		Kernel.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
+    [Fact]
+    public void Event_NOT_raised_when_non_empty_collection_is_resolved()
+    {
+        Kernel.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
 
-		var wasRaised = false;
-		Kernel.EmptyCollectionResolving += _ => { wasRaised = true; };
+        var wasRaised = false;
+        Kernel.EmptyCollectionResolving += _ => { wasRaised = true; };
 
-		var services = Container.ResolveAll<IEmptyService>();
+        var services = Container.ResolveAll<IEmptyService>();
 
-		Assert.False(wasRaised);
-		Assert.NotEmpty(services);
-	}
+        Assert.False(wasRaised);
+        Assert.NotEmpty(services);
+    }
 
-	[Fact]
-	public void Event_NOT_raised_when_non_empty_collection_is_resolved_from_parent_container()
-	{
-		Kernel.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
+    [Fact]
+    public void Event_NOT_raised_when_non_empty_collection_is_resolved_from_parent_container()
+    {
+        Kernel.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
 
-		var childContainer = new WindsorContainer();
-		childContainer.Parent = Container;
+        var childContainer = new WindsorContainer();
+        childContainer.Parent = Container;
 
-		var wasRaised = false;
-		childContainer.Kernel.EmptyCollectionResolving += _ => { wasRaised = true; };
+        var wasRaised = false;
+        childContainer.Kernel.EmptyCollectionResolving += _ => { wasRaised = true; };
 
-		var services = childContainer.ResolveAll<IEmptyService>();
+        var services = childContainer.ResolveAll<IEmptyService>();
 
-		Assert.False(wasRaised);
-		Assert.NotEmpty(services);
-	}
+        Assert.False(wasRaised);
+        Assert.NotEmpty(services);
+    }
 
-	[Fact]
-	public void Event_raised_when_empty_collection_is_resolved()
-	{
-		Type type = null;
-		Kernel.EmptyCollectionResolving += t => { type = t; };
+    [Fact]
+    public void Event_raised_when_empty_collection_is_resolved()
+    {
+        Type type = null;
+        Kernel.EmptyCollectionResolving += t => { type = t; };
 
-		var services = Container.ResolveAll<IEmptyService>();
+        var services = Container.ResolveAll<IEmptyService>();
 
-		Assert.Equal(typeof(IEmptyService), type);
-		Assert.Empty(services);
-	}
+        Assert.Equal(typeof(IEmptyService), type);
+        Assert.Empty(services);
+    }
 }

@@ -12,16 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities;
-
-using System.Threading;
-
 using Castle.Windsor.MicroKernel.Facilities;
+
+namespace Castle.Windsor.Tests.Facilities;
 
 public class SlowlyInitFacility : AbstractFacility
 {
-	protected override void Init()
-	{
-		Thread.Sleep(1000);
-	}
+    protected override void Init()
+    {
+        Thread.Sleep(1000);
+    }
 }

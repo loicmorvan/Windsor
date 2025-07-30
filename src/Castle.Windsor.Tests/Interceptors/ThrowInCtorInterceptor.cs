@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
 
@@ -21,12 +20,12 @@ namespace Castle.Windsor.Tests.Interceptors;
 [Transient]
 public class ThrowInCtorInterceptor : IInterceptor
 {
-	public ThrowInCtorInterceptor()
-	{
-		throw new Exception("Booo!");
-	}
+    public ThrowInCtorInterceptor()
+    {
+        throw new Exception("Booo!");
+    }
 
-	public void Intercept(IInvocation invocation)
-	{
-	}
+    public void Intercept(IInvocation invocation)
+    {
+    }
 }

@@ -16,10 +16,10 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class CustomerImpl : ICustomer
 {
-	public virtual ExtendedCustomer ExtendedCustomer { get; set; }
-	public virtual string Name { get; set; }
+    public virtual ExtendedCustomer ExtendedCustomer { get; set; }
+    public virtual string Name { get; set; }
 
-	public virtual string Address { get; set; }
+    public virtual string Address { get; set; }
 
-	public virtual int Age { get; set; }
+    public virtual int Age { get; set; }
 }

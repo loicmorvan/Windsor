@@ -12,32 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Scope
+namespace Castle.Windsor.Extensions.DependencyInjection.Scope;
+
+internal class ExtensionContainerScope : ExtensionContainerScopeBase
 {
-	internal class ExtensionContainerScope : ExtensionContainerScopeBase
-	{
-		private readonly ExtensionContainerScopeBase _parent;
+    private readonly ExtensionContainerScopeBase _parent;
 
-		private ExtensionContainerScope()
-		{
-			_parent = ExtensionContainerScopeCache.Current;
-		}
+    private ExtensionContainerScope()
+    {
+        _parent = ExtensionContainerScopeCache.Current;
+    }
 
-		internal override ExtensionContainerScopeBase RootScope { get; set; }
+    internal override ExtensionContainerScopeBase RootScope { get; set; }
 
 
-		internal static ExtensionContainerScopeBase BeginScope()
-		{
-			var scope = new ExtensionContainerScope { RootScope = ExtensionContainerScopeCache.Current.RootScope };
-			ExtensionContainerScopeCache.Current = scope;
-			return scope;
-		}
+    internal static ExtensionContainerScopeBase BeginScope()
+    {
+        var scope = new ExtensionContainerScope { RootScope = ExtensionContainerScopeCache.Current.RootScope };
+        ExtensionContainerScopeCache.Current = scope;
+        return scope;
+    }
 
-		public override void Dispose()
-		{
-			if (ExtensionContainerScopeCache.Current == this)
-				ExtensionContainerScopeCache.Current = _parent;
-			base.Dispose();
-		}
-	}
+    public override void Dispose()
+    {
+        if (ExtensionContainerScopeCache.Current == this)
+        {
+            ExtensionContainerScopeCache.Current = _parent;
+        }
+
+        base.Dispose();
+    }
 }

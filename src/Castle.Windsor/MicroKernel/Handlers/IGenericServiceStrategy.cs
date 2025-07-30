@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel.Handlers;
 
 public interface IGenericServiceStrategy
 {
-	bool Supports(Type service, ComponentModel component);
+    bool Supports(Type service, ComponentModel component);
 }

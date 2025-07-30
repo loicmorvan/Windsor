@@ -14,20 +14,19 @@
 
 using Castle.Windsor.Windsor;
 
-namespace Castle.Windsor.Extensions.DependencyInjection
-{
-	public sealed class WindsorServiceProviderFactory : WindsorServiceProviderFactoryBase
-	{
-		public WindsorServiceProviderFactory()
-		{
-			CreateRootScope();
-			CreateRootContainer();
-		}
+namespace Castle.Windsor.Extensions.DependencyInjection;
 
-		public WindsorServiceProviderFactory(IWindsorContainer container)
-		{
-			CreateRootScope();
-			SetRootContainer(container);
-		}
-	}
+public sealed class WindsorServiceProviderFactory : WindsorServiceProviderFactoryBase
+{
+    public WindsorServiceProviderFactory()
+    {
+        CreateRootScope();
+        CreateRootContainer();
+    }
+
+    public WindsorServiceProviderFactory(IWindsorContainer container)
+    {
+        CreateRootScope();
+        SetRootContainer(container);
+    }
 }

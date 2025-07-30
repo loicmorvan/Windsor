@@ -21,160 +21,160 @@ namespace Castle.Windsor.Tests.Registration;
 
 public class DynamicParametersTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void Arguments_are_case_insensitive_when_using_anonymous_object()
-	{
-		var wasCalled = false;
-		Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((_, d) =>
-		{
-			Assert.True(d.Contains("ArG1"));
-			wasCalled = true;
-		}));
+    [Fact]
+    public void Arguments_are_case_insensitive_when_using_anonymous_object()
+    {
+        var wasCalled = false;
+        Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((_, d) =>
+        {
+            Assert.True(d.Contains("ArG1"));
+            wasCalled = true;
+        }));
 
-		Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2).AddNamed("arg1", "foo"));
+        Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2).AddNamed("arg1", "foo"));
 
-		Assert.True(wasCalled);
-	}
+        Assert.True(wasCalled);
+    }
 
-	[Fact]
-	public void Can_dynamically_override_services()
-	{
-		Kernel.Register(
-			Component.For<ICustomer>()
-				.ImplementedBy<CustomerImpl>()
-				.Named("defaultCustomer"),
-			Component.For<ICustomer>().ImplementedBy<CustomerImpl2>()
-				.Named("otherCustomer")
-				.DependsOn(
-					Parameter.ForKey("name").Eq("foo"), // static parameters, resolved at registration time
-					Parameter.ForKey("address").Eq("bar st 13"),
-					Parameter.ForKey("age").Eq("5")),
-			Component.For<CommonImplWithDependency>()
-				.LifeStyle.Transient
-				.DynamicParameters((k, d) => // dynamic parameters
-				{
-					d["customer"] = k.Resolve<ICustomer>("otherCustomer");
-				}));
+    [Fact]
+    public void Can_dynamically_override_services()
+    {
+        Kernel.Register(
+            Component.For<ICustomer>()
+                .ImplementedBy<CustomerImpl>()
+                .Named("defaultCustomer"),
+            Component.For<ICustomer>().ImplementedBy<CustomerImpl2>()
+                .Named("otherCustomer")
+                .DependsOn(
+                    Parameter.ForKey("name").Eq("foo"), // static parameters, resolved at registration time
+                    Parameter.ForKey("address").Eq("bar st 13"),
+                    Parameter.ForKey("age").Eq("5")),
+            Component.For<CommonImplWithDependency>()
+                .LifeStyle.Transient
+                .DynamicParameters((k, d) => // dynamic parameters
+                {
+                    d["customer"] = k.Resolve<ICustomer>("otherCustomer");
+                }));
 
-		var component = Kernel.Resolve<CommonImplWithDependency>();
-		Assert.IsType<CustomerImpl2>(component.Customer);
-	}
+        var component = Kernel.Resolve<CommonImplWithDependency>();
+        Assert.IsType<CustomerImpl2>(component.Customer);
+    }
 
-	[Fact]
-	public void Can_mix_registration_and_call_site_parameters()
-	{
-		Kernel.Register(
-			Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((_, d) => d["arg1"] = "foo"));
+    [Fact]
+    public void Can_mix_registration_and_call_site_parameters()
+    {
+        Kernel.Register(
+            Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((_, d) => d["arg1"] = "foo"));
 
-		var component = Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2));
-		Assert.Equal(2, component.Arg2);
-		Assert.Equal("foo", component.Arg1);
-	}
+        var component = Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2));
+        Assert.Equal(2, component.Arg2);
+        Assert.Equal("foo", component.Arg1);
+    }
 
-	[Fact]
-	public void Can_release_components_with_dynamic_parameters()
-	{
-		var releaseCalled = 0;
-		Kernel.Register(
-			Component.For<ClassWithArguments>().LifeStyle.Transient
-				.DynamicParameters((_, d) =>
-				{
-					d["arg1"] = "foo";
-					return _ => ++releaseCalled;
-				})
-				.DynamicParameters((_, _) => { return _ => ++releaseCalled; }));
+    [Fact]
+    public void Can_release_components_with_dynamic_parameters()
+    {
+        var releaseCalled = 0;
+        Kernel.Register(
+            Component.For<ClassWithArguments>().LifeStyle.Transient
+                .DynamicParameters((_, d) =>
+                {
+                    d["arg1"] = "foo";
+                    return _ => ++releaseCalled;
+                })
+                .DynamicParameters((_, _) => { return _ => ++releaseCalled; }));
 
-		var component = Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2));
-		Assert.Equal(2, component.Arg2);
-		Assert.Equal("foo", component.Arg1);
+        var component = Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2));
+        Assert.Equal(2, component.Arg2);
+        Assert.Equal("foo", component.Arg1);
 
-		Kernel.ReleaseComponent(component);
-		Assert.Equal(2, releaseCalled);
-	}
+        Kernel.ReleaseComponent(component);
+        Assert.Equal(2, releaseCalled);
+    }
 
-	[Fact]
-	public void Can_release_generics_with_dynamic_parameters()
-	{
-		var releaseCalled = 0;
-		Kernel.Register(
-			Component.For(typeof(IGenericClassWithParameter<>))
-				.ImplementedBy(typeof(GenericClassWithParameter<>)).LifeStyle.Transient
-				.DynamicParameters((_, d) =>
-				{
-					d["name"] = "foo";
-					return _ => ++releaseCalled;
-				})
-				.DynamicParameters((_, _) => { return _ => ++releaseCalled; }));
+    [Fact]
+    public void Can_release_generics_with_dynamic_parameters()
+    {
+        var releaseCalled = 0;
+        Kernel.Register(
+            Component.For(typeof(IGenericClassWithParameter<>))
+                .ImplementedBy(typeof(GenericClassWithParameter<>)).LifeStyle.Transient
+                .DynamicParameters((_, d) =>
+                {
+                    d["name"] = "foo";
+                    return _ => ++releaseCalled;
+                })
+                .DynamicParameters((_, _) => { return _ => ++releaseCalled; }));
 
-		var component = Kernel.Resolve<IGenericClassWithParameter<int>>(new Arguments().AddNamed("name", "bar"));
-		Assert.Equal("foo", component.Name);
+        var component = Kernel.Resolve<IGenericClassWithParameter<int>>(new Arguments().AddNamed("name", "bar"));
+        Assert.Equal("foo", component.Name);
 
-		Kernel.ReleaseComponent(component);
-		Assert.Equal(2, releaseCalled);
-	}
+        Kernel.ReleaseComponent(component);
+        Assert.Equal(2, releaseCalled);
+    }
 
-	[Fact]
-	public void Should_handle_multiple_calls()
-	{
-		var arg1 = "bar";
-		var arg2 = 5;
-		Kernel.Register(Component.For<ClassWithArguments>()
-			.LifeStyle.Transient
-			.DynamicParameters((_, d) => { d["arg1"] = arg1; })
-			.DynamicParameters((_, d) => { d["arg2"] = arg2; }));
-		var component = Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2).AddNamed("arg1", "foo"));
-		Assert.Equal(arg1, component.Arg1);
-		Assert.Equal(arg2, component.Arg2);
-	}
+    [Fact]
+    public void Should_handle_multiple_calls()
+    {
+        var arg1 = "bar";
+        var arg2 = 5;
+        Kernel.Register(Component.For<ClassWithArguments>()
+            .LifeStyle.Transient
+            .DynamicParameters((_, d) => { d["arg1"] = arg1; })
+            .DynamicParameters((_, d) => { d["arg2"] = arg2; }));
+        var component = Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2).AddNamed("arg1", "foo"));
+        Assert.Equal(arg1, component.Arg1);
+        Assert.Equal(arg2, component.Arg2);
+    }
 
-	[Fact]
-	public void Should_have_access_to_parameters_passed_from_call_site()
-	{
-		string arg1 = null;
-		var arg2 = 0;
-		Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((_, d) =>
-		{
-			arg1 = (string)d["arg1"];
-			arg2 = (int)d["arg2"];
-		}));
-		Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2).AddNamed("arg1", "foo"));
-		Assert.Equal("foo", arg1);
-		Assert.Equal(2, arg2);
-	}
+    [Fact]
+    public void Should_have_access_to_parameters_passed_from_call_site()
+    {
+        string arg1 = null;
+        var arg2 = 0;
+        Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((_, d) =>
+        {
+            arg1 = (string)d["arg1"];
+            arg2 = (int)d["arg2"];
+        }));
+        Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2).AddNamed("arg1", "foo"));
+        Assert.Equal("foo", arg1);
+        Assert.Equal(2, arg2);
+    }
 
-	[Fact]
-	public void Should_not_require_explicit_registration()
-	{
-		Kernel.Register(Component.For<CommonSub2Impl>().LifeStyle.Transient.DynamicParameters((_, _) => { }));
-		Kernel.Resolve<CommonSub2Impl>();
-	}
+    [Fact]
+    public void Should_not_require_explicit_registration()
+    {
+        Kernel.Register(Component.For<CommonSub2Impl>().LifeStyle.Transient.DynamicParameters((_, _) => { }));
+        Kernel.Resolve<CommonSub2Impl>();
+    }
 
-	[Fact]
-	public void Should_override_parameters_passed_from_call_site()
-	{
-		var arg1 = "bar";
-		var arg2 = 5;
-		Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((_, d) =>
-		{
-			d["arg1"] = arg1;
-			d["arg2"] = arg2;
-		}));
-		var component = Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2).AddNamed("arg1", "foo"));
-		Assert.Equal(arg1, component.Arg1);
-		Assert.Equal(arg2, component.Arg2);
-	}
+    [Fact]
+    public void Should_override_parameters_passed_from_call_site()
+    {
+        var arg1 = "bar";
+        var arg2 = 5;
+        Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((_, d) =>
+        {
+            d["arg1"] = arg1;
+            d["arg2"] = arg2;
+        }));
+        var component = Kernel.Resolve<ClassWithArguments>(new Arguments().AddNamed("arg2", 2).AddNamed("arg1", "foo"));
+        Assert.Equal(arg1, component.Arg1);
+        Assert.Equal(arg2, component.Arg2);
+    }
 
-	[Fact]
-	public void Should_resolve_component_when_no_parameters_passed_from_call_site()
-	{
-		var arg1 = "bar";
-		var arg2 = 5;
-		Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((_, d) =>
-		{
-			d["arg1"] = arg1;
-			d["arg2"] = arg2;
-		}));
+    [Fact]
+    public void Should_resolve_component_when_no_parameters_passed_from_call_site()
+    {
+        var arg1 = "bar";
+        var arg2 = 5;
+        Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((_, d) =>
+        {
+            d["arg1"] = arg1;
+            d["arg2"] = arg2;
+        }));
 
-		Kernel.Resolve<ClassWithArguments>();
-	}
+        Kernel.Resolve<ClassWithArguments>();
+    }
 }

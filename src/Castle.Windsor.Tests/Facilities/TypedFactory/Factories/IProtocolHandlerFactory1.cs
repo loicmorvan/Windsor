@@ -18,7 +18,7 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
 public interface IProtocolHandlerFactory1
 {
-	IProtocolHandler Create();
+    IProtocolHandler Create();
 
-	void Release(IProtocolHandler handler);
+    void Release(IProtocolHandler handler);
 }

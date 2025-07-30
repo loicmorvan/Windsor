@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel;
@@ -20,32 +19,38 @@ namespace Castle.Windsor.MicroKernel;
 /// <summary>Policy managing lifetime of components, and in particular their release process.</summary>
 public interface IReleasePolicy : IDisposable
 {
-	/// <summary>Creates nested policy for scoped object tracking.</summary>
-	/// <returns></returns>
-	IReleasePolicy CreateSubPolicy();
+    /// <summary>Creates nested policy for scoped object tracking.</summary>
+    /// <returns></returns>
+    IReleasePolicy CreateSubPolicy();
 
-	/// <summary>Returns <c>true</c> if <paramref name = "instance" /> is being tracked by this release policy, <c>false</c> otherwise.</summary>
-	/// <param name = "instance"></param>
-	/// <returns></returns>
-	bool HasTrack(object instance);
+    /// <summary>
+    ///     Returns <c>true</c> if <paramref name="instance" /> is being tracked by this release policy, <c>false</c>
+    ///     otherwise.
+    /// </summary>
+    /// <param name="instance"></param>
+    /// <returns></returns>
+    bool HasTrack(object instance);
 
-	/// <summary>
-	///     Releases <paramref name = "instance" /> if it's being tracked by this release policy, invoking its
-	///     <see
-	///         cref = "IDecommissionConcern" />
-	///     s and stops tracking it so that it can be claimed by the Garbage Collector.
-	/// </summary>
-	/// <param name = "instance"></param>
-	void Release(object instance);
+    /// <summary>
+    ///     Releases <paramref name="instance" /> if it's being tracked by this release policy, invoking its
+    ///     <see
+    ///         cref="IDecommissionConcern" />
+    ///     s and stops tracking it so that it can be claimed by the Garbage Collector.
+    /// </summary>
+    /// <param name="instance"></param>
+    void Release(object instance);
 
-	/// <summary>Asks the policy to track given object. The object will be released when a call to <see cref = "Release" /> is made.</summary>
-	/// <param name = "instance"></param>
-	/// <param name = "burden"></param>
-	/// <exception cref = "ArgumentException">
-	///     Thrown when <paramref name = "burden" /> does NOT have its
-	///     <see
-	///         cref = "Burden.RequiresPolicyRelease" />
-	///     flag set.
-	/// </exception>
-	void Track(object instance, Burden burden);
+    /// <summary>
+    ///     Asks the policy to track given object. The object will be released when a call to <see cref="Release" /> is
+    ///     made.
+    /// </summary>
+    /// <param name="instance"></param>
+    /// <param name="burden"></param>
+    /// <exception cref="ArgumentException">
+    ///     Thrown when <paramref name="burden" /> does NOT have its
+    ///     <see
+    ///         cref="Burden.RequiresPolicyRelease" />
+    ///     flag set.
+    /// </exception>
+    void Track(object instance, Burden burden);
 }

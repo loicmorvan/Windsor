@@ -12,17 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components;
-
 using System.Text;
 
+namespace Castle.Windsor.Tests.Components;
+
 public class GenericToStringServiceImpl<T> :
-	IGenericToStringService<T> where T : class
+    IGenericToStringService<T> where T : class
 {
-	public string ToString(params T[] instances)
-	{
-		var result = new StringBuilder();
-		foreach (var instance in instances) result.Append(instance);
-		return result.ToString();
-	}
+    public string ToString(params T[] instances)
+    {
+        var result = new StringBuilder();
+        foreach (var instance in instances)
+        {
+            result.Append(instance);
+        }
+
+        return result.ToString();
+    }
 }

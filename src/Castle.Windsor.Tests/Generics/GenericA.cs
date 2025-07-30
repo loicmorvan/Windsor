@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Generics;
 
 public class GenericA<T>
 {
-	public T Item { get; set; }
+    public T Item { get; set; }
 
-	public GenericB<T> B { get; set; }
+    public GenericB<T> B { get; set; }
 }

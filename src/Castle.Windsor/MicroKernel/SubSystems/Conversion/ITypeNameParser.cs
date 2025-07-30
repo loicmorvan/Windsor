@@ -16,5 +16,5 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 public interface ITypeNameParser
 {
-	TypeName Parse(string name);
+    TypeName Parse(string name);
 }

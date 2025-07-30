@@ -16,14 +16,14 @@ namespace Castle.Windsor.Core.Internal;
 
 public static class Constants
 {
-	public const string DefaultComponentForServiceFilter = "castle.default-component-for-service-filter";
-	public const string FallbackComponentForServiceFilter = "castle.fallback-component-for-service-filter";
-	public const string GenericImplementationMatchingStrategy = "castle.generic-matching-strategy";
-	public const string GenericServiceStrategy = "castle.generic-service-strategy";
+    public const string DefaultComponentForServiceFilter = "castle.default-component-for-service-filter";
+    public const string FallbackComponentForServiceFilter = "castle.fallback-component-for-service-filter";
+    public const string GenericImplementationMatchingStrategy = "castle.generic-matching-strategy";
+    public const string GenericServiceStrategy = "castle.generic-service-strategy";
 
-	public const string PropertyFilters = "castle.property-filters";
-	public const string ScopeAccessorType = "castle.scope-accessor-type";
-	public const string ScopeRootSelector = "castle.scope-root";
+    public const string PropertyFilters = "castle.property-filters";
+    public const string ScopeAccessorType = "castle.scope-accessor-type";
+    public const string ScopeRootSelector = "castle.scope-root";
 
-	public static string ExceptionHelpLink => "http://www.castleproject.org/";
+    public static string ExceptionHelpLink => "http://www.castleproject.org/";
 }

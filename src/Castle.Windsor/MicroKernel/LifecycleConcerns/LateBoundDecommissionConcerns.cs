@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
@@ -21,10 +20,10 @@ namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
 [Serializable]
 public class LateBoundDecommissionConcerns : LateBoundConcerns<IDecommissionConcern>, IDecommissionConcern
 {
-	public override void Apply(ComponentModel model, object component)
-	{
-		var componentConcerns = GetComponentConcerns(component.GetType());
+    public override void Apply(ComponentModel model, object component)
+    {
+        var componentConcerns = GetComponentConcerns(component.GetType());
 
-		componentConcerns.ForEach(c => c.Apply(model, component));
-	}
+        componentConcerns.ForEach(c => c.Apply(model, component));
+    }
 }

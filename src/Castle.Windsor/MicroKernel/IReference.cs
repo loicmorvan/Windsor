@@ -18,22 +18,26 @@ using Castle.Windsor.MicroKernel.Context;
 namespace Castle.Windsor.MicroKernel;
 
 /// <summary>Represents obtained just in time object.</summary>
-/// <typeparam name = "T"></typeparam>
+/// <typeparam name="T"></typeparam>
 public interface IReference<out T>
 {
-	/// <summary>If the reference introduces dependency on a component, should return <see cref = "DependencyModel" /> for that dependency, otherwise <c>null</c>.</summary>
-	/// <param name = "component"></param>
+	/// <summary>
+	///     If the reference introduces dependency on a component, should return <see cref="DependencyModel" /> for that
+	///     dependency, otherwise <c>null</c>.
+	/// </summary>
+	/// <param name="component"></param>
 	/// <returns></returns>
 	void Attach(ComponentModel component);
 
 	void Detach(ComponentModel component);
 
 	/// <summary>
-	///     Resolves object referenced by this reference, optionally using provided <paramref name = "kernel" />. If object is resolved from the kernel, the <paramref name = "context" /> should be used to
+	///     Resolves object referenced by this reference, optionally using provided <paramref name="kernel" />. If object is
+	///     resolved from the kernel, the <paramref name="context" /> should be used to
 	///     guard against against cyclic dependencies.
 	/// </summary>
-	/// <param name = "kernel"></param>
-	/// <param name = "context"></param>
+	/// <param name="kernel"></param>
+	/// <param name="context"></param>
 	/// <returns></returns>
 	T Resolve(IKernel kernel, CreationContext context);
 }

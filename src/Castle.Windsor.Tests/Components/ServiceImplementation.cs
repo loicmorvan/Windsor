@@ -16,14 +16,14 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ServiceImplementation : ISomeService
 {
-	public ServiceImplementation(int someValue)
-	{
-		SomeValue = someValue;
-	}
+    public ServiceImplementation(int someValue)
+    {
+        SomeValue = someValue;
+    }
 
-	public int SomeValue { get; set; }
+    public int SomeValue { get; set; }
 
-	public void SomeOperation()
-	{
-	}
+    public void SomeOperation()
+    {
+    }
 }

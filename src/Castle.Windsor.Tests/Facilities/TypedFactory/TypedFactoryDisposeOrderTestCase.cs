@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Facilities.TypedFactory;
 using Castle.Windsor.MicroKernel.Registration;
 using JetBrains.Annotations;
@@ -21,44 +20,47 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public sealed class TypedFactoryDisposeOrderTestCase : AbstractContainerTestCase
 {
-	protected override void AfterContainerCreated()
-	{
-		Container.AddFacility<TypedFactoryFacility>();
-	}
+    protected override void AfterContainerCreated()
+    {
+        Container.AddFacility<TypedFactoryFacility>();
+    }
 
-	[Fact]
-	public void Typed_factories_are_not_disposed_before_their_dependents()
-	{
-		Container.Register(
-			Component.For<Dependency>(),
-			Component.For<Dependent>());
+    [Fact]
+    public void Typed_factories_are_not_disposed_before_their_dependents()
+    {
+        Container.Register(
+            Component.For<Dependency>(),
+            Component.For<Dependent>());
 
-		Container.Resolve<Dependent>();
-	}
+        Container.Resolve<Dependent>();
+    }
 
-	[UsedImplicitly]
-	public sealed class Dependency : IDisposable
-	{
-		private bool _isDisposed;
+    [UsedImplicitly]
+    public sealed class Dependency : IDisposable
+    {
+        private bool _isDisposed;
 
-		public void Dispose()
-		{
-			_isDisposed = true;
-		}
+        public void Dispose()
+        {
+            _isDisposed = true;
+        }
 
-		public void Use()
-		{
-			if (_isDisposed) throw new ObjectDisposedException(nameof(Dependency));
-		}
-	}
+        public void Use()
+        {
+            if (_isDisposed)
+            {
+                throw new ObjectDisposedException(nameof(Dependency));
+            }
+        }
+    }
 
-	[UsedImplicitly]
-	private sealed class Dependent(Func<Dependency> factory) : IDisposable
-	{
-		public void Dispose()
-		{
-			using var needed = factory.Invoke();
-			needed.Use();
-		}
-	}
+    [UsedImplicitly]
+    private sealed class Dependent(Func<Dependency> factory) : IDisposable
+    {
+        public void Dispose()
+        {
+            using var needed = factory.Invoke();
+            needed.Use();
+        }
+    }
 }

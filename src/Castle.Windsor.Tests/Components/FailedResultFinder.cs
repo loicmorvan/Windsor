@@ -16,10 +16,10 @@ namespace Castle.Windsor.Tests.Components;
 
 public class FailedResultFinder<T> : IResultFinder<T>
 {
-	public IResultFinder<T> Finder => null;
+    public IResultFinder<T> Finder => null;
 
-	public T Process(ISpecification specification)
-	{
-		return default;
-	}
+    public T Process(ISpecification specification)
+    {
+        return default;
+    }
 }

@@ -17,7 +17,7 @@ namespace Castle.Windsor.Tests.ClassComponents;
 /// <summary>Summary description for DefaultCustomer.</summary>
 public class DefaultCustomer
 {
-	public string Name { get; set; }
+    public string Name { get; set; }
 
-	public string Address { get; set; }
+    public string Address { get; set; }
 }

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
 
@@ -20,14 +19,14 @@ namespace Castle.Windsor.Tests.Registration.Interceptors.Multiple;
 
 public class InterceptorKeyMultipleCall : InterceptorsTestCaseHelper
 {
-	public override IRegistration RegisterInterceptors<TS>(ComponentRegistration<TS> registration)
-	{
-		return registration.Interceptors("interceptorKey").Interceptors("interceptorKey2");
-	}
+    public override IRegistration RegisterInterceptors<TS>(ComponentRegistration<TS> registration)
+    {
+        return registration.Interceptors("interceptorKey").Interceptors("interceptorKey2");
+    }
 
-	public override IEnumerable<InterceptorReference> GetExpectedInterceptorsInCorrectOrder()
-	{
-		yield return InterceptorReference.ForKey("interceptorKey");
-		yield return InterceptorReference.ForKey("interceptorKey2");
-	}
+    public override IEnumerable<InterceptorReference> GetExpectedInterceptorsInCorrectOrder()
+    {
+        yield return InterceptorReference.ForKey("interceptorKey");
+        yield return InterceptorReference.ForKey("interceptorKey2");
+    }
 }

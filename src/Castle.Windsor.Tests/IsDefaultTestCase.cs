@@ -20,77 +20,79 @@ namespace Castle.Windsor.Tests;
 
 public class IsDefaultTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void Can_make_a_component_default_via_AllTypes_1()
-	{
-		Container.Register(
-			Classes.FromAssembly(GetCurrentAssembly())
-				.BasedOn<IEmptyService>()
-				.WithService.Base()
-				.ConfigureFor<EmptyServiceB>(c => c.IsDefault()));
-		var obj = Container.Resolve<IEmptyService>();
+    [Fact]
+    public void Can_make_a_component_default_via_AllTypes_1()
+    {
+        Container.Register(
+            Classes.FromAssembly(GetCurrentAssembly())
+                .BasedOn<IEmptyService>()
+                .WithService.Base()
+                .ConfigureFor<EmptyServiceB>(c => c.IsDefault()));
+        var obj = Container.Resolve<IEmptyService>();
 
-		Assert.IsType<EmptyServiceB>(obj);
-	}
+        Assert.IsType<EmptyServiceB>(obj);
+    }
 
-	[Fact]
-	public void Can_make_a_component_default_via_AllTypes_2()
-	{
-		Container.Register(
-			Classes.FromAssembly(GetCurrentAssembly())
-				.BasedOn<IEmptyService>()
-				.WithService.Base()
-				.ConfigureFor<EmptyServiceA>(c => c.IsDefault()));
-		var obj = Container.Resolve<IEmptyService>();
+    [Fact]
+    public void Can_make_a_component_default_via_AllTypes_2()
+    {
+        Container.Register(
+            Classes.FromAssembly(GetCurrentAssembly())
+                .BasedOn<IEmptyService>()
+                .WithService.Base()
+                .ConfigureFor<EmptyServiceA>(c => c.IsDefault()));
+        var obj = Container.Resolve<IEmptyService>();
 
-		Assert.IsType<EmptyServiceA>(obj);
-	}
+        Assert.IsType<EmptyServiceA>(obj);
+    }
 
-	[Fact]
-	public void Can_make_non_first_component_default()
-	{
-		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
-			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().IsDefault());
+    [Fact]
+    public void Can_make_non_first_component_default()
+    {
+        Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
+            Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().IsDefault());
 
-		var obj = Container.Resolve<IEmptyService>();
+        var obj = Container.Resolve<IEmptyService>();
 
-		Assert.IsType<EmptyServiceB>(obj);
-	}
+        Assert.IsType<EmptyServiceB>(obj);
+    }
 
-	[Fact]
-	public void Can_make_non_first_component_default_with_filter()
-	{
-		Container.Register(Component.For<IEmptyService, EmptyServiceA, object>().ImplementedBy<EmptyServiceA>(),
-			Component.For<IEmptyService, EmptyServiceB, object>().ImplementedBy<EmptyServiceB>().IsDefault(t => t.GetTypeInfo().IsInterface));
+    [Fact]
+    public void Can_make_non_first_component_default_with_filter()
+    {
+        Container.Register(Component.For<IEmptyService, EmptyServiceA, object>().ImplementedBy<EmptyServiceA>(),
+            Component.For<IEmptyService, EmptyServiceB, object>().ImplementedBy<EmptyServiceB>()
+                .IsDefault(t => t.GetTypeInfo().IsInterface));
 
-		var obj = Container.Resolve<IEmptyService>();
+        var obj = Container.Resolve<IEmptyService>();
 
-		Assert.IsType<EmptyServiceB>(obj);
+        Assert.IsType<EmptyServiceB>(obj);
 
-		var obj2 = Container.Resolve<object>();
-		Assert.IsType<EmptyServiceA>(obj2);
-	}
+        var obj2 = Container.Resolve<object>();
+        Assert.IsType<EmptyServiceA>(obj2);
+    }
 
-	[Fact]
-	public void Does_affect_order_when_using_ResolveAll()
-	{
-		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
-			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().IsDefault(t => t.GetTypeInfo().IsInterface));
+    [Fact]
+    public void Does_affect_order_when_using_ResolveAll()
+    {
+        Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
+            Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().IsDefault(t => t.GetTypeInfo().IsInterface));
 
-		var obj = Container.ResolveAll<IEmptyService>();
+        var obj = Container.ResolveAll<IEmptyService>();
 
-		Assert.IsType<EmptyServiceB>(obj[0]);
-		Assert.IsType<EmptyServiceA>(obj[1]);
-	}
+        Assert.IsType<EmptyServiceB>(obj[0]);
+        Assert.IsType<EmptyServiceA>(obj[1]);
+    }
 
-	[Fact]
-	public void Later_default_overrides_earlier_one()
-	{
-		Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().IsDefault(t => t.GetTypeInfo().IsInterface),
-			Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().IsDefault(t => t.GetTypeInfo().IsInterface));
+    [Fact]
+    public void Later_default_overrides_earlier_one()
+    {
+        Container.Register(
+            Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().IsDefault(t => t.GetTypeInfo().IsInterface),
+            Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().IsDefault(t => t.GetTypeInfo().IsInterface));
 
-		var obj = Container.Resolve<IEmptyService>();
+        var obj = Container.Resolve<IEmptyService>();
 
-		Assert.IsType<EmptyServiceB>(obj);
-	}
+        Assert.IsType<EmptyServiceB>(obj);
+    }
 }

@@ -16,10 +16,10 @@ namespace Castle.Windsor.Tests.Components;
 
 public class HasNullDefaultForServiceDependency
 {
-	public HasNullDefaultForServiceDependency(IEmptyService empty = null)
-	{
-		Dependency = empty;
-	}
+    public HasNullDefaultForServiceDependency(IEmptyService empty = null)
+    {
+        Dependency = empty;
+    }
 
-	public IEmptyService Dependency { get; private set; }
+    public IEmptyService Dependency { get; private set; }
 }

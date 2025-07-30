@@ -19,9 +19,9 @@ namespace Castle.Windsor.MicroKernel.Proxy;
 /// <summary>Helper support for proxy configuration.</summary>
 public static class ProxyOptionsUtil
 {
-	/// <summary>Obtains the <see cref = "ProxyOptions" /> associated with the <see cref = "ComponentModel" />.</summary>
-	/// <param name = "model">The component model.</param>
-	/// <param name = "createOnDemand">true if the options should be created if not present.</param>
+	/// <summary>Obtains the <see cref="ProxyOptions" /> associated with the <see cref="ComponentModel" />.</summary>
+	/// <param name="model">The component model.</param>
+	/// <param name="createOnDemand">true if the options should be created if not present.</param>
 	/// <returns>The associated proxy options for the component model.</returns>
 	public static ProxyOptions ObtainProxyOptions(this ComponentModel model, bool createOnDemand = true)
 	{

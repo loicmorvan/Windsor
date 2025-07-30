@@ -16,10 +16,10 @@ namespace Castle.Windsor.Tests.Components;
 
 public class EmptyServiceComposite : IEmptyService
 {
-	public EmptyServiceComposite(IEmptyService[] inner)
-	{
-		Inner = inner;
-	}
+    public EmptyServiceComposite(IEmptyService[] inner)
+    {
+        Inner = inner;
+    }
 
-	public IEmptyService[] Inner { get; private set; }
+    public IEmptyService[] Inner { get; private set; }
 }

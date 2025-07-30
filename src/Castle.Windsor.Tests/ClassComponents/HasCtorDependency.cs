@@ -18,10 +18,10 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class HasCtorDependency
 {
-	public HasCtorDependency(ISimpleService dependency)
-	{
-		Dependency = dependency;
-	}
+    public HasCtorDependency(ISimpleService dependency)
+    {
+        Dependency = dependency;
+    }
 
-	public ISimpleService Dependency { get; private set; }
+    public ISimpleService Dependency { get; private set; }
 }

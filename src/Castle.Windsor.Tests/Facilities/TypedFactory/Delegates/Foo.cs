@@ -16,10 +16,10 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
 public class Foo
 {
-	public Foo(int number)
-	{
-		Number = number;
-	}
+    public Foo(int number)
+    {
+        Number = number;
+    }
 
-	public int Number { get; }
+    public int Number { get; }
 }

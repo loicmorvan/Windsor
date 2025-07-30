@@ -14,14 +14,12 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-using System;
-
 public class DefaultMailSenderService : IDisposable
 {
-	public bool IsDisposed { get; private set; }
+    public bool IsDisposed { get; private set; }
 
-	public void Dispose()
-	{
-		IsDisposed = true;
-	}
+    public void Dispose()
+    {
+        IsDisposed = true;
+    }
 }

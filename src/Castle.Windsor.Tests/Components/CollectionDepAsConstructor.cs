@@ -14,14 +14,12 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-using System.Collections.Generic;
-
 public class CollectionDepAsConstructor
 {
-	public CollectionDepAsConstructor(ICollection<IEmptyService> services)
-	{
-		Services = services;
-	}
+    public CollectionDepAsConstructor(ICollection<IEmptyService> services)
+    {
+        Services = services;
+    }
 
-	public ICollection<IEmptyService> Services { get; }
+    public ICollection<IEmptyService> Services { get; }
 }

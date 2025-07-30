@@ -21,41 +21,41 @@ namespace Castle.Windsor.Tests.Lifestyle;
 
 public class ScopedLifetyleCustomScopesTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void Can_use_custom_scope_accessor_with_scoped_lifestyle()
-	{
-		StaticScopeAccessor.ResetScope();
-		Container.Register(Component.For<A>().LifestyleScoped<StaticScopeAccessor>());
+    [Fact]
+    public void Can_use_custom_scope_accessor_with_scoped_lifestyle()
+    {
+        StaticScopeAccessor.ResetScope();
+        Container.Register(Component.For<A>().LifestyleScoped<StaticScopeAccessor>());
 
-		var a1 = Container.Resolve<A>();
-		var a2 = Container.Resolve<A>();
+        var a1 = Container.Resolve<A>();
+        var a2 = Container.Resolve<A>();
 
-		Assert.Same(a1, a2);
-	}
+        Assert.Same(a1, a2);
+    }
 
-	[Fact]
-	public void Can_use_custom_scope_accessor_with_scoped_lifestyle_generic()
-	{
-		StaticScopeAccessor.ResetScope();
-		Container.Register(Component.For<A>().LifestyleScoped<StaticScopeAccessor>());
+    [Fact]
+    public void Can_use_custom_scope_accessor_with_scoped_lifestyle_generic()
+    {
+        StaticScopeAccessor.ResetScope();
+        Container.Register(Component.For<A>().LifestyleScoped<StaticScopeAccessor>());
 
-		var a1 = Container.Resolve<A>();
-		var a2 = Container.Resolve<A>();
+        var a1 = Container.Resolve<A>();
+        var a2 = Container.Resolve<A>();
 
-		Assert.Same(a1, a2);
-	}
+        Assert.Same(a1, a2);
+    }
 
-	[Fact]
-	public void Can_use_custom_scope_accessor_with_scoped_lifestyle_multiple()
-	{
-		StaticScopeAccessor.ResetScope();
-		Container.Register(Classes.FromAssembly(GetCurrentAssembly())
-			.Where(c => c.Is<A>())
-			.LifestyleScoped<StaticScopeAccessor>());
+    [Fact]
+    public void Can_use_custom_scope_accessor_with_scoped_lifestyle_multiple()
+    {
+        StaticScopeAccessor.ResetScope();
+        Container.Register(Classes.FromAssembly(GetCurrentAssembly())
+            .Where(c => c.Is<A>())
+            .LifestyleScoped<StaticScopeAccessor>());
 
-		var a1 = Container.Resolve<A>();
-		var a2 = Container.Resolve<A>();
+        var a1 = Container.Resolve<A>();
+        var a2 = Container.Resolve<A>();
 
-		Assert.Same(a1, a2);
-	}
+        Assert.Same(a1, a2);
+    }
 }

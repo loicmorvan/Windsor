@@ -18,7 +18,7 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
 public interface INonDisposableFactory
 {
-	DisposableComponent Create();
+    DisposableComponent Create();
 
-	void LetGo(DisposableComponent component);
+    void LetGo(DisposableComponent component);
 }

@@ -22,8 +22,8 @@ namespace Castle.Windsor.Tests.ClassComponents;
 [UsedImplicitly]
 public class ComponentFactory(IKernel kernel)
 {
-	public object Create(string name)
-	{
-		return kernel.Resolve<object>(name);
-	}
+    public object Create(string name)
+    {
+        return kernel.Resolve<object>(name);
+    }
 }

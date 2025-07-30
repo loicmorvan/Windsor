@@ -16,50 +16,54 @@
 // ReSharper disable UnusedType.Global : TODO missing tests
 // ReSharper disable UnusedMember.Global : TODO missing tests
 
-namespace Microsoft.Extensions.Hosting
+using Castle.Windsor.Extensions.DependencyInjection;
+using Castle.Windsor.Windsor;
+
+// ReSharper disable once CheckNamespace
+namespace Microsoft.Extensions.Hosting;
+
+public static class HostBuilderExtensions
 {
-	using System;
+    /// <summary>Uses <see name="IWindsorContainer" /> as the DI container for the host</summary>
+    /// <param name="hostBuilder">Host builder</param>
+    /// <returns>Host builder</returns>
+    public static IHostBuilder UseWindsorContainerServiceProvider(this IHostBuilder hostBuilder)
+    {
+        return hostBuilder.UseServiceProviderFactory(new WindsorServiceProviderFactory());
+    }
 
-	using Castle.Windsor.Extensions.DependencyInjection;
-	using Castle.Windsor.Windsor;
+    /// <summary>Uses <see name="IWindsorContainer" /> as the DI container for the host</summary>
+    /// <param name="hostBuilder">Host builder</param>
+    /// <param name="factoryArgs">Ctor arguments for the creation of the factory</param>
+    /// <returns>Host builder, creates instance of factory passed as generic</returns>
+    public static IHostBuilder UseWindsorContainerServiceProvider<T>(this IHostBuilder hostBuilder,
+        params object[] factoryArgs)
+        where T : WindsorServiceProviderFactoryBase
+    {
+        return hostBuilder.UseServiceProviderFactory((T)Activator.CreateInstance(typeof(T), factoryArgs));
+    }
 
-	public static class HostBuilderExtensions
-	{
-		/// <summary>Uses <see name = "IWindsorContainer" /> as the DI container for the host</summary>
-		/// <param name = "hostBuilder">Host builder</param>
-		/// <returns>Host builder</returns>
-		public static IHostBuilder UseWindsorContainerServiceProvider(this IHostBuilder hostBuilder)
-		{
-			return hostBuilder.UseServiceProviderFactory(new WindsorServiceProviderFactory());
-		}
+    /// <summary>Uses <see name="IWindsorContainer" /> as the DI container for the host</summary>
+    /// <param name="hostBuilder">Host builder</param>
+    /// <param name="serviceProviderFactory">Instance of WindsorServiceProviderFactoryBase to be used as ServiceProviderFactory</param>
+    /// <returns>Host builder</returns>
+    public static IHostBuilder UseWindsorContainerServiceProvider<T>(this IHostBuilder hostBuilder,
+        T serviceProviderFactory)
+        where T : WindsorServiceProviderFactoryBase
+    {
+        return hostBuilder.UseServiceProviderFactory(serviceProviderFactory);
+    }
 
-		/// <summary>Uses <see name = "IWindsorContainer" /> as the DI container for the host</summary>
-		/// <param name = "hostBuilder">Host builder</param>
-		/// <param name = "factoryArgs">Ctor arguments for the creation of the factory</param>
-		/// <returns>Host builder, creates instance of factory passed as generic</returns>
-		public static IHostBuilder UseWindsorContainerServiceProvider<T>(this IHostBuilder hostBuilder, params object[] factoryArgs)
-			where T : WindsorServiceProviderFactoryBase
-		{
-			return hostBuilder.UseServiceProviderFactory((T)Activator.CreateInstance(typeof(T), factoryArgs));
-		}
-
-		/// <summary>Uses <see name = "IWindsorContainer" /> as the DI container for the host</summary>
-		/// <param name = "hostBuilder">Host builder</param>
-		/// <param name = "serviceProviderFactory">Instance of WindsorServiceProviderFactoryBase to be used as ServiceProviderFactory</param>
-		/// <returns>Host builder</returns>
-		public static IHostBuilder UseWindsorContainerServiceProvider<T>(this IHostBuilder hostBuilder, T serviceProviderFactory)
-			where T : WindsorServiceProviderFactoryBase
-		{
-			return hostBuilder.UseServiceProviderFactory(serviceProviderFactory);
-		}
-
-		/// <summary>Uses <see name = "IWindsorContainer" /> as the DI container for the host</summary>
-		/// <param name = "hostBuilder">Host builder</param>
-		/// <param name = "container">Windsor Container to be used for registrations, please note, will be cleared of all existing registrations</param>
-		/// <returns>Host builder</returns>
-		public static IHostBuilder UseWindsorContainerServiceProvider(this IHostBuilder hostBuilder, IWindsorContainer container)
-		{
-			return hostBuilder.UseServiceProviderFactory(new WindsorServiceProviderFactory(container));
-		}
-	}
+    /// <summary>Uses <see name="IWindsorContainer" /> as the DI container for the host</summary>
+    /// <param name="hostBuilder">Host builder</param>
+    /// <param name="container">
+    ///     Windsor Container to be used for registrations, please note, will be cleared of all existing
+    ///     registrations
+    /// </param>
+    /// <returns>Host builder</returns>
+    public static IHostBuilder UseWindsorContainerServiceProvider(this IHostBuilder hostBuilder,
+        IWindsorContainer container)
+    {
+        return hostBuilder.UseServiceProviderFactory(new WindsorServiceProviderFactory(container));
+    }
 }

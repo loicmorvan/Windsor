@@ -16,8 +16,8 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 public static class SubSystemExtensions
 {
-	public static IConversionManager GetConversionManager(this IKernel kernel)
-	{
-		return (IConversionManager)kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
-	}
+    public static IConversionManager GetConversionManager(this IKernel kernel)
+    {
+        return (IConversionManager)kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
+    }
 }

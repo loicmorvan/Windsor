@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Castle.Windsor.Core.Internal;
 
 /// <summary>Holds a timestamp (integer) for a given item</summary>

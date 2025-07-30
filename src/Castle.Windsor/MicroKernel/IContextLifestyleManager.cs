@@ -18,5 +18,5 @@ namespace Castle.Windsor.MicroKernel;
 
 public interface IContextLifestyleManager
 {
-	object GetContextInstance(CreationContext context);
+    object GetContextInstance(CreationContext context);
 }

@@ -16,10 +16,10 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class ClassWithInstanceCount
 {
-	public static int InstancesCount;
+    public static int InstancesCount;
 
-	public ClassWithInstanceCount()
-	{
-		InstancesCount++;
-	}
+    public ClassWithInstanceCount()
+    {
+        InstancesCount++;
+    }
 }

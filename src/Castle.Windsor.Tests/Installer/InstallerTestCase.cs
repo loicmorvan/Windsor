@@ -21,28 +21,28 @@ namespace Castle.Windsor.Tests.Installer;
 
 public class InstallerTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void InstallCalcService()
-	{
-		var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("installerconfig.xml")));
+    [Fact]
+    public void InstallCalcService()
+    {
+        var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("installerconfig.xml")));
 
-		Assert.True(container.Kernel.HasComponent(typeof(ICalcService)));
-		Assert.True(container.Kernel.HasComponent("calcservice"));
-	}
+        Assert.True(container.Kernel.HasComponent(typeof(ICalcService)));
+        Assert.True(container.Kernel.HasComponent("calcservice"));
+    }
 
-	[Fact]
-	public void InstallChildContainer()
-	{
-		var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("installerconfig.xml")));
-		var child1 = container.GetChildContainer("child1");
+    [Fact]
+    public void InstallChildContainer()
+    {
+        var container = new WindsorContainer(new XmlInterpreter(Xml.Embedded("installerconfig.xml")));
+        var child1 = container.GetChildContainer("child1");
 
-		Assert.NotNull(child1);
-		Assert.Equal(child1.Parent, container);
-		Assert.True(child1.Kernel.HasComponent(typeof(ICalcService)));
-		Assert.True(child1.Kernel.HasComponent("child_calcservice"));
+        Assert.NotNull(child1);
+        Assert.Equal(child1.Parent, container);
+        Assert.True(child1.Kernel.HasComponent(typeof(ICalcService)));
+        Assert.True(child1.Kernel.HasComponent("child_calcservice"));
 
-		var calcservice = container.Resolve<ICalcService>("calcservice");
-		var childCalcservice = child1.Resolve<ICalcService>();
-		Assert.NotEqual(calcservice, childCalcservice);
-	}
+        var calcservice = container.Resolve<ICalcService>("calcservice");
+        var childCalcservice = child1.Resolve<ICalcService>();
+        Assert.NotEqual(calcservice, childCalcservice);
+    }
 }

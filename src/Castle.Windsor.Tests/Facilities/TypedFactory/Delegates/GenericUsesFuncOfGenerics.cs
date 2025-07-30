@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
 public class GenericUsesFuncOfGenerics<T>
 {
-	public GenericUsesFuncOfGenerics(Func<GenericComponent<T>> func)
-	{
-		Func = func;
-	}
+    public GenericUsesFuncOfGenerics(Func<GenericComponent<T>> func)
+    {
+        Func = func;
+    }
 
-	public Func<GenericComponent<T>> Func { get; private set; }
+    public Func<GenericComponent<T>> Func { get; private set; }
 }

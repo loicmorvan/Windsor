@@ -19,12 +19,12 @@ namespace Castle.Windsor.Tests.Interceptors;
 
 public class InterceptorThatCauseStackOverflow : IInterceptor
 {
-	// ReSharper disable once UnusedParameter.Local
-	public InterceptorThatCauseStackOverflow(ICameraService service)
-	{
-	}
+    // ReSharper disable once UnusedParameter.Local
+    public InterceptorThatCauseStackOverflow(ICameraService service)
+    {
+    }
 
-	public void Intercept(IInvocation invocation)
-	{
-	}
+    public void Intercept(IInvocation invocation)
+    {
+    }
 }

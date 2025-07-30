@@ -16,7 +16,7 @@ namespace Castle.Windsor.MicroKernel.Context;
 
 public interface IArgumentsComparer
 {
-	bool RunEqualityComparison(object x, object y, out bool areEqual);
+    bool RunEqualityComparison(object x, object y, out bool areEqual);
 
-	bool RunHasCodeCalculation(object o, out int hashCode);
+    bool RunHasCodeCalculation(object o, out int hashCode);
 }

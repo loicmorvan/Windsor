@@ -12,33 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel;
 
 namespace Castle.Windsor.Windsor.Diagnostics;
 
 public partial class DefaultDiagnosticsSubSystem :
-	AbstractSubSystem
+    AbstractSubSystem
 {
-	private readonly IDictionary<Type, IDiagnostic<object>> _diagnostics = new Dictionary<Type, IDiagnostic<object>>();
+    private readonly IDictionary<Type, IDiagnostic<object>> _diagnostics = new Dictionary<Type, IDiagnostic<object>>();
 
-	public void AddDiagnostic<TDiagnostic>(TDiagnostic diagnostic) where TDiagnostic : IDiagnostic<object>
-	{
-		_diagnostics.Add(typeof(TDiagnostic), diagnostic);
-	}
+    public void AddDiagnostic<TDiagnostic>(TDiagnostic diagnostic) where TDiagnostic : IDiagnostic<object>
+    {
+        _diagnostics.Add(typeof(TDiagnostic), diagnostic);
+    }
 
-	public TDiagnostic GetDiagnostic<TDiagnostic>() where TDiagnostic : IDiagnostic<object>
-	{
-		_diagnostics.TryGetValue(typeof(TDiagnostic), out var value);
-		return (TDiagnostic)value;
-	}
+    public TDiagnostic GetDiagnostic<TDiagnostic>() where TDiagnostic : IDiagnostic<object>
+    {
+        _diagnostics.TryGetValue(typeof(TDiagnostic), out var value);
+        return (TDiagnostic)value;
+    }
 
-	public override void Terminate()
-	{
-		// ReSharper disable once SuspiciousTypeConversion.Global
-		_diagnostics.Values.OfType<IDisposable>().ForEach(e => e.Dispose());
-	}
+    public override void Terminate()
+    {
+        // ReSharper disable once SuspiciousTypeConversion.Global
+        _diagnostics.Values.OfType<IDisposable>().ForEach(e => e.Dispose());
+    }
 }

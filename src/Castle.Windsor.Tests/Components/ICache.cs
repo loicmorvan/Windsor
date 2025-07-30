@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Components;
 
 public interface ICache<T>
 {
-	T Get(string key);
+    T Get(string key);
 
-	void Put(string key, T item);
+    void Put(string key, T item);
 }

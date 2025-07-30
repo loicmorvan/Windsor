@@ -15,17 +15,19 @@
 using Castle.Windsor.MicroKernel.Registration;
 using ServiceDescriptor = Microsoft.Extensions.DependencyInjection.ServiceDescriptor;
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Extensions
+namespace Castle.Windsor.Extensions.DependencyInjection.Extensions;
+
+using ServiceDescriptor = ServiceDescriptor;
+
+public static class ServiceDescriptorExtensions
 {
-	using ServiceDescriptor = ServiceDescriptor;
+    public static IRegistration CreateWindsorRegistration(this ServiceDescriptor service)
+    {
+        if (service.ServiceType.ContainsGenericParameters)
+        {
+            return RegistrationAdapter.FromOpenGenericServiceDescriptor(service);
+        }
 
-	public static class ServiceDescriptorExtensions
-	{
-		public static IRegistration CreateWindsorRegistration(this ServiceDescriptor service)
-		{
-			if (service.ServiceType.ContainsGenericParameters) return RegistrationAdapter.FromOpenGenericServiceDescriptor(service);
-
-			return RegistrationAdapter.FromServiceDescriptor(service);
-		}
-	}
+        return RegistrationAdapter.FromServiceDescriptor(service);
+    }
 }

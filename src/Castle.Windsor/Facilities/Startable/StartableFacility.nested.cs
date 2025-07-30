@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Context;
 
@@ -20,86 +19,98 @@ namespace Castle.Windsor.Facilities.Startable;
 
 public partial class StartableFacility
 {
-	private class DeferredStartFlag : StartFlag
-	{
-		public override void Signal()
-		{
-			StartAll();
-		}
+    private class DeferredStartFlag : StartFlag
+    {
+        public override void Signal()
+        {
+            StartAll();
+        }
 
-		protected override void Init()
-		{
-			base.Init();
-			Events.Kernel.RegistrationCompleted += delegate { Signal(); };
-		}
-	}
+        protected override void Init()
+        {
+            base.Init();
+            Events.Kernel.RegistrationCompleted += delegate { Signal(); };
+        }
+    }
 
-	private class DeferredTryStartFlag : DeferredStartFlag
-	{
-		protected override void Start(IHandler handler)
-		{
-			if (TryStart(handler) == false) CacheHandler(handler);
-		}
+    private class DeferredTryStartFlag : DeferredStartFlag
+    {
+        protected override void Start(IHandler handler)
+        {
+            if (TryStart(handler) == false)
+            {
+                CacheHandler(handler);
+            }
+        }
 
-		private bool TryStart(IHandler handler)
-		{
-			return handler.TryResolve(CreationContext.CreateEmpty()) != null;
-		}
-	}
+        private bool TryStart(IHandler handler)
+        {
+            return handler.TryResolve(CreationContext.CreateEmpty()) != null;
+        }
+    }
 
-	private class LegacyStartFlag : StartFlag
-	{
-		/// <remarks>Don't check the waiting list while this flag is set as this could result in duplicate singletons.</remarks>
-		private bool _inStart;
+    private class LegacyStartFlag : StartFlag
+    {
+        /// <remarks>Don't check the waiting list while this flag is set as this could result in duplicate singletons.</remarks>
+        private bool _inStart;
 
-		public override void Signal()
-		{
-			StartAll();
-		}
+        public override void Signal()
+        {
+            StartAll();
+        }
 
-		protected override void Init()
-		{
-			base.Init();
-			Events.Kernel.ComponentRegistered += delegate
-			{
-				if (_inStart == false) Signal();
-			};
-		}
+        protected override void Init()
+        {
+            base.Init();
+            Events.Kernel.ComponentRegistered += delegate
+            {
+                if (_inStart == false)
+                {
+                    Signal();
+                }
+            };
+        }
 
-		protected override void Start(IHandler handler)
-		{
-			if (TryStart(handler) == false) CacheHandler(handler);
-		}
+        protected override void Start(IHandler handler)
+        {
+            if (TryStart(handler) == false)
+            {
+                CacheHandler(handler);
+            }
+        }
 
-		/// <summary>Request the component instance</summary>
-		/// <param name = "handler"></param>
-		private bool TryStart(IHandler handler)
-		{
-			try
-			{
-				_inStart = true;
-				return handler.TryResolve(CreationContext.CreateEmpty()) != null;
-			}
-			finally
-			{
-				_inStart = false;
-			}
-		}
-	}
+        /// <summary>Request the component instance</summary>
+        /// <param name="handler"></param>
+        private bool TryStart(IHandler handler)
+        {
+            try
+            {
+                _inStart = true;
+                return handler.TryResolve(CreationContext.CreateEmpty()) != null;
+            }
+            finally
+            {
+                _inStart = false;
+            }
+        }
+    }
 
-	public class StartableEvents
-	{
-		public StartableEvents(IKernelEvents kernel)
-		{
-			Kernel = kernel;
-			kernel.ComponentRegistered += (_, handler) =>
-			{
-				if (IsStartable(handler)) StartableComponentRegistered(handler);
-			};
-		}
+    public class StartableEvents
+    {
+        public StartableEvents(IKernelEvents kernel)
+        {
+            Kernel = kernel;
+            kernel.ComponentRegistered += (_, handler) =>
+            {
+                if (IsStartable(handler))
+                {
+                    StartableComponentRegistered(handler);
+                }
+            };
+        }
 
-		public IKernelEvents Kernel { get; }
+        public IKernelEvents Kernel { get; }
 
-		public event Action<IHandler> StartableComponentRegistered = delegate { };
-	}
+        public event Action<IHandler> StartableComponentRegistered = delegate { };
+    }
 }

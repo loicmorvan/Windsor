@@ -19,22 +19,25 @@ namespace Castle.Windsor.Facilities.Startable;
 
 public class StartConcern : ICommissionConcern
 {
-	protected StartConcern()
-	{
-	}
+    protected StartConcern()
+    {
+    }
 
-	public static StartConcern Instance { get; } = new();
+    public static StartConcern Instance { get; } = new();
 
-	public void Apply(ComponentModel model, object component)
-	{
-		if (component is IStartable startable)
-		{
-			startable.Start();
-		}
-		else if (model.Configuration != null)
-		{
-			var startMethod = model.ExtendedProperties["Castle.StartableFacility.StartMethod"] as MethodInfo;
-			if (startMethod != null) startMethod.Invoke(component, null);
-		}
-	}
+    public void Apply(ComponentModel model, object component)
+    {
+        if (component is IStartable startable)
+        {
+            startable.Start();
+        }
+        else if (model.Configuration != null)
+        {
+            var startMethod = model.ExtendedProperties["Castle.StartableFacility.StartMethod"] as MethodInfo;
+            if (startMethod != null)
+            {
+                startMethod.Invoke(component, null);
+            }
+        }
+    }
 }

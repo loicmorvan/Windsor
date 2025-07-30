@@ -21,7 +21,7 @@ namespace Castle.Windsor.Tests.Components;
 [UsedImplicitly]
 public class HasStringAndIntDependency
 {
-	public HasStringAndIntDependency(string x, int y)
-	{
-	}
+    public HasStringAndIntDependency(string x, int y)
+    {
+    }
 }

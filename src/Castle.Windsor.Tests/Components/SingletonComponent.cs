@@ -19,5 +19,5 @@ namespace Castle.Windsor.Tests.Components;
 [Singleton]
 public class SingletonComponent : IComponent
 {
-	public int Id => GetHashCode();
+    public int Id => GetHashCode();
 }

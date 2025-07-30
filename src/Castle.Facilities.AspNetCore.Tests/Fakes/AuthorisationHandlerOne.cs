@@ -1,13 +1,11 @@
-﻿namespace Castle.Facilities.AspNetCore.Tests.Fakes;
+﻿using Microsoft.AspNetCore.Authorization;
 
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Authorization;
+namespace Castle.Facilities.AspNetCore.Tests.Fakes;
 
 public class AuthorisationHandlerOne : IAuthorizationHandler
 {
-	public Task HandleAsync(AuthorizationHandlerContext context)
-	{
-		return Task.CompletedTask;
-	}
+    public Task HandleAsync(AuthorizationHandlerContext context)
+    {
+        return Task.CompletedTask;
+    }
 }

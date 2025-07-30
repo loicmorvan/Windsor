@@ -16,13 +16,13 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class ClassWithArrayConstructor
 {
-	public ClassWithArrayConstructor(ICommon first, ICommon[] services)
-	{
-		First = first;
-		Services = services;
-	}
+    public ClassWithArrayConstructor(ICommon first, ICommon[] services)
+    {
+        First = first;
+        Services = services;
+    }
 
-	public ICommon First { get; }
+    public ICommon First { get; }
 
-	public ICommon[] Services { get; }
+    public ICommon[] Services { get; }
 }

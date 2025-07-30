@@ -17,9 +17,9 @@ namespace Castle.Windsor.MicroKernel;
 /// <summary>Possible states for a IHandler instance</summary>
 public enum HandlerState
 {
-	/// <summary>The component can be requested</summary>
-	Valid,
+    /// <summary>The component can be requested</summary>
+    Valid,
 
-	/// <summary>The component can not be requested as it still depending on a external dependency not yet available</summary>
-	WaitingDependency
+    /// <summary>The component can not be requested as it still depending on a external dependency not yet available</summary>
+    WaitingDependency
 }

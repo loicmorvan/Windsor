@@ -16,13 +16,13 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class CustomerValidatorAndRepository : IValidator<ICustomer>, IRepository<ICustomer>
 {
-	public ICustomer Find()
-	{
-		return new CustomerImpl();
-	}
+    public ICustomer Find()
+    {
+        return new CustomerImpl();
+    }
 
-	public bool IsValid(ICustomer customer)
-	{
-		return true;
-	}
+    public bool IsValid(ICustomer customer)
+    {
+        return true;
+    }
 }

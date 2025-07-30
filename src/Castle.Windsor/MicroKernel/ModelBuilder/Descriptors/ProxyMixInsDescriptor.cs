@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
-using System.Linq;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Proxy;
 
@@ -21,14 +19,21 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class ProxyMixInsDescriptor(IEnumerable<IReference<object>> mixIns) : IComponentModelDescriptor
 {
-	public void BuildComponentModel(IKernel kernel, ComponentModel model)
-	{
-		if (!mixIns.Any()) return;
-		var options = model.ObtainProxyOptions();
-		foreach (var mixIn in mixIns) options.AddMixinReference(mixIn);
-	}
+    public void BuildComponentModel(IKernel kernel, ComponentModel model)
+    {
+        if (!mixIns.Any())
+        {
+            return;
+        }
 
-	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-	{
-	}
+        var options = model.ObtainProxyOptions();
+        foreach (var mixIn in mixIns)
+        {
+            options.AddMixinReference(mixIn);
+        }
+    }
+
+    public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+    {
+    }
 }

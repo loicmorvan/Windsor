@@ -20,29 +20,33 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class CustomDependencyDescriptor : IComponentModelDescriptor
 {
-	private readonly Arguments _arguments;
-	private readonly Property[] _properties;
+    private readonly Arguments _arguments;
+    private readonly Property[] _properties;
 
-	public CustomDependencyDescriptor(Arguments arguments)
-	{
-		_arguments = arguments;
-	}
+    public CustomDependencyDescriptor(Arguments arguments)
+    {
+        _arguments = arguments;
+    }
 
-	public CustomDependencyDescriptor(params Property[] properties)
-	{
-		_properties = properties;
-	}
+    public CustomDependencyDescriptor(params Property[] properties)
+    {
+        _properties = properties;
+    }
 
-	public void BuildComponentModel(IKernel kernel, ComponentModel model)
-	{
-	}
+    public void BuildComponentModel(IKernel kernel, ComponentModel model)
+    {
+    }
 
-	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-	{
-		if (_arguments != null)
-			foreach (var property in _arguments)
-				model.CustomDependencies[property.Key] = property.Value;
+    public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+    {
+        if (_arguments != null)
+        {
+            foreach (var property in _arguments)
+            {
+                model.CustomDependencies[property.Key] = property.Value;
+            }
+        }
 
-		_properties?.ForEach(p => model.CustomDependencies[p.Key] = p.Value);
-	}
+        _properties?.ForEach(p => model.CustomDependencies[p.Key] = p.Value);
+    }
 }

@@ -12,36 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace Castle.Windsor.Core;
 
 /// <summary>Indicates that the target components wants a pooled lifestyle.</summary>
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class PooledAttribute : LifestyleAttribute
 {
-	/// <summary>
-	///     Initializes a new instance of the <see cref="PooledAttribute" /> class using the default initial pool size (5)
-	///     and the max pool size (15).
-	/// </summary>
-	public PooledAttribute() : this(5, 15)
-	{
-	}
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="PooledAttribute" /> class using the default initial pool size (5)
+    ///     and the max pool size (15).
+    /// </summary>
+    public PooledAttribute() : this(5, 15)
+    {
+    }
 
-	/// <summary>Initializes a new instance of the <see cref="PooledAttribute" /> class.</summary>
-	/// <param name="initialPoolSize">Initial size of the pool.</param>
-	/// <param name="maxPoolSize">Max pool size.</param>
-	public PooledAttribute(int initialPoolSize, int maxPoolSize) : base(LifestyleType.Pooled)
-	{
-		InitialPoolSize = initialPoolSize;
-		MaxPoolSize = maxPoolSize;
-	}
+    /// <summary>Initializes a new instance of the <see cref="PooledAttribute" /> class.</summary>
+    /// <param name="initialPoolSize">Initial size of the pool.</param>
+    /// <param name="maxPoolSize">Max pool size.</param>
+    public PooledAttribute(int initialPoolSize, int maxPoolSize) : base(LifestyleType.Pooled)
+    {
+        InitialPoolSize = initialPoolSize;
+        MaxPoolSize = maxPoolSize;
+    }
 
-	/// <summary>Gets the initial size of the pool.</summary>
-	/// <value>The initial size of the pool.</value>
-	public int InitialPoolSize { get; }
+    /// <summary>Gets the initial size of the pool.</summary>
+    /// <value>The initial size of the pool.</value>
+    public int InitialPoolSize { get; }
 
-	/// <summary>Gets the maximum pool size.</summary>
-	/// <value>The size of the max pool.</value>
-	public int MaxPoolSize { get; }
+    /// <summary>Gets the maximum pool size.</summary>
+    /// <value>The size of the max pool.</value>
+    public int MaxPoolSize { get; }
 }

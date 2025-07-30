@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Core.Resource;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.XmlFiles;
@@ -22,38 +21,37 @@ namespace Castle.Windsor.Tests;
 
 public class CreatingContainerTestCase
 {
+    [Fact]
+    public void With_configuration_file()
+    {
+        var filePath = Xml.FilePath("hasFileIncludes.xml");
 
-	[Fact]
-	public void With_configuration_file()
-	{
-		var filePath = Xml.FilePath("hasFileIncludes.xml");
+        Assert.True(new Uri(filePath).IsFile);
 
-		Assert.True(new Uri(filePath).IsFile);
+        var container = new WindsorContainer(filePath);
 
-		var container = new WindsorContainer(filePath);
+        Assert.Equal(2, container.Kernel.GetFacilities().Length);
+    }
 
-		Assert.Equal(2, container.Kernel.GetFacilities().Length);
-	}
+    [Fact]
+    public void With_configuration_file_relative()
+    {
+        var filePath = "XmlFiles/hasFileIncludes.xml";
 
-	[Fact]
-	public void With_configuration_file_relative()
-	{
-		var filePath = "XmlFiles/hasFileIncludes.xml";
+        var container = new WindsorContainer(filePath);
 
-		var container = new WindsorContainer(filePath);
+        Assert.Equal(2, container.Kernel.GetFacilities().Length);
+    }
 
-		Assert.Equal(2, container.Kernel.GetFacilities().Length);
-	}
+    [Fact]
+    public void With_embedded_xml()
+    {
+        var resourcePath = Xml.EmbeddedPath("componentWithoutId.xml");
 
-	[Fact]
-	public void With_embedded_xml()
-	{
-		var resourcePath = Xml.EmbeddedPath("componentWithoutId.xml");
+        Assert.True(new CustomUri(resourcePath).IsAssembly);
 
-		Assert.True(new CustomUri(resourcePath).IsAssembly);
+        var container = new WindsorContainer(resourcePath);
 
-		var container = new WindsorContainer(resourcePath);
-
-		container.Resolve<A>();
-	}
+        container.Resolve<A>();
+    }
 }

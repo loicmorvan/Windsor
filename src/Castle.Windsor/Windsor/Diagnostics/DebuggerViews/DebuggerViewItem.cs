@@ -12,34 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
-
 using System.Diagnostics;
+
+namespace Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
 
 [DebuggerDisplay("{Description,nq}", Name = "{name,nq}")]
 public class DebuggerViewItem
 {
-	public DebuggerViewItem(string name, string description, object value)
-	{
-		Name = name;
-		Description = description;
-		Value = value;
-	}
+    public DebuggerViewItem(string name, string description, object value)
+    {
+        Name = name;
+        Description = description;
+        Value = value;
+    }
 
-	public DebuggerViewItem(string name, object value)
-	{
-		Name = name;
-		Description = value;
-		Value = value;
-	}
+    public DebuggerViewItem(string name, object value)
+    {
+        Name = name;
+        Description = value;
+        Value = value;
+    }
 
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public object Description { get; }
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public object Description { get; }
 
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public string Name { get; }
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public string Name { get; }
 
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	[field: DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-	public object Value { get; }
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    [field: DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    public object Value { get; }
 }

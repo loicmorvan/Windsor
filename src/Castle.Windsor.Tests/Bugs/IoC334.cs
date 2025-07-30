@@ -21,15 +21,15 @@ namespace Castle.Windsor.Tests.Bugs;
 
 public class IoC334
 {
-	[Fact]
-	public void FacilityConfig_is_not_null()
-	{
-		using var c = new DefaultKernel();
-		var facilityKey = typeof(HiperFacility).FullName;
-		var config = new MutableConfiguration("facility");
-		c.ConfigurationStore.AddFacilityConfiguration(facilityKey, config);
-		var facility = new HiperFacility();
-		c.AddFacility(facility);
-		Assert.True(facility.Initialized);
-	}
+    [Fact]
+    public void FacilityConfig_is_not_null()
+    {
+        using var c = new DefaultKernel();
+        var facilityKey = typeof(HiperFacility).FullName;
+        var config = new MutableConfiguration("facility");
+        c.ConfigurationStore.AddFacilityConfiguration(facilityKey, config);
+        var facility = new HiperFacility();
+        c.AddFacility(facility);
+        Assert.True(facility.Initialized);
+    }
 }

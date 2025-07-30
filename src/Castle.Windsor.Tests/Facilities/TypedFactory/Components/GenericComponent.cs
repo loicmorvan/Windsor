@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
 public class GenericComponent<T>
 {
-	public T Value { get; set; }
+    public T Value { get; set; }
 }

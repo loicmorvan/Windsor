@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Diagnostics;
 using System.Xml;
 
@@ -20,32 +19,34 @@ namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.Element
 
 public class EvalProcessingInstructionProcessor : AbstractXmlNodeProcessor
 {
-	private static readonly XmlNodeType[] AcceptNodes = [XmlNodeType.ProcessingInstruction];
+    private static readonly XmlNodeType[] AcceptNodes = [XmlNodeType.ProcessingInstruction];
 
-	public override XmlNodeType[] AcceptNodeTypes => AcceptNodes;
+    public override XmlNodeType[] AcceptNodeTypes => AcceptNodes;
 
-	public override string Name => "eval";
+    public override string Name => "eval";
 
-	public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
-	{
-		var node = nodeList.Current as XmlProcessingInstruction;
+    public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
+    {
+        var node = nodeList.Current as XmlProcessingInstruction;
 
-		var fragment = CreateFragment(node);
+        var fragment = CreateFragment(node);
 
-		Debug.Assert(node != null);
-		var expression = node.Data;
+        Debug.Assert(node != null);
+        var expression = node.Data;
 
-		// We don't have an expression evaluator right now, so expression will 
-		// be just pre-defined literals that we know how to evaluate
+        // We don't have an expression evaluator right now, so expression will 
+        // be just pre-defined literals that we know how to evaluate
 
-		object evaluated = "";
+        object evaluated = "";
 
-		if (string.Compare(expression, "$basedirectory", StringComparison.OrdinalIgnoreCase) == 0)
-			evaluated = AppContext.BaseDirectory;
+        if (string.Compare(expression, "$basedirectory", StringComparison.OrdinalIgnoreCase) == 0)
+        {
+            evaluated = AppContext.BaseDirectory;
+        }
 
-		Debug.Assert(node.OwnerDocument != null);
-		fragment.AppendChild(node.OwnerDocument.CreateTextNode(evaluated.ToString()));
+        Debug.Assert(node.OwnerDocument != null);
+        fragment.AppendChild(node.OwnerDocument.CreateTextNode(evaluated.ToString()));
 
-		ReplaceNode(node.ParentNode, fragment, node);
-	}
+        ReplaceNode(node.ParentNode, fragment, node);
+    }
 }

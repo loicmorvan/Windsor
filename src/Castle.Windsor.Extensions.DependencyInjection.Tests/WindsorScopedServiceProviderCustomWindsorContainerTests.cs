@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Windsor;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Specification;
@@ -21,10 +20,10 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Tests;
 
 public class WindsorScopedServiceProviderCustomWindsorContainerTests : SkippableDependencyInjectionSpecificationTests
 {
-	protected override IServiceProvider CreateServiceProviderImpl(IServiceCollection serviceCollection)
-	{
-		var factory = new WindsorServiceProviderFactory(new WindsorContainer());
-		var container = factory.CreateBuilder(serviceCollection);
-		return factory.CreateServiceProvider(container);
-	}
+    protected override IServiceProvider CreateServiceProviderImpl(IServiceCollection serviceCollection)
+    {
+        var factory = new WindsorServiceProviderFactory(new WindsorContainer());
+        var container = factory.CreateBuilder(serviceCollection);
+        return factory.CreateServiceProvider(container);
+    }
 }

@@ -16,9 +16,9 @@ namespace Castle.Windsor.Windsor.Diagnostics;
 
 public enum DependencyDuplicationReason
 {
-	Unspecified,
-	Name,
-	Type,
-	NameAndType,
-	Reference
+    Unspecified,
+    Name,
+    Type,
+    NameAndType,
+    Reference
 }

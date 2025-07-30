@@ -16,21 +16,28 @@ namespace Castle.Windsor.MicroKernel.Util;
 
 public abstract class ReferenceExpressionUtil
 {
-	public static string BuildReference(string value)
-	{
-		if (IsReference(value)) return value;
-		return $"${{{value}}}";
-	}
+    public static string BuildReference(string value)
+    {
+        if (IsReference(value))
+        {
+            return value;
+        }
 
-	public static string ExtractComponentName(string value)
-	{
-		if (IsReference(value)) return value.Substring(2, value.Length - 3);
+        return $"${{{value}}}";
+    }
 
-		return null;
-	}
+    public static string ExtractComponentName(string value)
+    {
+        if (IsReference(value))
+        {
+            return value.Substring(2, value.Length - 3);
+        }
 
-	public static bool IsReference(string value)
-	{
-		return value is { Length: > 3 } && value.StartsWith("${") && value.EndsWith("}");
-	}
+        return null;
+    }
+
+    public static bool IsReference(string value)
+    {
+        return value is { Length: > 3 } && value.StartsWith("${") && value.EndsWith("}");
+    }
 }

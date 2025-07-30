@@ -14,17 +14,15 @@
 
 namespace Castle.Facilities.AspNetCore.Tests.Fakes;
 
-using System;
-
 public class CompositeController
 {
-	public CompositeController(
-		ControllerCrossWired crossWiredController,
-		ControllerServiceProviderOnly serviceProviderOnlyController,
-		ControllerWindsorOnly windsorOnlyController)
-	{
-		ArgumentNullException.ThrowIfNull(crossWiredController);
-		ArgumentNullException.ThrowIfNull(serviceProviderOnlyController);
-		ArgumentNullException.ThrowIfNull(windsorOnlyController);
-	}
+    public CompositeController(
+        ControllerCrossWired crossWiredController,
+        ControllerServiceProviderOnly serviceProviderOnlyController,
+        ControllerWindsorOnly windsorOnlyController)
+    {
+        ArgumentNullException.ThrowIfNull(crossWiredController);
+        ArgumentNullException.ThrowIfNull(serviceProviderOnlyController);
+        ArgumentNullException.ThrowIfNull(windsorOnlyController);
+    }
 }

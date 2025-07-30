@@ -20,19 +20,19 @@ namespace Castle.Windsor.Tests.Interceptors;
 
 public class InterceptorWithOnBehalf : IInterceptor, IOnBehalfAware
 {
-	public static ComponentModel Model { get; private set; }
+    public static ComponentModel Model { get; private set; }
 
-	#region IMethodInterceptor Members
+    #region IMethodInterceptor Members
 
-	public void Intercept(IInvocation invocation)
-	{
-		invocation.Proceed();
-	}
+    public void Intercept(IInvocation invocation)
+    {
+        invocation.Proceed();
+    }
 
-	#endregion
+    #endregion
 
-	public void SetInterceptedComponentModel(ComponentModel target)
-	{
-		Model = target;
-	}
+    public void SetInterceptedComponentModel(ComponentModel target)
+    {
+        Model = target;
+    }
 }

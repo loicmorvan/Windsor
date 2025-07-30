@@ -18,22 +18,22 @@ namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.Element
 
 public class DefineElementProcessor : AbstractXmlNodeProcessor
 {
-	private const string FlagAttrName = "flag";
+    private const string FlagAttrName = "flag";
 
-	public override string Name => "define";
+    public override string Name => "define";
 
-	public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
-	{
-		var element = nodeList.Current as XmlElement;
+    public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
+    {
+        var element = nodeList.Current as XmlElement;
 
-		var flag = GetRequiredAttribute(element, FlagAttrName);
+        var flag = GetRequiredAttribute(element, FlagAttrName);
 
-		Process(flag, engine);
-		RemoveItSelf(element);
-	}
+        Process(flag, engine);
+        RemoveItSelf(element);
+    }
 
-	protected virtual void Process(string flag, IXmlProcessorEngine engine)
-	{
-		engine.AddFlag(flag);
-	}
+    protected virtual void Process(string flag, IXmlProcessorEngine engine)
+    {
+        engine.AddFlag(flag);
+    }
 }

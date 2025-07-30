@@ -13,40 +13,41 @@
 // limitations under the License.
 
 
-using System;
-
 namespace Castle.Windsor.MicroKernel.Internal;
 
 public class LazyEx<T> : Lazy<T>, IDisposable
 {
-	private readonly IKernel _kernel;
+    private readonly IKernel _kernel;
 
-	public LazyEx(IKernel kernel, Arguments arguments)
-		: base(() => kernel.Resolve<T>(arguments))
-	{
-		_kernel = kernel;
-	}
+    public LazyEx(IKernel kernel, Arguments arguments)
+        : base(() => kernel.Resolve<T>(arguments))
+    {
+        _kernel = kernel;
+    }
 
-	public LazyEx(IKernel kernel, string overrideComponentName)
-		: base(() => kernel.Resolve<T>(overrideComponentName))
-	{
-		_kernel = kernel;
-	}
+    public LazyEx(IKernel kernel, string overrideComponentName)
+        : base(() => kernel.Resolve<T>(overrideComponentName))
+    {
+        _kernel = kernel;
+    }
 
-	public LazyEx(IKernel kernel, string overrideComponentName, Arguments arguments)
-		: base(() => kernel.Resolve<T>(overrideComponentName, arguments))
-	{
-		_kernel = kernel;
-	}
+    public LazyEx(IKernel kernel, string overrideComponentName, Arguments arguments)
+        : base(() => kernel.Resolve<T>(overrideComponentName, arguments))
+    {
+        _kernel = kernel;
+    }
 
-	public LazyEx(IKernel kernel)
-		: base(kernel.Resolve<T>)
-	{
-		_kernel = kernel;
-	}
+    public LazyEx(IKernel kernel)
+        : base(kernel.Resolve<T>)
+    {
+        _kernel = kernel;
+    }
 
-	public void Dispose()
-	{
-		if (IsValueCreated) _kernel.ReleaseComponent(Value);
-	}
+    public void Dispose()
+    {
+        if (IsValueCreated)
+        {
+            _kernel.ReleaseComponent(Value);
+        }
+    }
 }

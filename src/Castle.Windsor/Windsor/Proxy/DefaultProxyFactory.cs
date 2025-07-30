@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Castle.DynamicProxy;
@@ -26,155 +24,177 @@ using Castle.Windsor.MicroKernel.Proxy;
 
 namespace Castle.Windsor.Windsor.Proxy;
 
-/// <summary>This implementation of <see cref = "IProxyFactory" /> relies on DynamicProxy to expose proxy capabilities.</summary>
+/// <summary>This implementation of <see cref="IProxyFactory" /> relies on DynamicProxy to expose proxy capabilities.</summary>
 /// <remarks>
-///     Note that only virtual methods can be intercepted in a concrete class. However, if the component was registered with a service interface, we proxy the interface and the methods don't need to be
+///     Note that only virtual methods can be intercepted in a concrete class. However, if the component was registered
+///     with a service interface, we proxy the interface and the methods don't need to be
 ///     virtual,
 /// </remarks>
 [Serializable]
 public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactory, IDeserializationCallback
 {
-	[NonSerialized] protected ProxyGenerator Generator = generator;
+    [NonSerialized] protected ProxyGenerator Generator = generator;
 
-	/// <summary>Constructs a DefaultProxyFactory</summary>
-	public DefaultProxyFactory() : this(new ProxyGenerator())
-	{
-	}
+    /// <summary>Constructs a DefaultProxyFactory</summary>
+    public DefaultProxyFactory() : this(new ProxyGenerator())
+    {
+    }
 
-	public DefaultProxyFactory(bool disableSignedModule)
-		: this(new ProxyGenerator(disableSignedModule))
-	{
-	}
+    public DefaultProxyFactory(bool disableSignedModule)
+        : this(new ProxyGenerator(disableSignedModule))
+    {
+    }
 
-	public void OnDeserialization(object sender)
-	{
-		Generator = new ProxyGenerator();
-	}
+    public void OnDeserialization(object sender)
+    {
+        Generator = new ProxyGenerator();
+    }
 
-	public override object Create(IProxyFactoryExtension customFactory, IKernel kernel, ComponentModel model, CreationContext context,
-		params object[] constructorArguments)
-	{
-		var interceptors = ObtainInterceptors(kernel, model, context);
-		var proxyOptions = model.ObtainProxyOptions();
-		var proxyGenOptions = CreateProxyGenerationOptionsFrom(proxyOptions, kernel, context, model);
+    public override object Create(IProxyFactoryExtension customFactory, IKernel kernel, ComponentModel model,
+        CreationContext context,
+        params object[] constructorArguments)
+    {
+        var interceptors = ObtainInterceptors(kernel, model, context);
+        var proxyOptions = model.ObtainProxyOptions();
+        var proxyGenOptions = CreateProxyGenerationOptionsFrom(proxyOptions, kernel, context, model);
 
-		CustomizeOptions(proxyGenOptions, kernel, model, constructorArguments);
-		var builder = Generator.ProxyBuilder;
-		var proxy = customFactory.Generate(builder, proxyGenOptions, interceptors, model, context);
+        CustomizeOptions(proxyGenOptions, kernel, model, constructorArguments);
+        var builder = Generator.ProxyBuilder;
+        var proxy = customFactory.Generate(builder, proxyGenOptions, interceptors, model, context);
 
-		CustomizeProxy(proxy, proxyGenOptions, kernel, model);
-		ReleaseHook(proxyGenOptions, kernel);
-		return proxy;
-	}
+        CustomizeProxy(proxy, proxyGenOptions, kernel, model);
+        ReleaseHook(proxyGenOptions, kernel);
+        return proxy;
+    }
 
-	private static void ReleaseHook(ProxyGenerationOptions proxyGenOptions, IKernel kernel)
-	{
-		if (proxyGenOptions.Hook == null) return;
-		kernel.ReleaseComponent(proxyGenOptions.Hook);
-	}
+    private static void ReleaseHook(ProxyGenerationOptions proxyGenOptions, IKernel kernel)
+    {
+        if (proxyGenOptions.Hook == null)
+        {
+            return;
+        }
 
-	/// <summary>Creates the proxy for the supplied component.</summary>
-	/// <param name = "kernel"> The kernel. </param>
-	/// <param name = "target"> The target. </param>
-	/// <param name = "model"> The model. </param>
-	/// <param name = "constructorArguments"> The constructor arguments. </param>
-	/// <param name = "context"> The creation context </param>
-	/// <returns> The component proxy. </returns>
-	public override object Create(IKernel kernel, object target, ComponentModel model, CreationContext context, params object[] constructorArguments)
-	{
-		object proxy;
+        kernel.ReleaseComponent(proxyGenOptions.Hook);
+    }
 
-		var interceptors = ObtainInterceptors(kernel, model, context);
-		var proxyOptions = model.ObtainProxyOptions();
-		var proxyGenOptions = CreateProxyGenerationOptionsFrom(proxyOptions, kernel, context, model);
+    /// <summary>Creates the proxy for the supplied component.</summary>
+    /// <param name="kernel"> The kernel. </param>
+    /// <param name="target"> The target. </param>
+    /// <param name="model"> The model. </param>
+    /// <param name="constructorArguments"> The constructor arguments. </param>
+    /// <param name="context"> The creation context </param>
+    /// <returns> The component proxy. </returns>
+    public override object Create(IKernel kernel, object target, ComponentModel model, CreationContext context,
+        params object[] constructorArguments)
+    {
+        object proxy;
 
-		CustomizeOptions(proxyGenOptions, kernel, model, constructorArguments);
+        var interceptors = ObtainInterceptors(kernel, model, context);
+        var proxyOptions = model.ObtainProxyOptions();
+        var proxyGenOptions = CreateProxyGenerationOptionsFrom(proxyOptions, kernel, context, model);
 
-		var interfaces = proxyOptions.AdditionalInterfaces;
-		if (model.HasClassServices == false)
-		{
-			var firstService = model.Services.First();
-			var additionalInterfaces = model.Services.Skip(1).Concat(interfaces).ToArray();
-			if (proxyOptions.OmitTarget)
-				proxy = Generator.CreateInterfaceProxyWithoutTarget(firstService, additionalInterfaces, proxyGenOptions,
-					interceptors);
-			else if (proxyOptions.AllowChangeTarget)
-				proxy = Generator.CreateInterfaceProxyWithTargetInterface(firstService, additionalInterfaces, target,
-					proxyGenOptions, interceptors);
-			else
-				proxy = Generator.CreateInterfaceProxyWithTarget(firstService, additionalInterfaces, target,
-					proxyGenOptions, interceptors);
-		}
-		else
-		{
-			Type classToProxy;
-			if (model.Implementation != null && model.Implementation != typeof(LateBoundComponent))
-				classToProxy = model.Implementation;
-			else
-				classToProxy = model.Services.First();
-			var additionalInterfaces = model.Services
-				.SkipWhile(s => s.GetTypeInfo().IsClass)
-				.Concat(interfaces)
-				.ToArray();
-			proxy = Generator.CreateClassProxy(classToProxy, additionalInterfaces, proxyGenOptions,
-				constructorArguments, interceptors);
-		}
+        CustomizeOptions(proxyGenOptions, kernel, model, constructorArguments);
 
-		CustomizeProxy(proxy, proxyGenOptions, kernel, model);
-		ReleaseHook(proxyGenOptions, kernel);
-		return proxy;
-	}
+        var interfaces = proxyOptions.AdditionalInterfaces;
+        if (model.HasClassServices == false)
+        {
+            var firstService = model.Services.First();
+            var additionalInterfaces = model.Services.Skip(1).Concat(interfaces).ToArray();
+            if (proxyOptions.OmitTarget)
+            {
+                proxy = Generator.CreateInterfaceProxyWithoutTarget(firstService, additionalInterfaces, proxyGenOptions,
+                    interceptors);
+            }
+            else if (proxyOptions.AllowChangeTarget)
+            {
+                proxy = Generator.CreateInterfaceProxyWithTargetInterface(firstService, additionalInterfaces, target,
+                    proxyGenOptions, interceptors);
+            }
+            else
+            {
+                proxy = Generator.CreateInterfaceProxyWithTarget(firstService, additionalInterfaces, target,
+                    proxyGenOptions, interceptors);
+            }
+        }
+        else
+        {
+            Type classToProxy;
+            if (model.Implementation != null && model.Implementation != typeof(LateBoundComponent))
+            {
+                classToProxy = model.Implementation;
+            }
+            else
+            {
+                classToProxy = model.Services.First();
+            }
 
-	protected static ProxyGenerationOptions CreateProxyGenerationOptionsFrom(ProxyOptions proxyOptions, IKernel kernel, CreationContext context, ComponentModel model)
-	{
-		var proxyGenOptions = new ProxyGenerationOptions();
-		if (proxyOptions.Hook != null)
-		{
-			var hook = proxyOptions.Hook.Resolve(kernel, context);
-			if (hook is IOnBehalfAware aware)
-			{
-				aware.SetInterceptedComponentModel(model);
-			}
+            var additionalInterfaces = model.Services
+                .SkipWhile(s => s.GetTypeInfo().IsClass)
+                .Concat(interfaces)
+                .ToArray();
+            proxy = Generator.CreateClassProxy(classToProxy, additionalInterfaces, proxyGenOptions,
+                constructorArguments, interceptors);
+        }
 
-			proxyGenOptions.Hook = hook;
-		}
+        CustomizeProxy(proxy, proxyGenOptions, kernel, model);
+        ReleaseHook(proxyGenOptions, kernel);
+        return proxy;
+    }
 
-		if (proxyOptions.Selector != null)
-		{
-			var selector = proxyOptions.Selector.Resolve(kernel, context);
-			if (selector is IOnBehalfAware aware)
-			{
-				aware.SetInterceptedComponentModel(model);
-			}
+    protected static ProxyGenerationOptions CreateProxyGenerationOptionsFrom(ProxyOptions proxyOptions, IKernel kernel,
+        CreationContext context, ComponentModel model)
+    {
+        var proxyGenOptions = new ProxyGenerationOptions();
+        if (proxyOptions.Hook != null)
+        {
+            var hook = proxyOptions.Hook.Resolve(kernel, context);
+            if (hook is IOnBehalfAware aware)
+            {
+                aware.SetInterceptedComponentModel(model);
+            }
 
-			proxyGenOptions.Selector = selector;
-		}
-		foreach (var mixInReference in proxyOptions.MixIns)
-		{
-			var mixIn = mixInReference.Resolve(kernel, context);
-			proxyGenOptions.AddMixinInstance(mixIn);
-		}
+            proxyGenOptions.Hook = hook;
+        }
 
-		return proxyGenOptions;
-	}
+        if (proxyOptions.Selector != null)
+        {
+            var selector = proxyOptions.Selector.Resolve(kernel, context);
+            if (selector is IOnBehalfAware aware)
+            {
+                aware.SetInterceptedComponentModel(model);
+            }
 
-	protected virtual void CustomizeProxy(object proxy, ProxyGenerationOptions options, IKernel kernel, ComponentModel model)
-	{
-	}
+            proxyGenOptions.Selector = selector;
+        }
 
-	protected virtual void CustomizeOptions(ProxyGenerationOptions options, IKernel kernel, ComponentModel model, object[] arguments)
-	{
-	}
+        foreach (var mixInReference in proxyOptions.MixIns)
+        {
+            var mixIn = mixInReference.Resolve(kernel, context);
+            proxyGenOptions.AddMixinInstance(mixIn);
+        }
 
-	/// <summary>Determines if the component requires a target instance for proxying.</summary>
-	/// <param name = "kernel"> The kernel. </param>
-	/// <param name = "model"> The model. </param>
-	/// <returns> true if an instance is required. </returns>
-	public override bool RequiresTargetInstance(IKernel kernel, ComponentModel model)
-	{
-		var proxyOptions = model.ObtainProxyOptions();
+        return proxyGenOptions;
+    }
 
-		return model.HasClassServices == false &&
-		       proxyOptions.OmitTarget == false;
-	}
+    protected virtual void CustomizeProxy(object proxy, ProxyGenerationOptions options, IKernel kernel,
+        ComponentModel model)
+    {
+    }
+
+    protected virtual void CustomizeOptions(ProxyGenerationOptions options, IKernel kernel, ComponentModel model,
+        object[] arguments)
+    {
+    }
+
+    /// <summary>Determines if the component requires a target instance for proxying.</summary>
+    /// <param name="kernel"> The kernel. </param>
+    /// <param name="model"> The model. </param>
+    /// <returns> true if an instance is required. </returns>
+    public override bool RequiresTargetInstance(IKernel kernel, ComponentModel model)
+    {
+        var proxyOptions = model.ObtainProxyOptions();
+
+        return model.HasClassServices == false &&
+               proxyOptions.OmitTarget == false;
+    }
 }

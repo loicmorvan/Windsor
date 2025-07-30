@@ -16,7 +16,7 @@ namespace Castle.Windsor.Windsor.Diagnostics;
 
 public interface ITrackedComponentsPerformanceCounter
 {
-	void DecrementTrackedInstancesCount();
+    void DecrementTrackedInstancesCount();
 
-	void IncrementTrackedInstancesCount();
+    void IncrementTrackedInstancesCount();
 }

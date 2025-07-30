@@ -21,13 +21,13 @@ namespace Castle.Windsor.Tests;
 
 public class IgnoreSelectTestCase
 {
-	[Fact]
-	public void TestIngoreAttribute()
-	{
-		var container = new WindsorContainer();
-		container.Install(Configuration.FromXml(Xml.Embedded("ignorector.xml")));
+    [Fact]
+    public void TestIngoreAttribute()
+    {
+        var container = new WindsorContainer();
+        container.Install(Configuration.FromXml(Xml.Embedded("ignorector.xml")));
 
-		var server = container.Resolve<ClassWithDoNotSelectConstructors>();
-		Assert.Null(server.Dependency);
-	}
+        var server = container.Resolve<ClassWithDoNotSelectConstructors>();
+        Assert.Null(server.Dependency);
+    }
 }

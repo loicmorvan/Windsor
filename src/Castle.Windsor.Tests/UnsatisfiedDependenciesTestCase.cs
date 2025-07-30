@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Core.Configuration;
 using Castle.Windsor.MicroKernel.Handlers;
 using Castle.Windsor.MicroKernel.Registration;
@@ -22,141 +21,141 @@ namespace Castle.Windsor.Tests;
 
 public class UnsatisfiedDependenciesTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void OverrideIsForcedDependency()
-	{
-		var config = new MutableConfiguration("component");
+    [Fact]
+    public void OverrideIsForcedDependency()
+    {
+        var config = new MutableConfiguration("component");
 
-		var parameters = new MutableConfiguration("parameters");
-		config.Children.Add(parameters);
+        var parameters = new MutableConfiguration("parameters");
+        config.Children.Add(parameters);
 
-		parameters.Children.Add(new MutableConfiguration("common", "${common2}"));
+        parameters.Children.Add(new MutableConfiguration("common", "${common2}"));
 
-		Kernel.ConfigurationStore.AddComponentConfiguration("key", config);
+        Kernel.ConfigurationStore.AddComponentConfiguration("key", config);
 
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("common1"));
-		Kernel.Register(Component.For(typeof(CommonServiceUser3)).Named("key"));
-		var exception =
-			Assert.Throws<HandlerException>(() => Kernel.Resolve<CommonServiceUser3>("key"));
-		var expectedMessage =
-			string.Format(
-				"Can't create component 'key' as it has dependencies to be satisfied.{0}{0}'key' is waiting for the following dependencies:{0}- Component 'common2' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
-				Environment.NewLine);
-		Assert.Equal(expectedMessage, exception.Message);
-	}
+        Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("common1"));
+        Kernel.Register(Component.For(typeof(CommonServiceUser3)).Named("key"));
+        var exception =
+            Assert.Throws<HandlerException>(() => Kernel.Resolve<CommonServiceUser3>("key"));
+        var expectedMessage =
+            string.Format(
+                "Can't create component 'key' as it has dependencies to be satisfied.{0}{0}'key' is waiting for the following dependencies:{0}- Component 'common2' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
+                Environment.NewLine);
+        Assert.Equal(expectedMessage, exception.Message);
+    }
 
-	[Fact]
-	public void SatisfiedOverride()
-	{
-		var config = new MutableConfiguration("component");
+    [Fact]
+    public void SatisfiedOverride()
+    {
+        var config = new MutableConfiguration("component");
 
-		var parameters = new MutableConfiguration("parameters");
-		config.Children.Add(parameters);
+        var parameters = new MutableConfiguration("parameters");
+        config.Children.Add(parameters);
 
-		parameters.Children.Add(new MutableConfiguration("common", "${common2}"));
+        parameters.Children.Add(new MutableConfiguration("common", "${common2}"));
 
-		Kernel.ConfigurationStore.AddComponentConfiguration("key", config);
+        Kernel.ConfigurationStore.AddComponentConfiguration("key", config);
 
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("common1"));
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl2>().Named("common2"));
-		Kernel.Register(Component.For(typeof(CommonServiceUser)).Named("key"));
-		var instance = Kernel.Resolve<CommonServiceUser>("key");
+        Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("common1"));
+        Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl2>().Named("common2"));
+        Kernel.Register(Component.For(typeof(CommonServiceUser)).Named("key"));
+        var instance = Kernel.Resolve<CommonServiceUser>("key");
 
-		Assert.NotNull(instance);
-		Assert.NotNull(instance.CommonService);
-		Assert.Equal("CommonImpl2", instance.CommonService.GetType().Name);
-	}
+        Assert.NotNull(instance);
+        Assert.NotNull(instance.CommonService);
+        Assert.Equal("CommonImpl2", instance.CommonService.GetType().Name);
+    }
 
-	[Fact]
-	public void SatisfiedOverrideRecursive()
-	{
-		var config1 = new MutableConfiguration("component");
-		var parameters1 = new MutableConfiguration("parameters");
-		config1.Children.Add(parameters1);
-		parameters1.Children.Add(new MutableConfiguration("inner", "${repository2}"));
-		Kernel.ConfigurationStore.AddComponentConfiguration("repository1", config1);
-		Kernel.Register(Component.For(typeof(IRepository)).ImplementedBy<Repository1>().Named("repository1"));
+    [Fact]
+    public void SatisfiedOverrideRecursive()
+    {
+        var config1 = new MutableConfiguration("component");
+        var parameters1 = new MutableConfiguration("parameters");
+        config1.Children.Add(parameters1);
+        parameters1.Children.Add(new MutableConfiguration("inner", "${repository2}"));
+        Kernel.ConfigurationStore.AddComponentConfiguration("repository1", config1);
+        Kernel.Register(Component.For(typeof(IRepository)).ImplementedBy<Repository1>().Named("repository1"));
 
-		var config2 = new MutableConfiguration("component");
-		var parameters2 = new MutableConfiguration("parameters");
-		config2.Children.Add(parameters2);
-		parameters2.Children.Add(new MutableConfiguration("inner", "${repository3}"));
-		Kernel.ConfigurationStore.AddComponentConfiguration("repository2", config2);
-		Kernel.Register(Component.For(typeof(IRepository)).ImplementedBy<Repository2>().Named("repository2"));
+        var config2 = new MutableConfiguration("component");
+        var parameters2 = new MutableConfiguration("parameters");
+        config2.Children.Add(parameters2);
+        parameters2.Children.Add(new MutableConfiguration("inner", "${repository3}"));
+        Kernel.ConfigurationStore.AddComponentConfiguration("repository2", config2);
+        Kernel.Register(Component.For(typeof(IRepository)).ImplementedBy<Repository2>().Named("repository2"));
 
-		var config3 = new MutableConfiguration("component");
-		var parameters3 = new MutableConfiguration("parameters");
-		config3.Children.Add(parameters3);
-		parameters3.Children.Add(new MutableConfiguration("inner", "${decoratedRepository}"));
-		Kernel.ConfigurationStore.AddComponentConfiguration("repository3", config3);
-		Kernel.Register(Component.For(typeof(IRepository)).ImplementedBy<Repository3>().Named("repository3"));
+        var config3 = new MutableConfiguration("component");
+        var parameters3 = new MutableConfiguration("parameters");
+        config3.Children.Add(parameters3);
+        parameters3.Children.Add(new MutableConfiguration("inner", "${decoratedRepository}"));
+        Kernel.ConfigurationStore.AddComponentConfiguration("repository3", config3);
+        Kernel.Register(Component.For(typeof(IRepository)).ImplementedBy<Repository3>().Named("repository3"));
 
-		Kernel.Register(
-			Component.For(typeof(IRepository)).ImplementedBy<DecoratedRepository>().Named("decoratedRepository"));
+        Kernel.Register(
+            Component.For(typeof(IRepository)).ImplementedBy<DecoratedRepository>().Named("decoratedRepository"));
 
-		var instance = Kernel.Resolve<IRepository>();
+        var instance = Kernel.Resolve<IRepository>();
 
-		Assert.NotNull(instance);
-		Assert.IsType<Repository1>(instance);
-		Assert.IsType<Repository2>(((Repository1)instance).InnerRepository);
-		Assert.IsType<Repository3>(
-			((Repository2)((Repository1)instance).InnerRepository).InnerRepository);
-		Assert.IsType<DecoratedRepository>(
-			((Repository3)((Repository2)((Repository1)instance).InnerRepository).InnerRepository).InnerRepository);
-	}
+        Assert.NotNull(instance);
+        Assert.IsType<Repository1>(instance);
+        Assert.IsType<Repository2>(((Repository1)instance).InnerRepository);
+        Assert.IsType<Repository3>(
+            ((Repository2)((Repository1)instance).InnerRepository).InnerRepository);
+        Assert.IsType<DecoratedRepository>(
+            ((Repository3)((Repository2)((Repository1)instance).InnerRepository).InnerRepository).InnerRepository);
+    }
 
-	[Fact]
-	public void UnsatisfiedConfigValues()
-	{
-		var config = new MutableConfiguration("component");
+    [Fact]
+    public void UnsatisfiedConfigValues()
+    {
+        var config = new MutableConfiguration("component");
 
-		var parameters = new MutableConfiguration("parameters");
-		config.Children.Add(parameters);
+        var parameters = new MutableConfiguration("parameters");
+        config.Children.Add(parameters);
 
-		parameters.Children.Add(new MutableConfiguration("name", "hammett"));
+        parameters.Children.Add(new MutableConfiguration("name", "hammett"));
 
-		Kernel.ConfigurationStore.AddComponentConfiguration("customer", config);
+        Kernel.ConfigurationStore.AddComponentConfiguration("customer", config);
 
-		Kernel.Register(Component.For(typeof(CustomerImpl2)).Named("key"));
+        Kernel.Register(Component.For(typeof(CustomerImpl2)).Named("key"));
 
-		var exception =
-			Assert.Throws<HandlerException>(() =>
-				Kernel.Resolve<CustomerImpl2>("key"));
-		var expectedMessage =
-			string.Format(
-				"Can't create component 'key' as it has dependencies to be satisfied.{0}{0}'key' is waiting for the following dependencies:{0}- Parameter 'name' which was not provided. Did you forget to set the dependency?{0}- Parameter 'address' which was not provided. Did you forget to set the dependency?{0}- Parameter 'age' which was not provided. Did you forget to set the dependency?{0}",
-				Environment.NewLine);
-		Assert.Equal(expectedMessage, exception.Message);
-	}
+        var exception =
+            Assert.Throws<HandlerException>(() =>
+                Kernel.Resolve<CustomerImpl2>("key"));
+        var expectedMessage =
+            string.Format(
+                "Can't create component 'key' as it has dependencies to be satisfied.{0}{0}'key' is waiting for the following dependencies:{0}- Parameter 'name' which was not provided. Did you forget to set the dependency?{0}- Parameter 'address' which was not provided. Did you forget to set the dependency?{0}- Parameter 'age' which was not provided. Did you forget to set the dependency?{0}",
+                Environment.NewLine);
+        Assert.Equal(expectedMessage, exception.Message);
+    }
 
-	[Fact]
-	public void UnsatisfiedOverride()
-	{
-		var config = new MutableConfiguration("component");
+    [Fact]
+    public void UnsatisfiedOverride()
+    {
+        var config = new MutableConfiguration("component");
 
-		var parameters = new MutableConfiguration("parameters");
-		config.Children.Add(parameters);
+        var parameters = new MutableConfiguration("parameters");
+        config.Children.Add(parameters);
 
-		parameters.Children.Add(new MutableConfiguration("common", "${common2}"));
+        parameters.Children.Add(new MutableConfiguration("common", "${common2}"));
 
-		Kernel.ConfigurationStore.AddComponentConfiguration("key", config);
+        Kernel.ConfigurationStore.AddComponentConfiguration("key", config);
 
-		Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("common1"));
-		Kernel.Register(Component.For(typeof(CommonServiceUser)).Named("key"));
-		var exception =
-			Assert.Throws<HandlerException>(() => Kernel.Resolve<CommonServiceUser>("key"));
-		var expectedMessage =
-			string.Format(
-				"Can't create component 'key' as it has dependencies to be satisfied.{0}{0}'key' is waiting for the following dependencies:{0}- Component 'common2' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
-				Environment.NewLine);
-		Assert.Equal(expectedMessage, exception.Message);
-	}
+        Kernel.Register(Component.For(typeof(ICommon)).ImplementedBy<CommonImpl1>().Named("common1"));
+        Kernel.Register(Component.For(typeof(CommonServiceUser)).Named("key"));
+        var exception =
+            Assert.Throws<HandlerException>(() => Kernel.Resolve<CommonServiceUser>("key"));
+        var expectedMessage =
+            string.Format(
+                "Can't create component 'key' as it has dependencies to be satisfied.{0}{0}'key' is waiting for the following dependencies:{0}- Component 'common2' (via override) which was not found. Did you forget to register it or misspelled the name? If the component is registered and override is via type make sure it doesn't have non-default name assigned explicitly or override the dependency via name.{0}",
+                Environment.NewLine);
+        Assert.Equal(expectedMessage, exception.Message);
+    }
 
-	[Fact]
-	public void UnsatisfiedService()
-	{
-		Kernel.Register(Component.For(typeof(CommonServiceUser)).Named("key"));
+    [Fact]
+    public void UnsatisfiedService()
+    {
+        Kernel.Register(Component.For(typeof(CommonServiceUser)).Named("key"));
 
-		Assert.Throws<HandlerException>(() => Kernel.Resolve<CommonServiceUser>("key"));
-	}
+        Assert.Throws<HandlerException>(() => Kernel.Resolve<CommonServiceUser>("key"));
+    }
 }

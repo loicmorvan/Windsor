@@ -14,9 +14,7 @@
 
 namespace Castle.Facilities.AspNetCore.Resolvers;
 
-using System;
-
 public interface IAcceptServiceProvider
 {
-	void AcceptServiceProvider(IServiceProvider serviceProvider);
+    void AcceptServiceProvider(IServiceProvider serviceProvider);
 }

@@ -21,29 +21,33 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class ExtendedPropertiesDescriptor : IComponentModelDescriptor
 {
-	private readonly IDictionary _dictionary;
-	private readonly Property[] _properties;
+    private readonly IDictionary _dictionary;
+    private readonly Property[] _properties;
 
-	public ExtendedPropertiesDescriptor(params Property[] properties)
-	{
-		_properties = properties;
-	}
+    public ExtendedPropertiesDescriptor(params Property[] properties)
+    {
+        _properties = properties;
+    }
 
-	public ExtendedPropertiesDescriptor(IDictionary dictionary)
-	{
-		_dictionary = dictionary;
-	}
+    public ExtendedPropertiesDescriptor(IDictionary dictionary)
+    {
+        _dictionary = dictionary;
+    }
 
-	public void BuildComponentModel(IKernel kernel, ComponentModel model)
-	{
-	}
+    public void BuildComponentModel(IKernel kernel, ComponentModel model)
+    {
+    }
 
-	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-	{
-		if (_dictionary != null)
-			foreach (DictionaryEntry property in _dictionary)
-				model.ExtendedProperties[property.Key] = property.Value;
+    public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+    {
+        if (_dictionary != null)
+        {
+            foreach (DictionaryEntry property in _dictionary)
+            {
+                model.ExtendedProperties[property.Key] = property.Value;
+            }
+        }
 
-		_properties?.ForEach(p => model.ExtendedProperties[p.Key] = p.Value);
-	}
+        _properties?.ForEach(p => model.ExtendedProperties[p.Key] = p.Value);
+    }
 }

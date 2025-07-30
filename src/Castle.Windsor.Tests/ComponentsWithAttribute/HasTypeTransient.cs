@@ -20,7 +20,7 @@ namespace Castle.Windsor.Tests.ComponentsWithAttribute;
 [CastleComponent(typeof(ISimpleService), Lifestyle = LifestyleType.Transient)]
 public class HasTypeTransient : ISimpleService
 {
-	public void Operation()
-	{
-	}
+    public void Operation()
+    {
+    }
 }

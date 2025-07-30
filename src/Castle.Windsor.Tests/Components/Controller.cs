@@ -16,14 +16,14 @@ namespace Castle.Windsor.Tests.Components;
 
 public class Controller : IController
 {
-	public Controller(IView view)
-	{
-		View = view;
-	}
+    public Controller(IView view)
+    {
+        View = view;
+    }
 
-	public IView View { get; }
+    public IView View { get; }
 
-	public void Process()
-	{
-	}
+    public void Process()
+    {
+    }
 }

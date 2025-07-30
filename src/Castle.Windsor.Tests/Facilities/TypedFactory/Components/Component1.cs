@@ -17,18 +17,18 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 /// <summary>Summary description for Component1.</summary>
 public class Component1 : IDummyComponent
 {
-	#region IDummyComponent Members
+    #region IDummyComponent Members
 
-	public string Name
-	{
-		get =>
-			// TODO:  Add Component1.Name getter implementation
-			null;
-		set
-		{
-			// TODO:  Add Component1.Name setter implementation
-		}
-	}
+    public string Name
+    {
+        get =>
+            // TODO:  Add Component1.Name getter implementation
+            null;
+        set
+        {
+            // TODO:  Add Component1.Name setter implementation
+        }
+    }
 
-	#endregion
+    #endregion
 }

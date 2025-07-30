@@ -14,9 +14,7 @@
 
 namespace Castle.Windsor.Windsor.Diagnostics;
 
-using System.Collections.Generic;
-
 public interface IContainerDebuggerExtensionHost : IEnumerable<IContainerDebuggerExtension>
 {
-	void Add(IContainerDebuggerExtension extension);
+    void Add(IContainerDebuggerExtension extension);
 }

@@ -14,17 +14,15 @@
 
 namespace Castle.Windsor.Core.Internal;
 
-using System;
-
 public static class ComponentModelExtensions
 {
-	public static Predicate<Type> GetDefaultComponentForServiceFilter(this ComponentModel component)
-	{
-		return (Predicate<Type>)component.ExtendedProperties[Constants.DefaultComponentForServiceFilter];
-	}
+    public static Predicate<Type> GetDefaultComponentForServiceFilter(this ComponentModel component)
+    {
+        return (Predicate<Type>)component.ExtendedProperties[Constants.DefaultComponentForServiceFilter];
+    }
 
-	public static Predicate<Type> GetFallbackComponentForServiceFilter(this ComponentModel component)
-	{
-		return (Predicate<Type>)component.ExtendedProperties[Constants.FallbackComponentForServiceFilter];
-	}
+    public static Predicate<Type> GetFallbackComponentForServiceFilter(this ComponentModel component)
+    {
+        return (Predicate<Type>)component.ExtendedProperties[Constants.FallbackComponentForServiceFilter];
+    }
 }

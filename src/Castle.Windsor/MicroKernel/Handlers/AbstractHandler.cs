@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Threading;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Context;
@@ -24,322 +21,404 @@ using Castle.Windsor.MicroKernel.Resolvers;
 
 namespace Castle.Windsor.MicroKernel.Handlers;
 
-/// <summary>Implements the basis of <see cref = "IHandler" /></summary>
+/// <summary>Implements the basis of <see cref="IHandler" /></summary>
 [Serializable]
 public abstract class AbstractHandler :
-	IHandler, IExposeDependencyInfo, IDisposable
+    IHandler, IExposeDependencyInfo, IDisposable
 {
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly ComponentModel _model;
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private readonly ComponentModel _model;
 
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private IKernelInternal _kernel;
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private IKernelInternal _kernel;
 
-	/// <summary>Dictionary of key (string) to <see cref = "DependencyModel" /></summary>
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private SimpleThreadSafeSet<DependencyModel> _missingDependencies;
+    /// <summary>Dictionary of key (string) to <see cref="DependencyModel" /></summary>
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private SimpleThreadSafeSet<DependencyModel> _missingDependencies;
 
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private HandlerState _state = HandlerState.Valid;
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private HandlerState _state = HandlerState.Valid;
 
-	/// <summary>Constructs and initializes the handler</summary>
-	/// <param name = "model"> </param>
-	protected AbstractHandler(ComponentModel model)
-	{
-		_model = model;
-	}
+    /// <summary>Constructs and initializes the handler</summary>
+    /// <param name="model"> </param>
+    protected AbstractHandler(ComponentModel model)
+    {
+        _model = model;
+    }
 
-	/// <summary>Gets the component model.</summary>
-	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-	public ComponentModel ComponentModel => _model;
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    protected IKernelInternal Kernel => _kernel;
 
-	/// <summary>Gets the handler state.</summary>
-	public HandlerState CurrentState => _state;
+    public virtual void Dispose()
+    {
+    }
 
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	protected IKernelInternal Kernel => _kernel;
+    public void ObtainDependencyDetails(IDependencyInspector inspector)
+    {
+        if (CurrentState == HandlerState.Valid)
+        {
+            return;
+        }
 
-	/// <summary>Should be implemented by derived classes: disposes the component instance (or recycle it)</summary>
-	/// <param name = "burden"> </param>
-	/// <returns> true if destroyed. </returns>
-	public abstract bool ReleaseCore(Burden burden);
+        var missing = _missingDependencies;
+        inspector.Inspect(this, missing != null ? missing.ToArray() : [], Kernel);
+    }
 
-	/// <summary>Returns an instance of the component this handler is responsible for</summary>
-	/// <param name = "context"> </param>
-	/// <param name = "instanceRequired"> when <c>false</c> , handler can not create valid instance and return <c>null</c> instead </param>
-	/// <returns> </returns>
-	protected abstract object Resolve(CreationContext context, bool instanceRequired);
+    /// <summary>Gets the component model.</summary>
+    [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    public ComponentModel ComponentModel => _model;
 
-	public override string ToString()
-	{
-		return $"Model: {_model}";
-	}
+    /// <summary>Gets the handler state.</summary>
+    public HandlerState CurrentState => _state;
 
-	public virtual void Dispose()
-	{
-	}
+    /// <summary>
+    ///     Saves the kernel instance, subscribes to <see cref="IKernelEvents.AddedAsChildKernel" /> event, creates the
+    ///     lifestyle manager instance and computes the handler state.
+    /// </summary>
+    /// <param name="kernel"> </param>
+    public virtual void Init(IKernelInternal kernel)
+    {
+        ArgumentNullException.ThrowIfNull(kernel);
+        _kernel = kernel;
+        _kernel.AddedAsChildKernel += OnAddedAsChildKernel;
 
-	public void ObtainDependencyDetails(IDependencyInspector inspector)
-	{
-		if (CurrentState == HandlerState.Valid) return;
-		var missing = _missingDependencies;
-		inspector.Inspect(this, missing != null ? missing.ToArray() : [], Kernel);
-	}
+        InitDependencies();
+        if (AllRequiredDependenciesResolvable())
+        {
+            SetNewState(HandlerState.Valid);
+            DisconnectEvents();
+            _missingDependencies = null;
+        }
+    }
 
-	private bool HasCustomParameter(object key)
-	{
-		if (key == null) return false;
+    public bool IsBeingResolvedInContext(CreationContext context)
+    {
+        return context != null && context.IsInResolutionContext(this);
+    }
 
-		return _model.CustomDependencies.Contains(key);
-	}
+    /// <summary>disposes the component instance (or recycle it).</summary>
+    /// <param name="burden"> </param>
+    /// <returns> </returns>
+    public virtual bool Release(Burden burden)
+    {
+        return ReleaseCore(burden);
+    }
 
-	/// <summary>Saves the kernel instance, subscribes to <see cref = "IKernelEvents.AddedAsChildKernel" /> event, creates the lifestyle manager instance and computes the handler state.</summary>
-	/// <param name = "kernel"> </param>
-	public virtual void Init(IKernelInternal kernel)
-	{
-		ArgumentNullException.ThrowIfNull(kernel);
-		_kernel = kernel;
-		_kernel.AddedAsChildKernel += OnAddedAsChildKernel;
+    /// <summary>Returns an instance of the component this handler is responsible for</summary>
+    /// <param name="context"> </param>
+    /// <returns> </returns>
+    public object Resolve(CreationContext context)
+    {
+        return Resolve(context, true);
+    }
 
-		InitDependencies();
-		if (AllRequiredDependenciesResolvable())
-		{
-			SetNewState(HandlerState.Valid);
-			DisconnectEvents();
-			_missingDependencies = null;
-		}
-	}
+    public virtual bool Supports(Type service)
+    {
+        return ComponentModel.ServicesLookup.Contains(service);
+    }
 
-	protected virtual void InitDependencies()
-	{
-		foreach (var dependency in ComponentModel.Dependencies) AddDependency(dependency);
-	}
+    public virtual bool SupportsAssignable(Type service)
+    {
+        return ComponentModel.Services.Any(service.GetTypeInfo().IsAssignableFrom);
+    }
 
-	public bool IsBeingResolvedInContext(CreationContext context)
-	{
-		return context != null && context.IsInResolutionContext(this);
-	}
+    public object TryResolve(CreationContext context)
+    {
+        try
+        {
+            return Resolve(context, false);
+        }
+        catch (DependencyResolverException e)
+        {
+            // this exception is thrown when a dependency can not be resolved
+            // in which case we're free to ignore it and fallback
+            Kernel.Logger.Warn(
+                $"Tried to resolve component {ComponentModel.Name} but failed due to exception. Ignoring.", e);
+            return null;
+        }
+        catch (HandlerException e)
+        {
+            // this exception is thrown when Handler can't operate or in the same
+            // cases as above, which means we should throw DependencyResolverException
+            // instead (in vNext, not to break anyone now)
+            Kernel.Logger.Warn(
+                $"Tried to resolve component {ComponentModel.Name} but failed due to exception. Ignoring.", e);
+            return null;
+        }
+    }
 
-	/// <summary>disposes the component instance (or recycle it).</summary>
-	/// <param name = "burden"> </param>
-	/// <returns> </returns>
-	public virtual bool Release(Burden burden)
-	{
-		return ReleaseCore(burden);
-	}
+    public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+        ComponentModel model, DependencyModel dependency)
+    {
+        if (_model.HasCustomDependencies == false)
+        {
+            return false;
+        }
 
-	/// <summary>Returns an instance of the component this handler is responsible for</summary>
-	/// <param name = "context"> </param>
-	/// <returns> </returns>
-	public object Resolve(CreationContext context)
-	{
-		return Resolve(context, true);
-	}
+        return HasCustomParameter(dependency.DependencyKey) || HasCustomParameter(dependency.TargetItemType);
+    }
 
-	public virtual bool Supports(Type service)
-	{
-		return ComponentModel.ServicesLookup.Contains(service);
-	}
+    public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+        ComponentModel model,
+        DependencyModel dependency)
+    {
+        Debug.Assert(CanResolve(context, contextHandlerResolver, model, dependency));
+        if (HasCustomParameter(dependency.DependencyKey))
+        {
+            return model.CustomDependencies[dependency.DependencyKey];
+        }
 
-	public virtual bool SupportsAssignable(Type service)
-	{
-		return ComponentModel.Services.Any(service.GetTypeInfo().IsAssignableFrom);
-	}
+        return model.CustomDependencies[dependency.TargetItemType];
+    }
 
-	public object TryResolve(CreationContext context)
-	{
-		try
-		{
-			return Resolve(context, false);
-		}
-		catch (DependencyResolverException e)
-		{
-			// this exception is thrown when a dependency can not be resolved
-			// in which case we're free to ignore it and fallback
-			Kernel.Logger.Warn(
-				$"Tried to resolve component {ComponentModel.Name} but failed due to exception. Ignoring.", e);
-			return null;
-		}
-		catch (HandlerException e)
-		{
-			// this exception is thrown when Handler can't operate or in the same
-			// cases as above, which means we should throw DependencyResolverException
-			// instead (in vNext, not to break anyone now)
-			Kernel.Logger.Warn(
-				$"Tried to resolve component {ComponentModel.Name} but failed due to exception. Ignoring.", e);
-			return null;
-		}
-	}
+    /// <summary>Should be implemented by derived classes: disposes the component instance (or recycle it)</summary>
+    /// <param name="burden"> </param>
+    /// <returns> true if destroyed. </returns>
+    public abstract bool ReleaseCore(Burden burden);
 
-	public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
-	{
-		if (_model.HasCustomDependencies == false) return false;
-		return HasCustomParameter(dependency.DependencyKey) || HasCustomParameter(dependency.TargetItemType);
-	}
+    /// <summary>Returns an instance of the component this handler is responsible for</summary>
+    /// <param name="context"> </param>
+    /// <param name="instanceRequired">
+    ///     when <c>false</c> , handler can not create valid instance and return <c>null</c>
+    ///     instead
+    /// </param>
+    /// <returns> </returns>
+    protected abstract object Resolve(CreationContext context, bool instanceRequired);
 
-	public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
-		DependencyModel dependency)
-	{
-		Debug.Assert(CanResolve(context, contextHandlerResolver, model, dependency));
-		if (HasCustomParameter(dependency.DependencyKey)) return model.CustomDependencies[dependency.DependencyKey];
+    public override string ToString()
+    {
+        return $"Model: {_model}";
+    }
 
-		return model.CustomDependencies[dependency.TargetItemType];
-	}
+    private bool HasCustomParameter(object key)
+    {
+        if (key == null)
+        {
+            return false;
+        }
 
-	/// <summary>Invoked by <see cref = "InitDependencies" /> in order to check if a dependency can be satisfied. If not, the handler is set to a 'waiting dependency' state.</summary>
-	/// <remarks>This method registers the dependencies within the correct collection or dictionary and changes the handler state to <see cref = "HandlerState.WaitingDependency" /></remarks>
-	/// <param name = "dependency"> </param>
-	protected void AddDependency(DependencyModel dependency)
-	{
-		dependency.Init(_model.ParametersInternal);
-		if (AddOptionalDependency(dependency)) return;
-		if (AddResolvableDependency(dependency)) return;
-		AddMissingDependency(dependency);
-	}
+        return _model.CustomDependencies.Contains(key);
+    }
 
-	protected void AddMissingDependency(DependencyModel dependency)
-	{
-		var missing = _missingDependencies;
-		if (missing == null)
-		{
-			var @new = new SimpleThreadSafeSet<DependencyModel>();
-			missing = Interlocked.CompareExchange(ref _missingDependencies, @new, null) ?? @new;
-		}
+    protected virtual void InitDependencies()
+    {
+        foreach (var dependency in ComponentModel.Dependencies)
+        {
+            AddDependency(dependency);
+        }
+    }
 
-		missing.Add(dependency);
-		if (_state != HandlerState.WaitingDependency)
-		{
-			// This handler is considered invalid
-			// until dependencies are satisfied
-			SetNewState(HandlerState.WaitingDependency);
+    /// <summary>
+    ///     Invoked by <see cref="InitDependencies" /> in order to check if a dependency can be satisfied. If not, the
+    ///     handler is set to a 'waiting dependency' state.
+    /// </summary>
+    /// <remarks>
+    ///     This method registers the dependencies within the correct collection or dictionary and changes the handler
+    ///     state to <see cref="HandlerState.WaitingDependency" />
+    /// </remarks>
+    /// <param name="dependency"> </param>
+    protected void AddDependency(DependencyModel dependency)
+    {
+        dependency.Init(_model.ParametersInternal);
+        if (AddOptionalDependency(dependency))
+        {
+            return;
+        }
 
-			// Register itself on the kernel
-			// to be notified if the dependency is satified
-			Kernel.HandlersChanged += DependencySatisfied;
+        if (AddResolvableDependency(dependency))
+        {
+            return;
+        }
 
-			// We also gonna pay attention for state
-			// changed within this very handler. The 
-			// state can be changed by AddCustomDependencyValue and RemoveCustomDependencyValue
-		}
-	}
+        AddMissingDependency(dependency);
+    }
 
-	protected bool CanResolvePendingDependencies(CreationContext context)
-	{
-		var missing = _missingDependencies;
-		if (CurrentState == HandlerState.Valid || missing == null) return true;
-		foreach (var dependency in missing.ToArray())
-		{
-			if (dependency.TargetItemType == null) return CanProvideDependenciesDynamically(context);
-			// a self-dependency is not allowed
-			var handler = Kernel.GetHandler(dependency.TargetItemType);
-			if (handler == this || handler == null) return CanProvideDependenciesDynamically(context);
-		}
+    protected void AddMissingDependency(DependencyModel dependency)
+    {
+        var missing = _missingDependencies;
+        if (missing == null)
+        {
+            var @new = new SimpleThreadSafeSet<DependencyModel>();
+            missing = Interlocked.CompareExchange(ref _missingDependencies, @new, null) ?? @new;
+        }
 
-		return true;
-	}
+        missing.Add(dependency);
+        if (_state != HandlerState.WaitingDependency)
+        {
+            // This handler is considered invalid
+            // until dependencies are satisfied
+            SetNewState(HandlerState.WaitingDependency);
 
-	private bool CanProvideDependenciesDynamically(CreationContext context)
-	{
-		return context.HasAdditionalArguments || _kernel.HasComponent(typeof(ILazyComponentLoader));
-	}
+            // Register itself on the kernel
+            // to be notified if the dependency is satified
+            Kernel.HandlersChanged += DependencySatisfied;
 
-	/// <summary>Invoked by the kernel when one of registered dependencies were satisfied by new components registered.</summary>
-	/// <remarks>Handler for the event <see cref = "IKernelEvents.HandlerRegistered" /></remarks>
-	/// <param name = "stateChanged"> </param>
-	protected void DependencySatisfied(ref bool stateChanged)
-	{
-		var missing = _missingDependencies;
-		if (missing == null)
-			// handled on another thread?
-			return;
-		// Check within the Kernel
-		foreach (var dependency in missing.ToArray())
-			if (AddResolvableDependency(dependency))
-				missing.Remove(dependency);
+            // We also gonna pay attention for state
+            // changed within this very handler. The 
+            // state can be changed by AddCustomDependencyValue and RemoveCustomDependencyValue
+        }
+    }
 
-		if (AllRequiredDependenciesResolvable())
-		{
-			SetNewState(HandlerState.Valid);
-			stateChanged = true;
+    protected bool CanResolvePendingDependencies(CreationContext context)
+    {
+        var missing = _missingDependencies;
+        if (CurrentState == HandlerState.Valid || missing == null)
+        {
+            return true;
+        }
 
-			DisconnectEvents();
+        foreach (var dependency in missing.ToArray())
+        {
+            if (dependency.TargetItemType == null)
+            {
+                return CanProvideDependenciesDynamically(context);
+            }
 
-			// We don't need these anymore
-			_missingDependencies = null;
-		}
-	}
+            // a self-dependency is not allowed
+            var handler = Kernel.GetHandler(dependency.TargetItemType);
+            if (handler == this || handler == null)
+            {
+                return CanProvideDependenciesDynamically(context);
+            }
+        }
 
-	/// <summary>Invoked when the container receives a parent container reference.</summary>
-	/// <remarks>This method implementation checks whether the parent container is able to supply the dependencies for this handler.</remarks>
-	/// <param name = "sender"> </param>
-	/// <param name = "e"> </param>
-	protected void OnAddedAsChildKernel(object sender, EventArgs e)
-	{
-		var stateChanged = false;
-		DependencySatisfied(ref stateChanged);
-	}
+        return true;
+    }
 
-	protected void SetNewState(HandlerState newState)
-	{
-		_state = newState;
-	}
+    private bool CanProvideDependenciesDynamically(CreationContext context)
+    {
+        return context.HasAdditionalArguments || _kernel.HasComponent(typeof(ILazyComponentLoader));
+    }
 
-	private void AddGraphDependency(DependencyModel dependency)
-	{
-		var handler = GetDependencyHandler(dependency);
-		if (handler != null) ComponentModel.AddDependent(handler.ComponentModel);
-	}
+    /// <summary>Invoked by the kernel when one of registered dependencies were satisfied by new components registered.</summary>
+    /// <remarks>Handler for the event <see cref="IKernelEvents.HandlerRegistered" /></remarks>
+    /// <param name="stateChanged"> </param>
+    protected void DependencySatisfied(ref bool stateChanged)
+    {
+        var missing = _missingDependencies;
+        if (missing == null)
+            // handled on another thread?
+        {
+            return;
+        }
 
-	private IHandler GetDependencyHandler(DependencyModel dependency)
-	{
-		if (dependency.ReferencedComponentName != null) return Kernel.GetHandler(dependency.ReferencedComponentName);
-		if (dependency.TargetItemType != null) return Kernel.GetHandler(dependency.TargetItemType);
-		return null;
-	}
+        // Check within the Kernel
+        foreach (var dependency in missing.ToArray())
+        {
+            if (AddResolvableDependency(dependency))
+            {
+                missing.Remove(dependency);
+            }
+        }
 
-	private bool AddOptionalDependency(DependencyModel dependency)
-	{
-		if (dependency.IsOptional || dependency.HasDefaultValue)
-		{
-			AddGraphDependency(dependency);
-			return true;
-		}
+        if (AllRequiredDependenciesResolvable())
+        {
+            SetNewState(HandlerState.Valid);
+            stateChanged = true;
 
-		return false;
-	}
+            DisconnectEvents();
 
-	private bool AddResolvableDependency(DependencyModel dependency)
-	{
-		if (HasValidComponentFromResolver(dependency))
-		{
-			AddGraphDependency(dependency);
-			return true;
-		}
+            // We don't need these anymore
+            _missingDependencies = null;
+        }
+    }
 
-		return false;
-	}
+    /// <summary>Invoked when the container receives a parent container reference.</summary>
+    /// <remarks>
+    ///     This method implementation checks whether the parent container is able to supply the dependencies for this
+    ///     handler.
+    /// </remarks>
+    /// <param name="sender"> </param>
+    /// <param name="e"> </param>
+    protected void OnAddedAsChildKernel(object sender, EventArgs e)
+    {
+        var stateChanged = false;
+        DependencySatisfied(ref stateChanged);
+    }
 
-	private bool AllRequiredDependenciesResolvable()
-	{
-		var missing = _missingDependencies;
-		if (missing == null) return true;
-		var dependencies = missing.ToArray();
-		if (dependencies.Length == 0) return true;
-		var constructorDependencies = dependencies.OfType<ConstructorDependencyModel>().ToList();
-		if (dependencies.Length != constructorDependencies.Count) return false;
+    protected void SetNewState(HandlerState newState)
+    {
+        _state = newState;
+    }
 
-		var ctorsWithMissingDependenciesCount = constructorDependencies.Select(d => d.Constructor).Distinct().Count();
-		return _model.Constructors.Count > ctorsWithMissingDependenciesCount;
-	}
+    private void AddGraphDependency(DependencyModel dependency)
+    {
+        var handler = GetDependencyHandler(dependency);
+        if (handler != null)
+        {
+            ComponentModel.AddDependent(handler.ComponentModel);
+        }
+    }
 
-	private void DisconnectEvents()
-	{
-		Kernel.HandlersChanged -= DependencySatisfied;
-		Kernel.AddedAsChildKernel -= OnAddedAsChildKernel;
-	}
+    private IHandler GetDependencyHandler(DependencyModel dependency)
+    {
+        if (dependency.ReferencedComponentName != null)
+        {
+            return Kernel.GetHandler(dependency.ReferencedComponentName);
+        }
 
-	private bool HasValidComponentFromResolver(DependencyModel dependency)
-	{
-		return Kernel.Resolver.CanResolve(CreationContext.ForDependencyInspection(this), this, _model, dependency);
-	}
+        if (dependency.TargetItemType != null)
+        {
+            return Kernel.GetHandler(dependency.TargetItemType);
+        }
+
+        return null;
+    }
+
+    private bool AddOptionalDependency(DependencyModel dependency)
+    {
+        if (dependency.IsOptional || dependency.HasDefaultValue)
+        {
+            AddGraphDependency(dependency);
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool AddResolvableDependency(DependencyModel dependency)
+    {
+        if (HasValidComponentFromResolver(dependency))
+        {
+            AddGraphDependency(dependency);
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool AllRequiredDependenciesResolvable()
+    {
+        var missing = _missingDependencies;
+        if (missing == null)
+        {
+            return true;
+        }
+
+        var dependencies = missing.ToArray();
+        if (dependencies.Length == 0)
+        {
+            return true;
+        }
+
+        var constructorDependencies = dependencies.OfType<ConstructorDependencyModel>().ToList();
+        if (dependencies.Length != constructorDependencies.Count)
+        {
+            return false;
+        }
+
+        var ctorsWithMissingDependenciesCount = constructorDependencies.Select(d => d.Constructor).Distinct().Count();
+        return _model.Constructors.Count > ctorsWithMissingDependenciesCount;
+    }
+
+    private void DisconnectEvents()
+    {
+        Kernel.HandlersChanged -= DependencySatisfied;
+        Kernel.AddedAsChildKernel -= OnAddedAsChildKernel;
+    }
+
+    private bool HasValidComponentFromResolver(DependencyModel dependency)
+    {
+        return Kernel.Resolver.CanResolve(CreationContext.ForDependencyInspection(this), this, _model, dependency);
+    }
 }

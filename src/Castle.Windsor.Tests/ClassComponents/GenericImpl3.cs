@@ -18,5 +18,5 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class GenericImpl3<T> : IGeneric<T>
 {
-	public IEmptyService Value { get; set; }
+    public IEmptyService Value { get; set; }
 }

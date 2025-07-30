@@ -21,8 +21,9 @@ namespace Castle.Windsor.Tests.Installers;
 
 public class CustomerInstaller : IWindsorInstaller
 {
-	public void Install(IWindsorContainer container, IConfigurationStore store)
-	{
-		container.Register(Component.For<ICustomer>().ImplementedBy<CustomerImpl>().Named("Customer-by-CustomerInstaller"));
-	}
+    public void Install(IWindsorContainer container, IConfigurationStore store)
+    {
+        container.Register(Component.For<ICustomer>().ImplementedBy<CustomerImpl>()
+            .Named("Customer-by-CustomerInstaller"));
+    }
 }

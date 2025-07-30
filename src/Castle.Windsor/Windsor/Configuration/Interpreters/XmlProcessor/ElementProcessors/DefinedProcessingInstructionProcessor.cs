@@ -18,18 +18,18 @@ namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.Element
 
 public class DefinedProcessingInstructionProcessor : AbstractXmlNodeProcessor
 {
-	private static readonly XmlNodeType[] AcceptNodes = [XmlNodeType.ProcessingInstruction];
+    private static readonly XmlNodeType[] AcceptNodes = [XmlNodeType.ProcessingInstruction];
 
-	public override XmlNodeType[] AcceptNodeTypes => AcceptNodes;
+    public override XmlNodeType[] AcceptNodeTypes => AcceptNodes;
 
-	public override string Name => "define";
+    public override string Name => "define";
 
-	public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
-	{
-		var node = nodeList.Current as XmlProcessingInstruction;
+    public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
+    {
+        var node = nodeList.Current as XmlProcessingInstruction;
 
-		engine.AddFlag(node.Data);
+        engine.AddFlag(node.Data);
 
-		RemoveItSelf(node);
-	}
+        RemoveItSelf(node);
+    }
 }

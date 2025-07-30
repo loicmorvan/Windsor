@@ -19,27 +19,30 @@ using Castle.Windsor.MicroKernel.Registration;
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class DynamicParametersDescriptor(DynamicParametersWithContextResolveDelegate resolve)
-	: IComponentModelDescriptor
+    : IComponentModelDescriptor
 {
-	private const string Key = "component_resolving_handler";
+    private const string Key = "component_resolving_handler";
 
-	public void BuildComponentModel(IKernel kernel, ComponentModel model)
-	{
-		var dynamicParameters = GetDynamicParametersExtension(model);
-		dynamicParameters.AddHandler((k, c) => resolve(k, c, c.AdditionalArguments));
-	}
+    public void BuildComponentModel(IKernel kernel, ComponentModel model)
+    {
+        var dynamicParameters = GetDynamicParametersExtension(model);
+        dynamicParameters.AddHandler((k, c) => resolve(k, c, c.AdditionalArguments));
+    }
 
-	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-	{
-	}
+    public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+    {
+    }
 
-	private ComponentLifecycleExtension GetDynamicParametersExtension(ComponentModel model)
-	{
-		if (model.ExtendedProperties.Contains(Key)) return (ComponentLifecycleExtension)model.ExtendedProperties[Key];
+    private ComponentLifecycleExtension GetDynamicParametersExtension(ComponentModel model)
+    {
+        if (model.ExtendedProperties.Contains(Key))
+        {
+            return (ComponentLifecycleExtension)model.ExtendedProperties[Key];
+        }
 
-		var dynamicParameters = new ComponentLifecycleExtension();
-		model.ExtendedProperties[Key] = dynamicParameters;
-		model.ResolveExtensions(true).Add(dynamicParameters);
-		return dynamicParameters;
-	}
+        var dynamicParameters = new ComponentLifecycleExtension();
+        model.ExtendedProperties[Key] = dynamicParameters;
+        model.ResolveExtensions(true).Add(dynamicParameters);
+        return dynamicParameters;
+    }
 }

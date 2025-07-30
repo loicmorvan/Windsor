@@ -22,131 +22,131 @@ namespace Castle.Windsor.Tests.Registration.Interceptors;
 
 public sealed class InterceptorsTestCase : AbstractContainerTestCase
 {
-	private void ExecuteScenario<TScenario>() where TScenario : InterceptorsTestCaseHelper, new()
-	{
-		var scenario = new TScenario();
-		var registration = Component.For<ICustomer>();
+    private void ExecuteScenario<TScenario>() where TScenario : InterceptorsTestCaseHelper, new()
+    {
+        var scenario = new TScenario();
+        var registration = Component.For<ICustomer>();
 
-		scenario.RegisterInterceptors(registration);
+        scenario.RegisterInterceptors(registration);
 
-		Kernel.Register(registration);
+        Kernel.Register(registration);
 
-		var handler = Kernel.GetHandler(typeof(ICustomer));
+        var handler = Kernel.GetHandler(typeof(ICustomer));
 
-		AssertInterceptorReferencesAreEqual(handler, scenario);
-	}
+        AssertInterceptorReferencesAreEqual(handler, scenario);
+    }
 
-	private void AssertInterceptorReferencesAreEqual(IHandler handler, InterceptorsTestCaseHelper helper)
-	{
-		Assert.Equal(helper.GetExpectedInterceptorsInCorrectOrder(),
-			handler.ComponentModel.Interceptors);
-	}
+    private void AssertInterceptorReferencesAreEqual(IHandler handler, InterceptorsTestCaseHelper helper)
+    {
+        Assert.Equal(helper.GetExpectedInterceptorsInCorrectOrder(),
+            handler.ComponentModel.Interceptors);
+    }
 
-	[Fact]
-	public void GenericInterceptor()
-	{
-		ExecuteScenario<SingleGenericInterceptor>();
-	}
+    [Fact]
+    public void GenericInterceptor()
+    {
+        ExecuteScenario<SingleGenericInterceptor>();
+    }
 
-	[Fact]
-	public void GenericInterceptorsInSingleCall()
-	{
-		ExecuteScenario<GenericInterceptorsInSingleCall>();
-	}
+    [Fact]
+    public void GenericInterceptorsInSingleCall()
+    {
+        ExecuteScenario<GenericInterceptorsInSingleCall>();
+    }
 
-	[Fact]
-	public void GenericInterceptorsMultipleCall()
-	{
-		ExecuteScenario<GenericInterceptorsMultipleCall>();
-	}
+    [Fact]
+    public void GenericInterceptorsMultipleCall()
+    {
+        ExecuteScenario<GenericInterceptorsMultipleCall>();
+    }
 
-	[Fact]
-	public void InterceptorKeyInSingleCall()
-	{
-		ExecuteScenario<InterceptorKeyInSingleCall>();
-	}
+    [Fact]
+    public void InterceptorKeyInSingleCall()
+    {
+        ExecuteScenario<InterceptorKeyInSingleCall>();
+    }
 
-	[Fact]
-	public void InterceptorKeyMultipleCall()
-	{
-		ExecuteScenario<InterceptorKeyMultipleCall>();
-	}
+    [Fact]
+    public void InterceptorKeyMultipleCall()
+    {
+        ExecuteScenario<InterceptorKeyMultipleCall>();
+    }
 
-	[Fact]
-	public void InterceptorReferenceAnywhereMultipleCall()
-	{
-		ExecuteScenario<InterceptorReferenceAnywhereMultipleCall>();
-	}
+    [Fact]
+    public void InterceptorReferenceAnywhereMultipleCall()
+    {
+        ExecuteScenario<InterceptorReferenceAnywhereMultipleCall>();
+    }
 
-	[Fact]
-	public void InterceptorReferenceWithPositionMultipleCall1()
-	{
-		ExecuteScenario<InterceptorReferenceWithPositionMultipleCall1>();
-	}
+    [Fact]
+    public void InterceptorReferenceWithPositionMultipleCall1()
+    {
+        ExecuteScenario<InterceptorReferenceWithPositionMultipleCall1>();
+    }
 
-	[Fact]
-	public void InterceptorReferenceWithPositionMultipleCall2()
-	{
-		ExecuteScenario<InterceptorReferenceWithPositionMultipleCall2>();
-	}
+    [Fact]
+    public void InterceptorReferenceWithPositionMultipleCall2()
+    {
+        ExecuteScenario<InterceptorReferenceWithPositionMultipleCall2>();
+    }
 
-	[Fact]
-	public void InterceptorReferenceWithPositionMultipleCall3()
-	{
-		ExecuteScenario<InterceptorReferenceWithPositionMultipleCall3>();
-	}
+    [Fact]
+    public void InterceptorReferenceWithPositionMultipleCall3()
+    {
+        ExecuteScenario<InterceptorReferenceWithPositionMultipleCall3>();
+    }
 
-	[Fact]
-	public void InterceptorReferencesAnywhereInSingleCall()
-	{
-		ExecuteScenario<InterceptorReferencesWithPositionInSingleCall>();
-	}
+    [Fact]
+    public void InterceptorReferencesAnywhereInSingleCall()
+    {
+        ExecuteScenario<InterceptorReferencesWithPositionInSingleCall>();
+    }
 
-	[Fact]
-	public void InterceptorReferencesWithPositionInSingleCall1()
-	{
-		ExecuteScenario<InterceptorReferencesWithPositionInSingleCall1>();
-	}
+    [Fact]
+    public void InterceptorReferencesWithPositionInSingleCall1()
+    {
+        ExecuteScenario<InterceptorReferencesWithPositionInSingleCall1>();
+    }
 
-	[Fact]
-	public void InterceptorReferencesWithPositionInSingleCall2()
-	{
-		ExecuteScenario<InterceptorReferencesWithPositionInSingleCall2>();
-	}
+    [Fact]
+    public void InterceptorReferencesWithPositionInSingleCall2()
+    {
+        ExecuteScenario<InterceptorReferencesWithPositionInSingleCall2>();
+    }
 
-	[Fact]
-	public void InterceptorReferencesWithPositionInSingleCall3()
-	{
-		ExecuteScenario<InterceptorReferencesWithPositionInSingleCall3>();
-	}
+    [Fact]
+    public void InterceptorReferencesWithPositionInSingleCall3()
+    {
+        ExecuteScenario<InterceptorReferencesWithPositionInSingleCall3>();
+    }
 
-	[Fact]
-	public void InterceptorTypeMultipleCall()
-	{
-		ExecuteScenario<InterceptorTypeMultipleCall>();
-	}
+    [Fact]
+    public void InterceptorTypeMultipleCall()
+    {
+        ExecuteScenario<InterceptorTypeMultipleCall>();
+    }
 
-	[Fact]
-	public void InterceptorTypesInSingleCall()
-	{
-		ExecuteScenario<InterceptorTypesInSingleCall>();
-	}
+    [Fact]
+    public void InterceptorTypesInSingleCall()
+    {
+        ExecuteScenario<InterceptorTypesInSingleCall>();
+    }
 
-	[Fact]
-	public void SingleInterceptorKey()
-	{
-		ExecuteScenario<SingleInterceptorKey>();
-	}
+    [Fact]
+    public void SingleInterceptorKey()
+    {
+        ExecuteScenario<SingleInterceptorKey>();
+    }
 
-	[Fact]
-	public void SingleInterceptorReference()
-	{
-		ExecuteScenario<SingleInterceptorReference>();
-	}
+    [Fact]
+    public void SingleInterceptorReference()
+    {
+        ExecuteScenario<SingleInterceptorReference>();
+    }
 
-	[Fact]
-	public void SingleInterceptorType()
-	{
-		ExecuteScenario<SingleInterceptorType>();
-	}
+    [Fact]
+    public void SingleInterceptorType()
+    {
+        ExecuteScenario<SingleInterceptorType>();
+    }
 }

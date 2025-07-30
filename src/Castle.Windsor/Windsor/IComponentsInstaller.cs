@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Windsor;
-
 using Castle.Windsor.MicroKernel.SubSystems.Configuration;
+
+namespace Castle.Windsor.Windsor;
 
 /// <summary>Installs the components and facilities based on the information on the configuration store.</summary>
 public interface IComponentsInstaller
 {
 	/// <summary>Perform installation.</summary>
-	/// <param name = "container">Target container</param>
-	/// <param name = "store">Configuration store</param>
+	/// <param name="container">Target container</param>
+	/// <param name="store">Configuration store</param>
 	void SetUp(IWindsorContainer container, IConfigurationStore store);
 }

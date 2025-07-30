@@ -50,14 +50,14 @@ Once you selected an assembly you do first base step of filtering the types you 
 scope of the objects in one of the following ways:
 
 1. By base type/implemented interface, for example:
-	* `Classes.FromThisAssembly().BasedOn<IMessage>()`
+    * `Classes.FromThisAssembly().BasedOn<IMessage>()`
 1. By namespace, for example:
-	* :information_source: This method (and its overloads) are new in Windsor 3
-	* `Classes.FromAssemblyInDirectory(new AssemblyFilter("bin")).InNamespace("Acme.Crm.Extensions")`
+    * :information_source: This method (and its overloads) are new in Windsor 3
+    * `Classes.FromAssemblyInDirectory(new AssemblyFilter("bin")).InNamespace("Acme.Crm.Extensions")`
 1. By any condtion, for example:
-	* `Classes.FromAssemblyContaining<MyController>().Where( t=> Attribute.IsDefined(t, typeof(CacheAttribute)))`
+    * `Classes.FromAssemblyContaining<MyController>().Where( t=> Attribute.IsDefined(t, typeof(CacheAttribute)))`
 1. No restrictions at this point:
-	* `Classes.FromAssemblyNamed("Acme.Crm.Services").Pick()`
+    * `Classes.FromAssemblyNamed("Acme.Crm.Services").Pick()`
 
 ### Additional filtering and configuration
 

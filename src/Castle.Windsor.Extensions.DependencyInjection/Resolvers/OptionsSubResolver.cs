@@ -18,27 +18,28 @@ using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Context;
 using Microsoft.Extensions.Options;
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers
+namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers;
+
+internal class OptionsSubResolver : ISubDependencyResolver
 {
-	internal class OptionsSubResolver : ISubDependencyResolver
-	{
-		private readonly IKernel _kernel;
+    private readonly IKernel _kernel;
 
-		public OptionsSubResolver(IKernel kernel)
-		{
-			_kernel = kernel;
-		}
+    public OptionsSubResolver(IKernel kernel)
+    {
+        _kernel = kernel;
+    }
 
-		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
-		{
-			return dependency.TargetType != null &&
-			       dependency.TargetType.GetTypeInfo().IsGenericType &&
-			       dependency.TargetType.GetGenericTypeDefinition() == typeof(IOptions<>);
-		}
+    public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+        DependencyModel dependency)
+    {
+        return dependency.TargetType != null &&
+               dependency.TargetType.GetTypeInfo().IsGenericType &&
+               dependency.TargetType.GetGenericTypeDefinition() == typeof(IOptions<>);
+    }
 
-		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
-		{
-			return _kernel.Resolve(dependency.TargetType);
-		}
-	}
+    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+        DependencyModel dependency)
+    {
+        return _kernel.Resolve(dependency.TargetType);
+    }
 }

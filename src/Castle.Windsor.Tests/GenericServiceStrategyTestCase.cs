@@ -20,48 +20,48 @@ namespace Castle.Windsor.Tests;
 
 public class GenericServiceStrategyTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void NOT_supports_returns_false_for_HasComponent()
-	{
-		Container.Register(Component.For(typeof(IGeneric<>))
-			.ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((_, _) => false)));
+    [Fact]
+    public void NOT_supports_returns_false_for_HasComponent()
+    {
+        Container.Register(Component.For(typeof(IGeneric<>))
+            .ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((_, _) => false)));
 
-		Assert.False(Kernel.HasComponent(typeof(IGeneric<int>)));
-	}
+        Assert.False(Kernel.HasComponent(typeof(IGeneric<int>)));
+    }
 
-	[Fact]
-	public void NOT_supports_returns_null_for_GetHandler()
-	{
-		Container.Register(Component.For(typeof(IGeneric<>))
-			.ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((_, _) => false)));
+    [Fact]
+    public void NOT_supports_returns_null_for_GetHandler()
+    {
+        Container.Register(Component.For(typeof(IGeneric<>))
+            .ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((_, _) => false)));
 
-		Assert.Null(Kernel.GetHandler(typeof(IGeneric<int>)));
-	}
+        Assert.Null(Kernel.GetHandler(typeof(IGeneric<int>)));
+    }
 
-	[Fact]
-	public void NOT_supports_returns_zero_for_GetAssignableHandlers()
-	{
-		Container.Register(Component.For(typeof(IGeneric<>))
-			.ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((_, _) => false)));
+    [Fact]
+    public void NOT_supports_returns_zero_for_GetAssignableHandlers()
+    {
+        Container.Register(Component.For(typeof(IGeneric<>))
+            .ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((_, _) => false)));
 
-		Assert.Empty(Kernel.GetAssignableHandlers(typeof(IGeneric<int>)));
-	}
+        Assert.Empty(Kernel.GetAssignableHandlers(typeof(IGeneric<int>)));
+    }
 
-	[Fact]
-	public void NOT_supports_returns_zero_for_GetHandlers()
-	{
-		Container.Register(Component.For(typeof(IGeneric<>))
-			.ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((_, _) => false)));
+    [Fact]
+    public void NOT_supports_returns_zero_for_GetHandlers()
+    {
+        Container.Register(Component.For(typeof(IGeneric<>))
+            .ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((_, _) => false)));
 
-		Assert.Empty(Kernel.GetHandlers(typeof(IGeneric<int>)));
-	}
+        Assert.Empty(Kernel.GetHandlers(typeof(IGeneric<int>)));
+    }
 
-	[Fact]
-	public void NOT_supports_throws_ComponentNotFoundException_when_resolving()
-	{
-		Container.Register(Component.For(typeof(IGeneric<>))
-			.ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((_, _) => false)));
+    [Fact]
+    public void NOT_supports_throws_ComponentNotFoundException_when_resolving()
+    {
+        Container.Register(Component.For(typeof(IGeneric<>))
+            .ImplementedBy(typeof(GenericImpl1<>), new DelegatingServiceStrategy((_, _) => false)));
 
-		Assert.Throws<ComponentNotFoundException>(() => Container.Resolve<IGeneric<int>>());
-	}
+        Assert.Throws<ComponentNotFoundException>(() => Container.Resolve<IGeneric<int>>());
+    }
 }

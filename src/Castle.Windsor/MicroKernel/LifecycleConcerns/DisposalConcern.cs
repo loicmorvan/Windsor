@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
@@ -21,15 +20,15 @@ namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
 [Serializable]
 public class DisposalConcern : IDecommissionConcern
 {
-	protected DisposalConcern()
-	{
-	}
+    protected DisposalConcern()
+    {
+    }
 
-	public static DisposalConcern Instance { get; } = new();
+    public static DisposalConcern Instance { get; } = new();
 
-	public void Apply(ComponentModel model, object component)
-	{
-		var disposable = component as IDisposable;
-		disposable?.Dispose();
-	}
+    public void Apply(ComponentModel model, object component)
+    {
+        var disposable = component as IDisposable;
+        disposable?.Dispose();
+    }
 }

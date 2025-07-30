@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Reflection;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.Windsor;
@@ -21,45 +20,45 @@ namespace Castle.Windsor.Tests;
 
 public abstract class AbstractContainerTestCase : IDisposable
 {
-	private WindsorContainer _container;
+    private WindsorContainer _container;
 
-	protected AbstractContainerTestCase()
-	{
-		Init();
-	}
+    protected AbstractContainerTestCase()
+    {
+        Init();
+    }
 
-	protected IWindsorContainer Container => _container;
+    protected IWindsorContainer Container => _container;
 
-	protected IKernel Kernel => _container.Kernel;
+    protected IKernel Kernel => _container.Kernel;
 
-	public void Dispose()
-	{
-		_container.Dispose();
-	}
+    public void Dispose()
+    {
+        _container.Dispose();
+    }
 
-	private void Init()
-	{
-		_container = BuildContainer();
-		AfterContainerCreated();
-	}
+    private void Init()
+    {
+        _container = BuildContainer();
+        AfterContainerCreated();
+    }
 
-	protected virtual void AfterContainerCreated()
-	{
-	}
+    protected virtual void AfterContainerCreated()
+    {
+    }
 
-	protected virtual WindsorContainer BuildContainer()
-	{
-		return new WindsorContainer();
-	}
+    protected virtual WindsorContainer BuildContainer()
+    {
+        return new WindsorContainer();
+    }
 
-	protected void ResetContainer()
-	{
-		Dispose();
-		Init();
-	}
+    protected void ResetContainer()
+    {
+        Dispose();
+        Init();
+    }
 
-	protected Assembly GetCurrentAssembly()
-	{
-		return typeof(AbstractContainerTestCase).GetTypeInfo().Assembly;
-	}
+    protected Assembly GetCurrentAssembly()
+    {
+        return typeof(AbstractContainerTestCase).GetTypeInfo().Assembly;
+    }
 }

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Linq;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 
@@ -21,13 +20,13 @@ namespace Castle.Windsor.Tests.Components;
 [BoundTo(typeof(Binder))]
 public class BoundComponent : IComponent
 {
-	public int Id => GetHashCode();
+    public int Id => GetHashCode();
 
-	public class Binder
-	{
-		public IHandler Bind(IHandler[] handlers)
-		{
-			return handlers.First();
-		}
-	}
+    public class Binder
+    {
+        public IHandler Bind(IHandler[] handlers)
+        {
+            return handlers.First();
+        }
+    }
 }

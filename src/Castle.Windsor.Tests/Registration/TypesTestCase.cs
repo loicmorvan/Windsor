@@ -22,32 +22,32 @@ namespace Castle.Windsor.Tests.Registration;
 
 public class TypesTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void Based_on_interface_types_registered()
-	{
-		Container.Register(Types.FromAssembly(GetCurrentAssembly())
-			.BasedOn<ICommon>()
-		);
+    [Fact]
+    public void Based_on_interface_types_registered()
+    {
+        Container.Register(Types.FromAssembly(GetCurrentAssembly())
+            .BasedOn<ICommon>()
+        );
 
-		var handlers = Kernel.GetHandlers(typeof(ICommon));
-		Assert.Single(handlers);
+        var handlers = Kernel.GetHandlers(typeof(ICommon));
+        Assert.Single(handlers);
 
-		handlers = Kernel.GetAssignableHandlers(typeof(ICommon));
-		Assert.True(handlers.Length > 1);
-	}
+        handlers = Kernel.GetAssignableHandlers(typeof(ICommon));
+        Assert.True(handlers.Length > 1);
+    }
 
-	[Fact]
-	public void Interface_registered_with_no_implementation_with_interceptor_can_be_used()
-	{
-		Container.Register(
-			Component.For<ReturnDefaultInterceptor>(),
-			Types.FromAssembly(GetCurrentAssembly())
-				.BasedOn<ISimpleService>()
-				.If(t => t.GetTypeInfo().IsInterface)
-				.Configure(t => t.Interceptors<ReturnDefaultInterceptor>())
-		);
+    [Fact]
+    public void Interface_registered_with_no_implementation_with_interceptor_can_be_used()
+    {
+        Container.Register(
+            Component.For<ReturnDefaultInterceptor>(),
+            Types.FromAssembly(GetCurrentAssembly())
+                .BasedOn<ISimpleService>()
+                .If(t => t.GetTypeInfo().IsInterface)
+                .Configure(t => t.Interceptors<ReturnDefaultInterceptor>())
+        );
 
-		var common = Container.Resolve<ISimpleService>();
-		common.Operation();
-	}
+        var common = Container.Resolve<ISimpleService>();
+        common.Operation();
+    }
 }

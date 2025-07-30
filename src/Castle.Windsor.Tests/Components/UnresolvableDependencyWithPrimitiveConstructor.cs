@@ -13,15 +13,16 @@
 // limitations under the License.
 
 // ReSharper disable UnusedParameter.Local
+
 namespace Castle.Windsor.Tests.Components;
 
 public class UnresolvableDependencyWithPrimitiveConstructor : IDependency
 {
-	public UnresolvableDependencyWithPrimitiveConstructor(A a)
-	{
-	}
+    public UnresolvableDependencyWithPrimitiveConstructor(A a)
+    {
+    }
 
-	public UnresolvableDependencyWithPrimitiveConstructor(string str)
-	{
-	}
+    public UnresolvableDependencyWithPrimitiveConstructor(string str)
+    {
+    }
 }

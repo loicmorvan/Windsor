@@ -16,12 +16,12 @@ namespace Castle.Windsor.Tests.Components;
 
 public class HumanArm : IArm
 {
-	public float GetLength()
-	{
-		return 1.0f;
-	}
+    public float GetLength()
+    {
+        return 1.0f;
+    }
 
-	public void Rotate(float degree)
-	{
-	}
+    public void Rotate(float degree)
+    {
+    }
 }

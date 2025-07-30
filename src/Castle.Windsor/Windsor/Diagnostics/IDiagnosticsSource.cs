@@ -18,5 +18,5 @@ namespace Castle.Windsor.Windsor.Diagnostics;
 
 public interface IDiagnosticsSource<out TResult>
 {
-	TResult Inspect(IKernel kernel);
+    TResult Inspect(IKernel kernel);
 }

@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.Windsor.Diagnostics.Helpers;
 
@@ -23,49 +21,52 @@ namespace Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
 [DebuggerDisplay("{Description,nq}", Name = "{name,nq}")]
 public class ComponentDebuggerView
 {
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private readonly IComponentDebuggerExtension[] _extension;
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private readonly IComponentDebuggerExtension[] _extension;
 
-	public ComponentDebuggerView(IHandler handler, string description, params IComponentDebuggerExtension[] defaultExtension)
-	{
-		Name = handler.GetComponentName();
-		Description = description;
-		_extension = defaultExtension.Concat(GetExtensions(handler)).ToArray();
-	}
+    public ComponentDebuggerView(IHandler handler, string description,
+        params IComponentDebuggerExtension[] defaultExtension)
+    {
+        Name = handler.GetComponentName();
+        Description = description;
+        _extension = defaultExtension.Concat(GetExtensions(handler)).ToArray();
+    }
 
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public string Description { get; }
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public string Description { get; }
 
-	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-	public object[] Extensions
-	{
-		get { return _extension.SelectMany(e => e.Attach()).ToArray(); }
-	}
+    [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    public object[] Extensions
+    {
+        get { return _extension.SelectMany(e => e.Attach()).ToArray(); }
+    }
 
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public string Name { get; }
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public string Name { get; }
 
-	public static ComponentDebuggerView BuildFor(IHandler handler, string description = null)
-	{
-		var extensions = new List<IComponentDebuggerExtension> { new DefaultComponentViewBuilder(handler) };
-		extensions.AddRange(GetExtensions(handler));
-		return BuildRawFor(handler, description ?? handler.ComponentModel.GetLifestyleDescription(), extensions.ToArray());
-	}
+    public static ComponentDebuggerView BuildFor(IHandler handler, string description = null)
+    {
+        var extensions = new List<IComponentDebuggerExtension> { new DefaultComponentViewBuilder(handler) };
+        extensions.AddRange(GetExtensions(handler));
+        return BuildRawFor(handler, description ?? handler.ComponentModel.GetLifestyleDescription(),
+            extensions.ToArray());
+    }
 
-	public static ComponentDebuggerView BuildRawFor(IHandler handler, string description, IComponentDebuggerExtension[] extensions)
-	{
-		return new ComponentDebuggerView(handler, description, extensions);
-	}
+    public static ComponentDebuggerView BuildRawFor(IHandler handler, string description,
+        IComponentDebuggerExtension[] extensions)
+    {
+        return new ComponentDebuggerView(handler, description, extensions);
+    }
 
-	public static ComponentDebuggerView BuildRawFor(IHandler handler, string description, IEnumerable<object> items)
-	{
-		return new ComponentDebuggerView(handler, description, new ComponentDebuggerExtension(items));
-	}
+    public static ComponentDebuggerView BuildRawFor(IHandler handler, string description, IEnumerable<object> items)
+    {
+        return new ComponentDebuggerView(handler, description, new ComponentDebuggerExtension(items));
+    }
 
-	private static IEnumerable<IComponentDebuggerExtension> GetExtensions(IHandler handler)
-	{
-		var handlerExtensions = handler.ComponentModel.ExtendedProperties["DebuggerExtensions"];
-		return (IEnumerable<IComponentDebuggerExtension>)handlerExtensions ??
-		       [];
-	}
+    private static IEnumerable<IComponentDebuggerExtension> GetExtensions(IHandler handler)
+    {
+        var handlerExtensions = handler.ComponentModel.ExtendedProperties["DebuggerExtensions"];
+        return (IEnumerable<IComponentDebuggerExtension>)handlerExtensions ??
+               [];
+    }
 }

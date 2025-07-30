@@ -21,29 +21,29 @@ namespace Castle.Windsor.Tests;
 
 public class InterceptorsSelectorTestCase
 {
-	[Fact]
-	public void CanApplyInterceptorsToSelectedMethods()
-	{
-		var reporter = new CallReporter();
-		var container = new WindsorContainer();
+    [Fact]
+    public void CanApplyInterceptorsToSelectedMethods()
+    {
+        var reporter = new CallReporter();
+        var container = new WindsorContainer();
 
-		container.Register(
-			Component.For<CallReporter>().Instance(reporter),
-			Component.For<ICatalog>()
-				.ImplementedBy<SimpleCatalog>()
-				.Interceptors(InterceptorReference.ForType<WasCalledInterceptor>())
-				.SelectedWith(new DummyInterceptorSelector()).Anywhere,
-			Component.For<WasCalledInterceptor>()
-		);
+        container.Register(
+            Component.For<CallReporter>().Instance(reporter),
+            Component.For<ICatalog>()
+                .ImplementedBy<SimpleCatalog>()
+                .Interceptors(InterceptorReference.ForType<WasCalledInterceptor>())
+                .SelectedWith(new DummyInterceptorSelector()).Anywhere,
+            Component.For<WasCalledInterceptor>()
+        );
 
-		Assert.False(reporter.WasCalled);
+        Assert.False(reporter.WasCalled);
 
-		var catalog = container.Resolve<ICatalog>();
-		catalog.AddItem("hot dogs");
-		Assert.True(reporter.WasCalled);
+        var catalog = container.Resolve<ICatalog>();
+        catalog.AddItem("hot dogs");
+        Assert.True(reporter.WasCalled);
 
-		reporter.WasCalled = false;
-		catalog.RemoveItem("hot dogs");
-		Assert.False(reporter.WasCalled);
-	}
+        reporter.WasCalled = false;
+        catalog.RemoveItem("hot dogs");
+        Assert.False(reporter.WasCalled);
+    }
 }

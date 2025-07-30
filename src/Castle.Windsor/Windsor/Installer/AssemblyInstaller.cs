@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Registration;
@@ -24,34 +21,37 @@ namespace Castle.Windsor.Windsor.Installer;
 
 public class AssemblyInstaller : IWindsorInstaller
 {
-	private readonly Assembly _assembly;
-	private readonly InstallerFactory _factory;
+    private readonly Assembly _assembly;
+    private readonly InstallerFactory _factory;
 
-	public AssemblyInstaller(Assembly assembly, InstallerFactory factory)
-	{
-		ArgumentNullException.ThrowIfNull(assembly);
-		ArgumentNullException.ThrowIfNull(factory);
-		_assembly = assembly;
-		_factory = factory;
-	}
+    public AssemblyInstaller(Assembly assembly, InstallerFactory factory)
+    {
+        ArgumentNullException.ThrowIfNull(assembly);
+        ArgumentNullException.ThrowIfNull(factory);
+        _assembly = assembly;
+        _factory = factory;
+    }
 
-	public void Install(IWindsorContainer container, IConfigurationStore store)
-	{
-		var installerTypes = _factory.Select(FilterInstallerTypes(_assembly.GetAvailableTypes()));
-		if (installerTypes == null) return;
+    public void Install(IWindsorContainer container, IConfigurationStore store)
+    {
+        var installerTypes = _factory.Select(FilterInstallerTypes(_assembly.GetAvailableTypes()));
+        if (installerTypes == null)
+        {
+            return;
+        }
 
-		foreach (var installerType in installerTypes)
-		{
-			var installer = _factory.CreateInstance(installerType);
-			installer.Install(container, store);
-		}
-	}
+        foreach (var installerType in installerTypes)
+        {
+            var installer = _factory.CreateInstance(installerType);
+            installer.Install(container, store);
+        }
+    }
 
-	private static IEnumerable<Type> FilterInstallerTypes(IEnumerable<Type> types)
-	{
-		return types.Where(t => t.GetTypeInfo().IsClass &&
-		                        t.GetTypeInfo().IsAbstract == false &&
-		                        t.GetTypeInfo().IsGenericTypeDefinition == false &&
-		                        t.Is<IWindsorInstaller>());
-	}
+    private static IEnumerable<Type> FilterInstallerTypes(IEnumerable<Type> types)
+    {
+        return types.Where(t => t.GetTypeInfo().IsClass &&
+                                t.GetTypeInfo().IsAbstract == false &&
+                                t.GetTypeInfo().IsGenericTypeDefinition == false &&
+                                t.Is<IWindsorInstaller>());
+    }
 }

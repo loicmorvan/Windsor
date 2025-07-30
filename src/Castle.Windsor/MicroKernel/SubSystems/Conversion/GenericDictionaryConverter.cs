@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using Castle.Core.Configuration;
@@ -24,98 +22,129 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 [Serializable]
 public class GenericDictionaryConverter : AbstractTypeConverter
 {
-	public override bool CanHandleType(Type type)
-	{
-		if (!type.GetTypeInfo().IsGenericType) return false;
+    public override bool CanHandleType(Type type)
+    {
+        if (!type.GetTypeInfo().IsGenericType)
+        {
+            return false;
+        }
 
-		var genericDef = type.GetGenericTypeDefinition();
+        var genericDef = type.GetGenericTypeDefinition();
 
-		return genericDef == typeof(IDictionary<,>) || genericDef == typeof(Dictionary<,>);
-	}
+        return genericDef == typeof(IDictionary<,>) || genericDef == typeof(Dictionary<,>);
+    }
 
-	public override object PerformConversion(string value, Type targetType)
-	{
-		throw new NotImplementedException();
-	}
+    public override object PerformConversion(string value, Type targetType)
+    {
+        throw new NotImplementedException();
+    }
 
-	public override object PerformConversion(IConfiguration configuration, Type targetType)
-	{
-		Debug.Assert(CanHandleType(targetType), "Got a type we can't handle!");
+    public override object PerformConversion(IConfiguration configuration, Type targetType)
+    {
+        Debug.Assert(CanHandleType(targetType), "Got a type we can't handle!");
 
-		var argTypes = targetType.GetGenericArguments();
+        var argTypes = targetType.GetGenericArguments();
 
-		if (argTypes.Length != 2) throw new ConverterException("Expected type with two generic arguments.");
+        if (argTypes.Length != 2)
+        {
+            throw new ConverterException("Expected type with two generic arguments.");
+        }
 
-		var keyTypeName = configuration.Attributes["keyType"];
-		var defaultKeyType = argTypes[0];
+        var keyTypeName = configuration.Attributes["keyType"];
+        var defaultKeyType = argTypes[0];
 
-		var valueTypeName = configuration.Attributes["valueType"];
-		var defaultValueType = argTypes[1];
+        var valueTypeName = configuration.Attributes["valueType"];
+        var defaultValueType = argTypes[1];
 
-		if (keyTypeName != null) defaultKeyType = Context.Composition.PerformConversion<Type>(keyTypeName);
+        if (keyTypeName != null)
+        {
+            defaultKeyType = Context.Composition.PerformConversion<Type>(keyTypeName);
+        }
 
-		if (valueTypeName != null) defaultValueType = Context.Composition.PerformConversion<Type>(valueTypeName);
+        if (valueTypeName != null)
+        {
+            defaultValueType = Context.Composition.PerformConversion<Type>(valueTypeName);
+        }
 
-		var helperType = typeof(DictionaryHelper<,>).MakeGenericType(defaultKeyType, defaultValueType);
-		var collectionConverterHelper = helperType.CreateInstance<IGenericCollectionConverterHelper>(this);
+        var helperType = typeof(DictionaryHelper<,>).MakeGenericType(defaultKeyType, defaultValueType);
+        var collectionConverterHelper = helperType.CreateInstance<IGenericCollectionConverterHelper>(this);
 
-		return collectionConverterHelper.ConvertConfigurationToCollection(configuration);
-	}
+        return collectionConverterHelper.ConvertConfigurationToCollection(configuration);
+    }
 
-	private class DictionaryHelper<TKey, TValue> : IGenericCollectionConverterHelper
-	{
-		private readonly GenericDictionaryConverter _parent;
+    private class DictionaryHelper<TKey, TValue> : IGenericCollectionConverterHelper
+    {
+        private readonly GenericDictionaryConverter _parent;
 
-		public DictionaryHelper(GenericDictionaryConverter parent)
-		{
-			_parent = parent;
-		}
+        public DictionaryHelper(GenericDictionaryConverter parent)
+        {
+            _parent = parent;
+        }
 
-		public object ConvertConfigurationToCollection(IConfiguration configuration)
-		{
-			var dict = new Dictionary<TKey, TValue>();
-			foreach (var itemConfig in configuration.Children)
-			{
-				// Preparing the key
+        public object ConvertConfigurationToCollection(IConfiguration configuration)
+        {
+            var dict = new Dictionary<TKey, TValue>();
+            foreach (var itemConfig in configuration.Children)
+            {
+                // Preparing the key
 
-				var keyValue = itemConfig.Attributes["key"];
+                var keyValue = itemConfig.Attributes["key"];
 
-				if (keyValue == null) throw new ConverterException("You must provide a key for the dictionary entry");
+                if (keyValue == null)
+                {
+                    throw new ConverterException("You must provide a key for the dictionary entry");
+                }
 
-				var convertKeyTo = typeof(TKey);
+                var convertKeyTo = typeof(TKey);
 
-				if (itemConfig.Attributes["keyType"] != null)
-					convertKeyTo =
-						_parent.Context.Composition.PerformConversion<Type>(itemConfig.Attributes["keyType"]);
+                if (itemConfig.Attributes["keyType"] != null)
+                {
+                    convertKeyTo =
+                        _parent.Context.Composition.PerformConversion<Type>(itemConfig.Attributes["keyType"]);
+                }
 
-				if (convertKeyTo.Is<TKey>() == false)
-					throw new ArgumentException(
-						string.Format("Could not create dictionary<{0},{1}> because {2} is not assignable to key type {0}", typeof(TKey),
-							typeof(TValue), convertKeyTo));
+                if (convertKeyTo.Is<TKey>() == false)
+                {
+                    throw new ArgumentException(
+                        string.Format(
+                            "Could not create dictionary<{0},{1}> because {2} is not assignable to key type {0}",
+                            typeof(TKey),
+                            typeof(TValue), convertKeyTo));
+                }
 
-				var key = (TKey)_parent.Context.Composition.PerformConversion(keyValue, convertKeyTo);
+                var key = (TKey)_parent.Context.Composition.PerformConversion(keyValue, convertKeyTo);
 
-				// Preparing the value
+                // Preparing the value
 
-				var convertValueTo = typeof(TValue);
+                var convertValueTo = typeof(TValue);
 
-				if (itemConfig.Attributes["valueType"] != null)
-					convertValueTo =
-						_parent.Context.Composition.PerformConversion<Type>(itemConfig.Attributes["valueType"]);
+                if (itemConfig.Attributes["valueType"] != null)
+                {
+                    convertValueTo =
+                        _parent.Context.Composition.PerformConversion<Type>(itemConfig.Attributes["valueType"]);
+                }
 
-				if (convertValueTo.Is<TValue>() == false)
-					throw new ArgumentException(
-						string.Format("Could not create dictionary<{0},{1}> because {2} is not assignable to value type {1}",
-							typeof(TKey), typeof(TValue), convertValueTo));
-				if (itemConfig.Children.Count == 1)
-					dict.Add(key,
-						(TValue)_parent.Context.Composition.PerformConversion(itemConfig.Children[0], convertValueTo));
-				else
-					dict.Add(key,
-						(TValue)_parent.Context.Composition.PerformConversion(itemConfig.Value, convertValueTo));
-			}
+                if (convertValueTo.Is<TValue>() == false)
+                {
+                    throw new ArgumentException(
+                        string.Format(
+                            "Could not create dictionary<{0},{1}> because {2} is not assignable to value type {1}",
+                            typeof(TKey), typeof(TValue), convertValueTo));
+                }
 
-			return dict;
-		}
-	}
+                if (itemConfig.Children.Count == 1)
+                {
+                    dict.Add(key,
+                        (TValue)_parent.Context.Composition.PerformConversion(itemConfig.Children[0], convertValueTo));
+                }
+                else
+                {
+                    dict.Add(key,
+                        (TValue)_parent.Context.Composition.PerformConversion(itemConfig.Value, convertValueTo));
+                }
+            }
+
+            return dict;
+        }
+    }
 }

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
@@ -23,30 +22,31 @@ namespace Castle.Windsor.Facilities.TypedFactory.Internal;
 
 public class DelegateProxyFactory : IProxyFactoryExtension
 {
-	public object Generate(IProxyBuilder builder, ProxyGenerationOptions options, IInterceptor[] interceptors, ComponentModel model,
-		CreationContext context)
-	{
-		var targetDelegateType = context.RequestedType;
-		var type = GetProxyType(builder, targetDelegateType);
-		var instance = GetProxyInstance(type, interceptors);
-		var method = GetInvokeDelegate(instance, targetDelegateType);
-		return method;
-	}
+    public object Generate(IProxyBuilder builder, ProxyGenerationOptions options, IInterceptor[] interceptors,
+        ComponentModel model,
+        CreationContext context)
+    {
+        var targetDelegateType = context.RequestedType;
+        var type = GetProxyType(builder, targetDelegateType);
+        var instance = GetProxyInstance(type, interceptors);
+        var method = GetInvokeDelegate(instance, targetDelegateType);
+        return method;
+    }
 
-	private object GetInvokeDelegate(object instance, Type targetDelegateType)
-	{
-		return instance.GetType().GetMethod("Invoke").CreateDelegate(targetDelegateType, instance);
-	}
+    private object GetInvokeDelegate(object instance, Type targetDelegateType)
+    {
+        return instance.GetType().GetMethod("Invoke").CreateDelegate(targetDelegateType, instance);
+    }
 
-	private object GetProxyInstance(Type type, IInterceptor[] interceptors)
-	{
-		return type.CreateInstance<object>(null, interceptors);
-	}
+    private object GetProxyInstance(Type type, IInterceptor[] interceptors)
+    {
+        return type.CreateInstance<object>(null, interceptors);
+    }
 
-	private Type GetProxyType(IProxyBuilder builder, Type targetDelegateType)
-	{
-		var options = new ProxyGenerationOptions();
-		options.AddDelegateTypeMixin(targetDelegateType);
-		return builder.CreateClassProxyType(typeof(object), null, options);
-	}
+    private Type GetProxyType(IProxyBuilder builder, Type targetDelegateType)
+    {
+        var options = new ProxyGenerationOptions();
+        options.AddDelegateTypeMixin(targetDelegateType);
+        return builder.CreateClassProxyType(typeof(object), null, options);
+    }
 }

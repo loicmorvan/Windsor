@@ -16,10 +16,10 @@ namespace Castle.Windsor.Tests.Components;
 
 public class GenericWithCtor<T>
 {
-	public GenericWithCtor(T dependency)
-	{
-		Dependency = dependency;
-	}
+    public GenericWithCtor(T dependency)
+    {
+        Dependency = dependency;
+    }
 
-	public T Dependency { get; private set; }
+    public T Dependency { get; private set; }
 }

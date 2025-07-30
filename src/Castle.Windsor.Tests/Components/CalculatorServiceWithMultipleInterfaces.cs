@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
 
@@ -21,7 +20,7 @@ namespace Castle.Windsor.Tests.Components;
 [Interceptor(typeof(StandardInterceptor))]
 public class CalculatorServiceWithMultipleInterfaces : CalculatorService, IDisposable
 {
-	public void Dispose()
-	{
-	}
+    public void Dispose()
+    {
+    }
 }

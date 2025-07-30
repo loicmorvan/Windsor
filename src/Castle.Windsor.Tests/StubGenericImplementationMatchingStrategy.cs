@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Handlers;
@@ -20,14 +19,14 @@ using Castle.Windsor.MicroKernel.Handlers;
 namespace Castle.Windsor.Tests;
 
 public class StubGenericImplementationMatchingStrategy(Func<ComponentModel, CreationContext, Type[]> result)
-	: IGenericImplementationMatchingStrategy
+    : IGenericImplementationMatchingStrategy
 {
-	public StubGenericImplementationMatchingStrategy(params Type[] result) : this(delegate { return result; })
-	{
-	}
+    public StubGenericImplementationMatchingStrategy(params Type[] result) : this(delegate { return result; })
+    {
+    }
 
-	public Type[] GetGenericArguments(ComponentModel model, CreationContext context)
-	{
-		return result(model, context);
-	}
+    public Type[] GetGenericArguments(ComponentModel model, CreationContext context)
+    {
+        return result(model, context);
+    }
 }

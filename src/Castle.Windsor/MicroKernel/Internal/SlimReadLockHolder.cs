@@ -13,34 +13,37 @@
 // limitations under the License.
 
 using System.ComponentModel;
-using System.Threading;
 
 namespace Castle.Windsor.MicroKernel.Internal;
 
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal class SlimReadLockHolder : ILockHolder
 {
-	private readonly ReaderWriterLockSlim _locker;
+    private readonly ReaderWriterLockSlim _locker;
 
-	public SlimReadLockHolder(ReaderWriterLockSlim locker, bool waitForLock)
-	{
-		_locker = locker;
-		if (waitForLock)
-		{
-			locker.EnterReadLock();
-			LockAcquired = true;
-			return;
-		}
+    public SlimReadLockHolder(ReaderWriterLockSlim locker, bool waitForLock)
+    {
+        _locker = locker;
+        if (waitForLock)
+        {
+            locker.EnterReadLock();
+            LockAcquired = true;
+            return;
+        }
 
-		LockAcquired = locker.TryEnterReadLock(0);
-	}
+        LockAcquired = locker.TryEnterReadLock(0);
+    }
 
-	public void Dispose()
-	{
-		if (!LockAcquired) return;
-		_locker.ExitReadLock();
-		LockAcquired = false;
-	}
+    public void Dispose()
+    {
+        if (!LockAcquired)
+        {
+            return;
+        }
 
-	public bool LockAcquired { get; private set; }
+        _locker.ExitReadLock();
+        LockAcquired = false;
+    }
+
+    public bool LockAcquired { get; private set; }
 }

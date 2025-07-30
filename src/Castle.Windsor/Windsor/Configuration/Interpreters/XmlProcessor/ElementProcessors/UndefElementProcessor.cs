@@ -16,10 +16,10 @@ namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.Element
 
 public class UndefElementProcessor : DefineElementProcessor
 {
-	public override string Name => "undef";
+    public override string Name => "undef";
 
-	protected override void Process(string flag, IXmlProcessorEngine engine)
-	{
-		engine.RemoveFlag(flag);
-	}
+    protected override void Process(string flag, IXmlProcessorEngine engine)
+    {
+        engine.RemoveFlag(flag);
+    }
 }

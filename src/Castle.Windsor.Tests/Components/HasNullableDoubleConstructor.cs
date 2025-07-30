@@ -19,8 +19,8 @@ namespace Castle.Windsor.Tests.Components;
 [UsedImplicitly]
 public class HasNullableDoubleConstructor
 {
-	// ReSharper disable once UnusedParameter.Local
-	public HasNullableDoubleConstructor(double? foo)
-	{
-	}
+    // ReSharper disable once UnusedParameter.Local
+    public HasNullableDoubleConstructor(double? foo)
+    {
+    }
 }

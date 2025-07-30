@@ -17,34 +17,43 @@ using Castle.Windsor.Core;
 namespace Castle.Windsor.Windsor.Diagnostics;
 
 public class DependencyDuplicate(
-	DependencyModel dependency1,
-	DependencyModel dependency2,
-	DependencyDuplicationReason reason)
+    DependencyModel dependency1,
+    DependencyModel dependency2,
+    DependencyDuplicationReason reason)
 {
-	public DependencyModel Dependency1 { get; } = dependency1;
-	public DependencyModel Dependency2 { get; } = dependency2;
-	public DependencyDuplicationReason Reason { get; } = reason;
+    public DependencyModel Dependency1 { get; } = dependency1;
+    public DependencyModel Dependency2 { get; } = dependency2;
+    public DependencyDuplicationReason Reason { get; } = reason;
 
-	public override bool Equals(object obj)
-	{
-		if (ReferenceEquals(null, obj)) return false;
-		if (ReferenceEquals(this, obj)) return true;
-		return obj.GetType() == GetType() && Equals((DependencyDuplicate)obj);
-	}
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj))
+        {
+            return false;
+        }
 
-	public override int GetHashCode()
-	{
-		unchecked
-		{
-			var hashCode = Dependency1 != null ? Dependency1.GetHashCode() : 0;
-			hashCode = (hashCode * 397) ^ (Dependency2 != null ? Dependency2.GetHashCode() : 0);
-			hashCode = (hashCode * 397) ^ Reason.GetHashCode();
-			return hashCode;
-		}
-	}
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
 
-	private bool Equals(DependencyDuplicate other)
-	{
-		return Equals(Dependency1, other.Dependency1) && Equals(Dependency2, other.Dependency2) && Reason.Equals(other.Reason);
-	}
+        return obj.GetType() == GetType() && Equals((DependencyDuplicate)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            var hashCode = Dependency1 != null ? Dependency1.GetHashCode() : 0;
+            hashCode = (hashCode * 397) ^ (Dependency2 != null ? Dependency2.GetHashCode() : 0);
+            hashCode = (hashCode * 397) ^ Reason.GetHashCode();
+            return hashCode;
+        }
+    }
+
+    private bool Equals(DependencyDuplicate other)
+    {
+        return Equals(Dependency1, other.Dependency1) && Equals(Dependency2, other.Dependency2) &&
+               Reason.Equals(other.Reason);
+    }
 }

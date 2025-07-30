@@ -12,27 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.MicroKernel;
-
-using System;
-
 using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.MicroKernel;
 
 /// <summary>Exception threw when there is a problem registering a component</summary>
 [Serializable]
 public class ComponentRegistrationException : Exception
 {
-	/// <summary>Initializes a new instance of the <see cref = "ComponentRegistrationException" /> class.</summary>
-	/// <param name = "message">The message.</param>
+    /// <summary>Initializes a new instance of the <see cref="ComponentRegistrationException" /> class.</summary>
+    /// <param name="message">The message.</param>
 	public ComponentRegistrationException(string message) : base(message)
-	{
-		this.SetUp();
-	}
+    {
+        this.SetUp();
+    }
 
-	public ComponentRegistrationException(string message, Exception innerException)
-		: base(message, innerException)
-	{
-		this.SetUp();
-	}
-
+    public ComponentRegistrationException(string message, Exception innerException)
+        : base(message, innerException)
+    {
+        this.SetUp();
+    }
 }

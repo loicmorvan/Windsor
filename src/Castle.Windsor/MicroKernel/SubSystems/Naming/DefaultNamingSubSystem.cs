@@ -12,18 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Castle.Windsor.Core.Internal;
-using Castle.Windsor.MicroKernel.Internal;
 using Castle.Windsor.MicroKernel.Util;
 using JetBrains.Annotations;
+using Lock = Castle.Windsor.MicroKernel.Internal.Lock;
 
 namespace Castle.Windsor.MicroKernel.SubSystems.Naming;
-
-using Lock = Lock;
 
 [Serializable]
 public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem

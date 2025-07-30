@@ -16,10 +16,10 @@ namespace Castle.Windsor.Tests.Components;
 
 public class CompA
 {
-	public CompA(CompB compb)
-	{
-		Compb = compb;
-	}
+    public CompA(CompB compb)
+    {
+        Compb = compb;
+    }
 
-	public CompB Compb { get; private set; }
+    public CompB Compb { get; private set; }
 }

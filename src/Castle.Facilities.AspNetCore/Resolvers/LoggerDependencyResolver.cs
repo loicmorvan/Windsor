@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Context;
@@ -23,30 +22,32 @@ namespace Castle.Facilities.AspNetCore.Resolvers;
 
 public class LoggerDependencyResolver : ISubDependencyResolver, IAcceptServiceProvider
 {
-	private IServiceProvider _serviceProvider;
+    private IServiceProvider _serviceProvider;
 
-	public void AcceptServiceProvider(IServiceProvider serviceProvider)
-	{
-		_serviceProvider = serviceProvider;
-	}
+    public void AcceptServiceProvider(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
 
-	public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
-		DependencyModel dependency)
-	{
-		return dependency.TargetType == typeof(ILogger);
-	}
+    public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+        DependencyModel dependency)
+    {
+        return dependency.TargetType == typeof(ILogger);
+    }
 
-	public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
-		DependencyModel dependency)
-	{
-		ThrowIfServiceProviderIsNull();
-		return _serviceProvider.GetService<ILoggerFactory>().CreateLogger(model.Name);
-	}
+    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+        DependencyModel dependency)
+    {
+        ThrowIfServiceProviderIsNull();
+        return _serviceProvider.GetService<ILoggerFactory>().CreateLogger(model.Name);
+    }
 
-	private void ThrowIfServiceProviderIsNull()
-	{
-		if (_serviceProvider == null)
-			throw new InvalidOperationException(
-				"The serviceProvider for this resolver is null. Please call AcceptServiceProvider first.");
-	}
+    private void ThrowIfServiceProviderIsNull()
+    {
+        if (_serviceProvider == null)
+        {
+            throw new InvalidOperationException(
+                "The serviceProvider for this resolver is null. Please call AcceptServiceProvider first.");
+        }
+    }
 }

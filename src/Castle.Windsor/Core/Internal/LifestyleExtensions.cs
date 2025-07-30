@@ -14,12 +14,10 @@
 
 namespace Castle.Windsor.Core.Internal;
 
-using System;
-
 public static class LifestyleExtensions
 {
-	public static Type GetScopeAccessorType(this ComponentModel model)
-	{
-		return (Type)model.ExtendedProperties[Constants.ScopeAccessorType];
-	}
+    public static Type GetScopeAccessorType(this ComponentModel model)
+    {
+        return (Type)model.ExtendedProperties[Constants.ScopeAccessorType];
+    }
 }

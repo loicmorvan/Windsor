@@ -16,7 +16,7 @@ namespace Castle.Windsor.Facilities.TypedFactory.Internal;
 
 public enum FactoryMethod
 {
-	Resolve,
-	Release,
-	Dispose
+    Resolve,
+    Release,
+    Dispose
 }

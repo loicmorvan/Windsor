@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class User
 {
-	public FiscalStability FiscalStability { get; set; }
+    public FiscalStability FiscalStability { get; set; }
 }

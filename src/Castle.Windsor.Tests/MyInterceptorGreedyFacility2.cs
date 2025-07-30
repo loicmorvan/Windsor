@@ -1,4 +1,3 @@
-using System.Linq;
 using Castle.Core.Configuration;
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;

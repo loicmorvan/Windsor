@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Windsor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,42 +19,42 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Castle.Facilities.AspNetCore.Tests.Framework;
 
 public sealed class TestContext(
-	IServiceCollection serviceCollection,
-	IServiceProvider serviceProvider,
-	IApplicationBuilder applicationBuilder,
-	IWindsorContainer container,
-	IDisposable windsorScope)
-	: IDisposable
+    IServiceCollection serviceCollection,
+    IServiceProvider serviceProvider,
+    IApplicationBuilder applicationBuilder,
+    IWindsorContainer container,
+    IDisposable windsorScope)
+    : IDisposable
 {
-	public IApplicationBuilder ApplicationBuilder { get; } = applicationBuilder;
-	public IServiceCollection ServiceCollection { get; } = serviceCollection;
-	public IServiceProvider ServiceProvider { get; private set; } = serviceProvider;
+    public IApplicationBuilder ApplicationBuilder { get; } = applicationBuilder;
+    public IServiceCollection ServiceCollection { get; } = serviceCollection;
+    public IServiceProvider ServiceProvider { get; private set; } = serviceProvider;
 
-	private IDisposable WindsorScope { get; set; } = windsorScope;
-	public IWindsorContainer WindsorContainer { get; private set; } = container;
+    private IDisposable WindsorScope { get; set; } = windsorScope;
+    public IWindsorContainer WindsorContainer { get; private set; } = container;
 
-	public void Dispose()
-	{
-		WindsorScope?.Dispose();
-		WindsorContainer?.Dispose();
-		(ServiceProvider as IDisposable)?.Dispose();
-	}
+    public void Dispose()
+    {
+        WindsorScope?.Dispose();
+        WindsorContainer?.Dispose();
+        (ServiceProvider as IDisposable)?.Dispose();
+    }
 
-	public void DisposeServiceProvider()
-	{
-		(ServiceProvider as IDisposable)?.Dispose();
-		ServiceProvider = null;
-	}
+    public void DisposeServiceProvider()
+    {
+        (ServiceProvider as IDisposable)?.Dispose();
+        ServiceProvider = null;
+    }
 
-	public void DisposeWindsorContainer()
-	{
-		WindsorContainer.Dispose();
-		WindsorContainer = null;
-	}
+    public void DisposeWindsorContainer()
+    {
+        WindsorContainer.Dispose();
+        WindsorContainer = null;
+    }
 
-	public void DisposeWindsorScope()
-	{
-		WindsorScope.Dispose();
-		WindsorScope = null;
-	}
+    public void DisposeWindsorScope()
+    {
+        WindsorScope.Dispose();
+        WindsorScope = null;
+    }
 }

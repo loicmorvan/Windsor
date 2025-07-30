@@ -12,36 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Bugs.IoC_78;
-
 using Castle.Windsor.MicroKernel.Handlers;
 using Castle.Windsor.MicroKernel.Registration;
 
+namespace Castle.Windsor.Tests.Bugs.IoC_78;
+
 public class IoC78 : AbstractContainerTestCase
 {
-	[Fact]
-	public void Will_Ignore_Components_Already_in_Dependency_Tracker_Constructor()
-	{
-		Container.Register(Component.For<IChain>().ImplementedBy<MyChain>().Named("chain"));
-		Container.Register(Component.For<IChain>().ImplementedBy<MyChain2>().Named("chain2"));
+    [Fact]
+    public void Will_Ignore_Components_Already_in_Dependency_Tracker_Constructor()
+    {
+        Container.Register(Component.For<IChain>().ImplementedBy<MyChain>().Named("chain"));
+        Container.Register(Component.For<IChain>().ImplementedBy<MyChain2>().Named("chain2"));
 
-		var resolve = Container.Resolve<IChain>("chain2");
-		Assert.NotNull(resolve);
-	}
+        var resolve = Container.Resolve<IChain>("chain2");
+        Assert.NotNull(resolve);
+    }
 
-	[Fact]
-	public void Will_Ignore_Components_Already_in_Dependency_Tracker_Property()
-	{
-		Container.Register(Component.For<IChain>().ImplementedBy<MyChain3>());
+    [Fact]
+    public void Will_Ignore_Components_Already_in_Dependency_Tracker_Property()
+    {
+        Container.Register(Component.For<IChain>().ImplementedBy<MyChain3>());
 
-		var chain3 = (MyChain3)Container.Resolve<IChain>();
-		Assert.Null(chain3.Chain);
-	}
+        var chain3 = (MyChain3)Container.Resolve<IChain>();
+        Assert.Null(chain3.Chain);
+    }
 
-	[Fact]
-	public void Will_Not_Try_To_Resolve_Component_To_Itself()
-	{
-		Container.Register(Component.For<IChain>().ImplementedBy<MyChain4>());
-		Assert.Throws<HandlerException>(() => Container.Resolve<IChain>());
-	}
+    [Fact]
+    public void Will_Not_Try_To_Resolve_Component_To_Itself()
+    {
+        Container.Register(Component.For<IChain>().ImplementedBy<MyChain4>());
+        Assert.Throws<HandlerException>(() => Container.Resolve<IChain>());
+    }
 }

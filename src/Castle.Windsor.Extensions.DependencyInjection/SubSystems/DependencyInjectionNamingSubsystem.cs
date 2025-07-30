@@ -13,77 +13,93 @@
 // limitations under the License.
 
 
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.SubSystems.Naming;
 
-namespace Castle.Windsor.Extensions.DependencyInjection.SubSystems
+namespace Castle.Windsor.Extensions.DependencyInjection.SubSystems;
+
+/// <summary>Naming subsystem based on DefaultNamingSubSystem but GetHandlers returns handlers in registration order</summary>
+public class DependencyInjectionNamingSubsystem : DefaultNamingSubSystem
 {
-	/// <summary>Naming subsystem based on DefaultNamingSubSystem but GetHandlers returns handlers in registration order</summary>
-	public class DependencyInjectionNamingSubsystem : DefaultNamingSubSystem
-	{
-		private IHandler[] GetHandlersInRegisterOrderNoLock(Type service)
-		{
-			var handlers = new List<IHandler>();
-			foreach (var handler in Name2Handler.Values)
-			{
-				if (handler.Supports(service) == false) continue;
+    private IHandler[] GetHandlersInRegisterOrderNoLock(Type service)
+    {
+        var handlers = new List<IHandler>();
+        foreach (var handler in Name2Handler.Values)
+        {
+            if (handler.Supports(service) == false)
+            {
+                continue;
+            }
 
-				handlers.Add(handler);
-			}
+            handlers.Add(handler);
+        }
 
-			return handlers.ToArray();
-		}
+        return handlers.ToArray();
+    }
 
-		public override IHandler[] GetHandlers(Type service)
-		{
-			ArgumentNullException.ThrowIfNull(service);
-			if (Filters != null)
-			{
-				var filtersOpinion = GetFiltersOpinion(service);
-				if (filtersOpinion != null) return filtersOpinion;
-			}
+    public override IHandler[] GetHandlers(Type service)
+    {
+        ArgumentNullException.ThrowIfNull(service);
+        if (Filters != null)
+        {
+            var filtersOpinion = GetFiltersOpinion(service);
+            if (filtersOpinion != null)
+            {
+                return filtersOpinion;
+            }
+        }
 
-			using var locker = Lock.ForReadingUpgradeable();
-			if (HandlerListsByTypeCache.TryGetValue(service, out var result))
-			{
-				return result;
-			}
+        using var locker = Lock.ForReadingUpgradeable();
+        if (HandlerListsByTypeCache.TryGetValue(service, out var result))
+        {
+            return result;
+        }
 
-			result = GetHandlersInRegisterOrderNoLock(service);
+        result = GetHandlersInRegisterOrderNoLock(service);
 
-			locker.Upgrade();
-			HandlerListsByTypeCache[service] = result;
+        locker.Upgrade();
+        HandlerListsByTypeCache[service] = result;
 
-			return result;
-		}
+        return result;
+    }
 
-		public override IHandler GetHandler(Type service)
-		{
-			ArgumentNullException.ThrowIfNull(service);
-			if (Selectors != null)
-			{
-				var selectorsOpinion = GetSelectorsOpinion(null, service);
-				if (selectorsOpinion != null) return selectorsOpinion;
-			}
+    public override IHandler GetHandler(Type service)
+    {
+        ArgumentNullException.ThrowIfNull(service);
+        if (Selectors != null)
+        {
+            var selectorsOpinion = GetSelectorsOpinion(null, service);
+            if (selectorsOpinion != null)
+            {
+                return selectorsOpinion;
+            }
+        }
 
-			if (HandlerByServiceCache.TryGetValue(service, out var handler)) return handler;
+        if (HandlerByServiceCache.TryGetValue(service, out var handler))
+        {
+            return handler;
+        }
 
-			if (service.GetTypeInfo().IsGenericType && service.GetTypeInfo().IsGenericTypeDefinition == false)
-			{
-				var openService = service.GetGenericTypeDefinition();
-				if (HandlerByServiceCache.TryGetValue(openService, out handler) && handler.Supports(service)) return handler;
+        if (service.GetTypeInfo().IsGenericType && service.GetTypeInfo().IsGenericTypeDefinition == false)
+        {
+            var openService = service.GetGenericTypeDefinition();
+            if (HandlerByServiceCache.TryGetValue(openService, out handler) && handler.Supports(service))
+            {
+                return handler;
+            }
 
-				//use original, priority-based GetHandlers
-				var handlerCandidates = base.GetHandlers(openService);
-				foreach (var handlerCandidate in handlerCandidates)
-					if (handlerCandidate.Supports(service))
-						return handlerCandidate;
-			}
+            //use original, priority-based GetHandlers
+            var handlerCandidates = base.GetHandlers(openService);
+            foreach (var handlerCandidate in handlerCandidates)
+            {
+                if (handlerCandidate.Supports(service))
+                {
+                    return handlerCandidate;
+                }
+            }
+        }
 
-			return null;
-		}
-	}
+        return null;
+    }
 }

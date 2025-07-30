@@ -17,8 +17,8 @@ namespace Castle.Windsor.Tests.Components;
 //[Castle.Core.Transient] //Test passes if this attributed added
 public class RepositoryNotMarkedAsTransient<T> : IRepository<T> where T : new()
 {
-	public T Get(int id)
-	{
-		return new T();
-	}
+    public T Get(int id)
+    {
+        return new T();
+    }
 }

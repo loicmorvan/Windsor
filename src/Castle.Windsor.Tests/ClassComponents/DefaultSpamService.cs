@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class DefaultSpamService
 {
-	public DefaultMailSenderService MailSender { get; set; }
+    public DefaultMailSenderService MailSender { get; set; }
 
-	public DefaultTemplateEngine TemplateEngine { get; set; }
+    public DefaultTemplateEngine TemplateEngine { get; set; }
 }

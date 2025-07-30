@@ -12,21 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core.Internal;
-
 using System.Diagnostics;
 
+namespace Castle.Windsor.Core.Internal;
+
 /// <summary>
-///     Marker class used to denote components that have late bound type That is the actual type is not known exactly at the time when <see cref = "ComponentModel" /> is created. Those are for example
+///     Marker class used to denote components that have late bound type That is the actual type is not known exactly at
+///     the time when <see cref="ComponentModel" /> is created. Those are for example
 ///     components instantiated via abstract factory.
 /// </summary>
 public sealed class LateBoundComponent
 {
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public static readonly object Instance = new LateBoundComponent();
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public static readonly object Instance = new LateBoundComponent();
 
-	public override string ToString()
-	{
-		return "Late bound component, actual type is not known statically.";
-	}
+    public override string ToString()
+    {
+        return "Late bound component, actual type is not known statically.";
+    }
 }

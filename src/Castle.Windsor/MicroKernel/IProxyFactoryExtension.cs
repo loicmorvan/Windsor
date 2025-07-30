@@ -20,5 +20,6 @@ namespace Castle.Windsor.MicroKernel;
 
 public interface IProxyFactoryExtension
 {
-	object Generate(IProxyBuilder builder, ProxyGenerationOptions options, IInterceptor[] interceptors, ComponentModel model, CreationContext context);
+    object Generate(IProxyBuilder builder, ProxyGenerationOptions options, IInterceptor[] interceptors,
+        ComponentModel model, CreationContext context);
 }

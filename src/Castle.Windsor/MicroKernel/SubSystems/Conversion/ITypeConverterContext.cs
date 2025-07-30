@@ -19,13 +19,13 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 public interface ITypeConverterContext
 {
-	ITypeConverter Composition { get; }
+    ITypeConverter Composition { get; }
 
-	CreationContext CurrentCreationContext { get; }
-	ComponentModel CurrentModel { get; }
-	IKernelInternal Kernel { get; }
+    CreationContext CurrentCreationContext { get; }
+    ComponentModel CurrentModel { get; }
+    IKernelInternal Kernel { get; }
 
-	void Pop();
+    void Pop();
 
-	void Push(ComponentModel model, CreationContext context);
+    void Push(ComponentModel model, CreationContext context);
 }

@@ -12,18 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core;
-
-using System;
-
 using Castle.Core.Configuration;
+
+namespace Castle.Windsor.Core;
 
 /// <summary>Represents meta information associated with a method (not yet defined)</summary>
 [Serializable]
 public class MethodMetaModel
 {
-	/// <summary>Initializes a new instance of the <see cref = "MethodMetaModel" /> class.</summary>
-	/// <param name = "configNode">The config node.</param>
+	/// <summary>Initializes a new instance of the <see cref="MethodMetaModel" /> class.</summary>
+	/// <param name="configNode">The config node.</param>
 	public MethodMetaModel(IConfiguration configNode)
 	{
 		ConfigNode = configNode;

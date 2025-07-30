@@ -16,8 +16,8 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ComponentWithStringProperty
 {
-	/// <summary>Initializes a new instance of the <see cref = "ComponentWithStringProperty" /> class.</summary>
-	/// <param name = "name">The name.</param>
+	/// <summary>Initializes a new instance of the <see cref="ComponentWithStringProperty" /> class.</summary>
+	/// <param name="name">The name.</param>
 	public ComponentWithStringProperty(string name)
 	{
 		Name = name;

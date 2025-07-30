@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
 
@@ -20,111 +19,112 @@ namespace Castle.Windsor.Tests;
 
 public class ConfigureDecoratorsTestCase
 {
-	[Fact]
-	public void ShouldResolveComponentFromParent()
-	{
-		var parent = new WindsorContainer();
-		var child = new WindsorContainer();
-		parent.AddChildContainer(child);
-		parent.Register(
-			Component.For<IDoNothingService>().ImplementedBy<DoNothingService>().Named("DoNothingService"),
-			Component.For<IDoSomethingService>().ImplementedBy<DoSomethingService>().Named("DoSomethingService"));
+    [Fact]
+    public void ShouldResolveComponentFromParent()
+    {
+        var parent = new WindsorContainer();
+        var child = new WindsorContainer();
+        parent.AddChildContainer(child);
+        parent.Register(
+            Component.For<IDoNothingService>().ImplementedBy<DoNothingService>().Named("DoNothingService"),
+            Component.For<IDoSomethingService>().ImplementedBy<DoSomethingService>().Named("DoSomethingService"));
 
-		Assert.NotNull(child.Resolve<IDoNothingService>());
-		Assert.NotNull(child.Resolve<IDoSomethingService>());
-	}
+        Assert.NotNull(child.Resolve<IDoNothingService>());
+        Assert.NotNull(child.Resolve<IDoSomethingService>());
+    }
 
-	[Fact]
-	public void ShouldResolveDecoratedComponent()
-	{
-		var container = new WindsorContainer();
-		container.Register(
-			Component.For<IDoNothingService>().ImplementedBy<DoNothingServiceDecorator>().Named("DoNothingServiceDecorator"),
-			Component.For<IDoNothingService>().ImplementedBy<DoNothingService>().Named("DoNothingService"));
-		var service = container.Resolve<IDoNothingService>();
+    [Fact]
+    public void ShouldResolveDecoratedComponent()
+    {
+        var container = new WindsorContainer();
+        container.Register(
+            Component.For<IDoNothingService>().ImplementedBy<DoNothingServiceDecorator>()
+                .Named("DoNothingServiceDecorator"),
+            Component.For<IDoNothingService>().ImplementedBy<DoNothingService>().Named("DoNothingService"));
+        var service = container.Resolve<IDoNothingService>();
 
-		Assert.IsType<DoNothingServiceDecorator>(service);
-		Assert.IsType<DoNothingService>(((DoNothingServiceDecorator)service).Inner);
-	}
+        Assert.IsType<DoNothingServiceDecorator>(service);
+        Assert.IsType<DoNothingService>(((DoNothingServiceDecorator)service).Inner);
+    }
 
-	[Fact]
-	public void ShouldResolveDecoratedComponentFromGrandParent()
-	{
-		var grandParent = new WindsorContainer();
-		var parent = new WindsorContainer();
-		var child = new WindsorContainer();
-		grandParent.AddChildContainer(parent);
-		parent.AddChildContainer(child);
-		grandParent.Register(
-			Component.For(typeof(IDoNothingService)).ImplementedBy<DoNothingServiceDecorator>().Named(
-				"DoNothingServiceDecorator"));
-		grandParent.Register(
-			Component.For(typeof(IDoNothingService)).ImplementedBy<DoNothingService>().Named("DoNothingService"));
-		var service = child.Resolve<IDoNothingService>();
-		Assert.NotNull(service);
-		Assert.IsType<DoNothingServiceDecorator>(service);
-	}
+    [Fact]
+    public void ShouldResolveDecoratedComponentFromGrandParent()
+    {
+        var grandParent = new WindsorContainer();
+        var parent = new WindsorContainer();
+        var child = new WindsorContainer();
+        grandParent.AddChildContainer(parent);
+        parent.AddChildContainer(child);
+        grandParent.Register(
+            Component.For(typeof(IDoNothingService)).ImplementedBy<DoNothingServiceDecorator>().Named(
+                "DoNothingServiceDecorator"));
+        grandParent.Register(
+            Component.For(typeof(IDoNothingService)).ImplementedBy<DoNothingService>().Named("DoNothingService"));
+        var service = child.Resolve<IDoNothingService>();
+        Assert.NotNull(service);
+        Assert.IsType<DoNothingServiceDecorator>(service);
+    }
 
-	[Fact]
-	public void ShouldResolveDecoratedComponentFromParent()
-	{
-		var parent = new WindsorContainer();
-		var child = new WindsorContainer();
-		parent.AddChildContainer(child);
-		parent.Register(
-			Component.For(typeof(IDoNothingService)).ImplementedBy<DoNothingServiceDecorator>().Named(
-				"DoNothingServiceDecorator"));
-		parent.Register(
-			Component.For(typeof(IDoNothingService)).ImplementedBy<DoNothingService>().Named("DoNothingService"));
-		child.Register(
-			Component.For(typeof(IDoSomethingService)).ImplementedBy<DoSomethingService>().Named("DoSometingService"));
-		var service = child.Resolve<IDoNothingService>();
-		Assert.NotNull(service);
-		Assert.IsType<DoNothingServiceDecorator>(service);
-	}
+    [Fact]
+    public void ShouldResolveDecoratedComponentFromParent()
+    {
+        var parent = new WindsorContainer();
+        var child = new WindsorContainer();
+        parent.AddChildContainer(child);
+        parent.Register(
+            Component.For(typeof(IDoNothingService)).ImplementedBy<DoNothingServiceDecorator>().Named(
+                "DoNothingServiceDecorator"));
+        parent.Register(
+            Component.For(typeof(IDoNothingService)).ImplementedBy<DoNothingService>().Named("DoNothingService"));
+        child.Register(
+            Component.For(typeof(IDoSomethingService)).ImplementedBy<DoSomethingService>().Named("DoSometingService"));
+        var service = child.Resolve<IDoNothingService>();
+        Assert.NotNull(service);
+        Assert.IsType<DoNothingServiceDecorator>(service);
+    }
 
-	private interface IDoNothingService
-	{
-		void DoNothing();
-	}
+    private interface IDoNothingService
+    {
+        void DoNothing();
+    }
 
-	private interface IDoSomethingService
-	{
-		void DoSomething();
-	}
+    private interface IDoSomethingService
+    {
+        void DoSomething();
+    }
 
-	private class DoNothingService : IDoNothingService
-	{
-		public void DoNothing()
-		{
-			throw new NotImplementedException();
-		}
-	}
+    private class DoNothingService : IDoNothingService
+    {
+        public void DoNothing()
+        {
+            throw new NotImplementedException();
+        }
+    }
 
-	private class DoNothingServiceDecorator : IDoNothingService
-	{
-		public DoNothingServiceDecorator(IDoNothingService inner)
-		{
-			Inner = inner;
-		}
+    private class DoNothingServiceDecorator : IDoNothingService
+    {
+        public DoNothingServiceDecorator(IDoNothingService inner)
+        {
+            Inner = inner;
+        }
 
-		public IDoNothingService Inner { get; }
+        public IDoNothingService Inner { get; }
 
-		public void DoNothing()
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public void DoNothing()
+        {
+            throw new NotImplementedException();
+        }
+    }
 
-	private class DoSomethingService : IDoSomethingService
-	{
-		public DoSomethingService(IDoNothingService service)
-		{
-		}
+    private class DoSomethingService : IDoSomethingService
+    {
+        public DoSomethingService(IDoNothingService service)
+        {
+        }
 
-		public void DoSomething()
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public void DoSomething()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

@@ -14,14 +14,12 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-using System;
-
 public class DisposableComponent : IDisposable
 {
-	public bool Disposed { get; set; }
+    public bool Disposed { get; set; }
 
-	public void Dispose()
-	{
-		Disposed = true;
-	}
+    public void Dispose()
+    {
+        Disposed = true;
+    }
 }

@@ -17,11 +17,11 @@ using Castle.Windsor.Core;
 namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
 
 public class OnDestroyConcern<TComponent>(LifecycleActionDelegate<TComponent> action, IKernel kernel)
-	: IDecommissionConcern
+    : IDecommissionConcern
 {
-	public void Apply(ComponentModel model, object component)
-	{
-		var item = (TComponent)component;
-		action(kernel, item);
-	}
+    public void Apply(ComponentModel model, object component)
+    {
+        var item = (TComponent)component;
+        action(kernel, item);
+    }
 }

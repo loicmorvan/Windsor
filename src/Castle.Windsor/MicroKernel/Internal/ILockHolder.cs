@@ -14,9 +14,7 @@
 
 namespace Castle.Windsor.MicroKernel.Internal;
 
-using System;
-
 public interface ILockHolder : IDisposable
 {
-	bool LockAcquired { get; }
+    bool LockAcquired { get; }
 }

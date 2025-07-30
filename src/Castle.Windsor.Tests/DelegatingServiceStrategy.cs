@@ -1,4 +1,3 @@
-using System;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Handlers;
 

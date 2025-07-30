@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
-
 namespace Castle.Windsor.Windsor.Diagnostics;
 
 public class ComponentDebuggerExtension(IEnumerable<object> items) : IComponentDebuggerExtension
 {
-	public IEnumerable<object> Attach()
-	{
-		return items;
-	}
+    public IEnumerable<object> Attach()
+    {
+        return items;
+    }
 }

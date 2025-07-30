@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Xml;
 using Castle.Core.Configuration;
 using Castle.Core.Configuration.Xml;
@@ -48,13 +47,13 @@ public sealed class XmlInterpreter : AbstractInterpreter
 {
     /// <summary>Initializes a new instance of the <see cref="XmlInterpreter" /> class.</summary>
     /// <param name="filename">The filename.</param>
-	public XmlInterpreter(string filename) : base(filename)
+    public XmlInterpreter(string filename) : base(filename)
     {
     }
 
     /// <summary>Initializes a new instance of the <see cref="XmlInterpreter" /> class.</summary>
     /// <param name="source">The source.</param>
-	public XmlInterpreter(IResource source) : base(source)
+    public XmlInterpreter(IResource source) : base(source)
     {
     }
 

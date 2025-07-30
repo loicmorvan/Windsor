@@ -20,13 +20,13 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class InterceptorSelectorDescriptor(IReference<IInterceptorSelector> selector) : IComponentModelDescriptor
 {
-	public void BuildComponentModel(IKernel kernel, ComponentModel model)
-	{
-		var options = model.ObtainProxyOptions();
-		options.Selector = selector;
-	}
+    public void BuildComponentModel(IKernel kernel, ComponentModel model)
+    {
+        var options = model.ObtainProxyOptions();
+        options.Selector = selector;
+    }
 
-	public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-	{
-	}
+    public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+    {
+    }
 }

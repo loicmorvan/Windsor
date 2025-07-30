@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 
-	<facilities>
+    <facilities>
 
-		<facility type="NoopFacility">
-			<item>value</item>
-		</facility>
+        <facility type="NoopFacility">
+            <item>value</item>
+        </facility>
 
-		<facility type="Noop2Facility">
-			<![CDATA[value within CDATA section]]>
-		</facility>
+        <facility type="Noop2Facility">
+            <![CDATA[value within CDATA section]]>
+        </facility>
 
-	</facilities>
+    </facilities>
 
 </configuration>

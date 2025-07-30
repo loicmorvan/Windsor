@@ -12,28 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core;
-
-using System;
-
 using Castle.Core.Configuration;
+
+namespace Castle.Windsor.Core;
 
 /// <summary>Represents a parameter. Usually the parameter comes from the external world, ie, an external configuration.</summary>
 [Serializable]
 public class ParameterModel
 {
-	/// <summary>Initializes a new instance of the <see cref = "ParameterModel" /> class.</summary>
-	/// <param name = "name">The name.</param>
-	/// <param name = "value">The value.</param>
+	/// <summary>Initializes a new instance of the <see cref="ParameterModel" /> class.</summary>
+	/// <param name="name">The name.</param>
+	/// <param name="value">The value.</param>
 	public ParameterModel(string name, string value)
 	{
 		Name = name;
 		Value = value;
 	}
 
-	/// <summary>Initializes a new instance of the <see cref = "ParameterModel" /> class.</summary>
-	/// <param name = "name">The name.</param>
-	/// <param name = "value">The value.</param>
+	/// <summary>Initializes a new instance of the <see cref="ParameterModel" /> class.</summary>
+	/// <param name="name">The name.</param>
+	/// <param name="value">The value.</param>
 	public ParameterModel(string name, IConfiguration value)
 	{
 		Name = name;

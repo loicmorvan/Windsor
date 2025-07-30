@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Castle.Core.Configuration;
 
@@ -23,58 +21,74 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 [Serializable]
 public class DictionaryConverter : AbstractTypeConverter
 {
-	public override bool CanHandleType(Type type)
-	{
-		return type == typeof(IDictionary) || type == typeof(Hashtable);
-	}
+    public override bool CanHandleType(Type type)
+    {
+        return type == typeof(IDictionary) || type == typeof(Hashtable);
+    }
 
-	public override object PerformConversion(string value, Type targetType)
-	{
-		throw new NotImplementedException();
-	}
+    public override object PerformConversion(string value, Type targetType)
+    {
+        throw new NotImplementedException();
+    }
 
-	public override object PerformConversion(IConfiguration configuration, Type targetType)
-	{
-		Debug.Assert(CanHandleType(targetType));
+    public override object PerformConversion(IConfiguration configuration, Type targetType)
+    {
+        Debug.Assert(CanHandleType(targetType));
 
-		var dict = new Dictionary<object, object>();
+        var dict = new Dictionary<object, object>();
 
-		var keyTypeName = configuration.Attributes["keyType"];
-		var defaultKeyType = typeof(string);
+        var keyTypeName = configuration.Attributes["keyType"];
+        var defaultKeyType = typeof(string);
 
-		var valueTypeName = configuration.Attributes["valueType"];
-		var defaultValueType = typeof(string);
+        var valueTypeName = configuration.Attributes["valueType"];
+        var defaultValueType = typeof(string);
 
-		if (keyTypeName != null) defaultKeyType = Context.Composition.PerformConversion<Type>(keyTypeName);
-		if (valueTypeName != null) defaultValueType = Context.Composition.PerformConversion<Type>(valueTypeName);
+        if (keyTypeName != null)
+        {
+            defaultKeyType = Context.Composition.PerformConversion<Type>(keyTypeName);
+        }
 
-		foreach (var itemConfig in configuration.Children)
-		{
-			// Preparing the key
+        if (valueTypeName != null)
+        {
+            defaultValueType = Context.Composition.PerformConversion<Type>(valueTypeName);
+        }
 
-			var keyValue = itemConfig.Attributes["key"];
+        foreach (var itemConfig in configuration.Children)
+        {
+            // Preparing the key
 
-			if (keyValue == null) throw new ConverterException("You must provide a key for the dictionary entry");
+            var keyValue = itemConfig.Attributes["key"];
 
-			var convertKeyTo = defaultKeyType;
+            if (keyValue == null)
+            {
+                throw new ConverterException("You must provide a key for the dictionary entry");
+            }
 
-			if (itemConfig.Attributes["keyType"] != null) convertKeyTo = Context.Composition.PerformConversion<Type>(itemConfig.Attributes["keyType"]);
+            var convertKeyTo = defaultKeyType;
 
-			var key = Context.Composition.PerformConversion(keyValue, convertKeyTo);
+            if (itemConfig.Attributes["keyType"] != null)
+            {
+                convertKeyTo = Context.Composition.PerformConversion<Type>(itemConfig.Attributes["keyType"]);
+            }
 
-			// Preparing the value
+            var key = Context.Composition.PerformConversion(keyValue, convertKeyTo);
 
-			var convertValueTo = defaultValueType;
+            // Preparing the value
 
-			if (itemConfig.Attributes["valueType"] != null) convertValueTo = Context.Composition.PerformConversion<Type>(itemConfig.Attributes["valueType"]);
+            var convertValueTo = defaultValueType;
 
-			var value = Context.Composition.PerformConversion(itemConfig.Children.Count == 0
-				? itemConfig
-				: itemConfig.Children[0], convertValueTo);
+            if (itemConfig.Attributes["valueType"] != null)
+            {
+                convertValueTo = Context.Composition.PerformConversion<Type>(itemConfig.Attributes["valueType"]);
+            }
 
-			dict.Add(key, value);
-		}
+            var value = Context.Composition.PerformConversion(itemConfig.Children.Count == 0
+                ? itemConfig
+                : itemConfig.Children[0], convertValueTo);
 
-		return dict;
-	}
+            dict.Add(key, value);
+        }
+
+        return dict;
+    }
 }

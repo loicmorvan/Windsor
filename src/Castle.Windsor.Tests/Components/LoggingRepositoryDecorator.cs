@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.Components;
@@ -20,20 +19,20 @@ namespace Castle.Windsor.Tests.Components;
 [UsedImplicitly]
 public class LoggingRepositoryDecorator<T> : IRepository<T>
 {
-	public readonly IRepository<T> Inner;
+    public readonly IRepository<T> Inner;
 
-	public LoggingRepositoryDecorator()
-	{
-	}
+    public LoggingRepositoryDecorator()
+    {
+    }
 
-	public LoggingRepositoryDecorator(IRepository<T> inner)
-	{
-		Inner = inner;
-	}
+    public LoggingRepositoryDecorator(IRepository<T> inner)
+    {
+        Inner = inner;
+    }
 
-	public T Get(int id)
-	{
-		Console.WriteLine(@"Getting {0}", id);
-		return Inner.Get(id);
-	}
+    public T Get(int id)
+    {
+        Console.WriteLine(@"Getting {0}", id);
+        return Inner.Get(id);
+    }
 }

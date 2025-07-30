@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Context;
 
@@ -20,40 +19,43 @@ namespace Castle.Windsor.Facilities.Startable;
 
 public class StartFlag : IStartFlagInternal
 {
-	private readonly List<IHandler> _waitList = [];
-	protected StartableFacility.StartableEvents Events;
+    private readonly List<IHandler> _waitList = [];
+    protected StartableFacility.StartableEvents Events;
 
-	void IStartFlagInternal.Init(StartableFacility.StartableEvents events)
-	{
-		Events = events;
-		Init();
-	}
+    void IStartFlagInternal.Init(StartableFacility.StartableEvents events)
+    {
+        Events = events;
+        Init();
+    }
 
-	public virtual void Signal()
-	{
-		Events.StartableComponentRegistered -= CacheHandler;
-		StartAll();
-	}
+    public virtual void Signal()
+    {
+        Events.StartableComponentRegistered -= CacheHandler;
+        StartAll();
+    }
 
-	protected void CacheHandler(IHandler handler)
-	{
-		_waitList.Add(handler);
-	}
+    protected void CacheHandler(IHandler handler)
+    {
+        _waitList.Add(handler);
+    }
 
-	protected virtual void Init()
-	{
-		Events.StartableComponentRegistered += CacheHandler;
-	}
+    protected virtual void Init()
+    {
+        Events.StartableComponentRegistered += CacheHandler;
+    }
 
-	protected virtual void Start(IHandler handler)
-	{
-		handler.Resolve(CreationContext.CreateEmpty());
-	}
+    protected virtual void Start(IHandler handler)
+    {
+        handler.Resolve(CreationContext.CreateEmpty());
+    }
 
-	protected void StartAll()
-	{
-		var array = _waitList.ToArray();
-		_waitList.Clear();
-		foreach (var handler in array) Start(handler);
-	}
+    protected void StartAll()
+    {
+        var array = _waitList.ToArray();
+        _waitList.Clear();
+        foreach (var handler in array)
+        {
+            Start(handler);
+        }
+    }
 }

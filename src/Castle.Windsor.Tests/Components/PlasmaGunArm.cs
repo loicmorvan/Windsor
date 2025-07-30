@@ -16,12 +16,12 @@ namespace Castle.Windsor.Tests.Components;
 
 public class PlasmaGunArm : IArm
 {
-	public float GetLength()
-	{
-		return 2.0f;
-	}
+    public float GetLength()
+    {
+        return 2.0f;
+    }
 
-	public void Rotate(float degree)
-	{
-	}
+    public void Rotate(float degree)
+    {
+    }
 }

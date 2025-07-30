@@ -19,15 +19,15 @@ namespace Castle.Windsor.Tests.Components;
 [UsedImplicitly]
 public class DDb
 {
-	public DDb(B b)
-	{
-		B = b;
-	}
+    public DDb(B b)
+    {
+        B = b;
+    }
 
-	public DDb()
-	{
-	}
+    public DDb()
+    {
+    }
 
-	// ReSharper disable once UnusedAutoPropertyAccessor.Global
-	public B B { get; private set; }
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
+    public B B { get; private set; }
 }

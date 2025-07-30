@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel.ComponentActivator;
@@ -21,16 +20,16 @@ namespace Castle.Windsor.MicroKernel.ComponentActivator;
 [Serializable]
 public class ComponentActivatorException : ComponentResolutionException
 {
-	public ComponentActivatorException(string message, ComponentModel componentComponentModel) : base(message)
-	{
-		ComponentModel = componentComponentModel;
-	}
+    public ComponentActivatorException(string message, ComponentModel componentComponentModel) : base(message)
+    {
+        ComponentModel = componentComponentModel;
+    }
 
-	public ComponentActivatorException(string message, Exception innerException, ComponentModel componentModel)
-		: base(message, innerException)
-	{
-		ComponentModel = componentModel;
-	}
+    public ComponentActivatorException(string message, Exception innerException, ComponentModel componentModel)
+        : base(message, innerException)
+    {
+        ComponentModel = componentModel;
+    }
 
-	public ComponentModel ComponentModel { get; private set; }
+    public ComponentModel ComponentModel { get; private set; }
 }

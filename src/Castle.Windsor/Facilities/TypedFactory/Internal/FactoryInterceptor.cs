@@ -25,38 +25,40 @@ namespace Castle.Windsor.Facilities.TypedFactory.Internal;
 [UsedImplicitly]
 public class FactoryInterceptor(IKernel kernel) : IInterceptor, IOnBehalfAware
 {
-	private FactoryEntry _entry;
+    private FactoryEntry _entry;
 
-	public void Intercept(IInvocation invocation)
-	{
-		var name = invocation.Method.Name;
-		var args = invocation.Arguments;
-		if (name.Equals(_entry.CreationMethod))
-		{
-			if (args.Length == 0 || args[0] == null)
-			{
-				invocation.ReturnValue = kernel.Resolve(invocation.Method.ReturnType);
-				return;
-			}
+    public void Intercept(IInvocation invocation)
+    {
+        var name = invocation.Method.Name;
+        var args = invocation.Arguments;
+        if (name.Equals(_entry.CreationMethod))
+        {
+            if (args.Length == 0 || args[0] == null)
+            {
+                invocation.ReturnValue = kernel.Resolve(invocation.Method.ReturnType);
+                return;
+            }
 
-			var key = (string)args[0];
-			invocation.ReturnValue = kernel.Resolve<object>(key);
-			return;
-		}
+            var key = (string)args[0];
+            invocation.ReturnValue = kernel.Resolve<object>(key);
+            return;
+        }
 
-		if (name.Equals(_entry.DestructionMethod))
-			if (args.Length == 1)
-			{
-				kernel.ReleaseComponent(args[0]);
-				invocation.ReturnValue = null;
-				return;
-			}
+        if (name.Equals(_entry.DestructionMethod))
+        {
+            if (args.Length == 1)
+            {
+                kernel.ReleaseComponent(args[0]);
+                invocation.ReturnValue = null;
+                return;
+            }
+        }
 
-		invocation.Proceed();
-	}
+        invocation.Proceed();
+    }
 
-	public void SetInterceptedComponentModel(ComponentModel target)
-	{
-		_entry = (FactoryEntry)target.ExtendedProperties["typed.fac.entry"];
-	}
+    public void SetInterceptedComponentModel(ComponentModel target)
+    {
+        _entry = (FactoryEntry)target.ExtendedProperties["typed.fac.entry"];
+    }
 }

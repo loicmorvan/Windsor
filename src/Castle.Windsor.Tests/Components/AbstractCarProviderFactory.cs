@@ -16,10 +16,13 @@ namespace Castle.Windsor.Tests.Components;
 
 public class AbstractCarProviderFactory
 {
-	public ICarProvider Create(User currentUser)
-	{
-		if (currentUser.FiscalStability == FiscalStability.MrMoneyBags) return new FerrariProvider();
+    public ICarProvider Create(User currentUser)
+    {
+        if (currentUser.FiscalStability == FiscalStability.MrMoneyBags)
+        {
+            return new FerrariProvider();
+        }
 
-		return new HondaProvider();
-	}
+        return new HondaProvider();
+    }
 }

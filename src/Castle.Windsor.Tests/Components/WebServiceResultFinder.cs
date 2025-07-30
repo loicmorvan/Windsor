@@ -16,19 +16,19 @@ namespace Castle.Windsor.Tests.Components;
 
 public class WebServiceResultFinder<T> : IResultFinder<T>
 {
-	public WebServiceResultFinder()
-	{
-	}
+    public WebServiceResultFinder()
+    {
+    }
 
-	public WebServiceResultFinder(IResultFinder<T> finder)
-	{
-		Finder = finder;
-	}
+    public WebServiceResultFinder(IResultFinder<T> finder)
+    {
+        Finder = finder;
+    }
 
-	public IResultFinder<T> Finder { get; }
+    public IResultFinder<T> Finder { get; }
 
-	public T Process(ISpecification specification)
-	{
-		return default;
-	}
+    public T Process(ISpecification specification)
+    {
+        return default;
+    }
 }

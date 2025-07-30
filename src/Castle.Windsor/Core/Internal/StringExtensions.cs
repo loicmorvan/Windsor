@@ -14,13 +14,11 @@
 
 namespace Castle.Windsor.Core.Internal;
 
-using System;
-
 public static class StringExtensions
 {
-	/// <summary>Performs string comparison using <see cref = "StringComparer.OrdinalIgnoreCase" /></summary>
-	/// <param name = "one"></param>
-	/// <param name = "two"></param>
+	/// <summary>Performs string comparison using <see cref="StringComparer.OrdinalIgnoreCase" /></summary>
+	/// <param name="one"></param>
+	/// <param name="two"></param>
 	/// <returns></returns>
 	public static bool EqualsText(this string one, string two)
 	{

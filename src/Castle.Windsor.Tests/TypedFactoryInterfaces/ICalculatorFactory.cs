@@ -18,7 +18,7 @@ namespace Castle.Windsor.Tests.TypedFactoryInterfaces;
 
 public interface ICalculatorFactory
 {
-	ICalcService Create(string id);
+    ICalcService Create(string id);
 
-	void Release(ICalcService calculator);
+    void Release(ICalcService calculator);
 }

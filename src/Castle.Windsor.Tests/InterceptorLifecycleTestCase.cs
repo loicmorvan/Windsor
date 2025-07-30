@@ -21,21 +21,21 @@ namespace Castle.Windsor.Tests;
 
 public class InterceptorLifecycleTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	public void Disposable_interceptor_gets_properly_released_when_the_component_gets_released()
-	{
-		var counter = new LifecycleCounter();
-		Container.Register(
-			Component.For<LifecycleCounter>().Instance(counter),
-			Component.For<DisposableInterceptor>().LifestyleTransient(),
-			Component.For<A>().LifestyleTransient().Interceptors<DisposableInterceptor>());
+    [Fact]
+    public void Disposable_interceptor_gets_properly_released_when_the_component_gets_released()
+    {
+        var counter = new LifecycleCounter();
+        Container.Register(
+            Component.For<LifecycleCounter>().Instance(counter),
+            Component.For<DisposableInterceptor>().LifestyleTransient(),
+            Component.For<A>().LifestyleTransient().Interceptors<DisposableInterceptor>());
 
-		var a = Container.Resolve<A>();
+        var a = Container.Resolve<A>();
 
-		Assert.Equal(1, counter[".ctor"]);
+        Assert.Equal(1, counter[".ctor"]);
 
-		Container.Release(a);
+        Container.Release(a);
 
-		Assert.Equal(1, counter["Dispose"]);
-	}
+        Assert.Equal(1, counter["Dispose"]);
+    }
 }

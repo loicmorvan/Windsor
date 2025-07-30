@@ -12,113 +12,133 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 public class TypeNameParser : ITypeNameParser
 {
-	public TypeName Parse(string name)
-	{
-		var isPotentiallyFullyQualifiedName = name.IndexOf(',') != -1;
-		var genericIndex = name.IndexOf('`');
-		var genericTypes = new TypeName[] { };
-		if (genericIndex > -1)
-		{
-			var start = name.IndexOf("[[", genericIndex, StringComparison.Ordinal);
-			if (start != -1)
-			{
-				var countString = name.Substring(genericIndex + 1, start - genericIndex - 1);
-				if (int.TryParse(countString, out var count) == false) return null;
-				genericTypes =
-					ParseNames(name.Substring(start + 2, name.LastIndexOf("]]", StringComparison.Ordinal) - 2 - start),
-						count);
-				if (genericTypes == null) return null;
-				isPotentiallyFullyQualifiedName = false;
-				name = name.Substring(0, start);
-			}
-		}
+    public TypeName Parse(string name)
+    {
+        var isPotentiallyFullyQualifiedName = name.IndexOf(',') != -1;
+        var genericIndex = name.IndexOf('`');
+        var genericTypes = new TypeName[] { };
+        if (genericIndex > -1)
+        {
+            var start = name.IndexOf("[[", genericIndex, StringComparison.Ordinal);
+            if (start != -1)
+            {
+                var countString = name.Substring(genericIndex + 1, start - genericIndex - 1);
+                if (int.TryParse(countString, out var count) == false)
+                {
+                    return null;
+                }
 
-		if (isPotentiallyFullyQualifiedName)
-			//well at this point it either is a fully qualified name, or invalid string
-			return new TypeName(name);
-		// at this point we assume we have just the type name, probably prefixed with namespace so let's see which one is it
-		return BuildName(name, genericTypes);
-	}
+                genericTypes =
+                    ParseNames(name.Substring(start + 2, name.LastIndexOf("]]", StringComparison.Ordinal) - 2 - start),
+                        count);
+                if (genericTypes == null)
+                {
+                    return null;
+                }
 
-	private TypeName BuildName(string name, TypeName[] genericTypes)
-	{
-		var typeStartsHere = name.LastIndexOf('.');
-		string typeName;
-		string @namespace = null;
+                isPotentiallyFullyQualifiedName = false;
+                name = name.Substring(0, start);
+            }
+        }
 
-		if (typeStartsHere > -1 && typeStartsHere < name.Length - 1)
-		{
-			typeName = name.Substring(typeStartsHere + 1);
-			@namespace = name.Substring(0, typeStartsHere);
-		}
-		else
-		{
-			typeName = name;
-		}
+        if (isPotentiallyFullyQualifiedName)
+            //well at this point it either is a fully qualified name, or invalid string
+        {
+            return new TypeName(name);
+        }
 
-		return new TypeName(@namespace, typeName, genericTypes);
-	}
+        // at this point we assume we have just the type name, probably prefixed with namespace so let's see which one is it
+        return BuildName(name, genericTypes);
+    }
 
-	private int MoveToBeginning(int location, string text)
-	{
-		var currentLocation = location;
-		while (currentLocation < text.Length)
-		{
-			if (text[currentLocation] == '[') return currentLocation;
-			currentLocation++;
-		}
+    private TypeName BuildName(string name, TypeName[] genericTypes)
+    {
+        var typeStartsHere = name.LastIndexOf('.');
+        string typeName;
+        string @namespace = null;
 
-		return currentLocation;
-	}
+        if (typeStartsHere > -1 && typeStartsHere < name.Length - 1)
+        {
+            typeName = name.Substring(typeStartsHere + 1);
+            @namespace = name.Substring(0, typeStartsHere);
+        }
+        else
+        {
+            typeName = name;
+        }
 
-	private int MoveToEnd(int location, string text)
-	{
-		var open = 1;
-		var currentLocation = location;
-		while (currentLocation < text.Length)
-		{
-			var current = text[currentLocation];
-			if (current == '[')
-			{
-				open++;
-			}
-			else if (current == ']')
-			{
-				open--;
-				if (open == 0) return currentLocation;
-			}
+        return new TypeName(@namespace, typeName, genericTypes);
+    }
 
-			currentLocation++;
-		}
+    private int MoveToBeginning(int location, string text)
+    {
+        var currentLocation = location;
+        while (currentLocation < text.Length)
+        {
+            if (text[currentLocation] == '[')
+            {
+                return currentLocation;
+            }
 
-		return currentLocation;
-	}
+            currentLocation++;
+        }
 
-	private TypeName[] ParseNames(string substring, int count)
-	{
-		if (count == 1)
-		{
-			var name = Parse(substring);
-			if (name == null) return [];
-			return [name];
-		}
+        return currentLocation;
+    }
 
-		var names = new TypeName[count];
+    private int MoveToEnd(int location, string text)
+    {
+        var open = 1;
+        var currentLocation = location;
+        while (currentLocation < text.Length)
+        {
+            var current = text[currentLocation];
+            if (current == '[')
+            {
+                open++;
+            }
+            else if (current == ']')
+            {
+                open--;
+                if (open == 0)
+                {
+                    return currentLocation;
+                }
+            }
 
-		var location = 0;
-		for (var i = 0; i < count; i++)
-		{
-			var newLocation = MoveToEnd(location, substring);
-			names[i] = Parse(substring.Substring(location, newLocation - location));
-			location = MoveToBeginning(newLocation, substring) + 1;
-		}
+            currentLocation++;
+        }
 
-		return names;
-	}
+        return currentLocation;
+    }
+
+    private TypeName[] ParseNames(string substring, int count)
+    {
+        if (count == 1)
+        {
+            var name = Parse(substring);
+            if (name == null)
+            {
+                return [];
+            }
+
+            return [name];
+        }
+
+        var names = new TypeName[count];
+
+        var location = 0;
+        for (var i = 0; i < count; i++)
+        {
+            var newLocation = MoveToEnd(location, substring);
+            names[i] = Parse(substring.Substring(location, newLocation - location));
+            location = MoveToBeginning(newLocation, substring) + 1;
+        }
+
+        return names;
+    }
 }

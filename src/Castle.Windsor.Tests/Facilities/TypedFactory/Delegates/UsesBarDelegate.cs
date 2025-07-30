@@ -12,21 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
 public class UsesBarDelegate
 {
-	private readonly Func<string, string, Bar> _barFactory;
+    private readonly Func<string, string, Bar> _barFactory;
 
-	public UsesBarDelegate(Func<string, string, Bar> barFactory)
-	{
-		_barFactory = barFactory;
-	}
+    public UsesBarDelegate(Func<string, string, Bar> barFactory)
+    {
+        _barFactory = barFactory;
+    }
 
-	public Bar GetBar(string name, string description)
-	{
-		return _barFactory(name, description);
-	}
+    public Bar GetBar(string name, string description)
+    {
+        return _barFactory(name, description);
+    }
 }

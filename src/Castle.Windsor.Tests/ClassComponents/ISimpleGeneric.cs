@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public interface ISimpleGeneric<T>
 {
-	T Operation();
+    T Operation();
 }

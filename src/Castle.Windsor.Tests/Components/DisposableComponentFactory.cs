@@ -16,8 +16,8 @@ namespace Castle.Windsor.Tests.Components;
 
 public class DisposableComponentFactory
 {
-	public IComponent Create()
-	{
-		return new ComponentWithDispose();
-	}
+    public IComponent Create()
+    {
+        return new ComponentWithDispose();
+    }
 }

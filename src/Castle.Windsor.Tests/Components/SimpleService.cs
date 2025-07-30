@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Components;
 
 public class SimpleService : ISimpleService
 {
-	public void Operation()
-	{
-	}
+    public void Operation()
+    {
+    }
 }

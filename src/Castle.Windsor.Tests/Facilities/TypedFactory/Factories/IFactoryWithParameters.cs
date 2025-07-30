@@ -18,5 +18,5 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
 public interface IFactoryWithParameters
 {
-	ComponentWithOptionalParameter BuildComponent(string parameter);
+    ComponentWithOptionalParameter BuildComponent(string parameter);
 }

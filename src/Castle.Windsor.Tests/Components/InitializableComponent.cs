@@ -19,10 +19,10 @@ namespace Castle.Windsor.Tests.Components;
 [Transient]
 public class InitializableComponent : IInitializable
 {
-	public bool IsInitialized { get; private set; }
+    public bool IsInitialized { get; private set; }
 
-	public void Initialize()
-	{
-		IsInitialized = true;
-	}
+    public void Initialize()
+    {
+        IsInitialized = true;
+    }
 }

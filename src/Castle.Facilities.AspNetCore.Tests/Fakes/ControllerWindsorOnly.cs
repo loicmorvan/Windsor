@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Castle.Facilities.AspNetCore.Tests.Fakes;

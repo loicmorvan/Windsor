@@ -1,5 +1,3 @@
-using System;
-
 namespace Castle.Windsor.Tests;
 
 [AttributeUsage(AttributeTargets.Interface)]

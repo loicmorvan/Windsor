@@ -14,17 +14,15 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-using System;
-
 public class MarshalCalculatorService :
-	ICalcService
+    ICalcService
 {
-	public int Sum(int x, int y)
-	{
-		return x + y;
-	}
+    public int Sum(int x, int y)
+    {
+        return x + y;
+    }
 
-	public bool Initialized => throw new NotImplementedException();
+    public bool Initialized => throw new NotImplementedException();
 
-	public bool Disposed => throw new NotImplementedException();
+    public bool Disposed => throw new NotImplementedException();
 }

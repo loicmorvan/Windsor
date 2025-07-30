@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
@@ -21,115 +20,115 @@ namespace Castle.Windsor.Tests;
 
 public class TypeUtilTestCase
 {
-	[Fact]
-	public void Closed_generic_double_type()
-	{
-		var name = typeof(IDoubleGeneric<A, A2>).ToCSharpString();
-		Assert.Equal("IDoubleGeneric<A, A2>", name);
-	}
+    [Fact]
+    public void Closed_generic_double_type()
+    {
+        var name = typeof(IDoubleGeneric<A, A2>).ToCSharpString();
+        Assert.Equal("IDoubleGeneric<A, A2>", name);
+    }
 
-	[Fact]
-	public void Closed_generic_on_generic_double_type()
-	{
-		var name = typeof(IDoubleGeneric<GenericImpl1<A>, A2>).ToCSharpString();
-		Assert.Equal("IDoubleGeneric<GenericImpl1<A>, A2>", name);
-	}
+    [Fact]
+    public void Closed_generic_on_generic_double_type()
+    {
+        var name = typeof(IDoubleGeneric<GenericImpl1<A>, A2>).ToCSharpString();
+        Assert.Equal("IDoubleGeneric<GenericImpl1<A>, A2>", name);
+    }
 
-	[Fact]
-	public void Closed_generic_on_generic_simple_type()
-	{
-		var name = typeof(GenericImpl1<GenericImpl2<A>>).ToCSharpString();
-		Assert.Equal("GenericImpl1<GenericImpl2<A>>", name);
-	}
+    [Fact]
+    public void Closed_generic_on_generic_simple_type()
+    {
+        var name = typeof(GenericImpl1<GenericImpl2<A>>).ToCSharpString();
+        Assert.Equal("GenericImpl1<GenericImpl2<A>>", name);
+    }
 
-	[Fact]
-	public void Closed_generic_simple_type()
-	{
-		var name = typeof(GenericImpl1<A>).ToCSharpString();
-		Assert.Equal("GenericImpl1<A>", name);
-	}
+    [Fact]
+    public void Closed_generic_simple_type()
+    {
+        var name = typeof(GenericImpl1<A>).ToCSharpString();
+        Assert.Equal("GenericImpl1<A>", name);
+    }
 
-	[Fact]
-	public void Closed_generic_nested_generic_on_generic_double_type()
-	{
-		var name = typeof(GenericHasNested<A2>.NestedGeneric<Tuple<int, bool>>).ToCSharpString();
-		Assert.Equal("GenericHasNested<A2>.NestedGeneric<Tuple<Int32, Boolean>>", name);
-	}
+    [Fact]
+    public void Closed_generic_nested_generic_on_generic_double_type()
+    {
+        var name = typeof(GenericHasNested<A2>.NestedGeneric<Tuple<int, bool>>).ToCSharpString();
+        Assert.Equal("GenericHasNested<A2>.NestedGeneric<Tuple<Int32, Boolean>>", name);
+    }
 
-	[Fact]
-	public void Generic_nested_generic_typeArray_multi_dimensional()
-	{
-		var name = typeof(GenericHasNested<A2>.NestedGeneric<AProp>[,,]).ToCSharpString();
-		Assert.Equal("GenericHasNested<A2>.NestedGeneric<AProp>[,,]", name);
-	}
+    [Fact]
+    public void Generic_nested_generic_typeArray_multi_dimensional()
+    {
+        var name = typeof(GenericHasNested<A2>.NestedGeneric<AProp>[,,]).ToCSharpString();
+        Assert.Equal("GenericHasNested<A2>.NestedGeneric<AProp>[,,]", name);
+    }
 
-	[Fact]
-	public void Generic_nested_generic_typeArray()
-	{
-		var name = typeof(GenericHasNested<A2>.NestedGeneric<AProp>[]).ToCSharpString();
-		Assert.Equal("GenericHasNested<A2>.NestedGeneric<AProp>[]", name);
-	}
+    [Fact]
+    public void Generic_nested_generic_typeArray()
+    {
+        var name = typeof(GenericHasNested<A2>.NestedGeneric<AProp>[]).ToCSharpString();
+        Assert.Equal("GenericHasNested<A2>.NestedGeneric<AProp>[]", name);
+    }
 
-	[Fact]
-	public void Generic_nested_generic_type()
-	{
-		var name = typeof(GenericHasNested<A2>.NestedGeneric<AProp>).ToCSharpString();
-		Assert.Equal("GenericHasNested<A2>.NestedGeneric<AProp>", name);
-	}
+    [Fact]
+    public void Generic_nested_generic_type()
+    {
+        var name = typeof(GenericHasNested<A2>.NestedGeneric<AProp>).ToCSharpString();
+        Assert.Equal("GenericHasNested<A2>.NestedGeneric<AProp>", name);
+    }
 
-	[Fact]
-	public void Generic_nested_type_array()
-	{
-		var name = typeof(GenericHasNested<A2>.Nested[]).ToCSharpString();
-		Assert.Equal("GenericHasNested<A2>.Nested[]", name);
-	}
+    [Fact]
+    public void Generic_nested_type_array()
+    {
+        var name = typeof(GenericHasNested<A2>.Nested[]).ToCSharpString();
+        Assert.Equal("GenericHasNested<A2>.Nested[]", name);
+    }
 
-	[Fact]
-	public void Generic_nested_type()
-	{
-		var name = typeof(GenericHasNested<A2>.Nested).ToCSharpString();
-		Assert.Equal("GenericHasNested<A2>.Nested", name);
-	}
+    [Fact]
+    public void Generic_nested_type()
+    {
+        var name = typeof(GenericHasNested<A2>.Nested).ToCSharpString();
+        Assert.Equal("GenericHasNested<A2>.Nested", name);
+    }
 
-	[Fact]
-	public void Non_generic_nested_type()
-	{
-		var name = typeof(HasNestedType.Nested).ToCSharpString();
-		Assert.Equal("HasNestedType.Nested", name);
-	}
+    [Fact]
+    public void Non_generic_nested_type()
+    {
+        var name = typeof(HasNestedType.Nested).ToCSharpString();
+        Assert.Equal("HasNestedType.Nested", name);
+    }
 
-	[Fact]
-	public void Non_generic_nested_type_array()
-	{
-		var name = typeof(HasNestedType.Nested[]).ToCSharpString();
-		Assert.Equal("HasNestedType.Nested[]", name);
-	}
+    [Fact]
+    public void Non_generic_nested_type_array()
+    {
+        var name = typeof(HasNestedType.Nested[]).ToCSharpString();
+        Assert.Equal("HasNestedType.Nested[]", name);
+    }
 
-	[Fact]
-	public void Non_generic_simple_type()
-	{
-		var name = typeof(APropCtor).ToCSharpString();
-		Assert.Equal("APropCtor", name);
-	}
+    [Fact]
+    public void Non_generic_simple_type()
+    {
+        var name = typeof(APropCtor).ToCSharpString();
+        Assert.Equal("APropCtor", name);
+    }
 
-	[Fact]
-	public void Non_generic_simple_type_array()
-	{
-		var name = typeof(APropCtor[]).ToCSharpString();
-		Assert.Equal("APropCtor[]", name);
-	}
+    [Fact]
+    public void Non_generic_simple_type_array()
+    {
+        var name = typeof(APropCtor[]).ToCSharpString();
+        Assert.Equal("APropCtor[]", name);
+    }
 
-	[Fact]
-	public void Open_generic_double_type()
-	{
-		var name = typeof(IDoubleGeneric<,>).ToCSharpString();
-		Assert.Equal("IDoubleGeneric<TOne, TTwo>", name);
-	}
+    [Fact]
+    public void Open_generic_double_type()
+    {
+        var name = typeof(IDoubleGeneric<,>).ToCSharpString();
+        Assert.Equal("IDoubleGeneric<TOne, TTwo>", name);
+    }
 
-	[Fact]
-	public void Open_generic_simple_type()
-	{
-		var name = typeof(GenericImpl1<>).ToCSharpString();
-		Assert.Equal("GenericImpl1<T>", name);
-	}
+    [Fact]
+    public void Open_generic_simple_type()
+    {
+        var name = typeof(GenericImpl1<>).ToCSharpString();
+        Assert.Equal("GenericImpl1<T>", name);
+    }
 }

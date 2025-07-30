@@ -18,47 +18,50 @@ namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.Element
 
 public class AttributesElementProcessor : AbstractXmlNodeProcessor
 {
-	public override string Name => "attributes";
+    public override string Name => "attributes";
 
-	/// <summary></summary>
-	/// <param name = "nodeList"></param>
-	/// <param name = "engine"></param>
-	/// <example>
-	///     <code>
-	///     <properties>
-	///             <attributes>
-	///                 <myAttribute>attributeValue</myAttribute>
-	///             </attributes>
-	///             <myProperty>propertyValue</myProperty>
-	///         </properties>
-	///   </code>
-	/// </example>
-	public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
-	{
-		var element = nodeList.Current as XmlElement;
+    /// <summary></summary>
+    /// <param name="nodeList"></param>
+    /// <param name="engine"></param>
+    /// <example>
+    ///     <code>
+    ///     <properties>
+    ///             <attributes>
+    ///                 <myAttribute>attributeValue</myAttribute>
+    ///             </attributes>
+    ///             <myProperty>propertyValue</myProperty>
+    ///         </properties>
+    ///   </code>
+    /// </example>
+    public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
+    {
+        var element = nodeList.Current as XmlElement;
 
-		var childNodes = new DefaultXmlProcessorNodeList(element.ChildNodes);
+        var childNodes = new DefaultXmlProcessorNodeList(element.ChildNodes);
 
-		while (childNodes.MoveNext())
-		{
-			engine.DispatchProcessCurrent(childNodes);
+        while (childNodes.MoveNext())
+        {
+            engine.DispatchProcessCurrent(childNodes);
 
-			if (IgnoreNode(childNodes.Current)) continue;
+            if (IgnoreNode(childNodes.Current))
+            {
+                continue;
+            }
 
-			GetNodeAsElement(element, childNodes.Current);
+            GetNodeAsElement(element, childNodes.Current);
 
-			AppendElementAsAttribute(element.ParentNode, childNodes.Current as XmlElement);
-		}
+            AppendElementAsAttribute(element.ParentNode, childNodes.Current as XmlElement);
+        }
 
-		RemoveItSelf(element);
-	}
+        RemoveItSelf(element);
+    }
 
-	protected void AppendElementAsAttribute(XmlNode parentElement, XmlElement element)
-	{
-		var attribute = parentElement.OwnerDocument.CreateAttribute(element.Name);
+    protected void AppendElementAsAttribute(XmlNode parentElement, XmlElement element)
+    {
+        var attribute = parentElement.OwnerDocument.CreateAttribute(element.Name);
 
-		attribute.Value = element.InnerText;
+        attribute.Value = element.InnerText;
 
-		parentElement.Attributes.Append(attribute);
-	}
+        parentElement.Attributes.Append(attribute);
+    }
 }

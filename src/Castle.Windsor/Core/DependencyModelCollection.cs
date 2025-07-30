@@ -12,45 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Castle.Windsor.Core.Internal;
 
 namespace Castle.Windsor.Core;
 
-/// <summary>Collection of <see cref = "DependencyModel" />.</summary>
+/// <summary>Collection of <see cref="DependencyModel" />.</summary>
 [Serializable]
 [DebuggerDisplay("Count = {_dependencies.Count}")]
 public class DependencyModelCollection : IMutableCollection<DependencyModel>
 {
-	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-	private readonly List<DependencyModel> _dependencies = new();
+    [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    private readonly List<DependencyModel> _dependencies = new();
 
-	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public int Count => _dependencies.Count;
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public int Count => _dependencies.Count;
 
-	[DebuggerStepThrough]
-	public IEnumerator<DependencyModel> GetEnumerator()
-	{
-		return _dependencies.GetEnumerator();
-	}
+    [DebuggerStepThrough]
+    public IEnumerator<DependencyModel> GetEnumerator()
+    {
+        return _dependencies.GetEnumerator();
+    }
 
-	public void Add(DependencyModel dependencyModel)
-	{
-		ArgumentNullException.ThrowIfNull(dependencyModel);
-		_dependencies.Add(dependencyModel);
-	}
+    public void Add(DependencyModel dependencyModel)
+    {
+        ArgumentNullException.ThrowIfNull(dependencyModel);
+        _dependencies.Add(dependencyModel);
+    }
 
-	public bool Remove(DependencyModel dependencyModel)
-	{
-		return _dependencies.Remove(dependencyModel);
-	}
+    public bool Remove(DependencyModel dependencyModel)
+    {
+        return _dependencies.Remove(dependencyModel);
+    }
 
-	[DebuggerStepThrough]
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return GetEnumerator();
-	}
+    [DebuggerStepThrough]
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 }

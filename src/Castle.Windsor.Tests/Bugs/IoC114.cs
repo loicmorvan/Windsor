@@ -20,26 +20,26 @@ namespace Castle.Windsor.Tests.Bugs;
 
 public class IoC114 : AbstractContainerTestCase
 {
-	[Fact]
-	public void UsingPropertyWithPrivateSetter()
-	{
-		Container.Register(Component.For<IService1>().ImplementedBy<Service1>(),
-			Component.For<IService2>().ImplementedBy<Service2>());
+    [Fact]
+    public void UsingPropertyWithPrivateSetter()
+    {
+        Container.Register(Component.For<IService1>().ImplementedBy<Service1>(),
+            Component.For<IService2>().ImplementedBy<Service2>());
 
-		var service2 = (Service2)Container.Resolve<IService2>();
+        var service2 = (Service2)Container.Resolve<IService2>();
 
-		Assert.Null(service2.S);
-	}
+        Assert.Null(service2.S);
+    }
 
-	public interface IService1;
+    public interface IService1;
 
-	public class Service1 : IService1;
+    public class Service1 : IService1;
 
-	public interface IService2;
+    public interface IService2;
 
-	public class Service2 : IService2
-	{
-		// ReSharper disable once UnusedAutoPropertyAccessor.Local
-		public IService1 S { get; private set; }
-	}
+    public class Service2 : IService2
+    {
+        // ReSharper disable once UnusedAutoPropertyAccessor.Local
+        public IService1 S { get; private set; }
+    }
 }

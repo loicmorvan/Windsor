@@ -21,31 +21,31 @@ namespace Castle.Windsor.Tests.Diagnostics;
 
 public class PotentiallyMisconfiguredComponentsDiagnosticTestCase : AbstractContainerTestCase
 {
-	private IPotentiallyMisconfiguredComponentsDiagnostic _diagnostic;
+    private IPotentiallyMisconfiguredComponentsDiagnostic _diagnostic;
 
-	protected override void AfterContainerCreated()
-	{
-		var host = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IDiagnosticsHost;
-		_diagnostic = host.GetDiagnostic<IPotentiallyMisconfiguredComponentsDiagnostic>();
-	}
+    protected override void AfterContainerCreated()
+    {
+        var host = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IDiagnosticsHost;
+        _diagnostic = host.GetDiagnostic<IPotentiallyMisconfiguredComponentsDiagnostic>();
+    }
 
-	[Fact]
-	public void Empty_when_all_components_healthy()
-	{
-		Container.Register(Component.For<A>(), Component.For<B>(), Component.For<C>());
+    [Fact]
+    public void Empty_when_all_components_healthy()
+    {
+        Container.Register(Component.For<A>(), Component.For<B>(), Component.For<C>());
 
-		var handlers = _diagnostic.Inspect();
+        var handlers = _diagnostic.Inspect();
 
-		Assert.Empty(handlers);
-	}
+        Assert.Empty(handlers);
+    }
 
-	[Fact]
-	public void Has_all_components_with_missing_or_waiting_dependencies()
-	{
-		Container.Register(Component.For<B>(), Component.For<C>());
+    [Fact]
+    public void Has_all_components_with_missing_or_waiting_dependencies()
+    {
+        Container.Register(Component.For<B>(), Component.For<C>());
 
-		var handlers = _diagnostic.Inspect();
+        var handlers = _diagnostic.Inspect();
 
-		Assert.Equal(2, handlers.Length);
-	}
+        Assert.Equal(2, handlers.Length);
+    }
 }

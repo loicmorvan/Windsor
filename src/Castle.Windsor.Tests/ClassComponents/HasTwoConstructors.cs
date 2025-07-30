@@ -16,16 +16,16 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class HasTwoConstructors
 {
-	public HasTwoConstructors(ICustomer customer)
-	{
-		Customer = customer;
-	}
+    public HasTwoConstructors(ICustomer customer)
+    {
+        Customer = customer;
+    }
 
-	public HasTwoConstructors(ICommon common)
-	{
-		Common = common;
-	}
+    public HasTwoConstructors(ICommon common)
+    {
+        Common = common;
+    }
 
-	public ICommon Common { get; set; }
-	public ICustomer Customer { get; set; }
+    public ICommon Common { get; set; }
+    public ICustomer Customer { get; set; }
 }

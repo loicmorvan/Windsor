@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
 
@@ -24,24 +21,24 @@ namespace Castle.Windsor.Windsor.Diagnostics;
 [DebuggerDisplay("")]
 internal class KernelDebuggerProxy
 {
-	private readonly IEnumerable<IContainerDebuggerExtension> _extensions;
+    private readonly IEnumerable<IContainerDebuggerExtension> _extensions;
 
-	public KernelDebuggerProxy(IWindsorContainer container) : this(container.Kernel)
-	{
-	}
+    public KernelDebuggerProxy(IWindsorContainer container) : this(container.Kernel)
+    {
+    }
 
-	public KernelDebuggerProxy(IKernel kernel)
-	{
-		ArgumentNullException.ThrowIfNull(kernel);
-		_extensions =
-			(IEnumerable<IContainerDebuggerExtension>)(kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as
-				IContainerDebuggerExtensionHost) ?? [];
-	}
+    public KernelDebuggerProxy(IKernel kernel)
+    {
+        ArgumentNullException.ThrowIfNull(kernel);
+        _extensions =
+            (IEnumerable<IContainerDebuggerExtension>)(kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as
+                IContainerDebuggerExtensionHost) ?? [];
+    }
 
-	[DebuggerDisplay("")]
-	[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-	public DebuggerViewItem[] Extensions
-	{
-		get { return _extensions.SelectMany(e => e.Attach()).ToArray(); }
-	}
+    [DebuggerDisplay("")]
+    [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    public DebuggerViewItem[] Extensions
+    {
+        get { return _extensions.SelectMany(e => e.Attach()).ToArray(); }
+    }
 }

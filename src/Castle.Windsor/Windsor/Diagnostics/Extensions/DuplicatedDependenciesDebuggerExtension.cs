@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel;
@@ -23,49 +21,53 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 
 public class DuplicatedDependenciesDebuggerExtension : AbstractContainerDebuggerExtension
 {
-	private const string Name = "Components with potentially duplicated dependencies";
+    private const string Name = "Components with potentially duplicated dependencies";
 
-	private DuplicatedDependenciesDiagnostic _diagnostic;
+    private DuplicatedDependenciesDiagnostic _diagnostic;
 
-	public override IEnumerable<DebuggerViewItem> Attach()
-	{
-		var result = _diagnostic.Inspect();
-		if (result.Length == 0) return [];
-		var items = BuildItems(result);
-		return
-		[
-			new DebuggerViewItem(Name, "Count = " + items.Length, items)
-		];
-	}
+    public override IEnumerable<DebuggerViewItem> Attach()
+    {
+        var result = _diagnostic.Inspect();
+        if (result.Length == 0)
+        {
+            return [];
+        }
 
-	public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
-	{
-		_diagnostic = new DuplicatedDependenciesDiagnostic(kernel);
-		diagnosticsHost.AddDiagnostic<IDuplicatedDependenciesDiagnostic>(_diagnostic);
-	}
+        var items = BuildItems(result);
+        return
+        [
+            new DebuggerViewItem(Name, "Count = " + items.Length, items)
+        ];
+    }
 
-	private ComponentDebuggerView[] BuildItems(Tuple<IHandler, DependencyDuplicate[]>[] results)
-	{
-		return results.ConvertAll(ComponentWithDuplicateDependenciesView);
-	}
+    public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
+    {
+        _diagnostic = new DuplicatedDependenciesDiagnostic(kernel);
+        diagnosticsHost.AddDiagnostic<IDuplicatedDependenciesDiagnostic>(_diagnostic);
+    }
 
-	private ComponentDebuggerView ComponentWithDuplicateDependenciesView(Tuple<IHandler, DependencyDuplicate[]> input)
-	{
-		var handler = input.Item1;
-		var mismatches = input.Item2;
-		var items = mismatches.ConvertAll(MismatchView);
-		Array.Sort(items, (c1, c2) => string.Compare(c1.Name, c2.Name, StringComparison.Ordinal));
-		return ComponentDebuggerView.BuildRawFor(handler, "Count = " + mismatches.Length, items);
-	}
+    private ComponentDebuggerView[] BuildItems(Tuple<IHandler, DependencyDuplicate[]>[] results)
+    {
+        return results.ConvertAll(ComponentWithDuplicateDependenciesView);
+    }
 
-	private static DebuggerViewItemWithDetails MismatchView(DependencyDuplicate input)
-	{
-		return new DebuggerViewItemWithDetails(Description(input.Dependency1), Description(input.Dependency2),
-			DuplicatedDependenciesDiagnostic.GetDetails(input));
-	}
+    private ComponentDebuggerView ComponentWithDuplicateDependenciesView(Tuple<IHandler, DependencyDuplicate[]> input)
+    {
+        var handler = input.Item1;
+        var mismatches = input.Item2;
+        var items = mismatches.ConvertAll(MismatchView);
+        Array.Sort(items, (c1, c2) => string.Compare(c1.Name, c2.Name, StringComparison.Ordinal));
+        return ComponentDebuggerView.BuildRawFor(handler, "Count = " + mismatches.Length, items);
+    }
 
-	private static string Description(DependencyModel dependencyModel)
-	{
-		return dependencyModel.TargetItemType.ToCSharpString() + " " + dependencyModel.DependencyKey;
-	}
+    private static DebuggerViewItemWithDetails MismatchView(DependencyDuplicate input)
+    {
+        return new DebuggerViewItemWithDetails(Description(input.Dependency1), Description(input.Dependency2),
+            DuplicatedDependenciesDiagnostic.GetDetails(input));
+    }
+
+    private static string Description(DependencyModel dependencyModel)
+    {
+        return dependencyModel.TargetItemType.ToCSharpString() + " " + dependencyModel.DependencyKey;
+    }
 }

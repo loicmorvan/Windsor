@@ -12,50 +12,57 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace Castle.Windsor.Core.Internal;
 
 public abstract class TopologicalSortAlgo
 {
-	public static IVertex[] Sort(IEnumerable<IVertex> graphNodes)
-	{
-		var enumerable = graphNodes as IVertex[] ?? graphNodes.ToArray();
+    public static IVertex[] Sort(IEnumerable<IVertex> graphNodes)
+    {
+        var enumerable = graphNodes as IVertex[] ?? graphNodes.ToArray();
 
-		var colors = new ColorsSet(enumerable);
-		var discovery = new TimestampSet();
-		var finish = new TimestampSet();
-		var list = new LinkedList<IVertex>();
+        var colors = new ColorsSet(enumerable);
+        var discovery = new TimestampSet();
+        var finish = new TimestampSet();
+        var list = new LinkedList<IVertex>();
 
-		var time = 0;
+        var time = 0;
 
-		foreach (var node in enumerable)
-			if (colors.ColorOf(node) == VertexColor.White)
-				Visit(node, colors, discovery, finish, list, ref time);
+        foreach (var node in enumerable)
+        {
+            if (colors.ColorOf(node) == VertexColor.White)
+            {
+                Visit(node, colors, discovery, finish, list, ref time);
+            }
+        }
 
-		var vertices = new IVertex[list.Count];
-		list.CopyTo(vertices, 0);
-		return vertices;
-	}
+        var vertices = new IVertex[list.Count];
+        list.CopyTo(vertices, 0);
+        return vertices;
+    }
 
-	private static void Visit(IVertex node, ColorsSet colors, TimestampSet discovery, TimestampSet finish, LinkedList<IVertex> list, ref int time)
-	{
-		colors.Set(node, VertexColor.Gray);
+    private static void Visit(IVertex node, ColorsSet colors, TimestampSet discovery, TimestampSet finish,
+        LinkedList<IVertex> list, ref int time)
+    {
+        colors.Set(node, VertexColor.Gray);
 
-		discovery.Register(node, time++);
+        discovery.Register(node, time++);
 
-		foreach (var child in node.Adjacencies)
-			if (colors.ColorOf(child) == VertexColor.White)
-				Visit(child, colors, discovery, finish, list, ref time);
+        foreach (var child in node.Adjacencies)
+        {
+            if (colors.ColorOf(child) == VertexColor.White)
+            {
+                Visit(child, colors, discovery, finish, list, ref time);
+            }
+        }
 
-		finish.Register(node, time++);
+        finish.Register(node, time++);
 
-		Debug.Assert(discovery.TimeOf(node) < finish.TimeOf(node));
+        Debug.Assert(discovery.TimeOf(node) < finish.TimeOf(node));
 
-		list.AddFirst(node);
+        list.AddFirst(node);
 
-		colors.Set(node, VertexColor.Black);
-	}
+        colors.Set(node, VertexColor.Black);
+    }
 }

@@ -14,13 +14,11 @@
 
 namespace Castle.Windsor.Core.Internal;
 
-using System;
-
 public static class ExceptionHelper
 {
-	public static Exception SetUp(this Exception exception)
-	{
-		exception.HelpLink = Constants.ExceptionHelpLink;
-		return exception;
-	}
+    public static Exception SetUp(this Exception exception)
+    {
+        exception.HelpLink = Constants.ExceptionHelpLink;
+        return exception;
+    }
 }

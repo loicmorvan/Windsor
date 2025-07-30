@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents;
-
 using System.Collections;
+
+namespace Castle.Windsor.Tests.ClassComponents;
 
 public class ClassWithListConstructor
 {
-	public ClassWithListConstructor(IList services)
-	{
-		Services = services;
-	}
+    public ClassWithListConstructor(IList services)
+    {
+        Services = services;
+    }
 
-	public IList Services { get; }
+    public IList Services { get; }
 }

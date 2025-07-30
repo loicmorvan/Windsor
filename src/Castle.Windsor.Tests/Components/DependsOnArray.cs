@@ -16,8 +16,8 @@ namespace Castle.Windsor.Tests.Components;
 
 public class DependsOnArray : IDependOnArray
 {
-	// ReSharper disable once UnusedParameter.Local
-	public DependsOnArray(params IDependency[] dependencies)
-	{
-	}
+    // ReSharper disable once UnusedParameter.Local
+    public DependsOnArray(params IDependency[] dependencies)
+    {
+    }
 }

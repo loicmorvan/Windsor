@@ -16,8 +16,8 @@ namespace Castle.Windsor.Tests.Components;
 
 public class UnresolvableDependency : IDependency
 {
-	// ReSharper disable once UnusedParameter.Local
-	public UnresolvableDependency(A a)
-	{
-	}
+    // ReSharper disable once UnusedParameter.Local
+    public UnresolvableDependency(A a)
+    {
+    }
 }

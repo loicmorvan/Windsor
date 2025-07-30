@@ -18,8 +18,8 @@ namespace Castle.Windsor.Tests.Interceptors;
 
 public class WasCalledInterceptor(CallReporter reporter) : StandardInterceptor
 {
-	protected override void PreProceed(IInvocation invocation)
-	{
-		reporter.WasCalled = true;
-	}
+    protected override void PreProceed(IInvocation invocation)
+    {
+        reporter.WasCalled = true;
+    }
 }

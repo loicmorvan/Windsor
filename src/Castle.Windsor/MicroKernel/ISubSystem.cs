@@ -18,7 +18,7 @@ namespace Castle.Windsor.MicroKernel;
 public interface ISubSystem
 {
 	/// <summary>Initializes the subsystem</summary>
-	/// <param name = "kernel"></param>
+	/// <param name="kernel"></param>
 	void Init(IKernelInternal kernel);
 
 	/// <summary>Should perform the termination of the subsystem instance.</summary>

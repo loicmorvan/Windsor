@@ -20,5 +20,5 @@ namespace Castle.Windsor.Tests.Components;
 [Transient]
 public class TransientComponent : IComponent
 {
-	public int Id => GetHashCode();
+    public int Id => GetHashCode();
 }

@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Core.Internal;
-
-using System.Collections.Generic;
 using System.Reflection;
+
+namespace Castle.Windsor.Core.Internal;
 
 public interface IAssemblyProvider
 {
-	IEnumerable<Assembly> GetAssemblies();
+    IEnumerable<Assembly> GetAssemblies();
 }

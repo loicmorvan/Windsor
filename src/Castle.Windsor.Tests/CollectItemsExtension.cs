@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Handlers;
 

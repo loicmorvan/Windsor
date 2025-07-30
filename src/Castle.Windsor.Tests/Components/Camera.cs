@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Components;
 
 public class Camera : ICamera
 {
-	public string IpNumber { get; set; }
-	public int Id { get; set; }
-	public string Name { get; set; }
+    public string IpNumber { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; }
 }

@@ -14,20 +14,18 @@
 
 namespace Castle.Windsor.MicroKernel;
 
-using System;
-
 [Serializable]
 public abstract class AbstractSubSystem :
-	ISubSystem
+    ISubSystem
 {
-	public virtual void Init(IKernelInternal kernel)
-	{
-		Kernel = kernel;
-	}
+    protected IKernelInternal Kernel { get; private set; }
 
-	public virtual void Terminate()
-	{
-	}
+    public virtual void Init(IKernelInternal kernel)
+    {
+        Kernel = kernel;
+    }
 
-	protected IKernelInternal Kernel { get; private set; }
+    public virtual void Terminate()
+    {
+    }
 }

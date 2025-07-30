@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.IO;
 using System.Reflection;
 using Castle.Core.Resource;
 
@@ -21,31 +19,31 @@ namespace Castle.Windsor.Tests.XmlFiles;
 
 public class Xml
 {
-	private static readonly string EmbeddedRootPath =
-		"assembly://" + typeof(Xml).GetTypeInfo().Assembly.FullName + "/Castle.Windsor.Tests/XmlFiles/";
+    private static readonly string EmbeddedRootPath =
+        "assembly://" + typeof(Xml).GetTypeInfo().Assembly.FullName + "/Castle.Windsor.Tests/XmlFiles/";
 
-	public static IResource Embedded(string name)
-	{
-		var uri = new CustomUri(EmbeddedPath(name));
-		var resource = new AssemblyResource(uri);
-		return resource;
-	}
+    public static IResource Embedded(string name)
+    {
+        var uri = new CustomUri(EmbeddedPath(name));
+        var resource = new AssemblyResource(uri);
+        return resource;
+    }
 
-	public static string EmbeddedPath(string name)
-	{
-		return EmbeddedRootPath + name;
-	}
+    public static string EmbeddedPath(string name)
+    {
+        return EmbeddedRootPath + name;
+    }
 
-	public static IResource File(string name)
-	{
-		var uri = new CustomUri(FilePath(name));
-		var resource = new FileResource(uri);
-		return resource;
-	}
+    public static IResource File(string name)
+    {
+        var uri = new CustomUri(FilePath(name));
+        var resource = new FileResource(uri);
+        return resource;
+    }
 
-	public static string FilePath(string name)
-	{
-		var fullPath = Path.Combine(AppContext.BaseDirectory, "XmlFiles/" + name);
-		return fullPath;
-	}
+    public static string FilePath(string name)
+    {
+        var fullPath = Path.Combine(AppContext.BaseDirectory, "XmlFiles/" + name);
+        return fullPath;
+    }
 }

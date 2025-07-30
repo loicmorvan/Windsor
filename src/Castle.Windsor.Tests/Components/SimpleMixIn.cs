@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Components;
 
 public class SimpleMixIn : ISimpleMixIn
 {
-	public void DoSomething()
-	{
-	}
+    public void DoSomething()
+    {
+    }
 }

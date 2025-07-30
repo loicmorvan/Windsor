@@ -18,11 +18,14 @@ namespace Castle.Windsor.Tests.Interceptors;
 
 public class CollectInterceptedIdInterceptor : IInterceptor
 {
-	public static int InterceptedId;
+    public static int InterceptedId;
 
-	public void Intercept(IInvocation invocation)
-	{
-		invocation.Proceed();
-		if (invocation.Arguments.Length > 0) InterceptedId = (int)invocation.Arguments[0];
-	}
+    public void Intercept(IInvocation invocation)
+    {
+        invocation.Proceed();
+        if (invocation.Arguments.Length > 0)
+        {
+            InterceptedId = (int)invocation.Arguments[0];
+        }
+    }
 }

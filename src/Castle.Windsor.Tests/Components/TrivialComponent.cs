@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class TrivialComponent : IComponent
 {
-	public int Id => 0;
+    public int Id => 0;
 }

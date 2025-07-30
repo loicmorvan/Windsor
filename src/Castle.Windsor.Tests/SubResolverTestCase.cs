@@ -23,81 +23,81 @@ namespace Castle.Windsor.Tests;
 
 public class SubResolverTestCase
 {
-	[Fact]
-	public void WillAskResolverWhenTryingToResolveDependencyAfterAnotherHandlerWasRegistered()
-	{
-		var resolver = new FooBarResolver();
+    [Fact]
+    public void WillAskResolverWhenTryingToResolveDependencyAfterAnotherHandlerWasRegistered()
+    {
+        var resolver = new FooBarResolver();
 
-		IKernel kernel = new DefaultKernel();
-		kernel.Resolver.AddSubResolver(resolver);
+        IKernel kernel = new DefaultKernel();
+        kernel.Resolver.AddSubResolver(resolver);
 
-		kernel.Register(Component.For<Foo>());
-		var handler = kernel.GetHandler(typeof(Foo));
+        kernel.Register(Component.For<Foo>());
+        var handler = kernel.GetHandler(typeof(Foo));
 
-		Assert.Equal(HandlerState.WaitingDependency, handler.CurrentState);
+        Assert.Equal(HandlerState.WaitingDependency, handler.CurrentState);
 
-		resolver.Result = 15;
+        resolver.Result = 15;
 
-		kernel.Register(Component.For<A>());
+        kernel.Register(Component.For<A>());
 
-		Assert.Equal(HandlerState.Valid, handler.CurrentState);
-	}
+        Assert.Equal(HandlerState.Valid, handler.CurrentState);
+    }
 
-	[Fact]
-	public void Sub_resolver_can_provide_null_as_the_value_to_use()
-	{
-		IKernel kernel = new DefaultKernel();
-		kernel.Resolver.AddSubResolver(new NullResolver());
+    [Fact]
+    public void Sub_resolver_can_provide_null_as_the_value_to_use()
+    {
+        IKernel kernel = new DefaultKernel();
+        kernel.Resolver.AddSubResolver(new NullResolver());
 
-		kernel.Register(Component.For<ComponentWithDependencyNotInContainer>());
+        kernel.Register(Component.For<ComponentWithDependencyNotInContainer>());
 
-		Assert.Null(kernel.Resolve<ComponentWithDependencyNotInContainer>().DependencyNotInContainer);
-	}
+        Assert.Null(kernel.Resolve<ComponentWithDependencyNotInContainer>().DependencyNotInContainer);
+    }
 
 #pragma warning disable CS9113 // Parameter is unread.
-	private class Foo(int bar);
+    private class Foo(int bar);
 #pragma warning restore CS9113 // Parameter is unread.
 
-	private class FooBarResolver : ISubDependencyResolver
-	{
-		public int? Result;
+    private class FooBarResolver : ISubDependencyResolver
+    {
+        public int? Result;
 
-		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
-			ComponentModel model, DependencyModel dependency)
-		{
-			return Result != null;
-		}
+        public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+            ComponentModel model, DependencyModel dependency)
+        {
+            return Result != null;
+        }
 
-		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
-			ComponentModel model, DependencyModel dependency)
-		{
-			Assert.NotNull(Result);
+        public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+            ComponentModel model, DependencyModel dependency)
+        {
+            Assert.NotNull(Result);
 
-			return Result.Value;
-		}
-	}
+            return Result.Value;
+        }
+    }
 
-	[UsedImplicitly]
-	private sealed class ComponentWithDependencyNotInContainer(DependencyNotInContainer dependencyNotInContainer)
-	{
-		public DependencyNotInContainer DependencyNotInContainer { get; } = dependencyNotInContainer;
-	}
+    [UsedImplicitly]
+    private sealed class ComponentWithDependencyNotInContainer(DependencyNotInContainer dependencyNotInContainer)
+    {
+        public DependencyNotInContainer DependencyNotInContainer { get; } = dependencyNotInContainer;
+    }
 
-	[UsedImplicitly]
-	private sealed class DependencyNotInContainer;
+    [UsedImplicitly]
+    private sealed class DependencyNotInContainer;
 
-	private sealed class NullResolver : ISubDependencyResolver
-	{
-		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
-			ComponentModel model, DependencyModel dependency)
-		{
-			return true;
-		}
+    private sealed class NullResolver : ISubDependencyResolver
+    {
+        public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+            ComponentModel model, DependencyModel dependency)
+        {
+            return true;
+        }
 
-		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
-			ComponentModel model, DependencyModel dependency)
-		{
-			return null;
-		}
-	}
+        public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+            ComponentModel model, DependencyModel dependency)
+        {
+            return null;
+        }
+    }
 }

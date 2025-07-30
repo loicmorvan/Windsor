@@ -14,13 +14,11 @@
 
 namespace Castle.Windsor.MicroKernel.Lifestyle.Pool;
 
-using System;
-
 [Serializable]
 public class DefaultPoolFactory : IPoolFactory
 {
-	public IPool Create(int initialsize, int maxSize, IComponentActivator activator)
-	{
-		return new DefaultPool(initialsize, maxSize, activator);
-	}
+    public IPool Create(int initialsize, int maxSize, IComponentActivator activator)
+    {
+        return new DefaultPool(initialsize, maxSize, activator);
+    }
 }

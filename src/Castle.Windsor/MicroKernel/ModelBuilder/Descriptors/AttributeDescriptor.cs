@@ -17,22 +17,25 @@ using Castle.Core.Configuration;
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class AttributeDescriptor<TS> : AbstractOverwriteableDescriptor<TS>
-	where TS : class
+    where TS : class
 {
-	private readonly string _name;
-	private readonly string _value;
+    private readonly string _name;
+    private readonly string _value;
 
-	/// <summary>Constructs the <see cref = "AttributeDescriptor{S}" /> descriptor with name and value.</summary>
-	/// <param name = "name">The attribute name.</param>
-	/// <param name = "value">The attribute value.</param>
-	public AttributeDescriptor(string name, string value)
-	{
-		_name = name;
-		_value = value;
-	}
+    /// <summary>Constructs the <see cref="AttributeDescriptor{S}" /> descriptor with name and value.</summary>
+    /// <param name="name">The attribute name.</param>
+    /// <param name="value">The attribute value.</param>
+    public AttributeDescriptor(string name, string value)
+    {
+        _name = name;
+        _value = value;
+    }
 
-	protected override void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
-	{
-		if (configuration.Attributes[_name] == null || IsOverWrite) configuration.Attributes[_name] = _value;
-	}
+    protected override void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
+    {
+        if (configuration.Attributes[_name] == null || IsOverWrite)
+        {
+            configuration.Attributes[_name] = _value;
+        }
+    }
 }

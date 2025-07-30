@@ -1,5 +1,3 @@
-using System;
-
 namespace Castle.Facilities.AspNetCore.Tests.Fakes;
 
 public sealed class CrossWiredTransientDisposable : CrossWiredTransient, IDisposable, IDisposableObservable

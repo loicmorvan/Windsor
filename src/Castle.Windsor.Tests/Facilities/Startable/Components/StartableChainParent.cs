@@ -21,24 +21,24 @@ namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 
 public class StartableChainParent : IStartable
 {
-	private readonly LifecycleCounter _lifecycleCounter;
+    private readonly LifecycleCounter _lifecycleCounter;
 
-	public StartableChainParent(StartableChainDependency item1, StartableChainGeneric<string> item2,
-		LifecycleCounter lifecycleCounter)
-	{
-		_lifecycleCounter = lifecycleCounter;
-		_lifecycleCounter.Increment();
-	}
+    public StartableChainParent(StartableChainDependency item1, StartableChainGeneric<string> item2,
+        LifecycleCounter lifecycleCounter)
+    {
+        _lifecycleCounter = lifecycleCounter;
+        _lifecycleCounter.Increment();
+    }
 
-	public void Start()
-	{
-		_lifecycleCounter.Increment();
-	}
+    public void Start()
+    {
+        _lifecycleCounter.Increment();
+    }
 
-	public void Stop()
-	{
-		_lifecycleCounter.Increment();
-	}
+    public void Stop()
+    {
+        _lifecycleCounter.Increment();
+    }
 }
 
 // ReSharper disable once UnusedTypeParameter

@@ -14,12 +14,10 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-using System;
-
 public class ThrowsInCtor
 {
-	public ThrowsInCtor()
-	{
-		throw new Exception("booo!");
-	}
+    public ThrowsInCtor()
+    {
+        throw new Exception("booo!");
+    }
 }

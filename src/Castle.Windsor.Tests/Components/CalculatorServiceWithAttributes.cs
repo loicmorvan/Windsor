@@ -21,8 +21,8 @@ namespace Castle.Windsor.Tests.Components;
 [Interceptor(typeof(ResultModifierInterceptor))]
 public class CalculatorServiceWithAttributes
 {
-	public virtual int Sum(int x, int y)
-	{
-		return x + y;
-	}
+    public virtual int Sum(int x, int y)
+    {
+        return x + y;
+    }
 }

@@ -50,10 +50,10 @@ Windsor and other frameworks. They also contain some pretty powerful features an
 * [Factory Support Facility](https://github.com/castleproject-deprecated/Castle.Windsor.Facilities) (deprecated) -
   Provides ability for the components to be created by factory objects. You can use it to register things like
   `HttpContext` in the container.
-	* :information_source: **Prefer `UsingFactoryMethod`:** This facility is used mostly for backward compatibility (XML
-	  registration) and it is discouraged to use it in new applications. Prefer usage of [
-	  `UsingFactoryMethod`](registering-components-one-by-one.md#using-a-delegate-as-component-factory). Factory Support
-	  Facility may become obsolete in future release.
+    * :information_source: **Prefer `UsingFactoryMethod`:** This facility is used mostly for backward compatibility (XML
+      registration) and it is discouraged to use it in new applications. Prefer usage of [
+      `UsingFactoryMethod`](registering-components-one-by-one.md#using-a-delegate-as-component-factory). Factory Support
+      Facility may become obsolete in future release.
 * [Event Wiring Facility](https://github.com/castleproject-deprecated/Castle.Windsor.Facilities) (deprecated) - Provides
   ability to wire up classes exposing events to classes consuming them.
 * [Remoting Facility](https://github.com/castleproject-deprecated/Castle.Windsor.Facilities) (deprecated) - Provides

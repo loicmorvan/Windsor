@@ -12,90 +12,88 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory;
-
-using System;
-
 using Castle.Windsor.Facilities.TypedFactory;
 using Castle.Windsor.MicroKernel.Registration;
 
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
+
 public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTestCase
 {
-	protected override void AfterContainerCreated()
-	{
-		Container.AddFacility<TypedFactoryFacility>();
-	}
+    protected override void AfterContainerCreated()
+    {
+        Container.AddFacility<TypedFactoryFacility>();
+    }
 
-	[Fact]
-	public void Object_resolved_from_factory_is_not_added_as_burden_of_object_being_created()
-	{
-		Container.Register(
-			Component.For(typeof(IFactory<>)).AsFactory(),
-			Component.For<Foo>().LifeStyle.Transient,
-			Component.For<LongLivedService>().LifeStyle.Singleton,
-			Component.For<ShortLivedViewModel>().LifeStyle.Transient);
+    [Fact]
+    public void Object_resolved_from_factory_is_not_added_as_burden_of_object_being_created()
+    {
+        Container.Register(
+            Component.For(typeof(IFactory<>)).AsFactory(),
+            Component.For<Foo>().LifeStyle.Transient,
+            Component.For<LongLivedService>().LifeStyle.Singleton,
+            Component.For<ShortLivedViewModel>().LifeStyle.Transient);
 
-		var longLivedService = Container.Resolve<LongLivedService>();
-		var shortLivedViewModel = Container.Resolve<ShortLivedViewModel>();
+        var longLivedService = Container.Resolve<LongLivedService>();
+        var shortLivedViewModel = Container.Resolve<ShortLivedViewModel>();
 
-		var prematureDisposalHandler = new EventHandler((_, _) =>
-			Assert.Fail("Long-lived service’s connection was disposed when short-lived view model was released."));
+        var prematureDisposalHandler = new EventHandler((_, _) =>
+            Assert.Fail("Long-lived service’s connection was disposed when short-lived view model was released."));
 
-		longLivedService.SqlConnection.Disposed += prematureDisposalHandler;
-		Container.Release(shortLivedViewModel);
-		longLivedService.SqlConnection.Disposed -= prematureDisposalHandler;
+        longLivedService.SqlConnection.Disposed += prematureDisposalHandler;
+        Container.Release(shortLivedViewModel);
+        longLivedService.SqlConnection.Disposed -= prematureDisposalHandler;
 
-		Container.Release(longLivedService);
-	}
+        Container.Release(longLivedService);
+    }
 
-	public sealed class Foo : IDisposable
-	{
-		public void Dispose()
-		{
-			Disposed?.Invoke(this, EventArgs.Empty);
-		}
+    public sealed class Foo : IDisposable
+    {
+        public void Dispose()
+        {
+            Disposed?.Invoke(this, EventArgs.Empty);
+        }
 
-		public event EventHandler Disposed;
-	}
+        public event EventHandler Disposed;
+    }
 
-	public interface IFactory<T>
-	{
-		T Resolve();
-		void Release(T instance);
-	}
+    public interface IFactory<T>
+    {
+        T Resolve();
+        void Release(T instance);
+    }
 
-	public sealed class LongLivedService
-	{
-		public LongLivedService(IFactory<Foo> fooFactory)
-		{
-			FooFactory = fooFactory;
-		}
+    public sealed class LongLivedService
+    {
+        public LongLivedService(IFactory<Foo> fooFactory)
+        {
+            FooFactory = fooFactory;
+        }
 
-		public IFactory<Foo> FooFactory { get; }
+        public IFactory<Foo> FooFactory { get; }
 
-		public Foo SqlConnection { get; private set; }
+        public Foo SqlConnection { get; private set; }
 
-		public void StartSomething()
-		{
-			SqlConnection = FooFactory.Resolve();
-		}
+        public void StartSomething()
+        {
+            SqlConnection = FooFactory.Resolve();
+        }
 
-		public void Dispose()
-		{
-			FooFactory.Release(SqlConnection);
-		}
-	}
+        public void Dispose()
+        {
+            FooFactory.Release(SqlConnection);
+        }
+    }
 
-	public sealed class ShortLivedViewModel
-	{
-		public ShortLivedViewModel(IFactory<Foo> fooFactory, LongLivedService longLivedService)
-		{
-			FooFactory = fooFactory;
-			LongLivedService = longLivedService;
-			longLivedService.StartSomething();
-		}
+    public sealed class ShortLivedViewModel
+    {
+        public ShortLivedViewModel(IFactory<Foo> fooFactory, LongLivedService longLivedService)
+        {
+            FooFactory = fooFactory;
+            LongLivedService = longLivedService;
+            longLivedService.StartSomething();
+        }
 
-		public IFactory<Foo> FooFactory { get; }
-		public LongLivedService LongLivedService { get; }
-	}
+        public IFactory<Foo> FooFactory { get; }
+        public LongLivedService LongLivedService { get; }
+    }
 }

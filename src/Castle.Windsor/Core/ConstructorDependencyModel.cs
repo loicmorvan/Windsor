@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Reflection;
 using Castle.Windsor.Core.Internal;
 
@@ -21,15 +20,15 @@ namespace Castle.Windsor.Core;
 [Serializable]
 public class ConstructorDependencyModel : DependencyModel
 {
-	public ConstructorDependencyModel(ParameterInfo parameter)
-		: base(parameter.Name, parameter.ParameterType, false, parameter.HasDefaultValue(), parameter.DefaultValue)
-	{
-	}
+    public ConstructorDependencyModel(ParameterInfo parameter)
+        : base(parameter.Name, parameter.ParameterType, false, parameter.HasDefaultValue(), parameter.DefaultValue)
+    {
+    }
 
-	public ConstructorCandidate Constructor { get; private set; }
+    public ConstructorCandidate Constructor { get; private set; }
 
-	internal void SetParentConstructor(ConstructorCandidate ctor)
-	{
-		Constructor = ctor;
-	}
+    internal void SetParentConstructor(ConstructorCandidate ctor)
+    {
+        Constructor = ctor;
+    }
 }

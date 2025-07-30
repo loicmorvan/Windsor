@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
 public interface IObjectFactory
 {
-	object GetItemByWithParameter(object parameter);
+    object GetItemByWithParameter(object parameter);
 }

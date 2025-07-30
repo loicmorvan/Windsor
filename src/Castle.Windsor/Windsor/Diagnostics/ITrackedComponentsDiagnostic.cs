@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Linq;
 using Castle.Windsor.MicroKernel;
 
 namespace Castle.Windsor.Windsor.Diagnostics;
 
 public interface ITrackedComponentsDiagnostic : IDiagnostic<ILookup<IHandler, object>>
 {
-	event EventHandler<TrackedInstancesEventArgs> TrackedInstancesRequested;
+    event EventHandler<TrackedInstancesEventArgs> TrackedInstancesRequested;
 }

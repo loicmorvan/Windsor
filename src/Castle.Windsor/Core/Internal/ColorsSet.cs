@@ -12,29 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
-
 namespace Castle.Windsor.Core.Internal;
 
 /// <summary>Represents a collection of objects which are guaranteed to be unique and holds a color for them</summary>
 internal class ColorsSet
 {
-	private readonly IDictionary<IVertex, VertexColor> _items = new Dictionary<IVertex, VertexColor>();
+    private readonly IDictionary<IVertex, VertexColor> _items = new Dictionary<IVertex, VertexColor>();
 
-	public ColorsSet(IEnumerable<IVertex> items)
-	{
-		foreach (var item in items) Set(item, VertexColor.White);
-	}
+    public ColorsSet(IEnumerable<IVertex> items)
+    {
+        foreach (var item in items)
+        {
+            Set(item, VertexColor.White);
+        }
+    }
 
-	public VertexColor ColorOf(IVertex item)
-	{
-		return _items.TryGetValue(item, out var vertexColor)
-			? vertexColor
-			: VertexColor.NotInThisSet;
-	}
+    public VertexColor ColorOf(IVertex item)
+    {
+        return _items.TryGetValue(item, out var vertexColor)
+            ? vertexColor
+            : VertexColor.NotInThisSet;
+    }
 
-	public void Set(IVertex item, VertexColor color)
-	{
-		_items[item] = color;
-	}
+    public void Set(IVertex item, VertexColor color)
+    {
+        _items[item] = color;
+    }
 }

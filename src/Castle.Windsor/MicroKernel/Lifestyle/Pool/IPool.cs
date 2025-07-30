@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.MicroKernel.Context;
 
 namespace Castle.Windsor.MicroKernel.Lifestyle.Pool;
@@ -21,7 +20,7 @@ namespace Castle.Windsor.MicroKernel.Lifestyle.Pool;
 public interface IPool : IDisposable
 {
 	/// <summary>Implementors should release the instance or put it on the pool</summary>
-	/// <param name = "instance"></param>
+	/// <param name="instance"></param>
 	bool Release(object instance);
 
 	object Request(CreationContext context, Func<CreationContext, Burden> creationCallback);

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using Castle.Windsor.Tests.ClassComponents;
 using JetBrains.Annotations;
 
@@ -23,10 +22,10 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 [UsedImplicitly]
 public class ServiceFactory
 {
-	public ServiceFactory(Func<ServiceRedirect> factory, Func<SimpleComponent1> factory2)
-	{
-		Factory = factory;
-	}
+    public ServiceFactory(Func<ServiceRedirect> factory, Func<SimpleComponent1> factory2)
+    {
+        Factory = factory;
+    }
 
-	public Func<ServiceRedirect> Factory { get; set; }
+    public Func<ServiceRedirect> Factory { get; set; }
 }

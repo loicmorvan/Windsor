@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Components;
 
 public class HasProtectedConstructor
 {
-	protected HasProtectedConstructor()
-	{
-	}
+    protected HasProtectedConstructor()
+    {
+    }
 }

@@ -14,28 +14,28 @@
 
 namespace Castle.Windsor.Windsor.Diagnostics;
 
-/// <summary>Exposes diagnostics about itself to the <see cref = "IDiagnosticsInspector{TData,TContext}" />.</summary>
-/// <typeparam name = "TData">
+/// <summary>Exposes diagnostics about itself to the <see cref="IDiagnosticsInspector{TData,TContext}" />.</summary>
+/// <typeparam name="TData">
 ///     Usually simple type containing information provided to the
 ///     <see
-///         cref = "IDiagnosticsInspector{TData,TContext}" />
+///         cref="IDiagnosticsInspector{TData,TContext}" />
 ///     .
 /// </typeparam>
 /// <remarks>
 ///     Can be implemented by any type constituting part of container infrastructure. Should have a matching
 ///     <see
-///         cref = "IDiagnosticsInspector{TData,TContext}" />
+///         cref="IDiagnosticsInspector{TData,TContext}" />
 ///     registred in the container that knows how to find it and that prepares information from it for consumption.
 /// </remarks>
 public interface IExposeDiagnostics<out TData>
 {
 	/// <summary>
-	///     Collects <typeparamref name = "TData" /> for the <paramref name = "inspector" /> and calls
+	///     Collects <typeparamref name="TData" /> for the <paramref name="inspector" /> and calls
 	///     <see
-	///         cref = "IDiagnosticsInspector{TData,TContext}.Inspect" />
+	///         cref="IDiagnosticsInspector{TData,TContext}.Inspect" />
 	///     if any data available.
 	/// </summary>
-	/// <param name = "inspector"></param>
-	/// <param name = "context">pass-through context. Used by the inspector.</param>
+	/// <param name="inspector"></param>
+	/// <param name="context">pass-through context. Used by the inspector.</param>
 	void Visit<TContext>(IDiagnosticsInspector<TData, TContext> inspector, TContext context);
 }

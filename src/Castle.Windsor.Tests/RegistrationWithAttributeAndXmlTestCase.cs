@@ -20,17 +20,17 @@ namespace Castle.Windsor.Tests;
 
 public class RegistrationWithAttributeAndXmlTestCase : AbstractContainerTestCase
 {
-	[Fact]
-	[Bug("IOC-295")]
-	public void Registration_via_xml_no_service_specified_uses_service_from_attribute()
-	{
-		var xml = @"<configuration>
+    [Fact]
+    [Bug("IOC-295")]
+    public void Registration_via_xml_no_service_specified_uses_service_from_attribute()
+    {
+        var xml = @"<configuration>
   <components>
     <component type=""HasType"" />
   </components>
 </configuration>";
 
-		Container.Install(Configuration.FromXml(new StaticContentResource(xml)));
-		Assert.True(Kernel.HasComponent(typeof(ISimpleService)));
-	}
+        Container.Install(Configuration.FromXml(new StaticContentResource(xml)));
+        Assert.True(Kernel.HasComponent(typeof(ISimpleService)));
+    }
 }

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Reflection;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
@@ -24,64 +23,73 @@ namespace Castle.Windsor.Facilities.Startable;
 
 public class StartableContributor(ITypeConverter converter) : IContributeComponentModelConstruction
 {
-	public void ProcessModel(IKernel kernel, ComponentModel model)
-	{
-		var startable = CheckIfComponentImplementsIStartable(model)
-		                || HasStartableAttributeSet(model);
+    public void ProcessModel(IKernel kernel, ComponentModel model)
+    {
+        var startable = CheckIfComponentImplementsIStartable(model)
+                        || HasStartableAttributeSet(model);
 
-		model.ExtendedProperties["startable"] = startable;
+        model.ExtendedProperties["startable"] = startable;
 
-		if (startable)
-		{
-			AddStart(model);
-			AddStop(model);
-		}
-	}
+        if (startable)
+        {
+            AddStart(model);
+            AddStop(model);
+        }
+    }
 
-	private void AddStart(ComponentModel model)
-	{
-		var startMethod = model.Configuration.Attributes["startMethod"];
-		if (startMethod != null)
-		{
-			var method = model.Implementation.GetTypeInfo().GetMethod(startMethod, Type.EmptyTypes);
-			if (method == null)
-				throw new ArgumentException(
-					string.Format(
-						"Could not find public parameterless method '{0}' on type {1} designated as start method. Make sure you didn't mistype the method name and that its signature matches.",
-						startMethod, model.Implementation));
-			model.ExtendedProperties.Add("Castle.StartableFacility.StartMethod", method);
-		}
+    private void AddStart(ComponentModel model)
+    {
+        var startMethod = model.Configuration.Attributes["startMethod"];
+        if (startMethod != null)
+        {
+            var method = model.Implementation.GetTypeInfo().GetMethod(startMethod, Type.EmptyTypes);
+            if (method == null)
+            {
+                throw new ArgumentException(
+                    string.Format(
+                        "Could not find public parameterless method '{0}' on type {1} designated as start method. Make sure you didn't mistype the method name and that its signature matches.",
+                        startMethod, model.Implementation));
+            }
 
-		model.Lifecycle.Add(StartConcern.Instance);
-	}
+            model.ExtendedProperties.Add("Castle.StartableFacility.StartMethod", method);
+        }
 
-	private void AddStop(ComponentModel model)
-	{
-		var stopMethod = model.Configuration.Attributes["stopMethod"];
-		if (stopMethod != null)
-		{
-			var method = model.Implementation.GetTypeInfo().GetMethod(stopMethod, Type.EmptyTypes);
-			if (method == null)
-				throw new ArgumentException(
-					string.Format(
-						"Could not find public parameterless method '{0}' on type {1} designated as stop method. Make sure you didn't mistype the method name and that its signature matches.",
-						stopMethod, model.Implementation));
-			model.ExtendedProperties.Add("Castle.StartableFacility.StopMethod", method);
-		}
+        model.Lifecycle.Add(StartConcern.Instance);
+    }
 
-		model.Lifecycle.AddFirst(StopConcern.Instance);
-	}
+    private void AddStop(ComponentModel model)
+    {
+        var stopMethod = model.Configuration.Attributes["stopMethod"];
+        if (stopMethod != null)
+        {
+            var method = model.Implementation.GetTypeInfo().GetMethod(stopMethod, Type.EmptyTypes);
+            if (method == null)
+            {
+                throw new ArgumentException(
+                    string.Format(
+                        "Could not find public parameterless method '{0}' on type {1} designated as stop method. Make sure you didn't mistype the method name and that its signature matches.",
+                        stopMethod, model.Implementation));
+            }
 
-	private bool HasStartableAttributeSet(ComponentModel model)
-	{
-		var startable = model.Configuration?.Attributes["startable"];
-		if (startable != null) return converter.PerformConversion<bool>(startable);
+            model.ExtendedProperties.Add("Castle.StartableFacility.StopMethod", method);
+        }
 
-		return false;
-	}
+        model.Lifecycle.AddFirst(StopConcern.Instance);
+    }
 
-	private static bool CheckIfComponentImplementsIStartable(ComponentModel model)
-	{
-		return model.Implementation.Is<IStartable>();
-	}
+    private bool HasStartableAttributeSet(ComponentModel model)
+    {
+        var startable = model.Configuration?.Attributes["startable"];
+        if (startable != null)
+        {
+            return converter.PerformConversion<bool>(startable);
+        }
+
+        return false;
+    }
+
+    private static bool CheckIfComponentImplementsIStartable(ComponentModel model)
+    {
+        return model.Implementation.Is<IStartable>();
+    }
 }

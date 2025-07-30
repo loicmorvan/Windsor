@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 internal interface IInternal
 {
-	void Do();
+    void Do();
 }
