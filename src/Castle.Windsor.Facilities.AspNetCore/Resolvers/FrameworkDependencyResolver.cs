@@ -17,7 +17,7 @@ using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Context;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Castle.Facilities.AspNetCore.Resolvers;
+namespace Castle.Windsor.Facilities.AspNetCore.Resolvers;
 
 public class FrameworkDependencyResolver(IServiceCollection serviceCollection)
     : ISubDependencyResolver, IAcceptServiceProvider

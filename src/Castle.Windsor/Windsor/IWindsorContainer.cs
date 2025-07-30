@@ -16,6 +16,7 @@ using System.Reflection;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor.Installer;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Windsor;
 
@@ -56,6 +57,7 @@ public interface IWindsorContainer : IDisposable
     /// <summary>Gets a child container instance by name.</summary>
     /// <param name="name">The container's name.</param>
     /// <returns>The child container instance or null</returns>
+    [PublicAPI]
     IWindsorContainer GetChildContainer(string name);
 
     /// <summary>Runs the <paramref name="installers" /> so that they can register components in the container.</summary>
@@ -118,6 +120,7 @@ public interface IWindsorContainer : IDisposable
     /// <param name="key"></param>
     /// <param name="service"></param>
     /// <returns></returns>
+    [PublicAPI]
     object Resolve(string key, Type service);
 
     /// <summary>Returns a component instance by the service</summary>
@@ -129,6 +132,7 @@ public interface IWindsorContainer : IDisposable
     /// <param name="service"></param>
     /// <param name="arguments">Arguments to resolve the service.</param>
     /// <returns></returns>
+    [PublicAPI]
     object Resolve(Type service, Arguments arguments);
 
     /// <summary>Returns a component instance by the service</summary>

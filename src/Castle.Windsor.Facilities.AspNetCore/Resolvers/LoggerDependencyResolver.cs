@@ -18,7 +18,7 @@ using Castle.Windsor.MicroKernel.Context;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Castle.Facilities.AspNetCore.Resolvers;
+namespace Castle.Windsor.Facilities.AspNetCore.Resolvers;
 
 public class LoggerDependencyResolver : ISubDependencyResolver, IAcceptServiceProvider
 {

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Castle.Facilities.AspNetCore.Tests.Fakes;
+namespace Castle.Windsor.Facilities.AspNetCore.Tests.Fakes;
 
 public class TagHelperWindsorOnly : TagHelper
 {

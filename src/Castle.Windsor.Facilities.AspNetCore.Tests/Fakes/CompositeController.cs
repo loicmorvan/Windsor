@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AspNetCore.Tests.Fakes;
+namespace Castle.Windsor.Facilities.AspNetCore.Tests.Fakes;
 
 public class CompositeController
 {

@@ -1,4 +1,4 @@
-namespace Castle.Facilities.AspNetCore.Tests.Fakes;
+namespace Castle.Windsor.Facilities.AspNetCore.Tests.Fakes;
 
 public sealed class ServiceProviderOnlySingletonDisposable : ServiceProviderOnlySingleton, IDisposable,
     IDisposableObservable

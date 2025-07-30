@@ -16,7 +16,7 @@ using System.Reflection;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
 
-namespace Castle.Facilities.AspNetCore;
+namespace Castle.Windsor.Facilities.AspNetCore;
 
 /// <summary>For overriding default registration and lifestyles behaviour</summary>
 public class WindsorRegistrationOptions

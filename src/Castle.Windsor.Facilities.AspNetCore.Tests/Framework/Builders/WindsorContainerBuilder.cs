@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Facilities.AspNetCore.Tests.Fakes;
+using Castle.Windsor.Facilities.AspNetCore.Tests.Fakes;
 using Castle.Windsor.Windsor;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Castle.Facilities.AspNetCore.Tests.Framework.Builders;
+namespace Castle.Windsor.Facilities.AspNetCore.Tests.Framework.Builders;
 
 public class WindsorContainerBuilder
 {

@@ -1,6 +1,6 @@
 using Castle.Windsor.MicroKernel.Lifestyle;
 
-namespace Castle.Facilities.AspNetCore.Tests.Fakes;
+namespace Castle.Windsor.Facilities.AspNetCore.Tests.Fakes;
 
 public class AnyComponentWithLifestyleManager : AbstractLifestyleManager
 {

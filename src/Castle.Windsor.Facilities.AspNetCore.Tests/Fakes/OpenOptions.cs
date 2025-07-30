@@ -17,7 +17,7 @@
 
 using JetBrains.Annotations;
 
-namespace Castle.Facilities.AspNetCore.Tests.Fakes;
+namespace Castle.Windsor.Facilities.AspNetCore.Tests.Fakes;
 
 [UsedImplicitly]
 public class OpenOptions;

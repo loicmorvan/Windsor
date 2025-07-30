@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Castle.Facilities.AspNetCore;
+namespace Castle.Windsor.Facilities.AspNetCore;
 
 internal static class AspNetCoreExtensions
 {

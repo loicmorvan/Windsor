@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Facilities.AspNetCore.Tests.Framework;
+using Castle.Windsor.Facilities.AspNetCore.Tests.Framework;
 using Castle.Windsor.MicroKernel.Registration;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Castle.Facilities.AspNetCore.Tests;
+namespace Castle.Windsor.Facilities.AspNetCore.Tests;
 
 public abstract class WindsorRegistrationOptionsViewComponentTestCase
 {

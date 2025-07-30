@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Facilities.AspNetCore.Tests.Fakes;
-using Castle.Facilities.AspNetCore.Tests.Framework;
 using Castle.Windsor.Core;
+using Castle.Windsor.Facilities.AspNetCore.Tests.Fakes;
+using Castle.Windsor.Facilities.AspNetCore.Tests.Framework;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Castle.Facilities.AspNetCore.Tests;
+namespace Castle.Windsor.Facilities.AspNetCore.Tests;
 
 using TestContext = TestContext;
 

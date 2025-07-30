@@ -20,7 +20,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Castle.Facilities.AspNetCore.Contributors;
+namespace Castle.Windsor.Facilities.AspNetCore.Contributors;
 
 public class MiddlewareComponentModelContributor : IContributeComponentModelConstruction
 {

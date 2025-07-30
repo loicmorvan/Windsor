@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Facilities.AspNetCore.Resolvers;
+using Castle.Windsor.Facilities.AspNetCore.Resolvers;
 using Castle.Windsor.MicroKernel.Lifestyle;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
@@ -22,7 +22,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Castle.Facilities.AspNetCore;
+namespace Castle.Windsor.Facilities.AspNetCore;
 
 public static class WindsorRegistrationExtensions
 {

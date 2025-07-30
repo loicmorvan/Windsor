@@ -14,7 +14,7 @@
 
 using Microsoft.AspNetCore.Builder;
 
-namespace Castle.Facilities.AspNetCore.Tests.Framework.Builders;
+namespace Castle.Windsor.Facilities.AspNetCore.Tests.Framework.Builders;
 
 public class ApplicationBuilder
 {

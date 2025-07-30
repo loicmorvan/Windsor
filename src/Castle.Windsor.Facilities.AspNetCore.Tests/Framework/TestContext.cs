@@ -16,7 +16,7 @@ using Castle.Windsor.Windsor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Castle.Facilities.AspNetCore.Tests.Framework;
+namespace Castle.Windsor.Facilities.AspNetCore.Tests.Framework;
 
 public sealed class TestContext(
     IServiceCollection serviceCollection,

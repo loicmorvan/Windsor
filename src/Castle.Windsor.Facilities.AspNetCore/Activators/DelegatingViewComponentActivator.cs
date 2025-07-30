@@ -14,7 +14,7 @@
 
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 
-namespace Castle.Facilities.AspNetCore.Activators;
+namespace Castle.Windsor.Facilities.AspNetCore.Activators;
 
 internal sealed class DelegatingViewComponentActivator : IViewComponentActivator
 {

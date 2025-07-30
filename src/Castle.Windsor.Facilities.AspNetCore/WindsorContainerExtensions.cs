@@ -15,7 +15,7 @@
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.Windsor;
 
-namespace Castle.Facilities.AspNetCore;
+namespace Castle.Windsor.Facilities.AspNetCore;
 
 public static class WindsorContainerExtensions
 {

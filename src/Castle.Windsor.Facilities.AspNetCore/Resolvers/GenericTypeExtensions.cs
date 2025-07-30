@@ -1,4 +1,4 @@
-namespace Castle.Facilities.AspNetCore.Resolvers;
+namespace Castle.Windsor.Facilities.AspNetCore.Resolvers;
 
 internal static class GenericTypeExtensions
 {

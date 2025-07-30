@@ -3,7 +3,7 @@ using Castle.Windsor.Windsor;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Castle.Facilities.AspNetCore.Tests.Fakes;
+namespace Castle.Windsor.Facilities.AspNetCore.Tests.Fakes;
 
 [UsedImplicitly]
 public class ModelInstaller

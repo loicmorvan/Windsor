@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using System.Reflection;
-using Castle.Facilities.AspNetCore.Activators;
+using Castle.Windsor.Facilities.AspNetCore.Activators;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -21,7 +21,7 @@ using Microsoft.AspNetCore.Mvc.Razor.Internal;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Castle.Facilities.AspNetCore;
+namespace Castle.Windsor.Facilities.AspNetCore;
 
 internal static class AspNetCoreMvcExtensions
 {

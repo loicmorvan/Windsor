@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Facilities.AspNetCore.Contributors;
+using Castle.Windsor.Facilities.AspNetCore.Contributors;
 using Castle.Windsor.MicroKernel.Facilities;
 using Castle.Windsor.Windsor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Castle.Facilities.AspNetCore;
+namespace Castle.Windsor.Facilities.AspNetCore;
 
 public class AspNetCoreFacility : AbstractFacility
 {

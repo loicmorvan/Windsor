@@ -1,7 +1,7 @@
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 
-namespace Castle.Facilities.AspNetCore.Tests.Fakes;
+namespace Castle.Windsor.Facilities.AspNetCore.Tests.Fakes;
 
 public sealed class AnyMiddleware : IMiddleware
 {

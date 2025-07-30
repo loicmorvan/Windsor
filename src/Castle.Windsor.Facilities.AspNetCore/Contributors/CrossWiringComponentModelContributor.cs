@@ -19,7 +19,7 @@ using Castle.Windsor.MicroKernel.Lifestyle;
 using Castle.Windsor.MicroKernel.ModelBuilder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Castle.Facilities.AspNetCore.Contributors;
+namespace Castle.Windsor.Facilities.AspNetCore.Contributors;
 
 public class CrossWiringComponentModelContributor : IContributeComponentModelConstruction
 {
