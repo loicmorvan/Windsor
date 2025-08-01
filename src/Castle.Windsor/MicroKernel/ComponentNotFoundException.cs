@@ -60,9 +60,7 @@ public class ComponentNotFoundException : ComponentResolutionException
     private static string BuildMessage(string name, Type service, int countOfHandlersForTheService)
     {
         var message =
-            string.Format(
-                "Requested component named '{0}' was not found in the container. Did you forget to register it?{1}",
-                name, Environment.NewLine);
+            $"Requested component named '{name}' was not found in the container. Did you forget to register it?{Environment.NewLine}";
         return countOfHandlersForTheService switch
         {
             0 => message +
@@ -70,9 +68,7 @@ public class ComponentNotFoundException : ComponentResolutionException
             1 => message +
                  $"There is one other component supporting requested service '{service.FullName}'. Is it what you were looking for?",
             > 1 => message +
-                   string.Format(
-                       "There are {0} other components supporting requested service '{1}'. Were you looking for any of them?",
-                       countOfHandlersForTheService, service.FullName),
+                   $"There are {countOfHandlersForTheService} other components supporting requested service '{service.FullName}'. Were you looking for any of them?",
             _ => message
         };
 

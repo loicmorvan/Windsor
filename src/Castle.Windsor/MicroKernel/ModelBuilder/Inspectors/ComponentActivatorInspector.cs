@@ -95,9 +95,7 @@ public class ComponentActivatorInspector(IConversionManager converter) : IContri
         }
 
         var message =
-            string.Format(
-                "The Type '{0}' specified in the componentActivatorType attribute must implement {1}",
-                customComponentActivator.FullName, typeof(IComponentActivator).FullName);
+            $"The Type '{customComponentActivator.FullName}' specified in the componentActivatorType attribute must implement {typeof(IComponentActivator).FullName}";
         throw new InvalidOperationException(message);
     }
 }

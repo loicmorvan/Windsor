@@ -152,9 +152,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
         {
             var lifestyle = (object)burden.Model.CustomLifestyle ?? burden.Model.LifestyleType;
             throw new ArgumentException(
-                string.Format(
-                    "Release policy was asked to track object '{0}', but its burden has 'RequiresPolicyRelease' set to false. If object is to be tracked the flag must be true. This is likely a bug in the lifetime manager '{1}'.",
-                    instance, lifestyle));
+                $"Release policy was asked to track object '{instance}', but its burden has 'RequiresPolicyRelease' set to false. If object is to be tracked the flag must be true. This is likely a bug in the lifetime manager '{lifestyle}'.");
         }
 
         try

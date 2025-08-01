@@ -33,9 +33,8 @@ public class FactoryMethodActivator<T> : DefaultComponentActivator, IDependencyA
         if (_creator == null)
         {
             throw new ComponentActivatorException(
-                string.Format(
-                    "{0} received misconfigured component model for {1}. Are you sure you registered this component with 'UsingFactoryMethod'?",
-                    GetType().Name, Model.Name), Model);
+                $"{GetType().Name} received misconfigured component model for {Model.Name}. Are you sure you registered this component with 'UsingFactoryMethod'?",
+                Model);
         }
     }
 

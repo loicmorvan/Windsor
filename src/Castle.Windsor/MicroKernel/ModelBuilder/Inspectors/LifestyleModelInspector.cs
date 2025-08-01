@@ -213,9 +213,7 @@ public class LifestyleModelInspector : IContributeComponentModelConstruction
         if (filterMethod == null)
         {
             throw new InvalidOperationException(
-                string.Format(
-                    "Type {0} which was designated as 'scopeRootBinderType' for component {1} does not have any public instance method matching signature of 'IHandler Method(IHandler[] pickOne)' and can not be used as scope root binder.",
-                    scopeRootBinderType.Name, name));
+                $"Type {scopeRootBinderType.Name} which was designated as 'scopeRootBinderType' for component {name} does not have any public instance method matching signature of 'IHandler Method(IHandler[] pickOne)' and can not be used as scope root binder.");
         }
 
         var instance = scopeRootBinderType.CreateInstance<object>();

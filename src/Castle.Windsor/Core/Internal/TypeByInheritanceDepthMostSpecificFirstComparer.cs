@@ -37,9 +37,7 @@ public class TypeByInheritanceDepthMostSpecificFirstComparer : IComparer<Type>
         }
 
         var message =
-            string.Format(
-                "Types {0} and {1} are unrelated. That is not allowed. Are you sure you want to make them both services on the same component?",
-                x, y);
+            $"Types {x} and {y} are unrelated. That is not allowed. Are you sure you want to make them both services on the same component?";
         throw new ArgumentOutOfRangeException(nameof(x), message);
     }
 }

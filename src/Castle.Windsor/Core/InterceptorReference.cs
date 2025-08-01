@@ -80,9 +80,7 @@ public class InterceptorReference : IReference<IInterceptor>, IEquatable<Interce
         if (handler.IsBeingResolvedInContext(context))
         {
             throw new DependencyResolverException(
-                string.Format(
-                    "Cycle detected - interceptor {0} wants to use itself as its interceptor. This usually signifies a bug in custom {1}",
-                    handler.ComponentModel.Name, nameof(IModelInterceptorsSelector)));
+                $"Cycle detected - interceptor {handler.ComponentModel.Name} wants to use itself as its interceptor. This usually signifies a bug in custom {nameof(IModelInterceptorsSelector)}");
         }
 
         var contextForInterceptor = RebuildContext(ComponentType(), context);

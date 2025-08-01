@@ -119,16 +119,14 @@ public class DefaultComplexConverter : AbstractTypeConverter
             var paramConfig = FindChildIgnoreCase(configuration, parameter.Name);
             if (paramConfig == null)
             {
-                throw new ConverterException(string.Format("Child '{0}' missing in {1} element.", parameter.Name,
-                    configuration.Name));
+                throw new ConverterException($"Child '{parameter.Name}' missing in {configuration.Name} element.");
             }
 
             var paramType = parameter.ParameterType;
             if (!ConversionManager.CanHandleType(paramType))
             {
-                throw new ConverterException(string.Format(
-                    "No converter found for child '{0}' in {1} element (type: {2}).",
-                    parameter.Name, configuration.Name, paramType.Name));
+                throw new ConverterException(
+                    $"No converter found for child '{parameter.Name}' in {configuration.Name} element (type: {paramType.Name}).");
             }
 
             parameterValues[i] = ConvertChildParameter(paramConfig, paramType);
@@ -156,9 +154,8 @@ public class DefaultComplexConverter : AbstractTypeConverter
             var propType = property.PropertyType;
             if (!ConversionManager.CanHandleType(propType))
             {
-                throw new ConverterException(string.Format(
-                    "No converter found for child '{0}' in {1} element (type: {2}).",
-                    property.Name, configuration.Name, propType.Name));
+                throw new ConverterException(
+                    $"No converter found for child '{property.Name}' in {configuration.Name} element (type: {propType.Name}).");
             }
 
             var val = ConvertChildParameter(propConfig, propType);

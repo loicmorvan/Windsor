@@ -36,10 +36,8 @@ public class ComponentConverter : AbstractTypeConverter, IKernelDependentConvert
         var componentName = ReferenceExpressionUtil.ExtractComponentName(value);
         if (componentName == null)
         {
-            throw new ConverterException(string.Format(
-                "Could not convert expression '{0}' to type '{1}'. Expecting a reference override like ${{some key}}",
-                value,
-                targetType.FullName));
+            throw new ConverterException(
+                $"Could not convert expression '{value}' to type '{targetType.FullName}'. Expecting a reference override like ${{some key}}");
         }
 
         var handler = Context.Kernel.LoadHandlerByName(componentName, targetType, null);

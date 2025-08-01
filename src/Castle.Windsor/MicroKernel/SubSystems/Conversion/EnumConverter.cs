@@ -38,9 +38,7 @@ public class EnumConverter : AbstractTypeConverter
         }
         catch (Exception ex)
         {
-            var message = string.Format(
-                "Could not convert from '{0}' to {1}.",
-                value, targetType.FullName);
+            var message = $"Could not convert from '{value}' to {targetType.FullName}.";
 
             throw new ConverterException(message, ex);
         }

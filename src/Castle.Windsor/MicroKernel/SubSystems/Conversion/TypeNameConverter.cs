@@ -122,9 +122,8 @@ public class TypeNameConverter : AbstractTypeConverter
             });
         if (assembly != null)
         {
-            throw new ConverterException(string.Format(
-                "Could not convert string '{0}' to a type. Assembly {1} was matched, but it doesn't contain the type. Make sure that the type name was not mistyped.",
-                name, assembly.FullName));
+            throw new ConverterException(
+                $"Could not convert string '{name}' to a type. Assembly {assembly.FullName} was matched, but it doesn't contain the type. Make sure that the type name was not mistyped.");
         }
 
         throw new ConverterException(

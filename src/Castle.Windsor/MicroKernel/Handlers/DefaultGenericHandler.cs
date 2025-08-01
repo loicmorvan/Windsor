@@ -317,14 +317,9 @@ public class DefaultGenericHandler(
             // 1.
             if (arguments.Length > genericArguments.Length)
             {
-                message = string.Format(
-                    "Requested type {0} has {1} generic parameter(s), whereas component implementation type {2} requires {3}.{4}" +
-                    "This means that Windsor does not have enough information to properly create that component for you.",
-                    context.RequestedType,
-                    context.GenericArguments.Length,
-                    ComponentModel.Implementation,
-                    arguments.Length,
-                    Environment.NewLine);
+                message =
+                    $"Requested type {context.RequestedType} has {context.GenericArguments.Length} generic parameter(s), whereas component implementation type {ComponentModel.Implementation} requires {arguments.Length}.{Environment.NewLine}" +
+                    "This means that Windsor does not have enough information to properly create that component for you.";
 
                 if (ImplementationMatchingStrategy == null)
                 {

@@ -50,16 +50,14 @@ public class GenericHandlerTypeMismatchException : HandlerException
     private static string BuildMessage(string[] argumentsUsed, ComponentModel componentModel,
         DefaultGenericHandler handler)
     {
-        var message = string.Format(
-            "Types {0} don't satisfy generic constraints of implementation type {1} of component '{2}'.",
-            string.Join(", ", argumentsUsed), componentModel.Implementation.FullName, handler.ComponentModel.Name);
+        var message =
+            $"Types {string.Join(", ", argumentsUsed)} don't satisfy generic constraints of implementation type {componentModel.Implementation.FullName} of component '{handler.ComponentModel.Name}'.";
         if (handler.ImplementationMatchingStrategy == null)
         {
             return message + " This is most likely a bug in your code.";
         }
 
-        return message + string.Format("this is likely a bug in the {0} used ({1})",
-            nameof(IGenericImplementationMatchingStrategy),
-            handler.ImplementationMatchingStrategy);
+        return message +
+               $"this is likely a bug in the {nameof(IGenericImplementationMatchingStrategy)} used ({handler.ImplementationMatchingStrategy})";
     }
 }

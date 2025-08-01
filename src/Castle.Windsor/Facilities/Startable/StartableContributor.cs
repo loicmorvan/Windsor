@@ -48,9 +48,7 @@ public class StartableContributor(ITypeConverter converter) : IContributeCompone
             if (method == null)
             {
                 throw new ArgumentException(
-                    string.Format(
-                        "Could not find public parameterless method '{0}' on type {1} designated as start method. Make sure you didn't mistype the method name and that its signature matches.",
-                        startMethod, model.Implementation));
+                    $"Could not find public parameterless method '{startMethod}' on type {model.Implementation} designated as start method. Make sure you didn't mistype the method name and that its signature matches.");
             }
 
             model.ExtendedProperties.Add("Castle.StartableFacility.StartMethod", method);
@@ -68,9 +66,7 @@ public class StartableContributor(ITypeConverter converter) : IContributeCompone
             if (method == null)
             {
                 throw new ArgumentException(
-                    string.Format(
-                        "Could not find public parameterless method '{0}' on type {1} designated as stop method. Make sure you didn't mistype the method name and that its signature matches.",
-                        stopMethod, model.Implementation));
+                    $"Could not find public parameterless method '{stopMethod}' on type {model.Implementation} designated as stop method. Make sure you didn't mistype the method name and that its signature matches.");
             }
 
             model.ExtendedProperties.Add("Castle.StartableFacility.StopMethod", method);

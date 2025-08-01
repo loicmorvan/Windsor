@@ -155,9 +155,7 @@ public static class TypedFactoryRegistrationExtensions
 		}
 
 		throw new ComponentRegistrationException(
-			string.Format(
-				"Type {0} is a delegate, however the component has also {1} inteface(s) specified as its service. Delegate-based typed factories can't expose any additional services.",
-				classService.Name, registration.ServicesCount - 1));
+			$"Type {classService.Name} is a delegate, however the component has also {registration.ServicesCount - 1} inteface(s) specified as its service. Delegate-based typed factories can't expose any additional services.");
 
 	}
 

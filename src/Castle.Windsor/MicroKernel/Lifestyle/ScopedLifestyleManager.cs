@@ -61,10 +61,7 @@ public class ScopedLifestyleManager(IScopeAccessor accessor) : AbstractLifestyle
         if (scope == null)
         {
             throw new ComponentResolutionException(
-                string.Format(
-                    "Could not obtain scope for component {0}. This is most likely either a bug in custom {1} or you're trying to access scoped component outside of the scope (like a per-web-request component outside of web request etc)",
-                    Model.Name,
-                    typeof(IScopeAccessor).ToCSharpString()),
+                $"Could not obtain scope for component {Model.Name}. This is most likely either a bug in custom {typeof(IScopeAccessor).ToCSharpString()} or you're trying to access scoped component outside of the scope (like a per-web-request component outside of web request etc)",
                 Model);
         }
 

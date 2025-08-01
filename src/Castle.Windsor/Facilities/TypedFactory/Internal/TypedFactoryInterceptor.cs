@@ -105,10 +105,7 @@ public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryCompon
         if (component == null)
         {
             throw new FacilityException(
-                string.Format(
-                    "Selector {0} didn't select any component for method {1}. This usually signifies a bug in the selector.",
-                    ComponentSelector,
-                    invocation.Method));
+                $"Selector {ComponentSelector} didn't select any component for method {invocation.Method}. This usually signifies a bug in the selector.");
         }
 
         invocation.ReturnValue = component(kernel, _scope);

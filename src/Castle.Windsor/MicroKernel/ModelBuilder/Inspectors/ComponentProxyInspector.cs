@@ -102,9 +102,8 @@ public class ComponentProxyInspector(IConversionManager converter) : IContribute
             return;
         }
 
-        var message = string.Format("The class {0} requested a single interface proxy, " +
-                                    "however the service {1} does not represent an interface",
-            model.Implementation.FullName, model.Services.First().FullName);
+        var message = $"The class {model.Implementation.FullName} requested a single interface proxy, " +
+                      $"however the service {model.Services.First().FullName} does not represent an interface";
 
         throw new ComponentRegistrationException(message);
     }
