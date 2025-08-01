@@ -55,12 +55,7 @@ public class InterceptorReference : IReference<IInterceptor>, IEquatable<Interce
 
     public bool Equals(InterceptorReference other)
     {
-        if (other == null)
-        {
-            return false;
-        }
-
-        return Equals(_referencedComponentName, other._referencedComponentName);
+        return other != null && Equals(_referencedComponentName, other._referencedComponentName);
     }
 
     void IReference<IInterceptor>.Attach(ComponentModel component)
@@ -96,12 +91,7 @@ public class InterceptorReference : IReference<IInterceptor>, IEquatable<Interce
 
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(this, obj))
-        {
-            return true;
-        }
-
-        return Equals(obj as InterceptorReference);
+        return ReferenceEquals(this, obj) || Equals(obj as InterceptorReference);
     }
 
     public override int GetHashCode()
@@ -147,24 +137,16 @@ public class InterceptorReference : IReference<IInterceptor>, IEquatable<Interce
 
         //try old behavior first
         var handler = kernel.GetHandler(_referencedComponentType.FullName);
-        if (handler != null)
-        {
-            return handler;
-        }
-
-        // new bahavior as a fallback
-        return kernel.GetHandler(_referencedComponentType);
-
+        return handler ??
+               // new bahavior as a fallback
+               kernel.GetHandler(_referencedComponentType);
     }
 
     private static CreationContext RebuildContext(Type handlerType, CreationContext current)
     {
-        if (handlerType.GetTypeInfo().ContainsGenericParameters)
-        {
-            return current;
-        }
-
-        return new CreationContext(handlerType, current, true);
+        return handlerType.GetTypeInfo().ContainsGenericParameters
+            ? current
+            : new CreationContext(handlerType, current, true);
     }
 
     /// <summary>Gets an <see cref="InterceptorReference" /> for the component key.</summary>

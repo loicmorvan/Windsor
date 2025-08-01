@@ -83,12 +83,7 @@ public class DelegateFactory : ILazyComponentLoader
         }
 
         var invoke = GetInvokeMethod(service);
-        if (!HasReturn(invoke))
-        {
-            return null;
-        }
-
-        return invoke;
+        return !HasReturn(invoke) ? null : invoke;
     }
 
     protected static MethodInfo GetInvokeMethod(Type @delegate)

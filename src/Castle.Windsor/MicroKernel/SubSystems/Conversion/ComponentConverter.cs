@@ -23,22 +23,12 @@ public class ComponentConverter : AbstractTypeConverter, IKernelDependentConvert
 {
     public override bool CanHandleType(Type type, IConfiguration configuration)
     {
-        if (configuration.Value != null)
-        {
-            return ReferenceExpressionUtil.IsReference(configuration.Value);
-        }
-
-        return false;
+        return configuration.Value != null && ReferenceExpressionUtil.IsReference(configuration.Value);
     }
 
     public override bool CanHandleType(Type type)
     {
-        if (Context.Kernel == null)
-        {
-            return false;
-        }
-
-        return Context.Kernel.HasComponent(type);
+        return Context.Kernel != null && Context.Kernel.HasComponent(type);
     }
 
     public override object PerformConversion(string value, Type targetType)

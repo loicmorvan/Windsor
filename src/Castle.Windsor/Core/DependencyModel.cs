@@ -159,22 +159,12 @@ public class DependencyModel(
     private static ParameterModel GetParameterModelByType(Type type, ParameterModelCollection parameters)
     {
         var assemblyQualifiedName = type.AssemblyQualifiedName;
-        if (assemblyQualifiedName == null)
-        {
-            return null;
-        }
-
-        return parameters[assemblyQualifiedName];
+        return assemblyQualifiedName == null ? null : parameters[assemblyQualifiedName];
     }
 
     private ParameterModel ObtainParameterModelByName(ParameterModelCollection parameters)
     {
-        if (DependencyKey == null)
-        {
-            return null;
-        }
-
-        return parameters[DependencyKey];
+        return DependencyKey == null ? null : parameters[DependencyKey];
     }
 
     private ParameterModel ObtainParameterModelByType(ParameterModelCollection parameters)

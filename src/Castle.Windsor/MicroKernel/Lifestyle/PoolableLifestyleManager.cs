@@ -62,12 +62,7 @@ public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLi
 
     public override bool Release(object instance)
     {
-        if (_pool != null)
-        {
-            return _pool.Release(instance);
-        }
-
-        return false;
+        return _pool != null && _pool.Release(instance);
     }
 
     public override object Resolve(CreationContext context, IReleasePolicy releasePolicy)

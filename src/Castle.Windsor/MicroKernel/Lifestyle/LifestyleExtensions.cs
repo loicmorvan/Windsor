@@ -61,11 +61,9 @@ public static class LifestyleExtensions
 	private static IDisposable RequireScope()
 	{
 		var current = CallContextLifetimeScope.ObtainCurrentScope();
-		if (current == null)
-		{
-			return BeginScope();
-		}
-
-		return null; // Return null, not the parent otherwise you'll cause premature disposal
+		return
+			current == null
+				? BeginScope()
+				: null; // Return null, not the parent otherwise you'll cause premature disposal
 	}
 }

@@ -50,11 +50,6 @@ public class ArrayResolver : CollectionResolver
 
     protected override Type GetItemType(Type targetItemType)
     {
-        if (targetItemType.IsArray)
-        {
-            return targetItemType.GetElementType();
-        }
-
-        return null;
+        return targetItemType.IsArray ? targetItemType.GetElementType() : null;
     }
 }

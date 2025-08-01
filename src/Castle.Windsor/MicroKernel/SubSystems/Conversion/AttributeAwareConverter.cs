@@ -28,12 +28,7 @@ public class AttributeAwareConverter : AbstractTypeConverter
     {
         var converter = TryGetConverterInstance(type);
 
-        if (converter != null)
-        {
-            return converter.CanHandleType(type);
-        }
-
-        return false;
+        return converter != null && converter.CanHandleType(type);
     }
 
     public override object PerformConversion(string value, Type targetType)

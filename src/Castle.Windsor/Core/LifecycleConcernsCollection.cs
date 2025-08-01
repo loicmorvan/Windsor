@@ -28,33 +28,12 @@ public class LifecycleConcernsCollection
 
     /// <summary>Returns all concerns for the commission phase</summary>
     /// <value></value>
-    public IEnumerable<ICommissionConcern> CommissionConcerns
-    {
-        get
-        {
-            if (HasCommissionConcerns == false)
-            {
-                return [];
-            }
-
-            return _commission;
-        }
-    }
+    public IEnumerable<ICommissionConcern> CommissionConcerns => HasCommissionConcerns == false ? [] : _commission;
 
     /// <summary>Returns all concerns for the decommission phase</summary>
     /// <value></value>
-    public IEnumerable<IDecommissionConcern> DecommissionConcerns
-    {
-        get
-        {
-            if (HasDecommissionConcerns == false)
-            {
-                return [];
-            }
-
-            return _decommission;
-        }
-    }
+    public IEnumerable<IDecommissionConcern> DecommissionConcerns =>
+        HasDecommissionConcerns == false ? [] : _decommission;
 
     /// <summary>Gets a value indicating whether this instance has commission steps.</summary>
     /// <value><c>true</c> if this instance has commission steps; otherwise, <c>false</c>.</value>

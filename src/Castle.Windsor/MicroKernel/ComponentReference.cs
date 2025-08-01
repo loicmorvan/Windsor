@@ -113,11 +113,8 @@ public class ComponentReference<T> : IReference<T>
     private CreationContext RebuildContext(IHandler handler, CreationContext current)
     {
         var handlerType = ComponentType ?? handler.ComponentModel.Services.First();
-        if (handlerType.GetTypeInfo().ContainsGenericParameters)
-        {
-            return current;
-        }
-
-        return new CreationContext(handlerType, current, false);
+        return handlerType.GetTypeInfo().ContainsGenericParameters
+            ? current
+            : new CreationContext(handlerType, current, false);
     }
 }

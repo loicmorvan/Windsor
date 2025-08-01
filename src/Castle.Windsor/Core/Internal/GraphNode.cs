@@ -23,12 +23,7 @@ public class GraphNode :
         get
         {
             var collection = _outgoing;
-            if (collection == null)
-            {
-                return [];
-            }
-
-            return collection.ToArray();
+            return collection == null ? [] : collection.ToArray();
         }
     }
 

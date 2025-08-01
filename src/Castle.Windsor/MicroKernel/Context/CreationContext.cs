@@ -336,12 +336,9 @@ public class CreationContext :
             return inlineArgument;
         }
 
-        if (CanConvertParameter(targetType))
-        {
-            return _converter.PerformConversion(inlineArgument.ToString(), targetType);
-        }
-
-        return null;
+        return CanConvertParameter(targetType)
+            ? _converter.PerformConversion(inlineArgument.ToString(), targetType)
+            : null;
     }
 
     /// <summary>Creates a new, empty <see cref="CreationContext" /> instance.</summary>
@@ -364,12 +361,9 @@ public class CreationContext :
 
     private static Type[] ExtractGenericArguments(Type typeToExtractGenericArguments)
     {
-        if (typeToExtractGenericArguments.GetTypeInfo().IsGenericType)
-        {
-            return typeToExtractGenericArguments.GetTypeInfo().GetGenericArguments();
-        }
-
-        return Type.EmptyTypes;
+        return typeToExtractGenericArguments.GetTypeInfo().IsGenericType
+            ? typeToExtractGenericArguments.GetTypeInfo().GetGenericArguments()
+            : Type.EmptyTypes;
     }
 
     public class ResolutionContext(

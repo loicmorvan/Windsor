@@ -121,11 +121,7 @@ public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryCompon
             return true;
         }
 
-        if (invocation.Method.IsGenericMethod == false)
-        {
-            return false;
-        }
-
-        return _methods.TryGetValue(invocation.Method.GetGenericMethodDefinition(), out method);
+        return invocation.Method.IsGenericMethod &&
+               _methods.TryGetValue(invocation.Method.GetGenericMethodDefinition(), out method);
     }
 }

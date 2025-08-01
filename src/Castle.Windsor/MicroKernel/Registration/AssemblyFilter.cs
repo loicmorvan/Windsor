@@ -133,12 +133,9 @@ public class AssemblyFilter : IAssemblyProvider
                 return [];
             }
 
-            if (string.IsNullOrEmpty(_mask))
-            {
-                return Directory.EnumerateFiles(_directoryName);
-            }
-
-            return Directory.EnumerateFiles(_directoryName, _mask);
+            return string.IsNullOrEmpty(_mask)
+                ? Directory.EnumerateFiles(_directoryName)
+                : Directory.EnumerateFiles(_directoryName, _mask);
         }
         catch (IOException e)
         {

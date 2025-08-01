@@ -165,12 +165,9 @@ public abstract class AbstractHandler :
         DependencyModel dependency)
     {
         Debug.Assert(CanResolve(context, contextHandlerResolver, model, dependency));
-        if (HasCustomParameter(dependency.DependencyKey))
-        {
-            return model.CustomDependencies[dependency.DependencyKey];
-        }
-
-        return model.CustomDependencies[dependency.TargetItemType];
+        return HasCustomParameter(dependency.DependencyKey)
+            ? model.CustomDependencies[dependency.DependencyKey]
+            : model.CustomDependencies[dependency.TargetItemType];
     }
 
     /// <summary>Should be implemented by derived classes: disposes the component instance (or recycle it)</summary>
@@ -194,12 +191,7 @@ public abstract class AbstractHandler :
 
     private bool HasCustomParameter(object key)
     {
-        if (key == null)
-        {
-            return false;
-        }
-
-        return _model.CustomDependencies.Contains(key);
+        return key != null && _model.CustomDependencies.Contains(key);
     }
 
     protected virtual void InitDependencies()
@@ -363,12 +355,7 @@ public abstract class AbstractHandler :
             return Kernel.GetHandler(dependency.ReferencedComponentName);
         }
 
-        if (dependency.TargetItemType != null)
-        {
-            return Kernel.GetHandler(dependency.TargetItemType);
-        }
-
-        return null;
+        return dependency.TargetItemType != null ? Kernel.GetHandler(dependency.TargetItemType) : null;
     }
 
     private bool AddOptionalDependency(DependencyModel dependency)

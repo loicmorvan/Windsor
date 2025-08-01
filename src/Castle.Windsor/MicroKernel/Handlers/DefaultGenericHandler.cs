@@ -118,13 +118,11 @@ public class DefaultGenericHandler(
         }
 
         AdaptInterfaceServices(closedImplementationType, closedServices, openServices, index);
-        if (closedServices.Count == 0)
+        return closedServices.Count == 0
+            ?
             // we obviously have either a bug or an uncovered case. I suppose the best we can do at this point is to fallback to the old behaviour
-        {
-            return [requestedType];
-        }
-
-        return closedServices.ToArray();
+            [requestedType]
+            : closedServices.ToArray();
     }
 
     protected virtual IHandler BuildSubHandler(Type closedImplementationType, Type requestedType)
@@ -221,12 +219,7 @@ public class DefaultGenericHandler(
             return false;
         }
 
-        if (ServiceStrategy != null && ServiceStrategy.Supports(modelServiceClosed, ComponentModel) == false)
-        {
-            return false;
-        }
-
-        return true;
+        return ServiceStrategy == null || ServiceStrategy.Supports(modelServiceClosed, ComponentModel);
     }
 
     /// <summary>Clone some of the parent componentmodel properties to the generic subhandler.</summary>

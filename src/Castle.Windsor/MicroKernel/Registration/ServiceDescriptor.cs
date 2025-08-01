@@ -237,11 +237,6 @@ public class ServiceDescriptor
             shouldUseGenericTypeDefinition |= argument.IsGenericParameter;
         }
 
-        if (shouldUseGenericTypeDefinition)
-        {
-            return serviceType.GetGenericTypeDefinition();
-        }
-
-        return serviceType;
+        return shouldUseGenericTypeDefinition ? serviceType.GetGenericTypeDefinition() : serviceType;
     }
 }

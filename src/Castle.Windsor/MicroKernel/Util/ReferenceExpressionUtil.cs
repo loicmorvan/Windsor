@@ -18,22 +18,12 @@ public abstract class ReferenceExpressionUtil
 {
     public static string BuildReference(string value)
     {
-        if (IsReference(value))
-        {
-            return value;
-        }
-
-        return $"${{{value}}}";
+        return IsReference(value) ? value : $"${{{value}}}";
     }
 
     public static string ExtractComponentName(string value)
     {
-        if (IsReference(value))
-        {
-            return value.Substring(2, value.Length - 3);
-        }
-
-        return null;
+        return IsReference(value) ? value.Substring(2, value.Length - 3) : null;
     }
 
     public static bool IsReference(string value)

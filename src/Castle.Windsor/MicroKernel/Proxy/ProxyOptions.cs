@@ -51,18 +51,7 @@ public class ProxyOptions
 
     /// <summary>Gets the mix ins to integrate.</summary>
     /// <value> The interfaces. </value>
-    public IEnumerable<IReference<object>> MixIns
-    {
-        get
-        {
-            if (_mixInList != null)
-            {
-                return _mixInList;
-            }
-
-            return [];
-        }
-    }
+    public IEnumerable<IReference<object>> MixIns => _mixInList ?? [];
 
     /// <summary>Determines if the proxied component uses a target.</summary>
     public bool OmitTarget { get; set; }

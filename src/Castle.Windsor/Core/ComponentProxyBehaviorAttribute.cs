@@ -23,15 +23,7 @@ public sealed class ComponentProxyBehaviorAttribute : Attribute
     /// <summary>Gets or sets the additional interfaces used during proxy generation.</summary>
     public Type[] AdditionalInterfaces
     {
-        get
-        {
-            if (_additionalInterfaces != null)
-            {
-                return _additionalInterfaces;
-            }
-
-            return Type.EmptyTypes;
-        }
+        get => _additionalInterfaces ?? Type.EmptyTypes;
         set => _additionalInterfaces = value;
     }
 }

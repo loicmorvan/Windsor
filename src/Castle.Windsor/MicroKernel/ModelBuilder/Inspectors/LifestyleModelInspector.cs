@@ -259,12 +259,7 @@ public class LifestyleModelInspector : IContributeComponentModelConstruction
     private Type GetTypeFromAttribute(ComponentModel model, string attribute)
     {
         var rawAttribute = model.Configuration.Attributes[attribute];
-        if (rawAttribute == null)
-        {
-            return null;
-        }
-
-        return _converter.PerformConversion<Type>(rawAttribute);
+        return rawAttribute == null ? null : _converter.PerformConversion<Type>(rawAttribute);
     }
 
     private bool IsBindMethod(MemberInfo methodMember, object _)
@@ -281,11 +276,6 @@ public class LifestyleModelInspector : IContributeComponentModelConstruction
             return false;
         }
 
-        if (parameters[0].ParameterType != typeof(IHandler[]))
-        {
-            return false;
-        }
-
-        return true;
+        return parameters[0].ParameterType == typeof(IHandler[]);
     }
 }
