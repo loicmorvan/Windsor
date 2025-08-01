@@ -16,6 +16,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Castle.Windsor.Core.Internal;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Registration;
 
@@ -91,6 +92,7 @@ public static class Classes
 	///     assemblies will be ignored.
 	/// </remarks>
 	[MethodImpl(MethodImplOptions.NoInlining)]
+	[PublicAPI]
 	public static FromAssemblyDescriptor FromAssemblyInThisApplication()
 	{
 		return FromAssemblyInThisApplication(Assembly.GetCallingAssembly());
@@ -105,6 +107,7 @@ public static class Classes
 	/// <summary>Prepares to register types from an assembly.</summary>
 	/// <param name="assemblyName"> The assembly name. </param>
 	/// <returns>The corresponding <see cref="FromDescriptor" /></returns>
+	[PublicAPI]
 	public static FromAssemblyDescriptor FromAssemblyNamed(string assemblyName)
 	{
 		var assembly = ReflectionUtil.GetAssemblyNamed(assemblyName);

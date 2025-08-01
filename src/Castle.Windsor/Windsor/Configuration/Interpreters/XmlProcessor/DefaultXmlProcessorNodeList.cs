@@ -43,8 +43,6 @@ public class DefaultXmlProcessorNodeList : IXmlProcessorNodeList
 
     public int CurrentPosition { get; set; } = -1;
 
-    public bool HasCurrent => CurrentPosition < _nodes.Count;
-
     public bool MoveNext()
     {
         return ++CurrentPosition < _nodes.Count;

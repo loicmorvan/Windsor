@@ -19,8 +19,6 @@ namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.Element
 public class DefaultElementProcessor : AbstractXmlNodeProcessor
 {
     private const string IncludeAttrName = "includeUri";
-    private static readonly IncludeElementProcessor IncludeProcessor = new();
-    private static readonly DefaultTextNodeProcessor TextProcessor = new();
 
     public override string Name => "";
 

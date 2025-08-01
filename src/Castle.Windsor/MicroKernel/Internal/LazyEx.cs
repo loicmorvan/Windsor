@@ -13,30 +13,36 @@
 // limitations under the License.
 
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.MicroKernel.Internal;
 
 public class LazyEx<T> : Lazy<T>, IDisposable
 {
     private readonly IKernel _kernel;
 
+    [PublicAPI]
     public LazyEx(IKernel kernel, Arguments arguments)
         : base(() => kernel.Resolve<T>(arguments))
     {
         _kernel = kernel;
     }
 
+    [PublicAPI]
     public LazyEx(IKernel kernel, string overrideComponentName)
         : base(() => kernel.Resolve<T>(overrideComponentName))
     {
         _kernel = kernel;
     }
 
+    [PublicAPI]
     public LazyEx(IKernel kernel, string overrideComponentName, Arguments arguments)
         : base(() => kernel.Resolve<T>(overrideComponentName, arguments))
     {
         _kernel = kernel;
     }
 
+    [PublicAPI]
     public LazyEx(IKernel kernel)
         : base(kernel.Resolve<T>)
     {

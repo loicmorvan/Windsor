@@ -134,11 +134,6 @@ public partial class DefaultXmlProcessorEngine : IXmlProcessorEngine
         return _flags.ContainsKey(GetCanonicalFlagName(flag));
     }
 
-    public bool HasProperty(string name)
-    {
-        return _properties.ContainsKey(name);
-    }
-
     public bool HasSpecialProcessor(XmlNode node)
     {
         return GetProcessor(node) != _defaultElementProcessor;

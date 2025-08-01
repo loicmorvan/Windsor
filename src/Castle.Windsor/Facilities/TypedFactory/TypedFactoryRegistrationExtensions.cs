@@ -21,6 +21,7 @@ using Castle.Windsor.Facilities.TypedFactory.Internal;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 using Castle.Windsor.MicroKernel.Registration;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Facilities.TypedFactory;
 
@@ -60,6 +61,7 @@ public static class TypedFactoryRegistrationExtensions
 	///     internally, so users should not set interceptor selectors explicitly; otherwise the
 	///     factory will not function correctly.
 	/// </remarks>
+	[PublicAPI]
 	public static ComponentRegistration<TFactoryInterface> AsFactory<TFactoryInterface>(
 		this ComponentRegistration<TFactoryInterface> registration, string selectorComponentName)
 		where TFactoryInterface : class
@@ -82,6 +84,7 @@ public static class TypedFactoryRegistrationExtensions
 	///     internally, so users should not set interceptor selectors explicitly; otherwise the
 	///     factory will not function correctly.
 	/// </remarks>
+	[PublicAPI]
 	public static ComponentRegistration<TFactoryInterface> AsFactory<TFactoryInterface>(
 		this ComponentRegistration<TFactoryInterface> registration, Type selectorComponentType)
 		where TFactoryInterface : class

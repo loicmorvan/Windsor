@@ -18,6 +18,7 @@ using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.Util;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
@@ -30,6 +31,7 @@ public class ServiceOverrideDescriptor : AbstractPropertyDescriptor
         _value = overrides;
     }
 
+    [PublicAPI]
     public ServiceOverrideDescriptor(IDictionary dictionary)
     {
         _value = dictionary;

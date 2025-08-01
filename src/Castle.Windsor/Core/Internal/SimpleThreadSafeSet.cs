@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
 using Lock = Castle.Windsor.MicroKernel.Internal.Lock;
 
 namespace Castle.Windsor.Core.Internal;
@@ -21,6 +22,7 @@ public class SimpleThreadSafeSet<T>
     private readonly HashSet<T> _implementation = [];
     private readonly Lock _lock = Lock.Create();
 
+    [PublicAPI]
     public int Count
     {
         get

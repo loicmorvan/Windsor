@@ -141,7 +141,6 @@ public class LifestyleModelInspector : IContributeComponentModelConstruction
             model.LifestyleType = LifestyleType.Custom;
             return true;
         }
-        return false;
     }
 
     /// <summary>Check if the type expose one of the lifestyle attributes defined in Castle.Model namespace.</summary>

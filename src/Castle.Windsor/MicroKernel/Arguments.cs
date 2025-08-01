@@ -15,6 +15,7 @@
 using System.Collections;
 using Castle.Core;
 using Castle.Windsor.Windsor;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel;
 
@@ -95,6 +96,7 @@ public sealed class Arguments
     }
 
     /// <summary>Adds a collection of named and/or typed arguments.</summary>
+    [PublicAPI]
     public Arguments Add(IEnumerable<KeyValuePair<object, object>> arguments)
     {
         foreach (var item in arguments)
@@ -192,6 +194,7 @@ public sealed class Arguments
     ///     Initializes a new instance of the <see cref="Arguments" /> class and adds a collection of typed arguments,
     ///     <see cref="Dictionary{TKey,TValue}" /> implements this interface.
     /// </summary>
+    [PublicAPI]
     public static Arguments FromTyped(IEnumerable<KeyValuePair<Type, object>> arguments)
     {
         return new Arguments().AddTyped(arguments);

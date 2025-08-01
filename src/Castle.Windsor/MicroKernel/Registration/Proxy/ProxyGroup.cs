@@ -14,6 +14,7 @@
 
 using Castle.DynamicProxy;
 using Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Registration.Proxy;
 
@@ -25,6 +26,7 @@ public class ProxyGroup<TS> : RegistrationGroup<TS>
     {
     }
 
+    [PublicAPI]
     public ComponentRegistration<TS> AsMarshalByRefClass =>
         AddAttributeDescriptor("marshalByRefProxy", bool.TrueString);
 

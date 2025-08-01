@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Describes the source of types to register.</summary>
@@ -76,6 +78,7 @@ public abstract class FromDescriptor : IRegistration
     ///     types.
     /// </param>
     /// <returns> The descriptor for the type. </returns>
+    [PublicAPI]
     public BasedOnDescriptor BasedOn(params Type[] basedOn)
     {
         return BasedOn((IEnumerable<Type>)basedOn);
@@ -114,6 +117,7 @@ public abstract class FromDescriptor : IRegistration
     /// <summary>Creates a predicate to check if a component shares a namespace with another.</summary>
     /// <param name="type"> The component type to test namespace against. </param>
     /// <returns> true if the component is in the same namespace. </returns>
+    [PublicAPI]
     public BasedOnDescriptor InSameNamespaceAs(Type type)
     {
         return Where(Component.IsInSameNamespaceAs(type));
@@ -123,6 +127,7 @@ public abstract class FromDescriptor : IRegistration
     /// <param name="type"> The component type to test namespace against. </param>
     /// <param name="includeSubnamespaces"> If set to true, will also include types from subnamespaces. </param>
     /// <returns> true if the component is in the same namespace. </returns>
+    [PublicAPI]
     public BasedOnDescriptor InSameNamespaceAs(Type type, bool includeSubnamespaces)
     {
         return Where(Component.IsInSameNamespaceAs(type, includeSubnamespaces));

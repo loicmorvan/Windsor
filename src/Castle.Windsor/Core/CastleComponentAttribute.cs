@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Reflection;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Core;
 
@@ -45,6 +46,7 @@ public class CastleComponentAttribute : LifestyleAttribute
         ServicesSpecifiedExplicitly = Services.Length > 0;
     }
 
+    [PublicAPI]
     public bool HasName => string.IsNullOrEmpty(Name) == false;
 
     public string Name { get; }

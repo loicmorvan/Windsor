@@ -15,6 +15,7 @@
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Lifestyle;
 
@@ -22,6 +23,7 @@ public class ScopedLifestyleManager(IScopeAccessor accessor) : AbstractLifestyle
 {
     private IScopeAccessor _accessor = accessor;
 
+    [PublicAPI]
     public ScopedLifestyleManager()
         : this(new LifetimeScopeAccessor())
     {

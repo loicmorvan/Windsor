@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Core.Internal;
 
@@ -24,6 +25,7 @@ public class SimpleSortedSet<T>(IComparer<T> comparer) : ICollection<T>
     {
     }
 
+    [PublicAPI]
     public SimpleSortedSet(IEnumerable<T> other, IComparer<T> comparer) : this(comparer)
     {
         foreach (var item in other)

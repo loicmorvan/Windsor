@@ -15,6 +15,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Castle.Windsor.Core;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Registration;
 
@@ -131,6 +132,7 @@ public static class Component
 	/// <typeparam name="TService4">The third forwarded type.</typeparam>
 	/// <typeparam name="TService5">The fourth forwarded type.</typeparam>
 	/// <returns>The component registration.</returns>
+	[PublicAPI]
 	public static ComponentRegistration<TService1> For<TService1, TService2, TService3, TService4, TService5>()
 		where TService1 : class
 	{

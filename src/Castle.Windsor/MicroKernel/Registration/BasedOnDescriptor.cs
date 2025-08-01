@@ -15,6 +15,7 @@
 using System.Reflection;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Registration;
 
@@ -45,6 +46,7 @@ public sealed class BasedOnDescriptor : IRegistration
     }
 
     /// <summary>Allows a type to be registered multiple times.</summary>
+    [PublicAPI]
     public FromDescriptor AllowMultipleMatches()
     {
         return _from.AllowMultipleMatches();
@@ -155,6 +157,7 @@ public sealed class BasedOnDescriptor : IRegistration
 
     /// <summary>Uses all interfaces implemented by the type (or its base types) as well as their base interfaces.</summary>
     /// <returns> </returns>
+    [PublicAPI]
     public BasedOnDescriptor WithServiceAllInterfaces()
     {
         return WithService.AllInterfaces();
@@ -172,6 +175,7 @@ public sealed class BasedOnDescriptor : IRegistration
     ///     to IFoo and IFooExtended etc.
     /// </summary>
     /// <returns> </returns>
+    [PublicAPI]
     public BasedOnDescriptor WithServiceDefaultInterfaces()
     {
         return WithService.DefaultInterfaces();
@@ -195,6 +199,7 @@ public sealed class BasedOnDescriptor : IRegistration
     /// </summary>
     /// <param name="implements"> </param>
     /// <returns> </returns>
+    [PublicAPI]
     public BasedOnDescriptor WithServiceFromInterface(Type implements)
     {
         return WithService.FromInterface(implements);
@@ -202,6 +207,7 @@ public sealed class BasedOnDescriptor : IRegistration
 
     /// <summary>Uses base type to look up the sub interface.</summary>
     /// <returns> </returns>
+    [PublicAPI]
     public BasedOnDescriptor WithServiceFromInterface()
     {
         return WithService.FromInterface();
@@ -210,6 +216,7 @@ public sealed class BasedOnDescriptor : IRegistration
     /// <summary>Assigns a custom service selection strategy.</summary>
     /// <param name="selector"> </param>
     /// <returns> </returns>
+    [PublicAPI]
     public BasedOnDescriptor WithServiceSelect(ServiceDescriptor.ServiceSelector selector)
     {
         return WithService.Select(selector);
@@ -217,6 +224,7 @@ public sealed class BasedOnDescriptor : IRegistration
 
     /// <summary>Uses the type itself.</summary>
     /// <returns> </returns>
+    [PublicAPI]
     public BasedOnDescriptor WithServiceSelf()
     {
         return WithService.Self();
@@ -224,6 +232,7 @@ public sealed class BasedOnDescriptor : IRegistration
 
     /// <summary>Sets component lifestyle to specified one.</summary>
     /// <returns> </returns>
+    [PublicAPI]
     public BasedOnDescriptor LifestyleCustom(Type customLifestyleType)
     {
         return Configure(c => c.LifestyleCustom(customLifestyleType));
@@ -276,6 +285,7 @@ public sealed class BasedOnDescriptor : IRegistration
     ///     assignable to <typeparamref name="TBaseForRoot" /> .
     /// </summary>
     /// <returns> </returns>
+    [PublicAPI]
     public BasedOnDescriptor LifestyleBoundToNearest<TBaseForRoot>() where TBaseForRoot : class
     {
         return Configure(c => c.LifestyleBoundToNearest<TBaseForRoot>());
@@ -308,6 +318,7 @@ public sealed class BasedOnDescriptor : IRegistration
     /// <summary>Assigns the supplied service types.</summary>
     /// <param name="types"> </param>
     /// <returns> </returns>
+    [PublicAPI]
     public BasedOnDescriptor WithServices(IEnumerable<Type> types)
     {
         return WithService.Select(types);
@@ -316,6 +327,7 @@ public sealed class BasedOnDescriptor : IRegistration
     /// <summary>Assigns the supplied service types.</summary>
     /// <param name="types"> </param>
     /// <returns> </returns>
+    [PublicAPI]
     public BasedOnDescriptor WithServices(params Type[] types)
     {
         return WithService.Select(types);

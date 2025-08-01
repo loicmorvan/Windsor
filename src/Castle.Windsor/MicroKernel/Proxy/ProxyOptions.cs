@@ -14,6 +14,7 @@
 
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Proxy;
 
@@ -91,6 +92,7 @@ public class ProxyOptions
 
     /// <summary>Adds the additional mix ins to integrate.</summary>
     /// <param name="mixIns"> The mix ins. </param>
+    [PublicAPI]
     public void AddMixIns(params object[] mixIns)
     {
         if (mixIns == null || mixIns.Length == 0)

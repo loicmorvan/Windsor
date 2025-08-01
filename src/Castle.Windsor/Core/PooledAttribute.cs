@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Core;
 
 /// <summary>Indicates that the target components wants a pooled lifestyle.</summary>
@@ -22,6 +24,7 @@ public sealed class PooledAttribute : LifestyleAttribute
     ///     Initializes a new instance of the <see cref="PooledAttribute" /> class using the default initial pool size (5)
     ///     and the max pool size (15).
     /// </summary>
+    [PublicAPI]
     public PooledAttribute() : this(5, 15)
     {
     }

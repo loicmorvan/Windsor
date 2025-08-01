@@ -17,6 +17,7 @@ using System.Reflection;
 using Castle.Core.Configuration;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Core;
 
@@ -181,6 +182,7 @@ public sealed class ComponentModel : GraphNode
     }
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    [PublicAPI]
     public bool HasParameters
     {
         get

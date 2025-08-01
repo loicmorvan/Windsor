@@ -16,6 +16,7 @@ using System.Text;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.ComponentActivator;
 using Castle.Windsor.MicroKernel.Context;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Handlers;
 
@@ -33,6 +34,7 @@ public class DefaultHandler : AbstractHandler
     }
 
     /// <summary>Lifestyle manager instance</summary>
+    [PublicAPI]
     protected ILifestyleManager LifestyleManager => _lifestyleManager;
 
     public override void Dispose()

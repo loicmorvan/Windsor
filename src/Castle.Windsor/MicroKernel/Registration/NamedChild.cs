@@ -1,4 +1,5 @@
 using Castle.Core.Configuration;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Registration;
 
@@ -29,6 +30,7 @@ public class NamedChild : Node
     /// <summary>Builds the <see cref="SimpleChild" /> with name/value.</summary>
     /// <param name="value">The child value.</param>
     /// <returns>The new <see cref="SimpleChild" /></returns>
+    [PublicAPI]
     public SimpleChild Eq(object value)
     {
         var valueStr = value != null ? value.ToString() : string.Empty;
@@ -38,6 +40,7 @@ public class NamedChild : Node
     /// <summary>Builds the <see cref="ComplexChild" /> with name/config.</summary>
     /// <param name="configNode">The child configuration.</param>
     /// <returns>The new <see cref="ComplexChild" /></returns>
+    [PublicAPI]
     public ComplexChild Eq(IConfiguration configNode)
     {
         return new ComplexChild(Name, configNode);

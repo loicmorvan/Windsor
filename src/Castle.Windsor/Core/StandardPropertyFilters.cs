@@ -14,6 +14,7 @@
 
 using System.Reflection;
 using Castle.Windsor.Core.Internal;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Core;
 
@@ -47,6 +48,7 @@ public class StandardPropertyFilters
         return props;
     }
 
+    [PublicAPI]
     public static PropertyDependencyFilter FromObsoleteFunction(Func<ComponentModel, PropertyInfo, bool> filter,
         bool isRequired)
     {

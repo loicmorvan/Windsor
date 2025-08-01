@@ -16,6 +16,7 @@ using System.Collections;
 using System.Reflection;
 using System.Resources;
 using Castle.Core.Configuration;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Registration;
 
@@ -171,6 +172,7 @@ public sealed class Dependency
     ///     Specifies that value <paramref name="value" /> should be used to satisfy dependencies matched by
     ///     <paramref name="dependencyType" />
     /// </summary>
+    [PublicAPI]
     public static Property OnValue(Type dependencyType, object value)
     {
         return Property.ForKey(dependencyType).Eq(value);

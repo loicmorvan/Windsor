@@ -31,6 +31,7 @@ using Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 using Castle.Windsor.MicroKernel.Registration.Interceptor;
 using Castle.Windsor.MicroKernel.Registration.Lifestyle;
 using Castle.Windsor.MicroKernel.Registration.Proxy;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Registration;
 
@@ -300,6 +301,7 @@ public class ComponentRegistration<TService> : IRegistration
     /// </summary>
     /// <param name="resolve"> The delegate used for providing dynamic parameters. </param>
     /// <returns> </returns>
+    [PublicAPI]
     public ComponentRegistration<TService> DependsOn(DynamicParametersResolveDelegate resolve)
     {
         return DynamicParameters((k, _, d) => resolve(k, d));
@@ -316,6 +318,7 @@ public class ComponentRegistration<TService> : IRegistration
     ///     Use <see cref="CreationContext" /> when resolving components from <see cref="IKernel" /> in order to detect
     ///     cycles.
     /// </remarks>
+    [PublicAPI]
     public ComponentRegistration<TService> DependsOn(DynamicParametersWithContextResolveDelegate resolve)
     {
         AddDescriptor(new DynamicParametersDescriptor(resolve));
@@ -374,6 +377,7 @@ public class ComponentRegistration<TService> : IRegistration
     /// <summary>Sets <see cref="ComponentModel.ExtendedProperties" /> for this component.</summary>
     /// <param name="anonymous"> The extendend properties as key/value pairs. </param>
     /// <returns> </returns>
+    [PublicAPI]
     public ComponentRegistration<TService> ExtendedProperties(object anonymous)
     {
         return AddDescriptor(new ExtendedPropertiesDescriptor(new ReflectionBasedDictionaryAdapter(anonymous)));
@@ -674,6 +678,7 @@ public class ComponentRegistration<TService> : IRegistration
     ///     lifetime of current component's instance, or <c>null</c>
     /// </param>
     /// <returns> </returns>
+    [PublicAPI]
     public ComponentRegistration<TService> LifestyleBoundTo(Func<IHandler[], IHandler> scopeRootBinder)
     {
         return LifeStyle.BoundTo(scopeRootBinder);
@@ -838,6 +843,7 @@ public class ComponentRegistration<TService> : IRegistration
     ///     will not happen at all.
     /// </summary>
     /// <returns> </returns>
+    [PublicAPI]
     public ComponentRegistration<TService> OnlyNewServices()
     {
         _registerNewServicesOnly = true;
@@ -847,6 +853,7 @@ public class ComponentRegistration<TService> : IRegistration
     /// <summary>With the overwrite.</summary>
     /// <returns> </returns>
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [PublicAPI]
     public ComponentRegistration<TService> OverWrite()
     {
         IsOverWrite = true;
