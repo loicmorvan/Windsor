@@ -7,9 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -102,7 +100,7 @@
       <force-push-target remote-path="origin" branch="net9" />
     </force-push-targets>
   </component>
-  <component name="RunManager" selected=".NET Project.Castle.Windsor.Tests">
+  <component name="RunManager">
     <configuration name="Castle.Windsor.Tests" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -457,7 +455,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754079519647</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="Improved handling of `LifestyleType.Undefined` across multiple classes, added missing exception cases, and enhanced code clarity with explicit `switch` branches.">
+      <option name="closed" value="true" />
+      <created>1754080271030</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1754080271030</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -491,7 +497,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Fixed some tests" />
     <MESSAGE value="Fixed all tests after switching to .NET 9.&#10;&#10;Still remaining the 8 tests that never worked." />
     <MESSAGE value="Cleanup everything" />
     <MESSAGE value="Fixed tests. Some random failure still remains." />
@@ -516,7 +521,8 @@
     <MESSAGE value="Removed unused diagnostics and related interfaces, added `[PublicAPI]` annotations, and improved exception handling." />
     <MESSAGE value="Improved null checks, streamlined conditional logic, and enhanced code consistency across multiple files." />
     <MESSAGE value="Refactored conditional logic by replacing `if-else` constructs with `switch` expressions to improve code clarity and consistency across multiple files." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored conditional logic by replacing `if-else` constructs with `switch` expressions to improve code clarity and consistency across multiple files." />
+    <MESSAGE value="Improved handling of `LifestyleType.Undefined` across multiple classes, added missing exception cases, and enhanced code clarity with explicit `switch` branches." />
+    <option name="LAST_COMMIT_MESSAGE" value="Improved handling of `LifestyleType.Undefined` across multiple classes, added missing exception cases, and enhanced code clarity with explicit `switch` branches." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

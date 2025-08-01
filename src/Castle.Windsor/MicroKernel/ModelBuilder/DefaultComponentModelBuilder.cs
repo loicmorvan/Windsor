@@ -23,7 +23,7 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder;
 [Serializable]
 public sealed class DefaultComponentModelBuilder : IComponentModelBuilder
 {
-    private readonly List<IContributeComponentModelConstruction> _contributors = new();
+    private readonly List<IContributeComponentModelConstruction> _contributors = [];
     private readonly IKernel _kernel;
 
     /// <summary>Initializes a new instance of the <see cref="DefaultComponentModelBuilder" /> class.</summary>

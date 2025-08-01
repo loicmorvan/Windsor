@@ -28,7 +28,7 @@ public class TypeNameConverter : AbstractTypeConverter
 {
     private static readonly Assembly Mscorlib = typeof(object).GetTypeInfo().Assembly;
 
-    private readonly HashSet<Assembly> _assemblies = new();
+    private readonly HashSet<Assembly> _assemblies = [];
 
     private readonly IDictionary<string, MultiType> _fullName2Type =
         new Dictionary<string, MultiType>(StringComparer.OrdinalIgnoreCase);
@@ -260,7 +260,7 @@ public class TypeNameConverter : AbstractTypeConverter
 
     private class MultiType : IEnumerable<Type>
     {
-        private readonly LinkedList<Type> _inner = new();
+        private readonly LinkedList<Type> _inner = [];
 
         public MultiType(Type type)
         {

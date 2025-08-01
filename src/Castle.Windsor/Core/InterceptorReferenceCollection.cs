@@ -28,7 +28,7 @@ public class InterceptorReferenceCollection(ComponentModel component) : IMutable
     private readonly ComponentModel _component = component;
 
     [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)] [DebuggerDisplay("Count = {list.Count}", Name = "")]
-    private readonly List<InterceptorReference> _list = new();
+    private readonly List<InterceptorReference> _list = [];
 
     /// <summary>Gets a value indicating whether this instance has interceptors.</summary>
     /// <value><c>true</c> if this instance has interceptors; otherwise, <c>false</c>.</value>

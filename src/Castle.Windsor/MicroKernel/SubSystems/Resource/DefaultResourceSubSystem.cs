@@ -19,7 +19,7 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Resource;
 /// <summary>Pendent</summary>
 public sealed class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 {
-    private readonly List<IResourceFactory> _resourceFactories = new();
+    private readonly List<IResourceFactory> _resourceFactories = [];
 
     public DefaultResourceSubSystem()
     {

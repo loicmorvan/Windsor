@@ -26,7 +26,7 @@ namespace Castle.Windsor.Core;
 public sealed class ComponentModel : GraphNode
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private readonly ConstructorCandidateCollection _constructors = new();
+    private readonly ConstructorCandidateCollection _constructors = [];
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly LifecycleConcernsCollection _lifecycle = new();
@@ -134,7 +134,7 @@ public sealed class ComponentModel : GraphNode
                 return value;
             }
 
-            value = new DependencyModelCollection();
+            value = [];
             var originalValue = Interlocked.CompareExchange(ref _dependencies, value, null);
             return originalValue ?? value;
         }
@@ -248,7 +248,7 @@ public sealed class ComponentModel : GraphNode
                 return value;
             }
 
-            value = new ParameterModelCollection();
+            value = [];
             var originalValue = Interlocked.CompareExchange(ref _parameters, value, null);
             return originalValue ?? value;
         }
@@ -267,7 +267,7 @@ public sealed class ComponentModel : GraphNode
                 return value;
             }
 
-            value = new PropertySetCollection();
+            value = [];
             var originalValue = Interlocked.CompareExchange(ref _properties, value, null);
             return originalValue ?? value;
         }
@@ -280,7 +280,7 @@ public sealed class ComponentModel : GraphNode
     [DebuggerDisplay("Count = {services.Count}")]
     public IEnumerable<Type> Services => _services;
 
-    internal HashSet<Type> ServicesLookup { get; } = new();
+    internal HashSet<Type> ServicesLookup { get; } = [];
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     internal ParameterModelCollection ParametersInternal => _parameters;

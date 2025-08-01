@@ -50,10 +50,10 @@ public sealed partial class DefaultKernel :
     [ThreadStatic] private static bool _isCheckingLazyLoaders;
 
     /// <summary>List of sub containers.</summary>
-    private readonly List<IKernel> _childKernels = new();
+    private readonly List<IKernel> _childKernels = [];
 
     /// <summary>List of <see cref="IFacility" /> registered.</summary>
-    private readonly List<IFacility> _facilities = new();
+    private readonly List<IFacility> _facilities = [];
 
     private readonly Lock _lazyLoadingLock = new();
 

@@ -24,7 +24,7 @@ namespace Castle.Windsor.Core;
 public class DependencyModelCollection : IMutableCollection<DependencyModel>
 {
     [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-    private readonly List<DependencyModel> _dependencies = new();
+    private readonly List<DependencyModel> _dependencies = [];
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public int Count => _dependencies.Count;

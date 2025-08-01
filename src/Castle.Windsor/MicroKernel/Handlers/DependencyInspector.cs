@@ -20,7 +20,7 @@ namespace Castle.Windsor.MicroKernel.Handlers;
 
 public class DependencyInspector(StringBuilder message) : IDependencyInspector
 {
-    private readonly HashSet<IHandler> _handlersChecked = new();
+    private readonly HashSet<IHandler> _handlersChecked = [];
 
     public string Message => message.ToString();
 
