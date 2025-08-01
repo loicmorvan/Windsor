@@ -50,16 +50,14 @@ public static class ComponentServicesUtil
             }
 
             var result = Comparer.Compare(newService, existingServices[i]);
-            if (result < 0)
+            switch (result)
             {
-                existingServices.Insert(i, newService);
-                lookup.Add(newService);
-                return;
-            }
-
-            if (result == 0)
-            {
-                return;
+                case < 0:
+                    existingServices.Insert(i, newService);
+                    lookup.Add(newService);
+                    return;
+                case 0:
+                    return;
             }
         }
 

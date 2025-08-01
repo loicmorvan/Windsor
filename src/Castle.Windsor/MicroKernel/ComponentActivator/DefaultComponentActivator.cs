@@ -164,15 +164,13 @@ public class DefaultComponentActivator : AbstractComponentActivator
 
     protected virtual ConstructorCandidate SelectEligibleConstructor(CreationContext context)
     {
-        if (Model.Constructors.Count == 0)
+        switch (Model.Constructors.Count)
+        {
             // This is required by some facilities
-        {
-            return null;
-        }
-
-        if (Model.Constructors.Count == 1)
-        {
-            return Model.Constructors[0];
+            case 0:
+                return null;
+            case 1:
+                return Model.Constructors[0];
         }
 
         ConstructorCandidate winnerCandidate = null;

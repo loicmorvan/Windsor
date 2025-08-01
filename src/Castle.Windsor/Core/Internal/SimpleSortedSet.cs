@@ -46,15 +46,13 @@ public class SimpleSortedSet<T>(IComparer<T> comparer) : ICollection<T>
         for (var i = 0; i < count; i++)
         {
             var result = comparer.Compare(item, _items[i]);
-            if (result < 0)
+            switch (result)
             {
-                _items.Insert(i, item);
-                return;
-            }
-
-            if (result == 0)
-            {
-                return;
+                case < 0:
+                    _items.Insert(i, item);
+                    return;
+                case 0:
+                    return;
             }
         }
 

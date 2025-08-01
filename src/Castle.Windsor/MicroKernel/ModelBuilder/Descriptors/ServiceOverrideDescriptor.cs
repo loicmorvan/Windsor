@@ -55,21 +55,20 @@ public class ServiceOverrideDescriptor : AbstractPropertyDescriptor
 
     private void Apply(ComponentModel model, object dependencyKey, object dependencyValue, ServiceOverride @override)
     {
-        if (dependencyValue is string value)
+        switch (dependencyValue)
         {
-            ApplySimpleReference(model, dependencyKey, value);
-        }
-        else if (dependencyValue is IEnumerable<string> enumerable)
-        {
-            ApplyReferenceList(model, dependencyKey, enumerable, @override);
-        }
-        else if (dependencyValue is Type type)
-        {
-            ApplySimpleReference(model, dependencyKey, ComponentName.DefaultNameFor(type));
-        }
-        else if (dependencyValue is IEnumerable<Type> types)
-        {
-            ApplyReferenceList(model, dependencyKey, types.Select(ComponentName.DefaultNameFor), @override);
+            case string value:
+                ApplySimpleReference(model, dependencyKey, value);
+                break;
+            case IEnumerable<string> enumerable:
+                ApplyReferenceList(model, dependencyKey, enumerable, @override);
+                break;
+            case Type type:
+                ApplySimpleReference(model, dependencyKey, ComponentName.DefaultNameFor(type));
+                break;
+            case IEnumerable<Type> types:
+                ApplyReferenceList(model, dependencyKey, types.Select(ComponentName.DefaultNameFor), @override);
+                break;
         }
     }
 

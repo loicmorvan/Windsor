@@ -97,16 +97,20 @@ public class TypeNameParser : ITypeNameParser
         while (currentLocation < text.Length)
         {
             var current = text[currentLocation];
-            if (current == '[')
+            switch (current)
             {
-                open++;
-            }
-            else if (current == ']')
-            {
-                open--;
-                if (open == 0)
+                case '[':
+                    open++;
+                    break;
+                case ']':
                 {
-                    return currentLocation;
+                    open--;
+                    if (open == 0)
+                    {
+                        return currentLocation;
+                    }
+
+                    break;
                 }
             }
 

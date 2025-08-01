@@ -40,21 +40,13 @@ public class ChooseElementProcessor : AbstractStatementElementProcessor
 
             var elem = GetNodeAsElement(element, child);
 
-            bool found;
-
-            if (elem.Name == WhenElemName)
+            var found = elem.Name switch
             {
-                found = ProcessStatement(elem, engine);
-            }
-            else if (elem.Name == OtherwiseElemName)
-            {
-                found = true;
-            }
-            else
-            {
-                throw new XmlProcessorException("'{0} can not contain only 'when' and 'otherwise' elements found '{1}'",
-                    element.Name, elem.Name);
-            }
+                WhenElemName => ProcessStatement(elem, engine),
+                OtherwiseElemName => true,
+                _ => throw new XmlProcessorException(
+                    "'{0} can not contain only 'when' and 'otherwise' elements found '{1}'", element.Name, elem.Name)
+            };
 
             if (!found)
             {

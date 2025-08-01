@@ -155,33 +155,40 @@ public class LifestyleModelInspector : IContributeComponentModelConstruction
         var attribute = attributes[0];
         model.LifestyleType = attribute.Lifestyle;
 
-        if (model.LifestyleType == LifestyleType.Custom)
+        switch (model.LifestyleType)
         {
-            var custom = (CustomLifestyleAttribute)attribute;
-            ValidateTypeFromAttribute(custom.CustomLifestyleType, typeof(ILifestyleManager), "CustomLifestyleType");
-            model.CustomLifestyle = custom.CustomLifestyleType;
-        }
-        else if (model.LifestyleType == LifestyleType.Pooled)
-        {
-            var pooled = (PooledAttribute)attribute;
-            model.ExtendedProperties[ExtendedPropertiesConstants.PoolInitialPoolSize] = pooled.InitialPoolSize;
-            model.ExtendedProperties[ExtendedPropertiesConstants.PoolMaxPoolSize] = pooled.MaxPoolSize;
-        }
-        else if (model.LifestyleType == LifestyleType.Bound)
-        {
-            var binder = ExtractBinder(((BoundToAttribute)attribute).ScopeRootBinderType, model.Name);
-            model.ExtendedProperties[Constants.ScopeRootSelector] = binder;
-        }
-        else if (model.LifestyleType == LifestyleType.Scoped)
-        {
-            var scoped = (ScopedAttribute)attribute;
-            if (scoped.ScopeAccessorType == null)
+            case LifestyleType.Custom:
             {
-                return;
+                var custom = (CustomLifestyleAttribute)attribute;
+                ValidateTypeFromAttribute(custom.CustomLifestyleType, typeof(ILifestyleManager), "CustomLifestyleType");
+                model.CustomLifestyle = custom.CustomLifestyleType;
+                break;
             }
+            case LifestyleType.Pooled:
+            {
+                var pooled = (PooledAttribute)attribute;
+                model.ExtendedProperties[ExtendedPropertiesConstants.PoolInitialPoolSize] = pooled.InitialPoolSize;
+                model.ExtendedProperties[ExtendedPropertiesConstants.PoolMaxPoolSize] = pooled.MaxPoolSize;
+                break;
+            }
+            case LifestyleType.Bound:
+            {
+                var binder = ExtractBinder(((BoundToAttribute)attribute).ScopeRootBinderType, model.Name);
+                model.ExtendedProperties[Constants.ScopeRootSelector] = binder;
+                break;
+            }
+            case LifestyleType.Scoped:
+            {
+                var scoped = (ScopedAttribute)attribute;
+                if (scoped.ScopeAccessorType == null)
+                {
+                    return;
+                }
 
-            ValidateTypeFromAttribute(scoped.ScopeAccessorType, typeof(IScopeAccessor), "ScopeAccessorType");
-            model.ExtendedProperties[Constants.ScopeAccessorType] = scoped.ScopeAccessorType;
+                ValidateTypeFromAttribute(scoped.ScopeAccessorType, typeof(IScopeAccessor), "ScopeAccessorType");
+                model.ExtendedProperties[Constants.ScopeAccessorType] = scoped.ScopeAccessorType;
+                break;
+            }
         }
     }
 

@@ -42,27 +42,27 @@ public static class HelpfulExceptionsUtil
         }
         else if (IsUsingFactoryMethod(burden.Model))
         {
-            // .UsingFactoryMethod case
-            if (burden.Model.LifestyleType == LifestyleType.Transient)
+            switch (burden.Model.LifestyleType)
             {
-                message.AppendLine(
-                    "The factory method providing instances of the component is reusing instances, but the lifestyle of the component is " +
-                    burden.Model.LifestyleType +
-                    " which requires new instance each time.");
-            }
-            else if (burden.Model.LifestyleType == LifestyleType.Custom)
-            {
-                message.AppendLine(
-                    "The factory method providing instances of the component is reusing instances, in a way that the custom lifestyle of the component (" +
-                    burden.Model.LifestyleType +
-                    ") does not expect.");
-            }
-            else
-            {
-                message.AppendLine(
-                    "The factory method providing instances of the component is reusing instances, in a way that the lifestyle of the component (" +
-                    burden.Model.LifestyleType +
-                    ") does not expect.");
+                // .UsingFactoryMethod case
+                case LifestyleType.Transient:
+                    message.AppendLine(
+                        "The factory method providing instances of the component is reusing instances, but the lifestyle of the component is " +
+                        burden.Model.LifestyleType +
+                        " which requires new instance each time.");
+                    break;
+                case LifestyleType.Custom:
+                    message.AppendLine(
+                        "The factory method providing instances of the component is reusing instances, in a way that the custom lifestyle of the component (" +
+                        burden.Model.LifestyleType +
+                        ") does not expect.");
+                    break;
+                default:
+                    message.AppendLine(
+                        "The factory method providing instances of the component is reusing instances, in a way that the lifestyle of the component (" +
+                        burden.Model.LifestyleType +
+                        ") does not expect.");
+                    break;
             }
 
             message.AppendLine(
@@ -72,27 +72,27 @@ public static class HelpfulExceptionsUtil
         }
         else
         {
-            // some other custom activator
-            if (burden.Model.LifestyleType == LifestyleType.Transient)
+            switch (burden.Model.LifestyleType)
             {
-                message.AppendLine("The custom activator" + burden.Model.CustomComponentActivator +
-                                   " is reusing instances, but the lifestyle of the component is " +
-                                   burden.Model.LifestyleType +
-                                   " which requires new instance each time.");
-            }
-            else if (burden.Model.LifestyleType == LifestyleType.Custom)
-            {
-                message.AppendLine("The custom activator" + burden.Model.CustomComponentActivator +
-                                   " is reusing instances, in a way that the custom lifestyle of the component (" +
-                                   burden.Model.LifestyleType +
-                                   ") does not expect.");
-            }
-            else
-            {
-                message.AppendLine("The custom activator" + burden.Model.CustomComponentActivator +
-                                   " is reusing instances, in a way that the lifestyle of the component (" +
-                                   burden.Model.LifestyleType +
-                                   ") does not expect.");
+                // some other custom activator
+                case LifestyleType.Transient:
+                    message.AppendLine("The custom activator" + burden.Model.CustomComponentActivator +
+                                       " is reusing instances, but the lifestyle of the component is " +
+                                       burden.Model.LifestyleType +
+                                       " which requires new instance each time.");
+                    break;
+                case LifestyleType.Custom:
+                    message.AppendLine("The custom activator" + burden.Model.CustomComponentActivator +
+                                       " is reusing instances, in a way that the custom lifestyle of the component (" +
+                                       burden.Model.LifestyleType +
+                                       ") does not expect.");
+                    break;
+                default:
+                    message.AppendLine("The custom activator" + burden.Model.CustomComponentActivator +
+                                       " is reusing instances, in a way that the lifestyle of the component (" +
+                                       burden.Model.LifestyleType +
+                                       ") does not expect.");
+                    break;
             }
 
             message.Append(
