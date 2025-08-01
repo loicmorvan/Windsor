@@ -32,7 +32,7 @@ public class DefaultsDescriptor(ComponentName name, Type implementation) : IComp
     {
     }
 
-    private void EnsureComponentConfiguration(IKernel kernel, ComponentModel model)
+    private static void EnsureComponentConfiguration(IKernel kernel, ComponentModel model)
     {
         var configuration = kernel.ConfigurationStore.GetComponentConfiguration(model.Name);
         if (configuration == null)
@@ -66,7 +66,7 @@ public class DefaultsDescriptor(ComponentName name, Type implementation) : IComp
         model.ComponentName = ComponentName.DefaultFor(model.Implementation);
     }
 
-    private Type FirstService(ComponentModel model)
+    private static Type FirstService(ComponentModel model)
     {
         return model.Services.First();
     }

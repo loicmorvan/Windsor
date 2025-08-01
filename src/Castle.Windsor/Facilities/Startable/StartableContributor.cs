@@ -39,7 +39,7 @@ public class StartableContributor(ITypeConverter converter) : IContributeCompone
         AddStop(model);
     }
 
-    private void AddStart(ComponentModel model)
+    private static void AddStart(ComponentModel model)
     {
         var startMethod = model.Configuration.Attributes["startMethod"];
         if (startMethod != null)
@@ -59,7 +59,7 @@ public class StartableContributor(ITypeConverter converter) : IContributeCompone
         model.Lifecycle.Add(StartConcern.Instance);
     }
 
-    private void AddStop(ComponentModel model)
+    private static void AddStop(ComponentModel model)
     {
         var stopMethod = model.Configuration.Attributes["stopMethod"];
         if (stopMethod != null)

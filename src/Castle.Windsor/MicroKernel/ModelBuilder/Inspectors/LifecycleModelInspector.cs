@@ -41,12 +41,12 @@ public class LifecycleModelInspector : IContributeComponentModelConstruction
         ProcessModel(model);
     }
 
-    private bool IsLateBoundComponent(ComponentModel model)
+    private static bool IsLateBoundComponent(ComponentModel model)
     {
         return typeof(LateBoundComponent) == model.Implementation;
     }
 
-    private void ProcessLateBoundModel(ComponentModel model)
+    private static void ProcessLateBoundModel(ComponentModel model)
     {
         var commission = new LateBoundCommissionConcerns();
         if (model.Services.Any(s => s.Is<IInitializable>()))
@@ -84,7 +84,7 @@ public class LifecycleModelInspector : IContributeComponentModelConstruction
         }
     }
 
-    private void ProcessModel(ComponentModel model)
+    private static void ProcessModel(ComponentModel model)
     {
         if (model.Implementation.Is<IInitializable>())
         {

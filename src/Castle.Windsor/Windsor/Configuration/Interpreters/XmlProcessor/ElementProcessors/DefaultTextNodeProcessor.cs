@@ -38,7 +38,7 @@ public partial class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
     /// <param name="node">The node.</param>
     /// <param name="value">The value.</param>
     /// <param name="engine">The context.</param>
-    public void ProcessString(XmlNode node, string value, IXmlProcessorEngine engine)
+    public static void ProcessString(XmlNode node, string value, IXmlProcessorEngine engine)
     {
         var fragment = CreateFragment(node);
 

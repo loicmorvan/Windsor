@@ -45,7 +45,7 @@ public class IncludeElementProcessor : AbstractXmlNodeProcessor
         ReplaceItself(result, element);
     }
 
-    public XmlNode ProcessInclude(XmlElement element, string includeUri, IXmlProcessorEngine engine)
+    public static XmlNode ProcessInclude(XmlElement element, string includeUri, IXmlProcessorEngine engine)
     {
         if (includeUri == null)
         {

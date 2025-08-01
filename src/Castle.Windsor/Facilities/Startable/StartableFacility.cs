@@ -74,7 +74,7 @@ public partial class StartableFacility : AbstractFacility
         InitFlag(_flag ?? new LegacyStartFlag(), new StartableEvents(Kernel));
     }
 
-    private void InitFlag(IStartFlagInternal startFlag, StartableEvents events)
+    private static void InitFlag(IStartFlagInternal startFlag, StartableEvents events)
     {
         startFlag.Init(events);
     }

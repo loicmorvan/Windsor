@@ -118,7 +118,7 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
     {
     }
 
-    private void AssertNameIsNotNull(string name, ComponentModel model)
+    private static void AssertNameIsNotNull(string name, ComponentModel model)
     {
         if (name != null)
         {

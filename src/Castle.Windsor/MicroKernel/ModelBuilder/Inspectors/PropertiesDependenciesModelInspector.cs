@@ -117,7 +117,7 @@ public class PropertiesDependenciesModelInspector(IConversionManager converter) 
         }
     }
 
-    private List<PropertyInfo> GetProperties(ComponentModel model, Type targetType)
+    private static List<PropertyInfo> GetProperties(ComponentModel model, Type targetType)
     {
         BindingFlags bindingFlags;
         if (model.InspectionBehavior == PropertiesInspectionBehavior.DeclaredOnly)

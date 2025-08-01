@@ -66,14 +66,16 @@ public static class DescriptionUtil
 
                 return "Scoped via " + accessorType.ToCSharpString();
             }
+            case LifestyleType.Custom:
+                return "Custom: " + componentModel.CustomLifestyle.Name;
+            case LifestyleType.Singleton:
+            case LifestyleType.Thread:
+            case LifestyleType.Transient:
+            case LifestyleType.Pooled:
+            case LifestyleType.Bound:
+            default:
+                return componentModel.LifestyleType.ToString();
         }
-
-        if (componentModel.LifestyleType != LifestyleType.Custom)
-        {
-            return componentModel.LifestyleType.ToString();
-        }
-
-        return "Custom: " + componentModel.CustomLifestyle.Name;
     }
 
     [PublicAPI]

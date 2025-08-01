@@ -8,7 +8,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Arguments.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Arguments.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ModelBuilder/Inspectors/ConfigurationParametersInspector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ModelBuilder/Inspectors/ConfigurationParametersInspector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ModelBuilder/Inspectors/InterceptorInspector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ModelBuilder/Inspectors/InterceptorInspector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ModelBuilder/Inspectors/LifecycleModelInspector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ModelBuilder/Inspectors/LifecycleModelInspector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ModelBuilder/Inspectors/MethodMetaInspector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ModelBuilder/Inspectors/MethodMetaInspector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ModelBuilder/Inspectors/PropertiesDependenciesModelInspector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ModelBuilder/Inspectors/PropertiesDependenciesModelInspector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/AssemblyFilter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/AssemblyFilter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Lifestyle/LifestyleGroup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Lifestyle/LifestyleGroup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ServiceDescriptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ServiceDescriptor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/TypeNameConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/TypeNameConverter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/TypeNameParser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/TypeNameParser.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Naming/DefaultNamingSubSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Naming/DefaultNamingSubSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/XmlProcessor/ElementProcessors/DefaultElementProcessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/XmlProcessor/ElementProcessors/DefaultElementProcessor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/XmlProcessor/ElementProcessors/DefaultTextNodeProcessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/XmlProcessor/ElementProcessors/DefaultTextNodeProcessor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/XmlProcessor/ElementProcessors/IncludeElementProcessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/XmlProcessor/ElementProcessors/IncludeElementProcessor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/Helpers/DescriptionUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/Helpers/DescriptionUtil.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +64,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///AIAssistantSnippet.." root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/36b39d9659c148b293a2b21eb84fe01b5e000/22/de2cae40/FileResource.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/36b39d9659c148b293a2b21eb84fe01b5e000/e7/1818274a/StandardInterceptor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/76b26a7a511f48aeba3bce44a1ba437af82e00/3e/42da7db5/IEnumerable.cs" root0="FORCE_HIGHLIGHTING" />
@@ -58,7 +74,6 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9cf5f68d759deefc91b9c48c5ac3dd27708bb7dc38d0c485661fff5ce15b82/SafeFileHandle.Unix.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/de1dc94e26de2eb8cdb9b19e9451c6a0738025b875978dc863de7ba87ee78c4/ServiceCollectionServiceExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/Resolvers/LoggerDependencyResolver.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/loicmorvan/RiderProjects/Windsor/src/Castle.Windsor/MicroKernel/Registration/ComponentRegistration.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProblemsViewState">
@@ -102,7 +117,7 @@
       <force-push-target remote-path="origin" branch="net9" />
     </force-push-targets>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected=".NET Project.Castle.Windsor.Tests">
     <configuration name="Castle.Windsor.Tests" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -159,6 +174,7 @@
       <workItem from="1753731266193" duration="3126000" />
       <workItem from="1753815885507" duration="4786000" />
       <workItem from="1753908899966" duration="3075000" />
+      <workItem from="1754075854179" duration="1448000" />
     </task>
     <task id="LOCAL-00001" summary="Keep only .NET 6.">
       <option name="closed" value="true" />
@@ -440,7 +456,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753911614547</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="Improved null checks, streamlined conditional logic, and enhanced code consistency across multiple files.">
+      <option name="closed" value="true" />
+      <created>1754076727580</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1754076727580</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -474,7 +498,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Improved projects." />
     <MESSAGE value="Backup" />
     <MESSAGE value="Fixed some tests" />
     <MESSAGE value="Fixed all tests after switching to .NET 9.&#10;&#10;Still remaining the 8 tests that never worked." />
@@ -499,7 +522,8 @@
     <MESSAGE value="Removed legacy build scripts and streamlined project references." />
     <MESSAGE value="Refactored namespaces for `Castle.Windsor.Facilities.AspNetCore` and annotations for `IWindsorContainer`." />
     <MESSAGE value="Removed unused diagnostics and related interfaces, added `[PublicAPI]` annotations, and improved exception handling." />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed unused diagnostics and related interfaces, added `[PublicAPI]` annotations, and improved exception handling." />
+    <MESSAGE value="Improved null checks, streamlined conditional logic, and enhanced code consistency across multiple files." />
+    <option name="LAST_COMMIT_MESSAGE" value="Improved null checks, streamlined conditional logic, and enhanced code consistency across multiple files." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

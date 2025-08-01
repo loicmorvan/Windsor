@@ -332,7 +332,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
         return handlers.ToArray();
     }
 
-    private Func<Type, HandlerWithPriority> GetServiceSelector(IHandler handler)
+    private static Func<Type, HandlerWithPriority> GetServiceSelector(IHandler handler)
     {
         var defaultsFilter = handler.ComponentModel.GetDefaultComponentForServiceFilter();
         var fallbackFilter = handler.ComponentModel.GetFallbackComponentForServiceFilter();

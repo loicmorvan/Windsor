@@ -43,7 +43,7 @@ public partial class StartableFacility
             }
         }
 
-        private bool TryStart(IHandler handler)
+        private static bool TryStart(IHandler handler)
         {
             return handler.TryResolve(CreationContext.CreateEmpty()) != null;
         }

@@ -203,7 +203,7 @@ public sealed class Arguments
         return new Arguments().AddTyped(arguments);
     }
 
-    private void CheckKeyType(object key)
+    private static void CheckKeyType(object key)
     {
         if (key is not string && key is not Type)
         {

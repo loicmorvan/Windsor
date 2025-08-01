@@ -48,7 +48,7 @@ public class DefaultElementProcessor : AbstractXmlNodeProcessor
 
         foreach (XmlAttribute att in element.Attributes)
         {
-            TextProcessor.ProcessString(att, att.Value, engine);
+            DefaultTextNodeProcessor.ProcessString(att, att.Value, engine);
         }
     }
 
@@ -64,7 +64,7 @@ public class DefaultElementProcessor : AbstractXmlNodeProcessor
         // removing the include attribute from the element
         element.Attributes.RemoveNamedItem(IncludeAttrName);
 
-        var includeContent = IncludeProcessor.ProcessInclude(element, include.Value, engine);
+        var includeContent = IncludeElementProcessor.ProcessInclude(element, include.Value, engine);
 
         if (includeContent != null)
         {

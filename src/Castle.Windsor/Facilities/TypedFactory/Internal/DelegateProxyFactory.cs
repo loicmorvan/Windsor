@@ -33,17 +33,17 @@ public class DelegateProxyFactory : IProxyFactoryExtension
         return method;
     }
 
-    private object GetInvokeDelegate(object instance, Type targetDelegateType)
+    private static object GetInvokeDelegate(object instance, Type targetDelegateType)
     {
         return instance.GetType().GetMethod("Invoke").CreateDelegate(targetDelegateType, instance);
     }
 
-    private object GetProxyInstance(Type type, IInterceptor[] interceptors)
+    private static object GetProxyInstance(Type type, IInterceptor[] interceptors)
     {
         return type.CreateInstance<object>(null, interceptors);
     }
 
-    private Type GetProxyType(IProxyBuilder builder, Type targetDelegateType)
+    private static Type GetProxyType(IProxyBuilder builder, Type targetDelegateType)
     {
         var options = new ProxyGenerationOptions();
         options.AddDelegateTypeMixin(targetDelegateType);

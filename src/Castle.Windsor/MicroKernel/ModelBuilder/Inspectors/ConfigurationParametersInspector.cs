@@ -60,7 +60,7 @@ public class ConfigurationParametersInspector : IContributeComponentModelConstru
         InspectCollections(model);
     }
 
-    private void AddAnyServiceOverrides(ComponentModel model, IConfiguration config)
+    private static void AddAnyServiceOverrides(ComponentModel model, IConfiguration config)
     {
         foreach (var item in config.Children)
         {
@@ -79,7 +79,7 @@ public class ConfigurationParametersInspector : IContributeComponentModelConstru
         }
     }
 
-    private void InspectCollections(ComponentModel model)
+    private static void InspectCollections(ComponentModel model)
     {
         foreach (var parameter in model.Parameters)
         {
@@ -98,12 +98,12 @@ public class ConfigurationParametersInspector : IContributeComponentModelConstru
         }
     }
 
-    private bool IsArray(ParameterModel parameter)
+    private static bool IsArray(ParameterModel parameter)
     {
         return parameter.ConfigValue.Name.EqualsText("array");
     }
 
-    private bool IsList(ParameterModel parameter)
+    private static bool IsList(ParameterModel parameter)
     {
         return parameter.ConfigValue.Name.EqualsText("list");
     }

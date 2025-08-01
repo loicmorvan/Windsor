@@ -95,7 +95,7 @@ public class AssemblyFilter : IAssemblyProvider
         return WithKeyToken(assembly.GetName().GetPublicKeyToken());
     }
 
-    private byte[] ExtractKeyToken(string keyToken)
+    private static byte[] ExtractKeyToken(string keyToken)
     {
         ArgumentNullException.ThrowIfNull(keyToken);
         if (keyToken.Length != 16)

@@ -56,7 +56,7 @@ public class DefaultDelegateComponentSelector : DefaultTypedFactoryComponentSele
         return null;
     }
 
-    private bool IsFunc(Type type)
+    private static bool IsFunc(Type type)
     {
         return type.FullName != null && type.FullName.StartsWith("System.Func");
     }

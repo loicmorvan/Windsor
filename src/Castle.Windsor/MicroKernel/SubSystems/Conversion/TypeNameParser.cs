@@ -55,7 +55,7 @@ public class TypeNameParser : ITypeNameParser
         return BuildName(name, genericTypes);
     }
 
-    private TypeName BuildName(string name, TypeName[] genericTypes)
+    private static TypeName BuildName(string name, TypeName[] genericTypes)
     {
         var typeStartsHere = name.LastIndexOf('.');
         string typeName;
@@ -74,7 +74,7 @@ public class TypeNameParser : ITypeNameParser
         return new TypeName(@namespace, typeName, genericTypes);
     }
 
-    private int MoveToBeginning(int location, string text)
+    private static int MoveToBeginning(int location, string text)
     {
         var currentLocation = location;
         while (currentLocation < text.Length)
@@ -90,7 +90,7 @@ public class TypeNameParser : ITypeNameParser
         return currentLocation;
     }
 
-    private int MoveToEnd(int location, string text)
+    private static int MoveToEnd(int location, string text)
     {
         var open = 1;
         var currentLocation = location;

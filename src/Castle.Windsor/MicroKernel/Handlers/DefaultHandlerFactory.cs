@@ -30,7 +30,7 @@ public class DefaultHandlerFactory(IKernelInternal kernel) : IHandlerFactory
         return handler;
     }
 
-    private IHandler CreateHandler(ComponentModel model)
+    private static IHandler CreateHandler(ComponentModel model)
     {
         if (model.RequiresGenericArguments)
         {
@@ -52,13 +52,13 @@ public class DefaultHandlerFactory(IKernelInternal kernel) : IHandlerFactory
         return new ExtendedHandler(model, resolveExtensions, releaseExtensions);
     }
 
-    private IGenericImplementationMatchingStrategy GenericImplementationMatchingStrategy(ComponentModel model)
+    private static IGenericImplementationMatchingStrategy GenericImplementationMatchingStrategy(ComponentModel model)
     {
         return (IGenericImplementationMatchingStrategy)model.ExtendedProperties[
             Constants.GenericImplementationMatchingStrategy];
     }
 
-    private IGenericServiceStrategy GenericServiceStrategy(ComponentModel model)
+    private static IGenericServiceStrategy GenericServiceStrategy(ComponentModel model)
     {
         return (IGenericServiceStrategy)model.ExtendedProperties[Constants.GenericServiceStrategy];
     }

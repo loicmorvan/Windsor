@@ -157,7 +157,7 @@ public class InterceptorReference : IReference<IInterceptor>, IEquatable<Interce
 
     }
 
-    private CreationContext RebuildContext(Type handlerType, CreationContext current)
+    private static CreationContext RebuildContext(Type handlerType, CreationContext current)
     {
         if (handlerType.GetTypeInfo().ContainsGenericParameters)
         {

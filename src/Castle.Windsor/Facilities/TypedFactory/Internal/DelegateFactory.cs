@@ -64,7 +64,7 @@ public class DelegateFactory : ILazyComponentLoader
             .AddAttributeDescriptor(TypedFactoryFacility.IsFactoryKey, bool.TrueString);
     }
 
-    protected string GetName(Type service)
+    protected static string GetName(Type service)
     {
         var defaultName = ComponentName.DefaultNameFor(service);
         if (string.IsNullOrEmpty(defaultName))

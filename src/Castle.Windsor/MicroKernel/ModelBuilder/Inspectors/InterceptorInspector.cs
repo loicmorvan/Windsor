@@ -96,7 +96,7 @@ public class InterceptorInspector : IContributeComponentModelConstruction
         options.Selector = new ComponentReference<IInterceptorSelector>(selectorComponent);
     }
 
-    private void CollectInterceptors(ComponentModel model, IConfiguration interceptors)
+    private static void CollectInterceptors(ComponentModel model, IConfiguration interceptors)
     {
         foreach (var interceptor in interceptors.Children)
         {

@@ -33,7 +33,7 @@ public class DynamicParametersDescriptor(DynamicParametersWithContextResolveDele
     {
     }
 
-    private ComponentLifecycleExtension GetDynamicParametersExtension(ComponentModel model)
+    private static ComponentLifecycleExtension GetDynamicParametersExtension(ComponentModel model)
     {
         if (model.ExtendedProperties.Contains(Key))
         {

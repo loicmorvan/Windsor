@@ -197,7 +197,7 @@ public class TypeNameConverter : AbstractTypeConverter
         }
     }
 
-    private void Insert(IDictionary<string, MultiType> collection, string key, Type value)
+    private static void Insert(IDictionary<string, MultiType> collection, string key, Type value)
     {
         if (collection.TryGetValue(key, out var existing) == false)
         {
@@ -228,7 +228,7 @@ public class TypeNameConverter : AbstractTypeConverter
         return GetUniqueType(justName, _justName2Type, "full name, or assembly qualified name");
     }
 
-    private Type GetUniqueType(string name, IDictionary<string, MultiType> map, string description)
+    private static Type GetUniqueType(string name, IDictionary<string, MultiType> map, string description)
     {
         if (!map.TryGetValue(name, out var type))
         {
@@ -240,7 +240,7 @@ public class TypeNameConverter : AbstractTypeConverter
 
     }
 
-    private void EnsureUnique(MultiType type, string value, string missingInformation)
+    private static void EnsureUnique(MultiType type, string value, string missingInformation)
     {
         if (type.HasOne)
         {

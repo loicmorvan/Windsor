@@ -176,7 +176,7 @@ public class ServiceDescriptor
         return services;
     }
 
-    private void AddFromInterface(Type type, Type implements, ICollection<Type> matches)
+    private static void AddFromInterface(Type type, Type implements, ICollection<Type> matches)
     {
         foreach (var @interface in GetTopLevelInterfaces(type))
         {
@@ -188,7 +188,7 @@ public class ServiceDescriptor
         }
     }
 
-    private string GetInterfaceName(Type @interface)
+    private static string GetInterfaceName(Type @interface)
     {
         var name = @interface.Name;
         if (name.Length > 1 && name[0] == 'I' && char.IsUpper(name[1]))
@@ -199,7 +199,7 @@ public class ServiceDescriptor
         return name;
     }
 
-    private IEnumerable<Type> GetTopLevelInterfaces(Type type)
+    private static IEnumerable<Type> GetTopLevelInterfaces(Type type)
     {
         var interfaces = type.GetInterfaces();
         var topLevel = new List<Type>(interfaces);

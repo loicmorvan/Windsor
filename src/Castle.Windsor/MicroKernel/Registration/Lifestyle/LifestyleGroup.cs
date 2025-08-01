@@ -58,7 +58,7 @@ public class LifestyleGroup<TService> : RegistrationGroup<TService>
         return AddDescriptor(new LifestyleDescriptor<TService>(type));
     }
 
-    private ArgumentOutOfRangeException InvalidValue(LifestyleType type, string message)
+    private static ArgumentOutOfRangeException InvalidValue(LifestyleType type, string message)
     {
         return new ArgumentOutOfRangeException(nameof(type), type, message);
     }

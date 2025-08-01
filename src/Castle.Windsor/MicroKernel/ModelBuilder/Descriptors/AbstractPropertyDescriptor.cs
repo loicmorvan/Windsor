@@ -25,7 +25,7 @@ public abstract class AbstractPropertyDescriptor : IComponentModelDescriptor
     {
     }
 
-    protected void AddParameter(ComponentModel model, string name, IConfiguration value)
+    protected static void AddParameter(ComponentModel model, string name, IConfiguration value)
     {
         var parameters = EnsureParametersConfiguration(model);
 
@@ -35,13 +35,13 @@ public abstract class AbstractPropertyDescriptor : IComponentModelDescriptor
         parameters.Children.Add(parameter);
     }
 
-    protected void AddParameter(ComponentModel model, string name, string value)
+    protected static void AddParameter(ComponentModel model, string name, string value)
     {
         var parameters = EnsureParametersConfiguration(model);
         parameters.Children.Add(new MutableConfiguration(name, value));
     }
 
-    private IConfiguration EnsureParametersConfiguration(ComponentModel model)
+    private static IConfiguration EnsureParametersConfiguration(ComponentModel model)
     {
         var parameters = model.Configuration.Children["parameters"];
         if (parameters != null)

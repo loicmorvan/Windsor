@@ -156,7 +156,7 @@ public class DependencyModel(
         return $"Dependency '{DependencyKey}' type '{TargetType}'";
     }
 
-    private ParameterModel GetParameterModelByType(Type type, ParameterModelCollection parameters)
+    private static ParameterModel GetParameterModelByType(Type type, ParameterModelCollection parameters)
     {
         var assemblyQualifiedName = type.AssemblyQualifiedName;
         if (assemblyQualifiedName == null)

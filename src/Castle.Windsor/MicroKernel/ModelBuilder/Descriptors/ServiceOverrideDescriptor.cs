@@ -96,7 +96,7 @@ public class ServiceOverrideDescriptor : AbstractPropertyDescriptor
         AddParameter(model, GetNameString(dependencyName), reference);
     }
 
-    private string GetNameString(object key)
+    private static string GetNameString(object key)
     {
         if (key is Type type)
         {
