@@ -36,11 +36,13 @@ public class SingletonLifestyleManager : AbstractLifestyleManager, IContextLifes
     public override void Dispose()
     {
         var localInstance = _cachedBurden;
-        if (localInstance != null)
+        if (localInstance == null)
         {
-            localInstance.Release();
-            _cachedBurden = null;
+            return;
         }
+
+        localInstance.Release();
+        _cachedBurden = null;
     }
 
     public override object Resolve(CreationContext context, IReleasePolicy releasePolicy)

@@ -102,25 +102,30 @@ public class DefaultComponentActivator : AbstractComponentActivator
             instance = CreateInstanceCore(constructor, arguments, implType);
         }
 
-        if (createProxy)
+        if (!createProxy)
         {
-            try
-            {
-                instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, context, arguments);
-            }
-            catch (Exception ex)
-            {
-                if (arguments != null)
-                {
-                    foreach (var argument in arguments)
-                    {
-                        Kernel.ReleaseComponent(argument);
-                    }
-                }
+            return instance;
+        }
 
+        try
+        {
+            instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, context, arguments);
+        }
+        catch (Exception ex)
+        {
+            if (arguments == null)
+            {
                 throw new ComponentActivatorException(
                     "ComponentActivator: could not proxy " + Model.Implementation.FullName, ex, Model);
             }
+
+            foreach (var argument in arguments)
+            {
+                Kernel.ReleaseComponent(argument);
+            }
+
+            throw new ComponentActivatorException(
+                "ComponentActivator: could not proxy " + Model.Implementation.FullName, ex, Model);
         }
 
         return instance;
@@ -179,17 +184,19 @@ public class DefaultComponentActivator : AbstractComponentActivator
                 continue;
             }
 
-            if (BestScoreSoFar(candidatePoints, winnerPoints, winnerCandidate))
+            if (!BestScoreSoFar(candidatePoints, winnerPoints, winnerCandidate))
             {
-                if (BestPossibleScore(candidate, candidatePoints))
-                    //since the constructors are sorted greedier first, we know there's no way any other .ctor is going to beat us here
-                {
-                    return candidate;
-                }
-
-                winnerCandidate = candidate;
-                winnerPoints = candidatePoints;
+                continue;
             }
+
+            if (BestPossibleScore(candidate, candidatePoints))
+                //since the constructors are sorted greedier first, we know there's no way any other .ctor is going to beat us here
+            {
+                return candidate;
+            }
+
+            winnerCandidate = candidate;
+            winnerPoints = candidatePoints;
         }
 
         if (winnerCandidate == null)
@@ -308,24 +315,26 @@ public class DefaultComponentActivator : AbstractComponentActivator
 
     private object ObtainPropertyValue(CreationContext context, PropertySet property, IDependencyResolver resolver)
     {
-        if (property.Dependency.IsOptional == false ||
-            resolver.CanResolve(context, context.Handler, Model, property.Dependency))
+        if (property.Dependency.IsOptional &&
+            !resolver.CanResolve(context, context.Handler, Model, property.Dependency))
         {
-            try
-            {
-                return resolver.Resolve(context, context.Handler, Model, property.Dependency);
-            }
-            catch (Exception e)
-            {
-                if (property.Dependency.IsOptional == false)
-                {
-                    throw;
-                }
+            return null;
+        }
 
-                Kernel.Logger.Warn(
-                    $"Exception when resolving optional dependency {property.Dependency} on component {Model.Name}.",
-                    e);
+        try
+        {
+            return resolver.Resolve(context, context.Handler, Model, property.Dependency);
+        }
+        catch (Exception e)
+        {
+            if (property.Dependency.IsOptional == false)
+            {
+                throw;
             }
+
+            Kernel.Logger.Warn(
+                $"Exception when resolving optional dependency {property.Dependency} on component {Model.Name}.",
+                e);
         }
 
         return null;

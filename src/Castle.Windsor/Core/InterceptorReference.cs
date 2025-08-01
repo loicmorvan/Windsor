@@ -140,20 +140,21 @@ public class InterceptorReference : IReference<IInterceptor>, IEquatable<Interce
 
     private IHandler GetInterceptorHandler(IKernel kernel)
     {
-        if (_referencedComponentType != null)
+        if (_referencedComponentType == null)
         {
-            //try old behavior first
-            var handler = kernel.GetHandler(_referencedComponentType.FullName);
-            if (handler != null)
-            {
-                return handler;
-            }
-
-            // new bahavior as a fallback
-            return kernel.GetHandler(_referencedComponentType);
+            return kernel.GetHandler(_referencedComponentName);
         }
 
-        return kernel.GetHandler(_referencedComponentName);
+        //try old behavior first
+        var handler = kernel.GetHandler(_referencedComponentType.FullName);
+        if (handler != null)
+        {
+            return handler;
+        }
+
+        // new bahavior as a fallback
+        return kernel.GetHandler(_referencedComponentType);
+
     }
 
     private CreationContext RebuildContext(Type handlerType, CreationContext current)

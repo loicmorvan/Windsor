@@ -69,11 +69,13 @@ public sealed class DefaultComponentModelBuilder : IComponentModelBuilder
         customContributors.ForEach(c =>
         {
             c.ConfigureComponentModel(_kernel, model);
-            if (c is IMetaComponentModelDescriptor meta)
+            if (c is not IMetaComponentModelDescriptor meta)
             {
-                metaDescriptors ??= model.GetMetaDescriptors(true);
-                metaDescriptors.Add(meta);
+                return;
             }
+
+            metaDescriptors ??= model.GetMetaDescriptors(true);
+            metaDescriptors.Add(meta);
         });
         return model;
     }

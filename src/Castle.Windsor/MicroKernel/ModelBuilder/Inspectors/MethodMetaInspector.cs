@@ -76,31 +76,33 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
 
             var metaModel = new MethodMetaModel(methodNode);
 
-            if (IsValidMeta(model, metaModel))
+            if (!IsValidMeta(model, metaModel))
             {
-                if (ShouldUseMetaModel)
-                {
-                    // model.MethodMetaModels.Add( metaModel );
-                }
+                continue;
+            }
 
-                var signature = methodNode.Attributes["signature"];
+            if (ShouldUseMetaModel)
+            {
+                // model.MethodMetaModels.Add( metaModel );
+            }
 
-                var methods = GetMethods(model.Implementation, name, signature);
+            var signature = methodNode.Attributes["signature"];
 
-                if (methods.Count == 0)
-                {
-                    var message = $"The class {model.Implementation.FullName} has tried to expose configuration for " +
-                                  $"a method named {name} which could not be found.";
+            var methods = GetMethods(model.Implementation, name, signature);
 
-                    throw new Exception(message);
-                }
+            if (methods.Count == 0)
+            {
+                var message = $"The class {model.Implementation.FullName} has tried to expose configuration for " +
+                              $"a method named {name} which could not be found.";
 
-                ProcessMeta(model, methods, metaModel);
+                throw new Exception(message);
+            }
 
-                if (ShouldUseMetaModel)
-                {
-                    // RegisterMethodsForFastAccess(methods, signature, metaModel, model);
-                }
+            ProcessMeta(model, methods, metaModel);
+
+            if (ShouldUseMetaModel)
+            {
+                // RegisterMethodsForFastAccess(methods, signature, metaModel, model);
             }
         }
     }
@@ -118,14 +120,16 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
 
     private void AssertNameIsNotNull(string name, ComponentModel model)
     {
-        if (name == null)
+        if (name != null)
         {
-            var message = "The configuration nodes within 'methods' " +
-                          $"for the component '{model.Name}' does not have a name. You can either name " +
-                          "the node as the method name or provide an attribute 'name'";
-
-            throw new Exception(message);
+            return;
         }
+
+        var message = "The configuration nodes within 'methods' " +
+                      $"for the component '{model.Name}' does not have a name. You can either name " +
+                      "the node as the method name or provide an attribute 'name'";
+
+        throw new Exception(message);
     }
 
     private Type[] ConvertSignature(string signature)

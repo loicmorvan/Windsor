@@ -27,11 +27,13 @@ public static class ProxyOptionsUtil
 	{
 		var options = model.ExtendedProperties[ProxyConstants.ProxyOptionsKey] as ProxyOptions;
 
-		if (options == null && createOnDemand)
+		if (options != null || !createOnDemand)
 		{
-			options = new ProxyOptions(model);
-			model.ExtendedProperties[ProxyConstants.ProxyOptionsKey] = options;
+			return options;
 		}
+
+		options = new ProxyOptions(model);
+		model.ExtendedProperties[ProxyConstants.ProxyOptionsKey] = options;
 
 		return options;
 	}

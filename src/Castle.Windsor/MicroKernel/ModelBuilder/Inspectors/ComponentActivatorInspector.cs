@@ -55,22 +55,18 @@ public class ComponentActivatorInspector(IConversionManager converter) : IContri
     /// <returns></returns>
     protected virtual bool ReadComponentActivatorFromConfiguration(ComponentModel model)
     {
-        if (model.Configuration != null)
+        var componentActivatorType = model.Configuration?.Attributes["componentActivatorType"];
+        if (componentActivatorType == null)
         {
-            var componentActivatorType = model.Configuration.Attributes["componentActivatorType"];
-            if (componentActivatorType == null)
-            {
-                return false;
-            }
-
-            var customComponentActivator = _converter.PerformConversion<Type>(componentActivatorType);
-            ValidateComponentActivator(customComponentActivator);
-
-            model.CustomComponentActivator = customComponentActivator;
-            return true;
+            return false;
         }
 
-        return false;
+        var customComponentActivator = _converter.PerformConversion<Type>(componentActivatorType);
+        ValidateComponentActivator(customComponentActivator);
+
+        model.CustomComponentActivator = customComponentActivator;
+        return true;
+
     }
 
     /// <summary>Check if the type expose one of the component activator attributes defined in Castle.Core namespace.</summary>
@@ -78,26 +74,30 @@ public class ComponentActivatorInspector(IConversionManager converter) : IContri
     protected virtual void ReadComponentActivatorFromType(ComponentModel model)
     {
         var attributes = model.Implementation.GetAttributes<ComponentActivatorAttribute>(true);
-        if (attributes.Length != 0)
+        if (attributes.Length == 0)
         {
-            var attribute = attributes[0];
-            ValidateComponentActivator(attribute.ComponentActivatorType);
-
-            model.CustomComponentActivator = attribute.ComponentActivatorType;
+            return;
         }
+
+        var attribute = attributes[0];
+        ValidateComponentActivator(attribute.ComponentActivatorType);
+
+        model.CustomComponentActivator = attribute.ComponentActivatorType;
     }
 
     /// <summary>Validates that the provide type implements IComponentActivator</summary>
     /// <param name="customComponentActivator">The custom component activator.</param>
     protected virtual void ValidateComponentActivator(Type customComponentActivator)
     {
-        if (customComponentActivator.Is<IComponentActivator>() == false)
+        if (customComponentActivator.Is<IComponentActivator>())
         {
-            var message =
-                string.Format(
-                    "The Type '{0}' specified in the componentActivatorType attribute must implement {1}",
-                    customComponentActivator.FullName, typeof(IComponentActivator).FullName);
-            throw new InvalidOperationException(message);
+            return;
         }
+
+        var message =
+            string.Format(
+                "The Type '{0}' specified in the componentActivatorType attribute must implement {1}",
+                customComponentActivator.FullName, typeof(IComponentActivator).FullName);
+        throw new InvalidOperationException(message);
     }
 }

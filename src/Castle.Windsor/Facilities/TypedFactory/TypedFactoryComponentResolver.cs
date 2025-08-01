@@ -47,24 +47,28 @@ public class TypedFactoryComponentResolver
     /// <returns>Resolved component(s).</returns>
     public virtual object Resolve(IKernelInternal kernel, IReleasePolicy scope)
     {
-        if (LoadByName(kernel))
+        if (!LoadByName(kernel))
         {
-            try
-            {
-                return kernel.Resolve(_componentName, _componentType, _additionalArguments, scope);
-            }
-            catch (ComponentNotFoundException e)
-            {
-                if (_actualSelectorType == typeof(DefaultDelegateComponentSelector) &&
-                    _fallbackToResolveByTypeIfNameNotFound == false)
-                {
-                    e.Data["breakingChangeId"] = "typedFactoryFallbackToResolveByTypeIfNameNotFound";
-                    e.Data["breakingChange"] =
-                        "This exception may have been caused by a breaking change between Windsor 2.5 and 3.0 See breakingchanges.txt for more details.";
-                }
+            return kernel.Resolve(_componentType, _additionalArguments, scope, true);
+        }
 
+        try
+        {
+            return kernel.Resolve(_componentName, _componentType, _additionalArguments, scope);
+        }
+        catch (ComponentNotFoundException e)
+        {
+            if (_actualSelectorType != typeof(DefaultDelegateComponentSelector) ||
+                _fallbackToResolveByTypeIfNameNotFound)
+            {
                 throw;
             }
+
+            e.Data["breakingChangeId"] = "typedFactoryFallbackToResolveByTypeIfNameNotFound";
+            e.Data["breakingChange"] =
+                "This exception may have been caused by a breaking change between Windsor 2.5 and 3.0 See breakingchanges.txt for more details.";
+
+            throw;
         }
 
         // Ignore thread-static parent context call stack tracking. Factory-resolved components

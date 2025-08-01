@@ -30,11 +30,13 @@ public class StartableContributor(ITypeConverter converter) : IContributeCompone
 
         model.ExtendedProperties["startable"] = startable;
 
-        if (startable)
+        if (!startable)
         {
-            AddStart(model);
-            AddStop(model);
+            return;
         }
+
+        AddStart(model);
+        AddStop(model);
     }
 
     private void AddStart(ComponentModel model)

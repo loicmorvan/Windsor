@@ -822,11 +822,13 @@ public class ComponentRegistration<TService> : IRegistration
     /// <param name="actions"> A set of actions to be executed when the component is destroyed. </param>
     public ComponentRegistration<TService> OnDestroy(params LifecycleActionDelegate<TService>[] actions)
     {
-        if (actions != null && actions.Length != 0)
+        if (actions == null || actions.Length == 0)
         {
-            var action = (LifecycleActionDelegate<TService>)Delegate.Combine(actions.Cast<Delegate>().ToArray());
-            AddDescriptor(new OnDestroyComponentDescriptor<TService>(action));
+            return this;
         }
+
+        var action = (LifecycleActionDelegate<TService>)Delegate.Combine(actions.Cast<Delegate>().ToArray());
+        AddDescriptor(new OnDestroyComponentDescriptor<TService>(action));
 
         return this;
     }

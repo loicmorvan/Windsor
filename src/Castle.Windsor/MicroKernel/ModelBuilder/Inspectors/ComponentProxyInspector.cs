@@ -97,13 +97,15 @@ public class ComponentProxyInspector(IConversionManager converter) : IContribute
 
     private static void EnsureComponentRegisteredWithInterface(ComponentModel model)
     {
-        if (model.HasClassServices)
+        if (!model.HasClassServices)
         {
-            var message = string.Format("The class {0} requested a single interface proxy, " +
-                                        "however the service {1} does not represent an interface",
-                model.Implementation.FullName, model.Services.First().FullName);
-
-            throw new ComponentRegistrationException(message);
+            return;
         }
+
+        var message = string.Format("The class {0} requested a single interface proxy, " +
+                                    "however the service {1} does not represent an interface",
+            model.Implementation.FullName, model.Services.First().FullName);
+
+        throw new ComponentRegistrationException(message);
     }
 }

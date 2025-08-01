@@ -107,54 +107,56 @@ public class TypeNameConverter : AbstractTypeConverter
         }
 
         var assemblyName = typeName.ExtractAssemblyName();
-        if (assemblyName != null)
+        if (assemblyName == null)
         {
-            var namePart = assemblyName + ", Version=";
-            var assembly =
-                _assemblies.FirstOrDefault(a =>
-                {
-                    Debug.Assert(a.FullName != null);
-                    return a.FullName.StartsWith(namePart, StringComparison.OrdinalIgnoreCase);
-                });
-            if (assembly != null)
-            {
-                throw new ConverterException(string.Format(
-                    "Could not convert string '{0}' to a type. Assembly {1} was matched, but it doesn't contain the type. Make sure that the type name was not mistyped.",
-                    name, assembly.FullName));
-            }
-
             throw new ConverterException(
-                $"Could not convert string '{name}' to a type. Assembly was not found. Make sure it was deployed and the name was not mistyped.");
+                $"Could not convert string '{name}' to a type. Make sure assembly containing the type has been loaded into the process, or consider specifying assembly qualified name of the type.");
+        }
+
+        var namePart = assemblyName + ", Version=";
+        var assembly =
+            _assemblies.FirstOrDefault(a =>
+            {
+                Debug.Assert(a.FullName != null);
+                return a.FullName.StartsWith(namePart, StringComparison.OrdinalIgnoreCase);
+            });
+        if (assembly != null)
+        {
+            throw new ConverterException(string.Format(
+                "Could not convert string '{0}' to a type. Assembly {1} was matched, but it doesn't contain the type. Make sure that the type name was not mistyped.",
+                name, assembly.FullName));
         }
 
         throw new ConverterException(
-            $"Could not convert string '{name}' to a type. Make sure assembly containing the type has been loaded into the process, or consider specifying assembly qualified name of the type.");
+            $"Could not convert string '{name}' to a type. Assembly was not found. Make sure it was deployed and the name was not mistyped.");
+
     }
 
     private bool InitializeAppDomainAssemblies()
     {
+        if (_assemblies.Count != 0)
+        {
+            return false;
+        }
         var anyAssemblyAdded = false;
 
-        if (_assemblies.Count == 0)
+        var context = DependencyContext.Default;
+        var dependencies = context.RuntimeLibraries
+            .SelectMany(library => library.GetDefaultAssemblyNames(context))
+            .Distinct();
+
+        foreach (var assemblyName in dependencies)
         {
-            var context = DependencyContext.Default;
-            var dependencies = context.RuntimeLibraries
-                .SelectMany(library => library.GetDefaultAssemblyNames(context))
-                .Distinct();
-
-            foreach (var assemblyName in dependencies)
+            if (ShouldSkipAssembly(assemblyName))
             {
-                if (ShouldSkipAssembly(assemblyName))
-                {
-                    continue;
-                }
-
-                var assembly = Assembly.Load(assemblyName);
-
-                _assemblies.Add(assembly);
-                Scan(assembly);
-                anyAssemblyAdded = true;
+                continue;
             }
+
+            var assembly = Assembly.Load(assemblyName);
+
+            _assemblies.Add(assembly);
+            Scan(assembly);
+            anyAssemblyAdded = true;
         }
 
         return anyAssemblyAdded;
@@ -228,13 +230,14 @@ public class TypeNameConverter : AbstractTypeConverter
 
     private Type GetUniqueType(string name, IDictionary<string, MultiType> map, string description)
     {
-        if (map.TryGetValue(name, out var type))
+        if (!map.TryGetValue(name, out var type))
         {
-            EnsureUnique(type, name, description);
-            return type.Single();
+            return null;
         }
 
-        return null;
+        EnsureUnique(type, name, description);
+        return type.Single();
+
     }
 
     private void EnsureUnique(MultiType type, string value, string missingInformation)

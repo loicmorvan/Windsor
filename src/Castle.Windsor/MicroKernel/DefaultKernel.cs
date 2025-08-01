@@ -275,18 +275,22 @@ public sealed partial class DefaultKernel :
         var result = NamingSubSystem.GetAssignableHandlers(service);
 
         // If a parent kernel exists, we merge both results
-        if (Parent != null)
+        if (Parent == null)
         {
-            var parentResult = Parent.GetAssignableHandlers(service);
-
-            if (parentResult.Length > 0)
-            {
-                var newResult = new IHandler[result.Length + parentResult.Length];
-                result.CopyTo(newResult, 0);
-                parentResult.CopyTo(newResult, result.Length);
-                result = newResult;
-            }
+            return result;
         }
+
+        var parentResult = Parent.GetAssignableHandlers(service);
+
+        if (parentResult.Length <= 0)
+        {
+            return result;
+        }
+
+        var newResult = new IHandler[result.Length + parentResult.Length];
+        result.CopyTo(newResult, 0);
+        parentResult.CopyTo(newResult, result.Length);
+        result = newResult;
 
         return result;
     }
@@ -333,18 +337,22 @@ public sealed partial class DefaultKernel :
         var result = NamingSubSystem.GetHandlers(service);
 
         // If a parent kernel exists, we merge both results
-        if (Parent != null)
+        if (Parent == null)
         {
-            var parentResult = Parent.GetHandlers(service);
-
-            if (parentResult.Length > 0)
-            {
-                var newResult = new IHandler[result.Length + parentResult.Length];
-                result.CopyTo(newResult, 0);
-                parentResult.CopyTo(newResult, result.Length);
-                result = newResult;
-            }
+            return result;
         }
+
+        var parentResult = Parent.GetHandlers(service);
+
+        if (parentResult.Length <= 0)
+        {
+            return result;
+        }
+
+        var newResult = new IHandler[result.Length + parentResult.Length];
+        result.CopyTo(newResult, 0);
+        parentResult.CopyTo(newResult, result.Length);
+        result = newResult;
 
         return result;
     }
@@ -356,18 +364,22 @@ public sealed partial class DefaultKernel :
         var result = NamingSubSystem.GetAllHandlers();
 
         // If a parent kernel exists, we merge both results
-        if (Parent != null)
+        if (Parent == null)
         {
-            var parentResult = Parent.GetHandlers();
-
-            if (parentResult.Length > 0)
-            {
-                var newResult = new IHandler[result.Length + parentResult.Length];
-                result.CopyTo(newResult, 0);
-                parentResult.CopyTo(newResult, result.Length);
-                result = newResult;
-            }
+            return result;
         }
+
+        var parentResult = Parent.GetHandlers();
+
+        if (parentResult.Length <= 0)
+        {
+            return result;
+        }
+
+        var newResult = new IHandler[result.Length + parentResult.Length];
+        result.CopyTo(newResult, 0);
+        parentResult.CopyTo(newResult, result.Length);
+        result = newResult;
 
         return result;
     }

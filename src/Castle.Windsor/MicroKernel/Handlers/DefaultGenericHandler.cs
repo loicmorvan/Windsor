@@ -69,18 +69,19 @@ public class DefaultGenericHandler(
             return true;
         }
 
-        if (service.GetTypeInfo().IsGenericType && service.GetTypeInfo().IsGenericTypeDefinition == false)
+        if (!service.GetTypeInfo().IsGenericType || service.GetTypeInfo().IsGenericTypeDefinition)
         {
-            var openService = service.GetGenericTypeDefinition();
-            if (base.Supports(openService) == false)
-            {
-                return false;
-            }
-
-            return ServiceStrategy == null || ServiceStrategy.Supports(service, ComponentModel);
+            return false;
         }
 
-        return false;
+        var openService = service.GetGenericTypeDefinition();
+        if (base.Supports(openService) == false)
+        {
+            return false;
+        }
+
+        return ServiceStrategy == null || ServiceStrategy.Supports(service, ComponentModel);
+
     }
 
     public override bool SupportsAssignable(Type service)
@@ -264,12 +265,14 @@ public class DefaultGenericHandler(
         }
 
         var metaDescriptors = ComponentModel.GetMetaDescriptors(false);
-        if (metaDescriptors != null)
+        if (metaDescriptors == null)
         {
-            foreach (var descriptor in metaDescriptors)
-            {
-                descriptor.ConfigureComponentModel(Kernel, newModel);
-            }
+            return;
+        }
+
+        foreach (var descriptor in metaDescriptors)
+        {
+            descriptor.ConfigureComponentModel(Kernel, newModel);
         }
     }
 
@@ -355,15 +358,16 @@ public class DefaultGenericHandler(
             // 2.
             var invalidArguments = genericArguments.Where(a => a.IsPointer || a.IsByRef || a == typeof(void))
                 .Select(t => t.FullName).ToArray();
-            if (invalidArguments.Length > 0)
+            if (invalidArguments.Length <= 0)
             {
-                message =
-                    $"The following types provided as generic parameters are not legal: {string.Join(", ", invalidArguments)}. This is most likely a bug in your code.";
-                throw new HandlerException(message, ComponentModel.ComponentName, e);
+                throw new GenericHandlerTypeMismatchException(genericArguments, ComponentModel, this);
             }
 
+            message =
+                $"The following types provided as generic parameters are not legal: {string.Join(", ", invalidArguments)}. This is most likely a bug in your code.";
+            throw new HandlerException(message, ComponentModel.ComponentName, e);
+
             // 3. at this point we should be 99% sure we have arguments that don't satisfy generic constraints of out service.
-            throw new GenericHandlerTypeMismatchException(genericArguments, ComponentModel, this);
         }
     }
 
@@ -455,19 +459,21 @@ public class DefaultGenericHandler(
     private static void EnsureClassMappingInitialized(Type closedImplementationType,
         ref IDictionary<Type, Type> genericDefinitionToClass)
     {
-        if (genericDefinitionToClass == null)
+        if (genericDefinitionToClass != null)
         {
-            genericDefinitionToClass = new Dictionary<Type, Type>();
-            var type = closedImplementationType;
-            while (type != typeof(object))
-            {
-                if (type != null && type.GetTypeInfo().IsGenericType)
-                {
-                    genericDefinitionToClass.Add(type.GetGenericTypeDefinition(), type);
-                }
+            return;
+        }
 
-                type = type?.GetTypeInfo().BaseType;
+        genericDefinitionToClass = new Dictionary<Type, Type>();
+        var type = closedImplementationType;
+        while (type != typeof(object))
+        {
+            if (type != null && type.GetTypeInfo().IsGenericType)
+            {
+                genericDefinitionToClass.Add(type.GetGenericTypeDefinition(), type);
             }
+
+            type = type?.GetTypeInfo().BaseType;
         }
     }
 

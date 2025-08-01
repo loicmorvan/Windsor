@@ -44,11 +44,13 @@ public abstract class AbstractPropertyDescriptor : IComponentModelDescriptor
     private IConfiguration EnsureParametersConfiguration(ComponentModel model)
     {
         var parameters = model.Configuration.Children["parameters"];
-        if (parameters == null)
+        if (parameters != null)
         {
-            parameters = new MutableConfiguration("parameters");
-            model.Configuration.Children.Add(parameters);
+            return parameters;
         }
+
+        parameters = new MutableConfiguration("parameters");
+        model.Configuration.Children.Add(parameters);
 
         return parameters;
     }

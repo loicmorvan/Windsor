@@ -100,17 +100,21 @@ public class ServiceDescriptor
                 }
             }
 
-            if (matches.Count == 0)
+            if (matches.Count != 0)
             {
+                return matches;
+            }
+
                 foreach (var baseType in baseTypes.Where(t => t != typeof(object)))
                 {
-                    if (baseType.IsAssignableFrom(type))
+                    if (!baseType.IsAssignableFrom(type))
                     {
-                        matches.Add(baseType);
-                        break;
+                        continue;
                     }
+
+                    matches.Add(baseType);
+                    break;
                 }
-            }
 
             return matches;
         });
@@ -222,18 +226,20 @@ public class ServiceDescriptor
         // This is a workaround for a CLR bug in
         // which GetInterfaces() returns interfaces
         // with no implementations.
-        if (serviceType.GetTypeInfo().IsGenericType && serviceType.DeclaringType == null)
+        if (!serviceType.GetTypeInfo().IsGenericType || serviceType.DeclaringType != null)
         {
-            var shouldUseGenericTypeDefinition = false;
-            foreach (var argument in serviceType.GetGenericArguments())
-            {
-                shouldUseGenericTypeDefinition |= argument.IsGenericParameter;
-            }
+            return serviceType;
+        }
 
-            if (shouldUseGenericTypeDefinition)
-            {
-                return serviceType.GetGenericTypeDefinition();
-            }
+        var shouldUseGenericTypeDefinition = false;
+        foreach (var argument in serviceType.GetGenericArguments())
+        {
+            shouldUseGenericTypeDefinition |= argument.IsGenericParameter;
+        }
+
+        if (shouldUseGenericTypeDefinition)
+        {
+            return serviceType.GetGenericTypeDefinition();
         }
 
         return serviceType;

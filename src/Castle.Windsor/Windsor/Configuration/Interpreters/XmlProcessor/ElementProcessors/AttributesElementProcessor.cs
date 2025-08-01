@@ -52,7 +52,6 @@ public class AttributesElementProcessor : AbstractXmlNodeProcessor
             }
 
             GetNodeAsElement(element, childNodes.Current);
-
             AppendElementAsAttribute(element.ParentNode, childNodes.Current as XmlElement);
         }
 

@@ -83,12 +83,14 @@ public abstract class AbstractHandler :
         _kernel.AddedAsChildKernel += OnAddedAsChildKernel;
 
         InitDependencies();
-        if (AllRequiredDependenciesResolvable())
+        if (!AllRequiredDependenciesResolvable())
         {
-            SetNewState(HandlerState.Valid);
-            DisconnectEvents();
-            _missingDependencies = null;
+            return;
         }
+
+        SetNewState(HandlerState.Valid);
+        DisconnectEvents();
+        _missingDependencies = null;
     }
 
     public bool IsBeingResolvedInContext(CreationContext context)
@@ -243,20 +245,22 @@ public abstract class AbstractHandler :
         }
 
         missing.Add(dependency);
-        if (_state != HandlerState.WaitingDependency)
+        if (_state == HandlerState.WaitingDependency)
         {
-            // This handler is considered invalid
-            // until dependencies are satisfied
-            SetNewState(HandlerState.WaitingDependency);
-
-            // Register itself on the kernel
-            // to be notified if the dependency is satified
-            Kernel.HandlersChanged += DependencySatisfied;
-
-            // We also gonna pay attention for state
-            // changed within this very handler. The 
-            // state can be changed by AddCustomDependencyValue and RemoveCustomDependencyValue
+            return;
         }
+
+        // This handler is considered invalid
+        // until dependencies are satisfied
+        SetNewState(HandlerState.WaitingDependency);
+
+        // Register itself on the kernel
+        // to be notified if the dependency is satified
+        Kernel.HandlersChanged += DependencySatisfied;
+
+        // We also gonna pay attention for state
+        // changed within this very handler. The 
+        // state can be changed by AddCustomDependencyValue and RemoveCustomDependencyValue
     }
 
     protected bool CanResolvePendingDependencies(CreationContext context)
@@ -311,16 +315,18 @@ public abstract class AbstractHandler :
             }
         }
 
-        if (AllRequiredDependenciesResolvable())
+        if (!AllRequiredDependenciesResolvable())
         {
-            SetNewState(HandlerState.Valid);
-            stateChanged = true;
-
-            DisconnectEvents();
-
-            // We don't need these anymore
-            _missingDependencies = null;
+            return;
         }
+
+        SetNewState(HandlerState.Valid);
+        stateChanged = true;
+
+        DisconnectEvents();
+
+        // We don't need these anymore
+        _missingDependencies = null;
     }
 
     /// <summary>Invoked when the container receives a parent container reference.</summary>
@@ -367,24 +373,26 @@ public abstract class AbstractHandler :
 
     private bool AddOptionalDependency(DependencyModel dependency)
     {
-        if (dependency.IsOptional || dependency.HasDefaultValue)
+        if (!dependency.IsOptional && !dependency.HasDefaultValue)
         {
-            AddGraphDependency(dependency);
-            return true;
+            return false;
         }
 
-        return false;
+        AddGraphDependency(dependency);
+        return true;
+
     }
 
     private bool AddResolvableDependency(DependencyModel dependency)
     {
-        if (HasValidComponentFromResolver(dependency))
+        if (!HasValidComponentFromResolver(dependency))
         {
-            AddGraphDependency(dependency);
-            return true;
+            return false;
         }
 
-        return false;
+        AddGraphDependency(dependency);
+        return true;
+
     }
 
     private bool AllRequiredDependenciesResolvable()

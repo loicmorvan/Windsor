@@ -62,15 +62,15 @@ public class AttributeAwareConverter : AbstractTypeConverter
 
     private ITypeConverter TryGetConverterInstance(Type type)
     {
-        ITypeConverter converter = null;
-
         var attr = type.GetTypeInfo().GetCustomAttribute<ConvertibleAttribute>();
 
-        if (attr != null)
+        if (attr == null)
         {
-            converter = attr.ConverterType.CreateInstance<ITypeConverter>();
-            converter.Context = Context;
+            return null;
         }
+
+        var converter = attr.ConverterType.CreateInstance<ITypeConverter>();
+        converter.Context = Context;
 
         return converter;
     }

@@ -234,16 +234,13 @@ public class CreationContext :
     {
         var scopes = _resolutionStack.Select(c => c.Handler).Reverse().ToArray();
         var selected = scopeRootSelector(scopes);
-        if (selected != null)
+        if (selected == null)
         {
-            var resolutionContext = _resolutionStack.SingleOrDefault(s => s.Handler == selected);
-            if (resolutionContext != null)
-            {
-                return resolutionContext;
-            }
+            return null;
         }
 
-        return null;
+        var resolutionContext = _resolutionStack.SingleOrDefault(s => s.Handler == selected);
+        return resolutionContext;
     }
 
     public void SetContextualProperty(object key, object value)
@@ -316,32 +313,32 @@ public class CreationContext :
             return;
         }
 
-        if (_resolutionStack.Count != 0)
+        if (_resolutionStack.Count == 0)
         {
-            var parent = _resolutionStack.Peek().Burden;
-            if (parent == null)
-            {
-                return;
-            }
-
-            parent.AddChild(burden);
+            return;
         }
+
+        var parent = _resolutionStack.Peek().Burden;
+
+        parent?.AddChild(burden);
     }
 
     private object Resolve(DependencyModel dependency, object inlineArgument)
     {
         var targetType = dependency.TargetItemType;
-        if (inlineArgument != null)
+        if (inlineArgument == null)
         {
-            if (targetType.IsInstanceOfType(inlineArgument))
-            {
-                return inlineArgument;
-            }
+            return null;
+        }
 
-            if (CanConvertParameter(targetType))
-            {
-                return _converter.PerformConversion(inlineArgument.ToString(), targetType);
-            }
+        if (targetType.IsInstanceOfType(inlineArgument))
+        {
+            return inlineArgument;
+        }
+
+        if (CanConvertParameter(targetType))
+        {
+            return _converter.PerformConversion(inlineArgument.ToString(), targetType);
         }
 
         return null;

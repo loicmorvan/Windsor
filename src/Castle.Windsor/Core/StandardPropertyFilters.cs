@@ -68,11 +68,13 @@ public class StandardPropertyFilters
     {
         var filters =
             (ICollection<PropertyDependencyFilter>)componentModel.ExtendedProperties[Constants.PropertyFilters];
-        if (filters == null && createIfMissing)
+        if (filters != null || !createIfMissing)
         {
-            filters = new List<PropertyDependencyFilter>(4);
-            componentModel.ExtendedProperties[Constants.PropertyFilters] = filters;
+            return filters;
         }
+
+        filters = new List<PropertyDependencyFilter>(4);
+        componentModel.ExtendedProperties[Constants.PropertyFilters] = filters;
 
         return filters;
     }

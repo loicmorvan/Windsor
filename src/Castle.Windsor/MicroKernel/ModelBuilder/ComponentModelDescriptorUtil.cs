@@ -29,11 +29,13 @@ public static class ComponentModelDescriptorUtil
 
         var metaDescriptors =
             model.ExtendedProperties[MetaDescriptorsKey] as ICollection<IMetaComponentModelDescriptor>;
-        if (metaDescriptors == null && ensureExists)
+        if (metaDescriptors != null || !ensureExists)
         {
-            metaDescriptors = new List<IMetaComponentModelDescriptor>();
-            model.ExtendedProperties[MetaDescriptorsKey] = metaDescriptors;
+            return metaDescriptors;
         }
+
+        metaDescriptors = new List<IMetaComponentModelDescriptor>();
+        model.ExtendedProperties[MetaDescriptorsKey] = metaDescriptors;
 
         return metaDescriptors;
     }

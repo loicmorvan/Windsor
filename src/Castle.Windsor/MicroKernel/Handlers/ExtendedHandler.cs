@@ -49,7 +49,11 @@ public class ExtendedHandler : DefaultHandler
             }
         }
 
-        if (_releaseExtensions != null)
+        if (_releaseExtensions == null)
+        {
+            return;
+        }
+
         {
             foreach (var extension in _releaseExtensions)
             {

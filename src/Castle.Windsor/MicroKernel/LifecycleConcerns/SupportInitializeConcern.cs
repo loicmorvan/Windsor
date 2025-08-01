@@ -29,10 +29,12 @@ public class SupportInitializeConcern : ICommissionConcern
 
     public void Apply(ComponentModel model, object component)
     {
-        if (component is ISupportInitialize supportInitialize)
+        if (component is not ISupportInitialize supportInitialize)
         {
-            supportInitialize.BeginInit();
-            supportInitialize.EndInit();
+            return;
         }
+
+        supportInitialize.BeginInit();
+        supportInitialize.EndInit();
     }
 }

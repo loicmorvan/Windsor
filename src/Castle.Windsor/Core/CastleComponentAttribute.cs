@@ -55,16 +55,17 @@ public class CastleComponentAttribute : LifestyleAttribute
     public static CastleComponentAttribute GetDefaultsFor(Type type)
     {
         var attribute = type.GetTypeInfo().GetCustomAttribute<CastleComponentAttribute>();
-        if (attribute != null)
+        if (attribute == null)
         {
-            if (attribute.ServicesSpecifiedExplicitly == false)
-            {
-                attribute.Services = [type];
-            }
-
-            return attribute;
+            return new CastleComponentAttribute(type);
         }
 
-        return new CastleComponentAttribute(type);
+        if (attribute.ServicesSpecifiedExplicitly == false)
+        {
+            attribute.Services = [type];
+        }
+
+        return attribute;
+
     }
 }

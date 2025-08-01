@@ -32,16 +32,18 @@ public class ComponentLifecycleExtension : IResolveExtension
             foreach (var resolver in _resolvers)
             {
                 var releaser = resolver(_kernel, invocation.Context);
-                if (releaser != null)
+                if (releaser == null)
                 {
-                    if (releasing == null)
-                    {
-                        releasing = new Releasing(_resolvers.Count, _kernel);
-                        invocation.RequireDecommission();
-                    }
-
-                    releasing.Add(releaser);
+                    continue;
                 }
+
+                if (releasing == null)
+                {
+                    releasing = new Releasing(_resolvers.Count, _kernel);
+                    invocation.RequireDecommission();
+                }
+
+                releasing.Add(releaser);
             }
         }
 

@@ -26,11 +26,13 @@ public static class HandlerExtensionsUtil
         ArgumentNullException.ThrowIfNull(model);
 
         var releaseExtensions = model.ExtendedProperties[ReleaseExtensionsKey] as ICollection<IReleaseExtension>;
-        if (releaseExtensions == null && ensureExists)
+        if (releaseExtensions != null || !ensureExists)
         {
-            releaseExtensions = new HashSet<IReleaseExtension>();
-            model.ExtendedProperties[ReleaseExtensionsKey] = releaseExtensions;
+            return releaseExtensions;
         }
+
+        releaseExtensions = new HashSet<IReleaseExtension>();
+        model.ExtendedProperties[ReleaseExtensionsKey] = releaseExtensions;
 
         return releaseExtensions;
     }
@@ -40,11 +42,13 @@ public static class HandlerExtensionsUtil
         ArgumentNullException.ThrowIfNull(model);
 
         var resolveExtensions = model.ExtendedProperties[ResolveExtensionsKey] as ICollection<IResolveExtension>;
-        if (resolveExtensions == null && ensureExists)
+        if (resolveExtensions != null || !ensureExists)
         {
-            resolveExtensions = new HashSet<IResolveExtension>();
-            model.ExtendedProperties[ResolveExtensionsKey] = resolveExtensions;
+            return resolveExtensions;
         }
+
+        resolveExtensions = new HashSet<IResolveExtension>();
+        model.ExtendedProperties[ResolveExtensionsKey] = resolveExtensions;
 
         return resolveExtensions;
     }

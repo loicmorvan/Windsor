@@ -26,21 +26,23 @@ public class TypedFactoryConfiguration
     {
         _defaultComponentSelectorKey = defaultComponentSelectorKey;
         var attributes = factoryType.GetAttributes<FactoryAttribute>(true);
-        if (attributes.Length > 0)
+        if (attributes.Length <= 0)
         {
-            var defaults = attributes[0];
-            if (defaults.SelectorComponentName != null)
-            {
-                SelectedWith(defaults.SelectorComponentName);
-            }
-            else if (defaults.SelectorComponentType != null)
-            {
-                SelectedWith(defaults.SelectorComponentType);
-            }
-            else if (defaults.SelectorType != null)
-            {
-                SelectedWith(defaults.SelectorType.CreateInstance<ITypedFactoryComponentSelector>());
-            }
+            return;
+        }
+
+        var defaults = attributes[0];
+        if (defaults.SelectorComponentName != null)
+        {
+            SelectedWith(defaults.SelectorComponentName);
+        }
+        else if (defaults.SelectorComponentType != null)
+        {
+            SelectedWith(defaults.SelectorComponentType);
+        }
+        else if (defaults.SelectorType != null)
+        {
+            SelectedWith(defaults.SelectorType.CreateInstance<ITypedFactoryComponentSelector>());
         }
     }
 

@@ -84,20 +84,24 @@ public class LifestyleModelInspector : IContributeComponentModelConstruction
                     return true;
                 case LifestyleType.Scoped:
                     var scopeAccessorType = GetTypeFromAttribute(model, "scopeAccessorType");
-                    if (scopeAccessorType != null)
+                    if (scopeAccessorType == null)
                     {
-                        ValidateTypeFromAttribute(scopeAccessorType, typeof(IScopeAccessor), "scopeAccessorType");
-                        model.ExtendedProperties[Constants.ScopeAccessorType] = scopeAccessorType;
+                        return true;
                     }
+
+                    ValidateTypeFromAttribute(scopeAccessorType, typeof(IScopeAccessor), "scopeAccessorType");
+                    model.ExtendedProperties[Constants.ScopeAccessorType] = scopeAccessorType;
 
                     return true;
                 case LifestyleType.Bound:
                     var binderType = GetTypeFromAttribute(model, "scopeRootBinderType");
-                    if (binderType != null)
+                    if (binderType == null)
                     {
-                        var binder = ExtractBinder(binderType, model.Name);
-                        model.ExtendedProperties[Constants.ScopeRootSelector] = binder;
+                        return true;
                     }
+
+                    var binder = ExtractBinder(binderType, model.Name);
+                    model.ExtendedProperties[Constants.ScopeRootSelector] = binder;
 
                     return true;
                 default:
@@ -127,13 +131,15 @@ public class LifestyleModelInspector : IContributeComponentModelConstruction
             }
 
             var customLifestyleType = GetTypeFromAttribute(model, "customLifestyleType");
-            if (customLifestyleType != null)
+            if (customLifestyleType == null)
             {
-                ValidateTypeFromAttribute(customLifestyleType, typeof(ILifestyleManager), "customLifestyleType");
-                model.CustomLifestyle = customLifestyleType;
-                model.LifestyleType = LifestyleType.Custom;
-                return true;
+                return false;
             }
+
+            ValidateTypeFromAttribute(customLifestyleType, typeof(ILifestyleManager), "customLifestyleType");
+            model.CustomLifestyle = customLifestyleType;
+            model.LifestyleType = LifestyleType.Custom;
+            return true;
         }
         return false;
     }
@@ -170,11 +176,13 @@ public class LifestyleModelInspector : IContributeComponentModelConstruction
         else if (model.LifestyleType == LifestyleType.Scoped)
         {
             var scoped = (ScopedAttribute)attribute;
-            if (scoped.ScopeAccessorType != null)
+            if (scoped.ScopeAccessorType == null)
             {
-                ValidateTypeFromAttribute(scoped.ScopeAccessorType, typeof(IScopeAccessor), "ScopeAccessorType");
-                model.ExtendedProperties[Constants.ScopeAccessorType] = scoped.ScopeAccessorType;
+                return;
             }
+
+            ValidateTypeFromAttribute(scoped.ScopeAccessorType, typeof(IScopeAccessor), "ScopeAccessorType");
+            model.ExtendedProperties[Constants.ScopeAccessorType] = scoped.ScopeAccessorType;
         }
     }
 
@@ -220,11 +228,13 @@ public class LifestyleModelInspector : IContributeComponentModelConstruction
             model.ExtendedProperties[ExtendedPropertiesConstants.PoolInitialPoolSize] = initial;
         }
 
-        if (maxRaw != null)
+        if (maxRaw == null)
         {
-            var max = _converter.PerformConversion<int>(maxRaw);
-            model.ExtendedProperties[ExtendedPropertiesConstants.PoolMaxPoolSize] = max;
+            return;
         }
+
+        var max = _converter.PerformConversion<int>(maxRaw);
+        model.ExtendedProperties[ExtendedPropertiesConstants.PoolMaxPoolSize] = max;
     }
 
     private Type GetMandatoryTypeFromAttribute(ComponentModel model, string attribute, LifestyleType lifestyleType)

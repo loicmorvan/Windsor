@@ -79,13 +79,15 @@ public class CallContextLifetimeScope : ILifetimeScope
     {
         using var token = _lock.ForReadingUpgradeable();
         var burden = _cache[model];
-        if (burden == null)
+        if (burden != null)
         {
-            token.Upgrade();
-
-            burden = createInstance(delegate { });
-            _cache[model] = burden;
+            return burden;
         }
+
+        token.Upgrade();
+
+        burden = createInstance(delegate { });
+        _cache[model] = burden;
 
         return burden;
     }

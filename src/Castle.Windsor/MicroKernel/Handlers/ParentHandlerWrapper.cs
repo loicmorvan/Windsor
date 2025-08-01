@@ -131,11 +131,13 @@ public class ParentHandlerWrapper : IHandler, IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        if (disposing)
+        if (!disposing)
         {
-            if (_parentHandler != null)
-            {
-            }
+            return;
+        }
+
+        if (_parentHandler != null)
+        {
         }
     }
 }

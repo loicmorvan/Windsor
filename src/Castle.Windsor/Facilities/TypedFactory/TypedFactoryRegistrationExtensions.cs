@@ -127,7 +127,7 @@ public static class TypedFactoryRegistrationExtensions
 	{
 		ArgumentNullException.ThrowIfNull(registration);
 		var classServices = registration.Services.TakeWhile(s => s.GetTypeInfo().IsClass).ToArray();
-		if (classServices.Any() == false)
+		if (classServices.Length == 0)
 		{
 			Debug.Assert(registration.Services.Any());
 			return RegisterInterfaceBasedFactory(registration, configuration);
@@ -140,21 +140,22 @@ public static class TypedFactoryRegistrationExtensions
 		}
 
 		var classService = classServices[0];
-		if (classService.GetTypeInfo().BaseType == typeof(MulticastDelegate))
+		if (classService.GetTypeInfo().BaseType != typeof(MulticastDelegate))
 		{
-			if (registration.ServicesCount == 1) // the delegate is the only service we expose
-			{
-				return RegisterDelegateBasedFactory(registration, configuration, classService);
-			}
-
 			throw new ComponentRegistrationException(
-				string.Format(
-					"Type {0} is a delegate, however the component has also {1} inteface(s) specified as its service. Delegate-based typed factories can't expose any additional services.",
-					classService.Name, registration.ServicesCount - 1));
+				$"Type {classService.Name} is not an interface nor a delegate. Only interfaces and delegates may be used as typed factories.");
+		}
+
+		if (registration.ServicesCount == 1) // the delegate is the only service we expose
+		{
+			return RegisterDelegateBasedFactory(registration, configuration, classService);
 		}
 
 		throw new ComponentRegistrationException(
-			$"Type {classService.Name} is not an interface nor a delegate. Only interfaces and delegates may be used as typed factories.");
+			string.Format(
+				"Type {0} is a delegate, however the component has also {1} inteface(s) specified as its service. Delegate-based typed factories can't expose any additional services.",
+				classService.Name, registration.ServicesCount - 1));
+
 	}
 
 	private static ComponentRegistration<TFactory> AttachConfiguration<TFactory>(

@@ -187,13 +187,14 @@ public sealed class Dependency
 
     internal bool Accept<TItem>(ICollection<TItem> items) where TItem : class
     {
-        if (_item is TItem castItem)
+        if (_item is not TItem castItem)
         {
-            items.Add(castItem);
-            return true;
+            return false;
         }
 
-        return false;
+        items.Add(castItem);
+        return true;
+
     }
 
     public static Property OnResource<TResources>(string dependencyName, string resourceName)
