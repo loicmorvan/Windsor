@@ -64,6 +64,8 @@ public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryCompon
             case FactoryMethod.Dispose:
                 Dispose();
                 break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 

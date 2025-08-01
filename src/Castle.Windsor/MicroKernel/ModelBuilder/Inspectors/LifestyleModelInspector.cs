@@ -104,6 +104,7 @@ public class LifestyleModelInspector : IContributeComponentModelConstruction
                     model.ExtendedProperties[Constants.ScopeRootSelector] = binder;
 
                     return true;
+                case LifestyleType.Undefined:
                 default:
                     throw new InvalidOperationException(
                         $"Component {model.Name} has {lifestyleType} lifestyle. This is not a valid value.");

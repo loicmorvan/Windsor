@@ -66,6 +66,7 @@ public class InterceptorDescriptor(InterceptorReference[] interceptors, Intercep
                     model.Interceptors.Insert(_insertIndex, interceptor);
                     break;
 
+                case Where.Default:
                 default:
                     model.Interceptors.Add(interceptor);
                     break;

@@ -57,6 +57,12 @@ public static class HelpfulExceptionsUtil
                         burden.Model.LifestyleType +
                         ") does not expect.");
                     break;
+                case LifestyleType.Undefined:
+                case LifestyleType.Singleton:
+                case LifestyleType.Thread:
+                case LifestyleType.Pooled:
+                case LifestyleType.Scoped:
+                case LifestyleType.Bound:
                 default:
                     message.AppendLine(
                         "The factory method providing instances of the component is reusing instances, in a way that the lifestyle of the component (" +
@@ -87,6 +93,12 @@ public static class HelpfulExceptionsUtil
                                        burden.Model.LifestyleType +
                                        ") does not expect.");
                     break;
+                case LifestyleType.Undefined:
+                case LifestyleType.Singleton:
+                case LifestyleType.Thread:
+                case LifestyleType.Pooled:
+                case LifestyleType.Scoped:
+                case LifestyleType.Bound:
                 default:
                     message.AppendLine("The custom activator" + burden.Model.CustomComponentActivator +
                                        " is reusing instances, in a way that the lifestyle of the component (" +

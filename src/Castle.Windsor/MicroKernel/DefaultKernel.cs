@@ -524,6 +524,8 @@ public sealed partial class DefaultKernel :
 
                 manager = new PoolableLifestyleManager(initial, maxSize);
                 break;
+            case LifestyleType.Undefined:
+            case LifestyleType.Singleton:
             default:
                 //this includes LifestyleType.Undefined, LifestyleType.Singleton and invalid values
                 manager = new SingletonLifestyleManager();
