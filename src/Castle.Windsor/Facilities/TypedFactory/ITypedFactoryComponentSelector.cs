@@ -25,8 +25,7 @@ public interface ITypedFactoryComponentSelector
 	///     should be requested by name only, componentType should be null.
 	/// </summary>
 	/// <param name="method"></param>
-	/// <param name="type"></param>
 	/// <param name="arguments"></param>
 	/// <returns></returns>
-	Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method, Type type, object[] arguments);
+	Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method, object[] arguments);
 }

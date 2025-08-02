@@ -15,7 +15,7 @@ public class ReturnAExtension : IResolveExtension
         _proceed = proceed;
     }
 
-    public void Init(IKernel kernel, IHandler handler)
+    public void Init(IKernel kernel)
     {
     }
 

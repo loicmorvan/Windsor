@@ -24,7 +24,7 @@ public class FromTypesDescriptor : FromDescriptor
         _types = types;
     }
 
-    protected override IEnumerable<Type> SelectedTypes(IKernel kernel)
+    protected override IEnumerable<Type> SelectedTypes()
     {
         return _types;
     }

@@ -39,7 +39,7 @@ public class ComponentProxyInspector(IConversionManager converter) : IContribute
     /// </summary>
     public virtual void ProcessModel(IKernel kernel, ComponentModel model)
     {
-        ReadProxyBehavior(kernel, model);
+        ReadProxyBehavior(model);
     }
 
     /// <summary>
@@ -54,9 +54,8 @@ public class ComponentProxyInspector(IConversionManager converter) : IContribute
 
     /// <summary>Reads the proxy behavior associated with the component configuration/type and applies it to the model.</summary>
     /// <exception cref="System.Exception">If the conversion fails</exception>
-    /// <param name="kernel"></param>
     /// <param name="model"></param>
-    protected virtual void ReadProxyBehavior(IKernel kernel, ComponentModel model)
+    protected virtual void ReadProxyBehavior(ComponentModel model)
     {
         var proxyBehaviorAttribute =
             ReadProxyBehaviorFromType(model.Implementation) ?? new ComponentProxyBehaviorAttribute();

@@ -31,7 +31,7 @@ public class AttributeDescriptor<TS> : AbstractOverwriteableDescriptor<TS>
         _value = value;
     }
 
-    protected override void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
+    protected override void ApplyToConfiguration(IConfiguration configuration)
     {
         if (configuration.Attributes[_name] == null || IsOverWrite)
         {

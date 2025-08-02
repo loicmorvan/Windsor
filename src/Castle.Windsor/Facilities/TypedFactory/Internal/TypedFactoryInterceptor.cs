@@ -101,7 +101,7 @@ public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryCompon
         }
 
         var component =
-            ComponentSelector.SelectComponent(invocation.Method, invocation.TargetType, invocation.Arguments);
+            ComponentSelector.SelectComponent(invocation.Method, invocation.Arguments);
         if (component == null)
         {
             throw new FacilityException(

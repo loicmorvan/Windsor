@@ -45,7 +45,7 @@ public class ExtendedHandler : DefaultHandler
         {
             foreach (var extension in _resolveExtensions)
             {
-                extension.Init(kernel, this);
+                extension.Init(kernel);
             }
         }
 
@@ -57,7 +57,7 @@ public class ExtendedHandler : DefaultHandler
         {
             foreach (var extension in _releaseExtensions)
             {
-                extension.Init(kernel, this);
+                extension.Init();
             }
         }
     }

@@ -15,6 +15,7 @@
 using System.ComponentModel;
 using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 using Castle.Windsor.Windsor;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Lifestyle;
 
@@ -24,6 +25,7 @@ public static class LifestyleExtensions
 	/// <summary>Begins a scope.</summary>
 	/// <param name="kernel">The <see cref="IKernel" />.</param>
 	/// <returns>Returns an <see cref="IDisposable" /> to be used in a <code>using</code> block.</returns>
+	// ReSharper disable once UnusedParameter.Global
 	public static IDisposable BeginScope(this IKernel kernel)
 	{
 		return BeginScope();
@@ -32,6 +34,7 @@ public static class LifestyleExtensions
 	/// <summary>Begins a scope.</summary>
 	/// <param name="container">The <see cref="IWindsorContainer" />.</param>
 	/// <returns>Returns an <see cref="IDisposable" /> to be used in a <code>using</code> block.</returns>
+	// ReSharper disable once UnusedParameter.Global
 	public static IDisposable BeginScope(this IWindsorContainer container)
 	{
 		return BeginScope();
@@ -40,6 +43,8 @@ public static class LifestyleExtensions
 	/// <summary>Begins a scope if not executing inside one.</summary>
 	/// <param name="kernel">The <see cref="IKernel" />.</param>
 	/// <returns>Returns an <see cref="IDisposable" /> to be used in a <code>using</code> block.</returns>
+	// ReSharper disable once UnusedParameter.Global
+	[PublicAPI]
 	public static IDisposable RequireScope(this IKernel kernel)
 	{
 		return RequireScope();
@@ -48,16 +53,18 @@ public static class LifestyleExtensions
 	/// <summary>Begins a scope if not executing inside one.</summary>
 	/// <param name="container">The <see cref="IWindsorContainer" />.</param>
 	/// <returns>Returns an <see cref="IDisposable" /> to be used in a <code>using</code> block.</returns>
+	// ReSharper disable once UnusedParameter.Global
 	public static IDisposable RequireScope(this IWindsorContainer container)
 	{
 		return RequireScope();
 	}
 
-	private static IDisposable BeginScope()
+	private static CallContextLifetimeScope BeginScope()
 	{
 		return new CallContextLifetimeScope();
 	}
 
+	[CanBeNull]
 	private static IDisposable RequireScope()
 	{
 		var current = CallContextLifetimeScope.ObtainCurrentScope();

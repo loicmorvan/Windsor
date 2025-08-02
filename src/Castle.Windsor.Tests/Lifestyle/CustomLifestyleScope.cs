@@ -19,7 +19,7 @@ namespace Castle.Windsor.Tests.Lifestyle;
 
 public class CustomLifestyleScope : IResolveExtension
 {
-    public void Init(IKernel kernel, IHandler handler)
+    public void Init(IKernel kernel)
     {
     }
 

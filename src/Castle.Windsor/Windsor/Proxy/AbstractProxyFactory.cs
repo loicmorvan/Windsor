@@ -62,7 +62,7 @@ public abstract class AbstractProxyFactory : IProxyFactory
         if (_selectors != null)
         {
             interceptors = _selectors.Where(selector => selector.HasInterceptors(model)).Aggregate(interceptors,
-                (current, selector) => selector.SelectInterceptors(model, current) ?? []);
+                (current, selector) => selector.SelectInterceptors(model) ?? []);
         }
 
         return interceptors;

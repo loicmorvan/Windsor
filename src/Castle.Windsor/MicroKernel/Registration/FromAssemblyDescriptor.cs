@@ -46,7 +46,7 @@ public class FromAssemblyDescriptor : FromDescriptor
         return this;
     }
 
-    protected override IEnumerable<Type> SelectedTypes(IKernel kernel)
+    protected override IEnumerable<Type> SelectedTypes()
     {
         return _assemblies.SelectMany(a => a.GetAvailableTypesOrdered(_nonPublicTypes));
     }

@@ -9,13 +9,17 @@ public class CollectItemsExtension : IResolveExtension, IReleaseExtension
 
     public IList<object> ResolvedItems { get; } = new List<object>();
 
+    public void Init()
+    {
+    }
+
     public void Intercept(ReleaseInvocation invocation)
     {
         invocation.Proceed();
         ReleasedItems.Add(invocation.Instance);
     }
 
-    public void Init(IKernel kernel, IHandler handler)
+    public void Init(IKernel kernel)
     {
     }
 

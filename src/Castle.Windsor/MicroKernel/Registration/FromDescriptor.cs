@@ -37,7 +37,7 @@ public abstract class FromDescriptor : IRegistration
             return;
         }
 
-        foreach (var type in SelectedTypes(kernel))
+        foreach (var type in SelectedTypes())
         foreach (var criteria in _criterias)
         {
             if (criteria.TryRegister(type, kernel) && !_allowMultipleMatches)
@@ -47,7 +47,7 @@ public abstract class FromDescriptor : IRegistration
         }
     }
 
-    protected abstract IEnumerable<Type> SelectedTypes(IKernel kernel);
+    protected abstract IEnumerable<Type> SelectedTypes();
 
     /// <summary>Allows a type to be registered multiple times.</summary>
     public FromDescriptor AllowMultipleMatches()

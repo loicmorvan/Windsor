@@ -19,7 +19,7 @@ public class ComponentLifecycleExtension : IResolveExtension
     private readonly List<ComponentResolvingDelegate> _resolvers = new(4);
     private IKernel _kernel;
 
-    public void Init(IKernel kernel, IHandler handler)
+    public void Init(IKernel kernel)
     {
         _kernel = kernel;
     }

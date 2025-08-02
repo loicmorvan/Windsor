@@ -488,7 +488,7 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
             Assert.Fail();
         }
 
-        public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method, Type type,
+        public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method,
             object[] arguments)
         {
             throw new NotImplementedException();
@@ -511,7 +511,7 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
             _counter.Increment();
         }
 
-        public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method, Type type,
+        public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method,
             object[] arguments)
         {
             throw new NotImplementedException();

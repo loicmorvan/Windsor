@@ -99,7 +99,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
 
         if (createInstance)
         {
-            instance = CreateInstanceCore(constructor, arguments, implType);
+            instance = CreateInstanceCore(arguments, implType);
         }
 
         if (!createProxy)
@@ -131,7 +131,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
         return instance;
     }
 
-    protected object CreateInstanceCore(ConstructorCandidate constructor, object[] arguments, Type implType)
+    protected object CreateInstanceCore(object[] arguments, Type implType)
     {
         object instance;
         try

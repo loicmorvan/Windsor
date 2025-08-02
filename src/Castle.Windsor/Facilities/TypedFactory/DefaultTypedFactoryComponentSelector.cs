@@ -57,14 +57,14 @@ public class DefaultTypedFactoryComponentSelector : ITypedFactoryComponentSelect
     [PublicAPI]
     protected bool GetMethodsResolveByName { get; set; }
 
-    public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method, Type type,
+    public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method,
         object[] arguments)
     {
         var componentName = GetComponentName(method, arguments);
         var componentType = GetComponentType(method, arguments);
         var additionalArguments = GetArguments(method, arguments);
 
-        return BuildFactoryComponent(method, componentName, componentType, additionalArguments);
+        return BuildFactoryComponent(componentName, componentType, additionalArguments);
     }
 
     /// <summary>
@@ -73,13 +73,11 @@ public class DefaultTypedFactoryComponentSelector : ITypedFactoryComponentSelect
     ///     <see cref="IKernel.ResolveAll(System.Type)" /> on collection's item type, otherwise standard
     ///     <see cref="TypedFactoryComponentResolver" />.
     /// </summary>
-    /// <param name="method"></param>
     /// <param name="componentName"></param>
     /// <param name="componentType"></param>
     /// <param name="additionalArguments"></param>
     /// <returns></returns>
-    protected virtual Func<IKernelInternal, IReleasePolicy, object> BuildFactoryComponent(MethodInfo method,
-        string componentName,
+    protected virtual Func<IKernelInternal, IReleasePolicy, object> BuildFactoryComponent(string componentName,
         Type componentType,
         Arguments additionalArguments)
     {

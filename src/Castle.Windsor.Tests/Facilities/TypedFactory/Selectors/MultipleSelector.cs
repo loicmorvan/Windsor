@@ -20,7 +20,7 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
 
 public class MultipleSelector : ITypedFactoryComponentSelector
 {
-    public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method, Type type,
+    public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method,
         object[] arguments)
     {
         return (k, c) => k.ResolveAll(method.ReturnType, null, c);

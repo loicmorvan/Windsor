@@ -27,14 +27,14 @@ public abstract class AbstractOverwriteableDescriptor<TService> : IComponentMode
 
     public virtual void BuildComponentModel(IKernel kernel, ComponentModel model)
     {
-        ApplyToConfiguration(kernel, model.Configuration);
+        ApplyToConfiguration(model.Configuration);
     }
 
     public virtual void ConfigureComponentModel(IKernel kernel, ComponentModel model)
     {
     }
 
-    protected virtual void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
+    protected virtual void ApplyToConfiguration(IConfiguration configuration)
     {
     }
 }

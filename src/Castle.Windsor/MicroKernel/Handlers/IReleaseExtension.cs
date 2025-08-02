@@ -16,7 +16,7 @@ namespace Castle.Windsor.MicroKernel.Handlers;
 
 public interface IReleaseExtension
 {
-    void Init(IKernel kernel, IHandler handler);
+    void Init();
 
     void Intercept(ReleaseInvocation invocation);
 }

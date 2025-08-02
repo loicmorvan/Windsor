@@ -37,11 +37,11 @@ public class ConstructorDependenciesModelInspector : IContributeComponentModelCo
             // and let the ComponentFactory select an 
             // eligible amongst the candidates later
         {
-            model.AddConstructor(CreateConstructorCandidate(model, constructor));
+            model.AddConstructor(CreateConstructorCandidate(constructor));
         }
     }
 
-    protected virtual ConstructorCandidate CreateConstructorCandidate(ComponentModel model, ConstructorInfo constructor)
+    protected virtual ConstructorCandidate CreateConstructorCandidate(ConstructorInfo constructor)
     {
         var parameters = constructor.GetParameters();
         var dependencies = parameters.ConvertAll(BuildParameterDependency);
