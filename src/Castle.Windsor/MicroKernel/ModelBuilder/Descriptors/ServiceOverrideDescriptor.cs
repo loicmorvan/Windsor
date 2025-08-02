@@ -53,7 +53,8 @@ public class ServiceOverrideDescriptor : AbstractPropertyDescriptor
         }
     }
 
-    private void Apply(ComponentModel model, object dependencyKey, object dependencyValue, ServiceOverride @override)
+    private static void Apply(ComponentModel model, object dependencyKey, object dependencyValue,
+        ServiceOverride @override)
     {
         switch (dependencyValue)
         {

@@ -14,6 +14,7 @@
 
 using System.Collections;
 using System.Collections.ObjectModel;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Core;
 
@@ -25,5 +26,6 @@ public class MethodMetaModelCollection : Collection<MethodMetaModel>
 
     /// <summary>Gets the method info2 model.</summary>
     /// <value>The method info2 model.</value>
+    [PublicAPI]
     public IDictionary MethodInfo2Model => _methodInfo2Model ??= new Dictionary<object, object>();
 }

@@ -191,10 +191,7 @@ public static class TypedFactoryRegistrationExtensions
 	{
 		var factoryConfiguration = new TypedFactoryConfiguration(defaultComponentSelectorKey, factoryType);
 
-		if (configuration != null)
-		{
-			configuration.Invoke(factoryConfiguration);
-		}
+		configuration?.Invoke(factoryConfiguration);
 
 		return factoryConfiguration.Reference;
 	}
@@ -225,10 +222,7 @@ public static class TypedFactoryRegistrationExtensions
 
 		var settings =
 			new TypedFactoryConfiguration(TypedFactoryFacility.DefaultDelegateSelectorKey, typeof(TDelegate));
-		if (configuration != null)
-		{
-			configuration.Invoke(settings);
-		}
+		configuration?.Invoke(settings);
 
 		var componentRegistration = AttachFactoryInterceptor(registration)
 			.Activator<DelegateFactoryActivator>();

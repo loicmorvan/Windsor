@@ -24,9 +24,6 @@ namespace Castle.Windsor.MicroKernel.Handlers;
 [Serializable]
 public class DefaultHandler : AbstractHandler
 {
-    /// <summary>Lifestyle manager instance</summary>
-    private ILifestyleManager _lifestyleManager;
-
     /// <summary>Initializes a new instance of the <see cref="DefaultHandler" /> class.</summary>
     /// <param name="model"> </param>
     public DefaultHandler(ComponentModel model) : base(model)
@@ -35,11 +32,11 @@ public class DefaultHandler : AbstractHandler
 
     /// <summary>Lifestyle manager instance</summary>
     [PublicAPI]
-    protected ILifestyleManager LifestyleManager => _lifestyleManager;
+    protected ILifestyleManager LifestyleManager { get; private set; }
 
     public override void Dispose()
     {
-        _lifestyleManager.Dispose();
+        LifestyleManager.Dispose();
     }
 
     /// <summary>disposes the component instance (or recycle it)</summary>
@@ -47,7 +44,7 @@ public class DefaultHandler : AbstractHandler
     /// <returns> true if destroyed </returns>
     public override bool ReleaseCore(Burden burden)
     {
-        return _lifestyleManager.Release(burden.Instance);
+        return LifestyleManager.Release(burden.Instance);
     }
 
     protected void AssertNotWaitingForDependency()
@@ -61,7 +58,7 @@ public class DefaultHandler : AbstractHandler
     protected override void InitDependencies()
     {
         var activator = Kernel.CreateComponentActivator(ComponentModel);
-        _lifestyleManager = Kernel.CreateLifestyleManager(ComponentModel, activator);
+        LifestyleManager = Kernel.CreateLifestyleManager(ComponentModel, activator);
 
         if (activator is IDependencyAwareActivator awareActivator &&
             awareActivator.CanProvideRequiredDependencies(ComponentModel))
@@ -93,7 +90,7 @@ public class DefaultHandler : AbstractHandler
     {
         if (IsBeingResolvedInContext(context))
         {
-            if (_lifestyleManager is IContextLifestyleManager cache)
+            if (LifestyleManager is IContextLifestyleManager cache)
             {
                 var instance = cache.GetContextInstance(context);
                 if (instance != null)
@@ -133,7 +130,7 @@ public class DefaultHandler : AbstractHandler
         try
         {
             using var ctx = context.EnterResolutionContext(this, requiresDecommission);
-            var instance = _lifestyleManager.Resolve(context, context.ReleasePolicy);
+            var instance = LifestyleManager.Resolve(context, context.ReleasePolicy);
             burden = ctx.Burden;
             return instance;
         }

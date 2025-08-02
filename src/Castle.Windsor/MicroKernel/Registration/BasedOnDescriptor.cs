@@ -261,6 +261,7 @@ public sealed class BasedOnDescriptor : IRegistration
 
     /// <summary>Sets component lifestyle to scoped per explicit scope.</summary>
     /// <returns> </returns>
+    [PublicAPI]
     public BasedOnDescriptor LifestyleScoped(Type scopeAccessorType)
     {
         return Configure(c => c.LifestyleScoped(scopeAccessorType));

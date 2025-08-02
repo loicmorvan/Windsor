@@ -28,10 +28,7 @@ public class BDisposable : B, IDisposable
 
     public void Dispose()
     {
-        if (OnDisposing != null)
-        {
-            OnDisposing();
-        }
+        OnDisposing?.Invoke();
 
         Disposed = true;
     }
