@@ -32,7 +32,7 @@ using Component = Component;
 ///     Provides automatically generated factories on top of interfaces or delegates that you can use to pull
 ///     components out of the container without ever referencing it explicitly.
 /// </summary>
-public class TypedFactoryFacility : AbstractFacility
+public sealed class TypedFactoryFacility : AbstractFacility
 {
     public const string DelegateFactoryKey = "Castle.TypedFactory.DelegateFactory";
     public const string FactoryMapCacheKey = "Castle.TypedFactory.MapCache";
@@ -61,7 +61,7 @@ public class TypedFactoryFacility : AbstractFacility
         ((IKernelInternal)Kernel).AddCustomComponent(model);
     }
 
-    protected virtual void AddFactories(IConfiguration facilityConfig, ITypeConverter converter)
+    private void AddFactories(IConfiguration facilityConfig, ITypeConverter converter)
     {
         if (facilityConfig == null)
         {
@@ -94,7 +94,7 @@ public class TypedFactoryFacility : AbstractFacility
     }
 
     // registers factory from configuration
-    protected void RegisterFactory(string id, Type type, string selector)
+    private void RegisterFactory(string id, Type type, string selector)
     {
         var factory = Component.For(type).Named(id);
         if (selector == null)

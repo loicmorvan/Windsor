@@ -257,13 +257,14 @@ public sealed partial class DefaultKernel :
 
         subsystem.Init(this);
         _subsystems[name] = subsystem;
-        if (name == SubSystemConstants.ConversionManagerKey)
+        switch (name)
         {
-            ConversionSubSystem = (IConversionManager)subsystem;
-        }
-        else if (name == SubSystemConstants.NamingKey)
-        {
-            NamingSubSystem = (INamingSubSystem)subsystem;
+            case SubSystemConstants.ConversionManagerKey:
+                ConversionSubSystem = (IConversionManager)subsystem;
+                break;
+            case SubSystemConstants.NamingKey:
+                NamingSubSystem = (INamingSubSystem)subsystem;
+                break;
         }
     }
 

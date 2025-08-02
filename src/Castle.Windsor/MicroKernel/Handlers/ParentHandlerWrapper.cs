@@ -17,7 +17,7 @@ using Castle.Windsor.MicroKernel.Context;
 
 namespace Castle.Windsor.MicroKernel.Handlers;
 
-public class ParentHandlerWrapper : IHandler, IDisposable
+public sealed class ParentHandlerWrapper : IHandler, IDisposable
 {
     private readonly ISubDependencyResolver _childResolver;
     private readonly IHandler _parentHandler;
@@ -43,11 +43,11 @@ public class ParentHandlerWrapper : IHandler, IDisposable
         Dispose(true);
     }
 
-    public virtual ComponentModel ComponentModel => _parentHandler.ComponentModel;
+    public ComponentModel ComponentModel => _parentHandler.ComponentModel;
 
-    public virtual HandlerState CurrentState => _parentHandler.CurrentState;
+    public HandlerState CurrentState => _parentHandler.CurrentState;
 
-    public virtual void Init(IKernelInternal kernel)
+    public void Init(IKernelInternal kernel)
     {
     }
 
@@ -57,12 +57,12 @@ public class ParentHandlerWrapper : IHandler, IDisposable
                _parentHandler.IsBeingResolvedInContext(context);
     }
 
-    public virtual bool Release(Burden burden)
+    public bool Release(Burden burden)
     {
         return _parentHandler.Release(burden);
     }
 
-    public virtual object Resolve(CreationContext context)
+    public object Resolve(CreationContext context)
     {
         var releasePolicy = default(IReleasePolicy);
         try
@@ -102,7 +102,7 @@ public class ParentHandlerWrapper : IHandler, IDisposable
         }
     }
 
-    public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
         ComponentModel model, DependencyModel dependency)
     {
         var canResolve = false;
@@ -120,7 +120,7 @@ public class ParentHandlerWrapper : IHandler, IDisposable
         return canResolve;
     }
 
-    public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
         ComponentModel model, DependencyModel dependency)
     {
         var value = _childResolver.Resolve(context, null, model, dependency) ??
@@ -129,7 +129,7 @@ public class ParentHandlerWrapper : IHandler, IDisposable
         return value;
     }
 
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (!disposing)
         {

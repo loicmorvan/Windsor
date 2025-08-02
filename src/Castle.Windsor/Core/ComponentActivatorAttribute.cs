@@ -12,10 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Core;
 
 /// <summary>Associates a custom activator with a component</summary>
 [AttributeUsage(AttributeTargets.Class)]
+[PublicAPI]
 public sealed class ComponentActivatorAttribute : Attribute
 {
 	/// <summary>Initializes a new instance of the <see cref="ComponentActivatorAttribute" /> class.</summary>

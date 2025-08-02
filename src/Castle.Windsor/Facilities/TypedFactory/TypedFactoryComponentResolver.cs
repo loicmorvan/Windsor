@@ -17,7 +17,7 @@ using Castle.Windsor.MicroKernel;
 namespace Castle.Windsor.Facilities.TypedFactory;
 
 /// <summary>Represents a single component to be resolved via Typed Factory</summary>
-public class TypedFactoryComponentResolver
+public sealed class TypedFactoryComponentResolver
 {
     private readonly Type _actualSelectorType;
     private readonly Arguments _additionalArguments;
@@ -45,7 +45,7 @@ public class TypedFactoryComponentResolver
     /// <param name="kernel"></param>
     /// <param name="scope"></param>
     /// <returns>Resolved component(s).</returns>
-    public virtual object Resolve(IKernelInternal kernel, IReleasePolicy scope)
+    public object Resolve(IKernelInternal kernel, IReleasePolicy scope)
     {
         if (!LoadByName(kernel))
         {

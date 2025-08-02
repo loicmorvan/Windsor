@@ -14,9 +14,11 @@
 
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Context;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.ComponentActivator;
 
+[PublicAPI]
 public class ExternalInstanceActivator : AbstractComponentActivator, IDependencyAwareActivator
 {
     public ExternalInstanceActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation,

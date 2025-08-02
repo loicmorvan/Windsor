@@ -18,6 +18,7 @@ using JetBrains.Annotations;
 
 namespace Castle.Windsor.Core;
 
+[PublicAPI]
 public class StandardPropertyFilters
 {
     public static PropertyDependencyFilter Create(PropertyFilter filter)

@@ -7,7 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="" />
+    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/DefaultKernel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/DefaultKernel.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -159,15 +161,7 @@
       <workItem from="1753815885507" duration="4786000" />
       <workItem from="1753908899966" duration="3075000" />
       <workItem from="1754075854179" duration="1448000" />
-      <workItem from="1754163630481" duration="1730000" />
-    </task>
-    <task id="LOCAL-00001" summary="Keep only .NET 6.">
-      <option name="closed" value="true" />
-      <created>1752524708755</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1752524708755</updated>
+      <workItem from="1754163630481" duration="2599000" />
     </task>
     <task id="LOCAL-00002" summary="Missing file?">
       <option name="closed" value="true" />
@@ -545,7 +539,23 @@
       <option name="project" value="LOCAL" />
       <updated>1754165322717</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="Added `[PublicAPI]` annotations, replaced null checks with null-conditional operators, and refactored to simplify logic and improve consistency across multiple files.">
+      <option name="closed" value="true" />
+      <created>1754165549834</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1754165549834</updated>
+    </task>
+    <task id="LOCAL-00050" summary="Replaced `static readonly` fields with `const` across applicable files to improve immutability and optimize performance.">
+      <option name="closed" value="true" />
+      <created>1754165948616</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1754165948616</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -579,8 +589,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Fixed warnings" />
-    <MESSAGE value="Fixed some warnings and removed conditional compilation symbols." />
     <MESSAGE value="Fixed more warnings." />
     <MESSAGE value="More warnings fixed." />
     <MESSAGE value="Finally, fixed all warnings." />
@@ -604,7 +612,9 @@
     <MESSAGE value="Refactored loops to use LINQ-based operations, simplifying logic and improving code readability across multiple files." />
     <MESSAGE value="Refactored `switch` statements to use expression syntax, added `[PublicAPI]` annotations, improved null checks with null-conditional operators, and streamlined formatting for improved clarity and consistency across multiple files." />
     <MESSAGE value="Made private methods `static` in `ParametersDescriptor` and `ServiceOverrideDescriptor` to improve clarity and enforce non-reliance on instance state." />
-    <option name="LAST_COMMIT_MESSAGE" value="Made private methods `static` in `ParametersDescriptor` and `ServiceOverrideDescriptor` to improve clarity and enforce non-reliance on instance state." />
+    <MESSAGE value="Added `[PublicAPI]` annotations, replaced null checks with null-conditional operators, and refactored to simplify logic and improve consistency across multiple files." />
+    <MESSAGE value="Replaced `static readonly` fields with `const` across applicable files to improve immutability and optimize performance." />
+    <option name="LAST_COMMIT_MESSAGE" value="Replaced `static readonly` fields with `const` across applicable files to improve immutability and optimize performance." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
