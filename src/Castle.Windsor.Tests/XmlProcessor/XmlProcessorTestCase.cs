@@ -53,7 +53,7 @@ public class XmlProcessorTestCase
 
             var doc = GetXmlDocument(fileName);
 
-            var resultFileName = fileName.Substring(0, fileName.Length - 4) + "Result.xml";
+            var resultFileName = fileName[..^4] + "Result.xml";
 
             var resultDoc = GetXmlDocument(resultFileName);
 

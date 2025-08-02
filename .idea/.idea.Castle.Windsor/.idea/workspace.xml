@@ -7,7 +7,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="" />
+    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/XmlProcessor/XmlProcessorTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/XmlProcessor/XmlProcessorTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Core/Internal/ReflectionUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Core/Internal/ReflectionUtil.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Facilities/TypedFactory/DefaultTypedFactoryComponentSelector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Facilities/TypedFactory/DefaultTypedFactoryComponentSelector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ServiceDescriptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ServiceDescriptor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/TypeNameParser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/TypeNameParser.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -158,6 +164,7 @@
       <workItem from="1753815885507" duration="4786000" />
       <workItem from="1753908899966" duration="3075000" />
       <workItem from="1754075854179" duration="1448000" />
+      <workItem from="1754163630481" duration="633000" />
     </task>
     <task id="LOCAL-00001" summary="Keep only .NET 6.">
       <option name="closed" value="true" />
@@ -487,7 +494,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754081589569</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="Refactored loops to use LINQ-based filtering and simplified logic for improved readability and consistency across applicable files.">
+      <option name="closed" value="true" />
+      <created>1754164008291</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1754164008291</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -521,7 +536,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Removed logging facilities." />
     <MESSAGE value="Fixed latest failing tests." />
     <MESSAGE value="Fixed issue with project names." />
     <MESSAGE value="Fixed last namespaces" />
@@ -546,7 +560,8 @@
     <MESSAGE value="Replaced object initializer shorthand `new()` with explicit collection initializers `[]` for improved clarity and consistency across all applicable files." />
     <MESSAGE value="Streamlined conditional logic by replacing `if-else` constructs with shorthand ternary expressions, improving code clarity and consistency across multiple files." />
     <MESSAGE value="Replaced `string.Format` with modern string interpolation for improved code readability and consistency across multiple files." />
-    <option name="LAST_COMMIT_MESSAGE" value="Replaced `string.Format` with modern string interpolation for improved code readability and consistency across multiple files." />
+    <MESSAGE value="Refactored loops to use LINQ-based filtering and simplified logic for improved readability and consistency across applicable files." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored loops to use LINQ-based filtering and simplified logic for improved readability and consistency across applicable files." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -193,7 +193,7 @@ public class ServiceDescriptor
         var name = @interface.Name;
         if (name.Length > 1 && name[0] == 'I' && char.IsUpper(name[1]))
         {
-            return name.Substring(1);
+            return name[1..];
         }
 
         return name;

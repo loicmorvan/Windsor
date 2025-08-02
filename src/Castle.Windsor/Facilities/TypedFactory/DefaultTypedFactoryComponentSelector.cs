@@ -129,7 +129,7 @@ public class DefaultTypedFactoryComponentSelector : ITypedFactoryComponentSelect
         string componentName = null;
         if (GetMethodsResolveByName && method.Name.StartsWith("Get", StringComparison.OrdinalIgnoreCase))
         {
-            componentName = method.Name.Substring("Get".Length);
+            componentName = method.Name["Get".Length..];
         }
 
         return componentName;

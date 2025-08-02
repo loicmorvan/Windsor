@@ -53,7 +53,7 @@ public static class ReflectionUtil
                 $"Could not determine application name for assembly \"{rootAssembly.FullName}\". Please use a different method for obtaining assemblies.");
         }
 
-        var applicationName = rootAssembly.FullName.Substring(0, index);
+        var applicationName = rootAssembly.FullName[..index];
         var assemblies = new HashSet<Assembly>();
         AddApplicationAssemblies(rootAssembly, assemblies, applicationName);
         return assemblies;

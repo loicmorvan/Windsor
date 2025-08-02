@@ -41,7 +41,7 @@ public class TypeNameParser : ITypeNameParser
                 }
 
                 isPotentiallyFullyQualifiedName = false;
-                name = name.Substring(0, start);
+                name = name[..start];
             }
         }
 
@@ -62,8 +62,8 @@ public class TypeNameParser : ITypeNameParser
 
         if (typeStartsHere > -1 && typeStartsHere < name.Length - 1)
         {
-            typeName = name.Substring(typeStartsHere + 1);
-            @namespace = name.Substring(0, typeStartsHere);
+            typeName = name[(typeStartsHere + 1)..];
+            @namespace = name[..typeStartsHere];
         }
         else
         {
