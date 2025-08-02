@@ -18,17 +18,17 @@ namespace Castle.Windsor.MicroKernel;
 public abstract class SubSystemConstants
 {
     /// <summary>Key used for the configuration store subsystem</summary>
-    public static readonly string ConfigurationStoreKey = "config.store";
+    public const string ConfigurationStoreKey = "config.store";
 
     /// <summary>Key used for the conversion manager</summary>
-    public static readonly string ConversionManagerKey = "conversion.mng";
+    public const string ConversionManagerKey = "conversion.mng";
 
     /// <summary>Key used for the diagnostics subsystem</summary>
-    public static readonly string DiagnosticsKey = "Castle.DiagnosticsSubSystem";
+    public const string DiagnosticsKey = "Castle.DiagnosticsSubSystem";
 
     /// <summary>Key used for the naming subsystem</summary>
-    public static readonly string NamingKey = "naming.sub.key";
+    public const string NamingKey = "naming.sub.key";
 
     /// <summary>Key used for the resource subsystem</summary>
-    public static readonly string ResourceKey = "resource.sub.key";
+    public const string ResourceKey = "resource.sub.key";
 }

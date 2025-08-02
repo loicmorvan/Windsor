@@ -18,5 +18,5 @@ namespace Castle.Windsor.MicroKernel.Proxy;
 public abstract class ProxyConstants
 {
     /// <summary>Key used to supply custom proxy options.</summary>
-    public static readonly string ProxyOptionsKey = "proxy.options";
+    public const string ProxyOptionsKey = "proxy.options";
 }

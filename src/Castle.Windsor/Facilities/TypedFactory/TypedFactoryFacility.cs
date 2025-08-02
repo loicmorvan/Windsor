@@ -34,16 +34,14 @@ using Component = Component;
 /// </summary>
 public class TypedFactoryFacility : AbstractFacility
 {
-    public static readonly string DelegateFactoryKey = "Castle.TypedFactory.DelegateFactory";
-    public static readonly string FactoryMapCacheKey = "Castle.TypedFactory.MapCache";
-    public static readonly string InterceptorKey = "Castle.TypedFactory.Interceptor";
-    public static readonly string IsFactoryKey = "Castle.TypedFactory.IsFactory";
+    public const string DelegateFactoryKey = "Castle.TypedFactory.DelegateFactory";
+    public const string FactoryMapCacheKey = "Castle.TypedFactory.MapCache";
+    public const string InterceptorKey = "Castle.TypedFactory.Interceptor";
+    public const string IsFactoryKey = "Castle.TypedFactory.IsFactory";
 
-    internal static readonly string DefaultDelegateSelectorKey =
-        "Castle.TypedFactory.DefaultDelegateFactoryComponentSelector";
+    internal const string DefaultDelegateSelectorKey = "Castle.TypedFactory.DefaultDelegateFactoryComponentSelector";
 
-    internal static readonly string DefaultInterfaceSelectorKey =
-        "Castle.TypedFactory.DefaultInterfaceFactoryComponentSelector";
+    internal const string DefaultInterfaceSelectorKey = "Castle.TypedFactory.DefaultInterfaceFactoryComponentSelector";
 
     [Obsolete("This method is obsolete. Use AsFactory() extension method on fluent registration API instead.")]
     [EditorBrowsable(EditorBrowsableState.Never)]

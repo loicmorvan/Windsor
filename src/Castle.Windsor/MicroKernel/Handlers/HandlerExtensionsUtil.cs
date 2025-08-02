@@ -18,8 +18,8 @@ namespace Castle.Windsor.MicroKernel.Handlers;
 
 public static class HandlerExtensionsUtil
 {
-    public static readonly string ReleaseExtensionsKey = "Castle.ReleaseExtensions";
-    public static readonly string ResolveExtensionsKey = "Castle.ResolveExtensions";
+    public const string ReleaseExtensionsKey = "Castle.ReleaseExtensions";
+    public const string ResolveExtensionsKey = "Castle.ResolveExtensions";
 
     public static ICollection<IReleaseExtension> ReleaseExtensions(this ComponentModel model, bool ensureExists)
     {
