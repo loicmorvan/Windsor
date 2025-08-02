@@ -92,14 +92,8 @@ public class GenericListConverter : AbstractTypeConverter
 
         public object ConvertConfigurationToCollection(IConfiguration configuration)
         {
-            var list = new List<T>();
-            foreach (var itemConfig in configuration.Children)
-            {
-                var item = _parent.Context.Composition.PerformConversion<T>(itemConfig);
-                list.Add(item);
-            }
-
-            return list;
+            return configuration.Children
+                .Select(itemConfig => _parent.Context.Composition.PerformConversion<T>(itemConfig)).ToList();
         }
     }
 }

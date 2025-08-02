@@ -75,12 +75,8 @@ public class ComponentProxyInspector(IConversionManager converter) : IContribute
         }
 
         var list = new List<Type>(behavior.AdditionalInterfaces);
-        foreach (var node in interfaces.Children)
-        {
-            var interfaceTypeName = node.Attributes["interface"];
-            var @interface = _converter.PerformConversion<Type>(interfaceTypeName);
-            list.Add(@interface);
-        }
+        list.AddRange(interfaces.Children.Select(node => node.Attributes["interface"])
+            .Select(interfaceTypeName => _converter.PerformConversion<Type>(interfaceTypeName)));
 
         behavior.AdditionalInterfaces = list.ToArray();
     }

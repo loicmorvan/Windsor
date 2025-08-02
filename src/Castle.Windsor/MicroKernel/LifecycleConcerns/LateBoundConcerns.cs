@@ -43,13 +43,9 @@ public abstract class LateBoundConcerns<TConcern>
     private List<TConcern> BuildConcernCache(Type type)
     {
         var componentConcerns = new List<TConcern>(_concerns.Count);
-        foreach (var concern in _concerns)
-        {
-            if (concern.Key.GetTypeInfo().IsAssignableFrom(type))
-            {
-                componentConcerns.Add(concern.Value);
-            }
-        }
+        componentConcerns.AddRange(from concern in _concerns
+            where concern.Key.GetTypeInfo().IsAssignableFrom(type)
+            select concern.Value);
 
         return componentConcerns;
     }

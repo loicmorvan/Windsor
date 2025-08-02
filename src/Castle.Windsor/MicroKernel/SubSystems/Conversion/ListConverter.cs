@@ -35,14 +35,12 @@ public class ListConverter : AbstractTypeConverter
     {
         Debug.Assert(CanHandleType(targetType));
 
-        var list = new List<object>();
         var convertTo = GetConvertToType(configuration);
-        foreach (var itemConfig in configuration.Children)
-        {
-            list.Add(Context.Composition.PerformConversion(itemConfig.Value, convertTo));
-        }
 
-        return list;
+        return configuration
+            .Children
+            .Select(itemConfig => Context.Composition.PerformConversion(itemConfig.Value, convertTo))
+            .ToList();
     }
 
     private Type GetConvertToType(IConfiguration configuration)
