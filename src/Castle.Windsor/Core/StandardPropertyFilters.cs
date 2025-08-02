@@ -22,22 +22,16 @@ public class StandardPropertyFilters
 {
     public static PropertyDependencyFilter Create(PropertyFilter filter)
     {
-        switch (filter)
+        return filter switch
         {
-            case PropertyFilter.Default:
-                return Default;
-            case PropertyFilter.IgnoreAll:
-                return IgnoreAll;
-            case PropertyFilter.IgnoreBase:
-                return IgnoreBase;
-            case PropertyFilter.RequireAll:
-                return RequireAll;
-            case PropertyFilter.RequireBase:
-                return RequireBase;
-            default:
-                throw new ArgumentOutOfRangeException(
-                    $"The value {filter} does not translate to a valid property filter. This is most likely a bug in the calling code.");
-        }
+            PropertyFilter.Default => Default,
+            PropertyFilter.IgnoreAll => IgnoreAll,
+            PropertyFilter.IgnoreBase => IgnoreBase,
+            PropertyFilter.RequireAll => RequireAll,
+            PropertyFilter.RequireBase => RequireBase,
+            _ => throw new ArgumentOutOfRangeException(
+                $"The value {filter} does not translate to a valid property filter. This is most likely a bug in the calling code.")
+        };
     }
 
     public static PropertySet[] Default(ComponentModel model, ICollection<PropertyInfo> properties,

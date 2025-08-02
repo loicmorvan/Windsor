@@ -92,7 +92,7 @@ public class PropertiesDependenciesModelInspector(IConversionManager converter) 
 
     private PropertiesInspectionBehavior GetInspectionBehaviorFromTheConfiguration(IConfiguration config)
     {
-        if (config == null || config.Attributes["inspectionBehavior"] == null)
+        if (config?.Attributes["inspectionBehavior"] == null)
             // return default behavior
         {
             return PropertiesInspectionBehavior.All;

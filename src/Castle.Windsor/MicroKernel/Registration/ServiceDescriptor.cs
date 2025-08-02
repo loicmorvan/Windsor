@@ -105,16 +105,16 @@ public class ServiceDescriptor
                 return matches;
             }
 
-                foreach (var baseType in baseTypes.Where(t => t != typeof(object)))
+            foreach (var baseType in baseTypes.Where(t => t != typeof(object)))
+            {
+                if (!baseType.IsAssignableFrom(type))
                 {
-                    if (!baseType.IsAssignableFrom(type))
-                    {
-                        continue;
-                    }
-
-                    matches.Add(baseType);
-                    break;
+                    continue;
                 }
+
+                matches.Add(baseType);
+                break;
+            }
 
             return matches;
         });

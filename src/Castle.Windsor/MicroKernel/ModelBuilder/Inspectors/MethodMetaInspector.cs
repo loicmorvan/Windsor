@@ -16,6 +16,7 @@ using System.Globalization;
 using System.Reflection;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.SubSystems.Conversion;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 
@@ -34,6 +35,7 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 /// ]]>
 ///   </code>
 /// </remarks>
+[PublicAPI]
 public abstract class MethodMetaInspector : IContributeComponentModelConstruction
 {
     private static readonly BindingFlags AllMethods =

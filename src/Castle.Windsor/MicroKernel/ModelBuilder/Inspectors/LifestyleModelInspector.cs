@@ -190,6 +190,12 @@ public class LifestyleModelInspector : IContributeComponentModelConstruction
                 model.ExtendedProperties[Constants.ScopeAccessorType] = scoped.ScopeAccessorType;
                 break;
             }
+            case LifestyleType.Undefined:
+            case LifestyleType.Singleton:
+            case LifestyleType.Thread:
+            case LifestyleType.Transient:
+            default:
+                break;
         }
     }
 

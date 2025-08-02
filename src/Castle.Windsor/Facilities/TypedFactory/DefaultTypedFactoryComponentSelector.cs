@@ -16,6 +16,7 @@ using System.Reflection;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Facilities.TypedFactory;
 
@@ -46,12 +47,14 @@ public class DefaultTypedFactoryComponentSelector : ITypedFactoryComponentSelect
     ///     If set to <c>true</c>, will fallback to resolving by type, if can not find component with specified name. This
     ///     property is here for backward compatibility. It is recommended not to use it.
     /// </summary>
+    [PublicAPI]
     protected bool FallbackToResolveByTypeIfNameNotFound { get; set; }
 
     /// <summary>
     ///     If set to <c>true</c>, all methods with names like 'GetSomething' will try to resolve by name component
     ///     'something'.
     /// </summary>
+    [PublicAPI]
     protected bool GetMethodsResolveByName { get; set; }
 
     public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method, Type type,
