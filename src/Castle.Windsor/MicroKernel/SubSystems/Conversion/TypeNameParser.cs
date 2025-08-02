@@ -21,29 +21,45 @@ public class TypeNameParser : ITypeNameParser
         var isPotentiallyFullyQualifiedName = name.IndexOf(',') != -1;
         var genericIndex = name.IndexOf('`');
         var genericTypes = new TypeName[] { };
-        if (genericIndex > -1)
+        if (genericIndex <= -1)
         {
-            var start = name.IndexOf("[[", genericIndex, StringComparison.Ordinal);
-            if (start != -1)
-            {
-                var countString = name.Substring(genericIndex + 1, start - genericIndex - 1);
-                if (int.TryParse(countString, out var count) == false)
-                {
-                    return null;
-                }
-
-                genericTypes =
-                    ParseNames(name.Substring(start + 2, name.LastIndexOf("]]", StringComparison.Ordinal) - 2 - start),
-                        count);
-                if (genericTypes == null)
-                {
-                    return null;
-                }
-
-                isPotentiallyFullyQualifiedName = false;
-                name = name[..start];
-            }
+            return isPotentiallyFullyQualifiedName
+                ?
+                //well at this point it either is a fully qualified name, or invalid string
+                new TypeName(name)
+                :
+                // at this point we assume we have just the type name, probably prefixed with namespace so let's see which one is it
+                BuildName(name, genericTypes);
         }
+
+        var start = name.IndexOf("[[", genericIndex, StringComparison.Ordinal);
+        if (start == -1)
+        {
+            return isPotentiallyFullyQualifiedName
+                ?
+                //well at this point it either is a fully qualified name, or invalid string
+                new TypeName(name)
+                :
+                // at this point we assume we have just the type name, probably prefixed with namespace so let's see which one is it
+                BuildName(name, genericTypes);
+        }
+
+        var countString = name.Substring(genericIndex + 1, start - genericIndex - 1);
+        if (int.TryParse(countString, out var count) == false)
+        {
+            return null;
+        }
+
+        genericTypes =
+            ParseNames(name.Substring(start + 2, name.LastIndexOf("]]", StringComparison.Ordinal) - 2 - start),
+                count);
+        if (genericTypes == null)
+        {
+            return null;
+        }
+
+        isPotentiallyFullyQualifiedName = false;
+        name = name[..start];
 
         return isPotentiallyFullyQualifiedName
             ?
