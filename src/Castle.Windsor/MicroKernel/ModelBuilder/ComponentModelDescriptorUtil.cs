@@ -20,7 +20,7 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class ComponentModelDescriptorUtil
 {
-    public const string MetaDescriptorsKey = "Castle.meta-descriptors";
+    private const string MetaDescriptorsKey = "Castle.meta-descriptors";
 
     public static ICollection<IMetaComponentModelDescriptor> GetMetaDescriptors(this ComponentModel model,
         bool ensureExists)

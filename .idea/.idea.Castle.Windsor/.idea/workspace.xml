@@ -8,7 +8,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/DefaultKernel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/DefaultKernel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Arguments.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Arguments.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ModelBuilder/ComponentModelDescriptorUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ModelBuilder/ComponentModelDescriptorUtil.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Classes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Classes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ComponentRegistration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ComponentRegistration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/FromAssemblyDescriptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/FromAssemblyDescriptor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/FromDescriptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/FromDescriptor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Proxy/ItemRegistration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Proxy/ItemRegistration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Proxy/MixinRegistration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Proxy/MixinRegistration.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,15 +168,7 @@
       <workItem from="1753815885507" duration="4786000" />
       <workItem from="1753908899966" duration="3075000" />
       <workItem from="1754075854179" duration="1448000" />
-      <workItem from="1754163630481" duration="2599000" />
-    </task>
-    <task id="LOCAL-00002" summary="Missing file?">
-      <option name="closed" value="true" />
-      <created>1752524741209</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1752524741209</updated>
+      <workItem from="1754163630481" duration="3016000" />
     </task>
     <task id="LOCAL-00003" summary="Switched to .NET 9.">
       <option name="closed" value="true" />
@@ -555,7 +554,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754165948616</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="Made classes `sealed` where applicable, added `[PublicAPI]` annotations, replaced virtual methods with concrete implementations, and simplified logic for improved consistency and readability across multiple files.">
+      <option name="closed" value="true" />
+      <created>1754166486514</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1754166486514</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -589,7 +596,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Fixed more warnings." />
     <MESSAGE value="More warnings fixed." />
     <MESSAGE value="Finally, fixed all warnings." />
     <MESSAGE value="Fixes" />
@@ -614,7 +620,8 @@
     <MESSAGE value="Made private methods `static` in `ParametersDescriptor` and `ServiceOverrideDescriptor` to improve clarity and enforce non-reliance on instance state." />
     <MESSAGE value="Added `[PublicAPI]` annotations, replaced null checks with null-conditional operators, and refactored to simplify logic and improve consistency across multiple files." />
     <MESSAGE value="Replaced `static readonly` fields with `const` across applicable files to improve immutability and optimize performance." />
-    <option name="LAST_COMMIT_MESSAGE" value="Replaced `static readonly` fields with `const` across applicable files to improve immutability and optimize performance." />
+    <MESSAGE value="Made classes `sealed` where applicable, added `[PublicAPI]` annotations, replaced virtual methods with concrete implementations, and simplified logic for improved consistency and readability across multiple files." />
+    <option name="LAST_COMMIT_MESSAGE" value="Made classes `sealed` where applicable, added `[PublicAPI]` annotations, replaced virtual methods with concrete implementations, and simplified logic for improved consistency and readability across multiple files." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

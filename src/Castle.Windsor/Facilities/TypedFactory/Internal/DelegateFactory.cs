@@ -64,7 +64,7 @@ public class DelegateFactory : ILazyComponentLoader
             .AddAttributeDescriptor(TypedFactoryFacility.IsFactoryKey, bool.TrueString);
     }
 
-    protected static string GetName(Type service)
+    private static string GetName(Type service)
     {
         var defaultName = ComponentName.DefaultNameFor(service);
         if (string.IsNullOrEmpty(defaultName))
@@ -86,14 +86,14 @@ public class DelegateFactory : ILazyComponentLoader
         return !HasReturn(invoke) ? null : invoke;
     }
 
-    protected static MethodInfo GetInvokeMethod(Type @delegate)
+    private static MethodInfo GetInvokeMethod(Type @delegate)
     {
         var invoke = @delegate.GetMethod("Invoke");
         Debug.Assert(invoke != null);
         return invoke;
     }
 
-    protected static bool HasReturn(MethodInfo invoke)
+    private static bool HasReturn(MethodInfo invoke)
     {
         return invoke.ReturnType != typeof(void);
     }

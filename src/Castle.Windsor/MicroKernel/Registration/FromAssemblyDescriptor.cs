@@ -20,19 +20,19 @@ namespace Castle.Windsor.MicroKernel.Registration;
 /// <summary>Selects a set of types from an assembly.</summary>
 public class FromAssemblyDescriptor : FromDescriptor
 {
-    protected readonly IEnumerable<Assembly> Assemblies;
-    protected bool NonPublicTypes;
+    private readonly IEnumerable<Assembly> _assemblies;
+    private bool _nonPublicTypes;
 
     protected internal FromAssemblyDescriptor(Assembly assembly, Predicate<Type> additionalFilters) : base(
         additionalFilters)
     {
-        Assemblies = [assembly];
+        _assemblies = [assembly];
     }
 
     protected internal FromAssemblyDescriptor(IEnumerable<Assembly> assemblies, Predicate<Type> additionalFilters)
         : base(additionalFilters)
     {
-        Assemblies = assemblies;
+        _assemblies = assemblies;
     }
 
     /// <summary>When called also non-public types will be scanned.</summary>
@@ -42,12 +42,12 @@ public class FromAssemblyDescriptor : FromDescriptor
     /// </remarks>
     public FromAssemblyDescriptor IncludeNonPublicTypes()
     {
-        NonPublicTypes = true;
+        _nonPublicTypes = true;
         return this;
     }
 
     protected override IEnumerable<Type> SelectedTypes(IKernel kernel)
     {
-        return Assemblies.SelectMany(a => a.GetAvailableTypesOrdered(NonPublicTypes));
+        return _assemblies.SelectMany(a => a.GetAvailableTypesOrdered(_nonPublicTypes));
     }
 }

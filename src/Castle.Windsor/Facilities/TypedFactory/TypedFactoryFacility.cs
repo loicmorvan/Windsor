@@ -34,7 +34,7 @@ using Component = Component;
 /// </summary>
 public sealed class TypedFactoryFacility : AbstractFacility
 {
-    public const string DelegateFactoryKey = "Castle.TypedFactory.DelegateFactory";
+    private const string DelegateFactoryKey = "Castle.TypedFactory.DelegateFactory";
     public const string FactoryMapCacheKey = "Castle.TypedFactory.MapCache";
     public const string InterceptorKey = "Castle.TypedFactory.Interceptor";
     public const string IsFactoryKey = "Castle.TypedFactory.IsFactory";

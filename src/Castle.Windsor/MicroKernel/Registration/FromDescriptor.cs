@@ -90,6 +90,7 @@ public abstract class FromDescriptor : IRegistration
     ///     types.
     /// </param>
     /// <returns> The descriptor for the type. </returns>
+    [PublicAPI]
     public BasedOnDescriptor BasedOn(IEnumerable<Type> basedOn)
     {
         var descriptor = new BasedOnDescriptor(basedOn, this, _additionalFilters);

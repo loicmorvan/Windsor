@@ -19,7 +19,7 @@ namespace Castle.Windsor.Facilities.Startable;
 
 public class StopConcern : IDecommissionConcern
 {
-    protected StopConcern()
+    private StopConcern()
     {
     }
 

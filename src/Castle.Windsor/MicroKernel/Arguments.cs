@@ -132,6 +132,7 @@ public sealed class Arguments
     }
 
     /// <summary>Adds a typed argument.</summary>
+    [PublicAPI]
     public Arguments AddTyped(Type key, object value)
     {
         Add(key, value);
@@ -146,6 +147,7 @@ public sealed class Arguments
     }
 
     /// <summary>Adds a collection of typed arguments.</summary>
+    [PublicAPI]
     public Arguments AddTyped(IEnumerable<object> arguments)
     {
         foreach (var item in arguments)

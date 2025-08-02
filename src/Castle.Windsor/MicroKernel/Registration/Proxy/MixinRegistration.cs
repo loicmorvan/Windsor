@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Registration.Proxy;
 
@@ -35,6 +36,7 @@ public class MixinRegistration : IEnumerable<IReference<object>>
         return Component(typeof(TService));
     }
 
+    [PublicAPI]
     public MixinRegistration Component(Type serviceType)
     {
         ArgumentNullException.ThrowIfNull(serviceType);

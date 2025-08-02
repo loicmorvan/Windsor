@@ -442,6 +442,7 @@ public class ComponentRegistration<TService> : IRegistration
     /// <summary>Adds <paramref name="types" /> as additional services to be exposed by this component.</summary>
     /// <param name="types"> The types to forward. </param>
     /// <returns> </returns>
+    [PublicAPI]
     public ComponentRegistration<TService> Forward(IEnumerable<Type> types)
     {
         foreach (var type in types)
@@ -531,6 +532,7 @@ public class ComponentRegistration<TService> : IRegistration
     ///     version of a service.
     /// </param>
     /// <returns> </returns>
+    [PublicAPI]
     public ComponentRegistration<TService> ImplementedBy(Type type,
         IGenericImplementationMatchingStrategy genericImplementationMatchingStrategy,
         IGenericServiceStrategy genericServiceStrategy)
@@ -928,6 +930,7 @@ public class ComponentRegistration<TService> : IRegistration
     ///     not track it not apply and lifecycle concerns to it.
     /// </param>
     /// <returns> </returns>
+    [PublicAPI]
     public ComponentRegistration<TService> UsingFactoryMethod<TImpl>(
         Func<IKernel, ComponentModel, CreationContext, TImpl> factoryMethod,
         bool managedExternally = false)
@@ -1087,6 +1090,7 @@ public class ComponentRegistration<TService> : IRegistration
     ///     <see cref="ComponentModel.Properties" /> collection and Windsor
     ///     will never try to set it.
     /// </param>
+    [PublicAPI]
     public ComponentRegistration<TService> PropertiesIgnore(Func<ComponentModel, PropertyInfo, bool> propertySelector)
     {
         return AddDescriptor(new DelegatingModelDescriptor((_, c) =>
@@ -1105,6 +1109,7 @@ public class ComponentRegistration<TService> : IRegistration
     ///     <see cref="ComponentModel.Properties" /> collection and Windsor will make it a
     ///     mandatory dependency.
     /// </param>
+    [PublicAPI]
     public ComponentRegistration<TService> PropertiesRequire(Func<ComponentModel, PropertyInfo, bool> propertySelector)
     {
         return AddDescriptor(new DelegatingModelDescriptor((_, c) =>

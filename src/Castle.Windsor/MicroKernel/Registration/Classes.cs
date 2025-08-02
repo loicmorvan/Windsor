@@ -55,6 +55,7 @@ public static class Classes
 	/// <summary>Prepares to register types from an assembly containing the type.</summary>
 	/// <param name="type"> The type belonging to the assembly. </param>
 	/// <returns>The corresponding <see cref="FromDescriptor" /></returns>
+	[PublicAPI]
 	public static FromAssemblyDescriptor FromAssemblyContaining(Type type)
 	{
 		ArgumentNullException.ThrowIfNull(type);
@@ -123,7 +124,7 @@ public static class Classes
 	}
 
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	internal static bool Filter(Type type)
+	private static bool Filter(Type type)
 	{
 		return type.GetTypeInfo().IsClass && type.GetTypeInfo().IsAbstract == false;
 	}

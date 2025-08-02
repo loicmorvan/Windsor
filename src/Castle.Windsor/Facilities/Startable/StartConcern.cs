@@ -19,7 +19,7 @@ namespace Castle.Windsor.Facilities.Startable;
 
 public class StartConcern : ICommissionConcern
 {
-    protected StartConcern()
+    private StartConcern()
     {
     }
 

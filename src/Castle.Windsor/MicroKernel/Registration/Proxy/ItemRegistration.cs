@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.MicroKernel.Registration.Proxy;
 
 public class ItemRegistration<TItem>
@@ -29,6 +31,7 @@ public class ItemRegistration<TItem>
         return Service(typeof(TService));
     }
 
+    [PublicAPI]
     public ItemRegistration<TItem> Service(Type serviceType)
     {
         Item = new ComponentReference<TItem>(serviceType);
