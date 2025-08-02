@@ -8,14 +8,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Arguments.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Arguments.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ModelBuilder/ComponentModelDescriptorUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ModelBuilder/ComponentModelDescriptorUtil.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Classes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Classes.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ComponentRegistration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ComponentRegistration.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/FromAssemblyDescriptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/FromAssemblyDescriptor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/FromDescriptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/FromDescriptor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Proxy/ItemRegistration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Proxy/ItemRegistration.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Proxy/MixinRegistration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Proxy/MixinRegistration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ComponentActivator/DefaultComponentActivator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ComponentActivator/DefaultComponentActivator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Proxy/IModelInterceptorsSelector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Proxy/IModelInterceptorsSelector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Proxy/AbstractProxyFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Proxy/AbstractProxyFactory.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,23 +164,7 @@
       <workItem from="1753815885507" duration="4786000" />
       <workItem from="1753908899966" duration="3075000" />
       <workItem from="1754075854179" duration="1448000" />
-      <workItem from="1754163630481" duration="3016000" />
-    </task>
-    <task id="LOCAL-00003" summary="Switched to .NET 9.">
-      <option name="closed" value="true" />
-      <created>1752525822189</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1752525822189</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Full cleanup.">
-      <option name="closed" value="true" />
-      <created>1752526036691</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1752526036691</updated>
+      <workItem from="1754163630481" duration="5900000" />
     </task>
     <task id="LOCAL-00005" summary="Improved projects.">
       <option name="closed" value="true" />
@@ -562,7 +542,23 @@
       <option name="project" value="LOCAL" />
       <updated>1754166486514</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="Added `[PublicAPI]` annotations to multiple methods, replaced `protected` fields with `private`, made applicable methods and constructors `private` or `static`, and improved consistency and readability across multiple files.">
+      <option name="closed" value="true" />
+      <created>1754166965484</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1754166965484</updated>
+    </task>
+    <task id="LOCAL-00053" summary="Removed unused parameters and associated logic from multiple methods and constructors, refactored method signatures, and streamlined related implementations for improved consistency and clarity across multiple files.">
+      <option name="closed" value="true" />
+      <created>1754168629469</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1754168629469</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -596,8 +592,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="More warnings fixed." />
-    <MESSAGE value="Finally, fixed all warnings." />
     <MESSAGE value="Fixes" />
     <MESSAGE value="Some fixes." />
     <MESSAGE value="More fixes." />
@@ -621,7 +615,9 @@
     <MESSAGE value="Added `[PublicAPI]` annotations, replaced null checks with null-conditional operators, and refactored to simplify logic and improve consistency across multiple files." />
     <MESSAGE value="Replaced `static readonly` fields with `const` across applicable files to improve immutability and optimize performance." />
     <MESSAGE value="Made classes `sealed` where applicable, added `[PublicAPI]` annotations, replaced virtual methods with concrete implementations, and simplified logic for improved consistency and readability across multiple files." />
-    <option name="LAST_COMMIT_MESSAGE" value="Made classes `sealed` where applicable, added `[PublicAPI]` annotations, replaced virtual methods with concrete implementations, and simplified logic for improved consistency and readability across multiple files." />
+    <MESSAGE value="Added `[PublicAPI]` annotations to multiple methods, replaced `protected` fields with `private`, made applicable methods and constructors `private` or `static`, and improved consistency and readability across multiple files." />
+    <MESSAGE value="Removed unused parameters and associated logic from multiple methods and constructors, refactored method signatures, and streamlined related implementations for improved consistency and clarity across multiple files." />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed unused parameters and associated logic from multiple methods and constructors, refactored method signatures, and streamlined related implementations for improved consistency and clarity across multiple files." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

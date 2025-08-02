@@ -69,11 +69,10 @@ public class DefaultComponentActivator : AbstractComponentActivator
 
         var arguments = CreateConstructorArguments(candidate, context);
 
-        return CreateInstance(context, candidate, arguments);
+        return CreateInstance(context, arguments);
     }
 
-    protected virtual object CreateInstance(CreationContext context, ConstructorCandidate constructor,
-        object[] arguments)
+    protected virtual object CreateInstance(CreationContext context, object[] arguments)
     {
         object instance = null;
 

@@ -33,11 +33,5 @@ public interface IModelInterceptorsSelector
 	/// </summary>
 	/// <param name="model">The model to select the interceptors for</param>
 	/// <returns>The interceptor for this model (in the current context) or a null reference</returns>
-	/// <remarks>
-	///     If the selector is not interested in modifying the interceptors for this model, it should return
-	///     <paramref name="interceptors" /> and the next selector in line would be executed. If the
-	///     selector wants no interceptors to be used it can either return <c>null</c> or empty array. However next interceptor
-	///     in line is free to override this choice.
-	/// </remarks>
 	InterceptorReference[] SelectInterceptors(ComponentModel model);
 }
