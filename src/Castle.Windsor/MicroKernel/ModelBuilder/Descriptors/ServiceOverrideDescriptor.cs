@@ -72,7 +72,7 @@ public class ServiceOverrideDescriptor : AbstractPropertyDescriptor
         }
     }
 
-    private void ApplyReferenceList(ComponentModel model, object name, IEnumerable<string> items,
+    private static void ApplyReferenceList(ComponentModel model, object name, IEnumerable<string> items,
         ServiceOverride serviceOverride)
     {
         var list = new MutableConfiguration("list");
@@ -91,7 +91,7 @@ public class ServiceOverrideDescriptor : AbstractPropertyDescriptor
         AddParameter(model, GetNameString(name), list);
     }
 
-    private void ApplySimpleReference(ComponentModel model, object dependencyName, string componentKey)
+    private static void ApplySimpleReference(ComponentModel model, object dependencyName, string componentKey)
     {
         var reference = ReferenceExpressionUtil.BuildReference(componentKey);
         AddParameter(model, GetNameString(dependencyName), reference);

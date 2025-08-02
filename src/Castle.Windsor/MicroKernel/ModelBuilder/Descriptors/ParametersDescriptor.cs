@@ -25,7 +25,7 @@ public class ParametersDescriptor(params Parameter[] parameters) : AbstractPrope
         parameters.ForEach(p => Apply(model, p));
     }
 
-    private void Apply(ComponentModel model, Parameter parameter)
+    private static void Apply(ComponentModel model, Parameter parameter)
     {
         if (parameter.Value != null)
         {
