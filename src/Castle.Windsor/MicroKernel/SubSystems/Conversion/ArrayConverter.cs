@@ -39,9 +39,9 @@ public class ArrayConverter : AbstractTypeConverter
         var array = Array.CreateInstance(itemType, count);
 
         var index = 0;
-        foreach (var itemConfig in configuration.Children)
+        foreach (var value in configuration.Children.Select(itemConfig =>
+                     Context.Composition.PerformConversion(itemConfig, itemType)))
         {
-            var value = Context.Composition.PerformConversion(itemConfig, itemType);
             array.SetValue(value, index++);
         }
 

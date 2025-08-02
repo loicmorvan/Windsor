@@ -100,7 +100,7 @@
       <force-push-target remote-path="origin" branch="net9" />
     </force-push-targets>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected=".NET Project.Castle.Windsor.Tests">
     <configuration name="Castle.Windsor.Tests" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -463,7 +463,31 @@
       <option name="project" value="LOCAL" />
       <updated>1754080271030</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="Replaced object initializer shorthand `new()` with explicit collection initializers `[]` for improved clarity and consistency across all applicable files.">
+      <option name="closed" value="true" />
+      <created>1754080944355</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1754080944355</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Streamlined conditional logic by replacing `if-else` constructs with shorthand ternary expressions, improving code clarity and consistency across multiple files.">
+      <option name="closed" value="true" />
+      <created>1754081292901</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1754081292901</updated>
+    </task>
+    <task id="LOCAL-00041" summary="Replaced `string.Format` with modern string interpolation for improved code readability and consistency across multiple files.">
+      <option name="closed" value="true" />
+      <created>1754081589569</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1754081589569</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -497,9 +521,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Fixed all tests after switching to .NET 9.&#10;&#10;Still remaining the 8 tests that never worked." />
-    <MESSAGE value="Cleanup everything" />
-    <MESSAGE value="Fixed tests. Some random failure still remains." />
     <MESSAGE value="Removed logging facilities." />
     <MESSAGE value="Fixed latest failing tests." />
     <MESSAGE value="Fixed issue with project names." />
@@ -522,7 +543,10 @@
     <MESSAGE value="Improved null checks, streamlined conditional logic, and enhanced code consistency across multiple files." />
     <MESSAGE value="Refactored conditional logic by replacing `if-else` constructs with `switch` expressions to improve code clarity and consistency across multiple files." />
     <MESSAGE value="Improved handling of `LifestyleType.Undefined` across multiple classes, added missing exception cases, and enhanced code clarity with explicit `switch` branches." />
-    <option name="LAST_COMMIT_MESSAGE" value="Improved handling of `LifestyleType.Undefined` across multiple classes, added missing exception cases, and enhanced code clarity with explicit `switch` branches." />
+    <MESSAGE value="Replaced object initializer shorthand `new()` with explicit collection initializers `[]` for improved clarity and consistency across all applicable files." />
+    <MESSAGE value="Streamlined conditional logic by replacing `if-else` constructs with shorthand ternary expressions, improving code clarity and consistency across multiple files." />
+    <MESSAGE value="Replaced `string.Format` with modern string interpolation for improved code readability and consistency across multiple files." />
+    <option name="LAST_COMMIT_MESSAGE" value="Replaced `string.Format` with modern string interpolation for improved code readability and consistency across multiple files." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

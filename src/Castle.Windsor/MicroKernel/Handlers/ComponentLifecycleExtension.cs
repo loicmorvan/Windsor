@@ -29,14 +29,9 @@ public class ComponentLifecycleExtension : IResolveExtension
         Releasing releasing = null;
         if (_resolvers.Count > 0)
         {
-            foreach (var resolver in _resolvers)
+            foreach (var releaser in _resolvers.Select(resolver => resolver(_kernel, invocation.Context))
+                         .Where(releaser => releaser != null))
             {
-                var releaser = resolver(_kernel, invocation.Context);
-                if (releaser == null)
-                {
-                    continue;
-                }
-
                 if (releasing == null)
                 {
                     releasing = new Releasing(_resolvers.Count, _kernel);

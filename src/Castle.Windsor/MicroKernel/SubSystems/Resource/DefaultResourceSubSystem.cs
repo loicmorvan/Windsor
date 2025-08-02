@@ -44,12 +44,9 @@ public sealed class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSy
     {
         ArgumentNullException.ThrowIfNull(uri);
 
-        foreach (var resFactory in _resourceFactories)
+        foreach (var resFactory in _resourceFactories.Where(resFactory => resFactory.Accept(uri)))
         {
-            if (resFactory.Accept(uri))
-            {
-                return resFactory.Create(uri);
-            }
+            return resFactory.Create(uri);
         }
 
         throw new KernelException("No Resource factory was able to " +
@@ -61,12 +58,9 @@ public sealed class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSy
         ArgumentNullException.ThrowIfNull(uri);
         ArgumentNullException.ThrowIfNull(basePath);
 
-        foreach (var resFactory in _resourceFactories)
+        foreach (var resFactory in _resourceFactories.Where(resFactory => resFactory.Accept(uri)))
         {
-            if (resFactory.Accept(uri))
-            {
-                return resFactory.Create(uri, basePath);
-            }
+            return resFactory.Create(uri, basePath);
         }
 
         throw new KernelException("No Resource factory was able to " +
