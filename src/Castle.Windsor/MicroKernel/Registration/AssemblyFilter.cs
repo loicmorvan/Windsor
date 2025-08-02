@@ -38,19 +38,12 @@ public class AssemblyFilter : IAssemblyProvider
 
     IEnumerable<Assembly> IAssemblyProvider.GetAssemblies()
     {
-        foreach (var file in GetFiles())
-        {
-            if (!ReflectionUtil.IsAssemblyFile(file))
-            {
-                continue;
-            }
-
-            var assembly = LoadAssemblyIgnoringErrors(file);
-            if (assembly != null)
-            {
-                yield return assembly;
-            }
-        }
+        return from file in GetFiles()
+            where ReflectionUtil.IsAssemblyFile(file)
+            select LoadAssemblyIgnoringErrors(file)
+            into assembly
+            where assembly != null
+            select assembly;
     }
 
     public AssemblyFilter FilterByAssembly(Predicate<Assembly> filter)
@@ -197,14 +190,6 @@ public class AssemblyFilter : IAssemblyProvider
             return false;
         }
 
-        for (var i = 0; i < actualToken.Length; i++)
-        {
-            if (actualToken[i] != expectedToken[i])
-            {
-                return false;
-            }
-        }
-
-        return true;
+        return !actualToken.Where((t, i) => t != expectedToken[i]).Any();
     }
 }

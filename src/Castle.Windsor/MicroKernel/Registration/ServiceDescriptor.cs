@@ -231,11 +231,8 @@ public class ServiceDescriptor
             return serviceType;
         }
 
-        var shouldUseGenericTypeDefinition = false;
-        foreach (var argument in serviceType.GetGenericArguments())
-        {
-            shouldUseGenericTypeDefinition |= argument.IsGenericParameter;
-        }
+        var shouldUseGenericTypeDefinition = serviceType.GetGenericArguments()
+            .Aggregate(false, (current, argument) => current | argument.IsGenericParameter);
 
         return shouldUseGenericTypeDefinition ? serviceType.GetGenericTypeDefinition() : serviceType;
     }

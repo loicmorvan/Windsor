@@ -173,17 +173,9 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
         {
             var allmethods = implementation.GetMethods(AllMethods);
 
-            var methods = new List<MethodInfo>();
-
-            foreach (var method in allmethods)
-            {
-                if (CultureInfo.InvariantCulture.CompareInfo.Compare(method.Name, name, CompareOptions.IgnoreCase) == 0)
-                {
-                    methods.Add(method);
-                }
-            }
-
-            return methods;
+            return allmethods.Where(method =>
+                    CultureInfo.InvariantCulture.CompareInfo.Compare(method.Name, name, CompareOptions.IgnoreCase) == 0)
+                .ToList();
         }
 
         var methodInfo = implementation.GetMethod(name, AllMethods, null, ConvertSignature(signature), null);
