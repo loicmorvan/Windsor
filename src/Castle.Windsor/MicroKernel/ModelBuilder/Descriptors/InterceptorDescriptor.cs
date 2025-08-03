@@ -16,7 +16,9 @@ using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
-public class InterceptorDescriptor(InterceptorReference[] interceptors, InterceptorDescriptor.Where where)
+public class InterceptorDescriptor(
+    InterceptorReference[] interceptors,
+    InterceptorDescriptor.Where where = InterceptorDescriptor.Where.Default)
     : IComponentModelDescriptor
 {
     public enum Where
@@ -38,10 +40,6 @@ public class InterceptorDescriptor(InterceptorReference[] interceptors, Intercep
         }
 
         _insertIndex = insertIndex;
-    }
-
-    public InterceptorDescriptor(InterceptorReference[] interceptors) : this(interceptors, Where.Default)
-    {
     }
 
     public void BuildComponentModel(IKernel kernel, ComponentModel model)

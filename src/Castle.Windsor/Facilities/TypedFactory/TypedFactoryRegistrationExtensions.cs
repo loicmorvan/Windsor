@@ -31,24 +31,6 @@ public static class TypedFactoryRegistrationExtensions
 	/// <summary>Marks the component as typed factory.</summary>
 	/// <typeparam name="TFactoryInterface"></typeparam>
 	/// <param name="registration"></param>
-	/// <returns></returns>
-	/// <remarks>
-	///     Only interfaces and delegates are legal to use as typed factories. Methods with out parameters are not allowed.
-	///     When registering component as typed factory no implementation should be provided
-	///     (in case there is any it will be ignored). Typed factories rely on <see cref="IInterceptorSelector" /> set
-	///     internally, so users should not set interceptor selectors explicitly; otherwise the
-	///     factory will not function correctly.
-	/// </remarks>
-	public static ComponentRegistration<TFactoryInterface> AsFactory<TFactoryInterface>(
-		this ComponentRegistration<TFactoryInterface> registration)
-		where TFactoryInterface : class
-	{
-		return AsFactory(registration, default(Action<TypedFactoryConfiguration>));
-	}
-
-	/// <summary>Marks the component as typed factory.</summary>
-	/// <typeparam name="TFactoryInterface"></typeparam>
-	/// <param name="registration"></param>
 	/// <param name="selectorComponentName">
 	///     Name of the <see cref="ITypedFactoryComponentSelector" /> component to be used for
 	///     this factory
@@ -125,7 +107,7 @@ public static class TypedFactoryRegistrationExtensions
 	/// </remarks>
 	public static ComponentRegistration<TFactoryInterface> AsFactory<TFactoryInterface>(
 		this ComponentRegistration<TFactoryInterface> registration,
-		Action<TypedFactoryConfiguration> configuration)
+		Action<TypedFactoryConfiguration> configuration = null)
 		where TFactoryInterface : class
 	{
 		ArgumentNullException.ThrowIfNull(registration);

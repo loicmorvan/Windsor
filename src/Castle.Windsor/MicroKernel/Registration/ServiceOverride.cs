@@ -17,11 +17,7 @@ namespace Castle.Windsor.MicroKernel.Registration;
 /// <summary>Represents a service override.</summary>
 public class ServiceOverride
 {
-    internal ServiceOverride(object dependencyKey, object value) : this(dependencyKey, value, null)
-    {
-    }
-
-    internal ServiceOverride(object dependencyKey, object value, Type type)
+    internal ServiceOverride(object dependencyKey, object value, Type type = null)
     {
         DependencyKey = dependencyKey;
         Value = value;

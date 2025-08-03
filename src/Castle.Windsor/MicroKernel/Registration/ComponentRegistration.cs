@@ -475,19 +475,6 @@ public class ComponentRegistration<TService> : IRegistration
     ///     component.
     /// </summary>
     /// <param name="type"> The type that is the implementation for the service. </param>
-    /// <returns> </returns>
-    public ComponentRegistration<TService> ImplementedBy(Type type)
-    {
-        return ImplementedBy(type, null, null);
-    }
-
-    /// <summary>
-    ///     Sets the concrete type that implements the service to <paramref name="type" /> .
-    ///     <para />
-    ///     If not set, the class service type or first registered interface will be used as the implementation for this
-    ///     component.
-    /// </summary>
-    /// <param name="type"> The type that is the implementation for the service. </param>
     /// <param name="genericImplementationMatchingStrategy">
     ///     Provides ability to close open generic service. Ignored when
     ///     registering closed or non-generic component.
@@ -534,8 +521,8 @@ public class ComponentRegistration<TService> : IRegistration
     /// <returns> </returns>
     [PublicAPI]
     public ComponentRegistration<TService> ImplementedBy(Type type,
-        IGenericImplementationMatchingStrategy genericImplementationMatchingStrategy,
-        IGenericServiceStrategy genericServiceStrategy)
+        IGenericImplementationMatchingStrategy genericImplementationMatchingStrategy = null,
+        IGenericServiceStrategy genericServiceStrategy = null)
     {
         if (Implementation != null && Implementation != typeof(LateBoundComponent))
         {

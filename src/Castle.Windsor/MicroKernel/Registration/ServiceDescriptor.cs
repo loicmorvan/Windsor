@@ -83,7 +83,7 @@ public class ServiceDescriptor
     /// </summary>
     /// <param name="implements"></param>
     /// <returns></returns>
-    public BasedOnDescriptor FromInterface(Type implements)
+    public BasedOnDescriptor FromInterface(Type implements = null)
     {
         return Select(delegate(Type type, Type[] baseTypes)
         {
@@ -118,13 +118,6 @@ public class ServiceDescriptor
 
             return matches;
         });
-    }
-
-    /// <summary>Uses base type to lookup the sub interface.</summary>
-    /// <returns></returns>
-    public BasedOnDescriptor FromInterface()
-    {
-        return FromInterface(null);
     }
 
     /// <summary>Assigns a custom service selection strategy.</summary>
