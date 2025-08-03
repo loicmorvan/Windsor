@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.ComponentModel;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Internal;
 
@@ -20,5 +21,7 @@ namespace Castle.Windsor.MicroKernel.Internal;
 public interface IUpgradeableLockHolder : ILockHolder
 {
     ILockHolder Upgrade();
+
+    [PublicAPI]
     ILockHolder Upgrade(bool waitForLock);
 }

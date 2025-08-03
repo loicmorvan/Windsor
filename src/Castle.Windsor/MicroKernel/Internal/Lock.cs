@@ -20,9 +20,7 @@ public abstract class Lock
     public abstract ILockHolder ForReading();
     public abstract ILockHolder ForWriting();
 
-    public abstract IUpgradeableLockHolder ForReadingUpgradeable(bool waitForLock);
     public abstract ILockHolder ForReading(bool waitForLock);
-    public abstract ILockHolder ForWriting(bool waitForLock);
 
     /// <summary>Creates a new lock.</summary>
     /// <returns></returns>

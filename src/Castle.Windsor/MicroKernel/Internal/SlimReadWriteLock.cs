@@ -39,7 +39,7 @@ public class SlimReadWriteLock : Lock
         return ForWriting(true);
     }
 
-    public override IUpgradeableLockHolder ForReadingUpgradeable(bool waitForLock)
+    public virtual IUpgradeableLockHolder ForReadingUpgradeable(bool waitForLock)
     {
         return new SlimUpgradeableReadLockHolder(_locker, waitForLock,
             _locker.IsUpgradeableReadLockHeld || _locker.IsWriteLockHeld);
@@ -55,7 +55,7 @@ public class SlimReadWriteLock : Lock
         return new SlimReadLockHolder(_locker, waitForLock);
     }
 
-    public override ILockHolder ForWriting(bool waitForLock)
+    public virtual ILockHolder ForWriting(bool waitForLock)
     {
         return _locker.IsWriteLockHeld ? NoOpLock.Lock : new SlimWriteLockHolder(_locker, waitForLock);
     }
