@@ -14,7 +14,7 @@
 
 namespace Castle.Windsor.MicroKernel.Internal;
 
-public class SlimReadWriteLock : Lock
+public sealed class SlimReadWriteLock : Lock
 {
     private readonly ReaderWriterLockSlim _locker = new(LockRecursionPolicy.NoRecursion);
 
@@ -39,7 +39,7 @@ public class SlimReadWriteLock : Lock
         return ForWriting(true);
     }
 
-    public virtual IUpgradeableLockHolder ForReadingUpgradeable(bool waitForLock)
+    private IUpgradeableLockHolder ForReadingUpgradeable(bool waitForLock)
     {
         return new SlimUpgradeableReadLockHolder(_locker, waitForLock,
             _locker.IsUpgradeableReadLockHeld || _locker.IsWriteLockHeld);
@@ -55,7 +55,7 @@ public class SlimReadWriteLock : Lock
         return new SlimReadLockHolder(_locker, waitForLock);
     }
 
-    public virtual ILockHolder ForWriting(bool waitForLock)
+    private ILockHolder ForWriting(bool waitForLock)
     {
         return _locker.IsWriteLockHeld ? NoOpLock.Lock : new SlimWriteLockHolder(_locker, waitForLock);
     }
