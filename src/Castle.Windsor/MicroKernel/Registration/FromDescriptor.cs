@@ -103,7 +103,7 @@ public abstract class FromDescriptor : IRegistration
     /// <returns> true if the component type is in the namespace. </returns>
     public BasedOnDescriptor InNamespace(string @namespace)
     {
-        return Where(Component.IsInNamespace(@namespace, false));
+        return Where(Component.IsInNamespace(@namespace));
     }
 
     /// <summary>Creates a predicate to check if a component is in a namespace.</summary>

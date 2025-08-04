@@ -18,9 +18,9 @@ public class TypeNameParser : ITypeNameParser
 {
     public TypeName Parse(string name)
     {
-        var isPotentiallyFullyQualifiedName = name.IndexOf(',') != -1;
+        var isPotentiallyFullyQualifiedName = name.Contains(',');
         var genericIndex = name.IndexOf('`');
-        var genericTypes = new TypeName[] { };
+        var genericTypes = Array.Empty<TypeName>();
         if (genericIndex <= -1)
         {
             return isPotentiallyFullyQualifiedName

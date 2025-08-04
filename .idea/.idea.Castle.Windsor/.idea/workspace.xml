@@ -9,6 +9,10 @@
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ComponentRegistration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ComponentRegistration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/FromDescriptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/FromDescriptor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/TypeNameParser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/TypeNameParser.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Util/ReferenceExpressionUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Util/ReferenceExpressionUtil.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,30 +166,8 @@
       <workItem from="1753908899966" duration="3075000" />
       <workItem from="1754075854179" duration="1448000" />
       <workItem from="1754163630481" duration="6485000" />
-    </task>
-    <task id="LOCAL-00006" summary="Backup">
-      <option name="closed" value="true" />
-      <created>1752702829577</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1752702829577</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Fixed some tests">
-      <option name="closed" value="true" />
-      <created>1752786847912</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1752786847912</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Fixed all tests after switching to .NET 9.&#10;&#10;Still remaining the 8 tests that never worked.">
-      <option name="closed" value="true" />
-      <created>1752875115721</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1752875115721</updated>
+      <workItem from="1754247539777" duration="1293000" />
+      <workItem from="1754334151653" duration="637000" />
     </task>
     <task id="LOCAL-00009" summary="Cleanup everything">
       <option name="closed" value="true" />
@@ -555,7 +537,31 @@
       <option name="project" value="LOCAL" />
       <updated>1754169832422</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="Added `[PublicAPI]` annotations, replaced `override` with `virtual` for specific methods in `SlimReadWriteLock`, and updated interfaces to improve flexibility and ensure consistency across multiple files.">
+      <option name="closed" value="true" />
+      <created>1754247837493</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1754247837493</updated>
+    </task>
+    <task id="LOCAL-00056" summary="Made `SlimReadWriteLock` class `sealed`, changed specific methods from `public` to `private` to reduce surface area, and ensure stricter encapsulation.">
+      <option name="closed" value="true" />
+      <created>1754247997667</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1754247997667</updated>
+    </task>
+    <task id="LOCAL-00057" summary="Refactored constructors and methods across multiple files to use default parameter values, removed redundant overloads, and streamlined implementations for improved consistency and readability.">
+      <option name="closed" value="true" />
+      <created>1754248176978</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1754248176978</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -589,9 +595,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Some fixes." />
-    <MESSAGE value="More fixes." />
-    <MESSAGE value="Improved code consistency and fixed remaining formatting issues." />
     <MESSAGE value="Removed legacy build scripts and streamlined project references." />
     <MESSAGE value="Refactored namespaces for `Castle.Windsor.Facilities.AspNetCore` and annotations for `IWindsorContainer`." />
     <MESSAGE value="Removed unused diagnostics and related interfaces, added `[PublicAPI]` annotations, and improved exception handling." />
@@ -614,7 +617,10 @@
     <MESSAGE value="Added `[PublicAPI]` annotations to multiple methods, replaced `protected` fields with `private`, made applicable methods and constructors `private` or `static`, and improved consistency and readability across multiple files." />
     <MESSAGE value="Removed unused parameters and associated logic from multiple methods and constructors, refactored method signatures, and streamlined related implementations for improved consistency and clarity across multiple files." />
     <MESSAGE value="Refactored method signatures to remove unused parameters, updated logic for interceptor selection, and simplified constructor handling for improved clarity and consistency across multiple files." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored method signatures to remove unused parameters, updated logic for interceptor selection, and simplified constructor handling for improved clarity and consistency across multiple files." />
+    <MESSAGE value="Added `[PublicAPI]` annotations, replaced `override` with `virtual` for specific methods in `SlimReadWriteLock`, and updated interfaces to improve flexibility and ensure consistency across multiple files." />
+    <MESSAGE value="Made `SlimReadWriteLock` class `sealed`, changed specific methods from `public` to `private` to reduce surface area, and ensure stricter encapsulation." />
+    <MESSAGE value="Refactored constructors and methods across multiple files to use default parameter values, removed redundant overloads, and streamlined implementations for improved consistency and readability." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored constructors and methods across multiple files to use default parameter values, removed redundant overloads, and streamlined implementations for improved consistency and readability." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

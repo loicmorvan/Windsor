@@ -28,6 +28,6 @@ public abstract class ReferenceExpressionUtil
 
     public static bool IsReference(string value)
     {
-        return value is { Length: > 3 } && value.StartsWith("${") && value.EndsWith("}");
+        return value is { Length: > 3 } && value.StartsWith("${") && value.EndsWith('}');
     }
 }
