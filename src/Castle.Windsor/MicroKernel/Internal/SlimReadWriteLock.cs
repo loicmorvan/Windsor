@@ -39,7 +39,7 @@ public sealed class SlimReadWriteLock : Lock
         return ForWriting(true);
     }
 
-    private IUpgradeableLockHolder ForReadingUpgradeable(bool waitForLock)
+    private SlimUpgradeableReadLockHolder ForReadingUpgradeable(bool waitForLock)
     {
         return new SlimUpgradeableReadLockHolder(_locker, waitForLock,
             _locker.IsUpgradeableReadLockHeld || _locker.IsWriteLockHeld);

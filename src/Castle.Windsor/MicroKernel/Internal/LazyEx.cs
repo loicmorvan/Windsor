@@ -51,6 +51,8 @@ public class LazyEx<T> : Lazy<T>, IDisposable
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         if (IsValueCreated)
         {
             _kernel.ReleaseComponent(Value);

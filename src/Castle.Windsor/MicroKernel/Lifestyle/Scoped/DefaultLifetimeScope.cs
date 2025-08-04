@@ -27,6 +27,8 @@ public class DefaultLifetimeScope(IScopeCache scopeCache = null, Action<Burden> 
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         if (_scopeCache is IDisposable disposableCache)
         {
             disposableCache.Dispose();

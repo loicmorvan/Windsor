@@ -31,7 +31,7 @@ public sealed class ThreadSafeInit
             return;
         }
 
-        if (_state == Thread.CurrentThread.ManagedThreadId)
+        if (_state == Environment.CurrentManagedThreadId)
         {
             _state = Initialized;
         }
@@ -44,7 +44,7 @@ public sealed class ThreadSafeInit
             return false;
         }
 
-        var inProgressByThisThread = Thread.CurrentThread.ManagedThreadId;
+        var inProgressByThisThread = Environment.CurrentManagedThreadId;
         var preexistingState = Interlocked.CompareExchange(ref _state, inProgressByThisThread, NotInitialized);
         if (preexistingState == NotInitialized)
         {

@@ -36,6 +36,8 @@ public class DefaultHandler : AbstractHandler
 
     public override void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         LifestyleManager.Dispose();
     }
 

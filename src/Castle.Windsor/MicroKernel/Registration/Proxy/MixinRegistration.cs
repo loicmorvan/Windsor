@@ -31,6 +31,7 @@ public class MixinRegistration : IEnumerable<IReference<object>>
         return _items.GetEnumerator();
     }
 
+    [PublicAPI]
     public MixinRegistration Component<TService>()
     {
         return Component(typeof(TService));
@@ -44,6 +45,7 @@ public class MixinRegistration : IEnumerable<IReference<object>>
         return this;
     }
 
+    [PublicAPI]
     public MixinRegistration Component(string name)
     {
         ArgumentNullException.ThrowIfNull(name);
@@ -51,6 +53,7 @@ public class MixinRegistration : IEnumerable<IReference<object>>
         return this;
     }
 
+    [PublicAPI]
     public MixinRegistration Objects(params object[] objects)
     {
         foreach (var item in objects)

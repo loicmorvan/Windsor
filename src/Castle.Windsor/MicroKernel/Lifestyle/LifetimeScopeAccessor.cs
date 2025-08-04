@@ -24,6 +24,8 @@ public class LifetimeScopeAccessor : IScopeAccessor
 {
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         var scope = Scope.ObtainCurrentScope();
         scope?.Dispose();
     }

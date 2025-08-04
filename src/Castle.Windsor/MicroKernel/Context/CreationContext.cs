@@ -383,6 +383,8 @@ public class CreationContext :
 
         public void Dispose()
         {
+            GC.SuppressFinalize(this);
+            
             Context.ExitResolutionContext(Burden, trackContext);
         }
 

@@ -17,18 +17,10 @@ using JetBrains.Annotations;
 namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Describes the source of types to register.</summary>
-public abstract class FromDescriptor : IRegistration
+public abstract class FromDescriptor(Predicate<Type> additionalFilters) : IRegistration
 {
-    private readonly Predicate<Type> _additionalFilters;
-    private readonly IList<BasedOnDescriptor> _criterias;
+    private readonly List<BasedOnDescriptor> _criterias = [];
     private bool _allowMultipleMatches;
-
-    protected FromDescriptor(Predicate<Type> additionalFilters)
-    {
-        _additionalFilters = additionalFilters;
-        _allowMultipleMatches = false;
-        _criterias = new List<BasedOnDescriptor>();
-    }
 
     void IRegistration.Register(IKernelInternal kernel)
     {
@@ -93,7 +85,7 @@ public abstract class FromDescriptor : IRegistration
     [PublicAPI]
     public BasedOnDescriptor BasedOn(IEnumerable<Type> basedOn)
     {
-        var descriptor = new BasedOnDescriptor(basedOn, this, _additionalFilters);
+        var descriptor = new BasedOnDescriptor(basedOn, this, additionalFilters);
         _criterias.Add(descriptor);
         return descriptor;
     }
@@ -163,7 +155,7 @@ public abstract class FromDescriptor : IRegistration
     /// <returns> The descriptor for the type. </returns>
     public BasedOnDescriptor Where(Predicate<Type> accepted)
     {
-        var descriptor = new BasedOnDescriptor([typeof(object)], this, _additionalFilters).If(accepted);
+        var descriptor = new BasedOnDescriptor([typeof(object)], this, additionalFilters).If(accepted);
         _criterias.Add(descriptor);
         return descriptor;
     }

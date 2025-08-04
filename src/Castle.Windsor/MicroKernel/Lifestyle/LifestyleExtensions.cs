@@ -65,7 +65,7 @@ public static class LifestyleExtensions
 	}
 
 	[CanBeNull]
-	private static IDisposable RequireScope()
+	private static CallContextLifetimeScope RequireScope()
 	{
 		var current = CallContextLifetimeScope.ObtainCurrentScope();
 		return

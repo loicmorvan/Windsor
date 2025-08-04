@@ -586,6 +586,7 @@ public class ComponentRegistration<TService> : IRegistration
 
     /// <summary>Sets component lifestyle to specified one.</summary>
     /// <returns> </returns>
+    [PublicAPI]
     public ComponentRegistration<TService> LifestyleCustom(Type customLifestyleType)
     {
         return LifeStyle.Custom(customLifestyleType);
@@ -839,6 +840,7 @@ public class ComponentRegistration<TService> : IRegistration
     /// <summary>Sets the interceptor selector for this component.</summary>
     /// <param name="selector"> </param>
     /// <returns> </returns>
+    [PublicAPI]
     public ComponentRegistration<TService> SelectInterceptorsWith(IInterceptorSelector selector)
     {
         return SelectInterceptorsWith(s => s.Instance(selector));

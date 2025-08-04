@@ -32,6 +32,8 @@ public class DefaultPool(int initialSize, int maxsize, IComponentActivator compo
 
     public virtual void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         _initialized = false;
 
         foreach (var burden in _available)

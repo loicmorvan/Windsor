@@ -53,6 +53,8 @@ public class CallContextLifetimeScope : ILifetimeScope
     [SecuritySafeCritical]
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         using (var token = _lock.ForReadingUpgradeable())
         {
             // Dispose the burden cache

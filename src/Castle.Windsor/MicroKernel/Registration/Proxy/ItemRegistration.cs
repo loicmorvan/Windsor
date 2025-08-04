@@ -20,12 +20,14 @@ public class ItemRegistration<TItem>
 {
     internal IReference<TItem> Item { get; private set; }
 
+    [PublicAPI]
     public ItemRegistration<TItem> Instance(TItem instance)
     {
         Item = new InstanceReference<TItem>(instance);
         return this;
     }
 
+    [PublicAPI]
     public ItemRegistration<TItem> Service<TService>() where TService : TItem
     {
         return Service(typeof(TService));
@@ -38,6 +40,7 @@ public class ItemRegistration<TItem>
         return this;
     }
 
+    [PublicAPI]
     public ItemRegistration<TItem> Service(string name)
     {
         Item = new ComponentReference<TItem>(name);

@@ -25,6 +25,8 @@ public class ThreadScopeAccessor : IScopeAccessor
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         var values = _items.EjectAllValues();
         foreach (var item in values.Reverse())
         {
@@ -40,6 +42,6 @@ public class ThreadScopeAccessor : IScopeAccessor
 
     protected virtual int GetCurrentThreadId()
     {
-        return Thread.CurrentThread.ManagedThreadId;
+        return Environment.CurrentManagedThreadId;
     }
 }

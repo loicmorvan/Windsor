@@ -34,6 +34,7 @@ public class SimpleThreadSafeSet<T>
         }
     }
 
+    [PublicAPI]
     public bool Add(T item)
     {
         using (_lock.ForWriting())
@@ -42,6 +43,7 @@ public class SimpleThreadSafeSet<T>
         }
     }
 
+    [PublicAPI]
     public bool Remove(T item)
     {
         using (_lock.ForWriting())

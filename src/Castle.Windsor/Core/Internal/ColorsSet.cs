@@ -17,7 +17,7 @@ namespace Castle.Windsor.Core.Internal;
 /// <summary>Represents a collection of objects which are guaranteed to be unique and holds a color for them</summary>
 internal class ColorsSet
 {
-    private readonly IDictionary<IVertex, VertexColor> _items = new Dictionary<IVertex, VertexColor>();
+    private readonly Dictionary<IVertex, VertexColor> _items = new();
 
     public ColorsSet(IEnumerable<IVertex> items)
     {

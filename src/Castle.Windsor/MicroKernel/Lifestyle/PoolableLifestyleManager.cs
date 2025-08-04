@@ -58,6 +58,8 @@ public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLi
 
     public override void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         _pool?.Dispose();
     }
 

@@ -83,6 +83,8 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         KeyValuePair<object, Burden>[] burdens;
         using (_lock.ForWriting())
         {

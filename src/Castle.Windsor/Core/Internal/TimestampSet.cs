@@ -3,7 +3,7 @@ namespace Castle.Windsor.Core.Internal;
 /// <summary>Holds a timestamp (integer) for a given item</summary>
 internal class TimestampSet
 {
-    private readonly IDictionary<IVertex, int> _items = new Dictionary<IVertex, int>();
+    private readonly Dictionary<IVertex, int> _items = new();
 
     public void Register(IVertex item, int time)
     {

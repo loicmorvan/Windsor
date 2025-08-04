@@ -35,6 +35,8 @@ public class SingletonLifestyleManager : AbstractLifestyleManager, IContextLifes
 
     public override void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         var localInstance = _cachedBurden;
         if (localInstance == null)
         {

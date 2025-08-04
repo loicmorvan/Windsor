@@ -34,6 +34,8 @@ public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryCompon
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         if (_disposed)
         {
             return;
@@ -65,7 +67,7 @@ public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryCompon
                 Dispose();
                 break;
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(invocation));
         }
     }
 

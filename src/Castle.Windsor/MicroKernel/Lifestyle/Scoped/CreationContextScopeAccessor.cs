@@ -18,29 +18,23 @@ using Castle.Windsor.MicroKernel.Context;
 
 namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
-public class CreationContextScopeAccessor : IScopeAccessor
+public class CreationContextScopeAccessor(ComponentModel componentModel, Func<IHandler[], IHandler> scopeRootSelector)
+    : IScopeAccessor
 {
     private const string ScopeStash = "castle.scope-stash";
-    private readonly ComponentModel _componentModel;
-    private readonly Func<IHandler[], IHandler> _scopeRootSelector;
-
-    public CreationContextScopeAccessor(ComponentModel componentModel, Func<IHandler[], IHandler> scopeRootSelector)
-    {
-        _componentModel = componentModel;
-        _scopeRootSelector = scopeRootSelector;
-    }
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
     }
 
     public ILifetimeScope GetScope(CreationContext context)
     {
-        var selected = context.SelectScopeRoot(_scopeRootSelector);
+        var selected = context.SelectScopeRoot(scopeRootSelector);
         if (selected == null)
         {
             throw new InvalidOperationException(
-                $"Scope was not available for '{_componentModel.Name}'. No component higher up in the resolution stack met the criteria specified for scoping the component. This usually indicates a bug in custom scope root selector or means that the component is being resolved in a unforseen context (a.k.a - it's probably a bug in how the dependencies in the application are wired).");
+                $"Scope was not available for '{componentModel.Name}'. No component higher up in the resolution stack met the criteria specified for scoping the component. This usually indicates a bug in custom scope root selector or means that the component is being resolved in a unforseen context (a.k.a - it's probably a bug in how the dependencies in the application are wired).");
         }
 
         var stash = (DefaultLifetimeScope)selected.GetContextualProperty(ScopeStash);

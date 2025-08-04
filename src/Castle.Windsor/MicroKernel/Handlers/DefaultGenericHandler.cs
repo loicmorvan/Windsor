@@ -39,6 +39,8 @@ public class DefaultGenericHandler(
 
     public override void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         var innerHandlers = _type2SubHandler.EjectAllValues();
         foreach (var handler in innerHandlers)
         {

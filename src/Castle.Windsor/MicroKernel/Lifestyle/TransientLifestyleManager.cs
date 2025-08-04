@@ -24,5 +24,6 @@ public class TransientLifestyleManager : AbstractLifestyleManager
 {
     public override void Dispose()
     {
+        GC.SuppressFinalize(this);
     }
 }

@@ -192,7 +192,7 @@ public class ServiceDescriptor
         return name;
     }
 
-    private static IEnumerable<Type> GetTopLevelInterfaces(Type type)
+    private static List<Type> GetTopLevelInterfaces(Type type)
     {
         var interfaces = type.GetInterfaces();
         var topLevel = new List<Type>(interfaces);

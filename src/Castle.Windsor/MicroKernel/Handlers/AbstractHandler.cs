@@ -51,6 +51,7 @@ public abstract class AbstractHandler :
 
     public virtual void Dispose()
     {
+        GC.SuppressFinalize(this);
     }
 
     public void ObtainDependencyDetails(IDependencyInspector inspector)

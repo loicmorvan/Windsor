@@ -30,6 +30,8 @@ public abstract class AbstractFacility : IFacility, IDisposable
 
     void IDisposable.Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         Dispose();
     }
 

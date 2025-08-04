@@ -23,6 +23,8 @@ public class ScopeCache : IScopeCache, IDisposable
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         var localCache = Interlocked.Exchange(ref _cache, null);
         localCache?.Values.Reverse().ForEach(b => b.Release());
     }

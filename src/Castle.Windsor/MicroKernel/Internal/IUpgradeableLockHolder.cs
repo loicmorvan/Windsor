@@ -20,6 +20,7 @@ namespace Castle.Windsor.MicroKernel.Internal;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public interface IUpgradeableLockHolder : ILockHolder
 {
+    [PublicAPI]
     ILockHolder Upgrade();
 
     [PublicAPI]

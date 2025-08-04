@@ -31,6 +31,8 @@ public class ScopedLifestyleManager(IScopeAccessor accessor) : AbstractLifestyle
 
     public override void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         var scope = Interlocked.Exchange(ref _accessor, null);
         scope?.Dispose();
     }
@@ -51,11 +53,7 @@ public class ScopedLifestyleManager(IScopeAccessor accessor) : AbstractLifestyle
     private ILifetimeScope GetScope(CreationContext context)
     {
         var localScope = _accessor;
-        if (localScope == null)
-        {
-            throw new ObjectDisposedException(
-                "Scope was already disposed. This is most likely a bug in the calling code.");
-        }
+        ObjectDisposedException.ThrowIf(localScope is null, this);
 
         var scope = localScope.GetScope(context);
         if (scope == null)

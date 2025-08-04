@@ -22,6 +22,7 @@ public class NoTrackingReleasePolicy : IReleasePolicy
 {
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
     }
 
     public IReleasePolicy CreateSubPolicy()
