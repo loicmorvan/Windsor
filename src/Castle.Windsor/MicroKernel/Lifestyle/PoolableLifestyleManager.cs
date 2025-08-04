@@ -16,6 +16,7 @@ using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Lifestyle.Pool;
 using Castle.Windsor.MicroKernel.Registration;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Lifestyle;
 
@@ -89,6 +90,7 @@ public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLi
         return factory.Create(initialSize, maxSize, ComponentActivator);
     }
 
+    [PublicAPI]
     protected virtual Burden PoolCreationCallback(CreationContext context, IReleasePolicy releasePolicy)
     {
         var burden = base.CreateInstance(context, false);

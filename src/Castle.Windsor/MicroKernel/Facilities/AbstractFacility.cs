@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Castle.Core.Configuration;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Facilities;
 
@@ -61,6 +62,7 @@ public abstract class AbstractFacility : IFacility, IDisposable
 
     /// <summary>Performs the tasks associated with freeing, releasing, or resetting the facility resources.</summary>
     /// <remarks>It can be overriden.</remarks>
+    [PublicAPI]
     protected virtual void Dispose()
     {
     }

@@ -77,6 +77,7 @@ public class DefaultTypedFactoryComponentSelector : ITypedFactoryComponentSelect
     /// <param name="componentType"></param>
     /// <param name="additionalArguments"></param>
     /// <returns></returns>
+    [PublicAPI]
     protected virtual Func<IKernelInternal, IReleasePolicy, object> BuildFactoryComponent(string componentName,
         Type componentType,
         Arguments additionalArguments)

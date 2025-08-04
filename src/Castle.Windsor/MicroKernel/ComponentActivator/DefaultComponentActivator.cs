@@ -17,6 +17,7 @@ using Castle.DynamicProxy;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Context;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.ComponentActivator;
 
@@ -72,6 +73,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
         return CreateInstance(context, arguments);
     }
 
+    [PublicAPI]
     protected virtual object CreateInstance(CreationContext context, object[] arguments)
     {
         object instance = null;
@@ -161,6 +163,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
         return instance;
     }
 
+    [PublicAPI]
     protected virtual ConstructorCandidate SelectEligibleConstructor(CreationContext context)
     {
         switch (Model.Constructors.Count)
@@ -237,11 +240,13 @@ public class DefaultComponentActivator : AbstractComponentActivator
         return true;
     }
 
+    [PublicAPI]
     protected virtual bool CanSatisfyDependency(CreationContext context, DependencyModel dependency)
     {
         return Kernel.Resolver.CanResolve(context, context.Handler, Model, dependency);
     }
 
+    [PublicAPI]
     protected virtual object[] CreateConstructorArguments(ConstructorCandidate constructor, CreationContext context)
     {
         if (constructor == null)

@@ -7,13 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ComponentRegistration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ComponentRegistration.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/FromDescriptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/FromDescriptor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/TypeNameParser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/TypeNameParser.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Util/ReferenceExpressionUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Util/ReferenceExpressionUtil.cs" afterDir="false" />
-    </list>
+    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -107,7 +101,7 @@
       <force-push-target remote-path="origin" branch="net9" />
     </force-push-targets>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected=".NET Project.Castle.Windsor.Tests">
     <configuration name="Castle.Windsor.Tests" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -168,14 +162,7 @@
       <workItem from="1754163630481" duration="6485000" />
       <workItem from="1754247539777" duration="1293000" />
       <workItem from="1754334151653" duration="637000" />
-    </task>
-    <task id="LOCAL-00009" summary="Cleanup everything">
-      <option name="closed" value="true" />
-      <created>1752875813424</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1752875813424</updated>
+      <workItem from="1754334801425" duration="819000" />
     </task>
     <task id="LOCAL-00010" summary="Fixed tests. Some random failure still remains.">
       <option name="closed" value="true" />
@@ -561,7 +548,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754248176978</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="Refactored various methods to remove redundant parameters, updated default values, streamlined logic for clarity, and replaced deprecated syntax for improved consistency across multiple files.">
+      <option name="closed" value="true" />
+      <created>1754335533555</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1754335533555</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -595,7 +590,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Removed legacy build scripts and streamlined project references." />
     <MESSAGE value="Refactored namespaces for `Castle.Windsor.Facilities.AspNetCore` and annotations for `IWindsorContainer`." />
     <MESSAGE value="Removed unused diagnostics and related interfaces, added `[PublicAPI]` annotations, and improved exception handling." />
     <MESSAGE value="Improved null checks, streamlined conditional logic, and enhanced code consistency across multiple files." />
@@ -620,7 +614,8 @@
     <MESSAGE value="Added `[PublicAPI]` annotations, replaced `override` with `virtual` for specific methods in `SlimReadWriteLock`, and updated interfaces to improve flexibility and ensure consistency across multiple files." />
     <MESSAGE value="Made `SlimReadWriteLock` class `sealed`, changed specific methods from `public` to `private` to reduce surface area, and ensure stricter encapsulation." />
     <MESSAGE value="Refactored constructors and methods across multiple files to use default parameter values, removed redundant overloads, and streamlined implementations for improved consistency and readability." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored constructors and methods across multiple files to use default parameter values, removed redundant overloads, and streamlined implementations for improved consistency and readability." />
+    <MESSAGE value="Refactored various methods to remove redundant parameters, updated default values, streamlined logic for clarity, and replaced deprecated syntax for improved consistency across multiple files." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored various methods to remove redundant parameters, updated default values, streamlined logic for clarity, and replaced deprecated syntax for improved consistency across multiple files." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

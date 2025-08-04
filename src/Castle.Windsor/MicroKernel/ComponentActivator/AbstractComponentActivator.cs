@@ -15,6 +15,7 @@
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Context;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.ComponentActivator;
 
@@ -83,6 +84,7 @@ public abstract class AbstractComponentActivator : IComponentActivator
         ApplyConcerns(Model.Lifecycle.CommissionConcerns, instance);
     }
 
+    [PublicAPI]
     protected virtual void ApplyConcerns(IEnumerable<ICommissionConcern> steps, object instance)
     {
         foreach (var concern in steps)
@@ -91,6 +93,7 @@ public abstract class AbstractComponentActivator : IComponentActivator
         }
     }
 
+    [PublicAPI]
     protected virtual void ApplyConcerns(IEnumerable<IDecommissionConcern> steps, object instance)
     {
         foreach (var concern in steps)
