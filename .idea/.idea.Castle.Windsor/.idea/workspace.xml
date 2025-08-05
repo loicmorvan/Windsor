@@ -7,23 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/DisposableComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/DisposableComponent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ADisposable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ADisposable.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/BDisposable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/BDisposable.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/BoundComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/BoundComponent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/Startable/WithOverloads.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/Startable/WithOverloads.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/BurdenAddedToUnrelatedObjectTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/BurdenAddedToUnrelatedObjectTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Delegates/UsesFooDelegate.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Delegates/UsesFooDelegate.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Delegates/UsesTwoFooDelegates.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Delegates/UsesTwoFooDelegates.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/HandlerFilterTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/HandlerFilterTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/HandlerSelectorsTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/HandlerSelectorsTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifecycle/DecomissioningResponsibilitiesTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifecycle/DecomissioningResponsibilitiesTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/MicroKernel/NotImplementedDependencyResolver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/MicroKernel/NotImplementedDependencyResolver.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/MyObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/MyObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/TestInfrastructure/StaticScopeAccessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/TestInfrastructure/StaticScopeAccessor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/XmlProcessor/XmlProcessorTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/XmlProcessor/XmlProcessorTestCase.cs" afterDir="false" />
-    </list>
+    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -181,15 +165,7 @@
       <workItem from="1754247539777" duration="1293000" />
       <workItem from="1754334151653" duration="637000" />
       <workItem from="1754334801425" duration="4632000" />
-      <workItem from="1754421122257" duration="4988000" />
-    </task>
-    <task id="LOCAL-00017" summary="More warnings fixed.">
-      <option name="closed" value="true" />
-      <created>1753132408296</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1753132408296</updated>
+      <workItem from="1754421122257" duration="6142000" />
     </task>
     <task id="LOCAL-00018" summary="Fixed some warnings.">
       <option name="closed" value="true" />
@@ -575,7 +551,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754425579031</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="Made multiple properties and methods `private` across test cases to improve encapsulation, enhance immutability, and simplify code structure.">
+      <option name="closed" value="true" />
+      <created>1754427118980</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1754427118980</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -609,7 +593,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Replaced `string.Format` with modern string interpolation for improved code readability and consistency across multiple files." />
     <MESSAGE value="Refactored loops to use LINQ-based filtering and simplified logic for improved readability and consistency across applicable files." />
     <MESSAGE value="Refactored to replace `Substring` calls with range operators for improved readability and consistency across applicable files." />
     <MESSAGE value="Streamlined type name parsing logic by simplifying conditional checks, improving code readability and consistency." />
@@ -634,7 +617,8 @@
     <MESSAGE value="Replaced local variables with constants across multiple test cases to improve immutability and code clarity." />
     <MESSAGE value="Made various methods `static` across multiple test cases to improve immutability, simplify usage, and ensure consistency." />
     <MESSAGE value="Refactored test cases to simplify logic using modern syntax, improved immutability, and enhanced code clarity across multiple files." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored test cases to simplify logic using modern syntax, improved immutability, and enhanced code clarity across multiple files." />
+    <MESSAGE value="Made multiple properties and methods `private` across test cases to improve encapsulation, enhance immutability, and simplify code structure." />
+    <option name="LAST_COMMIT_MESSAGE" value="Made multiple properties and methods `private` across test cases to improve encapsulation, enhance immutability, and simplify code structure." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

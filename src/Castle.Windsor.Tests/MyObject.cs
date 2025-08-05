@@ -1,13 +1,9 @@
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests;
 
-public class MyObject : IMyObject
+[UsedImplicitly]
+public class MyObject(IDictionary<int, IList<string>> stuff) : IMyObject
 {
-    private readonly IDictionary<int, IList<string>> Stuff;
-
-    public MyObject(IDictionary<int, IList<string>> stuff)
-    {
-        Stuff = stuff;
-    }
-
-    public virtual int Count => Stuff.Count;
+    public virtual int Count => stuff.Count;
 }
