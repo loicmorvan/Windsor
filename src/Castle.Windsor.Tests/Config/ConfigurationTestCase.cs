@@ -31,8 +31,7 @@ public class ConfigurationTestCase : AbstractContainerTestCase
     [Bug("https://github.com/castleproject/Windsor/issues/574")]
     public void DictionaryWithReferencedProperty()
     {
-        var config =
-            @"
+        const string config = @"
 <configuration>
 	<properties>
 		<value1>Property Value 1</value1>
@@ -64,8 +63,7 @@ public class ConfigurationTestCase : AbstractContainerTestCase
     [Bug("https://github.com/castleproject/Windsor/issues/574")]
     public void DictionaryWithReferencedList()
     {
-        var config =
-            @"
+        const string config = @"
 <configuration>
     <facilities>
     </facilities>
@@ -173,8 +171,7 @@ public class ConfigurationTestCase : AbstractContainerTestCase
     [Bug("IOC-73")]
     public void ShouldNotThrowCircularDependencyException()
     {
-        var config =
-            @"
+        const string config = @"
 <configuration>
     <facilities>
     </facilities>
@@ -253,9 +250,9 @@ public class ConfigurationTestCase : AbstractContainerTestCase
     [Fact]
     public void ComplexConfigurationParameter()
     {
-        var key = "key";
-        var value1 = "value1";
-        var value2 = "value2";
+        const string key = "key";
+        const string value1 = "value1";
+        const string value2 = "value2";
 
         var confignode = new MutableConfiguration(key);
 
@@ -394,7 +391,7 @@ public class ConfigurationTestCase : AbstractContainerTestCase
     [Fact]
     public void CustomLifestyleManager()
     {
-        var key = "key";
+        const string key = "key";
 
         var confignode = new MutableConfiguration(key);
         confignode.Attributes.Add("lifestyle", "custom");

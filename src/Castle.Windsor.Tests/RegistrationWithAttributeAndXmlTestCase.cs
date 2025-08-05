@@ -24,7 +24,7 @@ public class RegistrationWithAttributeAndXmlTestCase : AbstractContainerTestCase
     [Bug("IOC-295")]
     public void Registration_via_xml_no_service_specified_uses_service_from_attribute()
     {
-        var xml = @"<configuration>
+        const string xml = @"<configuration>
   <components>
     <component type=""HasType"" />
   </components>

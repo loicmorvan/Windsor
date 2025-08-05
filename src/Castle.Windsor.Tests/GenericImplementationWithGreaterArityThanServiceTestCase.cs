@@ -135,7 +135,7 @@ public class GenericImplementationWithGreaterArityThanServiceTestCase : Abstract
         var exception = Assert.Throws<GenericHandlerTypeMismatchException>(() =>
             Container.Resolve<ClassComponents.IRepository<string>>());
 
-        var message =
+        const string message =
             @"Types System.String, Castle.Windsor.Tests.Components.IEmployee don't satisfy generic constraints of implementation type Castle.Windsor.Tests.ClassComponents.DoubleRepository`2 of component 'Castle.Windsor.Tests.ClassComponents.DoubleRepository`2'.this is likely a bug in the IGenericImplementationMatchingStrategy used (Castle.Windsor.Tests.StubGenericImplementationMatchingStrategy)";
         Assert.Equal(message, exception.Message);
     }

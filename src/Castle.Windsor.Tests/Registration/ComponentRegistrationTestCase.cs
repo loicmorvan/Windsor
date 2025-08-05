@@ -105,7 +105,7 @@ public class ComponentRegistrationTestCase : AbstractContainerTestCase
     [Fact]
     public void AddComponent_NamedAlreadyAssigned_ThrowsException()
     {
-        var expectedMessage = "This component has already been assigned name 'customer'";
+        const string expectedMessage = "This component has already been assigned name 'customer'";
         var exception = Assert.Throws<ComponentRegistrationException>(() =>
         {
             Kernel.Register(
@@ -114,13 +114,13 @@ public class ComponentRegistrationTestCase : AbstractContainerTestCase
                     .Named("customer1")
             );
         });
-        Assert.Equal(exception.Message, expectedMessage);
+        Assert.Equal(expectedMessage, exception.Message);
     }
 
     [Fact]
     public void AddComponent_WithSameName_ThrowsException()
     {
-        var expectedMessage =
+        const string expectedMessage =
             "Component customer could not be registered. There is already a component with that name. Did you want to modify the existing component instead? If not, make sure you specify a unique name.";
         var exception = Assert.Throws<ComponentRegistrationException>(() =>
         {
@@ -152,7 +152,7 @@ public class ComponentRegistrationTestCase : AbstractContainerTestCase
     [Fact]
     public void AddComponent_WithImplementationAlreadyAssigned_ThrowsException()
     {
-        var expectedMessage =
+        const string expectedMessage =
             "This component has already been assigned implementation Castle.Windsor.Tests.ClassComponents.CustomerImpl";
         var exception = Assert.Throws<ComponentRegistrationException>(() =>
         {
@@ -162,7 +162,7 @@ public class ComponentRegistrationTestCase : AbstractContainerTestCase
                     .ImplementedBy<CustomerImpl2>()
             );
         });
-        Assert.Equal(exception.Message, expectedMessage);
+        Assert.Equal(expectedMessage, exception.Message);
     }
 
     [Fact]

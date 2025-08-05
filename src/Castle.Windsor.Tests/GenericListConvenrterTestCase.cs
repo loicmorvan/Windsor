@@ -22,8 +22,7 @@ public class GenericListConvenrterTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Can_read_component_with_dictionary_of_lists()
 	{
-		var xml =
-			@"<configuration>
+		const string xml = @"<configuration>
 	<components>
 		<component service=""IMyObject"" type=""MyObject"">
 			<parameters>

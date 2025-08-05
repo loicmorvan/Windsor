@@ -114,7 +114,7 @@ public class XmlConfigStructureTestCase : AbstractContainerTestCase
         var e =
             Assert.Throws<ConfigurationProcessingException>(() => Container.Install(FromFile("IOC-103.xml")));
 
-        var expected =
+        const string expected =
             @"Configuration parser encountered <aze>, but it was expecting to find <installers>, <facilities> or <components>. There might be either a typo on <aze> or you might have forgotten to nest it properly.";
         Assert.Equal(expected, e.Message);
     }

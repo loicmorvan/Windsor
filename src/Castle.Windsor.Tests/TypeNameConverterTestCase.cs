@@ -185,7 +185,7 @@ public class TypeNameConverterTestCase
     [Fact]
     public void Throws_helpful_exception_when_only_type_specified_but_not_found()
     {
-        var type = "Some.Assembly.AndThen.Type+NestedEven";
+        const string type = "Some.Assembly.AndThen.Type+NestedEven";
 
         var exception = Assert.Throws<ConverterException>(() => _converter.PerformConversion(type, typeof(Type)));
 

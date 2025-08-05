@@ -28,7 +28,7 @@ public class SubContainersTestCase : AbstractContainerTestCase
     [Fact]
     public void AddChildKernelToTwoParentsThrowsException()
     {
-        var expectedMessage =
+        const string expectedMessage =
             "You can not change the kernel parent once set, use the RemoveChildKernel and AddChildKernel methods together to achieve this.";
 
         IKernel kernel2 = new DefaultKernel();
@@ -39,7 +39,7 @@ public class SubContainersTestCase : AbstractContainerTestCase
         Assert.Equal(Kernel, subkernel.Parent);
 
         var exception = Assert.Throws<KernelException>(() => kernel2.AddChildKernel(subkernel));
-        Assert.Equal(exception.Message, expectedMessage);
+        Assert.Equal(expectedMessage, exception.Message);
     }
 
     [Fact]

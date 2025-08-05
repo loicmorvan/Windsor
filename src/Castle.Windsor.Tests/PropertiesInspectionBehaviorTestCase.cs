@@ -25,11 +25,11 @@ public class PropertiesInspectionBehaviorTestCase
     [Fact]
     public void InvalidOption()
     {
-        var expectedMessage =
+        const string expectedMessage =
             "Error on properties inspection. Could not convert the inspectionBehavior attribute value into an expected enum value. Value found is 'Invalid' while possible values are 'Undefined, None, All, DeclaredOnly'";
         var exception = Assert.Throws<ConverterException>(() =>
             new WindsorContainer(new XmlInterpreter(Xml.Embedded("propertyInspectionBehaviorInvalid.xml"))));
-        Assert.Equal(exception.Message, expectedMessage);
+        Assert.Equal(expectedMessage, exception.Message);
     }
 
     [Fact]

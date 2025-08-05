@@ -118,7 +118,7 @@ public class DependencyResolvingTestCase : AbstractContainerTestCase
     [Fact]
     public void String_class_can_NOT_be_a_service()
     {
-        var uriString = "http://castleproject.org";
+        const string uriString = "http://castleproject.org";
 
         Assert.Throws<ArgumentException>(() => Kernel.Register(Component.For<string>().Instance(uriString)));
     }
@@ -126,7 +126,7 @@ public class DependencyResolvingTestCase : AbstractContainerTestCase
     [Fact]
     public void Uri_class_can_be_a_component()
     {
-        var uriString = "http://castleproject.org";
+        const string uriString = "http://castleproject.org";
         Kernel.Register(Component.For<UsesUri>(),
             Component.For<Uri>().DependsOn(new { uriString }));
 
@@ -138,7 +138,7 @@ public class DependencyResolvingTestCase : AbstractContainerTestCase
     [Fact]
     public void Uri_class_can_be_a_parameter()
     {
-        var uriString = "http://castleproject.org";
+        const string uriString = "http://castleproject.org";
         Kernel.Register(Component.For<UsesUri>().DependsOn(Parameter.ForKey("uri").Eq(uriString)));
 
         var instance = Kernel.Resolve<UsesUri>();

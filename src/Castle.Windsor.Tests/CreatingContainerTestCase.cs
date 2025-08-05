@@ -36,7 +36,7 @@ public class CreatingContainerTestCase
     [Fact]
     public void With_configuration_file_relative()
     {
-        var filePath = "XmlFiles/hasFileIncludes.xml";
+        const string filePath = "XmlFiles/hasFileIncludes.xml";
 
         var container = new WindsorContainer(filePath);
 

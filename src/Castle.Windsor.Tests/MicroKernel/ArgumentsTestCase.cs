@@ -95,7 +95,7 @@ public class ArgumentsTestCase : AbstractContainerTestCase
     public void Handles_string_as_key()
     {
         var arguments = new Arguments();
-        var key = "Foo";
+        const string key = "Foo";
         var value = new object();
 
         arguments.Add(key, value);
@@ -109,7 +109,7 @@ public class ArgumentsTestCase : AbstractContainerTestCase
     public void Handles_string_as_key_case_insensitive()
     {
         var arguments = new Arguments();
-        var key = "foo";
+        const string key = "foo";
         var value = new object();
 
         arguments.Add(key, value);

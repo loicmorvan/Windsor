@@ -116,8 +116,8 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
     [Fact]
     public void Should_handle_multiple_calls()
     {
-        var arg1 = "bar";
-        var arg2 = 5;
+        const string arg1 = "bar";
+        const int arg2 = 5;
         Kernel.Register(Component.For<ClassWithArguments>()
             .LifeStyle.Transient
             .DynamicParameters((_, d) => { d["arg1"] = arg1; })
@@ -152,8 +152,8 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
     [Fact]
     public void Should_override_parameters_passed_from_call_site()
     {
-        var arg1 = "bar";
-        var arg2 = 5;
+        const string arg1 = "bar";
+        const int arg2 = 5;
         Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((_, d) =>
         {
             d["arg1"] = arg1;
@@ -167,8 +167,8 @@ public class DynamicParametersTestCase : AbstractContainerTestCase
     [Fact]
     public void Should_resolve_component_when_no_parameters_passed_from_call_site()
     {
-        var arg1 = "bar";
-        var arg2 = 5;
+        const string arg1 = "bar";
+        const int arg2 = 5;
         Kernel.Register(Component.For<ClassWithArguments>().LifeStyle.Transient.DynamicParameters((_, d) =>
         {
             d["arg1"] = arg1;
