@@ -171,13 +171,10 @@ public class ServiceDescriptor
 
     private static void AddFromInterface(Type type, Type implements, ICollection<Type> matches)
     {
-        foreach (var @interface in GetTopLevelInterfaces(type))
+        foreach (var @interface in GetTopLevelInterfaces(type).Where(@interface => @interface.GetTypeInfo()
+                     .GetInterface(implements.FullName ?? throw new InvalidOperationException(), false) != null))
         {
-            if (@interface.GetTypeInfo()
-                    .GetInterface(implements.FullName ?? throw new InvalidOperationException(), false) != null)
-            {
-                matches.Add(@interface);
-            }
+            matches.Add(@interface);
         }
     }
 
