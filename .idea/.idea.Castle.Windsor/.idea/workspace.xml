@@ -9,8 +9,9 @@
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/FromDescriptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/FromDescriptor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ServiceDescriptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ServiceDescriptor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Config/ConfigurationTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Config/ConfigurationTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/HelpfulExceptionsOnResolveTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/HelpfulExceptionsOnResolveTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/TypeNameConverterTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/TypeNameConverterTestCase.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,6 +63,8 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9cf5f68d759deefc91b9c48c5ac3dd27708bb7dc38d0c485661fff5ce15b82/SafeFileHandle.Unix.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/de1dc94e26de2eb8cdb9b19e9451c6a0738025b875978dc863de7ba87ee78c4/ServiceCollectionServiceExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/Resolvers/LoggerDependencyResolver.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/loicmorvan/RiderProjects/Windsor/src/Castle.Windsor/MicroKernel/Registration/FromDescriptor.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/loicmorvan/RiderProjects/Windsor/src/Castle.Windsor/MicroKernel/Registration/ServiceDescriptor.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProblemsViewState">
@@ -167,14 +170,7 @@
       <workItem from="1754247539777" duration="1293000" />
       <workItem from="1754334151653" duration="637000" />
       <workItem from="1754334801425" duration="4632000" />
-    </task>
-    <task id="LOCAL-00012" summary="Fixed latest failing tests.">
-      <option name="closed" value="true" />
-      <created>1753129624696</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1753129624696</updated>
+      <workItem from="1754421122257" duration="1400000" />
     </task>
     <task id="LOCAL-00013" summary="Fixed issue with project names.">
       <option name="closed" value="true" />
@@ -560,7 +556,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754338237386</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="Refactored `FromDescriptor` and `ServiceDescriptor` to streamline type registration logic and improve code clarity.">
+      <option name="closed" value="true" />
+      <created>1754421729062</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1754421729062</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -594,7 +598,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Improved null checks, streamlined conditional logic, and enhanced code consistency across multiple files." />
     <MESSAGE value="Refactored conditional logic by replacing `if-else` constructs with `switch` expressions to improve code clarity and consistency across multiple files." />
     <MESSAGE value="Improved handling of `LifestyleType.Undefined` across multiple classes, added missing exception cases, and enhanced code clarity with explicit `switch` branches." />
     <MESSAGE value="Replaced object initializer shorthand `new()` with explicit collection initializers `[]` for improved clarity and consistency across all applicable files." />
@@ -619,7 +622,8 @@
     <MESSAGE value="Refactored various methods to remove redundant parameters, updated default values, streamlined logic for clarity, and replaced deprecated syntax for improved consistency across multiple files." />
     <MESSAGE value="Added `[PublicAPI]` annotations to multiple methods across several classes to improve API discoverability and documentation." />
     <MESSAGE value="Added `GC.SuppressFinalize` calls to `Dispose` methods across multiple classes to improve finalization handling and resource management consistency." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added `GC.SuppressFinalize` calls to `Dispose` methods across multiple classes to improve finalization handling and resource management consistency." />
+    <MESSAGE value="Refactored `FromDescriptor` and `ServiceDescriptor` to streamline type registration logic and improve code clarity." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored `FromDescriptor` and `ServiceDescriptor` to streamline type registration logic and improve code clarity." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

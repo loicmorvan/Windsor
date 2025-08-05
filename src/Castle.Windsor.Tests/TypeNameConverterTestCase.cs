@@ -159,9 +159,8 @@ public class TypeNameConverterTestCase
 
         var exception = Assert.Throws<ConverterException>(() => _converter.PerformConversion(type, typeof(Type)));
 
-        var message = string.Format(
-            "Could not convert string '{0}' to a type. Assembly {1} was matched, but it doesn't contain the type. Make sure that the type name was not mistyped.",
-            type, assemblyName);
+        var message =
+            $"Could not convert string '{type}' to a type. Assembly {assemblyName} was matched, but it doesn't contain the type. Make sure that the type name was not mistyped.";
 
         Assert.Equal(message, exception.Message);
     }

@@ -119,10 +119,8 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
                 Container.Resolve<A>("Stefan-Mucha"));
 
         var expected =
-            string.Format(
-                "Requested component named 'Stefan-Mucha' was not found in the container. Did you forget to register it?{0}" +
-                "There are 2 other components supporting requested service '{1}'. Were you looking for any of them?",
-                Environment.NewLine, typeof(A).FullName);
+            $"Requested component named 'Stefan-Mucha' was not found in the container. Did you forget to register it?{Environment.NewLine}" +
+            $"There are 2 other components supporting requested service '{typeof(A).FullName}'. Were you looking for any of them?";
 
         Assert.Equal(expected, exception.Message);
     }
@@ -137,10 +135,8 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
                 Container.Resolve<A>("Stefan-Mucha"));
 
         var expected =
-            string.Format(
-                "Requested component named 'Stefan-Mucha' was not found in the container. Did you forget to register it?{0}" +
-                "There is one other component supporting requested service '{1}'. Is it what you were looking for?",
-                Environment.NewLine, typeof(A).FullName);
+            $"Requested component named 'Stefan-Mucha' was not found in the container. Did you forget to register it?{Environment.NewLine}" +
+            $"There is one other component supporting requested service '{typeof(A).FullName}'. Is it what you were looking for?";
 
         Assert.Equal(expected, exception.Message);
     }
@@ -153,10 +149,8 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
                 Container.Resolve<A>("Stefan-Mucha"));
 
         var expected =
-            string.Format(
-                "Requested component named 'Stefan-Mucha' was not found in the container. Did you forget to register it?{0}" +
-                "There are no components supporting requested service '{1}'. You need to register components in order to be able to use them.",
-                Environment.NewLine, typeof(A).FullName);
+            $"Requested component named 'Stefan-Mucha' was not found in the container. Did you forget to register it?{Environment.NewLine}" +
+            $"There are no components supporting requested service '{typeof(A).FullName}'. You need to register components in order to be able to use them.";
 
         Assert.Equal(expected, exception.Message);
     }

@@ -127,10 +127,8 @@ public class ConfigurationTestCase : AbstractContainerTestCase
 </components>
 </castle>"))));
 
-        var expected = string.Format("Could not set up component '{0}'. Type '{1}' does not implement service '{2}'",
-            typeof(IEmptyService).FullName,
-            typeof(IEmptyService).AssemblyQualifiedName,
-            typeof(EmptyServiceA).AssemblyQualifiedName);
+        var expected =
+            $"Could not set up component '{typeof(IEmptyService).FullName}'. Type '{typeof(IEmptyService).AssemblyQualifiedName}' does not implement service '{typeof(EmptyServiceA).AssemblyQualifiedName}'";
 
         Assert.Equal(expected, exception.Message);
     }
