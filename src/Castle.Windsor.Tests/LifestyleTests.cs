@@ -1,6 +1,7 @@
 using Castle.Windsor.Facilities.TypedFactory;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests;
 
@@ -45,6 +46,7 @@ public class LifestyleTests
 
     public interface IFactory
     {
+        [PublicAPI]
         IInterface Create();
     }
 

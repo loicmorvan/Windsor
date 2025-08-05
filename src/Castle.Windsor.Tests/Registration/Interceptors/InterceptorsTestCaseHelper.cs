@@ -14,6 +14,7 @@
 
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.Registration.Interceptors;
 
@@ -21,5 +22,6 @@ public abstract class InterceptorsTestCaseHelper
 {
     public abstract IEnumerable<InterceptorReference> GetExpectedInterceptorsInCorrectOrder();
 
+    [PublicAPI]
     public abstract IRegistration RegisterInterceptors<T>(ComponentRegistration<T> registration) where T : class;
 }

@@ -12,9 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
 public interface IGenericFactoryDouble<T1, T2> : IGenericFactory<T1>
 {
+    [PublicAPI]
     T2 Create2();
 }

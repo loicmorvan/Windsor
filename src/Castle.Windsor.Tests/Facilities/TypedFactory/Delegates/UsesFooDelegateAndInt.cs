@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
 public class UsesFooDelegateAndInt
@@ -28,6 +30,7 @@ public class UsesFooDelegateAndInt
 
     public int AdditionalArgument { get; set; }
 
+    [PublicAPI]
     public Foo GetFoo()
     {
         return _myFooFactory(++_counter);
