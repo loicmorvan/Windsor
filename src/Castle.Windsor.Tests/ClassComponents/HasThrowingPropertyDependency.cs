@@ -26,7 +26,7 @@ public class HasThrowingPropertyDependency
 
     public ThrowsInCtor Property { get; set; }
 
-    public void Start()
+    public static void Start()
     {
         InstancesStarted++;
     }

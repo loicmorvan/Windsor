@@ -25,7 +25,7 @@ namespace Castle.Windsor.Tests.Proxies;
 
 public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
 {
-    private void AssertIsProxy(object o)
+    private static void AssertIsProxy(object o)
     {
         Assert.IsType<IProxyTargetAccessor>(o, false);
     }

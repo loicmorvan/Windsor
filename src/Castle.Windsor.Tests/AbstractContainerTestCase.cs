@@ -57,7 +57,7 @@ public abstract class AbstractContainerTestCase : IDisposable
         Init();
     }
 
-    protected Assembly GetCurrentAssembly()
+    protected static Assembly GetCurrentAssembly()
     {
         return typeof(AbstractContainerTestCase).GetTypeInfo().Assembly;
     }

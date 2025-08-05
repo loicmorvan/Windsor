@@ -291,7 +291,7 @@ public class InterceptorsTestCase : IDisposable
         }
     }
 
-    private ConfigurationInstaller XmlResource(string fileName)
+    private static ConfigurationInstaller XmlResource(string fileName)
     {
         return Configuration.FromXml(Xml.Embedded(fileName));
     }

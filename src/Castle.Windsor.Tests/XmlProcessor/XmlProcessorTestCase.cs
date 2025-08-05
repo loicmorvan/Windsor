@@ -78,7 +78,7 @@ public class XmlProcessorTestCase
         }
     }
 
-    public XmlDocument GetXmlDocument(string fileName)
+    public static XmlDocument GetXmlDocument(string fileName)
     {
         var doc = new XmlDocument();
 
@@ -88,12 +88,12 @@ public class XmlProcessorTestCase
         return doc;
     }
 
-    private string StripSpaces(string xml)
+    private static string StripSpaces(string xml)
     {
         return Regex.Replace(xml, "\\s+", "", RegexOptions.Compiled);
     }
 
-    private string GetFullPath()
+    private static string GetFullPath()
     {
         return Path.Combine(AppContext.BaseDirectory, ConfigHelper.ResolveConfigPath("XmlProcessor/TestFiles/"));
     }

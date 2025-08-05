@@ -189,7 +189,7 @@ public class TypeNameConverterTestCase
 
         var exception = Assert.Throws<ConverterException>(() => _converter.PerformConversion(type, typeof(Type)));
 
-        var message =
+        const string message =
             $"Could not convert string '{type}' to a type. Make sure assembly containing the type has been loaded into the process, or consider specifying assembly qualified name of the type.";
 
         Assert.Equal(message, exception.Message);

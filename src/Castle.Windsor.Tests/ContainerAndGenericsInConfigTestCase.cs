@@ -26,7 +26,7 @@ public class ContainerAndGenericsInConfigTestCase : AbstractContainerTestCase
             GetFilePath(fileName));
     }
 
-    private string GetFilePath(string fileName)
+    private static string GetFilePath(string fileName)
     {
         return ConfigHelper.ResolveConfigPath("Config/" + fileName);
     }

@@ -71,7 +71,7 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
         return key;
     }
 
-    private Property ScopeRoot()
+    private static Property ScopeRoot()
     {
         return Property.ForKey(HandlerExtensionsUtil.ResolveExtensionsKey)
             .Eq(new IResolveExtension[] { new CustomLifestyleScope() });

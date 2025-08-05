@@ -24,11 +24,14 @@ public class RegistrationWithAttributeAndXmlTestCase : AbstractContainerTestCase
     [Bug("IOC-295")]
     public void Registration_via_xml_no_service_specified_uses_service_from_attribute()
     {
-        const string xml = @"<configuration>
-  <components>
-    <component type=""HasType"" />
-  </components>
-</configuration>";
+        const string xml =
+            """
+            <configuration>
+              <components>
+                <component type="HasType" />
+              </components>
+            </configuration>
+            """;
 
         Container.Install(Configuration.FromXml(new StaticContentResource(xml)));
         Assert.True(Kernel.HasComponent(typeof(ISimpleService)));

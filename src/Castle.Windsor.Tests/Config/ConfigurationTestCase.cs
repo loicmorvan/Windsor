@@ -31,25 +31,27 @@ public class ConfigurationTestCase : AbstractContainerTestCase
     [Bug("https://github.com/castleproject/Windsor/issues/574")]
     public void DictionaryWithReferencedProperty()
     {
-        const string config = @"
-<configuration>
-	<properties>
-		<value1>Property Value 1</value1>
-        <value2>Property Value 2</value2>
-    </properties>
-	<components>
-				<component id='stringToStringDictionary' type='System.Collections.Generic.Dictionary`2[System.String, System.String]'>
-					<parameters>
-						<dictionary>
-							<dictionary>
-								<entry key='Key 1'>#{value1}</entry>
-								<entry key='Key 2'>#{value2}</entry>
-							</dictionary>
-						</dictionary>
-					</parameters>
-				</component>
-	</components>
-</configuration>";
+        const string config =
+            """
+            <configuration>
+            	<properties>
+            		<value1>Property Value 1</value1>
+                    <value2>Property Value 2</value2>
+                </properties>
+            	<components>
+            				<component id='stringToStringDictionary' type='System.Collections.Generic.Dictionary`2[System.String, System.String]'>
+            					<parameters>
+            						<dictionary>
+            							<dictionary>
+            								<entry key='Key 1'>#{value1}</entry>
+            								<entry key='Key 2'>#{value2}</entry>
+            							</dictionary>
+            						</dictionary>
+            					</parameters>
+            				</component>
+            	</components>
+            </configuration>
+            """;
 
         Container.Install(Configuration.FromXml(new StaticContentResource(config)));
         var stringToStringDictionary = Container.Resolve<Dictionary<string, string>>("stringToStringDictionary");
@@ -63,45 +65,47 @@ public class ConfigurationTestCase : AbstractContainerTestCase
     [Bug("https://github.com/castleproject/Windsor/issues/574")]
     public void DictionaryWithReferencedList()
     {
-        const string config = @"
-<configuration>
-    <facilities>
-    </facilities>
-	<components>
-				<component id='list' type='System.Collections.Generic.List`1[[System.String]]'>
-					<parameters>
-						<collection>
-							<array>
-								<item>11</item>
-								<item>12</item>
-							</array>
-						</collection>
-					</parameters>
-				</component>
+        const string config =
+            """
+            <configuration>
+                <facilities>
+                </facilities>
+            	<components>
+            				<component id='list' type='System.Collections.Generic.List`1[[System.String]]'>
+            					<parameters>
+            						<collection>
+            							<array>
+            								<item>11</item>
+            								<item>12</item>
+            							</array>
+            						</collection>
+            					</parameters>
+            				</component>
 
-				<component id='list2' type='System.Collections.Generic.List`1[[System.String]]'>
-					<parameters>
-						<collection>
-							<array>
-								<item>21</item>
-								<item>22</item>
-							</array>
-						</collection>
-					</parameters>
-				</component>
+            				<component id='list2' type='System.Collections.Generic.List`1[[System.String]]'>
+            					<parameters>
+            						<collection>
+            							<array>
+            								<item>21</item>
+            								<item>22</item>
+            							</array>
+            						</collection>
+            					</parameters>
+            				</component>
 
-				<component id='stringToListDictionary' type='System.Collections.Generic.Dictionary`2[System.String, System.Collections.Generic.List`1[[System.String]]]'>
-					<parameters>
-						<dictionary>
-							<dictionary>
-								<entry key='Key 1'>${list}</entry>
-								<entry key='Key 2'>${list2}</entry>
-							</dictionary>
-						</dictionary>
-					</parameters>
-				</component>
-	</components>
-</configuration>";
+            				<component id='stringToListDictionary' type='System.Collections.Generic.Dictionary`2[System.String, System.Collections.Generic.List`1[[System.String]]]'>
+            					<parameters>
+            						<dictionary>
+            							<dictionary>
+            								<entry key='Key 1'>${list}</entry>
+            								<entry key='Key 2'>${list2}</entry>
+            							</dictionary>
+            						</dictionary>
+            					</parameters>
+            				</component>
+            	</components>
+            </configuration>
+            """;
 
         Container.Install(Configuration.FromXml(new StaticContentResource(config)));
         Container.Resolve<List<string>>("list");
@@ -117,13 +121,15 @@ public class ConfigurationTestCase : AbstractContainerTestCase
         var exception = Assert.Throws<ComponentRegistrationException>(() =>
             Container.Install(Configuration.FromXml(
                 new StaticContentResource(
-                    @"<castle>
-<components>
-    <component
-        service=""EmptyServiceA""
-        type=""IEmptyService""/>
-</components>
-</castle>"))));
+                    """
+                    <castle>
+                    <components>
+                        <component
+                            service="EmptyServiceA"
+                            type="IEmptyService"/>
+                    </components>
+                    </castle>
+                    """))));
 
         var expected =
             $"Could not set up component '{typeof(IEmptyService).FullName}'. Type '{typeof(IEmptyService).AssemblyQualifiedName}' does not implement service '{typeof(EmptyServiceA).AssemblyQualifiedName}'";
@@ -137,31 +143,33 @@ public class ConfigurationTestCase : AbstractContainerTestCase
     {
         Container.Install(Configuration.FromXml(
             new StaticContentResource(
-                $@"<castle>
-<components>
-	<component lifestyle=""singleton""
-		id=""Id.MyClass""
-		type=""{typeof(HasDictionaryDependency).AssemblyQualifiedName}"">
-		<parameters>
-			<DictionaryProperty>${{Id.dictionary}}</DictionaryProperty>
-		</parameters>
-	</component>
+                $$"""
+                  <castle>
+                  <components>
+                  	<component lifestyle="singleton"
+                  		id="Id.MyClass"
+                  		type="{{typeof(HasDictionaryDependency).AssemblyQualifiedName}}">
+                  		<parameters>
+                  			<DictionaryProperty>${Id.dictionary}</DictionaryProperty>
+                  		</parameters>
+                  	</component>
 
-	<component id=""Id.dictionary"" lifestyle=""singleton""
-						 service=""System.Collections.IDictionary, mscorlib""
-						 type=""System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]]""
-						 >
-		<parameters>
-			<dictionary>
-				<dictionary>
-					<entry key=""string.key.1"">string value 1</entry>
-					<entry key=""string.key.2"">string value 2</entry>
-				</dictionary>
-			</dictionary>
-		</parameters>
-	</component>
-</components>
-</castle>")));
+                  	<component id="Id.dictionary" lifestyle="singleton"
+                  						 service="System.Collections.IDictionary, mscorlib"
+                  						 type="System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]]"
+                  						 >
+                  		<parameters>
+                  			<dictionary>
+                  				<dictionary>
+                  					<entry key="string.key.1">string value 1</entry>
+                  					<entry key="string.key.2">string value 2</entry>
+                  				</dictionary>
+                  			</dictionary>
+                  		</parameters>
+                  	</component>
+                  </components>
+                  </castle>
+                  """)));
 
         var myInstance = Container.Resolve<HasDictionaryDependency>();
         Assert.Equal(2, myInstance.DictionaryProperty.Count);

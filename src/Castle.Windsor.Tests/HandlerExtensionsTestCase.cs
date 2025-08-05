@@ -21,7 +21,7 @@ namespace Castle.Windsor.Tests;
 
 public class HandlerExtensionsTestCase : AbstractContainerTestCase
 {
-    private ComponentRegistration<A> AddResolveExtensions(ComponentRegistration<A> componentRegistration,
+    private static ComponentRegistration<A> AddResolveExtensions(ComponentRegistration<A> componentRegistration,
         params IResolveExtension[] items)
     {
         var resolveExtensions = new List<IResolveExtension>();
@@ -34,7 +34,7 @@ public class HandlerExtensionsTestCase : AbstractContainerTestCase
             .Eq(resolveExtensions));
     }
 
-    private ComponentRegistration<TComponent> WithReleaseExtensions<TComponent>(
+    private static ComponentRegistration<TComponent> WithReleaseExtensions<TComponent>(
         ComponentRegistration<TComponent> componentRegistration, params IReleaseExtension[] items)
         where TComponent : class
     {

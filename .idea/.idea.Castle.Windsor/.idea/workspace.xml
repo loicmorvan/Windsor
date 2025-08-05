@@ -8,17 +8,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/CreatingContainerTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/CreatingContainerTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/DependencyResolvingTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/DependencyResolvingTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/GenericImplementationWithGreaterArityThanServiceTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/GenericImplementationWithGreaterArityThanServiceTestCase.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/GenericListConvenrterTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/GenericListConvenrterTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/PropertiesInspectionBehaviorTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/PropertiesInspectionBehaviorTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Registration/DynamicParametersTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Registration/DynamicParametersTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Interceptors/DummyInterceptorSelector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Interceptors/DummyInterceptorSelector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifestyle/CustomLifestyleScoped.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifestyle/CustomLifestyleScoped.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/RegistrationWithAttributeAndXmlTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/RegistrationWithAttributeAndXmlTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/SubContainers/SubContainersTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/SubContainers/SubContainersTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/TestUtils.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/TestUtils.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/TypeNameConverterTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/TypeNameConverterTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Windsor.Tests/XmlConfigStructureTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Windsor.Tests/XmlConfigStructureTestCase.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,15 +172,7 @@
       <workItem from="1754247539777" duration="1293000" />
       <workItem from="1754334151653" duration="637000" />
       <workItem from="1754334801425" duration="4632000" />
-      <workItem from="1754421122257" duration="2358000" />
-    </task>
-    <task id="LOCAL-00014" summary="Fixed last namespaces">
-      <option name="closed" value="true" />
-      <created>1753130569465</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1753130569465</updated>
+      <workItem from="1754421122257" duration="2809000" />
     </task>
     <task id="LOCAL-00015" summary="Some fixes.">
       <option name="closed" value="true" />
@@ -571,7 +558,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754422647661</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="Replaced local variables with constants across multiple test cases to improve immutability and code clarity.">
+      <option name="closed" value="true" />
+      <created>1754423769701</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1754423769701</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -605,7 +600,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Improved handling of `LifestyleType.Undefined` across multiple classes, added missing exception cases, and enhanced code clarity with explicit `switch` branches." />
     <MESSAGE value="Replaced object initializer shorthand `new()` with explicit collection initializers `[]` for improved clarity and consistency across all applicable files." />
     <MESSAGE value="Streamlined conditional logic by replacing `if-else` constructs with shorthand ternary expressions, improving code clarity and consistency across multiple files." />
     <MESSAGE value="Replaced `string.Format` with modern string interpolation for improved code readability and consistency across multiple files." />
@@ -630,7 +624,8 @@
     <MESSAGE value="Added `GC.SuppressFinalize` calls to `Dispose` methods across multiple classes to improve finalization handling and resource management consistency." />
     <MESSAGE value="Refactored `FromDescriptor` and `ServiceDescriptor` to streamline type registration logic and improve code clarity." />
     <MESSAGE value="Replaced `string.Format` with string interpolation in test assertions to improve readability and consistency." />
-    <option name="LAST_COMMIT_MESSAGE" value="Replaced `string.Format` with string interpolation in test assertions to improve readability and consistency." />
+    <MESSAGE value="Replaced local variables with constants across multiple test cases to improve immutability and code clarity." />
+    <option name="LAST_COMMIT_MESSAGE" value="Replaced local variables with constants across multiple test cases to improve immutability and code clarity." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

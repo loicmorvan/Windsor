@@ -22,14 +22,14 @@ public class DummyInterceptorSelector : IInterceptorSelector
 {
     public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
     {
-        if (type.Is<ICatalog>())
+        if (!type.Is<ICatalog>())
         {
-            if (method.Name == "AddItem")
-            {
-                return interceptors;
-            }
+            return null;
         }
 
-        return null;
+        return
+            method.Name == "AddItem"
+                ? interceptors
+                : null;
     }
 }

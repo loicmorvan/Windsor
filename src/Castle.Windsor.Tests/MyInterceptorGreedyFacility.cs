@@ -15,7 +15,7 @@ public class MyInterceptorGreedyFacility : IFacility
     {
     }
 
-    private void OnComponentRegistered(string key, IHandler handler)
+    private static void OnComponentRegistered(string key, IHandler handler)
     {
         if (key == "key")
         {

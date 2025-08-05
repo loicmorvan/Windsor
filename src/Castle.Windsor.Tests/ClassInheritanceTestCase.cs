@@ -23,7 +23,7 @@ namespace Castle.Windsor.Tests;
 public class ClassInheritanceTestCase : AbstractContainerTestCase
 {
     // TODO: add tests for generics in the hierarchy (open as well?)
-    private bool IsProxy(object o)
+    private static bool IsProxy(object o)
     {
         return o is IProxyTargetAccessor;
     }

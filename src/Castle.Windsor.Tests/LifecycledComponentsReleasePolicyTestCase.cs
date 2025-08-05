@@ -179,19 +179,19 @@ public class LifecycledComponentsReleasePolicyTestCase
         Assert.True(_releasePolicy.HasTrack(b));
     }
 
-    private ComponentRegistration<T> Pooled<T>()
+    private static ComponentRegistration<T> Pooled<T>()
         where T : class
     {
         return Component.For<T>().LifeStyle.Pooled;
     }
 
-    private ComponentRegistration<T> Singleton<T>()
+    private static ComponentRegistration<T> Singleton<T>()
         where T : class
     {
         return Component.For<T>().LifeStyle.Singleton;
     }
 
-    private ComponentRegistration<T> Transient<T>()
+    private static ComponentRegistration<T> Transient<T>()
         where T : class
     {
         return Component.For<T>().LifeStyle.Transient;

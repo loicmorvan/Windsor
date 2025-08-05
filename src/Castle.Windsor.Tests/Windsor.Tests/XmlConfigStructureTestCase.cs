@@ -27,7 +27,7 @@ namespace Castle.Windsor.Tests.Windsor.Tests;
 
 public class XmlConfigStructureTestCase : AbstractContainerTestCase
 {
-    private IWindsorInstaller FromFile(string fileName)
+    private static IWindsorInstaller FromFile(string fileName)
     {
         var file = Xml.Embedded(fileName);
         return Configuration.FromXml(file);

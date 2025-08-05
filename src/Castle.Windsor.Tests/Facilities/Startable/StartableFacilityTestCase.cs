@@ -63,7 +63,7 @@ public class StartableFacilityTestCase
         _kernel.Register(
             Component.For<ThrowsInCtor>(),
             Component.For<HasThrowingPropertyDependency>()
-                .StartUsingMethod(x => x.Start)
+                .StartUsingMethod(x => HasThrowingPropertyDependency.Start)
         );
 
         Assert.Equal(1, HasThrowingPropertyDependency.InstancesCreated);

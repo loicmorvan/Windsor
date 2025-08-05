@@ -22,7 +22,7 @@ namespace Castle.Windsor.Tests.Lifestyle;
 
 public class LitestylePerThreadTestCase : AbstractContainerTestCase
 {
-    private void ExecuteOnAnotherThreadAndWait([InstantHandle] Action action)
+    private static void ExecuteOnAnotherThreadAndWait([InstantHandle] Action action)
     {
         var @event = new ManualResetEvent(false);
         new Thread(() =>

@@ -36,7 +36,7 @@ public sealed class InterceptorsTestCase : AbstractContainerTestCase
         AssertInterceptorReferencesAreEqual(handler, scenario);
     }
 
-    private void AssertInterceptorReferencesAreEqual(IHandler handler, InterceptorsTestCaseHelper helper)
+    private static void AssertInterceptorReferencesAreEqual(IHandler handler, InterceptorsTestCaseHelper helper)
     {
         Assert.Equal(helper.GetExpectedInterceptorsInCorrectOrder(),
             handler.ComponentModel.Interceptors);

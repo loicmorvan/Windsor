@@ -20,12 +20,12 @@ namespace Castle.Windsor.Tests.Interceptors;
 
 public class InterceptorAttributeTestCase : AbstractContainerTestCase
 {
-    private bool IsProxy(object instance)
+    private static bool IsProxy(object instance)
     {
         return instance is IProxyTargetAccessor;
     }
 
-    private IInterceptor[] GetInterceptors(object proxy)
+    private static IInterceptor[] GetInterceptors(object proxy)
     {
         return ((IProxyTargetAccessor)proxy).GetInterceptors();
     }

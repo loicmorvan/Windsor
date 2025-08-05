@@ -17,7 +17,7 @@ public class MyInterceptorGreedyFacility2 : IFacility
     {
     }
 
-    private void OnComponentRegistered(string key, IHandler handler)
+    private static void OnComponentRegistered(string key, IHandler handler)
     {
         if (handler.ComponentModel.Services.Any(s => s.Is<IInterceptor>()))
         {

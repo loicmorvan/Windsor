@@ -93,7 +93,7 @@ public class OpenGenericsTestCase : AbstractContainerTestCase
                     return k.Resolve(closedType);
                 }));
         var repo = Container.Resolve<ClassComponents.IRepository<string>>();
-        Assert.Equal(default, repo.Find());
+        Assert.Null(repo.Find());
         Assert.IsType<DoubleRepository<string, int>>(repo);
     }
 }

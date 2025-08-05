@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Components;
 
 public class AbstractCarProviderFactory
 {
-    public ICarProvider Create(User currentUser)
+    public static ICarProvider Create(User currentUser)
     {
         if (currentUser.FiscalStability == FiscalStability.MrMoneyBags)
         {

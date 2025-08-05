@@ -32,11 +32,13 @@ public class CustomLifestyleScoped : AbstractLifestyleManager
             throw new InvalidOperationException("Scope is null");
         }
 
-        if (scope.Cache.TryGetValue(Model, out var instance) == false)
+        if (scope.Cache.TryGetValue(Model, out var instance))
         {
-            instance = base.CreateInstance(context, trackedExternally);
-            scope.Cache[Model] = instance;
+            return instance;
         }
+
+        instance = base.CreateInstance(context, trackedExternally);
+        scope.Cache[Model] = instance;
 
         return instance;
     }

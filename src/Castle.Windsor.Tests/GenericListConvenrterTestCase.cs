@@ -22,24 +22,27 @@ public class GenericListConvenrterTestCase : AbstractContainerTestCase
 	[Fact]
 	public void Can_read_component_with_dictionary_of_lists()
 	{
-		const string xml = @"<configuration>
-	<components>
-		<component service=""IMyObject"" type=""MyObject"">
-			<parameters>
-				<stuff>
-					<dictionary keyType=""System.Int32, mscorlib"" valueType=""System.Collections.Generic.IList`1[[System.String, mscorlib]], mscorlib"">
-					<entry key=""0"">
-						<list>
-						<item>test1</item>
-						<item>test2</item>
-						</list>
-					</entry>
-					</dictionary>
-				</stuff>
-			</parameters>
-		</component>
-	</components>
-</configuration>";
+		const string xml =
+			"""
+			<configuration>
+				<components>
+					<component service="IMyObject" type="MyObject">
+						<parameters>
+							<stuff>
+								<dictionary keyType="System.Int32, mscorlib" valueType="System.Collections.Generic.IList`1[[System.String, mscorlib]], mscorlib">
+								<entry key="0">
+									<list>
+									<item>test1</item>
+									<item>test2</item>
+									</list>
+								</entry>
+								</dictionary>
+							</stuff>
+						</parameters>
+					</component>
+				</components>
+			</configuration>
+			""";
 
 		Container.Install(Configuration.FromXml(new StaticContentResource(xml)));
 		var item = Container.Resolve<IMyObject>();

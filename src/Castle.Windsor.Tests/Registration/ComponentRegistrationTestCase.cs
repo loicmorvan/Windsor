@@ -131,7 +131,7 @@ public class ComponentRegistrationTestCase : AbstractContainerTestCase
                     .Named("customer")
             );
         });
-        Assert.Equal(exception.Message, expectedMessage);
+        Assert.Equal(expectedMessage, exception.Message);
     }
 
     [Fact]

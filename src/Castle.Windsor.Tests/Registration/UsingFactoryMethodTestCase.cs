@@ -92,7 +92,8 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
             Component.For<User>().Instance(user),
             Component.For<AbstractCarProviderFactory>(),
             Component.For<ICarProvider>()
-                .UsingFactory((AbstractCarProviderFactory f) => f.Create(Kernel.Resolve<User>()))
+                .UsingFactory((AbstractCarProviderFactory f) =>
+                    AbstractCarProviderFactory.Create(Kernel.Resolve<User>()))
         );
         Assert.IsType<HondaProvider>(Kernel.Resolve<ICarProvider>());
     }
@@ -103,7 +104,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
         Kernel.Register(
             Component.For<ICarProvider>()
                 .UsingFactoryMethod(() =>
-                    new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
+                    AbstractCarProviderFactory.Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
         );
 
         Assert.IsType<HondaProvider>(Kernel.Resolve<ICarProvider>());
@@ -115,11 +116,11 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
         Kernel.Register(
             Component.For<ICarProvider>()
                 .UsingFactoryMethod(() =>
-                    new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.MrMoneyBags }))
+                    AbstractCarProviderFactory.Create(new User { FiscalStability = FiscalStability.MrMoneyBags }))
                 .Named("ferrariProvider"),
             Component.For<ICarProvider>()
                 .UsingFactoryMethod(() =>
-                    new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
+                    AbstractCarProviderFactory.Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
                 .Named("hondaProvider")
         );
 
@@ -133,7 +134,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
         Kernel.Register(
             Component.For<User>().Instance(new User { FiscalStability = FiscalStability.MrMoneyBags }),
             Component.For<ICarProvider>()
-                .UsingFactoryMethod(k => new AbstractCarProviderFactory().Create(k.Resolve<User>()))
+                .UsingFactoryMethod(k => AbstractCarProviderFactory.Create(k.Resolve<User>()))
         );
         Assert.IsType<FerrariProvider>(Kernel.Resolve<ICarProvider>());
     }
@@ -144,11 +145,11 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
         Kernel.Register(
             Component.For<ICarProvider>()
                 .UsingFactoryMethod(_ =>
-                    new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.MrMoneyBags }))
+                    AbstractCarProviderFactory.Create(new User { FiscalStability = FiscalStability.MrMoneyBags }))
                 .Named("ferrariProvider"),
             Component.For<ICarProvider>()
                 .UsingFactoryMethod(_ =>
-                    new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
+                    AbstractCarProviderFactory.Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
                 .Named("hondaProvider")
         );
 
@@ -164,8 +165,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
             Component.For<AbstractCarProviderFactory>(),
             Component.For<ICarProvider>()
                 .UsingFactoryMethod((k, ctx) =>
-                    new AbstractCarProviderFactory()
-                        .Create(k.Resolve<User>(ctx.AdditionalArguments)))
+                    AbstractCarProviderFactory.Create(k.Resolve<User>(ctx.AdditionalArguments)))
         );
         var carProvider =
             Kernel.Resolve<ICarProvider>(new Arguments().AddNamed("FiscalStability", FiscalStability.MrMoneyBags));

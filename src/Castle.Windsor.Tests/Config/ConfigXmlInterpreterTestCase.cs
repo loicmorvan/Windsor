@@ -154,11 +154,13 @@ public class ConfigXmlInterpreterTestCase
     {
         var facilityConfig = Configuration.FromXml(
             new StaticContentResource(
-                @"<castle>
-<facilities>
-<facility id='IAmGone' loggingApi='custom' />
-</facilities>
-</castle>"));
+                """
+                <castle>
+                <facilities>
+                <facility id='IAmGone' loggingApi='custom' />
+                </facilities>
+                </castle>
+                """));
 
         Assert.Throws<ConfigurationProcessingException>(() => { new WindsorContainer().Install(facilityConfig); });
     }
