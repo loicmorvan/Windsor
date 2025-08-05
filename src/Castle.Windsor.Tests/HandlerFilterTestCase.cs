@@ -197,7 +197,7 @@ public class HandlerFilterTestCase : AbstractContainerTestCase
 
     private class TestHandlersFilter : IHandlersFilter
     {
-        public bool OpinionWasChecked { get; set; }
+        public bool OpinionWasChecked { get; private set; }
 
         public bool HasOpinionAbout(Type service)
         {

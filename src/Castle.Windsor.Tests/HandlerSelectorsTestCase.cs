@@ -88,7 +88,7 @@ public class HandlerSelectorsTestCase
         event Action<string> OnSomethingInterestingToWatch;
     }
 
-    public class Person
+    private class Person
     {
         public readonly IWatcher Watcher;
 
@@ -103,7 +103,7 @@ public class HandlerSelectorsTestCase
         public event Action<string> OnSomethingInterestingToWatch = delegate { };
     }
 
-    public class WatchSubDependencySelector : ISubDependencyResolver
+    private class WatchSubDependencySelector : ISubDependencyResolver
     {
         public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
             ComponentModel model,
@@ -120,7 +120,7 @@ public class HandlerSelectorsTestCase
         }
     }
 
-    public class WatcherSelector : IHandlerSelector
+    private class WatcherSelector : IHandlerSelector
     {
         public Interest Interest = Interest.None;
 

@@ -22,7 +22,7 @@ public class BDisposable : B, IDisposable
     {
     }
 
-    public bool Disposed { get; set; }
+    public bool Disposed { get; private set; }
 
     [DoNotWire] public Action OnDisposing { get; set; }
 

@@ -25,9 +25,9 @@ public class UsesTwoFooDelegates
         _counter = 0;
     }
 
-    public Func<int, Foo> One { get; }
+    private Func<int, Foo> One { get; }
 
-    public Func<int, Foo> Two { get; }
+    private Func<int, Foo> Two { get; }
 
     public Foo GetFooOne()
     {

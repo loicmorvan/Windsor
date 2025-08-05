@@ -21,7 +21,7 @@ namespace Castle.Windsor.Tests.TestInfrastructure;
 [Description("statically")]
 public class StaticScopeAccessor : IScopeAccessor
 {
-    public static DefaultLifetimeScope Scope { get; private set; } = new();
+    private static DefaultLifetimeScope Scope { get; set; } = new();
 
     public void Dispose()
     {

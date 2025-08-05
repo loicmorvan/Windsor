@@ -167,30 +167,19 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
         Container.Release(a);
     }
 
-    public class Indirection
+    private class Indirection(NonDisposableRoot fakeRoot)
     {
-        public Indirection(NonDisposableRoot fakeRoot)
-        {
-            FakeRoot = fakeRoot;
-        }
-
-        public NonDisposableRoot FakeRoot { get; }
+        public NonDisposableRoot FakeRoot { get; } = fakeRoot;
     }
 
-    public class NonDisposableRoot
+    private class NonDisposableRoot(A a, B b)
     {
-        public NonDisposableRoot(A a, B b)
-        {
-            A = a;
-            B = b;
-        }
+        public A A { get; } = a;
 
-        public A A { get; }
-
-        public B B { get; }
+        public B B { get; } = b;
     }
 
-    public class A : DisposableBase;
+    private class A : DisposableBase;
 
     public class B : DisposableBase;
 

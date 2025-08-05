@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ADisposable : A, IDisposable
 {
-    public bool Disposed { get; set; }
+    public bool Disposed { get; private set; }
 
     public void Dispose()
     {

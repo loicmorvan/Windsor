@@ -14,6 +14,7 @@
 
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.Components;
 
@@ -22,6 +23,7 @@ public class BoundComponent : IComponent
 {
     public int Id => GetHashCode();
 
+    [UsedImplicitly]
     public class Binder
     {
         public IHandler Bind(IHandler[] handlers)

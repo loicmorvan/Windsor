@@ -69,7 +69,7 @@ public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTest
             FooFactory = fooFactory;
         }
 
-        public IFactory<Foo> FooFactory { get; }
+        private IFactory<Foo> FooFactory { get; }
 
         public Foo SqlConnection { get; private set; }
 

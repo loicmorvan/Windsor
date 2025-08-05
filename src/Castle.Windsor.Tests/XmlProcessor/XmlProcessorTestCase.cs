@@ -78,7 +78,7 @@ public class XmlProcessorTestCase
         }
     }
 
-    public static XmlDocument GetXmlDocument(string fileName)
+    private static XmlDocument GetXmlDocument(string fileName)
     {
         var doc = new XmlDocument();
 
