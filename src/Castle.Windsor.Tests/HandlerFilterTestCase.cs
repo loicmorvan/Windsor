@@ -208,7 +208,7 @@ public class HandlerFilterTestCase : AbstractContainerTestCase
 
             OpinionWasChecked = true;
 
-            return wasExpectedService;
+            return true;
         }
 
         public IHandler[] SelectHandlers(Type service, IHandler[] handlers)

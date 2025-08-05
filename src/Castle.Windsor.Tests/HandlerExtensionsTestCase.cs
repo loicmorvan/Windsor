@@ -24,11 +24,7 @@ public class HandlerExtensionsTestCase : AbstractContainerTestCase
     private static ComponentRegistration<A> AddResolveExtensions(ComponentRegistration<A> componentRegistration,
         params IResolveExtension[] items)
     {
-        var resolveExtensions = new List<IResolveExtension>();
-        foreach (var item in items.Distinct())
-        {
-            resolveExtensions.Add(item);
-        }
+        var resolveExtensions = items.Distinct().ToList();
 
         return componentRegistration.ExtendedProperties(Property.ForKey("Castle.ResolveExtensions")
             .Eq(resolveExtensions));
@@ -38,11 +34,7 @@ public class HandlerExtensionsTestCase : AbstractContainerTestCase
         ComponentRegistration<TComponent> componentRegistration, params IReleaseExtension[] items)
         where TComponent : class
     {
-        var releaseExtensions = new List<IReleaseExtension>();
-        foreach (var item in items.Distinct())
-        {
-            releaseExtensions.Add(item);
-        }
+        var releaseExtensions = items.Distinct().ToList();
 
         return componentRegistration.ExtendedProperties(Property.ForKey("Castle.ReleaseExtensions")
             .Eq(releaseExtensions));

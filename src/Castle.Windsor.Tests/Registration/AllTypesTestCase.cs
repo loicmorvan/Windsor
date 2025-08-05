@@ -474,7 +474,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
             .BasedOn<ITask>()
             .WithService.Select((t, _) =>
                 from type in t.GetInterfaces()
-                where !type.Equals(typeof(ITask))
+                where type != typeof(ITask)
                 select type));
         Assert.NotNull(Kernel.Resolve<ITask<object>>());
     }

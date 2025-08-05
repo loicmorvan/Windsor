@@ -22,13 +22,10 @@ public class SelectorById : DefaultTypedFactoryComponentSelector
 {
     protected override Arguments GetArguments(MethodInfo method, object[] arguments)
     {
-        if (method.Name.Equals("ComponentNamed"))
+        return method.Name.Equals("ComponentNamed")
             //empty since we don't have any actual parameters
-        {
-            return new Arguments();
-        }
-
-        return base.GetArguments(method, arguments);
+            ? new Arguments()
+            : base.GetArguments(method, arguments);
     }
 
     protected override string GetComponentName(MethodInfo method, object[] arguments)

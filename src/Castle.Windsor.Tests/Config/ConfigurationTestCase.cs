@@ -179,29 +179,31 @@ public class ConfigurationTestCase : AbstractContainerTestCase
     [Bug("IOC-73")]
     public void ShouldNotThrowCircularDependencyException()
     {
-        const string config = @"
-<configuration>
-    <facilities>
-    </facilities>
-    <components>
-        <component id='MyClass'
-            service='IEmptyService'
-            type='EmptyServiceA'/>
-        <component id='Proxy'
-            service='IEmptyService'
-            type='EmptyServiceDecorator'>
-            <parameters>
-                <other>${MyClass}</other>
-            </parameters>
-        </component>
-        <component id='ClassUser'
-            type='UsesIEmptyService'>
-            <parameters>
-                <emptyService>${Proxy}</emptyService>
-            </parameters>
-        </component>
-    </components>
-</configuration>";
+        const string config =
+            """
+            <configuration>
+                <facilities>
+                </facilities>
+                <components>
+                    <component id='MyClass'
+                        service='IEmptyService'
+                        type='EmptyServiceA'/>
+                    <component id='Proxy'
+                        service='IEmptyService'
+                        type='EmptyServiceDecorator'>
+                        <parameters>
+                            <other>${MyClass}</other>
+                        </parameters>
+                    </component>
+                    <component id='ClassUser'
+                        type='UsesIEmptyService'>
+                        <parameters>
+                            <emptyService>${Proxy}</emptyService>
+                        </parameters>
+                    </component>
+                </components>
+            </configuration>
+            """;
 
         Container.Install(Configuration.FromXml(new StaticContentResource(config)));
         var user = Container.Resolve<UsesIEmptyService>();

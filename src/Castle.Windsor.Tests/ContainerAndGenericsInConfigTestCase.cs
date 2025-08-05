@@ -20,7 +20,7 @@ namespace Castle.Windsor.Tests;
 
 public class ContainerAndGenericsInConfigTestCase : AbstractContainerTestCase
 {
-    private IWindsorInstaller FromFile(string fileName)
+    private static IWindsorInstaller FromFile(string fileName)
     {
         return Configuration.FromXmlFile(
             GetFilePath(fileName));

@@ -23,11 +23,7 @@ public class CustomLifestyleInstanceScope : IDisposable
 
     public CustomLifestyleInstanceScope()
     {
-        if (_localScopes == null)
-        {
-            _localScopes = new Stack<CustomLifestyleInstanceScope>();
-        }
-
+        _localScopes ??= new Stack<CustomLifestyleInstanceScope>();
         _localScopes.Push(this);
     }
 

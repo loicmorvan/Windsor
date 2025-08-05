@@ -131,15 +131,9 @@ public class HandlerSelectorsTestCase
 
         public IHandler SelectHandler(string key, Type service, IHandler[] handlers)
         {
-            foreach (var handler in handlers)
-            {
-                if (handler.ComponentModel.Name.ToUpper().Contains(Interest.ToString().ToUpper()))
-                {
-                    return handler;
-                }
-            }
-
-            return null;
+            return handlers.FirstOrDefault(handler => handler.ComponentModel.Name.Contains(
+                Interest.ToString(),
+                StringComparison.CurrentCultureIgnoreCase));
         }
     }
 }

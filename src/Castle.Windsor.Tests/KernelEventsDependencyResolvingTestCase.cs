@@ -74,7 +74,7 @@ public class KernelEventsDependencyResolvingTestCase : AbstractContainerTestCase
         Assert.NotNull(templateengine);
 
         _expectedClient = Kernel.GetHandler("spamservice").ComponentModel;
-        _expectedModels = new List<DependencyModel>();
+        _expectedModels = [];
         foreach (var prop in Kernel.GetHandler("spamservice").ComponentModel.Properties)
         {
             _expectedModels.Add(prop.Dependency);
@@ -102,7 +102,7 @@ public class KernelEventsDependencyResolvingTestCase : AbstractContainerTestCase
         Kernel.Register(Component.For(typeof(ICustomer)).ImplementedBy<CustomerImpl>().Named("customer"));
 
         _expectedClient = Kernel.GetHandler("customer").ComponentModel;
-        _expectedModels = new List<DependencyModel>();
+        _expectedModels = [];
         foreach (var prop in Kernel.GetHandler("customer").ComponentModel.Properties)
         {
             _expectedModels.Add(prop.Dependency);

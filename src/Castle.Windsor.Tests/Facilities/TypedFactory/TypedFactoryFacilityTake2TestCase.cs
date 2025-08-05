@@ -243,7 +243,7 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
     {
         Container.Register(Component.For<IGenericFactoryClosedDoubly>().AsFactory());
 
-        var factory = Container.Resolve<IGenericFactoryClosedDoubly>() as IGenericFactory<IDummyComponent>;
+        IGenericFactory<IDummyComponent> factory = Container.Resolve<IGenericFactoryClosedDoubly>();
 
         var component = factory.Create();
         Assert.NotNull(component);

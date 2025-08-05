@@ -315,7 +315,7 @@ public class SubContainersTestCase : AbstractContainerTestCase
         public const string Added = "added";
         public const string Removed = "removed";
 
-        public List<string> Events { get; } = new();
+        public List<string> Events { get; } = [];
 
         public void AddedAsChildKernel(object sender, EventArgs e)
         {

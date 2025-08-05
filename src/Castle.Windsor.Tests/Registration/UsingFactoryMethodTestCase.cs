@@ -92,7 +92,7 @@ public class UsingFactoryMethodTestCase : AbstractContainerTestCase
             Component.For<User>().Instance(user),
             Component.For<AbstractCarProviderFactory>(),
             Component.For<ICarProvider>()
-                .UsingFactory((AbstractCarProviderFactory f) =>
+                .UsingFactory((AbstractCarProviderFactory _) =>
                     AbstractCarProviderFactory.Create(Kernel.Resolve<User>()))
         );
         Assert.IsType<HondaProvider>(Kernel.Resolve<ICarProvider>());
