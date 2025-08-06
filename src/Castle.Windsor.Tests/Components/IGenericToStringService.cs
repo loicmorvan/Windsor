@@ -14,7 +14,7 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public interface IGenericToStringService<T> where T : class
+public interface IGenericToStringService<in T> where T : class
 {
     string ToString(params T[] instances);
 }

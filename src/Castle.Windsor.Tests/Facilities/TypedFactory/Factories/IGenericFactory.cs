@@ -14,7 +14,7 @@
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
-public interface IGenericFactory<T>
+public interface IGenericFactory<out T>
 {
     T Create();
 }

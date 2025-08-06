@@ -14,7 +14,7 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public interface IRepository<T> : IRepository
+public interface IRepository<out T> : IRepository
     where T : class
 {
     T Find();

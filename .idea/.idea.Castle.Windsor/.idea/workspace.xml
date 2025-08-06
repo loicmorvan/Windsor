@@ -7,7 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="" />
+    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -165,23 +167,7 @@
       <workItem from="1754247539777" duration="1293000" />
       <workItem from="1754334151653" duration="637000" />
       <workItem from="1754334801425" duration="4632000" />
-      <workItem from="1754421122257" duration="6142000" />
-    </task>
-    <task id="LOCAL-00018" summary="Fixed some warnings.">
-      <option name="closed" value="true" />
-      <created>1753215901363</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1753215901363</updated>
-    </task>
-    <task id="LOCAL-00019" summary="More warning fixes.">
-      <option name="closed" value="true" />
-      <created>1753221658373</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1753221658373</updated>
+      <workItem from="1754421122257" duration="7213000" />
     </task>
     <task id="LOCAL-00020" summary="Fixed some warnings.">
       <option name="closed" value="true" />
@@ -559,7 +545,23 @@
       <option name="project" value="LOCAL" />
       <updated>1754427118980</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="Refactored classes to use record-like syntax for constructor initialization, added `[UsedImplicitly]` annotations, and streamlined code by removing redundant properties and logic.">
+      <option name="closed" value="true" />
+      <created>1754427633119</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1754427633119</updated>
+    </task>
+    <task id="LOCAL-00068" summary="Added `[PublicAPI]` annotations to multiple methods and interfaces across test cases to improve API discoverability and documentation.">
+      <option name="closed" value="true" />
+      <created>1754428108542</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1754428108542</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -593,8 +595,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Refactored loops to use LINQ-based filtering and simplified logic for improved readability and consistency across applicable files." />
-    <MESSAGE value="Refactored to replace `Substring` calls with range operators for improved readability and consistency across applicable files." />
     <MESSAGE value="Streamlined type name parsing logic by simplifying conditional checks, improving code readability and consistency." />
     <MESSAGE value="Refactored loops to use LINQ-based operations, improving code readability and consistency across multiple files." />
     <MESSAGE value="Refactored loops to use LINQ-based operations, simplifying logic and improving code readability across multiple files." />
@@ -618,7 +618,9 @@
     <MESSAGE value="Made various methods `static` across multiple test cases to improve immutability, simplify usage, and ensure consistency." />
     <MESSAGE value="Refactored test cases to simplify logic using modern syntax, improved immutability, and enhanced code clarity across multiple files." />
     <MESSAGE value="Made multiple properties and methods `private` across test cases to improve encapsulation, enhance immutability, and simplify code structure." />
-    <option name="LAST_COMMIT_MESSAGE" value="Made multiple properties and methods `private` across test cases to improve encapsulation, enhance immutability, and simplify code structure." />
+    <MESSAGE value="Refactored classes to use record-like syntax for constructor initialization, added `[UsedImplicitly]` annotations, and streamlined code by removing redundant properties and logic." />
+    <MESSAGE value="Added `[PublicAPI]` annotations to multiple methods and interfaces across test cases to improve API discoverability and documentation." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added `[PublicAPI]` annotations to multiple methods and interfaces across test cases to improve API discoverability and documentation." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

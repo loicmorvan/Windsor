@@ -14,7 +14,7 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public interface IUse<T>
+public interface IUse<out T>
 {
     T Dependency { get; }
 }

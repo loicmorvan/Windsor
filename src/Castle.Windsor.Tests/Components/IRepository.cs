@@ -14,7 +14,7 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public interface IRepository<T>
+public interface IRepository<out T>
 {
     T Get(int id);
 }
