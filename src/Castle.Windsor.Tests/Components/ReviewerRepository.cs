@@ -12,8 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.Components;
 
+[UsedImplicitly]
 public class ReviewerRepository : DemoRepository<IReviewer>
 {
     public new ICache<IReviewer> Cache { get; set; }

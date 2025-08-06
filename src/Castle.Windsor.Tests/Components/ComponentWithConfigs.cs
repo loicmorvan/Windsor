@@ -14,10 +14,12 @@
 
 using System.Collections;
 using Castle.Windsor.Core;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.Components;
 
 [Transient]
+[UsedImplicitly]
 public class ComponentWithConfigs
 {
     public ComponentWithConfigs(string name, int port, IDictionary dict)

@@ -9,6 +9,10 @@
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ConfigHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ConfigHelper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Factories/IGenericFactoryDouble.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Factories/IGenericFactoryDouble.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/SelectAllSelector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/SelectAllSelector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/UsingString.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/UsingString.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,14 +172,7 @@
       <workItem from="1754334151653" duration="637000" />
       <workItem from="1754334801425" duration="4632000" />
       <workItem from="1754421122257" duration="7213000" />
-    </task>
-    <task id="LOCAL-00020" summary="Fixed some warnings.">
-      <option name="closed" value="true" />
-      <created>1753302334423</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1753302334423</updated>
+      <workItem from="1754508214767" duration="2002000" />
     </task>
     <task id="LOCAL-00021" summary="Fixed warnings">
       <option name="closed" value="true" />
@@ -561,7 +558,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754428108542</updated>
     </task>
-    <option name="localTasksCounter" value="69" />
+    <task id="LOCAL-00069" summary="Marked type parameters as `in` or `out` in multiple generic interfaces to improve covariance and contravariance support across test cases.">
+      <option name="closed" value="true" />
+      <created>1754508794855</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1754508794855</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -595,7 +600,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Streamlined type name parsing logic by simplifying conditional checks, improving code readability and consistency." />
     <MESSAGE value="Refactored loops to use LINQ-based operations, improving code readability and consistency across multiple files." />
     <MESSAGE value="Refactored loops to use LINQ-based operations, simplifying logic and improving code readability across multiple files." />
     <MESSAGE value="Refactored `switch` statements to use expression syntax, added `[PublicAPI]` annotations, improved null checks with null-conditional operators, and streamlined formatting for improved clarity and consistency across multiple files." />
@@ -620,7 +624,8 @@
     <MESSAGE value="Made multiple properties and methods `private` across test cases to improve encapsulation, enhance immutability, and simplify code structure." />
     <MESSAGE value="Refactored classes to use record-like syntax for constructor initialization, added `[UsedImplicitly]` annotations, and streamlined code by removing redundant properties and logic." />
     <MESSAGE value="Added `[PublicAPI]` annotations to multiple methods and interfaces across test cases to improve API discoverability and documentation." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added `[PublicAPI]` annotations to multiple methods and interfaces across test cases to improve API discoverability and documentation." />
+    <MESSAGE value="Marked type parameters as `in` or `out` in multiple generic interfaces to improve covariance and contravariance support across test cases." />
+    <option name="LAST_COMMIT_MESSAGE" value="Marked type parameters as `in` or `out` in multiple generic interfaces to improve covariance and contravariance support across test cases." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

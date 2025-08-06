@@ -13,6 +13,7 @@
 // limitations under the License.using System;
 
 using Castle.Windsor.MicroKernel.SubSystems.Conversion;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.Config.Components;
 
@@ -21,6 +22,7 @@ public class ClassWithComplexParameter
     public ComplexParameterType ComplexParam { get; set; }
 
     [Convertible]
+    [UsedImplicitly]
     public class ComplexParameterType
     {
         public ComplexParameterType()

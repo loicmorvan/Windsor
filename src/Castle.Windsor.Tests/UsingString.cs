@@ -1,11 +1,9 @@
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests;
 
-public class UsingString
+[UsedImplicitly]
+public class UsingString(string parameter)
 {
-    public UsingString(string parameter)
-    {
-        Parameter = parameter;
-    }
-
-    public string Parameter { get; }
+    public string Parameter { get; } = parameter;
 }

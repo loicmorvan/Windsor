@@ -14,9 +14,11 @@
 
 using System.Reflection;
 using Castle.DynamicProxy;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests;
 
+[UsedImplicitly]
 public class SelectAllSelector : IInterceptorSelector
 {
     public static int Instances;

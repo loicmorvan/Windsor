@@ -13,9 +13,11 @@
 // limitations under the License.
 
 using Castle.Windsor.Core;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.Components;
 
+[UsedImplicitly]
 public class ClassWithDoNotWireProperties
 {
     [DoNotWire] public string Host { get; set; }

@@ -12,8 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.Components;
 
+[UsedImplicitly]
 public class ExtendedComponentWithProperties : ComponentWithProperties
 {
     public int Prop3 { get; set; }

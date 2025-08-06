@@ -13,8 +13,10 @@
 // limitations under the License.
 
 using Castle.Windsor.Core;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.ComponentsWithAttribute;
 
 [CastleComponent("keyTransient", Lifestyle = LifestyleType.Transient)]
+[UsedImplicitly]
 public class HasKeyTransient;

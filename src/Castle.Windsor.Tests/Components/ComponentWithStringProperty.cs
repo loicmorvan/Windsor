@@ -12,8 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.Components;
 
+[UsedImplicitly]
 public class ComponentWithStringProperty
 {
 	/// <summary>Initializes a new instance of the <see cref="ComponentWithStringProperty" /> class.</summary>
