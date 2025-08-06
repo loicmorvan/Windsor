@@ -17,6 +17,7 @@ using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests;
 
@@ -85,7 +86,7 @@ public class HandlerSelectorsTestCase
 
     public interface IWatcher
     {
-        event Action<string> OnSomethingInterestingToWatch;
+        [UsedImplicitly] event Action<string> OnSomethingInterestingToWatch;
     }
 
     private class Person
