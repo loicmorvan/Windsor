@@ -19,6 +19,7 @@ namespace Castle.Windsor.Tests.Components;
 
 /// <summary>Summary description for CalculatorServiceWithAttributes.</summary>
 [Interceptor(typeof(ResultModifierInterceptor))]
+// ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public class CalculatorServiceWithAttributes
 {
     public virtual int Sum(int x, int y)
