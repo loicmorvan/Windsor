@@ -18,9 +18,7 @@ using System.Text;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor.MicroKernel.SubSystems.Resource;
 using Castle.Windsor.Windsor.Configuration;
-using Castle.Windsor.Windsor.Configuration.Interpreters;
 using Castle.Windsor.Windsor.Diagnostics;
 using Castle.Windsor.Windsor.Installer;
 using Castle.Windsor.Windsor.Proxy;
@@ -75,23 +73,6 @@ public sealed class WindsorContainer :
         ArgumentNullException.ThrowIfNull(environmentInfo);
 
         interpreter.EnvironmentName = environmentInfo.GetEnvironmentName();
-        interpreter.ProcessResource(interpreter.Source, Kernel.ConfigurationStore, Kernel);
-
-        RunInstaller();
-    }
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="WindsorContainer" /> class using a resource pointed to by the
-    ///     parameter. That may be a file, an assembly embedded resource, a UNC path or a config
-    ///     file section.
-    ///     <para>Equivalent to the use of <c>new WindsorContainer(new XmlInterpreter(configurationUri))</c></para>
-    /// </summary>
-    /// <param name="configurationUri">The XML file.</param>
-    public WindsorContainer(string configurationUri) : this()
-    {
-        ArgumentNullException.ThrowIfNull(configurationUri);
-
-        var interpreter = GetInterpreter(configurationUri);
         interpreter.ProcessResource(interpreter.Source, Kernel.ConfigurationStore, Kernel);
 
         RunInstaller();
@@ -495,21 +476,6 @@ public sealed class WindsorContainer :
         }
 
         scope.SetUp(this, store);
-    }
-
-    private XmlInterpreter GetInterpreter(string configurationUri)
-    {
-        try
-        {
-            var resources = (IResourceSubSystem)Kernel.GetSubSystem(SubSystemConstants.ResourceKey);
-            var resource = resources.CreateResource(configurationUri);
-            return new XmlInterpreter(resource);
-        }
-        catch (Exception)
-        {
-            // We fallback to the old behavior
-            return new XmlInterpreter(configurationUri);
-        }
     }
 
     private static string MakeUniqueName()

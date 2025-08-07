@@ -15,14 +15,12 @@
 using System.Diagnostics;
 using System.Reflection;
 using Castle.Core.Configuration;
-using Castle.Core.Resource;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor.MicroKernel.SubSystems.Conversion;
-using Castle.Windsor.Windsor.Configuration.Interpreters;
 
 namespace Castle.Windsor.Windsor.Installer;
 
@@ -40,7 +38,6 @@ public sealed class DefaultComponentInstaller : IComponentsInstaller
         SetUpInstallers(store.GetInstallers(), container, converter);
         SetUpFacilities(store.GetFacilities(), container, converter);
         SetUpComponents(store.GetComponents(), container, converter);
-        SetUpChildContainers(store.GetConfigurationForChildContainers(), container);
     }
 
     private void SetUpInstallers(IConfiguration[] installers, IWindsorContainer container,
@@ -248,22 +245,6 @@ public sealed class DefaultComponentInstaller : IComponentsInstaller
                 throw new ComponentRegistrationException(
                     $"Component {component.Attributes["id"]} defines invalid forwarded type.", e);
             }
-        }
-    }
-
-    private static void SetUpChildContainers(IConfiguration[] configurations, IWindsorContainer parentContainer)
-    {
-        foreach (var childContainerConfig in configurations)
-        {
-            var id = childContainerConfig.Attributes["name"];
-
-            Debug.Assert(id != null);
-
-            // ReSharper disable once ObjectCreationAsStatement : WTF is that?
-#pragma warning disable CA1806
-            new WindsorContainer(id, parentContainer,
-#pragma warning restore CA1806
-                new XmlInterpreter(new StaticContentResource(childContainerConfig.Value)));
         }
     }
 }
