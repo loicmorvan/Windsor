@@ -26,6 +26,7 @@ public class HasTwoConstructors2
         Param = param;
     }
 
+    // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
     public string Param { get; set; }
     public ICommon Common { get; set; }
 }

@@ -39,6 +39,7 @@ public class ClassWithComplexParameter
 
         public string MandatoryValue { get; }
 
+        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
         public string OptionalValue { get; set; }
     }
 }

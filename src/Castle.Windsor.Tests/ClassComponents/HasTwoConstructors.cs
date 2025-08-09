@@ -26,6 +26,6 @@ public class HasTwoConstructors
         Common = common;
     }
 
-    public ICommon Common { get; set; }
+    public ICommon Common { get; }
     public ICustomer Customer { get; set; }
 }

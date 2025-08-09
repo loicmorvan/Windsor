@@ -27,5 +27,5 @@ public class ServiceFactory
         Factory = factory;
     }
 
-    public Func<ServiceRedirect> Factory { get; set; }
+    public Func<ServiceRedirect> Factory { get; }
 }
