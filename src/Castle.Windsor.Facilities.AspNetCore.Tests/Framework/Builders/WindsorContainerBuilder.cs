@@ -31,14 +31,14 @@ public static class WindsorContainerBuilder
     {
         var container = new WindsorContainer().AddFacility<AspNetCoreFacility>(f => f.CrossWiresInto(services));
 
-        RegisterApplicationComponents(container, services);
+        RegisterApplicationComponents(container);
 
         services.AddWindsor(container, configure, serviceProviderFactory);
 
         return container;
     }
 
-    private static void RegisterApplicationComponents(IWindsorContainer container, IServiceCollection serviceCollection)
+    private static void RegisterApplicationComponents(IWindsorContainer container)
     {
         ModelInstaller.RegisterWindsor(container);
         ModelInstaller.RegisterCrossWired(container);
