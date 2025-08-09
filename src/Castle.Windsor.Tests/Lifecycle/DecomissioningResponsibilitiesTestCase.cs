@@ -195,25 +195,20 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
     // ReSharper disable once UnusedTypeParameter
     public class GenB<T> : DisposableBase;
 
-    public class DisposableSpamService : DisposableBase
+    public class DisposableSpamService(
+        DisposableTemplateEngine templateEngine,
+        PoolableComponent1 pool)
+        : DisposableBase
     {
-        public DisposableSpamService(DisposableTemplateEngine templateEngine)
+        public DisposableSpamService(DisposableTemplateEngine templateEngine) : this(templateEngine, null)
         {
-            TemplateEngine = templateEngine;
-        }
-
-        public DisposableSpamService(DisposableTemplateEngine templateEngine,
-            PoolableComponent1 pool)
-        {
-            TemplateEngine = templateEngine;
-            Pool = pool;
         }
 
         public DefaultMailSenderService MailSender { get; set; }
 
-        public PoolableComponent1 Pool { get; }
+        public PoolableComponent1 Pool { get; } = pool;
 
-        public DisposableTemplateEngine TemplateEngine { get; }
+        public DisposableTemplateEngine TemplateEngine { get; } = templateEngine;
     }
 
     public class DisposableTemplateEngine : DisposableBase;

@@ -19,11 +19,8 @@ namespace Castle.Windsor.Tests.ProxyInfrastructure;
 
 public class ProxyAllHook : IProxyGenerationHook
 {
-    public static int Instances;
-
-    public ProxyAllHook()
+    protected ProxyAllHook()
     {
-        Instances++;
     }
 
     public void MethodsInspected()

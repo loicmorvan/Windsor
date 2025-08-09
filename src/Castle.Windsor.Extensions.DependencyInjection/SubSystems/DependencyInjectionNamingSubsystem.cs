@@ -24,18 +24,7 @@ public class DependencyInjectionNamingSubsystem : DefaultNamingSubSystem
 {
     private IHandler[] GetHandlersInRegisterOrderNoLock(Type service)
     {
-        var handlers = new List<IHandler>();
-        foreach (var handler in Name2Handler.Values)
-        {
-            if (handler.Supports(service) == false)
-            {
-                continue;
-            }
-
-            handlers.Add(handler);
-        }
-
-        return handlers.ToArray();
+        return Name2Handler.Values.Where(handler => handler.Supports(service)).ToArray();
     }
 
     public override IHandler[] GetHandlers(Type service)
@@ -81,25 +70,20 @@ public class DependencyInjectionNamingSubsystem : DefaultNamingSubSystem
             return handler;
         }
 
-        if (service.GetTypeInfo().IsGenericType && service.GetTypeInfo().IsGenericTypeDefinition == false)
+        if (!service.GetTypeInfo().IsGenericType || service.GetTypeInfo().IsGenericTypeDefinition)
         {
-            var openService = service.GetGenericTypeDefinition();
-            if (HandlerByServiceCache.TryGetValue(openService, out handler) && handler.Supports(service))
-            {
-                return handler;
-            }
-
-            //use original, priority-based GetHandlers
-            var handlerCandidates = base.GetHandlers(openService);
-            foreach (var handlerCandidate in handlerCandidates)
-            {
-                if (handlerCandidate.Supports(service))
-                {
-                    return handlerCandidate;
-                }
-            }
+            return null;
         }
 
-        return null;
+        var openService = service.GetGenericTypeDefinition();
+        if (HandlerByServiceCache.TryGetValue(openService, out handler) && handler.Supports(service))
+        {
+            return handler;
+        }
+
+        //use original, priority-based GetHandlers
+        var handlerCandidates = base.GetHandlers(openService);
+        return handlerCandidates.FirstOrDefault(handlerCandidate => handlerCandidate.Supports(service));
+
     }
 }

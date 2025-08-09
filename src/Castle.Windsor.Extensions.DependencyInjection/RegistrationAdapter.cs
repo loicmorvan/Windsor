@@ -119,17 +119,12 @@ internal class RegistrationAdapter
     private static ComponentRegistration<TService> ResolveLifestyle<TService>(
         ComponentRegistration<TService> registration, ServiceDescriptor service) where TService : class
     {
-        switch (service.Lifetime)
+        return service.Lifetime switch
         {
-            case ServiceLifetime.Singleton:
-                return registration.LifeStyle.NetStatic();
-            case ServiceLifetime.Scoped:
-                return registration.LifeStyle.ScopedToNetServiceScope();
-            case ServiceLifetime.Transient:
-                return registration.LifestyleNetTransient();
-
-            default:
-                throw new ArgumentException($"Invalid lifetime {service.Lifetime}");
-        }
+            ServiceLifetime.Singleton => registration.LifeStyle.NetStatic(),
+            ServiceLifetime.Scoped => registration.LifeStyle.ScopedToNetServiceScope(),
+            ServiceLifetime.Transient => registration.LifestyleNetTransient(),
+            _ => throw new ArgumentException($"Invalid lifetime {service.Lifetime}")
+        };
     }
 }

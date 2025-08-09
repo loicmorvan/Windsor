@@ -37,18 +37,10 @@ public abstract class FromDescriptor(Predicate<Type> additionalFilters) : IRegis
 
     private void RegisterTypeWithCriteria(IKernelInternal kernel, Type type)
     {
-        foreach (var criteria in _criterias)
+        foreach (var unused in _criterias
+                     .Where(criteria => criteria.TryRegister(type, kernel))
+                     .Where(_ => !_allowMultipleMatches))
         {
-            if (!criteria.TryRegister(type, kernel))
-            {
-                continue;
-            }
-
-            if (_allowMultipleMatches)
-            {
-                continue;
-            }
-
             break;
         }
     }

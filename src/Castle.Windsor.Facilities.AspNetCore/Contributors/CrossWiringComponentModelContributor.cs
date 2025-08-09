@@ -50,26 +50,29 @@ public class CrossWiringComponentModelContributor : IContributeComponentModelCon
 
             foreach (var serviceType in model.Services)
             {
-                if (model.LifestyleType == LifestyleType.Transient)
+                switch (model.LifestyleType)
                 {
-                    Services.AddTransient(serviceType, _ => kernel.Resolve(key, serviceType));
-                }
-                else if (model.LifestyleType == LifestyleType.Scoped)
-                {
-                    Services.AddScoped(serviceType, _ =>
-                    {
-                        kernel.RequireScope();
-                        return kernel.Resolve(key, serviceType);
-                    });
-                }
-                else if (model.LifestyleType == LifestyleType.Singleton)
-                {
-                    Services.AddSingleton(serviceType, _ => kernel.Resolve(key, serviceType));
-                }
-                else
-                {
-                    throw new NotSupportedException(
-                        $"The Castle Windsor ASP.NET Core facility only supports the following lifestyles: {nameof(LifestyleType.Transient)}, {nameof(LifestyleType.Scoped)} and {nameof(LifestyleType.Singleton)}.");
+                    case LifestyleType.Transient:
+                        Services.AddTransient(serviceType, _ => kernel.Resolve(key, serviceType));
+                        break;
+                    case LifestyleType.Scoped:
+                        Services.AddScoped(serviceType, _ =>
+                        {
+                            kernel.RequireScope();
+                            return kernel.Resolve(key, serviceType);
+                        });
+                        break;
+                    case LifestyleType.Singleton:
+                        Services.AddSingleton(serviceType, _ => kernel.Resolve(key, serviceType));
+                        break;
+                    case LifestyleType.Undefined:
+                    case LifestyleType.Thread:
+                    case LifestyleType.Pooled:
+                    case LifestyleType.Custom:
+                    case LifestyleType.Bound:
+                    default:
+                        throw new NotSupportedException(
+                            $"The Castle Windsor ASP.NET Core facility only supports the following lifestyles: {nameof(LifestyleType.Transient)}, {nameof(LifestyleType.Scoped)} and {nameof(LifestyleType.Singleton)}.");
                 }
             }
         }
