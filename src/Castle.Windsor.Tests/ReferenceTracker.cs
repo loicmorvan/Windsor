@@ -101,29 +101,4 @@ public readonly struct ReferenceTracker<T> where T : class
 
         action.Invoke((T)target);
     }
-
-    /// <summary>
-    ///     <para>
-    ///         Calls <see cref="GC.Collect()" /> and asserts that the tracked instance is still alive, passes it to the
-    ///         specified function, and returns the value returned by the specified function.
-    ///     </para>
-    ///     <para>
-    ///         Be careful not to let the tracked instance become reachable via a local variable in the test method or it will
-    ///         be kept alive until the end of the test method if the runtime is in debug mode.
-    ///         (See <see cref="Track" />.)
-    ///     </para>
-    /// </summary>
-    public TReturn AssertStillReferencedAndDo<TReturn>(Func<T, TReturn> func)
-    {
-        ArgumentNullException.ThrowIfNull(func);
-
-        GC.Collect();
-        var target = _weakReference.Target;
-        if (target is null)
-        {
-            Assert.Fail("The tracked instance is not longer referenced.");
-        }
-
-        return func.Invoke((T)target);
-    }
 }

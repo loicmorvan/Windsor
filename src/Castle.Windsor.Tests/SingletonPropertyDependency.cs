@@ -5,7 +5,4 @@ namespace Castle.Windsor.Tests;
 
 [Singleton]
 [UsedImplicitly]
-public class SingletonPropertyDependency
-{
-    public SingletonPropertyComponent Component { get; set; }
-}
+public class SingletonPropertyDependency;

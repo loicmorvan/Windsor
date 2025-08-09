@@ -15,6 +15,7 @@
 using Castle.Windsor.Extensions.DependencyInjection.Scope;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.Registration.Lifestyle;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Extensions.DependencyInjection.Extensions;
 
@@ -54,6 +55,7 @@ public static class WindsorExtensions
 	/// </summary>
 	/// <param name="descriptor">Service descriptor</param>
 	/// <returns></returns>
+	[PublicAPI]
 	public static BasedOnDescriptor ScopedToNetServiceScope(this BasedOnDescriptor descriptor)
 	{
 		return descriptor.Configure(reg => reg.LifeStyle.ScopedToNetServiceScope());
@@ -62,6 +64,7 @@ public static class WindsorExtensions
 	/// <summary>Returns new instances everytime it's resolved but disposes it on <see name="IServiceScope" /> end</summary>
 	/// <param name="descriptor">Service descriptor</param>
 	/// <returns></returns>
+	[PublicAPI]
 	public static BasedOnDescriptor LifestyleNetTransient(this BasedOnDescriptor descriptor)
 	{
 		return descriptor.Configure(reg => reg.LifestyleNetTransient());
@@ -70,6 +73,7 @@ public static class WindsorExtensions
 	/// <summary>Singleton instance with .NET Core semantics</summary>
 	/// <param name="descriptor">Service descriptor</param>
 	/// <returns></returns>
+	[PublicAPI]
 	public static BasedOnDescriptor LifestyleNetStatic(this BasedOnDescriptor descriptor)
 	{
 		return descriptor.Configure(reg => reg.LifeStyle.NetStatic());

@@ -86,6 +86,7 @@ public static class WindsorRegistrationExtensions
 	/// <returns>
     ///     <see cref="ComponentRegistration" />
 	/// </returns>
+    [PublicAPI]
 	public static ComponentRegistration AsMiddleware(this ComponentRegistration registration)
     {
         registration.Attribute(AspNetCoreFacility.IsRegisteredAsMiddlewareIntoApplicationBuilderKey)
