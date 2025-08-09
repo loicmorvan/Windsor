@@ -51,9 +51,9 @@ internal static class AspNetCoreMvcExtensions
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(activator);
 
-        applicationTypeSelector = applicationTypeSelector ?? (type =>
+        applicationTypeSelector ??= type =>
             !type.GetTypeInfo().Namespace.StartsWith("Microsoft") &&
-            !type.GetTypeInfo().Name.Contains("__Generated__"));
+            !type.GetTypeInfo().Name.Contains("__Generated__");
 
         services.AddSingleton<ITagHelperActivator>(provider =>
             new DelegatingTagHelperActivator(

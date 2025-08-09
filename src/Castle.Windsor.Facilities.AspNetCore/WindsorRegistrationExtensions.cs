@@ -17,6 +17,7 @@ using Castle.Windsor.MicroKernel.Lifestyle;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor.Windsor;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -41,6 +42,7 @@ public static class WindsorRegistrationExtensions
     ///     and viewComponents
     /// </param>
     /// <param name="serviceProviderFactory">Optional factory for creating a custom <see cref="IServiceProvider" /></param>
+    [PublicAPI]
     public static IServiceProvider AddWindsor(this IServiceCollection services, IWindsorContainer container,
         Action<WindsorRegistrationOptions> configure = null, Func<IServiceProvider> serviceProviderFactory = null)
     {

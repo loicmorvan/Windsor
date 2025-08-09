@@ -15,6 +15,7 @@
 using System.Reflection;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Facilities.AspNetCore;
 
@@ -36,11 +37,11 @@ public class WindsorRegistrationOptions
         {
             try
             {
-                _entryAssembly = _entryAssembly ?? Assembly.GetEntryAssembly();
+                _entryAssembly ??= Assembly.GetEntryAssembly();
             }
             catch
             {
-                _entryAssembly = _entryAssembly ?? Assembly.GetCallingAssembly();
+                _entryAssembly ??= Assembly.GetCallingAssembly();
             }
 
             return _entryAssembly;
@@ -119,6 +120,7 @@ public class WindsorRegistrationOptions
     /// </param>
     /// <param name="lifestyleType">The lifestyle of the controllers. Defaults to <see cref="LifestyleType.Scoped" />.</param>
     /// <returns><see cref="WindsorRegistrationOptions" /> as a fluent interface</returns>
+    [PublicAPI]
     public WindsorRegistrationOptions RegisterViewComponents(Assembly viewComponentsAssembly = null,
         LifestyleType lifestyleType = LifestyleType.Scoped)
     {
@@ -130,6 +132,7 @@ public class WindsorRegistrationOptions
     /// <param name="registrations"><see cref="ComponentRegistration" /> for more details</param>
     /// <returns></returns>
     /// <returns><see cref="WindsorRegistrationOptions" /> as a fluent interface</returns>
+    [PublicAPI]
     public WindsorRegistrationOptions RegisterViewComponents(params IRegistration[] registrations)
     {
         ViewComponentComponentRegistrations.AddRange(registrations);

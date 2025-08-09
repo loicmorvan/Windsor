@@ -50,7 +50,7 @@ public class MiddlewareComponentModelContributor : IContributeComponentModelCons
             {
                 var windsorScope = kernel.BeginScope();
                 var serviceProviderScope =
-                    (_provider = _provider ?? _services.BuildServiceProvider()).CreateScope();
+                    (_provider ??= _services.BuildServiceProvider()).CreateScope();
                 try
                 {
                     var middleware = (IMiddleware)kernel.Resolve(service);

@@ -8,11 +8,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/Extensions/ServiceDescriptorExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/Extensions/ServiceDescriptorExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/RegistrationAdapter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/RegistrationAdapter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/Resolvers/RegisteredCollectionResolver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/Resolvers/RegisteredCollectionResolver.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/WindsorScopedServiceProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/WindsorScopedServiceProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/AspNetCoreMvcExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/AspNetCoreMvcExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/Contributors/MiddlewareComponentModelContributor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/Contributors/MiddlewareComponentModelContributor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/WindsorRegistrationExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/WindsorRegistrationExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/WindsorRegistrationOptions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/WindsorRegistrationOptions.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -173,31 +172,7 @@
       <workItem from="1754334801425" duration="4632000" />
       <workItem from="1754421122257" duration="7213000" />
       <workItem from="1754508214767" duration="2002000" />
-      <workItem from="1754769680087" duration="801000" />
-    </task>
-    <task id="LOCAL-00022" summary="Fixed warnings">
-      <option name="closed" value="true" />
-      <created>1753304569098</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1753304569098</updated>
-    </task>
-    <task id="LOCAL-00023" summary="Fixed some warnings and removed conditional compilation symbols.">
-      <option name="closed" value="true" />
-      <created>1753393544267</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1753393544267</updated>
-    </task>
-    <task id="LOCAL-00024" summary="Fixed more warnings.">
-      <option name="closed" value="true" />
-      <created>1753545279883</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1753545279883</updated>
+      <workItem from="1754769680087" duration="1767000" />
     </task>
     <task id="LOCAL-00025" summary="Fixed more warnings.">
       <option name="closed" value="true" />
@@ -567,7 +542,31 @@
       <option name="project" value="LOCAL" />
       <updated>1754601428459</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="Simplified conditional patterns across multiple classes to improve readability and reduce redundancy.">
+      <option name="closed" value="true" />
+      <created>1754770737941</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1754770737942</updated>
+    </task>
+    <task id="LOCAL-00072" summary="Refactored multiple classes to reduce redundancy, improve readability, and adopt modern syntax patterns across core files and test cases. Added `[UsedImplicitly]` annotations where necessary to enhance code clarity.">
+      <option name="closed" value="true" />
+      <created>1754771041930</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1754771041930</updated>
+    </task>
+    <task id="LOCAL-00073" summary="Simplified conditional logic and streamlined method structures in `MiddlewareComponentModelContributor` and `CrossWiringComponentModelContributor` to improve readability and maintainability. Updated test class constructors to adopt more concise parameter initialization.">
+      <option name="closed" value="true" />
+      <created>1754771167558</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1754771167558</updated>
+    </task>
+    <option name="localTasksCounter" value="74" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -601,9 +600,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Refactored loops to use LINQ-based operations, simplifying logic and improving code readability across multiple files." />
-    <MESSAGE value="Refactored `switch` statements to use expression syntax, added `[PublicAPI]` annotations, improved null checks with null-conditional operators, and streamlined formatting for improved clarity and consistency across multiple files." />
-    <MESSAGE value="Made private methods `static` in `ParametersDescriptor` and `ServiceOverrideDescriptor` to improve clarity and enforce non-reliance on instance state." />
     <MESSAGE value="Added `[PublicAPI]` annotations, replaced null checks with null-conditional operators, and refactored to simplify logic and improve consistency across multiple files." />
     <MESSAGE value="Replaced `static readonly` fields with `const` across applicable files to improve immutability and optimize performance." />
     <MESSAGE value="Made classes `sealed` where applicable, added `[PublicAPI]` annotations, replaced virtual methods with concrete implementations, and simplified logic for improved consistency and readability across multiple files." />
@@ -626,7 +622,10 @@
     <MESSAGE value="Added `[PublicAPI]` annotations to multiple methods and interfaces across test cases to improve API discoverability and documentation." />
     <MESSAGE value="Marked type parameters as `in` or `out` in multiple generic interfaces to improve covariance and contravariance support across test cases." />
     <MESSAGE value="Removed `XmlInterpreter` and related classes, tests, and implementation references to simplify and modernize the codebase." />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed `XmlInterpreter` and related classes, tests, and implementation references to simplify and modernize the codebase." />
+    <MESSAGE value="Simplified conditional patterns across multiple classes to improve readability and reduce redundancy." />
+    <MESSAGE value="Refactored multiple classes to reduce redundancy, improve readability, and adopt modern syntax patterns across core files and test cases. Added `[UsedImplicitly]` annotations where necessary to enhance code clarity." />
+    <MESSAGE value="Simplified conditional logic and streamlined method structures in `MiddlewareComponentModelContributor` and `CrossWiringComponentModelContributor` to improve readability and maintainability. Updated test class constructors to adopt more concise parameter initialization." />
+    <option name="LAST_COMMIT_MESSAGE" value="Simplified conditional logic and streamlined method structures in `MiddlewareComponentModelContributor` and `CrossWiringComponentModelContributor` to improve readability and maintainability. Updated test class constructors to adopt more concise parameter initialization." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
