@@ -29,7 +29,7 @@ public class Xml
         return resource;
     }
 
-    public static string EmbeddedPath(string name)
+    private static string EmbeddedPath(string name)
     {
         return EmbeddedRootPath + name;
     }
@@ -41,7 +41,7 @@ public class Xml
         return resource;
     }
 
-    public static string FilePath(string name)
+    private static string FilePath(string name)
     {
         var fullPath = Path.Combine(AppContext.BaseDirectory, "XmlFiles/" + name);
         return fullPath;

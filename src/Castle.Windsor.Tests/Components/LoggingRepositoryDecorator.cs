@@ -19,7 +19,7 @@ namespace Castle.Windsor.Tests.Components;
 [UsedImplicitly]
 public class LoggingRepositoryDecorator<T> : IRepository<T>
 {
-    public readonly IRepository<T> Inner;
+    private readonly IRepository<T> _inner;
 
     public LoggingRepositoryDecorator()
     {
@@ -27,12 +27,12 @@ public class LoggingRepositoryDecorator<T> : IRepository<T>
 
     public LoggingRepositoryDecorator(IRepository<T> inner)
     {
-        Inner = inner;
+        _inner = inner;
     }
 
     public T Get(int id)
     {
         Console.WriteLine(@"Getting {0}", id);
-        return Inner.Get(id);
+        return _inner.Get(id);
     }
 }

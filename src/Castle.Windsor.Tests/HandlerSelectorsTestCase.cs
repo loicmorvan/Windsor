@@ -23,7 +23,7 @@ namespace Castle.Windsor.Tests;
 
 public class HandlerSelectorsTestCase
 {
-    public enum Interest
+    private enum Interest
     {
         None,
         Biology,

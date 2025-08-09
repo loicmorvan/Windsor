@@ -21,16 +21,16 @@ namespace Castle.Windsor.Tests.ProxyInfrastructure;
 
 public class OnBehalfAwareInterceptorSelector : IInterceptorSelector, IOnBehalfAware
 {
-    public static ComponentModel Target;
+    private static ComponentModel _target;
 
     public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
     {
-        Assert.NotNull(Target);
+        Assert.NotNull(_target);
         return interceptors;
     }
 
     public void SetInterceptedComponentModel(ComponentModel target)
     {
-        Target = target;
+        _target = target;
     }
 }
