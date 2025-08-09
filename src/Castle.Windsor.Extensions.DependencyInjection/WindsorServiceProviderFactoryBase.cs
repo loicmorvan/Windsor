@@ -21,6 +21,7 @@ using Castle.Windsor.Extensions.DependencyInjection.SubSystems;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Castle.Windsor.Extensions.DependencyInjection;
@@ -30,6 +31,7 @@ public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactor
     private IWindsorContainer _rootContainer;
     private ExtensionContainerRootScope _rootScope;
 
+    [PublicAPI]
     public virtual IWindsorContainer Container => _rootContainer;
 
     public virtual IWindsorContainer CreateBuilder(IServiceCollection services)
@@ -42,22 +44,26 @@ public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactor
         return container.Resolve<IServiceProvider>();
     }
 
+    [PublicAPI]
     protected virtual void CreateRootScope()
     {
         _rootScope = ExtensionContainerRootScope.BeginRootScope();
     }
 
+    [PublicAPI]
     protected virtual void CreateRootContainer()
     {
         SetRootContainer(new WindsorContainer());
     }
 
+    [PublicAPI]
     protected virtual void SetRootContainer(IWindsorContainer container)
     {
         _rootContainer = container;
         AddSubSystemToContainer(_rootContainer);
     }
 
+    [PublicAPI]
     protected virtual void AddSubSystemToContainer(IWindsorContainer container)
     {
         container.Kernel.AddSubSystem(
@@ -66,6 +72,7 @@ public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactor
         );
     }
 
+    [PublicAPI]
     protected virtual IWindsorContainer BuildContainer(IServiceCollection serviceCollection,
         IWindsorContainer windsorContainer)
     {
@@ -92,6 +99,7 @@ public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactor
         return _rootContainer;
     }
 
+    [PublicAPI]
     protected virtual void RegisterContainer(IWindsorContainer container)
     {
         container.Register(
@@ -100,6 +108,7 @@ public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactor
                 .Instance(container));
     }
 
+    [PublicAPI]
     protected virtual void RegisterProviders(IWindsorContainer container)
     {
         container.Register(Component
@@ -108,6 +117,7 @@ public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactor
             .LifeStyle.ScopedToNetServiceScope());
     }
 
+    [PublicAPI]
     protected virtual void RegisterFactories(IWindsorContainer container)
     {
         container.Register(Component
@@ -121,6 +131,7 @@ public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactor
                 .LifestyleSingleton());
     }
 
+    [PublicAPI]
     protected virtual void RegisterServiceCollection(IServiceCollection serviceCollection, IWindsorContainer container)
     {
         foreach (var service in serviceCollection)
@@ -129,6 +140,7 @@ public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactor
         }
     }
 
+    [PublicAPI]
     protected virtual void AddSubResolvers()
     {
         _rootContainer.Kernel.Resolver.AddSubResolver(new RegisteredCollectionResolver(_rootContainer.Kernel));

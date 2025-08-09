@@ -16,7 +16,4 @@ namespace Castle.Windsor.Tests.Components;
 
 public class JohnGrandparent
 {
-    public virtual void JohnGrandParentMethod()
-    {
-    }
 }
