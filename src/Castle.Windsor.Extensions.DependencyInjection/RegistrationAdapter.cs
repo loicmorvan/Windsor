@@ -70,12 +70,7 @@ internal class RegistrationAdapter
             return null;
         }
 
-        if (!uniqueComponentName.Contains("@"))
-        {
-            return uniqueComponentName;
-        }
-
-        return uniqueComponentName.Split('@')[0];
+        return !uniqueComponentName.Contains("@") ? uniqueComponentName : uniqueComponentName.Split('@')[0];
     }
 
     internal static string UniqueComponentName(ServiceDescriptor service)

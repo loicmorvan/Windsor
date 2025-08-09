@@ -23,11 +23,8 @@ public static class ServiceDescriptorExtensions
 {
     public static IRegistration CreateWindsorRegistration(this ServiceDescriptor service)
     {
-        if (service.ServiceType.ContainsGenericParameters)
-        {
-            return RegistrationAdapter.FromOpenGenericServiceDescriptor(service);
-        }
-
-        return RegistrationAdapter.FromServiceDescriptor(service);
+        return service.ServiceType.ContainsGenericParameters
+            ? RegistrationAdapter.FromOpenGenericServiceDescriptor(service)
+            : RegistrationAdapter.FromServiceDescriptor(service);
     }
 }

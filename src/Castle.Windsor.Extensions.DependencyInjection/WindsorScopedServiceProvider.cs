@@ -72,18 +72,14 @@ internal class WindsorScopedServiceProvider : IServiceProvider, ISupportRequired
             return _container.Resolve(serviceType);
         }
 
-        if (serviceType.GetTypeInfo().IsGenericType &&
-            serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+        if (!serviceType.GetTypeInfo().IsGenericType ||
+            serviceType.GetGenericTypeDefinition() != typeof(IEnumerable<>))
         {
-            var allObjects = _container.ResolveAll(serviceType.GenericTypeArguments[0]);
-            return allObjects;
+            return isOptional ? null : _container.Resolve(serviceType);
         }
 
-        if (isOptional)
-        {
-            return null;
-        }
+        var allObjects = _container.ResolveAll(serviceType.GenericTypeArguments[0]);
+        return allObjects;
 
-        return _container.Resolve(serviceType);
     }
 }

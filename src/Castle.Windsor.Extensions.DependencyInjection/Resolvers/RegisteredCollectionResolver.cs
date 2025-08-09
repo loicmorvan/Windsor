@@ -32,12 +32,8 @@ public class RegisteredCollectionResolver : CollectionResolver
         ComponentModel model,
         DependencyModel dependency)
     {
-        if (Kernel.HasComponent(dependency.TargetItemType))
-        {
-            return false;
-        }
-
-        return base.CanResolve(context, contextHandlerResolver, model, dependency);
+        return !Kernel.HasComponent(dependency.TargetItemType) &&
+               base.CanResolve(context, contextHandlerResolver, model, dependency);
     }
 
     public override object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,

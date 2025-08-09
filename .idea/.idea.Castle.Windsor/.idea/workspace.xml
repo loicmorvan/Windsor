@@ -9,9 +9,10 @@
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/Presenter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/Presenter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CalculatorServiceWithAttributes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CalculatorServiceWithAttributes.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/JohnChild.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/JohnChild.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/Extensions/ServiceDescriptorExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/Extensions/ServiceDescriptorExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/RegistrationAdapter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/RegistrationAdapter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/Resolvers/RegisteredCollectionResolver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/Resolvers/RegisteredCollectionResolver.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/WindsorScopedServiceProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/WindsorScopedServiceProvider.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +109,7 @@
       <force-push-target remote-path="origin" branch="net9" />
     </force-push-targets>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected=".NET Project.Castle.Windsor.Tests">
     <configuration name="Castle.Windsor.Tests" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -172,14 +173,7 @@
       <workItem from="1754334801425" duration="4632000" />
       <workItem from="1754421122257" duration="7213000" />
       <workItem from="1754508214767" duration="2002000" />
-    </task>
-    <task id="LOCAL-00021" summary="Fixed warnings">
-      <option name="closed" value="true" />
-      <created>1753302695362</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1753302695362</updated>
+      <workItem from="1754769680087" duration="801000" />
     </task>
     <task id="LOCAL-00022" summary="Fixed warnings">
       <option name="closed" value="true" />
@@ -565,7 +559,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754508794855</updated>
     </task>
-    <option name="localTasksCounter" value="70" />
+    <task id="LOCAL-00070" summary="Removed `XmlInterpreter` and related classes, tests, and implementation references to simplify and modernize the codebase.">
+      <option name="closed" value="true" />
+      <created>1754601428459</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1754601428459</updated>
+    </task>
+    <option name="localTasksCounter" value="71" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -599,7 +601,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Refactored loops to use LINQ-based operations, improving code readability and consistency across multiple files." />
     <MESSAGE value="Refactored loops to use LINQ-based operations, simplifying logic and improving code readability across multiple files." />
     <MESSAGE value="Refactored `switch` statements to use expression syntax, added `[PublicAPI]` annotations, improved null checks with null-conditional operators, and streamlined formatting for improved clarity and consistency across multiple files." />
     <MESSAGE value="Made private methods `static` in `ParametersDescriptor` and `ServiceOverrideDescriptor` to improve clarity and enforce non-reliance on instance state." />
@@ -624,7 +625,8 @@
     <MESSAGE value="Refactored classes to use record-like syntax for constructor initialization, added `[UsedImplicitly]` annotations, and streamlined code by removing redundant properties and logic." />
     <MESSAGE value="Added `[PublicAPI]` annotations to multiple methods and interfaces across test cases to improve API discoverability and documentation." />
     <MESSAGE value="Marked type parameters as `in` or `out` in multiple generic interfaces to improve covariance and contravariance support across test cases." />
-    <option name="LAST_COMMIT_MESSAGE" value="Marked type parameters as `in` or `out` in multiple generic interfaces to improve covariance and contravariance support across test cases." />
+    <MESSAGE value="Removed `XmlInterpreter` and related classes, tests, and implementation references to simplify and modernize the codebase." />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed `XmlInterpreter` and related classes, tests, and implementation references to simplify and modernize the codebase." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
