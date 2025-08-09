@@ -21,7 +21,7 @@ namespace Castle.Windsor.Extensions.DependencyInjection;
 
 using ServiceDescriptor = ServiceDescriptor;
 
-internal class RegistrationAdapter
+internal static class RegistrationAdapter
 {
     public static IRegistration FromOpenGenericServiceDescriptor(ServiceDescriptor service)
     {

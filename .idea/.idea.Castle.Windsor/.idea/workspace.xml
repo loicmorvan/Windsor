@@ -7,12 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/AspNetCoreMvcExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/AspNetCoreMvcExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/Contributors/MiddlewareComponentModelContributor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/Contributors/MiddlewareComponentModelContributor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/WindsorRegistrationExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/WindsorRegistrationExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/WindsorRegistrationOptions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/WindsorRegistrationOptions.cs" afterDir="false" />
-    </list>
+    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -63,8 +58,8 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9cf5f68d759deefc91b9c48c5ac3dd27708bb7dc38d0c485661fff5ce15b82/SafeFileHandle.Unix.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/de1dc94e26de2eb8cdb9b19e9451c6a0738025b875978dc863de7ba87ee78c4/ServiceCollectionServiceExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/Resolvers/LoggerDependencyResolver.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/loicmorvan/RiderProjects/Windsor/src/Castle.Windsor/MicroKernel/Registration/FromDescriptor.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/loicmorvan/RiderProjects/Windsor/src/Castle.Windsor/MicroKernel/Registration/ServiceDescriptor.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/loicmorvan/RiderProjects/Windsor/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors2.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/loicmorvan/RiderProjects/Windsor/src/Castle.Windsor.Tests/Config/Components/ClassWithComplexParameter.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProblemsViewState">
@@ -172,31 +167,7 @@
       <workItem from="1754334801425" duration="4632000" />
       <workItem from="1754421122257" duration="7213000" />
       <workItem from="1754508214767" duration="2002000" />
-      <workItem from="1754769680087" duration="1767000" />
-    </task>
-    <task id="LOCAL-00025" summary="Fixed more warnings.">
-      <option name="closed" value="true" />
-      <created>1753646556420</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1753646556420</updated>
-    </task>
-    <task id="LOCAL-00026" summary="More warnings fixed.">
-      <option name="closed" value="true" />
-      <created>1753647484019</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1753647484019</updated>
-    </task>
-    <task id="LOCAL-00027" summary="Finally, fixed all warnings.">
-      <option name="closed" value="true" />
-      <created>1753649166105</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1753649166105</updated>
+      <workItem from="1754769680087" duration="4128000" />
     </task>
     <task id="LOCAL-00028" summary="Fixes">
       <option name="closed" value="true" />
@@ -566,7 +537,31 @@
       <option name="project" value="LOCAL" />
       <updated>1754771167558</updated>
     </task>
-    <option name="localTasksCounter" value="74" />
+    <task id="LOCAL-00074" summary="Added `[PublicAPI]` annotations and replaced redundant null checks with modern conditional assignment operators to improve code clarity and consistency across core files.">
+      <option name="closed" value="true" />
+      <created>1754771581742</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1754771581742</updated>
+    </task>
+    <task id="LOCAL-00075" summary="Refactored properties in test classes to use read-only auto-properties where applicable, improved code clarity, and resolved inspection warnings.">
+      <option name="closed" value="true" />
+      <created>1754773411055</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1754773411055</updated>
+    </task>
+    <task id="LOCAL-00076" summary="Removed redundant static members and unused assignments from test classes to streamline the code and improve maintainability.">
+      <option name="closed" value="true" />
+      <created>1754773571347</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1754773571347</updated>
+    </task>
+    <option name="localTasksCounter" value="77" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -599,10 +594,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Added `[PublicAPI]` annotations, replaced null checks with null-conditional operators, and refactored to simplify logic and improve consistency across multiple files." />
-    <MESSAGE value="Replaced `static readonly` fields with `const` across applicable files to improve immutability and optimize performance." />
-    <MESSAGE value="Made classes `sealed` where applicable, added `[PublicAPI]` annotations, replaced virtual methods with concrete implementations, and simplified logic for improved consistency and readability across multiple files." />
     <MESSAGE value="Added `[PublicAPI]` annotations to multiple methods, replaced `protected` fields with `private`, made applicable methods and constructors `private` or `static`, and improved consistency and readability across multiple files." />
     <MESSAGE value="Removed unused parameters and associated logic from multiple methods and constructors, refactored method signatures, and streamlined related implementations for improved consistency and clarity across multiple files." />
     <MESSAGE value="Refactored method signatures to remove unused parameters, updated logic for interceptor selection, and simplified constructor handling for improved clarity and consistency across multiple files." />
@@ -625,7 +618,10 @@
     <MESSAGE value="Simplified conditional patterns across multiple classes to improve readability and reduce redundancy." />
     <MESSAGE value="Refactored multiple classes to reduce redundancy, improve readability, and adopt modern syntax patterns across core files and test cases. Added `[UsedImplicitly]` annotations where necessary to enhance code clarity." />
     <MESSAGE value="Simplified conditional logic and streamlined method structures in `MiddlewareComponentModelContributor` and `CrossWiringComponentModelContributor` to improve readability and maintainability. Updated test class constructors to adopt more concise parameter initialization." />
-    <option name="LAST_COMMIT_MESSAGE" value="Simplified conditional logic and streamlined method structures in `MiddlewareComponentModelContributor` and `CrossWiringComponentModelContributor` to improve readability and maintainability. Updated test class constructors to adopt more concise parameter initialization." />
+    <MESSAGE value="Added `[PublicAPI]` annotations and replaced redundant null checks with modern conditional assignment operators to improve code clarity and consistency across core files." />
+    <MESSAGE value="Refactored properties in test classes to use read-only auto-properties where applicable, improved code clarity, and resolved inspection warnings." />
+    <MESSAGE value="Removed redundant static members and unused assignments from test classes to streamline the code and improve maintainability." />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed redundant static members and unused assignments from test classes to streamline the code and improve maintainability." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

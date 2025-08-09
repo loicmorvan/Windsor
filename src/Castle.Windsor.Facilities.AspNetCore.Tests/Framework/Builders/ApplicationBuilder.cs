@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Builder;
 
 namespace Castle.Windsor.Facilities.AspNetCore.Tests.Framework.Builders;
 
-public class ApplicationBuilder
+public static class ApplicationBuilder
 {
     public static IApplicationBuilder New(IServiceProvider serviceProvider)
     {

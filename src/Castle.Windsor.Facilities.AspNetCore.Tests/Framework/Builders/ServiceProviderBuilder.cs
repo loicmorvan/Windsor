@@ -16,7 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Castle.Windsor.Facilities.AspNetCore.Tests.Framework.Builders;
 
-public class ServiceProviderBuilder
+public static class ServiceProviderBuilder
 {
     public static IServiceProvider New(IServiceCollection services)
     {

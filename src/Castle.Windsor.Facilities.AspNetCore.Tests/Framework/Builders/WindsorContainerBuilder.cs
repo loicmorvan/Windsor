@@ -18,7 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Castle.Windsor.Facilities.AspNetCore.Tests.Framework.Builders;
 
-public class WindsorContainerBuilder
+public static class WindsorContainerBuilder
 {
     public static IWindsorContainer New(IServiceCollection services, Action<WindsorRegistrationOptions> configure,
         Func<IServiceProvider> serviceProviderFactory)

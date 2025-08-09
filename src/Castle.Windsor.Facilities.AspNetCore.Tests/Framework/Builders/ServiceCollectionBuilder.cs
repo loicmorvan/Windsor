@@ -17,7 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Castle.Windsor.Facilities.AspNetCore.Tests.Framework.Builders;
 
-public class ServiceCollectionBuilder
+public static class ServiceCollectionBuilder
 {
     public static ServiceCollection New()
     {
