@@ -197,13 +197,9 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 
     public class DisposableSpamService(
         DisposableTemplateEngine templateEngine,
-        PoolableComponent1 pool)
+        PoolableComponent1 pool = null)
         : DisposableBase
     {
-        public DisposableSpamService(DisposableTemplateEngine templateEngine) : this(templateEngine, null)
-        {
-        }
-
         public DefaultMailSenderService MailSender { get; set; }
 
         public PoolableComponent1 Pool { get; } = pool;

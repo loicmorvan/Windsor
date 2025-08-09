@@ -38,28 +38,30 @@ public class MiddlewareComponentModelContributor : IContributeComponentModelCons
 
     public void ProcessModel(IKernel kernel, ComponentModel model)
     {
-        if (model.Configuration.Attributes.Get(AspNetCoreFacility.IsRegisteredAsMiddlewareIntoApplicationBuilderKey) ==
+        if (model.Configuration.Attributes.Get(AspNetCoreFacility.IsRegisteredAsMiddlewareIntoApplicationBuilderKey) !=
             bool.TrueString)
         {
-            foreach (var service in model.Services)
+            return;
+        }
+
+        foreach (var service in model.Services)
+        {
+            _applicationBuilder.Use(async (context, next) =>
             {
-                _applicationBuilder.Use(async (context, next) =>
+                var windsorScope = kernel.BeginScope();
+                var serviceProviderScope =
+                    (_provider = _provider ?? _services.BuildServiceProvider()).CreateScope();
+                try
                 {
-                    var windsorScope = kernel.BeginScope();
-                    var serviceProviderScope =
-                        (_provider = _provider ?? _services.BuildServiceProvider()).CreateScope();
-                    try
-                    {
-                        var middleware = (IMiddleware)kernel.Resolve(service);
-                        await middleware.InvokeAsync(context, async _ => await next());
-                    }
-                    finally
-                    {
-                        serviceProviderScope.Dispose();
-                        windsorScope.Dispose();
-                    }
-                });
-            }
+                    var middleware = (IMiddleware)kernel.Resolve(service);
+                    await middleware.InvokeAsync(context, async _ => await next());
+                }
+                finally
+                {
+                    serviceProviderScope.Dispose();
+                    windsorScope.Dispose();
+                }
+            });
         }
     }
 }

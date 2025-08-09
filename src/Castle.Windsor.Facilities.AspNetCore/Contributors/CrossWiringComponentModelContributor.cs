@@ -34,46 +34,48 @@ public class CrossWiringComponentModelContributor : IContributeComponentModelCon
 
     public void ProcessModel(IKernel kernel, ComponentModel model)
     {
-        if (model.Configuration.Attributes.Get(AspNetCoreFacility.IsCrossWiredIntoServiceCollectionKey) ==
+        if (model.Configuration.Attributes.Get(AspNetCoreFacility.IsCrossWiredIntoServiceCollectionKey) !=
             bool.TrueString)
         {
-            if (model.Lifecycle.HasDecommissionConcerns)
+            return;
+        }
+
+        if (model.Lifecycle.HasDecommissionConcerns)
+        {
+            var disposableConcern = model.Lifecycle.DecommissionConcerns.OfType<DisposalConcern>().FirstOrDefault();
+            if (disposableConcern != null)
             {
-                var disposableConcern = model.Lifecycle.DecommissionConcerns.OfType<DisposalConcern>().FirstOrDefault();
-                if (disposableConcern != null)
-                {
-                    model.Lifecycle.Remove(disposableConcern);
-                }
+                model.Lifecycle.Remove(disposableConcern);
             }
+        }
 
-            var key = model.Name;
+        var key = model.Name;
 
-            foreach (var serviceType in model.Services)
+        foreach (var serviceType in model.Services)
+        {
+            switch (model.LifestyleType)
             {
-                switch (model.LifestyleType)
-                {
-                    case LifestyleType.Transient:
-                        Services.AddTransient(serviceType, _ => kernel.Resolve(key, serviceType));
-                        break;
-                    case LifestyleType.Scoped:
-                        Services.AddScoped(serviceType, _ =>
-                        {
-                            kernel.RequireScope();
-                            return kernel.Resolve(key, serviceType);
-                        });
-                        break;
-                    case LifestyleType.Singleton:
-                        Services.AddSingleton(serviceType, _ => kernel.Resolve(key, serviceType));
-                        break;
-                    case LifestyleType.Undefined:
-                    case LifestyleType.Thread:
-                    case LifestyleType.Pooled:
-                    case LifestyleType.Custom:
-                    case LifestyleType.Bound:
-                    default:
-                        throw new NotSupportedException(
-                            $"The Castle Windsor ASP.NET Core facility only supports the following lifestyles: {nameof(LifestyleType.Transient)}, {nameof(LifestyleType.Scoped)} and {nameof(LifestyleType.Singleton)}.");
-                }
+                case LifestyleType.Transient:
+                    Services.AddTransient(serviceType, _ => kernel.Resolve(key, serviceType));
+                    break;
+                case LifestyleType.Scoped:
+                    Services.AddScoped(serviceType, _ =>
+                    {
+                        kernel.RequireScope();
+                        return kernel.Resolve(key, serviceType);
+                    });
+                    break;
+                case LifestyleType.Singleton:
+                    Services.AddSingleton(serviceType, _ => kernel.Resolve(key, serviceType));
+                    break;
+                case LifestyleType.Undefined:
+                case LifestyleType.Thread:
+                case LifestyleType.Pooled:
+                case LifestyleType.Custom:
+                case LifestyleType.Bound:
+                default:
+                    throw new NotSupportedException(
+                        $"The Castle Windsor ASP.NET Core facility only supports the following lifestyles: {nameof(LifestyleType.Transient)}, {nameof(LifestyleType.Scoped)} and {nameof(LifestyleType.Singleton)}.");
             }
         }
     }
