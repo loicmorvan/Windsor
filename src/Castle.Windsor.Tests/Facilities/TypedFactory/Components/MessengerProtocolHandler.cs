@@ -19,7 +19,7 @@ public class MessengerProtocolHandler : IProtocolHandler
 {
     #region IProtocolHandler Members
 
-    public void Handle(string content)
+    public void Handle()
     {
         // TODO:  Add MessengerProtocolHandler.Handle implementation
     }

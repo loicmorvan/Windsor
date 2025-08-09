@@ -30,7 +30,7 @@ public class DatabaseResultFinder<T> : IResultFinder<T>
 
     public IResultFinder<T> Finder { get; }
 
-    public T Process(ISpecification specification)
+    public T Process()
     {
         return default;
     }

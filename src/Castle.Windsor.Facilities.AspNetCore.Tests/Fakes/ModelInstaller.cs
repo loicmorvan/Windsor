@@ -52,7 +52,7 @@ public class ModelInstaller
         services.AddScoped<ViewComponentServiceProviderOnly>();
     }
 
-    public static void RegisterCrossWired(IWindsorContainer container, IServiceCollection serviceCollection)
+    public static void RegisterCrossWired(IWindsorContainer container)
     {
         container.Register(Component.For<CrossWiredTransient>().CrossWired().LifestyleTransient());
         container.Register(Component.For<CrossWiredTransientGeneric<OpenOptions>>().CrossWired().LifestyleTransient());

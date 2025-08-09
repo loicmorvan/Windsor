@@ -19,7 +19,7 @@ public class MirandaProtocolHandler : IProtocolHandler
 {
     #region IProtocolHandler Members
 
-    public void Handle(string content)
+    public void Handle()
     {
         // TODO:  Add MirandaProtocolHandler.Handle implementation
     }

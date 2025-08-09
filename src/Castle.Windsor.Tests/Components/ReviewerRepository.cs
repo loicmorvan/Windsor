@@ -23,7 +23,7 @@ public class ReviewerRepository : DemoRepository<IReviewer>
 
     public new string Name { get; set; }
 
-    public new IReviewer Get(int id)
+    public new IReviewer Get()
     {
         return null;
     }

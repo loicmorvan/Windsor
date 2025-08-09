@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public interface IAmContravariant<in T>
 {
-    void Method(T item);
+    void Method();
 }

@@ -41,6 +41,6 @@ public static class WindsorContainerBuilder
     private static void RegisterApplicationComponents(IWindsorContainer container, IServiceCollection serviceCollection)
     {
         ModelInstaller.RegisterWindsor(container);
-        ModelInstaller.RegisterCrossWired(container, serviceCollection);
+        ModelInstaller.RegisterCrossWired(container);
     }
 }

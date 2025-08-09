@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public interface ICameraServiceBase
 {
-    ICamera Add(string name, string ipNumber);
+    ICamera Add();
 }

@@ -21,7 +21,7 @@ public class CustomerValidatorAndRepository : IValidator<ICustomer>, IRepository
         return new CustomerImpl();
     }
 
-    public bool IsValid(ICustomer customer)
+    public bool IsValid()
     {
         return true;
     }

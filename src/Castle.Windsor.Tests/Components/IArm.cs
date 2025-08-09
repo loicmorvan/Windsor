@@ -18,5 +18,5 @@ public interface IArm
 {
     float GetLength();
 
-    void Rotate(float degree);
+    void Rotate();
 }

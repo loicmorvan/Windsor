@@ -21,7 +21,7 @@ public class HumanArm : IArm
         return 1.0f;
     }
 
-    public void Rotate(float degree)
+    public void Rotate()
     {
     }
 }

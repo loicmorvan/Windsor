@@ -16,11 +16,11 @@ namespace Castle.Windsor.Tests.Components;
 
 public class CameraService : ICameraService
 {
-    public void Record(ICamera cam)
+    public void Record()
     {
     }
 
-    public ICamera Add(string name, string ipNumber)
+    public ICamera Add()
     {
         return new Camera();
     }

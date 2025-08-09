@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ContravariantDerived : IAmContravariant<EmptySub1>
 {
-    public void Method(EmptySub1 item)
+    public void Method()
     {
     }
 }

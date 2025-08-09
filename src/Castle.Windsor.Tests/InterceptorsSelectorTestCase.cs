@@ -39,7 +39,7 @@ public class InterceptorsSelectorTestCase
         Assert.False(reporter.WasCalled);
 
         var catalog = container.Resolve<ICatalog>();
-        catalog.AddItem("hot dogs");
+        catalog.AddItem();
         Assert.True(reporter.WasCalled);
 
         reporter.WasCalled = false;

@@ -18,5 +18,5 @@ public interface IResultFinder<out T>
 {
     IResultFinder<T> Finder { get; }
 
-    T Process(ISpecification specification);
+    T Process();
 }

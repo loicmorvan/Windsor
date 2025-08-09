@@ -21,7 +21,7 @@ public class PlasmaGunArm : IArm
         return 2.0f;
     }
 
-    public void Rotate(float degree)
+    public void Rotate()
     {
     }
 }

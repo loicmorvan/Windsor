@@ -26,7 +26,7 @@ public class ResultFinderStringDecorator : IResultFinder<string>
 
     public IResultFinder<string> Finder { get; }
 
-    public string Process(ISpecification specification)
+    public string Process()
     {
         return string.Empty;
     }

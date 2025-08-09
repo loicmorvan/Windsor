@@ -13,6 +13,7 @@ public class WithOverloads
         StartCalled = true;
     }
 
+    // ReSharper disable once UnusedParameter.Global
     public void Start(int fake)
     {
     }

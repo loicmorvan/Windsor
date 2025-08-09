@@ -17,5 +17,5 @@ namespace Castle.Windsor.Tests.ClassComponents;
 /// <summary>Summary description for IValidator.</summary>
 public interface IValidator<in T>
 {
-    bool IsValid(T target);
+    bool IsValid();
 }

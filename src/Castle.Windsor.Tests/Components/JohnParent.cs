@@ -14,6 +14,4 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class JohnParent : JohnGrandparent
-{
-}
+public class JohnParent : JohnGrandparent;

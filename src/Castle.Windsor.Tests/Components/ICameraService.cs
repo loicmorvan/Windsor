@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public interface ICameraService : ICameraServiceBase
 {
-    void Record(ICamera cam);
+    void Record();
 }
