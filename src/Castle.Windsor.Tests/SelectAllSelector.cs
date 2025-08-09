@@ -21,17 +21,8 @@ namespace Castle.Windsor.Tests;
 [UsedImplicitly]
 public class SelectAllSelector : IInterceptorSelector
 {
-    public static int Instances;
-    public static int Calls;
-
-    public SelectAllSelector()
-    {
-        Instances++;
-    }
-
     public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
     {
-        Calls++;
         return interceptors;
     }
 }
