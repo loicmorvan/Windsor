@@ -8,6 +8,6 @@ public sealed class WindsorOnlyTransientDisposable : WindsorOnlyTransient, IDisp
         DisposedCount++;
     }
 
-    public bool Disposed { get; set; }
+    public bool Disposed { get; private set; }
     public int DisposedCount { get; set; }
 }

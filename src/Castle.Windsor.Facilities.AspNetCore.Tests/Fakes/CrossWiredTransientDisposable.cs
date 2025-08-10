@@ -8,6 +8,6 @@ public sealed class CrossWiredTransientDisposable : CrossWiredTransient, IDispos
         DisposedCount++;
     }
 
-    public bool Disposed { get; set; }
+    public bool Disposed { get; private set; }
     public int DisposedCount { get; set; }
 }

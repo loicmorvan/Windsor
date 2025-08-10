@@ -72,7 +72,7 @@ public class DisposeOrderTestFixture
     [UsedImplicitly]
     private class MyService : IMyService
     {
-        public bool IsInUse
+        private bool IsInUse
         {
             get
             {
@@ -85,7 +85,7 @@ public class DisposeOrderTestFixture
             }
         }
 
-        public bool IsInitialized { get; private set; }
+        private bool IsInitialized { get; set; }
 
         public void Dispose()
         {

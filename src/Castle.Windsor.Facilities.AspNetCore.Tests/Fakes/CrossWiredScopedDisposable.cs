@@ -8,6 +8,6 @@ public sealed class CrossWiredScopedDisposable : CrossWiredScoped, IDisposable, 
         DisposedCount++;
     }
 
-    public bool Disposed { get; set; }
+    public bool Disposed { get; private set; }
     public int DisposedCount { get; set; }
 }
