@@ -53,40 +53,25 @@ public class DisposeOrderTestFixture
         }
     }
 
-    private interface IMyComponent : IInitializable, IDisposable
-    {
-        bool IsInitialized { get; }
-    }
+    private interface IMyComponent : IInitializable, IDisposable;
 
-    private interface IMyService : IInitializable, IDisposable
-    {
-        bool IsInUse { get; set; }
-        bool IsInitialized { get; }
-    }
+    private interface IMyService : IInitializable, IDisposable;
 
     [UsedImplicitly]
-    private class MyComponent(IMyService service) : IMyComponent
+    private class MyComponent : IMyComponent
     {
-        public bool IsInitialized { get; private set; }
-
         public void Dispose()
         {
-            IsInitialized = false;
-            service.IsInUse = false;
         }
 
         public void Initialize()
         {
-            service.IsInUse = true;
-            IsInitialized = true;
         }
     }
 
     [UsedImplicitly]
     private class MyService : IMyService
     {
-        private bool _inUse;
-
         public bool IsInUse
         {
             get
@@ -96,16 +81,7 @@ public class DisposeOrderTestFixture
                     throw new Exception("Service must be initialized !!!");
                 }
 
-                return _inUse;
-            }
-            set
-            {
-                if (IsInitialized == false)
-                {
-                    throw new Exception("Service must be initialized !!!");
-                }
-
-                _inUse = value;
+                return false;
             }
         }
 

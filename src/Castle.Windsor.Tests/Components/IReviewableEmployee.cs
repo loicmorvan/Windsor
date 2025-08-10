@@ -19,8 +19,6 @@ namespace Castle.Windsor.Tests.Components;
 /// <summary>Summary description for IReviewableEmployee.</summary>
 public interface IReviewableEmployee : IEmployee
 {
-    IReviewer Reviewer { get; set; }
-
     string ReviewerId { get; }
     int SalaryThird { get; set; }
 }

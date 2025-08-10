@@ -16,7 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public interface IResultFinder<out T>
 {
-    IResultFinder<T> Finder { get; }
-
     T Process();
 }

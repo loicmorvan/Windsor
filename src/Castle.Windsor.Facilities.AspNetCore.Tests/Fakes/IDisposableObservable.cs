@@ -2,6 +2,6 @@ namespace Castle.Windsor.Facilities.AspNetCore.Tests.Fakes;
 
 public interface IDisposableObservable
 {
-    bool Disposed { get; set; }
-    int DisposedCount { get; set; }
+    bool Disposed { get; }
+    int DisposedCount { get; }
 }
