@@ -183,8 +183,6 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 
     public class B : DisposableBase;
 
-    public class C : DisposableBase;
-
     public class GenA<T> : DisposableBase
     {
         public B BField { get; set; }
