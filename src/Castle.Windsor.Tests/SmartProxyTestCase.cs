@@ -12,78 +12,62 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+using Castle.DynamicProxy;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Interceptors;
+using Castle.Windsor.Windsor;
+
+namespace Castle.Windsor.Tests;
+
+public class SmartProxyTestCase : IDisposable
 {
-#if FEATURE_REMOTING
-	using System.Runtime.Remoting;
-#endif
+    private readonly WindsorContainer _container;
 
-	using Castle.DynamicProxy;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.Interceptors;
+    public SmartProxyTestCase()
+    {
+        _container = new WindsorContainer();
 
-	using CastleTests.Components;
+        _container.AddFacility<MyInterceptorGreedyFacility>();
+    }
 
-	using NUnit.Framework;
+    public void Dispose()
+    {
+        _container.Dispose();
+    }
 
-	[TestFixture]
-	public class SmartProxyTestCase
-	{
-		private IWindsorContainer container;
+    [Fact]
+    public void ConcreteClassProxy()
+    {
+        _container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
+        _container.Register(Component.For(typeof(CalculatorService)).Named("key"));
 
-		[Test]
-		public void ConcreteClassProxy()
-		{
-			container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
-			container.Register(Component.For(typeof(CalculatorService)).Named("key"));
+        var service = _container.Resolve<CalculatorService>("key");
 
-			var service = container.Resolve<CalculatorService>("key");
+        Assert.NotNull(service);
+        Assert.Equal(5, service.Sum(2, 2));
+    }
 
-			Assert.IsNotNull(service);
-#if FEATURE_REMOTING
-			Assert.IsFalse(RemotingServices.IsTransparentProxy(service));
-#endif
-			Assert.AreEqual(5, service.Sum(2, 2));
-		}
+    [Fact]
+    public void InterfaceInheritance()
+    {
+        _container.Register(Component.For<StandardInterceptor>().Named("interceptor"));
+        _container.Register(Component.For<ICameraService>().ImplementedBy<CameraService>());
 
-		[SetUp]
-		public void Init()
-		{
-			container = new WindsorContainer();
+        var service = _container.Resolve<ICameraService>();
 
-			container.AddFacility<MyInterceptorGreedyFacility>();
-		}
+        Assert.NotNull(service);
+    }
 
-		[Test]
-		public void InterfaceInheritance()
-		{
-			container.Register(Component.For<StandardInterceptor>().Named("interceptor"));
-			container.Register(Component.For<ICameraService>().ImplementedBy<CameraService>());
+    [Fact]
+    public void InterfaceProxy()
+    {
+        _container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
+        _container.Register(Component.For(typeof(ICalcService)).ImplementedBy<CalculatorService>().Named("key"));
 
-			var service = container.Resolve<ICameraService>();
+        var service = _container.Resolve<ICalcService>("key");
 
-			Assert.IsNotNull(service);
-		}
-
-		[Test]
-		public void InterfaceProxy()
-		{
-			container.Register(Component.For(typeof(ResultModifierInterceptor)).Named("interceptor"));
-			container.Register(Component.For(typeof(ICalcService)).ImplementedBy(typeof(CalculatorService)).Named("key"));
-
-			var service = container.Resolve<ICalcService>("key");
-
-			Assert.IsNotNull(service);
-#if FEATURE_REMOTING
-			Assert.IsFalse(RemotingServices.IsTransparentProxy(service));
-#endif
-			Assert.AreEqual(5, service.Sum(2, 2));
-		}
-
-		[TearDown]
-		public void Terminate()
-		{
-			container.Dispose();
-		}
-	}
+        Assert.NotNull(service);
+        Assert.Equal(5, service.Sum(2, 2));
+    }
 }

@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Interceptor
+namespace Castle.Windsor.Core.Interceptor;
+
+/// <summary>
+///     Interceptors might implement this to receive the ComponentModel on behalf of the component where the
+///     interceptor is acting.
+/// </summary>
+public interface IOnBehalfAware
 {
-	/// <summary>
-	///   Interceptors might implement this to receive the
-	///   ComponentModel on behalf of the component where the
-	///   interceptor is acting.
-	/// </summary>
-	public interface IOnBehalfAware
-	{
-		void SetInterceptedComponentModel(ComponentModel target);
-	}
+    void SetInterceptedComponentModel(ComponentModel target);
 }

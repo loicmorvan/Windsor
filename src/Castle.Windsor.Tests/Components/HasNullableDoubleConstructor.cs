@@ -12,12 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Components
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.Components;
+
+[UsedImplicitly]
+public class HasNullableDoubleConstructor
 {
-	public class HasNullableDoubleConstructor
-	{
-		public HasNullableDoubleConstructor(double? foo)
-		{
-		}
-	}
+    // ReSharper disable once UnusedParameter.Local
+    public HasNullableDoubleConstructor(double? foo)
+    {
+    }
 }

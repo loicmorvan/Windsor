@@ -12,27 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
+
+public class UsesFooAndDelegate
 {
-	using System;
+    private readonly Func<int, Foo> _myFooFactory;
+    private int _counter;
 
-	public class UsesFooAndDelegate
-	{
-		private readonly Func<int, Foo> myFooFactory;
-		private int counter;
+    public UsesFooAndDelegate(Func<int, Foo> myFooFactory, Foo foo)
+    {
+        Foo = foo;
+        _myFooFactory = myFooFactory;
+        _counter = 0;
+    }
 
-		public UsesFooAndDelegate(Func<int, Foo> myFooFactory, Foo foo)
-		{
-			Foo = foo;
-			this.myFooFactory = myFooFactory;
-			counter = 0;
-		}
+    public Foo Foo { get; private set; }
 
-		public Foo Foo { get; private set; }
-
-		public Foo GetFoo()
-		{
-			return myFooFactory(++counter);
-		}
-	}
+    public Foo GetFoo()
+    {
+        return _myFooFactory(++_counter);
+    }
 }

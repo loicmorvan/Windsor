@@ -12,17 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+/// <summary>Summary description for CustomComponent.</summary>
+[CustomTestLifestyle]
+public class CustomComponentWithCustomLifestyleAttribute : IComponent
 {
-	/// <summary>
-	///   Summary description for CustomComponent.
-	/// </summary>
-	[CustomTestLifestyle]
-	public class CustomComponentWithCustomLifestyleAttribute : IComponent
-	{
-		public int ID
-		{
-			get { return GetHashCode(); }
-		}
-	}
+    public int Id => GetHashCode();
 }

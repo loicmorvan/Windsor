@@ -12,16 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
-{
-	using System;
+using Castle.Windsor.MicroKernel;
 
-	using Castle.MicroKernel;
+namespace Castle.Windsor.Windsor.Diagnostics;
 
-	/// <summary>
-	///   Collects dependencies that are duplicated between constructors and properties.
-	/// </summary>
-	public interface IDuplicatedDependenciesDiagnostic : IDiagnostic<Tuple<IHandler, DependencyDuplicate[]>[]>
-	{
-	}
-}
+/// <summary>Collects dependencies that are duplicated between constructors and properties.</summary>
+public interface IDuplicatedDependenciesDiagnostic : IDiagnostic<Tuple<IHandler, DependencyDuplicate[]>[]>;

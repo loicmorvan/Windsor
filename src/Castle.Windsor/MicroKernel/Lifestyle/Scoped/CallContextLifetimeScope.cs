@@ -12,128 +12,99 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Scoped
+using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Security;
+using Castle.Windsor.Core;
+using Lock = Castle.Windsor.MicroKernel.Internal.Lock;
+
+namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
+
+/// <summary>
+///     Provides explicit lifetime scoping within logical path of execution. Used for types with
+///     <see cref="LifestyleType.Scoped" />.
+/// </summary>
+/// <remarks>
+///     The scope is passed on to child threads, including ThreadPool threads. The capability is limited to a single
+///     AppDomain and should be used cautiously as calls to <see cref="Dispose" /> may occur
+///     while the child thread is still executing, which in turn may lead to subtle threading bugs.
+/// </remarks>
+public class CallContextLifetimeScope : ILifetimeScope
 {
-	using System.Diagnostics;
-	using System.Globalization;
-	using System;
-	using System.Collections.Concurrent;
-#if FEATURE_REMOTING
-	using System.Runtime.Remoting.Messaging;
-#endif
-	using System.Security;
-#if !FEATURE_REMOTING
-	using System.Threading;
-#endif
+    private static readonly ConcurrentDictionary<Guid, CallContextLifetimeScope> AllScopes = new();
 
-	using Castle.Core;
-	using Castle.Core.Internal;
+    private static readonly AsyncLocal<Guid> AsyncLocal = new();
 
-	using Lock = Castle.MicroKernel.Internal.Lock;
+    private readonly Guid _contextId;
+    private readonly Lock _lock = Lock.Create();
+    private readonly CallContextLifetimeScope _parentScope;
+    private ScopeCache _cache = new();
 
-	/// <summary>
-	/// Provides explicit lifetime scoping within logical path of execution. Used for types with <see cref="LifestyleType.Scoped" />.
-	/// </summary>
-	/// <remarks>
-	/// The scope is passed on to child threads, including ThreadPool threads. The capability is limited to a single AppDomain
-	/// and should be used cautiously as calls to <see cref="Dispose" /> may occur while the child thread is still executing,
-	/// which in turn may lead to subtle threading bugs.
-	/// </remarks>
-	public class CallContextLifetimeScope : ILifetimeScope
-	{
-		private static readonly ConcurrentDictionary<Guid, CallContextLifetimeScope> allScopes =
-			new ConcurrentDictionary<Guid, CallContextLifetimeScope>();
+    public CallContextLifetimeScope()
+    {
+        _contextId = Guid.NewGuid();
+        _parentScope = ObtainCurrentScope();
 
-#if FEATURE_REMOTING
-		private static readonly string callContextKey = "castle.lifetime-scope-" + AppDomain.CurrentDomain.Id.ToString(CultureInfo.InvariantCulture);
-#else
-		private static readonly AsyncLocal<Guid> asyncLocal = new AsyncLocal<Guid>();
-#endif
+        var added = AllScopes.TryAdd(_contextId, this);
+        Debug.Assert(added);
+        SetCurrentScope(this);
+    }
 
-		private readonly Guid contextId = Guid.NewGuid();
-		private readonly CallContextLifetimeScope parentScope;
-		private readonly Lock @lock = Lock.Create();
-		private ScopeCache cache = new ScopeCache();
+    [SecuritySafeCritical]
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        
+        using (var token = _lock.ForReadingUpgradeable())
+        {
+            // Dispose the burden cache
+            if (_cache == null)
+            {
+                return;
+            }
 
-		public CallContextLifetimeScope()
-		{
-			contextId = Guid.NewGuid();
-			parentScope = ObtainCurrentScope();
+            token.Upgrade();
+            _cache.Dispose();
+            _cache = null;
 
-			var added = allScopes.TryAdd(contextId, this);
-			Debug.Assert(added);
-			SetCurrentScope(this);
-		}
+            // Restore the parent scope (if inside one)
+            if (_parentScope != null)
+            {
+                SetCurrentScope(_parentScope);
+            }
+        }
 
-		[SecuritySafeCritical]
-		public void Dispose()
-		{
-			using (var token = @lock.ForReadingUpgradeable())
-			{
-				// Dispose the burden cache
-				if (cache == null) return;
-				token.Upgrade();
-				cache.Dispose();
-				cache = null;
+        AllScopes.TryRemove(_contextId, out _);
+    }
 
-				// Restore the parent scope (if inside one)
-				if (parentScope != null)
-				{
-					SetCurrentScope(parentScope);
-				}
-				else
-				{
-#if FEATURE_REMOTING
-					CallContext.FreeNamedDataSlot(callContextKey);
-#endif
-				}
-			}
+    public Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance)
+    {
+        using var token = _lock.ForReadingUpgradeable();
+        var burden = _cache[model];
+        if (burden != null)
+        {
+            return burden;
+        }
 
-			CallContextLifetimeScope @this;
-			allScopes.TryRemove(contextId, out @this);
-		}
+        token.Upgrade();
 
-		public Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance)
-		{
-			using (var token = @lock.ForReadingUpgradeable())
-			{
-				var burden = cache[model];
-				if (burden == null)
-				{
-					token.Upgrade();
+        burden = createInstance(delegate { });
+        _cache[model] = burden;
 
-					burden = createInstance(delegate { });
-					cache[model] = burden;
-				}
-				return burden;
-			}
-		}
+        return burden;
+    }
 
-		[SecuritySafeCritical]
-		private static void SetCurrentScope(CallContextLifetimeScope lifetimeScope)
-		{
-#if FEATURE_REMOTING
-			CallContext.LogicalSetData(callContextKey, lifetimeScope.contextId);
-#else
-			asyncLocal.Value = lifetimeScope.contextId;
-#endif
-		}
+    [SecuritySafeCritical]
+    private static void SetCurrentScope(CallContextLifetimeScope lifetimeScope)
+    {
+        AsyncLocal.Value = lifetimeScope._contextId;
+    }
 
-		[SecuritySafeCritical]
-		public static CallContextLifetimeScope ObtainCurrentScope()
-		{
-			object scopeKey;
-#if FEATURE_REMOTING
-			scopeKey = CallContext.LogicalGetData(callContextKey);
-#else
-			scopeKey = asyncLocal.Value;
-#endif
-			if (!(scopeKey is Guid))
-			{
-				return null;
-			}
-			allScopes.TryGetValue((Guid)scopeKey, out var scope);
-			return scope;
-		}
-	}
+    [SecuritySafeCritical]
+    public static CallContextLifetimeScope ObtainCurrentScope()
+    {
+        object scopeKey = AsyncLocal.Value;
+        AllScopes.TryGetValue((Guid)scopeKey, out var scope);
+        return scope;
+    }
 }

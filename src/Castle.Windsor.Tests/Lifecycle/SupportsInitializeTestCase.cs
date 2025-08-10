@@ -12,66 +12,60 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Lifecycle
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.Lifecycle;
+
+public class SupportsInitializeTestCase : AbstractContainerTestCase
 {
-	using Castle.MicroKernel.Registration;
+    [Fact]
+    public void SupportsInitialize_components_are_not_tracked()
+    {
+        Container.Register(Component.For<ISimpleService>()
+            .ImplementedBy<SimpleServiceSupportInitialize>()
+            .LifeStyle.Transient);
 
-	using CastleTests;
-	using CastleTests.Components;
+        ReferenceTracker
+            .Track(() => Container.Resolve<ISimpleService>())
+            .AssertNoLongerReferenced();
+    }
 
-	using NUnit.Framework;
+    [Fact]
+    public void SupportsInitialize_components_for_non_SupportsInitialize_service_get_initialized_when_resolved()
+    {
+        Container.Register(Component.For<ISimpleService>()
+            .ImplementedBy<SimpleServiceSupportInitialize>()
+            .LifeStyle.Transient);
 
-	[TestFixture]
-	public class SupportsInitializeTestCase : AbstractContainerTestCase
-	{
-		[Test]
-		public void SupportsInitialize_components_are_not_tracked()
-		{
-			Container.Register(Component.For<ISimpleService>()
-			                   	.ImplementedBy<SimpleServiceSupportInitialize>()
-			                   	.LifeStyle.Transient);
+        var server = (SimpleServiceSupportInitialize)Container.Resolve<ISimpleService>();
 
-			ReferenceTracker
-				.Track(() => Container.Resolve<ISimpleService>())
-				.AssertNoLongerReferenced();
-		}
+        Assert.True(server.InitBegun);
+        Assert.True(server.InitEnded);
+    }
 
-		[Test]
-		public void SupportsInitialize_components_for_non_SupportsInitialize_service_get_initialized_when_resolved()
-		{
-			Container.Register(Component.For<ISimpleService>()
-			                   	.ImplementedBy<SimpleServiceSupportInitialize>()
-			                   	.LifeStyle.Transient);
+    [Fact]
+    public void
+        SupportsInitialize_components_for_non_SupportsInitialize_service_get_initialized_when_resolved_via_factoryMethod()
+    {
+        Container.Register(Component.For<ISimpleService>()
+            .UsingFactoryMethod(() => new SimpleServiceSupportInitialize())
+            .LifeStyle.Transient);
 
-			var server = (SimpleServiceSupportInitialize)Container.Resolve<ISimpleService>();
+        var server = (SimpleServiceSupportInitialize)Container.Resolve<ISimpleService>();
 
-			Assert.IsTrue(server.InitBegun);
-			Assert.IsTrue(server.InitEnded);
-		}
+        Assert.True(server.InitBegun);
+        Assert.True(server.InitEnded);
+    }
 
-		[Test]
-		public void
-			SupportsInitialize_components_for_non_SupportsInitialize_service_get_initialized_when_resolved_via_factoryMethod()
-		{
-			Container.Register(Component.For<ISimpleService>()
-			                   	.UsingFactoryMethod(() => new SimpleServiceSupportInitialize())
-			                   	.LifeStyle.Transient);
+    [Fact]
+    public void SupportsInitialize_components_get_initialized_when_resolved()
+    {
+        Container.Register(Component.For<SupportInitializeComponent>());
 
-			var server = (SimpleServiceSupportInitialize)Container.Resolve<ISimpleService>();
+        var server = Container.Resolve<SupportInitializeComponent>();
 
-			Assert.IsTrue(server.InitBegun);
-			Assert.IsTrue(server.InitEnded);
-		}
-
-		[Test]
-		public void SupportsInitialize_components_get_initialized_when_resolved()
-		{
-			Container.Register(Component.For<SupportInitializeComponent>());
-
-			var server = Container.Resolve<SupportInitializeComponent>();
-
-			Assert.IsTrue(server.InitBegun);
-			Assert.IsTrue(server.InitEnded);
-		}
-	}
+        Assert.True(server.InitBegun);
+        Assert.True(server.InitEnded);
+    }
 }

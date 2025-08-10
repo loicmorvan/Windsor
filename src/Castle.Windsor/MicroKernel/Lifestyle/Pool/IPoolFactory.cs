@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Pool
+namespace Castle.Windsor.MicroKernel.Lifestyle.Pool;
+
+public interface IPoolFactory
 {
-	public interface IPoolFactory
-	{
-		IPool Create(int initialsize, int maxSize, IComponentActivator activator);
-	}
+    IPool Create(int initialsize, int maxSize, IComponentActivator activator);
 }

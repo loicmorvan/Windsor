@@ -12,12 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Context
-{
-	public interface IArgumentsComparer
-	{
-		bool RunEqualityComparison(object x, object y, out bool areEqual);
+using JetBrains.Annotations;
 
-		bool RunHasCodeCalculation(object o, out int hashCode);
-	}
+namespace Castle.Windsor.MicroKernel.Context;
+
+public interface IArgumentsComparer
+{
+    [PublicAPI]
+    bool RunEqualityComparison(object x, object y, out bool areEqual);
+
+    [PublicAPI]
+    bool RunHasCodeCalculation(object o, out int hashCode);
 }

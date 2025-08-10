@@ -1,43 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFrameworks>net462;netstandard2.0;net6.0</TargetFrameworks>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
 
-	<Import Project="..\..\buildscripts\common.props"></Import>
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>Castle Windsor</Title>
+    <Description>Castle Windsor is best of breed, mature Inversion of Control container available for .NET.</Description>
+    <PackageTags>castle, windsor, inversionOfControl, DependencyInjection</PackageTags>
+  </PropertyGroup>
 
-	<PropertyGroup>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageId>Castle.Windsor</PackageId>
-		<Title>Castle Windsor</Title>
-		<Description>Castle Windsor is best of breed, mature Inversion of Control container available for .NET.</Description>
-		<PackageTags>castle, windsor, inversionOfControl, DependencyInjection</PackageTags>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-		<AssemblyName>Castle.Windsor</AssemblyName>
-		<RootNamespace>Castle</RootNamespace>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<Compile Include="..\..\buildscripts\CommonAssemblyInfo.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Castle.Core" Version="[5.1.0,6.0)" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)'=='net462'">
-		<Reference Include="System.Configuration" />
-		<Reference Include="System.Runtime.Remoting" />
-		<Reference Include="System.Web" />
-	</ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-		<PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.1.0" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)'=='net6.0'">
-		<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="6.0.0" />
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Castle.Core" Version="[5.1.0,6.0)"/>
+    <PackageReference Include="JetBrains.Annotations" Version="2025.2.0"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="6.0.0"/>
+  </ItemGroup>
 
 </Project>

@@ -12,125 +12,115 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory.Internal
+using System.Reflection;
+using Castle.DynamicProxy;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Interceptor;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Facilities;
+
+namespace Castle.Windsor.Facilities.TypedFactory.Internal;
+
+[Transient]
+public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryComponentSelector componentSelector)
+    : IInterceptor, IOnBehalfAware, IDisposable
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Reflection;
+    private readonly IReleasePolicy _scope = kernel.ReleasePolicy.CreateSubPolicy();
 
-	using Castle.Core;
-	using Castle.Core.Interceptor;
-	using Castle.DynamicProxy;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Facilities;
+    private bool _disposed;
+    private IDictionary<MethodInfo, FactoryMethod> _methods;
 
-	[Transient]
-	public class TypedFactoryInterceptor : IInterceptor, IOnBehalfAware, IDisposable
-	{
-		private readonly IKernelInternal kernel;
-		private readonly IReleasePolicy scope;
+    private ITypedFactoryComponentSelector ComponentSelector { get; } = componentSelector;
 
-		private bool disposed;
-		private IDictionary<MethodInfo, FactoryMethod> methods;
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        
+        if (_disposed)
+        {
+            return;
+        }
 
-		public TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryComponentSelector componentSelector)
-		{
-			ComponentSelector = componentSelector;
-			this.kernel = kernel;
-			scope = kernel.ReleasePolicy.CreateSubPolicy();
-		}
+        _disposed = true;
+        _scope.Dispose();
+    }
 
-		public ITypedFactoryComponentSelector ComponentSelector { get; private set; }
+    public void Intercept(IInvocation invocation)
+    {
+        // don't check whether the factory was already disposed: it may be a call to Dispose or
+        // Release methods, which must remain functional after dispose as well
+        if (TryGetMethod(invocation, out var method) == false)
+        {
+            throw new InvalidOperationException(
+                $"Can't find information about factory method {invocation.Method}. This is most likely a bug. Please report it.");
+        }
 
-		public void Dispose()
-		{
-			if (disposed)
-			{
-				return;
-			}
+        switch (method)
+        {
+            case FactoryMethod.Resolve:
+                Resolve(invocation);
+                break;
+            case FactoryMethod.Release:
+                Release(invocation);
+                break;
+            case FactoryMethod.Dispose:
+                Dispose();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(invocation));
+        }
+    }
 
-			disposed = true;
-			scope.Dispose();
-		}
+    public void SetInterceptedComponentModel(ComponentModel target)
+    {
+        _methods =
+            (IDictionary<MethodInfo, FactoryMethod>)target.ExtendedProperties[TypedFactoryFacility.FactoryMapCacheKey];
+        if (_methods == null)
+        {
+            throw new ArgumentException(
+                $"Component {target.Name} is not a typed factory. {GetType().Name} only works with typed factories.");
+        }
+    }
 
-		public void Intercept(IInvocation invocation)
-		{
-			// don't check whether the factory was already disposed: it may be a call to Dispose or
-			// Release methods, which must remain functional after dispose as well
-			FactoryMethod method;
-			if (TryGetMethod(invocation, out method) == false)
-			{
-				throw new InvalidOperationException(
-					string.Format("Can't find information about factory method {0}. This is most likely a bug. Please report it.",
-					              invocation.Method));
-			}
-			switch (method)
-			{
-				case FactoryMethod.Resolve:
-					Resolve(invocation);
-					break;
-				case FactoryMethod.Release:
-					Release(invocation);
-					break;
-				case FactoryMethod.Dispose:
-					Dispose();
-					break;
-			}
-		}
+    private void Release(IInvocation invocation)
+    {
+        if (_disposed)
+        {
+            return;
+        }
 
-		public void SetInterceptedComponentModel(ComponentModel target)
-		{
-			methods = (IDictionary<MethodInfo, FactoryMethod>)target.ExtendedProperties[TypedFactoryFacility.FactoryMapCacheKey];
-			if (methods == null)
-			{
-				throw new ArgumentException(
-					string.Format("Component {0} is not a typed factory. {1} only works with typed factories.", target.Name, GetType().Name));
-			}
-		}
+        foreach (var t in invocation.Arguments)
+        {
+            _scope.Release(t);
+        }
+    }
 
-		private void Release(IInvocation invocation)
-		{
-			if (disposed)
-			{
-				return;
-			}
+    private void Resolve(IInvocation invocation)
+    {
+        if (_disposed)
+        {
+            throw new ObjectDisposedException("this", "The factory was disposed and can no longer be used.");
+        }
 
-			for (var i = 0; i < invocation.Arguments.Length; i++)
-			{
-				scope.Release(invocation.Arguments[i]);
-			}
-		}
+        var component =
+            ComponentSelector.SelectComponent(invocation.Method, invocation.Arguments);
+        if (component == null)
+        {
+            throw new FacilityException(
+                $"Selector {ComponentSelector} didn't select any component for method {invocation.Method}. This usually signifies a bug in the selector.");
+        }
 
-		private void Resolve(IInvocation invocation)
-		{
-			if (disposed)
-			{
-				throw new ObjectDisposedException("this", "The factory was disposed and can no longer be used.");
-			}
+        invocation.ReturnValue = component(kernel, _scope);
+    }
 
-			var component = ComponentSelector.SelectComponent(invocation.Method, invocation.TargetType, invocation.Arguments);
-			if (component == null)
-			{
-				throw new FacilityException(
-					string.Format(
-						"Selector {0} didn't select any component for method {1}. This usually signifies a bug in the selector.",
-						ComponentSelector,
-						invocation.Method));
-			}
-			invocation.ReturnValue = component(kernel, scope);
-		}
+    private bool TryGetMethod(IInvocation invocation, out FactoryMethod method)
+    {
+        if (_methods.TryGetValue(invocation.Method, out method))
+        {
+            return true;
+        }
 
-		private bool TryGetMethod(IInvocation invocation, out FactoryMethod method)
-		{
-			if (methods.TryGetValue(invocation.Method, out method))
-			{
-				return true;
-			}
-			if (invocation.Method.IsGenericMethod == false)
-			{
-				return false;
-			}
-			return methods.TryGetValue(invocation.Method.GetGenericMethodDefinition(), out method);
-		}
-	}
+        return invocation.Method.IsGenericMethod &&
+               _methods.TryGetValue(invocation.Method.GetGenericMethodDefinition(), out method);
+    }
 }

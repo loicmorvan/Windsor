@@ -12,93 +12,89 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory.Internal
+using System.Diagnostics;
+using System.Reflection;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Resolvers;
+
+namespace Castle.Windsor.Facilities.TypedFactory.Internal;
+
+[Singleton]
+public class DelegateFactory : ILazyComponentLoader
 {
-	using System;
-	using System.Diagnostics;
-	using System.Reflection;
+    public IRegistration Load(string name, Type service, Arguments arguments)
+    {
+        if (service == null)
+        {
+            return null;
+        }
 
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Resolvers;
+        var invoke = ExtractInvokeMethod(service);
+        if (invoke == null)
+        {
+            return null;
+        }
 
-	[Singleton]
-	public class DelegateFactory : ILazyComponentLoader
-	{
-		public IRegistration Load(string name, Type service, Arguments arguments)
-		{
-			if (service == null)
-			{
-				return null;
-			}
+        if (invoke.ReturnType.IsPrimitiveTypeOrCollection())
+        {
+            return null;
+        }
 
-			var invoke = ExtractInvokeMethod(service);
-			if (invoke == null)
-			{
-				return null;
-			}
-			if (invoke.ReturnType.IsPrimitiveTypeOrCollection())
-			{
-				return null;
-			}
+        if (service.GetTypeInfo().IsGenericType)
+        {
+            service = service.GetGenericTypeDefinition();
+        }
 
-			if (service.GetTypeInfo().IsGenericType)
-			{
-				service = service.GetGenericTypeDefinition();
-			}
+        return Component.For(service)
+            .ImplementedBy(service, DelegateServiceStrategy.Instance)
+            .NamedAutomatically(GetName(service))
+            .LifeStyle.Transient
+            .Interceptors(new InterceptorReference(TypedFactoryFacility.InterceptorKey)).Last
+            .Activator<DelegateFactoryActivator>()
+            .DynamicParameters((k, args) =>
+            {
+                var selector =
+                    k.Resolve<ITypedFactoryComponentSelector>(TypedFactoryFacility.DefaultDelegateSelectorKey);
+                args.AddTyped(selector);
+                return k2 => k2.ReleaseComponent(selector);
+            })
+            .AddAttributeDescriptor(TypedFactoryFacility.IsFactoryKey, bool.TrueString);
+    }
 
-			return Component.For(service)
-				.ImplementedBy(service, DelegateServiceStrategy.Instance)
-				.NamedAutomatically(GetName(service))
-				.LifeStyle.Transient
-				.Interceptors(new InterceptorReference(TypedFactoryFacility.InterceptorKey)).Last
-				.Activator<DelegateFactoryActivator>()
-				.DynamicParameters((k, args) => {
-					var selector = k.Resolve<ITypedFactoryComponentSelector>(TypedFactoryFacility.DefaultDelegateSelectorKey);
-					args.AddTyped(selector);
-					return k2 => k2.ReleaseComponent(selector);
-				})
-				.AddAttributeDescriptor(TypedFactoryFacility.IsFactoryKey, bool.TrueString);
-		}
+    private static string GetName(Type service)
+    {
+        var defaultName = ComponentName.DefaultNameFor(service);
+        if (string.IsNullOrEmpty(defaultName))
+        {
+            return "auto-factory: " + Guid.NewGuid();
+        }
 
-		protected string GetName(Type service)
-		{
-			var defaultName = ComponentName.DefaultNameFor(service);
-			if (string.IsNullOrEmpty(defaultName))
-			{
-				return "auto-factory: " + Guid.NewGuid();
-			}
-			return "auto-factory: " + defaultName;
-		}
+        return "auto-factory: " + defaultName;
+    }
 
-		public static MethodInfo ExtractInvokeMethod(Type service)
-		{
-			if (!service.Is<MulticastDelegate>())
-			{
-				return null;
-			}
+    public static MethodInfo ExtractInvokeMethod(Type service)
+    {
+        if (!service.Is<MulticastDelegate>())
+        {
+            return null;
+        }
 
-			var invoke = GetInvokeMethod(service);
-			if (!HasReturn(invoke))
-			{
-				return null;
-			}
+        var invoke = GetInvokeMethod(service);
+        return !HasReturn(invoke) ? null : invoke;
+    }
 
-			return invoke;
-		}
+    private static MethodInfo GetInvokeMethod(Type @delegate)
+    {
+        var invoke = @delegate.GetMethod("Invoke");
+        Debug.Assert(invoke != null);
+        return invoke;
+    }
 
-		protected static MethodInfo GetInvokeMethod(Type @delegate)
-		{
-			var invoke = @delegate.GetMethod("Invoke");
-			Debug.Assert(invoke != null, "invoke != null");
-			return invoke;
-		}
-
-		protected static bool HasReturn(MethodInfo invoke)
-		{
-			return invoke.ReturnType != typeof(void);
-		}
-	}
+    private static bool HasReturn(MethodInfo invoke)
+    {
+        return invoke.ReturnType != typeof(void);
+    }
 }

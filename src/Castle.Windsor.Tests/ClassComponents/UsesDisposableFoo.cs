@@ -12,17 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents
-{
-	using CastleTests.Components;
+using Castle.Windsor.Tests.Components;
+using JetBrains.Annotations;
 
-	public class UsesDisposableFoo
-	{
-		private DisposableFoo foo;
+namespace Castle.Windsor.Tests.ClassComponents;
 
-		public UsesDisposableFoo(DisposableFoo foo)
-		{
-			this.foo = foo;
-		}
-	}
-}
+[UsedImplicitly]
+#pragma warning disable CS9113 // Parameter is unread.
+public class UsesDisposableFoo(DisposableFoo foo);
+#pragma warning restore CS9113 // Parameter is unread.

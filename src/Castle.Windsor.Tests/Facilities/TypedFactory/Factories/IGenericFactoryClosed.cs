@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories
-{
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
-	public interface IGenericFactoryClosed : IGenericFactory<IDummyComponent>
-	{
-	}
-}
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
+
+public interface IGenericFactoryClosed : IGenericFactory<IDummyComponent>;

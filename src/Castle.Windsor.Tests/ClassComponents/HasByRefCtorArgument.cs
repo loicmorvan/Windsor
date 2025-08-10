@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents
+using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.ClassComponents;
+
+public class HasByRefCtorArgument
 {
-	using CastleTests.Components;
+    public HasByRefCtorArgument(ref A a)
+    {
+        A = a;
+    }
 
-	public class HasByRefCtorArgument
-	{
-		public HasByRefCtorArgument(ref A a)
-		{
-			A = a;
-		}
-
-		public A A { get; private set; }
-	}
+    public A A { get; private set; }
 }

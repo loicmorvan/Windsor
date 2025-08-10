@@ -12,60 +12,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.ModelBuilder;
+
+namespace Castle.Windsor.MicroKernel.Handlers;
+
+[Serializable]
+public class DefaultHandlerFactory(IKernelInternal kernel) : IHandlerFactory
 {
-	using System;
+    private readonly IKernelInternal _kernel = kernel;
 
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.ModelBuilder;
+    public virtual IHandler Create(ComponentModel model)
+    {
+        var handler = CreateHandler(model);
+        handler.Init(_kernel);
+        return handler;
+    }
 
-	[Serializable]
-	public class DefaultHandlerFactory : IHandlerFactory
-	{
-		private readonly IKernelInternal kernel;
+    private static IHandler CreateHandler(ComponentModel model)
+    {
+        if (model.RequiresGenericArguments)
+        {
+            var matchingStrategy = GenericImplementationMatchingStrategy(model);
+            var serviceStrategy = GenericServiceStrategy(model);
+            return new DefaultGenericHandler(model, matchingStrategy, serviceStrategy);
+        }
 
-		public DefaultHandlerFactory(IKernelInternal kernel)
-		{
-			this.kernel = kernel;
-		}
+        // meta descriptors only apply to open generic handlers so we cam safely let go of them, save some memory
+        ComponentModelDescriptorUtil.RemoveMetaDescriptors(model);
 
-		public virtual IHandler Create(ComponentModel model)
-		{
-			var handler = CreateHandler(model);
-			handler.Init(kernel);
-			return handler;
-		}
+        var resolveExtensions = model.ResolveExtensions(false);
+        var releaseExtensions = model.ReleaseExtensions(false);
+        if (releaseExtensions == null && resolveExtensions == null)
+        {
+            return new DefaultHandler(model);
+        }
 
-		private IHandler CreateHandler(ComponentModel model)
-		{
-			if (model.RequiresGenericArguments)
-			{
-				var matchingStrategy = GenericImplementationMatchingStrategy(model);
-				var serviceStrategy = GenericServiceStrategy(model);
-				return new DefaultGenericHandler(model, matchingStrategy, serviceStrategy);
-			}
+        return new ExtendedHandler(model, resolveExtensions, releaseExtensions);
+    }
 
-			// meta descriptors only apply to open generic handlers so we cam safely let go of them, save some memory
-			ComponentModelDescriptorUtil.RemoveMetaDescriptors(model);
+    private static IGenericImplementationMatchingStrategy GenericImplementationMatchingStrategy(ComponentModel model)
+    {
+        return (IGenericImplementationMatchingStrategy)model.ExtendedProperties[
+            Constants.GenericImplementationMatchingStrategy];
+    }
 
-			var resolveExtensions = model.ResolveExtensions(false);
-			var releaseExtensions = model.ReleaseExtensions(false);
-			if (releaseExtensions == null && resolveExtensions == null)
-			{
-				return new DefaultHandler(model);
-			}
-			return new ExtendedHandler(model, resolveExtensions, releaseExtensions);
-		}
-
-		private IGenericImplementationMatchingStrategy GenericImplementationMatchingStrategy(ComponentModel model)
-		{
-			return (IGenericImplementationMatchingStrategy) model.ExtendedProperties[Constants.GenericImplementationMatchingStrategy];
-		}
-
-		private IGenericServiceStrategy GenericServiceStrategy(ComponentModel model)
-		{
-			return (IGenericServiceStrategy) model.ExtendedProperties[Constants.GenericServiceStrategy];
-		}
-	}
+    private static IGenericServiceStrategy GenericServiceStrategy(ComponentModel model)
+    {
+        return (IGenericServiceStrategy)model.ExtendedProperties[Constants.GenericServiceStrategy];
+    }
 }

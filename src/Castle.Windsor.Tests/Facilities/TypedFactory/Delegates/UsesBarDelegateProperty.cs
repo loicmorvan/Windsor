@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates
-{
-	using System;
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
-	public class UsesBarDelegateProperty
-	{
-		public Func<Bar> BarFactory { get; set; }
-	}
+public class UsesBarDelegateProperty
+{
+    public Func<Bar> BarFactory { get; set; }
 }

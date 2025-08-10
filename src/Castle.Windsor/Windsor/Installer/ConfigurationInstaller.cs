@@ -12,66 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Installer
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.SubSystems.Configuration;
+using Castle.Windsor.Windsor.Configuration;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Windsor.Installer;
+
+public class ConfigurationInstaller : IWindsorInstaller
 {
-	using System;
+    private readonly IConfigurationInterpreter _interpreter;
+    private EnvironmentDelegate _environment;
 
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.SubSystems.Configuration;
-	using Castle.Windsor.Configuration;
+    /// <summary>Initializes a new instance of the ConfigurationInstaller class.</summary>
+    public ConfigurationInstaller(IConfigurationInterpreter interpreter)
+    {
+        ArgumentNullException.ThrowIfNull(interpreter);
+        _interpreter = interpreter;
+    }
 
-	/// <summary>
-	///   Delegate to provide environment name.
-	/// </summary>
-	/// <returns>The environment name.</returns>
-	public delegate String EnvironmentDelegate();
+    void IWindsorInstaller.Install(IWindsorContainer container, IConfigurationStore store)
+    {
+        if (_environment != null)
+        {
+            _interpreter.EnvironmentName = _environment();
+        }
 
-	public class ConfigurationInstaller : IWindsorInstaller
-	{
-		private readonly IConfigurationInterpreter interpreter;
-		private EnvironmentDelegate environment;
+        _interpreter.ProcessResource(_interpreter.Source, store, container.Kernel);
+    }
 
-		/// <summary>
-		///   Initializes a new instance of the ConfigurationInstaller class.
-		/// </summary>
-		public ConfigurationInstaller(IConfigurationInterpreter interpreter)
-		{
-			if (interpreter == null)
-			{
-				throw new ArgumentNullException(nameof(interpreter));
-			}
-			this.interpreter = interpreter;
-		}
+    /// <summary>Sets the configuration environment name.</summary>
+    /// <param name="environmentName">The environment name.</param>
+    /// <returns></returns>
+    public ConfigurationInstaller Environment(string environmentName)
+    {
+        return Environment(() => environmentName);
+    }
 
-		/// <summary>
-		///   Sets the configuration environment name.
-		/// </summary>
-		/// <param name = "environmentName">The environment name.</param>
-		/// <returns></returns>
-		public ConfigurationInstaller Environment(String environmentName)
-		{
-			return Environment(() => environmentName);
-		}
-
-		/// <summary>
-		///   Set the configuration environment strategy.
-		/// </summary>
-		/// <param name = "environment">The environment strategy.</param>
-		/// <returns></returns>
-		public ConfigurationInstaller Environment(EnvironmentDelegate environment)
-		{
-			this.environment = environment;
-			return this;
-		}
-
-		void IWindsorInstaller.Install(IWindsorContainer container, IConfigurationStore store)
-		{
-			if (environment != null)
-			{
-				interpreter.EnvironmentName = environment();
-			}
-
-			interpreter.ProcessResource(interpreter.Source, store, container.Kernel);
-		}
-	}
+    /// <summary>Set the configuration environment strategy.</summary>
+    /// <param name="environment">The environment strategy.</param>
+    /// <returns></returns>
+    [PublicAPI]
+    public ConfigurationInstaller Environment(EnvironmentDelegate environment)
+    {
+        _environment = environment;
+        return this;
+    }
 }

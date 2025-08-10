@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
-{
-	public interface ITrackedComponentsPerformanceCounter
-	{
-		void DecrementTrackedInstancesCount();
+namespace Castle.Windsor.Windsor.Diagnostics;
 
-		void IncrementTrackedInstancesCount();
-	}
+public interface ITrackedComponentsPerformanceCounter
+{
+    void DecrementTrackedInstancesCount();
+
+    void IncrementTrackedInstancesCount();
 }

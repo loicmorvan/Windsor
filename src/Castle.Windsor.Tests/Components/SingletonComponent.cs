@@ -12,16 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using Castle.Core;
+using Castle.Windsor.Core;
 
-	[Singleton]
-	public class SingletonComponent : IComponent
-	{
-		public int ID
-		{
-			get { return GetHashCode(); }
-		}
-	}
+namespace Castle.Windsor.Tests.Components;
+
+[Singleton]
+public class SingletonComponent : IComponent
+{
+    public int Id => GetHashCode();
 }

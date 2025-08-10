@@ -12,28 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.Components;
+
+[UsedImplicitly]
+public class ComponentWithStringProperty
 {
-	public class ComponentWithStringProperty
+	/// <summary>Initializes a new instance of the <see cref="ComponentWithStringProperty" /> class.</summary>
+	/// <param name="name">The name.</param>
+	public ComponentWithStringProperty(string name)
 	{
-		private readonly string name;
-
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "ComponentWithStringProperty" /> class.
-		/// </summary>
-		/// <param name = "name">The name.</param>
-		public ComponentWithStringProperty(string name)
-		{
-			this.name = name;
-		}
-
-		/// <summary>
-		///   Gets the name.
-		/// </summary>
-		/// <value>The name.</value>
-		public string Name
-		{
-			get { return name; }
-		}
+		Name = name;
 	}
+
+	/// <summary>Gets the name.</summary>
+	/// <value>The name.</value>
+	public string Name { get; }
 }

@@ -12,26 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory.Internal
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.Handlers;
+
+namespace Castle.Windsor.Facilities.TypedFactory.Internal;
+
+public class DelegateServiceStrategy : IGenericServiceStrategy
 {
-	using System;
+    public static readonly DelegateServiceStrategy Instance = new();
 
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Handlers;
+    private DelegateServiceStrategy()
+    {
+    }
 
-	public class DelegateServiceStrategy : IGenericServiceStrategy
-	{
-		public static readonly DelegateServiceStrategy Instance = new DelegateServiceStrategy();
-
-		private DelegateServiceStrategy()
-		{
-		}
-
-		public bool Supports(Type service, ComponentModel component)
-		{
-			var invoke = DelegateFactory.ExtractInvokeMethod(service);
-			return invoke != null && invoke.ReturnType.IsPrimitiveTypeOrCollection() == false;
-		}
-	}
+    public bool Supports(Type service, ComponentModel component)
+    {
+        var invoke = DelegateFactory.ExtractInvokeMethod(service);
+        return invoke != null && invoke.ReturnType.IsPrimitiveTypeOrCollection() == false;
+    }
 }

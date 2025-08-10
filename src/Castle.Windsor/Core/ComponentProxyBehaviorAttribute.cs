@@ -12,41 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
+namespace Castle.Windsor.Core;
+
+/// <summary>Specifies the proxying behavior for a component.</summary>
+[AttributeUsage(AttributeTargets.Class)]
+public sealed class ComponentProxyBehaviorAttribute : Attribute
 {
-	using System;
+    private Type[] _additionalInterfaces;
 
-	/// <summary>
-	///   Specifies the proxying behavior for a component.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-	public sealed class ComponentProxyBehaviorAttribute : Attribute
-	{
-		private Type[] additionalInterfaces;
-
-#if FEATURE_REMOTING
-		/// <summary>
-		///   Gets or sets a value indicating whether the generated 
-		///   interface proxy should inherit from <see cref = "MarshalByRefObject" />.
-		/// </summary>
-		public bool UseMarshalByRefProxy { get; set; }
-#endif
-
-		/// <summary>
-		///   Gets or sets the additional interfaces used during proxy generation.
-		/// </summary>
-		public Type[] AdditionalInterfaces
-		{
-			get
-			{
-				if (additionalInterfaces != null)
-				{
-					return additionalInterfaces;
-				}
-
-				return Type.EmptyTypes;
-			}
-			set { additionalInterfaces = value; }
-		}
-	}
+    /// <summary>Gets or sets the additional interfaces used during proxy generation.</summary>
+    public Type[] AdditionalInterfaces
+    {
+        get => _additionalInterfaces ?? Type.EmptyTypes;
+        set => _additionalInterfaces = value;
+    }
 }

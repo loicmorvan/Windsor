@@ -12,16 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Pool
-{
-	using System;
+namespace Castle.Windsor.MicroKernel.Lifestyle.Pool;
 
-	[Serializable]
-	public class DefaultPoolFactory : IPoolFactory
-	{
-		public IPool Create(int initialsize, int maxSize, IComponentActivator activator)
-		{
-			return new DefaultPool(initialsize, maxSize, activator);
-		}
-	}
+[Serializable]
+public class DefaultPoolFactory : IPoolFactory
+{
+    public IPool Create(int initialsize, int maxSize, IComponentActivator activator)
+    {
+        return new DefaultPool(initialsize, maxSize, activator);
+    }
 }

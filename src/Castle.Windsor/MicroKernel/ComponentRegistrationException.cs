@@ -12,45 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.MicroKernel;
+
+/// <summary>Exception threw when there is a problem registering a component</summary>
+[Serializable]
+public class ComponentRegistrationException : Exception
 {
-	using System;
-	using System.Runtime.Serialization;
+    /// <summary>Initializes a new instance of the <see cref="ComponentRegistrationException" /> class.</summary>
+    /// <param name="message">The message.</param>
+	public ComponentRegistrationException(string message) : base(message)
+    {
+        this.SetUp();
+    }
 
-	using Castle.Core.Internal;
-
-	/// <summary>
-	///   Exception threw when there is a problem
-	///   registering a component
-	/// </summary>
-	[Serializable]
-	public class ComponentRegistrationException : Exception
-	{
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "ComponentRegistrationException" /> class.
-		/// </summary>
-		/// <param name = "message">The message.</param>
-		public ComponentRegistrationException(string message) : base(message)
-		{
-			ExceptionHelper.SetUp(this);
-		}
-
-		public ComponentRegistrationException(string message, Exception innerException)
-			: base(message, innerException)
-		{
-			ExceptionHelper.SetUp(this);
-		}
-
-#if FEATURE_SERIALIZATION
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "ComponentRegistrationException" /> class.
-		/// </summary>
-		/// <param name = "info">The object that holds the serialized object data.</param>
-		/// <param name = "context">The contextual information about the source or destination.</param>
-		public ComponentRegistrationException(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-			ExceptionHelper.SetUp(this);
-		}
-#endif
-	}
+    public ComponentRegistrationException(string message, Exception innerException)
+        : base(message, innerException)
+    {
+        this.SetUp();
+    }
 }

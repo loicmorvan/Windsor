@@ -12,26 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.Startable.Components
+using Castle.Windsor.Core;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.Facilities.Startable.Components;
+
+[UsedImplicitly]
+#pragma warning disable CS9113 // Parameter is unread.
+public class Startable(ICustomer customer, LifecycleCounter counter) : IStartable
+#pragma warning restore CS9113 // Parameter is unread.
 {
-	using Castle.Core;
-	using Castle.MicroKernel.Tests.ClassComponents;
+    public void Start()
+    {
+        counter.Increment();
+    }
 
-	public class Startable : IStartable
-	{
-		public static bool Started;
-
-		public Startable(ICustomer customer)
-		{
-		}
-
-		public void Start()
-		{
-			Started = true;
-		}
-
-		public void Stop()
-		{
-		}
-	}
+    public void Stop()
+    {
+        counter.Increment();
+    }
 }

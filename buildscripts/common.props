@@ -1,52 +1,48 @@
 <Project>
 
-	<PropertyGroup>
-		<NoWarn>$(NoWarn);CS1591;NU5048</NoWarn>
-		<RepositoryType>git</RepositoryType>
-		<RepositoryUrl>https://github.com/castleproject/Windsor</RepositoryUrl>
-		<BuildVersion>0.0.0</BuildVersion>
-		<BuildVersion Condition="'$(APPVEYOR_BUILD_VERSION)'!=''">$(APPVEYOR_BUILD_VERSION)</BuildVersion>
-		<BuildVersionMajor>$(BuildVersion.Split('.')[0])</BuildVersionMajor>
-		<BuildVersionNoSuffix>$(BuildVersion.Split('-')[0])</BuildVersionNoSuffix>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<AssemblyOriginatorKeyFile>../../buildscripts/CastleKey.snk</AssemblyOriginatorKeyFile>
-		<SignAssembly>true</SignAssembly>
-		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-	</PropertyGroup>
+    <PropertyGroup>
+        <NoWarn>$(NoWarn);CS1591;NU5048</NoWarn>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/castleproject/Windsor</RepositoryUrl>
+        <BuildVersion>0.0.0</BuildVersion>
+        <BuildVersion Condition="'$(APPVEYOR_BUILD_VERSION)'!=''">$(APPVEYOR_BUILD_VERSION)</BuildVersion>
+        <BuildVersionMajor>$(BuildVersion.Split('.')[0])</BuildVersionMajor>
+        <BuildVersionNoSuffix>$(BuildVersion.Split('-')[0])</BuildVersionNoSuffix>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <AssemblyOriginatorKeyFile>../../buildscripts/CastleKey.snk</AssemblyOriginatorKeyFile>
+        <SignAssembly>true</SignAssembly>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    </PropertyGroup>
 
-	<PropertyGroup>
-		<Product>Castle Windsor</Product>
-		<FileVersion>$(BuildVersionNoSuffix)</FileVersion>
-		<VersionPrefix>$(BuildVersion)</VersionPrefix>
-		<AssemblyVersion>$(BuildVersionMajor).0.0</AssemblyVersion>
-		<AssemblyTitle>Castle Windsor is best of breed, mature Inversion of Control container available for .NET</AssemblyTitle>
-		<Authors>Castle Project Contributors</Authors>
-		<PackageProjectUrl>http://www.castleproject.org/projects/windsor/</PackageProjectUrl>
-		<PackageIcon>windsor-logo.png</PackageIcon>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<PackageOutputPath>../../build/</PackageOutputPath>
-		<PackageVersion>$(BuildVersion)</PackageVersion>
-		<IncludeSymbols>true</IncludeSymbols>
-		<IncludeSource>false</IncludeSource>
-		<CurrentYear>$([System.DateTime]::Now.ToString("yyyy"))</CurrentYear>
-		<Copyright>Copyright 2004-$(CurrentYear) Castle Project - http://www.castleproject.org/ </Copyright>
-		<ContentTargetFolders>.</ContentTargetFolders>
-	</PropertyGroup>
+    <PropertyGroup>
+        <Product>Castle Windsor</Product>
+        <FileVersion>$(BuildVersionNoSuffix)</FileVersion>
+        <VersionPrefix>$(BuildVersion)</VersionPrefix>
+        <AssemblyVersion>$(BuildVersionMajor).0.0</AssemblyVersion>
+        <AssemblyTitle>Castle Windsor is best of breed, mature Inversion of Control container available for .NET</AssemblyTitle>
+        <Authors>Castle Project Contributors</Authors>
+        <PackageProjectUrl>http://www.castleproject.org/projects/windsor/</PackageProjectUrl>
+        <PackageIcon>windsor-logo.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PackageOutputPath>../../build/</PackageOutputPath>
+        <PackageVersion>$(BuildVersion)</PackageVersion>
+        <IncludeSymbols>true</IncludeSymbols>
+        <IncludeSource>false</IncludeSource>
+        <CurrentYear>$([System.DateTime]::Now.ToString("yyyy"))</CurrentYear>
+        <Copyright>Copyright 2004-$(CurrentYear) Castle Project - http://www.castleproject.org/</Copyright>
+        <ContentTargetFolders>.</ContentTargetFolders>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)'=='net462'">
-		<DefineConstants>$(DefineConstants);FEATURE_PERFCOUNTERS;FEATURE_REMOTING;FEATURE_SECURITY_PERMISSIONS;FEATURE_SYSTEM_CONFIGURATION;FEATURE_SERIALIZATION;FEATURE_APPDOMAIN;FEATURE_CODEDOM;FEATURE_ASSEMBLIES</DefineConstants>
-	</PropertyGroup>
+    <ItemGroup>
+        <Content Include="..\..\README.md" Pack="true" PackagePath="\"/>
+        <Content Include="..\..\CHANGELOG.md"/>
+        <Content Include="..\..\LICENSE" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<Content Include="..\..\README.md" Pack="true" PackagePath="\" />
-		<Content Include="..\..\CHANGELOG.md" />
-		<Content Include="..\..\LICENSE" Pack="true" PackagePath="\" />
-	</ItemGroup>
-	
-	<ItemGroup>
-		<None Include="$(SolutionDir)docs\images\windsor-logo.png" Pack="true" PackagePath=""/>
-	</ItemGroup>
+    <ItemGroup>
+        <None Include="$(SolutionDir)docs\images\windsor-logo.png" Pack="true" PackagePath=""/>
+    </ItemGroup>
 
 </Project>

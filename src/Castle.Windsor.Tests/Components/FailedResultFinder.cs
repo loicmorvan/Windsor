@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class FailedResultFinder<T> : IResultFinder<T>
-	{
-		public IResultFinder<T> Finder
-		{
-			get { return null; }
-		}
+using JetBrains.Annotations;
 
-		public T Process(ISpecification specification)
-		{
-			return default(T);
-		}
-	}
+namespace Castle.Windsor.Tests.Components;
+
+[UsedImplicitly]
+public class FailedResultFinder<T> : IResultFinder<T>
+{
+    public IResultFinder<T> Finder => null;
+
+    public T Process()
+    {
+        return default;
+    }
 }

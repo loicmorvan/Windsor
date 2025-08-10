@@ -12,190 +12,192 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.SubSystems.Conversion;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests;
+
+public class TypedParametersTestCase : AbstractContainerTestCase
 {
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.SubSystems.Conversion;
-	using Castle.MicroKernel.Tests.ClassComponents;
+    [Fact]
+    public void Can_mix_typed_arguments_with_named()
+    {
+        Kernel.Register(Component.For<ClassWithArguments>());
+        var arguments = new Arguments
+        {
+            { "arg1", "foo" },
+            { typeof(int), 2 }
+        };
 
-	using CastleTests.ClassComponents;
-	using CastleTests.Components;
+        var item = Kernel.Resolve<ClassWithArguments>(arguments);
 
-	using NUnit.Framework;
+        Assert.Equal("foo", item.Arg1);
+        Assert.Equal(2, item.Arg2);
+    }
 
-	[TestFixture]
-	public class TypedParametersTestCase : AbstractContainerTestCase
-	{
-		[Test]
-		public void Can_mix_typed_arguments_with_named()
-		{
-			Kernel.Register(Component.For<ClassWithArguments>());
-			var arguments = new Arguments {
-				{ "arg1", "foo" },
-				{ typeof(int), 2 }
-			};
+    [Fact]
+    public void Can_named_arguments_take_precedense_over_typed()
+    {
+        Kernel.Register(Component.For<ClassWithArguments>());
+        var arguments = new Arguments
+        {
+            { "arg1", "named" },
+            { typeof(string), "typed" },
+            { typeof(int), 2 }
+        };
 
-			var item = Kernel.Resolve<ClassWithArguments>(arguments);
+        var item = Kernel.Resolve<ClassWithArguments>(arguments);
 
-			Assert.AreEqual("foo", item.Arg1);
-			Assert.AreEqual(2, item.Arg2);
-		}
+        Assert.Equal("named", item.Arg1);
+        Assert.Equal(2, item.Arg2);
+    }
 
-		[Test]
-		public void Can_named_arguments_take_precedense_over_typed()
-		{
-			Kernel.Register(Component.For<ClassWithArguments>());
-			var arguments = new Arguments {
-				{ "arg1", "named" },
-				{ typeof(string), "typed" },
-				{ typeof(int), 2 }
-			};
+    [Fact]
+    public void Can_resolve_component_with_typed_arguments()
+    {
+        Kernel.Register(Component.For<ClassWithArguments>());
+        var arguments = new Arguments
+        {
+            { typeof(string), "foo" },
+            { typeof(int), 2 }
+        };
 
-			var item = Kernel.Resolve<ClassWithArguments>(arguments);
+        var item = Kernel.Resolve<ClassWithArguments>(arguments);
 
-			Assert.AreEqual("named", item.Arg1);
-			Assert.AreEqual(2, item.Arg2);
-		}
+        Assert.Equal("foo", item.Arg1);
+        Assert.Equal(2, item.Arg2);
+    }
 
-		[Test]
-		public void Can_resolve_component_with_typed_arguments()
-		{
-			Kernel.Register(Component.For<ClassWithArguments>());
-			var arguments = new Arguments {
-				{ typeof(string), "foo" },
-				{ typeof(int), 2 }
-			};
+    [Fact]
+    public void Typed_arguments_work_for_DynamicParameters()
+    {
+        Kernel.Register(
+            Component.For<ClassWithArguments>().DynamicParameters((_, d) => d.AddTyped("typed").AddTyped(2)));
 
-			var item = Kernel.Resolve<ClassWithArguments>(arguments);
+        var item = Kernel.Resolve<ClassWithArguments>();
 
-			Assert.AreEqual("foo", item.Arg1);
-			Assert.AreEqual(2, item.Arg2);
-		}
+        Assert.Equal("typed", item.Arg1);
+        Assert.Equal(2, item.Arg2);
+    }
 
-		[Test]
-		public void Typed_arguments_work_for_DynamicParameters()
-		{
-			Kernel.Register(Component.For<ClassWithArguments>().DynamicParameters((k, d) => d.AddTyped("typed").AddTyped(2)));
+    [Fact]
+    public void Typed_arguments_work_for_DynamicParameters_mixed()
+    {
+        Kernel.Register(Component.For<ClassWithArguments>().DynamicParameters((_, d) => d.AddTyped("typed")));
+        var arguments = new Arguments
+        {
+            { typeof(int), 2 }
+        };
+        var item = Kernel.Resolve<ClassWithArguments>(arguments);
 
-			var item = Kernel.Resolve<ClassWithArguments>();
+        Assert.Equal("typed", item.Arg1);
+        Assert.Equal(2, item.Arg2);
+    }
 
-			Assert.AreEqual("typed", item.Arg1);
-			Assert.AreEqual(2, item.Arg2);
-		}
+    [Fact]
+    public void Typed_arguments_work_for_DynamicParameters_mixed2()
+    {
+        Kernel.Register(Component.For<ClassWithArguments>());
+        Assert.Throws<ConverterException>(() =>
+        {
+            Kernel.Resolve<ClassWithArguments>(new Arguments
+            {
+                { typeof(int), "not an int" },
+                { typeof(string), "a string" }
+            });
+        });
+    }
 
-		[Test]
-		public void Typed_arguments_work_for_DynamicParameters_mixed()
-		{
-			Kernel.Register(Component.For<ClassWithArguments>().DynamicParameters((k, d) => d.AddTyped("typed")));
-			var arguments = new Arguments {
-				{ typeof(int), 2 }
-			};
-			var item = Kernel.Resolve<ClassWithArguments>(arguments);
+    [Fact]
+    public void Typed_arguments_work_for_InLine_Parameters()
+    {
+        Kernel.Register(Component.For<ClassWithArguments>()
+            .DependsOn(
+                Property.ForKey<string>().Eq("typed"),
+                Property.ForKey<int>().Eq(2)));
 
-			Assert.AreEqual("typed", item.Arg1);
-			Assert.AreEqual(2, item.Arg2);
-		}
+        var item = Kernel.Resolve<ClassWithArguments>();
 
-		[Test]
-		public void Typed_arguments_work_for_DynamicParameters_mixed2()
-		{
-			Kernel.Register(Component.For<ClassWithArguments>());
-			Assert.Throws<ConverterException>(() =>
-			{
-				Kernel.Resolve<ClassWithArguments>(new Arguments {
-					{ typeof(int), "not an int" },
-					{ typeof(string), "a string" }
-				});
-			});
-		}
+        Assert.Equal("typed", item.Arg1);
+        Assert.Equal(2, item.Arg2);
+    }
 
-		[Test]
-		public void Typed_arguments_work_for_InLine_Parameters()
-		{
-			Kernel.Register(Component.For<ClassWithArguments>()
-				.DependsOn(
-					Property.ForKey<string>().Eq("typed"),
-					Property.ForKey<int>().Eq(2)));
+    [Fact]
+    public void Typed_arguments_work_for_ServiceOverrides()
+    {
+        Kernel.Register(Component.For<ICommon>().ImplementedBy<CommonImpl1>().Named("default"));
+        Kernel.Register(Component.For<ICommon>().ImplementedBy<CommonImpl2>().Named("non-default"));
+        Kernel.Register(Component.For<CommonServiceUser>()
+            .DependsOn(ServiceOverride.ForKey<ICommon>().Eq("non-default")));
 
-			var item = Kernel.Resolve<ClassWithArguments>();
+        var item = Kernel.Resolve<CommonServiceUser>();
 
-			Assert.AreEqual("typed", item.Arg1);
-			Assert.AreEqual(2, item.Arg2);
-		}
+        Assert.IsType<CommonImpl2>(item.CommonService);
+    }
 
-		[Test]
-		public void Typed_arguments_work_for_ServiceOverrides()
-		{
-			Kernel.Register(Component.For<ICommon>().ImplementedBy<CommonImpl1>().Named("default"));
-			Kernel.Register(Component.For<ICommon>().ImplementedBy<CommonImpl2>().Named("non-default"));
-			Kernel.Register(Component.For<CommonServiceUser>().DependsOn(ServiceOverride.ForKey<ICommon>().Eq("non-default")));
+    [Fact]
+    public void Typed_arguments_work_for_closed_generic_ServiceOverrides()
+    {
+        Kernel.Register(
+            Component.For<IGeneric<string>>().ImplementedBy<GenericImpl1<string>>().Named("default"),
+            Component.For<IGeneric<string>>().ImplementedBy<GenericImpl2<string>>().Named("non-default"),
+            Component.For<UsesIGeneric<string>>()
+                .DependsOn(ServiceOverride.ForKey<IGeneric<string>>().Eq("non-default")));
 
-			var item = Kernel.Resolve<CommonServiceUser>();
+        var item = Kernel.Resolve<UsesIGeneric<string>>();
 
-			Assert.IsInstanceOf<CommonImpl2>(item.CommonService);
-		}
+        Assert.IsType<GenericImpl2<string>>(item.Dependency);
+    }
 
-		[Test]
-		public void Typed_arguments_work_for_closed_generic_ServiceOverrides()
-		{
-			Kernel.Register(
-				Component.For<IGeneric<string>>().ImplementedBy<GenericImpl1<string>>().Named("default"),
-				Component.For<IGeneric<string>>().ImplementedBy<GenericImpl2<string>>().Named("non-default"),
-				Component.For<UsesIGeneric<string>>().DependsOn(ServiceOverride.ForKey<IGeneric<string>>().Eq("non-default")));
+    [Fact]
+    public void Typed_arguments_work_for_open_generic_ServiceOverrides_closed_service()
+    {
+        Kernel.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)).Named("default"));
+        Kernel.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)).Named("non-default"));
+        Kernel.Register(Component.For(typeof(UsesIGeneric<>))
+            .DependsOn(ServiceOverride.ForKey<IGeneric<string>>().Eq("non-default")));
 
-			var item = Kernel.Resolve<UsesIGeneric<string>>();
+        var item = Kernel.Resolve<UsesIGeneric<string>>();
 
-			Assert.IsInstanceOf<GenericImpl2<string>>(item.Dependency);
-		}
+        Assert.IsType<GenericImpl2<string>>(item.Dependency);
+    }
 
-		[Test]
-		public void Typed_arguments_work_for_open_generic_ServiceOverrides_closed_service()
-		{
-			Kernel.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)).Named("default"));
-			Kernel.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)).Named("non-default"));
-			Kernel.Register(Component.For(typeof(UsesIGeneric<>))
-				.DependsOn(ServiceOverride.ForKey(typeof(IGeneric<string>)).Eq("non-default")));
+    [Fact]
+    public void Typed_arguments_work_for_open_generic_ServiceOverrides_closed_service_preferred_over_open_service()
+    {
+        Kernel.Register(
+            Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)).Named("default"),
+            Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)).Named("non-default-open")
+                .DependsOn(Property.ForKey("value").Eq(1)),
+            Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)).Named("non-default-int")
+                .DependsOn(Property.ForKey("value").Eq(2)),
+            Component.For(typeof(UsesIGeneric<>))
+                .DependsOn(ServiceOverride.ForKey(typeof(IGeneric<>)).Eq("non-default-open"),
+                    ServiceOverride.ForKey<IGeneric<int>>().Eq("non-default-int"))
+        );
 
-			var item = Kernel.Resolve<UsesIGeneric<string>>();
+        var withString = Kernel.Resolve<UsesIGeneric<string>>();
+        var withInt = Kernel.Resolve<UsesIGeneric<int>>();
 
-			Assert.IsInstanceOf<GenericImpl2<string>>(item.Dependency);
-		}
+        Assert.IsType<GenericImpl2<string>>(withString.Dependency);
+        Assert.Equal(1, (withString.Dependency as GenericImpl2<string>).Value);
+        Assert.IsType<GenericImpl2<int>>(withInt.Dependency);
+        Assert.Equal(2, (withInt.Dependency as GenericImpl2<int>).Value);
+    }
 
-		[Test]
-		public void Typed_arguments_work_for_open_generic_ServiceOverrides_closed_service_preferred_over_open_service()
-		{
-			Kernel.Register(
-				Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)).Named("default"),
-				Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)).Named("non-default-open")
-					.DependsOn(Property.ForKey("value").Eq(1)),
-				Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)).Named("non-default-int")
-					.DependsOn(Property.ForKey("value").Eq(2)),
-				Component.For(typeof(UsesIGeneric<>))
-					.DependsOn(ServiceOverride.ForKey(typeof(IGeneric<>)).Eq("non-default-open"),
-					           ServiceOverride.ForKey(typeof(IGeneric<int>)).Eq("non-default-int"))
-				);
+    [Fact]
+    public void Typed_arguments_work_for_open_generic_ServiceOverrides_open_service()
+    {
+        Kernel.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)).Named("default"));
+        Kernel.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)).Named("non-default"));
+        Kernel.Register(Component.For(typeof(UsesIGeneric<>))
+            .DependsOn(ServiceOverride.ForKey(typeof(IGeneric<>)).Eq("non-default")));
 
-			var withString = Kernel.Resolve<UsesIGeneric<string>>();
-			var withInt = Kernel.Resolve<UsesIGeneric<int>>();
+        var item = Kernel.Resolve<UsesIGeneric<string>>();
 
-			Assert.IsInstanceOf<GenericImpl2<string>>(withString.Dependency);
-			Assert.AreEqual(1, (withString.Dependency as GenericImpl2<string>).Value);
-			Assert.IsInstanceOf<GenericImpl2<int>>(withInt.Dependency);
-			Assert.AreEqual(2, (withInt.Dependency as GenericImpl2<int>).Value);
-		}
-
-		[Test]
-		public void Typed_arguments_work_for_open_generic_ServiceOverrides_open_service()
-		{
-			Kernel.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)).Named("default"));
-			Kernel.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)).Named("non-default"));
-			Kernel.Register(Component.For(typeof(UsesIGeneric<>))
-			                	.DependsOn(ServiceOverride.ForKey(typeof(IGeneric<>)).Eq("non-default")));
-
-			var item = Kernel.Resolve<UsesIGeneric<string>>();
-
-			Assert.IsInstanceOf<GenericImpl2<string>>(item.Dependency);
-		}
-	}
+        Assert.IsType<GenericImpl2<string>>(item.Dependency);
+    }
 }

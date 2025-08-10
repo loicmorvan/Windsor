@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.ClassComponents
-{
-	public interface IGeneric<T>
-	{
-	}
-}
+namespace Castle.Windsor.Tests.ClassComponents;
+
+// ReSharper disable once UnusedTypeParameter
+public interface IGeneric<T>;

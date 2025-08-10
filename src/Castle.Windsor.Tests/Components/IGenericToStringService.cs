@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public interface IGenericToStringService<in T> where T : class
 {
-	public interface IGenericToStringService<T> where T : class
-	{
-		string ToString(params T[] instances);
-	}
+    string ToString(params T[] instances);
 }

@@ -12,15 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class Use<T> : IUse<T>
-	{
-		public Use(T dependency)
-		{
-			Dependency = dependency;
-		}
+namespace Castle.Windsor.Tests.Components;
 
-		public T Dependency { get; private set; }
-	}
+public class Use<T>(T dependency) : IUse<T>
+{
+    public T Dependency { get; } = dependency;
 }

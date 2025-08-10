@@ -12,42 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+using System.Diagnostics;
+using Castle.Core.Configuration;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
+
+[Serializable]
+public class ArrayConverter : AbstractTypeConverter
 {
-	using System;
-	using System.Diagnostics;
+    public override bool CanHandleType(Type type)
+    {
+        return type.IsArray;
+    }
 
-	using Castle.Core.Configuration;
+    public override object PerformConversion(string value, Type targetType)
+    {
+        throw new NotImplementedException();
+    }
 
-	[Serializable]
-	public class ArrayConverter : AbstractTypeConverter
-	{
-		public override bool CanHandleType(Type type)
-		{
-			return type.IsArray;
-		}
+    public override object PerformConversion(IConfiguration configuration, Type targetType)
+    {
+        Debug.Assert(targetType.IsArray);
+        var count = configuration.Children.Count;
+        var itemType = targetType.GetElementType();
 
-		public override object PerformConversion(String value, Type targetType)
-		{
-			throw new NotImplementedException();
-		}
+        var array = Array.CreateInstance(itemType, count);
 
-		public override object PerformConversion(IConfiguration configuration, Type targetType)
-		{
-			Debug.Assert(targetType.IsArray);
-			var count = configuration.Children.Count;
-			var itemType = targetType.GetElementType();
+        var index = 0;
+        foreach (var value in configuration.Children.Select(itemConfig =>
+                     Context.Composition.PerformConversion(itemConfig, itemType)))
+        {
+            array.SetValue(value, index++);
+        }
 
-			var array = Array.CreateInstance(itemType, count);
-
-			var index = 0;
-			foreach (var itemConfig in configuration.Children)
-			{
-				var value = Context.Composition.PerformConversion(itemConfig, itemType);
-				array.SetValue(value, index++);
-			}
-
-			return array;
-		}
-	}
+        return array;
+    }
 }

@@ -12,134 +12,112 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors
+using System.Diagnostics;
+using System.Text.RegularExpressions;
+using System.Xml;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
+
+public partial class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 {
-	using System;
-#if FEATURE_SYSTEM_CONFIGURATION
-	using System.Configuration;
-#endif
-	using System.Text.RegularExpressions;
-	using System.Xml;
+    private static readonly XmlNodeType[] AcceptNodes = [XmlNodeType.CDATA, XmlNodeType.Text];
 
-	public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
-	{
-		/// <summary>
-		///   Properties names can contain a-zA-Z0-9_. 
-		///   i.e. #!{ my_node_name } || #{ my.node.name }
-		///   spaces are trimmed
-		/// </summary>
-		private static readonly Regex PropertyValidationRegExp = new Regex(@"(\#!?\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled);
+    public override XmlNodeType[] AcceptNodeTypes => AcceptNodes;
 
-		private static readonly XmlNodeType[] acceptNodes = new[] { XmlNodeType.CDATA, XmlNodeType.Text };
+    public override string Name => "#text";
 
-		public override XmlNodeType[] AcceptNodeTypes
-		{
-			get { return acceptNodes; }
-		}
+    public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
+    {
+        var node = nodeList.Current as XmlCharacterData;
 
-		public override String Name
-		{
-			get { return "#text"; }
-		}
+        Debug.Assert(node != null);
+        ProcessString(node, node.Value, engine);
+    }
 
-		public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
-		{
-			var node = nodeList.Current as XmlCharacterData;
+    /// <summary>Processes the string.</summary>
+    /// <param name="node">The node.</param>
+    /// <param name="value">The value.</param>
+    /// <param name="engine">The context.</param>
+    public static void ProcessString(XmlNode node, string value, IXmlProcessorEngine engine)
+    {
+        var fragment = CreateFragment(node);
 
-			ProcessString(node, node.Value, engine);
-		}
+        Match match;
+        var pos = 0;
+        while ((match = GetPropertyValidationRegex().Match(value, pos)).Success)
+        {
+            if (pos < match.Index)
+            {
+                AppendChild(fragment, value.Substring(pos, match.Index - pos));
+            }
 
-		/// <summary>
-		///   Processes the string.
-		/// </summary>
-		/// <param name = "node">The node.</param>
-		/// <param name = "value">The value.</param>
-		/// <param name = "engine">The context.</param>
-		public void ProcessString(XmlNode node, string value, IXmlProcessorEngine engine)
-		{
-			var fragment = CreateFragment(node);
+            var propRef = match.Groups[1].Value; // #!{ propKey }
+            var propKey = match.Groups[2].Value; // propKey
 
-			Match match;
-			var pos = 0;
-			while ((match = PropertyValidationRegExp.Match(value, pos)).Success)
-			{
-				if (pos < match.Index)
-				{
-					AppendChild(fragment, value.Substring(pos, match.Index - pos));
-				}
+            {
+            }
+            var prop = engine.GetProperty(propKey);
 
-				var propRef = match.Groups[1].Value; // #!{ propKey }
-				var propKey = match.Groups[2].Value; // propKey
+            if (prop != null)
+            {
+                // When node has a parentNode (not an attribute)
+                // we copy any attributes for the property into the parentNode
+                if (node.ParentNode != null)
+                {
+                    MoveAttributes(node.ParentNode as XmlElement, prop);
+                }
 
-				{
-				}
-				var prop = engine.GetProperty(propKey);
+                AppendChild(fragment, prop.ChildNodes);
+            }
+            else if (IsRequiredProperty(propRef))
+            {
+                {
+                    throw new XmlProcessorException($"Required configuration property {propKey} not found");
+                }
+            }
 
-				if (prop != null)
-				{
-					// When node has a parentNode (not an attribute)
-					// we copy any attributes for the property into the parentNode
-					if (node.ParentNode != null)
-					{
-						MoveAttributes(node.ParentNode as XmlElement, prop);
-					}
+            pos = match.Index + match.Length;
+        }
 
-					AppendChild(fragment, prop.ChildNodes);
-				}
-				else if (IsRequiredProperty(propRef))
-				{
-#if FEATURE_SYSTEM_CONFIGURATION
-					// fallback to reading from appSettings
-					var appSetting = ConfigurationManager.AppSettings[propKey];
-					if (appSetting != null)
-					{
-						AppendChild(fragment, appSetting);
-					}
-					else
-#endif
-					{
-						throw new XmlProcessorException(String.Format("Required configuration property {0} not found", propKey));
-					}
-				}
+        switch (pos)
+        {
+            // Appending anything left
+            case > 0 when pos < value.Length:
+                AppendChild(fragment, value[pos..]);
+                break;
+            // we only process when there was at least one match
+            // even when the fragment contents is empty since
+            // that could mean that there was a match but the property
+            // reference was a silent property
+            case <= 0:
+                return;
+        }
 
-				pos = match.Index + match.Length;
-			}
+        if (node.NodeType == XmlNodeType.Attribute)
+        {
+            node.Value = fragment.InnerText.Trim();
+        }
+        else
+        {
+            ReplaceNode(node.ParentNode, fragment, node);
+        }
+    }
 
-			// Appending anything left
-			if (pos > 0 && pos < value.Length)
-			{
-				AppendChild(fragment, value.Substring(pos, value.Length - pos));
-			}
+    private static bool IsRequiredProperty(string propRef)
+    {
+        return propRef.StartsWith("#{");
+    }
 
-			// we only process when there was at least one match
-			// even when the fragment contents is empty since
-			// that could mean that there was a match but the property
-			// reference was a silent property
-			if (pos > 0)
-			{
-				if (node.NodeType == XmlNodeType.Attribute)
-				{
-					node.Value = fragment.InnerText.Trim();
-				}
-				else
-				{
-					ReplaceNode(node.ParentNode, fragment, node);
-				}
-			}
-		}
+    private static void MoveAttributes(XmlElement targetElement, XmlElement srcElement)
+    {
+        for (var i = srcElement.Attributes.Count - 1; i > -1; i--)
+        {
+            var importedAttr = ImportNode(targetElement, srcElement.Attributes[i]) as XmlAttribute;
+            Debug.Assert(importedAttr != null);
+            targetElement.Attributes.Append(importedAttr);
+        }
+    }
 
-		private bool IsRequiredProperty(string propRef)
-		{
-			return propRef.StartsWith("#{");
-		}
-
-		private void MoveAttributes(XmlElement targetElement, XmlElement srcElement)
-		{
-			for (var i = srcElement.Attributes.Count - 1; i > -1; i--)
-			{
-				var importedAttr = ImportNode(targetElement, srcElement.Attributes[i]) as XmlAttribute;
-				targetElement.Attributes.Append(importedAttr);
-			}
-		}
-	}
+    [GeneratedRegex(@"(\#!?\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled)]
+    private static partial Regex GetPropertyValidationRegex();
 }

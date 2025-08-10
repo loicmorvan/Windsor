@@ -12,251 +12,240 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.SpecializedResolvers
+using Castle.Windsor.MicroKernel.Handlers;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
+using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.SpecializedResolvers;
+
+public class ArrayResolverTestCase : AbstractContainerTestCase
 {
-	using System;
-	using System.Linq;
+    [Fact]
+    public void ArrayResolution_UnresolvableDependencyCausesResolutionFailure()
+    {
+        Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel, true));
+        Container.Register(
+            Component.For<IDependency>().ImplementedBy<ResolvableDependency>(),
+            Component.For<IDependency>().ImplementedBy<UnresolvableDependencyWithPrimitiveConstructor>(),
+            Component.For<IDependOnArray>().ImplementedBy<DependsOnArray>()
+        );
 
-	using Castle.MicroKernel.Handlers;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Resolvers.SpecializedResolvers;
+        var exception =
+            Assert.Throws<HandlerException>(() => Container.Resolve<IDependOnArray>());
 
-	using CastleTests;
-	using CastleTests.Components;
+        var message =
+            string.Format(
+                "Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Service '{2}' which was not registered.{0}- Parameter 'str' which was not provided. Did you forget to set the dependency?{0}",
+                Environment.NewLine,
+                typeof(UnresolvableDependencyWithPrimitiveConstructor).FullName,
+                typeof(A).FullName);
 
-	using NUnit.Framework;
+        Assert.Equal(message, exception.Message);
+    }
 
-	[TestFixture]
-	public class ArrayResolverTestCase : AbstractContainerTestCase
-	{
-		[Test(Description = "IOC-239")]
-		public void ArrayResolution_UnresolvableDependencyCausesResolutionFailure()
-		{
-			Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel, true));
-			Container.Register(
-				Component.For<IDependency>().ImplementedBy<ResolvableDependency>(),
-				Component.For<IDependency>().ImplementedBy<UnresolvalbeDependencyWithPrimitiveConstructor>(),
-				Component.For<IDependOnArray>().ImplementedBy<DependsOnArray>()
-				);
+    [Fact]
+    public void ArrayResolution_UnresolvableDependencyCausesResolutionFailure_ServiceConstructor()
+    {
+        Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel, true));
+        Container.Register(
+            Component.For<IDependency>().ImplementedBy<ResolvableDependency>(),
+            Component.For<IDependency>().ImplementedBy<UnresolvableDependencyWithAdditionalServiceConstructor>(),
+            Component.For<IDependOnArray>().ImplementedBy<DependsOnArray>()
+        );
 
-			var exception = 
+        var exception =
+            Assert.Throws<HandlerException>(() => Container.Resolve<IDependOnArray>());
 
-			Assert.Throws<HandlerException>(() => Container.Resolve<IDependOnArray>());
+        var message =
+            string.Format(
+                "Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Service '{2}' which was not registered.{0}- Service '{3}' which was not registered.{0}",
+                Environment.NewLine,
+                typeof(UnresolvableDependencyWithAdditionalServiceConstructor).FullName,
+                typeof(A).FullName,
+                typeof(IEmptyService).FullName);
 
-			var message =
-				string.Format(
-					"Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Service '{2}' which was not registered.{0}- Parameter 'str' which was not provided. Did you forget to set the dependency?{0}",
-					Environment.NewLine,
-					typeof(UnresolvalbeDependencyWithPrimitiveConstructor).FullName,
-					typeof(A).FullName);
+        Assert.Equal(message, exception.Message);
+    }
 
-			Assert.AreEqual(message, exception.Message);
-		}
+    [Fact]
+    public void ArrayResolution_UnresolvableDependencyIsNotIncluded()
+    {
+        Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
+        Container.Register(
+            Component.For<IDependency>().ImplementedBy<ResolvableDependency>(),
+            Component.For<IDependency>().ImplementedBy<UnresolvableDependency>(),
+            Component.For<IDependOnArray>().ImplementedBy<DependsOnArray>()
+        );
 
-		[Test(Description = "IOC-239")]
-		public void ArrayResolution_UnresolvableDependencyCausesResolutionFailure_ServiceConstructor()
-		{
-			Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel, true));
-			Container.Register(
-				Component.For<IDependency>().ImplementedBy<ResolvableDependency>(),
-				Component.For<IDependency>().ImplementedBy<UnresolvalbeDependencyWithAdditionalServiceConstructor>(),
-				Component.For<IDependOnArray>().ImplementedBy<DependsOnArray>()
-				);
+        var exception =
+            Assert.Throws<HandlerException>(() => Container.Resolve<IDependOnArray>());
 
-			var exception =
+        var message =
+            string.Format(
+                "Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Service '{2}' which was not registered.{0}",
+                Environment.NewLine,
+                typeof(UnresolvableDependency).FullName,
+                typeof(A).FullName);
 
-			Assert.Throws<HandlerException>(() => Container.Resolve<IDependOnArray>());
+        Assert.Equal(message, exception.Message);
+    }
 
-			var message =
-				string.Format(
-					"Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Service '{2}' which was not registered.{0}- Service '{3}' which was not registered.{0}",
-					Environment.NewLine,
-					typeof(UnresolvalbeDependencyWithAdditionalServiceConstructor).FullName,
-					typeof(A).FullName,
-					typeof(IEmptyService).FullName);
+    [Fact]
+    public void Composite_service_can_be_resolved_without_triggering_circular_dependency_detection_fuse()
+    {
+        Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
+        Container.Register(Classes.FromAssembly(GetCurrentAssembly())
+            .BasedOn<IEmptyService>()
+            .WithService.Base()
+            .ConfigureFor<EmptyServiceComposite>(r => r.Forward<EmptyServiceComposite>()));
 
-			Assert.AreEqual(message, exception.Message);
-		}
+        var composite = Container.Resolve<EmptyServiceComposite>();
+        Assert.Equal(5, composite.Inner.Length);
+    }
 
-		[Test(Description = "IOC-239")]
-		public void ArrayResolution_UnresolvableDependencyIsNotIncluded()
-		{
-			Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
-			Container.Register(
-				Component.For<IDependency>().ImplementedBy<ResolvableDependency>(),
-				Component.For<IDependency>().ImplementedBy<UnresolvalbeDependency>(),
-				Component.For<IDependOnArray>().ImplementedBy<DependsOnArray>()
-				);
+    [Fact]
+    public void
+        Composite_service_can_be_resolved_without_triggering_circular_dependency_detection_fuse_composite_registered_first()
+    {
+        Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
+        Container.Register(
+            Component.For<IEmptyService, EmptyServiceComposite>().ImplementedBy<EmptyServiceComposite>(),
+            Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
+            Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
+            Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
+            Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>()
+        );
 
-			var exception =
+        var composite = Container.Resolve<EmptyServiceComposite>();
+        Assert.Equal(4, composite.Inner.Length);
+    }
 
-			Assert.Throws<HandlerException>(() => Container.Resolve<IDependOnArray>());
+    [Fact]
+    public void DependencyOnArrayOfServices_OnConstructor()
+    {
+        Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
+        Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
+            Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
+            Component.For<ArrayDepAsConstructor>());
 
-			var message =
-				string.Format(
-					"Can't create component '{1}' as it has dependencies to be satisfied.{0}{0}'{1}' is waiting for the following dependencies:{0}- Service '{2}' which was not registered.{0}",
-					Environment.NewLine,
-					typeof(UnresolvalbeDependency).FullName,
-					typeof(A).FullName);
+        var comp = Container.Resolve<ArrayDepAsConstructor>();
 
-			Assert.AreEqual(message, exception.Message);
-		}
+        Assert.NotNull(comp);
+        Assert.NotNull(comp.Services);
+        Assert.Equal(2, comp.Services.Length);
+        foreach (var service in comp.Services)
+        {
+            Assert.NotNull(service);
+        }
+    }
 
-		[Test]
-		public void Composite_service_can_be_resolved_without_triggering_circular_dependency_detection_fuse()
-		{
-			Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
-			Container.Register(Classes.FromAssembly(GetCurrentAssembly())
-			                   	.BasedOn<IEmptyService>()
-			                   	.WithService.Base()
-			                   	.ConfigureFor<EmptyServiceComposite>(r => r.Forward<EmptyServiceComposite>()));
+    [Fact]
+    public void DependencyOnArrayOfServices_OnProperty()
+    {
+        Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
+        Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
+            Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
+            Component.For<ArrayDepAsProperty>());
 
-			var composite = Container.Resolve<EmptyServiceComposite>();
-			Assert.AreEqual(5, composite.Inner.Length);
-		}
+        var comp = Container.Resolve<ArrayDepAsProperty>();
 
-		[Test(Description = "IOC-238")]
-		public void Composite_service_can_be_resolved_without_triggering_circular_dependency_detection_fuse_composite_registered_first()
-		{
-			Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
-			Container.Register(
-				Component.For<IEmptyService, EmptyServiceComposite>().ImplementedBy<EmptyServiceComposite>(),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>()
-				);
+        Assert.NotNull(comp);
+        Assert.NotNull(comp.Services);
+        Assert.Equal(2, comp.Services.Length);
+        foreach (var service in comp.Services)
+        {
+            Assert.NotNull(service);
+        }
+    }
 
-			var composite = Container.Resolve<EmptyServiceComposite>();
-			Assert.AreEqual(4, composite.Inner.Length);
-		}
+    [Fact]
+    public void DependencyOnArrayWhenEmpty()
+    {
+        Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel, true));
+        Container.Register(Component.For<ArrayDepAsConstructor>(),
+            Component.For<ArrayDepAsProperty>());
 
-		[Test]
-		public void DependencyOnArrayOfServices_OnConstructor()
-		{
-			Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
-			Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
-			                   Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
-			                   Component.For<ArrayDepAsConstructor>());
+        var proxy = Container.Resolve<ArrayDepAsConstructor>();
+        Assert.NotNull(proxy.Services);
 
-			var comp = Container.Resolve<ArrayDepAsConstructor>();
+        var proxy2 = Container.Resolve<ArrayDepAsProperty>();
+        Assert.NotNull(proxy2.Services);
+    }
 
-			Assert.IsNotNull(comp);
-			Assert.IsNotNull(comp.Services);
-			Assert.AreEqual(2, comp.Services.Length);
-			foreach (var service in comp.Services)
-			{
-				Assert.IsNotNull(service);
-			}
-		}
+    [Fact]
+    public void DependencyOn_ref_ArrayOfServices_OnConstructor()
+    {
+        Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
+        Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
+            Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
+            Component.For<ArrayRefDepAsConstructor>());
 
-		[Test]
-		public void DependencyOnArrayOfServices_OnProperty()
-		{
-			Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
-			Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
-			                   Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
-			                   Component.For<ArrayDepAsProperty>());
+        var comp = Container.Resolve<ArrayRefDepAsConstructor>();
 
-			var comp = Container.Resolve<ArrayDepAsProperty>();
+        Assert.NotNull(comp);
+        Assert.NotNull(comp.Services);
+        Assert.Equal(2, comp.Services.Length);
+        foreach (var service in comp.Services)
+        {
+            Assert.NotNull(service);
+        }
+    }
 
-			Assert.IsNotNull(comp);
-			Assert.IsNotNull(comp.Services);
-			Assert.AreEqual(2, comp.Services.Length);
-			foreach (var service in comp.Services)
-			{
-				Assert.IsNotNull(service);
-			}
-		}
+    [Fact]
+    public void InjectAll()
+    {
+        Container.Kernel.Resolver.AddSubResolver(new ArrayResolver(Container.Kernel, true));
+        Container.Install(new CollectionServiceOverridesInstaller());
+        var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectAll");
+        var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
+        Assert.Equal(3, dependencies.Count);
+        Assert.Contains(typeof(EmptyServiceA), dependencies);
+        Assert.Contains(typeof(EmptyServiceB), dependencies);
+        Assert.Contains(typeof(EmptyServiceDecoratorViaProperty), dependencies);
+    }
 
-		[Test]
-		public void DependencyOnArrayWhenEmpty()
-		{
-			Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel, true));
-			Container.Register(Component.For<ArrayDepAsConstructor>(),
-			                   Component.For<ArrayDepAsProperty>());
+    [Fact]
+    public void InjectFooAndBarOnly_WithArrayResolver()
+    {
+        Container.Kernel.Resolver.AddSubResolver(new ArrayResolver(Container.Kernel, true));
+        Container.Install(new CollectionServiceOverridesInstaller());
+        var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectFooAndBarOnly");
+        var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
+        Assert.Equal(2, dependencies.Count);
+        Assert.Contains(typeof(EmptyServiceA), dependencies);
+        Assert.Contains(typeof(EmptyServiceB), dependencies);
+    }
 
-			var proxy = Container.Resolve<ArrayDepAsConstructor>();
-			Assert.IsNotNull(proxy.Services);
+    [Fact]
+    public void InjectFooAndBarOnly_WithoutArrayResolver()
+    {
+        Container.Install(new CollectionServiceOverridesInstaller());
+        var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectFooAndBarOnly");
+        var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
+        Assert.Equal(2, dependencies.Count);
+        Assert.Contains(typeof(EmptyServiceA), dependencies);
+        Assert.Contains(typeof(EmptyServiceB), dependencies);
+    }
 
-			var proxy2 = Container.Resolve<ArrayDepAsProperty>();
-			Assert.IsNotNull(proxy2.Services);
-		}
+    [Fact]
+    public void InjectFooOnly_WithArrayResolver()
+    {
+        Container.Kernel.Resolver.AddSubResolver(new ArrayResolver(Container.Kernel, true));
+        Container.Install(new CollectionServiceOverridesInstaller());
+        var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectFooOnly");
+        var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
+        Assert.Single(dependencies);
+        Assert.Contains(typeof(EmptyServiceA), dependencies);
+    }
 
-		[Test]
-		public void DependencyOn_ref_ArrayOfServices_OnConstructor()
-		{
-			Kernel.Resolver.AddSubResolver(new ArrayResolver(Kernel));
-			Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
-			                   Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
-			                   Component.For<ArrayRefDepAsConstructor>());
-
-			var comp = Container.Resolve<ArrayRefDepAsConstructor>();
-
-			Assert.IsNotNull(comp);
-			Assert.IsNotNull(comp.Services);
-			Assert.AreEqual(2, comp.Services.Length);
-			foreach (var service in comp.Services)
-			{
-				Assert.IsNotNull(service);
-			}
-		}
-
-		[Test(Description = "IOC-240")]
-		public void InjectAll()
-		{
-			Container.Kernel.Resolver.AddSubResolver(new ArrayResolver(Container.Kernel, true));
-			Container.Install(new CollectionServiceOverridesInstaller());
-			var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectAll");
-			var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
-			Assert.That(dependencies, Has.Count.EqualTo(3));
-			Assert.That(dependencies, Has.Member(typeof(EmptyServiceA)));
-			Assert.That(dependencies, Has.Member(typeof(EmptyServiceB)));
-			Assert.That(dependencies, Has.Member(typeof(EmptyServiceDecoratorViaProperty)));
-		}
-
-		[Test(Description = "IOC-240")]
-		public void InjectFooAndBarOnly_WithArrayResolver()
-		{
-			Container.Kernel.Resolver.AddSubResolver(new ArrayResolver(Container.Kernel, true));
-			Container.Install(new CollectionServiceOverridesInstaller());
-			var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectFooAndBarOnly");
-			var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
-			Assert.That(dependencies, Has.Count.EqualTo(2));
-			Assert.That(dependencies, Has.Member(typeof(EmptyServiceA)));
-			Assert.That(dependencies, Has.Member(typeof(EmptyServiceB)));
-		}
-
-		[Test(Description = "IOC-240")]
-		public void InjectFooAndBarOnly_WithoutArrayResolver()
-		{
-			Container.Install(new CollectionServiceOverridesInstaller());
-			var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectFooAndBarOnly");
-			var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
-			Assert.That(dependencies, Has.Count.EqualTo(2));
-			Assert.That(dependencies, Has.Member(typeof(EmptyServiceA)));
-			Assert.That(dependencies, Has.Member(typeof(EmptyServiceB)));
-		}
-
-		[Test(Description = "IOC-240")]
-		public void InjectFooOnly_WithArrayResolver()
-		{
-			Container.Kernel.Resolver.AddSubResolver(new ArrayResolver(Container.Kernel, true));
-			Container.Install(new CollectionServiceOverridesInstaller());
-			var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectFooOnly");
-			var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
-			Assert.That(dependencies, Has.Count.EqualTo(1));
-			Assert.That(dependencies, Has.Member(typeof(EmptyServiceA)));
-		}
-
-		[Test(Description = "IOC-240")]
-		public void InjectFooOnly_WithoutArrayResolver()
-		{
-			Container.Install(new CollectionServiceOverridesInstaller());
-			var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectFooOnly");
-			var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
-			Assert.That(dependencies, Has.Count.EqualTo(1));
-			Assert.That(dependencies, Has.Member(typeof(EmptyServiceA)));
-		}
-	}
+    [Fact]
+    public void InjectFooOnly_WithoutArrayResolver()
+    {
+        Container.Install(new CollectionServiceOverridesInstaller());
+        var fooItemTest = Container.Resolve<ArrayDepAsConstructor>("InjectFooOnly");
+        var dependencies = fooItemTest.Services.Select(d => d.GetType()).ToList();
+        Assert.Single(dependencies);
+        Assert.Contains(typeof(EmptyServiceA), dependencies);
+    }
 }

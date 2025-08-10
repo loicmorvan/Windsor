@@ -1,28 +1,33 @@
 # ASP.NET WebAPI Facility
 
-The ASP.NET WebAPI facility provides Castle Windsor integration using custom 
+The ASP.NET WebAPI facility provides Castle Windsor integration using custom
 
- - [IHttpControllerActivator](https://msdn.microsoft.com/en-us/library/system.web.http.dispatcher.ihttpcontrolleractivator(v=vs.118).aspx) for .NET Framework web hosted projects.
- - [IDependencyResolver](https://msdn.microsoft.com/en-us/library/system.web.http.dependencies.idependencyresolver(v=vs.118).aspx) for .NET Framework self-hosted projects.
+- [IHttpControllerActivator](https://msdn.microsoft.com/en-us/library/system.web.http.dispatcher.ihttpcontrolleractivator(v=vs.118).aspx)
+  for .NET Framework web hosted projects.
+- [IDependencyResolver](https://msdn.microsoft.com/en-us/library/system.web.http.dependencies.idependencyresolver(v=vs.118).aspx)
+  for .NET Framework self-hosted projects.
 
 ## How does it work?
 
 ### Web Hosted
 
-This is basically a WebApi that is co-hosted with an MVC project or served up in isolation using IIS. The activator is 
+This is basically a WebApi that is co-hosted with an MVC project or served up in isolation using IIS. The activator is
 the most reliable way of resolving/releasing from Windsor using the latest NuGet's and tooling.
 
-Scoped lifestyles are possible using the `WithLifestyleScopedPerWebRequest` method which is described in more detail [here](asp-lifestyles.md). 
+Scoped lifestyles are possible using the `WithLifestyleScopedPerWebRequest` method which is described in more
+detail [here](asp-lifestyles.md).
 
 ### Self Hosted
 
-This is a WebApi project that is served up using self hosting capabilities or with OWIN self hosting. Typically something
+This is a WebApi project that is served up using self hosting capabilities or with OWIN self hosting. Typically
+something
 that runs in a windows service outside of IIS.
 
 ## What do I need to set it up?
 
-You need to determine whether your webapi is hosted in or outside of IIS. Then pull down `Castle.Facilities.AspNet.WebApi` 
-into your project from NuGet. 
+You need to determine whether your webapi is hosted in or outside of IIS. Then pull down
+`Castle.Windsor.Facilities.AspNet.WebApi`
+into your project from NuGet.
 
 ### IIS or WebHosted
 
@@ -46,17 +51,18 @@ public class MvcApplication : System.Web.HttpApplication
 }
 ```
 
-The scoped lifestyles are an optional extra if you are using scopes in your web project, they will emulate a `Per Web Request` 
-lifestyle. If not, you can simply register your controllers as transient and they will be implicitly lifestyled for the 
+The scoped lifestyles are an optional extra if you are using scopes in your web project, they will emulate a
+`Per Web Request`
+lifestyle. If not, you can simply register your controllers as transient and they will be implicitly lifestyled for the
 duration of a web request but behave as transients normally do for services consumed by controllers.
 
 ### Self Hosted
 
 Here you will not need anything radically different from the web hosting scenario. You will however need to apply
-the `UsingSelfHosting` method to your facility on startup. 
+the `UsingSelfHosting` method to your facility on startup.
 
 Here is a rather comprehensive example of how you could achieve this using OWIN. The same is also possible with vanilla
-webapi self hosting. 
+webapi self hosting.
 
 ```csharp
 public interface IAnyService

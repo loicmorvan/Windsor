@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Scope
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
+
+namespace Castle.Windsor.Extensions.DependencyInjection.Scope;
+
+internal class ExtensionContainerScopeAccessor : IScopeAccessor
 {
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Lifestyle.Scoped;
+    public ILifetimeScope GetScope(CreationContext context)
+    {
+        return ExtensionContainerScopeCache.Current;
+    }
 
-	internal class ExtensionContainerScopeAccessor : IScopeAccessor
-	{
-		public ILifetimeScope GetScope(CreationContext context)
-		{
-			return ExtensionContainerScopeCache.Current;
-		}
-
-		public void Dispose()
-		{
-		}
-	}
+    public void Dispose()
+    {
+    }
 }

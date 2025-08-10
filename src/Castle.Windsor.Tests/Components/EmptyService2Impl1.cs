@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class EmptyService2Impl1 : IEmptyService2
-	{
-	}
-}
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.Components;
+
+[UsedImplicitly]
+public class EmptyService2Impl1 : IEmptyService2;

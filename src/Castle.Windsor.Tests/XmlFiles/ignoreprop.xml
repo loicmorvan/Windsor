@@ -1,15 +1,15 @@
 <configuration>
 
-	<components>
+    <components>
 
-		<component id="server" 
-			type="ClassWithDoNotWireProperties">
-			<parameters>
-				<Port>100</Port>
-				<Host>server</Host>
-			</parameters>
-		</component>
+        <component id="server"
+                   type="ClassWithDoNotWireProperties">
+            <parameters>
+                <Port>100</Port>
+                <Host>server</Host>
+            </parameters>
+        </component>
 
-	</components>
+    </components>
 
 </configuration>

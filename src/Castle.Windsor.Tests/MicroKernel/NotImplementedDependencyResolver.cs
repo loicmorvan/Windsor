@@ -12,43 +12,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.MicroKernel
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Context;
+
+namespace Castle.Windsor.Tests.MicroKernel;
+
+public class NotImplementedDependencyResolver : IDependencyResolver
 {
-	using System;
+    public IKernel Kernel { get; private set; }
 
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Context;
+    public void Initialize(IKernelInternal kernel, DependencyDelegate resolving)
+    {
+        Kernel = kernel;
+    }
 
-	public class NotImplementedDependencyResolver : IDependencyResolver
-	{
-		public IKernel Kernel { get; set; }
+    public void AddSubResolver(ISubDependencyResolver subResolver)
+    {
+        throw new NotImplementedException();
+    }
 
-		public void Initialize(IKernelInternal kernel, DependencyDelegate resolving)
-		{
-			Kernel = kernel;
-		}
+    public void RemoveSubResolver(ISubDependencyResolver subResolver)
+    {
+        throw new NotImplementedException();
+    }
 
-		public void AddSubResolver(ISubDependencyResolver subResolver)
-		{
-			throw new NotImplementedException();
-		}
+    public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+        DependencyModel dependency)
+    {
+        throw new NotImplementedException();
+    }
 
-		public void RemoveSubResolver(ISubDependencyResolver subResolver)
-		{
-			throw new NotImplementedException();
-		}
-
-		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
-		                       DependencyModel dependency)
-		{
-			throw new NotImplementedException();
-		}
-
-		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
-		                      DependencyModel dependency)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+        DependencyModel dependency)
+    {
+        throw new NotImplementedException();
+    }
 }

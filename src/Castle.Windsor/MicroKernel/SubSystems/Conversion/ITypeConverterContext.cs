@@ -12,21 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Context;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
+
+public interface ITypeConverterContext
 {
-	using Castle.Core;
-	using Castle.MicroKernel.Context;
+    ITypeConverter Composition { get; }
 
-	public interface ITypeConverterContext
-	{
-		ITypeConverter Composition { get; }
+    CreationContext CurrentCreationContext { get; }
 
-		CreationContext CurrentCreationContext { get; }
-		ComponentModel CurrentModel { get; }
-		IKernelInternal Kernel { get; }
+    [PublicAPI] ComponentModel CurrentModel { get; }
 
-		void Pop();
+    IKernelInternal Kernel { get; }
 
-		void Push(ComponentModel model, CreationContext context);
-	}
+    void Pop();
+
+    void Push(ComponentModel model, CreationContext context);
 }

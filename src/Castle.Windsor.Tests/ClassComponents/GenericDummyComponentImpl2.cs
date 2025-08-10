@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.ClassComponents
-{
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
-	public class GenericDummyComponentImpl<T, T2> : IGeneric<T>, IDummyComponent<T2>
-	{
-	}
-}
+namespace Castle.Windsor.Tests.ClassComponents;
+
+public class GenericDummyComponentImpl<T, T2> : IGeneric<T>, IDummyComponent<T2>;

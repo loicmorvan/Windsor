@@ -12,21 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Interceptors
+using Castle.DynamicProxy;
+
+namespace Castle.Windsor.Tests.Interceptors;
+
+public class CollectInterceptedIdInterceptor : IInterceptor
 {
-	using Castle.DynamicProxy;
+    public static int InterceptedId;
 
-	public class CollectInterceptedIdInterceptor : IInterceptor
-	{
-		public static int InterceptedId;
-
-		public void Intercept(IInvocation invocation)
-		{
-			invocation.Proceed();
-			if (invocation.Arguments.Length > 0)
-			{
-				InterceptedId = (int)invocation.Arguments[0];
-			}
-		}
-	}
+    public void Intercept(IInvocation invocation)
+    {
+        invocation.Proceed();
+        if (invocation.Arguments.Length > 0)
+        {
+            InterceptedId = (int)invocation.Arguments[0];
+        }
+    }
 }

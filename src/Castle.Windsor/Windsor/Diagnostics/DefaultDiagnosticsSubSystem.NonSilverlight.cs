@@ -12,50 +12,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
+using System.Collections;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.Windsor.Diagnostics.Extensions;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Windsor.Diagnostics;
+
+[PublicAPI]
+public partial class DefaultDiagnosticsSubSystem : IDiagnosticsHost, IContainerDebuggerExtensionHost
 {
-	using System.Collections;
-	using System.Collections.Generic;
+    private readonly IList<IContainerDebuggerExtension> _extensions = new List<IContainerDebuggerExtension>();
 
-	using Castle.MicroKernel;
-	using Castle.Windsor.Diagnostics.Extensions;
+    public void Add(IContainerDebuggerExtension item)
+    {
+        item.Init(Kernel, this);
+        _extensions.Add(item);
+    }
 
-	public partial class DefaultDiagnosticsSubSystem : IDiagnosticsHost, IContainerDebuggerExtensionHost
-	{
-		private readonly IList<IContainerDebuggerExtension> extensions = new List<IContainerDebuggerExtension>();
+    public IEnumerator<IContainerDebuggerExtension> GetEnumerator()
+    {
+        return _extensions.GetEnumerator();
+    }
 
-		public override void Init(IKernelInternal kernel)
-		{
-			base.Init(kernel);
-			InitStandardExtensions();
-		}
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 
-		public void Add(IContainerDebuggerExtension item)
-		{
-			item.Init(Kernel, this);
-			extensions.Add(item);
-		}
+    public override void Init(IKernelInternal kernel)
+    {
+        base.Init(kernel);
+        InitStandardExtensions();
+    }
 
-		public IEnumerator<IContainerDebuggerExtension> GetEnumerator()
-		{
-			return extensions.GetEnumerator();
-		}
-
-		protected virtual void InitStandardExtensions()
-		{
-			Add(new AllComponents());
-			Add(new AllServices());
-			Add(new PotentiallyMisconfiguredComponents());
-			Add(new PotentialLifestyleMismatches());
-			Add(new DuplicatedDependenciesDebuggerExtension());
-			Add(new UsingContainerAsServiceLocator());
-			Add(new ReleasePolicyTrackedObjects());
-			Add(new Facilities());
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-	}
+    protected virtual void InitStandardExtensions()
+    {
+        Add(new AllComponents());
+        Add(new AllServices());
+        Add(new PotentiallyMisconfiguredComponents());
+        Add(new PotentialLifestyleMismatches());
+        Add(new DuplicatedDependenciesDebuggerExtension());
+        Add(new UsingContainerAsServiceLocator());
+        Add(new ReleasePolicyTrackedObjects());
+        Add(new Extensions.Facilities());
+    }
 }

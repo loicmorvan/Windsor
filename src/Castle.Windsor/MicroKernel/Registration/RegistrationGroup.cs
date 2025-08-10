@@ -12,34 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration
+using Castle.Windsor.MicroKernel.ModelBuilder;
+using Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.MicroKernel.Registration;
+
+public abstract class RegistrationGroup<TS>(ComponentRegistration<TS> registration)
+    where TS : class
 {
-	using Castle.MicroKernel.ModelBuilder;
-	using Castle.MicroKernel.ModelBuilder.Descriptors;
+    [PublicAPI] public ComponentRegistration<TS> Registration { get; } = registration;
 
-	public abstract class RegistrationGroup<S>
-		where S : class
-	{
-		private readonly ComponentRegistration<S> registration;
+    protected ComponentRegistration<TS> AddAttributeDescriptor(string name, string value)
+    {
+        return Registration.AddDescriptor(new AttributeDescriptor<TS>(name, value));
+    }
 
-		public RegistrationGroup(ComponentRegistration<S> registration)
-		{
-			this.registration = registration;
-		}
-
-		public ComponentRegistration<S> Registration
-		{
-			get { return registration; }
-		}
-
-		protected ComponentRegistration<S> AddAttributeDescriptor(string name, string value)
-		{
-			return registration.AddDescriptor(new AttributeDescriptor<S>(name, value));
-		}
-
-		protected ComponentRegistration<S> AddDescriptor(IComponentModelDescriptor descriptor)
-		{
-			return registration.AddDescriptor(descriptor);
-		}
-	}
+    protected ComponentRegistration<TS> AddDescriptor(IComponentModelDescriptor descriptor)
+    {
+        return Registration.AddDescriptor(descriptor);
+    }
 }

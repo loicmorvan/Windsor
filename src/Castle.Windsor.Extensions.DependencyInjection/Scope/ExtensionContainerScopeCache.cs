@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Scope
-{
-	using System;
-	using System.Threading;
+namespace Castle.Windsor.Extensions.DependencyInjection.Scope;
 
-	internal static class ExtensionContainerScopeCache
-	{
-		internal static readonly AsyncLocal<ExtensionContainerScopeBase> current = new AsyncLocal<ExtensionContainerScopeBase>();
-		/// <summary>Current scope for the thread. Initial scope will be set when calling BeginRootScope from a ExtensionContainerRootScope instance.</summary>
-		/// <exception cref="InvalidOperationException">Thrown when there is no scope available.</exception>
-		internal static ExtensionContainerScopeBase Current
-		{
-			get => current.Value ?? throw new InvalidOperationException("No scope available");
-			set => current.Value = value;
-		}
-	}
+internal static class ExtensionContainerScopeCache
+{
+    private static readonly AsyncLocal<ExtensionContainerScopeBase> CurrentScope = new();
+
+    /// <summary>
+    ///     Current scope for the thread. Initial scope will be set when calling BeginRootScope from a
+    ///     ExtensionContainerRootScope instance.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown when there is no scope available.</exception>
+    internal static ExtensionContainerScopeBase Current
+    {
+        get => CurrentScope.Value ?? throw new InvalidOperationException("No scope available");
+        set => CurrentScope.Value = value;
+    }
 }

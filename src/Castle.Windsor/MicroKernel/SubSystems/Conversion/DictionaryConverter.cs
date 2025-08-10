@@ -12,95 +12,83 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+using System.Collections;
+using System.Diagnostics;
+using Castle.Core.Configuration;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
+
+[Serializable]
+public class DictionaryConverter : AbstractTypeConverter
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.Diagnostics;
+    public override bool CanHandleType(Type type)
+    {
+        return type == typeof(IDictionary) || type == typeof(Hashtable);
+    }
 
-	using Castle.Core.Configuration;
+    public override object PerformConversion(string value, Type targetType)
+    {
+        throw new NotImplementedException();
+    }
 
-	[Serializable]
-	public class DictionaryConverter : AbstractTypeConverter
-	{
-		public override bool CanHandleType(Type type)
-		{
-			return (type == typeof(IDictionary) || type == typeof(Hashtable));
-		}
+    public override object PerformConversion(IConfiguration configuration, Type targetType)
+    {
+        Debug.Assert(CanHandleType(targetType));
 
-		public override object PerformConversion(String value, Type targetType)
-		{
-			throw new NotImplementedException();
-		}
+        var dict = new Dictionary<object, object>();
 
-		public override object PerformConversion(IConfiguration configuration, Type targetType)
-		{
-			Debug.Assert(CanHandleType(targetType), "CanHandleType(targetType)");
+        var keyTypeName = configuration.Attributes["keyType"];
+        var defaultKeyType = typeof(string);
 
-			var dict = new Dictionary<object, object>();
+        var valueTypeName = configuration.Attributes["valueType"];
+        var defaultValueType = typeof(string);
 
-			var keyTypeName = configuration.Attributes["keyType"];
-			var defaultKeyType = typeof(String);
+        if (keyTypeName != null)
+        {
+            defaultKeyType = Context.Composition.PerformConversion<Type>(keyTypeName);
+        }
 
-			var valueTypeName = configuration.Attributes["valueType"];
-			var defaultValueType = typeof(String);
+        if (valueTypeName != null)
+        {
+            defaultValueType = Context.Composition.PerformConversion<Type>(valueTypeName);
+        }
 
-			if (keyTypeName != null)
-			{
-				defaultKeyType = Context.Composition.PerformConversion<Type>(keyTypeName);
-			}
-			if (valueTypeName != null)
-			{
-				defaultValueType = Context.Composition.PerformConversion<Type>(valueTypeName);
-			}
+        foreach (var itemConfig in configuration.Children)
+        {
+            // Preparing the key
 
-			foreach (var itemConfig in configuration.Children)
-			{
-				// Preparing the key
+            var keyValue = itemConfig.Attributes["key"];
 
-				var keyValue = itemConfig.Attributes["key"];
+            if (keyValue == null)
+            {
+                throw new ConverterException("You must provide a key for the dictionary entry");
+            }
 
-				if (keyValue == null)
-				{
-					throw new ConverterException("You must provide a key for the dictionary entry");
-				}
+            var convertKeyTo = defaultKeyType;
 
-				var convertKeyTo = defaultKeyType;
+            if (itemConfig.Attributes["keyType"] != null)
+            {
+                convertKeyTo = Context.Composition.PerformConversion<Type>(itemConfig.Attributes["keyType"]);
+            }
 
-				if (itemConfig.Attributes["keyType"] != null)
-				{
-					convertKeyTo = Context.Composition.PerformConversion<Type>(itemConfig.Attributes["keyType"]);
-				}
+            var key = Context.Composition.PerformConversion(keyValue, convertKeyTo);
 
-				var key = Context.Composition.PerformConversion(keyValue, convertKeyTo);
+            // Preparing the value
 
-				// Preparing the value
+            var convertValueTo = defaultValueType;
 
-				var convertValueTo = defaultValueType;
+            if (itemConfig.Attributes["valueType"] != null)
+            {
+                convertValueTo = Context.Composition.PerformConversion<Type>(itemConfig.Attributes["valueType"]);
+            }
 
-				if (itemConfig.Attributes["valueType"] != null)
-				{
-					convertValueTo = Context.Composition.PerformConversion<Type>(itemConfig.Attributes["valueType"]);
-				}
+            var value = Context.Composition.PerformConversion(itemConfig.Children.Count == 0
+                ? itemConfig
+                : itemConfig.Children[0], convertValueTo);
 
-				object value;
+            dict.Add(key, value);
+        }
 
-				if (itemConfig.Children.Count == 0)
-				{
-					value = Context.Composition.PerformConversion(
-						itemConfig, convertValueTo);
-				}
-				else
-				{
-					value = Context.Composition.PerformConversion(
-						itemConfig.Children[0], convertValueTo);
-				}
-
-				dict.Add(key, value);
-			}
-
-			return dict;
-		}
-	}
+        return dict;
+    }
 }

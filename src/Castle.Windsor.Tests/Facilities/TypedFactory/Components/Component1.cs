@@ -12,30 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+
+/// <summary>Summary description for Component1.</summary>
+public class Component1 : IDummyComponent
 {
-	using System;
+    #region IDummyComponent Members
 
-	/// <summary>
-	/// Summary description for Component1.
-	/// </summary>
-	public class Component1 : IDummyComponent
-	{
-		#region IDummyComponent Members
+    public string Name
+    {
+        get =>
+            // TODO:  Add Component1.Name getter implementation
+            null;
+        set
+        {
+            // TODO:  Add Component1.Name setter implementation
+        }
+    }
 
-		public String Name
-		{
-			get
-			{
-				// TODO:  Add Component1.Name getter implementation
-				return null;
-			}
-			set
-			{
-				// TODO:  Add Component1.Name setter implementation
-			}
-		}
-
-		#endregion
-	}
+    #endregion
 }

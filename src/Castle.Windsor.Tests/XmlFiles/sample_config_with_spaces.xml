@@ -1,8 +1,8 @@
 <configuration>
-  <components>
-  <component id="test " 
-             service="ICalcService" 
-             type="CalculatorService" 
-             lifestyle="transient" />
-  </components>
+    <components>
+        <component id="test "
+                   service="ICalcService"
+                   type="CalculatorService"
+                   lifestyle="transient"/>
+    </components>
 </configuration>

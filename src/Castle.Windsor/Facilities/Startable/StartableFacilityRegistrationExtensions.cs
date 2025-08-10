@@ -12,117 +12,105 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Startable
+using System.Linq.Expressions;
+using System.Reflection;
+using Castle.Windsor.MicroKernel.Facilities;
+using Castle.Windsor.MicroKernel.Registration;
+
+namespace Castle.Windsor.Facilities.Startable;
+
+public static class StartableFacilityRegistrationExtensions
 {
-	using System;
-	using System.Linq.Expressions;
-	using System.Reflection;
+    public static ComponentRegistration<TService> Start<TService>(this ComponentRegistration<TService> registration)
+        where TService : class
+    {
+        return registration.AddAttributeDescriptor("startable", true.ToString());
+    }
 
-	using Castle.MicroKernel.Facilities;
-	using Castle.MicroKernel.Registration;
+    /// <summary>Assigns the start method for the startable.</summary>
+    /// <param name="registration"></param>
+    /// <param name="startMethod">The start method.</param>
+    /// <returns></returns>
+    /// <remarks>
+    ///     Be sure that you first added the <see cref="StartableFacility" /> to the kernel, before registering this
+    ///     component.
+    /// </remarks>
+    public static ComponentRegistration<TService> StartUsingMethod<TService>(
+        this ComponentRegistration<TService> registration, string startMethod)
+        where TService : class
+    {
+        return Start(registration)
+            .AddAttributeDescriptor("startMethod", startMethod);
+    }
 
-	public static class StartableFacilityRegistrationExtensions
-	{
-		public static ComponentRegistration<TService> Start<TService>(this ComponentRegistration<TService> registration)
-			where TService : class
-		{
-			return registration.AddAttributeDescriptor("startable", true.ToString());
-		}
+    /// <summary>Assigns the start method for the startable.</summary>
+    /// <param name="registration"></param>
+    /// <param name="methodToUse">Method to use. something like: StartUsingMethod(s => s.Start)</param>
+    /// <returns></returns>
+    /// <remarks>
+    ///     Be sure that you first added the <see cref="StartableFacility" /> to the kernel, before registering this
+    ///     component.
+    /// </remarks>
+    public static ComponentRegistration<TService> StartUsingMethod<TService>(
+        this ComponentRegistration<TService> registration, Expression<Func<TService, Action>> methodToUse)
+        where TService : class
+    {
+        var startMethod = ObtainMethodName(methodToUse);
+        return Start(registration)
+            .AddAttributeDescriptor("startMethod", startMethod);
+    }
 
-		/// <summary>
-		///   Assigns the start method for the startable.
-		/// </summary>
-		/// <param name = "registration"></param>
-		/// <param name = "startMethod">The start method.</param>
-		/// <returns></returns>
-		/// <remarks>
-		///   Be sure that you first added the <see cref = "Castle.Facilities.Startable.StartableFacility" /> 
-		///   to the kernel, before registering this component.
-		/// </remarks>
-		public static ComponentRegistration<TService> StartUsingMethod<TService>(
-			this ComponentRegistration<TService> registration, string startMethod)
-			where TService : class
-		{
-			return Start(registration)
-				.AddAttributeDescriptor("startMethod", startMethod);
-		}
+    /// <summary>Assigns the stop method for the startable.</summary>
+    /// <param name="registration"></param>
+    /// <param name="stopMethod">The stop method.</param>
+    /// <returns></returns>
+    /// <remarks>
+    ///     Be sure that you first added the <see cref="StartableFacility" /> to the kernel, before registering this
+    ///     component.
+    /// </remarks>
+    public static ComponentRegistration<TService> StopUsingMethod<TService>(
+        this ComponentRegistration<TService> registration, string stopMethod)
+        where TService : class
+    {
+        return Start(registration)
+            .AddAttributeDescriptor("stopMethod", stopMethod);
+    }
 
-		/// <summary>
-		///   Assigns the start method for the startable.
-		/// </summary>
-		/// <param name = "registration"></param>
-		/// <param name = "methodToUse">Method to use. something like: StartUsingMethod(s => s.Start)</param>
-		/// <returns></returns>
-		/// <remarks>
-		///   Be sure that you first added the <see cref = "Castle.Facilities.Startable.StartableFacility" /> 
-		///   to the kernel, before registering this component.
-		/// </remarks>
-		public static ComponentRegistration<TService> StartUsingMethod<TService>(
-			this ComponentRegistration<TService> registration, Expression<Func<TService, Action>> methodToUse)
-			where TService : class
-		{
-			var startMethod = ObtainMethodName(methodToUse);
-			return Start(registration)
-				.AddAttributeDescriptor("startMethod", startMethod);
-		}
+    /// <summary>Assigns the stop method for the startable.</summary>
+    /// <param name="registration"></param>
+    /// <param name="methodToUse">Method to use. something like: StartUsingMethod(s => s.Start)</param>
+    /// <returns></returns>
+    /// <remarks>
+    ///     Be sure that you first added the <see cref="StartableFacility" /> to the kernel, before registering this
+    ///     component.
+    /// </remarks>
+    public static ComponentRegistration<TService> StopUsingMethod<TService>(
+        this ComponentRegistration<TService> registration, Expression<Func<TService, Action>> methodToUse)
+        where TService : class
+    {
+        var stopMethod = ObtainMethodName(methodToUse);
 
-		/// <summary>
-		///   Assigns the stop method for the startable.
-		/// </summary>
-		/// <param name = "registration"></param>
-		/// <param name = "stopMethod">The stop method.</param>
-		/// <returns></returns>
-		/// <remarks>
-		///   Be sure that you first added the <see cref = "Castle.Facilities.Startable.StartableFacility" /> 
-		///   to the kernel, before registering this component.
-		/// </remarks>
-		public static ComponentRegistration<TService> StopUsingMethod<TService>(
-			this ComponentRegistration<TService> registration, string stopMethod)
-			where TService : class
-		{
-			return Start(registration)
-				.AddAttributeDescriptor("stopMethod", stopMethod);
-		}
+        return Start(registration)
+            .AddAttributeDescriptor("stopMethod", stopMethod);
+    }
 
-		/// <summary>
-		///   Assigns the stop method for the startable.
-		/// </summary>
-		/// <param name = "registration"></param>
-		/// <param name = "methodToUse">Method to use. something like: StartUsingMethod(s => s.Start)</param>
-		/// <returns></returns>
-		/// <remarks>
-		///   Be sure that you first added the <see cref = "Castle.Facilities.Startable.StartableFacility" /> 
-		///   to the kernel, before registering this component.
-		/// </remarks>
-		public static ComponentRegistration<TService> StopUsingMethod<TService>(
-			this ComponentRegistration<TService> registration, Expression<Func<TService, Action>> methodToUse)
-			where TService : class
-		{
-			var stopMethod = ObtainMethodName(methodToUse);
-			
-			return Start(registration)
-				.AddAttributeDescriptor("stopMethod", stopMethod);
-		}
+    private static TExpression EnsureIs<TExpression>(Expression expression) where TExpression : Expression
+    {
+        if (expression is not TExpression casted)
+        {
+            throw new FacilityException(
+                "Unexpected shape of expression. Expected direct call to method, something like 'x => x.Foo'");
+        }
 
-		private static TExpression EnsureIs<TExpression>(Expression expression) where TExpression : Expression
-		{
-			var casted = expression as TExpression;
-			if (casted == null)
-			{
-				throw new FacilityException(
-					"Unexpected shape of expression. Expected direct call to method, something like 'x => x.Foo'");
-			}
+        return casted;
+    }
 
-			return casted;
-		}
+    private static string ObtainMethodName<TService>(Expression<Func<TService, Action>> methodToUse)
+    {
+        var call = EnsureIs<UnaryExpression>(methodToUse.Body);
+        var createDelegate = EnsureIs<MethodCallExpression>(call.Operand);
+        var method = EnsureIs<ConstantExpression>(createDelegate.Object);
 
-		private static string ObtainMethodName<TService>(Expression<Func<TService, Action>> methodToUse)
-		{
-			var call = EnsureIs<UnaryExpression>(methodToUse.Body);
-			var createDelegate = EnsureIs<MethodCallExpression>(call.Operand);
-			var method = EnsureIs<ConstantExpression>(createDelegate.Object);
-
-			return ((MethodInfo)method.Value).Name;
-		}
-	}
+        return ((MethodInfo)method.Value).Name;
+    }
 }

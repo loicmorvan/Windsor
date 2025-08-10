@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates
-{
-	using System;
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
-	public class HasFuncProperty<T>
-	{
-		public Func<T> Function { get; set; }
-	}
+public class HasFuncProperty<T>
+{
+    public Func<T> Function { get; set; }
 }

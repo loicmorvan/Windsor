@@ -12,45 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
+namespace Castle.Windsor.Core.Internal;
+
+public class SegmentedList<T>(int segmentCount)
 {
-	using System.Collections.Generic;
-	using System.Linq;
+    private readonly List<T>[] _segments = new List<T>[segmentCount];
 
-	public class SegmentedList<T>
-	{
-		private readonly List<T>[] segments;
+    public void AddFirst(int segmentIndex, T item)
+    {
+        GetSegment(segmentIndex).Insert(0, item);
+    }
 
-		public SegmentedList(int segmentCount)
-		{
-			segments = new List<T>[segmentCount];
-		}
+    public void AddLast(int segmentIndex, T item)
+    {
+        GetSegment(segmentIndex).Add(item);
+    }
 
-		public void AddFirst(int segmentIndex, T item)
-		{
-			GetSegment(segmentIndex).Insert(0, item);
-		}
+    public T[] ToArray()
+    {
+        return _segments.Where(l => l != null)
+            .SelectMany(l => l)
+            .ToArray();
+    }
 
-		public void AddLast(int segmentIndex, T item)
-		{
-			GetSegment(segmentIndex).Add(item);
-		}
-
-		public T[] ToArray()
-		{
-			return segments.Where(l => l != null)
-				.SelectMany(l => l)
-				.ToArray();
-		}
-
-		private List<T> GetSegment(int segmentIndex)
-		{
-			var group = segments[segmentIndex];
-			if (group == null)
-			{
-				group = segments[segmentIndex] = new List<T>(4);
-			}
-			return @group;
-		}
-	}
+    private List<T> GetSegment(int segmentIndex)
+    {
+        return _segments[segmentIndex] ?? (_segments[segmentIndex] = new List<T>(4));
+    }
 }

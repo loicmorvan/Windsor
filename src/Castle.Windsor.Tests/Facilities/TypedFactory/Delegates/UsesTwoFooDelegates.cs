@@ -12,41 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
+
+public class UsesTwoFooDelegates
 {
-	using System;
+    private int _counter;
 
-	public class UsesTwoFooDelegates
-	{
-		private readonly Func<int, Foo> one;
-		private readonly Func<int, Foo> two;
-		private int counter;
+    public UsesTwoFooDelegates(Func<int, Foo> one, Func<int, Foo> two)
+    {
+        One = one;
+        Two = two;
+        _counter = 0;
+    }
 
-		public UsesTwoFooDelegates(Func<int, Foo> one, Func<int, Foo> two)
-		{
-			this.one = one;
-			this.two = two;
-			counter = 0;
-		}
+    private Func<int, Foo> One { get; }
 
-		public Func<int, Foo> One
-		{
-			get { return one; }
-		}
+    private Func<int, Foo> Two { get; }
 
-		public Func<int, Foo> Two
-		{
-			get { return two; }
-		}
+    public Foo GetFooOne()
+    {
+        return One(++_counter);
+    }
 
-		public Foo GetFooOne()
-		{
-			return one(++counter);
-		}
-
-		public Foo GetFooTwo()
-		{
-			return two(++counter);
-		}
-	}
+    public Foo GetFooTwo()
+    {
+        return Two(++_counter);
+    }
 }

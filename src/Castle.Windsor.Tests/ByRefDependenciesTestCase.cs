@@ -12,42 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests;
+
+public class ByRefDependenciesTestCase : AbstractContainerTestCase
 {
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.ClassComponents;
+    [Fact]
+    public void Can_resolve_type_with_by_ref_dependency()
+    {
+        Container.Register(Component.For<A>(),
+            Component.For<HasByRefCtorArgument>());
 
-	using CastleTests;
-	using CastleTests.Components;
+        Container.Resolve<HasByRefCtorArgument>();
+    }
 
-	using NUnit.Framework;
+    [Fact]
+    public void Can_resolve_type_with_by_ref_dependency_provided_inline()
+    {
+        Container.Register(Component.For<HasByRefCtorArgument>());
 
-	public class ByRefDependenciesTestCase : AbstractContainerTestCase
-	{
-		[Test]
-		public void Can_resolve_type_with_by_ref_dependency()
-		{
-			Container.Register(Component.For<A>(),
-			                   Component.For<HasByRefCtorArgument>());
+        Container.Resolve<HasByRefCtorArgument>(Arguments.FromProperties(new { a = new A() }));
+    }
 
-			Container.Resolve<HasByRefCtorArgument>();
-		}
+    [Fact]
+    public void Can_resolve_type_with_by_ref_dependency_provided_inline_via_anonymous_type()
+    {
+        Container.Register(Component.For<HasByRefCtorArgument>());
 
-		[Test]
-		public void Can_resolve_type_with_by_ref_dependency_provided_inline()
-		{
-			Container.Register(Component.For<HasByRefCtorArgument>());
-
-			Container.Resolve<HasByRefCtorArgument>(Arguments.FromProperties(new { a = new A() }));
-		}
-
-		[Test]
-		public void Can_resolve_type_with_by_ref_dependency_provided_inline_via_anonymous_type()
-		{
-			Container.Register(Component.For<HasByRefCtorArgument>());
-
-			Container.Resolve<HasByRefCtorArgument>(Arguments.FromProperties(new { a = new A() }));
-		}
-	}
+        Container.Resolve<HasByRefCtorArgument>(Arguments.FromProperties(new { a = new A() }));
+    }
 }

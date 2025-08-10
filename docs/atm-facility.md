@@ -1,12 +1,15 @@
 # Automatic Transaction Management Facility
 
-This facility manages the creation of Transactions and the associated commit or rollback, depending on whether the method throws an exception or not.
+This facility manages the creation of Transactions and the associated commit or rollback, depending on whether the
+method throws an exception or not.
 
 Transactions are logical. It is up the other integration to be transaction aware and enlist its resources on it.
 
 ## Quick start
 
-This facility usually works together with others facilities, as it requires an implementation of `ITransactionManager`. Currently the [ActiveRecord Integration Facility](activerecord-integration-facility.md) and [NHibernate facility](nhibernate-facility.md) implement the `ITransactionManager`.
+This facility usually works together with others facilities, as it requires an implementation of `ITransactionManager`.
+Currently the [ActiveRecord Integration Facility](activerecord-integration-facility.md)
+and [NHibernate facility](nhibernate-facility.md) implement the `ITransactionManager`.
 
 ### Defining transaction behavior on components
 
@@ -52,7 +55,10 @@ public class BusinessClass
 </configuration>
 ```
 
-:warning: **Class methods must be virtual:** If you are registering the component without an interface as a service you must make the methods virtual in order to being intercepted. Please refer to [DynamicProxy documentation](https://github.com/castleproject/Core/blob/master/docs/README.md) for more information about it.
+:warning: **Class methods must be virtual:** If you are registering the component without an interface as a service you
+must make the methods virtual in order to being intercepted. Please refer
+to [DynamicProxy documentation](https://github.com/castleproject/Core/blob/master/docs/README.md) for more information
+about it.
 
 ### TransactionMode
 
@@ -63,6 +69,6 @@ public class BusinessClass
 
 ### Required Assemblies
 
-* `Castle.Facilities.AutomaticTransactionManagement.dll`
+* `Castle.Windsor.Facilities.AutomaticTransactionManagement.dll`
 * `Castle.Services.Transactions.dll`
 * `Castle.Core.dll`

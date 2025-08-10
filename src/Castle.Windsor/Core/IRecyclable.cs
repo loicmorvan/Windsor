@@ -12,19 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
+namespace Castle.Windsor.Core;
+
+/// <summary>Only called for components that belongs to a pool when the component comes back to the pool.</summary>
+public interface IRecyclable
 {
-	/// <summary>
-	///   Only called for components that 
-	///   belongs to a pool when the component
-	///   comes back to the pool.
-	/// </summary>
-	public interface IRecyclable
-	{
-		/// <summary>
-		///   Implementors should perform any 
-		///   initialization/clean up.
-		/// </summary>
-		void Recycle();
-	}
+    /// <summary>Implementors should perform any initialization/clean up.</summary>
+    void Recycle();
 }

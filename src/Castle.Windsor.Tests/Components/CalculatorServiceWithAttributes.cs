@@ -12,25 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+using Castle.Windsor.Core;
+using Castle.Windsor.Tests.Interceptors;
+
+namespace Castle.Windsor.Tests.Components;
+
+/// <summary>Summary description for CalculatorServiceWithAttributes.</summary>
+[Interceptor(typeof(ResultModifierInterceptor))]
+// ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
+public class CalculatorServiceWithAttributes
 {
-	using System;
-
-	using Castle.Core;
-	using Castle.Windsor.Tests.Interceptors;
-
-	/// <summary>
-	///   Summary description for CalculatorServiceWithAttributes.
-	/// </summary>
-	[Interceptor(typeof(ResultModifierInterceptor))]
-	public class CalculatorServiceWithAttributes
-#if FEATURE_REMOTING
-		: MarshalByRefObject
-#endif
-	{
-		public virtual int Sum(int x, int y)
-		{
-			return x + y;
-		}
-	}
+    public virtual int Sum(int x, int y)
+    {
+        return x + y;
+    }
 }

@@ -12,52 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.DebuggerViews
+using System.Diagnostics;
+
+namespace Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
+
+[DebuggerDisplay("{Description,nq}", Name = "{name,nq}")]
+public class DebuggerViewItem
 {
-	using System.Diagnostics;
+    public DebuggerViewItem(string name, string description, object value)
+    {
+        Name = name;
+        Description = description;
+        Value = value;
+    }
 
-	[DebuggerDisplay("{description,nq}", Name = "{name,nq}")]
-	public class DebuggerViewItem
-	{
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		private readonly object description;
+    public DebuggerViewItem(string name, object value)
+    {
+        Name = name;
+        Description = value;
+        Value = value;
+    }
 
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		private readonly string name;
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public object Description { get; }
 
-		[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-		private readonly object value;
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public string Name { get; }
 
-		public DebuggerViewItem(string name, string description, object value)
-		{
-			this.name = name;
-			this.description = description;
-			this.value = value;
-		}
-
-		public DebuggerViewItem(string name, object value)
-		{
-			this.name = name;
-			description = value;
-			this.value = value;
-		}
-
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		public object Description
-		{
-			get { return description; }
-		}
-
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		public string Name
-		{
-			get { return name; }
-		}
-
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		public object Value
-		{
-			get { return value; }
-		}
-	}
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    [field: DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    public object Value { get; }
 }

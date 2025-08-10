@@ -12,239 +12,233 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Lifestyle
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
+using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.Lifestyle;
+
+public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestCase
 {
-	using System.Linq;
+    [Fact]
+    public void Scoped_component_created_for_outermost_sub_graph()
+    {
+        Container.Register(
+            Component.For<A>().LifeStyle.BoundTo<Cba>(),
+            Component.For<B>().LifeStyle.Transient,
+            Component.For<Cba>().ImplementedBy<CbaDecorator>().LifeStyle.Transient,
+            Component.For<Cba>().LifeStyle.Transient);
 
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Resolvers.SpecializedResolvers;
+        var cba = Container.Resolve<Cba>();
+        var inner = ((CbaDecorator)cba).Inner;
 
-	using CastleTests.Components;
+        Assert.Same(cba.A, inner.A);
+    }
 
-	using NUnit.Framework;
+    [Fact]
+    public void Scoped_component_disposable_not_tracked()
+    {
+        Container.Register(
+            Component.For<A>().ImplementedBy<ADisposable>().LifestyleBoundTo<Cba>(),
+            Component.For<B>().LifeStyle.Transient,
+            Component.For<Cba>().LifeStyle.Transient);
 
-	public class BoundLifestyleImplicitGraphScopingTestCase : AbstractContainerTestCase
-	{
-		[Test]
-		public void Scoped_component_created_for_outermost_sub_graph()
-		{
-			Container.Register(
-				Component.For<A>().LifeStyle.BoundTo<CBA>(),
-				Component.For<B>().LifeStyle.Transient,
-				Component.For<CBA>().ImplementedBy<CBADecorator>().LifeStyle.Transient,
-				Component.For<CBA>().LifeStyle.Transient);
+        var cba = Container.Resolve<Cba>();
 
-			var cba = Container.Resolve<CBA>();
-			var inner = ((CBADecorator)cba).Inner;
+        Assert.False(Kernel.ReleasePolicy.HasTrack(cba.A));
+    }
 
-			Assert.AreSame(cba.A, inner.A);
-		}
+    [Fact]
+    public void Scoped_component_disposable_root_tracked()
+    {
+        Container.Register(
+            Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<Cba>(),
+            Component.For<B>().LifeStyle.Transient,
+            Component.For<Cba>().LifeStyle.Transient);
 
-		[Test]
-		public void Scoped_component_disposable_not_tracked()
-		{
-			Container.Register(
-				Component.For<A>().ImplementedBy<ADisposable>().LifestyleBoundTo<CBA>(),
-				Component.For<B>().LifeStyle.Transient,
-				Component.For<CBA>().LifeStyle.Transient);
+        var cba = Container.Resolve<Cba>();
 
-			var cba = Container.Resolve<CBA>();
+        Assert.True(Kernel.ReleasePolicy.HasTrack(cba));
+    }
 
-			Assert.False(Kernel.ReleasePolicy.HasTrack(cba.A));
-		}
+    [Fact]
+    public void Scoped_component_doesnt_unnecessarily_force_root_to_be_tracked()
+    {
+        Container.Register(
+            Component.For<A>().LifeStyle.BoundTo<Cba>(),
+            Component.For<B>().LifeStyle.Transient,
+            Component.For<Cba>().LifeStyle.Transient);
 
-		[Test]
-		public void Scoped_component_disposable_root_tracked()
-		{
-			Container.Register(
-				Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<CBA>(),
-				Component.For<B>().LifeStyle.Transient,
-				Component.For<CBA>().LifeStyle.Transient);
+        var cba = Container.Resolve<Cba>();
 
-			var cba = Container.Resolve<CBA>();
+        Assert.False(Kernel.ReleasePolicy.HasTrack(cba));
+        Assert.False(Kernel.ReleasePolicy.HasTrack(cba.B));
+    }
 
-			Assert.True(Kernel.ReleasePolicy.HasTrack(cba));
-		}
+    [Fact]
+    public void Scoped_component_doesnt_unnecessarily_get_tracked()
+    {
+        Container.Register(
+            Component.For<A>().LifeStyle.BoundTo<Cba>(),
+            Component.For<B>().LifeStyle.Transient,
+            Component.For<Cba>().LifeStyle.Transient);
 
-		[Test]
-		public void Scoped_component_doesnt_unnecessarily_force_root_to_be_tracked()
-		{
-			Container.Register(
-				Component.For<A>().LifeStyle.BoundTo<CBA>(),
-				Component.For<B>().LifeStyle.Transient,
-				Component.For<CBA>().LifeStyle.Transient);
+        var cba = Container.Resolve<Cba>();
 
-			var cba = Container.Resolve<CBA>();
+        Assert.False(Kernel.ReleasePolicy.HasTrack(cba.A));
+    }
 
-			Assert.False(Kernel.ReleasePolicy.HasTrack(cba));
-			Assert.False(Kernel.ReleasePolicy.HasTrack(cba.B));
-		}
+    [Fact]
+    public void Scoped_component_not_released_prematurely()
+    {
+        Container.Register(
+            Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<Cba>(),
+            Component.For<B>().ImplementedBy<BDisposable>().LifeStyle.Transient,
+            Component.For<Cba>().LifeStyle.Transient);
 
-		[Test]
-		public void Scoped_component_doesnt_unnecessarily_get_tracked()
-		{
-			Container.Register(
-				Component.For<A>().LifeStyle.BoundTo<CBA>(),
-				Component.For<B>().LifeStyle.Transient,
-				Component.For<CBA>().LifeStyle.Transient);
+        var cba = Container.Resolve<Cba>();
 
-			var cba = Container.Resolve<CBA>();
+        var b = (BDisposable)cba.B;
+        var wasADisposedAtTheTimeWhenDisposingB = false;
+        b.OnDisposing = () => wasADisposedAtTheTimeWhenDisposingB = ((ADisposable)b.A).Disposed;
 
-			Assert.False(Kernel.ReleasePolicy.HasTrack(cba.A));
-		}
+        Container.Release(cba);
 
-		[Test]
-		public void Scoped_component_not_released_prematurely()
-		{
-			Container.Register(
-				Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<CBA>(),
-				Component.For<B>().ImplementedBy<BDisposable>().LifeStyle.Transient,
-				Component.For<CBA>().LifeStyle.Transient);
+        Assert.True(b.Disposed);
+        Assert.False(wasADisposedAtTheTimeWhenDisposingB);
+    }
 
-			var cba = Container.Resolve<CBA>();
+    [Fact]
+    public void Scoped_component_not_released_prematurely_interdependencies()
+    {
+        Container.Register(
+            Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<Cba>(),
+            Component.For<B>().ImplementedBy<BDisposable>().LifeStyle.BoundTo<Cba>(),
+            Component.For<Cba>().LifeStyle.Transient);
 
-			var b = (BDisposable)cba.B;
-			var wasADisposedAtTheTimeWhenDisposingB = false;
-			b.OnDisposing = () => wasADisposedAtTheTimeWhenDisposingB = ((ADisposable)b.A).Disposed;
+        var cba = Container.Resolve<Cba>();
 
-			Container.Release(cba);
+        var b = (BDisposable)cba.B;
+        var wasADisposedAtTheTimeWhenDisposingB = false;
+        b.OnDisposing = () => wasADisposedAtTheTimeWhenDisposingB = ((ADisposable)b.A).Disposed;
 
-			Assert.True(b.Disposed);
-			Assert.False(wasADisposedAtTheTimeWhenDisposingB);
-		}
+        Container.Release(cba);
+        Assert.True(b.Disposed);
+        Assert.False(wasADisposedAtTheTimeWhenDisposingB);
+    }
 
-		[Test]
-		public void Scoped_component_not_released_prematurely_interdependencies()
-		{
-			Container.Register(
-				Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<CBA>(),
-				Component.For<B>().ImplementedBy<BDisposable>().LifeStyle.BoundTo<CBA>(),
-				Component.For<CBA>().LifeStyle.Transient);
+    [Fact]
+    public void Scoped_component_not_reused_across_resolves()
+    {
+        Container.Register(
+            Component.For<A>().LifeStyle.BoundTo<Cba>(),
+            Component.For<B>().LifeStyle.Transient,
+            Component.For<Cba>().LifeStyle.Transient);
 
-			var cba = Container.Resolve<CBA>();
+        var one = Container.Resolve<Cba>();
+        var two = Container.Resolve<Cba>();
 
-			var b = (BDisposable)cba.B;
-			var wasADisposedAtTheTimeWhenDisposingB = false;
-			b.OnDisposing = () => wasADisposedAtTheTimeWhenDisposingB = ((ADisposable)b.A).Disposed;
+        Assert.NotSame(one.A, two.A);
+        Assert.NotSame(one.B.A, two.B.A);
+        Assert.NotSame(one.B.A, two.A);
+    }
 
-			Container.Release(cba);
-			Assert.True(b.Disposed);
-			Assert.False(wasADisposedAtTheTimeWhenDisposingB);
-		}
+    [Fact]
+    public void Scoped_component_properly_release_when_roots_collection_is_involved()
+    {
+        Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel));
+        Container.Register(
+            Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<AppScreenCba>(),
+            Component.For<B>().LifeStyle.Transient,
+            Component.For<Cba>().LifeStyle.Transient,
+            Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("1"),
+            Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("2"),
+            Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("3"),
+            Component.For<AppHost>().LifeStyle.Transient);
 
-		[Test]
-		public void Scoped_component_not_reused_across_resolves()
-		{
-			Container.Register(
-				Component.For<A>().LifeStyle.BoundTo<CBA>(),
-				Component.For<B>().LifeStyle.Transient,
-				Component.For<CBA>().LifeStyle.Transient);
+        var host = Container.Resolve<AppHost>();
 
-			var one = Container.Resolve<CBA>();
-			var two = Container.Resolve<CBA>();
+        var a = host.Screens.Cast<AppScreenCba>().Select(s => s.Dependency.A as ADisposable).ToArray();
 
-			Assert.AreNotSame(one.A, two.A);
-			Assert.AreNotSame(one.B.A, two.B.A);
-			Assert.AreNotSame(one.B.A, two.A);
-		}
+        Container.Dispose();
 
-		[Test]
-		public void Scoped_component_properly_release_when_roots_collection_is_involved()
-		{
-			Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel));
-			Container.Register(
-				Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<AppScreenCBA>(),
-				Component.For<B>().LifeStyle.Transient,
-				Component.For<CBA>().LifeStyle.Transient,
-				Component.For<IAppScreen>().ImplementedBy<AppScreenCBA>().LifeStyle.Transient.Named("1"),
-				Component.For<IAppScreen>().ImplementedBy<AppScreenCBA>().LifeStyle.Transient.Named("2"),
-				Component.For<IAppScreen>().ImplementedBy<AppScreenCBA>().LifeStyle.Transient.Named("3"),
-				Component.For<AppHost>().LifeStyle.Transient);
+        Assert.True(a.All(x => x.Disposed));
+    }
 
-			var host = Container.Resolve<AppHost>();
+    [Fact]
+    public void Scoped_component_properly_scoped_when_roots_collection_is_involved()
+    {
+        Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel));
+        Container.Register(
+            Component.For<A>().LifeStyle.BoundTo<AppScreenCba>(),
+            Component.For<B>().LifeStyle.Transient,
+            Component.For<Cba>().LifeStyle.Transient,
+            Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("1"),
+            Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("2"),
+            Component.For<IAppScreen>().ImplementedBy<AppScreenCba>().LifeStyle.Transient.Named("3"),
+            Component.For<AppHost>().LifeStyle.Transient);
 
-			var a = host.Screens.Cast<AppScreenCBA>().Select(s => s.Dependency.A as ADisposable).ToArray();
+        var host = Container.Resolve<AppHost>();
 
-			Container.Dispose();
+        var a = host.Screens.Cast<AppScreenCba>().Select(s => s.Dependency.A).Distinct().ToArray();
 
-			Assert.True(a.All(x => x.Disposed));
-		}
+        Assert.Equal(3, a.Length);
+    }
 
-		[Test]
-		public void Scoped_component_properly_scoped_when_roots_collection_is_involved()
-		{
-			Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel));
-			Container.Register(
-				Component.For<A>().LifeStyle.BoundTo<AppScreenCBA>(),
-				Component.For<B>().LifeStyle.Transient,
-				Component.For<CBA>().LifeStyle.Transient,
-				Component.For<IAppScreen>().ImplementedBy<AppScreenCBA>().LifeStyle.Transient.Named("1"),
-				Component.For<IAppScreen>().ImplementedBy<AppScreenCBA>().LifeStyle.Transient.Named("2"),
-				Component.For<IAppScreen>().ImplementedBy<AppScreenCBA>().LifeStyle.Transient.Named("3"),
-				Component.For<AppHost>().LifeStyle.Transient);
+    [Fact]
+    public void Scoped_component_released_when_releasing_root_disposable()
+    {
+        Container.Register(
+            Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<Cba>(),
+            Component.For<B>().LifeStyle.Transient,
+            Component.For<Cba>().LifeStyle.Transient);
 
-			var host = Container.Resolve<AppHost>();
+        var cba = Container.Resolve<Cba>();
+        var a = (ADisposable)cba.A;
 
-			var a = host.Screens.Cast<AppScreenCBA>().Select(s => s.Dependency.A).Distinct().ToArray();
+        Container.Release(cba);
 
-			Assert.AreEqual(3, a.Length);
-		}
+        Assert.True(a.Disposed);
+    }
 
-		[Test]
-		public void Scoped_component_released_when_releasing_root_disposable()
-		{
-			Container.Register(
-				Component.For<A>().ImplementedBy<ADisposable>().LifeStyle.BoundTo<CBA>(),
-				Component.For<B>().LifeStyle.Transient,
-				Component.For<CBA>().LifeStyle.Transient);
+    [Fact]
+    public void Scoped_component_reused()
+    {
+        Container.Register(
+            Component.For<A>().LifestyleBoundTo<Cba>(),
+            Component.For<B>().LifeStyle.Transient,
+            Component.For<Cba>().LifeStyle.Transient);
 
-			var cba = Container.Resolve<CBA>();
-			var a = (ADisposable)cba.A;
+        var cba = Container.Resolve<Cba>();
 
-			Container.Release(cba);
+        Assert.Same(cba.A, cba.B.A);
+    }
 
-			Assert.True(a.Disposed);
-		}
+    [Fact]
+    public void Scoped_nearest_component_created_for_innermost_sub_graph()
+    {
+        Container.Register(
+            Component.For<A>().LifeStyle.BoundToNearest<Cba>(),
+            Component.For<B>().LifeStyle.Transient,
+            Component.For<Cba>().ImplementedBy<CbaDecorator>().LifeStyle.Transient,
+            Component.For<Cba>().LifeStyle.Transient);
 
-		[Test]
-		public void Scoped_component_reused()
-		{
-			Container.Register(
-				Component.For<A>().LifestyleBoundTo<CBA>(),
-				Component.For<B>().LifeStyle.Transient,
-				Component.For<CBA>().LifeStyle.Transient);
+        var cba = Container.Resolve<Cba>();
+        var inner = ((CbaDecorator)cba).Inner;
 
-			var cba = Container.Resolve<CBA>();
+        Assert.NotSame(cba.A, inner.A);
+    }
 
-			Assert.AreSame(cba.A, cba.B.A);
-		}
+    [Fact]
+    public void Scoped_nearest_component_reused_in_subgraph()
+    {
+        Container.Register(
+            Component.For<A>().LifestyleBoundToNearest<Cba>(),
+            Component.For<B>().LifeStyle.Transient,
+            Component.For<Cba>().LifeStyle.Transient);
 
-		[Test]
-		public void Scoped_nearest_component_created_for_innermost_sub_graph()
-		{
-			Container.Register(
-				Component.For<A>().LifeStyle.BoundToNearest<CBA>(),
-				Component.For<B>().LifeStyle.Transient,
-				Component.For<CBA>().ImplementedBy<CBADecorator>().LifeStyle.Transient,
-				Component.For<CBA>().LifeStyle.Transient);
+        var cba = Container.Resolve<Cba>();
 
-			var cba = Container.Resolve<CBA>();
-			var inner = ((CBADecorator)cba).Inner;
-
-			Assert.AreNotSame(cba.A, inner.A);
-		}
-
-		[Test]
-		public void Scoped_nearest_component_reused_in_subgraph()
-		{
-			Container.Register(
-				Component.For<A>().LifestyleBoundToNearest<CBA>(),
-				Component.For<B>().LifeStyle.Transient,
-				Component.For<CBA>().LifeStyle.Transient);
-
-			var cba = Container.Resolve<CBA>();
-
-			Assert.AreSame(cba.A, cba.B.A);
-		}
-	}
+        Assert.Same(cba.A, cba.B.A);
+    }
 }

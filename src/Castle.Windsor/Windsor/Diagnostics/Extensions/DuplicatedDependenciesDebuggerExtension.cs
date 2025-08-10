@@ -12,69 +12,63 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Extensions
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
+
+namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
+
+public class DuplicatedDependenciesDebuggerExtension : AbstractContainerDebuggerExtension
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+    private const string Name = "Components with potentially duplicated dependencies";
 
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel;
-	using Castle.Windsor.Diagnostics.DebuggerViews;
+    private DuplicatedDependenciesDiagnostic _diagnostic;
 
-	public class DuplicatedDependenciesDebuggerExtension : AbstractContainerDebuggerExtension
-	{
-		private const string name = "Components with potentially duplicated dependencies";
-		private DuplicatedDependenciesDiagnostic diagnostic;
+    public override IEnumerable<DebuggerViewItem> Attach()
+    {
+        var result = _diagnostic.Inspect();
+        if (result.Length == 0)
+        {
+            return [];
+        }
 
-		public override IEnumerable<DebuggerViewItem> Attach()
-		{
-			var result = diagnostic.Inspect();
-			if (result.Length == 0)
-			{
-				return Enumerable.Empty<DebuggerViewItem>();
-			}
-			var items = BuildItems(result);
-			return new[]
-			{
-				new DebuggerViewItem(name, "Count = " + items.Length, items)
-			};
-		}
+        var items = BuildItems(result);
+        return
+        [
+            new DebuggerViewItem(Name, "Count = " + items.Length, items)
+        ];
+    }
 
-		public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
-		{
-			diagnostic = new DuplicatedDependenciesDiagnostic(kernel);
-			diagnosticsHost.AddDiagnostic<IDuplicatedDependenciesDiagnostic>(diagnostic);
-		}
+    public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
+    {
+        _diagnostic = new DuplicatedDependenciesDiagnostic(kernel);
+        diagnosticsHost.AddDiagnostic<IDuplicatedDependenciesDiagnostic>(_diagnostic);
+    }
 
-		private ComponentDebuggerView[] BuildItems(Tuple<IHandler, DependencyDuplicate[]>[] results)
-		{
-			return results.ConvertAll(ComponentWithDuplicateDependenciesView);
-		}
+    private static ComponentDebuggerView[] BuildItems(Tuple<IHandler, DependencyDuplicate[]>[] results)
+    {
+        return results.ConvertAll(ComponentWithDuplicateDependenciesView);
+    }
 
-		private ComponentDebuggerView ComponentWithDuplicateDependenciesView(Tuple<IHandler, DependencyDuplicate[]> input)
-		{
-			var handler = input.Item1;
-			var mismatches = input.Item2;
-			var items = mismatches.ConvertAll(MismatchView);
-			Array.Sort(items, (c1, c2) => c1.Name.CompareTo(c2.Name));
-			return ComponentDebuggerView.BuildRawFor(handler, "Count = " + mismatches.Length, items);
-		}
+    private static ComponentDebuggerView ComponentWithDuplicateDependenciesView(
+        Tuple<IHandler, DependencyDuplicate[]> input)
+    {
+        var handler = input.Item1;
+        var mismatches = input.Item2;
+        var items = mismatches.ConvertAll(MismatchView);
+        Array.Sort(items, (c1, c2) => string.Compare(c1.Name, c2.Name, StringComparison.Ordinal));
+        return ComponentDebuggerView.BuildRawFor(handler, "Count = " + mismatches.Length, items);
+    }
 
-		private DebuggerViewItemWithDetails MismatchView(DependencyDuplicate input)
-		{
-			return new DebuggerViewItemWithDetails(Description(input.Dependency1), Description(input.Dependency2), diagnostic.GetDetails(input));
-		}
+    private static DebuggerViewItemWithDetails MismatchView(DependencyDuplicate input)
+    {
+        return new DebuggerViewItemWithDetails(Description(input.Dependency1), Description(input.Dependency2),
+            DuplicatedDependenciesDiagnostic.GetDetails(input));
+    }
 
-		public static string Name
-		{
-			get { return name; }
-		}
-
-		private static string Description(DependencyModel dependencyModel)
-		{
-			return dependencyModel.TargetItemType.ToCSharpString() + " " + dependencyModel.DependencyKey;
-		}
-	}
+    private static string Description(DependencyModel dependencyModel)
+    {
+        return dependencyModel.TargetItemType.ToCSharpString() + " " + dependencyModel.DependencyKey;
+    }
 }

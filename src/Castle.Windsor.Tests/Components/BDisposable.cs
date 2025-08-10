@@ -12,30 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+using Castle.Windsor.Core;
+
+namespace Castle.Windsor.Tests.Components;
+
+public class BDisposable : B, IDisposable
 {
-	using System;
+    public BDisposable(A a) : base(a)
+    {
+    }
 
-	using Castle.Core;
+    public bool Disposed { get; private set; }
 
-	public class BDisposable : B, IDisposable
-	{
-		public BDisposable(A a) : base(a)
-		{
-		}
+    [DoNotWire] public Action OnDisposing { get; set; }
 
-		public bool Disposed { get; set; }
+    public void Dispose()
+    {
+        OnDisposing?.Invoke();
 
-		[DoNotWire]
-		public Action OnDisposing { get; set; }
-
-		public void Dispose()
-		{
-			if (OnDisposing != null)
-			{
-				OnDisposing();
-			}
-			Disposed = true;
-		}
-	}
+        Disposed = true;
+    }
 }

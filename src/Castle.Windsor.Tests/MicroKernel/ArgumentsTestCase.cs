@@ -12,118 +12,109 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.MicroKernel
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Windsor;
+
+namespace Castle.Windsor.Tests.MicroKernel;
+
+public class ArgumentsTestCase : AbstractContainerTestCase
 {
-	using System;
-	using System.Collections.Generic;
+    [Fact]
+    public void Any_type_as_key_is_not_supported()
+    {
+        var arguments = new Arguments();
 
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.Components;
+        Assert.Throws<ArgumentException>(delegate { arguments.Add(123, 321); });
+        Assert.Throws<ArgumentException>(delegate { arguments.Add(new object(), "value"); });
+    }
 
-	using CastleTests;
-	using CastleTests.Components;
+    [Fact]
+    [Bug("IOC-147")]
+    public void Can_have_dictionary_as_inline_dependency()
+    {
+        var container = new WindsorContainer();
+        container.Register(Component.For<HasDictionaryDependency>());
 
-	using NUnit.Framework;
+        var dictionaryProperty = new Dictionary<string, string>();
 
-	[TestFixture]
-	public class ArgumentsTestCase : AbstractContainerTestCase
-	{
-		[Test]
-		public void Any_type_as_key_is_not_supported()
-		{
-			var arguments = new Arguments();
+        var obj = container.Resolve<HasDictionaryDependency>(Arguments.FromProperties(new { dictionaryProperty }));
+        Assert.Same(dictionaryProperty, obj.DictionaryProperty);
+    }
 
-			Assert.Throws<ArgumentException>(delegate { arguments.Add(123, 321); });
-			Assert.Throws<ArgumentException>(delegate { arguments.Add(new object(), "value"); });
-		}
+    [Fact]
+    [Bug("IOC-142")]
+    public void Can_satisfy_nullable_property_dependency()
+    {
+        Container.Register(Component.For<HasNullableIntProperty>());
 
-		[Test]
-		[Bug("IOC-147")]
-		public void Can_have_dictionary_as_inline_dependency()
-		{
-			var container = new WindsorContainer();
-			container.Register(Component.For<HasDictionaryDependency>());
+        var arguments = new Arguments().AddNamed("SomeVal", 5);
+        var s = Container.Resolve<HasNullableIntProperty>(arguments);
 
-			var dictionaryProperty = new Dictionary<string, string>();
+        Assert.NotNull(s.SomeVal);
+    }
 
-			var obj = container.Resolve<HasDictionaryDependency>(Arguments.FromProperties(new { dictionaryProperty }));
-			Assert.AreSame(dictionaryProperty, obj.DictionaryProperty);
-		}
+    [Fact]
+    [Bug("IOC-142")]
+    public void Can_satisfy_nullable_ctor_dependency()
+    {
+        Container.Register(Component.For<HasNullableDoubleConstructor>());
 
-		[Test]
-		[Bug("IOC-142")]
-		public void Can_satisfy_nullable_property_dependency()
-		{
-			Container.Register(Component.For<HasNullableIntProperty>());
+        var s = Container.Resolve<HasNullableDoubleConstructor>(new Arguments().AddNamed("foo", 5d));
+        Assert.NotNull(s);
+    }
 
-			var arguments = new Arguments().AddNamed("SomeVal", 5);
-			var s = Container.Resolve<HasNullableIntProperty>(arguments);
+    [Fact]
+    [Bug("IOC-92")]
+    public void Can_mix_hashtable_parameters_and_configuration_parameters()
+    {
+        Container.Register(
+            Component.For<HasStringAndIntDependency>()
+                .DependsOn(Parameter.ForKey("x").Eq("abc"))
+        );
 
-			Assert.IsNotNull(s.SomeVal);
-		}
+        Container.Resolve<HasStringAndIntDependency>(new Arguments().AddNamed("y", 1));
+    }
 
-		[Test]
-		[Bug("IOC-142")]
-		public void Can_satisfy_nullable_ctor_dependency()
-		{
-			Container.Register(Component.For<HasNullableDoubleConstructor>());
+    [Fact]
+    public void Handles_Type_as_key()
+    {
+        var arguments = new Arguments();
+        var key = typeof(object);
+        var value = new object();
 
-			var s = Container.Resolve<HasNullableDoubleConstructor>(new Arguments().AddNamed("foo", 5d));
-			Assert.IsNotNull(s);
-		}
+        arguments.Add(key, value);
 
-		[Test]
-		[Bug("IOC-92")]
-		public void Can_mix_hashtable_parameters_and_configuration_parameters()
-		{
-			Container.Register(
-				Component.For<HasStringAndIntDependency>()
-					.DependsOn(Parameter.ForKey("x").Eq("abc"))
-				);
+        Assert.Equal(1, arguments.Count);
+        Assert.True(arguments.Contains(key));
+        Assert.Same(value, arguments[key]);
+    }
 
-			Container.Resolve<HasStringAndIntDependency>(new Arguments().AddNamed("y", 1));
-		}
+    [Fact]
+    public void Handles_string_as_key()
+    {
+        var arguments = new Arguments();
+        const string key = "Foo";
+        var value = new object();
 
-		[Test]
-		public void Handles_Type_as_key()
-		{
-			var arguments = new Arguments();
-			var key = typeof(object);
-			var value = new object();
+        arguments.Add(key, value);
 
-			arguments.Add(key, value);
+        Assert.Equal(1, arguments.Count);
+        Assert.True(arguments.Contains(key));
+        Assert.Same(value, arguments[key]);
+    }
 
-			Assert.AreEqual(1, arguments.Count);
-			Assert.IsTrue(arguments.Contains(key));
-			Assert.AreSame(value, arguments[key]);
-		}
+    [Fact]
+    public void Handles_string_as_key_case_insensitive()
+    {
+        var arguments = new Arguments();
+        const string key = "foo";
+        var value = new object();
 
-		[Test]
-		public void Handles_string_as_key()
-		{
-			var arguments = new Arguments();
-			var key = "Foo";
-			var value = new object();
+        arguments.Add(key, value);
 
-			arguments.Add(key, value);
-
-			Assert.AreEqual(1, arguments.Count);
-			Assert.IsTrue(arguments.Contains(key));
-			Assert.AreSame(value, arguments[key]);
-		}
-
-		[Test]
-		public void Handles_string_as_key_case_insensitive()
-		{
-			var arguments = new Arguments();
-			var key = "foo";
-			var value = new object();
-
-			arguments.Add(key, value);
-
-			Assert.IsTrue(arguments.Contains(key.ToLower()));
-			Assert.IsTrue(arguments.Contains(key.ToUpper()));
-		}
-	}
+        Assert.True(arguments.Contains(key.ToLower()));
+        Assert.True(arguments.Contains(key.ToUpper()));
+    }
 }

@@ -12,119 +12,95 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
+using Castle.Windsor.MicroKernel.SubSystems.Conversion;
+
+namespace Castle.Windsor.MicroKernel.ModelBuilder;
+
+/// <summary>Summary description for DefaultComponentModelBuilder.</summary>
+[Serializable]
+public sealed class DefaultComponentModelBuilder : IComponentModelBuilder
 {
-	using System;
-	using System.Collections.Generic;
+    private readonly List<IContributeComponentModelConstruction> _contributors = [];
+    private readonly IKernel _kernel;
 
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.ModelBuilder.Inspectors;
-	using Castle.MicroKernel.SubSystems.Conversion;
+    /// <summary>Initializes a new instance of the <see cref="DefaultComponentModelBuilder" /> class.</summary>
+    /// <param name="kernel">The kernel.</param>
+    public DefaultComponentModelBuilder(IKernel kernel)
+    {
+        _kernel = kernel;
+        InitializeContributors();
+    }
 
-	/// <summary>
-	///   Summary description for DefaultComponentModelBuilder.
-	/// </summary>
-	[Serializable]
-	public class DefaultComponentModelBuilder : IComponentModelBuilder
-	{
-		private readonly List<IContributeComponentModelConstruction> contributors = new List<IContributeComponentModelConstruction>();
-		private readonly IKernel kernel;
+    /// <summary>Gets the contributors.</summary>
+    /// <value>The contributors.</value>
+    public IContributeComponentModelConstruction[] Contributors => _contributors.ToArray();
 
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "DefaultComponentModelBuilder" /> class.
-		/// </summary>
-		/// <param name = "kernel">The kernel.</param>
-		public DefaultComponentModelBuilder(IKernel kernel)
-		{
-			this.kernel = kernel;
-			InitializeContributors();
-		}
+    /// <summary>
+    ///     "To give or supply in common with others; give to a common fund or for a common purpose". The contributor should
+    ///     inspect the component, or even the configuration associated with the component, to
+    ///     add or change information in the model that can be used later.
+    /// </summary>
+    /// <param name="contributor"></param>
+    public void AddContributor(IContributeComponentModelConstruction contributor)
+    {
+        _contributors.Add(contributor);
+    }
 
-		/// <summary>
-		///   Gets the contributors.
-		/// </summary>
-		/// <value>The contributors.</value>
-		public IContributeComponentModelConstruction[] Contributors
-		{
-			get { return contributors.ToArray(); }
-		}
+    /// <summary>Constructs a new ComponentModel by invoking the registered contributors.</summary>
+    public ComponentModel BuildModel(ComponentName name, Type[] services, Type classType, Arguments extendedProperties)
+    {
+        var model = new ComponentModel(name, services, classType, extendedProperties);
+        _contributors.ForEach(c => c.ProcessModel(_kernel, model));
 
-		/// <summary>
-		///   "To give or supply in common with others; give to a
-		///   common fund or for a common purpose". The contributor
-		///   should inspect the component, or even the configuration
-		///   associated with the component, to add or change information
-		///   in the model that can be used later.
-		/// </summary>
-		/// <param name = "contributor"></param>
-		public void AddContributor(IContributeComponentModelConstruction contributor)
-		{
-			contributors.Add(contributor);
-		}
+        return model;
+    }
 
-		/// <summary>
-		///   Constructs a new ComponentModel by invoking
-		///   the registered contributors.
-		/// </summary>
-		public ComponentModel BuildModel(ComponentName name, Type[] services, Type classType, Arguments extendedProperties)
-		{
-			var model = new ComponentModel(name, services, classType, extendedProperties);
-			contributors.ForEach(c => c.ProcessModel(kernel, model));
+    public ComponentModel BuildModel(IComponentModelDescriptor[] customContributors)
+    {
+        var model = new ComponentModel();
+        customContributors.ForEach(c => c.BuildComponentModel(_kernel, model));
 
-			return model;
-		}
+        _contributors.ForEach(c => c.ProcessModel(_kernel, model));
 
-		public ComponentModel BuildModel(IComponentModelDescriptor[] customContributors)
-		{
-			var model = new ComponentModel();
-			customContributors.ForEach(c => c.BuildComponentModel(kernel, model));
+        var metaDescriptors = default(ICollection<IMetaComponentModelDescriptor>);
+        customContributors.ForEach(c =>
+        {
+            c.ConfigureComponentModel(_kernel, model);
+            if (c is not IMetaComponentModelDescriptor meta)
+            {
+                return;
+            }
 
-			contributors.ForEach(c => c.ProcessModel(kernel, model));
+            metaDescriptors ??= model.GetMetaDescriptors(true);
+            metaDescriptors.Add(meta);
+        });
+        return model;
+    }
 
-			var metaDescriptors = default(ICollection<IMetaComponentModelDescriptor>);
-			customContributors.ForEach(c =>
-			{
-				c.ConfigureComponentModel(kernel, model);
-				var meta = c as IMetaComponentModelDescriptor;
-				if (meta != null)
-				{
-					if (metaDescriptors == null)
-					{
-						metaDescriptors = model.GetMetaDescriptors(true);
-					}
-					metaDescriptors.Add(meta);
-				}
-			});
-			return model;
-		}
+    /// <summary>Removes the specified contributor</summary>
+    /// <param name="contributor"></param>
+    public void RemoveContributor(IContributeComponentModelConstruction contributor)
+    {
+        _contributors.Remove(contributor);
+    }
 
-		/// <summary>
-		///   Removes the specified contributor
-		/// </summary>
-		/// <param name = "contributor"></param>
-		public void RemoveContributor(IContributeComponentModelConstruction contributor)
-		{
-			contributors.Remove(contributor);
-		}
-
-		/// <summary>
-		///   Initializes the default contributors.
-		/// </summary>
-		protected virtual void InitializeContributors()
-		{
-			var conversionManager = kernel.GetConversionManager();
-			AddContributor(new GenericInspector());
-			AddContributor(new ConfigurationModelInspector());
-			AddContributor(new ConfigurationParametersInspector());
-			AddContributor(new LifestyleModelInspector(conversionManager));
-			AddContributor(new ConstructorDependenciesModelInspector());
-			AddContributor(new PropertiesDependenciesModelInspector(conversionManager));
-			AddContributor(new LifecycleModelInspector());
-			AddContributor(new InterceptorInspector());
-			AddContributor(new MixinInspector());
-			AddContributor(new ComponentActivatorInspector(conversionManager));
-			AddContributor(new ComponentProxyInspector(conversionManager));
-		}
-	}
+    /// <summary>Initializes the default contributors.</summary>
+    private void InitializeContributors()
+    {
+        var conversionManager = _kernel.GetConversionManager();
+        AddContributor(new GenericInspector());
+        AddContributor(new ConfigurationModelInspector());
+        AddContributor(new ConfigurationParametersInspector());
+        AddContributor(new LifestyleModelInspector(conversionManager));
+        AddContributor(new ConstructorDependenciesModelInspector());
+        AddContributor(new PropertiesDependenciesModelInspector(conversionManager));
+        AddContributor(new LifecycleModelInspector());
+        AddContributor(new InterceptorInspector());
+        AddContributor(new MixinInspector());
+        AddContributor(new ComponentActivatorInspector(conversionManager));
+        AddContributor(new ComponentProxyInspector(conversionManager));
+    }
 }

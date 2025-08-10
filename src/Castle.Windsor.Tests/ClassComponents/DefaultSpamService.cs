@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
-{
-	public class DefaultSpamService
-	{
-		public DefaultMailSenderService MailSender { get; set; }
+namespace Castle.Windsor.Tests.ClassComponents;
 
-		public DefaultTemplateEngine TemplateEngine { get; set; }
-	}
+public class DefaultSpamService
+{
+    public DefaultMailSenderService MailSender { get; set; }
+
+    public DefaultTemplateEngine TemplateEngine { get; set; }
 }

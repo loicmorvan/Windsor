@@ -12,57 +12,46 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Installer
+using System.Reflection;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.SubSystems.Configuration;
+
+namespace Castle.Windsor.Windsor.Installer;
+
+public class AssemblyInstaller : IWindsorInstaller
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Reflection;
+    private readonly Assembly _assembly;
+    private readonly InstallerFactory _factory;
 
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.SubSystems.Configuration;
+    public AssemblyInstaller(Assembly assembly, InstallerFactory factory)
+    {
+        ArgumentNullException.ThrowIfNull(assembly);
+        ArgumentNullException.ThrowIfNull(factory);
+        _assembly = assembly;
+        _factory = factory;
+    }
 
-	public class AssemblyInstaller : IWindsorInstaller
-	{
-		private readonly Assembly assembly;
-		private readonly InstallerFactory factory;
+    public void Install(IWindsorContainer container, IConfigurationStore store)
+    {
+        var installerTypes = _factory.Select(FilterInstallerTypes(_assembly.GetAvailableTypes()));
+        if (installerTypes == null)
+        {
+            return;
+        }
 
-		public AssemblyInstaller(Assembly assembly, InstallerFactory factory)
-		{
-			if (assembly == null)
-			{
-				throw new ArgumentNullException(nameof(assembly));
-			}
-			if (factory == null)
-			{
-				throw new ArgumentNullException(nameof(factory));
-			}
-			this.assembly = assembly;
-			this.factory = factory;
-		}
+        foreach (var installerType in installerTypes)
+        {
+            var installer = _factory.CreateInstance(installerType);
+            installer.Install(container, store);
+        }
+    }
 
-		public void Install(IWindsorContainer container, IConfigurationStore store)
-		{
-			var installerTypes = factory.Select(FilterInstallerTypes(assembly.GetAvailableTypes()));
-			if (installerTypes == null)
-			{
-				return;
-			}
-
-			foreach (var installerType in installerTypes)
-			{
-				var installer = factory.CreateInstance(installerType);
-				installer.Install(container, store);
-			}
-		}
-
-		private IEnumerable<Type> FilterInstallerTypes(IEnumerable<Type> types)
-		{
-			return types.Where(t => t.GetTypeInfo().IsClass &&
-			                        t.GetTypeInfo().IsAbstract == false &&
-			                        t.GetTypeInfo().IsGenericTypeDefinition == false &&
-			                        t.Is<IWindsorInstaller>());
-		}
-	}
+    private static IEnumerable<Type> FilterInstallerTypes(IEnumerable<Type> types)
+    {
+        return types.Where(t => t.GetTypeInfo().IsClass &&
+                                t.GetTypeInfo().IsAbstract == false &&
+                                t.GetTypeInfo().IsGenericTypeDefinition == false &&
+                                t.Is<IWindsorInstaller>());
+    }
 }

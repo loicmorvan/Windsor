@@ -12,111 +12,85 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.SpecializedResolvers
+using System.Reflection;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Resolvers;
+using Castle.Windsor.Windsor;
+using Castle.Windsor.Windsor.Installer;
+using Castle.Windsor.Windsor.Proxy;
+
+namespace Castle.Windsor.Tests.SpecializedResolvers;
+
+public class CollectionResolverWithPropagatingContainerTestCase
+    : CollectionResolverTestCase
 {
-	using System;
-	using System.Reflection;
+    /// <summary>Build a container, where all <see cref="CreationContext" /> are propagating.</summary>
+    /// <returns>A Castle Windsor container</returns>
+    protected override WindsorContainer BuildContainer()
+    {
+        return
+            new WindsorContainer(
+                new DefaultKernel(
+                    new InlineDependenciesPropagatingDependencyResolver(),
+                    new DefaultProxyFactory()),
+                new DefaultComponentInstaller());
+    }
 
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Resolvers;
-	using Castle.Windsor;
-	using Castle.Windsor.Installer;
-	using Castle.Windsor.Proxy;
+    [Fact]
+    public void collection_sub_resolver_should_honor_composition_context_if_kernel_propagates_inline_dependencies()
+    {
+        Container.Register(Component.For<ComponentA>().LifestyleTransient());
+        Container.Register(Component.For<IComponentB>().ImplementedBy<ComponentB1>().LifestyleTransient());
+        Container.Register(Component.For<IComponentB>().ImplementedBy<ComponentB2>().LifestyleTransient());
 
-	using NUnit.Framework;
+        var additionalArguments = Arguments.FromProperties(new { greeting = "Hello propagating system." });
+        var componentA = Kernel.Resolve<ComponentA>(additionalArguments);
+        Assert.NotNull(componentA);
+        Assert.NotNull(componentA.Greeting);
+        Assert.NotNull(componentA.ComponentsOfB);
+        Assert.Equal(2, componentA.ComponentsOfB.Length);
+        foreach (var componentB in componentA.ComponentsOfB)
+        {
+            Assert.Equal(componentB.Greeting, componentA.Greeting);
+        }
+    }
 
-	public class CollectionResolverWithPropagatingContainerTestCase
-		: CollectionResolverTestCase
-	{
-		/// <summary>Build a container, where all <see cref = "CreationContext" /> are propagating.</summary>
-		/// <returns>A Castle Windsor container</returns>
-		protected override WindsorContainer BuildContainer()
-		{
-			return
-				new WindsorContainer(
-					new DefaultKernel(
-						new InlineDependenciesPropagatingDependencyResolver(),
-						new DefaultProxyFactory()),
-					new DefaultComponentInstaller());
-		}
+    private class InlineDependenciesPropagatingDependencyResolver
+        : DefaultDependencyResolver
+    {
+        protected override CreationContext RebuildContextForParameter(
+            CreationContext current,
+            Type parameterType)
+        {
+            return parameterType.GetTypeInfo().ContainsGenericParameters
+                ? current
+                : new CreationContext(parameterType, current, true);
+        }
+    }
 
-		[Test]
-		public void collection_sub_resolver_should_honor_composition_context_if_kernel_propagates_inline_dependencies()
-		{
-			Container.Register(Component.For<ComponentA>().LifestyleTransient());
-			Container.Register(Component.For<IComponentB>().ImplementedBy<ComponentB1>().LifestyleTransient());
-			Container.Register(Component.For<IComponentB>().ImplementedBy<ComponentB2>().LifestyleTransient());
+    public class ComponentA(
+        IKernel kernel,
+        IComponentB[] componentsOfB,
+        string greeting)
+    {
+        public IKernel Kernel { get; } = kernel;
+        public IComponentB[] ComponentsOfB { get; } = componentsOfB;
+        public string Greeting { get; } = greeting;
+    }
 
-			var additionalArguments = Arguments.FromProperties(new { greeting = "Hello propagating system." });
-			var componentA = Kernel.Resolve<ComponentA>(additionalArguments);
-			Assert.That(componentA, Is.Not.Null);
-			Assert.That(componentA.Greeting, Is.Not.Null);
-			Assert.That(componentA.ComponentsOfB, Is.Not.Null);
-			Assert.That(componentA.ComponentsOfB.Length, Is.EqualTo(2));
-			foreach (IComponentB componentB in componentA.ComponentsOfB)
-			{
-				Assert.That(componentA.Greeting, Is.EqualTo(componentB.Greeting));
-			}
-		}
+    public interface IComponentB
+    {
+        string Greeting { get; }
+    }
 
-		public class InlineDependenciesPropagatingDependencyResolver
-			: DefaultDependencyResolver
-		{
-			protected override CreationContext RebuildContextForParameter(
-				CreationContext current,
-				Type parameterType)
-			{
-				return parameterType.GetTypeInfo().ContainsGenericParameters
-					? current
-					: new CreationContext(parameterType, current, true);
-			}
-		}
+    public abstract class ComponentB(string greeting) : IComponentB
+    {
+        public string Greeting { get; } = greeting;
+    }
 
-		public class ComponentA
-		{
-			public ComponentA(
-				IKernel kernel,
-				IComponentB[] componentsOfB,
-				string greeting)
-			{
-				Kernel = kernel;
-				ComponentsOfB = componentsOfB;
-				Greeting = greeting;
-			}
+    public class ComponentB1(string greeting) : ComponentB(greeting);
 
-			public IKernel Kernel { get; }
-			public IComponentB[] ComponentsOfB { get; }
-			public string Greeting { get; }
-		}
-
-		public interface IComponentB
-		{
-			string Greeting { get; }
-		}
-
-		public abstract class ComponentB : IComponentB
-		{
-			protected ComponentB(string greeting)
-			{
-				Greeting = greeting;
-			}
-
-			public string Greeting { get; }
-		}
-
-		public class ComponentB1 : ComponentB
-		{
-			public ComponentB1(string greeting) : base(greeting)
-			{
-			}
-		}
-
-		public class ComponentB2 : ComponentB
-		{
-			public ComponentB2(string greeting) : base(greeting)
-			{
-			}
-		}
-	}
+    public class ComponentB2(string greeting) : ComponentB(greeting);
 }

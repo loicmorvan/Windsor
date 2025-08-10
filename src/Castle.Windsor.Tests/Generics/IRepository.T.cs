@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Generics
-{
-	public interface IRepository<T>
-	{
-	}
-}
+namespace Castle.Windsor.Tests.Generics;
+
+// ReSharper disable once UnusedTypeParameter
+public interface IRepository<T>;

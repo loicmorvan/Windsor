@@ -12,61 +12,53 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+using System.Reflection;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.Windsor;
+
+namespace Castle.Windsor.Tests;
+
+public abstract class AbstractContainerTestCase : IDisposable
 {
-	using System.Reflection;
+    private WindsorContainer _container;
 
-	using Castle.MicroKernel;
-	using Castle.Windsor;
+    protected AbstractContainerTestCase()
+    {
+        Init();
+    }
 
-	using NUnit.Framework;
+    protected IWindsorContainer Container => _container;
 
-	[TestFixture]
-	public abstract class AbstractContainerTestCase
-	{
-		[TearDown]
-		public void CleanUp()
-		{
-			container.Dispose();
-		}
+    protected IKernel Kernel => _container.Kernel;
 
-		[SetUp]
-		public void Init()
-		{
-			container = BuildContainer();
-			AfterContainerCreated();
-		}
+    public void Dispose()
+    {
+        _container.Dispose();
+    }
 
-		private WindsorContainer container;
+    private void Init()
+    {
+        _container = BuildContainer();
+        AfterContainerCreated();
+    }
 
-		protected IWindsorContainer Container
-		{
-			get { return container; }
-		}
+    protected virtual void AfterContainerCreated()
+    {
+    }
 
-		protected IKernel Kernel
-		{
-			get { return container.Kernel; }
-		}
+    protected virtual WindsorContainer BuildContainer()
+    {
+        return new WindsorContainer();
+    }
 
-		protected virtual void AfterContainerCreated()
-		{
-		}
+    protected void ResetContainer()
+    {
+        Dispose();
+        Init();
+    }
 
-		protected virtual WindsorContainer BuildContainer()
-		{
-			return new WindsorContainer();
-		}
-
-		protected void ResetContainer()
-		{
-			CleanUp();
-			Init();
-		}
-
-		protected Assembly GetCurrentAssembly()
-		{
-			return typeof(AbstractContainerTestCase).GetTypeInfo().Assembly;
-		}
-	}
+    protected static Assembly GetCurrentAssembly()
+    {
+        return typeof(AbstractContainerTestCase).GetTypeInfo().Assembly;
+    }
 }

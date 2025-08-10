@@ -12,105 +12,53 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+
+// ReSharper disable UnusedParameter.Local
+
+namespace Castle.Windsor.Tests;
+
+public class TransientMultiConstructorTestCase
 {
-	using System;
+    [Fact]
+    public void TransientMultiConstructorTest()
+    {
+        var container = new DefaultKernel();
+        container.Register(Component.For(typeof(AnyClass)).Named("AnyClass"));
 
-	using Castle.Core;
-	using Castle.MicroKernel.Registration;
+        var arguments1 = new Arguments { { "integer", 1 } };
 
-	using NUnit.Framework;
+        var arguments2 = new Arguments { { "datetime", DateTime.Now.AddDays(1) } };
 
-	[TestFixture]
-	public class TransientMultiConstructorTestCase
-	{
-		[Test]
-		public void TransientMultiConstructorTest()
-		{
-			DefaultKernel container = new DefaultKernel();
-			((IKernel)container).Register(Component.For(typeof(AnyClass)).Named("AnyClass"));
+        var a = container.Resolve<AnyClass>(arguments1);
+        var b = container.Resolve<AnyClass>(arguments2);
 
-			var arguments1 = new Arguments();
-			arguments1.Add("integer", 1);
+        Assert.NotSame(a, b);
+    }
 
-			var arguments2 = new Arguments();
-			arguments2.Add("datetime", DateTime.Now.AddDays(1));
+    [Fact]
+    public void TransientMultipleConstructorNonValueTypeTest()
+    {
+        var container = new DefaultKernel();
+        container.Register(Component.For(typeof(AnyClassWithReference)).Named("AnyClass"));
+        var one = new Tester1("AnyString");
+        var two = new Tester2(1);
 
-			object a = container.Resolve(typeof(AnyClass), arguments1);
-			object b = container.Resolve(typeof(AnyClass), arguments2);
+        var arguments1 = new Arguments { { "test1", one } };
 
-			Assert.AreNotSame(a, b, "A should not be B");
-		}
+        var arguments2 = new Arguments { { "test2", two } };
 
-		[Test]
-		public void TransientMultipleConstructorNonValueTypeTest()
-		{
-			DefaultKernel container = new DefaultKernel();
-			((IKernel)container).Register(Component.For(typeof(AnyClassWithReference)).Named("AnyClass"));
-			Tester1 one = new Tester1("AnyString");
-			Tester2 two = new Tester2(1);
+        var a = container.Resolve<AnyClassWithReference>(arguments1);
+        var b = container.Resolve<AnyClassWithReference>(arguments2);
 
-			var arguments1 = new Arguments();
-			arguments1.Add("test1", one);
+        Assert.NotSame(a, b);
 
-			var arguments2 = new Arguments();
-			arguments2.Add("test2", two);
+        // multi resolve test
 
-			object a = container.Resolve(typeof(AnyClassWithReference), arguments1);
-			object b = container.Resolve(typeof(AnyClassWithReference), arguments2);
+        a = container.Resolve<AnyClassWithReference>(arguments1);
+        b = container.Resolve<AnyClassWithReference>(arguments2);
 
-			Assert.AreNotSame(a, b, "A should not be B");
-
-			// multi resolve test
-
-			a = container.Resolve(typeof(AnyClassWithReference), arguments1);
-			b = container.Resolve(typeof(AnyClassWithReference), arguments2);
-
-			Assert.AreNotSame(a, b, "A should not be B");
-		}
-	}
-
-	[Transient]
-	public class AnyClass
-	{
-		public AnyClass(int integer)
-		{
-		}
-
-		public AnyClass(DateTime datetime)
-		{
-		}
-	}
-
-	public class Tester1
-	{
-		public string bar;
-
-		public Tester1(string bar)
-		{
-			this.bar = bar;
-		}
-	}
-
-	public class Tester2
-	{
-		public int foo;
-
-		public Tester2(int foo)
-		{
-			this.foo = foo;
-		}
-	}
-
-	[Transient]
-	public class AnyClassWithReference
-	{
-		public AnyClassWithReference(Tester1 test1)
-		{
-		}
-
-		public AnyClassWithReference(Tester2 test2)
-		{
-		}
-	}
+        Assert.NotSame(a, b);
+    }
 }

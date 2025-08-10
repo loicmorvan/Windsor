@@ -12,29 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
+
+public class ServicesDescriptor(Type[] services) : IComponentModelDescriptor
 {
-	using System;
+    public void BuildComponentModel(IKernel kernel, ComponentModel model)
+    {
+        services.ForEach(model.AddService);
+    }
 
-	using Castle.Core;
-	using Castle.Core.Internal;
-
-	public class ServicesDescriptor : IComponentModelDescriptor
-	{
-		private readonly Type[] services;
-
-		public ServicesDescriptor(Type[] services)
-		{
-			this.services = services;
-		}
-
-		public void BuildComponentModel(IKernel kernel, ComponentModel model)
-		{
-			services.ForEach(model.AddService);
-		}
-
-		public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-		{
-		}
-	}
+    public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+    {
+    }
 }

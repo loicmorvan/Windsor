@@ -9,48 +9,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
+using JetBrains.Annotations;
+using Lock = Castle.Windsor.MicroKernel.Internal.Lock;
+
+namespace Castle.Windsor.Core.Internal;
+
+public class SimpleThreadSafeCollection<T>
 {
-	using System.Collections.Generic;
+    private readonly List<T> _implementation = [];
+    private readonly Lock _lock = Lock.Create();
 
-	public class SimpleThreadSafeCollection<T>
-	{
-		private readonly List<T> implementation = new List<T>();
-		private readonly MicroKernel.Internal.Lock @lock =MicroKernel.Internal.Lock.Create();
+    [PublicAPI]
+    public int Count
+    {
+        get
+        {
+            using (_lock.ForReading())
+            {
+                return _implementation.Count;
+            }
+        }
+    }
 
-		public int Count
-		{
-			get
-			{
-				using (@lock.ForReading())
-				{
-					return implementation.Count;
-				}
-			}
-		}
+    public void Add(T item)
+    {
+        using (_lock.ForWriting())
+        {
+            _implementation.Add(item);
+        }
+    }
 
-		public void Add(T item)
-		{
-			using (@lock.ForWriting())
-			{
-				implementation.Add(item);
-			}
-		}
+    [PublicAPI]
+    public bool Remove(T item)
+    {
+        using (_lock.ForWriting())
+        {
+            return _implementation.Remove(item);
+        }
+    }
 
-		public bool Remove(T item)
-		{
-			using (@lock.ForWriting())
-			{
-				return implementation.Remove(item);
-			}
-		}
-
-		public T[] ToArray()
-		{
-			using (@lock.ForReading())
-			{
-				return implementation.ToArray();
-			}
-		}
-	}
+    public T[] ToArray()
+    {
+        using (_lock.ForReading())
+        {
+            return _implementation.ToArray();
+        }
+    }
 }

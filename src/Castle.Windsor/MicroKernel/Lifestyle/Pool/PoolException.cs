@@ -12,26 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Pool
+using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.MicroKernel.Lifestyle.Pool;
+
+[Serializable]
+public class PoolException : Exception
 {
-	using System;
-	using System.Runtime.Serialization;
-
-	using Castle.Core.Internal;
-
-	[Serializable]
-	public class PoolException : Exception
-	{
-		public PoolException(string message) : base(message)
-		{
-			ExceptionHelper.SetUp(this);
-		}
-
-#if FEATURE_SERIALIZATION
-		public PoolException(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-			ExceptionHelper.SetUp(this);
-		}
-#endif
-	}
+    public PoolException(string message) : base(message)
+    {
+        this.SetUp();
+    }
 }

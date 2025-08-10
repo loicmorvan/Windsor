@@ -12,22 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+// ReSharper disable once UnusedType.Global
+public class AlarmGeneratorWithDependency
 {
-	using Castle.Windsor.Tests;
+    // ReSharper disable once UnusedParameter.Local
+    public AlarmGeneratorWithDependency(IAlarmSender sender, A dependency)
+    {
+        Sender = sender;
+    }
 
-	public class AlarmGeneratorWithDependency
-	{
-		private readonly IAlarmSender sender;
-
-		public AlarmGeneratorWithDependency(IAlarmSender sender, A dependency)
-		{
-			this.sender = sender;
-		}
-
-		public IAlarmSender Sender
-		{
-			get { return sender; }
-		}
-	}
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
+    public IAlarmSender Sender { get; }
 }

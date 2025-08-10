@@ -12,16 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using Castle.Core;
+using Castle.Windsor.Core;
 
-	[Scoped]
-	public class ScopedComponent : IComponent
-	{
-		public int ID
-		{
-			get { return GetHashCode(); }
-		}
-	}
+namespace Castle.Windsor.Tests.Components;
+
+[Scoped]
+public class ScopedComponent : IComponent
+{
+    public int Id => GetHashCode();
 }

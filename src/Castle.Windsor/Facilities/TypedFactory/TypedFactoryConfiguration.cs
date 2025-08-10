@@ -12,76 +12,72 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel;
+
+namespace Castle.Windsor.Facilities.TypedFactory;
+
+public class TypedFactoryConfiguration
 {
-	using System;
+    private readonly string _defaultComponentSelectorKey;
+    private IReference<ITypedFactoryComponentSelector> _selectorReference;
 
-	using Castle.Core.Internal;
-	using Castle.MicroKernel;
+    public TypedFactoryConfiguration(string defaultComponentSelectorKey, Type factoryType)
+    {
+        _defaultComponentSelectorKey = defaultComponentSelectorKey;
+        var attributes = factoryType.GetAttributes<FactoryAttribute>(true);
+        if (attributes.Length <= 0)
+        {
+            return;
+        }
 
-	public class TypedFactoryConfiguration
-	{
-		private readonly string defaultComponentSelectorKey;
-		private IReference<ITypedFactoryComponentSelector> selectorReference;
+        var defaults = attributes[0];
+        if (defaults.SelectorComponentName != null)
+        {
+            SelectedWith(defaults.SelectorComponentName);
+        }
+        else if (defaults.SelectorComponentType != null)
+        {
+            SelectedWith(defaults.SelectorComponentType);
+        }
+        else if (defaults.SelectorType != null)
+        {
+            SelectedWith(defaults.SelectorType.CreateInstance<ITypedFactoryComponentSelector>());
+        }
+    }
 
-		public TypedFactoryConfiguration(string defaultComponentSelectorKey, Type factoryType)
-		{
-			this.defaultComponentSelectorKey = defaultComponentSelectorKey;
-			var attributes = factoryType.GetAttributes<FactoryAttribute>(true);
-			if (attributes.Length > 0)
-			{
-				var defaults = attributes[0];
-				if (defaults.SelectorComponentName != null)
-				{
-					SelectedWith(defaults.SelectorComponentName);
-				}
-				else if (defaults.SelectorComponentType != null)
-				{
-					SelectedWith(defaults.SelectorComponentType);
-				}
-				else if (defaults.SelectorType != null)
-				{
-					SelectedWith(defaults.SelectorType.CreateInstance<ITypedFactoryComponentSelector>());
-				}
-			}
-		}
+    internal IReference<ITypedFactoryComponentSelector> Reference
+    {
+        get
+        {
+            if (_selectorReference == null)
+            {
+                SelectedWith(_defaultComponentSelectorKey);
+            }
 
-		internal IReference<ITypedFactoryComponentSelector> Reference
-		{
-			get
-			{
-				if (selectorReference == null)
-				{
-					SelectedWith(defaultComponentSelectorKey);
-				}
+            return _selectorReference;
+        }
+    }
 
-				return selectorReference;
-			}
-		}
+    public void SelectedWith(string selectorComponentName)
+    {
+        _selectorReference = new ComponentReference<ITypedFactoryComponentSelector>(selectorComponentName);
+    }
 
-		public void SelectedWith(string selectorComponentName)
-		{
-			selectorReference = new ComponentReference<ITypedFactoryComponentSelector>(selectorComponentName);
-		}
+    public void SelectedWith<TSelectorComponent>() where TSelectorComponent : ITypedFactoryComponentSelector
+    {
+        SelectedWith(typeof(TSelectorComponent));
+    }
 
-		public void SelectedWith<TSelectorComponent>() where TSelectorComponent : ITypedFactoryComponentSelector
-		{
-			SelectedWith(typeof(TSelectorComponent));
-		}
+    public void SelectedWith(Type selectorComponentType)
+    {
+        _selectorReference = new ComponentReference<ITypedFactoryComponentSelector>(selectorComponentType);
+    }
 
-		public void SelectedWith(Type selectorComponentType)
-		{
-			selectorReference = new ComponentReference<ITypedFactoryComponentSelector>(selectorComponentType);
-		}
+    public void SelectedWith(ITypedFactoryComponentSelector selector)
+    {
+        ArgumentNullException.ThrowIfNull(selector);
 
-		public void SelectedWith(ITypedFactoryComponentSelector selector)
-		{
-			if (selector == null)
-			{
-				throw new ArgumentNullException(nameof(selector));
-			}
-
-			selectorReference = new InstanceReference<ITypedFactoryComponentSelector>(selector);
-		}
-	}
+        _selectorReference = new InstanceReference<ITypedFactoryComponentSelector>(selector);
+    }
 }

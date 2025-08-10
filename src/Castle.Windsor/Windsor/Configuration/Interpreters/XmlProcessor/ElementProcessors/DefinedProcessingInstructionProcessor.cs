@@ -12,32 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors
+using System.Xml;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
+
+public class DefinedProcessingInstructionProcessor : AbstractXmlNodeProcessor
 {
-	using System;
-	using System.Xml;
+    private static readonly XmlNodeType[] AcceptNodes = [XmlNodeType.ProcessingInstruction];
 
-	public class DefinedProcessingInstructionProcessor : AbstractXmlNodeProcessor
-	{
-		private static readonly XmlNodeType[] acceptNodes = new[] { XmlNodeType.ProcessingInstruction };
+    public override XmlNodeType[] AcceptNodeTypes => AcceptNodes;
 
-		public override XmlNodeType[] AcceptNodeTypes
-		{
-			get { return acceptNodes; }
-		}
+    public override string Name => "define";
 
-		public override String Name
-		{
-			get { return "define"; }
-		}
+    public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
+    {
+        var node = nodeList.Current as XmlProcessingInstruction;
 
-		public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
-		{
-			var node = nodeList.Current as XmlProcessingInstruction;
+        engine.AddFlag(node.Data);
 
-			engine.AddFlag(node.Data);
-
-			RemoveItSelf(node);
-		}
-	}
+        RemoveItSelf(node);
+    }
 }

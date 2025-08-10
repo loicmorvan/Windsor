@@ -12,54 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
+using Castle.DynamicProxy;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Internal;
+using Castle.Windsor.MicroKernel.Resolvers;
+
+namespace Castle.Windsor.Windsor.Diagnostics;
+
+public class UsingContainerAsServiceLocatorDiagnostic(IKernel kernel) : IUsingContainerAsServiceLocatorDiagnostic
 {
-	using System;
-	using System.Linq;
+    private static readonly Type[] ContainerTypes =
+    [
+        typeof(IKernel),
+        typeof(IWindsorContainer),
+        typeof(IKernelEvents),
+        typeof(IKernelInternal),
+        typeof(DefaultKernel),
+        typeof(WindsorContainer)
+    ];
 
-	using Castle.Core.Internal;
-	using Castle.DynamicProxy;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Resolvers;
+    private static readonly Predicate<IHandler>[] ExceptionsToTheRule =
+    [
+        h => h.ComponentModel.Implementation.Is<IInterceptor>(),
+        h => h.ComponentModel.Services.Any(s => s.Is<ILazyComponentLoader>()),
+        h => h.ComponentModel.Implementation == typeof(LazyEx<>)
+    ];
 
-	public class UsingContainerAsServiceLocatorDiagnostic : IUsingContainerAsServiceLocatorDiagnostic
-	{
-		public static Type[] ContainerTypes =
-			{
-				typeof(IKernel),
-				typeof(IWindsorContainer),
-				typeof(IKernelEvents),
-				typeof(IKernelInternal),
-				typeof(DefaultKernel),
-				typeof(WindsorContainer),
-			};
+    public IHandler[] Inspect()
+    {
+        var allHandlers = kernel.GetAssignableHandlers(typeof(object));
+        var handlersWithContainerDependency = allHandlers.Where(HasDependencyOnTheContainer);
+        return handlersWithContainerDependency
+            .Where(h => ExceptionsToTheRule.Any(e => e(h)) == false)
+            .ToArray();
+    }
 
-		public static Predicate<IHandler>[] ExceptionsToTheRule =
-			{
-				h => h.ComponentModel.Implementation.Is<IInterceptor>(),
-				h => h.ComponentModel.Services.Any(s => s.Is<ILazyComponentLoader>()),
-				h => h.ComponentModel.Implementation == typeof(MicroKernel.Internal.LazyEx<>),
-			};
-
-		private readonly IKernel kernel;
-
-		public UsingContainerAsServiceLocatorDiagnostic(IKernel kernel)
-		{
-			this.kernel = kernel;
-		}
-
-		public IHandler[] Inspect()
-		{
-			var allHandlers = kernel.GetAssignableHandlers(typeof(object));
-			var handlersWithContainerDependency = allHandlers.Where(HasDependencyOnTheContainer);
-			return handlersWithContainerDependency
-				.Where(h => ExceptionsToTheRule.Any(e => e(h)) == false)
-				.ToArray();
-		}
-
-		private bool HasDependencyOnTheContainer(IHandler handler)
-		{
-			return handler.ComponentModel.Dependencies.Any(d => ContainerTypes.Any(c => c == d.TargetItemType));
-		}
-	}
+    private static bool HasDependencyOnTheContainer(IHandler handler)
+    {
+        return handler.ComponentModel.Dependencies.Any(d => ContainerTypes.Any(c => c == d.TargetItemType));
+    }
 }

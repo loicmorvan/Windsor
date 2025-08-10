@@ -1,4 +1,4 @@
 <configuration>
-	<define flag="ProD"/>
+    <define flag="ProD"/>
     <include uri="file://config_with_choose_stmt.xml"/>
 </configuration>

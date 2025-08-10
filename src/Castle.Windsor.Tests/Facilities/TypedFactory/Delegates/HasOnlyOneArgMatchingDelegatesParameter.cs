@@ -12,27 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
+
+public class HasOnlyOneArgMatchingDelegatesParameter
 {
-	public class HasOnlyOneArgMatchingDelegatesParameter
-	{
-		private readonly string arg1;
-		private readonly string name;
+    public HasOnlyOneArgMatchingDelegatesParameter(string arg1, string name)
+    {
+        Arg1 = arg1;
+        Name = name;
+    }
 
-		public HasOnlyOneArgMatchingDelegatesParameter(string arg1, string name)
-		{
-			this.arg1 = arg1;
-			this.name = name;
-		}
+    public string Arg1 { get; }
 
-		public string Arg1
-		{
-			get { return arg1; }
-		}
-
-		public string Name
-		{
-			get { return name; }
-		}
-	}
+    public string Name { get; }
 }

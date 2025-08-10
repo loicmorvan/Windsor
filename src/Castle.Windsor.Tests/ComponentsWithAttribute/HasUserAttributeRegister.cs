@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ComponentsWithAttribute
-{
-	[User(true)]
-	public class HasUserAttributeRegister
-	{
-	}
-}
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.ComponentsWithAttribute;
+
+[User(true)]
+[UsedImplicitly]
+public class HasUserAttributeRegister;

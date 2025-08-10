@@ -12,16 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories
+using Castle.Windsor.Tests.ClassComponents;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
+
+public interface IDisposableFactory : IDisposable
 {
-	using System;
+    DisposableComponent Create();
 
-	using Castle.Windsor.Tests.ClassComponents;
-
-	public interface IDisposableFactory : IDisposable
-	{
-		DisposableComponent Create();
-
-		void Destroy(DisposableComponent value);
-	}
+    void Destroy(DisposableComponent value);
 }

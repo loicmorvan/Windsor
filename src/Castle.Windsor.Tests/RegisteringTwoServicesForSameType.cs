@@ -12,45 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Windsor;
+
+namespace Castle.Windsor.Tests;
+
+public class RegisteringTwoServicesForSameType
 {
-	using Castle.MicroKernel.Registration;
+    [Fact]
+    public void ResolvingComponentIsDoneOnFirstComeBasis()
+    {
+        IWindsorContainer windsor = new WindsorContainer();
+        windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("1"));
+        windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("2"));
 
-	using NUnit.Framework;
+        Assert.IsType<Srv1>(windsor.Resolve<IService>());
+    }
 
-	[TestFixture]
-	public class RegisteringTwoServicesForSameType
-	{
-		[Test]
-		public void ResolvingComponentIsDoneOnFirstComeBasis()
-		{
-			IWindsorContainer windsor = new WindsorContainer();
-			windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("1"));
-			windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("2"));
+    [Fact]
+    public void ResolvingComponentIsDoneOnFirstComeBasisWhenNamesAreNotOrdered()
+    {
+        IWindsorContainer windsor = new WindsorContainer();
+        windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("3"));
+        windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("2"));
 
-			Assert.IsInstanceOf<Srv1>(windsor.Resolve<IService>());
-		}
+        Assert.IsType<Srv1>(windsor.Resolve<IService>());
+    }
 
-		[Test]
-		public void ResolvingComponentIsDoneOnFirstComeBasisWhenNamesAreNotOrdered()
-		{
-			IWindsorContainer windsor = new WindsorContainer();
-			windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("3"));
-			windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("2"));
+    public interface IService;
 
-			Assert.IsInstanceOf<Srv1>(windsor.Resolve<IService>());
-		}
-
-		public interface IService
-		{
-		}
-
-		public class Srv1 : IService
-		{
-		}
-
-		public class Srv2 : IService
-		{
-		}
-	}
+    public class Srv1 : IService;
 }

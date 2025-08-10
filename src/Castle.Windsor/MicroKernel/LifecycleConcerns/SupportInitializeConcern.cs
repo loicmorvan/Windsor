@@ -12,32 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.LifecycleConcerns
+using System.ComponentModel;
+using Castle.Windsor.Core;
+
+namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
+
+/// <summary>Summary description for SupportInitializeConcern.</summary>
+[Serializable]
+public class SupportInitializeConcern : ICommissionConcern
 {
-	using System;
-	using System.ComponentModel;
+    protected SupportInitializeConcern()
+    {
+    }
 
-	using Castle.Core;
+    public static SupportInitializeConcern Instance { get; } = new();
 
-	/// <summary>
-	///   Summary description for SupportInitializeConcern.
-	/// </summary>
-	[Serializable]
-	public class SupportInitializeConcern : ICommissionConcern
-	{
-		protected SupportInitializeConcern()
-		{
-		}
+    public void Apply(ComponentModel model, object component)
+    {
+        if (component is not ISupportInitialize supportInitialize)
+        {
+            return;
+        }
 
-		public void Apply(ComponentModel model, object component)
-		{
-			if (component is ISupportInitialize supportInitialize)
-			{
-				supportInitialize.BeginInit();
-				supportInitialize.EndInit();
-			}
-		}
-
-		public static SupportInitializeConcern Instance { get; } = new SupportInitializeConcern();
-	}
+        supportInitialize.BeginInit();
+        supportInitialize.EndInit();
+    }
 }

@@ -12,28 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
+using Castle.Windsor.MicroKernel;
+
+namespace Castle.Windsor.Windsor.Diagnostics;
+
+public class TrackedComponentsDiagnostic : ITrackedComponentsDiagnostic
 {
-	using System;
-	using System.Linq;
+    public ILookup<IHandler, object> Inspect()
+    {
+        var @event = TrackedInstancesRequested;
+        if (@event == null)
+        {
+            return null;
+        }
 
-	using Castle.MicroKernel;
+        var args = new TrackedInstancesEventArgs();
+        @event(this, args);
 
-	public class TrackedComponentsDiagnostic : ITrackedComponentsDiagnostic
-	{
-		public ILookup<IHandler, object> Inspect()
-		{
-			var @event = TrackedInstancesRequested;
-			if (@event == null)
-			{
-				return null;
-			}
-			var args = new TrackedInstancesEventArgs();
-			@event(this, args);
+        return args.Items.ToLookup(k => k.Handler, b => b.Instance);
+    }
 
-			return args.Items.ToLookup(k => k.Handler, b => b.Instance);
-		}
-
-		public event EventHandler<TrackedInstancesEventArgs> TrackedInstancesRequested;
-	}
+    public event EventHandler<TrackedInstancesEventArgs> TrackedInstancesRequested;
 }

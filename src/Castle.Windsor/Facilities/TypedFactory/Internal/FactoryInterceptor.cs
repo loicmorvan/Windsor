@@ -12,61 +12,53 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory.Internal
+using Castle.DynamicProxy;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Interceptor;
+using Castle.Windsor.MicroKernel;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Facilities.TypedFactory.Internal;
+
+/// <summary>Legacy interceptor for old impl. of the facility.</summary>
+[Transient]
+[UsedImplicitly]
+public class FactoryInterceptor(IKernel kernel) : IInterceptor, IOnBehalfAware
 {
-	using System;
+    private FactoryEntry _entry;
 
-	using Castle.Core;
-	using Castle.Core.Interceptor;
-	using Castle.DynamicProxy;
-	using Castle.MicroKernel;
+    public void Intercept(IInvocation invocation)
+    {
+        var name = invocation.Method.Name;
+        var args = invocation.Arguments;
+        if (name.Equals(_entry.CreationMethod))
+        {
+            if (args.Length == 0 || args[0] == null)
+            {
+                invocation.ReturnValue = kernel.Resolve(invocation.Method.ReturnType);
+                return;
+            }
 
-	/// <summary>
-	///   Legacy interceptor for old impl. of the facility.
-	/// </summary>
-	[Transient]
-	public class FactoryInterceptor : IInterceptor, IOnBehalfAware
-	{
-		private readonly IKernel kernel;
-		private FactoryEntry entry;
+            var key = (string)args[0];
+            invocation.ReturnValue = kernel.Resolve<object>(key);
+            return;
+        }
 
-		public FactoryInterceptor(IKernel kernel)
-		{
-			this.kernel = kernel;
-		}
+        if (name.Equals(_entry.DestructionMethod))
+        {
+            if (args.Length == 1)
+            {
+                kernel.ReleaseComponent(args[0]);
+                invocation.ReturnValue = null;
+                return;
+            }
+        }
 
-		public void Intercept(IInvocation invocation)
-		{
-			var name = invocation.Method.Name;
-			var args = invocation.Arguments;
-			if (name.Equals(entry.CreationMethod))
-			{
-				if (args.Length == 0 || args[0] == null)
-				{
-					invocation.ReturnValue = kernel.Resolve(invocation.Method.ReturnType);
-					return;
-				}
-				var key = (String)args[0];
-				invocation.ReturnValue = kernel.Resolve<object>(key);
-				return;
-			}
+        invocation.Proceed();
+    }
 
-			if (name.Equals(entry.DestructionMethod))
-			{
-				if (args.Length == 1)
-				{
-					kernel.ReleaseComponent(args[0]);
-					invocation.ReturnValue = null;
-					return;
-				}
-			}
-
-			invocation.Proceed();
-		}
-
-		public void SetInterceptedComponentModel(ComponentModel target)
-		{
-			entry = (FactoryEntry)target.ExtendedProperties["typed.fac.entry"];
-		}
-	}
+    public void SetInterceptedComponentModel(ComponentModel target)
+    {
+        _entry = (FactoryEntry)target.ExtendedProperties["typed.fac.entry"];
+    }
 }

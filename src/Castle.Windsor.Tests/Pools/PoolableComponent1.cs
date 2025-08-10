@@ -12,20 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Pools
+using Castle.Windsor.Core;
+
+namespace Castle.Windsor.Tests.Pools;
+
+[Pooled(2, 5)]
+public class PoolableComponent1
 {
-	using System;
+    private readonly Guid _id = Guid.NewGuid();
 
-	using Castle.Core;
-
-	[Pooled(2, 5)]
-	public class PoolableComponent1
-	{
-		private readonly Guid id = Guid.NewGuid();
-
-		public override string ToString()
-		{
-			return string.Format("{0:D}", id);
-		}
-	}
+    public override string ToString()
+    {
+        return $"{_id:D}";
+    }
 }

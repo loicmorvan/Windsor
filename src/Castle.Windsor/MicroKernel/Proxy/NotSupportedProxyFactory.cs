@@ -12,56 +12,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Proxy
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Context;
+
+namespace Castle.Windsor.MicroKernel.Proxy;
+
+/// <summary>This is a placeholder implementation of <see cref="IProxyFactory" />.</summary>
+/// <remarks>
+///     The decision to supply no implementation for <see cref="IProxyFactory" /> is supported by the fact that the
+///     MicroKernel should be a thin assembly with the minimal set of features, although
+///     extensible. Providing the support for this interface would obligate the user to import another assembly, even if
+///     the large majority of simple cases, no use use of interceptors will take place. If
+///     you want to use however, see the Windsor container.
+/// </remarks>
+[Serializable]
+public class NotSupportedProxyFactory : IProxyFactory
 {
-	using System;
+    public void AddInterceptorSelector(IModelInterceptorsSelector selector)
+    {
+    }
 
-	using Castle.Core;
-	using Castle.MicroKernel.Context;
+    public object Create(IKernel kernel, object instance, ComponentModel mode, CreationContext context,
+        params object[] constructorArguments)
+    {
+        throw new NotImplementedException(
+            "You must supply an implementation of IProxyFactory " +
+            "to use interceptors on the Microkernel");
+    }
 
-	/// <summary>
-	///   This is a placeholder implementation of <see cref = "IProxyFactory" />.
-	/// </summary>
-	/// <remarks>
-	///   The decision to supply no implementation for <see cref = "IProxyFactory" />
-	///   is supported by the fact that the MicroKernel should be a thin
-	///   assembly with the minimal set of features, although extensible.
-	///   Providing the support for this interface would obligate 
-	///   the user to import another assembly, even if the large majority of
-	///   simple cases, no use use of interceptors will take place.
-	///   If you want to use however, see the Windsor container.
-	/// </remarks>
-	[Serializable]
-	public class NotSupportedProxyFactory : IProxyFactory
-	{
-		public void AddInterceptorSelector(IModelInterceptorsSelector selector)
-		{
-		}
+    public object Create(IProxyFactoryExtension customFactory, IKernel kernel, ComponentModel model,
+        CreationContext context, params object[] constructorArguments)
+    {
+        throw new NotImplementedException(
+            "You must supply an implementation of IProxyFactory " +
+            "to use interceptors on the Microkernel");
+    }
 
-		public object Create(IKernel kernel, object instance, ComponentModel mode, CreationContext context,
-		                     params object[] constructorArguments)
-		{
-			throw new NotImplementedException(
-				"You must supply an implementation of IProxyFactory " +
-				"to use interceptors on the Microkernel");
-		}
+    public bool RequiresTargetInstance(IKernel kernel, ComponentModel model)
+    {
+        return false;
+    }
 
-		public object Create(IProxyFactoryExtension customFactory, IKernel kernel, ComponentModel model,
-		                     CreationContext context, params object[] constructorArguments)
-		{
-			throw new NotImplementedException(
-				"You must supply an implementation of IProxyFactory " +
-				"to use interceptors on the Microkernel");
-		}
-
-		public bool RequiresTargetInstance(IKernel kernel, ComponentModel model)
-		{
-			return false;
-		}
-
-		public bool ShouldCreateProxy(ComponentModel model)
-		{
-			return false;
-		}
-	}
+    public bool ShouldCreateProxy(ComponentModel model)
+    {
+        return false;
+    }
 }

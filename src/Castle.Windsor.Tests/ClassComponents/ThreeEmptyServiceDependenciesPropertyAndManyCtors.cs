@@ -12,32 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.ClassComponents;
+
+public class ThreeEmptyServiceDependenciesPropertyAndManyCtors
 {
-	using CastleTests.Components;
+    public ThreeEmptyServiceDependenciesPropertyAndManyCtors(IEmptyService one)
+    {
+        One = one;
+    }
 
-	public class ThreeEmptyServiceDependenciesPropertyAndManyCtors
-	{
-		public ThreeEmptyServiceDependenciesPropertyAndManyCtors(IEmptyService one)
-		{
-			One = one;
-		}
+    public ThreeEmptyServiceDependenciesPropertyAndManyCtors(IEmptyService one, IDoubleGeneric<int, A> two)
+    {
+        One = one;
+        Two = two;
+    }
 
-		public ThreeEmptyServiceDependenciesPropertyAndManyCtors(IEmptyService one, IDoubleGeneric<int, A> two)
-		{
-			One = one;
-			Two = two;
-		}
+    public ThreeEmptyServiceDependenciesPropertyAndManyCtors(IEmptyService one, IEmptyService two, IEmptyService three)
+    {
+        One = one;
+        Two = two;
+        Three = three;
+    }
 
-		public ThreeEmptyServiceDependenciesPropertyAndManyCtors(IEmptyService one, IEmptyService two, IEmptyService three)
-		{
-			One = one;
-			Two = two;
-			Three = three;
-		}
-
-		public IEmptyService One { get; set; }
-		public IEmptyService Three { get; set; }
-		public object Two { get; set; }
-	}
+    public IEmptyService One { get; set; }
+    public IEmptyService Three { get; set; }
+    public object Two { get; set; }
 }

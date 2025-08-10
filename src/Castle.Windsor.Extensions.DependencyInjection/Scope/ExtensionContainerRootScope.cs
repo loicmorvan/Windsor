@@ -12,18 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Scope
-{
-	internal class ExtensionContainerRootScope : ExtensionContainerScopeBase
-	{
-		
-		public static ExtensionContainerRootScope BeginRootScope()
-		{
-			var scope = new ExtensionContainerRootScope();
-			ExtensionContainerScopeCache.Current = scope;
-			return scope;
-		}
+namespace Castle.Windsor.Extensions.DependencyInjection.Scope;
 
-		internal override ExtensionContainerScopeBase RootScope => this;
-	}
+internal class ExtensionContainerRootScope : ExtensionContainerScopeBase
+{
+    internal override ExtensionContainerScopeBase RootScope => this;
+
+    public static ExtensionContainerRootScope BeginRootScope()
+    {
+        var scope = new ExtensionContainerRootScope();
+        ExtensionContainerScopeCache.Current = scope;
+        return scope;
+    }
 }

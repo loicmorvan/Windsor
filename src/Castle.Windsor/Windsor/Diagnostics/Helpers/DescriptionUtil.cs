@@ -12,69 +12,75 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Helpers
+using System.ComponentModel;
+using Castle.Core.Internal;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Windsor.Diagnostics.Helpers;
+
+public static class DescriptionUtil
 {
-	using System.ComponentModel;
+    public static string GetComponentName(this IHandler handler)
+    {
+        var componentName = handler.ComponentModel.ComponentName;
+        return componentName.SetByUser
+            ? $"\"{componentName.Name}\" {handler.GetServicesDescription()}"
+            : handler.GetServicesDescription();
+    }
 
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel;
+    public static string GetLifestyleDescription(this ComponentModel componentModel)
+    {
+        if (componentModel.LifestyleType == LifestyleType.Undefined)
+        {
+            return $"{LifestyleType.Singleton}*";
+        }
 
-	public static class DescriptionUtil
-	{
-		public static string GetComponentName(this IHandler handler)
-		{
-			var componentName = handler.ComponentModel.ComponentName;
-			if (componentName.SetByUser)
-			{
-				return string.Format("\"{0}\" {1}", componentName.Name, handler.GetServicesDescription());
-			}
-			return handler.GetServicesDescription();
-		}
+        return componentModel.LifestyleType != LifestyleType.Custom
+            ? componentModel.LifestyleType.ToString()
+            : componentModel.CustomLifestyle.Name;
+    }
 
-		public static string GetLifestyleDescription(this ComponentModel componentModel)
-		{
-			if (componentModel.LifestyleType == LifestyleType.Undefined)
-			{
-				return string.Format("{0}*", LifestyleType.Singleton);
-			}
-			if (componentModel.LifestyleType != LifestyleType.Custom)
-			{
-				return componentModel.LifestyleType.ToString();
-			}
-			return componentModel.CustomLifestyle.Name;
-		}
+    public static string GetLifestyleDescriptionLong(this ComponentModel componentModel)
+    {
+        switch (componentModel.LifestyleType)
+        {
+            case LifestyleType.Undefined:
+                return
+                    $"{componentModel.LifestyleType} (default lifestyle {LifestyleType.Singleton} will be used)";
+            case LifestyleType.Scoped:
+            {
+                var accessorType = componentModel.GetScopeAccessorType();
+                if (accessorType == null)
+                {
+                    return "Scoped explicitly";
+                }
 
-		public static string GetLifestyleDescriptionLong(this ComponentModel componentModel)
-		{
-			if (componentModel.LifestyleType == LifestyleType.Undefined)
-			{
-				return string.Format("{0} (default lifestyle {1} will be used)", componentModel.LifestyleType, LifestyleType.Singleton);
-			}
-			if (componentModel.LifestyleType == LifestyleType.Scoped)
-			{
-				var accessorType = componentModel.GetScopeAccessorType();
-				if (accessorType == null)
-				{
-					return "Scoped explicitly";
-				}
-				var description = accessorType.GetAttribute<DescriptionAttribute>();
-				if (description != null)
-				{
-					return "Scoped " + description.Description;
-				}
-				return "Scoped via " + accessorType.ToCSharpString();
-			}
-			if (componentModel.LifestyleType != LifestyleType.Custom)
-			{
-				return componentModel.LifestyleType.ToString();
-			}
-			return "Custom: " + componentModel.CustomLifestyle.Name;
-		}
+                var description = accessorType.GetAttribute<DescriptionAttribute>();
+                if (description != null)
+                {
+                    return "Scoped " + description.Description;
+                }
 
-		public static string GetServicesDescription(this IHandler handler)
-		{
-			return handler.ComponentModel.ToString();
-		}
-	}
+                return "Scoped via " + accessorType.ToCSharpString();
+            }
+            case LifestyleType.Custom:
+                return "Custom: " + componentModel.CustomLifestyle.Name;
+            case LifestyleType.Singleton:
+            case LifestyleType.Thread:
+            case LifestyleType.Transient:
+            case LifestyleType.Pooled:
+            case LifestyleType.Bound:
+            default:
+                return componentModel.LifestyleType.ToString();
+        }
+    }
+
+    [PublicAPI]
+    public static string GetServicesDescription(this IHandler handler)
+    {
+        return handler.ComponentModel.ToString();
+    }
 }

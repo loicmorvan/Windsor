@@ -12,12 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
-{
-	/// <summary>
-	/// Summary description for NonPublicComponent.
-	/// </summary>
-	internal class NonPublicComponent
-	{
-	}
-}
+namespace Castle.Windsor.Tests.ClassComponents;
+
+/// <summary>Summary description for NonPublicComponent.</summary>
+internal class NonPublicComponent;

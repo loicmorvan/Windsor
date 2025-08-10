@@ -12,47 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+using System.Collections;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.Registration;
+
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
+
+public class ExtendedPropertiesDescriptor : IComponentModelDescriptor
 {
-	using System;
-	using System.Collections;
+    private readonly IDictionary _dictionary;
+    private readonly Property[] _properties;
 
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Registration;
+    public ExtendedPropertiesDescriptor(params Property[] properties)
+    {
+        _properties = properties;
+    }
 
-	public class ExtendedPropertiesDescriptor : IComponentModelDescriptor
-	{
-		private readonly IDictionary dictionary;
-		private readonly Property[] properties;
+    public ExtendedPropertiesDescriptor(IDictionary dictionary)
+    {
+        _dictionary = dictionary;
+    }
 
-		public ExtendedPropertiesDescriptor(params Property[] properties)
-		{
-			this.properties = properties;
-		}
+    public void BuildComponentModel(IKernel kernel, ComponentModel model)
+    {
+    }
 
-		public ExtendedPropertiesDescriptor(IDictionary dictionary)
-		{
-			this.dictionary = dictionary;
-		}
+    public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+    {
+        if (_dictionary != null)
+        {
+            foreach (DictionaryEntry property in _dictionary)
+            {
+                model.ExtendedProperties[property.Key] = property.Value;
+            }
+        }
 
-		public void BuildComponentModel(IKernel kernel, ComponentModel model)
-		{
-		}
-
-		public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-		{
-			if (dictionary != null)
-			{
-				foreach (DictionaryEntry property in dictionary)
-				{
-					model.ExtendedProperties[property.Key] = property.Value;
-				}
-			}
-			if (properties != null)
-			{
-				properties.ForEach(p => model.ExtendedProperties[p.Key] = p.Value);
-			}
-		}
-	}
+        _properties?.ForEach(p => model.ExtendedProperties[p.Key] = p.Value);
+    }
 }

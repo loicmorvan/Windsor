@@ -12,27 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+public class ClassWithTwoParametersWithSameType
 {
-	public class ClassWithTwoParametersWithSameType
-	{
-		private readonly ICommon one;
-		private readonly ICommon two;
+    public ClassWithTwoParametersWithSameType(ICommon one, ICommon two)
+    {
+        One = one;
+        Two = two;
+    }
 
-		public ClassWithTwoParametersWithSameType(ICommon one, ICommon two)
-		{
-			this.one = one;
-			this.two = two;
-		}
+    public ICommon One { get; }
 
-		public ICommon One
-		{
-			get { return one; }
-		}
-
-		public ICommon Two
-		{
-			get { return two; }
-		}
-	}
+    public ICommon Two { get; }
 }

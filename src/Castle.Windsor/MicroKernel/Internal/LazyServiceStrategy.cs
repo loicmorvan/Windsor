@@ -12,30 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Internal
+using System.Diagnostics;
+using System.Reflection;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.Handlers;
+
+namespace Castle.Windsor.MicroKernel.Internal;
+
+public class LazyServiceStrategy : IGenericServiceStrategy
 {
-	using System;
-	using System.Diagnostics;
-	using System.Linq;
-	using System.Reflection;
+    public static readonly LazyServiceStrategy Instance = new();
 
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Handlers;
+    private LazyServiceStrategy()
+    {
+    }
 
-	public class LazyServiceStrategy : IGenericServiceStrategy
-	{
-		public static readonly LazyServiceStrategy Instance = new LazyServiceStrategy();
-
-		private LazyServiceStrategy()
-		{
-		}
-
-		public bool Supports(Type service, ComponentModel component)
-		{
-			Debug.Assert(service.GetGenericTypeDefinition() == typeof(Lazy<>));
-			var argument = service.GetTypeInfo().GetGenericArguments().Single();
-			return argument.IsPrimitiveTypeOrCollection() == false;
-		}
-	}
+    public bool Supports(Type service, ComponentModel component)
+    {
+        Debug.Assert(service.GetGenericTypeDefinition() == typeof(Lazy<>));
+        var argument = service.GetTypeInfo().GetGenericArguments().Single();
+        return argument.IsPrimitiveTypeOrCollection() == false;
+    }
 }

@@ -12,15 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components
-{
-	using System;
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
-	/// <summary>
-	/// Summary description for IProtocolHandler.
-	/// </summary>
-	public interface IProtocolHandler
-	{
-		void Handle(String content);
-	}
+/// <summary>Summary description for IProtocolHandler.</summary>
+public interface IProtocolHandler
+{
+    void Handle();
 }

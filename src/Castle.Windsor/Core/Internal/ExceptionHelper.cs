@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
-{
-	using System;
+using JetBrains.Annotations;
 
-	public static class ExceptionHelper
-	{
-		public static Exception SetUp(this Exception exception)
-		{
-			exception.HelpLink = Constants.ExceptionHelpLink;
-			return exception;
-		}
-	}
+namespace Castle.Windsor.Core.Internal;
+
+public static class ExceptionHelper
+{
+    [PublicAPI]
+    public static Exception SetUp(this Exception exception)
+    {
+        exception.HelpLink = Constants.ExceptionHelpLink;
+        return exception;
+    }
 }

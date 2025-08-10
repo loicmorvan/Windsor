@@ -1,0 +1,50 @@
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using Castle.Windsor.MicroKernel.Registration;
+using JetBrains.Annotations;
+
+// ReSharper disable UnusedMember.Global
+
+namespace Castle.Windsor.Tests.Bugs;
+
+public class IoC108 : AbstractContainerTestCase
+{
+    [Fact]
+    public void Should_not_fail_when_constructor_parameter_and_public_property_with_private_setter_have_same_name()
+    {
+        Container.Register(Component.For<Service2>(),
+            Component.For<Service1>());
+
+        Container.Resolve<Service2>();
+    }
+
+    [UsedImplicitly]
+    public class Service1
+    {
+        public void OpA()
+        {
+        }
+
+        public void OpB()
+        {
+        }
+    }
+
+    [UsedImplicitly]
+    public class Service2(Service1 service1)
+    {
+        public Service1 Service1 { get; private set; } = service1;
+    }
+}

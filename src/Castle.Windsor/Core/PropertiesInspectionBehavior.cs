@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
+namespace Castle.Windsor.Core;
+
+public enum PropertiesInspectionBehavior
 {
-	public enum PropertiesInspectionBehavior
-	{
-		Undefined,
-		None,
-		All,
-		DeclaredOnly
-	}
+    Undefined,
+    None,
+    All,
+    DeclaredOnly
 }

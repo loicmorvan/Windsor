@@ -12,45 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+using Castle.Windsor.Core;
+
+namespace Castle.Windsor.Tests.Components;
+
+[Transient]
+public class CalculatorServiceWithLifecycle :
+    ICalcService, IInitializable, IDisposable
 {
-	using System;
+    public int Sum(int x, int y)
+    {
+        return x + y;
+    }
 
-	using Castle.Core;
+    public bool Initialized { get; private set; }
 
-	[Transient]
-	public class CalculatorServiceWithLifecycle :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
-		 ICalcService, IInitializable, IDisposable
-	{
-		private bool initialized;
-		private bool disposed;
+    public bool Disposed { get; private set; }
 
-		public int Sum(int x, int y)
-		{
-			return x + y;
-		}
+    public void Dispose()
+    {
+        Disposed = true;
+    }
 
-		public void Initialize()
-		{
-			initialized = true;
-		}
-
-		public void Dispose()
-		{
-			disposed = true;
-		}
-
-		public bool Initialized
-		{
-			get { return initialized; }
-		}
-
-		public bool Disposed
-		{
-			get { return disposed; }
-		}
-	}
+    public void Initialize()
+    {
+        Initialized = true;
+    }
 }

@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class HasGenericConstraintsImpl<T1, T2> : IHasGenericConstraints<T1, T2>
+    where T1 : EmptyBase, IMarkerInterface
+    where T2 : class
 {
-	public class HasGenericConstraintsImpl<T1, T2> : IHasGenericConstraints<T1, T2>
-		where T1 : EmptyBase, IMarkerInterface
-		where T2 : class
-	{
-		public T1 Property { get; set; }
-	}
+    public T1 Property { get; set; }
 }

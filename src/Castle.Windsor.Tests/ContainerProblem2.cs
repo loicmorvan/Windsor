@@ -12,127 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Windsor;
+
+// ReSharper disable UnusedParameter.Local
+
+namespace Castle.Windsor.Tests;
+
+public class ContainerProblem2
 {
-	using Castle.Core;
-	using Castle.MicroKernel.Registration;
+    [Fact]
+    public void CausesStackOverflow()
+    {
+        IWindsorContainer container = new WindsorContainer();
 
-	using NUnit.Framework;
+        container.Register(Component.For(typeof(IS)).ImplementedBy<Bs>().Named("BS"));
+        container.Register(Component.For(typeof(IC)).ImplementedBy<CImpl>().Named("C"));
+        container.Register(Component.For(typeof(IWm)).ImplementedBy<Wm>().Named("WM"));
+        container.Register(Component.For(typeof(ISp)).ImplementedBy<Sp>().Named("SP"));
 
-	[PerThread]
-	public class R
-	{
-	}
+        //TODO: dead code - why is it here?
+        // ComponentModel model = new ComponentModel("R", typeof(R), typeof(R));
+        // model.LifestyleType = LifestyleType.Custom;
+        // model.CustomLifestyle = typeof(PerThreadLifestyleManager);
 
-	public interface IC
-	{
-		IN N { get; set; }
-	}
+        // container.Kernel.AddCustomComponent(model);
+        // container.Kernel.AddComponent("R", typeof(R), LifestyleType.Thread);
+        container.Kernel.Register(Component.For(typeof(R)).Named("R"));
 
-	public class CImpl : IC
-	{
-		private R r = null;
-
-		public R R
-		{
-			set { r = value; }
-		}
-
-		public CImpl()
-		{
-			N = null;
-		}
-
-		public IN N { get; set; }
-	}
-
-	public interface IN
-	{
-		IS CS { get; }
-	}
-
-	[Transient]
-	public class DN : IN
-	{
-		private IWM vm;
-		private ISP sp;
-
-		public IS CS { get; private set; }
-
-		public DN(IWM vm, ISP sp)
-		{
-			this.vm = vm;
-			this.sp = sp;
-			CS = new BS();
-		}
-	}
-
-	public interface IWM
-	{
-		void A(IN n);
-	}
-
-	public class WM : IWM
-	{
-		public void A(IN n)
-		{
-			//...
-		}
-	}
-
-	public interface IS
-	{
-		ISP SP { get; set; }
-	}
-
-	[Transient]
-	public class BS : IS
-	{
-		private ISP _sp = null;
-
-		public ISP SP
-		{
-			get { return _sp; }
-			set { _sp = value; }
-		}
-	}
-
-	public interface ISP
-	{
-		void Save(IS s);
-	}
-
-	public class SP : ISP
-	{
-		public void Save(IS s)
-		{
-		}
-	}
-
-	[TestFixture]
-	public class ContainerProblem2
-	{
-		[Test]
-		public void CausesStackOverflow()
-		{
-			IWindsorContainer container = new WindsorContainer();
-
-			container.Register(Component.For(typeof(IS)).ImplementedBy(typeof(BS)).Named("BS"));
-			container.Register(Component.For(typeof(IC)).ImplementedBy(typeof(CImpl)).Named("C"));
-			container.Register(Component.For(typeof(IWM)).ImplementedBy(typeof(WM)).Named("WM"));
-			container.Register(Component.For(typeof(ISP)).ImplementedBy(typeof(SP)).Named("SP"));
-
-			//TODO: dead code - why is it here?
-			// ComponentModel model = new ComponentModel("R", typeof(R), typeof(R));
-			// model.LifestyleType = LifestyleType.Custom;
-			// model.CustomLifestyle = typeof(PerThreadLifestyleManager);
-
-			// container.Kernel.AddCustomComponent(model);
-			// container.Kernel.AddComponent("R", typeof(R), LifestyleType.Thread);
-			container.Kernel.Register(Component.For(typeof(R)).Named("R"));
-
-			IC c = container.Resolve<IC>("C");
-			Assert.IsNotNull(c);
-		}
-	}
+        var c = container.Resolve<IC>("C");
+        Assert.NotNull(c);
+    }
 }

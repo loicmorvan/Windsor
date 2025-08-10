@@ -12,499 +12,509 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.TypedFactory
+using System.Reflection;
+using Castle.Windsor.Facilities.TypedFactory;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Releasers;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
+using Castle.Windsor.Tests.Interceptors;
+using JetBrains.Annotations;
+using HasTwoConstructors = Castle.Windsor.Tests.Facilities.TypedFactory.Delegates.HasTwoConstructors;
+using ServiceFactory = Castle.Windsor.Tests.Facilities.TypedFactory.Components.ServiceFactory;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
+
+using HasTwoConstructors = HasTwoConstructors;
+using ServiceFactory = ServiceFactory;
+
+public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 {
-	using System;
-	using System.Linq;
+    protected override void AfterContainerCreated()
+    {
+        Container.AddFacility<TypedFactoryFacility>();
+    }
 
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Releasers;
-	using Castle.MicroKernel.Tests.ClassComponents;
-	using Castle.Windsor.Tests.Facilities.TypedFactory;
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
+    [Fact]
+    public void Can_register_generic_delegate_factory_explicitly_as_open_generic_optional_dependency()
+    {
+        Container.Register(Component.For<Foo>().LifeStyle.Transient,
+            Component.For<Bar>().LifeStyle.Transient,
+            Component.For<UsesFooAndBarDelegateProperties>(),
+            Component.For(typeof(Func<>)).AsFactory());
 
-	using CastleTests.Components;
-	using CastleTests.Facilities.TypedFactory.Delegates;
-	using CastleTests.Interceptors;
+        var instance = Container.Resolve<UsesFooAndBarDelegateProperties>();
 
-	using NUnit.Framework;
+        Assert.NotNull(instance.FooFactory);
+        Assert.NotNull(instance.BarFactory);
 
-	using HasTwoConstructors = Castle.Windsor.Tests.Facilities.TypedFactory.Delegates.HasTwoConstructors;
-	using ServiceFactory = Castle.Windsor.Tests.Facilities.TypedFactory.ServiceFactory;
+        var factoryHandler = Kernel.GetHandler(typeof(Func<>));
+        Assert.NotNull(factoryHandler);
 
-	[TestFixture]
-	public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
-	{
-		protected override void AfterContainerCreated()
-		{
-			Container.AddFacility<TypedFactoryFacility>();
-		}
+        var allhandlers = Kernel.GetAssignableHandlers(typeof(object));
 
-		[Test]
-		public void Can_register_generic_delegate_factory_explicitly_as_open_generic_optional_dependency()
-		{
-			Container.Register(Component.For<Foo>().LifeStyle.Transient,
-			                   Component.For<Bar>().LifeStyle.Transient,
-			                   Component.For<UsesFooAndBarDelegateProperties>(),
-			                   Component.For(typeof(Func<>)).AsFactory());
+        Assert.DoesNotContain(allhandlers.SelectMany(h => h.ComponentModel.Services), s => s == typeof(Func<Foo>));
+        Assert.DoesNotContain(allhandlers.SelectMany(h => h.ComponentModel.Services), s => s == typeof(Func<Bar>));
+    }
 
-			var instance = Container.Resolve<UsesFooAndBarDelegateProperties>();
+    [Fact]
+    public void Can_register_generic_delegate_factory_explicitly_as_open_generic_required_dependency()
+    {
+        Container.Register(Component.For<Foo>().LifeStyle.Transient,
+            Component.For<Bar>().LifeStyle.Transient,
+            Component.For<UsesFooAndBarDelegateCtor>(),
+            Component.For(typeof(Func<>)).AsFactory());
 
-			Assert.IsNotNull(instance.FooFactory);
-			Assert.IsNotNull(instance.BarFactory);
+        var instance = Container.Resolve<UsesFooAndBarDelegateCtor>();
 
-			var factoryHandler = Kernel.GetHandler(typeof(Func<>));
-			Assert.IsNotNull(factoryHandler);
+        Assert.NotNull(instance.FooFactory);
+        Assert.NotNull(instance.BarFactory);
 
-			var allhandlers = Kernel.GetAssignableHandlers(typeof(object));
+        var factoryHandler = Kernel.GetHandler(typeof(Func<>));
+        Assert.NotNull(factoryHandler);
 
-			Assert.IsFalse(allhandlers.SelectMany(h => h.ComponentModel.Services).Any(s => s == typeof(Func<Foo>)));
-			Assert.IsFalse(allhandlers.SelectMany(h => h.ComponentModel.Services).Any(s => s == typeof(Func<Bar>)));
-		}
+        var allhandlers = Kernel.GetAssignableHandlers(typeof(object));
 
-		[Test]
-		public void Can_register_generic_delegate_factory_explicitly_as_open_generic_required_dependency()
-		{
-			Container.Register(Component.For<Foo>().LifeStyle.Transient,
-			                   Component.For<Bar>().LifeStyle.Transient,
-			                   Component.For<UsesFooAndBarDelegateCtor>(),
-			                   Component.For(typeof(Func<>)).AsFactory());
+        Assert.DoesNotContain(allhandlers.SelectMany(h => h.ComponentModel.Services), s => s == typeof(Func<Foo>));
+        Assert.DoesNotContain(allhandlers.SelectMany(h => h.ComponentModel.Services), s => s == typeof(Func<Bar>));
+    }
 
-			var instance = Container.Resolve<UsesFooAndBarDelegateCtor>();
+    [Fact]
+    public void Can_resolve_component_depending_on_delegate_when_inline_argumens_are_provided()
+    {
+        Container.Register(Component.For<Foo>(),
+            Component.For<UsesFooDelegateAndInt>());
 
-			Assert.IsNotNull(instance.FooFactory);
-			Assert.IsNotNull(instance.BarFactory);
+        Container.Resolve<UsesFooDelegateAndInt>(Arguments.FromProperties(new { additionalArgument = 5 }));
+    }
 
-			var factoryHandler = Kernel.GetHandler(typeof(Func<>));
-			Assert.IsNotNull(factoryHandler);
+    [Fact]
+    public void Can_resolve_delegate_of_generic()
+    {
+        Container.Register(Component.For(typeof(GenericComponent<>)).LifeStyle.Transient);
+        var one = Container.Resolve<Func<GenericComponent<int>>>();
+        var two = Container.Resolve<Func<GenericComponent<string>>>();
+        one();
+        two();
+    }
 
-			var allhandlers = Kernel.GetAssignableHandlers(typeof(object));
+    [Fact]
+    public void Can_resolve_generic_component_depending_on_delegate_of_generic()
+    {
+        Container.Register(Component.For(typeof(GenericComponent<>)).LifeStyle.Transient,
+            Component.For(typeof(GenericUsesFuncOfGenerics<>)).LifeStyle.Transient);
+        var one = Container.Resolve<GenericUsesFuncOfGenerics<int>>();
+        var two = Container.Resolve<GenericUsesFuncOfGenerics<string>>();
+        one.Func();
+        two.Func();
+    }
 
-			Assert.IsFalse(allhandlers.SelectMany(h => h.ComponentModel.Services).Any(s => s == typeof(Func<Foo>)));
-			Assert.IsFalse(allhandlers.SelectMany(h => h.ComponentModel.Services).Any(s => s == typeof(Func<Bar>)));
-		}
+    [Fact]
+    public void Can_resolve_multiple_delegates()
+    {
+        Container.Register(Component.For<Baz>());
+        Container.Register(Component.For<A>());
 
-		[Test]
-		public void Can_resolve_component_depending_on_delegate_when_inline_argumens_are_provided()
-		{
-			Container.Register(Component.For<Foo>(),
-			                   Component.For<UsesFooDelegateAndInt>());
+        var bazFactory = Container.Resolve<Func<Baz>>();
+        var aFactory = Container.Resolve<Func<A>>();
 
-			Container.Resolve<UsesFooDelegateAndInt>(Arguments.FromProperties(new { additionalArgument = 5 }));
-		}
+        bazFactory.Invoke();
+        aFactory.Invoke();
+    }
 
-		[Test]
-		public void Can_resolve_delegate_of_generic()
-		{
-			Container.Register(Component.For(typeof(GenericComponent<>)).LifeStyle.Transient);
-			var one = Container.Resolve<Func<GenericComponent<int>>>();
-			var two = Container.Resolve<Func<GenericComponent<string>>>();
-			one();
-			two();
-		}
+    [Fact]
+    public void Can_resolve_service_via_delegate()
+    {
+        Container.Register(Component.For<Foo>().Named("MyFoo").LifeStyle.Transient);
+        Container.Register(Component.For<UsesFooDelegate>());
+        var dependsOnFoo = Container.Resolve<UsesFooDelegate>();
+        var foo = dependsOnFoo.GetFoo();
+        Assert.Equal(1, foo.Number);
+        foo = dependsOnFoo.GetFoo();
+        Assert.Equal(2, foo.Number);
+    }
 
-		[Test]
-		public void Can_resolve_generic_component_depending_on_delegate_of_generic()
-		{
-			Container.Register(Component.For(typeof(GenericComponent<>)).LifeStyle.Transient,
-			                   Component.For(typeof(GenericUsesFuncOfGenerics<>)).LifeStyle.Transient);
-			var one = Container.Resolve<GenericUsesFuncOfGenerics<int>>();
-			var two = Container.Resolve<GenericUsesFuncOfGenerics<string>>();
-			one.Func();
-			two.Func();
-		}
+    [Fact]
+    public void Can_resolve_two_services_depending_on_identical_delegates()
+    {
+        Container.Register(Component.For<Foo>().LifeStyle.Transient,
+            Component.For<UsesFooDelegate>(),
+            Component.For<UsesFooDelegateAndInt>().DependsOn(new Arguments().AddTyped(5)));
+        var one = Container.Resolve<UsesFooDelegate>();
+        var two = Container.Resolve<UsesFooDelegateAndInt>();
+        one.GetFoo();
+        two.GetFoo();
+    }
 
-		[Test]
-		public void Can_resolve_multiple_delegates()
-		{
-			Container.Register(Component.For<Baz>());
-			Container.Register(Component.For<A>());
+    [Fact]
+    public void Can_resolve_two_services_depending_on_identical_delegates_via_interface_based_factory()
+    {
+        Container.Register(Component.For<Foo>().LifeStyle.Transient,
+            Component.For<UsesFooDelegate>(),
+            Component.For<UsesFooDelegateAndInt>().DependsOn(new Arguments().AddTyped(5)),
+            Component.For<IGenericComponentsFactory>().AsFactory());
 
-			var bazFactory = Container.Resolve<Func<Baz>>();
-			var aFactory = Container.Resolve<Func<A>>();
+        var factory = Container.Resolve<IGenericComponentsFactory>();
 
-			bazFactory.Invoke();
-			aFactory.Invoke();
-		}
+        var one = factory.CreateGeneric<UsesFooDelegate>();
+        var two = factory.CreateGeneric<UsesFooDelegateAndInt>();
 
-		[Test]
-		public void Can_resolve_service_via_delegate()
-		{
-			Container.Register(Component.For<Foo>().Named("MyFoo").LifeStyle.Transient);
-			Container.Register(Component.For<UsesFooDelegate>());
-			var dependsOnFoo = Container.Resolve<UsesFooDelegate>();
-			var foo = dependsOnFoo.GetFoo();
-			Assert.AreEqual(1, foo.Number);
-			foo = dependsOnFoo.GetFoo();
-			Assert.AreEqual(2, foo.Number);
-		}
+        one.GetFoo();
+        two.GetFoo();
+    }
 
-		[Test]
-		public void Can_resolve_two_services_depending_on_identical_delegates()
-		{
-			Container.Register(Component.For<Foo>().LifeStyle.Transient,
-			                   Component.For<UsesFooDelegate>(),
-			                   Component.For<UsesFooDelegateAndInt>().DependsOn(new Arguments().AddTyped(5)));
-			var one = Container.Resolve<UsesFooDelegate>();
-			var two = Container.Resolve<UsesFooDelegateAndInt>();
-			one.GetFoo();
-			two.GetFoo();
-		}
+    [Fact]
+    public void Can_use_additional_interceptors_on_delegate_based_factory()
+    {
+        Container.Register(
+            Component.For<CollectInvocationsInterceptor>(),
+            Component.For<IDummyComponent>().ImplementedBy<Component1>(),
+            Component.For<Func<IDummyComponent>>().Interceptors<CollectInvocationsInterceptor>().AsFactory());
+        var factory = Container.Resolve<Func<IDummyComponent>>();
 
-		[Test]
-		public void Can_resolve_two_services_depending_on_identical_delegates_via_interface_based_factory()
-		{
-			Container.Register(Component.For<Foo>().LifeStyle.Transient,
-			                   Component.For<UsesFooDelegate>(),
-			                   Component.For<UsesFooDelegateAndInt>().DependsOn(new Arguments().AddTyped(5)),
-			                   Component.For<IGenericComponentsFactory>().AsFactory());
+        var component = factory();
+        Assert.NotNull(component);
 
-			var factory = Container.Resolve<IGenericComponentsFactory>();
+        var interceptor = Container.Resolve<CollectInvocationsInterceptor>();
 
-			var one = factory.CreateGeneric<UsesFooDelegate>();
-			var two = factory.CreateGeneric<UsesFooDelegateAndInt>();
+        Assert.Single(interceptor.Invocations);
+        Assert.Same(component, interceptor.Invocations[0].ReturnValue);
+    }
 
-			one.GetFoo();
-			two.GetFoo();
-		}
+    [Fact]
+    public void Explicitly_registered_factory_is_tracked()
+    {
+        Container.Register(Component.For<Func<A>>().AsFactory());
 
-		[Test]
-		public void Can_use_additional_interceptors_on_delegate_based_factory()
-		{
-			Container.Register(
-				Component.For<CollectInvocationsInterceptor>(),
-				Component.For<IDummyComponent>().ImplementedBy<Component1>(),
-				Component.For<Func<IDummyComponent>>().Interceptors<CollectInvocationsInterceptor>().AsFactory());
-			var factory = Container.Resolve<Func<IDummyComponent>>();
+        ReferenceTracker
+            .Track(() => Container.Resolve<Func<A>>())
+            .AssertStillReferenced();
+    }
 
-			var component = factory();
-			Assert.IsNotNull(component);
+    [Fact]
+    public void Factory_DOES_NOT_implicitly_pick_registered_selector_explicitly_registered_factory()
+    {
+        Container.Register(
+            Component.For<ITypedFactoryComponentSelector>().ImplementedBy<NotInstantiableSelector>().LifeStyle
+                .Transient,
+            Component.For<Func<Foo>>().LifeStyle.Transient.AsFactory());
 
-			var interceptor = Container.Resolve<CollectInvocationsInterceptor>();
+        Container.Resolve<Func<Foo>>();
+    }
 
-			Assert.AreEqual(1, interceptor.Invocations.Count);
-			Assert.AreSame(component, interceptor.Invocations[0].ReturnValue);
-		}
+    [Fact]
+    public void Factory_DOES_NOT_implicitly_pick_registered_selector_implicitly_registered_factory()
+    {
+        Container.Register(
+            Component
+                .For<ITypedFactoryComponentSelector>()
+                .ImplementedBy<NotInstantiableSelector>()
+                .LifeStyle.Transient);
 
-		[Test]
-		[Ignore("Not supported for Func delegates")]
-		public void Does_not_duplicate_arguments_matching_delegate_parameters()
-		{
-			Container.Register(Component.For(typeof(HasOnlyOneArgMatchingDelegatesParameter)).Named("fizz"));
-			var factory = Container.Resolve<Func<string, string, HasOnlyOneArgMatchingDelegatesParameter>>("fizzFactory");
-			var obj = factory("arg1", "name");
-			Assert.AreEqual("name", obj.Name);
-			Assert.AreEqual("arg1", obj.Arg1);
-		}
+        Container.Resolve<Func<Foo>>();
+    }
 
-		[Test]
-		public void Explicitly_registered_factory_is_tracked()
-		{
-			Container.Register(Component.For<Func<A>>().AsFactory());
+    [Fact]
+    public void Factory_affects_constructor_resolution()
+    {
+        Container.Register(Component.For<Baz>().Named("baz"));
+        Container.Register(Component.For<HasTwoConstructors>().Named("fizz"));
+        var factory = Container.Resolve<Func<string, HasTwoConstructors>>();
 
-			ReferenceTracker
-				.Track(() => Container.Resolve<Func<A>>())
-				.AssertStillReferenced();
-		}
+        var obj = factory("naaaameee");
+        Assert.Equal("naaaameee", obj.Name);
+    }
 
-		[Test]
-		public void Factory_DOES_NOT_implicitly_pick_registered_selector_explicitly_registered_factory()
-		{
-			DisposableSelector.InstancesCreated = 0;
-			DisposableSelector.InstancesDisposed = 0;
-			Container.Register(
-				Component.For<ITypedFactoryComponentSelector>().ImplementedBy<DisposableSelector>().LifeStyle.Transient,
-				Component.For<Func<Foo>>().LifeStyle.Transient.AsFactory());
+    [Fact]
+    public void
+        Factory_constructor_dependency_is_satisfied_implicitly_even_if_less_greedy_constructor_is_readily_available()
+    {
+        Container.Register(Component.For<Bar>().LifeStyle.Transient,
+            Component.For<UsesBarDelegateTwoConstructors>().LifeStyle.Transient);
 
-			Container.Resolve<Func<Foo>>();
+        var component = Container.Resolve<UsesBarDelegateTwoConstructors>();
 
-			Assert.AreEqual(0, DisposableSelector.InstancesCreated);
-		}
+        Assert.NotNull(component.BarFactory);
+    }
 
-		[Test]
-		public void Factory_DOES_NOT_implicitly_pick_registered_selector_implicitly_registered_factory()
-		{
-			DisposableSelector.InstancesCreated = 0;
-			DisposableSelector.InstancesDisposed = 0;
-			Container.Register(
-				Component.For<ITypedFactoryComponentSelector>().ImplementedBy<DisposableSelector>().LifeStyle.Transient);
+    [Fact]
+    public void Factory_does_not_reference_components_after_they_are_released()
+    {
+        var counter = new LifecycleCounter();
 
-			Container.Resolve<Func<Foo>>();
+        Container.Register(
+            Component
+                .For<DisposableFoo>()
+                .LifeStyle.Transient
+                .DependsOn(Arguments.FromTyped([counter])),
+            Component
+                .For<UsesDisposableFooDelegate>()
+                .LifeStyle.Transient);
+        var dependsOnFoo = Container.Resolve<UsesDisposableFooDelegate>();
 
-			Assert.AreEqual(0, DisposableSelector.InstancesCreated);
-		}
+        var tracker = ReferenceTracker.Track(() => dependsOnFoo.GetFoo());
 
-		[Test]
-		public void Factory_affects_constructor_resolution()
-		{
-			Container.Register(Component.For<Baz>().Named("baz"));
-			Container.Register(Component.For<HasTwoConstructors>().Named("fizz"));
-			var factory = Container.Resolve<Func<string, HasTwoConstructors>>();
+        Assert.Equal(0, counter["Dispose"]);
+        Container.Release(dependsOnFoo);
+        Assert.Equal(1, counter["Dispose"]);
 
-			var obj = factory("naaaameee");
-			Assert.AreEqual("naaaameee", obj.Name);
-		}
+        tracker.AssertNoLongerReferenced();
+    }
 
-		[Test]
-		public void Factory_constructor_dependency_is_satisfied_implicitly_even_if_less_greedy_constructor_is_readily_available()
-		{
-			Container.Register(Component.For<Bar>().LifeStyle.Transient,
-			                   Component.For<UsesBarDelegateTwoConstructors>().LifeStyle.Transient);
+    [Fact]
+    public void Factory_explicitly_pick_registered_selector()
+    {
+        SimpleSelector.InstancesCreated = 0;
+        Container.Register(
+            Component.For<ITypedFactoryComponentSelector>().ImplementedBy<NotInstantiableSelector>().Named("1")
+                .LifeStyle.Transient,
+            Component.For<ITypedFactoryComponentSelector>().ImplementedBy<SimpleSelector>().Named("2").LifeStyle
+                .Transient,
+            Component.For<Func<Foo>>().LifeStyle.Transient.AsFactory(x => x.SelectedWith("2")));
 
-			var component = Container.Resolve<UsesBarDelegateTwoConstructors>();
+        Container.Resolve<Func<Foo>>();
 
-			Assert.IsNotNull(component.BarFactory);
-		}
+        Assert.Equal(1, SimpleSelector.InstancesCreated);
+    }
 
-		[Test]
-		public void Factory_does_not_reference_components_after_they_are_released()
-		{
-			DisposableFoo.ResetDisposedCount();
+    [Fact]
+    public void Factory_obeys_lifestyle()
+    {
+        Container.Register(Component.For<Foo>().Named("MyFoo").LifeStyle.Singleton);
+        Container.Register(Component.For<UsesFooDelegate>());
+        var dependsOnFoo = Container.Resolve<UsesFooDelegate>();
+        var foo = dependsOnFoo.GetFoo();
+        Assert.Equal(1, foo.Number);
+        foo = dependsOnFoo.GetFoo();
+        Assert.Equal(1, foo.Number);
+    }
 
-			Container.Register(Component.For<DisposableFoo>().LifeStyle.Transient,
-			                   Component.For<UsesDisposableFooDelegate>().LifeStyle.Transient);
-			var dependsOnFoo = Container.Resolve<UsesDisposableFooDelegate>();
-
-			var tracker = ReferenceTracker.Track(() => dependsOnFoo.GetFoo());
-
-			Assert.AreEqual(0, DisposableFoo.DisposedCount);
-			Container.Release(dependsOnFoo);
-			Assert.AreEqual(1, DisposableFoo.DisposedCount);
-
-			tracker.AssertNoLongerReferenced();
-		}
-
-		[Test]
-		public void Factory_explicitly_pick_registered_selector()
-		{
-			DisposableSelector.InstancesCreated = 0;
-			SimpleSelector.InstancesCreated = 0;
-			Container.Register(
-				Component.For<ITypedFactoryComponentSelector>().ImplementedBy<DisposableSelector>().Named("1").LifeStyle.Transient,
-				Component.For<ITypedFactoryComponentSelector>().ImplementedBy<SimpleSelector>().Named("2").LifeStyle.Transient,
-				Component.For<Func<Foo>>().LifeStyle.Transient.AsFactory(x => x.SelectedWith("2")));
-
-			Container.Resolve<Func<Foo>>();
-
-			Assert.AreEqual(0, DisposableSelector.InstancesCreated);
-			Assert.AreEqual(1, SimpleSelector.InstancesCreated);
-		}
-
-		[Test]
-		public void Factory_obeys_lifestyle()
-		{
-			Container.Register(Component.For<Foo>().Named("MyFoo").LifeStyle.Singleton);
-			Container.Register(Component.For<UsesFooDelegate>());
-			var dependsOnFoo = Container.Resolve<UsesFooDelegate>();
-			var foo = dependsOnFoo.GetFoo();
-			Assert.AreEqual(1, foo.Number);
-			foo = dependsOnFoo.GetFoo();
-			Assert.AreEqual(1, foo.Number);
-		}
-
-		[Test]
-		public void Factory_obeys_release_policy_non_tracking()
-		{
+    [Fact]
+    public void Factory_obeys_release_policy_non_tracking()
+    {
 #pragma warning disable 612,618
-			Container.Kernel.ReleasePolicy = new NoTrackingReleasePolicy();
+        Container.Kernel.ReleasePolicy = new NoTrackingReleasePolicy();
 #pragma warning restore 612,618
-			Container.Register(Component.For<DisposableFoo>().LifeStyle.Transient,
-			                   Component.For<UsesDisposableFooDelegate>().LifeStyle.Transient);
-			var dependsOnFoo = Container.Resolve<UsesDisposableFooDelegate>();
+        Container.Register(
+            Component.For<LifecycleCounter>(),
+            Component.For<DisposableFoo>().LifeStyle.Transient,
+            Component.For<UsesDisposableFooDelegate>().LifeStyle.Transient);
+        var dependsOnFoo = Container.Resolve<UsesDisposableFooDelegate>();
 
-			ReferenceTracker
-				.Track(() => dependsOnFoo.GetFoo())
-				.AssertNoLongerReferenced();
-		}
+        ReferenceTracker
+            .Track(() => dependsOnFoo.GetFoo())
+            .AssertNoLongerReferenced();
+    }
 
-		[Test]
-		public void Factory_obeys_release_policy_tracking()
-		{
-			Container.Register(Component.For<DisposableFoo>().LifeStyle.Transient,
-			                   Component.For<UsesDisposableFooDelegate>().LifeStyle.Transient);
+    [Fact]
+    public void Factory_obeys_release_policy_tracking()
+    {
+        Container.Register(
+            Component.For<LifecycleCounter>(),
+            Component.For<DisposableFoo>().LifeStyle.Transient,
+            Component.For<UsesDisposableFooDelegate>().LifeStyle.Transient);
 
-			var dependsOnFoo = Container.Resolve<UsesDisposableFooDelegate>();
+        var dependsOnFoo = Container.Resolve<UsesDisposableFooDelegate>();
 
-			ReferenceTracker
-				.Track(() => dependsOnFoo.GetFoo())
-				.AssertStillReferenced();
-		}
+        ReferenceTracker
+            .Track(() => dependsOnFoo.GetFoo())
+            .AssertStillReferenced();
+    }
 
-		[Test]
-		[Ignore("Not supported for Func delegates")]
-		public void Factory_parameters_are_used_in_order_first_ctor_then_properties()
-		{
-			Container.Register(Component.For(typeof(Baz)).Named("baz"));
-			Container.Register(Component.For(typeof(Bar)).Named("bar"));
-			Container.Register(Component.For(typeof(UsesBarDelegate)).Named("barBar"));
+    [Fact]
+    public void Factory_property_dependency_is_satisfied_implicitly()
+    {
+        Container.Register(Component.For<Bar>().LifeStyle.Transient,
+            Component.For<UsesBarDelegateProperty>().LifeStyle.Transient);
 
-			var dependsOnFoo = Container.Resolve<UsesBarDelegate>();
-			var bar = dependsOnFoo.GetBar("a name", "a description");
-			Assert.AreEqual("a name", bar.Name);
-			Assert.AreEqual("a description", bar.Description);
-		}
+        var component = Container.Resolve<UsesBarDelegateProperty>();
 
-		[Test]
-		public void Factory_property_dependency_is_satisfied_implicitly()
-		{
-			Container.Register(Component.For<Bar>().LifeStyle.Transient,
-			                   Component.For<UsesBarDelegateProperty>().LifeStyle.Transient);
+        Assert.NotNull(component.BarFactory);
+    }
 
-			var component = Container.Resolve<UsesBarDelegateProperty>();
+    [Fact]
+    public void Func_delegate_with_duplicated_Parameter_types_throws_exception()
+    {
+        Container.Register(Component.For<Baz>().Named("baz"),
+            Component.For<Bar>().Named("bar"),
+            Component.For<UsesBarDelegate>());
 
-			Assert.IsNotNull(component.BarFactory);
-		}
+        var user = Container.Resolve<UsesBarDelegate>();
 
-		[Test]
-		[Ignore("Not supported for Func delegates")]
-		public void Factory_pulls_unspecified_dependencies_from_container()
-		{
-			Container.Register(Component.For(typeof(Baz)).Named("baz"));
-			Container.Register(Component.For(typeof(Bar)).Named("bar"));
-			Container.Register(Component.For(typeof(UsesBarDelegate)).Named("uBar"));
+        var exception =
+            Assert.Throws<ArgumentException>(() =>
+                user.GetBar("aaa", "bbb"));
 
-			var dependsOnFoo = Container.Resolve<UsesBarDelegate>();
-			dependsOnFoo.GetBar("aaa", "bbb");
-		}
+        Assert.Equal(
+            "Factory delegate System.Func`3[System.String,System.String,Castle.Windsor.Tests.Facilities.TypedFactory.Delegates.Bar] has duplicated arguments of type System.String. " +
+            "Using generic purpose delegates with duplicated argument types is unsupported, because then it is not possible to match arguments properly. " +
+            "Use some custom delegate with meaningful argument names or interface based factory instead.",
+            exception.Message);
+    }
 
-		[Test]
-		public void Func_delegate_with_duplicated_Parameter_types_throws_exception()
-		{
-			Container.Register(Component.For<Baz>().Named("baz"),
-			                   Component.For<Bar>().Named("bar"),
-			                   Component.For<UsesBarDelegate>());
+    [Fact]
+    public void Implicitly_registered_factory_is_always_tracked()
+    {
+        var factory = Container.Resolve<Func<A>>();
 
-			var user = Container.Resolve<UsesBarDelegate>();
+        Assert.True(Container.Kernel.ReleasePolicy.HasTrack(factory));
+    }
 
-			var exception =
-				Assert.Throws<ArgumentException>(() =>
-				                                 user.GetBar("aaa", "bbb"));
+    [Fact]
+    public void Registered_Delegate_prefered_over_factory()
+    {
+        var foo = new DisposableFoo(new LifecycleCounter());
+        Container.Register(Component.For<DisposableFoo>().LifeStyle.Transient,
+            Component.For<Func<int, DisposableFoo>>().Instance(_ => foo),
+            Component.For<UsesDisposableFooDelegate>().LifeStyle.Transient);
+        var dependsOnFoo = Container.Resolve<UsesDisposableFooDelegate>();
+        var otherFoo = dependsOnFoo.GetFoo();
+        Assert.Same(foo, otherFoo);
+    }
 
-			Assert.AreEqual(
-				"Factory delegate System.Func`3[System.String,System.String,Castle.Windsor.Tests.Facilities.TypedFactory.Delegates.Bar] has duplicated arguments of type System.String. " +
-				"Using generic purpose delegates with duplicated argument types is unsupported, because then it is not possible to match arguments properly. " +
-				"Use some custom delegate with meaningful argument names or interface based factory instead.",
-				exception.Message);
-		}
+    [Fact]
+    public void Registers_generic_delegate_factories_as_open_generics_optional_dependency()
+    {
+        Container.Register(Component.For<Foo>().LifeStyle.Transient,
+            Component.For<Bar>().LifeStyle.Transient,
+            Component.For<UsesFooAndBarDelegateProperties>());
 
-		[Test]
-		public void Implicitly_registered_factory_is_always_tracked()
-		{
-			var factory = Container.Resolve<Func<A>>();
+        var instance = Container.Resolve<UsesFooAndBarDelegateProperties>();
 
-			Assert.IsTrue(Container.Kernel.ReleasePolicy.HasTrack(factory));
-		}
+        Assert.NotNull(instance.FooFactory);
+        Assert.NotNull(instance.BarFactory);
 
-		[Test]
-		public void Registered_Delegate_prefered_over_factory()
-		{
-			var foo = new DisposableFoo();
-			Container.Register(Component.For<DisposableFoo>().LifeStyle.Transient,
-			                   Component.For<Func<int, DisposableFoo>>().Instance(i => foo),
-			                   Component.For<UsesDisposableFooDelegate>().LifeStyle.Transient);
-			var dependsOnFoo = Container.Resolve<UsesDisposableFooDelegate>();
-			var otherFoo = dependsOnFoo.GetFoo();
-			Assert.AreSame(foo, otherFoo);
-		}
+        var factoryHandler = Kernel.GetHandler(typeof(Func<>));
+        Assert.NotNull(factoryHandler);
+    }
 
-		[Test]
-		public void Registers_generic_delegate_factories_as_open_generics_optional_dependency()
-		{
-			Container.Register(Component.For<Foo>().LifeStyle.Transient,
-			                   Component.For<Bar>().LifeStyle.Transient,
-			                   Component.For<UsesFooAndBarDelegateProperties>());
+    [Fact]
+    public void Registers_generic_delegate_factories_as_open_generics_required_dependency()
+    {
+        Container.Register(Component.For<Foo>().LifeStyle.Transient,
+            Component.For<Bar>().LifeStyle.Transient,
+            Component.For<UsesFooAndBarDelegateCtor>());
 
-			var instance = Container.Resolve<UsesFooAndBarDelegateProperties>();
+        var instance = Container.Resolve<UsesFooAndBarDelegateCtor>();
 
-			Assert.IsNotNull(instance.FooFactory);
-			Assert.IsNotNull(instance.BarFactory);
+        Assert.NotNull(instance.FooFactory);
+        Assert.NotNull(instance.BarFactory);
 
-			var factoryHandler = Kernel.GetHandler(typeof(Func<>));
-			Assert.IsNotNull(factoryHandler);
-		}
+        var factoryHandler = Kernel.GetHandler(typeof(Func<>));
+        Assert.NotNull(factoryHandler);
+    }
 
-		[Test]
-		public void Registers_generic_delegate_factories_as_open_generics_required_dependency()
-		{
-			Container.Register(Component.For<Foo>().LifeStyle.Transient,
-			                   Component.For<Bar>().LifeStyle.Transient,
-			                   Component.For<UsesFooAndBarDelegateCtor>());
+    [Fact]
+    public void Releasing_component_depending_on_a_factory_releases_what_was_pulled_from_it()
+    {
+        var counter = new LifecycleCounter();
 
-			var instance = Container.Resolve<UsesFooAndBarDelegateCtor>();
+        Container.Register(
+            Component
+                .For<DisposableFoo>()
+                .LifeStyle.Transient
+                .DependsOn(Arguments.FromTyped([counter])),
+            Component
+                .For<UsesDisposableFooDelegate>()
+                .LifeStyle.Transient);
+        var dependsOnFoo = Container.Resolve<UsesDisposableFooDelegate>();
+        dependsOnFoo.GetFoo();
 
-			Assert.IsNotNull(instance.FooFactory);
-			Assert.IsNotNull(instance.BarFactory);
+        Assert.Equal(0, counter["Dispose"]);
+        Container.Release(dependsOnFoo);
+        Assert.Equal(1, counter["Dispose"]);
+    }
 
-			var factoryHandler = Kernel.GetHandler(typeof(Func<>));
-			Assert.IsNotNull(factoryHandler);
-		}
+    [Fact]
+    public void Releasing_factory_releases_selector()
+    {
+        var counter = new LifecycleCounter();
 
-		[Test]
-		public void Releasing_component_depending_on_a_factory_releases_what_was_pulled_from_it()
-		{
-			DisposableFoo.ResetDisposedCount();
+        Container.Register(
+            Component.For<LifecycleCounter>().Instance(counter),
+            Component.For<SelectorWithLifecycleCounter>().LifeStyle.Transient,
+            Component.For<Func<Foo>>().LifeStyle.Transient
+                .AsFactory(x => x.SelectedWith<SelectorWithLifecycleCounter>()));
+        var factory = Container.Resolve<Func<Foo>>();
 
-			Container.Register(Component.For<DisposableFoo>().LifeStyle.Transient,
-			                   Component.For<UsesDisposableFooDelegate>().LifeStyle.Transient);
-			var dependsOnFoo = Container.Resolve<UsesDisposableFooDelegate>();
-			dependsOnFoo.GetFoo();
+        Assert.Equal(1, counter[".ctor"]);
 
-			Assert.AreEqual(0, DisposableFoo.DisposedCount);
-			Container.Release(dependsOnFoo);
-			Assert.AreEqual(1, DisposableFoo.DisposedCount);
-		}
+        Container.Release(factory);
 
-		[Test]
-		public void Releasing_factory_releases_selector()
-		{
-			DisposableSelector.InstancesCreated = 0;
-			DisposableSelector.InstancesDisposed = 0;
-			Container.Register(
-				Component.For<DisposableSelector>().LifeStyle.Transient,
-				Component.For<Func<Foo>>().LifeStyle.Transient.AsFactory(x => x.SelectedWith<DisposableSelector>()));
-			var factory = Container.Resolve<Func<Foo>>();
+        Assert.Equal(1, counter["Dispose"]);
+    }
 
-			Assert.AreEqual(1, DisposableSelector.InstancesCreated);
+    [Fact]
+    public void
+        Resolution_ShouldNotThrow_When_TwoDelegateFactoriesAreResolvedWithOnePreviouslyLazyLoaded_WithMultipleCtors()
+    {
+        Container.Register(Component.For<SimpleComponent1>(),
+            Component.For<SimpleComponent2>(),
+            Component.For<SimpleComponent3>(),
+            Component.For<ServiceFactory>(),
+            Component.For<ServiceRedirect>(),
+            Component.For<ServiceWithMultipleCtors>());
 
-			Container.Release(factory);
+        var factory = Container.Resolve<ServiceFactory>();
+        factory.Factory();
+    }
 
-			Assert.AreEqual(1, DisposableSelector.InstancesDisposed);
-		}
+    [Fact]
+    public void Selector_pick_by_name()
+    {
+        Container.Register(
+            Component.For<IDummyComponent>().ImplementedBy<Component1>().Named("one").LifeStyle.Transient,
+            Component.For<IDummyComponent>().ImplementedBy<Component2>().Named("two").LifeStyle.Transient,
+            Component.For<Func<IDummyComponent>>().AsFactory(c => c.SelectedWith("factoryTwo")),
+            Component.For<ITypedFactoryComponentSelector>().ImplementedBy<Component1Selector>().Named("factoryOne"),
+            Component.For<ITypedFactoryComponentSelector>().ImplementedBy<Component2Selector>().Named("factoryTwo"));
 
-		[Test]
-		public void Resolution_ShouldNotThrow_When_TwoDelegateFactoriesAreResolvedWithOnePreviouslyLazyLoaded_WithMultipleCtors()
-		{
-			Container.Register(Component.For<SimpleComponent1>(),
-			                   Component.For<SimpleComponent2>(),
-			                   Component.For<SimpleComponent3>(),
-			                   Component.For<ServiceFactory>(),
-			                   Component.For<ServiceRedirect>(),
-			                   Component.For<ServiceWithMultipleCtors>());
+        Assert.True(Container.Kernel.HasComponent(typeof(Func<IDummyComponent>)));
+        var factory = Container.Resolve<Func<IDummyComponent>>();
+        var component = factory.Invoke();
 
-			var factory = Container.Resolve<ServiceFactory>();
-			factory.Factory();
-		}
+        Assert.IsType<Component2>(component);
+    }
 
-		[Test]
-		public void Selector_pick_by_name()
-		{
-			Container.Register(
-				Component.For<IDummyComponent>().ImplementedBy<Component1>().Named("one").LifeStyle.Transient,
-				Component.For<IDummyComponent>().ImplementedBy<Component2>().Named("two").LifeStyle.Transient,
-				Component.For<Func<IDummyComponent>>().AsFactory(c => c.SelectedWith("factoryTwo")),
-				Component.For<ITypedFactoryComponentSelector>().ImplementedBy<Component1Selector>().Named("factoryOne"),
-				Component.For<ITypedFactoryComponentSelector>().ImplementedBy<Component2Selector>().Named("factoryTwo"));
+    public class NotInstantiableSelector : ITypedFactoryComponentSelector
+    {
+        public NotInstantiableSelector()
+        {
+            Assert.Fail();
+        }
 
-			Assert.IsTrue(Container.Kernel.HasComponent(typeof(Func<IDummyComponent>)));
-			var factory = Container.Resolve<Func<IDummyComponent>>();
-			var component = factory.Invoke();
+        public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method,
+            object[] arguments)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
-			Assert.IsInstanceOf<Component2>(component);
-		}
-	}
+    [UsedImplicitly]
+    public class SelectorWithLifecycleCounter : ITypedFactoryComponentSelector, IDisposable
+    {
+        private readonly LifecycleCounter _counter;
+
+        public SelectorWithLifecycleCounter(LifecycleCounter counter)
+        {
+            _counter = counter;
+            counter.Increment();
+        }
+
+        public void Dispose()
+        {
+            _counter.Increment();
+        }
+
+        public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method,
+            object[] arguments)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

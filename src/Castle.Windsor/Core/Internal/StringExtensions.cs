@@ -12,21 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
-{
-	using System;
+namespace Castle.Windsor.Core.Internal;
 
-	public static class StringExtensions
+public static class StringExtensions
+{
+	/// <summary>Performs string comparison using <see cref="StringComparer.OrdinalIgnoreCase" /></summary>
+	/// <param name="one"></param>
+	/// <param name="two"></param>
+	/// <returns></returns>
+	public static bool EqualsText(this string one, string two)
 	{
-		/// <summary>
-		///   Performs string comparison using <see cref = "StringComparer.OrdinalIgnoreCase" />
-		/// </summary>
-		/// <param name = "one"></param>
-		/// <param name = "two"></param>
-		/// <returns></returns>
-		public static bool EqualsText(this string one, string two)
-		{
-			return StringComparer.OrdinalIgnoreCase.Equals(one, two);
-		}
+		return StringComparer.OrdinalIgnoreCase.Equals(one, two);
 	}
 }

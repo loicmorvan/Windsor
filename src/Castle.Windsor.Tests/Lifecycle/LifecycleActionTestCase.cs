@@ -12,166 +12,161 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Lifecycle
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Generics;
+
+namespace Castle.Windsor.Tests.Lifecycle;
+
+public class LifecycleActionTestCase : AbstractContainerTestCase
 {
-	using Castle.MicroKernel.Registration;
+    [Fact]
+    public void CanModify_when_singleton()
+    {
+        Container.Register(Component.For<IService>().ImplementedBy<MyService>()
+            .OnCreate((_, instance) => instance.Name += "a"));
+        var service = Container.Resolve<IService>();
+        Assert.Equal("a", service.Name);
+        service = Container.Resolve<IService>();
+        Assert.Equal("a", service.Name);
+    }
 
-	using CastleTests.Components;
-	using CastleTests.Generics;
+    [Fact]
+    public void CanModify_when_singleton_multiple_ordered()
+    {
+        Container.Register(Component.For<IService>().ImplementedBy<MyService>()
+            .OnCreate((_, instance) => instance.Name += "a",
+                (_, instance) => instance.Name += "b"));
+        var service = Container.Resolve<IService>();
+        Assert.Equal("ab", service.Name);
+        service = Container.Resolve<IService>();
+        Assert.Equal("ab", service.Name);
+    }
 
-	using NUnit.Framework;
+    [Fact]
+    public void CanModify_when_transient()
+    {
+        MyService2.Staticname = "";
+        Container.Register(Component.For<IService2>().ImplementedBy<MyService2>()
+            .LifeStyle.Transient.OnCreate((_, instance) => instance.Name += "a"));
+        var service = Container.Resolve<IService2>();
+        Assert.Equal("a", service.Name);
+        service = Container.Resolve<IService2>();
+        Assert.Equal("aa", service.Name);
+    }
 
-	[TestFixture]
-	public class LifecycleActionTestCase : AbstractContainerTestCase
-	{
-		[Test]
-		public void CanModify_when_singleton()
-		{
-			Container.Register(Component.For<IService>().ImplementedBy<MyService>()
-				                   .OnCreate((kernel, instance) => instance.Name += "a"));
-			var service = Container.Resolve<IService>();
-			Assert.That(service.Name, Is.EqualTo("a"));
-			service = Container.Resolve<IService>();
-			Assert.That(service.Name, Is.EqualTo("a"));
-		}
+    [Fact]
+    public void CanModify_when_transient_multiple_ordered()
+    {
+        MyService2.Staticname = "";
+        Container.Register(Component.For<IService2>().ImplementedBy<MyService2>()
+            .LifeStyle.Transient.OnCreate((_, instance) => instance.Name += "a",
+                (_, instance) => instance.Name += "b"));
+        var service = Container.Resolve<IService2>();
+        Assert.Equal("ab", service.Name);
 
-		[Test]
-		public void CanModify_when_singleton_multiple_ordered()
-		{
-			Container.Register(Component.For<IService>().ImplementedBy<MyService>()
-				                   .OnCreate((kernel, instance) => instance.Name += "a",
-				                             (kernel, instance) => instance.Name += "b"));
-			var service = Container.Resolve<IService>();
-			Assert.That(service.Name, Is.EqualTo("ab"));
-			service = Container.Resolve<IService>();
-			Assert.That(service.Name, Is.EqualTo("ab"));
-		}
+        service = Container.Resolve<IService2>();
+        Assert.Equal("abab", service.Name);
+    }
 
-		[Test]
-		public void CanModify_when_transient()
-		{
-			MyService2.staticname = "";
-			Container.Register(Component.For<IService2>().ImplementedBy<MyService2>()
-				                   .LifeStyle.Transient.OnCreate((kernel, instance) => instance.Name += "a"));
-			var service = Container.Resolve<IService2>();
-			Assert.That(service.Name, Is.EqualTo("a"));
-			service = Container.Resolve<IService2>();
-			Assert.That(service.Name, Is.EqualTo("aa"));
-		}
+    [Fact]
+    public void Can_mix_vaious_overloads_OnCreate()
+    {
+        Container.Register(Component.For<IService>().ImplementedBy<MyService>()
+            .OnCreate((_, instance) => instance.Name += "a")
+            .OnCreate(instance => instance.Name += "b"));
+        var service = Container.Resolve<IService>();
+        Assert.Equal("ba", service.Name);
+    }
 
-		[Test]
-		public void CanModify_when_transient_multiple_ordered()
-		{
-			MyService2.staticname = "";
-			Container.Register(Component.For<IService2>().ImplementedBy<MyService2>()
-				                   .LifeStyle.Transient.OnCreate((kernel, instance) => instance.Name += "a",
-				                                                 (kernel, instance) => instance.Name += "b"));
-			var service = Container.Resolve<IService2>();
-			Assert.That(service.Name, Is.EqualTo("ab"));
+    [Fact]
+    public void Can_apply_OnCreate_to_open_generic_components()
+    {
+        var called = false;
+        Container.Register(Component.For(typeof(GenericA<>))
+            .OnCreate((_, _) => { called = true; }));
+        Container.Resolve<GenericA<int>>();
+        Assert.True(called);
+    }
 
-			service = Container.Resolve<IService2>();
-			Assert.That(service.Name, Is.EqualTo("abab"));
-		}
+    [Fact]
+    public void Can_apply_OnDestroy_to_open_generic_components()
+    {
+        var called = false;
+        Container.Register(Component.For(typeof(GenericA<>))
+            .LifestyleTransient()
+            .OnDestroy((_, _) => { called = true; }));
+        var item = Container.Resolve<GenericA<int>>();
+        Container.Release(item);
+        Assert.True(called);
+    }
 
-		[Test]
-		public void Can_mix_vaious_overloads_OnCreate()
-		{
-			Container.Register(Component.For<IService>().ImplementedBy<MyService>()
-				                   .OnCreate((kernel, instance) => instance.Name += "a")
-				                   .OnCreate(instance => instance.Name += "b"));
-			var service = Container.Resolve<IService>();
-			Assert.That(service.Name, Is.EqualTo("ba"));
-		}
+    [Fact]
+    public void Can_mix_vaious_overloads_OnDestroy()
+    {
+        Container.Register(Component.For<IService>().ImplementedBy<MyService>()
+            .LifestyleTransient()
+            .OnDestroy((_, instance) => instance.Name += "a")
+            .OnDestroy(instance => instance.Name += "b"));
+        var service = Container.Resolve<IService>();
+        Assert.Equal(string.Empty, service.Name);
 
-		[Test]
-		public void Can_apply_OnCreate_to_open_generic_components()
-		{
-			var called = false;
-			Container.Register(Component.For(typeof(GenericA<>))
-				                   .OnCreate((kernel, instance) => { called = true; }));
-			Container.Resolve<GenericA<int>>();
-			Assert.True(called);
-		}
+        Container.Release(service);
+        Assert.Equal("ba", service.Name);
+    }
 
-		[Test]
-		public void Can_apply_OnDestroy_to_open_generic_components()
-		{
-			var called = false;
-			Container.Register(Component.For(typeof(GenericA<>))
-				                   .LifestyleTransient()
-				                   .OnDestroy((kernel, instance) => { called = true; }));
-			var item = Container.Resolve<GenericA<int>>();
-			Container.Release(item);
-			Assert.True(called);
-		}
+    [Fact]
+    [Bug("IOC-326")]
+    public void OnDestroy_called_before_disposal()
+    {
+        var wasDisposed = false;
+        Container.Register(Component.For<ADisposable>()
+            .LifeStyle.Transient
+            .OnDestroy((_, i) => { wasDisposed = i.Disposed; }));
 
-		[Test]
-		public void Can_mix_vaious_overloads_OnDestroy()
-		{
-			Container.Register(Component.For<IService>().ImplementedBy<MyService>()
-				                   .LifestyleTransient()
-				                   .OnDestroy((kernel, instance) => instance.Name += "a")
-				                   .OnDestroy(instance => instance.Name += "b"));
-			var service = Container.Resolve<IService>();
-			Assert.AreEqual(string.Empty, service.Name);
+        var a = Container.Resolve<ADisposable>();
+        Container.Release(a);
 
-			Container.Release(service);
-			Assert.AreEqual("ba", service.Name);
-		}
+        Assert.False(wasDisposed);
+        Assert.True(a.Disposed);
+    }
 
-		[Test]
-		[Bug("IOC-326")]
-		public void OnDestroy_called_before_disposal()
-		{
-			var wasDisposed = false;
-			Container.Register(Component.For<ADisposable>()
-				                   .LifeStyle.Transient
-				                   .OnDestroy((k, i) => { wasDisposed = i.Disposed; }));
+    [Fact]
+    public void OnDestroy_called_on_release()
+    {
+        var called = false;
+        Container.Register(Component.For<A>()
+            .LifeStyle.Transient
+            .OnDestroy((_, _) => { called = true; }));
 
-			var a = Container.Resolve<ADisposable>();
-			Container.Release(a);
+        Assert.False(called);
+        var a = Container.Resolve<A>();
+        Container.Release(a);
 
-			Assert.IsFalse(wasDisposed);
-			Assert.IsTrue(a.Disposed);
-		}
+        Assert.True(called);
+    }
 
-		[Test]
-		public void OnDestroy_called_on_release()
-		{
-			var called = false;
-			Container.Register(Component.For<A>()
-				                   .LifeStyle.Transient
-				                   .OnDestroy((k, i) => { called = true; }));
+    [Fact]
+    public void OnDestroy_makes_transient_simple_component_tracked()
+    {
+        Container.Register(Component.For<A>()
+            .LifeStyle.Transient
+            .OnDestroy((_, _) => { }));
 
-			Assert.IsFalse(called);
-			var a = Container.Resolve<A>();
-			Container.Release(a);
+        var a = Container.Resolve<A>();
+        Assert.True(Kernel.ReleasePolicy.HasTrack(a));
+        Container.Release(a);
+    }
 
-			Assert.IsTrue(called);
-		}
+    [Fact]
+    public void Works_for_components_obtained_via_factory()
+    {
+        Container.Register(Component.For<IService>()
+            .UsingFactoryMethod(() => new MyService())
+            .OnCreate((_, instance) => instance.Name += "a"));
 
-		[Test]
-		public void OnDestroy_makes_transient_simple_component_tracked()
-		{
-			Container.Register(Component.For<A>()
-				                   .LifeStyle.Transient
-				                   .OnDestroy((k, i) => { }));
+        var service = Container.Resolve<IService>();
 
-			var a = Container.Resolve<A>();
-			Assert.IsTrue(Kernel.ReleasePolicy.HasTrack(a));
-			Container.Release(a);
-		}
-
-		[Test]
-		public void Works_for_components_obtained_via_factory()
-		{
-			Container.Register(Component.For<IService>()
-				                   .UsingFactoryMethod(() => new MyService())
-				                   .OnCreate((kernel, instance) => instance.Name += "a"));
-
-			var service = Container.Resolve<IService>();
-
-			Assert.That(service.Name, Is.EqualTo("a"));
-		}
-	}
+        Assert.Equal("a", service.Name);
+    }
 }

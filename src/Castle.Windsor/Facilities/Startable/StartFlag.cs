@@ -12,53 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Startable
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Context;
+
+namespace Castle.Windsor.Facilities.Startable;
+
+public class StartFlag : IStartFlagInternal
 {
-	using System.Collections.Generic;
+    private readonly List<IHandler> _waitList = [];
+    protected StartableFacility.StartableEvents Events;
 
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Context;
+    void IStartFlagInternal.Init(StartableFacility.StartableEvents events)
+    {
+        Events = events;
+        Init();
+    }
 
-	public class StartFlag : IStartFlagInternal
-	{
-		protected readonly List<IHandler> waitList = new List<IHandler>();
-		protected StartableFacility.StartableEvents events;
+    public virtual void Signal()
+    {
+        Events.StartableComponentRegistered -= CacheHandler;
+        StartAll();
+    }
 
-		public virtual void Signal()
-		{
-			events.StartableComponentRegistered -= CacheHandler;
-			StartAll();
-		}
+    protected void CacheHandler(IHandler handler)
+    {
+        _waitList.Add(handler);
+    }
 
-		protected void CacheHandler(IHandler handler)
-		{
-			waitList.Add(handler);
-		}
+    protected virtual void Init()
+    {
+        Events.StartableComponentRegistered += CacheHandler;
+    }
 
-		protected virtual void Init()
-		{
-			events.StartableComponentRegistered += CacheHandler;
-		}
+    protected virtual void Start(IHandler handler)
+    {
+        handler.Resolve(CreationContext.CreateEmpty());
+    }
 
-		protected virtual void Start(IHandler handler)
-		{
-			handler.Resolve(CreationContext.CreateEmpty());
-		}
-
-		protected void StartAll()
-		{
-			var array = waitList.ToArray();
-			waitList.Clear();
-			foreach (var handler in array)
-			{
-				Start(handler);
-			}
-		}
-
-		void IStartFlagInternal.Init(StartableFacility.StartableEvents events)
-		{
-			this.events = events;
-			Init();
-		}
-	}
+    protected void StartAll()
+    {
+        var array = _waitList.ToArray();
+        _waitList.Clear();
+        foreach (var handler in array)
+        {
+            Start(handler);
+        }
+    }
 }

@@ -12,59 +12,46 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
+using System.Collections;
+using System.Reflection;
+using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.Core;
+
+/// <summary>Collection of <see cref="PropertySet" /></summary>
+[Serializable]
+public class PropertySetCollection : IMutableCollection<PropertySet>
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Reflection;
+    private readonly HashSet<PropertySet> _properties = [];
 
-	using Castle.Core.Internal;
+    public int Count => _properties.Count;
 
-	/// <summary>
-	///     Collection of <see cref = "PropertySet" />
-	/// </summary>
-	[Serializable]
-	public class PropertySetCollection : IMutableCollection<PropertySet>
-	{
-		private readonly HashSet<PropertySet> properties = new HashSet<PropertySet>();
+    public IEnumerator<PropertySet> GetEnumerator()
+    {
+        return _properties.GetEnumerator();
+    }
 
-		public int Count
-		{
-			get { return properties.Count; }
-		}
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return _properties.GetEnumerator();
+    }
 
-		/// <summary>Finds a PropertySet the by PropertyInfo.</summary>
-		/// <param name = "info">The info.</param>
-		/// <returns></returns>
-		public PropertySet FindByPropertyInfo(PropertyInfo info)
-		{
-			return this.FirstOrDefault(prop => info == prop.Property);
-		}
+    void IMutableCollection<PropertySet>.Add(PropertySet property)
+    {
+        ArgumentNullException.ThrowIfNull(property);
+        _properties.Add(property);
+    }
 
-		public IEnumerator<PropertySet> GetEnumerator()
-		{
-			return properties.GetEnumerator();
-		}
+    bool IMutableCollection<PropertySet>.Remove(PropertySet item)
+    {
+        return _properties.Remove(item);
+    }
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return properties.GetEnumerator();
-		}
-
-		void IMutableCollection<PropertySet>.Add(PropertySet property)
-		{
-			if (property == null)
-			{
-				throw new ArgumentNullException(nameof(property));
-			}
-			properties.Add(property);
-		}
-
-		bool IMutableCollection<PropertySet>.Remove(PropertySet item)
-		{
-			return properties.Remove(item);
-		}
-	}
+    /// <summary>Finds a PropertySet the by PropertyInfo.</summary>
+    /// <param name="info">The info.</param>
+    /// <returns></returns>
+    public PropertySet FindByPropertyInfo(PropertyInfo info)
+    {
+        return this.FirstOrDefault(prop => info == prop.Property);
+    }
 }

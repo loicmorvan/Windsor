@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+public interface IRepository<out T> : IRepository
+    where T : class
 {
-	public interface IRepository<T> : IRepository
-		where T : class
-	{
-		T Find();
-	}
+    T Find();
 }

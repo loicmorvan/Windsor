@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers
-{
-	using Castle.Core;
+using Castle.Windsor.Core;
 
-	/// <summary>
-	///   Inspects missings dependencies in the container. Default implementation is used to
-	///   construct helpful message for exceptions and debugger views, but other implementations
-	///   are also possible if needed.
-	/// </summary>
-	public interface IDependencyInspector
-	{
-		void Inspect(IHandler handler, DependencyModel[] missingDependencies, IKernel kernel);
-	}
+namespace Castle.Windsor.MicroKernel.Handlers;
+
+/// <summary>
+///     Inspects missings dependencies in the container. Default implementation is used to construct helpful message for
+///     exceptions and debugger views, but other implementations are also possible if
+///     needed.
+/// </summary>
+public interface IDependencyInspector
+{
+    void Inspect(IHandler handler, DependencyModel[] missingDependencies, IKernel kernel);
 }

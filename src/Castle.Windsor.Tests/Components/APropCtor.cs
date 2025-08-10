@@ -12,22 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class APropCtor
 {
-	public class APropCtor
-	{
-		private readonly A2 a;
+    public APropCtor(A2 a)
+    {
+        A = a;
+    }
 
-		public APropCtor(A2 a)
-		{
-			this.a = a;
-		}
+    public A2 A { get; }
 
-		public A2 A
-		{
-			get { return a; }
-		}
-
-		public A Prop { get; set; }
-	}
+    public A Prop { get; set; }
 }

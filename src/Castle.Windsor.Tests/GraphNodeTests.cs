@@ -12,114 +12,92 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Tests
+using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.Tests;
+
+public class GraphNodeTests
 {
-	using System;
+    [Fact]
+    public void SimpleUsage()
+    {
+        var parent = new GraphNode();
+        var child = new GraphNode();
 
-	using NUnit.Framework;
+        parent.AddDependent(child);
 
-	using Castle.Core.Internal;
+        Assert.Same(child, parent.Dependents[0]);
+    }
 
-	[TestFixture]
-	public class GraphTestCase
-	{
-		[Test]
-		public void SimpleUsage()
-		{
-			GraphNode parent = new GraphNode();
-			GraphNode child = new GraphNode();
-			
-			parent.AddDependent(child);
+    [Fact]
+    public void TopologicalSortOneElement()
+    {
+        GraphNode alone = new TestGraphNode("alone");
 
-			Assert.AreSame( child, parent.Dependents[0] );
-		}
+        var nodes = TopologicalSortAlgo.Sort([alone]);
 
-		[Test]
-		public void TopologicalSortOneElement()
-		{
-			GraphNode alone = new TestGraphNode("alone");
+        Assert.Same(alone, nodes[0]);
+    }
 
-			IVertex[] nodes = TopologicalSortAlgo.Sort( new[] { alone } );
+    [Fact]
+    public void TopologicalSortSimple()
+    {
+        GraphNode alone = new TestGraphNode("alone");
+        GraphNode first = new TestGraphNode("first");
+        GraphNode second = new TestGraphNode("second");
+        GraphNode third = new TestGraphNode("third");
 
-			Assert.AreSame( alone, nodes[0] );
-		}
+        first.AddDependent(second);
+        second.AddDependent(third);
 
-		[Test]
-		public void TopologicalSortSimple()
-		{
-			GraphNode alone = new TestGraphNode("alone");
-			GraphNode first = new TestGraphNode("first");
-			GraphNode second = new TestGraphNode("second");
-			GraphNode third = new TestGraphNode("third");
-			
-			first.AddDependent(second);
-			second.AddDependent(third);
+        var nodes =
+            TopologicalSortAlgo.Sort([alone, second, first, third]);
 
-			IVertex[] nodes = 
-				TopologicalSortAlgo.Sort( new GraphNode[] { alone, second, first, third } );
+        Assert.Same(first, nodes[0]);
+        Assert.Same(second, nodes[1]);
+        Assert.Same(third, nodes[2]);
+        Assert.Same(alone, nodes[3]);
+    }
 
-			Assert.AreSame( first, nodes[0] );
-			Assert.AreSame( second, nodes[1] );
-			Assert.AreSame( third, nodes[2] );
-			Assert.AreSame( alone, nodes[3] );
-		}
+    [Fact]
+    public void ComplexDag()
+    {
+        GraphNode shirt = new TestGraphNode("shirt");
+        GraphNode tie = new TestGraphNode("tie");
+        GraphNode jacket = new TestGraphNode("jacket");
+        GraphNode belt = new TestGraphNode("belt");
+        GraphNode watch = new TestGraphNode("watch");
+        GraphNode undershorts = new TestGraphNode("undershorts");
+        GraphNode pants = new TestGraphNode("pants");
+        GraphNode shoes = new TestGraphNode("shoes");
+        GraphNode socks = new TestGraphNode("socks");
 
-		[Test]
-		public void ComplexDag()
-		{
-			GraphNode shirt = new TestGraphNode("shirt");
-			GraphNode tie = new TestGraphNode("tie");
-			GraphNode jacket = new TestGraphNode("jacket");
-			GraphNode belt = new TestGraphNode("belt");
-			GraphNode watch = new TestGraphNode("watch");
-			GraphNode undershorts = new TestGraphNode("undershorts");
-			GraphNode pants = new TestGraphNode("pants");
-			GraphNode shoes = new TestGraphNode("shoes");
-			GraphNode socks = new TestGraphNode("socks");
-			
-			shirt.AddDependent(belt);
-			shirt.AddDependent(tie);
+        shirt.AddDependent(belt);
+        shirt.AddDependent(tie);
 
-			tie.AddDependent(jacket);
+        tie.AddDependent(jacket);
 
-			pants.AddDependent(belt);
-			pants.AddDependent(shoes);
+        pants.AddDependent(belt);
+        pants.AddDependent(shoes);
 
-			undershorts.AddDependent(pants);
-			undershorts.AddDependent(shoes);
+        undershorts.AddDependent(pants);
+        undershorts.AddDependent(shoes);
 
-			socks.AddDependent(shoes);
-			belt.AddDependent(jacket);
+        socks.AddDependent(shoes);
+        belt.AddDependent(jacket);
 
-			IVertex[] nodes = 
-				TopologicalSortAlgo.Sort( 
-					new GraphNode[] 
-					{ shirt, tie, jacket, belt, watch, undershorts, pants, shoes, socks} );
+        var nodes =
+            TopologicalSortAlgo.Sort(
+                [shirt, tie, jacket, belt, watch, undershorts, pants, shoes, socks]);
 
-			Assert.AreSame( socks, nodes[0] );
-			Assert.AreSame( undershorts, nodes[1] );
-			Assert.AreSame( pants, nodes[2] );
-			Assert.AreSame( shoes, nodes[3] );
-			Assert.AreSame( watch, nodes[4] );
-			Assert.AreSame( shirt, nodes[5] );
-			Assert.AreSame( tie, nodes[6] );
-			Assert.AreSame( belt, nodes[7] );
-			Assert.AreSame( jacket, nodes[8] );
-		}
-	}
-
-	public class TestGraphNode : GraphNode
-	{
-		private String _name;
-
-		public TestGraphNode(String name)
-		{
-			_name = name;
-		}
-
-		public String Name
-		{
-			get { return _name; }
-		}
-	}
+        Assert.Same(socks, nodes[0]);
+        Assert.Same(undershorts, nodes[1]);
+        Assert.Same(pants, nodes[2]);
+        Assert.Same(shoes, nodes[3]);
+        Assert.Same(watch, nodes[4]);
+        Assert.Same(shirt, nodes[5]);
+        Assert.Same(tie, nodes[6]);
+        Assert.Same(belt, nodes[7]);
+        Assert.Same(jacket, nodes[8]);
+    }
 }

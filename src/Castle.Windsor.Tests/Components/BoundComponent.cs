@@ -12,27 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.Components;
+
+[BoundTo(typeof(Binder))]
+public class BoundComponent : IComponent
 {
-	using System.Linq;
+    public int Id => GetHashCode();
 
-	using Castle.Core;
-	using Castle.MicroKernel;
-
-	[BoundTo(typeof(Binder))]
-	public class BoundComponent : IComponent
-	{
-		public int ID
-		{
-			get { return GetHashCode(); }
-		}
-
-		public class Binder
-		{
-			public IHandler Bind(IHandler[] handlers)
-			{
-				return handlers.First();
-			}
-		}
-	}
+    [UsedImplicitly]
+    public class Binder
+    {
+        public IHandler Bind(IHandler[] handlers)
+        {
+            return handlers.First();
+        }
+    }
 }

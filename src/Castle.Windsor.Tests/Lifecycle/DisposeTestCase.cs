@@ -12,170 +12,182 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Lifecycle
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+
+namespace Castle.Windsor.Tests.Lifecycle;
+
+public class DisposeTestCase : AbstractContainerTestCase
 {
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+    [Fact]
+    public void Disposable_component_for_nondisposable_service_built_via_factory_should_be_disposed_when_released()
+    {
+        var counter = new LifecycleCounter();
+        Container.Register(Component.For<ISimpleService>()
+            .UsingFactoryMethod(() => new SimpleServiceDisposable(counter))
+            .LifeStyle.Transient);
 
-	using CastleTests;
-	using CastleTests.Components;
+        var service = Container.Resolve<ISimpleService>();
 
-	using NUnit.Framework;
+        Assert.Equal(0, counter["Dispose"]);
 
-	[TestFixture]
-	public class DisposeTestCase : AbstractContainerTestCase
-	{
-		[Test]
-		public void Disposable_component_for_nondisposable_service_built_via_factory_should_be_disposed_when_released()
-		{
-			SimpleServiceDisposable.DisposedCount = 0;
-			Container.Register(Component.For<ISimpleService>()
-			                   	.UsingFactoryMethod(() => new SimpleServiceDisposable())
-			                   	.LifeStyle.Transient);
+        Container.Release(service);
 
-			var service = Container.Resolve<ISimpleService>();
+        Assert.Equal(1, counter["Dispose"]);
+    }
 
-			Assert.AreEqual(0, SimpleServiceDisposable.DisposedCount);
+    [Fact]
+    public void Disposable_component_for_nondisposable_service_is_tracked()
+    {
+        Container.Register(
+            Component.For<LifecycleCounter>(),
+            Component.For<ISimpleService>()
+                .ImplementedBy<SimpleServiceDisposable>()
+                .LifeStyle.Transient);
 
-			Container.Release(service);
+        var service = Container.Resolve<ISimpleService>();
 
-			Assert.AreEqual(1, SimpleServiceDisposable.DisposedCount);
-		}
+        Assert.True(Kernel.ReleasePolicy.HasTrack(service));
+    }
 
-		[Test]
-		public void Disposable_component_for_nondisposable_service_is_tracked()
-		{
-			Container.Register(Component.For<ISimpleService>()
-			                   	.ImplementedBy<SimpleServiceDisposable>()
-			                   	.LifeStyle.Transient);
+    [Fact]
+    public void Disposable_component_for_nondisposable_service_should_be_disposed_when_released()
+    {
+        Container.Register(
+            Component.For<LifecycleCounter>(),
+            Component.For<ISimpleService>()
+                .ImplementedBy<SimpleServiceDisposable>()
+                .LifeStyle.Transient);
 
-			var service = Container.Resolve<ISimpleService>();
+        var service = Container.Resolve<ISimpleService>();
+        Container.Release(service);
 
-			Assert.IsTrue(Kernel.ReleasePolicy.HasTrack(service));
-		}
+        Assert.Equal(1, Container.Resolve<LifecycleCounter>()["Dispose"]);
+    }
 
-		[Test]
-		public void Disposable_component_for_nondisposable_service_should_be_disposed_when_released()
-		{
-			SimpleServiceDisposable.DisposedCount = 0;
-			Container.Register(Component.For<ISimpleService>()
-			                   	.ImplementedBy<SimpleServiceDisposable>()
-			                   	.LifeStyle.Transient);
+    [Fact]
+    public void Disposable_service_is_tracked()
+    {
+        Container.Register(
+            Component.For<LifecycleCounter>(),
+            Component.For<DisposableFoo>().LifeStyle.Transient);
 
-			var service = Container.Resolve<ISimpleService>();
-			Container.Release(service);
+        var foo = Container.Resolve<DisposableFoo>();
 
-			Assert.AreEqual(1, SimpleServiceDisposable.DisposedCount);
-		}
+        Assert.True(Kernel.ReleasePolicy.HasTrack(foo));
+    }
 
-		[Test]
-		public void Disposable_service_is_tracked()
-		{
-			Container.Register(Component.For<DisposableFoo>().LifeStyle.Transient);
+    [Fact]
+    public void Disposable_services_should_be_disposed_when_released()
+    {
+        var counter = new LifecycleCounter();
+        Container.Register(Component.For<DisposableFoo>().LifeStyle.Transient
+            .DependsOn(Arguments.FromTyped([counter])));
 
-			var foo = Container.Resolve<DisposableFoo>();
+        var foo = Container.Resolve<DisposableFoo>();
+        Container.Release(foo);
 
-			Assert.IsTrue(Kernel.ReleasePolicy.HasTrack(foo));
-		}
+        Assert.Equal(1, counter["Dispose"]);
+    }
 
-		[Test]
-		public void Disposable_services_should_be_disposed_when_released()
-		{
-			DisposableFoo.ResetDisposedCount();
-			Container.Register(Component.For<DisposableFoo>().LifeStyle.Transient);
+    [Fact]
+    public void Disposable_singleton_dependency_of_transient_open_generic_is_disposed()
+    {
+        var counter = new LifecycleCounter();
 
-			var foo = Container.Resolve<DisposableFoo>();
-			Container.Release(foo);
+        Container.Register(
+            Component.For(typeof(GenericComponent<>)).LifeStyle.Transient,
+            Component.For<LifecycleCounter>().Instance(counter),
+            Component.For<Disposable>().LifeStyle.Singleton
+        );
 
-			Assert.AreEqual(1, DisposableFoo.DisposedCount);
-		}
+        var tracker = ReferenceTracker
+            .Track(() =>
+            {
+                var depender = Container.Resolve<GenericComponent<Disposable>>();
+                return depender.Value;
+            });
 
-		[Test]
-		public void Disposable_singleton_dependency_of_transient_open_generic_is_disposed()
-		{
-			DisposableFoo.ResetDisposedCount();
-			Container.Register(
-				Component.For(typeof(GenericComponent<>)).LifeStyle.Transient,
-				Component.For<DisposableFoo>().LifeStyle.Singleton
-				);
+        Container.Dispose();
 
-			var tracker = ReferenceTracker
-				.Track(() =>
-				{
-					var depender = Container.Resolve<GenericComponent<DisposableFoo>>();
-					return depender.Value;
-				});
+        Assert.Equal(1, counter["Dispose"]);
+        tracker.AssertNoLongerReferenced();
+    }
 
-			Container.Dispose();
+    [Fact]
+    public void Disposable_singleton_generic_closed_disposed()
+    {
+        Container.Register(Component.For<DisposableGeneric<A>>());
+        var component = Container.Resolve<DisposableGeneric<A>>();
 
-			Assert.AreEqual(1, DisposableFoo.DisposedCount);
-			tracker.AssertNoLongerReferenced();
-		}
+        Container.Dispose();
 
-		[Test]
-		public void Disposable_singleton_generic_closed_disposed()
-		{
-			Container.Register(Component.For<DisposableGeneric<A>>());
-			var component = Container.Resolve<DisposableGeneric<A>>();
+        Assert.True(component.Disposed);
+    }
 
-			Container.Dispose();
+    [Fact]
+    public void Disposable_singleton_generic_closed_inherited_disposed()
+    {
+        Container.Register(Component.For<DisposableGenericA>());
+        var component = Container.Resolve<DisposableGenericA>();
 
-			Assert.IsTrue(component.Disposed);
-		}
+        Container.Dispose();
 
-		[Test]
-		public void Disposable_singleton_generic_closed_inherited_disposed()
-		{
-			Container.Register(Component.For<DisposableGenericA>());
-			var component = Container.Resolve<DisposableGenericA>();
+        Assert.True(component.Disposed);
+    }
 
-			Container.Dispose();
+    [Fact]
+    public void Disposable_singleton_generic_open_disposed()
+    {
+        Container.Register(Component.For(typeof(DisposableGeneric<>)));
+        var component = Container.Resolve<DisposableGeneric<A>>();
 
-			Assert.IsTrue(component.Disposed);
-		}
+        Container.Dispose();
 
-		[Test]
-		public void Disposable_singleton_generic_open_disposed()
-		{
-			Container.Register(Component.For(typeof(DisposableGeneric<>)));
-			var component = Container.Resolve<DisposableGeneric<A>>();
+        Assert.True(component.Disposed);
+    }
 
-			Container.Dispose();
+    [Fact]
+    public void Disposable_transient_generic_closed_disposed()
+    {
+        Container.Register(Component.For<DisposableGeneric<A>>().LifeStyle.Transient);
+        var component = Container.Resolve<DisposableGeneric<A>>();
 
-			Assert.IsTrue(component.Disposed);
-		}
+        Container.Dispose();
 
-		[Test]
-		public void Disposable_transient_generic_closed_disposed()
-		{
-			Container.Register(Component.For<DisposableGeneric<A>>().LifeStyle.Transient);
-			var component = Container.Resolve<DisposableGeneric<A>>();
+        Assert.True(component.Disposed);
+    }
 
-			Container.Dispose();
+    [Fact]
+    public void Disposable_transient_generic_closed_inherited_disposed()
+    {
+        Container.Register(Component.For<DisposableGenericA>().LifeStyle.Transient);
+        var component = Container.Resolve<DisposableGenericA>();
 
-			Assert.IsTrue(component.Disposed);
-		}
+        Container.Dispose();
 
-		[Test]
-		public void Disposable_transient_generic_closed_inherited_disposed()
-		{
-			Container.Register(Component.For<DisposableGenericA>().LifeStyle.Transient);
-			var component = Container.Resolve<DisposableGenericA>();
+        Assert.True(component.Disposed);
+    }
 
-			Container.Dispose();
+    [Fact]
+    public void Disposable_transient_generic_open_disposed()
+    {
+        Container.Register(Component.For(typeof(DisposableGeneric<>)).LifeStyle.Transient);
+        var component = Container.Resolve<DisposableGeneric<A>>();
 
-			Assert.IsTrue(component.Disposed);
-		}
+        Container.Dispose();
 
-		[Test]
-		public void Disposable_transient_generic_open_disposed()
-		{
-			Container.Register(Component.For(typeof(DisposableGeneric<>)).LifeStyle.Transient);
-			var component = Container.Resolve<DisposableGeneric<A>>();
+        Assert.True(component.Disposed);
+    }
 
-			Container.Dispose();
-
-			Assert.IsTrue(component.Disposed);
-		}
-	}
+    public sealed class Disposable(LifecycleCounter counter) : IDisposable
+    {
+        public void Dispose()
+        {
+            counter.Increment();
+        }
+    }
 }

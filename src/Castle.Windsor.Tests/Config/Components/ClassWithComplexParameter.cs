@@ -12,48 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.using System;
 
-namespace Castle.MicroKernel.Tests.Configuration.Components
+using Castle.Windsor.MicroKernel.SubSystems.Conversion;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.Config.Components;
+
+public class ClassWithComplexParameter
 {
-	using Castle.MicroKernel.SubSystems.Conversion;
+    public ComplexParameterType ComplexParam { get; set; }
 
-	public class ClassWithComplexParameter
-	{
-		private ComplexParameterType param1;
+    [Convertible]
+    [UsedImplicitly]
+    public class ComplexParameterType
+    {
+        public ComplexParameterType()
+        {
+            // sets default values
+            MandatoryValue = "default1";
+            OptionalValue = "default2";
+        }
 
-		[Convertible]
-		public class ComplexParameterType
-		{
-			private string mandatoryValue;
-			private string optionalValue;
+        public ComplexParameterType(string mandatoryValue)
+        {
+            MandatoryValue = mandatoryValue;
+        }
 
-			public ComplexParameterType()
-			{
-				// sets default values
-				mandatoryValue = "default1";
-				optionalValue = "default2";
-			}
+        public string MandatoryValue { get; }
 
-			public ComplexParameterType(string mandatoryValue)
-			{
-				this.mandatoryValue = mandatoryValue;
-			}
-
-			public string MandatoryValue
-			{
-				get { return mandatoryValue; }
-			}
-
-			public string OptionalValue
-			{
-				get { return optionalValue; }
-				set { optionalValue = value; }
-			}
-		}
-
-		public ComplexParameterType ComplexParam
-		{
-			get { return param1; }
-			set { param1 = value; }
-		}
-	}
+        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
+        public string OptionalValue { get; set; }
+    }
 }

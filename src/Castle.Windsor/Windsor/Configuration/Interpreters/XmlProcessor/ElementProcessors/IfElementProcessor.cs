@@ -12,35 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors
+using System.Xml;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
+
+public class IfElementProcessor : AbstractStatementElementProcessor
 {
-	using System;
-	using System.Xml;
+    public override string Name => "if";
 
-	public class IfElementProcessor : AbstractStatementElementProcessor
-	{
-		public override String Name
-		{
-			get { return "if"; }
-		}
+    public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
+    {
+        var element = nodeList.Current as XmlElement;
 
-		public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
-		{
-			var element = nodeList.Current as XmlElement;
+        var processContents = ProcessStatement(element, engine);
 
-			var processContents = ProcessStatement(element, engine);
-
-			if (processContents)
-			{
-				var fragment = CreateFragment(element);
-				MoveChildNodes(fragment, element);
-				engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(fragment.ChildNodes));
-				ReplaceItself(fragment, element);
-			}
-			else
-			{
-				RemoveItSelf(element);
-			}
-		}
-	}
+        if (processContents)
+        {
+            var fragment = CreateFragment(element);
+            MoveChildNodes(fragment, element);
+            engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(fragment.ChildNodes));
+            ReplaceItself(fragment, element);
+        }
+        else
+        {
+            RemoveItSelf(element);
+        }
+    }
 }

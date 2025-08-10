@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public interface IService
 {
-	public interface IService
-	{
-		string Name { get; set; }
-	}
+    string Name { get; set; }
 }

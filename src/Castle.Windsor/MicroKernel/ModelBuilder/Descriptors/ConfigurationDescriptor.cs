@@ -12,44 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+using Castle.Core.Configuration;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Registration;
+
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
+
+public class ConfigurationDescriptor : IComponentModelDescriptor
 {
-	using Castle.Core;
-	using Castle.Core.Configuration;
-	using Castle.MicroKernel.Registration;
+    private readonly Node[] _configNodes;
+    private readonly IConfiguration _configuration;
 
-	public class ConfigurationDescriptor : IComponentModelDescriptor
-	{
-		private readonly Node[] configNodes;
-		private readonly IConfiguration configuration;
+    public ConfigurationDescriptor(params Node[] configNodes)
+    {
+        _configNodes = configNodes;
+    }
 
-		public ConfigurationDescriptor(params Node[] configNodes)
-		{
-			this.configNodes = configNodes;
-		}
+    public ConfigurationDescriptor(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
 
-		public ConfigurationDescriptor(IConfiguration configuration)
-		{
-			this.configuration = configuration;
-		}
+    public void BuildComponentModel(IKernel kernel, ComponentModel model)
+    {
+        if (_configuration != null)
+        {
+            model.Configuration.Children.Add(_configuration);
+        }
+        else
+        {
+            foreach (var configNode in _configNodes)
+            {
+                configNode.ApplyTo(model.Configuration);
+            }
+        }
+    }
 
-		public void BuildComponentModel(IKernel kernel, ComponentModel model)
-		{
-			if (configuration != null)
-			{
-				model.Configuration.Children.Add(configuration);
-			}
-			else
-			{
-				foreach (var configNode in configNodes)
-				{
-					configNode.ApplyTo(model.Configuration);
-				}
-			}
-		}
-
-		public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-		{
-		}
-	}
+    public void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+    {
+    }
 }

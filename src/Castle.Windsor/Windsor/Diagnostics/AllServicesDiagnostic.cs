@@ -12,27 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
+using Castle.Windsor.MicroKernel;
+
+namespace Castle.Windsor.Windsor.Diagnostics;
+
+public class AllServicesDiagnostic : IAllServicesDiagnostic
 {
-	using System;
-	using System.Linq;
+    private readonly IKernel _kernel;
 
-	using Castle.MicroKernel;
+    public AllServicesDiagnostic(IKernel kernel)
+    {
+        _kernel = kernel;
+    }
 
-	public class AllServicesDiagnostic : IAllServicesDiagnostic
-	{
-		private readonly IKernel kernel;
-
-		public AllServicesDiagnostic(IKernel kernel)
-		{
-			this.kernel = kernel;
-		}
-
-		public ILookup<Type, IHandler> Inspect()
-		{
-			return kernel.GetAssignableHandlers(typeof(object))
-				.SelectMany(handler => handler.ComponentModel.Services, (handler, service) => new { handler, service })
-				.ToLookup(g => g.service, g => g.handler);
-		}
-	}
+    public ILookup<Type, IHandler> Inspect()
+    {
+        return _kernel.GetAssignableHandlers(typeof(object))
+            .SelectMany(handler => handler.ComponentModel.Services, (handler, service) => new { handler, service })
+            .ToLookup(g => g.service, g => g.handler);
+    }
 }

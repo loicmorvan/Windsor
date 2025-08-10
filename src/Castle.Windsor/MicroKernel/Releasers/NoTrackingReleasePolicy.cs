@@ -12,37 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Releasers
+namespace Castle.Windsor.MicroKernel.Releasers;
+
+/// <summary>No tracking of component instances are made.</summary>
+[Serializable]
+[Obsolete(
+    "This class is a hack, will be removed in the future release and should be avoided. Please implement proper lifecycle management instead.")]
+public class NoTrackingReleasePolicy : IReleasePolicy
 {
-	using System;
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+    }
 
-	/// <summary>
-	///   No tracking of component instances are made.
-	/// </summary>
-	[Serializable]
-	[Obsolete("This class is a hack, will be removed in the future release and should be avoided. Please implement proper lifecycle management instead.")]
-	public class NoTrackingReleasePolicy : IReleasePolicy
-	{
-		public void Dispose()
-		{
-		}
+    public IReleasePolicy CreateSubPolicy()
+    {
+        return this;
+    }
 
-		public IReleasePolicy CreateSubPolicy()
-		{
-			return this;
-		}
+    public bool HasTrack(object instance)
+    {
+        return false;
+    }
 
-		public bool HasTrack(object instance)
-		{
-			return false;
-		}
+    public void Release(object instance)
+    {
+    }
 
-		public void Release(object instance)
-		{
-		}
-
-		public void Track(object instance, Burden burden)
-		{
-		}
-	}
+    public void Track(object instance, Burden burden)
+    {
+    }
 }

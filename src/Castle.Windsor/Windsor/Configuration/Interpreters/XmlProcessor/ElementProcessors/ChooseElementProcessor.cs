@@ -12,63 +12,56 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors
+using System.Diagnostics;
+using System.Xml;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
+
+public class ChooseElementProcessor : AbstractStatementElementProcessor
 {
-	using System;
-	using System.Xml;
+    private const string OtherwiseElemName = "otherwise";
+    private const string WhenElemName = "when";
 
-	public class ChooseElementProcessor : AbstractStatementElementProcessor
-	{
-		private static readonly String OtherwiseElemName = "otherwise";
-		private static readonly String WhenElemName = "when";
+    public override string Name => "choose";
 
-		public override String Name
-		{
-			get { return "choose"; }
-		}
+    public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
+    {
+        var element = nodeList.Current as XmlElement;
 
-		public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
-		{
-			var element = nodeList.Current as XmlElement;
+        var fragment = CreateFragment(element);
 
-			var fragment = CreateFragment(element);
+        Debug.Assert(element != null);
+        foreach (XmlNode child in element.ChildNodes)
+        {
+            if (IgnoreNode(child))
+            {
+                continue;
+            }
 
-			foreach (XmlNode child in element.ChildNodes)
-			{
-				if (IgnoreNode(child))
-				{
-					continue;
-				}
+            var elem = GetNodeAsElement(element, child);
 
-				var elem = GetNodeAsElement(element, child);
+            var found = elem.Name switch
+            {
+                WhenElemName => ProcessStatement(elem, engine),
+                OtherwiseElemName => true,
+                _ => throw new XmlProcessorException(
+                    "'{0} can not contain only 'when' and 'otherwise' elements found '{1}'", element.Name, elem.Name)
+            };
 
-				var found = false;
+            if (!found)
+            {
+                continue;
+            }
 
-				if (elem.Name == WhenElemName)
-				{
-					found = ProcessStatement(elem, engine);
-				}
-				else if (elem.Name == OtherwiseElemName)
-				{
-					found = true;
-				}
-				else
-				{
-					throw new XmlProcessorException("'{0} can not contain only 'when' and 'otherwise' elements found '{1}'", element.Name, elem.Name);
-				}
+            if (elem.ChildNodes.Count > 0)
+            {
+                MoveChildNodes(fragment, elem);
+                engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(fragment.ChildNodes));
+            }
 
-				if (found)
-				{
-					if (elem.ChildNodes.Count > 0)
-					{
-						MoveChildNodes(fragment, elem);
-						engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(fragment.ChildNodes));
-					}
-					break;
-				}
-			}
+            break;
+        }
 
-			ReplaceItself(fragment, element);
-		}
-	}
+        ReplaceItself(fragment, element);
+    }
 }

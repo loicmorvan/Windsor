@@ -12,41 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
+using System.Diagnostics;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
+
+namespace Castle.Windsor.Windsor.Diagnostics;
+
+[DebuggerDisplay("")]
+internal class KernelDebuggerProxy
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Linq;
+    private readonly IEnumerable<IContainerDebuggerExtension> _extensions;
 
-	using Castle.MicroKernel;
-	using Castle.Windsor.Diagnostics.DebuggerViews;
+    public KernelDebuggerProxy(IWindsorContainer container) : this(container.Kernel)
+    {
+    }
 
-	[DebuggerDisplay("")]
-	internal class KernelDebuggerProxy
-	{
-		private readonly IEnumerable<IContainerDebuggerExtension> extensions;
+    public KernelDebuggerProxy(IKernel kernel)
+    {
+        ArgumentNullException.ThrowIfNull(kernel);
+        _extensions =
+            (IEnumerable<IContainerDebuggerExtension>)(kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as
+                IContainerDebuggerExtensionHost) ?? [];
+    }
 
-		public KernelDebuggerProxy(IWindsorContainer container) : this(container.Kernel)
-		{
-		}
-
-		public KernelDebuggerProxy(IKernel kernel)
-		{
-			if (kernel == null)
-			{
-				throw new ArgumentNullException(nameof(kernel));
-			}
-			extensions =
-				(IEnumerable<IContainerDebuggerExtension>)(kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IContainerDebuggerExtensionHost) ??
-				new IContainerDebuggerExtension[0];
-		}
-
-		[DebuggerDisplay("")]
-		[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-		public DebuggerViewItem[] Extensions
-		{
-			get { return extensions.SelectMany(e => e.Attach()).ToArray(); }
-		}
-	}
+    [DebuggerDisplay("")]
+    [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    public DebuggerViewItem[] Extensions
+    {
+        get { return _extensions.SelectMany(e => e.Attach()).ToArray(); }
+    }
 }

@@ -12,30 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors
+using System.Xml;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
+
+public class UndefProcessingInstructionProcessor : AbstractStatementElementProcessor
 {
-	using System;
-	using System.Xml;
+    public override XmlNodeType[] AcceptNodeTypes => [XmlNodeType.ProcessingInstruction];
 
-	public class UndefProcessingInstructionProcessor : AbstractStatementElementProcessor
-	{
-		public override XmlNodeType[] AcceptNodeTypes
-		{
-			get { return new[] { XmlNodeType.ProcessingInstruction }; }
-		}
+    public override string Name => "undef";
 
-		public override String Name
-		{
-			get { return "undef"; }
-		}
+    public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
+    {
+        var node = nodeList.Current as XmlProcessingInstruction;
 
-		public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
-		{
-			var node = nodeList.Current as XmlProcessingInstruction;
+        engine.RemoveFlag(node.Data);
 
-			engine.RemoveFlag(node.Data);
-
-			RemoveItSelf(node);
-		}
-	}
+        RemoveItSelf(node);
+    }
 }

@@ -12,122 +12,118 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.TypedFactory
+using Castle.Windsor.Facilities.TypedFactory;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
+
+public class TypedFactoryObsoleteApiTestCase : AbstractContainerTestCase
 {
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
+    private TypedFactoryFacility _facility;
 
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class TypedFactoryObsoleteApiTestCase : AbstractContainerTestCase
-	{
-		private TypedFactoryFacility facility;
-
-		[Test]
-		public void Factory1()
-		{
+    [Fact]
+    public void Factory1()
+    {
 #pragma warning disable 0618 //call to obsolete method
-			facility.AddTypedFactoryEntry(
-				new FactoryEntry(
-					"protocolHandlerFactory", typeof(IProtocolHandlerFactory1), "Create", "Release"));
+        _facility.AddTypedFactoryEntry(
+            new FactoryEntry(
+                "protocolHandlerFactory", typeof(IProtocolHandlerFactory1), "Create", "Release"));
 #pragma warning restore
-			Container.Register(
-				Component.For(typeof(IProtocolHandler)).ImplementedBy(typeof(MirandaProtocolHandler)).Named("miranda"));
-			Container.Register(
-				Component.For(typeof(IProtocolHandler)).ImplementedBy(typeof(MessengerProtocolHandler)).Named("messenger"));
+        Container.Register(
+            Component.For(typeof(IProtocolHandler)).ImplementedBy<MirandaProtocolHandler>().Named("miranda"));
+        Container.Register(
+            Component.For(typeof(IProtocolHandler)).ImplementedBy<MessengerProtocolHandler>().Named("messenger"));
 
-			var factory = Container.Resolve<IProtocolHandlerFactory1>("protocolHandlerFactory");
+        var factory = Container.Resolve<IProtocolHandlerFactory1>("protocolHandlerFactory");
 
-			Assert.IsNotNull(factory);
+        Assert.NotNull(factory);
 
-			var handler = factory.Create();
+        var handler = factory.Create();
 
-			Assert.IsNotNull(handler);
+        Assert.NotNull(handler);
 
-			factory.Release(handler);
-		}
+        factory.Release(handler);
+    }
 
-		[Test]
-		public void Factory2()
-		{
+    [Fact]
+    public void Factory2()
+    {
 #pragma warning disable 0618 //call to obsolete method
-			facility.AddTypedFactoryEntry(
-				new FactoryEntry(
-					"protocolHandlerFactory", typeof(IProtocolHandlerFactory2), "Create", "Release"));
+        _facility.AddTypedFactoryEntry(
+            new FactoryEntry(
+                "protocolHandlerFactory", typeof(IProtocolHandlerFactory2), "Create", "Release"));
 #pragma warning restore
-			Container.Register(
-				Component.For(typeof(IProtocolHandler)).ImplementedBy(typeof(MirandaProtocolHandler)).Named("miranda"));
-			Container.Register(
-				Component.For(typeof(IProtocolHandler)).ImplementedBy(typeof(MessengerProtocolHandler)).Named("messenger"));
+        Container.Register(
+            Component.For(typeof(IProtocolHandler)).ImplementedBy<MirandaProtocolHandler>().Named("miranda"));
+        Container.Register(
+            Component.For(typeof(IProtocolHandler)).ImplementedBy<MessengerProtocolHandler>().Named("messenger"));
 
-			var factory = Container.Resolve<IProtocolHandlerFactory2>("protocolHandlerFactory");
+        var factory = Container.Resolve<IProtocolHandlerFactory2>("protocolHandlerFactory");
 
-			Assert.IsNotNull(factory);
+        Assert.NotNull(factory);
 
-			var handler = factory.Create("miranda");
-			Assert.IsNotNull(handler);
-			Assert.IsTrue(handler is MirandaProtocolHandler);
-			factory.Release(handler);
+        var handler = factory.Create("miranda");
+        Assert.NotNull(handler);
+        Assert.True(handler is MirandaProtocolHandler);
+        factory.Release(handler);
 
-			handler = factory.Create("messenger");
-			Assert.IsNotNull(handler);
-			Assert.IsTrue(handler is MessengerProtocolHandler);
-			factory.Release(handler);
-		}
+        handler = factory.Create("messenger");
+        Assert.NotNull(handler);
+        Assert.True(handler is MessengerProtocolHandler);
+        factory.Release(handler);
+    }
 
-		[Test]
-		public void Factory3()
-		{
+    [Fact]
+    public void Factory3()
+    {
 #pragma warning disable 0618 //call to obsolete method
-			facility.AddTypedFactoryEntry(
-				new FactoryEntry(
-					"compFactory", typeof(IComponentFactory1), "Construct", ""));
+        _facility.AddTypedFactoryEntry(
+            new FactoryEntry(
+                "compFactory", typeof(IComponentFactory1), "Construct", ""));
 #pragma warning restore
-			Container.Register(Component.For(typeof(IDummyComponent)).ImplementedBy(typeof(Component1)).Named("comp1"));
-			Container.Register(Component.For(typeof(IDummyComponent)).ImplementedBy(typeof(Component2)).Named("comp2"));
+        Container.Register(Component.For(typeof(IDummyComponent)).ImplementedBy<Component1>().Named("comp1"));
+        Container.Register(Component.For(typeof(IDummyComponent)).ImplementedBy<Component2>().Named("comp2"));
 
-			var factory = Container.Resolve<IComponentFactory1>("compFactory");
-			Assert.IsNotNull(factory);
+        var factory = Container.Resolve<IComponentFactory1>("compFactory");
+        Assert.NotNull(factory);
 
-			var comp1 = factory.Construct();
-			Assert.IsNotNull(comp1);
+        var comp1 = factory.Construct();
+        Assert.NotNull(comp1);
 
-			var comp2 = factory.Construct();
-			Assert.IsNotNull(comp2);
-		}
+        var comp2 = factory.Construct();
+        Assert.NotNull(comp2);
+    }
 
-		[Test]
-		public void Factory4()
-		{
+    [Fact]
+    public void Factory4()
+    {
 #pragma warning disable 0618 //call to obsolete method
-			facility.AddTypedFactoryEntry(
-				new FactoryEntry(
-					"compFactory", typeof(IComponentFactory2), "Construct", ""));
+        _facility.AddTypedFactoryEntry(
+            new FactoryEntry(
+                "compFactory", typeof(IComponentFactory2), "Construct", ""));
 #pragma warning restore
 
-			Container.Register(Component.For(typeof(IDummyComponent)).ImplementedBy(typeof(Component1)).Named("comp1"));
-			Container.Register(Component.For(typeof(IDummyComponent)).ImplementedBy(typeof(Component2)).Named("comp2"));
+        Container.Register(Component.For(typeof(IDummyComponent)).ImplementedBy<Component1>().Named("comp1"));
+        Container.Register(Component.For(typeof(IDummyComponent)).ImplementedBy<Component2>().Named("comp2"));
 
-			var factory = Container.Resolve<IComponentFactory2>("compFactory");
+        var factory = Container.Resolve<IComponentFactory2>("compFactory");
 
-			Assert.IsNotNull(factory);
+        Assert.NotNull(factory);
 
-			var comp1 = (IDummyComponent)factory.Construct("comp1");
-			Assert.IsTrue(comp1 is Component1);
-			Assert.IsNotNull(comp1);
+        var comp1 = (IDummyComponent)factory.Construct("comp1");
+        Assert.True(comp1 is Component1);
+        Assert.NotNull(comp1);
 
-			var comp2 = (IDummyComponent)factory.Construct("comp2");
-			Assert.IsTrue(comp2 is Component2);
-			Assert.IsNotNull(comp2);
-		}
+        var comp2 = (IDummyComponent)factory.Construct("comp2");
+        Assert.True(comp2 is Component2);
+        Assert.NotNull(comp2);
+    }
 
-		protected override void AfterContainerCreated()
-		{
-			facility = new TypedFactoryFacility();
-			Container.AddFacility(facility);
-		}
-	}
+    protected override void AfterContainerCreated()
+    {
+        _facility = new TypedFactoryFacility();
+        Container.AddFacility(_facility);
+    }
 }

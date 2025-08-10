@@ -12,35 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers
+using System.Reflection;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Context;
+using Microsoft.Extensions.Options;
+
+namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers;
+
+internal class OptionsSubResolver : ISubDependencyResolver
 {
-	using System;
-	using System.Reflection;
+    private readonly IKernel _kernel;
 
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Context;
-	
-	using Microsoft.Extensions.Options;
+    public OptionsSubResolver(IKernel kernel)
+    {
+        _kernel = kernel;
+    }
 
-	internal class OptionsSubResolver : ISubDependencyResolver
-	{
-		private readonly IKernel kernel;
+    public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+        DependencyModel dependency)
+    {
+        return dependency.TargetType != null &&
+               dependency.TargetType.GetTypeInfo().IsGenericType &&
+               dependency.TargetType.GetGenericTypeDefinition() == typeof(IOptions<>);
+    }
 
-		public OptionsSubResolver(IKernel kernel)
-		{
-			this.kernel = kernel;
-		}
-		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
-		{
-			return dependency.TargetType != null && 
-				dependency.TargetType.GetTypeInfo().IsGenericType && 
-				dependency.TargetType.GetGenericTypeDefinition() == typeof(IOptions<>);
-		}
-
-		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
-		{
-			return kernel.Resolve(dependency.TargetType);
-		}
-	}
+    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+        DependencyModel dependency)
+    {
+        return _kernel.Resolve(dependency.TargetType);
+    }
 }

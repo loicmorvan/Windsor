@@ -12,49 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.MicroKernel;
+
+/// <summary>Exception threw by Kernel operations that failed for some reason.</summary>
+[Serializable]
+public class KernelException : Exception
 {
-	using System;
-	using System.Runtime.Serialization;
-
-	using Castle.Core.Internal;
-
-	/// <summary>
-	///   Exception threw by Kernel operations that failed
-	///   for some reason.
-	/// </summary>
-	[Serializable]
-	public class KernelException : Exception
+	/// <summary>Initializes a new instance of the <see cref="KernelException" /> class.</summary>
+	/// <param name="message">The message.</param>
+	public KernelException(string message) : base(message)
 	{
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "KernelException" /> class.
-		/// </summary>
-		/// <param name = "message">The message.</param>
-		public KernelException(string message) : base(message)
-		{
-			ExceptionHelper.SetUp(this);
-		}
+		this.SetUp();
+	}
 
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "KernelException" /> class.
-		/// </summary>
-		/// <param name = "message">The message.</param>
-		/// <param name = "innerException">The inner exception.</param>
-		public KernelException(string message, Exception innerException) : base(message, innerException)
-		{
-			ExceptionHelper.SetUp(this);
-		}
-
-#if FEATURE_SERIALIZATION
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "KernelException" /> class.
-		/// </summary>
-		/// <param name = "info">The object that holds the serialized object data.</param>
-		/// <param name = "context">The contextual information about the source or destination.</param>
-		public KernelException(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-			ExceptionHelper.SetUp(this);
-		}
-#endif
+	/// <summary>Initializes a new instance of the <see cref="KernelException" /> class.</summary>
+	/// <param name="message">The message.</param>
+	/// <param name="innerException">The inner exception.</param>
+	public KernelException(string message, Exception innerException) : base(message, innerException)
+	{
+		this.SetUp();
 	}
 }

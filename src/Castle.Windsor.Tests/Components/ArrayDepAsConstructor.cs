@@ -12,20 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class ArrayDepAsConstructor
 {
-	public class ArrayDepAsConstructor
-	{
-		private readonly IEmptyService[] services;
+    public ArrayDepAsConstructor(IEmptyService[] services)
+    {
+        Services = services;
+    }
 
-		public ArrayDepAsConstructor(IEmptyService[] services)
-		{
-			this.services = services;
-		}
-
-		public IEmptyService[] Services
-		{
-			get { return services; }
-		}
-	}
+    public IEmptyService[] Services { get; }
 }

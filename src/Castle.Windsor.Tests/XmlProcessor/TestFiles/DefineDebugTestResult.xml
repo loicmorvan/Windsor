@@ -1,8 +1,8 @@
 <configuration>
-	<!-- some comment -->
-	<?process instruction?>
-	<components>
-		<component id="debug" att="prop1value"/>
-	</components>		
+    <!-- some comment -->
+    <?process instruction?>
+    <components>
+        <component id="debug" att="prop1value"/>
+    </components>
 </configuration>
 

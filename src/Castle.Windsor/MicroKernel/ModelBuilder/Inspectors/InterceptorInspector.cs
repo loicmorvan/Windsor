@@ -12,114 +12,104 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors
+using Castle.Core.Configuration;
+using Castle.DynamicProxy;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.Proxy;
+using Castle.Windsor.MicroKernel.Util;
+
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
+
+/// <summary>Inspect the component for <c>InterceptorAttribute</c> and the configuration for the interceptors node</summary>
+[Serializable]
+public class InterceptorInspector : IContributeComponentModelConstruction
 {
-	using System;
+    public virtual void ProcessModel(IKernel kernel, ComponentModel model)
+    {
+        CollectFromAttributes(model);
+        CollectFromConfiguration(model);
+    }
 
-	using Castle.Core;
-	using Castle.Core.Configuration;
-	using Castle.Core.Internal;
-	using Castle.DynamicProxy;
-	using Castle.MicroKernel.Proxy;
-	using Castle.MicroKernel.Util;
+    protected virtual void AddInterceptor(InterceptorReference interceptorRef,
+        InterceptorReferenceCollection interceptors)
+    {
+        interceptors.Add(interceptorRef);
+    }
 
-	/// <summary>
-	///   Inspect the component for <c>InterceptorAttribute</c> and
-	///   the configuration for the interceptors node
-	/// </summary>
-	[Serializable]
-	public class InterceptorInspector : IContributeComponentModelConstruction
-	{
-		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
-		{
-			CollectFromAttributes(model);
-			CollectFromConfiguration(model);
-		}
+    protected virtual void CollectFromAttributes(ComponentModel model)
+    {
+        var attributes = model.Implementation.GetAttributes<InterceptorAttribute>(true);
+        foreach (var attribute in attributes)
+        {
+            AddInterceptor(attribute.Interceptor, model.Interceptors);
+        }
+    }
 
-		protected virtual void AddInterceptor(InterceptorReference interceptorRef, InterceptorReferenceCollection interceptors)
-		{
-			interceptors.Add(interceptorRef);
-		}
+    protected virtual void CollectFromConfiguration(ComponentModel model)
+    {
+        var interceptors = model.Configuration?.Children["interceptors"];
+        if (interceptors == null)
+        {
+            return;
+        }
 
-		protected virtual void CollectFromAttributes(ComponentModel model)
-		{
-			var attributes = model.Implementation.GetAttributes<InterceptorAttribute>(true);
-			foreach (var attribute in attributes)
-			{
-				AddInterceptor(attribute.Interceptor, model.Interceptors);
-			}
-		}
+        CollectInterceptors(model, interceptors);
+        var options = model.ObtainProxyOptions();
+        CollectSelector(interceptors, options);
+        CollectHook(interceptors, options);
+    }
 
-		protected virtual void CollectFromConfiguration(ComponentModel model)
-		{
-			if (model.Configuration == null)
-			{
-				return;
-			}
+    protected virtual void CollectHook(IConfiguration interceptors, ProxyOptions options)
+    {
+        var hook = interceptors.Attributes["hook"];
+        if (hook == null)
+        {
+            return;
+        }
 
-			var interceptors = model.Configuration.Children["interceptors"];
-			if (interceptors == null)
-			{
-				return;
-			}
+        var hookComponent = ReferenceExpressionUtil.ExtractComponentName(hook);
+        if (hookComponent == null)
+        {
+            throw new Exception(
+                $"The value for the hook must be a reference to a component (Currently {hook})");
+        }
 
-			CollectInterceptors(model, interceptors);
-			var options = model.ObtainProxyOptions();
-			CollectSelector(interceptors, options);
-			CollectHook(interceptors, options);
-		}
+        options.Hook = new ComponentReference<IProxyGenerationHook>(hookComponent);
+    }
 
-		protected virtual void CollectHook(IConfiguration interceptors, ProxyOptions options)
-		{
-			var hook = interceptors.Attributes["hook"];
-			if (hook == null)
-			{
-				return;
-			}
+    protected virtual void CollectSelector(IConfiguration interceptors, ProxyOptions options)
+    {
+        var selector = interceptors.Attributes["selector"];
+        if (selector == null)
+        {
+            return;
+        }
 
-			var hookComponent = ReferenceExpressionUtil.ExtractComponentName(hook);
-			if (hookComponent == null)
-			{
-				throw new Exception(
-					String.Format("The value for the hook must be a reference to a component (Currently {0})", hook));
-			}
+        var selectorComponent = ReferenceExpressionUtil.ExtractComponentName(selector);
+        if (selectorComponent == null)
+        {
+            throw new Exception(
+                $"The value for the selector must be a reference to a component (Currently {selector})");
+        }
 
-			options.Hook = new ComponentReference<IProxyGenerationHook>(hookComponent);
-		}
+        options.Selector = new ComponentReference<IInterceptorSelector>(selectorComponent);
+    }
 
-		protected virtual void CollectSelector(IConfiguration interceptors, ProxyOptions options)
-		{
-			var selector = interceptors.Attributes["selector"];
-			if (selector == null)
-			{
-				return;
-			}
+    private static void CollectInterceptors(ComponentModel model, IConfiguration interceptors)
+    {
+        foreach (var interceptor in interceptors.Children)
+        {
+            var interceptorComponent = ReferenceExpressionUtil.ExtractComponentName(interceptor.Value);
+            if (interceptorComponent == null)
+            {
+                throw new Exception(
+                    $"The value for the interceptor must be a reference to a component (Currently {interceptor.Value})");
+            }
 
-			var selectorComponent = ReferenceExpressionUtil.ExtractComponentName(selector);
-			if (selectorComponent == null)
-			{
-				throw new Exception(
-					String.Format("The value for the selector must be a reference to a component (Currently {0})", selector));
-			}
+            var reference = new InterceptorReference(interceptorComponent);
 
-			options.Selector = new ComponentReference<IInterceptorSelector>(selectorComponent);
-		}
-
-		private void CollectInterceptors(ComponentModel model, IConfiguration interceptors)
-		{
-			foreach (var interceptor in interceptors.Children)
-			{
-				var interceptorComponent = ReferenceExpressionUtil.ExtractComponentName(interceptor.Value);
-				if (interceptorComponent == null)
-				{
-					throw new Exception(
-						String.Format("The value for the interceptor must be a reference to a component (Currently {0})", interceptor.Value));
-				}
-
-				var reference = new InterceptorReference(interceptorComponent);
-
-				model.Interceptors.Add(reference);
-			}
-		}
-	}
+            model.Interceptors.Add(reference);
+        }
+    }
 }

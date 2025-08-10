@@ -12,12 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.Components;
+
+[UsedImplicitly]
+public class CompB
 {
-	public class CompB
-	{
-		public CompB(CompC compC)
-		{
-		}
-	}
+    public CompB(CompC compC)
+    {
+    }
 }

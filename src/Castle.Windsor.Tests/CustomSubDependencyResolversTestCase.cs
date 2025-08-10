@@ -12,42 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.ContainerExtensions;
+
+namespace Castle.Windsor.Tests;
+
+public class CustomSubDependencyResolversTestCase : AbstractContainerTestCase
 {
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Handlers;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.Components;
+    [Fact]
+    public void Can_detect_dependency_cycle_introduced_by_poorly_implemented_subresolver()
+    {
+        Kernel.Resolver.AddSubResolver(new BadDependencyResolver(Kernel));
+        Container
+            .Register(
+                Component.For<IItemService>().ImplementedBy<ItemService>(),
+                Component.For<IBookStore>().ImplementedBy<BookStore>()
+            );
+        Assert.Throws<CircularDependencyException>(() => Container.Resolve<IItemService>());
+    }
 
-	using CastleTests.ContainerExtensions;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class CustomSubDependencyResolversTestCase : AbstractContainerTestCase
-	{
-		[Test]
-		public void Can_detect_dependency_cycle_introduced_by_poorly_implemented_subresolver()
-		{
-			Kernel.Resolver.AddSubResolver(new BadDependencyResolver(Kernel));
-			Container
-				.Register(
-					Component.For<IItemService>().ImplementedBy<ItemService>(),
-					Component.For<IBookStore>().ImplementedBy<BookStore>()
-				);
-			Assert.Throws<CircularDependencyException>(() => Container.Resolve<IItemService>());
-		}
-
-		[Test]
-		public void Can_detect_waiting_dependency_pointed_to_by_sub_resolver()
-		{
-			Kernel.Resolver.AddSubResolver(new GoodDependencyResolver());
-			Container
-				.Register(
-					Component.For<IItemService>().ImplementedBy<ItemService>(),
-					Component.For<IBookStore>().ImplementedBy<BookStore>()
-				);
-			Assert.Throws<CircularDependencyException>(() => Container.Resolve<IItemService>());
-		}
-	}
+    [Fact]
+    public void Can_detect_waiting_dependency_pointed_to_by_sub_resolver()
+    {
+        Kernel.Resolver.AddSubResolver(new GoodDependencyResolver());
+        Container
+            .Register(
+                Component.For<IItemService>().ImplementedBy<ItemService>(),
+                Component.For<IBookStore>().ImplementedBy<BookStore>()
+            );
+        Assert.Throws<CircularDependencyException>(() => Container.Resolve<IItemService>());
+    }
 }

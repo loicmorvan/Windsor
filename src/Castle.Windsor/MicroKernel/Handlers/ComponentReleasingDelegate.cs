@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers
-{
-	public delegate void ComponentReleasingDelegate(IKernel kernel);
-}
+namespace Castle.Windsor.MicroKernel.Handlers;
+
+public delegate void ComponentReleasingDelegate(IKernel kernel);

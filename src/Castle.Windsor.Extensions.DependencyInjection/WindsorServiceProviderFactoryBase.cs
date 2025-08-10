@@ -13,125 +13,138 @@
 // limitations under the License.
 
 
-namespace Castle.Windsor.Extensions.DependencyInjection
+using System.Diagnostics;
+using Castle.Windsor.Extensions.DependencyInjection.Extensions;
+using Castle.Windsor.Extensions.DependencyInjection.Resolvers;
+using Castle.Windsor.Extensions.DependencyInjection.Scope;
+using Castle.Windsor.Extensions.DependencyInjection.SubSystems;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Windsor;
+using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Castle.Windsor.Extensions.DependencyInjection;
+
+public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactory<IWindsorContainer>
 {
-	using System;
+    private IWindsorContainer _rootContainer;
+    private ExtensionContainerRootScope _rootScope;
 
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Extensions.DependencyInjection.Extensions;
-	using Castle.Windsor.Extensions.DependencyInjection.Resolvers;
-	using Castle.Windsor.Extensions.DependencyInjection.Scope;
+    [PublicAPI]
+    public virtual IWindsorContainer Container => _rootContainer;
 
-	using Microsoft.Extensions.DependencyInjection;
+    public virtual IWindsorContainer CreateBuilder(IServiceCollection services)
+    {
+        return BuildContainer(services, _rootContainer);
+    }
 
-	public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactory<IWindsorContainer>
-	{
-		internal ExtensionContainerRootScope rootScope;
-		protected IWindsorContainer rootContainer;
+    public virtual IServiceProvider CreateServiceProvider(IWindsorContainer container)
+    {
+        return container.Resolve<IServiceProvider>();
+    }
 
-		public virtual IWindsorContainer Container => rootContainer;
+    [PublicAPI]
+    protected virtual void CreateRootScope()
+    {
+        _rootScope = ExtensionContainerRootScope.BeginRootScope();
+    }
 
-		public virtual IWindsorContainer CreateBuilder(IServiceCollection services)
-		{
-			return BuildContainer(services, rootContainer);
-		}
+    [PublicAPI]
+    protected virtual void CreateRootContainer()
+    {
+        SetRootContainer(new WindsorContainer());
+    }
 
-		public virtual IServiceProvider CreateServiceProvider(IWindsorContainer container)
-		{
-			return container.Resolve<IServiceProvider>();
-		}
+    [PublicAPI]
+    protected virtual void SetRootContainer(IWindsorContainer container)
+    {
+        _rootContainer = container;
+        AddSubSystemToContainer(_rootContainer);
+    }
 
-		protected virtual void CreateRootScope()
-		{
-			rootScope = ExtensionContainerRootScope.BeginRootScope();
-		}
+    [PublicAPI]
+    protected virtual void AddSubSystemToContainer(IWindsorContainer container)
+    {
+        container.Kernel.AddSubSystem(
+            SubSystemConstants.NamingKey,
+            new DependencyInjectionNamingSubsystem()
+        );
+    }
 
-		protected virtual void CreateRootContainer()
-		{
-			SetRootContainer(new WindsorContainer());
-		}
+    [PublicAPI]
+    protected virtual IWindsorContainer BuildContainer(IServiceCollection serviceCollection,
+        IWindsorContainer windsorContainer)
+    {
+        if (_rootContainer is null)
+        {
+            CreateRootContainer();
+        }
 
-		protected virtual void SetRootContainer(IWindsorContainer container)
-		{
-			rootContainer = container;
-			AddSubSystemToContainer(rootContainer);
-		}
+        Debug.Assert(_rootContainer is not null, "Could not initialize container");
 
-		protected virtual void AddSubSystemToContainer(IWindsorContainer container)
-		{
-			container.Kernel.AddSubSystem(
-				SubSystemConstants.NamingKey,
-				new SubSystems.DependencyInjectionNamingSubsystem()
-			);
-		}
+        if (serviceCollection == null)
+        {
+            return _rootContainer;
+        }
 
-		protected virtual IWindsorContainer BuildContainer(IServiceCollection serviceCollection, IWindsorContainer windsorContainer)
-		{
-			if (rootContainer == null)
-			{
-				CreateRootContainer();
-			}
-			if (rootContainer == null) throw new ArgumentNullException("Could not initialize container");
+        RegisterContainer(_rootContainer);
+        RegisterProviders(_rootContainer);
+        RegisterFactories(_rootContainer);
 
-			if (serviceCollection == null)
-			{
-				return rootContainer;
-			}
+        AddSubResolvers();
 
-			RegisterContainer(rootContainer);
-			RegisterProviders(rootContainer);
-			RegisterFactories(rootContainer);
+        RegisterServiceCollection(serviceCollection, windsorContainer);
 
-			AddSubResolvers();
+        return _rootContainer;
+    }
 
-			RegisterServiceCollection(serviceCollection, windsorContainer);
+    [PublicAPI]
+    protected virtual void RegisterContainer(IWindsorContainer container)
+    {
+        container.Register(
+            Component
+                .For<IWindsorContainer>()
+                .Instance(container));
+    }
 
-			return rootContainer;
-		}
+    [PublicAPI]
+    protected virtual void RegisterProviders(IWindsorContainer container)
+    {
+        container.Register(Component
+            .For<IServiceProvider, ISupportRequiredService>()
+            .ImplementedBy<WindsorScopedServiceProvider>()
+            .LifeStyle.ScopedToNetServiceScope());
+    }
 
-		protected virtual void RegisterContainer(IWindsorContainer container)
-		{
-			container.Register(
-				Component
-					.For<IWindsorContainer>()
-					.Instance(container));
-		}
+    [PublicAPI]
+    protected virtual void RegisterFactories(IWindsorContainer container)
+    {
+        container.Register(Component
+                .For<IServiceScopeFactory>()
+                .ImplementedBy<WindsorScopeFactory>()
+                .DependsOn(Dependency.OnValue<ExtensionContainerRootScope>(_rootScope))
+                .LifestyleSingleton(),
+            Component
+                .For<IServiceProviderFactory<IWindsorContainer>>()
+                .Instance(this)
+                .LifestyleSingleton());
+    }
 
-		protected virtual void RegisterProviders(IWindsorContainer container)
-		{
-			container.Register(Component
-				.For<IServiceProvider, ISupportRequiredService>()
-				.ImplementedBy<WindsorScopedServiceProvider>()
-				.LifeStyle.ScopedToNetServiceScope());
-		}
+    [PublicAPI]
+    protected virtual void RegisterServiceCollection(IServiceCollection serviceCollection, IWindsorContainer container)
+    {
+        foreach (var service in serviceCollection)
+        {
+            _rootContainer.Register(service.CreateWindsorRegistration());
+        }
+    }
 
-		protected virtual void RegisterFactories(IWindsorContainer container)
-		{
-			container.Register(Component
-					.For<IServiceScopeFactory>()
-					.ImplementedBy<WindsorScopeFactory>()
-					.DependsOn(Dependency.OnValue<ExtensionContainerRootScope>(rootScope))
-					.LifestyleSingleton(),
-				Component
-					.For<IServiceProviderFactory<IWindsorContainer>>()
-					.Instance(this)
-					.LifestyleSingleton());
-		}
-
-		protected virtual void RegisterServiceCollection(IServiceCollection serviceCollection,IWindsorContainer container)
-		{
-			foreach (var service in serviceCollection)
-			{
-				rootContainer.Register(service.CreateWindsorRegistration());
-			}
-		}
-
-		protected virtual void AddSubResolvers()
-		{
-			rootContainer.Kernel.Resolver.AddSubResolver(new RegisteredCollectionResolver(rootContainer.Kernel));
-			rootContainer.Kernel.Resolver.AddSubResolver(new OptionsSubResolver(rootContainer.Kernel));
-			rootContainer.Kernel.Resolver.AddSubResolver(new LoggerDependencyResolver(rootContainer.Kernel));
-		}
-	}
+    [PublicAPI]
+    protected virtual void AddSubResolvers()
+    {
+        _rootContainer.Kernel.Resolver.AddSubResolver(new RegisteredCollectionResolver(_rootContainer.Kernel));
+        _rootContainer.Kernel.Resolver.AddSubResolver(new OptionsSubResolver(_rootContainer.Kernel));
+        _rootContainer.Kernel.Resolver.AddSubResolver(new LoggerDependencyResolver(_rootContainer.Kernel));
+    }
 }

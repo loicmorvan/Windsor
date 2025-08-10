@@ -12,21 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+using Castle.Windsor.Tests.Facilities.TypedFactory;
+
+namespace Castle.Windsor.Tests.Components;
+
+public sealed class SimpleServiceDisposable(LifecycleCounter lifecycleCounter) : ISimpleService, IDisposable
 {
-	using System;
+    public void Dispose()
+    {
+        lifecycleCounter.Increment();
+    }
 
-	public class SimpleServiceDisposable : ISimpleService, IDisposable
-	{
-		public static int DisposedCount;
-
-		public void Dispose()
-		{
-			DisposedCount++;
-		}
-
-		public void Operation()
-		{
-		}
-	}
+    public void Operation()
+    {
+    }
 }

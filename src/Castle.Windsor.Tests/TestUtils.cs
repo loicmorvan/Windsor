@@ -12,55 +12,53 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+using System.Runtime.ExceptionServices;
+using System.Text;
+using System.Text.RegularExpressions;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests;
+
+public static class TestUtils
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Runtime.ExceptionServices;
-	using System.Text;
-	using System.Text.RegularExpressions;
+    public static void AssertNoFirstChanceExceptions([InstantHandle] Action action)
+    {
+        var firstChanceExceptions = new List<Exception>();
 
-	using NUnit.Framework;
+        var handler = new EventHandler<FirstChanceExceptionEventArgs>((_, e) =>
+            firstChanceExceptions.Add(e.Exception));
 
-	public static class TestUtils
-	{
-		public static void AssertNoFirstChanceExceptions(Action action)
-		{
-			var firstChanceExceptions = new List<Exception>();
+        AppDomain.CurrentDomain.FirstChanceException += handler;
+        try
+        {
+            action.Invoke();
+        }
+        finally
+        {
+            AppDomain.CurrentDomain.FirstChanceException -= handler;
+        }
 
-			var handler = new EventHandler<FirstChanceExceptionEventArgs>((sender, e) =>
-				firstChanceExceptions.Add(e.Exception));
+        if (!firstChanceExceptions.Any())
+        {
+            return;
+        }
 
-			AppDomain.CurrentDomain.FirstChanceException += handler;
-			try
-			{
-				action.Invoke();
-			}
-			finally
-			{
-				AppDomain.CurrentDomain.FirstChanceException -= handler;
-			}
+        var message = new StringBuilder();
+        for (var i = 0; i < firstChanceExceptions.Count; i++)
+        {
+            message.Append("First-chance exception ").Append(i + 1).Append(" of ")
+                .Append(firstChanceExceptions.Count).AppendLine(":");
+            message.AppendLine(firstChanceExceptions[i].ToString());
+            message.AppendLine();
+        }
 
-			if (firstChanceExceptions.Any())
-			{
-				var message = new StringBuilder();
-				for (var i = 0; i < firstChanceExceptions.Count; i++)
-				{
-					message.Append("First-chance exception ").Append(i + 1).Append(" of ").Append(firstChanceExceptions.Count).AppendLine(":");
-					message.AppendLine(firstChanceExceptions[i].ToString());
-					message.AppendLine();
-				}
+        message.Append("Expected: no first-chance exceptions.");
 
-				message.Append("Expected: no first-chance exceptions.");
+        Assert.Fail(message.ToString());
+    }
 
-				Assert.Fail(message.ToString());
-			}
-		}
-
-		public static string ConvertToEnvironmentLineEndings(this string value)
-		{
-			return Regex.Replace(value, @"\r?\n", Environment.NewLine);
-		}
-	}
+    public static string ConvertToEnvironmentLineEndings(this string value)
+    {
+        return Regex.Replace(value, @"\r?\n", Environment.NewLine);
+    }
 }

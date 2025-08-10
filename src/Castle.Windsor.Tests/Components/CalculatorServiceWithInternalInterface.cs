@@ -12,34 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+using Castle.DynamicProxy;
+using Castle.Windsor.Core;
+
+namespace Castle.Windsor.Tests.Components;
+
+[Interceptor(typeof(StandardInterceptor))]
+public class CalculatorServiceWithInternalInterface : ICalcService, IInternal
 {
-	using System;
+    public bool Disposed => throw new NotImplementedException();
 
-	using Castle.Core;
-	using Castle.DynamicProxy;
+    public bool Initialized => throw new NotImplementedException();
 
-	[Interceptor(typeof(StandardInterceptor))]
-	public class CalculatorServiceWithInternalInterface : ICalcService, IInternal
-	{
-		public bool Disposed
-		{
-			get { throw new NotImplementedException(); }
-		}
+    public int Sum(int x, int y)
+    {
+        throw new NotImplementedException();
+    }
 
-		public bool Initialized
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public int Sum(int x, int y)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Do()
-		{
-			throw new NotImplementedException();
-		}
-	}
+    public void Do()
+    {
+        throw new NotImplementedException();
+    }
 }

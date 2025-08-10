@@ -12,29 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.ContainerExtensions
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.ContainerExtensions;
+
+public class GoodDependencyResolver : ISubDependencyResolver
 {
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Context;
-	using Castle.Windsor.Tests.Components;
+    public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+        DependencyModel dependency)
+    {
+        return dependency.TargetType == typeof(IBookStore) && contextHandlerResolver.CanResolve(context,
+            contextHandlerResolver, model,
+            new DependencyModel(typeof(IBookStore).FullName,
+                typeof(IBookStore), false));
+    }
 
-	public class GoodDependencyResolver : ISubDependencyResolver
-	{
-		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
-		                       DependencyModel dependency)
-		{
-			return dependency.TargetType == typeof(IBookStore) && contextHandlerResolver.CanResolve(context, contextHandlerResolver, model,
-			                                                                                        new DependencyModel(typeof(IBookStore).FullName,
-			                                                                                                            typeof(IBookStore), false));
-		}
-
-		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
-		                      DependencyModel dependency)
-		{
-			return contextHandlerResolver.Resolve(context, contextHandlerResolver, model,
-			                                      new DependencyModel(typeof(IBookStore).FullName,
-			                                                          typeof(IBookStore), false));
-		}
-	}
+    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+        DependencyModel dependency)
+    {
+        return contextHandlerResolver.Resolve(context, contextHandlerResolver, model,
+            new DependencyModel(typeof(IBookStore).FullName,
+                typeof(IBookStore), false));
+    }
 }

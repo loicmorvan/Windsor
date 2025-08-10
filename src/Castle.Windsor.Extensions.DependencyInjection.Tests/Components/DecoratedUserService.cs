@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Tests.Components
-{
-	public class DecoratedUserService : UserService
-	{
-		public IUserService UserService { get; }
+namespace Castle.Windsor.Extensions.DependencyInjection.Tests.Components;
 
-		public DecoratedUserService(IUserService userService)
-		{
-			UserService = userService;
-		}
-	}
+public class DecoratedUserService : UserService
+{
+    public DecoratedUserService(IUserService userService)
+    {
+        UserService = userService;
+    }
+
+    public IUserService UserService { get; }
 }

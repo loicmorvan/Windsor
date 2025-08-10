@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using Castle.Core;
-	using Castle.DynamicProxy;
+using Castle.DynamicProxy;
+using Castle.Windsor.Core;
 
-	[Interceptor(typeof(StandardInterceptor))]
-	public class CalculatorFactory
-	{
-		public virtual ICalcService Create()
-		{
-			return new CalculatorService();
-		}
-	}
+namespace Castle.Windsor.Tests.Components;
+
+[Interceptor(typeof(StandardInterceptor))]
+public class CalculatorFactory
+{
+    public virtual ICalcService Create()
+    {
+        return new CalculatorService();
+    }
 }

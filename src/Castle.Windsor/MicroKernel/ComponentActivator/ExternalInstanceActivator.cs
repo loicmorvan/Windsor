@@ -12,37 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ComponentActivator
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Context;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.MicroKernel.ComponentActivator;
+
+[PublicAPI]
+public class ExternalInstanceActivator : AbstractComponentActivator, IDependencyAwareActivator
 {
-	using Castle.Core;
-	using Castle.MicroKernel.Context;
+    public ExternalInstanceActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation,
+        ComponentInstanceDelegate onDestruction)
+        : base(model, kernel, onCreation, onDestruction)
+    {
+    }
 
-	public class ExternalInstanceActivator : AbstractComponentActivator, IDependencyAwareActivator
-	{
-		public ExternalInstanceActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
-			: base(model, kernel, onCreation, onDestruction)
-		{
-		}
+    public bool CanProvideRequiredDependencies(ComponentModel component)
+    {
+        //we already have an instance so we don't need to provide any dependencies at all
+        return true;
+    }
 
-		public bool CanProvideRequiredDependencies(ComponentModel component)
-		{
-			//we already have an instance so we don't need to provide any dependencies at all
-			return true;
-		}
+    public bool IsManagedExternally(ComponentModel component)
+    {
+        return true;
+    }
 
-		public bool IsManagedExternally(ComponentModel component)
-		{
-			return true;
-		}
+    protected override object InternalCreate(CreationContext context)
+    {
+        return Model.ExtendedProperties["instance"];
+    }
 
-		protected override object InternalCreate(CreationContext context)
-		{
-			return Model.ExtendedProperties["instance"];
-		}
-
-		protected override void InternalDestroy(object instance)
-		{
-			// Nothing to do
-		}
-	}
+    protected override void InternalDestroy(object instance)
+    {
+        // Nothing to do
+    }
 }

@@ -12,98 +12,91 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Diagnostics
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Windsor;
+using Castle.Windsor.Windsor.Diagnostics;
+
+namespace Castle.Windsor.Tests.Diagnostics;
+
+public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 {
-	using System.Linq;
+    private IAllComponentsDiagnostic _diagnostic;
 
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Tests.ClassComponents;
-	using Castle.Windsor;
-	using Castle.Windsor.Diagnostics;
+    protected override void AfterContainerCreated()
+    {
+        var host = (IDiagnosticsHost)Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
+        _diagnostic = host.GetDiagnostic<IAllComponentsDiagnostic>();
+    }
 
-	using CastleTests.ClassComponents;
-	using CastleTests.Components;
+    [Fact]
+    public void Doesnt_include_closed_versions_of_generic_handler()
+    {
+        Container.Register(Component.For(typeof(GenericImpl1<>)));
+        Container.Resolve<GenericImpl1<A>>();
+        Container.Resolve<GenericImpl1<B>>();
 
-	using NUnit.Framework;
-	
-	public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
-	{
-		private IAllComponentsDiagnostic diagnostic;
+        var handlers = _diagnostic.Inspect();
 
-		protected override void AfterContainerCreated()
-		{
-			var host = (IDiagnosticsHost)Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
-			diagnostic = host.GetDiagnostic<IAllComponentsDiagnostic>();
-		}
+        Assert.Single(handlers);
+    }
 
-		[Test]
-		public void Doesnt_include_closed_versions_of_generic_handler()
-		{
-			Container.Register(Component.For(typeof(GenericImpl1<>)));
-			Container.Resolve<GenericImpl1<A>>();
-			Container.Resolve<GenericImpl1<B>>();
+    [Fact]
+    public void Shows_also_components_from_parent_container()
+    {
+        var parent = new WindsorContainer();
+        parent.Register(Component.For<A>(),
+            Component.For<B>());
+        Container.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)),
+            Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)));
 
-			var handlers = diagnostic.Inspect();
+        parent.AddChildContainer(Container);
 
-			Assert.AreEqual(1, handlers.Length);
-		}
+        var handlers = _diagnostic.Inspect();
 
-		[Test]
-		public void Shows_also_components_from_parent_container()
-		{
-			var parent = new WindsorContainer();
-			parent.Register(Component.For<A>(),
-			                Component.For<B>());
-			Container.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)),
-			                   Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)));
+        Assert.Equal(4, handlers.Length);
+    }
 
-			parent.AddChildContainer(Container);
+    [Fact]
+    public void Works_with_empty_container()
+    {
+        var handlers = _diagnostic.Inspect();
 
-			var handlers = diagnostic.Inspect();
+        Assert.Empty(handlers);
+    }
 
-			Assert.AreEqual(4, handlers.Length);
-		}
+    [Fact]
+    public void Works_with_generic_handlers()
+    {
+        Container.Register(Component.For(typeof(GenericImpl1<>)));
 
-		[Test]
-		public void Works_with_empty_container()
-		{
-			var handlers = diagnostic.Inspect();
+        var handlers = _diagnostic.Inspect();
 
-			Assert.IsEmpty(handlers);
-		}
+        Assert.Single(handlers);
+    }
 
-		[Test]
-		public void Works_with_generic_handlers()
-		{
-			Container.Register(Component.For(typeof(GenericImpl1<>)));
+    [Fact]
+    public void Works_with_multi_service_components()
+    {
+        Container.Register(Component.For<IEmptyService, EmptyServiceA>()
+            .ImplementedBy<EmptyServiceA>());
 
-			var handlers = diagnostic.Inspect();
+        var handlers = _diagnostic.Inspect();
 
-			Assert.AreEqual(1, handlers.Length);
-		}
+        Assert.Single(handlers);
+        Assert.Equal(2, handlers[0].ComponentModel.Services.Count());
+    }
 
-		[Test]
-		public void Works_with_multi_service_components()
-		{
-			Container.Register(Component.For<IEmptyService, EmptyServiceA>()
-			                   	.ImplementedBy<EmptyServiceA>());
+    [Fact]
+    public void Works_with_multiple_handlers_for_given_type()
+    {
+        Container.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)),
+            Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)));
 
-			var handlers = diagnostic.Inspect();
+        var handlers = _diagnostic.Inspect();
 
-			Assert.AreEqual(1, handlers.Length);
-			Assert.AreEqual(2, handlers[0].ComponentModel.Services.Count());
-		}
-
-		[Test]
-		public void Works_with_multiple_handlers_for_given_type()
-		{
-			Container.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)),
-			                   Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)));
-
-			var handlers = diagnostic.Inspect();
-
-			Assert.AreEqual(2, handlers.Length);
-		}
-	}
+        Assert.Equal(2, handlers.Length);
+    }
 }

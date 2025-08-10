@@ -12,14 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Internal
-{
-	using System.ComponentModel;
+using System.ComponentModel;
+using JetBrains.Annotations;
 
-	[EditorBrowsable(EditorBrowsableState.Never)]
-	public interface IUpgradeableLockHolder : ILockHolder
-	{
-		ILockHolder Upgrade();
-		ILockHolder Upgrade(bool waitForLock);
-	}
+namespace Castle.Windsor.MicroKernel.Internal;
+
+[EditorBrowsable(EditorBrowsableState.Never)]
+public interface IUpgradeableLockHolder : ILockHolder
+{
+    [PublicAPI]
+    ILockHolder Upgrade();
+
+    [PublicAPI]
+    ILockHolder Upgrade(bool waitForLock);
 }

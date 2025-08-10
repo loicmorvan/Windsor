@@ -12,36 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
+using System.Collections;
+using System.Collections.ObjectModel;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Core;
+
+/// <summary>Collection of <see cref="MethodMetaModel" /></summary>
+[Serializable]
+public class MethodMetaModelCollection : Collection<MethodMetaModel>
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
+    private IDictionary _methodInfo2Model;
 
-	/// <summary>
-	///   Collection of <see cref = "MethodMetaModel" />
-	/// </summary>
-	[Serializable]
-	public class MethodMetaModelCollection : Collection<MethodMetaModel>
-	{
-		private IDictionary methodInfo2Model;
-
-		/// <summary>
-		///   Gets the method info2 model.
-		/// </summary>
-		/// <value>The method info2 model.</value>
-		public IDictionary MethodInfo2Model
-		{
-			get
-			{
-				if (methodInfo2Model == null)
-				{
-					methodInfo2Model = new Dictionary<object, object>();
-				}
-
-				return methodInfo2Model;
-			}
-		}
-	}
+    /// <summary>Gets the method info2 model.</summary>
+    /// <value>The method info2 model.</value>
+    [PublicAPI]
+    public IDictionary MethodInfo2Model => _methodInfo2Model ??= new Dictionary<object, object>();
 }

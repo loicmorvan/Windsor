@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration
-{
-	using Castle.MicroKernel.Handlers;
+using Castle.Windsor.MicroKernel.Handlers;
 
-	public delegate ComponentReleasingDelegate DynamicParametersResolveDelegate(IKernel kernel, Arguments arguments);
-}
+namespace Castle.Windsor.MicroKernel.Registration;
+
+public delegate ComponentReleasingDelegate DynamicParametersResolveDelegate(IKernel kernel, Arguments arguments);

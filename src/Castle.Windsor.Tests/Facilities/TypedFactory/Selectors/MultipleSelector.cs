@@ -12,19 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Selectors
+using System.Reflection;
+using Castle.Windsor.Facilities.TypedFactory;
+using Castle.Windsor.MicroKernel;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
+
+public class MultipleSelector : ITypedFactoryComponentSelector
 {
-	using System;
-	using System.Reflection;
-
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel;
-
-	public class MultipleSelector : ITypedFactoryComponentSelector
-	{
-		public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method, Type type, object[] arguments)
-		{
-			return (k, c) => k.ResolveAll(method.ReturnType, null, c);
-		}
-	}
+    public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method,
+        object[] arguments)
+    {
+        return (k, c) => k.ResolveAll(method.ReturnType, null, c);
+    }
 }

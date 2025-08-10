@@ -12,25 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using System;
-	using System.Text;
+using System.Text;
 
-	public class GenericToStringServiceImpl<T> :
-#if FEATURE_REMOTING
-		MarshalByRefObject, 
-#endif
-		IGenericToStringService<T> where T : class
-	{
-		public string ToString(params T[] instances)
-		{
-			var result = new StringBuilder();
-			foreach (var instance in instances)
-			{
-				result.Append(instance.ToString());
-			}
-			return result.ToString();
-		}
-	}
+namespace Castle.Windsor.Tests.Components;
+
+public class GenericToStringServiceImpl<T> :
+    IGenericToStringService<T> where T : class
+{
+    public string ToString(params T[] instances)
+    {
+        var result = new StringBuilder();
+        foreach (var instance in instances)
+        {
+            result.Append(instance);
+        }
+
+        return result.ToString();
+    }
 }

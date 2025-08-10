@@ -12,18 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace Castle.Windsor.Tests;
+
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+public class BugAttribute(string bugId) : Attribute
 {
-	using System;
-
-	[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-	public class BugAttribute : Attribute
-	{
-		public BugAttribute(string bugId)
-		{
-			BugId = bugId;
-		}
-
-		public string BugId { get; set; }
-	}
+    // ReSharper disable once UnusedMember.Global
+    public string BugId { get; set; } = bugId;
 }

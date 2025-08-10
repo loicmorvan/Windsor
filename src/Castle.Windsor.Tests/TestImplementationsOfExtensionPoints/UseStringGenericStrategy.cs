@@ -1,16 +1,13 @@
-namespace CastleTests.TestImplementationsOfExtensionPoints
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Handlers;
+
+namespace Castle.Windsor.Tests.TestImplementationsOfExtensionPoints;
+
+public class UseStringGenericStrategy : IGenericImplementationMatchingStrategy
 {
-	using System;
-
-	using Castle.Core;
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Handlers;
-
-	public class UseStringGenericStrategy : IGenericImplementationMatchingStrategy
-	{
-		public Type[] GetGenericArguments(ComponentModel model, CreationContext context)
-		{
-			return new[] { typeof(string) };
-		}
-	}
+    public Type[] GetGenericArguments(ComponentModel model, CreationContext context)
+    {
+        return [typeof(string)];
+    }
 }

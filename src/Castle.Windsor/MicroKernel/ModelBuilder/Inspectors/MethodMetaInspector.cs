@@ -12,200 +12,181 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors
+using System.Globalization;
+using System.Reflection;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.SubSystems.Conversion;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
+
+/// <summary>
+///     Base for inspectors that want configuration associated with methods. For each child a
+///     <see cref="MethodMetaModel" /> is created and added to ComponentModel's methods collection
+/// </summary>
+/// <remarks>
+///     Implementors should override the <see cref="ObtainNodeName" /> return the name of the node to be inspected. For
+///     example:
+///     <code>
+///     <![CDATA[
+///   <transactions>
+///     <method name="Save" transaction="requires" />
+///   </transactions>
+/// ]]>
+///   </code>
+/// </remarks>
+[PublicAPI]
+public abstract class MethodMetaInspector : IContributeComponentModelConstruction
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
-	using System.Reflection;
+    private static readonly BindingFlags AllMethods =
+        BindingFlags.Public | BindingFlags.NonPublic |
+        BindingFlags.Instance | BindingFlags.Static |
+        BindingFlags.IgnoreCase;
 
-	using Castle.Core;
-	using Castle.MicroKernel.SubSystems.Conversion;
+    private ITypeConverter _converter;
 
-	/// <summary>
-	///   Base for inspectors that want configuration associated with methods.
-	///   For each child a <see cref = "MethodMetaModel" /> is created
-	///   and added to ComponentModel's methods collection
-	/// </summary>
-	/// <remarks>
-	///   Implementors should override the <see cref = "ObtainNodeName" /> return
-	///   the name of the node to be inspected. For example:
-	///   <code>
-	///     <![CDATA[
-	///   <transactions>
-	///     <method name="Save" transaction="requires" />
-	///   </transactions>
-	/// ]]>
-	///   </code>
-	/// </remarks>
-	public abstract class MethodMetaInspector : IContributeComponentModelConstruction
-	{
-		private static readonly BindingFlags AllMethods =
-			BindingFlags.Public | BindingFlags.NonPublic |
-			BindingFlags.Instance | BindingFlags.Static |
-#if FEATURE_REMOTING
-			BindingFlags.IgnoreReturn |
-#endif
-			BindingFlags.IgnoreCase;
+    protected virtual bool ShouldUseMetaModel => false;
 
-		private ITypeConverter converter;
+    public virtual void ProcessModel(IKernel kernel, ComponentModel model)
+    {
+        ArgumentNullException.ThrowIfNull(model);
 
-		protected virtual bool ShouldUseMetaModel
-		{
-			get { return false; }
-		}
+        if (model.Configuration == null || model.Implementation == null)
+        {
+            return;
+        }
 
-		protected abstract String ObtainNodeName();
+        var methodsNode = model.Configuration.Children[ObtainNodeName()];
 
-		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
-		{
-			if (model == null)
-			{
-				throw new ArgumentNullException(nameof(model));
-			}
+        if (methodsNode == null)
+        {
+            return;
+        }
 
-			if (model.Configuration == null || model.Implementation == null)
-			{
-				return;
-			}
+        EnsureHasReferenceToConverter(kernel);
 
-			var methodsNode = model.Configuration.Children[ObtainNodeName()];
+        foreach (var methodNode in methodsNode.Children)
+        {
+            var name = methodNode.Name;
 
-			if (methodsNode == null)
-			{
-				return;
-			}
+            if ("method".Equals(name))
+            {
+                name = methodNode.Attributes["name"];
+            }
 
-			EnsureHasReferenceToConverter(kernel);
+            AssertNameIsNotNull(name, model);
 
-			foreach (var methodNode in methodsNode.Children)
-			{
-				var name = methodNode.Name;
+            var metaModel = new MethodMetaModel(methodNode);
 
-				if ("method".Equals(name))
-				{
-					name = methodNode.Attributes["name"];
-				}
+            if (!IsValidMeta(model, metaModel))
+            {
+                continue;
+            }
 
-				AssertNameIsNotNull(name, model);
+            if (ShouldUseMetaModel)
+            {
+                // model.MethodMetaModels.Add( metaModel );
+            }
 
-				var metaModel = new MethodMetaModel(methodNode);
+            var signature = methodNode.Attributes["signature"];
 
-				if (IsValidMeta(model, metaModel))
-				{
-					if (ShouldUseMetaModel)
-					{
-						// model.MethodMetaModels.Add( metaModel );
-					}
+            var methods = GetMethods(model.Implementation, name, signature);
 
-					var signature = methodNode.Attributes["signature"];
+            if (methods.Count == 0)
+            {
+                var message = $"The class {model.Implementation.FullName} has tried to expose configuration for " +
+                              $"a method named {name} which could not be found.";
 
-					var methods = GetMethods(model.Implementation, name, signature);
+                throw new Exception(message);
+            }
 
-					if (methods.Count == 0)
-					{
-						var message = String.Format("The class {0} has tried to expose configuration for " +
-						                            "a method named {1} which could not be found.", model.Implementation.FullName, name);
+            ProcessMeta(model, methods, metaModel);
 
-						throw new Exception(message);
-					}
+            if (ShouldUseMetaModel)
+            {
+                // RegisterMethodsForFastAccess(methods, signature, metaModel, model);
+            }
+        }
+    }
 
-					ProcessMeta(model, methods, metaModel);
+    protected abstract string ObtainNodeName();
 
-					if (ShouldUseMetaModel)
-					{
-						// RegisterMethodsForFastAccess(methods, signature, metaModel, model);
-					}
-				}
-			}
-		}
+    protected virtual bool IsValidMeta(ComponentModel model, MethodMetaModel metaModel)
+    {
+        return true;
+    }
 
-		protected virtual bool IsValidMeta(ComponentModel model, MethodMetaModel metaModel)
-		{
-			return true;
-		}
+    protected virtual void ProcessMeta(ComponentModel model, IList<MethodInfo> methods, MethodMetaModel metaModel)
+    {
+    }
 
-		protected virtual void ProcessMeta(ComponentModel model, IList<MethodInfo> methods, MethodMetaModel metaModel)
-		{
-		}
+    private static void AssertNameIsNotNull(string name, ComponentModel model)
+    {
+        if (name != null)
+        {
+            return;
+        }
 
-		private void AssertNameIsNotNull(string name, ComponentModel model)
-		{
-			if (name == null)
-			{
-				var message = String.Format("The configuration nodes within 'methods' " +
-				                            "for the component '{0}' does not have a name. You can either name " +
-				                            "the node as the method name or provide an attribute 'name'", model.Name);
+        var message = "The configuration nodes within 'methods' " +
+                      $"for the component '{model.Name}' does not have a name. You can either name " +
+                      "the node as the method name or provide an attribute 'name'";
 
-				throw new Exception(message);
-			}
-		}
+        throw new Exception(message);
+    }
 
-		private Type[] ConvertSignature(string signature)
-		{
-			var parameters = signature.Split(';');
+    private Type[] ConvertSignature(string signature)
+    {
+        var parameters = signature.Split(';');
 
-			var types = new List<Type>();
+        var types = new List<Type>();
 
-			foreach (var param in parameters)
-			{
-				try
-				{
-					types.Add(converter.PerformConversion<Type>(param));
-				}
-				catch (Exception)
-				{
-					var message = String.Format("The signature {0} contains an entry type {1} " +
-					                            "that could not be converted to System.Type. Check the inner exception for " +
-					                            "details", signature, param);
+        foreach (var param in parameters)
+        {
+            try
+            {
+                types.Add(_converter.PerformConversion<Type>(param));
+            }
+            catch (Exception)
+            {
+                var message = $"The signature {signature} contains an entry type {param} " +
+                              "that could not be converted to System.Type. Check the inner exception for " + "details";
 
-					throw new Exception(message);
-				}
-			}
+                throw new Exception(message);
+            }
+        }
 
-			return types.ToArray();
-		}
+        return types.ToArray();
+    }
 
-		private void EnsureHasReferenceToConverter(IKernel kernel)
-		{
-			if (converter != null)
-			{
-				return;
-			}
+    private void EnsureHasReferenceToConverter(IKernel kernel)
+    {
+        if (_converter != null)
+        {
+            return;
+        }
 
-			converter = (ITypeConverter)
-			            kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
-		}
+        _converter = (ITypeConverter)
+            kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
+    }
 
-		private IList<MethodInfo> GetMethods(Type implementation, String name, String signature)
-		{
-			if (string.IsNullOrEmpty(signature))
-			{
-				var allmethods = implementation.GetMethods(AllMethods);
+    private IList<MethodInfo> GetMethods(Type implementation, string name, string signature)
+    {
+        if (string.IsNullOrEmpty(signature))
+        {
+            var allmethods = implementation.GetMethods(AllMethods);
 
-				var methods = new List<MethodInfo>();
+            return allmethods.Where(method =>
+                    CultureInfo.InvariantCulture.CompareInfo.Compare(method.Name, name, CompareOptions.IgnoreCase) == 0)
+                .ToList();
+        }
 
-				foreach (var method in allmethods)
-				{
-					if (CultureInfo.InvariantCulture.CompareInfo.Compare(method.Name, name, CompareOptions.IgnoreCase) == 0)
-					{
-						methods.Add(method);
-					}
-				}
+        var methodInfo = implementation.GetMethod(name, AllMethods, null, ConvertSignature(signature), null);
 
-				return methods;
-			}
-			else
-			{
-				var methodInfo = implementation.GetMethod(name, AllMethods, null, ConvertSignature(signature), null);
+        if (methodInfo == null)
+        {
+            return Array.Empty<MethodInfo>();
+        }
 
-				if (methodInfo == null)
-				{
-					return new MethodInfo[0];
-				}
-
-				return new List<MethodInfo> { methodInfo };
-			}
-		}
-	}
+        return new List<MethodInfo> { methodInfo };
+    }
 }

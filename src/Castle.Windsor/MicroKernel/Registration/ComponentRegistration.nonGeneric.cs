@@ -12,19 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration
-{
-	using System;
+namespace Castle.Windsor.MicroKernel.Registration;
 
-	/// <summary>
-	///   A non-generic <see cref = "ComponentRegistration{S}" />.
-	///   <para />
-	///   You can create a new registration with the <see cref = "Component" /> factory.
-	/// </summary>
-	public class ComponentRegistration : ComponentRegistration<object>
-	{
-		public ComponentRegistration(params Type[] serviceTypes) : base(serviceTypes)
-		{
-		}
-	}
+/// <summary>
+///     A non-generic <see cref="ComponentRegistration{S}" />.
+///     <para />
+///     You can create a new registration with the <see cref="Component" /> factory.
+/// </summary>
+public class ComponentRegistration : ComponentRegistration<object>
+{
+    public ComponentRegistration(params Type[] serviceTypes) : base(serviceTypes)
+    {
+    }
 }

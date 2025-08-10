@@ -12,27 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.Components;
+
+[UsedImplicitly]
+public class LoggingRepositoryDecorator<T> : IRepository<T>
 {
-	using System;
+    private readonly IRepository<T> _inner;
 
-	public class LoggingRepositoryDecorator<T> : IRepository<T>
-	{
-		public IRepository<T> inner;
+    public LoggingRepositoryDecorator()
+    {
+    }
 
-		public LoggingRepositoryDecorator()
-		{
-		}
+    public LoggingRepositoryDecorator(IRepository<T> inner)
+    {
+        _inner = inner;
+    }
 
-		public LoggingRepositoryDecorator(IRepository<T> inner)
-		{
-			this.inner = inner;
-		}
-
-		public T Get(int id)
-		{
-			Console.WriteLine("Getting {0}", id);
-			return inner.Get(id);
-		}
-	}
+    public T Get(int id)
+    {
+        Console.WriteLine(@"Getting {0}", id);
+        return _inner.Get(id);
+    }
 }

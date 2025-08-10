@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.LifecycleConcerns
-{
-	public delegate void LifecycleActionDelegate<T>(IKernel kernel, T item);
-}
+namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
+
+public delegate void LifecycleActionDelegate<in T>(IKernel kernel, T item);

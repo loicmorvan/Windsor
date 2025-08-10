@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Interceptors
-{
-	public class TestInterceptor3 : CountingInterceptor
-	{
-	}
-}
+namespace Castle.Windsor.Tests.Interceptors;
+
+public class TestInterceptor3 : CountingInterceptor;

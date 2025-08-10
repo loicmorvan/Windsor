@@ -12,99 +12,59 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+
+// ReSharper disable UnusedParameter.Local
+
+namespace Castle.Windsor.Tests;
+
+public class CustomActivatorTestCase : IDisposable
 {
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.Lifecycle;
+    private readonly IKernel _kernel = new DefaultKernel();
 
-	using CastleTests.Components;
+    public void Dispose()
+    {
+        _kernel.Dispose();
+    }
 
-	using NUnit.Framework;
+    [Fact]
+    public void Can_resolve_component_with_primitive_dependency_via_factory()
+    {
+        _kernel.Register(
+            Component.For<ClassWithPrimitiveDependency>()
+                .UsingFactoryMethod(() => new ClassWithPrimitiveDependency(2)));
 
-	[TestFixture]
-	public class CustomActivatorTestCase
-	{
-		private IKernel kernel;
+        _kernel.Resolve<ClassWithPrimitiveDependency>();
+    }
 
-		[Test]
-		public void Can_resolve_component_with_primitive_dependency_via_factory()
-		{
-			kernel.Register(
-				Component.For<ClassWithPrimitiveDependency>()
-					.UsingFactoryMethod(() => new ClassWithPrimitiveDependency(2)));
+    [Fact]
+    public void Can_resolve_component_with_primitive_dependency_via_instance()
+    {
+        _kernel.Register(
+            Component.For<ClassWithPrimitiveDependency>()
+                .Instance(new ClassWithPrimitiveDependency(2)));
 
-			kernel.Resolve<ClassWithPrimitiveDependency>();
-		}
+        _kernel.Resolve<ClassWithPrimitiveDependency>();
+    }
 
-		[Test]
-		public void Can_resolve_component_with_primitive_dependency_via_instance()
-		{
-			kernel.Register(
-				Component.For<ClassWithPrimitiveDependency>()
-					.Instance(new ClassWithPrimitiveDependency(2)));
+    [Fact]
+    public void Can_resolve_component_with_service_dependency_via_factory()
+    {
+        _kernel.Register(
+            Component.For<ClassWithServiceDependency>()
+                .UsingFactoryMethod(() => new ClassWithServiceDependency(null)));
 
-			kernel.Resolve<ClassWithPrimitiveDependency>();
-		}
+        _kernel.Resolve<ClassWithServiceDependency>();
+    }
 
-		[Test]
-		public void Can_resolve_component_with_service_dependency_via_factory()
-		{
-			kernel.Register(
-				Component.For<ClassWithServiceDependency>()
-					.UsingFactoryMethod(() => new ClassWithServiceDependency(null)));
+    [Fact]
+    public void Can_resolve_component_with_service_dependency_via_instance()
+    {
+        _kernel.Register(
+            Component.For<ClassWithServiceDependency>()
+                .Instance(new ClassWithServiceDependency(null)));
 
-			kernel.Resolve<ClassWithServiceDependency>();
-		}
-
-		[Test]
-		public void Can_resolve_component_with_service_dependency_via_instance()
-		{
-			kernel.Register(
-				Component.For<ClassWithServiceDependency>()
-					.Instance(new ClassWithServiceDependency(null)));
-
-			kernel.Resolve<ClassWithServiceDependency>();
-		}
-
-		[SetUp]
-		public void SetUp()
-		{
-			kernel = new DefaultKernel();
-		}
-
-		[TearDown]
-		public void TearDown()
-		{
-			kernel.Dispose();
-		}
-	}
-
-	public class ClassWithPrimitiveDependencyFactory
-	{
-		public ClassWithPrimitiveDependency Create()
-		{
-			return new ClassWithPrimitiveDependency(2);
-		}
-	}
-
-	public class ClassWithPrimitiveDependency
-	{
-		private int dependency;
-
-		public ClassWithPrimitiveDependency(int dependency)
-		{
-			this.dependency = dependency;
-		}
-	}
-
-	public class ClassWithServiceDependency
-	{
-		private IService dependency;
-
-		public ClassWithServiceDependency(IService dependency)
-		{
-			this.dependency = dependency;
-		}
-	}
+        _kernel.Resolve<ClassWithServiceDependency>();
+    }
 }

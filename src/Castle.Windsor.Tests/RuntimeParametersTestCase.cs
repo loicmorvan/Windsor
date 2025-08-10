@@ -12,139 +12,132 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Handlers;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Resolvers;
+using Castle.Windsor.Tests.RuntimeParameters;
+using Castle.Windsor.Windsor.Extensions;
+
+namespace Castle.Windsor.Tests;
+
+public class RuntimeParametersTestCase : AbstractContainerTestCase
 {
-	using System;
-	using System.Collections.Generic;
+    private readonly Dictionary<string, object> _dependencies = new()
+        { { "cc", new CompC(12) }, { "myArgument", "ernst" } };
 
-	using Castle.MicroKernel.Handlers;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Resolvers;
-	using Castle.MicroKernel.Tests.RuntimeParameters;
-	using Castle.Windsor;
+    private void AssertDependencies(CompB compb)
+    {
+        Assert.NotNull(compb);
 
-	using CastleTests;
+        Assert.NotNull(compb.Compc);
+        Assert.True(compb.MyArgument != string.Empty, "MyArgument property should not be empty");
 
-	using NUnit.Framework;
+        Assert.Same(_dependencies["cc"], compb.Compc);
+        Assert.True(
+            "ernst".Equals(compb.MyArgument),
+            $"The MyArgument property of compb should be equal to ernst, found {compb.MyArgument}");
+    }
 
-	[TestFixture]
-	public class RuntimeParametersTestCase : AbstractContainerTestCase
-	{
-		private readonly Dictionary<string, object> dependencies = new Dictionary<string, object> { { "cc", new CompC(12) }, { "myArgument", "ernst" } };
+    [Fact]
+    public void AddingDependencyToServiceWithCustomDependency()
+    {
+        var kernel = new DefaultKernel();
+        kernel.Register(Component.For<NeedClassWithCustomerDependency>(),
+            Component.For<HasCustomDependency>().DependsOn(new Dictionary<object, object> { { "name", new CompA() } }));
 
-		private void AssertDependencies(CompB compb)
-		{
-			Assert.IsNotNull(compb, "Component B should have been resolved");
+        Assert.Equal(HandlerState.Valid, kernel.GetHandler(typeof(HasCustomDependency)).CurrentState);
+        Assert.NotNull(kernel.Resolve<NeedClassWithCustomerDependency>());
+    }
 
-			Assert.IsNotNull(compb.Compc, "CompC property should not be null");
-			Assert.IsTrue(compb.MyArgument != string.Empty, "MyArgument property should not be empty");
+    [Fact]
+    public void Missing_service_is_correctly_detected()
+    {
+        Container.Register(Component.For<CompA>().Named("compa"),
+            Component.For<CompB>().Named("compb"));
 
-			Assert.AreSame(dependencies["cc"], compb.Compc, "CompC property should be the same instnace as in the hashtable argument");
-			Assert.IsTrue("ernst".Equals(compb.MyArgument),
-			              string.Format("The MyArgument property of compb should be equal to ernst, found {0}", compb.MyArgument));
-		}
+        var exception = Assert.Throws<DependencyResolverException>(() =>
+            Container.Resolve<CompB>(new Arguments().AddNamed("myArgument", 123)));
+        Assert.Equal(
+            string.Format(
+                "Missing dependency.{0}Component compb has a dependency on Castle.Windsor.Tests.RuntimeParameters.CompC, which could not be resolved.{0}Make sure the dependency is correctly registered in the container as a service, or provided as inline argument.",
+                Environment.NewLine),
+            exception.Message);
+    }
 
-		[Test]
-		public void AddingDependencyToServiceWithCustomDependency()
-		{
-			var kernel = new DefaultKernel();
-			kernel.Register(Component.For<NeedClassWithCustomerDependency>(),
-			                Component.For<HasCustomDependency>().DependsOn(new Dictionary<object, object> { { "name", new CompA() } }));
+    [Fact]
+    public void Parameter_takes_precedence_over_registered_service()
+    {
+        Container.Register(Component.For<CompA>(),
+            Component.For<CompB>().DependsOn(Dependency.OnValue<string>("some string")),
+            Component.For<CompC>().Instance(new CompC(0)));
 
-			Assert.AreEqual(HandlerState.Valid, kernel.GetHandler(typeof(HasCustomDependency)).CurrentState);
-			Assert.IsNotNull(kernel.Resolve(typeof(NeedClassWithCustomerDependency)));
-		}
+        var c2 = new CompC(42);
+        var args = new Arguments().AddTyped(c2);
+        var b = Container.Resolve<CompB>(args);
 
-		[Test]
-		public void Missing_service_is_correctly_detected()
-		{
-			Container.Register(Component.For<CompA>().Named("compa"),
-			                   Component.For<CompB>().Named("compb"));
-			TestDelegate act = () =>
-			                   Container.Resolve<CompB>(new Arguments().AddNamed("myArgument", 123));
+        Assert.Same(c2, b.Compc);
+    }
 
-			var exception = Assert.Throws<DependencyResolverException>(act);
-			Assert.AreEqual(
-				string.Format(
-					"Missing dependency.{0}Component compb has a dependency on Castle.MicroKernel.Tests.RuntimeParameters.CompC, which could not be resolved.{0}Make sure the dependency is correctly registered in the container as a service, or provided as inline argument.",
-					Environment.NewLine),
-				exception.Message);
-		}
+    [Fact]
+    public void ParametersPrecedence()
+    {
+        Container.Register(Component.For<CompA>().Named("compa"),
+            Component.For<CompB>().Named("compb").DependsOn(_dependencies));
 
-		[Test]
-		public void Parameter_takes_precedence_over_registered_service()
-		{
-			Container.Register(Component.For<CompA>(),
-			                   Component.For<CompB>().DependsOn(Dependency.OnValue<string>("some string")),
-			                   Component.For<CompC>().Instance(new CompC(0)));
+        var instanceWithModel = Container.Resolve<CompB>();
+        Assert.Same(_dependencies["cc"], instanceWithModel.Compc);
 
-			var c2 = new CompC(42);
-			var args = new Arguments().AddTyped(c2);
-			var b = Container.Resolve<CompB>(args);
+        var deps2 = new Dictionary<string, object> { { "cc", new CompC(12) }, { "myArgument", "ayende" } };
 
-			Assert.AreSame(c2, b.Compc);
-		}
+        var instanceWithArgs = Container.Resolve<CompB>(deps2);
 
-		[Test]
-		public void ParametersPrecedence()
-		{
-			Container.Register(Component.For<CompA>().Named("compa"),
-			                   Component.For<CompB>().Named("compb").DependsOn(dependencies));
+        Assert.Same(deps2["cc"], instanceWithArgs.Compc);
+        Assert.Equal("ayende", instanceWithArgs.MyArgument);
+    }
 
-			var instance_with_model = Container.Resolve<CompB>();
-			Assert.AreSame(dependencies["cc"], instance_with_model.Compc, "Model dependency should override kernel dependency");
+    [Fact]
+    public void ResolveUsingParameters()
+    {
+        Container.Register(Component.For<CompA>().Named("compa"),
+            Component.For<CompB>().Named("compb"));
+        var compb = Container.Resolve<CompB>(_dependencies);
 
-			var deps2 = new Dictionary<string, object> { { "cc", new CompC(12) }, { "myArgument", "ayende" } };
+        AssertDependencies(compb);
+    }
 
-			var instance_with_args = Container.Resolve<CompB>(deps2);
+    [Fact]
+    public void ResolveUsingParametersWithinTheHandler()
+    {
+        Container.Register(Component.For<CompA>().Named("compa"),
+            Component.For<CompB>().Named("compb").DependsOn(_dependencies));
 
-			Assert.AreSame(deps2["cc"], instance_with_args.Compc, "Should get it from resolve params");
-			Assert.AreEqual("ayende", instance_with_args.MyArgument);
-		}
+        var compb = Container.Resolve<CompB>();
 
-		[Test]
-		public void ResolveUsingParameters()
-		{
-			Container.Register(Component.For<CompA>().Named("compa"),
-			                   Component.For<CompB>().Named("compb"));
-			var compb = Container.Resolve<CompB>(dependencies);
+        AssertDependencies(compb);
+    }
 
-			AssertDependencies(compb);
-		}
+    [Fact]
+    public void WillAlwaysResolveCustomParameterFromServiceComponent()
+    {
+        Container.Register(Component.For<CompA>(),
+            Component.For<CompB>().DependsOn(new { myArgument = "foo" }),
+            Component.For<CompC>().DependsOn(new { test = 15 }));
+        var b = Kernel.Resolve<CompB>();
+        Assert.NotNull(b);
+        Assert.Equal(15, b.Compc.Test);
+    }
 
-		[Test]
-		public void ResolveUsingParametersWithinTheHandler()
-		{
-			Container.Register(Component.For<CompA>().Named("compa"),
-			                   Component.For<CompB>().Named("compb").DependsOn(dependencies));
-
-			var compb = Container.Resolve<CompB>();
-
-			AssertDependencies(compb);
-		}
-
-		[Test]
-		public void WillAlwaysResolveCustomParameterFromServiceComponent()
-		{
-			Container.Register(Component.For<CompA>(),
-			                   Component.For<CompB>().DependsOn(new { myArgument = "foo" }),
-			                   Component.For<CompC>().DependsOn(new { test = 15 }));
-			var b = Kernel.Resolve<CompB>();
-			Assert.IsNotNull(b);
-			Assert.AreEqual(15, b.Compc.test);
-		}
-
-		[Test]
-		public void WithoutParameters()
-		{
-			Container.Register(Component.For<CompA>().Named("compa"),
-			                   Component.For<CompB>().Named("compb"));
-			var expectedMessage =
-				string.Format(
-					"Can't create component 'compb' as it has dependencies to be satisfied.{0}{0}'compb' is waiting for the following dependencies:{0}- Service 'Castle.MicroKernel.Tests.RuntimeParameters.CompC' which was not registered.{0}- Parameter 'myArgument' which was not provided. Did you forget to set the dependency?{0}",
-					Environment.NewLine);
-			var exception = Assert.Throws(typeof(HandlerException), () => Kernel.Resolve<CompB>());
-			Assert.AreEqual(expectedMessage, exception.Message);
-		}
-	}
+    [Fact]
+    public void WithoutParameters()
+    {
+        Container.Register(Component.For<CompA>().Named("compa"),
+            Component.For<CompB>().Named("compb"));
+        var expectedMessage =
+            string.Format(
+                "Can't create component 'compb' as it has dependencies to be satisfied.{0}{0}'compb' is waiting for the following dependencies:{0}- Service 'Castle.Windsor.Tests.RuntimeParameters.CompC' which was not registered.{0}- Parameter 'myArgument' which was not provided. Did you forget to set the dependency?{0}",
+                Environment.NewLine);
+        var exception = Assert.Throws<HandlerException>(() => Kernel.Resolve<CompB>());
+        Assert.Equal(expectedMessage, exception.Message);
+    }
 }

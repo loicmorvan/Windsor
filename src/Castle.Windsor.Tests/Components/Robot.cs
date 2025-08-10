@@ -12,18 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.Components;
+
+[UsedImplicitly]
+public class Robot
 {
-	public class Robot
-	{
-		public IArm Left;
-
-		public IArm Right;
-
-		public Robot(IArm left, IArm right)
-		{
-			Left = left;
-			Right = right;
-		}
-	}
+    public Robot(IArm left, IArm right)
+    {
+    }
 }

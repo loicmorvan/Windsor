@@ -12,164 +12,145 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers
+using System.Text;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.ComponentActivator;
+using Castle.Windsor.MicroKernel.Context;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.MicroKernel.Handlers;
+
+/// <summary>Summary description for DefaultHandler.</summary>
+[Serializable]
+public class DefaultHandler : AbstractHandler
 {
-	using System;
-	using System.Text;
+    /// <summary>Initializes a new instance of the <see cref="DefaultHandler" /> class.</summary>
+    /// <param name="model"> </param>
+    public DefaultHandler(ComponentModel model) : base(model)
+    {
+    }
 
-	using Castle.Core;
-	using Castle.MicroKernel.ComponentActivator;
-	using Castle.MicroKernel.Context;
+    /// <summary>Lifestyle manager instance</summary>
+    [PublicAPI]
+    protected ILifestyleManager LifestyleManager { get; private set; }
 
-	/// <summary>
-	///   Summary description for DefaultHandler.
-	/// </summary>
-	[Serializable]
-	public class DefaultHandler : AbstractHandler
-	{
-		/// <summary>
-		///   Lifestyle manager instance
-		/// </summary>
-		private ILifestyleManager lifestyleManager;
+    public override void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        
+        LifestyleManager.Dispose();
+    }
 
-		/// <summary>
-		///   Initializes a new instance of the
-		///   <see cref = "DefaultHandler" />
-		///   class.
-		/// </summary>
-		/// <param name = "model"> </param>
-		public DefaultHandler(ComponentModel model) : base(model)
-		{
-		}
+    /// <summary>disposes the component instance (or recycle it)</summary>
+    /// <param name="burden"> </param>
+    /// <returns> true if destroyed </returns>
+    public override bool ReleaseCore(Burden burden)
+    {
+        return LifestyleManager.Release(burden.Instance);
+    }
 
-		/// <summary>
-		///   Lifestyle manager instance
-		/// </summary>
-		protected ILifestyleManager LifestyleManager
-		{
-			get { return lifestyleManager; }
-		}
+    protected void AssertNotWaitingForDependency()
+    {
+        if (CurrentState == HandlerState.WaitingDependency)
+        {
+            throw UnresolvableHandlerException();
+        }
+    }
 
-		public override void Dispose()
-		{
-			lifestyleManager.Dispose();
-		}
+    protected override void InitDependencies()
+    {
+        var activator = Kernel.CreateComponentActivator(ComponentModel);
+        LifestyleManager = Kernel.CreateLifestyleManager(ComponentModel, activator);
 
-		/// <summary>
-		///   disposes the component instance (or recycle it)
-		/// </summary>
-		/// <param name = "burden"> </param>
-		/// <returns> true if destroyed </returns>
-		public override bool ReleaseCore(Burden burden)
-		{
-			return lifestyleManager.Release(burden.Instance);
-		}
+        if (activator is IDependencyAwareActivator awareActivator &&
+            awareActivator.CanProvideRequiredDependencies(ComponentModel))
+        {
+            foreach (var dependency in ComponentModel.Dependencies)
+            {
+                dependency.Init(ComponentModel.ParametersInternal);
+            }
 
-		protected void AssertNotWaitingForDependency()
-		{
-			if (CurrentState == HandlerState.WaitingDependency)
-			{
-				throw UnresolvableHandlerException();
-			}
-		}
+            return;
+        }
 
-		protected override void InitDependencies()
-		{
-			var activator = Kernel.CreateComponentActivator(ComponentModel);
-			lifestyleManager = Kernel.CreateLifestyleManager(ComponentModel, activator);
+        base.InitDependencies();
+    }
 
-			var awareActivator = activator as IDependencyAwareActivator;
-			if (awareActivator != null && awareActivator.CanProvideRequiredDependencies(ComponentModel))
-			{
-				foreach (var dependency in ComponentModel.Dependencies)
-				{
-					dependency.Init(ComponentModel.ParametersInternal);
-				}
-				return;
-			}
+    protected override object Resolve(CreationContext context, bool instanceRequired)
+    {
+        return ResolveCore(context, false, instanceRequired, out _);
+    }
 
-			base.InitDependencies();
-		}
+    /// <summary>Returns an instance of the component this handler is responsible for</summary>
+    /// <param name="context"> </param>
+    /// <param name="requiresDecommission"> </param>
+    /// <param name="instanceRequired"> </param>
+    /// <param name="burden"> </param>
+    /// <returns> </returns>
+    protected object ResolveCore(CreationContext context, bool requiresDecommission, bool instanceRequired,
+        out Burden burden)
+    {
+        if (IsBeingResolvedInContext(context))
+        {
+            if (LifestyleManager is IContextLifestyleManager cache)
+            {
+                var instance = cache.GetContextInstance(context);
+                if (instance != null)
+                {
+                    burden = null;
+                    return instance;
+                }
+            }
 
-		protected override object Resolve(CreationContext context, bool instanceRequired)
-		{
-			Burden burden;
-			return ResolveCore(context, false, instanceRequired, out burden);
-		}
+            if (instanceRequired == false)
+            {
+                burden = null;
+                return null;
+            }
 
-		/// <summary>
-		///   Returns an instance of the component this handler
-		///   is responsible for
-		/// </summary>
-		/// <param name = "context"> </param>
-		/// <param name = "requiresDecommission"> </param>
-		/// <param name = "instanceRequired"> </param>
-		/// <param name = "burden"> </param>
-		/// <returns> </returns>
-		protected object ResolveCore(CreationContext context, bool requiresDecommission, bool instanceRequired, out Burden burden)
-		{
-			if (IsBeingResolvedInContext(context))
-			{
-				var cache = lifestyleManager as IContextLifestyleManager;
-				if (cache != null)
-				{
-					var instance = cache.GetContextInstance(context);
-					if (instance != null)
-					{
-						burden = null;
-						return instance;
-					}
-				}
+            var message = new StringBuilder();
+            message.Append(
+                $"Dependency cycle has been detected when trying to resolve component '{ComponentModel.Name}'.");
+            message.AppendLine();
+            message.AppendLine("The resolution tree that resulted in the cycle is the following:");
+            context.BuildCycleMessageFor(this, message);
 
-				if (instanceRequired == false)
-				{
-					burden = null;
-					return null;
-				}
-				var message = new StringBuilder();
-				message.AppendFormat("Dependency cycle has been detected when trying to resolve component '{0}'.",
-				                     ComponentModel.Name);
-				message.AppendLine();
-				message.AppendLine("The resolution tree that resulted in the cycle is the following:");
-				context.BuildCycleMessageFor(this, message);
+            throw new CircularDependencyException(message.ToString(), ComponentModel);
+        }
 
-				throw new CircularDependencyException(message.ToString(), ComponentModel);
-			}
-			if (CanResolvePendingDependencies(context) == false)
-			{
-				if (instanceRequired == false)
-				{
-					burden = null;
-					return null;
-				}
+        if (CanResolvePendingDependencies(context) == false)
+        {
+            if (instanceRequired == false)
+            {
+                burden = null;
+                return null;
+            }
 
-				AssertNotWaitingForDependency();
-			}
-			try
-			{
-				using (var ctx = context.EnterResolutionContext(this, requiresDecommission))
-				{
-					var instance = lifestyleManager.Resolve(context, context.ReleasePolicy);
-					burden = ctx.Burden;
-					return instance;
-				}
-			}
-			catch (NoResolvableConstructorFoundException)
-			{
-				throw UnresolvableHandlerException();
-			}
-		}
+            AssertNotWaitingForDependency();
+        }
 
-		private HandlerException UnresolvableHandlerException()
-		{
-			var message = new StringBuilder("Can't create component '");
-			message.Append(ComponentModel.Name);
-			message.AppendLine("' as it has dependencies to be satisfied.");
+        try
+        {
+            using var ctx = context.EnterResolutionContext(this, requiresDecommission);
+            var instance = LifestyleManager.Resolve(context, context.ReleasePolicy);
+            burden = ctx.Burden;
+            return instance;
+        }
+        catch (NoResolvableConstructorFoundException)
+        {
+            throw UnresolvableHandlerException();
+        }
+    }
 
-			var inspector = new DependencyInspector(message);
-			ObtainDependencyDetails(inspector);
+    private HandlerException UnresolvableHandlerException()
+    {
+        var message = new StringBuilder("Can't create component '");
+        message.Append(ComponentModel.Name);
+        message.AppendLine("' as it has dependencies to be satisfied.");
 
-			return new HandlerException(inspector.Message, ComponentModel.ComponentName);
-		}
-	}
+        var inspector = new DependencyInspector(message);
+        ObtainDependencyDetails(inspector);
+
+        return new HandlerException(inspector.Message, ComponentModel.ComponentName);
+    }
 }

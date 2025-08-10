@@ -12,16 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	/// <summary>
-	///   Summary description for IReviewableEmployee.
-	/// </summary>
-	public interface IReviewableEmployee : IEmployee
-	{
-		IReviewer Reviewer { get; set; }
+// ReSharper disable UnusedMember.Global
 
-		string ReviewerID { get; }
-		int SalaryThird { get; set; }
-	}
+namespace Castle.Windsor.Tests.Components;
+
+/// <summary>Summary description for IReviewableEmployee.</summary>
+public interface IReviewableEmployee : IEmployee
+{
+    string ReviewerId { get; }
+    int SalaryThird { get; set; }
 }

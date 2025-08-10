@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public interface IResultFinder<T>
-	{
-		IResultFinder<T> Finder { get; }
+namespace Castle.Windsor.Tests.Components;
 
-		T Process(ISpecification specification);
-	}
+public interface IResultFinder<out T>
+{
+    T Process();
 }

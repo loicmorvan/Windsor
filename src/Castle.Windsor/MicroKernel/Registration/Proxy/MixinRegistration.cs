@@ -12,58 +12,55 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration.Proxy
+using System.Collections;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.MicroKernel.Registration.Proxy;
+
+public class MixinRegistration : IEnumerable<IReference<object>>
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
+    private readonly IList<IReference<object>> _items = new List<IReference<object>>();
 
-	public class MixinRegistration : IEnumerable<IReference<object>>
-	{
-		private readonly IList<IReference<object>> items = new List<IReference<object>>();
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return _items.GetEnumerator();
+    }
 
-		public MixinRegistration Component<TService>()
-		{
-			return Component(typeof(TService));
-		}
+    IEnumerator<IReference<object>> IEnumerable<IReference<object>>.GetEnumerator()
+    {
+        return _items.GetEnumerator();
+    }
 
-		public MixinRegistration Component(Type serviceType)
-		{
-			if (serviceType == null)
-			{
-				throw new ArgumentNullException(nameof(serviceType));
-			}
-			items.Add(new ComponentReference<object>(serviceType));
-			return this;
-		}
+    [PublicAPI]
+    public MixinRegistration Component<TService>()
+    {
+        return Component(typeof(TService));
+    }
 
-		public MixinRegistration Component(string name)
-		{
-			if (name == null)
-			{
-				throw new ArgumentNullException(nameof(name));
-			}
-			items.Add(new ComponentReference<object>(name));
-			return this;
-		}
+    [PublicAPI]
+    public MixinRegistration Component(Type serviceType)
+    {
+        ArgumentNullException.ThrowIfNull(serviceType);
+        _items.Add(new ComponentReference<object>(serviceType));
+        return this;
+    }
 
-		public MixinRegistration Objects(params object[] objects)
-		{
-			foreach (var item in objects)
-			{
-				items.Add(new InstanceReference<object>(item));
-			}
-			return this;
-		}
+    [PublicAPI]
+    public MixinRegistration Component(string name)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+        _items.Add(new ComponentReference<object>(name));
+        return this;
+    }
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return items.GetEnumerator();
-		}
+    [PublicAPI]
+    public MixinRegistration Objects(params object[] objects)
+    {
+        foreach (var item in objects)
+        {
+            _items.Add(new InstanceReference<object>(item));
+        }
 
-		IEnumerator<IReference<object>> IEnumerable<IReference<object>>.GetEnumerator()
-		{
-			return items.GetEnumerator();
-		}
-	}
+        return this;
+    }
 }

@@ -12,10 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.Components;
+
+public class User
 {
-	public class User
-	{
-		public FiscalStability FiscalStability { get; set; }
-	}
+    [UsedImplicitly]
+    public FiscalStability FiscalStability { get; set; }
 }

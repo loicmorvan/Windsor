@@ -12,17 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class CBA
-	{
-		public CBA(A a, B b)
-		{
-			A = a;
-			B = b;
-		}
+namespace Castle.Windsor.Tests.Components;
 
-		public A A { get; private set; }
-		public B B { get; private set; }
-	}
+public class Cba(A a, B b)
+{
+    public A A { get; private set; } = a;
+    public B B { get; private set; } = b;
 }

@@ -13,31 +13,27 @@
 // limitations under the License.
 
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Scope
+using Castle.Windsor.Windsor;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Castle.Windsor.Extensions.DependencyInjection.Scope;
+
+internal class WindsorScopeFactory : IServiceScopeFactory
 {
-	using System;
+    private readonly IWindsorContainer _scopeFactoryContainer;
 
-	using Castle.Windsor;
+    public WindsorScopeFactory(IWindsorContainer container)
+    {
+        _scopeFactoryContainer = container;
+    }
 
-	using Microsoft.Extensions.DependencyInjection;
+    public IServiceScope CreateScope()
+    {
+        var scope = ExtensionContainerScope.BeginScope();
 
-	internal class WindsorScopeFactory : IServiceScopeFactory
-	{
-		private readonly IWindsorContainer scopeFactoryContainer;
-		
-		public WindsorScopeFactory(IWindsorContainer container)
-		{
-			scopeFactoryContainer = container;
-		}
+        //since WindsorServiceProvider is scoped, this gives us new instance
+        var provider = _scopeFactoryContainer.Resolve<IServiceProvider>();
 
-		public IServiceScope CreateScope()
-		{
-			var scope = ExtensionContainerScope.BeginScope();
-
-			//since WindsorServiceProvider is scoped, this gives us new instance
-			var provider = scopeFactoryContainer.Resolve<IServiceProvider>();
-
-			return new ServiceScope(scope, provider);
-		}
-	}
+        return new ServiceScope(scope, provider);
+    }
 }

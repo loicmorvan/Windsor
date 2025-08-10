@@ -12,32 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
-{
-	public class CustomerValidator : IValidator<ICustomer>
-	{
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="customer"></param>
-		/// <returns></returns>
-		public bool IsValid(ICustomer customer)
-		{
-			return true;
-		}
-	}
+namespace Castle.Windsor.Tests.ClassComponents;
 
-	public class CustomerChainValidator<T> : IValidator<T>
-		where T : CustomerChain1
+public class CustomerValidator : IValidator<ICustomer>
+{
+	/// <summary></summary>
+	/// <returns></returns>
+	public bool IsValid()
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="customerChain"></param>
-		/// <returns></returns>
-		public bool IsValid(T customerChain)
-		{
-			return true;
-		}
+		return true;
 	}
 }

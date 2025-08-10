@@ -12,26 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Windsor.Tests
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.Windsor.Tests;
+
+public class GenericVarianceTestCase : AbstractContainerTestCase
 {
-	using Castle.MicroKernel.Registration;
+    [Fact]
+    public void ResolveAll_can_resolve_contravariant_components()
+    {
+        Container.Register(
+            Component.For<IAmContravariant<EmptyBase>, IAmContravariant<EmptySub1>>()
+                .ImplementedBy<ContravariantBase>(),
+            Component.For<IAmContravariant<EmptySub1>>().ImplementedBy<ContravariantDerived>());
 
-	using CastleTests;
-	using CastleTests.Components;
-
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class GenericVarianceTestCase : AbstractContainerTestCase
-	{
-		[Test]
-		public void ResolveAll_can_resolve_contravariant_components()
-		{
-			Container.Register(Component.For<IAmContravariant<EmptyBase>, IAmContravariant<EmptySub1>>().ImplementedBy<ContravariantBase>(),
-			                   Component.For<IAmContravariant<EmptySub1>>().ImplementedBy<ContravariantDerived>());
-
-			var convariantOfDerived = Container.ResolveAll<IAmContravariant<EmptySub1>>();
-			Assert.AreEqual(2, convariantOfDerived.Length);
-		}
-	}
+        var convariantOfDerived = Container.ResolveAll<IAmContravariant<EmptySub1>>();
+        Assert.Equal(2, convariantOfDerived.Length);
+    }
 }

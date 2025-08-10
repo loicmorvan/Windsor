@@ -12,15 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class NeedsGenericType
-	{
-		private ICache<string> cache;
+using JetBrains.Annotations;
 
-		public NeedsGenericType(ICache<string> cache)
-		{
-			this.cache = cache;
-		}
-	}
-}
+namespace Castle.Windsor.Tests.Components;
+
+[UsedImplicitly]
+#pragma warning disable CS9113 // Parameter is unread.
+public class NeedsGenericType(ICache<string> cache);
+#pragma warning restore CS9113 // Parameter is unread.

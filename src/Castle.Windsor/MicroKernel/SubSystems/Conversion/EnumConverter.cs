@@ -12,47 +12,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+using System.Reflection;
+using Castle.Core.Configuration;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
+
+/// <summary>Converts a string representation to an enum value</summary>
+[Serializable]
+public class EnumConverter : AbstractTypeConverter
 {
-	using System;
-	using System.Reflection;
+    public override bool CanHandleType(Type type)
+    {
+        return type.GetTypeInfo().IsEnum;
+    }
 
-	using Castle.Core.Configuration;
+    public override object PerformConversion(string value, Type targetType)
+    {
+        try
+        {
+            return Enum.Parse(targetType, value, true);
+        }
+        catch (ConverterException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            var message = $"Could not convert from '{value}' to {targetType.FullName}.";
 
-	/// <summary>
-	///   Converts a string representation to an enum value
-	/// </summary>
-	[Serializable]
-	public class EnumConverter : AbstractTypeConverter
-	{
-		public override bool CanHandleType(Type type)
-		{
-			return type.GetTypeInfo().IsEnum;
-		}
+            throw new ConverterException(message, ex);
+        }
+    }
 
-		public override object PerformConversion(String value, Type targetType)
-		{
-			try
-			{
-				return Enum.Parse(targetType, value, true);
-			}
-			catch (ConverterException)
-			{
-				throw;
-			}
-			catch (Exception ex)
-			{
-				var message = String.Format(
-					"Could not convert from '{0}' to {1}.",
-					value, targetType.FullName);
-
-				throw new ConverterException(message, ex);
-			}
-		}
-
-		public override object PerformConversion(IConfiguration configuration, Type targetType)
-		{
-			return PerformConversion(configuration.Value, targetType);
-		}
-	}
+    public override object PerformConversion(IConfiguration configuration, Type targetType)
+    {
+        return PerformConversion(configuration.Value, targetType);
+    }
 }

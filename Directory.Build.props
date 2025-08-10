@@ -1,0 +1,10 @@
+<Project>
+
+    <PropertyGroup>
+        <ImplicitUsings>true</ImplicitUsings>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+
+    <Import Project="$(MSBuildThisFileDirectory)\buildscripts\common.props"/>
+
+</Project>

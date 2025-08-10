@@ -12,27 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.Components;
+
+[UsedImplicitly]
+public class ResultFinderStringDecorator : IResultFinder<string>
 {
-	using System;
+    public ResultFinderStringDecorator(IResultFinder<string> finder)
+    {
+        Finder = finder;
+    }
 
-	public class ResultFinderStringDecorator : IResultFinder<string>
-	{
-		private IResultFinder<string> finder;
+    public IResultFinder<string> Finder { get; }
 
-		public ResultFinderStringDecorator(IResultFinder<string> finder)
-		{
-			this.finder = finder;
-		}
-
-		public IResultFinder<string> Finder
-		{
-			get { return finder; }
-		}
-
-		public String Process(ISpecification specification)
-		{
-			return String.Empty;
-		}
-	}
+    public string Process()
+    {
+        return string.Empty;
+    }
 }

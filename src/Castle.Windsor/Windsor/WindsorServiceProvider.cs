@@ -12,47 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor
+using Castle.Core;
+using Castle.Windsor.MicroKernel;
+
+namespace Castle.Windsor.Windsor;
+
+/// <summary>
+///     Implementation of <see cref="IServiceProvider" /> and <see cref="IServiceProviderEx" /> that uses a
+///     <see
+///         cref="IWindsorContainer" />
+///     or <see cref="IKernel" /> as its component's source.
+/// </summary>
+public class WindsorServiceProvider : IServiceProviderEx
 {
-	using System;
+    private readonly IKernelInternal _kernel;
 
-	using Castle.Core;
-	using Castle.MicroKernel;
+    public WindsorServiceProvider(IWindsorContainer container)
+    {
+        _kernel = container.Kernel as IKernelInternal;
+        if (_kernel == null)
+        {
+            throw new ArgumentException($"The kernel must implement {typeof(IKernelInternal)}");
+        }
+    }
 
-	/// <summary>
-	///   Implementation of <see cref = "IServiceProvider" /> and <see cref = "IServiceProviderEx" /> that uses a <see
-	///    cref = "IWindsorContainer" /> or <see cref = "IKernel" /> as its component's source.
-	/// </summary>
-	public class WindsorServiceProvider : IServiceProviderEx
-	{
-		private readonly IKernelInternal kernel;
+    // ReSharper disable once UnusedMember.Global
+    public IKernel Kernel => _kernel;
 
-		public WindsorServiceProvider(IWindsorContainer container)
-		{
-			kernel = container.Kernel as IKernelInternal;
-			if (kernel == null)
-			{
-				throw new ArgumentException(string.Format("The kernel must implement {0}", typeof(IKernelInternal)));
-			}
-		}
+    public object GetService(Type serviceType)
+    {
+        return _kernel.LoadHandlerByType(null, serviceType, null) != null
+            ? _kernel.Resolve(serviceType)
+            : null;
+    }
 
-		public IKernel Kernel
-		{
-			get { return kernel; }
-		}
-
-		public object GetService(Type serviceType)
-		{
-			if (kernel.LoadHandlerByType(null, serviceType, null) != null)
-			{
-				return kernel.Resolve(serviceType);
-			}
-			return null;
-		}
-
-		public T GetService<T>() where T : class
-		{
-			return (T)GetService(typeof(T));
-		}
-	}
+    public T GetService<T>() where T : class
+    {
+        return (T)GetService(typeof(T));
+    }
 }

@@ -6,11 +6,13 @@ Castle Windsor is best of breed, mature [Inversion of Control container](ioc.md)
 
 * See [the release notes](https://github.com/castleproject/Windsor/releases/latest)
 * [Download it](https://github.com/castleproject/Windsor/releases/latest)
-* Get official and pre-release builds from [NuGet](http://nuget.org/packages/Castle.Windsor): `PM> Install-Package Castle.Windsor`
+* Get official and pre-release builds from [NuGet](http://nuget.org/packages/Castle.Windsor):
+  `PM> Install-Package Castle.Windsor`
 
 ## Show me the code already
 
-Windsor is very simple to use. Code below is not just *hello world* - that's how many big real life applications use Windsor. See the full documentation for more details on the API, features, patterns, and practices.
+Windsor is very simple to use. Code below is not just *hello world* - that's how many big real life applications use
+Windsor. See the full documentation for more details on the API, features, patterns, and practices.
 
 ```csharp
 // application starts...
@@ -46,10 +48,13 @@ For more in-depth sample try the section below, or dive right into API documenta
 
 ## Samples and tutorials
 
-Learn Windsor by example by completing step-by-step tutorials. See Windsor in action by exploring sample applications showcasing its capabilities:
+Learn Windsor by example by completing step-by-step tutorials. See Windsor in action by exploring sample applications
+showcasing its capabilities:
 
 * [Basic tutorial](basic-tutorial.md)
-* [Simple ASP.NET MVC 3 application (To be Seen)](mvc-tutorial-intro.md) - built step by step from the ground up. This tutorial will help you get up to speed with Windsor quickly while keeping an eye on both the usage of the container API as well as patterns that will help you get the most out of using the container.
+* [Simple ASP.NET MVC 3 application (To be Seen)](mvc-tutorial-intro.md) - built step by step from the ground up. This
+  tutorial will help you get up to speed with Windsor quickly while keeping an eye on both the usage of the container
+  API as well as patterns that will help you get the most out of using the container.
 
 ## Documentation
 

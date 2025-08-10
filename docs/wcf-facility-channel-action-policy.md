@@ -1,14 +1,20 @@
 # WCF Facility - Channel Action Policy
 
-WCF Facility replaces standard WCF remoting proxy with Windsor's dynamic proxy. This lets you [intercept](interceptors.md) the call to the channel proxy at a early stage just like with any other Windsor component. You can also intercept it at a later stage, when it's about to reach WCF execution pipeline by using `IChannelActionPolicy`.
+WCF Facility replaces standard WCF remoting proxy with Windsor's dynamic proxy. This lets
+you [intercept](interceptors.md) the call to the channel proxy at a early stage just like with any other Windsor
+component. You can also intercept it at a later stage, when it's about to reach WCF execution pipeline by using
+`IChannelActionPolicy`.
 
-:information_source: **So what's the difference?:** Difference between `IChannelActionPolicy` and standard `IInterceptor` is that the former gives you access to some information specific to the WCF action call, whereas the latter is generic purpose interception mechanism.
+:information_source: **So what's the difference?:** Difference between `IChannelActionPolicy` and standard
+`IInterceptor` is that the former gives you access to some information specific to the WCF action call, whereas the
+latter is generic purpose interception mechanism.
 
 ## The `IChannelActionPolicy` interface
 
 (This section is outdated, `IChannelActionPolicy` is no longer exists, look for `IWcfPolicy` instead)
 
-The channel action policy is one of standard [WCF Facility policies](wcf-facility-policies.md) that lets you execute some logic before the call is made, and optionally cancel it. The interface looks like this:
+The channel action policy is one of standard [WCF Facility policies](wcf-facility-policies.md) that lets you execute
+some logic before the call is made, and optionally cancel it. The interface looks like this:
 
 ```csharp
 public interface IChannelActionPolicy : IWcfChannelPolicy
@@ -57,7 +63,8 @@ There are a couple of ways you can attach a channel action policy to your client
 
 #### As a component
 
-To attach the policy all you need to do is to register it in the container. It will be then picked up and attached to every client proxy managed by Windsor and WCF Facility.
+To attach the policy all you need to do is to register it in the container. It will be then picked up and attached to
+every client proxy managed by Windsor and WCF Facility.
 
 ```csharp
 container.Register(Component.For<MyPolicy>());
@@ -65,7 +72,8 @@ container.Register(Component.For<MyPolicy>());
 
 #### Explicitly
 
-If you have multiple WCF client proxies and want to have fine grained, per endpoint control over policies you apply you can add the policy as a endpoint extension:
+If you have multiple WCF client proxies and want to have fine grained, per endpoint control over policies you apply you
+can add the policy as a endpoint extension:
 
 ```csharp
 container.Register(
@@ -79,7 +87,9 @@ container.Register(
 
 #### Default policy
 
-When no custom policy is specified or none of them is interested applies in given invocation (all return `false` from `Perform` method) the default policy will be used. The policy is specified at a facility level, when you configure the facility:
+When no custom policy is specified or none of them is interested applies in given invocation (all return `false` from
+`Perform` method) the default policy will be used. The policy is specified at a facility level, when you configure the
+facility:
 
 ```csharp
 container.AddFacility<WcfFacility>(f =>
@@ -88,7 +98,10 @@ container.AddFacility<WcfFacility>(f =>
 });
 ```
 
-:information_source: **Default `DefaultChannelPolicy`:** If you don't specify `DefaultChannelPolicy` WCF Facility will use `ChannelReconnectPolicy`, which will retry call once if `ChannelTerminatedException`, `CommunicationObjectFaultedException`, `CommunicationObjectAbortedException`, `MessageSecurityException` or `CommunicationException` is thrown.
+:information_source: **Default `DefaultChannelPolicy`:** If you don't specify `DefaultChannelPolicy` WCF Facility will
+use `ChannelReconnectPolicy`, which will retry call once if `ChannelTerminatedException`,
+`CommunicationObjectFaultedException`, `CommunicationObjectAbortedException`, `MessageSecurityException` or
+`CommunicationException` is thrown.
 
 ## See also
 

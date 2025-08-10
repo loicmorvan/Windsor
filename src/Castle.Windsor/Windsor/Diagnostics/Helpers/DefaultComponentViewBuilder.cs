@@ -12,80 +12,70 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Helpers
+using System.Text;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Handlers;
+using Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
+
+namespace Castle.Windsor.Windsor.Diagnostics.Helpers;
+
+public class DefaultComponentViewBuilder(IHandler handler) : IComponentDebuggerExtension
 {
-	using System.Collections.Generic;
-	using System.Text;
+    public IEnumerable<object> Attach()
+    {
+        yield return new DebuggerViewItem("Implementation", GetImplementation());
+        foreach (var service in handler.ComponentModel.Services)
+        {
+            yield return new DebuggerViewItem("Service", service);
+        }
 
-	using Castle.Core.Internal;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Handlers;
-	using Castle.Windsor.Diagnostics.DebuggerViews;
+        yield return GetStatus();
+        yield return new DebuggerViewItem("Lifestyle", handler.ComponentModel.GetLifestyleDescriptionLong());
+        if (HasInterceptors())
+        {
+            var interceptors = handler.ComponentModel.Interceptors;
+            var value = interceptors.ToArray();
+            yield return new DebuggerViewItem("Interceptors", "Count = " + value.Length, value);
+        }
 
-	public class DefaultComponentViewBuilder : IComponentDebuggerExtension
-	{
-		private readonly IHandler handler;
+        yield return new DebuggerViewItem("Name", handler.ComponentModel.Name);
+        yield return new DebuggerViewItem("Raw handler/component", handler);
+    }
 
-		public DefaultComponentViewBuilder(IHandler handler)
-		{
-			this.handler = handler;
-		}
+    private object GetImplementation()
+    {
+        var implementation = handler.ComponentModel.Implementation;
+        return implementation != typeof(LateBoundComponent) ? implementation : LateBoundComponent.Instance;
+    }
 
-		public IEnumerable<object> Attach()
-		{
-			yield return new DebuggerViewItem("Implementation", GetImplementation());
-			foreach (var service in handler.ComponentModel.Services)
-			{
-				yield return new DebuggerViewItem("Service", service);
-			}
-			yield return GetStatus();
-			yield return new DebuggerViewItem("Lifestyle", handler.ComponentModel.GetLifestyleDescriptionLong());
-			if (HasInterceptors())
-			{
-				var interceptors = handler.ComponentModel.Interceptors;
-				var value = interceptors.ToArray();
-				yield return new DebuggerViewItem("Interceptors", "Count = " + value.Length, value);
-			}
-			yield return new DebuggerViewItem("Name", handler.ComponentModel.Name);
-			yield return new DebuggerViewItem("Raw handler/component", handler);
-		}
+    private object GetStatus()
+    {
+        if (handler.CurrentState == HandlerState.Valid)
+        {
+            return new DebuggerViewItem("Status", "All required dependencies can be resolved.");
+        }
 
-		private object GetImplementation()
-		{
-			var implementation = handler.ComponentModel.Implementation;
-			if (implementation != typeof(LateBoundComponent))
-			{
-				return implementation;
-			}
+        return new DebuggerViewItemWithDetails("Status", "This component may not resolve properly.",
+            GetStatusDetails(handler as IExposeDependencyInfo));
+    }
 
-			return LateBoundComponent.Instance;
-		}
+    private static string GetStatusDetails(IExposeDependencyInfo info)
+    {
+        var message = new StringBuilder("Some dependencies of this component could not be statically resolved.");
+        if (info == null)
+        {
+            return message.ToString();
+        }
 
-		private object GetStatus()
-		{
-			if (handler.CurrentState == HandlerState.Valid)
-			{
-				return new DebuggerViewItem("Status", "All required dependencies can be resolved.");
-			}
-			return new DebuggerViewItemWithDetails("Status", "This component may not resolve properly.", GetStatusDetails(handler as IExposeDependencyInfo));
-		}
+        var inspector = new DependencyInspector(message);
+        info.ObtainDependencyDetails(inspector);
 
-		private string GetStatusDetails(IExposeDependencyInfo info)
-		{
-			var message = new StringBuilder("Some dependencies of this component could not be statically resolved.");
-			if (info == null)
-			{
-				return message.ToString();
-			}
-			var inspector = new DependencyInspector(message);
-			info.ObtainDependencyDetails(inspector);
+        return inspector.Message;
+    }
 
-			return inspector.Message;
-		}
-
-		private bool HasInterceptors()
-		{
-			return handler.ComponentModel.HasInterceptors;
-		}
-	}
+    private bool HasInterceptors()
+    {
+        return handler.ComponentModel.HasInterceptors;
+    }
 }

@@ -12,39 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.Context;
+using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
+
+namespace Castle.Windsor.MicroKernel.Lifestyle;
+
+[Serializable]
+public class ThreadScopeAccessor : IScopeAccessor
 {
-	using System;
-	using System.Linq;
-	using System.Threading;
+    private readonly SimpleThreadSafeDictionary<int, ILifetimeScope> _items = new();
 
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Context;
-	using Castle.MicroKernel.Lifestyle.Scoped;
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        
+        var values = _items.EjectAllValues();
+        foreach (var item in values.Reverse())
+        {
+            item.Dispose();
+        }
+    }
 
-	[Serializable]
-	public class ThreadScopeAccessor : IScopeAccessor
-	{
-		private readonly SimpleThreadSafeDictionary<int, ILifetimeScope> items = new SimpleThreadSafeDictionary<int, ILifetimeScope>();
+    public ILifetimeScope GetScope(CreationContext context)
+    {
+        var currentThreadId = GetCurrentThreadId();
+        return _items.GetOrAdd(currentThreadId, _ => new DefaultLifetimeScope());
+    }
 
-		public void Dispose()
-		{
-			var values = items.EjectAllValues();
-			foreach (var item in values.Reverse())
-			{
-				item.Dispose();
-			}
-		}
-
-		public ILifetimeScope GetScope(CreationContext context)
-		{
-			var currentThreadId = GetCurrentThreadId();
-			return items.GetOrAdd(currentThreadId, id => new DefaultLifetimeScope());
-		}
-
-		protected virtual int GetCurrentThreadId()
-		{
-			return Thread.CurrentThread.ManagedThreadId;
-		}
-	}
+    protected virtual int GetCurrentThreadId()
+    {
+        return Environment.CurrentManagedThreadId;
+    }
 }

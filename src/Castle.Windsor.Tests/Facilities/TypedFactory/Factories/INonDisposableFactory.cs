@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories
+using Castle.Windsor.Tests.ClassComponents;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
+
+public interface INonDisposableFactory
 {
-	using Castle.Windsor.Tests.ClassComponents;
+    DisposableComponent Create();
 
-	public interface INonDisposableFactory
-	{
-		DisposableComponent Create();
-
-		void LetGo(DisposableComponent component);
-	}
+    void LetGo(DisposableComponent component);
 }

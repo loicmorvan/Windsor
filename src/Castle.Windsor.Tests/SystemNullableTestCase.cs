@@ -12,53 +12,56 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+// ReSharper disable UnusedParameter.Local
+
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Handlers;
+using Castle.Windsor.MicroKernel.Registration;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests;
+
+public class SystemNullableTestCase : AbstractContainerTestCase
 {
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Handlers;
-	using Castle.MicroKernel.Registration;
-	using NUnit.Framework;
+    [Fact]
+    public void Null_may_be_specified_for_non_optional_System_Nullable_constructor_parameter()
+    {
+        Container.Register(
+            Component.For<DependencyFromContainer>(),
+            Component.For<ComponentWithNonOptionalNullableParameter>());
 
-	[TestFixture]
-	public class SystemNullableTestCase : AbstractContainerTestCase
-	{
-		[Test]
-		public void Null_may_be_specified_for_non_optional_System_Nullable_constructor_parameter()
-		{
-			Container.Register(
-				Component.For<DependencyFromContainer>(),
-				Component.For<ComponentWithNonOptionalNullableParameter>());
+        Container.Resolve<ComponentWithNonOptionalNullableParameter>(
+            Arguments.FromProperties(new { nonOptionalNullableParameter = (int?)null }));
+    }
 
-			Container.Resolve<ComponentWithNonOptionalNullableParameter>(
-				Arguments.FromProperties(new { nonOptionalNullableParameter = (int?)null }));
-		}
+    [Fact]
+    public void Non_optional_System_Nullable_constructor_parameter_is_still_required()
+    {
+        Container.Register(
+            Component.For<DependencyFromContainer>(),
+            Component.For<ComponentWithNonOptionalNullableParameter>());
 
-		[Test]
-		public void Non_optional_System_Nullable_constructor_parameter_is_still_required()
-		{
-			Container.Register(
-				Component.For<DependencyFromContainer>(),
-				Component.For<ComponentWithNonOptionalNullableParameter>());
+        var exception =
+            Assert.Throws<HandlerException>(() => Container.Resolve<ComponentWithNonOptionalNullableParameter>());
+        Assert.Equal(
+            $"""
+                 Can't create component '{typeof(ComponentWithNonOptionalNullableParameter)}' as it has dependencies to be satisfied.
 
-			Assert.That(
-				() => Container.Resolve<ComponentWithNonOptionalNullableParameter>(),
-				Throws.InstanceOf<HandlerException>()
-					.With.Property("Message").EqualTo($@"Can't create component '{typeof(ComponentWithNonOptionalNullableParameter)}' as it has dependencies to be satisfied.
+                 '{typeof(ComponentWithNonOptionalNullableParameter)}' is waiting for the following dependencies:
+                 - Parameter 'nonOptionalNullableParameter' which was not provided. Did you forget to set the dependency?
 
-'{typeof(ComponentWithNonOptionalNullableParameter)}' is waiting for the following dependencies:
-- Parameter 'nonOptionalNullableParameter' which was not provided. Did you forget to set the dependency?
-".ConvertToEnvironmentLineEndings()));
-		}
+                 """.ConvertToEnvironmentLineEndings(),
+            exception.Message);
+    }
 
-		public sealed class DependencyFromContainer
-		{
-		}
+    [UsedImplicitly]
+    public sealed class DependencyFromContainer;
 
-		public sealed class ComponentWithNonOptionalNullableParameter
-		{
-			public ComponentWithNonOptionalNullableParameter(int? nonOptionalNullableParameter, DependencyFromContainer dependencyFromContainer)
-			{
-			}
-		}
-	}
+    private sealed class ComponentWithNonOptionalNullableParameter
+    {
+        public ComponentWithNonOptionalNullableParameter(int? nonOptionalNullableParameter,
+            DependencyFromContainer dependencyFromContainer)
+        {
+        }
+    }
 }

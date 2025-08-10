@@ -12,35 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ComponentActivator
+using Castle.Windsor.Core;
+
+namespace Castle.Windsor.MicroKernel.ComponentActivator;
+
+/// <summary>Exception thrown whe a component could not be activated. THis should come from the component activator.</summary>
+[Serializable]
+public class ComponentActivatorException : ComponentResolutionException
 {
-	using System;
-	using System.Runtime.Serialization;
+    public ComponentActivatorException(string message, ComponentModel componentComponentModel) : base(message)
+    {
+        ComponentModel = componentComponentModel;
+    }
 
-	using Castle.Core;
+    public ComponentActivatorException(string message, Exception innerException, ComponentModel componentModel)
+        : base(message, innerException)
+    {
+        ComponentModel = componentModel;
+    }
 
-	/// <summary>
-	///   Exception thrown whe a component could not be activated. THis should come from the component activator.
-	/// </summary>
-	[Serializable]
-	public class ComponentActivatorException : ComponentResolutionException
-	{
-		public ComponentActivatorException(string message, ComponentModel componentComponentModel) : base(message)
-		{
-			ComponentModel = componentComponentModel;
-		}
-
-		public ComponentActivatorException(string message, Exception innerException, ComponentModel componentModel)
-			: base(message, innerException)
-		{
-			ComponentModel = componentModel;
-		}
-
-#if FEATURE_SERIALIZATION
-		public ComponentActivatorException(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-		}
-#endif
-		public ComponentModel ComponentModel { get; private set; }
-	}
+    public ComponentModel ComponentModel { get; private set; }
 }

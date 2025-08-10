@@ -12,20 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+using Castle.Windsor.Core;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.Components;
+
+[UsedImplicitly]
+public class ClassWithDoNotSelectConstructors
 {
-    using Castle.Core;
-
-    public class ClassWithDoNotSelectConstructors
+    public ClassWithDoNotSelectConstructors()
     {
-        public ClassWithDoNotSelectConstructors() { }
-        
-        [DoNotSelect]
-        public ClassWithDoNotSelectConstructors(string dependency)
-        {
-            Dependency = dependency;
-        }
-
-        public string Dependency { get; private set; }
     }
+
+    [DoNotSelect]
+    public ClassWithDoNotSelectConstructors(string dependency)
+    {
+        Dependency = dependency;
+    }
+
+    public string Dependency { get; private set; }
 }

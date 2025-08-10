@@ -12,77 +12,59 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
+using System.Reflection;
+using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.Core;
+
+/// <summary>Represents a constructor of the component that the container can use to initialize it properly.</summary>
+[Serializable]
+public class ConstructorCandidate : IComparable<ConstructorCandidate>
 {
-	using System;
-	using System.Reflection;
+    /// <summary>Initializes a new instance of the <see cref="ConstructorCandidate" /> class.</summary>
+    /// <param name="constructorInfo">The constructor info.</param>
+    /// <param name="dependencies">The dependencies.</param>
+	public ConstructorCandidate(ConstructorInfo constructorInfo, ConstructorDependencyModel[] dependencies)
+    {
+        Constructor = constructorInfo;
+        Dependencies = dependencies;
+        dependencies.ForEach(InitParameter);
+    }
 
-	using Castle.Core.Internal;
+    /// <summary>Gets the ConstructorInfo (from reflection).</summary>
+    /// <value>The constructor.</value>
+    public ConstructorInfo Constructor { get; }
 
-	/// <summary>
-	///   Represents a constructor of the component 
-	///   that the container can use to initialize it properly.
-	/// </summary>
-	[Serializable]
-	public class ConstructorCandidate : IComparable<ConstructorCandidate>
-	{
-		private readonly ConstructorInfo constructorInfo;
-		private readonly ConstructorDependencyModel[] dependencies;
+    /// <summary>Gets the dependencies this constructor candidate exposes.</summary>
+    /// <value>The dependencies.</value>
+    public ConstructorDependencyModel[] Dependencies { get; }
 
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "ConstructorCandidate" /> class.
-		/// </summary>
-		/// <param name = "constructorInfo">The constructor info.</param>
-		/// <param name = "dependencies">The dependencies.</param>
-		public ConstructorCandidate(ConstructorInfo constructorInfo, ConstructorDependencyModel[] dependencies)
-		{
-			this.constructorInfo = constructorInfo;
-			this.dependencies = dependencies;
-			dependencies.ForEach(InitParameter);
-		}
+    int IComparable<ConstructorCandidate>.CompareTo(ConstructorCandidate other)
+    {
+        // we sort greedier first
+        var value = other.Dependencies.Length - Dependencies.Length;
+        if (value != 0)
+        {
+            return value;
+        }
 
-		/// <summary>
-		///   Gets the ConstructorInfo (from reflection).
-		/// </summary>
-		/// <value>The constructor.</value>
-		public ConstructorInfo Constructor
-		{
-			get { return constructorInfo; }
-		}
+        for (var index = 0; index < Dependencies.Length; index++)
+        {
+            var mine = Dependencies[index];
+            var othr = other.Dependencies[index];
+            value = string.Compare(mine.TargetItemType.FullName, othr.TargetItemType.FullName,
+                StringComparison.OrdinalIgnoreCase);
+            if (value != 0)
+            {
+                return value;
+            }
+        }
 
-		/// <summary>
-		///   Gets the dependencies this constructor candidate exposes.
-		/// </summary>
-		/// <value>The dependencies.</value>
-		public ConstructorDependencyModel[] Dependencies
-		{
-			get { return dependencies; }
-		}
+        return 0;
+    }
 
-		private void InitParameter(ConstructorDependencyModel parameter)
-		{
-			parameter.SetParentConstructor(this);
-		}
-
-		int IComparable<ConstructorCandidate>.CompareTo(ConstructorCandidate other)
-		{
-			// we sort greedier first
-			var value = other.Dependencies.Length - Dependencies.Length;
-			if (value != 0)
-			{
-				return value;
-			}
-			for (var index = 0; index < Dependencies.Length; index++)
-			{
-				var mine = Dependencies[index];
-				var othr = other.Dependencies[index];
-				value = string.Compare(mine.TargetItemType.FullName, othr.TargetItemType.FullName, StringComparison.OrdinalIgnoreCase);
-				if (value != 0)
-				{
-					return value;
-				}
-			}
-			return 0;
-		}
-	}
+    private void InitParameter(ConstructorDependencyModel parameter)
+    {
+        parameter.SetParentConstructor(this);
+    }
 }

@@ -12,16 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class ServiceFactory
-	{
-		public static bool CreateWasCalled;
+namespace Castle.Windsor.Tests.Components;
 
-		public ServiceImplementation Create()
-		{
-			CreateWasCalled = true;
-			return new ServiceImplementation(12);
-		}
-	}
+public class ServiceFactory
+{
+    public ServiceImplementation Create()
+    {
+        return new ServiceImplementation(12);
+    }
 }

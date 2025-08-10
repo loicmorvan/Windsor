@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
-{
-	using System.Collections.Generic;
+using JetBrains.Annotations;
 
-	public interface IContainerDebuggerExtensionHost : IEnumerable<IContainerDebuggerExtension>
-	{
-		void Add(IContainerDebuggerExtension extension);
-	}
+namespace Castle.Windsor.Windsor.Diagnostics;
+
+public interface IContainerDebuggerExtensionHost : IEnumerable<IContainerDebuggerExtension>
+{
+    [PublicAPI]
+    void Add(IContainerDebuggerExtension extension);
 }

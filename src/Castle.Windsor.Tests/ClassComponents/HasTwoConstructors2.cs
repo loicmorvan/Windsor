@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+public class HasTwoConstructors2
 {
-	public class HasTwoConstructors2
-	{
-		public string Param { get; set; }
-		public ICommon Common { get; set; }
+    public HasTwoConstructors2(ICommon common)
+    {
+        Common = common;
+    }
 
-		public HasTwoConstructors2(ICommon common)
-		{
-			Common = common;
-		}
+    public HasTwoConstructors2(string param)
+    {
+        Param = param;
+    }
 
-		public HasTwoConstructors2(string param)
-		{
-			Param = param;
-		}
-	}
+    // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
+    public string Param { get; set; }
+    public ICommon Common { get; set; }
 }

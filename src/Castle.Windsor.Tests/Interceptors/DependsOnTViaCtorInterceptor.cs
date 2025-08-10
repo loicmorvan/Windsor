@@ -12,22 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Interceptors
+using Castle.DynamicProxy;
+
+namespace Castle.Windsor.Tests.Interceptors;
+
+public class DependsOnTViaCtorInterceptor<T> : StandardInterceptor
 {
-	using Castle.DynamicProxy;
+    public DependsOnTViaCtorInterceptor(T tee)
+    {
+        Tee = tee;
+    }
 
-	public class DependsOnTViaCtorInterceptor<T> : StandardInterceptor
-	{
-		private readonly T tee;
-
-		public DependsOnTViaCtorInterceptor(T tee)
-		{
-			this.tee = tee;
-		}
-
-		public T Tee
-		{
-			get { return tee; }
-		}
-	}
+    public T Tee { get; }
 }

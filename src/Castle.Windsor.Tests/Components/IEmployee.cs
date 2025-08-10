@@ -12,26 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+/// <summary>Summary description for IEmployee.</summary>
+public interface IEmployee
 {
-	/// <summary>
-	///   Summary description for IEmployee.
-	/// </summary>
-	public interface IEmployee
-	{
-		string Email { get; set; }
-		string EmployeeID { get; set; }
-
-		string FirstName { get; set; }
-
-		string FullName { get; }
-		bool IsProxy { get; set; }
-
-		bool IsSupervisor { get; set; }
-		string LastName { get; set; }
-		string MiddleName { get; set; }
-		string NTLogin { get; }
-
-		void SetNTLogin(string ntLogin);
-	}
+    string EmployeeId { get; set; }
 }

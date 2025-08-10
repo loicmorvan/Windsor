@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class EmptyGenericClassService<T>
-	{
-	}
-}
+namespace Castle.Windsor.Tests.Components;
+
+// ReSharper disable once UnusedTypeParameter
+public class EmptyGenericClassService<T>;

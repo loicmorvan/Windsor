@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class SimpleService2B : ISimpleService2
 {
-	public class SimpleService2B : ISimpleService2
-	{
-		public string Method()
-		{
-			return "b";
-		}
-	}
+    public string Method()
+    {
+        return "b";
+    }
 }

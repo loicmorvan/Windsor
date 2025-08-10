@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class AProp
 {
-	public class AProp
-	{
-		public A Prop { get; set; }
-	}
+    public A Prop { get; set; }
 }

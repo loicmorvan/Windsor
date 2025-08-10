@@ -12,36 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
-{
-	/// <summary>
-	/// Summary description for IMapper.
-	/// </summary>
-	/// <typeparam name="T"></typeparam>
-	public interface IMapper<T>
-	{
-	}
+// ReSharper disable UnusedTypeParameter
+// ReSharper disable UnusedType.Global
 
-	/// <summary>
-	/// Summary description for CommonImpl1Mapper.
-	/// </summary>
-	public class CommonImpl1Mapper : IMapper<CommonImpl1>
-	{
-	}
+namespace Castle.Windsor.Tests.ClassComponents;
 
-	/// <summary>
-	/// Summary description for CommonImpl2Mapper.
-	/// </summary>
-	public class CommonImpl2Mapper : IMapper<CommonImpl2>
-	{
-	}
-
-	public interface IGenericMapper<T>{}
-
-	/// <summary>
-	/// Summary description for CommonImpl1Mapper.
-	/// </summary>
-	public class GenericMapper<T> : IGenericMapper<IGenericClassWithParameter<T>>
-	{
-	}
-}
+public interface IMapper<T>;

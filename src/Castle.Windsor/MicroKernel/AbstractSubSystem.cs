@@ -12,40 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.Windsor.MicroKernel;
+
+[Serializable]
+public abstract class AbstractSubSystem :
+    ISubSystem
 {
-	using System;
-	using System.Security;
+    protected IKernelInternal Kernel { get; private set; }
 
-	[Serializable]
-	public abstract class AbstractSubSystem :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
-		ISubSystem
-	{
-		private IKernelInternal kernel;
+    public virtual void Init(IKernelInternal kernel)
+    {
+        Kernel = kernel;
+    }
 
-#if FEATURE_REMOTING
-		[SecurityCritical]
-		public override object InitializeLifetimeService()
-		{
-			return null;
-		}
-#endif
-
-		public virtual void Init(IKernelInternal kernel)
-		{
-			this.kernel = kernel;
-		}
-
-		public virtual void Terminate()
-		{
-		}
-
-		protected IKernelInternal Kernel
-		{
-			get { return kernel; }
-		}
-	}
+    public virtual void Terminate()
+    {
+    }
 }

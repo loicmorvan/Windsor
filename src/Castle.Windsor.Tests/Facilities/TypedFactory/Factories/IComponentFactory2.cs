@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories
-{
-	using System;
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
 
-	public interface IComponentFactory2
-	{
-		Object Construct(String key);
-	}
+public interface IComponentFactory2
+{
+    object Construct(string key);
 }

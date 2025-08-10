@@ -12,35 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Internal
+namespace Castle.Windsor.MicroKernel.Internal;
+
+internal class SlimWriteLockHolder : ILockHolder
 {
-	using System.Threading;
+    private readonly ReaderWriterLockSlim _locker;
 
-	internal class SlimWriteLockHolder : ILockHolder
-	{
-		private readonly ReaderWriterLockSlim locker;
+    public SlimWriteLockHolder(ReaderWriterLockSlim locker, bool waitForLock)
+    {
+        _locker = locker;
+        if (waitForLock)
+        {
+            locker.EnterWriteLock();
+            LockAcquired = true;
+            return;
+        }
 
-		private bool lockAcquired;
+        LockAcquired = locker.TryEnterWriteLock(0);
+    }
 
-		public SlimWriteLockHolder(ReaderWriterLockSlim locker, bool waitForLock)
-		{
-			this.locker = locker;
-			if(waitForLock)
-			{
-				locker.EnterWriteLock();
-				lockAcquired = true;
-				return;
-			}
-			lockAcquired = locker.TryEnterWriteLock(0);
-		}
+    public void Dispose()
+    {
+        if (!LockAcquired)
+        {
+            return;
+        }
 
-		public void Dispose()
-		{
-			if(!LockAcquired) return;
-			locker.ExitWriteLock();
-			lockAcquired = false;
-		}
+        _locker.ExitWriteLock();
+        LockAcquired = false;
+    }
 
-		public bool LockAcquired => lockAcquired;
-	}
+    public bool LockAcquired { get; private set; }
 }

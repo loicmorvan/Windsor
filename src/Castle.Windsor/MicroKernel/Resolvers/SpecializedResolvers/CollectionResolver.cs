@@ -12,67 +12,62 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Resolvers.SpecializedResolvers
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.Context;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
+
+/// <summary>
+///     More generic alternative to <see cref="ArrayResolver" /> and <see cref="ListResolver" />. It supports arrays
+///     as well as any generic interface type assignable from arrays.
+/// </summary>
+/// <remarks>
+///     The collection instance that is provided is read only, even for interfaces like <see cref="IList{T}" />
+/// </remarks>
+public class CollectionResolver(IKernel kernel, bool allowEmptyCollections = false) : ISubDependencyResolver
 {
-	using System;
-	using System.Collections.Generic;
+    [PublicAPI] protected readonly bool AllowEmptyCollections = allowEmptyCollections;
 
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Context;
+    protected readonly IKernel Kernel = kernel;
 
-	/// <summary>
-	///   More generic alternative to <see cref = "ArrayResolver" /> and <see cref = "ListResolver" />.
-	///   It supports arrays as well as any generic interface type assignable from arrays.
-	/// </summary>
-	/// <remarks>
-	///   The collection instance that is provided is read only, even for interfaces like <see cref = "IList{T}" />
-	/// </remarks>
-	public class CollectionResolver : ISubDependencyResolver
-	{
-		protected readonly bool allowEmptyCollections;
-		protected readonly IKernel kernel;
+    public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+        ComponentModel model,
+        DependencyModel dependency)
+    {
+        if (dependency.TargetItemType == null)
+        {
+            return false;
+        }
 
-		public CollectionResolver(IKernel kernel, bool allowEmptyCollections = false)
-		{
-			this.kernel = kernel;
-			this.allowEmptyCollections = allowEmptyCollections;
-		}
+        var itemType = GetItemType(dependency.TargetItemType);
+        return itemType != null &&
+               HasParameter(dependency) == false &&
+               CanSatisfy(itemType);
+    }
 
-		public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
-		                               ComponentModel model,
-		                               DependencyModel dependency)
-		{
-			if (dependency.TargetItemType == null)
-			{
-				return false;
-			}
+    public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+        ComponentModel model,
+        DependencyModel dependency)
+    {
+        return Kernel.ResolveAll(GetItemType(dependency.TargetItemType), context.AdditionalArguments);
+    }
 
-			var itemType = GetItemType(dependency.TargetItemType);
-			return itemType != null &&
-			       HasParameter(dependency) == false &&
-			       CanSatisfy(itemType);
-		}
+    [PublicAPI]
+    protected virtual bool CanSatisfy(Type itemType)
+    {
+        return AllowEmptyCollections || Kernel.HasComponent(itemType);
+    }
 
-		public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
-		                              DependencyModel dependency)
-		{
-			return kernel.ResolveAll(GetItemType(dependency.TargetItemType), context.AdditionalArguments);
-		}
+    protected virtual Type GetItemType(Type targetItemType)
+    {
+        return targetItemType.GetCompatibleArrayItemType();
+    }
 
-		protected virtual bool CanSatisfy(Type itemType)
-		{
-			return allowEmptyCollections || kernel.HasComponent(itemType);
-		}
-
-		protected virtual Type GetItemType(Type targetItemType)
-		{
-			return targetItemType.GetCompatibleArrayItemType();
-		}
-
-		protected virtual bool HasParameter(DependencyModel dependency)
-		{
-			return dependency.Parameter != null;
-		}
-	}
+    [PublicAPI]
+    protected virtual bool HasParameter(DependencyModel dependency)
+    {
+        return dependency.Parameter != null;
+    }
 }

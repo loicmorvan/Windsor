@@ -12,62 +12,61 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors
+using System.Diagnostics;
+using System.Xml;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
+
+public class AttributesElementProcessor : AbstractXmlNodeProcessor
 {
-	using System;
-	using System.Xml;
+    public override string Name => "attributes";
 
-	public class AttributesElementProcessor : AbstractXmlNodeProcessor
-	{
-		public override String Name
-		{
-			get { return "attributes"; }
-		}
+    /// <summary></summary>
+    /// <param name="nodeList"></param>
+    /// <param name="engine"></param>
+    /// <example>
+    ///     <code>
+    ///     <properties>
+    ///             <attributes>
+    ///                 <myAttribute>attributeValue</myAttribute>
+    ///             </attributes>
+    ///             <myProperty>propertyValue</myProperty>
+    ///         </properties>
+    ///   </code>
+    /// </example>
+    public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
+    {
+        var element = nodeList.Current as XmlElement;
 
-		///<summary>
-		///</summary>
-		///<param name = "nodeList"></param>
-		///<param name = "engine"></param>
-		///<example>
-		///  <code>
-		///    <properties>
-		///      <attributes>
-		///        <myAttribute>attributeValue</myAttribute>
-		///      </attributes>
-		///      <myProperty>propertyValue</myProperty>
-		///    </properties>
-		///  </code>
-		///</example>
-		public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
-		{
-			var element = nodeList.Current as XmlElement;
+        Debug.Assert(element != null, nameof(element) + " != null");
+        var childNodes = new DefaultXmlProcessorNodeList(element.ChildNodes);
 
-			var childNodes = new DefaultXmlProcessorNodeList(element.ChildNodes);
+        while (childNodes.MoveNext())
+        {
+            engine.DispatchProcessCurrent(childNodes);
 
-			while (childNodes.MoveNext())
-			{
-				engine.DispatchProcessCurrent(childNodes);
+            if (IgnoreNode(childNodes.Current))
+            {
+                continue;
+            }
 
-				if (IgnoreNode(childNodes.Current))
-				{
-					continue;
-				}
+            GetNodeAsElement(element, childNodes.Current);
+            AppendElementAsAttribute(element.ParentNode, childNodes.Current as XmlElement);
+        }
 
-				var elem = GetNodeAsElement(element, childNodes.Current);
+        RemoveItSelf(element);
+    }
 
-				AppendElementAsAttribute(element.ParentNode, childNodes.Current as XmlElement);
-			}
+    [PublicAPI]
+    protected static void AppendElementAsAttribute(XmlNode parentElement, XmlElement element)
+    {
+        Debug.Assert(parentElement.OwnerDocument != null);
+        var attribute = parentElement.OwnerDocument.CreateAttribute(element.Name);
 
-			RemoveItSelf(element);
-		}
+        attribute.Value = element.InnerText;
 
-		protected void AppendElementAsAttribute(XmlNode parentElement, XmlElement element)
-		{
-			var attribute = parentElement.OwnerDocument.CreateAttribute(element.Name);
-
-			attribute.Value = element.InnerText;
-
-			parentElement.Attributes.Append(attribute);
-		}
-	}
+        Debug.Assert(parentElement.Attributes != null);
+        parentElement.Attributes.Append(attribute);
+    }
 }

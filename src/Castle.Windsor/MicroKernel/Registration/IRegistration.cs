@@ -12,17 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration
+namespace Castle.Windsor.MicroKernel.Registration;
+
+/// <summary>The contract for all registrations with the kernel.</summary>
+public interface IRegistration
 {
-	/// <summary>
-	///   The contract for all registrations with the kernel.
-	/// </summary>
-	public interface IRegistration
-	{
-		/// <summary>
-		///   Performs the registration in the <see cref = "IKernel" />.
-		/// </summary>
-		/// <param name = "kernel">The kernel.</param>
-		void Register(IKernelInternal kernel);
-	}
+	/// <summary>Performs the registration in the <see cref="IKernel" />.</summary>
+	/// <param name="kernel">The kernel.</param>
+	void Register(IKernelInternal kernel);
 }

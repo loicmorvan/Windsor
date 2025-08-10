@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents
-{
-	public class ClassWithInstanceCount
-	{
-		public static int InstancesCount;
+namespace Castle.Windsor.Tests.ClassComponents;
 
-		public ClassWithInstanceCount()
-		{
-			InstancesCount++;
-		}
-	}
+public class ClassWithInstanceCount
+{
+    public static int InstancesCount;
+
+    public ClassWithInstanceCount()
+    {
+        InstancesCount++;
+    }
 }

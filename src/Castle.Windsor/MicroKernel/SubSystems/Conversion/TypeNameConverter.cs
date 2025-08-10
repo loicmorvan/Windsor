@@ -12,290 +12,275 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+using System.Collections;
+using System.Diagnostics;
+using System.Reflection;
+using System.Text;
+using Castle.Core.Configuration;
+using Castle.Windsor.Core.Internal;
+using Microsoft.Extensions.DependencyModel;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
+
+/// <summary>Convert a type name to a Type instance.</summary>
+[Serializable]
+public class TypeNameConverter : AbstractTypeConverter
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Reflection;
-	using System.Text;
+    private static readonly Assembly Mscorlib = typeof(object).GetTypeInfo().Assembly;
 
-#if !FEATURE_APPDOMAIN
-	using Microsoft.Extensions.DependencyModel;
-#endif
+    private readonly HashSet<Assembly> _assemblies = [];
 
-	using Castle.Core.Configuration;
-	using Castle.Core.Internal;
+    private readonly IDictionary<string, MultiType> _fullName2Type =
+        new Dictionary<string, MultiType>(StringComparer.OrdinalIgnoreCase);
 
-	/// <summary>
-	///   Convert a type name to a Type instance.
-	/// </summary>
-	[Serializable]
-	public class TypeNameConverter : AbstractTypeConverter
-	{
-		private static readonly Assembly mscorlib = typeof(object).GetTypeInfo().Assembly;
+    private readonly IDictionary<string, MultiType> _justName2Type =
+        new Dictionary<string, MultiType>(StringComparer.OrdinalIgnoreCase);
 
-		private readonly HashSet<Assembly> assemblies = new HashSet<Assembly>();
+    private readonly ITypeNameParser _parser;
 
-		private readonly IDictionary<string, MultiType> fullName2Type =
-			new Dictionary<string, MultiType>(StringComparer.OrdinalIgnoreCase);
+    public TypeNameConverter(ITypeNameParser parser)
+    {
+        ArgumentNullException.ThrowIfNull(parser);
 
-		private readonly IDictionary<string, MultiType> justName2Type =
-			new Dictionary<string, MultiType>(StringComparer.OrdinalIgnoreCase);
+        _parser = parser;
+    }
 
-		private readonly ITypeNameParser parser;
+    public override bool CanHandleType(Type type)
+    {
+        return type == typeof(Type);
+    }
 
-		public TypeNameConverter(ITypeNameParser parser)
-		{
-			if (parser == null)
-			{
-				throw new ArgumentNullException(nameof(parser));
-			}
+    public override object PerformConversion(string value, Type targetType)
+    {
+        try
+        {
+            return GetType(value);
+        }
+        catch (ConverterException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new ConverterException($"Could not convert string '{value}' to a type.", ex);
+        }
+    }
 
-			this.parser = parser;
-		}
+    private Type GetType(string name)
+    {
+        // try to create type using case sensitive search first.
+        var type = Type.GetType(name, false, false);
+        if (type != null)
+        {
+            return type;
+        }
 
-		public override bool CanHandleType(Type type)
-		{
-			return type == typeof(Type);
-		}
+        // if case sensitive search did not create the type, try case insensitive.
+        type = Type.GetType(name, false, true);
+        if (type != null)
+        {
+            return type;
+        }
 
-		public override object PerformConversion(String value, Type targetType)
-		{
-			try
-			{
-				return GetType(value);
-			}
-			catch (ConverterException)
-			{
-				throw;
-			}
-			catch (Exception ex)
-			{
-				throw new ConverterException(String.Format("Could not convert string '{0}' to a type.", value), ex);
-			}
-		}
+        var typeName = ParseName(name);
+        if (typeName == null)
+        {
+            throw new ConverterException(
+                $"Could not convert string '{name}' to a type. It doesn't appear to be a valid type name.");
+        }
 
-		private Type GetType(string name)
-		{
-			// try to create type using case sensitive search first.
-			var type = Type.GetType(name, false, false);
-			if (type != null)
-			{
-				return type;
-			}
-			// if case sensitive search did not create the type, try case insensitive.
-			type = Type.GetType(name, false, true);
-			if (type != null)
-			{
-				return type;
-			}
-			var typeName = ParseName(name);
-			if (typeName == null)
-			{
-				throw new ConverterException(String.Format("Could not convert string '{0}' to a type. It doesn't appear to be a valid type name.", name));
-			}
+        InitializeAppDomainAssemblies();
+        type = typeName.GetType(this);
+        if (type != null)
+        {
+            return type;
+        }
 
-			InitializeAppDomainAssemblies(forceLoad: false);
-			type = typeName.GetType(this);
-			if (type != null)
-			{
-				return type;
-			}
-			if (InitializeAppDomainAssemblies(forceLoad: true))
-			{
-				type = typeName.GetType(this);
-			}
-			if (type != null)
-			{
-				return type;
-			}
-			var assemblyName = typeName.ExtractAssemblyName();
-			if (assemblyName != null)
-			{
-				var namePart = assemblyName + ", Version=";
-				var assembly = assemblies.FirstOrDefault(a => a.FullName.StartsWith(namePart, StringComparison.OrdinalIgnoreCase));
-				if (assembly != null)
-				{
-					throw new ConverterException(String.Format(
-						"Could not convert string '{0}' to a type. Assembly {1} was matched, but it doesn't contain the type. Make sure that the type name was not mistyped.",
-						name, assembly.FullName));
-				}
-				throw new ConverterException(String.Format(
-					"Could not convert string '{0}' to a type. Assembly was not found. Make sure it was deployed and the name was not mistyped.",
-					name));
-			}
-			throw new ConverterException(String.Format(
-				"Could not convert string '{0}' to a type. Make sure assembly containing the type has been loaded into the process, or consider specifying assembly qualified name of the type.",
-				name));
-		}
+        if (InitializeAppDomainAssemblies())
+        {
+            type = typeName.GetType(this);
+        }
 
-		private bool InitializeAppDomainAssemblies(bool forceLoad)
-		{
-			var anyAssemblyAdded = false;
-#if FEATURE_APPDOMAIN
-			if (forceLoad || assemblies.Count == 0)
-			{
-				var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-				foreach (var assembly in loadedAssemblies)
-				{
-					if (assemblies.Contains(assembly) || ShouldSkipAssembly(assembly))
-					{
-						continue;
-					}
-					anyAssemblyAdded = true;
-					assemblies.Add(assembly);
-					Scan(assembly);
-				}
-			}
-#else
-			if (assemblies.Count == 0)
-			{
-				var context = DependencyContext.Default;
-				var dependencies = context.RuntimeLibraries
-					.SelectMany(library => library.GetDefaultAssemblyNames(context))
-					.Distinct();
+        if (type != null)
+        {
+            return type;
+        }
 
-				foreach (var assemblyName in dependencies)
-				{
-					if (ShouldSkipAssembly(assemblyName))
-					{
-						continue;
-					}
+        var assemblyName = typeName.ExtractAssemblyName();
+        if (assemblyName == null)
+        {
+            throw new ConverterException(
+                $"Could not convert string '{name}' to a type. Make sure assembly containing the type has been loaded into the process, or consider specifying assembly qualified name of the type.");
+        }
 
-					var assembly = Assembly.Load(assemblyName);
+        var namePart = assemblyName + ", Version=";
+        var assembly =
+            _assemblies.FirstOrDefault(a =>
+            {
+                Debug.Assert(a.FullName != null);
+                return a.FullName.StartsWith(namePart, StringComparison.OrdinalIgnoreCase);
+            });
+        if (assembly != null)
+        {
+            throw new ConverterException(
+                $"Could not convert string '{name}' to a type. Assembly {assembly.FullName} was matched, but it doesn't contain the type. Make sure that the type name was not mistyped.");
+        }
 
-					assemblies.Add(assembly);
-					Scan(assembly);
-					anyAssemblyAdded = true;
-				}
-			}
-#endif
-			return anyAssemblyAdded;
-		}
+        throw new ConverterException(
+            $"Could not convert string '{name}' to a type. Assembly was not found. Make sure it was deployed and the name was not mistyped.");
 
-		protected virtual bool ShouldSkipAssembly(Assembly assembly)
-		{
-			return assembly == mscorlib || assembly.FullName.StartsWith("System");
-		}
+    }
 
-		protected virtual bool ShouldSkipAssembly(AssemblyName assemblyName)
-		{
-			return assemblyName.FullName.StartsWith("System", StringComparison.Ordinal)
-				|| assemblyName.FullName.StartsWith("mscorlib", StringComparison.OrdinalIgnoreCase)
-				|| assemblyName.ContentType != AssemblyContentType.Default;
-		}
+    private bool InitializeAppDomainAssemblies()
+    {
+        if (_assemblies.Count != 0)
+        {
+            return false;
+        }
+        var anyAssemblyAdded = false;
 
-		private void Scan(Assembly assembly)
-		{
-			if (assembly.IsDynamic)
-			{
-				return;
-			}
-			try
-			{
-				var exportedTypes = assembly.GetAvailableTypes();
-				foreach (var type in exportedTypes)
-				{
-					Insert(fullName2Type, type.FullName, type);
-					Insert(justName2Type, type.Name, type);
-				}
-			}
-			catch (NotSupportedException)
-			{
-				// This might fail in an ASPNET scenario for Desktop CLR
-			}
-		}
+        var context = DependencyContext.Default;
+        var dependencies = context.RuntimeLibraries
+            .SelectMany(library => library.GetDefaultAssemblyNames(context))
+            .Distinct();
 
-		private void Insert(IDictionary<string, MultiType> collection, string key, Type value)
-		{
-			MultiType existing;
-			if (collection.TryGetValue(key, out existing) == false)
-			{
-				collection[key] = new MultiType(value);
-				return;
-			}
-			existing.AddInnerType(value);
-		}
+        foreach (var assemblyName in dependencies)
+        {
+            if (ShouldSkipAssembly(assemblyName))
+            {
+                continue;
+            }
 
-		private TypeName ParseName(string name)
-		{
-			return parser.Parse(name);
-		}
+            var assembly = Assembly.Load(assemblyName);
 
-		public override object PerformConversion(IConfiguration configuration, Type targetType)
-		{
-			return PerformConversion(configuration.Value, targetType);
-		}
+            _assemblies.Add(assembly);
+            Scan(assembly);
+            anyAssemblyAdded = true;
+        }
 
-		public Type GetTypeByFullName(string fullName)
-		{
-			return GetUniqueType(fullName, fullName2Type, "assembly qualified name");
-		}
+        return anyAssemblyAdded;
+    }
 
-		public Type GetTypeByName(string justName)
-		{
-			return GetUniqueType(justName, justName2Type, "full name, or assembly qualified name");
-		}
+    protected virtual bool ShouldSkipAssembly(Assembly assembly)
+    {
+        Debug.Assert(assembly.FullName != null);
+        return assembly == Mscorlib || assembly.FullName.StartsWith("System");
+    }
 
-		private Type GetUniqueType(string name, IDictionary<string, MultiType> map, string description)
-		{
-			MultiType type;
-			if (map.TryGetValue(name, out type))
-			{
-				EnsureUnique(type, name, description);
-				return type.Single();
-			}
-			return null;
-		}
+    protected virtual bool ShouldSkipAssembly(AssemblyName assemblyName)
+    {
+        return assemblyName.FullName.StartsWith("System", StringComparison.Ordinal)
+               || assemblyName.FullName.StartsWith("mscorlib", StringComparison.OrdinalIgnoreCase)
+               || assemblyName.ContentType != AssemblyContentType.Default;
+    }
 
-		private void EnsureUnique(MultiType type, string value, string missingInformation)
-		{
-			if (type.HasOne)
-			{
-				return;
-			}
+    private void Scan(Assembly assembly)
+    {
+        if (assembly.IsDynamic)
+        {
+            return;
+        }
 
-			var message = new StringBuilder(string.Format("Could not uniquely identify type for '{0}'. ", value));
-			message.AppendLine("The following types were matched:");
-			foreach (var matchedType in type)
-			{
-				message.AppendLine(matchedType.AssemblyQualifiedName);
-			}
-			message.AppendFormat("Provide more information ({0}) to uniquely identify the type.", missingInformation);
-			throw new ConverterException(message.ToString());
-		}
+        try
+        {
+            var exportedTypes = assembly.GetAvailableTypes();
+            foreach (var type in exportedTypes)
+            {
+                Insert(_fullName2Type, type.FullName, type);
+                Insert(_justName2Type, type.Name, type);
+            }
+        }
+        catch (NotSupportedException)
+        {
+            // This might fail in an ASPNET scenario for Desktop CLR
+        }
+    }
 
-		private class MultiType : IEnumerable<Type>
-		{
-			private readonly LinkedList<Type> inner = new LinkedList<Type>();
+    private static void Insert(IDictionary<string, MultiType> collection, string key, Type value)
+    {
+        if (collection.TryGetValue(key, out var existing) == false)
+        {
+            collection[key] = new MultiType(value);
+            return;
+        }
 
-			public MultiType(Type type)
-			{
-				inner.AddFirst(type);
-			}
+        existing.AddInnerType(value);
+    }
 
-			public bool HasOne
-			{
-				get { return inner.Count == 1; }
-			}
+    private TypeName ParseName(string name)
+    {
+        return _parser.Parse(name);
+    }
 
-			public MultiType AddInnerType(Type type)
-			{
-				inner.AddLast(type);
-				return this;
-			}
+    public override object PerformConversion(IConfiguration configuration, Type targetType)
+    {
+        return PerformConversion(configuration.Value, targetType);
+    }
 
-			public IEnumerator<Type> GetEnumerator()
-			{
-				return inner.GetEnumerator();
-			}
+    public Type GetTypeByFullName(string fullName)
+    {
+        return GetUniqueType(fullName, _fullName2Type, "assembly qualified name");
+    }
 
-			IEnumerator IEnumerable.GetEnumerator()
-			{
-				return ((IEnumerable)inner).GetEnumerator();
-			}
-		}
-	}
+    public Type GetTypeByName(string justName)
+    {
+        return GetUniqueType(justName, _justName2Type, "full name, or assembly qualified name");
+    }
+
+    private static Type GetUniqueType(string name, IDictionary<string, MultiType> map, string description)
+    {
+        if (!map.TryGetValue(name, out var type))
+        {
+            return null;
+        }
+
+        EnsureUnique(type, name, description);
+        return type.Single();
+
+    }
+
+    private static void EnsureUnique(MultiType type, string value, string missingInformation)
+    {
+        if (type.HasOne)
+        {
+            return;
+        }
+
+        var message = new StringBuilder($"Could not uniquely identify type for '{value}'. ");
+        message.AppendLine("The following types were matched:");
+        foreach (var matchedType in type)
+        {
+            message.AppendLine(matchedType.AssemblyQualifiedName);
+        }
+
+        message.Append($"Provide more information ({missingInformation}) to uniquely identify the type.");
+        throw new ConverterException(message.ToString());
+    }
+
+    private class MultiType : IEnumerable<Type>
+    {
+        private readonly LinkedList<Type> _inner = [];
+
+        public MultiType(Type type)
+        {
+            _inner.AddFirst(type);
+        }
+
+        public bool HasOne => _inner.Count == 1;
+
+        public IEnumerator<Type> GetEnumerator()
+        {
+            return _inner.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable)_inner).GetEnumerator();
+        }
+
+        public void AddInnerType(Type type)
+        {
+            _inner.AddLast(type);
+        }
+    }
 }

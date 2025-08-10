@@ -12,36 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Context;
+
+namespace Castle.Windsor.MicroKernel;
+
+/// <summary>Represents a reference to an existing object.</summary>
+/// <typeparam name="T"></typeparam>
+public class InstanceReference<T>(T instance) : IReference<T>
 {
-	using Castle.Core;
-	using Castle.MicroKernel.Context;
+    public void Attach(ComponentModel component)
+    {
+        // we might provide the instance as dependency's default value...
+    }
 
-	/// <summary>
-	///   Represents a reference to an existing object.
-	/// </summary>
-	/// <typeparam name = "T"></typeparam>
-	public class InstanceReference<T> : IReference<T>
-	{
-		private readonly T instance;
+    public void Detach(ComponentModel component)
+    {
+    }
 
-		public InstanceReference(T instance)
-		{
-			this.instance = instance;
-		}
-
-		public void Attach(ComponentModel component)
-		{
-			// we might provide the instance as dependency's default value...
-		}
-
-		public void Detach(ComponentModel component)
-		{
-		}
-
-		public T Resolve(IKernel kernel, CreationContext context)
-		{
-			return instance;
-		}
-	}
+    public T Resolve(IKernel kernel, CreationContext context)
+    {
+        return instance;
+    }
 }

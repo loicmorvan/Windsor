@@ -12,48 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers
+using Castle.Windsor.Core;
+
+namespace Castle.Windsor.MicroKernel.Handlers;
+
+public static class HandlerExtensionsUtil
 {
-	using System;
-	using System.Collections.Generic;
+    private const string ReleaseExtensionsKey = "Castle.ReleaseExtensions";
+    public const string ResolveExtensionsKey = "Castle.ResolveExtensions";
 
-	using Castle.Core;
+    public static ICollection<IReleaseExtension> ReleaseExtensions(this ComponentModel model, bool ensureExists)
+    {
+        ArgumentNullException.ThrowIfNull(model);
 
-	public static class HandlerExtensionsUtil
-	{
-		public static readonly string ReleaseExtensionsKey = "Castle.ReleaseExtensions";
-		public static readonly string ResolveExtensionsKey = "Castle.ResolveExtensions";
+        var releaseExtensions = model.ExtendedProperties[ReleaseExtensionsKey] as ICollection<IReleaseExtension>;
+        if (releaseExtensions != null || !ensureExists)
+        {
+            return releaseExtensions;
+        }
 
-		public static ICollection<IReleaseExtension> ReleaseExtensions(this ComponentModel model, bool ensureExists)
-		{
-			if (model == null)
-			{
-				throw new ArgumentNullException(nameof(model));
-			}
+        releaseExtensions = new HashSet<IReleaseExtension>();
+        model.ExtendedProperties[ReleaseExtensionsKey] = releaseExtensions;
 
-			var releaseExtensions = model.ExtendedProperties[ReleaseExtensionsKey] as ICollection<IReleaseExtension>;
-			if (releaseExtensions == null && ensureExists)
-			{
-				releaseExtensions = new HashSet<IReleaseExtension>();
-				model.ExtendedProperties[ReleaseExtensionsKey] = releaseExtensions;
-			}
-			return releaseExtensions;
-		}
+        return releaseExtensions;
+    }
 
-		public static ICollection<IResolveExtension> ResolveExtensions(this ComponentModel model, bool ensureExists)
-		{
-			if (model == null)
-			{
-				throw new ArgumentNullException(nameof(model));
-			}
+    public static ICollection<IResolveExtension> ResolveExtensions(this ComponentModel model, bool ensureExists)
+    {
+        ArgumentNullException.ThrowIfNull(model);
 
-			var resolveExtensions = model.ExtendedProperties[ResolveExtensionsKey] as ICollection<IResolveExtension>;
-			if (resolveExtensions == null && ensureExists)
-			{
-				resolveExtensions = new HashSet<IResolveExtension>();
-				model.ExtendedProperties[ResolveExtensionsKey] = resolveExtensions;
-			}
-			return resolveExtensions;
-		}
-	}
+        var resolveExtensions = model.ExtendedProperties[ResolveExtensionsKey] as ICollection<IResolveExtension>;
+        if (resolveExtensions != null || !ensureExists)
+        {
+            return resolveExtensions;
+        }
+
+        resolveExtensions = new HashSet<IResolveExtension>();
+        model.ExtendedProperties[ResolveExtensionsKey] = resolveExtensions;
+
+        return resolveExtensions;
+    }
 }

@@ -12,24 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
+
+public class Bar
 {
-	public class Bar
-	{
-		private readonly Baz baz;
-		private readonly string name;
+    // ReSharper disable once UnusedParameter.Local
+    public Bar(Baz baz, string name)
+    {
+        Name = name;
+    }
 
-		public Bar(Baz baz, string name)
-		{
-			this.baz = baz;
-			this.name = name;
-		}
+    public string Description { get; set; }
 
-		public string Description { get; set; }
-
-		public string Name
-		{
-			get { return name; }
-		}
-	}
+    public string Name { get; }
 }

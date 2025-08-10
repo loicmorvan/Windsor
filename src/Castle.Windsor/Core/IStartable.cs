@@ -12,21 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
-{
-	/// <summary>
-	///   Interface for components that wish to be started and stopped by the container
-	/// </summary>
-	public interface IStartable
-	{
-		/// <summary>
-		///   Starts this instance.
-		/// </summary>
-		void Start();
+namespace Castle.Windsor.Core;
 
-		/// <summary>
-		///   Stops this instance.
-		/// </summary>
-		void Stop();
-	}
+/// <summary>Interface for components that wish to be started and stopped by the container</summary>
+public interface IStartable
+{
+    /// <summary>Starts this instance.</summary>
+    void Start();
+
+    /// <summary>Stops this instance.</summary>
+    void Stop();
 }

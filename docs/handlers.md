@@ -2,7 +2,9 @@
 
 ## What is a handler
 
-Handlers are types implementing `IHandler` interface. Windsor uses handlers to resolve components for given services, and then to release them. Handlers also give access to [`ComponentModel`](componentmodel.md) which allows developers to programatically inspect components.
+Handlers are types implementing `IHandler` interface. Windsor uses handlers to resolve components for given services,
+and then to release them. Handlers also give access to [`ComponentModel`](componentmodel.md) which allows developers to
+programatically inspect components.
 
 ## See also
 

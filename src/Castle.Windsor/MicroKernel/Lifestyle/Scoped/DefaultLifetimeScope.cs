@@ -12,44 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Scoped
+using Castle.Windsor.Core;
+
+namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
+
+/// <remarks>This class is not thread safe like CallContextLifetimeScope.</remarks>
+public class DefaultLifetimeScope(IScopeCache scopeCache = null, Action<Burden> onAfterCreated = null)
+    : ILifetimeScope
 {
-	using System;
+    private static readonly Action<Burden> EmptyOnAfterCreated = delegate { };
+    private readonly IScopeCache _scopeCache = scopeCache ?? new ScopeCache();
 
-	using Castle.Core;
+    internal Action<Burden> OnAfterCreated { get; set; } = onAfterCreated ?? EmptyOnAfterCreated;
 
-	/// <remarks>
-	/// This class is not thread safe like CallContextLifetimeScope.
-	/// </remarks>
-	public class DefaultLifetimeScope : ILifetimeScope
-	{
-		private static readonly Action<Burden> emptyOnAfterCreated = delegate { };
-		private readonly Action<Burden> onAfterCreated;
-		private readonly IScopeCache scopeCache;
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        
+        if (_scopeCache is IDisposable disposableCache)
+        {
+            disposableCache.Dispose();
+        }
+    }
 
-		public DefaultLifetimeScope(IScopeCache scopeCache = null, Action<Burden> onAfterCreated = null)
-		{
-			this.scopeCache = scopeCache ?? new ScopeCache();
-			this.onAfterCreated = onAfterCreated ?? emptyOnAfterCreated;
-		}
+    public Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance)
+    {
+        var burden = _scopeCache[model];
+        if (burden == null)
+        {
+            _scopeCache[model] = burden = createInstance(OnAfterCreated);
+        }
 
-		public void Dispose()
-		{
-			var disposableCache = scopeCache as IDisposable;
-			if (disposableCache != null)
-			{
-				disposableCache.Dispose();
-			}
-		}
-
-		public Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance)
-		{
-			var burden = scopeCache[model];
-			if (burden == null)
-			{
-				scopeCache[model] = burden = createInstance(onAfterCreated);
-			}
-			return burden;
-		}
-	}
+        return burden;
+    }
 }

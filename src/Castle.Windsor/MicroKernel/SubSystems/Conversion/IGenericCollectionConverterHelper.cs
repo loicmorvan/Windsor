@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
-{
-	using Castle.Core.Configuration;
+using Castle.Core.Configuration;
 
-	/// <summary>
-	///   This interface is needed because we want to isolate ourself from
-	///   the generic parameters, so we can work type safe inside the implementations,
-	///   and still call from non generic types outside.
-	/// </summary>
-	public interface IGenericCollectionConverterHelper
-	{
-		object ConvertConfigurationToCollection(IConfiguration configuration);
-	}
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
+
+/// <summary>
+///     This interface is needed because we want to isolate ourself from the generic parameters, so we can work type
+///     safe inside the implementations, and still call from non generic types outside.
+/// </summary>
+public interface IGenericCollectionConverterHelper
+{
+    object ConvertConfigurationToCollection(IConfiguration configuration);
 }

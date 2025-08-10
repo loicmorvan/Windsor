@@ -12,129 +12,106 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Windsor;
+
+namespace Castle.Windsor.Tests;
+
+public class ChildContainerSupportTestCase : AbstractContainerTestCase
 {
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor;
-	using Castle.Windsor.Configuration.Interpreters;
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
+    [Fact]
+    [Bug("IOC-127")]
+    public void AddComponentInstanceAndChildContainers()
+    {
+        var child = new WindsorContainer();
+        Container.AddChildContainer(child);
 
-	using CastleTests.Components;
+        var clock1 = new EmptyServiceA();
+        var clock2 = new EmptyServiceB();
 
-	using NUnit.Framework;
+        Container.Register(Component.For<IEmptyService>().Instance(clock2));
+        child.Register(Component.For<IEmptyService>().Instance(clock1));
 
-	[TestFixture]
-	public class ChildContainerSupportTestCase : AbstractContainerTestCase
-	{
-		[Test]
-		[Bug("IOC-127")]
-		public void AddComponentInstanceAndChildContainers()
-		{
-			var child = new WindsorContainer();
-			Container.AddChildContainer(child);
+        Assert.Same(clock2, Container.Resolve<IEmptyService>());
+        Assert.Same(clock1, child.Resolve<IEmptyService>());
+    }
 
-			var clock1 = new EmptyServiceA();
-			var clock2 = new EmptyServiceB();
+    [Fact]
+    public void AddAndRemoveChildContainer()
+    {
+        IWindsorContainer childcontainer = new WindsorContainer();
+        Container.AddChildContainer(childcontainer);
+        Assert.Equal(Container, childcontainer.Parent);
 
-			Container.Register(Component.For<IEmptyService>().Instance(clock2));
-			child.Register(Component.For<IEmptyService>().Instance(clock1));
+        Container.RemoveChildContainer(childcontainer);
+        Assert.Null(childcontainer.Parent);
 
-			Assert.AreSame(clock2, Container.Resolve<IEmptyService>());
-			Assert.AreSame(clock1, child.Resolve<IEmptyService>());
-		}
+        Container.AddChildContainer(childcontainer);
+        Assert.Equal(Container, childcontainer.Parent);
+    }
 
-		[Test]
-		public void AddAndRemoveChildContainer()
-		{
-			IWindsorContainer childcontainer = new WindsorContainer();
-			Container.AddChildContainer(childcontainer);
-			Assert.AreEqual(Container, childcontainer.Parent);
+    [Fact]
+    public void AddAndRemoveChildContainerWithProperty()
+    {
+        IWindsorContainer childcontainer = new WindsorContainer();
+        childcontainer.Parent = Container;
+        Assert.Equal(Container, childcontainer.Parent);
 
-			Container.RemoveChildContainer(childcontainer);
-			Assert.IsNull(childcontainer.Parent);
+        childcontainer.Parent = null;
+        Assert.Null(childcontainer.Parent);
 
-			Container.AddChildContainer(childcontainer);
-			Assert.AreEqual(Container, childcontainer.Parent);
-		}
+        childcontainer.Parent = Container;
+        Assert.Equal(Container, childcontainer.Parent);
+    }
 
-		[Test]
-		public void AddAndRemoveChildContainerWithProperty()
-		{
-			IWindsorContainer childcontainer = new WindsorContainer();
-			childcontainer.Parent = Container;
-			Assert.AreEqual(Container, childcontainer.Parent);
+    [Fact]
+    public void AddingToTwoParentContainsThrowsKernelException()
+    {
+        IWindsorContainer container3 = new WindsorContainer();
+        IWindsorContainer childcontainer = new WindsorContainer();
+        Container.AddChildContainer(childcontainer);
+        Assert.Throws<KernelException>(() => container3.AddChildContainer(childcontainer));
+    }
 
-			childcontainer.Parent = null;
-			Assert.IsNull(childcontainer.Parent);
+    [Fact]
+    public void AddingToTwoParentWithPropertyContainsThrowsKernelException()
+    {
+        IWindsorContainer container3 = new WindsorContainer();
+        IWindsorContainer childcontainer = new WindsorContainer();
+        childcontainer.Parent = Container;
+        Assert.Throws<KernelException>(() => childcontainer.Parent = container3);
+    }
 
-			childcontainer.Parent = Container;
-			Assert.AreEqual(Container, childcontainer.Parent);
-		}
+    protected override void AfterContainerCreated()
+    {
+        Container.Register(Component.For(typeof(A)).Named("A"));
+    }
 
-		[Test]
-		public void AddingToTwoParentContainsThrowsKernelException()
-		{
-			IWindsorContainer container3 = new WindsorContainer();
-			IWindsorContainer childcontainer = new WindsorContainer();
-			Container.AddChildContainer(childcontainer);
-			Assert.Throws<KernelException>(() => container3.AddChildContainer(childcontainer));
-		}
+    [Fact]
+    public void ResolveAgainstParentContainer()
+    {
+        IWindsorContainer childcontainer = new WindsorContainer();
+        Container.AddChildContainer(childcontainer);
 
-		[Test]
-		public void AddingToTwoParentWithPropertyContainsThrowsKernelException()
-		{
-			IWindsorContainer container3 = new WindsorContainer();
-			IWindsorContainer childcontainer = new WindsorContainer();
-			childcontainer.Parent = Container;
-			Assert.Throws<KernelException>(() => childcontainer.Parent = container3);
-		}
+        Assert.Equal(Container, childcontainer.Parent);
 
-		protected override void AfterContainerCreated()
-		{
-			Container.Register(Component.For(typeof(A)).Named("A"));
-		}
+        childcontainer.Register(Component.For(typeof(B)).Named("B"));
+        var b = childcontainer.Resolve<B>("B");
+        Assert.NotNull(b);
+    }
 
-		[Test]
-		public void ResolveAgainstParentContainer()
-		{
-			IWindsorContainer childcontainer = new WindsorContainer();
-			Container.AddChildContainer(childcontainer);
+    [Fact]
+    public void ResolveAgainstParentContainerWithProperty()
+    {
+        IWindsorContainer childcontainer = new WindsorContainer { Parent = Container };
 
-			Assert.AreEqual(Container, childcontainer.Parent);
+        Assert.Equal(Container, childcontainer.Parent);
 
-			childcontainer.Register(Component.For(typeof(B)).Named("B"));
-			var b = childcontainer.Resolve<B>("B");
-			Assert.IsNotNull(b);
-		}
+        childcontainer.Register(Component.For(typeof(B)).Named("B"));
+        var b = childcontainer.Resolve<B>("B");
 
-		[Test]
-		public void ResolveAgainstParentContainerWithProperty()
-		{
-			IWindsorContainer childcontainer = new WindsorContainer { Parent = Container };
-
-			Assert.AreEqual(Container, childcontainer.Parent);
-
-			childcontainer.Register(Component.For(typeof(B)).Named("B"));
-			var b = childcontainer.Resolve<B>("B");
-
-			Assert.IsNotNull(b);
-		}
-
-#if FEATURE_SYSTEM_CONFIGURATION
-		[Test]
-		public void StartWithParentContainer()
-		{
-			IWindsorContainer childcontainer = new WindsorContainer(Container, new XmlInterpreter());
-
-			Assert.AreEqual(Container, childcontainer.Parent);
-
-			childcontainer.Register(Component.For(typeof(B)).Named("B"));
-			var b = childcontainer.Resolve<B>("B");
-
-			Assert.IsNotNull(b);
-		}
-#endif
-	}
+        Assert.NotNull(b);
+    }
 }

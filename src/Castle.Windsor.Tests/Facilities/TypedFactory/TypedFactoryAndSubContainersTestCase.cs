@@ -12,66 +12,61 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components
+using Castle.Windsor.Facilities.TypedFactory;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
+using Castle.Windsor.Windsor;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
+
+public class TypedFactoryAndSubContainersTestCase : AbstractContainerTestCase
 {
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Factories;
+    [Fact]
+    public void Facility_When_added_to_a_child_container_wher_parent_has_facility_pulls_from_child()
+    {
+        var childContainer = new WindsorContainer();
 
-	using CastleTests;
-	using CastleTests.Components;
-	using CastleTests.Facilities.TypedFactory.Factories;
+        // NOTE: this has to happen in this order
+        Container.AddChildContainer(childContainer);
+        Container.AddFacility<TypedFactoryFacility>();
+        childContainer.AddFacility<TypedFactoryFacility>();
 
-	using NUnit.Framework;
+        Container.Register(Component.For<IDummyComponent>().ImplementedBy<Component1>());
+        childContainer.Register(Component.For<IDummyComponentFactory>().AsFactory(),
+            Component.For<IDummyComponent>().ImplementedBy<Component2>());
 
-	[TestFixture]
-	public class TypedFactoryAndSubContainersTestCase : AbstractContainerTestCase
-	{
-		[Test]
-		public void Facility_When_added_to_a_child_container_wher_parent_has_facility_pulls_from_child()
-		{
-			var childContainer = new WindsorContainer();
+        var fromParent = Container.Resolve<IDummyComponent>();
+        var fromFactory = childContainer.Resolve<IDummyComponentFactory>().CreateDummyComponent();
+        var fromChild = childContainer.Resolve<IDummyComponent>();
 
-			// NOTE: this has to happen in this order
-			Container.AddChildContainer(childContainer);
-			Container.AddFacility<TypedFactoryFacility>();
-			childContainer.AddFacility<TypedFactoryFacility>();
+        Assert.Same(fromFactory, fromChild);
+        Assert.NotSame(fromChild, fromParent);
+        Assert.NotSame(fromFactory, fromParent);
+    }
 
-			Container.Register(Component.For<IDummyComponent>().ImplementedBy<Component1>());
-			childContainer.Register(Component.For<IDummyComponentFactory>().AsFactory(),
-			                        Component.For<IDummyComponent>().ImplementedBy<Component2>());
+    [Fact]
+    [Bug("IOC-345")]
+    public void Resolve_SingletonAndDisposeChildContainer_ShouldNotDisposeSingleton()
+    {
+        Container.AddFacility<TypedFactoryFacility>();
+        Container.Register(Component.For<IGenericFactory<A>>().AsFactory(),
+            Component.For<A>());
 
-			var fromParent = Container.Resolve<IDummyComponent>();
-			var fromFactory = childContainer.Resolve<IDummyComponentFactory>().CreateDummyComponent();
-			var fromChild = childContainer.Resolve<IDummyComponent>();
+        // uncomment the line below and the test will not fail
+        //container.Resolve<ISomeFactory>();
 
-			Assert.AreSame(fromFactory, fromChild);
-			Assert.AreNotSame(fromChild, fromParent);
-			Assert.AreNotSame(fromFactory, fromParent);
-		}
+        var childContainer = new WindsorContainer();
+        Container.AddChildContainer(childContainer);
 
-		[Test]
-		[Bug("IOC-345")]
-		public void Resolve_SingletonAndDisposeChildContainer_ShouldNotDisposeSingleton()
-		{
-			Container.AddFacility<TypedFactoryFacility>();
-			Container.Register(Component.For<IGenericFactory<A>>().AsFactory(),
-			                   Component.For<A>());
+        childContainer.Resolve<IGenericFactory<A>>();
+        Container.RemoveChildContainer(childContainer);
+        childContainer.Dispose();
 
-			// uncomment the line below and the test will not fail
-			//container.Resolve<ISomeFactory>();
-
-			var childContainer = new WindsorContainer();
-			Container.AddChildContainer(childContainer);
-
-			var factory = childContainer.Resolve<IGenericFactory<A>>();
-			Container.RemoveChildContainer(childContainer);
-			childContainer.Dispose();
-
-			factory = Container.Resolve<IGenericFactory<A>>();
+        var factory = Container.Resolve<IGenericFactory<A>>();
 
 
-			factory.Create();
-		}
-	}
+        factory.Create();
+    }
 }

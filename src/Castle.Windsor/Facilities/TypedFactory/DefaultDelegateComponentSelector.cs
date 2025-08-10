@@ -12,53 +12,51 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.TypedFactory
+using System.Reflection;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+
+namespace Castle.Windsor.Facilities.TypedFactory;
+
+[Singleton]
+public class DefaultDelegateComponentSelector : DefaultTypedFactoryComponentSelector
 {
-	using System;
-	using System.Reflection;
+    protected override Arguments GetArguments(MethodInfo method, object[] arguments)
+    {
+        var parameters = method.GetParameters();
+        var arg = new Arguments();
+        for (var i = 0; i < parameters.Length; i++)
+        {
+            if (arg.Contains(parameters[i].ParameterType))
+            {
+                if (IsFunc(method.DeclaringType))
+                {
+                    throw new ArgumentException(
+                        $"Factory delegate {method.DeclaringType} has duplicated arguments of type {parameters[i].ParameterType}. " +
+                        "Using generic purpose delegates with duplicated argument types is unsupported, because then it is not possible to match arguments properly. " +
+                        "Use some custom delegate with meaningful argument names or interface based factory instead.");
+                }
 
-	using Castle.Core;
-	using Castle.MicroKernel;
+                // else we just ignore it. It will likely be matched by name so we don't want to throw prematurely. We could log this though.
+            }
+            else
+            {
+                arg.Add(parameters[i].ParameterType, arguments[i]);
+            }
 
-	[Singleton]
-	public class DefaultDelegateComponentSelector : DefaultTypedFactoryComponentSelector
-	{
-		protected override Arguments GetArguments(MethodInfo method, object[] arguments)
-		{
-			var parameters = method.GetParameters();
-			var arg = new Arguments();
-			for (var i = 0; i < parameters.Length; i++)
-			{
-				if (arg.Contains(parameters[i].ParameterType))
-				{
-					if (IsFunc(method.DeclaringType))
-					{
-						throw new ArgumentException(
-							string.Format("Factory delegate {0} has duplicated arguments of type {1}. " +
-							              "Using generic purpose delegates with duplicated argument types is unsupported, because then it is not possible to match arguments properly. " +
-							              "Use some custom delegate with meaningful argument names or interface based factory instead.",
-							              method.DeclaringType, parameters[i].ParameterType));
-					}
+            arg.Add(parameters[i].Name, arguments[i]);
+        }
 
-					// else we just ignore it. It will likely be matched by name so we don't want to throw prematurely. We could log this though.
-				}
-				else
-				{
-					arg.Add(parameters[i].ParameterType, arguments[i]);
-				}
-				arg.Add(parameters[i].Name, arguments[i]);
-			}
-			return arg;
-		}
+        return arg;
+    }
 
-		protected override string GetComponentName(MethodInfo method, object[] arguments)
-		{
-			return null;
-		}
+    protected override string GetComponentName(MethodInfo method, object[] arguments)
+    {
+        return null;
+    }
 
-		private bool IsFunc(Type type)
-		{
-			return type.FullName != null && type.FullName.StartsWith("System.Func");
-		}
-	}
+    private static bool IsFunc(Type type)
+    {
+        return type.FullName != null && type.FullName.StartsWith("System.Func");
+    }
 }

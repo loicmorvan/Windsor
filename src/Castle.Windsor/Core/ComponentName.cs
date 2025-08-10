@@ -12,52 +12,51 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
+using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.Core;
+
+public class ComponentName
 {
-	using System;
+    public ComponentName(string name, bool setByUser)
+    {
+        Name = Must.NotBeEmpty(name, "name");
+        SetByUser = setByUser;
+    }
 
-	using Castle.Core.Internal;
+    public string Name { get; private set; }
+    public bool SetByUser { get; private set; }
 
-	public class ComponentName
-	{
-		public ComponentName(string name, bool setByUser)
-		{
-			Name = Must.NotBeEmpty(name, "name");
-			SetByUser = setByUser;
-		}
+    public override string ToString()
+    {
+        return Name;
+    }
 
-		public string Name { get; private set; }
-		public bool SetByUser { get; private set; }
+    internal void SetName(string value)
+    {
+        Name = Must.NotBeEmpty(value, "value");
+        SetByUser = true;
+    }
 
-		public override string ToString()
-		{
-			return Name;
-		}
+    /// <summary>
+    ///     Gets the default name for component implemented by <paramref name="componentType" /> which will be used in
+    ///     case when user does not provide one explicitly.
+    /// </summary>
+    /// <param name="componentType"></param>
+    /// <returns></returns>
+    public static ComponentName DefaultFor(Type componentType)
+    {
+        return new ComponentName(DefaultNameFor(componentType), false);
+    }
 
-		internal void SetName(string value)
-		{
-			Name = Must.NotBeEmpty(value, "value");
-			SetByUser = true;
-		}
-
-		/// <summary>
-		///   Gets the default name for component implemented by <paramref name = "componentType" /> which will be used in case when user does not provide one explicitly.
-		/// </summary>
-		/// <param name = "componentType"></param>
-		/// <returns></returns>
-		public static ComponentName DefaultFor(Type componentType)
-		{
-			return new ComponentName(DefaultNameFor(componentType), false);
-		}
-
-		/// <summary>
-		///   Gets the default name for component implemented by <paramref name = "componentType" /> which will be used in case when user does not provide one explicitly.
-		/// </summary>
-		/// <param name = "componentType"></param>
-		/// <returns></returns>
-		public static string DefaultNameFor(Type componentType)
-		{
-			return componentType.FullName;
-		}
-	}
+    /// <summary>
+    ///     Gets the default name for component implemented by <paramref name="componentType" /> which will be used in
+    ///     case when user does not provide one explicitly.
+    /// </summary>
+    /// <param name="componentType"></param>
+    /// <returns></returns>
+    public static string DefaultNameFor(Type componentType)
+    {
+        return componentType.FullName;
+    }
 }

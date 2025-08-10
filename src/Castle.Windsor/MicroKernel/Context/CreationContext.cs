@@ -12,496 +12,406 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Context
+using System.Diagnostics;
+using System.Reflection;
+using System.Text;
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.ComponentActivator;
+using Castle.Windsor.MicroKernel.Releasers;
+using Castle.Windsor.MicroKernel.SubSystems.Conversion;
+
+namespace Castle.Windsor.MicroKernel.Context;
+
+/// <summary>
+///     Used during a component request, passed along to the whole process. This allow some data to be passed along the
+///     process, which is used to detected cycled dependency graphs and now it's also being
+///     used to provide arguments to components.
+/// </summary>
+[Serializable]
+public class CreationContext :
+    ISubDependencyResolver
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Linq;
-	using System.Reflection;
-	using System.Text;
+    private readonly ITypeConverter _converter;
 
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.ComponentActivator;
-	using Castle.MicroKernel.Releasers;
-	using Castle.MicroKernel.SubSystems.Conversion;
+    /// <summary>
+    ///     The list of handlers that are used to resolve the component. We track that in order to try to avoid attempts
+    ///     to resolve a service with itself.
+    /// </summary>
+    private readonly Stack<IHandler> _handlerStack;
 
-	/// <summary>
-	///   Used during a component request, passed along to the whole process.
-	///   This allow some data to be passed along the process, which is used 
-	///   to detected cycled dependency graphs and now it's also being used
-	///   to provide arguments to components.
-	/// </summary>
-	[Serializable]
-	public class CreationContext :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
-		ISubDependencyResolver
-	{
-		private readonly ITypeConverter converter;
+    private readonly Stack<ResolutionContext> _resolutionStack;
+    private Arguments _additionalArguments;
+    private Arguments _extendedProperties;
+    private Type[] _genericArguments;
+    private bool _isResolving = true;
 
-		private readonly IHandler handler;
+    /// <summary>Initializes a new instance of the <see cref="CreationContext" /> class.</summary>
+    /// <param name="requestedType"> The type to extract generic arguments. </param>
+    /// <param name="parentContext"> The parent context. </param>
+    /// <param name="propagateInlineDependencies">
+    ///     When set to <c>true</c> will clone <paramref name="parentContext" />
+    ///     <see cref="AdditionalArguments" /> .
+    /// </param>
+    public CreationContext(Type requestedType, CreationContext parentContext, bool propagateInlineDependencies)
+        : this(parentContext.Handler, parentContext.ReleasePolicy, requestedType, null, null, parentContext)
+    {
+        ArgumentNullException.ThrowIfNull(parentContext);
 
-		/// <summary>
-		///   The list of handlers that are used to resolve
-		///   the component.
-		///   We track that in order to try to avoid attempts to resolve a service
-		///   with itself.
-		/// </summary>
-		private readonly Stack<IHandler> handlerStack;
+        if (parentContext._extendedProperties != null)
+        {
+            _extendedProperties = new Arguments(parentContext._extendedProperties);
+        }
 
-		private readonly Type requestedType;
+        if (propagateInlineDependencies && parentContext.HasAdditionalArguments)
+        {
+            _additionalArguments = new Arguments(parentContext._additionalArguments);
+        }
+    }
 
-		private readonly Stack<ResolutionContext> resolutionStack;
-		private Arguments additionalArguments;
-		private Arguments extendedProperties;
-		private Type[] genericArguments;
-		private bool isResolving = true;
+    /// <summary>Initializes a new instance of the <see cref="CreationContext" /> class.</summary>
+    /// <param name="handler"> The handler. </param>
+    /// <param name="releasePolicy"> The release policy. </param>
+    /// <param name="requestedType"> The type to extract generic arguments. </param>
+    /// <param name="additionalArguments"> The additional arguments. </param>
+    /// <param name="converter"> The conversion manager. </param>
+    /// <param name="parent"> Parent context </param>
+    public CreationContext(IHandler handler, IReleasePolicy releasePolicy, Type requestedType,
+        Arguments additionalArguments, ITypeConverter converter,
+        CreationContext parent)
+    {
+        RequestedType = requestedType;
+        Handler = handler;
+        ReleasePolicy = releasePolicy;
+        _additionalArguments = additionalArguments;
+        _converter = converter;
 
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "CreationContext" /> class.
-		/// </summary>
-		/// <param name = "requestedType"> The type to extract generic arguments. </param>
-		/// <param name = "parentContext"> The parent context. </param>
-		/// <param name = "propagateInlineDependencies"> When set to <c>true</c> will clone <paramref name = "parentContext" /> <see cref = "AdditionalArguments" /> . </param>
-		public CreationContext(Type requestedType, CreationContext parentContext, bool propagateInlineDependencies)
-			: this(parentContext.Handler, parentContext.ReleasePolicy, requestedType, null, null, parentContext)
-		{
-			if (parentContext == null)
-			{
-				throw new ArgumentNullException(nameof(parentContext));
-			}
+        if (parent != null)
+        {
+            _resolutionStack = parent._resolutionStack;
+            _handlerStack = parent._handlerStack;
+            return;
+        }
 
-			if (parentContext.extendedProperties != null)
-			{
-				extendedProperties = new Arguments(parentContext.extendedProperties);
-			}
+        _handlerStack = new Stack<IHandler>(4);
+        _resolutionStack = new Stack<ResolutionContext>(4);
+    }
 
-			if (propagateInlineDependencies && parentContext.HasAdditionalArguments)
-			{
-				additionalArguments = new Arguments(parentContext.additionalArguments);
-			}
-		}
-
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "CreationContext" /> class.
-		/// </summary>
-		/// <param name = "handler"> The handler. </param>
-		/// <param name = "releasePolicy"> The release policy. </param>
-		/// <param name = "requestedType"> The type to extract generic arguments. </param>
-		/// <param name = "additionalArguments"> The additional arguments. </param>
-		/// <param name = "converter"> The conversion manager. </param>
-		/// <param name = "parent"> Parent context </param>
-		public CreationContext(IHandler handler, IReleasePolicy releasePolicy, Type requestedType,
-		                       Arguments additionalArguments, ITypeConverter converter,
-		                       CreationContext parent)
-		{
-			this.requestedType = requestedType;
-			this.handler = handler;
-			ReleasePolicy = releasePolicy;
-			this.additionalArguments = additionalArguments;
-			this.converter = converter;
-
-			if (parent != null)
-			{
-				resolutionStack = parent.resolutionStack;
-				handlerStack = parent.handlerStack;
-				return;
-			}
-			handlerStack = new Stack<IHandler>(4);
-			resolutionStack = new Stack<ResolutionContext>(4);
-		}
-
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "CreationContext" /> class.
-		/// </summary>
-		private CreationContext()
-		{
+    /// <summary>Initializes a new instance of the <see cref="CreationContext" /> class.</summary>
+    private CreationContext()
+    {
 #pragma warning disable 612,618
-			ReleasePolicy = new NoTrackingReleasePolicy();
+        ReleasePolicy = new NoTrackingReleasePolicy();
 #pragma warning restore 612,618
-			handlerStack = new Stack<IHandler>(4);
-			resolutionStack = new Stack<ResolutionContext>(4);
-		}
+        _handlerStack = new Stack<IHandler>(4);
+        _resolutionStack = new Stack<ResolutionContext>(4);
+    }
 
-		public Arguments AdditionalArguments
-		{
-			get
-			{
-				if (additionalArguments == null)
-				{
-					additionalArguments = new Arguments();
-				}
-				return additionalArguments;
-			}
-		}
+    public Arguments AdditionalArguments => _additionalArguments ??= new Arguments();
 
-		public Type[] GenericArguments
-		{
-			get
-			{
-				if (genericArguments == null)
-				{
-					genericArguments = ExtractGenericArguments(requestedType);
-				}
-				return genericArguments;
-			}
-		}
+    public Type[] GenericArguments => _genericArguments ??= ExtractGenericArguments(RequestedType);
 
-		public IHandler Handler
-		{
-			get { return handler; }
-		}
+    public IHandler Handler { get; }
 
-		public bool HasAdditionalArguments
-		{
-			get { return additionalArguments != null && additionalArguments.Count != 0; }
-		}
+    public bool HasAdditionalArguments => _additionalArguments != null && _additionalArguments.Count != 0;
 
-		public virtual bool IsResolving
-		{
-			get { return isResolving; }
-		}
+    public virtual bool IsResolving => _isResolving;
 
-		public IReleasePolicy ReleasePolicy { get; set; }
+    public IReleasePolicy ReleasePolicy { get; set; }
 
-		public Type RequestedType
-		{
-			get { return requestedType; }
-		}
+    public Type RequestedType { get; }
 
-		public void AttachExistingBurden(Burden burden)
-		{
-			ResolutionContext resolutionContext;
-			try
-			{
-				resolutionContext = resolutionStack.Peek();
-			}
-			catch (InvalidOperationException)
-			{
-				throw new ComponentActivatorException(
-					"Not in a resolution context. 'AttachExistingBurden' method can only be called withing a resoltion scope. (after 'EnterResolutionContext' was called within a handler)",
-					null);
-			}
-			resolutionContext.AttachBurden(burden);
-		}
+    public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+        ComponentModel model,
+        DependencyModel dependency)
+    {
+        return HasAdditionalArguments && (CanResolveByKey(dependency) || CanResolveByType(dependency));
+    }
 
-		public void BuildCycleMessageFor(IHandler duplicateHandler, StringBuilder message)
-		{
-			message.AppendFormat("Component '{0}'", duplicateHandler.ComponentModel.Name);
+    public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+        ComponentModel model,
+        DependencyModel dependency)
+    {
+        Debug.Assert(CanResolve(context, contextHandlerResolver, model, dependency));
+        object result = null;
+        if (dependency.DependencyKey != null)
+        {
+            result = Resolve(dependency, _additionalArguments[dependency.DependencyKey]);
+        }
 
-			foreach (var handlerOnTheStack in handlerStack)
-			{
-				message.AppendFormat(" resolved as dependency of");
-				message.AppendLine();
-				message.AppendFormat("\tcomponent '{0}'", handlerOnTheStack.ComponentModel.Name);
-			}
-			message.AppendLine(" which is the root component being resolved.");
-		}
+        return result ?? Resolve(dependency, _additionalArguments[dependency.TargetType]);
+    }
 
-		public Burden CreateBurden(IComponentActivator componentActivator, bool trackedExternally)
-		{
-			ResolutionContext resolutionContext;
-			try
-			{
-				resolutionContext = resolutionStack.Peek();
-			}
-			catch (InvalidOperationException)
-			{
-				throw new ComponentActivatorException(
-					"Not in a resolution context. 'CreateBurden' method can only be called withing a resoltion scope. (after 'EnterResolutionContext' was called within a handler)",
-					null);
-			}
+    public void AttachExistingBurden(Burden burden)
+    {
+        ResolutionContext resolutionContext;
+        try
+        {
+            resolutionContext = _resolutionStack.Peek();
+        }
+        catch (InvalidOperationException)
+        {
+            throw new ComponentActivatorException(
+                "Not in a resolution context. 'AttachExistingBurden' method can only be called withing a resoltion scope. (after 'EnterResolutionContext' was called within a handler)",
+                null);
+        }
 
-			var activator = componentActivator as IDependencyAwareActivator;
-			if (activator != null)
-			{
-				trackedExternally |= activator.IsManagedExternally(resolutionContext.Handler.ComponentModel);
-			}
+        resolutionContext.AttachBurden(burden);
+    }
 
-			return resolutionContext.CreateBurden(trackedExternally);
-		}
+    public void BuildCycleMessageFor(IHandler duplicateHandler, StringBuilder message)
+    {
+        message.Append($"Component '{duplicateHandler.ComponentModel.Name}'");
 
-		public ResolutionContext EnterResolutionContext(IHandler handlerBeingResolved, bool requiresDecommission)
-		{
-			return EnterResolutionContext(handlerBeingResolved, true, requiresDecommission);
-		}
+        foreach (var handlerOnTheStack in _handlerStack)
+        {
+            message.AppendFormat(" resolved as dependency of");
+            message.AppendLine();
+            message.Append($"\tcomponent '{handlerOnTheStack.ComponentModel.Name}'");
+        }
 
-		public ResolutionContext EnterResolutionContext(IHandler handlerBeingResolved, bool trackContext,
-		                                                bool requiresDecommission)
-		{
-			var resolutionContext = new ResolutionContext(this, handlerBeingResolved, requiresDecommission, trackContext);
-			handlerStack.Push(handlerBeingResolved);
-			if (trackContext)
-			{
-				resolutionStack.Push(resolutionContext);
-			}
-			return resolutionContext;
-		}
+        message.AppendLine(" which is the root component being resolved.");
+    }
 
-		public object GetContextualProperty(object key)
-		{
-			if (extendedProperties == null)
-			{
-				return null;
-			}
-			return extendedProperties[key];
-		}
+    public Burden CreateBurden(IComponentActivator componentActivator, bool trackedExternally)
+    {
+        ResolutionContext resolutionContext;
+        try
+        {
+            resolutionContext = _resolutionStack.Peek();
+        }
+        catch (InvalidOperationException)
+        {
+            throw new ComponentActivatorException(
+                "Not in a resolution context. 'CreateBurden' method can only be called withing a resoltion scope. (after 'EnterResolutionContext' was called within a handler)",
+                null);
+        }
 
-		/// <summary>
-		///   Method used by handlers to test whether they are being resolved in the context.
-		/// </summary>
-		/// <param name = "handler"> </param>
-		/// <returns> </returns>
-		/// <remarks>
-		///   This method is provided as part of double dispatch mechanism for use by handlers.
-		///   Outside of handlers, call <see cref = "IHandler.IsBeingResolvedInContext" /> instead.
-		/// </remarks>
-		public bool IsInResolutionContext(IHandler handler)
-		{
-			return handlerStack.Contains(handler);
-		}
+        if (componentActivator is IDependencyAwareActivator activator)
+        {
+            trackedExternally |= activator.IsManagedExternally(resolutionContext.Handler.ComponentModel);
+        }
 
-		public ResolutionContext SelectScopeRoot(Func<IHandler[], IHandler> scopeRootSelector)
-		{
-			var scopes = resolutionStack.Select(c => c.Handler).Reverse().ToArray();
-			var selected = scopeRootSelector(scopes);
-			if (selected != null)
-			{
-				var resolutionContext = resolutionStack.SingleOrDefault(s => s.Handler == selected);
-				if (resolutionContext != null)
-				{
-					return resolutionContext;
-				}
-			}
-			return null;
-		}
+        return resolutionContext.CreateBurden(trackedExternally);
+    }
 
-		public void SetContextualProperty(object key, object value)
-		{
-			if (key == null)
-			{
-				throw new ArgumentNullException(nameof(key));
-			}
-			if (extendedProperties == null)
-			{
-				extendedProperties = new Arguments();
-			}
-			extendedProperties[key] = value;
-		}
+    public ResolutionContext EnterResolutionContext(IHandler handlerBeingResolved, bool requiresDecommission)
+    {
+        return EnterResolutionContext(handlerBeingResolved, true, requiresDecommission);
+    }
 
-		public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
-		                               ComponentModel model,
-		                               DependencyModel dependency)
-		{
-			return HasAdditionalArguments && (CanResolveByKey(dependency) || CanResolveByType(dependency));
-		}
+    public ResolutionContext EnterResolutionContext(IHandler handlerBeingResolved, bool trackContext,
+        bool requiresDecommission)
+    {
+        var resolutionContext = new ResolutionContext(this, handlerBeingResolved, requiresDecommission, trackContext);
+        _handlerStack.Push(handlerBeingResolved);
+        if (trackContext)
+        {
+            _resolutionStack.Push(resolutionContext);
+        }
 
-		public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
-		                              ComponentModel model,
-		                              DependencyModel dependency)
-		{
-			Debug.Assert(CanResolve(context, contextHandlerResolver, model, dependency),
-			             "CanResolve(context, contextHandlerResolver, model, dependency)");
-			object result = null;
-			if (dependency.DependencyKey != null)
-			{
-				result = Resolve(dependency, additionalArguments[dependency.DependencyKey]);
-			}
-			return result ?? Resolve(dependency, additionalArguments[dependency.TargetType]);
-		}
+        return resolutionContext;
+    }
 
-		private bool CanConvertParameter(Type type)
-		{
-			return converter != null && converter.CanHandleType(type);
-		}
+    public object GetContextualProperty(object key)
+    {
+        return _extendedProperties?[key];
+    }
 
-		private bool CanResolve(DependencyModel dependency, object inlineArgument)
-		{
-			var type = dependency.TargetItemType;
-			if (type == null)
-			{
-				return false;
-			}
-			if (inlineArgument == null)
-			{
-				return type.IsNullable();
-			}
-			return type.IsInstanceOfType(inlineArgument) || CanConvertParameter(type);
-		}
+    /// <summary>Method used by handlers to test whether they are being resolved in the context.</summary>
+    /// <param name="handler"> </param>
+    /// <returns> </returns>
+    /// <remarks>
+    ///     This method is provided as part of double dispatch mechanism for use by handlers. Outside of handlers, call
+    ///     <see cref="IHandler.IsBeingResolvedInContext" /> instead.
+    /// </remarks>
+    public bool IsInResolutionContext(IHandler handler)
+    {
+        return _handlerStack.Contains(handler);
+    }
 
-		private bool CanResolveByKey(DependencyModel dependency)
-		{
-			if (dependency.DependencyKey == null)
-			{
-				return false;
-			}
-			Debug.Assert(additionalArguments != null, "additionalArguments != null");
-			return CanResolve(dependency, additionalArguments[dependency.DependencyKey]);
-		}
+    public ResolutionContext SelectScopeRoot(Func<IHandler[], IHandler> scopeRootSelector)
+    {
+        var scopes = _resolutionStack.Select(c => c.Handler).Reverse().ToArray();
+        var selected = scopeRootSelector(scopes);
+        if (selected == null)
+        {
+            return null;
+        }
 
-		private bool CanResolveByType(DependencyModel dependency)
-		{
-			var type = dependency.TargetItemType;
-			if (type == null)
-			{
-				return false;
-			}
-			Debug.Assert(additionalArguments != null, "additionalArguments != null");
-			return CanResolve(dependency, additionalArguments[type]);
-		}
+        var resolutionContext = _resolutionStack.SingleOrDefault(s => s.Handler == selected);
+        return resolutionContext;
+    }
 
-		private void ExitResolutionContext(Burden burden, bool trackContext)
-		{
-			handlerStack.Pop();
+    public void SetContextualProperty(object key, object value)
+    {
+        ArgumentNullException.ThrowIfNull(key);
+        _extendedProperties ??= new Arguments();
+        _extendedProperties[key] = value;
+    }
 
-			if (trackContext)
-			{
-				resolutionStack.Pop();
-			}
-			if (burden == null)
-			{
-				return;
-			}
-			if (burden.Instance == null)
-			{
-				return;
-			}
-			if (burden.RequiresPolicyRelease == false)
-			{
-				return;
-			}
-			if (resolutionStack.Count != 0)
-			{
-				var parent = resolutionStack.Peek().Burden;
-				if (parent == null)
-				{
-					return;
-				}
-				parent.AddChild(burden);
-			}
-		}
+    private bool CanConvertParameter(Type type)
+    {
+        return _converter != null && _converter.CanHandleType(type);
+    }
 
-		private object Resolve(DependencyModel dependency, object inlineArgument)
-		{
-			var targetType = dependency.TargetItemType;
-			if (inlineArgument != null)
-			{
-				if (targetType.IsInstanceOfType(inlineArgument))
-				{
-					return inlineArgument;
-				}
-				if (CanConvertParameter(targetType))
-				{
-					return converter.PerformConversion(inlineArgument.ToString(), targetType);
-				}
-			}
-			return null;
-		}
+    private bool CanResolve(DependencyModel dependency, object inlineArgument)
+    {
+        var type = dependency.TargetItemType;
+        if (type == null)
+        {
+            return false;
+        }
 
-		/// <summary>
-		///   Creates a new, empty <see cref = "CreationContext" /> instance.
-		/// </summary>
-		/// <remarks>
-		///   A new CreationContext should be created every time, as the contexts keeps some state related to dependency resolution.
-		/// </remarks>
-		public static CreationContext CreateEmpty()
-		{
-			return new CreationContext();
-		}
+        if (inlineArgument == null)
+        {
+            return type.IsNullable();
+        }
 
-		public static CreationContext ForDependencyInspection(IHandler handler)
-		{
-			var context = CreateEmpty();
-			context.isResolving = false;
-			context.EnterResolutionContext(handler, false);
-			return context;
-		}
+        return type.IsInstanceOfType(inlineArgument) || CanConvertParameter(type);
+    }
 
-		private static Type[] ExtractGenericArguments(Type typeToExtractGenericArguments)
-		{
-			if (typeToExtractGenericArguments.GetTypeInfo().IsGenericType)
-			{
-				return typeToExtractGenericArguments.GetTypeInfo().GetGenericArguments();
-			}
-			return Type.EmptyTypes;
-		}
+    private bool CanResolveByKey(DependencyModel dependency)
+    {
+        if (dependency.DependencyKey == null)
+        {
+            return false;
+        }
 
-		public class ResolutionContext : IDisposable
-		{
-			private readonly CreationContext context;
-			private readonly IHandler handler;
-			private readonly bool requiresDecommission;
-			private readonly bool trackContext;
-			private Burden burden;
-			private Arguments extendedProperties;
+        Debug.Assert(_additionalArguments != null);
+        return CanResolve(dependency, _additionalArguments[dependency.DependencyKey]);
+    }
 
-			public ResolutionContext(CreationContext context, IHandler handler, bool requiresDecommission, bool trackContext)
-			{
-				this.context = context;
-				this.requiresDecommission = requiresDecommission;
-				this.trackContext = trackContext;
-				this.handler = handler;
-			}
+    private bool CanResolveByType(DependencyModel dependency)
+    {
+        var type = dependency.TargetItemType;
+        if (type == null)
+        {
+            return false;
+        }
 
-			public Burden Burden
-			{
-				get { return burden; }
-			}
+        Debug.Assert(_additionalArguments != null);
+        return CanResolve(dependency, _additionalArguments[type]);
+    }
 
-			public CreationContext Context
-			{
-				get { return context; }
-			}
+    private void ExitResolutionContext(Burden burden, bool trackContext)
+    {
+        _handlerStack.Pop();
 
-			public IHandler Handler
-			{
-				get { return handler; }
-			}
+        if (trackContext)
+        {
+            _resolutionStack.Pop();
+        }
 
-			public void AttachBurden(Burden burden)
-			{
-				this.burden = burden;
-			}
+        if (burden?.Instance == null)
+        {
+            return;
+        }
 
-			public Burden CreateBurden(bool trackedExternally)
-			{
-				// NOTE: not sure we should allow crreating burden again, when it was already created...
-				// this is currently employed by pooled lifestyle
-				burden = new Burden(handler, requiresDecommission, trackedExternally);
-				return burden;
-			}
+        if (burden.RequiresPolicyRelease == false)
+        {
+            return;
+        }
 
-			public object GetContextualProperty(object key)
-			{
-				if (extendedProperties == null)
-				{
-					return null;
-				}
+        if (_resolutionStack.Count == 0)
+        {
+            return;
+        }
 
-				var value = extendedProperties[key];
-				return value;
-			}
+        var parent = _resolutionStack.Peek().Burden;
 
-			public void SetContextualProperty(object key, object value)
-			{
-				if (key == null)
-				{
-					throw new ArgumentNullException(nameof(key));
-				}
-				if (extendedProperties == null)
-				{
-					extendedProperties = new Arguments();
-				}
-				extendedProperties[key] = value;
-			}
+        parent?.AddChild(burden);
+    }
 
-			public void Dispose()
-			{
-				context.ExitResolutionContext(burden, trackContext);
-			}
-		}
-	}
+    private object Resolve(DependencyModel dependency, object inlineArgument)
+    {
+        var targetType = dependency.TargetItemType;
+        if (inlineArgument == null)
+        {
+            return null;
+        }
+
+        if (targetType.IsInstanceOfType(inlineArgument))
+        {
+            return inlineArgument;
+        }
+
+        return CanConvertParameter(targetType)
+            ? _converter.PerformConversion(inlineArgument.ToString(), targetType)
+            : null;
+    }
+
+    /// <summary>Creates a new, empty <see cref="CreationContext" /> instance.</summary>
+    /// <remarks>
+    ///     A new CreationContext should be created every time, as the contexts keeps some state related to dependency
+    ///     resolution.
+    /// </remarks>
+    public static CreationContext CreateEmpty()
+    {
+        return new CreationContext();
+    }
+
+    public static CreationContext ForDependencyInspection(IHandler handler)
+    {
+        var context = CreateEmpty();
+        context._isResolving = false;
+        context.EnterResolutionContext(handler, false);
+        return context;
+    }
+
+    private static Type[] ExtractGenericArguments(Type typeToExtractGenericArguments)
+    {
+        return typeToExtractGenericArguments.GetTypeInfo().IsGenericType
+            ? typeToExtractGenericArguments.GetTypeInfo().GetGenericArguments()
+            : Type.EmptyTypes;
+    }
+
+    public class ResolutionContext(
+        CreationContext context,
+        IHandler handler,
+        bool requiresDecommission,
+        bool trackContext)
+        : IDisposable
+    {
+        private Arguments _extendedProperties;
+
+        public Burden Burden { get; private set; }
+
+        private CreationContext Context { get; } = context;
+
+        public IHandler Handler { get; } = handler;
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+            
+            Context.ExitResolutionContext(Burden, trackContext);
+        }
+
+        public void AttachBurden(Burden burden)
+        {
+            Burden = burden;
+        }
+
+        public Burden CreateBurden(bool trackedExternally)
+        {
+            // NOTE: not sure we should allow crreating burden again, when it was already created...
+            // this is currently employed by pooled lifestyle
+            Burden = new Burden(Handler, requiresDecommission, trackedExternally);
+            return Burden;
+        }
+
+        public object GetContextualProperty(object key)
+        {
+            var value = _extendedProperties?[key];
+            return value;
+        }
+
+        public void SetContextualProperty(object key, object value)
+        {
+            ArgumentNullException.ThrowIfNull(key);
+            _extendedProperties ??= new Arguments();
+            _extendedProperties[key] = value;
+        }
+    }
 }

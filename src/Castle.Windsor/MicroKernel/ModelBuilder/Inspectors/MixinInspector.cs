@@ -12,51 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Proxy;
+using Castle.Windsor.MicroKernel.Util;
+
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
+
+[Serializable]
+public class MixinInspector : IContributeComponentModelConstruction
 {
-	using System;
-	using System.Collections.Generic;
+    public void ProcessModel(IKernel kernel, ComponentModel model)
+    {
+        var mixins = model.Configuration?.Children["mixins"];
+        if (mixins == null)
+        {
+            return;
+        }
 
-	using Castle.Core;
-	using Castle.MicroKernel.Proxy;
-	using Castle.MicroKernel.Util;
+        var mixinReferences = new List<ComponentReference<object>>();
+        foreach (var mixin in mixins.Children)
+        {
+            var value = mixin.Value;
 
-	[Serializable]
-	public class MixinInspector : IContributeComponentModelConstruction
-	{
-		public void ProcessModel(IKernel kernel, ComponentModel model)
-		{
-			if (model.Configuration == null)
-			{
-				return;
-			}
+            var mixinComponent = ReferenceExpressionUtil.ExtractComponentName(value);
+            if (mixinComponent == null)
+            {
+                throw new Exception(
+                    $"The value for the mixin must be a reference to a component (Currently {value})");
+            }
 
-			var mixins = model.Configuration.Children["mixins"];
-			if (mixins == null)
-			{
-				return;
-			}
+            mixinReferences.Add(new ComponentReference<object>(mixinComponent));
+        }
 
-			var mixinReferences = new List<ComponentReference<object>>();
-			foreach (var mixin in mixins.Children)
-			{
-				var value = mixin.Value;
+        if (mixinReferences.Count == 0)
+        {
+            return;
+        }
 
-				var mixinComponent = ReferenceExpressionUtil.ExtractComponentName(value);
-				if (mixinComponent == null)
-				{
-					throw new Exception(
-						String.Format("The value for the mixin must be a reference to a component (Currently {0})", value));
-				}
-
-				mixinReferences.Add(new ComponentReference<object>(mixinComponent));
-			}
-			if (mixinReferences.Count == 0)
-			{
-				return;
-			}
-			var options = model.ObtainProxyOptions();
-			mixinReferences.ForEach(options.AddMixinReference);
-		}
-	}
+        var options = model.ObtainProxyOptions();
+        mixinReferences.ForEach(options.AddMixinReference);
+    }
 }

@@ -12,47 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class Employee : IEmployee
 {
-	using System;
+    public string Email { get; set; }
 
-	public class Employee : IEmployee
-	{
-		private string ntLogin;
-		public string Email { get; set; }
+    public string EmployeeId { get; set; }
 
-		public string EmployeeID { get; set; }
+    public string FirstName { get; set; }
 
-		public string FirstName { get; set; }
+    public string FullName => $"{FirstName} {MiddleName} {LastName}";
 
-		public string FullName
-		{
-			get { return String.Format("{0} {1} {2}", FirstName, MiddleName, LastName); }
-		}
+    public bool IsProxy { get; set; }
 
-		public bool IsProxy { get; set; }
+    public bool IsSupervisor { get; set; }
 
-		public bool IsSupervisor { get; set; }
+    public string LastName { get; set; }
 
-		public string LastName { get; set; }
+    public string MiddleName { get; set; }
 
-		public string MiddleName { get; set; }
+    public string NtLogin { get; private set; }
 
-		public string NTLogin
-		{
-			get
-			{
-				if (ntLogin.Length > 0)
-				{
-					return ntLogin;
-				}
-				return ntLogin;
-			}
-		}
-
-		public void SetNTLogin(string ntLogin)
-		{
-			this.ntLogin = ntLogin;
-		}
-	}
+    public void SetNtLogin(string ntLogin)
+    {
+        NtLogin = ntLogin;
+    }
 }

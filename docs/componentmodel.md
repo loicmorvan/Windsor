@@ -2,7 +2,8 @@
 
 ## What `ComponentModel` is
 
-ComponentModel is the model of the component in Windsor. It contains all the information Windsor has about any given component - its implementation type, configuration, interceptors, lifecycle steps etc.
+ComponentModel is the model of the component in Windsor. It contains all the information Windsor has about any given
+component - its implementation type, configuration, interceptors, lifecycle steps etc.
 
 ## See also
 

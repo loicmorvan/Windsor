@@ -12,57 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Resolvers;
+using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests;
+
+public class DependencyCyclesTestCase : AbstractContainerTestCase
 {
-	using System;
+    [Fact]
+    public void Can_detect_and_report_cycle_via_factory_method()
+    {
+        Container.Register(
+            Component.For<A>().UsingFactoryMethod(k =>
+            {
+                var thisCreatesCycle = k.Resolve<C>();
+                Assert.NotNull(thisCreatesCycle);
+                return new A();
+            }),
+            Component.For<B>(),
+            Component.For<C>());
 
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Resolvers;
-	using Castle.MicroKernel.Tests;
+        var exception = Assert.Throws<CircularDependencyException>(() => Container.Resolve<C>());
+        var message =
+            string.Format(
+                "Dependency cycle has been detected when trying to resolve component 'Castle.Windsor.Tests.Components.C'.{0}The resolution tree that resulted in the cycle is the following:{0}Component 'Castle.Windsor.Tests.Components.C' resolved as dependency of{0}\tcomponent 'Late bound Castle.Windsor.Tests.Components.A' resolved as dependency of{0}\tcomponent 'Castle.Windsor.Tests.Components.B' resolved as dependency of{0}\tcomponent 'Castle.Windsor.Tests.Components.C' which is the root component being resolved.{0}",
+                Environment.NewLine);
 
-	using CastleTests.Components;
+        Assert.Equal(message, exception.Message);
+    }
 
-	using NUnit.Framework;
+    [Fact]
+    public void Can_detect_and_report_cycle_where_container_has_lazy_loaders()
+    {
+        Container.Register(
+            Component.For<ILazyComponentLoader>().ImplementedBy<AbLoader>(),
+            Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>());
 
-	public class DependencyCyclesTestCase : AbstractContainerTestCase
-	{
-		[Test]
-		public void Can_detect_and_report_cycle_via_factory_method()
-		{
-			Container.Register(
-				Component.For<A>().UsingFactoryMethod(k =>
-				{
-					var thisCreatesCycle = k.Resolve<C>();
-					Assert.NotNull(thisCreatesCycle, "just so that the variable is not optimized away");
-					return new A();
-				}),
-				Component.For<B>(),
-				Component.For<C>());
+        var exception = Assert.Throws<CircularDependencyException>(() => Container.Resolve<IEmptyService>());
+        var message =
+            string.Format(
+                "Dependency cycle has been detected when trying to resolve component 'Castle.Windsor.Tests.Components.EmptyServiceDecorator'.{0}The resolution tree that resulted in the cycle is the following:{0}Component 'Castle.Windsor.Tests.Components.EmptyServiceDecorator' resolved as dependency of{0}	component 'Castle.Windsor.Tests.Components.EmptyServiceDecorator' which is the root component being resolved.{0}",
+                Environment.NewLine);
 
-			var exception = Assert.Throws<CircularDependencyException>(() => Container.Resolve<C>());
-			var message =
-				string.Format(
-					"Dependency cycle has been detected when trying to resolve component 'CastleTests.Components.C'.{0}The resolution tree that resulted in the cycle is the following:{0}Component 'CastleTests.Components.C' resolved as dependency of{0}\tcomponent 'Late bound CastleTests.Components.A' resolved as dependency of{0}\tcomponent 'CastleTests.Components.B' resolved as dependency of{0}\tcomponent 'CastleTests.Components.C' which is the root component being resolved.{0}",
-					Environment.NewLine);
-
-			Assert.AreEqual(message, exception.Message);
-		}
-
-		[Test]
-		public void Can_detect_and_report_cycle_where_container_has_lazy_loaders()
-		{
-			Container.Register(
-				Component.For<ILazyComponentLoader>().ImplementedBy<ABLoader>(),
-				Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>());
-
-			var exception = Assert.Throws<CircularDependencyException>(() => Container.Resolve<IEmptyService>());
-			var message =
-				string.Format(
-					"Dependency cycle has been detected when trying to resolve component 'CastleTests.Components.EmptyServiceDecorator'.{0}The resolution tree that resulted in the cycle is the following:{0}Component 'CastleTests.Components.EmptyServiceDecorator' resolved as dependency of{0}	component 'CastleTests.Components.EmptyServiceDecorator' which is the root component being resolved.{0}",
-					Environment.NewLine);
-
-			Assert.AreEqual(message, exception.Message);
-		}
-	}
+        Assert.Equal(message, exception.Message);
+    }
 }

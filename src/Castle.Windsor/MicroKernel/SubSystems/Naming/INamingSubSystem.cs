@@ -12,96 +12,73 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Naming
+using Castle.Windsor.Core;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Naming;
+
+/// <summary>Contract for SubSystem that wishes to keep and coordinate component registration.</summary>
+public interface INamingSubSystem : ISubSystem
 {
-	using System;
+    /// <summary>Returns the number of components registered.</summary>
+    int ComponentCount { get; }
 
-	using Castle.Core;
+    /// <summary>Register a new component resolver that can take part in the decision making about which handler to resolve</summary>
+    void AddHandlerSelector(IHandlerSelector selector);
 
-	/// <summary>
-	///   Contract for SubSystem that wishes to keep and coordinate
-	///   component registration.
-	/// </summary>
-	public interface INamingSubSystem : ISubSystem
-	{
-		/// <summary>
-		///   Returns the number of components registered.
-		/// </summary>
-		int ComponentCount { get; }
+    /// <summary>
+    ///     Register a new component resolver that can take part in the decision making about which handler(s) to resolve
+    ///     and in which order
+    /// </summary>
+    void AddHandlersFilter(IHandlersFilter filter);
 
-		/// <summary>
-		///   Register a new component resolver that can take part in the decision
-		///   making about which handler to resolve
-		/// </summary>
-		void AddHandlerSelector(IHandlerSelector selector);
+    /// <summary>Returns true if there is a component registered for the specified name</summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    bool Contains(string name);
 
-		/// <summary>
-		///   Register a new component resolver that can take part in the decision
-		///   making about which handler(s) to resolve and in which order
-		/// </summary>
-		void AddHandlersFilter(IHandlersFilter filter);
+    /// <summary>Returns true if there is a component registered for the specified service</summary>
+    /// <param name="service"></param>
+    /// <returns></returns>
+    bool Contains(Type service);
 
-		/// <summary>
-		///   Returns true if there is a component registered 
-		///   for the specified name
-		/// </summary>
-		/// <param name = "name"></param>
-		/// <returns></returns>
-		bool Contains(String name);
+    /// <summary>Returns all <see cref="IHandler" /> registered.</summary>
+    /// <returns></returns>
+    IHandler[] GetAllHandlers();
 
-		/// <summary>
-		///   Returns true if there is a component registered 
-		///   for the specified service
-		/// </summary>
-		/// <param name = "service"></param>
-		/// <returns></returns>
-		bool Contains(Type service);
+    /// <summary>Return <see cref="IHandler" />s where components are compatible with the specified service.</summary>
+    /// <param name="service"></param>
+    /// <returns></returns>
+    IHandler[] GetAssignableHandlers(Type service);
 
-		/// <summary>
-		///   Returns all <see cref = "IHandler" /> registered.
-		/// </summary>
-		/// <returns></returns>
-		IHandler[] GetAllHandlers();
+    /// <summary>Returns the <see cref="IHandler" /> associated with the specified name.</summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    IHandler GetHandler(string name);
 
-		/// <summary>
-		///   Return <see cref = "IHandler" />s where components are compatible
-		///   with the specified service.
-		/// </summary>
-		/// <param name = "service"></param>
-		/// <returns></returns>
-		IHandler[] GetAssignableHandlers(Type service);
+    /// <summary>Returns the <see cref="IHandler" /> associated with the specified service.</summary>
+    IHandler GetHandler(Type service);
 
-		/// <summary>
-		///   Returns the <see cref = "IHandler" /> associated with
-		///   the specified name.
-		/// </summary>
-		/// <param name = "name"></param>
-		/// <returns></returns>
-		IHandler GetHandler(String name);
+    /// <summary>Returns an array of <see cref="IHandler" /> associated with the specified service.</summary>
+    /// <param name="service"></param>
+    /// <returns></returns>
+    IHandler[] GetHandlers(Type service);
 
-		/// <summary>
-		///   Returns the <see cref = "IHandler" /> associated with
-		///   the specified service.
-		/// </summary>
-		IHandler GetHandler(Type service);
-
-		/// <summary>
-		///   Returns an array of <see cref = "IHandler" /> associated with
-		///   the specified service.
-		/// </summary>
-		/// <param name = "service"></param>
-		/// <returns></returns>
-		IHandler[] GetHandlers(Type service);
-
-		/// <summary>
-		///   Implementors should register the <see cref = "IHandler" /> with all <see cref = "ComponentModel.Services" /> its <see
-		///    cref = "IHandler.ComponentModel" /> exposes.
-		///   The handler should also be accessible via unique <see cref = "ComponentModel.Name" /> of its <see
-		///    cref = "IHandler.ComponentModel" />.
-		/// </summary>
-		/// <param name = "handler"></param>
-		/// <exception cref = "ComponentRegistrationException">Thrown if the <see cref = "ComponentModel.Name" /> of <paramref
-		///    name = "handler" />'s <see cref = "IHandler.ComponentModel" /> is not unique and a handler with the same name has already been registered.</exception>
-		void Register(IHandler handler);
-	}
+    /// <summary>
+    ///     Implementors should register the <see cref="IHandler" /> with all <see cref="ComponentModel.Services" /> its
+    ///     <see
+    ///         cref="IHandler.ComponentModel" />
+    ///     exposes. The handler should also be accessible via unique <see cref="ComponentModel.Name" /> of its
+    ///     <see
+    ///         cref="IHandler.ComponentModel" />
+    ///     .
+    /// </summary>
+    /// <param name="handler"></param>
+    /// <exception cref="ComponentRegistrationException">
+    ///     Thrown if the <see cref="ComponentModel.Name" /> of
+    ///     <paramref
+    ///         name="handler" />
+    ///     's <see cref="IHandler.ComponentModel" /> is not unique and a handler with the same name has already been
+    ///     registered.
+    /// </exception>
+    void Register(IHandler handler);
 }

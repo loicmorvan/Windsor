@@ -12,19 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
+
+/// <summary>
+///     Establish a composition interface and a subsystem. Implementors should delegate the conversion to a instance
+///     of a type converter.
+/// </summary>
+public interface IConversionManager : ITypeConverter, ISubSystem
 {
-	/// <summary>
-	///   Establish a composition interface and a subsystem.
-	///   Implementors should delegate the conversion to 
-	///   a instance of a type converter.
-	/// </summary>
-	public interface IConversionManager : ITypeConverter, ISubSystem
-	{
-		/// <summary>
-		///   Register a type converter instance.
-		/// </summary>
-		/// <param name = "converter"></param>
-		void Add(ITypeConverter converter);
-	}
+    /// <summary>Register a type converter instance.</summary>
+    /// <param name="converter"></param>
+    [PublicAPI]
+    void Add(ITypeConverter converter);
 }

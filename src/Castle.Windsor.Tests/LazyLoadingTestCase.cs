@@ -12,245 +12,101 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.MicroKernel.Resolvers;
+using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests;
+
+public class LazyLoadingTestCase : AbstractContainerTestCase
 {
-	using System;
-	using System.Collections;
-	using System.Linq;
-	using System.Reflection;
-	using System.Threading;
+    [Fact]
+    public void Can_Lazily_resolve_component()
+    {
+        Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LoaderForDefaultImplementations>());
+        var service = Container.Resolve<IHasDefaultImplementation>("foo");
+        Assert.NotNull(service);
+        Assert.IsType<Implementation>(service);
+    }
 
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Resolvers;
-	using CastleTests;
-	using CastleTests.Components;
+    [Fact]
+    public void Can_lazily_resolve_dependency()
+    {
+        Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LoaderForDefaultImplementations>(),
+            Component.For<UsingLazyComponent>());
+        var component = Container.Resolve<UsingLazyComponent>();
+        Assert.NotNull(component.Dependency);
+    }
 
-	using NUnit.Framework;
+    [Fact]
+    public void Can_lazily_resolve_explicit_dependency()
+    {
+        Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LoaderUsingDependency>());
+        var component = Container.Resolve<UsingString>(new Arguments().AddNamed("parameter", "Hello"));
+        Assert.Equal("Hello", component.Parameter);
+    }
 
-	[TestFixture]
-	public class LazyLoadingTestCase : AbstractContainerTestCase
-	{
-		[Test]
-		public void Can_Lazily_resolve_component()
-		{
-			Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LoaderForDefaultImplementations>());
-			var service = Container.Resolve("foo", typeof(IHasDefaultImplementation));
-			Assert.IsNotNull(service);
-			Assert.IsInstanceOf<Implementation>(service);
-		}
+    [Fact]
+    public void Component_loaded_lazily_can_have_lazy_dependencies()
+    {
+        Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<AbLoader>());
+        Container.Resolve<B>();
+    }
 
-		[Test]
-		public void Can_lazily_resolve_dependency()
-		{
-			Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LoaderForDefaultImplementations>(),
-			                   Component.For<UsingLazyComponent>());
-			var component = Container.Resolve<UsingLazyComponent>();
-			Assert.IsNotNull(component.Dependency);
-		}
+    [Fact(Timeout = 2000)]
+    public async Task Loaders_are_thread_safe()
+    {
+        Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<SlowLoader>());
+        var @event = new ManualResetEvent(false);
+        int[] count = [10];
+        Exception exception = null;
+        for (var i = 0; i < count[0]; i++)
+        {
+            ThreadPool.QueueUserWorkItem(_ =>
+                {
+                    try
+                    {
+                        Container.Resolve<Implementation>("not registered");
+                        if (Interlocked.Decrement(ref count[0]) == 0)
+                        {
+                            @event.Set();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        exception = e;
+                        // this is required because NUnit does not consider it a failure when
+                        // an exception is thrown on a non-main thread and therfore it waits.
+                        @event.Set();
+                    }
+                }
+            );
+        }
 
-		[Test]
-		public void Can_lazily_resolve_explicit_dependency()
-		{
-			Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LoaderUsingDependency>());
-			var component = Container.Resolve<UsingString>(new Arguments().AddNamed("parameter", "Hello"));
-			Assert.AreEqual("Hello", component.Parameter);
-		}
+        await Task.Run(() => @event.WaitOne());
+        Assert.Null(exception);
+        Assert.Equal(0, count[0]);
+    }
 
-		[Test]
-		public void Component_loaded_lazily_can_have_lazy_dependencies()
-		{
-			Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<ABLoader>());
-			Container.Resolve<B>();
-		}
+    [Fact]
+    public void Loaders_only_triggered_when_resolving()
+    {
+        var loader = new AbLoaderWithGuardClause();
+        Container.Register(Component.For<ILazyComponentLoader>().Instance(loader),
+            Component.For<B>());
 
-		[Test]
-		[Timeout(2000)]
-		public void Loaders_are_thread_safe()
-		{
-			Container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<SlowLoader>());
-			var @event = new ManualResetEvent(false);
-			int[] count = { 10 };
-			Exception exception = null;
-			for (var i = 0; i < count[0]; i++)
-			{
-				ThreadPool.QueueUserWorkItem(o =>
-				{
-					try
-					{
-						Container.Resolve<Implementation>("not registered");
-						if (Interlocked.Decrement(ref count[0]) == 0)
-						{
-							@event.Set();
-						}
-					}
-					catch (Exception e)
-					{
-						exception = e;
-						// this is required because NUnit does not consider it a failure when
-						// an exception is thrown on a non-main thread and therfore it waits.
-						@event.Set();
-					}
-				}
-					);
-			}
-			@event.WaitOne();
-			Assert.IsNull(exception);
-			Assert.AreEqual(0, count[0]);
-		}
+        loader.CanLoadNow = true;
 
-		[Test]
-		public void Loaders_only_triggered_when_resolving()
-		{
-			var loader = new ABLoaderWithGuardClause();
-			Container.Register(Component.For<ILazyComponentLoader>().Instance(loader),
-			                   Component.For<B>());
+        Container.Resolve<B>();
+    }
 
-			loader.CanLoadNow = true;
+    [Fact]
+    public void Loaders_with_dependencies_dont_overflow_the_stack()
+    {
+        Container.Register(Component.For<LoaderWithDependency>());
 
-			Container.Resolve<B>();
-		}
-
-		[Test]
-		public void Loaders_with_dependencies_dont_overflow_the_stack()
-		{
-			Container.Register(Component.For<LoaderWithDependency>());
-
-			Assert.Throws<ComponentNotFoundException>(() =>
-			                                          Container.Resolve<ISpecification>("some not registered service"));
-		}
-	}
-
-	public class ABLoaderWithGuardClause : ILazyComponentLoader
-	{
-		public bool CanLoadNow { get; set; }
-
-		public IRegistration Load(string name, Type service, Arguments arguments)
-		{
-			Assert.True(CanLoadNow);
-
-			if (service == typeof(A) || service == typeof(B))
-			{
-				return Component.For(service);
-			}
-			return null;
-		}
-	}
-
-	public class ABLoader : ILazyComponentLoader
-	{
-		public IRegistration Load(string name, Type service, Arguments arguments)
-		{
-			if (service == typeof(A) || service == typeof(B))
-			{
-				return Component.For(service);
-			}
-			return null;
-		}
-	}
-
-	public class LoaderWithDependency : ILazyComponentLoader
-	{
-		private IEmployee employee;
-
-		public LoaderWithDependency(IEmployee employee)
-		{
-			this.employee = employee;
-		}
-
-		public IRegistration Load(string name, Type service, Arguments arguments)
-		{
-			return null;
-		}
-	}
-
-	public class SlowLoader : ILazyComponentLoader
-	{
-		public IRegistration Load(string name, Type service, Arguments argume)
-		{
-			Thread.Sleep(200);
-			return Component.For(service).Named(name);
-		}
-	}
-
-	public class LoaderForDefaultImplementations : ILazyComponentLoader
-	{
-		public IRegistration Load(string name, Type service, Arguments arguments)
-		{
-			if (!service.GetTypeInfo().IsDefined(typeof(DefaultImplementationAttribute)))
-			{
-				return null;
-			}
-
-			var attributes = service.GetTypeInfo().GetCustomAttributes(typeof(DefaultImplementationAttribute), false);
-			var attribute = attributes.First() as DefaultImplementationAttribute;
-			return Component.For(service).ImplementedBy(attribute.Implementation).Named(name);
-		}
-	}
-
-	public class LoaderUsingDependency : ILazyComponentLoader
-	{
-		public IRegistration Load(string name, Type service, Arguments arguments)
-		{
-			return Component.For(service).DependsOn(arguments);
-		}
-	}
-
-	public class UsingString
-	{
-		private readonly string parameter;
-
-		public UsingString(string parameter)
-		{
-			this.parameter = parameter;
-		}
-
-		public string Parameter
-		{
-			get { return parameter; }
-		}
-	}
-
-	public class UsingLazyComponent
-	{
-		private readonly IHasDefaultImplementation dependency;
-
-		public UsingLazyComponent(IHasDefaultImplementation dependency)
-		{
-			this.dependency = dependency;
-		}
-
-		public IHasDefaultImplementation Dependency
-		{
-			get { return dependency; }
-		}
-	}
-
-	[DefaultImplementation(typeof(Implementation))]
-	public interface IHasDefaultImplementation
-	{
-		void Foo();
-	}
-
-	public class Implementation : IHasDefaultImplementation
-	{
-		public void Foo()
-		{
-		}
-	}
-
-	[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false)]
-	public class DefaultImplementationAttribute : Attribute
-	{
-		private readonly Type implementation;
-
-		public DefaultImplementationAttribute(Type implementation)
-		{
-			this.implementation = implementation;
-		}
-
-		public Type Implementation
-		{
-			get { return implementation; }
-		}
-	}
+        Assert.Throws<ComponentNotFoundException>(() =>
+            Container.Resolve<ISpecification>("some not registered service"));
+    }
 }

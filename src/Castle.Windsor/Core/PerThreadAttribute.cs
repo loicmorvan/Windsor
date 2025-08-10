@@ -12,22 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
-{
-	using System;
+namespace Castle.Windsor.Core;
 
-	/// <summary>
-	///   Indicates that the target components wants a
-	///   per thread lifestyle.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-	public sealed class PerThreadAttribute : LifestyleAttribute
+/// <summary>Indicates that the target components wants a per thread lifestyle.</summary>
+[AttributeUsage(AttributeTargets.Class)]
+public sealed class PerThreadAttribute : LifestyleAttribute
+{
+	/// <summary>Initializes a new instance of the <see cref="PerThreadAttribute" /> class.</summary>
+	public PerThreadAttribute() : base(LifestyleType.Thread)
 	{
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "PerThreadAttribute" /> class.
-		/// </summary>
-		public PerThreadAttribute() : base(LifestyleType.Thread)
-		{
-		}
 	}
 }

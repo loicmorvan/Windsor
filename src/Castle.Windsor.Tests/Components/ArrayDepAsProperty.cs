@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using CastleTests.Components;
+namespace Castle.Windsor.Tests.Components;
 
-	public class ArrayDepAsProperty
-	{
-		public IEmptyService[] Services { get; set; }
-	}
+public class ArrayDepAsProperty
+{
+    public IEmptyService[] Services { get; set; }
 }

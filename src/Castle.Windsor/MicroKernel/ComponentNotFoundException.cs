@@ -12,108 +12,66 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.Windsor.MicroKernel;
+
+/// <summary>
+///     Exception threw when a request for a component cannot be satisfied because the component does not exist in the
+///     container
+/// </summary>
+[Serializable]
+public class ComponentNotFoundException : ComponentResolutionException
 {
-	using System;
-	using System.Runtime.Serialization;
+    public ComponentNotFoundException(string name, Type service, int countOfHandlersForTheService)
+        : base(BuildMessage(name, service, countOfHandlersForTheService))
+    {
+        Name = name;
+        Service = service;
+    }
 
-	/// <summary>
-	///   Exception threw when a request for a component
-	///   cannot be satisfied because the component does not
-	///   exist in the container
-	/// </summary>
-	[Serializable]
-	public class ComponentNotFoundException : ComponentResolutionException
-	{
-		public ComponentNotFoundException(string name, Type service, int countOfHandlersForTheService)
-			: base(BuildMessage(name, service, countOfHandlersForTheService))
-		{
-			Name = name;
-			Service = service;
-		}
+    /// <summary>Initializes a new instance of the <see cref="ComponentNotFoundException" /> class.</summary>
+    /// <param name="name">The name.</param>
+    /// <param name="message">Exception message.</param>
+    public ComponentNotFoundException(string name, string message)
+        : base(message)
+    {
+        Name = name;
+    }
 
-		/// <summary>
-		///   Initializes a new instance of the
-		///   <see cref = "ComponentNotFoundException" />
-		///   class.
-		/// </summary>
-		/// <param name = "name">The name.</param>
-		/// <param name = "message">Exception message.</param>
-		public ComponentNotFoundException(string name, string message)
-			: base(message)
-		{
-			Name = name;
-		}
+    /// <summary>Initializes a new instance of the <see cref="ComponentNotFoundException" /> class.</summary>
+    /// <param name="service">The service.</param>
+    /// <param name="message">Exception message.</param>
+    public ComponentNotFoundException(Type service, string message)
+        : base(message)
+    {
+        Service = service;
+    }
 
-		/// <summary>
-		///   Initializes a new instance of the
-		///   <see cref = "ComponentNotFoundException" />
-		///   class.
-		/// </summary>
-		/// <param name = "service">The service.</param>
-		/// <param name = "message">Exception message.</param>
-		public ComponentNotFoundException(Type service, string message)
-			: base(message)
-		{
-			Service = service;
-		}
+    /// <summary>Initializes a new instance of the <see cref="ComponentNotFoundException" /> class.</summary>
+    /// <param name="service">The service.</param>
+    public ComponentNotFoundException(Type service) :
+        this(service, $"No component for supporting the service {service.FullName} was found")
+    {
+    }
 
-		/// <summary>
-		///   Initializes a new instance of the
-		///   <see cref = "ComponentNotFoundException" />
-		///   class.
-		/// </summary>
-		/// <param name = "service">The service.</param>
-		public ComponentNotFoundException(Type service) :
-			this(service, String.Format("No component for supporting the service {0} was found", service.FullName))
-		{
-		}
 
-#if FEATURE_SERIALIZATION
-		/// <summary>
-		///   Initializes a new instance of the
-		///   <see cref = "ComponentNotFoundException" />
-		///   class.
-		/// </summary>
-		/// <param name = "info">The object that holds the serialized object data.</param>
-		/// <param name = "context">The contextual information about the source or destination.</param>
-		public ComponentNotFoundException(SerializationInfo info, StreamingContext context)
-			: base(info, context)
-		{
-		}
-#endif
+    public string Name { get; private set; }
+    public Type Service { get; private set; }
 
-		public string Name { get; private set; }
-		public Type Service { get; private set; }
+    private static string BuildMessage(string name, Type service, int countOfHandlersForTheService)
+    {
+        var message =
+            $"Requested component named '{name}' was not found in the container. Did you forget to register it?{Environment.NewLine}";
+        return countOfHandlersForTheService switch
+        {
+            0 => message +
+                 $"There are no components supporting requested service '{service.FullName}'. You need to register components in order to be able to use them.",
+            1 => message +
+                 $"There is one other component supporting requested service '{service.FullName}'. Is it what you were looking for?",
+            > 1 => message +
+                   $"There are {countOfHandlersForTheService} other components supporting requested service '{service.FullName}'. Were you looking for any of them?",
+            _ => message
+        };
 
-		private static string BuildMessage(string name, Type service, int countOfHandlersForTheService)
-		{
-			var message =
-				string.Format("Requested component named '{0}' was not found in the container. Did you forget to register it?{1}",
-				              name, Environment.NewLine);
-			if (countOfHandlersForTheService == 0)
-			{
-				return message +
-				       string.Format(
-				       	"There are no components supporting requested service '{0}'. You need to register components in order to be able to use them.",
-				       	service.FullName);
-			}
-			if (countOfHandlersForTheService == 1)
-			{
-				return message +
-				       string.Format(
-				       	"There is one other component supporting requested service '{0}'. Is it what you were looking for?",
-				       	service.FullName);
-			}
-			if (countOfHandlersForTheService > 1)
-			{
-				return message +
-				       string.Format(
-				       	"There are {0} other components supporting requested service '{1}'. Were you looking for any of them?",
-				       	countOfHandlersForTheService, service.FullName);
-			}
-			// this should never happen but if someone passes us wrong information we just ignore it
-			return message;
-		}
-	}
+        // this should never happen but if someone passes us wrong information we just ignore it
+    }
 }

@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ClassComponents
-{
-	public class GenericHasNested<TOuter>
-	{
-		public class Nested
-		{
-		}
+// ReSharper disable UnusedTypeParameter
 
-		public class NestedGeneric<TInner>
-		{
-		}
-	}
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.ClassComponents;
+
+[UsedImplicitly]
+public class GenericHasNested<TOuter>
+{
+    public class Nested;
+
+    public class NestedGeneric<TInner>;
 }

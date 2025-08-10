@@ -12,56 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.MicroKernel.Handlers;
+
+/// <summary>Summary description for HandlerException.</summary>
+[Serializable]
+public class HandlerException : Exception
 {
-	using System;
-	using System.Runtime.Serialization;
-
-	using Castle.Core;
-	using Castle.Core.Internal;
-
-	/// <summary>
-	///   Summary description for HandlerException.
-	/// </summary>
-	[Serializable]
-	public class HandlerException : Exception
+	/// <summary>Initializes a new instance of the <see cref="HandlerException" /> class.</summary>
+	/// <param name="message">The message.</param>
+	/// <param name="name"></param>
+	public HandlerException(string message, ComponentName name) : base(message)
 	{
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "HandlerException" /> class.
-		/// </summary>
-		/// <param name = "message">The message.</param>
-		/// <param name = "name"></param>
-		public HandlerException(string message, ComponentName name) : base(message)
-		{
-			ExceptionHelper.SetUp(this);
-			Name = name;
-		}
-
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "HandlerException" /> class.
-		/// </summary>
-		/// <param name = "message">The message.</param>
-		/// <param name = "name"></param>
-		/// <param name = "innerException"></param>
-		public HandlerException(string message, ComponentName name, Exception innerException)
-			: base(message, innerException)
-		{
-			ExceptionHelper.SetUp(this);
-			Name = name;
-		}
-
-#if FEATURE_SERIALIZATION
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "HandlerException" /> class.
-		/// </summary>
-		/// <param name = "info">The object that holds the serialized object data.</param>
-		/// <param name = "context">The contextual information about the source or destination.</param>
-		public HandlerException(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-			ExceptionHelper.SetUp(this);
-		}
-#endif
-
-		public ComponentName Name { get; private set; }
+		this.SetUp();
+		Name = name;
 	}
+
+	/// <summary>Initializes a new instance of the <see cref="HandlerException" /> class.</summary>
+	/// <param name="message">The message.</param>
+	/// <param name="name"></param>
+	/// <param name="innerException"></param>
+	public HandlerException(string message, ComponentName name, Exception innerException)
+		: base(message, innerException)
+	{
+		this.SetUp();
+		Name = name;
+	}
+
+
+	public ComponentName Name { get; private set; }
 }

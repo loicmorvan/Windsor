@@ -12,43 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.ModelBuilder;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.MicroKernel;
+
+/// <summary>
+///     Implementors must construct a populated instance of ComponentModel by inspecting the component and|or the
+///     configuration.
+/// </summary>
+public interface IComponentModelBuilder
 {
-	using System;
+    [PublicAPI] IContributeComponentModelConstruction[] Contributors { get; }
 
-	using Castle.Core;
-	using Castle.MicroKernel.ModelBuilder;
+    /// <summary>
+    ///     "To give or supply in common with others; give to a common fund or for a common purpose". The contributor should
+    ///     inspect the component, or even the configuration associated with the component, to
+    ///     add or change information in the model that can be used later.
+    /// </summary>
+    void AddContributor(IContributeComponentModelConstruction contributor);
 
-	/// <summary>
-	///   Implementors must construct a populated
-	///   instance of ComponentModel by inspecting the component
-	///   and|or the configuration.
-	/// </summary>
-	public interface IComponentModelBuilder
-	{
-		IContributeComponentModelConstruction[] Contributors { get; }
+    /// <summary>Constructs a new ComponentModel by invoking the registered contributors.</summary>
+    ComponentModel BuildModel(ComponentName name, Type[] services, Type classType, Arguments extendedProperties);
 
-		/// <summary>
-		///   "To give or supply in common with others; give to a 
-		///   common fund or for a common purpose". The contributor
-		///   should inspect the component, or even the configuration
-		///   associated with the component, to add or change information
-		///   in the model that can be used later.
-		/// </summary>
-		void AddContributor(IContributeComponentModelConstruction contributor);
+    ComponentModel BuildModel(IComponentModelDescriptor[] customContributors);
 
-		/// <summary>
-		///   Constructs a new ComponentModel by invoking
-		///   the registered contributors.
-		/// </summary>
-		ComponentModel BuildModel(ComponentName name, Type[] services, Type classType, Arguments extendedProperties);
-
-		ComponentModel BuildModel(IComponentModelDescriptor[] customContributors);
-
-		/// <summary>
-		///   Removes the specified contributor
-		/// </summary>
-		/// <param name = "contributor"></param>
-		void RemoveContributor(IContributeComponentModelConstruction contributor);
-	}
+    /// <summary>Removes the specified contributor</summary>
+    /// <param name="contributor"></param>
+    [PublicAPI]
+    void RemoveContributor(IContributeComponentModelConstruction contributor);
 }

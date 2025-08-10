@@ -12,67 +12,62 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Lifestyle.Scoped
+using System.Reflection;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Context;
+
+namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
+
+public class CreationContextScopeAccessor(ComponentModel componentModel, Func<IHandler[], IHandler> scopeRootSelector)
+    : IScopeAccessor
 {
-	using System;
-	using System.Linq;
-	using System.Reflection;
+    private const string ScopeStash = "castle.scope-stash";
 
-	using Castle.Core;
-	using Castle.MicroKernel.Context;
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+    }
 
-	public class CreationContextScopeAccessor : IScopeAccessor
-	{
-		private const string ScopeStash = "castle.scope-stash";
-		private readonly ComponentModel componentModel;
-		private readonly Func<IHandler[], IHandler> scopeRootSelector;
+    public ILifetimeScope GetScope(CreationContext context)
+    {
+        var selected = context.SelectScopeRoot(scopeRootSelector);
+        if (selected == null)
+        {
+            throw new InvalidOperationException(
+                $"Scope was not available for '{componentModel.Name}'. No component higher up in the resolution stack met the criteria specified for scoping the component. This usually indicates a bug in custom scope root selector or means that the component is being resolved in a unforseen context (a.k.a - it's probably a bug in how the dependencies in the application are wired).");
+        }
 
-		public CreationContextScopeAccessor(ComponentModel componentModel, Func<IHandler[], IHandler> scopeRootSelector)
-		{
-			this.componentModel = componentModel;
-			this.scopeRootSelector = scopeRootSelector;
-		}
+        var stash = (DefaultLifetimeScope)selected.GetContextualProperty(ScopeStash);
+        if (stash is not null)
+        {
+            return stash;
+        }
 
-		public void Dispose()
-		{
-		}
+        var newStash = new DefaultLifetimeScope(new ScopeCache());
+        newStash.OnAfterCreated = burden =>
+        {
+            if (!burden.RequiresDecommission)
+            {
+                return;
+            }
 
-		public ILifetimeScope GetScope(CreationContext context)
-		{
-			var selected = context.SelectScopeRoot(scopeRootSelector);
-			if (selected == null)
-			{
-				throw new InvalidOperationException(
-					string.Format(
-						"Scope was not available for '{0}'. No component higher up in the resolution stack met the criteria specified for scoping the component. This usually indicates a bug in custom scope root selector or means that the component is being resolved in a unforseen context (a.k.a - it's probably a bug in how the dependencies in the application are wired).",
-						componentModel.Name));
-			}
-			var stash = (DefaultLifetimeScope)selected.GetContextualProperty(ScopeStash);
-			if (stash == null)
-			{
-				DefaultLifetimeScope newStash = null;
-				newStash = new DefaultLifetimeScope(new ScopeCache(), burden =>
-				{
-					if (burden.RequiresDecommission)
-					{
-						selected.Burden.RequiresDecommission = true;
-						selected.Burden.GraphReleased += delegate { newStash.Dispose(); };
-					}
-				});
-				selected.SetContextualProperty(ScopeStash, newStash);
-				stash = newStash;
-			}
-			return stash;
-		}
+            selected.Burden.RequiresDecommission = true;
+            selected.Burden.GraphReleased += _ => newStash.Dispose();
+        };
+        selected.SetContextualProperty(ScopeStash, newStash);
 
-		public static IHandler DefaultScopeRootSelector<TBaseForRoot>(IHandler[] resolutionStack)
-		{
-			return resolutionStack.FirstOrDefault(h => typeof(TBaseForRoot).GetTypeInfo().IsAssignableFrom(h.ComponentModel.Implementation));
-		}
+        return newStash;
+    }
 
-		public static IHandler NearestScopeRootSelector<TBaseForRoot>(IHandler[] resolutionStack)
-		{
-			return resolutionStack.LastOrDefault(h => typeof(TBaseForRoot).IsAssignableFrom(h.ComponentModel.Implementation));
-		}
-	}
+    public static IHandler DefaultScopeRootSelector<TBaseForRoot>(IHandler[] resolutionStack)
+    {
+        return resolutionStack.FirstOrDefault(h =>
+            typeof(TBaseForRoot).GetTypeInfo().IsAssignableFrom(h.ComponentModel.Implementation));
+    }
+
+    public static IHandler NearestScopeRootSelector<TBaseForRoot>(IHandler[] resolutionStack)
+    {
+        return resolutionStack.LastOrDefault(h =>
+            typeof(TBaseForRoot).IsAssignableFrom(h.ComponentModel.Implementation));
+    }
 }

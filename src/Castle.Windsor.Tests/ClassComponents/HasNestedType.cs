@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ClassComponents
-{
-	public class HasNestedType
-	{
-		public class Nested
-		{
-		}
+using JetBrains.Annotations;
 
-		public class NestedGeneric<TArg>
-		{
-		}
-	}
+namespace Castle.Windsor.Tests.ClassComponents;
+
+[UsedImplicitly]
+public class HasNestedType
+{
+    public class Nested;
+
+    // ReSharper disable once UnusedTypeParameter
+    [UsedImplicitly]
+    public class NestedGeneric<TArg>;
 }

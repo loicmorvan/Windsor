@@ -12,21 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
+
+public class UsesBarDelegateTwoConstructors
 {
-	using System;
+    public UsesBarDelegateTwoConstructors(Func<Bar> barFactory)
+    {
+        BarFactory = barFactory;
+    }
 
-	public class UsesBarDelegateTwoConstructors
-	{
-		public UsesBarDelegateTwoConstructors(Func<Bar> barFactory)
-		{
-			BarFactory = barFactory;
-		}
+    public UsesBarDelegateTwoConstructors()
+    {
+    }
 
-		public UsesBarDelegateTwoConstructors()
-		{
-		}
-
-		public Func<Bar> BarFactory { get; private set; }
-	}
+    public Func<Bar> BarFactory { get; private set; }
 }

@@ -12,262 +12,198 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Lifecycle
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.ClassComponents;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Pools;
+
+namespace Castle.Windsor.Tests.Lifecycle;
+
+public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 {
-	using System;
+    [Fact]
+    public void ComponentsAreOnlyDisposedOnce()
+    {
+        Kernel.Register(
+            Component.For<DisposableSpamService>().Named("spamservice").LifeStyle.Transient,
+            Component.For<DisposableTemplateEngine>().Named("templateengine").LifeStyle.Transient);
 
-	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Tests.ClassComponents;
-	using Castle.MicroKernel.Tests.Pools;
+        var instance1 = Kernel.Resolve<DisposableSpamService>("spamservice");
+        Assert.False(instance1.IsDisposed);
+        Assert.False(instance1.TemplateEngine.IsDisposed);
 
-	using CastleTests.Components;
+        Kernel.ReleaseComponent(instance1);
+        Kernel.ReleaseComponent(instance1);
+        Kernel.ReleaseComponent(instance1);
+    }
 
-	using NUnit.Framework;
+    [Fact]
+    public void DisposingSubLevelBurdenWontDisposeComponentAsTheyAreDisposedAlready()
+    {
+        Kernel.Register(
+            Component.For<DisposableSpamService>().Named("spamservice").LifeStyle.Transient);
+        Kernel.Register(
+            Component.For<DisposableTemplateEngine>().Named("templateengine").LifeStyle.Transient);
 
-	[TestFixture]
-	public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
-	{
-		public class Indirection
-		{
-			private readonly NonDisposableRoot fakeRoot;
+        var instance1 = Kernel.Resolve<DisposableSpamService>("spamservice");
+        Assert.False(instance1.IsDisposed);
+        Assert.False(instance1.TemplateEngine.IsDisposed);
 
-			public Indirection(NonDisposableRoot fakeRoot)
-			{
-				this.fakeRoot = fakeRoot;
-			}
+        Kernel.ReleaseComponent(instance1);
+        Kernel.ReleaseComponent(instance1.TemplateEngine);
+    }
 
-			public NonDisposableRoot FakeRoot
-			{
-				get { return fakeRoot; }
-			}
-		}
+    [Fact]
+    public void GenericTransientComponentsAreReleasedInChain()
+    {
+        Kernel.Register(Component.For(typeof(GenA<>)).LifeStyle.Transient);
+        Kernel.Register(Component.For(typeof(GenB<>)).LifeStyle.Transient);
 
-		public class NonDisposableRoot
-		{
-			private readonly A a;
-			private readonly B b;
+        var instance1 = Kernel.Resolve<GenA<string>>();
+        Assert.False(instance1.IsDisposed);
+        Assert.False(instance1.GenBField.IsDisposed);
 
-			public NonDisposableRoot(A a, B b)
-			{
-				this.a = a;
-				this.b = b;
-			}
+        Kernel.ReleaseComponent(instance1);
 
-			public A A
-			{
-				get { return a; }
-			}
+        Assert.True(instance1.IsDisposed);
+        Assert.True(instance1.GenBField.IsDisposed);
+    }
 
-			public B B
-			{
-				get { return b; }
-			}
-		}
+    [Fact]
+    public void SingletonReferencedComponentIsNotDisposed()
+    {
+        Kernel.Register(
+            Component.For(typeof(DisposableSpamService)).Named("spamservice").LifeStyle.Transient);
+        Kernel.Register(
+            Component.For(typeof(DefaultMailSenderService)).Named("mailsender").LifeStyle.Singleton);
+        Kernel.Register(
+            Component.For(typeof(DisposableTemplateEngine)).Named("templateengine").LifeStyle.Transient);
 
-		public class A : DisposableBase
-		{
-		}
+        var instance1 = Kernel.Resolve<DisposableSpamService>("spamservice");
+        Assert.False(instance1.IsDisposed);
+        Assert.False(instance1.TemplateEngine.IsDisposed);
 
-		public class B : DisposableBase
-		{
-		}
+        Kernel.ReleaseComponent(instance1);
 
-		public class C : DisposableBase
-		{
-		}
+        Assert.True(instance1.IsDisposed);
+        Assert.True(instance1.TemplateEngine.IsDisposed);
+        Assert.False(instance1.MailSender.IsDisposed);
+    }
 
-		public class GenA<T> : DisposableBase
-		{
-			public B BField { get; set; }
+    [Fact]
+    public void TransientReferencedComponentsAreReleasedInChain()
+    {
+        Kernel.Register(
+            Component.For<DisposableSpamService>().LifeStyle.Transient,
+            Component.For<DisposableTemplateEngine>().LifeStyle.Transient
+        );
 
-			public GenB<T> GenBField { get; set; }
-		}
+        var service = Kernel.Resolve<DisposableSpamService>();
+        Assert.False(service.IsDisposed);
+        Assert.False(service.TemplateEngine.IsDisposed);
 
-		public class GenB<T> : DisposableBase
-		{
-		}
+        Kernel.ReleaseComponent(service);
 
-		public class DisposableSpamService : DisposableBase
-		{
-			private readonly PoolableComponent1 pool;
-			private readonly DisposableTemplateEngine templateEngine;
+        Assert.True(service.IsDisposed);
+        Assert.True(service.TemplateEngine.IsDisposed);
+    }
 
-			public DisposableSpamService(DisposableTemplateEngine templateEngine)
-			{
-				this.templateEngine = templateEngine;
-			}
+    [Fact]
+    public void TransientReferencesAreNotHeldByContainer()
+    {
+        Kernel.Register(Component.For<EmptyClass>().LifeStyle.Transient);
 
-			public DisposableSpamService(DisposableTemplateEngine templateEngine,
-			                             PoolableComponent1 pool)
-			{
-				this.templateEngine = templateEngine;
-				this.pool = pool;
-			}
+        ReferenceTracker
+            .Track(() => Kernel.Resolve<EmptyClass>())
+            .AssertNoLongerReferenced();
+    }
 
-			public DefaultMailSenderService MailSender { get; set; }
+    [Fact]
+    public void WhenRootComponentIsNotDisposableButDependenciesAre_DependenciesShouldBeDisposed()
+    {
+        Kernel.Register(Component.For(typeof(NonDisposableRoot)).Named("root").LifeStyle.Transient);
+        Kernel.Register(Component.For(typeof(A)).Named("a").LifeStyle.Transient);
+        Kernel.Register(Component.For(typeof(B)).Named("b").LifeStyle.Transient);
 
-			public PoolableComponent1 Pool
-			{
-				get { return pool; }
-			}
+        var instance1 = Kernel.Resolve<NonDisposableRoot>();
+        Assert.False(instance1.A.IsDisposed);
+        Assert.False(instance1.B.IsDisposed);
 
-			public DisposableTemplateEngine TemplateEngine
-			{
-				get { return templateEngine; }
-			}
-		}
+        Kernel.ReleaseComponent(instance1);
 
-		public class DisposableTemplateEngine : DisposableBase
-		{
-		}
+        Assert.True(instance1.A.IsDisposed);
+        Assert.True(instance1.B.IsDisposed);
+    }
 
-		[Test]
-		public void ComponentsAreOnlyDisposedOnce()
-		{
-			Kernel.Register(
-				Component.For<DisposableSpamService>().Named("spamservice").LifeStyle.Transient,
-				Component.For<DisposableTemplateEngine>().Named("templateengine").LifeStyle.Transient);
+    [Fact]
+    public void WhenRootComponentIsNotDisposableButThirdLevelDependenciesAre_DependenciesShouldBeDisposed()
+    {
+        Kernel.Register(Component.For(typeof(Indirection)).Named("root").LifeStyle.Transient);
+        Kernel.Register(Component.For(typeof(NonDisposableRoot)).Named("secroot").LifeStyle.Transient);
+        Kernel.Register(Component.For(typeof(A)).Named("a").LifeStyle.Transient);
+        Kernel.Register(Component.For(typeof(B)).Named("b").LifeStyle.Transient);
 
-			var instance1 = Kernel.Resolve<DisposableSpamService>("spamservice");
-			Assert.IsFalse(instance1.IsDisposed);
-			Assert.IsFalse(instance1.TemplateEngine.IsDisposed);
+        var instance1 = Kernel.Resolve<Indirection>();
+        Assert.False(instance1.FakeRoot.A.IsDisposed);
+        Assert.False(instance1.FakeRoot.B.IsDisposed);
 
-			Kernel.ReleaseComponent(instance1);
-			Kernel.ReleaseComponent(instance1);
-			Kernel.ReleaseComponent(instance1);
-		}
+        Kernel.ReleaseComponent(instance1);
 
-		[Test]
-		public void DisposingSubLevelBurdenWontDisposeComponentAsTheyAreDisposedAlready()
-		{
-			Kernel.Register(
-				Component.For<DisposableSpamService>().Named("spamservice").LifeStyle.Transient);
-			Kernel.Register(
-				Component.For<DisposableTemplateEngine>().Named("templateengine").LifeStyle.Transient);
+        Assert.True(instance1.FakeRoot.A.IsDisposed);
+        Assert.True(instance1.FakeRoot.B.IsDisposed);
+    }
 
-			var instance1 = Kernel.Resolve<DisposableSpamService>("spamservice");
-			Assert.IsFalse(instance1.IsDisposed);
-			Assert.IsFalse(instance1.TemplateEngine.IsDisposed);
+    [Fact]
+    [Bug("IOC-320")]
+    public void Expected_exception_during_creation_doesnt_prevent_from_being_released_properly()
+    {
+        Container.Register(Component.For<GenA<int>>().LifestyleTransient(),
+            Component.For<B>().UsingFactoryMethod<B>(delegate { throw new NotImplementedException("boo hoo!"); })
+                .LifestyleTransient()
+                .OnDestroy(Assert.NotNull));
 
-			Kernel.ReleaseComponent(instance1);
-			Kernel.ReleaseComponent(instance1.TemplateEngine);
-		}
+        var a = Container.Resolve<GenA<int>>();
 
-		[Test]
-		public void GenericTransientComponentsAreReleasedInChain()
-		{
-			Kernel.Register(Component.For(typeof(GenA<>)).LifeStyle.Transient);
-			Kernel.Register(Component.For(typeof(GenB<>)).LifeStyle.Transient);
+        Container.Release(a);
+    }
 
-			var instance1 = Kernel.Resolve<GenA<string>>();
-			Assert.IsFalse(instance1.IsDisposed);
-			Assert.IsFalse(instance1.GenBField.IsDisposed);
+    private class Indirection(NonDisposableRoot fakeRoot)
+    {
+        public NonDisposableRoot FakeRoot { get; } = fakeRoot;
+    }
 
-			Kernel.ReleaseComponent(instance1);
+    private class NonDisposableRoot(A a, B b)
+    {
+        public A A { get; } = a;
 
-			Assert.IsTrue(instance1.IsDisposed);
-			Assert.IsTrue(instance1.GenBField.IsDisposed);
-		}
+        public B B { get; } = b;
+    }
 
-		[Test]
-		public void SingletonReferencedComponentIsNotDisposed()
-		{
-			Kernel.Register(
-				Component.For(typeof(DisposableSpamService)).Named("spamservice").LifeStyle.Transient);
-			Kernel.Register(
-				Component.For(typeof(DefaultMailSenderService)).Named("mailsender").LifeStyle.Singleton);
-			Kernel.Register(
-				Component.For(typeof(DisposableTemplateEngine)).Named("templateengine").LifeStyle.Transient);
+    private class A : DisposableBase;
 
-			var instance1 = Kernel.Resolve<DisposableSpamService>("spamservice");
-			Assert.IsFalse(instance1.IsDisposed);
-			Assert.IsFalse(instance1.TemplateEngine.IsDisposed);
+    public class B : DisposableBase;
 
-			Kernel.ReleaseComponent(instance1);
+    public class GenA<T> : DisposableBase
+    {
+        public B BField { get; set; }
 
-			Assert.IsTrue(instance1.IsDisposed);
-			Assert.IsTrue(instance1.TemplateEngine.IsDisposed);
-			Assert.IsFalse(instance1.MailSender.IsDisposed);
-		}
+        public GenB<T> GenBField { get; set; }
+    }
 
-		[Test]
-		public void TransientReferencedComponentsAreReleasedInChain()
-		{
-			Kernel.Register(
-				Component.For<DisposableSpamService>().LifeStyle.Transient,
-				Component.For<DisposableTemplateEngine>().LifeStyle.Transient
-				);
+    // ReSharper disable once UnusedTypeParameter
+    public class GenB<T> : DisposableBase;
 
-			var service = Kernel.Resolve<DisposableSpamService>();
-			Assert.IsFalse(service.IsDisposed);
-			Assert.IsFalse(service.TemplateEngine.IsDisposed);
+    public class DisposableSpamService(
+        DisposableTemplateEngine templateEngine,
+        PoolableComponent1 pool = null)
+        : DisposableBase
+    {
+        public DefaultMailSenderService MailSender { get; set; }
 
-			Kernel.ReleaseComponent(service);
+        public PoolableComponent1 Pool { get; } = pool;
 
-			Assert.IsTrue(service.IsDisposed);
-			Assert.IsTrue(service.TemplateEngine.IsDisposed);
-		}
+        public DisposableTemplateEngine TemplateEngine { get; } = templateEngine;
+    }
 
-		[Test]
-		public void TransientReferencesAreNotHeldByContainer()
-		{
-			Kernel.Register(Component.For<EmptyClass>().LifeStyle.Transient);
-
-			ReferenceTracker
-				.Track(() => Kernel.Resolve<EmptyClass>())
-				.AssertNoLongerReferenced();
-		}
-
-		[Test]
-		public void WhenRootComponentIsNotDisposableButDependenciesAre_DependenciesShouldBeDisposed()
-		{
-			Kernel.Register(Component.For(typeof(NonDisposableRoot)).Named("root").LifeStyle.Transient);
-			Kernel.Register(Component.For(typeof(A)).Named("a").LifeStyle.Transient);
-			Kernel.Register(Component.For(typeof(B)).Named("b").LifeStyle.Transient);
-
-			var instance1 = Kernel.Resolve<NonDisposableRoot>();
-			Assert.IsFalse(instance1.A.IsDisposed);
-			Assert.IsFalse(instance1.B.IsDisposed);
-
-			Kernel.ReleaseComponent(instance1);
-
-			Assert.IsTrue(instance1.A.IsDisposed);
-			Assert.IsTrue(instance1.B.IsDisposed);
-		}
-
-		[Test]
-		public void WhenRootComponentIsNotDisposableButThirdLevelDependenciesAre_DependenciesShouldBeDisposed()
-		{
-			Kernel.Register(Component.For(typeof(Indirection)).Named("root").LifeStyle.Transient);
-			Kernel.Register(Component.For(typeof(NonDisposableRoot)).Named("secroot").LifeStyle.Transient);
-			Kernel.Register(Component.For(typeof(A)).Named("a").LifeStyle.Transient);
-			Kernel.Register(Component.For(typeof(B)).Named("b").LifeStyle.Transient);
-
-			var instance1 = Kernel.Resolve<Indirection>();
-			Assert.IsFalse(instance1.FakeRoot.A.IsDisposed);
-			Assert.IsFalse(instance1.FakeRoot.B.IsDisposed);
-
-			Kernel.ReleaseComponent(instance1);
-
-			Assert.IsTrue(instance1.FakeRoot.A.IsDisposed);
-			Assert.IsTrue(instance1.FakeRoot.B.IsDisposed);
-		}
-
-		[Test]
-		[Bug("IOC-320")]
-		public void Expected_exception_during_creation_doesnt_prevent_from_being_released_properly()
-		{
-			Container.Register(Component.For<GenA<int>>().LifestyleTransient(),
-			                   Component.For<B>().UsingFactoryMethod<B>(delegate
-			                   {
-			                   	throw new NotImplementedException("boo hoo!");
-			                   }).LifestyleTransient()
-			                   	.OnDestroy(Assert.IsNotNull));
-
-			var a = Container.Resolve<GenA<int>>();
-
-			Container.Release(a);
-		}
-
-	}
+    public class DisposableTemplateEngine : DisposableBase;
 }

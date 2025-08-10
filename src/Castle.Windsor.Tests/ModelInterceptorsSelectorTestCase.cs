@@ -12,140 +12,125 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
+using Castle.Windsor.Tests.Interceptors;
+using Castle.Windsor.Windsor;
+
+namespace Castle.Windsor.Tests;
+
+public class ModelInterceptorsSelectorTestCase
 {
-	using System;
+    [Fact]
+    public void CanAddInterceptor_DirectSelection()
+    {
+        var reporter = new CallReporter();
 
-	using Castle.Core;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.Interceptors;
+        var container = new WindsorContainer();
+        container.Register(
+            Component.For<CallReporter>().Instance(reporter),
+            Component.For<WasCalledInterceptor>(),
+            Component.For<IWatcher>()
+                .ImplementedBy<BirdWatcher>()
+                .Named("bird.watcher")
+                .LifeStyle.Transient);
 
-	using CastleTests.Components;
+        var selector = new WatcherInterceptorSelector();
+        container.Kernel.ProxyFactory.AddInterceptorSelector(selector);
 
-	using NUnit.Framework;
+        reporter.WasCalled = false;
+        var watcher = container.Resolve<IWatcher>();
+        watcher.OnSomethingInterestingToWatch += delegate { };
+        Assert.False(reporter.WasCalled);
 
-	[TestFixture]
-	public class ModelInterceptorsSelectorTestCase
-	{
-		[Test]
-		public void CanAddInterceptor_DirectSelection()
-		{
-			IWindsorContainer container = new WindsorContainer();
-			container.Register(Component.For<WasCalledInterceptor>(),
-			                   Component.For<IWatcher>()
-			                   	.ImplementedBy<BirdWatcher>()
-			                   	.Named("bird.watcher")
-			                   	.LifeStyle.Transient);
+        selector.Interceptors = InterceptorKind.Dummy;
 
-			var selector = new WatcherInterceptorSelector();
-			container.Kernel.ProxyFactory.AddInterceptorSelector(selector);
+        reporter.WasCalled = false;
+        watcher = container.Resolve<IWatcher>();
+        watcher.OnSomethingInterestingToWatch += delegate { };
+        Assert.True(reporter.WasCalled);
+    }
 
-			WasCalledInterceptor.WasCalled = false;
-			var watcher = container.Resolve<IWatcher>();
-			watcher.OnSomethingInterestingToWatch += delegate { };
-			Assert.IsFalse(WasCalledInterceptor.WasCalled);
+    [Fact]
+    public void InterceptorSelectors_Are_Cumulative()
+    {
+        var reporter = new CallReporter();
 
-			selector.Interceptors = InterceptorKind.Dummy;
+        var container = new WindsorContainer();
+        container.Register(
+            Component.For<CallReporter>().Instance(reporter),
+            Component.For<CountingInterceptor>(),
+            Component.For<WasCalledInterceptor>(),
+            Component.For<IWatcher>().ImplementedBy<BirdWatcher>().Named("bird.watcher").LifeStyle.Transient);
 
-			WasCalledInterceptor.WasCalled = false;
-			watcher = container.Resolve<IWatcher>();
-			watcher.OnSomethingInterestingToWatch += delegate { };
-			Assert.IsTrue(WasCalledInterceptor.WasCalled);
-		}
+        var selector = new WatcherInterceptorSelector { Interceptors = InterceptorKind.Dummy };
+        container.Kernel.ProxyFactory.AddInterceptorSelector(selector);
+        container.Kernel.ProxyFactory.AddInterceptorSelector(new AnotherInterceptorSelector());
 
-		[Test]
-		public void InterceptorSelectors_Are_Cumulative()
-		{
-			IWindsorContainer container = new WindsorContainer();
-			container.Register(Component.For<CountingInterceptor>(),
-			                   Component.For<WasCalledInterceptor>(),
-			                   Component.For<IWatcher>().ImplementedBy<BirdWatcher>().Named("bird.watcher").LifeStyle.Transient);
+        var watcher = container.Resolve<IWatcher>();
+        watcher.OnSomethingInterestingToWatch += delegate { };
+        Assert.True(reporter.WasCalled);
+        Assert.True(reporter.WasCalled);
+    }
 
-			var selector = new WatcherInterceptorSelector { Interceptors = InterceptorKind.Dummy };
-			container.Kernel.ProxyFactory.AddInterceptorSelector(selector);
-			container.Kernel.ProxyFactory.AddInterceptorSelector(new AnotherInterceptorSelector());
+    [Fact]
+    public void TurnProxyOnAndOff_DirectSelection()
+    {
+        var reporter = new CallReporter();
+        var container = new WindsorContainer();
+        container.Register(Component.For<WasCalledInterceptor>()).Register(
+            Component.For<CallReporter>().Instance(reporter),
+            Component.For<IWatcher>()
+                .ImplementedBy<BirdWatcher>()
+                .Named("bird.watcher")
+                .LifeStyle.Transient);
+        var selector = new WatcherInterceptorSelector();
+        container.Kernel.ProxyFactory.AddInterceptorSelector(selector);
 
-			var watcher = container.Resolve<IWatcher>();
-			watcher.OnSomethingInterestingToWatch += delegate { };
-			Assert.IsTrue(WasCalledInterceptor.WasCalled);
-			Assert.IsTrue(WasCalledInterceptor.WasCalled);
-		}
+        Assert.DoesNotContain("Proxy", container.Resolve<IWatcher>().GetType().Name);
+        selector.Interceptors = InterceptorKind.Dummy;
+        Assert.Contains("Proxy", container.Resolve<IWatcher>().GetType().Name);
+    }
 
-		[Test]
-		public void TurnProxyOnAndOff_DirectSelection()
-		{
-			IWindsorContainer container = new WindsorContainer();
-			container.Register(Component.For<WasCalledInterceptor>()).Register(
-				Component.For(typeof(IWatcher)).ImplementedBy(typeof(BirdWatcher)).Named("bird.watcher").LifeStyle.Is(
-					LifestyleType.Transient));
-			var selector = new WatcherInterceptorSelector();
-			container.Kernel.ProxyFactory.AddInterceptorSelector(selector);
+    [Fact]
+    public void TurnProxyOnAndOff_SubDependency()
+    {
+        var reporter = new CallReporter();
+        var container = new WindsorContainer();
+        container.Register(Component.For<WasCalledInterceptor>()).Register(
+            Component.For<CallReporter>().Instance(reporter),
+            Component.For(typeof(IWatcher)).ImplementedBy<BirdWatcher>().Named("bird.watcher").LifeStyle.Is(
+                LifestyleType.Transient)).Register(Component.For(typeof(Person)).LifeStyle.Is(LifestyleType.Transient));
+        var selector = new WatcherInterceptorSelector();
+        container.Kernel.ProxyFactory.AddInterceptorSelector(selector);
 
-			Assert.IsFalse(container.Resolve<IWatcher>().GetType().Name.Contains("Proxy"));
-			selector.Interceptors = InterceptorKind.Dummy;
-			Assert.IsTrue(container.Resolve<IWatcher>().GetType().Name.Contains("Proxy"));
-		}
+        Assert.DoesNotContain("Proxy", container.Resolve<Person>().Watcher.GetType().Name);
+        Assert.DoesNotContain("Proxy", container.Resolve<Person>().GetType().Name);
 
-		[Test]
-		public void TurnProxyOnAndOff_SubDependency()
-		{
-			IWindsorContainer container = new WindsorContainer();
-			container.Register(Component.For<WasCalledInterceptor>()).Register(
-				Component.For(typeof(IWatcher)).ImplementedBy(typeof(BirdWatcher)).Named("bird.watcher").LifeStyle.Is(
-					LifestyleType.Transient)).Register(Component.For(typeof(Person)).LifeStyle.Is(LifestyleType.Transient));
-			var selector = new WatcherInterceptorSelector();
-			container.Kernel.ProxyFactory.AddInterceptorSelector(selector);
+        selector.Interceptors = InterceptorKind.Dummy;
 
-			Assert.IsFalse(container.Resolve<Person>().Watcher.GetType().Name.Contains("Proxy"));
-			Assert.IsFalse(container.Resolve<Person>().GetType().Name.Contains("Proxy"));
+        Assert.DoesNotContain("Proxy", container.Resolve<Person>().GetType().Name);
+        Assert.Contains("Proxy", container.Resolve<Person>().Watcher.GetType().Name);
+    }
 
-			selector.Interceptors = InterceptorKind.Dummy;
+    [Fact]
+    public void Interceptor_selected_by_selector_gets_released_properly()
+    {
+        var counter = new LifecycleCounter();
+        var container = new WindsorContainer();
+        container.Kernel.ProxyFactory.AddInterceptorSelector(
+            new ByTypeInterceptorSelector(typeof(DisposableInterceptor)));
+        container.Register(
+            Component.For<LifecycleCounter>().Instance(counter),
+            Component.For<DisposableInterceptor>(),
+            Component.For<A>().LifeStyle.Transient);
 
-			Assert.IsFalse(container.Resolve<Person>().GetType().Name.Contains("Proxy"));
-			Assert.IsTrue(container.Resolve<Person>().Watcher.GetType().Name.Contains("Proxy"));
-		}
+        var a = container.Resolve<A>();
+        Assert.Equal(1, counter[".ctor"]);
 
-		[Test]
-		public void Interceptor_selected_by_selector_gets_released_properly()
-		{
-			DisposableInterceptor.InstancesDisposed = 0;
-			DisposableInterceptor.InstancesCreated = 0;
-			var container = new WindsorContainer();
-			container.Kernel.ProxyFactory.AddInterceptorSelector(new ByTypeInterceptorSelector(typeof(DisposableInterceptor)));
-			container.Register(Component.For<DisposableInterceptor>(),
-			                   Component.For<A>().LifeStyle.Transient);
-
-			var a = container.Resolve<A>();
-			Assert.AreEqual(1, DisposableInterceptor.InstancesCreated);
-
-			container.Release(a);
-			Assert.AreEqual(1, DisposableInterceptor.InstancesDisposed);
-		}
-	}
-
-	public interface IWatcher
-	{
-		event Action<string> OnSomethingInterestingToWatch;
-	}
-
-	public class BirdWatcher : IWatcher
-	{
-		public event Action<string> OnSomethingInterestingToWatch = delegate { };
-	}
-
-	public class Person
-	{
-		public IWatcher Watcher;
-
-		public Person(IWatcher watcher)
-		{
-			Watcher = watcher;
-		}
-	}
-
-	public enum InterceptorKind
-	{
-		None,
-		Dummy,
-	}
+        container.Release(a);
+        Assert.Equal(1, counter["Dispose"]);
+    }
 }

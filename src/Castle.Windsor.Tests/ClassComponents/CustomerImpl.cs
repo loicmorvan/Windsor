@@ -12,27 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+public class CustomerImpl : ICustomer
 {
-	using System;
+    public ExtendedCustomer ExtendedCustomer { get; set; }
+    public virtual string Name { get; init; }
 
-	public class CustomerImpl : ICustomer
-	{
-	    public virtual String Name { get; set; }
+    public virtual string Address { get; set; }
 
-	    public virtual String Address { get; set; }
-
-	    public virtual int Age { get; set; }
-
-	    public virtual ExtendedCustomer ExtendedCustomer { get; set; }
-	}
-
-	public class ExtendedCustomer
-	{
-	    public String Name { get; set; }
-
-	    public String Address { get; set; }
-
-	    public int Age { get; set; }
-	}
+    public virtual int Age { get; set; }
 }

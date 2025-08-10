@@ -12,31 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters
+using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.Windsor.Configuration.Interpreters;
+
+[Serializable]
+public class ConfigurationProcessingException : Exception
 {
-	using System;
-	using System.Runtime.Serialization;
+    public ConfigurationProcessingException(string message) : base(message)
+    {
+        this.SetUp();
+    }
 
-	using Castle.Core.Internal;
-
-	[Serializable]
-	public class ConfigurationProcessingException : Exception
-	{
-		public ConfigurationProcessingException(string message) : base(message)
-		{
-			ExceptionHelper.SetUp(this);
-		}
-
-		public ConfigurationProcessingException(string message, Exception innerException) : base(message, innerException)
-		{
-			ExceptionHelper.SetUp(this);
-		}
-
-#if FEATURE_SERIALIZATION
-		public ConfigurationProcessingException(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-			ExceptionHelper.SetUp(this);
-		}
-#endif
-	}
+    public ConfigurationProcessingException(string message, Exception innerException) : base(message, innerException)
+    {
+        this.SetUp();
+    }
 }

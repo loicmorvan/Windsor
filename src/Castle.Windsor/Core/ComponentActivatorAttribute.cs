@@ -12,34 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Core;
+
+/// <summary>Associates a custom activator with a component</summary>
+[AttributeUsage(AttributeTargets.Class)]
+[PublicAPI]
+public sealed class ComponentActivatorAttribute : Attribute
 {
-	using System;
-
-	/// <summary>
-	///   Associates a custom activator with a component
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-	public sealed class ComponentActivatorAttribute : Attribute
+	/// <summary>Initializes a new instance of the <see cref="ComponentActivatorAttribute" /> class.</summary>
+	/// <param name="componentActivatorType">Type of the component activator.</param>
+	public ComponentActivatorAttribute(Type componentActivatorType)
 	{
-		private readonly Type componentActivatorType;
-
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "ComponentActivatorAttribute" /> class.
-		/// </summary>
-		/// <param name = "componentActivatorType">Type of the component activator.</param>
-		public ComponentActivatorAttribute(Type componentActivatorType)
-		{
-			this.componentActivatorType = componentActivatorType;
-		}
-
-		/// <summary>
-		///   Gets the type of the component activator.
-		/// </summary>
-		/// <value>The type of the component activator.</value>
-		public Type ComponentActivatorType
-		{
-			get { return componentActivatorType; }
-		}
+		ComponentActivatorType = componentActivatorType;
 	}
+
+	/// <summary>Gets the type of the component activator.</summary>
+	/// <value>The type of the component activator.</value>
+	public Type ComponentActivatorType { get; }
 }

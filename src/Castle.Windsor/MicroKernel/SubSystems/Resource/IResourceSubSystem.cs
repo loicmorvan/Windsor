@@ -12,27 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Resource
+using Castle.Core.Resource;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Resource;
+
+/// <summary>
+///     An implementation of <c>a</c> should be able to return instances of <see cref="IResource" /> for a given
+///     resource identifier.
+/// </summary>
+public interface IResourceSubSystem : ISubSystem
 {
-	using System;
+    [PublicAPI]
+    IResource CreateResource(CustomUri uri);
 
-	using Castle.Core.Resource;
+    [PublicAPI]
+    IResource CreateResource(CustomUri uri, string basePath);
 
-	/// <summary>
-	///   An implementation of <c>a</c> should 
-	///   be able to return instances of <see cref = "IResource" />
-	///   for a given resource identifier.
-	/// </summary>
-	public interface IResourceSubSystem : ISubSystem
-	{
-		IResource CreateResource(CustomUri uri);
+    IResource CreateResource(string resource);
 
-		IResource CreateResource(CustomUri uri, String basePath);
+    IResource CreateResource(string resource, string basePath);
 
-		IResource CreateResource(String resource);
-
-		IResource CreateResource(String resource, String basePath);
-
-		void RegisterResourceFactory(IResourceFactory resourceFactory);
-	}
+    [PublicAPI]
+    void RegisterResourceFactory(IResourceFactory resourceFactory);
 }

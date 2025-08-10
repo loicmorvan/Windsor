@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using Castle.Windsor.Tests;
+namespace Castle.Windsor.Tests.Components;
 
-	public class EmailSenderWithDependency : IAlarmSender
-	{
-		public EmailSenderWithDependency(A dependency)
-		{
-		}
-	}
+public class EmailSenderWithDependency : IAlarmSender
+{
+    // ReSharper disable once UnusedParameter.Local
+    public EmailSenderWithDependency(A dependency)
+    {
+    }
 }

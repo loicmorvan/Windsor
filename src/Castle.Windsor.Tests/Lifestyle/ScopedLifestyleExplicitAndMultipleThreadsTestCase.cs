@@ -12,171 +12,107 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Lifestyle
+using System.Runtime.ExceptionServices;
+using Castle.Windsor.MicroKernel.Lifestyle;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+
+namespace Castle.Windsor.Tests.Lifestyle;
+
+public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContainerTestCase
 {
-	using System;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Castle.MicroKernel.Lifestyle;
-	using Castle.MicroKernel.Registration;
+    protected override void AfterContainerCreated()
+    {
+        Container.Register(Component.For<A>().LifestyleScoped());
+    }
 
-	using CastleTests.Components;
+    [Fact]
+    public async Task Context_is_passed_onto_the_next_thread_TPL()
+    {
+        using (Container.BeginScope())
+        {
+            var instanceFromOtherThread = default(A);
+            var instance = Container.Resolve<A>();
+            var task = Task.Factory.StartNew(() => { instanceFromOtherThread = Container.Resolve<A>(); });
+            await task;
+            Assert.Same(instance, instanceFromOtherThread);
+        }
+    }
 
-	using NUnit.Framework;
+    [Fact]
+    public void Context_is_passed_onto_the_next_thread_ThreadPool()
+    {
+        using (Container.BeginScope())
+        {
+            var @event = new ManualResetEvent(false);
+            var instanceFromOtherThread = default(A);
+            var instance = Container.Resolve<A>();
+            var initialThreadId = Thread.CurrentThread.ManagedThreadId;
+            var exceptionFromTheOtherThread = default(Exception);
+            ThreadPool.QueueUserWorkItem(_ =>
+            {
+                Assert.NotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
+                try
+                {
+                    instanceFromOtherThread = Container.Resolve<A>();
+                }
+                catch (Exception e)
+                {
+                    exceptionFromTheOtherThread = e;
+                }
+                finally
+                {
+                    @event.Set();
+                }
+            });
+            var signalled = @event.WaitOne(TimeSpan.FromSeconds(2));
+            if (exceptionFromTheOtherThread != null)
+            {
+                var capture = ExceptionDispatchInfo.Capture(exceptionFromTheOtherThread);
+                capture.Throw();
+            }
 
-	[TestFixture]
-	public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContainerTestCase
-	{
-		protected override void AfterContainerCreated()
-		{
-			Container.Register(Component.For<A>().LifestyleScoped());
-		}
+            Assert.True(signalled, "The other thread didn't finish on time.");
+            Assert.Same(instance, instanceFromOtherThread);
+        }
+    }
 
-#if FEATURE_REMOTING   //async delegates depend on Remoting https://github.com/dotnet/corefx/issues/5940 
-		[Test]
-		public void Context_is_passed_onto_the_next_thread_Begin_End_Invoke()
-		{
-			using (Container.BeginScope())
-			{
-				var instance = default(A);
-				var instanceFromOtherThread = default(A);
-				instance = Container.Resolve<A>();
-				var initialThreadId = Thread.CurrentThread.ManagedThreadId;
-				Action action = () =>
-				{
-					Assert.AreNotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
-					instanceFromOtherThread = Container.Resolve<A>();
-				};
+    [Fact]
+    public void Context_is_passed_onto_the_next_thread_explicit()
+    {
+        using (Container.BeginScope())
+        {
+            var @event = new ManualResetEvent(false);
+            var instanceFromOtherThread = default(A);
+            var instance = Container.Resolve<A>();
+            var initialThreadId = Thread.CurrentThread.ManagedThreadId;
+            var exceptionFromTheOtherThread = default(Exception);
+            var otherThread = new Thread(() =>
+            {
+                Assert.NotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
+                try
+                {
+                    instanceFromOtherThread = Container.Resolve<A>();
+                }
+                catch (Exception e)
+                {
+                    exceptionFromTheOtherThread = e;
+                }
+                finally
+                {
+                    @event.Set();
+                }
+            });
+            otherThread.Start();
+            var signalled = @event.WaitOne(TimeSpan.FromSeconds(2));
+            if (exceptionFromTheOtherThread != null)
+            {
+                var capture = ExceptionDispatchInfo.Capture(exceptionFromTheOtherThread);
+                capture.Throw();
+            }
 
-				var result = action.BeginInvoke(null, null);
-				result.AsyncWaitHandle.WaitOne();
-				Assert.AreSame(instance, instanceFromOtherThread);
-			}
-		}
-
-		[Test]
-		public void Context_is_NOT_visible_in_unrelated_thread_Begin_End_Invoke()
-		{
-			var startLock = new ManualResetEvent(false);
-			var resolvedLock = new ManualResetEvent(false);
-			var instanceFromOtherThread = default(A);
-			var initialThreadId = Thread.CurrentThread.ManagedThreadId;
-			Action action = () =>
-			{
-				using (Container.BeginScope())
-				{
-					startLock.WaitOne();
-					Assert.AreNotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
-					instanceFromOtherThread = Container.Resolve<A>();
-					resolvedLock.Set();
-				}
-			};
-			var result = action.BeginInvoke(null, null);
-			using (Container.BeginScope())
-			{
-				startLock.Set();
-				var instance = Container.Resolve<A>();
-				resolvedLock.WaitOne();
-
-				result.AsyncWaitHandle.WaitOne();
-				Assert.AreNotSame(instance, instanceFromOtherThread);
-			}
-		}
-#endif
-
-		[Test] 
-		public void Context_is_passed_onto_the_next_thread_TPL()
-		{
-			using (Container.BeginScope())
-			{
-				var instance = default(A);
-				var instanceFromOtherThread = default(A);
-				instance = Container.Resolve<A>();
-				var initialThreadId = Thread.CurrentThread.ManagedThreadId;
-				var task = Task.Factory.StartNew(() =>
-				{
-					instanceFromOtherThread = Container.Resolve<A>();
-				});
-				task.Wait();
-				Assert.AreSame(instance, instanceFromOtherThread);
-			}
-		}
-
-		[Test]
-		public void Context_is_passed_onto_the_next_thread_ThreadPool()
-		{
-			using (Container.BeginScope())
-			{
-				var instance = default(A);
-				var @event = new ManualResetEvent(false);
-				var instanceFromOtherThread = default(A);
-				instance = Container.Resolve<A>();
-				var initialThreadId = Thread.CurrentThread.ManagedThreadId;
-				var exceptionFromTheOtherThread = default(Exception);
-				ThreadPool.QueueUserWorkItem(_ =>
-				{
-					Assert.AreNotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
-					try
-					{
-						instanceFromOtherThread = Container.Resolve<A>();
-					}
-					catch (Exception e)
-					{
-						exceptionFromTheOtherThread = e;
-					}
-					finally
-					{
-						@event.Set();
-					}
-				});
-				var signalled = @event.WaitOne(TimeSpan.FromSeconds(2));
-				if (exceptionFromTheOtherThread != null)
-				{
-					var capture = System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(exceptionFromTheOtherThread);
-					capture.Throw();
-				}
-				Assert.IsTrue(signalled, "The other thread didn't finish on time.");
-				Assert.AreSame(instance, instanceFromOtherThread);
-			}
-		}
-
-		[Test]
-		public void Context_is_passed_onto_the_next_thread_explicit()
-		{
-			using (Container.BeginScope())
-			{
-				var instance = default(A);
-				var @event = new ManualResetEvent(false);
-				var instanceFromOtherThread = default(A);
-				instance = Container.Resolve<A>();
-				var initialThreadId = Thread.CurrentThread.ManagedThreadId;
-				var exceptionFromTheOtherThread = default(Exception);
-				var otherThread = new Thread(() =>
-				{
-					Assert.AreNotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
-					try
-					{
-						instanceFromOtherThread = Container.Resolve<A>();
-					}
-					catch (Exception e)
-					{
-						exceptionFromTheOtherThread = e;
-					}
-					finally
-					{
-						@event.Set();
-					}
-				});
-				otherThread.Start();
-				var signalled = @event.WaitOne(TimeSpan.FromSeconds(2));
-				if (exceptionFromTheOtherThread != null)
-				{
-					var capture = System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(exceptionFromTheOtherThread);
-					capture.Throw();
-				}
-				Assert.IsTrue(signalled, "The other thread didn't finish on time.");
-				Assert.AreSame(instance, instanceFromOtherThread);
-			}
-		}
-	}
+            Assert.True(signalled, "The other thread didn't finish on time.");
+            Assert.Same(instance, instanceFromOtherThread);
+        }
+    }
 }

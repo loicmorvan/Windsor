@@ -12,30 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+/// <summary>Summary description for DefaultSpamServiceWithConstructor.</summary>
+public class DefaultSpamServiceWithConstructor
 {
-	/// <summary>
-	///   Summary description for DefaultSpamServiceWithConstructor.
-	/// </summary>
-	public class DefaultSpamServiceWithConstructor
-	{
-		private readonly DefaultMailSenderService mailSender;
-		private readonly DefaultTemplateEngine templateEngine;
+    public DefaultSpamServiceWithConstructor(DefaultMailSenderService mailsender, DefaultTemplateEngine templateEngine)
+    {
+        MailSender = mailsender;
+        TemplateEngine = templateEngine;
+    }
 
-		public DefaultSpamServiceWithConstructor(DefaultMailSenderService mailsender, DefaultTemplateEngine templateEngine)
-		{
-			mailSender = mailsender;
-			this.templateEngine = templateEngine;
-		}
+    public DefaultMailSenderService MailSender { get; }
 
-		public DefaultMailSenderService MailSender
-		{
-			get { return mailSender; }
-		}
-
-		public DefaultTemplateEngine TemplateEngine
-		{
-			get { return templateEngine; }
-		}
-	}
+    public DefaultTemplateEngine TemplateEngine { get; }
 }

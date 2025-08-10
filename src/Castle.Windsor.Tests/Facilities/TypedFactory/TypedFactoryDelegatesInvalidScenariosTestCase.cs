@@ -12,54 +12,47 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Facilities.TypedFactory
+using Castle.Windsor.Facilities.TypedFactory;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory;
+
+public class TypedFactoryDelegatesInvalidScenariosTestCase : AbstractContainerTestCase
 {
-	using System;
+    protected override void AfterContainerCreated()
+    {
+        Container.AddFacility<TypedFactoryFacility>();
+    }
 
-	using Castle.Facilities.TypedFactory;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
+    [Fact]
+    public void Dependency_on_Func_of_bool_is_not_satisfied()
+    {
+        Container.Register(Component.For<HasFuncProperty<bool>>());
 
-	using CastleTests.Components;
+        var item = Container.Resolve<HasFuncProperty<bool>>();
 
-	using NUnit.Framework;
+        Assert.Null(item.Function);
+    }
 
-	[TestFixture]
-	public class TypedFactoryDelegatesInvalidScenariosTestCase : AbstractContainerTestCase
-	{
-		protected override void AfterContainerCreated()
-		{
-			Container.AddFacility<TypedFactoryFacility>();
-		}
+    [Fact]
+    public void Dependency_on_Func_of_string_is_not_satisfied()
+    {
+        Container.Register(Component.For<HasFuncProperty<string>>());
 
-		[Test]
-		public void Dependency_on_Func_of_bool_is_not_satisfied()
-		{
-			Container.Register(Component.For<HasFuncProperty<bool>>());
+        var item = Container.Resolve<HasFuncProperty<string>>();
 
-			var item = Container.Resolve<HasFuncProperty<bool>>();
+        Assert.Null(item.Function);
+    }
 
-			Assert.IsNull(item.Function);
-		}
+    [Fact]
+    public void Dependency_on_Func_of_string_is_not_satisfied_after_resolving_valid_func()
+    {
+        Container.Register(Component.For<HasFuncProperty<string>>());
+        Container.Resolve<Func<A>>();
+        var item = Container.Resolve<HasFuncProperty<string>>();
 
-		[Test]
-		public void Dependency_on_Func_of_string_is_not_satisfied()
-		{
-			Container.Register(Component.For<HasFuncProperty<string>>());
-
-			var item = Container.Resolve<HasFuncProperty<string>>();
-
-			Assert.IsNull(item.Function);
-		}
-
-		[Test]
-		public void Dependency_on_Func_of_string_is_not_satisfied_after_resolving_valid_func()
-		{
-			Container.Register(Component.For<HasFuncProperty<string>>());
-			Container.Resolve<Func<A>>();
-			var item = Container.Resolve<HasFuncProperty<string>>();
-
-			Assert.IsNull(item.Function);
-		}
-	}
+        Assert.Null(item.Function);
+    }
 }

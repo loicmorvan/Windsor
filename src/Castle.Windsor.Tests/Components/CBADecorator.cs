@@ -12,15 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class CBADecorator : CBA
-	{
-		public CBADecorator(CBA inner, A a, B b) : base(a, b)
-		{
-			Inner = inner;
-		}
+namespace Castle.Windsor.Tests.Components;
 
-		public CBA Inner { get; private set; }
-	}
+public class CbaDecorator(Cba inner, A a, B b) : Cba(a, b)
+{
+    public Cba Inner { get; private set; } = inner;
 }

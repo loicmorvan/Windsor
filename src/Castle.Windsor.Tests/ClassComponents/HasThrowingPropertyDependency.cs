@@ -12,23 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+public class HasThrowingPropertyDependency
 {
-	public class HasThrowingPropertyDependency
-	{
-		public static int InstancesStarted;
-		public static int InstancesCreated;
+    public static int InstancesStarted;
+    public static int InstancesCreated;
 
-		public HasThrowingPropertyDependency()
-		{
-			InstancesCreated++;
-		}
+    public HasThrowingPropertyDependency()
+    {
+        InstancesCreated++;
+    }
 
-		public ThrowsInCtor Property { get; set; }
+    public ThrowsInCtor Property { get; set; }
 
-		public void Start()
-		{
-			InstancesStarted++;
-		}
-	}
+    public static void Start()
+    {
+        InstancesStarted++;
+    }
 }

@@ -12,105 +12,72 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Resource
+using Castle.Core.Resource;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Resource;
+
+/// <summary>Pendent</summary>
+public sealed class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 {
-	using System;
-	using System.Collections.Generic;
+    private readonly List<IResourceFactory> _resourceFactories = [];
 
-	using Castle.Core.Resource;
+    public DefaultResourceSubSystem()
+    {
+        InitDefaultResourceFactories();
+    }
 
-	/// <summary>
-	///   Pendent
-	/// </summary>
-	public class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
-	{
-		private readonly List<IResourceFactory> resourceFactories = new List<IResourceFactory>();
+    public IResource CreateResource(string resource)
+    {
+        ArgumentNullException.ThrowIfNull(resource);
 
-		public DefaultResourceSubSystem()
-		{
-			InitDefaultResourceFactories();
-		}
+        return CreateResource(new CustomUri(resource));
+    }
 
-		public IResource CreateResource(String resource)
-		{
-			if (resource == null)
-			{
-				throw new ArgumentNullException(nameof(resource));
-			}
+    public IResource CreateResource(string resource, string basePath)
+    {
+        ArgumentNullException.ThrowIfNull(resource);
 
-			return CreateResource(new CustomUri(resource));
-		}
+        return CreateResource(new CustomUri(resource), basePath);
+    }
 
-		public IResource CreateResource(String resource, String basePath)
-		{
-			if (resource == null)
-			{
-				throw new ArgumentNullException(nameof(resource));
-			}
+    public IResource CreateResource(CustomUri uri)
+    {
+        ArgumentNullException.ThrowIfNull(uri);
 
-			return CreateResource(new CustomUri(resource), basePath);
-		}
+        foreach (var resFactory in _resourceFactories.Where(resFactory => resFactory.Accept(uri)))
+        {
+            return resFactory.Create(uri);
+        }
 
-		public IResource CreateResource(CustomUri uri)
-		{
-			if (uri == null)
-			{
-				throw new ArgumentNullException(nameof(uri));
-			}
+        throw new KernelException("No Resource factory was able to " +
+                                  "deal with Uri " + uri);
+    }
 
-			foreach (var resFactory in resourceFactories)
-			{
-				if (resFactory.Accept(uri))
-				{
-					return resFactory.Create(uri);
-				}
-			}
+    public IResource CreateResource(CustomUri uri, string basePath)
+    {
+        ArgumentNullException.ThrowIfNull(uri);
+        ArgumentNullException.ThrowIfNull(basePath);
 
-			throw new KernelException("No Resource factory was able to " +
-			                          "deal with Uri " + uri);
-		}
+        foreach (var resFactory in _resourceFactories.Where(resFactory => resFactory.Accept(uri)))
+        {
+            return resFactory.Create(uri, basePath);
+        }
 
-		public IResource CreateResource(CustomUri uri, String basePath)
-		{
-			if (uri == null)
-			{
-				throw new ArgumentNullException(nameof(uri));
-			}
-			if (basePath == null)
-			{
-				throw new ArgumentNullException(nameof(basePath));
-			}
+        throw new KernelException("No Resource factory was able to " +
+                                  "deal with Uri " + uri);
+    }
 
-			foreach (var resFactory in resourceFactories)
-			{
-				if (resFactory.Accept(uri))
-				{
-					return resFactory.Create(uri, basePath);
-				}
-			}
+    public void RegisterResourceFactory(IResourceFactory resourceFactory)
+    {
+        ArgumentNullException.ThrowIfNull(resourceFactory);
 
-			throw new KernelException("No Resource factory was able to " +
-			                          "deal with Uri " + uri);
-		}
+        _resourceFactories.Add(resourceFactory);
+    }
 
-		public void RegisterResourceFactory(IResourceFactory resourceFactory)
-		{
-			if (resourceFactory == null)
-			{
-				throw new ArgumentNullException(nameof(resourceFactory));
-			}
-
-			resourceFactories.Add(resourceFactory);
-		}
-
-		protected virtual void InitDefaultResourceFactories()
-		{
-			RegisterResourceFactory(new AssemblyResourceFactory());
-			RegisterResourceFactory(new UncResourceFactory());
-			RegisterResourceFactory(new FileResourceFactory());
-#if FEATURE_SYSTEM_CONFIGURATION
-			RegisterResourceFactory(new ConfigResourceFactory());
-#endif
-		}
-	}
+    private void InitDefaultResourceFactories()
+    {
+        RegisterResourceFactory(new AssemblyResourceFactory());
+        RegisterResourceFactory(new UncResourceFactory());
+        RegisterResourceFactory(new FileResourceFactory());
+    }
 }

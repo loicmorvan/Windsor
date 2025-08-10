@@ -12,25 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+// ReSharper disable once UnusedTypeParameter
+public class GenericClassWithParameter<T>(string name) : IGenericClassWithParameter<T>
 {
-	public interface IGenericClassWithParameter<T>
-	{
-		string Name { get; }
-	}
-
-	public class GenericClassWithParameter<T> : IGenericClassWithParameter<T>
-	{
-		private readonly string name;
-
-		public GenericClassWithParameter(string name)
-		{
-			this.name = name;
-		}
-
-		public string Name
-		{
-			get { return name; }
-		}
-	}
+    public string Name { get; } = name;
 }

@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.ComponentsWithAttribute
-{
-	using Castle.Core;
+using Castle.Windsor.Core;
+using JetBrains.Annotations;
 
-	[CastleComponent("keyTransient", Lifestyle = LifestyleType.Transient)]
-	public class HasKeyTransient
-	{
-	}
-}
+namespace Castle.Windsor.Tests.ComponentsWithAttribute;
+
+[CastleComponent("keyTransient", Lifestyle = LifestyleType.Transient)]
+[UsedImplicitly]
+public class HasKeyTransient;

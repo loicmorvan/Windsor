@@ -12,51 +12,46 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+using System.Collections;
+using System.Diagnostics;
+using Castle.Core.Configuration;
+
+namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
+
+[Serializable]
+public class ListConverter : AbstractTypeConverter
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.Diagnostics;
+    public override bool CanHandleType(Type type)
+    {
+        return type == typeof(IList) || type == typeof(ArrayList);
+    }
 
-	using Castle.Core.Configuration;
+    public override object PerformConversion(string value, Type targetType)
+    {
+        throw new NotImplementedException();
+    }
 
-	[Serializable]
-	public class ListConverter : AbstractTypeConverter
-	{
-		public override bool CanHandleType(Type type)
-		{
-			return (type == typeof(IList) || type == typeof(ArrayList));
-		}
+    public override object PerformConversion(IConfiguration configuration, Type targetType)
+    {
+        Debug.Assert(CanHandleType(targetType));
 
-		public override object PerformConversion(String value, Type targetType)
-		{
-			throw new NotImplementedException();
-		}
+        var convertTo = GetConvertToType(configuration);
 
-		public override object PerformConversion(IConfiguration configuration, Type targetType)
-		{
-			Debug.Assert(CanHandleType(targetType), "CanHandleType(targetType)");
+        return configuration
+            .Children
+            .Select(itemConfig => Context.Composition.PerformConversion(itemConfig.Value, convertTo))
+            .ToList();
+    }
 
-			var list = new List<object>();
-			var convertTo = GetConvertToType(configuration);
-			foreach (var itemConfig in configuration.Children)
-			{
-				list.Add(Context.Composition.PerformConversion(itemConfig.Value, convertTo));
-			}
+    private Type GetConvertToType(IConfiguration configuration)
+    {
+        var itemType = configuration.Attributes["type"];
+        var convertTo = typeof(string);
+        if (itemType != null)
+        {
+            convertTo = Context.Composition.PerformConversion<Type>(itemType);
+        }
 
-			return list;
-		}
-
-		private Type GetConvertToType(IConfiguration configuration)
-		{
-			var itemType = configuration.Attributes["type"];
-			var convertTo = typeof(String);
-			if (itemType != null)
-			{
-				convertTo = Context.Composition.PerformConversion<Type>(itemType);
-			}
-			return convertTo;
-		}
-	}
+        return convertTo;
+    }
 }

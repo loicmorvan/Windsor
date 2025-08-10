@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Pools
-{
-	public class UseRecyclableComponent
-	{
-		public UseRecyclableComponent(RecyclableComponent dependency)
-		{
-			Dependency = dependency;
-		}
+namespace Castle.Windsor.Tests.Pools;
 
-		public RecyclableComponent Dependency { get; private set; }
-	}
+public class UseRecyclableComponent
+{
+    public UseRecyclableComponent(RecyclableComponent dependency)
+    {
+        Dependency = dependency;
+    }
+
+    public RecyclableComponent Dependency { get; private set; }
 }

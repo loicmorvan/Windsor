@@ -12,29 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Tests.Components;
+
+[UsedImplicitly]
+public class WebServiceResultFinder<T> : IResultFinder<T>
 {
-	public class WebServiceResultFinder<T> : IResultFinder<T>
-	{
-		private IResultFinder<T> finder;
+    public WebServiceResultFinder()
+    {
+    }
 
-		public WebServiceResultFinder()
-		{
-		}
+    public WebServiceResultFinder(IResultFinder<T> finder)
+    {
+        Finder = finder;
+    }
 
-		public WebServiceResultFinder(IResultFinder<T> finder)
-		{
-			this.finder = finder;
-		}
+    public IResultFinder<T> Finder { get; }
 
-		public IResultFinder<T> Finder
-		{
-			get { return finder; }
-		}
-
-		public T Process(ISpecification specification)
-		{
-			return default(T);
-		}
-	}
+    public T Process()
+    {
+        return default;
+    }
 }

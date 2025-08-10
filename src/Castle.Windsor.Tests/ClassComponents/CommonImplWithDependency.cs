@@ -12,15 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
-{
-	public class CommonImplWithDependency : ICommonSub1, ICommonSub2
-	{
-		public ICustomer Customer;
+namespace Castle.Windsor.Tests.ClassComponents;
 
-		public CommonImplWithDependency(ICustomer customer)
-		{
-			Customer = customer;
-		}
-	}
+public class CommonImplWithDependency(ICustomer customer) : ICommonSub2
+{
+    public readonly ICustomer Customer = customer;
 }

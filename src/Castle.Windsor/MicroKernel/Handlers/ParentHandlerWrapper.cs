@@ -12,149 +12,132 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Context;
+
+namespace Castle.Windsor.MicroKernel.Handlers;
+
+public sealed class ParentHandlerWrapper : IHandler, IDisposable
 {
-	using System;
+    private readonly ISubDependencyResolver _childResolver;
+    private readonly IHandler _parentHandler;
+    private readonly IReleasePolicy _parentReleasePolicy;
 
-	using Castle.Core;
-	using Castle.MicroKernel.Context;
+    /// <summary>Initializes a new instance of the <see cref="ParentHandlerWrapper" /> class.</summary>
+    /// <param name="parentHandler">The parent handler.</param>
+    /// <param name="childResolver">The child resolver.</param>
+    /// <param name="parentReleasePolicy">Release policy of the parent container.</param>
+    public ParentHandlerWrapper(IHandler parentHandler, ISubDependencyResolver childResolver,
+        IReleasePolicy parentReleasePolicy)
+    {
+        ArgumentNullException.ThrowIfNull(parentHandler);
+        ArgumentNullException.ThrowIfNull(childResolver);
 
-	public class ParentHandlerWrapper : IHandler, IDisposable
-	{
-		private readonly ISubDependencyResolver childResolver;
-		private readonly IReleasePolicy parentReleasePolicy;
-		private readonly IHandler parentHandler;
+        _parentHandler = parentHandler;
+        _childResolver = childResolver;
+        _parentReleasePolicy = parentReleasePolicy;
+    }
 
-		/// <summary>
-		///   Initializes a new instance of the <see cref = "ParentHandlerWrapper" /> class.
-		/// </summary>
-		/// <param name = "parentHandler">The parent handler.</param>
-		/// <param name = "childResolver">The child resolver.</param>
-		/// <param name="parentReleasePolicy">Release policy of the parent container.</param>
-		public ParentHandlerWrapper(IHandler parentHandler, ISubDependencyResolver childResolver, IReleasePolicy parentReleasePolicy)
-		{
-			if (parentHandler == null)
-			{
-				throw new ArgumentNullException(nameof(parentHandler));
-			}
-			if (childResolver == null)
-			{
-				throw new ArgumentNullException(nameof(childResolver));
-			}
+    public void Dispose()
+    {
+        Dispose(true);
+    }
 
-			this.parentHandler = parentHandler;
-			this.childResolver = childResolver;
-			this.parentReleasePolicy = parentReleasePolicy;
-		}
+    public ComponentModel ComponentModel => _parentHandler.ComponentModel;
 
-		public virtual ComponentModel ComponentModel
-		{
-			get { return parentHandler.ComponentModel; }
-		}
+    public HandlerState CurrentState => _parentHandler.CurrentState;
 
-		public virtual HandlerState CurrentState
-		{
-			get { return parentHandler.CurrentState; }
-		}
+    public void Init(IKernelInternal kernel)
+    {
+    }
 
-		public void Dispose()
-		{
-			Dispose(true);
-		}
+    public bool IsBeingResolvedInContext(CreationContext context)
+    {
+        return (context != null && context.IsInResolutionContext(this)) ||
+               _parentHandler.IsBeingResolvedInContext(context);
+    }
 
-		public virtual void Init(IKernelInternal kernel)
-		{
-		}
+    public bool Release(Burden burden)
+    {
+        return _parentHandler.Release(burden);
+    }
 
-		public bool IsBeingResolvedInContext(CreationContext context)
-		{
-			return (context != null && context.IsInResolutionContext(this)) || parentHandler.IsBeingResolvedInContext(context);
-		}
+    public object Resolve(CreationContext context)
+    {
+        var releasePolicy = default(IReleasePolicy);
+        try
+        {
+            releasePolicy = context.ReleasePolicy;
+            context.ReleasePolicy = _parentReleasePolicy;
+            return _parentHandler.Resolve(context);
+        }
+        finally
+        {
+            context.ReleasePolicy = releasePolicy;
+        }
+    }
 
-		public virtual bool Release(Burden burden)
-		{
-			return parentHandler.Release(burden);
-		}
+    public bool Supports(Type service)
+    {
+        return _parentHandler.Supports(service);
+    }
 
-		public virtual object Resolve(CreationContext context)
-		{
-			var releasePolicy = default(IReleasePolicy);
-			try
-			{
-				releasePolicy = context.ReleasePolicy;
-				context.ReleasePolicy = parentReleasePolicy;
-				return parentHandler.Resolve(context);
-			}
-			finally
-			{
-				context.ReleasePolicy = releasePolicy;
-			}
-		}
+    public bool SupportsAssignable(Type service)
+    {
+        return _parentHandler.SupportsAssignable(service);
+    }
 
-		public bool Supports(Type service)
-		{
-			return parentHandler.Supports(service);
-		}
+    public object TryResolve(CreationContext context)
+    {
+        var releasePolicy = default(IReleasePolicy);
+        try
+        {
+            releasePolicy = context.ReleasePolicy;
+            context.ReleasePolicy = _parentReleasePolicy;
+            return _parentHandler.TryResolve(context);
+        }
+        finally
+        {
+            context.ReleasePolicy = releasePolicy;
+        }
+    }
 
-		public bool SupportsAssignable(Type service)
-		{
-			return parentHandler.SupportsAssignable(service);
-		}
+    public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+        ComponentModel model, DependencyModel dependency)
+    {
+        var canResolve = false;
 
-		public object TryResolve(CreationContext context)
-		{
-			var releasePolicy = default(IReleasePolicy);
-			try
-			{
-				releasePolicy = context.ReleasePolicy;
-				context.ReleasePolicy = parentReleasePolicy;
-				return parentHandler.TryResolve(context);
-			}
-			finally
-			{
-				context.ReleasePolicy = releasePolicy;
-			}
-		}
+        if (contextHandlerResolver != null)
+        {
+            canResolve = _childResolver.CanResolve(context, null, model, dependency);
+        }
 
-		public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
-		                               ComponentModel model, DependencyModel dependency)
-		{
-			var canResolve = false;
+        if (!canResolve)
+        {
+            canResolve = _parentHandler.CanResolve(context, contextHandlerResolver, model, dependency);
+        }
 
-			if (contextHandlerResolver != null)
-			{
-				canResolve = childResolver.CanResolve(context, null, model, dependency);
-			}
+        return canResolve;
+    }
 
-			if (!canResolve)
-			{
-				canResolve = parentHandler.CanResolve(context, contextHandlerResolver, model, dependency);
-			}
+    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+        ComponentModel model, DependencyModel dependency)
+    {
+        var value = _childResolver.Resolve(context, null, model, dependency) ??
+                    _parentHandler.Resolve(context, contextHandlerResolver, model, dependency);
 
-			return canResolve;
-		}
+        return value;
+    }
 
-		public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
-		                              ComponentModel model, DependencyModel dependency)
-		{
-			var value = childResolver.Resolve(context, null, model, dependency);
+    private void Dispose(bool disposing)
+    {
+        if (!disposing)
+        {
+            return;
+        }
 
-			if (value == null)
-			{
-				value = parentHandler.Resolve(context, contextHandlerResolver, model, dependency);
-			}
-
-			return value;
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				if (parentHandler != null)
-				{
-				}
-			}
-		}
-	}
+        if (_parentHandler != null)
+        {
+        }
+    }
 }

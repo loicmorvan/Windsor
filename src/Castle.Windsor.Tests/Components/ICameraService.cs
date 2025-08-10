@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public interface ICameraService : ICameraServiceBase
 {
-	public interface ICameraService : ICameraServiceBase
-	{
-		void Record(ICamera cam);
-	}
+    void Record();
 }

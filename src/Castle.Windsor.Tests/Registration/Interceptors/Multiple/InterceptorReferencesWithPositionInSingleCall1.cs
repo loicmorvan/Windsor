@@ -12,27 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.Registration.Interceptors.Multiple
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Interceptors;
+
+namespace Castle.Windsor.Tests.Registration.Interceptors.Multiple;
+
+public class InterceptorReferencesWithPositionInSingleCall1 : InterceptorsTestCaseHelper
 {
-	using System.Collections.Generic;
+    public override IRegistration RegisterInterceptors<TS>(ComponentRegistration<TS> registration)
+    {
+        return registration.Interceptors(
+#pragma warning disable CA2263
+            InterceptorReference.ForType(typeof(TestInterceptor1)),
+            InterceptorReference.ForType(typeof(TestInterceptor2))).First;
+#pragma warning restore CA2263
+    }
 
-	using Castle.Core;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Tests.Interceptors;
-
-	public class InterceptorReferencesWithPositionInSingleCall1 : InterceptorsTestCaseHelper
-	{
-		public override IRegistration RegisterInterceptors<S>(ComponentRegistration<S> registration)
-		{
-			return registration.Interceptors(
-				InterceptorReference.ForType(typeof(TestInterceptor1)),
-				InterceptorReference.ForType(typeof(TestInterceptor2))).First;
-		}
-
-		public override IEnumerable<InterceptorReference> GetExpectedInterceptorsInCorrectOrder()
-		{
-			yield return InterceptorReference.ForType<TestInterceptor2>();
-			yield return InterceptorReference.ForType<TestInterceptor1>();
-		}
-	}
+    public override IEnumerable<InterceptorReference> GetExpectedInterceptorsInCorrectOrder()
+    {
+        yield return InterceptorReference.ForType<TestInterceptor2>();
+        yield return InterceptorReference.ForType<TestInterceptor1>();
+    }
 }

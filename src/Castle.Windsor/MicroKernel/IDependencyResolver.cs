@@ -12,33 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.MicroKernel;
+
+/// <summary>
+///     Implementors should use a strategy to obtain valid references to properties and/or services requested in the
+///     dependency model.
+/// </summary>
+public interface IDependencyResolver : ISubDependencyResolver
 {
-	/// <summary>
-	///   Implementors should use a strategy to obtain 
-	///   valid references to properties and/or services 
-	///   requested in the dependency model.
-	/// </summary>
-	public interface IDependencyResolver : ISubDependencyResolver
-	{
-		/// <summary>
-		///   Registers a sub resolver instance
-		/// </summary>
-		/// <param name = "subResolver">The subresolver instance</param>
-		void AddSubResolver(ISubDependencyResolver subResolver);
+	/// <summary>Registers a sub resolver instance</summary>
+	/// <param name="subResolver">The subresolver instance</param>
+	void AddSubResolver(ISubDependencyResolver subResolver);
 
-		/// <summary>
-		///   This method is called with a delegate for firing the
-		///   IKernelEvents.DependencyResolving event.
-		/// </summary>
-		/// <param name = "kernel">kernel</param>
-		/// <param name = "resolving">The delegate used to fire the event</param>
-		void Initialize(IKernelInternal kernel, DependencyDelegate resolving);
+	/// <summary>This method is called with a delegate for firing the IKernelEvents.DependencyResolving event.</summary>
+	/// <param name="kernel">kernel</param>
+	/// <param name="resolving">The delegate used to fire the event</param>
+	void Initialize(IKernelInternal kernel, DependencyDelegate resolving);
 
-		/// <summary>
-		///   Unregisters a sub resolver instance previously registered
-		/// </summary>
-		/// <param name = "subResolver">The subresolver instance</param>
-		void RemoveSubResolver(ISubDependencyResolver subResolver);
-	}
+	/// <summary>Unregisters a sub resolver instance previously registered</summary>
+	/// <param name="subResolver">The subresolver instance</param>
+	[PublicAPI]
+	void RemoveSubResolver(ISubDependencyResolver subResolver);
 }

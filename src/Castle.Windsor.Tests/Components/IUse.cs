@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public interface IUse<out T>
 {
-	public interface IUse<T>
-	{
-		T Dependency { get; }
-	}
+    T Dependency { get; }
 }

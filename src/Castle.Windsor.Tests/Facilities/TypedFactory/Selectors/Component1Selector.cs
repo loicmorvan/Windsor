@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Selectors
+using System.Reflection;
+using Castle.Windsor.Facilities.TypedFactory;
+
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
+
+public class Component1Selector : DefaultTypedFactoryComponentSelector
 {
-	using System.Reflection;
-
-	using Castle.Facilities.TypedFactory;
-
-	public class Component1Selector : DefaultTypedFactoryComponentSelector
-	{
-		protected override string GetComponentName(MethodInfo method, object[] arguments)
-		{
-			return "one";
-		}
-	}
+    protected override string GetComponentName(MethodInfo method, object[] arguments)
+    {
+        return "one";
+    }
 }

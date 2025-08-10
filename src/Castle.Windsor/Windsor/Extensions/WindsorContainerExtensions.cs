@@ -12,61 +12,56 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor
+using Castle.Windsor.MicroKernel;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Windsor.Extensions;
+
+public static class WindsorContainerExtensions
 {
-	using System;
-	using System.Collections.Generic;
+    /// <summary>Returns a component instance by the service.</summary>
+    [PublicAPI]
+    public static object Resolve(this IWindsorContainer container, Type service,
+        IEnumerable<KeyValuePair<string, object>> arguments)
+    {
+        return container.Kernel.Resolve(service, new Arguments().AddNamed(arguments));
+    }
 
-	using Castle.MicroKernel;
+    /// <summary>Returns a component instance by the key.</summary>
+    [PublicAPI]
+    public static object Resolve(this IWindsorContainer container, string key, Type service,
+        IEnumerable<KeyValuePair<string, object>> arguments)
+    {
+        return container.Kernel.Resolve(key, service, new Arguments().AddNamed(arguments));
+    }
 
-	public static class WindsorContainerExtensions
-	{
-		/// <summary>
-		/// Returns a component instance by the service.
-		/// </summary>
-		public static object Resolve(this IWindsorContainer container, Type service, IEnumerable<KeyValuePair<string, object>> arguments)
-		{
-			return container.Kernel.Resolve(service, new Arguments().AddNamed(arguments));
-		}
+    /// <summary>Returns a component instance by the service.</summary>
+    public static T Resolve<T>(this IWindsorContainer container, IEnumerable<KeyValuePair<string, object>> arguments)
+    {
+        return container.Kernel.Resolve<T>(new Arguments().AddNamed(arguments));
+    }
 
-		/// <summary>
-		/// Returns a component instance by the key.
-		/// </summary>
-		public static object Resolve(this IWindsorContainer container, string key, Type service, IEnumerable<KeyValuePair<string, object>> arguments)
-		{
-			return container.Kernel.Resolve(key, service, new Arguments().AddNamed(arguments));
-		}
+    /// <summary>Returns a component instance by the key.</summary>
+    [PublicAPI]
+    public static T Resolve<T>(this IWindsorContainer container, string key,
+        IEnumerable<KeyValuePair<string, object>> arguments)
+    {
+        return container.Kernel.Resolve<T>(key, new Arguments().AddNamed(arguments));
+    }
 
-		/// <summary>
-		/// Returns a component instance by the service.
-		/// </summary>
-		public static T Resolve<T>(this IWindsorContainer container, IEnumerable<KeyValuePair<string, object>> arguments)
-		{
-			return (T)container.Kernel.Resolve(typeof(T), new Arguments().AddNamed(arguments));
-		}
+    /// <summary>Resolve all valid components that match this type by passing dependencies as arguments.</summary>
+    [PublicAPI]
+    public static Array ResolveAll(this IWindsorContainer container, Type service,
+        IEnumerable<KeyValuePair<string, object>> arguments)
+    {
+        return container.Kernel.ResolveAll(service, new Arguments().AddNamed(arguments));
+    }
 
-		/// <summary>
-		/// Returns a component instance by the key.
-		/// </summary>
-		public static T Resolve<T>(this IWindsorContainer container, string key, IEnumerable<KeyValuePair<string, object>> arguments)
-		{
-			return container.Kernel.Resolve<T>(key, new Arguments().AddNamed(arguments));
-		}
-
-		/// <summary>
-		/// Resolve all valid components that match this type by passing dependencies as arguments.
-		/// </summary>
-		public static Array ResolveAll(this IWindsorContainer container, Type service, IEnumerable<KeyValuePair<string, object>> arguments)
-		{
-			return container.Kernel.ResolveAll(service, new Arguments().AddNamed(arguments));
-		}
-
-		/// <summary>
-		/// Resolve all valid components that match this type.
-		/// </summary>
-		public static T[] ResolveAll<T>(this IWindsorContainer container, IEnumerable<KeyValuePair<string, object>> arguments)
-		{
-			return (T[])container.ResolveAll(typeof(T), new Arguments().AddNamed(arguments));
-		}
-	}
+    /// <summary>Resolve all valid components that match this type.</summary>
+    [PublicAPI]
+    public static T[] ResolveAll<T>(this IWindsorContainer container,
+        IEnumerable<KeyValuePair<string, object>> arguments)
+    {
+        return container.ResolveAll<T>(new Arguments().AddNamed(arguments));
+    }
 }

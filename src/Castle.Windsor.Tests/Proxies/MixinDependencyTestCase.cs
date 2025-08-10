@@ -12,70 +12,73 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Proxies
+using Castle.DynamicProxy;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Interceptors;
+
+// ReSharper disable UnusedVariable
+
+// ReSharper disable SuspiciousTypeConversion.Global
+// ReSharper disable NotAccessedVariable
+
+namespace Castle.Windsor.Tests.Proxies;
+
+public class MixinDependencyTestCase : AbstractContainerTestCase
 {
-	using System.Linq;
+    [Fact]
+    public void Bound_mixin_reused_as_implicit_and_explicit_dependency_chain()
+    {
+        Container.Register(
+            Component.For<CollectInvocationsInterceptor>().LifestyleTransient(),
+            Component.For<IComponent>()
+                .ImplementedBy<TrivialComponent>()
+                .LifestyleBoundToNearest<IUse<IComponent>>(),
+            Component.For<IUse<IComponent>, UseChain<IComponent>>()
+                .ImplementedBy<UseChain<IComponent>>()
+                .Proxy.MixIns(m => m.Component<TrivialComponent>())
+                .Interceptors<CollectInvocationsInterceptor>(),
+            Component.For<IUse<IComponent>>()
+                .ImplementedBy<Use<IComponent>>()
+                .Proxy.MixIns(m => m.Component<TrivialComponent>())
+                .Interceptors<CollectInvocationsInterceptor>()
+        );
 
-	using Castle.DynamicProxy;
-	using Castle.MicroKernel.Registration;
+        var outerProxy = (UseChain<IComponent>)Container.Resolve<IUse<IComponent>>();
+        var innerProxy = outerProxy.Next;
 
-	using CastleTests.Components;
-	using CastleTests.Interceptors;
+        var id = ((IComponent)outerProxy).Id; // to trigger interception;
+        var id2 = ((IComponent)innerProxy).Id; // to trigger interception;
 
-	using NUnit.Framework;
+        var outerMixin = ((CollectInvocationsInterceptor)((IProxyTargetAccessor)outerProxy).GetInterceptors()[0])
+            .Invocations[0].InvocationTarget;
+        var innerMixin = ((CollectInvocationsInterceptor)((IProxyTargetAccessor)innerProxy).GetInterceptors()[0])
+            .Invocations[0].InvocationTarget;
 
-	public class MixinDependencyTestCase : AbstractContainerTestCase
-	{
-		[Test]
-		public void Bound_mixin_reused_as_implicit_and_explicit_dependency_chain()
-		{
-			Container.Register(
-				Component.For<CollectInvocationsInterceptor>().LifestyleTransient(),
-				Component.For<IComponent>()
-					.ImplementedBy<TrivialComponent>()
-					.LifestyleBoundToNearest<IUse<IComponent>>(),
-				Component.For<IUse<IComponent>, UseChain<IComponent>>()
-					.ImplementedBy<UseChain<IComponent>>()
-					.Proxy.MixIns(m => m.Component<TrivialComponent>())
-					.Interceptors<CollectInvocationsInterceptor>(),
-				Component.For<IUse<IComponent>>()
-					.ImplementedBy<Use<IComponent>>()
-					.Proxy.MixIns(m => m.Component<TrivialComponent>())
-					.Interceptors<CollectInvocationsInterceptor>()
-				);
+        Assert.NotSame(innerMixin, outerMixin);
+        Assert.Same(outerMixin, outerProxy.Dependency);
+        Assert.Same(innerMixin, innerProxy.Dependency);
+    }
 
-			var outerProxy = (UseChain<IComponent>)Container.Resolve<IUse<IComponent>>();
-			var innerProxy = outerProxy.Next;
+    [Fact]
+    public void Bound_mixin_reused_as_implicit_and_explicit_dependency_simple()
+    {
+        Container.Register(
+            Component.For<CollectInvocationsInterceptor>(),
+            Component.For<IComponent>()
+                .ImplementedBy<TrivialComponent>()
+                .LifestyleBoundTo<IUse<IComponent>>(),
+            Component.For<IUse<IComponent>>()
+                .ImplementedBy<Use<IComponent>>()
+                .Proxy.MixIns(m => m.Component<TrivialComponent>())
+                .Interceptors<CollectInvocationsInterceptor>());
 
-			var id = (outerProxy as IComponent).ID; // to trigger interception;
-			id = (innerProxy as IComponent).ID; // to trigger interception;
-
-			var outerMixin = ((outerProxy as IProxyTargetAccessor).GetInterceptors()[0] as CollectInvocationsInterceptor).Invocations[0].InvocationTarget;
-			var innerMixin = ((innerProxy as IProxyTargetAccessor).GetInterceptors()[0] as CollectInvocationsInterceptor).Invocations[0].InvocationTarget;
-
-			Assert.AreNotSame(innerMixin, outerMixin);
-			Assert.AreSame(outerMixin, outerProxy.Dependency);
-			Assert.AreSame(innerMixin, innerProxy.Dependency);
-		}
-
-		[Test]
-		public void Bound_mixin_reused_as_implicit_and_explicit_dependency_simple()
-		{
-			Container.Register(
-				Component.For<CollectInvocationsInterceptor>(),
-				Component.For<IComponent>()
-					.ImplementedBy<TrivialComponent>()
-					.LifestyleBoundTo<IUse<IComponent>>(),
-				Component.For<IUse<IComponent>>()
-					.ImplementedBy<Use<IComponent>>()
-					.Proxy.MixIns(m => m.Component<TrivialComponent>())
-					.Interceptors<CollectInvocationsInterceptor>());
-
-			var proxy = Container.Resolve<IUse<IComponent>>();
-			var id = (proxy as IComponent).ID; // to trigger interception;
-			var interceptor = Container.Resolve<CollectInvocationsInterceptor>();
-			var mixin = interceptor.Invocations.Single().InvocationTarget;
-			Assert.AreSame(mixin, proxy.Dependency);
-		}
-	}
+        var proxy = Container.Resolve<IUse<IComponent>>();
+        // ReSharper disable once UnusedVariable
+        // ReSharper disable once SuspiciousTypeConversion.Global
+        var id = ((IComponent)proxy).Id; // to trigger interception;
+        var interceptor = Container.Resolve<CollectInvocationsInterceptor>();
+        var mixin = interceptor.Invocations.Single().InvocationTarget;
+        Assert.Same(mixin, proxy.Dependency);
+    }
 }

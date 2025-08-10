@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics
+namespace Castle.Windsor.Windsor.Diagnostics;
+
+public enum DependencyDuplicationReason
 {
-	public enum DependencyDuplicationReason
-	{
-		Unspecified,
-		Name,
-		Type,
-		NameAndType,
-		Reference
-	}
+    Unspecified,
+    Name,
+    Type,
+    NameAndType,
+    Reference
 }

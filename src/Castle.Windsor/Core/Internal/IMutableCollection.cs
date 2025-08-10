@@ -12,16 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Core.Internal;
+
+public interface IMutableCollection<T> : IEnumerable<T>
 {
-	using System.Collections.Generic;
+    [PublicAPI]
+    int Count { get; }
 
-	public interface IMutableCollection<T> : IEnumerable<T>
-	{
-		int Count { get; }
+    void Add(T item);
 
-		void Add(T item);
-
-		bool Remove(T item);
-	}
+    [PublicAPI]
+    bool Remove(T item);
 }

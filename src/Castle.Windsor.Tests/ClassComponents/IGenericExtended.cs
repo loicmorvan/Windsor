@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.ClassComponents
-{
-	public interface IGenericExtended<T> : IGeneric<T>
-	{
-	}
-}
+namespace Castle.Windsor.Tests.ClassComponents;
+
+public interface IGenericExtended<T> : IGeneric<T>;

@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class CacheWithClassConstraint<T> : ICache<T> where T : class
-	{
-		public T Get(string key)
-		{
-			return default(T);
-		}
+namespace Castle.Windsor.Tests.Components;
 
-		public void Put(string key, T item)
-		{
-		}
-	}
+public class CacheWithClassConstraint<T> : ICache<T> where T : class
+{
+    public T Get(string key)
+    {
+        return null;
+    }
+
+    public void Put(string key, T item)
+    {
+    }
 }

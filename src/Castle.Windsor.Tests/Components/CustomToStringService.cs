@@ -12,25 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using System;
-	using System.Text;
+using System.Text;
 
-	public class CustomToStringService :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
-		IGenericToStringService<StringBuilder>
-	{
-		public string ToString(params StringBuilder[] instances)
-		{
-			var result = new StringBuilder();
-			foreach (var instance in instances)
-			{
-				result.Append(instance.Length.ToString());
-			}
-			return result.ToString();
-		}
-	}
+namespace Castle.Windsor.Tests.Components;
+
+public class CustomToStringService :
+    IGenericToStringService<StringBuilder>
+{
+    public string ToString(params StringBuilder[] instances)
+    {
+        var result = new StringBuilder();
+        foreach (var instance in instances)
+        {
+            result.Append(instance.Length.ToString());
+        }
+
+        return result.ToString();
+    }
 }

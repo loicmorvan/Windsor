@@ -12,29 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Util
+namespace Castle.Windsor.MicroKernel.Util;
+
+[Serializable]
+public class SimpleTypeEqualityComparer : IEqualityComparer<Type>
 {
-	using System;
-	using System.Collections.Generic;
+    public static SimpleTypeEqualityComparer Instance { get; } = new();
 
-	[Serializable]
-	public class SimpleTypeEqualityComparer : IEqualityComparer<Type>
-	{
-		private static readonly SimpleTypeEqualityComparer instance = new SimpleTypeEqualityComparer();
+    public bool Equals(Type x, Type y)
+    {
+        return ReferenceEquals(x, y);
+    }
 
-		public bool Equals(Type x, Type y)
-		{
-			return ReferenceEquals(x, y);
-		}
-
-		public int GetHashCode(Type obj)
-		{
-			return obj.GetHashCode();
-		}
-
-		public static SimpleTypeEqualityComparer Instance
-		{
-			get { return instance; }
-		}
-	}
+    public int GetHashCode(Type obj)
+    {
+        return obj.GetHashCode();
+    }
 }

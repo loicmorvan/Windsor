@@ -12,46 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Extensions
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
+
+namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
+
+public class PotentiallyMisconfiguredComponents : AbstractContainerDebuggerExtension
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+    private const string Name = "Potentially misconfigured components";
+    private PotentiallyMisconfiguredComponentsDiagnostic _diagnostic;
 
-	using Castle.Core.Internal;
-	using Castle.MicroKernel;
-	using Castle.Windsor.Diagnostics.DebuggerViews;
+    public override IEnumerable<DebuggerViewItem> Attach()
+    {
+        var handlers = _diagnostic.Inspect();
+        if (handlers.Length == 0)
+        {
+            return [];
+        }
 
-	public class PotentiallyMisconfiguredComponents : AbstractContainerDebuggerExtension
-	{
-		private const string name = "Potentially misconfigured components";
-		private IPotentiallyMisconfiguredComponentsDiagnostic diagnostic;
+        Array.Sort(handlers,
+            (f, s) => string.Compare(f.ComponentModel.Name, s.ComponentModel.Name, StringComparison.Ordinal));
+        var items = handlers.ConvertAll(DefaultComponentView);
+        return
+        [
+            new DebuggerViewItem(Name, "Count = " + items.Length, items)
+        ];
+    }
 
-		public override IEnumerable<DebuggerViewItem> Attach()
-		{
-			var handlers = diagnostic.Inspect();
-			if (handlers.Length == 0)
-			{
-				return Enumerable.Empty<DebuggerViewItem>();
-			}
-
-			Array.Sort(handlers, (f, s) => f.ComponentModel.Name.CompareTo(s.ComponentModel.Name));
-			var items = handlers.ConvertAll(DefaultComponentView);
-			return new[]
-			{
-				new DebuggerViewItem(name, "Count = " + items.Length, items)
-			};
-		}
-
-		public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
-		{
-			diagnostic = new PotentiallyMisconfiguredComponentsDiagnostic(kernel);
-			diagnosticsHost.AddDiagnostic(diagnostic);
-		}
-
-		public static string Name
-		{
-			get { return name; }
-		}
-	}
+    public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
+    {
+        _diagnostic = new PotentiallyMisconfiguredComponentsDiagnostic(kernel);
+        diagnosticsHost.AddDiagnostic<IPotentiallyMisconfiguredComponentsDiagnostic>(_diagnostic);
+    }
 }

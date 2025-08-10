@@ -12,50 +12,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
+using JetBrains.Annotations;
+using Lock = Castle.Windsor.MicroKernel.Internal.Lock;
+
+namespace Castle.Windsor.Core.Internal;
+
+public class SimpleThreadSafeSet<T>
 {
-	using System.Collections.Generic;
-	
-	public class SimpleThreadSafeSet<T>
-	{
-		private readonly HashSet<T> implementation = new HashSet<T>();
-		private readonly MicroKernel.Internal.Lock @lock = MicroKernel.Internal.Lock.Create();
+    private readonly HashSet<T> _implementation = [];
+    private readonly Lock _lock = Lock.Create();
 
-		public int Count
-		{
-			get
-			{
-				using (@lock.ForReading())
-				{
-					return implementation.Count;
-				}
-			}
-		}
+    [PublicAPI]
+    public int Count
+    {
+        get
+        {
+            using (_lock.ForReading())
+            {
+                return _implementation.Count;
+            }
+        }
+    }
 
-		public bool Add(T item)
-		{
-			using (@lock.ForWriting())
-			{
-				return implementation.Add(item);
-			}
-		}
+    [PublicAPI]
+    public bool Add(T item)
+    {
+        using (_lock.ForWriting())
+        {
+            return _implementation.Add(item);
+        }
+    }
 
-		public bool Remove(T item)
-		{
-			using (@lock.ForWriting())
-			{
-				return implementation.Remove(item);
-			}
-		}
+    [PublicAPI]
+    public bool Remove(T item)
+    {
+        using (_lock.ForWriting())
+        {
+            return _implementation.Remove(item);
+        }
+    }
 
-		public T[] ToArray()
-		{
-			List<T> hashSetCopy;
-			using (@lock.ForReading())
-			{
-				hashSetCopy = new List<T>(implementation);
-			}
-			return hashSetCopy.ToArray();
-		}
-	}
+    public T[] ToArray()
+    {
+        List<T> hashSetCopy;
+        using (_lock.ForReading())
+        {
+            hashSetCopy = new List<T>(_implementation);
+        }
+
+        return hashSetCopy.ToArray();
+    }
 }

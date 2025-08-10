@@ -12,41 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.Extensions
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
+
+namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
+
+public class UsingContainerAsServiceLocator : AbstractContainerDebuggerExtension
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+    private const string Name = "Potential Service Locator usages";
 
-	using Castle.Core.Internal;
-	using Castle.MicroKernel;
-	using Castle.Windsor.Diagnostics.DebuggerViews;
+    private UsingContainerAsServiceLocatorDiagnostic _diagnostic;
 
-	public class UsingContainerAsServiceLocator : AbstractContainerDebuggerExtension
-	{
-		private const string name = "Potential Service Locator usages";
+    public override IEnumerable<DebuggerViewItem> Attach()
+    {
+        var handlers = _diagnostic.Inspect();
+        if (handlers.Length == 0)
+        {
+            return [];
+        }
 
-		private IUsingContainerAsServiceLocatorDiagnostic diagnostic;
+        Array.Sort(handlers,
+            (f, s) => string.Compare(f.ComponentModel.Name, s.ComponentModel.Name, StringComparison.Ordinal));
+        var items = handlers.ConvertAll(DefaultComponentView);
+        return
+        [
+            new DebuggerViewItem(Name, "Count = " + items.Length, items)
+        ];
+    }
 
-		public override IEnumerable<DebuggerViewItem> Attach()
-		{
-			var handlers = diagnostic.Inspect();
-			if (handlers.Length == 0)
-			{
-				return Enumerable.Empty<DebuggerViewItem>();
-			}
-			Array.Sort(handlers, (f, s) => f.ComponentModel.Name.CompareTo(s.ComponentModel.Name));
-			var items = handlers.ConvertAll(DefaultComponentView);
-			return new[]
-			{
-				new DebuggerViewItem(name, "Count = " + items.Length, items)
-			};
-		}
-
-		public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
-		{
-			diagnostic = new UsingContainerAsServiceLocatorDiagnostic(kernel);
-			diagnosticsHost.AddDiagnostic(diagnostic);
-		}
-	}
+    public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)
+    {
+        _diagnostic = new UsingContainerAsServiceLocatorDiagnostic(kernel);
+        diagnosticsHost.AddDiagnostic<IUsingContainerAsServiceLocatorDiagnostic>(_diagnostic);
+    }
 }

@@ -12,42 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Diagnostics.DebuggerViews
+using System.Diagnostics;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
+
+[DebuggerDisplay("{Description,nq}", Name = "{name,nq}")]
+public class DebuggerViewItemWithDetails(
+    string name,
+    string description,
+    string details,
+    params IEnumerable<object> items)
 {
-	using System.Diagnostics;
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public object Description { get; } = description;
 
-	[DebuggerDisplay("{description,nq}", Name = "{name,nq}")]
-	public class DebuggerViewItemWithDetails
-	{
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		private readonly object description;
+    [PublicAPI]
+    public string Details { get; private set; } = details;
 
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		private readonly string name;
+    [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    [PublicAPI]
+    public IEnumerable<object> Items { get; set; } = items;
 
-		public DebuggerViewItemWithDetails(string name, string description, string details,params object[] items)
-		{
-			this.name = name;
-			this.description = description;
-			Details = details;
-			Items = items;
-		}
-
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		public object Description
-		{
-			get { return description; }
-		}
-
-		public string Details { get; private set; }
-
-		[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-		public object[] Items { get; set; }
-
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		public string Name
-		{
-			get { return name; }
-		}
-	}
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public string Name { get; } = name;
 }

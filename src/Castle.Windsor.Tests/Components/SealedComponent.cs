@@ -12,13 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public sealed class SealedComponent : IComponent
 {
-	public sealed class SealedComponent : IComponent
-	{
-		public int ID
-		{
-			get { return 0; }
-		}
-	}
+    public int Id => 0;
 }

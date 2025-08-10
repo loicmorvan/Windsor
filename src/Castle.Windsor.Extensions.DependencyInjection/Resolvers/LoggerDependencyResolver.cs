@@ -13,31 +13,32 @@
 // limitations under the License.
 
 
-namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Context;
+using Microsoft.Extensions.Logging;
+
+namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers;
+
+public class LoggerDependencyResolver : ISubDependencyResolver
 {
-	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Context;
-	
-	using Microsoft.Extensions.Logging;
+    private readonly IKernel _kernel;
 
-	public class LoggerDependencyResolver : ISubDependencyResolver
-	{
-		private readonly IKernel kernel;
+    public LoggerDependencyResolver(IKernel kernel)
+    {
+        _kernel = kernel;
+    }
 
-		public LoggerDependencyResolver(IKernel kernel)
-		{
-			this.kernel = kernel;
-		}
-		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
-		{
-			return dependency.TargetType == typeof(ILogger);
-		}
+    public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+        DependencyModel dependency)
+    {
+        return dependency.TargetType == typeof(ILogger);
+    }
 
-		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
-		{
-			var factory = kernel.Resolve<ILoggerFactory>();
-			return factory.CreateLogger(RegistrationAdapter.OriginalComponentName(model.Name));
-		}
-	}
+    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+        DependencyModel dependency)
+    {
+        var factory = _kernel.Resolve<ILoggerFactory>();
+        return factory.CreateLogger(RegistrationAdapter.OriginalComponentName(model.Name));
+    }
 }

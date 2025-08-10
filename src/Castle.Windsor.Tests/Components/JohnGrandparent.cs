@@ -12,12 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	public class JohnGrandparent
-	{
-		public virtual void JohnGrandParentMethod()
-		{
-		}
-	}
-}
+namespace Castle.Windsor.Tests.Components;
+
+public class JohnGrandparent;

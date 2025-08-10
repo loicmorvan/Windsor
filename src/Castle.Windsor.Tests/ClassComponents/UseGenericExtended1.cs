@@ -12,27 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.ClassComponents
+namespace Castle.Windsor.Tests.ClassComponents;
+
+public class UseGenericExtended1
 {
-	public class UseGenericExtended1
-	{
-		private readonly IGeneric<string> generic;
-		private readonly IGenericExtended<string> genericExtended;
+    public UseGenericExtended1(IGeneric<string> generic, IGenericExtended<string> genericExtended)
+    {
+        Generic = generic;
+        GenericExtended = genericExtended;
+    }
 
-		public UseGenericExtended1(IGeneric<string> generic, IGenericExtended<string> genericExtended)
-		{
-			this.generic = generic;
-			this.genericExtended = genericExtended;
-		}
+    public IGeneric<string> Generic { get; }
 
-		public IGeneric<string> Generic
-		{
-			get { return generic; }
-		}
-
-		public IGenericExtended<string> GenericExtended
-		{
-			get { return genericExtended; }
-		}
-	}
+    public IGenericExtended<string> GenericExtended { get; }
 }

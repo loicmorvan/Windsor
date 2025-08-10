@@ -12,120 +12,104 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ComponentActivator
+using Castle.DynamicProxy;
+using Castle.Windsor.Core;
+using Castle.Windsor.MicroKernel.Context;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.MicroKernel.ComponentActivator;
+
+/// <summary>
+///     Abstract implementation of <see cref="IComponentActivator" />. The implementors must only override the
+///     InternalCreate and InternalDestroy methods in order to perform their creation and
+///     destruction logic.
+/// </summary>
+[Serializable]
+public abstract class AbstractComponentActivator : IComponentActivator
 {
-	using System;
-	using System.Collections.Generic;
+    /// <summary>Constructs an AbstractComponentActivator</summary>
+    protected AbstractComponentActivator(ComponentModel model, IKernelInternal kernel,
+        ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
+    {
+        Model = model;
+        Kernel = kernel;
+        OnCreation = onCreation;
+        OnDestruction = onDestruction;
+    }
 
-	using Castle.Core;
-	using Castle.DynamicProxy;
-	using Castle.MicroKernel.Context;
+    public IKernelInternal Kernel { get; }
 
-	/// <summary>
-	/// Abstract implementation of <see cref = "IComponentActivator" />. The implementors must only override the InternalCreate and InternalDestroy methods in order to perform their creation and destruction
-	/// logic.
-	/// </summary>
-	[Serializable]
-	public abstract class AbstractComponentActivator : IComponentActivator
-	{
-		private readonly IKernelInternal kernel;
-		private readonly ComponentModel model;
-		private readonly ComponentInstanceDelegate onCreation;
-		private readonly ComponentInstanceDelegate onDestruction;
+    public ComponentModel Model { get; }
 
-		/// <summary>
-		/// Constructs an AbstractComponentActivator
-		/// </summary>
-		protected AbstractComponentActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
-		{
-			this.model = model;
-			this.kernel = kernel;
-			this.onCreation = onCreation;
-			this.onDestruction = onDestruction;
-		}
+    public ComponentInstanceDelegate OnCreation { get; }
 
-		public IKernelInternal Kernel
-		{
-			get { return kernel; }
-		}
+    public ComponentInstanceDelegate OnDestruction { get; }
 
-		public ComponentModel Model
-		{
-			get { return model; }
-		}
+    public virtual object Create(CreationContext context, Burden burden)
+    {
+        var instance = InternalCreate(context);
+        burden.SetRootInstance(instance);
 
-		public ComponentInstanceDelegate OnCreation
-		{
-			get { return onCreation; }
-		}
+        OnCreation(Model, instance);
 
-		public ComponentInstanceDelegate OnDestruction
-		{
-			get { return onDestruction; }
-		}
+        return instance;
+    }
 
-		protected abstract object InternalCreate(CreationContext context);
+    public virtual void Destroy(object instance)
+    {
+        InternalDestroy(instance);
 
-		protected abstract void InternalDestroy(object instance);
+        OnDestruction(Model, instance);
+    }
 
-		public virtual object Create(CreationContext context, Burden burden)
-		{
-			var instance = InternalCreate(context);
-			burden.SetRootInstance(instance);
+    protected abstract object InternalCreate(CreationContext context);
 
-			onCreation(model, instance);
+    protected abstract void InternalDestroy(object instance);
 
-			return instance;
-		}
+    protected virtual void ApplyCommissionConcerns(object instance)
+    {
+        if (Model.Lifecycle.HasCommissionConcerns == false)
+        {
+            return;
+        }
 
-		public virtual void Destroy(object instance)
-		{
-			InternalDestroy(instance);
+        instance = ProxyUtil.GetUnproxiedInstance(instance);
+        if (instance == null)
+            // see http://issues.castleproject.org/issue/IOC-332 for details
+        {
+            throw new NotSupportedException(
+                $"Can not apply commission concerns to component {Model.Name} because it appears to be a target-less proxy. Currently those are not supported.");
+        }
 
-			onDestruction(model, instance);
-		}
+        ApplyConcerns(Model.Lifecycle.CommissionConcerns, instance);
+    }
 
-		protected virtual void ApplyCommissionConcerns(object instance)
-		{
-			if (Model.Lifecycle.HasCommissionConcerns == false)
-			{
-				return;
-			}
+    [PublicAPI]
+    protected virtual void ApplyConcerns(IEnumerable<ICommissionConcern> steps, object instance)
+    {
+        foreach (var concern in steps)
+        {
+            concern.Apply(Model, instance);
+        }
+    }
 
-			instance = ProxyUtil.GetUnproxiedInstance(instance);
-			if (instance == null)
-			{
-				// see http://issues.castleproject.org/issue/IOC-332 for details
-				throw new NotSupportedException(string.Format("Can not apply commission concerns to component {0} because it appears to be a target-less proxy. Currently those are not supported.", Model.Name));
-			}
-			ApplyConcerns(Model.Lifecycle.CommissionConcerns, instance);
-		}
+    [PublicAPI]
+    protected virtual void ApplyConcerns(IEnumerable<IDecommissionConcern> steps, object instance)
+    {
+        foreach (var concern in steps)
+        {
+            concern.Apply(Model, instance);
+        }
+    }
 
-		protected virtual void ApplyConcerns(IEnumerable<ICommissionConcern> steps, object instance)
-		{
-			foreach (var concern in steps)
-			{
-				concern.Apply(Model, instance);
-			}
-		}
+    protected virtual void ApplyDecommissionConcerns(object instance)
+    {
+        if (Model.Lifecycle.HasDecommissionConcerns == false)
+        {
+            return;
+        }
 
-		protected virtual void ApplyConcerns(IEnumerable<IDecommissionConcern> steps, object instance)
-		{
-			foreach (var concern in steps)
-			{
-				concern.Apply(Model, instance);
-			}
-		}
-
-		protected virtual void ApplyDecommissionConcerns(object instance)
-		{
-			if (Model.Lifecycle.HasDecommissionConcerns == false)
-			{
-				return;
-			}
-
-			instance = ProxyUtil.GetUnproxiedInstance(instance);
-			ApplyConcerns(Model.Lifecycle.DecommissionConcerns, instance);
-		}
-	}
+        instance = ProxyUtil.GetUnproxiedInstance(instance);
+        ApplyConcerns(Model.Lifecycle.DecommissionConcerns, instance);
+    }
 }

@@ -12,21 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class MyService2 : IService2
 {
-	public class MyService2 : IService2
-	{
-		public static string staticname;
+    public static string Staticname;
 
-		static MyService2()
-		{
-			staticname = string.Empty;
-		}
+    static MyService2()
+    {
+        Staticname = string.Empty;
+    }
 
-		public string Name
-		{
-			get { return staticname; }
-			set { staticname = value; }
-		}
-	}
+    public string Name
+    {
+        get => Staticname;
+        set => Staticname = value;
+    }
 }

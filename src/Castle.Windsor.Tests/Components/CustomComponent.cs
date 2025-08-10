@@ -12,20 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
-{
-	using Castle.Core;
-	using Castle.MicroKernel.Tests.ClassComponents;
+using Castle.Windsor.Core;
+using Castle.Windsor.Tests.ClassComponents;
 
-	/// <summary>
-	///   Summary description for CustomComponent.
-	/// </summary>
-	[CustomLifestyle(typeof(CustomLifestyleManager))]
-	public class CustomComponent : IComponent
-	{
-		public int ID
-		{
-			get { return GetHashCode(); }
-		}
-	}
+namespace Castle.Windsor.Tests.Components;
+
+/// <summary>Summary description for CustomComponent.</summary>
+[CustomLifestyle(typeof(CustomLifestyleManager))]
+public class CustomComponent : IComponent
+{
+    public int Id => GetHashCode();
 }

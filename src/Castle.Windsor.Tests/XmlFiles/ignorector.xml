@@ -1,14 +1,14 @@
 <configuration>
 
-	<components>
+    <components>
 
-		<component id="server" 
-			type="ClassWithDoNotSelectConstructors">
-			<parameters>
-				<dependency>"abcde"</dependency>
-			</parameters>
-		</component>
+        <component id="server"
+                   type="ClassWithDoNotSelectConstructors">
+            <parameters>
+                <dependency>"abcde"</dependency>
+            </parameters>
+        </component>
 
-	</components>
+    </components>
 
 </configuration>

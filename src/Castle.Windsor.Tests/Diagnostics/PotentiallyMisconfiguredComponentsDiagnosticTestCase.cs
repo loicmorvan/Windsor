@@ -12,44 +12,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Diagnostics
+using Castle.Windsor.MicroKernel;
+using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Windsor.Diagnostics;
+
+namespace Castle.Windsor.Tests.Diagnostics;
+
+public class PotentiallyMisconfiguredComponentsDiagnosticTestCase : AbstractContainerTestCase
 {
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Registration;
-	using Castle.Windsor.Diagnostics;
+    private IPotentiallyMisconfiguredComponentsDiagnostic _diagnostic;
 
-	using CastleTests.Components;
+    protected override void AfterContainerCreated()
+    {
+        var host = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IDiagnosticsHost;
+        _diagnostic = host.GetDiagnostic<IPotentiallyMisconfiguredComponentsDiagnostic>();
+    }
 
-	using NUnit.Framework;
+    [Fact]
+    public void Empty_when_all_components_healthy()
+    {
+        Container.Register(Component.For<A>(), Component.For<B>(), Component.For<C>());
 
-	public class PotentiallyMisconfiguredComponentsDiagnosticTestCase : AbstractContainerTestCase
-	{
-		private IPotentiallyMisconfiguredComponentsDiagnostic diagnostic;
+        var handlers = _diagnostic.Inspect();
 
-		protected override void AfterContainerCreated()
-		{
-			var host = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IDiagnosticsHost;
-			diagnostic = host.GetDiagnostic<IPotentiallyMisconfiguredComponentsDiagnostic>();
-		}
+        Assert.Empty(handlers);
+    }
 
-		[Test]
-		public void Empty_when_all_components_healthy()
-		{
-			Container.Register(Component.For<A>(), Component.For<B>(), Component.For<C>());
+    [Fact]
+    public void Has_all_components_with_missing_or_waiting_dependencies()
+    {
+        Container.Register(Component.For<B>(), Component.For<C>());
 
-			var handlers = diagnostic.Inspect();
+        var handlers = _diagnostic.Inspect();
 
-			Assert.IsEmpty(handlers);
-		}
-
-		[Test]
-		public void Has_all_components_with_missing_or_waiting_dependencies()
-		{
-			Container.Register(Component.For<B>(), Component.For<C>());
-
-			var handlers = diagnostic.Inspect();
-
-			Assert.AreEqual(2, handlers.Length);
-		}
-	}
+        Assert.Equal(2, handlers.Length);
+    }
 }

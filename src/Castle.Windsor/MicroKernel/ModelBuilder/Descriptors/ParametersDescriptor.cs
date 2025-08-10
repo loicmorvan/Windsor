@@ -12,38 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+using Castle.Windsor.Core;
+using Castle.Windsor.Core.Internal;
+using Castle.Windsor.MicroKernel.Registration;
+
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
+
+public class ParametersDescriptor(params Parameter[] parameters) : AbstractPropertyDescriptor
 {
-	using System;
+    public override void BuildComponentModel(IKernel kernel, ComponentModel model)
+    {
+        parameters.ForEach(p => Apply(model, p));
+    }
 
-	using Castle.Core;
-	using Castle.Core.Internal;
-	using Castle.MicroKernel.Registration;
-
-	public class ParametersDescriptor : AbstractPropertyDescriptor
-	{
-		private readonly Parameter[] parameters;
-
-		public ParametersDescriptor(params Parameter[] parameters)
-		{
-			this.parameters = parameters;
-		}
-
-		public override void BuildComponentModel(IKernel kernel, ComponentModel model)
-		{
-			parameters.ForEach(p => Apply(model, p));
-		}
-
-		private void Apply(ComponentModel model, Parameter parameter)
-		{
-			if (parameter.Value != null)
-			{
-				AddParameter(model, parameter.Key, parameter.Value);
-			}
-			else if (parameter.ConfigNode != null)
-			{
-				AddParameter(model, parameter.Key, parameter.ConfigNode);
-			}
-		}
-	}
+    private static void Apply(ComponentModel model, Parameter parameter)
+    {
+        if (parameter.Value != null)
+        {
+            AddParameter(model, parameter.Key, parameter.Value);
+        }
+        else if (parameter.ConfigNode != null)
+        {
+            AddParameter(model, parameter.Key, parameter.ConfigNode);
+        }
+    }
 }

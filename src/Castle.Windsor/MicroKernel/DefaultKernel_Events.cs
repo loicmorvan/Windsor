@@ -12,171 +12,152 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+using Castle.Windsor.Core;
+
+namespace Castle.Windsor.MicroKernel;
+
+/// <summary>
+///     Default implementation of <see cref="IKernel" />. This implementation is complete and also support a kernel
+///     hierarchy (sub containers).
+/// </summary>
+public sealed partial class DefaultKernel
 {
-	using System;
-	using System.Security;
+    private readonly object _handlersChangedLock = new();
+    private bool _handlersChanged;
+    private volatile bool _handlersChangedDeferred;
 
-	using Castle.Core;
 
-	/// <summary>
-	///   Default implementation of <see cref = "IKernel" />. 
-	///   This implementation is complete and also support a kernel 
-	///   hierarchy (sub containers).
-	/// </summary>
-	public partial class DefaultKernel
-	{
-		private readonly object handlersChangedLock = new object();
-		private bool handlersChanged;
-		private volatile bool handlersChangedDeferred;
+    public IDisposable OptimizeDependencyResolution()
+    {
+        if (_handlersChangedDeferred)
+        {
+            return null;
+        }
 
-#if FEATURE_REMOTING
-		[SecurityCritical]
-		public override object InitializeLifetimeService()
-		{
-			return null;
-		}
-#endif
+        _handlersChangedDeferred = true;
 
-		public IDisposable OptimizeDependencyResolution()
-		{
-			if (handlersChangedDeferred)
-			{
-				return null;
-			}
+        return new OptimizeDependencyResolutionDisposable(this);
+    }
 
-			handlersChangedDeferred = true;
+    public event HandlerDelegate HandlerRegistered = delegate { };
 
-			return new OptimizeDependencyResolutionDisposable(this);
-		}
+    public event HandlersChangedDelegate HandlersChanged = delegate { };
 
-		protected virtual void RaiseAddedAsChildKernel()
-		{
-			AddedAsChildKernel(this, EventArgs.Empty);
-		}
+    public event ComponentDataDelegate ComponentRegistered = delegate { };
 
-		protected virtual void RaiseComponentCreated(ComponentModel model, object instance)
-		{
-			ComponentCreated(model, instance);
-		}
+    public event ComponentInstanceDelegate ComponentCreated = delegate { };
 
-		protected virtual void RaiseComponentDestroyed(ComponentModel model, object instance)
-		{
-			ComponentDestroyed(model, instance);
-		}
+    public event ComponentInstanceDelegate ComponentDestroyed = delegate { };
 
-		protected virtual void RaiseComponentModelCreated(ComponentModel model)
-		{
-			ComponentModelCreated(model);
-		}
+    public event EventHandler AddedAsChildKernel = delegate { };
 
-		protected virtual void RaiseComponentRegistered(String key, IHandler handler)
-		{
-			ComponentRegistered(key, handler);
-		}
+    public event EventHandler RegistrationCompleted = delegate { };
 
-		protected virtual void RaiseDependencyResolving(ComponentModel client, DependencyModel model, Object dependency)
-		{
-			DependencyResolving(client, model, dependency);
-		}
+    public event EventHandler RemovedAsChildKernel = delegate { };
 
-		protected virtual void RaiseHandlerRegistered(IHandler handler)
-		{
-			var stateChanged = true;
-			while (stateChanged)
-			{
-				stateChanged = false;
-				HandlerRegistered(handler, ref stateChanged);
-			}
-		}
+    public event ComponentModelDelegate ComponentModelCreated = delegate { };
 
-		protected virtual void RaiseHandlersChanged()
-		{
-			if (handlersChangedDeferred)
-			{
-				lock (handlersChangedLock)
-				{
-					handlersChanged = true;
-				}
+    public event DependencyDelegate DependencyResolving = delegate { };
 
-				return;
-			}
+    public event ServiceDelegate EmptyCollectionResolving = delegate { };
 
-			DoActualRaisingOfHandlersChanged();
-		}
+    private void RaiseAddedAsChildKernel()
+    {
+        AddedAsChildKernel(this, EventArgs.Empty);
+    }
 
-		protected virtual void RaiseRegistrationCompleted()
-		{
-			RegistrationCompleted(this, EventArgs.Empty);
-		}
+    private void RaiseComponentCreated(ComponentModel model, object instance)
+    {
+        ComponentCreated(model, instance);
+    }
 
-		protected virtual void RaiseRemovedAsChildKernel()
-		{
-			RemovedAsChildKernel(this, EventArgs.Empty);
-		}
+    private void RaiseComponentDestroyed(ComponentModel model, object instance)
+    {
+        ComponentDestroyed(model, instance);
+    }
 
-		private void DoActualRaisingOfHandlersChanged()
-		{
-			var stateChanged = true;
-			while (stateChanged)
-			{
-				stateChanged = false;
-				HandlersChanged(ref stateChanged);
-			}
-		}
+    private void RaiseComponentModelCreated(ComponentModel model)
+    {
+        ComponentModelCreated(model);
+    }
 
-		public event HandlerDelegate HandlerRegistered = delegate { };
+    private void RaiseComponentRegistered(string key, IHandler handler)
+    {
+        ComponentRegistered(key, handler);
+    }
 
-		public event HandlersChangedDelegate HandlersChanged = delegate { };
+    private void RaiseDependencyResolving(ComponentModel client, DependencyModel model, object dependency)
+    {
+        DependencyResolving(client, model, dependency);
+    }
 
-		public event ComponentDataDelegate ComponentRegistered = delegate { };
+    private void RaiseHandlerRegistered(IHandler handler)
+    {
+        var stateChanged = true;
+        while (stateChanged)
+        {
+            stateChanged = false;
+            HandlerRegistered(handler, ref stateChanged);
+        }
+    }
 
-		public event ComponentInstanceDelegate ComponentCreated = delegate { };
+    private void RaiseHandlersChanged()
+    {
+        if (_handlersChangedDeferred)
+        {
+            lock (_handlersChangedLock)
+            {
+                _handlersChanged = true;
+            }
 
-		public event ComponentInstanceDelegate ComponentDestroyed = delegate { };
+            return;
+        }
 
-		public event EventHandler AddedAsChildKernel = delegate { };
+        DoActualRaisingOfHandlersChanged();
+    }
 
-		public event EventHandler RegistrationCompleted = delegate { };
+    private void RaiseRegistrationCompleted()
+    {
+        RegistrationCompleted(this, EventArgs.Empty);
+    }
 
-		public event EventHandler RemovedAsChildKernel = delegate { };
+    private void RaiseRemovedAsChildKernel()
+    {
+        RemovedAsChildKernel(this, EventArgs.Empty);
+    }
 
-		public event ComponentModelDelegate ComponentModelCreated = delegate { };
+    private void DoActualRaisingOfHandlersChanged()
+    {
+        var stateChanged = true;
+        while (stateChanged)
+        {
+            stateChanged = false;
+            HandlersChanged(ref stateChanged);
+        }
+    }
 
-		public event DependencyDelegate DependencyResolving = delegate { };
+    private class OptimizeDependencyResolutionDisposable(DefaultKernel kernel) : IDisposable
+    {
+        public void Dispose()
+        {
+            lock (kernel._handlersChangedLock)
+            {
+                try
+                {
+                    if (kernel._handlersChanged == false)
+                    {
+                        return;
+                    }
 
-		public event ServiceDelegate EmptyCollectionResolving = delegate { };
-
-		private class OptimizeDependencyResolutionDisposable : IDisposable
-		{
-			private readonly DefaultKernel kernel;
-
-			public OptimizeDependencyResolutionDisposable(DefaultKernel kernel)
-			{
-				this.kernel = kernel;
-			}
-
-			public void Dispose()
-			{
-				lock (kernel.handlersChangedLock)
-				{
-					try
-					{
-						if (kernel.handlersChanged == false)
-						{
-							return;
-						}
-
-						kernel.DoActualRaisingOfHandlersChanged();
-						kernel.RaiseRegistrationCompleted();
-						kernel.handlersChanged = false;
-					}
-					finally
-					{
-						kernel.handlersChangedDeferred = false;
-					}
-				}
-			}
-		}
-	}
+                    kernel.DoActualRaisingOfHandlersChanged();
+                    kernel.RaiseRegistrationCompleted();
+                    kernel._handlersChanged = false;
+                }
+                finally
+                {
+                    kernel._handlersChangedDeferred = false;
+                }
+            }
+        }
+    }
 }

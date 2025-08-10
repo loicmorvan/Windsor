@@ -12,16 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core
-{
-	using System;
+namespace Castle.Windsor.Core;
 
-	/// <summary>
-	///   Marks as property to be skipped and not be wired
-	///   by the IoC container
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Property)]
-	public sealed class DoNotWireAttribute : Attribute
-	{
-	}
-}
+/// <summary>Marks as property to be skipped and not be wired by the IoC container</summary>
+[AttributeUsage(AttributeTargets.Property)]
+public sealed class DoNotWireAttribute : Attribute;

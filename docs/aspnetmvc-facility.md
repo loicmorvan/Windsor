@@ -1,6 +1,8 @@
 # ASP.NET MVC Facility
 
-The ASP.NET MVC facility provides Castle Windsor integration using a custom [IControllerFactory](https://msdn.microsoft.com/en-us/library/system.web.mvc.icontrollerfactory(v=vs.118).aspx) for .NET Framework web based projects.
+The ASP.NET MVC facility provides Castle Windsor integration using a
+custom [IControllerFactory](https://msdn.microsoft.com/en-us/library/system.web.mvc.icontrollerfactory(v=vs.118).aspx)
+for .NET Framework web based projects.
 
 ## How does it work?
 
@@ -10,7 +12,8 @@ can find an explanation of lifestyles [here](aspnet-lifestyles.md).
 
 ## What do I need to set it up?
 
-First you need to install the `Castle.Facilities.AspNet.Mvc` facility from Nuget. Then you will need to add the AspNetMvcFacility in your application startup. 
+First you need to install the `Castle.Windsor.Facilities.AspNet.Mvc` facility from Nuget. Then you will need to add the
+AspNetMvcFacility in your application startup.
 Below is an example of how this could work.
 
 ```csharp
@@ -32,7 +35,8 @@ public class MvcApplication : System.Web.HttpApplication
 }
 ```
 
-The scoped lifestyles are an optional extra if you are using scopes in your web project, they will emulate a `Per Web Request` 
-lifestyle. If not, you can simply register your controllers as transient and they will be implicitly lifestyled for the 
+The scoped lifestyles are an optional extra if you are using scopes in your web project, they will emulate a
+`Per Web Request`
+lifestyle. If not, you can simply register your controllers as transient and they will be implicitly lifestyled for the
 duration of a web request but behave as transients normally do for services consumed by controllers.
 

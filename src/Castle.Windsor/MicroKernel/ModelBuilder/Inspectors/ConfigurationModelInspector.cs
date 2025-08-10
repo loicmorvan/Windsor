@@ -12,30 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Inspectors
+using Castle.Core.Configuration;
+using Castle.Windsor.Core;
+
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
+
+/// <summary>
+///     Uses the ConfigurationStore registered in the kernel to obtain an <see cref="IConfiguration" /> associated
+///     with the component.
+/// </summary>
+[Serializable]
+public class ConfigurationModelInspector : IContributeComponentModelConstruction
 {
-	using System;
-
-	using Castle.Core;
-	using Castle.Core.Configuration;
-
-	/// <summary>
-	///   Uses the ConfigurationStore registered in the kernel to obtain
-	///   an <see cref = "IConfiguration" /> associated with the component.
-	/// </summary>
-	[Serializable]
-	public class ConfigurationModelInspector : IContributeComponentModelConstruction
+	/// <summary>Queries the kernel's ConfigurationStore for a configuration associated with the component name.</summary>
+	/// <param name="kernel"></param>
+	/// <param name="model"></param>
+	public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 	{
-		/// <summary>
-		///   Queries the kernel's ConfigurationStore for a configuration
-		///   associated with the component name.
-		/// </summary>
-		/// <param name = "kernel"></param>
-		/// <param name = "model"></param>
-		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
-		{
-			var config = kernel.ConfigurationStore.GetComponentConfiguration(model.Name);
-			model.Configuration = config;
-		}
+		var config = kernel.ConfigurationStore.GetComponentConfiguration(model.Name);
+		model.Configuration = config;
 	}
 }

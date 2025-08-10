@@ -12,39 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Startable
+using System.Reflection;
+using Castle.Windsor.Core;
+
+namespace Castle.Windsor.Facilities.Startable;
+
+public class StartConcern : ICommissionConcern
 {
-	using System.Reflection;
+    private StartConcern()
+    {
+    }
 
-	using Castle.Core;
+    public static StartConcern Instance { get; } = new();
 
-	public class StartConcern : ICommissionConcern
-	{
-		private static readonly StartConcern instance = new StartConcern();
-
-		protected StartConcern()
-		{
-		}
-
-		public void Apply(ComponentModel model, object component)
-		{
-			if (component is IStartable)
-			{
-				(component as IStartable).Start();
-			}
-			else if (model.Configuration != null)
-			{
-				var startMethod = model.ExtendedProperties["Castle.StartableFacility.StartMethod"] as MethodInfo;
-				if (startMethod != null)
-				{
-					startMethod.Invoke(component, null);
-				}
-			}
-		}
-
-		public static StartConcern Instance
-		{
-			get { return instance; }
-		}
-	}
+    public void Apply(ComponentModel model, object component)
+    {
+        if (component is IStartable startable)
+        {
+            startable.Start();
+        }
+        else if (model.Configuration != null)
+        {
+            var startMethod = model.ExtendedProperties["Castle.StartableFacility.StartMethod"] as MethodInfo;
+            if (startMethod != null)
+            {
+                startMethod.Invoke(component, null);
+            }
+        }
+    }
 }

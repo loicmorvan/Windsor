@@ -12,22 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class UsesLazy<T>
 {
-	using System;
+    public UsesLazy(Lazy<T> lazy)
+    {
+        Lazy = lazy;
+    }
 
-	public class UsesLazy<T>
-	{
-		private readonly Lazy<T> lazy;
-
-		public UsesLazy(Lazy<T> lazy)
-		{
-			this.lazy = lazy;
-		}
-
-		public Lazy<T> Lazy
-		{
-			get { return lazy; }
-		}
-	}
+    public Lazy<T> Lazy { get; }
 }

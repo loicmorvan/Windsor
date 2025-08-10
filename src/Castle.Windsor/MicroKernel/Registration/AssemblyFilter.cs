@@ -12,209 +12,184 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Registration
+using System.Globalization;
+using System.Reflection;
+using Castle.Windsor.Core.Internal;
+
+namespace Castle.Windsor.MicroKernel.Registration;
+
+public class AssemblyFilter : IAssemblyProvider
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
-	using System.IO;
-	using System.Linq;
-	using System.Reflection;
+    private static readonly Assembly CastleWindsorDll = typeof(AssemblyFilter).GetTypeInfo().Assembly;
 
-	using Castle.Core.Internal;
+    private readonly string _directoryName;
+    private readonly string _mask;
+    private Predicate<Assembly> _assemblyFilter;
+    private Predicate<AssemblyName> _nameFilter;
 
-	public class AssemblyFilter : IAssemblyProvider
-	{
-		private static readonly Assembly CastleWindsorDll = typeof(AssemblyFilter).GetTypeInfo().Assembly;
+    public AssemblyFilter(string directoryName, string mask = null)
+    {
+        ArgumentNullException.ThrowIfNull(directoryName);
 
-		private readonly string directoryName;
-		private readonly string mask;
-		private Predicate<Assembly> assemblyFilter;
-		private Predicate<AssemblyName> nameFilter;
+        _directoryName = GetFullPath(directoryName);
+        _mask = mask;
+        _assemblyFilter += a => a != CastleWindsorDll;
+    }
 
-		public AssemblyFilter(string directoryName, string mask = null)
-		{
-			if (directoryName == null)
-			{
-				throw new ArgumentNullException(nameof(directoryName));
-			}
+    IEnumerable<Assembly> IAssemblyProvider.GetAssemblies()
+    {
+        return from file in GetFiles()
+            where ReflectionUtil.IsAssemblyFile(file)
+            select LoadAssemblyIgnoringErrors(file)
+            into assembly
+            where assembly != null
+            select assembly;
+    }
 
-			this.directoryName = GetFullPath(directoryName);
-			this.mask = mask;
-			assemblyFilter += a => a != CastleWindsorDll;
-		}
+    public AssemblyFilter FilterByAssembly(Predicate<Assembly> filter)
+    {
+        ArgumentNullException.ThrowIfNull(filter);
 
-		public AssemblyFilter FilterByAssembly(Predicate<Assembly> filter)
-		{
-			if (filter == null)
-			{
-				throw new ArgumentNullException(nameof(filter));
-			}
+        _assemblyFilter += filter;
+        return this;
+    }
 
-			assemblyFilter += filter;
-			return this;
-		}
+    public AssemblyFilter FilterByName(Predicate<AssemblyName> filter)
+    {
+        ArgumentNullException.ThrowIfNull(filter);
 
-		public AssemblyFilter FilterByName(Predicate<AssemblyName> filter)
-		{
-			if (filter == null)
-			{
-				throw new ArgumentNullException(nameof(filter));
-			}
+        _nameFilter += filter;
+        return this;
+    }
 
-			nameFilter += filter;
-			return this;
-		}
+    public AssemblyFilter WithKeyToken(string publicKeyToken)
+    {
+        return WithKeyToken(ExtractKeyToken(publicKeyToken));
+    }
 
-		public AssemblyFilter WithKeyToken(string publicKeyToken)
-		{
-			return WithKeyToken(ExtractKeyToken(publicKeyToken));
-		}
+    private AssemblyFilter WithKeyToken(byte[] publicKeyToken)
+    {
+        ArgumentNullException.ThrowIfNull(publicKeyToken);
+        return FilterByName(n => IsTokenEqual(n.GetPublicKeyToken(), publicKeyToken));
+    }
 
-		public AssemblyFilter WithKeyToken(byte[] publicKeyToken)
-		{
-			if (publicKeyToken == null)
-			{
-				throw new ArgumentNullException(nameof(publicKeyToken));
-			}
-			return FilterByName(n => IsTokenEqual(n.GetPublicKeyToken(), publicKeyToken));
-		}
+    public AssemblyFilter WithKeyToken(Type typeFromAssemblySignedWithKey)
+    {
+        return WithKeyToken(typeFromAssemblySignedWithKey.GetTypeInfo().Assembly);
+    }
 
-		public AssemblyFilter WithKeyToken(Type typeFromAssemblySignedWithKey)
-		{
-			return WithKeyToken(typeFromAssemblySignedWithKey.GetTypeInfo().Assembly);
-		}
+    public AssemblyFilter WithKeyToken<TTypeFromAssemblySignedWithKey>()
+    {
+        return WithKeyToken(typeof(TTypeFromAssemblySignedWithKey).GetTypeInfo().Assembly);
+    }
 
-		public AssemblyFilter WithKeyToken<TTypeFromAssemblySignedWithKey>()
-		{
-			return WithKeyToken(typeof(TTypeFromAssemblySignedWithKey).GetTypeInfo().Assembly);
-		}
+    private AssemblyFilter WithKeyToken(Assembly assembly)
+    {
+        return WithKeyToken(assembly.GetName().GetPublicKeyToken());
+    }
 
-		public AssemblyFilter WithKeyToken(Assembly assembly)
-		{
-			return WithKeyToken(assembly.GetName().GetPublicKeyToken());
-		}
+    private static byte[] ExtractKeyToken(string keyToken)
+    {
+        ArgumentNullException.ThrowIfNull(keyToken);
+        if (keyToken.Length != 16)
+        {
+            throw new ArgumentException(
+                string.Format(
+                    "The string '{1}' does not appear to be a valid public key token. It should have 16 characters, has {0}.",
+                    keyToken.Length, keyToken));
+        }
 
-		private byte[] ExtractKeyToken(string keyToken)
-		{
-			if (keyToken == null)
-			{
-				throw new ArgumentNullException(nameof(keyToken));
-			}
-			if (keyToken.Length != 16)
-			{
-				throw new ArgumentException(
-					string.Format(
-						"The string '{1}' does not appear to be a valid public key token. It should have 16 characters, has {0}.",
-						keyToken.Length, keyToken));
-			}
-			try
-			{
-				var tokenBytes = new byte[8];
-				for (var i = 0; i < 8; i++)
-				{
-					tokenBytes[i] = byte.Parse(keyToken.Substring(2*i, 2), NumberStyles.HexNumber);
-				}
-				return tokenBytes;
-			}
-			catch (Exception e)
-			{
-				throw new ArgumentException(
-					string.Format("The string '{0}' does not appear to be a valid public key token. It could not be processed.",
-					              keyToken), e);
-			}
-		}
+        try
+        {
+            var tokenBytes = new byte[8];
+            for (var i = 0; i < 8; i++)
+            {
+                tokenBytes[i] = byte.Parse(keyToken.Substring(2 * i, 2), NumberStyles.HexNumber);
+            }
 
-		private IEnumerable<string> GetFiles()
-		{
-			try
-			{
-				if (Directory.Exists(directoryName) == false)
-				{
-					return Enumerable.Empty<string>();
-				}
-				if (string.IsNullOrEmpty(mask))
-				{
-					return Directory.EnumerateFiles(directoryName);
-				}
-				return Directory.EnumerateFiles(directoryName, mask);
-			}
-			catch (IOException e)
-			{
-				throw new ArgumentException("Could not resolve assemblies.", e);
-			}
-		}
+            return tokenBytes;
+        }
+        catch (Exception e)
+        {
+            throw new ArgumentException(
+                $"The string '{keyToken}' does not appear to be a valid public key token. It could not be processed.",
+                e);
+        }
+    }
 
-		private Assembly LoadAssemblyIgnoringErrors(string file)
-		{
-			// based on MEF DirectoryCatalog
-			try
-			{
-				return ReflectionUtil.GetAssemblyNamed(file, nameFilter, assemblyFilter);
-			}
-			catch (FileNotFoundException)
-			{
-			}
-			catch (FileLoadException)
-			{
-				// File was found but could not be loaded
-			}
-			catch (BadImageFormatException)
-			{
-				// Dlls that contain native code or assemblies for wrong runtime (like .NET 4 asembly when we're in CLR2 process)
-			}
-			catch (ReflectionTypeLoadException)
-			{
-				// Dlls that have missing Managed dependencies are not loaded, but do not invalidate the Directory 
-			}
-			// TODO: log
-			return null;
-		}
+    private IEnumerable<string> GetFiles()
+    {
+        try
+        {
+            if (Directory.Exists(_directoryName) == false)
+            {
+                return [];
+            }
 
-		IEnumerable<Assembly> IAssemblyProvider.GetAssemblies()
-		{
-			foreach (var file in GetFiles())
-			{
-				if (!ReflectionUtil.IsAssemblyFile(file))
-				{
-					continue;
-				}
+            return string.IsNullOrEmpty(_mask)
+                ? Directory.EnumerateFiles(_directoryName)
+                : Directory.EnumerateFiles(_directoryName, _mask);
+        }
+        catch (IOException e)
+        {
+            throw new ArgumentException("Could not resolve assemblies.", e);
+        }
+    }
 
-				var assembly = LoadAssemblyIgnoringErrors(file);
-				if (assembly != null)
-				{
-					yield return assembly;
-				}
-			}
-		}
+    private Assembly LoadAssemblyIgnoringErrors(string file)
+    {
+        // based on MEF DirectoryCatalog
+        try
+        {
+            return ReflectionUtil.GetAssemblyNamed(file, _nameFilter, _assemblyFilter);
+        }
+        catch (FileNotFoundException)
+        {
+        }
+        catch (FileLoadException)
+        {
+            // File was found but could not be loaded
+        }
+        catch (BadImageFormatException)
+        {
+            // Dlls that contain native code or assemblies for wrong runtime (like .NET 4 asembly when we're in CLR2 process)
+        }
+        catch (ReflectionTypeLoadException)
+        {
+            // Dlls that have missing Managed dependencies are not loaded, but do not invalidate the Directory 
+        }
 
-		private static string GetFullPath(string path)
-		{
-			if (Path.IsPathRooted(path) == false && AppContext.BaseDirectory != null)
-			{
-				path = Path.Combine(AppContext.BaseDirectory, path);
-			}
-			return Path.GetFullPath(path);
-		}
+        // TODO: log
+        return null;
+    }
 
-		private static bool IsTokenEqual(byte[] actualToken, byte[] expectedToken)
-		{
-			if (actualToken == null)
-			{
-				return false;
-			}
-			if (actualToken.Length != expectedToken.Length)
-			{
-				return false;
-			}
-			for (var i = 0; i < actualToken.Length; i++)
-			{
-				if (actualToken[i] != expectedToken[i])
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-	}
+    private static string GetFullPath(string path)
+    {
+        if (Path.IsPathRooted(path))
+        {
+            return Path.GetFullPath(path);
+        }
+
+        if (path != null)
+        {
+            path = Path.Combine(AppContext.BaseDirectory, path);
+        }
+
+        return Path.GetFullPath(path);
+    }
+
+    private static bool IsTokenEqual(byte[] actualToken, byte[] expectedToken)
+    {
+        if (actualToken == null)
+        {
+            return false;
+        }
+
+        if (actualToken.Length != expectedToken.Length)
+        {
+            return false;
+        }
+
+        return !actualToken.Where((t, i) => t != expectedToken[i]).Any();
+    }
 }

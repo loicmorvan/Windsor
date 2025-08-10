@@ -12,20 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates
+namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
+
+public class Foo
 {
-	public class Foo
-	{
-		private readonly int number;
+    public Foo(int number)
+    {
+        Number = number;
+    }
 
-		public Foo(int number)
-		{
-			this.number = number;
-		}
-
-		public int Number
-		{
-			get { return number; }
-		}
-	}
+    public int Number { get; }
 }

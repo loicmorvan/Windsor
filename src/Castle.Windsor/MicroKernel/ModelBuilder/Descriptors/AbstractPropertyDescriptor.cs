@@ -12,46 +12,46 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.ModelBuilder.Descriptors
+using Castle.Core.Configuration;
+using Castle.Windsor.Core;
+
+namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
+
+public abstract class AbstractPropertyDescriptor : IComponentModelDescriptor
 {
-	using System;
+    public abstract void BuildComponentModel(IKernel kernel, ComponentModel model);
 
-	using Castle.Core;
-	using Castle.Core.Configuration;
+    public virtual void ConfigureComponentModel(IKernel kernel, ComponentModel model)
+    {
+    }
 
-	public abstract class AbstractPropertyDescriptor : IComponentModelDescriptor
-	{
-		public abstract void BuildComponentModel(IKernel kernel, ComponentModel model);
+    protected static void AddParameter(ComponentModel model, string name, IConfiguration value)
+    {
+        var parameters = EnsureParametersConfiguration(model);
 
-		public virtual void ConfigureComponentModel(IKernel kernel, ComponentModel model)
-		{
-		}
+        var parameter = new MutableConfiguration(name);
+        parameter.Children.Add(value);
 
-		protected void AddParameter(ComponentModel model, String name, IConfiguration value)
-		{
-			var parameters = EnsureParametersConfiguration(model);
+        parameters.Children.Add(parameter);
+    }
 
-			var parameter = new MutableConfiguration(name);
-			parameter.Children.Add(value);
+    protected static void AddParameter(ComponentModel model, string name, string value)
+    {
+        var parameters = EnsureParametersConfiguration(model);
+        parameters.Children.Add(new MutableConfiguration(name, value));
+    }
 
-			parameters.Children.Add(parameter);
-		}
+    private static IConfiguration EnsureParametersConfiguration(ComponentModel model)
+    {
+        var parameters = model.Configuration.Children["parameters"];
+        if (parameters != null)
+        {
+            return parameters;
+        }
 
-		protected void AddParameter(ComponentModel model, String name, String value)
-		{
-			var parameters = EnsureParametersConfiguration(model);
-			parameters.Children.Add(new MutableConfiguration(name, value));
-		}
+        parameters = new MutableConfiguration("parameters");
+        model.Configuration.Children.Add(parameters);
 
-		private IConfiguration EnsureParametersConfiguration(ComponentModel model)
-		{
-			var parameters = model.Configuration.Children["parameters"];
-			if (parameters == null)
-			{
-				parameters = new MutableConfiguration("parameters");
-				model.Configuration.Children.Add(parameters);
-			}
-			return parameters;
-		}
-	}
+        return parameters;
+    }
 }

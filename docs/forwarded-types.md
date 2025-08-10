@@ -28,4 +28,6 @@ var bar = container.Resolve<IBar>();
 Debug.Assert(object.ReferenceEquals(foo, bar));
 ```
 
-This can be done either via [fluent registration API](registering-components-one-by-one.md#registering-component-with-multiple-services) or [XML configuration](registering-components.md#component-with-multiple-services-forwarded-types).
+This can be done either
+via [fluent registration API](registering-components-one-by-one.md#registering-component-with-multiple-services)
+or [XML configuration](registering-components.md#component-with-multiple-services-forwarded-types).

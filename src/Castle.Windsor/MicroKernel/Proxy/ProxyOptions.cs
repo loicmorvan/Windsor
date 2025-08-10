@@ -12,293 +12,190 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Proxy
+using Castle.DynamicProxy;
+using Castle.Windsor.Core;
+using JetBrains.Annotations;
+
+namespace Castle.Windsor.MicroKernel.Proxy;
+
+/// <summary>Represents options to configure proxies.</summary>
+public class ProxyOptions
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
+    private readonly ComponentModel _component;
+    private IReference<IProxyGenerationHook> _hook;
+    private List<Type> _interfaceList;
+    private List<IReference<object>> _mixInList;
 
-	using Castle.Core;
-	using Castle.DynamicProxy;
+    private IReference<IInterceptorSelector> _selector;
 
-	/// <summary>
-	/// 	Represents options to configure proxies.
-	/// </summary>
-	public class ProxyOptions
-	{
-		private IReference<IProxyGenerationHook> hook;
-		private List<Type> interfaceList;
-		private List<IReference<object>> mixInList;
+    /// <summary>Initializes a new instance of the <see cref="ProxyOptions" /> class.</summary>
+    public ProxyOptions(ComponentModel component)
+    {
+        _component = component;
+    }
 
-		private IReference<IInterceptorSelector> selector;
-		private readonly ComponentModel component;
+    /// <summary>Gets the additional interfaces to proxy.</summary>
+    /// <value> The interfaces. </value>
+    public Type[] AdditionalInterfaces => _interfaceList != null ? _interfaceList.ToArray() : Type.EmptyTypes;
 
-		/// <summary>
-		/// 	Initializes a new instance of the <see cref="ProxyOptions" /> class.
-		/// </summary>
-		public ProxyOptions(ComponentModel component)
-		{
-			this.component = component;
-		}
+    /// <summary>Determines if the proxied component can change targets.</summary>
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
+    public bool AllowChangeTarget { get; set; }
 
-		/// <summary>
-		/// 	Gets the additional interfaces to proxy.
-		/// </summary>
-		/// <value> The interfaces. </value>
-		public Type[] AdditionalInterfaces
-		{
-			get
-			{
-				if (interfaceList != null)
-				{
-					return interfaceList.ToArray();
-				}
+    /// <summary>Gets or sets the proxy hook.</summary>
+    public IReference<IProxyGenerationHook> Hook
+    {
+        get => _hook;
+        set => SetReferenceValue(ref _hook, value);
+    }
 
-				return Type.EmptyTypes;
-			}
-		}
+    /// <summary>Gets the mix ins to integrate.</summary>
+    /// <value> The interfaces. </value>
+    public IEnumerable<IReference<object>> MixIns => _mixInList ?? [];
 
-		/// <summary>
-		/// 	Determines if the proxied component can change targets.
-		/// </summary>
-		public bool AllowChangeTarget { get; set; }
+    /// <summary>Determines if the proxied component uses a target.</summary>
+    public bool OmitTarget { get; set; }
 
-#if FEATURE_REMOTING
-		/// <summary>
-		/// 	Determines if the interface proxied component should inherit 
-		/// 	from <see cref="MarshalByRefObject" />
-		/// </summary>
-		public bool UseMarshalByRefAsBaseClass { get; set; }
-#endif
+    /// <summary>Gets or sets the interceptor selector.</summary>
+    public IReference<IInterceptorSelector> Selector
+    {
+        get => _selector;
+        set => SetReferenceValue(ref _selector, value);
+    }
 
-		/// <summary>
-		/// 	Gets or sets the proxy hook.
-		/// </summary>
-		public IReference<IProxyGenerationHook> Hook
-		{
-			get { return hook; }
-			set { SetReferenceValue(ref hook, value); }
-		}
+    public bool RequiresProxy => _interfaceList != null || _mixInList != null || _hook != null;
 
-		/// <summary>
-		/// 	Gets the mix ins to integrate.
-		/// </summary>
-		/// <value> The interfaces. </value>
-		public IEnumerable<IReference<object>> MixIns
-		{
-			get
-			{
-				if (mixInList != null)
-				{
-					return mixInList;
-				}
-				return new IReference<object>[] { };
-			}
-		}
+    /// <summary>Adds the additional interfaces to proxy.</summary>
+    /// <param name="interfaces"> The interfaces. </param>
+    public void AddAdditionalInterfaces(params Type[] interfaces)
+    {
+        if (interfaces == null || interfaces.Length == 0)
+        {
+            return;
+        }
 
-		/// <summary>
-		/// 	Determines if the proxied component uses a target.
-		/// </summary>
-		public bool OmitTarget { get; set; }
+        _interfaceList ??= [];
 
-		/// <summary>
-		/// 	Gets or sets the interceptor selector.
-		/// </summary>
-		public IReference<IInterceptorSelector> Selector
-		{
-			get { return selector; }
-			set { SetReferenceValue(ref selector, value); }
-		}
+        _interfaceList.AddRange(interfaces);
+    }
 
-		/// <summary>
-		/// 	Adds the additional interfaces to proxy.
-		/// </summary>
-		/// <param name="interfaces"> The interfaces. </param>
-		public void AddAdditionalInterfaces(params Type[] interfaces)
-		{
-			if (interfaces == null || interfaces.Length == 0)
-			{
-				return;
-			}
+    /// <summary>Adds the additional mix ins to integrate.</summary>
+    /// <param name="mixIns"> The mix ins. </param>
+    [PublicAPI]
+    public void AddMixIns(params object[] mixIns)
+    {
+        if (mixIns == null || mixIns.Length == 0)
+        {
+            return;
+        }
 
-			if (interfaceList == null)
-			{
-				interfaceList = new List<Type>();
-			}
+        _mixInList ??= [];
 
-			interfaceList.AddRange(interfaces);
-		}
+        foreach (var mixIn in mixIns)
+        {
+            var reference = new InstanceReference<object>(mixIn);
+            _mixInList.Add(reference);
+            reference.Attach(_component);
+        }
+    }
 
-		/// <summary>
-		/// 	Adds the additional mix ins to integrate.
-		/// </summary>
-		/// <param name="mixIns"> The mix ins. </param>
-		public void AddMixIns(params object[] mixIns)
-		{
-			if (mixIns == null || mixIns.Length == 0)
-			{
-				return;
-			}
+    /// <summary>Adds the additional mix in to integrate.</summary>
+    /// <param name="mixIn"> The mix in. </param>
+    public void AddMixinReference(IReference<object> mixIn)
+    {
+        ArgumentNullException.ThrowIfNull(mixIn);
 
-			if (mixInList == null)
-			{
-				mixInList = new List<IReference<object>>();
-			}
+        _mixInList ??= [];
 
-			foreach (var mixIn in mixIns)
-			{
-				var reference = new InstanceReference<object>(mixIn);
-				mixInList.Add(reference);
-				reference.Attach(component);
-			}
-		}
+        _mixInList.Add(mixIn);
+        mixIn.Attach(_component);
+    }
 
-		/// <summary>
-		/// 	Adds the additional mix in to integrate.
-		/// </summary>
-		/// <param name="mixIn"> The mix in. </param>
-		public void AddMixinReference(IReference<object> mixIn)
-		{
-			if (mixIn == null)
-			{
-				throw new ArgumentNullException(nameof(mixIn));
-			}
+    /// <summary>Equals the specified obj.</summary>
+    /// <param name="obj"> The obj. </param>
+    /// <returns> true if equal. </returns>
+    public override bool Equals(object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
 
-			if (mixInList == null)
-			{
-				mixInList = new List<IReference<object>>();
-			}
-			mixInList.Add(mixIn);
-			mixIn.Attach(component);
-		}
+        if (obj is not ProxyOptions proxyOptions)
+        {
+            return false;
+        }
 
-		/// <summary>
-		/// 	Equals the specified obj.
-		/// </summary>
-		/// <param name="obj"> The obj. </param>
-		/// <returns> true if equal. </returns>
-		public override bool Equals(object obj)
-		{
-			if (this == obj)
-			{
-				return true;
-			}
-			var proxyOptions = obj as ProxyOptions;
-			if (proxyOptions == null)
-			{
-				return false;
-			}
-			if (!Equals(Hook, proxyOptions.Hook))
-			{
-				return false;
-			}
-			if (!Equals(Selector, proxyOptions.Selector))
-			{
-				return false;
-			}
-			if (!Equals(OmitTarget, proxyOptions.OmitTarget))
-			{
-				return false;
-			}
-			if (!AdditionalInterfacesAreEquals(proxyOptions))
-			{
-				return false;
-			}
-			return MixInsAreEquals(proxyOptions);
-		}
+        if (!Equals(Hook, proxyOptions.Hook))
+        {
+            return false;
+        }
 
-		/// <summary>
-		/// 	Gets the hash code.
-		/// </summary>
-		/// <returns> </returns>
-		public override int GetHashCode()
-		{
-			return 29*base.GetHashCode()
-			       + GetCollectionHashCode(interfaceList)
-			       + GetCollectionHashCode(mixInList);
-		}
+        if (!Equals(Selector, proxyOptions.Selector))
+        {
+            return false;
+        }
 
-		private bool AdditionalInterfacesAreEquals(ProxyOptions proxyOptions)
-		{
-			if (!Equals(interfaceList == null, proxyOptions.interfaceList == null))
-			{
-				return false;
-			}
-			if (interfaceList == null)
-			{
-				return true; //both are null, nothing more to check
-			}
-			if (interfaceList.Count != proxyOptions.interfaceList.Count)
-			{
-				return false;
-			}
-			for (var i = 0; i < interfaceList.Count; ++i)
-			{
-				if (!proxyOptions.interfaceList.Contains(interfaceList[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
+        if (!Equals(OmitTarget, proxyOptions.OmitTarget))
+        {
+            return false;
+        }
 
-		public bool RequiresProxy
-		{
-			get { return interfaceList != null || mixInList != null || hook != null; }
-		}
+        return AdditionalInterfacesAreEquals(proxyOptions) &&
+               MixInsAreEquals(proxyOptions);
+    }
 
-		private int GetCollectionHashCode(IEnumerable items)
-		{
-			var result = 0;
+    /// <summary>Gets the hash code.</summary>
+    /// <returns> </returns>
+    public override int GetHashCode()
+    {
+        return 0;
+    }
 
-			if (items == null)
-			{
-				return result;
-			}
+    private bool AdditionalInterfacesAreEquals(ProxyOptions proxyOptions)
+    {
+        if (!Equals(_interfaceList == null, proxyOptions._interfaceList == null))
+        {
+            return false;
+        }
 
-			foreach (var item in items)
-			{
-				result = 29*result + item.GetHashCode();
-			}
+        if (_interfaceList == null)
+        {
+            return true; //both are null, nothing more to check
+        }
 
-			return result;
-		}
+        if (proxyOptions._interfaceList != null && _interfaceList.Count != proxyOptions._interfaceList.Count)
+        {
+            return false;
+        }
 
-		private bool MixInsAreEquals(ProxyOptions proxyOptions)
-		{
-			if (!Equals(mixInList == null, proxyOptions.mixInList == null))
-			{
-				return false;
-			}
-			if (mixInList == null)
-			{
-				return true; //both are null, nothing more to check
-			}
-			if (mixInList.Count != proxyOptions.mixInList.Count)
-			{
-				return false;
-			}
-			for (var i = 0; i < mixInList.Count; ++i)
-			{
-				if (!proxyOptions.mixInList.Contains(mixInList[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
+        return _interfaceList.All(t => proxyOptions._interfaceList == null || proxyOptions._interfaceList.Contains(t));
+    }
 
-		private void SetReferenceValue<T>(ref IReference<T> reference, IReference<T> value)
-		{
-			if (reference != null)
-			{
-				reference.Detach(component);
-			}
-			if (value != null)
-			{
-				value.Attach(component);
-			}
-			reference = value;
-		}
-	}
+    private bool MixInsAreEquals(ProxyOptions proxyOptions)
+    {
+        if (!Equals(_mixInList == null, proxyOptions._mixInList == null))
+        {
+            return false;
+        }
+
+        if (_mixInList == null)
+        {
+            return true; //both are null, nothing more to check
+        }
+
+        if (proxyOptions._mixInList != null && _mixInList.Count != proxyOptions._mixInList.Count)
+        {
+            return false;
+        }
+
+        return _mixInList.All(t => proxyOptions._mixInList == null || proxyOptions._mixInList.Contains(t));
+    }
+
+    private void SetReferenceValue<T>(ref IReference<T> reference, IReference<T> value)
+    {
+        reference?.Detach(_component);
+        value?.Attach(_component);
+        reference = value;
+    }
 }

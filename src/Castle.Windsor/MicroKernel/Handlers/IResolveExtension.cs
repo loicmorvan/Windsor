@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers
-{
-	public interface IResolveExtension
-	{
-		void Init(IKernel kernel, IHandler handler);
+namespace Castle.Windsor.MicroKernel.Handlers;
 
-		void Intercept(ResolveInvocation invocation);
-	}
+public interface IResolveExtension
+{
+    void Init(IKernel kernel);
+
+    void Intercept(ResolveInvocation invocation);
 }

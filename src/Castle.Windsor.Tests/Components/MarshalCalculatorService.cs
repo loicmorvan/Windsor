@@ -12,29 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components
+namespace Castle.Windsor.Tests.Components;
+
+public class MarshalCalculatorService :
+    ICalcService
 {
-	using System;
+    public int Sum(int x, int y)
+    {
+        return x + y;
+    }
 
-	public class MarshalCalculatorService :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
-		ICalcService
-	{
-		public int Sum(int x, int y)
-		{
-			return x + y;
-		}
+    public bool Initialized => throw new NotImplementedException();
 
-		public bool Initialized
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool Disposed
-		{
-			get { throw new NotImplementedException(); }
-		}
-	}
+    public bool Disposed => throw new NotImplementedException();
 }
