@@ -4,5 +4,5 @@ public interface ICatalog
 {
     void AddItem();
 
-    void RemoveItem(object item);
+    void RemoveItem();
 }

@@ -43,7 +43,7 @@ public class InterceptorsSelectorTestCase
         Assert.True(reporter.WasCalled);
 
         reporter.WasCalled = false;
-        catalog.RemoveItem("hot dogs");
+        catalog.RemoveItem();
         Assert.False(reporter.WasCalled);
     }
 }

@@ -6,7 +6,7 @@ public class SimpleCatalog : ICatalog
     {
     }
 
-    public void RemoveItem(object item)
+    public void RemoveItem()
     {
     }
 }

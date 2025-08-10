@@ -7,7 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="" />
+    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -103,7 +105,7 @@
       <force-push-target remote-path="origin" branch="net9" />
     </force-push-targets>
   </component>
-  <component name="RunManager" selected=".NET Project.Castle.Windsor.Tests">
+  <component name="RunManager">
     <configuration name="Castle.Windsor.Tests" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -167,55 +169,7 @@
       <workItem from="1754334801425" duration="4632000" />
       <workItem from="1754421122257" duration="7213000" />
       <workItem from="1754508214767" duration="2002000" />
-      <workItem from="1754769680087" duration="4128000" />
-    </task>
-    <task id="LOCAL-00028" summary="Fixes">
-      <option name="closed" value="true" />
-      <created>1753651621636</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1753651621636</updated>
-    </task>
-    <task id="LOCAL-00029" summary="Some fixes.">
-      <option name="closed" value="true" />
-      <created>1753736393827</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1753736393827</updated>
-    </task>
-    <task id="LOCAL-00030" summary="More fixes.">
-      <option name="closed" value="true" />
-      <created>1753736833115</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1753736833115</updated>
-    </task>
-    <task id="LOCAL-00031" summary="More fixes.">
-      <option name="closed" value="true" />
-      <created>1753817994228</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1753817994228</updated>
-    </task>
-    <task id="LOCAL-00032" summary="Improved code consistency and fixed remaining formatting issues.">
-      <option name="closed" value="true" />
-      <created>1753907783989</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1753907783989</updated>
-    </task>
-    <task id="LOCAL-00033" summary="Removed legacy build scripts and streamlined project references.">
-      <option name="closed" value="true" />
-      <created>1753908449071</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1753908449071</updated>
+      <workItem from="1754769680087" duration="6008000" />
     </task>
     <task id="LOCAL-00034" summary="Refactored namespaces for `Castle.Windsor.Facilities.AspNetCore` and annotations for `IWindsorContainer`.">
       <option name="closed" value="true" />
@@ -561,7 +515,55 @@
       <option name="project" value="LOCAL" />
       <updated>1754773571347</updated>
     </task>
-    <option name="localTasksCounter" value="77" />
+    <task id="LOCAL-00077" summary="Added `[UsedImplicitly]` annotations and converted several classes to `static` to improve code clarity, ensure consistency, and align with best practices across test and core files.">
+      <option name="closed" value="true" />
+      <created>1754774058922</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1754774058922</updated>
+    </task>
+    <task id="LOCAL-00078" summary="Refactored multiple classes to replace `public` static members with `private` fields, updated access modifiers for methods and enums, and streamlined code consistency across core and test files.">
+      <option name="closed" value="true" />
+      <created>1754774363154</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1754774363154</updated>
+    </task>
+    <task id="LOCAL-00079" summary="Added `[PublicAPI]` annotations to multiple methods in `WindsorServiceProviderFactoryBase`. Removed redundant virtual methods in test classes and updated property to non-virtual in `CustomerImpl` for clarity and consistency.">
+      <option name="closed" value="true" />
+      <created>1754774595390</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1754774595390</updated>
+    </task>
+    <task id="LOCAL-00080" summary="Removed unused method parameters from multiple interfaces, classes, and test cases to simplify method signatures and improve code clarity. Consolidated parameter-less methods for consistency and maintainability across core and test files.">
+      <option name="closed" value="true" />
+      <created>1754775099561</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1754775099561</updated>
+    </task>
+    <task id="LOCAL-00081" summary="Added ReSharper suppression comments for unused type parameters in interfaces and removed unused method parameters in `WindsorContainerBuilder`. Simplified method signatures and resolved inspection warnings across test and core files.">
+      <option name="closed" value="true" />
+      <created>1754775206793</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1754775206793</updated>
+    </task>
+    <task id="LOCAL-00082" summary="Marked unused parameters with `#pragma warning` suppressions, removed redundant method bodies, and added `[PublicAPI]` annotations to enhance code clarity and maintainability across core files and test cases.">
+      <option name="closed" value="true" />
+      <created>1754775655628</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1754775655628</updated>
+    </task>
+    <option name="localTasksCounter" value="83" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -596,12 +598,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Added `[PublicAPI]` annotations to multiple methods, replaced `protected` fields with `private`, made applicable methods and constructors `private` or `static`, and improved consistency and readability across multiple files." />
-    <MESSAGE value="Removed unused parameters and associated logic from multiple methods and constructors, refactored method signatures, and streamlined related implementations for improved consistency and clarity across multiple files." />
-    <MESSAGE value="Refactored method signatures to remove unused parameters, updated logic for interceptor selection, and simplified constructor handling for improved clarity and consistency across multiple files." />
-    <MESSAGE value="Added `[PublicAPI]` annotations, replaced `override` with `virtual` for specific methods in `SlimReadWriteLock`, and updated interfaces to improve flexibility and ensure consistency across multiple files." />
-    <MESSAGE value="Made `SlimReadWriteLock` class `sealed`, changed specific methods from `public` to `private` to reduce surface area, and ensure stricter encapsulation." />
-    <MESSAGE value="Refactored constructors and methods across multiple files to use default parameter values, removed redundant overloads, and streamlined implementations for improved consistency and readability." />
     <MESSAGE value="Refactored various methods to remove redundant parameters, updated default values, streamlined logic for clarity, and replaced deprecated syntax for improved consistency across multiple files." />
     <MESSAGE value="Added `[PublicAPI]` annotations to multiple methods across several classes to improve API discoverability and documentation." />
     <MESSAGE value="Added `GC.SuppressFinalize` calls to `Dispose` methods across multiple classes to improve finalization handling and resource management consistency." />
@@ -621,7 +617,13 @@
     <MESSAGE value="Added `[PublicAPI]` annotations and replaced redundant null checks with modern conditional assignment operators to improve code clarity and consistency across core files." />
     <MESSAGE value="Refactored properties in test classes to use read-only auto-properties where applicable, improved code clarity, and resolved inspection warnings." />
     <MESSAGE value="Removed redundant static members and unused assignments from test classes to streamline the code and improve maintainability." />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed redundant static members and unused assignments from test classes to streamline the code and improve maintainability." />
+    <MESSAGE value="Added `[UsedImplicitly]` annotations and converted several classes to `static` to improve code clarity, ensure consistency, and align with best practices across test and core files." />
+    <MESSAGE value="Refactored multiple classes to replace `public` static members with `private` fields, updated access modifiers for methods and enums, and streamlined code consistency across core and test files." />
+    <MESSAGE value="Added `[PublicAPI]` annotations to multiple methods in `WindsorServiceProviderFactoryBase`. Removed redundant virtual methods in test classes and updated property to non-virtual in `CustomerImpl` for clarity and consistency." />
+    <MESSAGE value="Removed unused method parameters from multiple interfaces, classes, and test cases to simplify method signatures and improve code clarity. Consolidated parameter-less methods for consistency and maintainability across core and test files." />
+    <MESSAGE value="Added ReSharper suppression comments for unused type parameters in interfaces and removed unused method parameters in `WindsorContainerBuilder`. Simplified method signatures and resolved inspection warnings across test and core files." />
+    <MESSAGE value="Marked unused parameters with `#pragma warning` suppressions, removed redundant method bodies, and added `[PublicAPI]` annotations to enhance code clarity and maintainability across core files and test cases." />
+    <option name="LAST_COMMIT_MESSAGE" value="Marked unused parameters with `#pragma warning` suppressions, removed redundant method bodies, and added `[PublicAPI]` annotations to enhance code clarity and maintainability across core files and test cases." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
