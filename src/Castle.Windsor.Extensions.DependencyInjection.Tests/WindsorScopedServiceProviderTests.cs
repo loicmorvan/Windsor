@@ -12,11 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Specification;
 
 namespace Castle.Windsor.Extensions.DependencyInjection.Tests;
 
+[UsedImplicitly]
 public class WindsorScopedServiceProviderTests : SkippableDependencyInjectionSpecificationTests
 {
     protected override IServiceProvider CreateServiceProviderImpl(IServiceCollection serviceCollection)

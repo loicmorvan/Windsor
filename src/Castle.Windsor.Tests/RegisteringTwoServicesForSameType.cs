@@ -42,6 +42,4 @@ public class RegisteringTwoServicesForSameType
     public interface IService;
 
     public class Srv1 : IService;
-
-    public class Srv2 : IService;
 }

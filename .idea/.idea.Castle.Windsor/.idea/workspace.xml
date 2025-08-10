@@ -7,9 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -56,12 +54,12 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/76b26a7a511f48aeba3bce44a1ba437af82e00/3e/42da7db5/IEnumerable.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/76b26a7a511f48aeba3bce44a1ba437af82e00/cb/24d3c94a/IEnumerator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/cc00f2b69bca4587b182863328c900713400/5e/ac09e302/ExtendedLog4netFactory.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/6265b4ecc5c0cdea8b21a229d131b222df9065102d3887b05b50b7e9a972b7/DependencyInjectionSpecificationTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/74a328368fe41d2091c5466d997e8a9748b142c81d46acca85d62465cdb0c145/StringAsserts.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9cf5f68d759deefc91b9c48c5ac3dd27708bb7dc38d0c485661fff5ce15b82/SafeFileHandle.Unix.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/de1dc94e26de2eb8cdb9b19e9451c6a0738025b875978dc863de7ba87ee78c4/ServiceCollectionServiceExtensions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f21ed9b111a49d8b9fadc594d68f824f1ae398faf147dfd144e5051f7c7ed6e/ActivatorUtilitiesTests.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/Resolvers/LoggerDependencyResolver.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/loicmorvan/RiderProjects/Windsor/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors2.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/loicmorvan/RiderProjects/Windsor/src/Castle.Windsor.Tests/Config/Components/ClassWithComplexParameter.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProblemsViewState">
@@ -105,7 +103,7 @@
       <force-push-target remote-path="origin" branch="net9" />
     </force-push-targets>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected=".NET Project.Castle.Windsor.Tests">
     <configuration name="Castle.Windsor.Tests" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -170,38 +168,7 @@
       <workItem from="1754421122257" duration="7213000" />
       <workItem from="1754508214767" duration="2002000" />
       <workItem from="1754769680087" duration="6008000" />
-    </task>
-    <task id="LOCAL-00034" summary="Refactored namespaces for `Castle.Windsor.Facilities.AspNetCore` and annotations for `IWindsorContainer`.">
-      <option name="closed" value="true" />
-      <created>1753909200767</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1753909200767</updated>
-    </task>
-    <task id="LOCAL-00035" summary="Removed unused diagnostics and related interfaces, added `[PublicAPI]` annotations, and improved exception handling.">
-      <option name="closed" value="true" />
-      <created>1753911614547</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1753911614547</updated>
-    </task>
-    <task id="LOCAL-00036" summary="Improved null checks, streamlined conditional logic, and enhanced code consistency across multiple files.">
-      <option name="closed" value="true" />
-      <created>1754076727580</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1754076727580</updated>
-    </task>
-    <task id="LOCAL-00037" summary="Refactored conditional logic by replacing `if-else` constructs with `switch` expressions to improve code clarity and consistency across multiple files.">
-      <option name="closed" value="true" />
-      <created>1754079519647</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1754079519647</updated>
+      <workItem from="1754854494950" duration="1359000" />
     </task>
     <task id="LOCAL-00038" summary="Improved handling of `LifestyleType.Undefined` across multiple classes, added missing exception cases, and enhanced code clarity with explicit `switch` branches.">
       <option name="closed" value="true" />
@@ -563,7 +530,39 @@
       <option name="project" value="LOCAL" />
       <updated>1754775655628</updated>
     </task>
-    <option name="localTasksCounter" value="83" />
+    <task id="LOCAL-00083" summary="Removed unused method parameters in `ICatalog` and `SimpleCatalog`, refactored `RemoveItem` method to align with updated interface definitions, and suppressed ReSharper warnings for unused parameters.">
+      <option name="closed" value="true" />
+      <created>1754854732595</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1754854732595</updated>
+    </task>
+    <task id="LOCAL-00084" summary="Removed unused properties, methods, and interfaces across test files; converted multiple interfaces to single-line declarations and adjusted property accessors to read-only where applicable to simplify and streamline code.">
+      <option name="closed" value="true" />
+      <created>1754855158192</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1754855158192</updated>
+    </task>
+    <task id="LOCAL-00085" summary="Added `[PublicAPI]` annotation to `GetConfigurationForChildContainers` and updated test interface properties to read-only to improve code clarity and consistency.">
+      <option name="closed" value="true" />
+      <created>1754855352544</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1754855352544</updated>
+    </task>
+    <task id="LOCAL-00086" summary="Made properties in test fakes private set to enforce immutability and updated access modifiers in core and test files to improve consistency and code clarity.">
+      <option name="closed" value="true" />
+      <created>1754855539395</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1754855539395</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -598,10 +597,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Refactored various methods to remove redundant parameters, updated default values, streamlined logic for clarity, and replaced deprecated syntax for improved consistency across multiple files." />
-    <MESSAGE value="Added `[PublicAPI]` annotations to multiple methods across several classes to improve API discoverability and documentation." />
-    <MESSAGE value="Added `GC.SuppressFinalize` calls to `Dispose` methods across multiple classes to improve finalization handling and resource management consistency." />
-    <MESSAGE value="Refactored `FromDescriptor` and `ServiceDescriptor` to streamline type registration logic and improve code clarity." />
     <MESSAGE value="Replaced `string.Format` with string interpolation in test assertions to improve readability and consistency." />
     <MESSAGE value="Replaced local variables with constants across multiple test cases to improve immutability and code clarity." />
     <MESSAGE value="Made various methods `static` across multiple test cases to improve immutability, simplify usage, and ensure consistency." />
@@ -623,7 +618,11 @@
     <MESSAGE value="Removed unused method parameters from multiple interfaces, classes, and test cases to simplify method signatures and improve code clarity. Consolidated parameter-less methods for consistency and maintainability across core and test files." />
     <MESSAGE value="Added ReSharper suppression comments for unused type parameters in interfaces and removed unused method parameters in `WindsorContainerBuilder`. Simplified method signatures and resolved inspection warnings across test and core files." />
     <MESSAGE value="Marked unused parameters with `#pragma warning` suppressions, removed redundant method bodies, and added `[PublicAPI]` annotations to enhance code clarity and maintainability across core files and test cases." />
-    <option name="LAST_COMMIT_MESSAGE" value="Marked unused parameters with `#pragma warning` suppressions, removed redundant method bodies, and added `[PublicAPI]` annotations to enhance code clarity and maintainability across core files and test cases." />
+    <MESSAGE value="Removed unused method parameters in `ICatalog` and `SimpleCatalog`, refactored `RemoveItem` method to align with updated interface definitions, and suppressed ReSharper warnings for unused parameters." />
+    <MESSAGE value="Removed unused properties, methods, and interfaces across test files; converted multiple interfaces to single-line declarations and adjusted property accessors to read-only where applicable to simplify and streamline code." />
+    <MESSAGE value="Added `[PublicAPI]` annotation to `GetConfigurationForChildContainers` and updated test interface properties to read-only to improve code clarity and consistency." />
+    <MESSAGE value="Made properties in test fakes private set to enforce immutability and updated access modifiers in core and test files to improve consistency and code clarity." />
+    <option name="LAST_COMMIT_MESSAGE" value="Made properties in test fakes private set to enforce immutability and updated access modifiers in core and test files to improve consistency and code clarity." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

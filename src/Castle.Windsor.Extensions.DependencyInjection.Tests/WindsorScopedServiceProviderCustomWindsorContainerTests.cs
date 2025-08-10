@@ -13,11 +13,13 @@
 // limitations under the License.
 
 using Castle.Windsor.Windsor;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Specification;
 
 namespace Castle.Windsor.Extensions.DependencyInjection.Tests;
 
+[UsedImplicitly]
 public class WindsorScopedServiceProviderCustomWindsorContainerTests : SkippableDependencyInjectionSpecificationTests
 {
     protected override IServiceProvider CreateServiceProviderImpl(IServiceCollection serviceCollection)
