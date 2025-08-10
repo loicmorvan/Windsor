@@ -18,10 +18,6 @@ using JetBrains.Annotations;
 
 namespace Castle.Windsor.Windsor.Installer;
 
-/// <summary>
-///     Helper class used by <see cref="FromAssembly" /> to filter/order and instantiate
-///     <see cref="IWindsorInstaller" /> implementations
-/// </summary>
 public class InstallerFactory
 {
 	/// <summary>

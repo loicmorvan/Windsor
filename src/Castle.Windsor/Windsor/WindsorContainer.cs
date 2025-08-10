@@ -255,14 +255,6 @@ public sealed class WindsorContainer :
     }
 
     /// <summary>Runs the <paramref name="installers" /> so that they can register components in the container.</summary>
-    /// <remarks>
-    ///     In addition to instantiating and passing every installer inline you can use helper methods on
-    ///     <see
-    ///         cref="FromAssembly" />
-    ///     class to automatically instantiate and run your installers. You can also use <see cref="Configuration" /> class to
-    ///     install components and/or run aditional installers specofied in a
-    ///     configuration file.
-    /// </remarks>
     /// <returns>The container.</returns>
     /// <example>
     ///     <code>
