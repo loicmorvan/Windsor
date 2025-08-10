@@ -61,6 +61,7 @@ public interface IConfigurationStore : ISubSystem
 
     /// <summary>Gets the child containers configuration nodes.</summary>
     /// <returns></returns>
+    [PublicAPI]
     IConfiguration[] GetConfigurationForChildContainers();
 
     /// <summary>Returns all configuration nodes for facilities</summary>
