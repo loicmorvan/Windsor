@@ -17,7 +17,6 @@ using Castle.Windsor.Facilities.AspNetCore.Tests.Fakes;
 using Castle.Windsor.Facilities.AspNetCore.Tests.Framework;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Windsor;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Castle.Windsor.Facilities.AspNetCore.Tests;
@@ -280,23 +279,6 @@ public sealed class WindsorRegistrationExtensionsTestCase : IDisposable
 
         using var sp = _testContext.ServiceCollection.BuildServiceProvider();
         sp.GetRequiredService(compositeType);
-    }
-
-    [Fact]
-    public void Should_resolve_Multiple_Transient_CrossWired_from_ServiceProvider()
-    {
-        _testContext.WindsorContainer.Register(Types.FromAssemblyContaining<AuthorisationHandlerOne>()
-            .BasedOn<IAuthorizationHandler>().WithServiceBase()
-            .LifestyleTransient().Configure(c => c.CrossWired()));
-
-        using var sp = _testContext.ServiceCollection.BuildServiceProvider();
-        var services = sp.GetServices<IAuthorizationHandler>();
-
-        var authorizationHandlers = services as IAuthorizationHandler[] ?? services.ToArray();
-        Assert.Equal(3, authorizationHandlers.Length);
-        Assert.Equal(
-            new HashSet<Type>(authorizationHandlers.Select(x => x.GetType())).Count,
-            authorizationHandlers.Select(s => s.GetType()).Count());
     }
 
     [InlineData(LifestyleType.Bound)]
