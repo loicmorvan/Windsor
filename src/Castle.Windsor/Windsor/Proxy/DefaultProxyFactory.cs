@@ -150,6 +150,7 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
         if (proxyOptions.Hook != null)
         {
             var hook = proxyOptions.Hook.Resolve(kernel, context);
+            // ReSharper disable once SuspiciousTypeConversion.Global
             if (hook is IOnBehalfAware aware)
             {
                 aware.SetInterceptedComponentModel(model);
@@ -161,6 +162,7 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
         if (proxyOptions.Selector != null)
         {
             var selector = proxyOptions.Selector.Resolve(kernel, context);
+            // ReSharper disable once SuspiciousTypeConversion.Global
             if (selector is IOnBehalfAware aware)
             {
                 aware.SetInterceptedComponentModel(model);

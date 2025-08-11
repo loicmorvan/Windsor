@@ -12,14 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.ClassComponents;
 
 public class CustomerImpl : ICustomer
 {
-    public ExtendedCustomer ExtendedCustomer { get; set; }
+    [UsedImplicitly] public ExtendedCustomer ExtendedCustomer { get; set; }
+
     public virtual string Name { get; init; }
 
-    public virtual string Address { get; set; }
+    [UsedImplicitly] public virtual string Address { get; set; }
 
-    public virtual int Age { get; set; }
+    [UsedImplicitly] public virtual int Age { get; set; }
 }
