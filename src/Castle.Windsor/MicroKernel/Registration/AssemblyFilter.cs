@@ -62,9 +62,9 @@ public class AssemblyFilter : IAssemblyProvider
         return this;
     }
 
-    public AssemblyFilter WithKeyToken(string publicKeyToken)
+    public void WithKeyToken(string publicKeyToken)
     {
-        return WithKeyToken(ExtractKeyToken(publicKeyToken));
+        WithKeyToken(ExtractKeyToken(publicKeyToken));
     }
 
     private AssemblyFilter WithKeyToken(byte[] publicKeyToken)

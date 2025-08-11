@@ -24,7 +24,7 @@ public class CustomToStringService :
         var result = new StringBuilder();
         foreach (var instance in instances)
         {
-            result.Append(instance.Length.ToString());
+            result.Append(instance.Length);
         }
 
         return result.ToString();
