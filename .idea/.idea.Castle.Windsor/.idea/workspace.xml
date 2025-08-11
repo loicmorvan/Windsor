@@ -8,8 +8,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/WindsorRegistrationExtensionsTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/WindsorRegistrationExtensionsTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Types.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Types.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/RegistrationAdapter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/RegistrationAdapter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ComponentsWithAttribute/UserAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ComponentsWithAttribute/UserAttribute.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/TypedFactoryDisposeOrderTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/TypedFactoryDisposeOrderTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/TestUtils.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/TestUtils.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/XmlProcessor/XmlProcessorTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/XmlProcessor/XmlProcessorTestCase.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +34,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="a235622740a3b360c687491ecec1538acc0769be" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -80,28 +83,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;1040357a-a374-4805-ae55-296a10391d40.executor&quot;: &quot;Debug&quot;,
-    &quot;457fe246-3a65-482c-9b97-436b5d6e2078.executor&quot;: &quot;Debug&quot;,
-    &quot;6735a692-6eea-4ff7-a309-8dd38fbf00bf.executor&quot;: &quot;Debug&quot;,
-    &quot;7c964d5d-15cd-4425-a015-ad6d5f0fc580.executor&quot;: &quot;Debug&quot;,
-    &quot;89dda535-a689-4076-a660-df5d01541ebe.executor&quot;: &quot;Debug&quot;,
-    &quot;92c054ad-452f-41b6-a548-9856400a347d.executor&quot;: &quot;Debug&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;T4 Template Run Configuration.ModelFakes.tt.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;net9&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C#&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "1040357a-a374-4805-ae55-296a10391d40.executor": "Debug",
+    "457fe246-3a65-482c-9b97-436b5d6e2078.executor": "Debug",
+    "6356ce7a-e504-4c39-a7e4-fe4a2206522d.executor": "Run",
+    "6735a692-6eea-4ff7-a309-8dd38fbf00bf.executor": "Debug",
+    "7c964d5d-15cd-4425-a015-ad6d5f0fc580.executor": "Debug",
+    "89dda535-a689-4076-a660-df5d01541ebe.executor": "Debug",
+    "92c054ad-452f-41b6-a548-9856400a347d.executor": "Debug",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "T4 Template Run Configuration.ModelFakes.tt.executor": "Run",
+    "git-widget-placeholder": "more-cleanup",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode.C#",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="Push.Settings">
     <force-push-targets>
       <force-push-target remote-path="origin" branch="net9" />
@@ -173,14 +177,7 @@
       <workItem from="1754508214767" duration="2002000" />
       <workItem from="1754769680087" duration="6008000" />
       <workItem from="1754854494950" duration="2579000" />
-    </task>
-    <task id="LOCAL-00039" summary="Replaced object initializer shorthand `new()` with explicit collection initializers `[]` for improved clarity and consistency across all applicable files.">
-      <option name="closed" value="true" />
-      <created>1754080944355</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1754080944355</updated>
+      <workItem from="1754940328318" duration="942000" />
     </task>
     <task id="LOCAL-00040" summary="Streamlined conditional logic by replacing `if-else` constructs with shorthand ternary expressions, improving code clarity and consistency across multiple files.">
       <option name="closed" value="true" />
@@ -566,7 +563,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754856343240</updated>
     </task>
-    <option name="localTasksCounter" value="88" />
+    <task id="LOCAL-00088" summary="Added `[UsedImplicitly]` annotations to properties in `CustomerImpl` to suppress ReSharper warnings and added suppressions for suspicious type conversions in `DefaultProxyFactory`.">
+      <option name="closed" value="true" />
+      <created>1754941057621</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1754941057622</updated>
+    </task>
+    <option name="localTasksCounter" value="89" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -601,7 +606,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Replaced local variables with constants across multiple test cases to improve immutability and code clarity." />
     <MESSAGE value="Made various methods `static` across multiple test cases to improve immutability, simplify usage, and ensure consistency." />
     <MESSAGE value="Refactored test cases to simplify logic using modern syntax, improved immutability, and enhanced code clarity across multiple files." />
     <MESSAGE value="Made multiple properties and methods `private` across test cases to improve encapsulation, enhance immutability, and simplify code structure." />
@@ -626,7 +630,8 @@
     <MESSAGE value="Added `[PublicAPI]` annotation to `GetConfigurationForChildContainers` and updated test interface properties to read-only to improve code clarity and consistency." />
     <MESSAGE value="Made properties in test fakes private set to enforce immutability and updated access modifiers in core and test files to improve consistency and code clarity." />
     <MESSAGE value="Removed unused classes, interfaces, and methods across test and core files to simplify codebase and improve maintainability. Added `[UsedImplicitly]` annotations where applicable." />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed unused classes, interfaces, and methods across test and core files to simplify codebase and improve maintainability. Added `[UsedImplicitly]` annotations where applicable." />
+    <MESSAGE value="Added `[UsedImplicitly]` annotations to properties in `CustomerImpl` to suppress ReSharper warnings and added suppressions for suspicious type conversions in `DefaultProxyFactory`." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added `[UsedImplicitly]` annotations to properties in `CustomerImpl` to suppress ReSharper warnings and added suppressions for suspicious type conversions in `DefaultProxyFactory`." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -644,20 +649,14 @@
           <option name="timeStamp" value="3" />
         </breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/Castle.Facilities.Logging/LoggingFacility.cs</url>
-          <line>52</line>
-          <properties documentPath="$PROJECT_DIR$/src/Castle.Facilities.Logging/LoggingFacility.cs" containingFunctionPresentation="Constructor 'LoggingFacility'" />
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/DefaultDiagnosticsSubSystem.cs</url>
-          <line>31</line>
-          <properties documentPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/DefaultDiagnosticsSubSystem.cs" containingFunctionPresentation="Method 'GetDiagnostic'">
+          <line>27</line>
+          <properties documentPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/DefaultDiagnosticsSubSystem.cs" containingFunctionPresentation="Method 'AddDiagnostic'">
             <startOffsets>
-              <option value="1231" />
+              <option value="1122" />
             </startOffsets>
             <endOffsets>
-              <option value="1292" />
+              <option value="1123" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="13" />

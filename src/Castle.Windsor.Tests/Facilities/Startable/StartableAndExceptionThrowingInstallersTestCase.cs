@@ -15,6 +15,7 @@
 using Castle.Windsor.Facilities.Startable;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 using Castle.Windsor.Windsor;
 
 namespace Castle.Windsor.Tests.Facilities.Startable;
@@ -51,14 +52,14 @@ public class StartableAndExceptionThrowingInstallersTestCase
     [Bug("IOC-311")]
     public void StartableComponentShouldNotStartIfExceptionThrownByInstaller()
     {
-        UsesIEmptyService.InstancesCreated = 0;
+        var counter = new LifecycleCounter();
         using var container = new WindsorContainer();
         container.AddFacility<StartableFacility>(f => f.DeferredStart());
-        Assert.Throws<NotImplementedException>(() =>
-            container.Install(new ActionBasedInstaller(c => c.Register(Component.For<UsesIEmptyService>().Start())),
-                new ActionBasedInstaller(c =>
-                    c.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>())),
-                new ActionBasedInstaller(_ => throw new NotImplementedException())));
+        container.Register(Component.For<LifecycleCounter>().Instance(counter));
+        Assert.Throws<NotImplementedException>(() => container.Install(
+            new ActionBasedInstaller(c => c.Register(Component.For<UsesIEmptyServiceWithLifecycleCounter>().Start())),
+            new ActionBasedInstaller(c => c.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>())),
+            new ActionBasedInstaller(_ => throw new NotImplementedException())));
 
         // In this scenario, I've registered IDependencyOfStartableComponent
         // before the ExceptionThrowingInstaller gets a chance to gum up the works
@@ -70,6 +71,6 @@ public class StartableAndExceptionThrowingInstallersTestCase
         // being implemented by a using() block or something similar
         // via OptimizeDependencyResolutionDisposable.Dispose()
 
-        Assert.Equal(0, UsesIEmptyService.InstancesCreated);
+        Assert.Equal(0, counter[".ctor"]);
     }
 }

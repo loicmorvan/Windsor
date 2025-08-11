@@ -47,10 +47,7 @@ public sealed class TypedFactoryDisposeOrderTestCase : AbstractContainerTestCase
 
         public void Use()
         {
-            if (_isDisposed)
-            {
-                throw new ObjectDisposedException(nameof(Dependency));
-            }
+            ObjectDisposedException.ThrowIf(_isDisposed, typeof(Dependency));
         }
     }
 

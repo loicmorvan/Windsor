@@ -19,7 +19,7 @@ using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests;
 
-public static class TestUtils
+public static partial class TestUtils
 {
     public static void AssertNoFirstChanceExceptions([InstantHandle] Action action)
     {
@@ -59,6 +59,9 @@ public static class TestUtils
 
     public static string ConvertToEnvironmentLineEndings(this string value)
     {
-        return Regex.Replace(value, @"\r?\n", Environment.NewLine);
+        return MyRegex().Replace(value, Environment.NewLine);
     }
+
+    [GeneratedRegex(@"\r?\n")]
+    private static partial Regex MyRegex();
 }
