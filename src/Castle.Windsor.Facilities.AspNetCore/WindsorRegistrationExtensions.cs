@@ -115,19 +115,22 @@ public static class WindsorRegistrationExtensions
     {
         // Applying default registrations, Lifestyle here is Scoped
 
-        if (!options.ControllerAssemblyRegistrations.Any() && !options.ControllerComponentRegistrations.Any())
+        if (options.ControllerAssemblyRegistrations.Count == 0 &&
+            options.ControllerComponentRegistrations.Count == 0)
         {
             container.Register(Classes.FromAssemblyInThisApplication(options.EntryAssembly).BasedOn<ControllerBase>()
                 .LifestyleScoped());
         }
 
-        if (!options.TagHelperAssemblyRegistrations.Any() && !options.TagHelperComponentRegistrations.Any())
+        if (options.TagHelperAssemblyRegistrations.Count == 0 &&
+            options.TagHelperComponentRegistrations.Count == 0)
         {
             container.Register(Classes.FromAssemblyInThisApplication(options.EntryAssembly).BasedOn<ITagHelper>()
                 .LifestyleScoped());
         }
 
-        if (!options.ViewComponentAssemblyRegistrations.Any() && !options.ViewComponentComponentRegistrations.Any())
+        if (options.ViewComponentAssemblyRegistrations.Count == 0 &&
+            options.ViewComponentComponentRegistrations.Count == 0)
         {
             container.Register(Classes.FromAssemblyInThisApplication(options.EntryAssembly).BasedOn<ViewComponent>()
                 .LifestyleScoped());

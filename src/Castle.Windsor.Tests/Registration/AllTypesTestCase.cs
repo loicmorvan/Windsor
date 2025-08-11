@@ -264,7 +264,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     {
         Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
             .BasedOn<ICustomer>()
-            .If(t => t.Name.EndsWith("2"))
+            .If(t => t.Name.EndsWith('2'))
             .If(t => t.FullName.Contains("Chain"))
         );
 
@@ -292,8 +292,8 @@ public class AllTypesTestCase : AbstractContainerTestCase
     {
         Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
             .BasedOn<ICustomer>()
-            .Unless(t => t.Name.EndsWith("2"))
-            .Unless(t => t.Name.EndsWith("3"))
+            .Unless(t => t.Name.EndsWith('2'))
+            .Unless(t => t.Name.EndsWith('3'))
         );
 
         var handlers = Kernel.GetAssignableHandlers(typeof(ICustomer));
@@ -301,8 +301,8 @@ public class AllTypesTestCase : AbstractContainerTestCase
         foreach (var handler in handlers)
         {
             var name = handler.ComponentModel.Implementation.Name;
-            Assert.False(name.EndsWith("2"));
-            Assert.False(name.EndsWith("3"));
+            Assert.False(name.EndsWith('2'));
+            Assert.False(name.EndsWith('3'));
         }
     }
 

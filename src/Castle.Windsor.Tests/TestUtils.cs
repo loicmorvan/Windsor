@@ -38,7 +38,7 @@ public static partial class TestUtils
             AppDomain.CurrentDomain.FirstChanceException -= handler;
         }
 
-        if (!firstChanceExceptions.Any())
+        if (firstChanceExceptions.Count == 0)
         {
             return;
         }

@@ -31,8 +31,8 @@ public class ConventionRegistrationConfigureTestCase : AbstractContainerTestCase
     {
         Container.Register(Classes.FromAssembly(GetCurrentAssembly())
             .BasedOn<IEmptyService>()
-            .ConfigureIf(r => r.Implementation.Name.EndsWith("A"), r => r.Named("A"))
-            .ConfigureIf(r => r.Implementation.Name.EndsWith("B"), r => r.Named("B")));
+            .ConfigureIf(r => r.Implementation.Name.EndsWith('A'), r => r.Named("A"))
+            .ConfigureIf(r => r.Implementation.Name.EndsWith('B'), r => r.Named("B")));
 
         var a = Container.Resolve<IEmptyService>("a");
         var b = Container.Resolve<IEmptyService>("b");
@@ -61,7 +61,7 @@ public class ConventionRegistrationConfigureTestCase : AbstractContainerTestCase
     {
         Container.Register(Classes.FromAssembly(GetCurrentAssembly())
             .BasedOn<IEmptyService>()
-            .ConfigureIf(r => r.Implementation.Name.EndsWith("A"), r => r.Named("A")));
+            .ConfigureIf(r => r.Implementation.Name.EndsWith('A'), r => r.Named("A")));
 
         var a = Container.Resolve<IEmptyService>("a");
 
@@ -75,7 +75,7 @@ public class ConventionRegistrationConfigureTestCase : AbstractContainerTestCase
         Container.Register(Classes.FromAssembly(GetCurrentAssembly())
             .BasedOn<IEmptyService>()
             .WithService.Base()
-            .ConfigureIf(r => r.Implementation.Name.EndsWith("A"), r => r.Named("A"),
+            .ConfigureIf(r => r.Implementation.Name.EndsWith('A'), r => r.Named("A"),
                 r => r.Named((++number).ToString())));
 
         var a = Container.Resolve<IEmptyService>("a");
