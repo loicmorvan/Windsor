@@ -12,20 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Windsor.Tests.Facilities.TypedFactory;
+
 namespace Castle.Windsor.Tests.ProxyInfrastructure;
 
 public class DisposableHook : ProxyAllHook, IDisposable
 {
-    public static int InstancesCreated;
-    public static int InstancesDisposed;
+    private readonly LifecycleCounter _counter;
 
-    public DisposableHook()
+    public DisposableHook(LifecycleCounter counter)
     {
-        InstancesCreated++;
+        _counter = counter;
+        _counter.Increment();
     }
 
     public void Dispose()
     {
-        InstancesDisposed++;
+        _counter.Increment();
     }
 }
