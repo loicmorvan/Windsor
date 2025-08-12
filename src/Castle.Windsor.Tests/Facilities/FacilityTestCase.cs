@@ -23,13 +23,11 @@ public class FacilityTestCase
 {
     private static readonly string FacilityKey = typeof(HiperFacility).FullName;
     private readonly HiperFacility _facility;
-    private readonly IKernel _kernel;
+    private readonly DefaultKernel _kernel = new();
 
     public FacilityTestCase()
     {
-        _kernel = new DefaultKernel();
-
-        IConfiguration confignode = new MutableConfiguration("facility");
+        var confignode = new MutableConfiguration("facility");
         IConfiguration facilityConf = new MutableConfiguration(FacilityKey);
         confignode.Children.Add(facilityConf);
         _kernel.ConfigurationStore.AddFacilityConfiguration(FacilityKey, confignode);

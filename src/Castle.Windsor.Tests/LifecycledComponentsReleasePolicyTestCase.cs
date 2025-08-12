@@ -24,12 +24,11 @@ namespace Castle.Windsor.Tests;
 
 public class LifecycledComponentsReleasePolicyTestCase
 {
-    private readonly IWindsorContainer _container;
+    private readonly WindsorContainer _container = new();
     private readonly IReleasePolicy _releasePolicy;
 
     public LifecycledComponentsReleasePolicyTestCase()
     {
-        _container = new WindsorContainer();
         _releasePolicy = _container.Kernel.ReleasePolicy;
     }
 

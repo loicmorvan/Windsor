@@ -28,7 +28,7 @@ public class SubResolverTestCase
     {
         var resolver = new FooBarResolver();
 
-        IKernel kernel = new DefaultKernel();
+        var kernel = new DefaultKernel();
         kernel.Resolver.AddSubResolver(resolver);
 
         kernel.Register(Component.For<Foo>());
@@ -46,7 +46,7 @@ public class SubResolverTestCase
     [Fact]
     public void Sub_resolver_can_provide_null_as_the_value_to_use()
     {
-        IKernel kernel = new DefaultKernel();
+        var kernel = new DefaultKernel();
         kernel.Resolver.AddSubResolver(new NullResolver());
 
         kernel.Register(Component.For<ComponentWithDependencyNotInContainer>());

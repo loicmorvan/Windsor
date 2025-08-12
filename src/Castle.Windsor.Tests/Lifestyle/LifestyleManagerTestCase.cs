@@ -160,7 +160,7 @@ public class LifestyleManagerTestCase : AbstractContainerTestCase
     [Fact]
     public void LifestyleSetThroughExternalConfig()
     {
-        IConfiguration confignode = new MutableConfiguration("component");
+        var confignode = new MutableConfiguration("component");
         confignode.Attributes.Add("lifestyle", "transient");
         Kernel.ConfigurationStore.AddComponentConfiguration("a", confignode);
         Kernel.Register(Component.For(typeof(TrivialComponent)).Named("a"));

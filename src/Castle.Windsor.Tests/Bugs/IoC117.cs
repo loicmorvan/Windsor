@@ -22,7 +22,7 @@ public class IoC117
     [Fact]
     public void Public_property_with_Protected_setter_causes_Object_Reference_exception()
     {
-        IKernel kernel = new DefaultKernel();
+        var kernel = new DefaultKernel();
 
         kernel.Register(Component.For<Presenter>());
         kernel.Register(Component.For<View>());

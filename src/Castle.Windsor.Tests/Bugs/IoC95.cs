@@ -24,8 +24,8 @@ public class IoC95
     [Fact]
     public void AddingComponentToRootKernelWhenChildKernelHasStartableFacility()
     {
-        IKernel kernel = new DefaultKernel();
-        IKernel childKernel = new DefaultKernel();
+        var kernel = new DefaultKernel();
+        var childKernel = new DefaultKernel();
         kernel.AddChildKernel(childKernel);
         childKernel.AddFacility(new StartableFacility());
         kernel.Register(Component.For(typeof(A)).Named("string")); // exception here

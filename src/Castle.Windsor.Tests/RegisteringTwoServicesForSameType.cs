@@ -22,7 +22,7 @@ public class RegisteringTwoServicesForSameType
     [Fact]
     public void ResolvingComponentIsDoneOnFirstComeBasis()
     {
-        IWindsorContainer windsor = new WindsorContainer();
+        var windsor = new WindsorContainer();
         windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("1"));
         windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("2"));
 
@@ -32,7 +32,7 @@ public class RegisteringTwoServicesForSameType
     [Fact]
     public void ResolvingComponentIsDoneOnFirstComeBasisWhenNamesAreNotOrdered()
     {
-        IWindsorContainer windsor = new WindsorContainer();
+        var windsor = new WindsorContainer();
         windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("3"));
         windsor.Register(Component.For<IService>().ImplementedBy<Srv1>().Named("2"));
 

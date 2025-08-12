@@ -22,7 +22,7 @@ public class ContainerProblem
     [Fact]
     public void CausesStackOverflow()
     {
-        IWindsorContainer container = new WindsorContainer();
+        var container = new WindsorContainer();
 
         container.Register(Component.For<IChild>().ImplementedBy<Child>().Named("child"));
         container.Register(Component.For<IParent>().ImplementedBy<Parent>().Named("parent"));
