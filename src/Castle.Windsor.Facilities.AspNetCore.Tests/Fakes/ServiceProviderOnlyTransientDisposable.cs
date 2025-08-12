@@ -10,5 +10,5 @@ public sealed class ServiceProviderOnlyTransientDisposable : ServiceProviderOnly
     }
 
     public bool Disposed { get; private set; }
-    public int DisposedCount { get; set; }
+    public int DisposedCount { get; private set; }
 }

@@ -7,7 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="" />
+    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -107,7 +109,7 @@
       <force-push-target remote-path="origin" branch="net9" />
     </force-push-targets>
   </component>
-  <component name="RunManager" selected=".NET Project.Castle.Windsor.Tests">
+  <component name="RunManager">
     <configuration name="Castle.Windsor.Tests" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -174,15 +176,7 @@
       <workItem from="1754769680087" duration="6008000" />
       <workItem from="1754854494950" duration="2579000" />
       <workItem from="1754940328318" duration="9469000" />
-      <workItem from="1755003593080" duration="2396000" />
-    </task>
-    <task id="LOCAL-00046" summary="Refactored loops to use LINQ-based operations, simplifying logic and improving code readability across multiple files.">
-      <option name="closed" value="true" />
-      <created>1754164934840</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1754164934840</updated>
+      <workItem from="1755003593080" duration="3856000" />
     </task>
     <task id="LOCAL-00047" summary="Refactored `switch` statements to use expression syntax, added `[PublicAPI]` annotations, improved null checks with null-conditional operators, and streamlined formatting for improved clarity and consistency across multiple files.">
       <option name="closed" value="true" />
@@ -568,7 +562,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755005509648</updated>
     </task>
-    <option name="localTasksCounter" value="95" />
+    <task id="LOCAL-00095" summary="Refactored test files to use `var` for container and kernel declarations, replaced explicit types in initializers with implicit type expressions, and streamlined related code for improved readability and consistency.">
+      <option name="closed" value="true" />
+      <created>1755007630153</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1755007630153</updated>
+    </task>
+    <option name="localTasksCounter" value="96" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -603,7 +605,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Removed `XmlInterpreter` and related classes, tests, and implementation references to simplify and modernize the codebase." />
     <MESSAGE value="Simplified conditional patterns across multiple classes to improve readability and reduce redundancy." />
     <MESSAGE value="Refactored multiple classes to reduce redundancy, improve readability, and adopt modern syntax patterns across core files and test cases. Added `[UsedImplicitly]` annotations where necessary to enhance code clarity." />
     <MESSAGE value="Simplified conditional logic and streamlined method structures in `MiddlewareComponentModelContributor` and `CrossWiringComponentModelContributor` to improve readability and maintainability. Updated test class constructors to adopt more concise parameter initialization." />
@@ -628,7 +629,8 @@
     <MESSAGE value="Replaced `Any()` with `Count == 0` for conditional checks and switched string `EndsWith` arguments to char literals across test and core files for improved performance and code clarity." />
     <MESSAGE value="Refactored `DisposableHook` to use `LifecycleCounter` for improved readability and test reliability; updated dependent test case accordingly." />
     <MESSAGE value="Marked multiple classes across test files as `sealed`, removed unused `InitializableDisposableComponent`, and applied `GC.SuppressFinalize` in `AbstractContainerTestCase` for improved reliability and maintainability." />
-    <option name="LAST_COMMIT_MESSAGE" value="Marked multiple classes across test files as `sealed`, removed unused `InitializableDisposableComponent`, and applied `GC.SuppressFinalize` in `AbstractContainerTestCase` for improved reliability and maintainability." />
+    <MESSAGE value="Refactored test files to use `var` for container and kernel declarations, replaced explicit types in initializers with implicit type expressions, and streamlined related code for improved readability and consistency." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored test files to use `var` for container and kernel declarations, replaced explicit types in initializers with implicit type expressions, and streamlined related code for improved readability and consistency." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

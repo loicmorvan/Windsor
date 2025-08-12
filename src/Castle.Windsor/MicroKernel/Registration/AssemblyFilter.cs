@@ -54,7 +54,7 @@ public class AssemblyFilter : IAssemblyProvider
         return this;
     }
 
-    public AssemblyFilter FilterByName(Predicate<AssemblyName> filter)
+    private AssemblyFilter FilterByName(Predicate<AssemblyName> filter)
     {
         ArgumentNullException.ThrowIfNull(filter);
 
