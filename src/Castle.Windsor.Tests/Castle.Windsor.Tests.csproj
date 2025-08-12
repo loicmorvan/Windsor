@@ -55,6 +55,7 @@
 
     <ItemGroup>
         <Folder Include="Installers\"/>
+        <Folder Include="Installer\"/>
         <Folder Include="TypedFactoryInterfaces\"/>
     </ItemGroup>
 
