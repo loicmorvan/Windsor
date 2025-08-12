@@ -35,6 +35,7 @@ public class InstallerFactory
 	/// <param name="installerTypes">Set of concrete class types implementing <see cref="IWindsorInstaller" /> interface.</param>
 	/// <returns>Transformed <paramref name="installerTypes" />.</returns>
 	/// <remarks>Default implementation simply returns types passed into it.</remarks>
+	[PublicAPI]
 	public virtual IEnumerable<Type> Select(IEnumerable<Type> installerTypes)
 	{
 		return installerTypes;
