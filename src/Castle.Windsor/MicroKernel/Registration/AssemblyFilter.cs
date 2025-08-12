@@ -165,15 +165,14 @@ public class AssemblyFilter : IAssemblyProvider
 
     private static string GetFullPath(string path)
     {
+        ArgumentNullException.ThrowIfNull(path);
+
         if (Path.IsPathRooted(path))
         {
             return Path.GetFullPath(path);
         }
 
-        if (path != null)
-        {
-            path = Path.Combine(AppContext.BaseDirectory, path);
-        }
+        path = Path.Combine(AppContext.BaseDirectory, path);
 
         return Path.GetFullPath(path);
     }
