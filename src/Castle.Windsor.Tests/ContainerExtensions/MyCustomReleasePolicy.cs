@@ -16,7 +16,7 @@ using Castle.Windsor.MicroKernel;
 
 namespace Castle.Windsor.Tests.ContainerExtensions;
 
-public class MyCustomReleasePolicy : IReleasePolicy
+public sealed class MyCustomReleasePolicy : IReleasePolicy
 {
     public void Dispose()
     {

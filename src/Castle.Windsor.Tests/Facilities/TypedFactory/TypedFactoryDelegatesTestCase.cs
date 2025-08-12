@@ -496,7 +496,7 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
     }
 
     [UsedImplicitly]
-    public class SelectorWithLifecycleCounter : ITypedFactoryComponentSelector, IDisposable
+    public sealed class SelectorWithLifecycleCounter : ITypedFactoryComponentSelector, IDisposable
     {
         private readonly LifecycleCounter _counter;
 

@@ -19,7 +19,7 @@ using Castle.Windsor.Tests.Facilities.TypedFactory;
 namespace Castle.Windsor.Tests.Interceptors;
 
 [Transient]
-public class DisposableInterceptor : StandardInterceptor, IDisposable
+public sealed class DisposableInterceptor : StandardInterceptor, IDisposable
 {
     private readonly LifecycleCounter _counter;
 

@@ -20,14 +20,9 @@ using Castle.Windsor.Tests.Components;
 
 namespace Castle.Windsor.Tests;
 
-public class GraphTestCase : IDisposable
+public sealed class GraphTestCase : IDisposable
 {
-    private readonly IKernel _kernel;
-
-    public GraphTestCase()
-    {
-        _kernel = new DefaultKernel();
-    }
+    private readonly DefaultKernel _kernel = new();
 
     public void Dispose()
     {

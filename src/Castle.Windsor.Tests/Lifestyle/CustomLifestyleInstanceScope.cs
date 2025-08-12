@@ -17,7 +17,7 @@ using Castle.Windsor.MicroKernel;
 
 namespace Castle.Windsor.Tests.Lifestyle;
 
-public class CustomLifestyleInstanceScope : IDisposable
+public sealed class CustomLifestyleInstanceScope : IDisposable
 {
     [ThreadStatic] private static Stack<CustomLifestyleInstanceScope> _localScopes;
 

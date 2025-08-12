@@ -20,7 +20,7 @@ using Castle.Windsor.Windsor;
 
 namespace Castle.Windsor.Tests;
 
-public class SmartProxyTestCase : IDisposable
+public sealed class SmartProxyTestCase : IDisposable
 {
     private readonly WindsorContainer _container;
 

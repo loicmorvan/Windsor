@@ -8,8 +8,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/Fakes/AnyComponentWithLifestyleManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/Fakes/AnyComponentWithLifestyleManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/Fakes/ServiceProviderOnlyTransientDisposable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/Fakes/ServiceProviderOnlyTransientDisposable.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/AbstractContainerTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/AbstractContainerTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/CustomActivatorTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/CustomActivatorTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/GraphTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/GraphTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifestyle/CustomLifestyleInstanceScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifestyle/CustomLifestyleInstanceScope.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifestyle/CustomLifestyleScoped.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifestyle/CustomLifestyleScoped.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/LifestyleTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/LifestyleTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Pools/PooledLifestyleManagerTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Pools/PooledLifestyleManagerTestCase.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ProxyInfrastructure/DisposableHook.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ProxyInfrastructure/DisposableHook.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/SmartProxyTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/SmartProxyTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/TestInfrastructure/StaticScopeAccessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/TestInfrastructure/StaticScopeAccessor.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,7 +120,7 @@
       <force-push-target remote-path="origin" branch="net9" />
     </force-push-targets>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected=".NET Project.Castle.Windsor.Tests">
     <configuration name="Castle.Windsor.Tests" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -177,15 +187,7 @@
       <workItem from="1754769680087" duration="6008000" />
       <workItem from="1754854494950" duration="2579000" />
       <workItem from="1754940328318" duration="9469000" />
-      <workItem from="1755003593080" duration="1268000" />
-    </task>
-    <task id="LOCAL-00044" summary="Streamlined type name parsing logic by simplifying conditional checks, improving code readability and consistency.">
-      <option name="closed" value="true" />
-      <created>1754164396671</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1754164396671</updated>
+      <workItem from="1755003593080" duration="1772000" />
     </task>
     <task id="LOCAL-00045" summary="Refactored loops to use LINQ-based operations, improving code readability and consistency across multiple files.">
       <option name="closed" value="true" />
@@ -571,7 +573,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754943680788</updated>
     </task>
-    <option name="localTasksCounter" value="93" />
+    <task id="LOCAL-00093" summary="Refactored `DisposableHook` to use `LifecycleCounter` for improved readability and test reliability; updated dependent test case accordingly.">
+      <option name="closed" value="true" />
+      <created>1755005133437</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1755005133437</updated>
+    </task>
+    <option name="localTasksCounter" value="94" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -606,7 +616,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Added `[PublicAPI]` annotations to multiple methods and interfaces across test cases to improve API discoverability and documentation." />
     <MESSAGE value="Marked type parameters as `in` or `out` in multiple generic interfaces to improve covariance and contravariance support across test cases." />
     <MESSAGE value="Removed `XmlInterpreter` and related classes, tests, and implementation references to simplify and modernize the codebase." />
     <MESSAGE value="Simplified conditional patterns across multiple classes to improve readability and reduce redundancy." />
@@ -631,7 +640,8 @@
     <MESSAGE value="Replaced `Thread.CurrentThread.ManagedThreadId` with `Environment.CurrentManagedThreadId` in scoped lifestyle tests for improved API usage consistency." />
     <MESSAGE value="Simplified string operations in `CustomToStringService` and adjusted `WithKeyToken` method signature in `AssemblyFilter` for improved consistency and clarity." />
     <MESSAGE value="Replaced `Any()` with `Count == 0` for conditional checks and switched string `EndsWith` arguments to char literals across test and core files for improved performance and code clarity." />
-    <option name="LAST_COMMIT_MESSAGE" value="Replaced `Any()` with `Count == 0` for conditional checks and switched string `EndsWith` arguments to char literals across test and core files for improved performance and code clarity." />
+    <MESSAGE value="Refactored `DisposableHook` to use `LifecycleCounter` for improved readability and test reliability; updated dependent test case accordingly." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored `DisposableHook` to use `LifecycleCounter` for improved readability and test reliability; updated dependent test case accordingly." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

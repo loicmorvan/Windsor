@@ -1,6 +1,7 @@
 namespace Castle.Windsor.Facilities.AspNetCore.Tests.Fakes;
 
-public class ServiceProviderOnlyTransientDisposable : ServiceProviderOnlyTransient, IDisposable, IDisposableObservable
+public sealed class ServiceProviderOnlyTransientDisposable : ServiceProviderOnlyTransient, IDisposable,
+    IDisposableObservable
 {
     public void Dispose()
     {

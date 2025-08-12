@@ -16,7 +16,7 @@ using Castle.Windsor.Tests.Facilities.TypedFactory;
 
 namespace Castle.Windsor.Tests.ProxyInfrastructure;
 
-public class DisposableHook : ProxyAllHook, IDisposable
+public sealed class DisposableHook : ProxyAllHook, IDisposable
 {
     private readonly LifecycleCounter _counter;
 

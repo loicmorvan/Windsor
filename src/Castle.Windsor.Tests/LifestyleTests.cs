@@ -55,7 +55,7 @@ public class LifestyleTests
         void Do();
     }
 
-    public class InterfaceImpl : IInterface, IDisposable
+    public sealed class InterfaceImpl : IInterface, IDisposable
     {
         private bool _disposed;
 
