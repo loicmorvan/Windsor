@@ -269,8 +269,10 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
     [Fact]
     public void Factory_explicitly_pick_registered_selector()
     {
-        SimpleSelector.InstancesCreated = 0;
+        var dataRepository = new DataRepository();
+        
         Container.Register(
+            Component.For<DataRepository>().Instance(dataRepository),
             Component.For<ITypedFactoryComponentSelector>().ImplementedBy<NotInstantiableSelector>().Named("1")
                 .LifeStyle.Transient,
             Component.For<ITypedFactoryComponentSelector>().ImplementedBy<SimpleSelector>().Named("2").LifeStyle
@@ -279,7 +281,7 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 
         Container.Resolve<Func<Foo>>();
 
-        Assert.Equal(1, SimpleSelector.InstancesCreated);
+        Assert.Equal(1, dataRepository[".ctor"]);
     }
 
     [Fact]

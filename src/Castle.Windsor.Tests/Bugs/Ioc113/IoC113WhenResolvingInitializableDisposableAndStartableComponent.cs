@@ -20,7 +20,7 @@ namespace Castle.Windsor.Tests.Bugs.Ioc113;
 
 public class IoC113WhenResolvingInitializableDisposableAndStartableComponent
 {
-    private readonly IList<SdiComponentMethods> _calledMethods;
+    private readonly List<SdiComponentMethods> _calledMethods;
     private readonly StartableDisposableAndInitializableComponent _component;
 
     public IoC113WhenResolvingInitializableDisposableAndStartableComponent()
