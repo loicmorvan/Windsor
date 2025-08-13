@@ -16,11 +16,11 @@ using Castle.Windsor.Tests.Facilities.TypedFactory;
 
 namespace Castle.Windsor.Tests.Components;
 
-public sealed class SimpleServiceDisposable(LifecycleCounter lifecycleCounter) : ISimpleService, IDisposable
+public sealed class SimpleServiceDisposable(DataRepository dataRepository) : ISimpleService, IDisposable
 {
     public void Dispose()
     {
-        lifecycleCounter.Increment();
+        dataRepository.RegisterCallerMemberName();
     }
 
     public void Operation()

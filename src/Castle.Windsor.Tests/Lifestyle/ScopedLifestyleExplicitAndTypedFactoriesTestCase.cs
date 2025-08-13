@@ -32,7 +32,7 @@ public class ScopedLifestyleExplicitAndTypedFactoriesTestCase : AbstractContaine
     public void Can_obtain_scoped_component_via_factory()
     {
         Container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Component.For<UsesDisposableFooDelegate>().LifestyleTransient(),
             Component.For<DisposableFoo>().LifestyleScoped());
 
@@ -64,7 +64,7 @@ public class ScopedLifestyleExplicitAndTypedFactoriesTestCase : AbstractContaine
     public void Scoped_component_via_factory_instances_reused_properly()
     {
         Container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Component.For<UsesDisposableFooDelegate>().LifeStyle.Transient,
             Component.For<DisposableFoo>().LifestyleScoped());
         using (Container.BeginScope())

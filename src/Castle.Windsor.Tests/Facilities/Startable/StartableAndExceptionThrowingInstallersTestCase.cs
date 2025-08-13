@@ -52,10 +52,10 @@ public class StartableAndExceptionThrowingInstallersTestCase
     [Bug("IOC-311")]
     public void StartableComponentShouldNotStartIfExceptionThrownByInstaller()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
         using var container = new WindsorContainer();
         container.AddFacility<StartableFacility>(f => f.DeferredStart());
-        container.Register(Component.For<LifecycleCounter>().Instance(counter));
+        container.Register(Component.For<DataRepository>().Instance(counter));
         Assert.Throws<NotImplementedException>(() => container.Install(
             new ActionBasedInstaller(c => c.Register(Component.For<UsesIEmptyServiceWithLifecycleCounter>().Start())),
             new ActionBasedInstaller(c => c.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>())),

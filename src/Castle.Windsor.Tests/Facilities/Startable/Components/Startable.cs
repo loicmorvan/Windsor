@@ -21,16 +21,16 @@ namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 
 [UsedImplicitly]
 #pragma warning disable CS9113 // Parameter is unread.
-public class Startable(ICustomer customer, LifecycleCounter counter) : IStartable
+public class Startable(ICustomer customer, DataRepository counter) : IStartable
 #pragma warning restore CS9113 // Parameter is unread.
 {
     public void Start()
     {
-        counter.Increment();
+        counter.RegisterCallerMemberName();
     }
 
     public void Stop()
     {
-        counter.Increment();
+        counter.RegisterCallerMemberName();
     }
 }

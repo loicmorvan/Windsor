@@ -21,16 +21,16 @@ namespace Castle.Windsor.Tests.Interceptors;
 [Transient]
 public sealed class DisposableInterceptor : StandardInterceptor, IDisposable
 {
-    private readonly LifecycleCounter _counter;
+    private readonly DataRepository _counter;
 
-    public DisposableInterceptor(LifecycleCounter counter)
+    public DisposableInterceptor(DataRepository counter)
     {
-        counter.Increment();
+        counter.RegisterCallerMemberName();
         _counter = counter;
     }
 
     public void Dispose()
     {
-        _counter.Increment();
+        _counter.RegisterCallerMemberName();
     }
 }

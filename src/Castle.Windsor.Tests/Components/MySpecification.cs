@@ -14,12 +14,7 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class MySpecification : ISpecification
+public class MySpecification(IRepository<int> repository) : ISpecification
 {
-    public MySpecification(IRepository<int> repository)
-    {
-        Repository = repository;
-    }
-
-    public IRepository<int> Repository { get; }
+    public IRepository<int> Repository { get; } = repository;
 }

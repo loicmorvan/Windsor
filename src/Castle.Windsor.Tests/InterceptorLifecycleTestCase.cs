@@ -24,9 +24,9 @@ public class InterceptorLifecycleTestCase : AbstractContainerTestCase
     [Fact]
     public void Disposable_interceptor_gets_properly_released_when_the_component_gets_released()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
         Container.Register(
-            Component.For<LifecycleCounter>().Instance(counter),
+            Component.For<DataRepository>().Instance(counter),
             Component.For<DisposableInterceptor>().LifestyleTransient(),
             Component.For<A>().LifestyleTransient().Interceptors<DisposableInterceptor>());
 

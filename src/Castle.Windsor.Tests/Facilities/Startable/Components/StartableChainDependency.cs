@@ -5,22 +5,22 @@ namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 
 public class StartableChainDependency : IStartable
 {
-    private readonly LifecycleCounter _lifecycleCounter;
+    private readonly DataRepository _dataRepository;
 
     // ReSharper disable once UnusedParameter.Local
-    public StartableChainDependency(StartableChainGeneric<string> item, LifecycleCounter lifecycleCounter)
+    public StartableChainDependency(StartableChainGeneric<string> item, DataRepository dataRepository)
     {
-        _lifecycleCounter = lifecycleCounter;
-        _lifecycleCounter.Increment();
+        _dataRepository = dataRepository;
+        _dataRepository.RegisterCallerMemberName();
     }
 
     public void Start()
     {
-        _lifecycleCounter.Increment();
+        _dataRepository.RegisterCallerMemberName();
     }
 
     public void Stop()
     {
-        _lifecycleCounter.Increment();
+        _dataRepository.RegisterCallerMemberName();
     }
 }

@@ -18,16 +18,16 @@ namespace Castle.Windsor.Tests.ProxyInfrastructure;
 
 public sealed class DisposableHook : ProxyAllHook, IDisposable
 {
-    private readonly LifecycleCounter _counter;
+    private readonly DataRepository _counter;
 
-    public DisposableHook(LifecycleCounter counter)
+    public DisposableHook(DataRepository counter)
     {
         _counter = counter;
-        _counter.Increment();
+        _counter.RegisterCallerMemberName();
     }
 
     public void Dispose()
     {
-        _counter.Increment();
+        _counter.RegisterCallerMemberName();
     }
 }

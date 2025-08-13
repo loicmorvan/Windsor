@@ -4,9 +4,9 @@ namespace Castle.Windsor.Tests.Components;
 
 public class UsesIEmptyServiceWithLifecycleCounter
 {
-    public UsesIEmptyServiceWithLifecycleCounter(IEmptyService emptyService, LifecycleCounter counter)
+    public UsesIEmptyServiceWithLifecycleCounter(IEmptyService emptyService, DataRepository counter)
     {
-        counter.Increment();
+        counter.RegisterCallerMemberName();
 
         EmptyService = emptyService;
     }

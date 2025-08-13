@@ -25,7 +25,7 @@ public class DisposeTestCase : AbstractContainerTestCase
     [Fact]
     public void Disposable_component_for_nondisposable_service_built_via_factory_should_be_disposed_when_released()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
         Container.Register(Component.For<ISimpleService>()
             .UsingFactoryMethod(() => new SimpleServiceDisposable(counter))
             .LifeStyle.Transient);
@@ -43,7 +43,7 @@ public class DisposeTestCase : AbstractContainerTestCase
     public void Disposable_component_for_nondisposable_service_is_tracked()
     {
         Container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Component.For<ISimpleService>()
                 .ImplementedBy<SimpleServiceDisposable>()
                 .LifeStyle.Transient);
@@ -57,7 +57,7 @@ public class DisposeTestCase : AbstractContainerTestCase
     public void Disposable_component_for_nondisposable_service_should_be_disposed_when_released()
     {
         Container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Component.For<ISimpleService>()
                 .ImplementedBy<SimpleServiceDisposable>()
                 .LifeStyle.Transient);
@@ -65,14 +65,14 @@ public class DisposeTestCase : AbstractContainerTestCase
         var service = Container.Resolve<ISimpleService>();
         Container.Release(service);
 
-        Assert.Equal(1, Container.Resolve<LifecycleCounter>()["Dispose"]);
+        Assert.Equal(1, Container.Resolve<DataRepository>()["Dispose"]);
     }
 
     [Fact]
     public void Disposable_service_is_tracked()
     {
         Container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Component.For<DisposableFoo>().LifeStyle.Transient);
 
         var foo = Container.Resolve<DisposableFoo>();
@@ -83,7 +83,7 @@ public class DisposeTestCase : AbstractContainerTestCase
     [Fact]
     public void Disposable_services_should_be_disposed_when_released()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
         Container.Register(Component.For<DisposableFoo>().LifeStyle.Transient
             .DependsOn(Arguments.FromTyped([counter])));
 
@@ -96,11 +96,11 @@ public class DisposeTestCase : AbstractContainerTestCase
     [Fact]
     public void Disposable_singleton_dependency_of_transient_open_generic_is_disposed()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
 
         Container.Register(
             Component.For(typeof(GenericComponent<>)).LifeStyle.Transient,
-            Component.For<LifecycleCounter>().Instance(counter),
+            Component.For<DataRepository>().Instance(counter),
             Component.For<Disposable>().LifeStyle.Singleton
         );
 
@@ -183,11 +183,11 @@ public class DisposeTestCase : AbstractContainerTestCase
         Assert.True(component.Disposed);
     }
 
-    public sealed class Disposable(LifecycleCounter counter) : IDisposable
+    public sealed class Disposable(DataRepository counter) : IDisposable
     {
         public void Dispose()
         {
-            counter.Increment();
+            counter.RegisterCallerMemberName();
         }
     }
 }

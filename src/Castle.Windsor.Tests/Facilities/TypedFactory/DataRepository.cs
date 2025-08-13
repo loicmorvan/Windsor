@@ -16,13 +16,13 @@ using System.Runtime.CompilerServices;
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
-public class LifecycleCounter
+public class DataRepository
 {
-    private readonly Dictionary<string, int> _countersByKeys = new();
+    private readonly Dictionary<string, dynamic> _countersByKeys = new();
 
-    public int this[string key] => _countersByKeys.TryGetValue(key, out var value) ? value : 0;
+    public dynamic this[string key] => _countersByKeys.TryGetValue(key, out var value) ? value : 0;
 
-    public void Increment([CallerMemberName] string key = null)
+    public void RegisterCallerMemberName([CallerMemberName] string key = null)
     {
         if (key == null)
         {
@@ -30,5 +30,10 @@ public class LifecycleCounter
         }
 
         _countersByKeys[key] = _countersByKeys.TryGetValue(key, out var value) ? value + 1 : 1;
+    }
+
+    public void RegisterValue(string key, dynamic value)
+    {
+        _countersByKeys[key] = value;
     }
 }

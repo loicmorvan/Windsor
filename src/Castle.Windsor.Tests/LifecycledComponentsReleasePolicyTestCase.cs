@@ -93,7 +93,7 @@ public class LifecycledComponentsReleasePolicyTestCase
     [Fact]
     public void Release_doesnt_stop_tracking_component_singleton_until_container_is_disposed()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
         _container.Register(Singleton<DisposableFoo>().DependsOn(Arguments.FromTyped([counter])));
 
         var tracker = ReferenceTracker.Track(() => _container.Resolve<DisposableFoo>());
@@ -113,7 +113,7 @@ public class LifecycledComponentsReleasePolicyTestCase
     public void Release_stops_tracking_component_transient()
     {
         _container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Transient<DisposableFoo>());
         var foo = _container.Resolve<DisposableFoo>();
 
@@ -126,7 +126,7 @@ public class LifecycledComponentsReleasePolicyTestCase
     public void Tracks_disposable_components()
     {
         _container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Transient<DisposableFoo>());
 
         var foo = _container.Resolve<DisposableFoo>();
@@ -158,7 +158,7 @@ public class LifecycledComponentsReleasePolicyTestCase
     public void Tracks_simple_components_with_disposable_dependencies()
     {
         _container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Transient<DisposableFoo>(),
             Transient<UsesDisposableFoo>());
 

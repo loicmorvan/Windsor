@@ -164,7 +164,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
     public void Releasing_MixIn_releases_all_parts()
     {
         Container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Component.For<ICalcService>()
                 .ImplementedBy<CalculatorService>().Proxy.MixIns(m => m.Component<SimpleServiceDisposable>())
                 .LifeStyle.Transient,
@@ -179,7 +179,7 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
         var mixin = (ISimpleService)calculator;
         mixin.Operation();
         Container.Release(mixin);
-        Assert.Equal(1, Container.Resolve<LifecycleCounter>()["Dispose"]);
+        Assert.Equal(1, Container.Resolve<DataRepository>()["Dispose"]);
     }
 
     [Fact]
@@ -259,10 +259,10 @@ public class ComponentProxyRegistrationTestCase : AbstractContainerTestCase
     [Fact]
     public void hook_gets_disposed_after_proxy_is_created()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
         var interceptor = new ResultModifierInterceptor(5);
         Container.Register(
-            Component.For<LifecycleCounter>().Instance(counter),
+            Component.For<DataRepository>().Instance(counter),
             Component.For<ResultModifierInterceptor>().Instance(interceptor),
             Component.For<DisposableHook>().Named("hook").LifeStyle.Transient,
             Component.For<ICalcService>()

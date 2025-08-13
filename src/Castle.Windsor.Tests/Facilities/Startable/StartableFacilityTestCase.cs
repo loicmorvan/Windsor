@@ -168,9 +168,9 @@ public class StartableFacilityTestCase
     [Fact]
     public void TestStartableChainWithGenerics()
     {
-        var parentLifecycle = new LifecycleCounter();
-        var dependencyLifecycle = new LifecycleCounter();
-        var genericLifecycle = new LifecycleCounter();
+        var parentLifecycle = new DataRepository();
+        var dependencyLifecycle = new DataRepository();
+        var genericLifecycle = new DataRepository();
 
         _kernel.AddFacility<StartableFacility>();
 

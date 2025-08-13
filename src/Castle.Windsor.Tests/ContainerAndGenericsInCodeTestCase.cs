@@ -17,6 +17,7 @@ using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 using Castle.Windsor.Tests.Interceptors;
 
 namespace Castle.Windsor.Tests;
@@ -47,14 +48,18 @@ public class ContainerAndGenericsInCodeTestCase : AbstractContainerTestCase
     [Fact]
     public void Can_intercept_open_generic_components()
     {
-        Container.Register(Component.For<CollectInterceptedIdInterceptor>(),
+        var dataRepository = new DataRepository();
+
+        Container.Register(
+            Component.For<DataRepository>().Instance(dataRepository),
+            Component.For<CollectInterceptedIdInterceptor>(),
             Component.For(typeof(Components.IRepository<>)).ImplementedBy(typeof(DemoRepository<>))
                 .Interceptors<CollectInterceptedIdInterceptor>());
 
         var demoRepository = Container.Resolve<Components.IRepository<object>>();
         demoRepository.Get(12);
 
-        Assert.Equal(12, CollectInterceptedIdInterceptor.InterceptedId);
+        Assert.Equal(12, dataRepository["interceptedId"]);
     }
 
     [Fact]
@@ -155,11 +160,15 @@ public class ContainerAndGenericsInCodeTestCase : AbstractContainerTestCase
     [Fact]
     public void Proxy_parent_does_not_make_generic_child_a_proxy()
     {
-        Container.Register(Component.For<CollectInterceptedIdInterceptor>(),
-            Component.For<ISpecification>()
+        Container.Register(
+            Component
+                .For<NoopInterceptor>(),
+            Component
+                .For<ISpecification>()
                 .ImplementedBy<MySpecification>()
-                .Interceptors<CollectInterceptedIdInterceptor>(),
-            Component.For(typeof(Components.IRepository<>))
+                .Interceptors<NoopInterceptor>(),
+            Component
+                .For(typeof(Components.IRepository<>))
                 .ImplementedBy(typeof(TransientRepository<>))
                 .Named("repos"));
 
