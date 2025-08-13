@@ -20,6 +20,8 @@ public abstract class DisposableBase : IDisposable
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         if (IsDisposed)
         {
             throw new Exception("Already disposed");

@@ -16,12 +16,8 @@ using Castle.Windsor.Core;
 
 namespace Castle.Windsor.Tests.Components;
 
-public class BDisposable : B, IDisposable
+public sealed class BDisposable(A a) : B(a), IDisposable
 {
-    public BDisposable(A a) : base(a)
-    {
-    }
-
     public bool Disposed { get; private set; }
 
     [DoNotWire] public Action OnDisposing { get; set; }

@@ -18,6 +18,7 @@ using JetBrains.Annotations;
 
 namespace Castle.Windsor.Windsor.Installer;
 
+[PublicAPI]
 public class InstallerFactory
 {
 	/// <summary>
@@ -25,7 +26,6 @@ public class InstallerFactory
 	///     <param name="installerType" />
 	/// </summary>
 	/// <remarks>Default implementation uses public parameterless constructor to create the instance.</remarks>
-	[PublicAPI]
 	public virtual IWindsorInstaller CreateInstance(Type installerType)
 	{
 		return installerType.CreateInstance<IWindsorInstaller>();
@@ -35,7 +35,6 @@ public class InstallerFactory
 	/// <param name="installerTypes">Set of concrete class types implementing <see cref="IWindsorInstaller" /> interface.</param>
 	/// <returns>Transformed <paramref name="installerTypes" />.</returns>
 	/// <remarks>Default implementation simply returns types passed into it.</remarks>
-	[PublicAPI]
 	public virtual IEnumerable<Type> Select(IEnumerable<Type> installerTypes)
 	{
 		return installerTypes;
