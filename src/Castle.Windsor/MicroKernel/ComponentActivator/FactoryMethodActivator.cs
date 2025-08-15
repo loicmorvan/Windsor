@@ -99,11 +99,11 @@ public class FactoryMethodActivator<T> : DefaultComponentActivator, IDependencyA
             return false;
         }
 
-        if (Kernel.ProxyFactory.ShouldCreateProxy(Model) == false)
+        if (!Kernel.ProxyFactory.ShouldCreateProxy(Model))
         {
             return false;
         }
 
-        return ProxyUtil.IsProxy(instance) == false;
+        return !ProxyUtil.IsProxy(instance);
     }
 }

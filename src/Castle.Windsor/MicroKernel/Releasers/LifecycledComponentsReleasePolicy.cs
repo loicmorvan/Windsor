@@ -69,7 +69,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
         get
         {
             using var holder = _lock.ForReading(false);
-            if (holder.LockAcquired == false)
+            if (!holder.LockAcquired)
             {
                 // TODO: that's sad... perhaps we should have waited...? But what do we do now? We're in the debugger. If some thread is keeping the lock
                 // we could wait indefinatelly. I guess the best way to proceed is to add a 200ms timepout to accquire the lock, and if not succeeded
@@ -139,7 +139,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
         {
             // NOTE: we don't physically remove the instance from the instance2Burden collection here.
             // we do it in OnInstanceReleased event handler
-            if (_instance2Burden.TryGetValue(instance, out burden) == false)
+            if (!_instance2Burden.TryGetValue(instance, out burden))
             {
                 return;
             }
@@ -150,7 +150,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 
     public virtual void Track(object instance, Burden burden)
     {
-        if (burden.RequiresPolicyRelease == false)
+        if (!burden.RequiresPolicyRelease)
         {
             var lifestyle = (object)burden.Model.CustomLifestyle ?? burden.Model.LifestyleType;
             throw new ArgumentException(
@@ -182,7 +182,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
     {
         using (_lock.ForWriting())
         {
-            if (_instance2Burden.Remove(burden.Instance) == false)
+            if (!_instance2Burden.Remove(burden.Instance))
             {
                 return;
             }

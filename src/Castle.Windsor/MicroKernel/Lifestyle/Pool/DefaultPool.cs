@@ -51,13 +51,13 @@ public class DefaultPool(int initialSize, int maxsize, IComponentActivator compo
         {
             Burden burden;
 
-            if (_initialized == false)
+            if (!_initialized)
             {
                 _inUse.Remove(instance, out burden);
             }
             else
             {
-                if (_inUse.Remove(instance, out burden) == false)
+                if (!_inUse.Remove(instance, out burden))
                 {
                     return false;
                 }

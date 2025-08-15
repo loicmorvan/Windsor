@@ -61,7 +61,7 @@ public class PotentialLifestyleMismatchesDiagnostic(IKernel kernel) : IPotential
     private static IEnumerable<MismatchedLifestyleDependency> GetMismatches(IHandler handler,
         IDictionary<ComponentModel, IHandler> model2Handler)
     {
-        if (IsSingleton(handler) == false)
+        if (!IsSingleton(handler))
         {
             yield break;
         }
@@ -109,7 +109,7 @@ public class PotentialLifestyleMismatchesDiagnostic(IKernel kernel) : IPotential
 
         public bool Checked(ComponentModel component)
         {
-            return _checkedComponents.Add(component) == false;
+            return !_checkedComponents.Add(component);
         }
 
         public IHandler[] GetHandlers()

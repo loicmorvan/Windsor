@@ -26,7 +26,7 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
 
     public void Inspect(IHandler handler, DependencyModel[] missingDependencies, IKernel kernel)
     {
-        if (_handlersChecked.Add(handler) == false)
+        if (!_handlersChecked.Add(handler))
         {
             return;
         }

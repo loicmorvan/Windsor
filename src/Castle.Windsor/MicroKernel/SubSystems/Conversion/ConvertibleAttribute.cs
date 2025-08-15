@@ -34,7 +34,7 @@ public class ConvertibleAttribute : Attribute
     [PublicAPI]
     public ConvertibleAttribute(Type converterType)
     {
-        if (converterType.Is<ITypeConverter>() == false)
+        if (!converterType.Is<ITypeConverter>())
         {
             throw new ArgumentException(
                 $"ConverterType {converterType.FullName} does not implement {typeof(ITypeConverter).FullName} interface",

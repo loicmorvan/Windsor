@@ -64,7 +64,7 @@ public class ListResolver : CollectionResolver
 
     protected override Type GetItemType(Type targetItemType)
     {
-        if (targetItemType.GetTypeInfo().IsGenericType == false ||
+        if (!targetItemType.GetTypeInfo().IsGenericType ||
             targetItemType.GetGenericTypeDefinition() != typeof(IList<>))
         {
             return null;

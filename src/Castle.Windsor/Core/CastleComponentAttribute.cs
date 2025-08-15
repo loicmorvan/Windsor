@@ -46,8 +46,7 @@ public class CastleComponentAttribute : LifestyleAttribute
         ServicesSpecifiedExplicitly = Services.Length > 0;
     }
 
-    [PublicAPI]
-    public bool HasName => string.IsNullOrEmpty(Name) == false;
+    [PublicAPI] public bool HasName => !string.IsNullOrEmpty(Name);
 
     public string Name { get; }
 
@@ -62,7 +61,7 @@ public class CastleComponentAttribute : LifestyleAttribute
             return new CastleComponentAttribute(type);
         }
 
-        if (attribute.ServicesSpecifiedExplicitly == false)
+        if (!attribute.ServicesSpecifiedExplicitly)
         {
             attribute.Services = [type];
         }

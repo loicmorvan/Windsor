@@ -338,7 +338,7 @@ public sealed class BasedOnDescriptor : IRegistration
     {
         return IsBasedOn(type, out baseTypes)
                && ExecuteIfCondition(type)
-               && ExecuteUnlessCondition(type) == false;
+               && !ExecuteUnlessCondition(type);
     }
 
     private bool ExecuteIfCondition(Type type)

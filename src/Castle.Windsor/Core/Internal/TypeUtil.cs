@@ -192,7 +192,7 @@ public static class TypeUtil
             name.Append('.');
         }
 
-        if (type.GetTypeInfo().IsGenericType == false)
+        if (!type.GetTypeInfo().IsGenericType)
         {
             name.Append(type.Name);
             return;

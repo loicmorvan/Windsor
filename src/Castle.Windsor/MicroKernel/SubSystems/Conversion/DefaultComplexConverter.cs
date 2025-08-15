@@ -187,7 +187,7 @@ public class DefaultComplexConverter : AbstractTypeConverter
 
     public override bool CanHandleType(Type type)
     {
-        return type.GetTypeInfo().IsPrimitive == false;
+        return !type.GetTypeInfo().IsPrimitive;
     }
 
     public override object PerformConversion(IConfiguration configuration, Type targetType)

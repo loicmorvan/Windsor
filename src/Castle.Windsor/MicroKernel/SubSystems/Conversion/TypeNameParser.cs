@@ -45,7 +45,7 @@ public class TypeNameParser : ITypeNameParser
         }
 
         var countString = name.Substring(genericIndex + 1, start - genericIndex - 1);
-        if (int.TryParse(countString, out var count) == false)
+        if (!int.TryParse(countString, out var count))
         {
             return null;
         }

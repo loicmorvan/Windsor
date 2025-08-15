@@ -126,6 +126,6 @@ public static class Classes
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	private static bool Filter(Type type)
 	{
-		return type.GetTypeInfo().IsClass && type.GetTypeInfo().IsAbstract == false;
+		return type.GetTypeInfo().IsClass && !type.GetTypeInfo().IsAbstract;
 	}
 }

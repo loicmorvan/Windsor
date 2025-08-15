@@ -144,7 +144,7 @@ public sealed partial class DefaultKernel
             {
                 try
                 {
-                    if (kernel._handlersChanged == false)
+                    if (!kernel._handlersChanged)
                     {
                         return;
                     }

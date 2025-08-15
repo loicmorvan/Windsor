@@ -34,7 +34,7 @@ public static class ComponentServicesUtil
             return;
         }
 
-        if (newService.GetTypeInfo().IsClass == false)
+        if (!newService.GetTypeInfo().IsClass)
         {
             throw new ArgumentException(
                 $"Type {newService} is not a class nor an interface, and those are the only values allowed.");

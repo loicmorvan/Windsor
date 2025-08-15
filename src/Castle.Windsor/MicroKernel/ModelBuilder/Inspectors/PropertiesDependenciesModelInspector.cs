@@ -151,6 +151,6 @@ public class PropertiesDependenciesModelInspector(IConversionManager converter) 
 
     private static bool IsValidPropertyDependency(PropertyInfo property)
     {
-        return IsSettable(property) && HasParameters(property) == false && HasDoNotWireAttribute(property) == false;
+        return IsSettable(property) && !HasParameters(property) && !HasDoNotWireAttribute(property);
     }
 }

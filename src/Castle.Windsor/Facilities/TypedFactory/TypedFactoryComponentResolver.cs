@@ -79,7 +79,7 @@ public sealed class TypedFactoryComponentResolver
             return false;
         }
 
-        return _fallbackToResolveByTypeIfNameNotFound == false ||
+        return !_fallbackToResolveByTypeIfNameNotFound ||
                kernel.LoadHandlerByName(_componentName, _componentType, _additionalArguments) != null;
     }
 }

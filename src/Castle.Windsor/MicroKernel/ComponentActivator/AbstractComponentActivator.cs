@@ -68,7 +68,7 @@ public abstract class AbstractComponentActivator : IComponentActivator
 
     protected virtual void ApplyCommissionConcerns(object instance)
     {
-        if (Model.Lifecycle.HasCommissionConcerns == false)
+        if (!Model.Lifecycle.HasCommissionConcerns)
         {
             return;
         }
@@ -104,7 +104,7 @@ public abstract class AbstractComponentActivator : IComponentActivator
 
     protected virtual void ApplyDecommissionConcerns(object instance)
     {
-        if (Model.Lifecycle.HasDecommissionConcerns == false)
+        if (!Model.Lifecycle.HasDecommissionConcerns)
         {
             return;
         }

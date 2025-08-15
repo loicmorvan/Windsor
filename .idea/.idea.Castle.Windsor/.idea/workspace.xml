@@ -8,14 +8,55 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection.Tests/Castle.Windsor.Extensions.DependencyInjection.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection.Tests/Castle.Windsor.Extensions.DependencyInjection.Tests.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/Castle.Windsor.Extensions.DependencyInjection.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/Castle.Windsor.Extensions.DependencyInjection.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.Hosting/Castle.Windsor.Extensions.Hosting.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.Hosting/Castle.Windsor.Extensions.Hosting.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/Castle.Windsor.Facilities.AspNetCore.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/Castle.Windsor.Facilities.AspNetCore.Tests.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/Castle.Windsor.Facilities.AspNetCore.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/Castle.Windsor.Facilities.AspNetCore.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Castle.Windsor.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Castle.Windsor.Tests.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Castle.Windsor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Castle.Windsor.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/SimpleServiceSupportInitialize.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/SimpleServiceSupportInitialize.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/SupportInitializeComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/SupportInitializeComponent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/DisposeOrderTestFixture.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/DisposeOrderTestFixture.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Interceptors/ByTypeInterceptorSelector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Interceptors/ByTypeInterceptorSelector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Core/CastleComponentAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Core/CastleComponentAttribute.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Core/InterceptorReferenceCollection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Core/InterceptorReferenceCollection.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Core/Internal/ComponentServicesUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Core/Internal/ComponentServicesUtil.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Core/Internal/ReflectionUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Core/Internal/ReflectionUtil.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Core/Internal/TypeUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Core/Internal/TypeUtil.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Core/LifecycleConcernsCollection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Core/LifecycleConcernsCollection.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Core/StandardPropertyFilters.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Core/StandardPropertyFilters.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Facilities/Startable/StartableFacility.nested.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Facilities/Startable/StartableFacility.nested.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Facilities/TypedFactory/Internal/DelegateServiceStrategy.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Facilities/TypedFactory/Internal/DelegateServiceStrategy.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Facilities/TypedFactory/Internal/TypedFactoryInterceptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Facilities/TypedFactory/Internal/TypedFactoryInterceptor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Facilities/TypedFactory/TypedFactoryComponentResolver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Facilities/TypedFactory/TypedFactoryComponentResolver.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Burden.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Burden.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ComponentActivator/AbstractComponentActivator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ComponentActivator/AbstractComponentActivator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ComponentActivator/DefaultComponentActivator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ComponentActivator/DefaultComponentActivator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ComponentActivator/FactoryMethodActivator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ComponentActivator/FactoryMethodActivator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Context/CreationContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Context/CreationContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/DefaultKernel_Events.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/DefaultKernel_Events.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Handlers/AbstractHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Handlers/AbstractHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Handlers/DefaultGenericHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Handlers/DefaultGenericHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Handlers/DefaultHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Handlers/DefaultHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Handlers/DependencyInspector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Handlers/DependencyInspector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Internal/LazyServiceStrategy.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Internal/LazyServiceStrategy.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Lifestyle/Pool/DefaultPool.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Lifestyle/Pool/DefaultPool.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ModelBuilder/Inspectors/PropertiesDependenciesModelInspector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/ModelBuilder/Inspectors/PropertiesDependenciesModelInspector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/AssemblyFilter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/AssemblyFilter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/BasedOnDescriptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/BasedOnDescriptor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Classes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Classes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ComponentRegistration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ComponentRegistration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Lifestyle/LifestyleGroup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Lifestyle/LifestyleGroup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Releasers/LifecycledComponentsReleasePolicy.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Releasers/LifecycledComponentsReleasePolicy.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Resolvers/DefaultDependencyResolver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Resolvers/DefaultDependencyResolver.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Resolvers/LazyOfTComponentLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Resolvers/LazyOfTComponentLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Resolvers/SpecializedResolvers/CollectionResolver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Resolvers/SpecializedResolvers/CollectionResolver.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Resolvers/SpecializedResolvers/ListResolver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Resolvers/SpecializedResolvers/ListResolver.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/ConvertibleAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/ConvertibleAttribute.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/DefaultComplexConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/DefaultComplexConverter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/GenericDictionaryConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/GenericDictionaryConverter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/TypeName.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/TypeName.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/TypeNameConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/TypeNameConverter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/TypeNameParser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Conversion/TypeNameParser.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Naming/DefaultNamingSubSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Naming/DefaultNamingSubSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/PotentialLifestyleMismatchesDiagnostic.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/PotentialLifestyleMismatchesDiagnostic.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/UsingContainerAsServiceLocatorDiagnostic.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/UsingContainerAsServiceLocatorDiagnostic.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Installer/DefaultComponentInstaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Installer/DefaultComponentInstaller.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Proxy/DefaultProxyFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Proxy/DefaultProxyFactory.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,33 +131,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;1040357a-a374-4805-ae55-296a10391d40.executor&quot;: &quot;Debug&quot;,
-    &quot;36c383d8-1096-48c6-9b6c-8e57ac7b4b8d.executor&quot;: &quot;Run&quot;,
-    &quot;457fe246-3a65-482c-9b97-436b5d6e2078.executor&quot;: &quot;Debug&quot;,
-    &quot;544ebf71-769d-49f6-88b1-47a73962a2b1.executor&quot;: &quot;Run&quot;,
-    &quot;6356ce7a-e504-4c39-a7e4-fe4a2206522d.executor&quot;: &quot;Run&quot;,
-    &quot;6735a692-6eea-4ff7-a309-8dd38fbf00bf.executor&quot;: &quot;Debug&quot;,
-    &quot;7c93ec0e-d2e1-442e-8418-ad90b07a71b7.executor&quot;: &quot;Run&quot;,
-    &quot;7c964d5d-15cd-4425-a015-ad6d5f0fc580.executor&quot;: &quot;Debug&quot;,
-    &quot;89dda535-a689-4076-a660-df5d01541ebe.executor&quot;: &quot;Debug&quot;,
-    &quot;92c054ad-452f-41b6-a548-9856400a347d.executor&quot;: &quot;Debug&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;T4 Template Run Configuration.ModelFakes.tt.executor&quot;: &quot;Run&quot;,
-    &quot;e0ad4eed-3a6f-49ec-852e-59ba3136ace6.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;more-cleanup&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C#&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "1040357a-a374-4805-ae55-296a10391d40.executor": "Debug",
+    "2dc3fd48-7f19-46dc-9e61-9ca484058a3d.executor": "Run",
+    "36c383d8-1096-48c6-9b6c-8e57ac7b4b8d.executor": "Run",
+    "457fe246-3a65-482c-9b97-436b5d6e2078.executor": "Debug",
+    "544ebf71-769d-49f6-88b1-47a73962a2b1.executor": "Run",
+    "6356ce7a-e504-4c39-a7e4-fe4a2206522d.executor": "Run",
+    "6735a692-6eea-4ff7-a309-8dd38fbf00bf.executor": "Debug",
+    "7c93ec0e-d2e1-442e-8418-ad90b07a71b7.executor": "Run",
+    "7c964d5d-15cd-4425-a015-ad6d5f0fc580.executor": "Debug",
+    "89dda535-a689-4076-a660-df5d01541ebe.executor": "Debug",
+    "92c054ad-452f-41b6-a548-9856400a347d.executor": "Debug",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "T4 Template Run Configuration.ModelFakes.tt.executor": "Run",
+    "e0ad4eed-3a6f-49ec-852e-59ba3136ace6.executor": "Run",
+    "git-widget-placeholder": "more-cleanup",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode.C#",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="Push.Settings">
     <force-push-targets>
       <force-push-target remote-path="origin" branch="net9" />
@@ -192,15 +234,7 @@
       <workItem from="1755003593080" duration="3856000" />
       <workItem from="1755026350056" duration="4815000" />
       <workItem from="1755085691344" duration="1926000" />
-      <workItem from="1755264280661" duration="811000" />
-    </task>
-    <task id="LOCAL-00056" summary="Made `SlimReadWriteLock` class `sealed`, changed specific methods from `public` to `private` to reduce surface area, and ensure stricter encapsulation.">
-      <option name="closed" value="true" />
-      <created>1754247997667</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1754247997667</updated>
+      <workItem from="1755264280661" duration="1581000" />
     </task>
     <task id="LOCAL-00057" summary="Refactored constructors and methods across multiple files to use default parameter values, removed redundant overloads, and streamlined implementations for improved consistency and readability.">
       <option name="closed" value="true" />
@@ -586,7 +620,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755086329035</updated>
     </task>
-    <option name="localTasksCounter" value="105" />
+    <task id="LOCAL-00105" summary="Updated all dependencies to latest versions.">
+      <option name="closed" value="true" />
+      <created>1755265110075</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1755265110075</updated>
+    </task>
+    <option name="localTasksCounter" value="106" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -621,7 +663,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Removed unused method parameters from multiple interfaces, classes, and test cases to simplify method signatures and improve code clarity. Consolidated parameter-less methods for consistency and maintainability across core and test files." />
     <MESSAGE value="Added ReSharper suppression comments for unused type parameters in interfaces and removed unused method parameters in `WindsorContainerBuilder`. Simplified method signatures and resolved inspection warnings across test and core files." />
     <MESSAGE value="Marked unused parameters with `#pragma warning` suppressions, removed redundant method bodies, and added `[PublicAPI]` annotations to enhance code clarity and maintainability across core files and test cases." />
     <MESSAGE value="Removed unused method parameters in `ICatalog` and `SimpleCatalog`, refactored `RemoveItem` method to align with updated interface definitions, and suppressed ReSharper warnings for unused parameters." />
@@ -646,7 +687,8 @@
     <MESSAGE value="Removed obsolete test interfaces and generic mapper class, and added `[UsedImplicitly]` annotations to specific mappers to improve maintainability and code clarity." />
     <MESSAGE value="Removed obsolete test component implementations and interfaces, replacing them with concise definitions to reduce clutter and improve maintainability." />
     <MESSAGE value="Marked multiple disposable and test classes as `sealed`, removed redundant constructors, replaced initializations with concise definitions, and applied `GC.SuppressFinalize` in disposable components for improved reliability and maintainability." />
-    <option name="LAST_COMMIT_MESSAGE" value="Marked multiple disposable and test classes as `sealed`, removed redundant constructors, replaced initializations with concise definitions, and applied `GC.SuppressFinalize` in disposable components for improved reliability and maintainability." />
+    <MESSAGE value="Updated all dependencies to latest versions." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated all dependencies to latest versions." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

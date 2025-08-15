@@ -49,7 +49,7 @@ public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryCompon
     {
         // don't check whether the factory was already disposed: it may be a call to Dispose or
         // Release methods, which must remain functional after dispose as well
-        if (TryGetMethod(invocation, out var method) == false)
+        if (!TryGetMethod(invocation, out var method))
         {
             throw new InvalidOperationException(
                 $"Can't find information about factory method {invocation.Method}. This is most likely a bug. Please report it.");

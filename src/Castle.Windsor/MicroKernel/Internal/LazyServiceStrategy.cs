@@ -32,6 +32,6 @@ public class LazyServiceStrategy : IGenericServiceStrategy
     {
         Debug.Assert(service.GetGenericTypeDefinition() == typeof(Lazy<>));
         var argument = service.GetTypeInfo().GetGenericArguments().Single();
-        return argument.IsPrimitiveTypeOrCollection() == false;
+        return !argument.IsPrimitiveTypeOrCollection();
     }
 }

@@ -73,7 +73,7 @@ public class InterceptorReferenceCollection(ComponentModel component) : IMutable
     /// <param name="interceptorReference">The interceptor reference.</param>
     public void AddIfNotInCollection(InterceptorReference interceptorReference)
     {
-        if (_list.Contains(interceptorReference) == false)
+        if (!_list.Contains(interceptorReference))
         {
             AddLast(interceptorReference);
         }

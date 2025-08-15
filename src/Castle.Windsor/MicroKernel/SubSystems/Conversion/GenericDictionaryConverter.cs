@@ -103,7 +103,7 @@ public class GenericDictionaryConverter : AbstractTypeConverter
                         _parent.Context.Composition.PerformConversion<Type>(itemConfig.Attributes["keyType"]);
                 }
 
-                if (convertKeyTo.Is<TKey>() == false)
+                if (!convertKeyTo.Is<TKey>())
                 {
                     throw new ArgumentException(
                         string.Format(
@@ -124,7 +124,7 @@ public class GenericDictionaryConverter : AbstractTypeConverter
                         _parent.Context.Composition.PerformConversion<Type>(itemConfig.Attributes["valueType"]);
                 }
 
-                if (convertValueTo.Is<TValue>() == false)
+                if (!convertValueTo.Is<TValue>())
                 {
                     throw new ArgumentException(
                         string.Format(

@@ -121,7 +121,7 @@ public class AssemblyFilter : IAssemblyProvider
     {
         try
         {
-            if (Directory.Exists(_directoryName) == false)
+            if (!Directory.Exists(_directoryName))
             {
                 return [];
             }

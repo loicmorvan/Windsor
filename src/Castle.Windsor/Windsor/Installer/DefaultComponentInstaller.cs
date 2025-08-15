@@ -60,7 +60,7 @@ public sealed class DefaultComponentInstaller : IComponentsInstaller
         IConversionManager conversionManager, ICollection<Assembly> assemblies)
     {
         var typeName = installer.Attributes["type"];
-        if (string.IsNullOrEmpty(typeName) == false)
+        if (!string.IsNullOrEmpty(typeName))
         {
             var type = conversionManager.PerformConversion<Type>(typeName);
             AddInstaller(cache, type);
@@ -68,7 +68,7 @@ public sealed class DefaultComponentInstaller : IComponentsInstaller
         }
 
         _assemblyName = installer.Attributes["assembly"];
-        if (string.IsNullOrEmpty(_assemblyName) == false)
+        if (!string.IsNullOrEmpty(_assemblyName))
         {
             var assembly = ReflectionUtil.GetAssemblyNamed(_assemblyName);
             if (assemblies.Contains(assembly))
@@ -121,8 +121,8 @@ public sealed class DefaultComponentInstaller : IComponentsInstaller
     private static bool IsInstaller(Type type)
     {
         return type.GetTypeInfo().IsClass &&
-               type.GetTypeInfo().IsAbstract == false &&
-               type.GetTypeInfo().IsGenericTypeDefinition == false &&
+               !type.GetTypeInfo().IsAbstract &&
+               !type.GetTypeInfo().IsGenericTypeDefinition &&
                type.Is<IWindsorInstaller>();
     }
 

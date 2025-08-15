@@ -54,7 +54,7 @@ public class StandardPropertyFilters
                 .Select(p =>
                 {
                     properties.Remove(p);
-                    return callback(p, isRequired == false);
+                    return callback(p, !isRequired);
                 }).ToArray();
             return props;
         };

@@ -98,7 +98,7 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
         CustomizeOptions(proxyGenOptions, kernel, model, constructorArguments);
 
         var interfaces = proxyOptions.AdditionalInterfaces;
-        if (model.HasClassServices == false)
+        if (!model.HasClassServices)
         {
             var firstService = model.Services.First();
             var additionalInterfaces = model.Services.Skip(1).Concat(interfaces).ToArray();
@@ -200,7 +200,7 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
     {
         var proxyOptions = model.ObtainProxyOptions();
 
-        return model.HasClassServices == false &&
-               proxyOptions.OmitTarget == false;
+        return !model.HasClassServices &&
+               !proxyOptions.OmitTarget;
     }
 }

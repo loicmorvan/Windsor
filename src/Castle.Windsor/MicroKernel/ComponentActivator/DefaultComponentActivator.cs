@@ -82,7 +82,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
 
         var createProxy = Kernel.ProxyFactory.ShouldCreateProxy(Model);
 
-        if (createProxy == false && Model.Implementation.GetTypeInfo().IsAbstract)
+        if (!createProxy && Model.Implementation.GetTypeInfo().IsAbstract)
         {
             throw new ComponentRegistrationException(
                 string.Format(
@@ -179,7 +179,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
         var winnerPoints = 0;
         foreach (var candidate in Model.Constructors)
         {
-            if (CheckCtorCandidate(candidate, context, out var candidatePoints) == false)
+            if (!CheckCtorCandidate(candidate, context, out var candidatePoints))
             {
                 continue;
             }
@@ -329,7 +329,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
         }
         catch (Exception e)
         {
-            if (property.Dependency.IsOptional == false)
+            if (!property.Dependency.IsOptional)
             {
                 throw;
             }

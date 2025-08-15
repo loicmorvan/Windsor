@@ -37,7 +37,7 @@ public partial class StartableFacility
     {
         protected override void Start(IHandler handler)
         {
-            if (TryStart(handler) == false)
+            if (!TryStart(handler))
             {
                 CacheHandler(handler);
             }
@@ -64,7 +64,7 @@ public partial class StartableFacility
             base.Init();
             Events.Kernel.ComponentRegistered += delegate
             {
-                if (_inStart == false)
+                if (!_inStart)
                 {
                     Signal();
                 }
@@ -73,7 +73,7 @@ public partial class StartableFacility
 
         protected override void Start(IHandler handler)
         {
-            if (TryStart(handler) == false)
+            if (!TryStart(handler))
             {
                 CacheHandler(handler);
             }

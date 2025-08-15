@@ -921,8 +921,8 @@ public class ComponentRegistration<TService> : IRegistration
         }
 
         if (Implementation == null &&
-            (_potentialServices.First().GetTypeInfo().IsClass == false ||
-             _potentialServices.First().GetTypeInfo().IsSealed == false))
+            (!_potentialServices.First().GetTypeInfo().IsClass ||
+             !_potentialServices.First().GetTypeInfo().IsSealed))
         {
             Implementation = typeof(LateBoundComponent);
         }

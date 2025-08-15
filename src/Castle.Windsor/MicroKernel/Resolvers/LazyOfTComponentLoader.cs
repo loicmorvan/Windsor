@@ -30,7 +30,7 @@ public class LazyOfTComponentLoader : ILazyComponentLoader
             return null;
         }
 
-        if (service.GetTypeInfo().IsGenericType == false)
+        if (!service.GetTypeInfo().IsGenericType)
         {
             return null;
         }

@@ -198,7 +198,7 @@ public class TypeNameConverter : AbstractTypeConverter
 
     private static void Insert(IDictionary<string, MultiType> collection, string key, Type value)
     {
-        if (collection.TryGetValue(key, out var existing) == false)
+        if (!collection.TryGetValue(key, out var existing))
         {
             collection[key] = new MultiType(value);
             return;

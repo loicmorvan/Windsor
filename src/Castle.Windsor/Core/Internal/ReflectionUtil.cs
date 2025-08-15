@@ -66,7 +66,7 @@ public static class ReflectionUtil
 
     public static Assembly GetAssemblyNamed(string assemblyName)
     {
-        Debug.Assert(string.IsNullOrEmpty(assemblyName) == false);
+        Debug.Assert(!string.IsNullOrEmpty(assemblyName));
 
         try
         {
@@ -101,7 +101,7 @@ public static class ReflectionUtil
         if (nameFilter != null)
         {
             if (nameFilter.GetInvocationList().Cast<Predicate<AssemblyName>>()
-                .Any(predicate => predicate(assemblyName) == false))
+                .Any(predicate => !predicate(assemblyName)))
             {
                 return null;
             }
@@ -114,7 +114,7 @@ public static class ReflectionUtil
         }
 
         return assemblyFilter.GetInvocationList().Cast<Predicate<Assembly>>()
-            .Any(predicate => predicate(assembly) == false)
+            .Any(predicate => !predicate(assembly))
             ? null
             : assembly;
     }
@@ -172,7 +172,7 @@ public static class ReflectionUtil
             return type.GetElementType();
         }
 
-        if (type.GetTypeInfo().IsGenericType == false || type.GetTypeInfo().IsGenericTypeDefinition)
+        if (!type.GetTypeInfo().IsGenericType || type.GetTypeInfo().IsGenericTypeDefinition)
         {
             return null;
         }
@@ -312,7 +312,7 @@ public static class ReflectionUtil
     private static void AddApplicationAssemblies(Assembly assembly, HashSet<Assembly> assemblies,
         string applicationName)
     {
-        if (assemblies.Add(assembly) == false)
+        if (!assemblies.Add(assembly))
         {
             return;
         }
