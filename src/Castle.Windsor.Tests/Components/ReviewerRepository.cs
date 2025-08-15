@@ -17,14 +17,4 @@ using JetBrains.Annotations;
 namespace Castle.Windsor.Tests.Components;
 
 [UsedImplicitly]
-public class ReviewerRepository : DemoRepository<IReviewer>
-{
-    public new ICache<IReviewer> Cache { get; set; }
-
-    public new string Name { get; set; }
-
-    public IReviewer Get()
-    {
-        return null;
-    }
-}
+public class ReviewerRepository : DemoRepository<IReviewer>;

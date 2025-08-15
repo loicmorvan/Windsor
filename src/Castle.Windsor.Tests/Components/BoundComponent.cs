@@ -26,7 +26,10 @@ public class BoundComponent : IComponent
     [UsedImplicitly]
     public class Binder
     {
+        // ReSharper disable once UnusedMember.Global
+#pragma warning disable CA1822
         public IHandler Bind(IHandler[] handlers)
+#pragma warning restore CA1822
         {
             return handlers.First();
         }

@@ -57,37 +57,41 @@ public class StartableFacilityTestCase
     [Fact]
     public void Startable_with_throwing_property_dependency()
     {
-        HasThrowingPropertyDependency.InstancesStarted = 0;
-        HasThrowingPropertyDependency.InstancesCreated = 0;
+        var dataRepository = new DataRepository();
         _kernel.AddFacility<StartableFacility>();
         _kernel.Register(
+            Component.For<DataRepository>().Instance(dataRepository),
             Component.For<ThrowsInCtor>(),
             Component.For<HasThrowingPropertyDependency>()
-                .StartUsingMethod(x => HasThrowingPropertyDependency.Start)
+                .StartUsingMethod(x => x.Start)
         );
 
-        Assert.Equal(1, HasThrowingPropertyDependency.InstancesCreated);
-        Assert.Equal(1, HasThrowingPropertyDependency.InstancesStarted);
+        Assert.Equal(1, dataRepository[".ctor"]);
+        Assert.Equal(1, dataRepository["Start"]);
     }
 
     [Fact]
     public void Starts_component_without_start_method()
     {
-        ClassWithInstanceCount.InstancesCount = 0;
+        var dataRepository = new DataRepository();
         _kernel.AddFacility<StartableFacility>(f => f.DeferredTryStart());
-        _kernel.Register(Component.For<ClassWithInstanceCount>().Start());
-        Assert.Equal(1, ClassWithInstanceCount.InstancesCount);
+        _kernel.Register(
+            Component.For<DataRepository>().Instance(dataRepository),
+            Component.For<ClassWithInstanceCount>().Start());
+        Assert.Equal(1, dataRepository[".ctor"]);
     }
 
     [Fact]
     public void Starts_component_without_start_method_AllTypes()
     {
-        ClassWithInstanceCount.InstancesCount = 0;
+        var dataRepository = new DataRepository();
         _kernel.AddFacility<StartableFacility>(f => f.DeferredTryStart());
-        _kernel.Register(Classes.FromAssembly(_currentAssembly)
+        _kernel.Register(
+            Component.For<DataRepository>().Instance(dataRepository),
+            Classes.FromAssembly(_currentAssembly)
             .Where(t => t == typeof(ClassWithInstanceCount))
             .Configure(c => c.Start()));
-        Assert.Equal(1, ClassWithInstanceCount.InstancesCount);
+        Assert.Equal(1, dataRepository[".ctor"]);
     }
 
     [Fact]
@@ -147,17 +151,19 @@ public class StartableFacilityTestCase
     [Fact]
     public void TestStartableCallsStartOnlyOnceOnError()
     {
-        StartableWithError.StartedCount = 0;
+        var dataRepository = new DataRepository();
         _kernel.AddFacility<StartableFacility>();
 
         var ex =
             Assert.Throws<Exception>(() =>
-                _kernel.Register(Component.For<StartableWithError>(),
+                _kernel.Register(
+                    Component.For<DataRepository>().Instance(dataRepository),
+                    Component.For<StartableWithError>(),
                     Component.For<ICommon>().ImplementedBy<CommonImpl1>()));
 
         // Every additional registration causes Start to be called again and again...
         Assert.Equal("This should go bonk", ex.Message);
-        Assert.Equal(1, StartableWithError.StartedCount);
+        Assert.Equal(1, dataRepository["Start"]);
     }
 
     /// <summary>

@@ -1,6 +1,7 @@
 using System.Reflection;
 using Castle.Windsor.Facilities.Startable;
 using Castle.Windsor.MicroKernel.Registration;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 using Castle.Windsor.Windsor;
 
 namespace Castle.Windsor.Tests.Bugs.IoC_169;
@@ -10,13 +11,15 @@ public class IoC169
     [Fact]
     public void BulkRegistrations_WhenRegistrationMatchesNoInstancesOfService_StopsStartableFacilityFromWorking()
     {
-        AbstractBlackboard.PrepareForTest();
-
+        var dataRepository = new DataRepository();
+            
         var container = new WindsorContainer();
 
         container.AddFacility(new StartableFacility());
 
-        container.Register(Component.For(typeof(IBlackboard)).ImplementedBy<Blackboard>().Named("blackboard"));
+        container.Register(
+            Component.For<DataRepository>().Instance(dataRepository),
+            Component.For(typeof(IBlackboard)).ImplementedBy<Blackboard>().Named("blackboard"));
 
         var registrations = Classes.FromAssembly(GetType().GetTypeInfo().Assembly)
             .BasedOn<IServiceWithoutImplementation>()
@@ -26,6 +29,6 @@ public class IoC169
 
         container.Kernel.Register(Component.For<IChalk>().Named("chalk").Instance(new Chalk()));
 
-        Assert.True(AbstractBlackboard.Started); // fails here, service is never started
+        Assert.Equal(1, dataRepository["Start"]); // fails here, service is never started
     }
 }

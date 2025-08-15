@@ -13,19 +13,18 @@
 // limitations under the License.
 
 using Castle.Windsor.Core;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 
 namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 
-public class StartableWithError : IStartable
+public class StartableWithError(DataRepository dataRepository) : IStartable
 {
-    public static int StartedCount;
-
     public bool Started { get; private set; }
 
     public void Start()
     {
         Started = true;
-        StartedCount++;
+        dataRepository.RegisterCallerMemberName();
         throw new Exception("This should go bonk");
     }
 

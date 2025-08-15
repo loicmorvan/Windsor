@@ -12,22 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Windsor.Tests.Facilities.TypedFactory;
+
 namespace Castle.Windsor.Tests.ClassComponents;
 
 public class HasThrowingPropertyDependency
 {
-    public static int InstancesStarted;
-    public static int InstancesCreated;
+    private readonly DataRepository _dataRepository;
 
-    public HasThrowingPropertyDependency()
+    public HasThrowingPropertyDependency(DataRepository dataRepository)
     {
-        InstancesCreated++;
+        _dataRepository = dataRepository;
+        _dataRepository.RegisterCallerMemberName();
     }
 
     public ThrowsInCtor Property { get; set; }
 
-    public static void Start()
+    public void Start()
     {
-        InstancesStarted++;
+        _dataRepository.RegisterCallerMemberName();
     }
 }

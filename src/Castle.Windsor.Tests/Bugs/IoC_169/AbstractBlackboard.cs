@@ -1,22 +1,16 @@
 using Castle.Windsor.Core;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 
 namespace Castle.Windsor.Tests.Bugs.IoC_169;
 
-public abstract class AbstractBlackboard : IBlackboard, IStartable
+public abstract class AbstractBlackboard(DataRepository dataRepository) : IBlackboard, IStartable
 {
-    public static bool Started;
-
     public void Start()
     {
-        Started = true;
+        dataRepository.RegisterCallerMemberName();
     }
 
     public void Stop()
     {
-    }
-
-    public static void PrepareForTest()
-    {
-        Started = false;
     }
 }

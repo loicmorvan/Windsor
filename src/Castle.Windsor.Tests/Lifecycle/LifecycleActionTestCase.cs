@@ -14,6 +14,7 @@
 
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 using Castle.Windsor.Tests.Generics;
 
 namespace Castle.Windsor.Tests.Lifecycle;
@@ -46,9 +47,13 @@ public class LifecycleActionTestCase : AbstractContainerTestCase
     [Fact]
     public void CanModify_when_transient()
     {
-        MyService2.Staticname = "";
-        Container.Register(Component.For<IService2>().ImplementedBy<MyService2>()
-            .LifeStyle.Transient.OnCreate((_, instance) => instance.Name += "a"));
+        var dataRepository = new DataRepository();
+        dataRepository.RegisterValue("Name", string.Empty);
+
+        Container.Register(
+            Component.For<DataRepository>().Instance(dataRepository),
+            Component.For<IService2>().ImplementedBy<MyService2>()
+                .LifeStyle.Transient.OnCreate((_, instance) => instance.Name += "a"));
         var service = Container.Resolve<IService2>();
         Assert.Equal("a", service.Name);
         service = Container.Resolve<IService2>();
@@ -58,10 +63,14 @@ public class LifecycleActionTestCase : AbstractContainerTestCase
     [Fact]
     public void CanModify_when_transient_multiple_ordered()
     {
-        MyService2.Staticname = "";
-        Container.Register(Component.For<IService2>().ImplementedBy<MyService2>()
-            .LifeStyle.Transient.OnCreate((_, instance) => instance.Name += "a",
-                (_, instance) => instance.Name += "b"));
+        var dataRepository = new DataRepository();
+        dataRepository.RegisterValue("Name", string.Empty);
+
+        Container.Register(
+            Component.For<DataRepository>().Instance(dataRepository),
+            Component.For<IService2>().ImplementedBy<MyService2>()
+                .LifeStyle.Transient.OnCreate((_, instance) => instance.Name += "a",
+                    (_, instance) => instance.Name += "b"));
         var service = Container.Resolve<IService2>();
         Assert.Equal("ab", service.Name);
 
