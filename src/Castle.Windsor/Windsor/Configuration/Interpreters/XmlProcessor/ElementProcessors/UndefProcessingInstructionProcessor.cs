@@ -24,7 +24,7 @@ public class UndefProcessingInstructionProcessor : AbstractStatementElementProce
 
     public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
     {
-        var node = nodeList.Current as XmlProcessingInstruction;
+        var node = (XmlProcessingInstruction)nodeList.Current;
 
         engine.RemoveFlag(node.Data);
 

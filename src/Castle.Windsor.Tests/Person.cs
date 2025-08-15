@@ -1,11 +1,6 @@
 namespace Castle.Windsor.Tests;
 
-public class Person
+public class Person(IWatcher watcher)
 {
-    public readonly IWatcher Watcher;
-
-    public Person(IWatcher watcher)
-    {
-        Watcher = watcher;
-    }
+    public readonly IWatcher Watcher = watcher;
 }

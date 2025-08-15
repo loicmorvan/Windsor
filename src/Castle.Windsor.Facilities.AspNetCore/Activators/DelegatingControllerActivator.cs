@@ -17,18 +17,16 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 
 namespace Castle.Windsor.Facilities.AspNetCore.Activators;
 
-internal sealed class DelegatingControllerActivator : IControllerActivator
+internal sealed class DelegatingControllerActivator(
+    Func<ControllerContext, object> controllerCreator,
+    Action<ControllerContext, object> controllerReleaser)
+    : IControllerActivator
 {
-    private readonly Func<ControllerContext, object> _controllerCreator;
-    private readonly Action<ControllerContext, object> _controllerReleaser;
+    private readonly Func<ControllerContext, object> _controllerCreator =
+        controllerCreator ?? throw new ArgumentNullException(nameof(controllerCreator));
 
-    public DelegatingControllerActivator(
-        Func<ControllerContext, object> controllerCreator,
-        Action<ControllerContext, object> controllerReleaser)
-    {
-        _controllerCreator = controllerCreator ?? throw new ArgumentNullException(nameof(controllerCreator));
-        _controllerReleaser = controllerReleaser ?? throw new ArgumentNullException(nameof(controllerReleaser));
-    }
+    private readonly Action<ControllerContext, object> _controllerReleaser =
+        controllerReleaser ?? throw new ArgumentNullException(nameof(controllerReleaser));
 
     public object Create(ControllerContext context)
     {

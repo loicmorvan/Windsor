@@ -43,8 +43,8 @@ public sealed class GraphTestCase : IDisposable
 
         var vertices = TopologicalSortAlgo.Sort(nodes);
 
-        Assert.Equal("c", (vertices[0] as ComponentModel).Name);
-        Assert.Equal("b", (vertices[1] as ComponentModel).Name);
-        Assert.Equal("a", (vertices[2] as ComponentModel).Name);
+        Assert.Equal("c", ((ComponentModel)vertices[0]).Name);
+        Assert.Equal("b", ((ComponentModel)vertices[1]).Name);
+        Assert.Equal("a", ((ComponentModel)vertices[2]).Name);
     }
 }

@@ -14,15 +14,9 @@
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
-public class UsesFooAndBarDelegateCtor
+public class UsesFooAndBarDelegateCtor(Func<Bar> barFactory, Func<Foo> fooFactory)
 {
-    public UsesFooAndBarDelegateCtor(Func<Bar> barFactory, Func<Foo> fooFactory)
-    {
-        BarFactory = barFactory;
-        FooFactory = fooFactory;
-    }
+    public Func<Bar> BarFactory { get; private set; } = barFactory;
 
-    public Func<Bar> BarFactory { get; private set; }
-
-    public Func<Foo> FooFactory { get; private set; }
+    public Func<Foo> FooFactory { get; private set; } = fooFactory;
 }

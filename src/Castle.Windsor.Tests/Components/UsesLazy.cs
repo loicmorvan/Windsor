@@ -14,12 +14,7 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class UsesLazy<T>
+public class UsesLazy<T>(Lazy<T> lazy)
 {
-    public UsesLazy(Lazy<T> lazy)
-    {
-        Lazy = lazy;
-    }
-
-    public Lazy<T> Lazy { get; }
+    public Lazy<T> Lazy { get; } = lazy;
 }

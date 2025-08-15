@@ -14,12 +14,7 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class UsesUri
+public class UsesUri(Uri uri)
 {
-    public UsesUri(Uri uri)
-    {
-        Uri = uri;
-    }
-
-    public Uri Uri { get; }
+    public Uri Uri { get; } = uri;
 }

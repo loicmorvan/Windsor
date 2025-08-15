@@ -14,14 +14,9 @@
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
-public class GenericComponentWithIntArg<T>
+public class GenericComponentWithIntArg<T>(int arg)
 {
-    public GenericComponentWithIntArg(int arg)
-    {
-        Property = arg;
-    }
-
-    public int Property { get; private set; }
+    public int Property { get; private set; } = arg;
 
     public T Value { get; set; }
 }

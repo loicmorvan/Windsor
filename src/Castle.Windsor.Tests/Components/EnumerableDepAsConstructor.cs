@@ -14,12 +14,7 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class EnumerableDepAsConstructor
+public class EnumerableDepAsConstructor(IEnumerable<IEmptyService> services)
 {
-    public EnumerableDepAsConstructor(IEnumerable<IEmptyService> services)
-    {
-        Services = services;
-    }
-
-    public IEnumerable<IEmptyService> Services { get; }
+    public IEnumerable<IEmptyService> Services { get; } = services;
 }

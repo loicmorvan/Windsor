@@ -18,22 +18,15 @@ using Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 namespace Castle.Windsor.MicroKernel.Registration.Interceptor;
 
-public class InterceptorGroup<TS> : RegistrationGroup<TS>
+public class InterceptorGroup<TS>(ComponentRegistration<TS> registration, InterceptorReference[] interceptors)
+    : RegistrationGroup<TS>(registration)
     where TS : class
 {
-    private readonly InterceptorReference[] _interceptors;
-
-    public InterceptorGroup(ComponentRegistration<TS> registration, InterceptorReference[] interceptors)
-        : base(registration)
-    {
-        _interceptors = interceptors;
-    }
-
     public ComponentRegistration<TS> Anywhere
     {
         get
         {
-            AddDescriptor(new InterceptorDescriptor(_interceptors));
+            AddDescriptor(new InterceptorDescriptor(interceptors));
             return Registration;
         }
     }
@@ -42,7 +35,7 @@ public class InterceptorGroup<TS> : RegistrationGroup<TS>
     {
         get
         {
-            AddDescriptor(new InterceptorDescriptor(_interceptors, InterceptorDescriptor.Where.First));
+            AddDescriptor(new InterceptorDescriptor(interceptors, InterceptorDescriptor.Where.First));
             return Registration;
         }
     }
@@ -51,14 +44,14 @@ public class InterceptorGroup<TS> : RegistrationGroup<TS>
     {
         get
         {
-            AddDescriptor(new InterceptorDescriptor(_interceptors, InterceptorDescriptor.Where.Last));
+            AddDescriptor(new InterceptorDescriptor(interceptors, InterceptorDescriptor.Where.Last));
             return Registration;
         }
     }
 
     public ComponentRegistration<TS> AtIndex(int index)
     {
-        AddDescriptor(new InterceptorDescriptor(_interceptors, index));
+        AddDescriptor(new InterceptorDescriptor(interceptors, index));
         return Registration;
     }
 

@@ -26,7 +26,7 @@ public class DefinedProcessingInstructionProcessor : AbstractXmlNodeProcessor
 
     public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
     {
-        var node = nodeList.Current as XmlProcessingInstruction;
+        var node = (XmlProcessingInstruction)nodeList.Current;
 
         engine.AddFlag(node.Data);
 

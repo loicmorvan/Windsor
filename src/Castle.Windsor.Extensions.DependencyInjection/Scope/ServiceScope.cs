@@ -16,17 +16,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Castle.Windsor.Extensions.DependencyInjection.Scope;
 
-internal class ServiceScope : IServiceScope
+internal class ServiceScope(IDisposable windsorScope, IServiceProvider serviceProvider) : IServiceScope
 {
-    private readonly IDisposable _scope;
+    private readonly IDisposable _scope = windsorScope ?? throw new ArgumentNullException(nameof(windsorScope));
 
-    public ServiceScope(IDisposable windsorScope, IServiceProvider serviceProvider)
-    {
-        _scope = windsorScope ?? throw new ArgumentNullException(nameof(windsorScope));
-        ServiceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-    }
-
-    public IServiceProvider ServiceProvider { get; }
+    public IServiceProvider ServiceProvider { get; } =
+        serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
 
     public void Dispose()
     {

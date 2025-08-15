@@ -20,18 +20,11 @@ namespace Castle.Windsor.Tests.Components;
 
 [Transient]
 [UsedImplicitly]
-public class ComponentWithConfigs
+public class ComponentWithConfigs(string name, int port, IDictionary dict)
 {
-    public ComponentWithConfigs(string name, int port, IDictionary dict)
-    {
-        Name = name;
-        Port = port;
-        Dict = dict;
-    }
+    public IDictionary Dict { get; } = dict;
 
-    public IDictionary Dict { get; }
+    public string Name { get; } = name;
 
-    public string Name { get; }
-
-    public int Port { get; }
+    public int Port { get; } = port;
 }

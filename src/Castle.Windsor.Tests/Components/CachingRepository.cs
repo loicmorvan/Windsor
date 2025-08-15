@@ -14,14 +14,9 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class CachingRepository<T> : IRepository<T>
+public class CachingRepository<T>(ICache<T> cache) : IRepository<T>
 {
-    public CachingRepository(ICache<T> cache)
-    {
-        Cache = cache;
-    }
-
-    public ICache<T> Cache { get; private set; }
+    public ICache<T> Cache { get; private set; } = cache;
 
     public T Get(int id)
     {

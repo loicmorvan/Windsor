@@ -17,14 +17,9 @@ using JetBrains.Annotations;
 namespace Castle.Windsor.Tests.Components;
 
 [UsedImplicitly]
-public class ResultFinderStringDecorator : IResultFinder<string>
+public class ResultFinderStringDecorator(IResultFinder<string> finder) : IResultFinder<string>
 {
-    public ResultFinderStringDecorator(IResultFinder<string> finder)
-    {
-        Finder = finder;
-    }
-
-    public IResultFinder<string> Finder { get; }
+    public IResultFinder<string> Finder { get; } = finder;
 
     public string Process()
     {

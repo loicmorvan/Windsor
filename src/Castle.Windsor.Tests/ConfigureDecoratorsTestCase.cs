@@ -101,14 +101,9 @@ public class ConfigureDecoratorsTestCase
         }
     }
 
-    private class DoNothingServiceDecorator : IDoNothingService
+    private class DoNothingServiceDecorator(IDoNothingService inner) : IDoNothingService
     {
-        public DoNothingServiceDecorator(IDoNothingService inner)
-        {
-            Inner = inner;
-        }
-
-        public IDoNothingService Inner { get; }
+        public IDoNothingService Inner { get; } = inner;
 
         public void DoNothing()
         {
@@ -116,12 +111,8 @@ public class ConfigureDecoratorsTestCase
         }
     }
 
-    private class DoSomethingService : IDoSomethingService
+    private class DoSomethingService(IDoNothingService service) : IDoSomethingService
     {
-        public DoSomethingService(IDoNothingService service)
-        {
-        }
-
         public void DoSomething()
         {
             throw new NotImplementedException();

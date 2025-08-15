@@ -58,16 +58,9 @@ public class TypeNameParser : ITypeNameParser
             return null;
         }
 
-        isPotentiallyFullyQualifiedName = false;
         name = name[..start];
 
-        return isPotentiallyFullyQualifiedName
-            ?
-            //well at this point it either is a fully qualified name, or invalid string
-            new TypeName(name)
-            :
-            // at this point we assume we have just the type name, probably prefixed with namespace so let's see which one is it
-            BuildName(name, genericTypes);
+        return BuildName(name, genericTypes);
     }
 
     private static TypeName BuildName(string name, TypeName[] genericTypes)

@@ -20,17 +20,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Castle.Windsor.Extensions.DependencyInjection;
 
-internal class WindsorScopedServiceProvider : IServiceProvider, ISupportRequiredService, IDisposable
+internal class WindsorScopedServiceProvider(IWindsorContainer container)
+    : IServiceProvider, ISupportRequiredService, IDisposable
 {
-    private readonly IWindsorContainer _container;
-    private readonly ExtensionContainerScopeBase _scope;
+    private readonly ExtensionContainerScopeBase _scope = ExtensionContainerScopeCache.Current;
     private bool _disposing;
-
-    public WindsorScopedServiceProvider(IWindsorContainer container)
-    {
-        _container = container;
-        _scope = ExtensionContainerScopeCache.Current;
-    }
 
     public void Dispose()
     {
@@ -46,7 +40,7 @@ internal class WindsorScopedServiceProvider : IServiceProvider, ISupportRequired
 
         _disposing = true;
         _scope?.Dispose();
-        _container.Dispose();
+        container.Dispose();
     }
 
     public object GetService(Type serviceType)
@@ -67,18 +61,18 @@ internal class WindsorScopedServiceProvider : IServiceProvider, ISupportRequired
 
     private object ResolveInstanceOrNull(Type serviceType, bool isOptional)
     {
-        if (_container.Kernel.HasComponent(serviceType))
+        if (container.Kernel.HasComponent(serviceType))
         {
-            return _container.Resolve(serviceType);
+            return container.Resolve(serviceType);
         }
 
         if (!serviceType.GetTypeInfo().IsGenericType ||
             serviceType.GetGenericTypeDefinition() != typeof(IEnumerable<>))
         {
-            return isOptional ? null : _container.Resolve(serviceType);
+            return isOptional ? null : container.Resolve(serviceType);
         }
 
-        var allObjects = _container.ResolveAll(serviceType.GenericTypeArguments[0]);
+        var allObjects = container.ResolveAll(serviceType.GenericTypeArguments[0]);
         return allObjects;
 
     }

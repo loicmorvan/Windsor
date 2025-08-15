@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.DynamicProxy;
 
 namespace Castle.Windsor.Tests.Interceptors;
@@ -34,14 +35,15 @@ public class ResultModifierInterceptor : IInterceptor
         if (invocation.Method.Name.Equals("Sum"))
         {
             invocation.Proceed();
-            var result = invocation.ReturnValue;
-            if (!_returnValue.HasValue)
+            if (_returnValue is { } value)
             {
-                invocation.ReturnValue = (int)result + 1;
+                invocation.ReturnValue = value;
                 return;
             }
 
-            invocation.ReturnValue = _returnValue.Value;
+            var result = invocation.ReturnValue;
+            Debug.Assert(result != null, nameof(result) + " != null");
+            invocation.ReturnValue = (int)result + 1;
             return;
         }
 

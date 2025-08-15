@@ -14,12 +14,7 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class EmptyServiceDecorator : IEmptyService
+public class EmptyServiceDecorator(IEmptyService other) : IEmptyService
 {
-    public EmptyServiceDecorator(IEmptyService other)
-    {
-        Other = other;
-    }
-
-    public IEmptyService Other { get; private set; }
+    public IEmptyService Other { get; private set; } = other;
 }

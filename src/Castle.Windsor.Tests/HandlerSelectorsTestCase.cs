@@ -89,14 +89,9 @@ public class HandlerSelectorsTestCase
         [UsedImplicitly] event Action<string> OnSomethingInterestingToWatch;
     }
 
-    private class Person
+    private class Person(IWatcher watcher)
     {
-        public readonly IWatcher Watcher;
-
-        public Person(IWatcher watcher)
-        {
-            Watcher = watcher;
-        }
+        public readonly IWatcher Watcher = watcher;
     }
 
     public class SatiWatcher : IWatcher

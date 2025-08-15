@@ -4,28 +4,19 @@ using Castle.Windsor.Tests.Components;
 
 namespace Castle.Windsor.Tests;
 
-public class ReturnAExtension : IResolveExtension
+public class ReturnAExtension(A a, bool proceed = false) : IResolveExtension
 {
-    private readonly A _a;
-    private readonly bool _proceed;
-
-    public ReturnAExtension(A a, bool proceed = false)
-    {
-        _a = a;
-        _proceed = proceed;
-    }
-
     public void Init(IKernel kernel)
     {
     }
 
     public void Intercept(ResolveInvocation invocation)
     {
-        if (_proceed)
+        if (proceed)
         {
             invocation.Proceed();
         }
 
-        invocation.ResolvedInstance = _a;
+        invocation.ResolvedInstance = a;
     }
 }

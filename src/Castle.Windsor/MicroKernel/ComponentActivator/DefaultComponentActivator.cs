@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using System.Reflection;
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
@@ -296,6 +297,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
             var setMethod = property.Property.GetSetMethod();
             try
             {
+                Debug.Assert(setMethod != null, nameof(setMethod) + " != null");
                 setMethod.Invoke(instance, [value]);
             }
             catch (Exception ex)

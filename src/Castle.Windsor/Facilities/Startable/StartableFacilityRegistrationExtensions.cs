@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
 using Castle.Windsor.MicroKernel.Facilities;
@@ -111,6 +112,8 @@ public static class StartableFacilityRegistrationExtensions
         var createDelegate = EnsureIs<MethodCallExpression>(call.Operand);
         var method = EnsureIs<ConstantExpression>(createDelegate.Object);
 
-        return ((MethodInfo)method.Value).Name;
+        var methodValue = method.Value;
+        Debug.Assert(methodValue is MethodInfo);
+        return ((MethodInfo)methodValue).Name;
     }
 }

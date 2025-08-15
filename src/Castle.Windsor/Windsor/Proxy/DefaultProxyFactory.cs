@@ -71,11 +71,6 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
 
     private static void ReleaseHook(ProxyGenerationOptions proxyGenOptions, IKernel kernel)
     {
-        if (proxyGenOptions.Hook == null)
-        {
-            return;
-        }
-
         kernel.ReleaseComponent(proxyGenOptions.Hook);
     }
 

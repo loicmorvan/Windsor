@@ -21,14 +21,13 @@ using Castle.Windsor.Tests.ClassComponents;
 namespace Castle.Windsor.Tests.Components;
 
 /// <summary>Summary description for MyCustomerActivator.</summary>
-public class MyCustomerActivator : AbstractComponentActivator
+public class MyCustomerActivator(
+    ComponentModel model,
+    IKernelInternal kernel,
+    ComponentInstanceDelegate onCreation,
+    ComponentInstanceDelegate onDestruction)
+    : AbstractComponentActivator(model, kernel, onCreation, onDestruction)
 {
-    public MyCustomerActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation,
-        ComponentInstanceDelegate onDestruction)
-        : base(model, kernel, onCreation, onDestruction)
-    {
-    }
-
     protected override object InternalCreate(CreationContext context)
     {
         var customer = new CustomerImpl

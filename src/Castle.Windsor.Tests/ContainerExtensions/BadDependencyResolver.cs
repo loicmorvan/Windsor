@@ -19,15 +19,8 @@ using Castle.Windsor.Tests.Components;
 
 namespace Castle.Windsor.Tests.ContainerExtensions;
 
-public class BadDependencyResolver : ISubDependencyResolver
+public class BadDependencyResolver(IKernel kernel) : ISubDependencyResolver
 {
-    private readonly IKernel _kernel;
-
-    public BadDependencyResolver(IKernel kernel)
-    {
-        _kernel = kernel;
-    }
-
     public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
@@ -37,6 +30,6 @@ public class BadDependencyResolver : ISubDependencyResolver
     public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
-        return _kernel.Resolve<IBookStore>();
+        return kernel.Resolve<IBookStore>();
     }
 }

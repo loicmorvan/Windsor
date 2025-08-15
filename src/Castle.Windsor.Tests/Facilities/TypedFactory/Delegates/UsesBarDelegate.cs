@@ -14,17 +14,10 @@
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
-public class UsesBarDelegate
+public class UsesBarDelegate(Func<string, string, Bar> barFactory)
 {
-    private readonly Func<string, string, Bar> _barFactory;
-
-    public UsesBarDelegate(Func<string, string, Bar> barFactory)
-    {
-        _barFactory = barFactory;
-    }
-
     public Bar GetBar(string name, string description)
     {
-        return _barFactory(name, description);
+        return barFactory(name, description);
     }
 }

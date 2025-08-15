@@ -16,14 +16,8 @@ using Castle.Windsor.Tests.Components;
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class TwoEmptyServiceDependenciesConstructor
+public class TwoEmptyServiceDependenciesConstructor(IEmptyService one, IEmptyService two)
 {
-    public TwoEmptyServiceDependenciesConstructor(IEmptyService one, IEmptyService two)
-    {
-        One = one;
-        Two = two;
-    }
-
-    public IEmptyService One { get; private set; }
-    public IEmptyService Two { get; private set; }
+    public IEmptyService One { get; private set; } = one;
+    public IEmptyService Two { get; private set; } = two;
 }

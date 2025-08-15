@@ -16,18 +16,16 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 
 namespace Castle.Windsor.Facilities.AspNetCore.Activators;
 
-internal sealed class DelegatingViewComponentActivator : IViewComponentActivator
+internal sealed class DelegatingViewComponentActivator(
+    Func<Type, object> viewComponentCreator,
+    Action<object> viewComponentReleaser)
+    : IViewComponentActivator
 {
-    private readonly Func<Type, object> _viewComponentCreator;
-    private readonly Action<object> _viewComponentReleaser;
+    private readonly Func<Type, object> _viewComponentCreator =
+        viewComponentCreator ?? throw new ArgumentNullException(nameof(viewComponentCreator));
 
-    public DelegatingViewComponentActivator(Func<Type, object> viewComponentCreator,
-        Action<object> viewComponentReleaser)
-    {
-        _viewComponentCreator = viewComponentCreator ?? throw new ArgumentNullException(nameof(viewComponentCreator));
-        _viewComponentReleaser =
-            viewComponentReleaser ?? throw new ArgumentNullException(nameof(viewComponentReleaser));
-    }
+    private readonly Action<object> _viewComponentReleaser =
+        viewComponentReleaser ?? throw new ArgumentNullException(nameof(viewComponentReleaser));
 
     public object Create(ViewComponentContext context)
     {

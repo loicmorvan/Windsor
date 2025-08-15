@@ -16,12 +16,7 @@ using Castle.Windsor.Tests.Components;
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class HasObjectPropertyAndTypedCtorParameterDifferentName
+public class HasObjectPropertyAndTypedCtorParameterDifferentName(IEmptyService emptyService)
 {
-    public HasObjectPropertyAndTypedCtorParameterDifferentName(IEmptyService emptyService)
-    {
-        SomeService = emptyService;
-    }
-
-    public object SomeService { get; set; }
+    public object SomeService { get; set; } = emptyService;
 }

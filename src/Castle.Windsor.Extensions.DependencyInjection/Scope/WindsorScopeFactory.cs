@@ -18,21 +18,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Castle.Windsor.Extensions.DependencyInjection.Scope;
 
-internal class WindsorScopeFactory : IServiceScopeFactory
+internal class WindsorScopeFactory(IWindsorContainer container) : IServiceScopeFactory
 {
-    private readonly IWindsorContainer _scopeFactoryContainer;
-
-    public WindsorScopeFactory(IWindsorContainer container)
-    {
-        _scopeFactoryContainer = container;
-    }
-
     public IServiceScope CreateScope()
     {
         var scope = ExtensionContainerScope.BeginScope();
 
         //since WindsorServiceProvider is scoped, this gives us new instance
-        var provider = _scopeFactoryContainer.Resolve<IServiceProvider>();
+        var provider = container.Resolve<IServiceProvider>();
 
         return new ServiceScope(scope, provider);
     }

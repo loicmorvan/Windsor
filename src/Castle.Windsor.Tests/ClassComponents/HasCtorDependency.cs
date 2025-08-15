@@ -16,12 +16,7 @@ using Castle.Windsor.Tests.Components;
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class HasCtorDependency
+public class HasCtorDependency(ISimpleService dependency)
 {
-    public HasCtorDependency(ISimpleService dependency)
-    {
-        Dependency = dependency;
-    }
-
-    public ISimpleService Dependency { get; private set; }
+    public ISimpleService Dependency { get; private set; } = dependency;
 }

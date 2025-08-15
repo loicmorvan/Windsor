@@ -15,15 +15,11 @@
 namespace Castle.Windsor.Tests.ClassComponents;
 
 /// <summary>Summary description for DefaultSpamServiceWithConstructor.</summary>
-public class DefaultSpamServiceWithConstructor
+public class DefaultSpamServiceWithConstructor(
+    DefaultMailSenderService mailsender,
+    DefaultTemplateEngine templateEngine)
 {
-    public DefaultSpamServiceWithConstructor(DefaultMailSenderService mailsender, DefaultTemplateEngine templateEngine)
-    {
-        MailSender = mailsender;
-        TemplateEngine = templateEngine;
-    }
+    public DefaultMailSenderService MailSender { get; } = mailsender;
 
-    public DefaultMailSenderService MailSender { get; }
-
-    public DefaultTemplateEngine TemplateEngine { get; }
+    public DefaultTemplateEngine TemplateEngine { get; } = templateEngine;
 }

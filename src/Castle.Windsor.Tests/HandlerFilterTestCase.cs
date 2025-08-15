@@ -134,22 +134,15 @@ public class HandlerFilterTestCase : AbstractContainerTestCase
         }
     }
 
-    private class DelegatingFilter : IHandlersFilter
+    private class DelegatingFilter(Type typeToFilter, Func<IHandler, bool> filter = null) : IHandlersFilter
     {
-        private readonly Func<IHandler, bool> _filter;
-        private readonly Type _typeToFilter;
-
-        public DelegatingFilter(Type typeToFilter, Func<IHandler, bool> filter = null)
-        {
-            _typeToFilter = typeToFilter;
-            _filter = filter ?? (_ => true);
-        }
+        private readonly Func<IHandler, bool> _filter = filter ?? (_ => true);
 
         public IHandler[] HandlersAsked { get; private set; }
 
         public bool HasOpinionAbout(Type service)
         {
-            return service == _typeToFilter;
+            return service == typeToFilter;
         }
 
         public IHandler[] SelectHandlers(Type service, IHandler[] handlers)

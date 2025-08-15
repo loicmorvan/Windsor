@@ -183,9 +183,9 @@ public class TypedParametersTestCase : AbstractContainerTestCase
         var withInt = Kernel.Resolve<UsesIGeneric<int>>();
 
         Assert.IsType<GenericImpl2<string>>(withString.Dependency);
-        Assert.Equal(1, (withString.Dependency as GenericImpl2<string>).Value);
+        Assert.Equal(1, ((GenericImpl2<string>)withString.Dependency).Value);
         Assert.IsType<GenericImpl2<int>>(withInt.Dependency);
-        Assert.Equal(2, (withInt.Dependency as GenericImpl2<int>).Value);
+        Assert.Equal(2, ((GenericImpl2<int>)withInt.Dependency).Value);
     }
 
     [Fact]

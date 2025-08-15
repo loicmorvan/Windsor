@@ -81,19 +81,12 @@ public class GenericListConverter : AbstractTypeConverter
         return converterHelper.ConvertConfigurationToCollection(configuration);
     }
 
-    private class ListHelper<T> : IGenericCollectionConverterHelper
+    private class ListHelper<T>(GenericListConverter parent) : IGenericCollectionConverterHelper
     {
-        private readonly GenericListConverter _parent;
-
-        public ListHelper(GenericListConverter parent)
-        {
-            _parent = parent;
-        }
-
         public object ConvertConfigurationToCollection(IConfiguration configuration)
         {
             return configuration.Children
-                .Select(itemConfig => _parent.Context.Composition.PerformConversion<T>(itemConfig)).ToList();
+                .Select(itemConfig => parent.Context.Composition.PerformConversion<T>(itemConfig)).ToList();
         }
     }
 }

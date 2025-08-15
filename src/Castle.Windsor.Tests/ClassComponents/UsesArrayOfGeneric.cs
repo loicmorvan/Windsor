@@ -14,12 +14,7 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class UsesArrayOfGeneric<T>
+public class UsesArrayOfGeneric<T>(IGeneric<T> items)
 {
-    public UsesArrayOfGeneric(IGeneric<T> items)
-    {
-        Items = items;
-    }
-
-    public IGeneric<T> Items { get; private set; }
+    public IGeneric<T> Items { get; private set; } = items;
 }

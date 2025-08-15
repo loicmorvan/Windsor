@@ -72,15 +72,8 @@ public class GenericDictionaryConverter : AbstractTypeConverter
         return collectionConverterHelper.ConvertConfigurationToCollection(configuration);
     }
 
-    private class DictionaryHelper<TKey, TValue> : IGenericCollectionConverterHelper
+    private class DictionaryHelper<TKey, TValue>(GenericDictionaryConverter parent) : IGenericCollectionConverterHelper
     {
-        private readonly GenericDictionaryConverter _parent;
-
-        public DictionaryHelper(GenericDictionaryConverter parent)
-        {
-            _parent = parent;
-        }
-
         public object ConvertConfigurationToCollection(IConfiguration configuration)
         {
             var dict = new Dictionary<TKey, TValue>();
@@ -100,7 +93,7 @@ public class GenericDictionaryConverter : AbstractTypeConverter
                 if (itemConfig.Attributes["keyType"] != null)
                 {
                     convertKeyTo =
-                        _parent.Context.Composition.PerformConversion<Type>(itemConfig.Attributes["keyType"]);
+                        parent.Context.Composition.PerformConversion<Type>(itemConfig.Attributes["keyType"]);
                 }
 
                 if (!convertKeyTo.Is<TKey>())
@@ -112,7 +105,7 @@ public class GenericDictionaryConverter : AbstractTypeConverter
                             typeof(TValue), convertKeyTo));
                 }
 
-                var key = (TKey)_parent.Context.Composition.PerformConversion(keyValue, convertKeyTo);
+                var key = (TKey)parent.Context.Composition.PerformConversion(keyValue, convertKeyTo);
 
                 // Preparing the value
 
@@ -121,7 +114,7 @@ public class GenericDictionaryConverter : AbstractTypeConverter
                 if (itemConfig.Attributes["valueType"] != null)
                 {
                     convertValueTo =
-                        _parent.Context.Composition.PerformConversion<Type>(itemConfig.Attributes["valueType"]);
+                        parent.Context.Composition.PerformConversion<Type>(itemConfig.Attributes["valueType"]);
                 }
 
                 if (!convertValueTo.Is<TValue>())
@@ -135,12 +128,12 @@ public class GenericDictionaryConverter : AbstractTypeConverter
                 if (itemConfig.Children.Count == 1)
                 {
                     dict.Add(key,
-                        (TValue)_parent.Context.Composition.PerformConversion(itemConfig.Children[0], convertValueTo));
+                        (TValue)parent.Context.Composition.PerformConversion(itemConfig.Children[0], convertValueTo));
                 }
                 else
                 {
                     dict.Add(key,
-                        (TValue)_parent.Context.Composition.PerformConversion(itemConfig.Value, convertValueTo));
+                        (TValue)parent.Context.Composition.PerformConversion(itemConfig.Value, convertValueTo));
                 }
             }
 

@@ -16,19 +16,12 @@ using Castle.Windsor.Tests.Components;
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
-public class UsesDisposableFooDelegate
+public class UsesDisposableFooDelegate(Func<int, DisposableFoo> myFooFactory)
 {
-    private readonly Func<int, DisposableFoo> _myFooFactory;
     private int _counter;
-
-    public UsesDisposableFooDelegate(Func<int, DisposableFoo> myFooFactory)
-    {
-        _myFooFactory = myFooFactory;
-        _counter = 0;
-    }
 
     public DisposableFoo GetFoo()
     {
-        return _myFooFactory(++_counter);
+        return myFooFactory(++_counter);
     }
 }

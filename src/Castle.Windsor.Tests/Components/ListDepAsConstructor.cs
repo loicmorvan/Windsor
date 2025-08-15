@@ -14,12 +14,7 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class ListDepAsConstructor
+public class ListDepAsConstructor(IList<IEmptyService> services)
 {
-    public ListDepAsConstructor(IList<IEmptyService> services)
-    {
-        Services = services;
-    }
-
-    public IList<IEmptyService> Services { get; }
+    public IList<IEmptyService> Services { get; } = services;
 }

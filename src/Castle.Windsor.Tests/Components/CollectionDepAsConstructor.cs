@@ -14,12 +14,7 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class CollectionDepAsConstructor
+public class CollectionDepAsConstructor(ICollection<IEmptyService> services)
 {
-    public CollectionDepAsConstructor(ICollection<IEmptyService> services)
-    {
-        Services = services;
-    }
-
-    public ICollection<IEmptyService> Services { get; }
+    public ICollection<IEmptyService> Services { get; } = services;
 }

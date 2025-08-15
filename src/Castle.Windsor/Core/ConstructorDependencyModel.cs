@@ -18,13 +18,9 @@ using Castle.Windsor.Core.Internal;
 namespace Castle.Windsor.Core;
 
 [Serializable]
-public class ConstructorDependencyModel : DependencyModel
+public class ConstructorDependencyModel(ParameterInfo parameter) : DependencyModel(parameter.Name,
+    parameter.ParameterType, false, parameter.HasDefaultValue(), parameter.DefaultValue)
 {
-    public ConstructorDependencyModel(ParameterInfo parameter)
-        : base(parameter.Name, parameter.ParameterType, false, parameter.HasDefaultValue(), parameter.DefaultValue)
-    {
-    }
-
     public ConstructorCandidate Constructor { get; private set; }
 
     internal void SetParentConstructor(ConstructorCandidate ctor)

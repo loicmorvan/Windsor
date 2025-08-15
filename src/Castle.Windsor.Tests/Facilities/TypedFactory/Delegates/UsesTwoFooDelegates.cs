@@ -14,20 +14,13 @@
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
-public class UsesTwoFooDelegates
+public class UsesTwoFooDelegates(Func<int, Foo> one, Func<int, Foo> two)
 {
     private int _counter;
 
-    public UsesTwoFooDelegates(Func<int, Foo> one, Func<int, Foo> two)
-    {
-        One = one;
-        Two = two;
-        _counter = 0;
-    }
+    private Func<int, Foo> One { get; } = one;
 
-    private Func<int, Foo> One { get; }
-
-    private Func<int, Foo> Two { get; }
+    private Func<int, Foo> Two { get; } = two;
 
     public Foo GetFooOne()
     {

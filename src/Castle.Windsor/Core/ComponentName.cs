@@ -16,16 +16,10 @@ using Castle.Windsor.Core.Internal;
 
 namespace Castle.Windsor.Core;
 
-public class ComponentName
+public class ComponentName(string name, bool setByUser)
 {
-    public ComponentName(string name, bool setByUser)
-    {
-        Name = Must.NotBeEmpty(name, "name");
-        SetByUser = setByUser;
-    }
-
-    public string Name { get; private set; }
-    public bool SetByUser { get; private set; }
+    public string Name { get; private set; } = Must.NotBeEmpty(name, "name");
+    public bool SetByUser { get; private set; } = setByUser;
 
     public override string ToString()
     {

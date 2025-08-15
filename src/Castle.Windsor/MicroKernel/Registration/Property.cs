@@ -15,19 +15,13 @@
 namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Represents a key/value pair.</summary>
-public class Property
+public class Property(object key, object value)
 {
-    public Property(object key, object value)
-    {
-        Key = key;
-        Value = value;
-    }
-
     /// <summary>Gets the property key.</summary>
-    public object Key { get; }
+    public object Key { get; } = key;
 
     /// <summary>Gets the property value.</summary>
-    public object Value { get; }
+    public object Value { get; } = value;
 
     /// <summary>Create a <see cref="PropertyKey" /> with key.</summary>
     /// <param name="key">The property key.</param>

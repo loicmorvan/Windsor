@@ -14,12 +14,7 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class AlarmGenerator
+public class AlarmGenerator(IAlarmSender sender)
 {
-    public AlarmGenerator(IAlarmSender sender)
-    {
-        Sender = sender;
-    }
-
-    public IAlarmSender Sender { get; }
+    public IAlarmSender Sender { get; } = sender;
 }

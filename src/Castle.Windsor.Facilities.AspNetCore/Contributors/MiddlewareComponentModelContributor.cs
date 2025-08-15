@@ -22,19 +22,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Castle.Windsor.Facilities.AspNetCore.Contributors;
 
-public class MiddlewareComponentModelContributor : IContributeComponentModelConstruction
+public class MiddlewareComponentModelContributor(IServiceCollection services, IApplicationBuilder applicationBuilder)
+    : IContributeComponentModelConstruction
 {
-    private readonly IApplicationBuilder _applicationBuilder;
-    private readonly IServiceCollection _services;
-    private IServiceProvider _provider;
+    private readonly IApplicationBuilder _applicationBuilder = applicationBuilder ??
+                                                               throw new InvalidOperationException(
+                                                                   "Please call `Container.GetFacility<AspNetCoreFacility>(f => f.RegistersMiddlewareInto(applicationBuilder));` first. This should happen before any middleware registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md");
 
-    public MiddlewareComponentModelContributor(IServiceCollection services, IApplicationBuilder applicationBuilder)
-    {
-        _services = services ?? throw new ArgumentNullException(nameof(services));
-        _applicationBuilder = applicationBuilder ??
-                              throw new InvalidOperationException(
-                                  "Please call `Container.GetFacility<AspNetCoreFacility>(f => f.RegistersMiddlewareInto(applicationBuilder));` first. This should happen before any middleware registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md");
-    }
+    private readonly IServiceCollection _services = services ?? throw new ArgumentNullException(nameof(services));
+    private IServiceProvider _provider;
 
     public void ProcessModel(IKernel kernel, ComponentModel model)
     {

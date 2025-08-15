@@ -140,6 +140,7 @@ public class TypeNameConverter : AbstractTypeConverter
         var anyAssemblyAdded = false;
 
         var context = DependencyContext.Default;
+        Debug.Assert(context != null, nameof(context) + " != null");
         var dependencies = context.RuntimeLibraries
             .SelectMany(library => library.GetDefaultAssemblyNames(context))
             .Distinct();

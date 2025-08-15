@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.Extensions.DependencyInjection.Extensions;
 using Castle.Windsor.MicroKernel.Registration;
 using Microsoft.Extensions.DependencyInjection;
@@ -86,6 +87,7 @@ internal static class RegistrationAdapter
         }
         else
         {
+            Debug.Assert(service.ImplementationFactory != null);
             result = service.ImplementationFactory.GetType().FullName;
         }
 
@@ -100,6 +102,7 @@ internal static class RegistrationAdapter
         return registration.UsingFactoryMethod(kernel =>
         {
             var serviceProvider = kernel.Resolve<IServiceProvider>();
+            Debug.Assert(service.ImplementationFactory != null);
             return service.ImplementationFactory(serviceProvider) as TService;
         });
     }

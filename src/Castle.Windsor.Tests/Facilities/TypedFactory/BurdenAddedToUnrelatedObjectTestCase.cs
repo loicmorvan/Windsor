@@ -62,14 +62,9 @@ public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTest
         void Release(T instance);
     }
 
-    public sealed class LongLivedService
+    public sealed class LongLivedService(IFactory<Foo> fooFactory)
     {
-        public LongLivedService(IFactory<Foo> fooFactory)
-        {
-            FooFactory = fooFactory;
-        }
-
-        private IFactory<Foo> FooFactory { get; }
+        private IFactory<Foo> FooFactory { get; } = fooFactory;
 
         public Foo SqlConnection { get; private set; }
 

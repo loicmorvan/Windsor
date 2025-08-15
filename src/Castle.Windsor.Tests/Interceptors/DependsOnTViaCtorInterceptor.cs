@@ -16,12 +16,7 @@ using Castle.DynamicProxy;
 
 namespace Castle.Windsor.Tests.Interceptors;
 
-public class DependsOnTViaCtorInterceptor<T> : StandardInterceptor
+public class DependsOnTViaCtorInterceptor<T>(T tee) : StandardInterceptor
 {
-    public DependsOnTViaCtorInterceptor(T tee)
-    {
-        Tee = tee;
-    }
-
-    public T Tee { get; }
+    public T Tee { get; } = tee;
 }

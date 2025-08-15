@@ -18,12 +18,7 @@ namespace Castle.Windsor.Tests.MicroKernel.Internal;
 
 public class SlimReadWriteLockTestCase
 {
-    private readonly SlimReadWriteLock _lock;
-
-    public SlimReadWriteLockTestCase()
-    {
-        _lock = new SlimReadWriteLock();
-    }
+    private readonly SlimReadWriteLock _lock = new();
 
     [Fact]
     public void Can_be_used_ForReading_multiple_nested_time()

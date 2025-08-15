@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
@@ -35,7 +36,9 @@ public class DelegateProxyFactory : IProxyFactoryExtension
 
     private static object GetInvokeDelegate(object instance, Type targetDelegateType)
     {
-        return instance.GetType().GetMethod("Invoke").CreateDelegate(targetDelegateType, instance);
+        var methodInfo = instance.GetType().GetMethod("Invoke");
+        Debug.Assert(methodInfo != null, nameof(methodInfo) + " != null");
+        return methodInfo.CreateDelegate(targetDelegateType, instance);
     }
 
     private static object GetProxyInstance(Type type, IInterceptor[] interceptors)

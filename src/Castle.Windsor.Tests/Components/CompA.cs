@@ -17,12 +17,7 @@ using JetBrains.Annotations;
 namespace Castle.Windsor.Tests.Components;
 
 [UsedImplicitly]
-public class CompA
+public class CompA(CompB compb)
 {
-    public CompA(CompB compb)
-    {
-        Compb = compb;
-    }
-
-    public CompB Compb { get; private set; }
+    public CompB Compb { get; private set; } = compb;
 }

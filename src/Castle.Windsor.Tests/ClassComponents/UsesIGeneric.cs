@@ -14,12 +14,7 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class UsesIGeneric<T>
+public class UsesIGeneric<T>(IGeneric<T> dependency)
 {
-    public UsesIGeneric(IGeneric<T> dependency)
-    {
-        Dependency = dependency;
-    }
-
-    public IGeneric<T> Dependency { get; }
+    public IGeneric<T> Dependency { get; } = dependency;
 }
