@@ -1,6 +1,3 @@
 namespace Castle.Windsor.Tests;
 
-public interface IPathProvider
-{
-    string Path { get; }
-}
+public interface IPathProvider;

@@ -72,11 +72,6 @@ public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTest
         {
             SqlConnection = FooFactory.Resolve();
         }
-
-        public void Dispose()
-        {
-            FooFactory.Release(SqlConnection);
-        }
     }
 
     public sealed class ShortLivedViewModel

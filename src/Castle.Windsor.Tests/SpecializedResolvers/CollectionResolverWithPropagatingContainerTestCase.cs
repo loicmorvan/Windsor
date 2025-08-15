@@ -75,7 +75,6 @@ public class CollectionResolverWithPropagatingContainerTestCase
         IComponentB[] componentsOfB,
         string greeting)
     {
-        public IKernel Kernel { get; } = kernel;
         public IComponentB[] ComponentsOfB { get; } = componentsOfB;
         public string Greeting { get; } = greeting;
     }

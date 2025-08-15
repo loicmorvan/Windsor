@@ -16,11 +16,11 @@ using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
+#pragma warning disable CS9113 // Parameter is unread.
 public class UsesFooDelegateAndInt(Func<int, Foo> myFooFactory, int additionalArgument)
+#pragma warning restore CS9113 // Parameter is unread.
 {
     private int _counter;
-
-    public int AdditionalArgument { get; set; } = additionalArgument;
 
     [PublicAPI]
     public Foo GetFoo()

@@ -9,20 +9,23 @@
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC108.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC108.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC_169/AbstractBlackboard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC_169/AbstractBlackboard.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC_169/Blackboard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC_169/Blackboard.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC_169/IoC169.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC_169/IoC169.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ClassWithInstanceCount.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ClassWithInstanceCount.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasThrowingPropertyDependency.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasThrowingPropertyDependency.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/PropertySetterThrows.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/PropertySetterThrows.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/BoundComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/BoundComponent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/MyService2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/MyService2.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ReviewerRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ReviewerRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/Startable/Components/StartableWithError.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/Startable/Components/StartableWithError.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/Startable/StartableFacilityTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/Startable/StartableFacilityTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/Startable/WithOverloads.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/Startable/WithOverloads.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifecycle/LifecycleActionTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifecycle/LifecycleActionTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ConfigHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ConfigHelper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ConfigureDecoratorsTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ConfigureDecoratorsTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/BurdenAddedToUnrelatedObjectTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/BurdenAddedToUnrelatedObjectTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Factories/IFactoryWithParametersTwoBases.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Factories/IFactoryWithParametersTwoBases.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IC.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IC.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IDevice.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IDevice.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IHasDefaultImplementation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IHasDefaultImplementation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IMyObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IMyObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IPathProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IPathProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IS.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IS.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ISp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ISp.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IWm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IWm.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Interceptors/DependsOnTViaCtorInterceptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Interceptors/DependsOnTViaCtorInterceptor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Interceptors/DependsOnTViaPropertyInterceptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Interceptors/DependsOnTViaPropertyInterceptor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifecycle/DecomissioningResponsibilitiesTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifecycle/DecomissioningResponsibilitiesTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Pools/RecyclableComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Pools/RecyclableComponent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/SpecializedResolvers/CollectionResolverWithPropagatingContainerTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/SpecializedResolvers/CollectionResolverWithPropagatingContainerTestCase.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,7 +109,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "DotCoverContinuousTestingPageId",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -186,15 +189,7 @@
       <workItem from="1755026350056" duration="4815000" />
       <workItem from="1755085691344" duration="1926000" />
       <workItem from="1755264280661" duration="3097000" />
-      <workItem from="1755267527802" duration="8885000" />
-    </task>
-    <task id="LOCAL-00062" summary="Replaced `string.Format` with string interpolation in test assertions to improve readability and consistency.">
-      <option name="closed" value="true" />
-      <created>1754422647661</created>
-      <option name="number" value="00062" />
-      <option name="presentableId" value="LOCAL-00062" />
-      <option name="project" value="LOCAL" />
-      <updated>1754422647661</updated>
+      <workItem from="1755267527802" duration="10559000" />
     </task>
     <task id="LOCAL-00063" summary="Replaced local variables with constants across multiple test cases to improve immutability and code clarity.">
       <option name="closed" value="true" />
@@ -580,7 +575,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755289399212</updated>
     </task>
-    <option name="localTasksCounter" value="111" />
+    <task id="LOCAL-00111" summary="Replaced static counters with `DataRepository` in tests, updated constructors to use dependency injection, and refactored related logic for improved consistency and functionality.">
+      <option name="closed" value="true" />
+      <created>1755292350087</created>
+      <option name="number" value="00111" />
+      <option name="presentableId" value="LOCAL-00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1755292350087</updated>
+    </task>
+    <option name="localTasksCounter" value="112" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -615,7 +618,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Made properties in test fakes private set to enforce immutability and updated access modifiers in core and test files to improve consistency and code clarity." />
     <MESSAGE value="Removed unused classes, interfaces, and methods across test and core files to simplify codebase and improve maintainability. Added `[UsedImplicitly]` annotations where applicable." />
     <MESSAGE value="Added `[UsedImplicitly]` annotations to properties in `CustomerImpl` to suppress ReSharper warnings and added suppressions for suspicious type conversions in `DefaultProxyFactory`." />
     <MESSAGE value="Refactored test utils and related test cases: replaced Regex declarations with `[GeneratedRegex]`, simplified constructors with property initializers, converted methods/classes to partial where needed, and replaced redundant conditionals with modern syntax for improved readability and maintainability." />
@@ -640,7 +642,8 @@
     <MESSAGE value="Refactored constructors to use concise definitions, replaced redundant initializations, applied `Debug.Assert` for improved null handling, and removed unnecessary checks and obsolete methods for better readability and maintainability." />
     <MESSAGE value="Updated `HasTwoConstructors` to use optional parameter for concise definition and removed redundant constructor implementation." />
     <MESSAGE value="Removed redundant `#if DEBUG` initializations and streamlined `RunManager` configuration for improved clarity and maintainability." />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed redundant `#if DEBUG` initializations and streamlined `RunManager` configuration for improved clarity and maintainability." />
+    <MESSAGE value="Replaced static counters with `DataRepository` in tests, updated constructors to use dependency injection, and refactored related logic for improved consistency and functionality." />
+    <option name="LAST_COMMIT_MESSAGE" value="Replaced static counters with `DataRepository` in tests, updated constructors to use dependency injection, and refactored related logic for improved consistency and functionality." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

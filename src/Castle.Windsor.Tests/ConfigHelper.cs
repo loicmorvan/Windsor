@@ -20,9 +20,4 @@ internal static class ConfigHelper
     {
         return Path.Combine(AppContext.BaseDirectory, configFilePath);
     }
-
-    public static string ResolveConfigPath(string configFilePath, params object[] parameters)
-    {
-        return Path.Combine(AppContext.BaseDirectory, string.Format(configFilePath, parameters));
-    }
 }
