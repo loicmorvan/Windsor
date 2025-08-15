@@ -47,12 +47,8 @@ public class AttributeAwareConverter : AbstractTypeConverter
     {
         var converter = TryGetConverterInstance(type);
 
-        if (converter == null)
-        {
-            throw new InvalidOperationException("Type " + type.Name + " does not have a Convertible attribute.");
-        }
-
-        return converter;
+        return converter ??
+               throw new InvalidOperationException("Type " + type.Name + " does not have a Convertible attribute.");
     }
 
     private ITypeConverter TryGetConverterInstance(Type type)

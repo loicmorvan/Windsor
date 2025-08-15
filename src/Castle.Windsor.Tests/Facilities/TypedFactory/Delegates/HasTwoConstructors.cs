@@ -14,12 +14,8 @@
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
-public class HasTwoConstructors(Baz baz, string name)
+public class HasTwoConstructors(Baz baz, string name = null)
 {
-    public HasTwoConstructors(Baz baz) : this(baz, null)
-    {
-    }
-
     public Baz Baz { get; } = baz;
 
     public string Name { get; } = name;

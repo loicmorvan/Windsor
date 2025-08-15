@@ -33,22 +33,12 @@ public static class Must
             disposable.Dispose();
         }
 
-        if (!any)
-        {
-            throw new ArgumentException(name);
-        }
-
-        return arg;
+        return !any ? throw new ArgumentException(name) : arg;
     }
 
     [return: NotNull]
     public static T NotBeNull<T>(T arg, string name) where T : class
     {
-        if (arg == null)
-        {
-            throw new ArgumentNullException(name);
-        }
-
-        return arg;
+        return arg ?? throw new ArgumentNullException(name);
     }
 }

@@ -200,12 +200,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
             winnerPoints = candidatePoints;
         }
 
-        if (winnerCandidate == null)
-        {
-            throw new NoResolvableConstructorFoundException(Model.Implementation, Model);
-        }
-
-        return winnerCandidate;
+        return winnerCandidate ?? throw new NoResolvableConstructorFoundException(Model.Implementation, Model);
     }
 
     private static bool BestScoreSoFar(int candidatePoints, int winnerPoints, ConstructorCandidate winnerCandidate)

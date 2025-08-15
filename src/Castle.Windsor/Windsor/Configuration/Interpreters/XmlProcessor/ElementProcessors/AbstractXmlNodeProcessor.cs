@@ -81,24 +81,17 @@ public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
     /// <returns>child node as XmlElement</returns>
     protected static XmlElement GetNodeAsElement(XmlElement element, XmlNode child)
     {
-        if (child is not XmlElement result)
-        {
-            throw new XmlProcessorException("{0} expects XmlElement found {1}", element.Name, child.NodeType);
-        }
-
-        return result;
+        return child as XmlElement ??
+               throw new XmlProcessorException("{0} expects XmlElement found {1}", element.Name, child.NodeType);
     }
 
     protected static string GetRequiredAttribute(XmlElement element, string attribute)
     {
         var attValue = element.GetAttribute(attribute).Trim();
 
-        if (attValue == string.Empty)
-        {
-            throw new XmlProcessorException("'{0}' requires a non empty '{1}' attribute", element.Name, attribute);
-        }
-
-        return attValue;
+        return attValue == string.Empty
+            ? throw new XmlProcessorException("'{0}' requires a non empty '{1}' attribute", element.Name, attribute)
+            : attValue;
     }
 
     [PublicAPI]

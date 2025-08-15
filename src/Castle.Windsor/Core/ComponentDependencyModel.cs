@@ -23,6 +23,6 @@ public class ComponentDependencyModel(string referencedComponentName, Type servi
 #if DEBUG
         Initialized = true;
 #endif
-        Reference = DependencyKey;
+        ReferencedComponentName = DependencyKey;
     }
 }

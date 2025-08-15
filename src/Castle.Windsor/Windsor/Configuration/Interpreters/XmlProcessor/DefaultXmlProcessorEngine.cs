@@ -166,12 +166,9 @@ public partial class DefaultXmlProcessorEngine : IXmlProcessorEngine
     {
         flag = flag.Trim().ToLower();
 
-        if (!GetFlagPattern().IsMatch(flag))
-        {
-            throw new XmlProcessorException("Invalid flag name '{0}'", flag);
-        }
-
-        return flag;
+        return !GetFlagPattern().IsMatch(flag)
+            ? throw new XmlProcessorException("Invalid flag name '{0}'", flag)
+            : flag;
     }
 
     private IXmlNodeProcessor GetProcessor(XmlNode node)
