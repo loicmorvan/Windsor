@@ -36,6 +36,7 @@ public class ArrayConverter : AbstractTypeConverter
         var count = configuration.Children.Count;
         var itemType = targetType.GetElementType();
 
+        Debug.Assert(itemType != null);
         var array = Array.CreateInstance(itemType, count);
 
         var index = 0;
