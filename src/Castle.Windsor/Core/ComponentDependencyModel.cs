@@ -20,9 +20,6 @@ public class ComponentDependencyModel(string referencedComponentName, Type servi
 {
     public override void Init(ParameterModelCollection parameters)
     {
-#if DEBUG
-        Initialized = true;
-#endif
         ReferencedComponentName = DependencyKey;
     }
 }

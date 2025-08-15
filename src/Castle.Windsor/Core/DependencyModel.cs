@@ -27,9 +27,6 @@ public class DependencyModel(
     bool hasDefaultValue = false,
     object defaultValue = null)
 {
-#if DEBUG
-    protected bool Initialized;
-#endif
     protected ParameterModel ParameterModel;
 
     // TODO: add configuration so that information about override is attached to the dependency
@@ -116,9 +113,6 @@ public class DependencyModel(
 
     public virtual void Init(ParameterModelCollection parameters)
     {
-#if DEBUG
-        Initialized = true;
-#endif
         if (parameters == null)
         {
             return;
