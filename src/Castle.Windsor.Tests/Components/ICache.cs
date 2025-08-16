@@ -14,9 +14,5 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public interface ICache<T>
-{
-    T Get(string key);
-
-    void Put(string key, T item);
-}
+// ReSharper disable once UnusedTypeParameter
+public interface ICache<T>;

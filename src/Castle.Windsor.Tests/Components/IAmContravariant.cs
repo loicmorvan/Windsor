@@ -15,7 +15,4 @@
 namespace Castle.Windsor.Tests.Components;
 
 // ReSharper disable once UnusedTypeParameter
-public interface IAmContravariant<in T>
-{
-    void Method();
-}
+public interface IAmContravariant<in T>;

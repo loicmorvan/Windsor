@@ -17,12 +17,4 @@ using JetBrains.Annotations;
 namespace Castle.Windsor.Tests.Components;
 
 [UsedImplicitly]
-public class FailedResultFinder<T> : IResultFinder<T>
-{
-    public IResultFinder<T> Finder => null;
-
-    public T Process()
-    {
-        return default;
-    }
-}
+public class FailedResultFinder<T> : IResultFinder<T>;
