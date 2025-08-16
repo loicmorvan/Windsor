@@ -7,26 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ConfigHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ConfigHelper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ConfigureDecoratorsTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ConfigureDecoratorsTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/BurdenAddedToUnrelatedObjectTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/BurdenAddedToUnrelatedObjectTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Factories/IFactoryWithParametersTwoBases.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Factories/IFactoryWithParametersTwoBases.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IC.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IC.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IDevice.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IDevice.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IHasDefaultImplementation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IHasDefaultImplementation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IMyObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IMyObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IPathProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IPathProvider.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IS.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IS.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ISp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ISp.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IWm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IWm.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Interceptors/DependsOnTViaCtorInterceptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Interceptors/DependsOnTViaCtorInterceptor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Interceptors/DependsOnTViaPropertyInterceptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Interceptors/DependsOnTViaPropertyInterceptor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifecycle/DecomissioningResponsibilitiesTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifecycle/DecomissioningResponsibilitiesTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Pools/RecyclableComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Pools/RecyclableComponent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/SpecializedResolvers/CollectionResolverWithPropagatingContainerTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/SpecializedResolvers/CollectionResolverWithPropagatingContainerTestCase.cs" afterDir="false" />
-    </list>
+    <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -84,41 +65,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "1040357a-a374-4805-ae55-296a10391d40.executor": "Debug",
-    "2dc3fd48-7f19-46dc-9e61-9ca484058a3d.executor": "Run",
-    "36c383d8-1096-48c6-9b6c-8e57ac7b4b8d.executor": "Run",
-    "457fe246-3a65-482c-9b97-436b5d6e2078.executor": "Debug",
-    "54437557-b30d-4a31-834c-387d565fefaf.executor": "Run",
-    "544ebf71-769d-49f6-88b1-47a73962a2b1.executor": "Run",
-    "6356ce7a-e504-4c39-a7e4-fe4a2206522d.executor": "Run",
-    "6735a692-6eea-4ff7-a309-8dd38fbf00bf.executor": "Debug",
-    "7c93ec0e-d2e1-442e-8418-ad90b07a71b7.executor": "Run",
-    "7c964d5d-15cd-4425-a015-ad6d5f0fc580.executor": "Debug",
-    "89dda535-a689-4076-a660-df5d01541ebe.executor": "Debug",
-    "92c054ad-452f-41b6-a548-9856400a347d.executor": "Debug",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "T4 Template Run Configuration.ModelFakes.tt.executor": "Run",
-    "e0ad4eed-3a6f-49ec-852e-59ba3136ace6.executor": "Run",
-    "git-widget-placeholder": "more-cleanup",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "DotCoverContinuousTestingPageId",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;1040357a-a374-4805-ae55-296a10391d40.executor&quot;: &quot;Debug&quot;,
+    &quot;2dc3fd48-7f19-46dc-9e61-9ca484058a3d.executor&quot;: &quot;Run&quot;,
+    &quot;36c383d8-1096-48c6-9b6c-8e57ac7b4b8d.executor&quot;: &quot;Run&quot;,
+    &quot;457fe246-3a65-482c-9b97-436b5d6e2078.executor&quot;: &quot;Debug&quot;,
+    &quot;54437557-b30d-4a31-834c-387d565fefaf.executor&quot;: &quot;Run&quot;,
+    &quot;544ebf71-769d-49f6-88b1-47a73962a2b1.executor&quot;: &quot;Run&quot;,
+    &quot;6356ce7a-e504-4c39-a7e4-fe4a2206522d.executor&quot;: &quot;Run&quot;,
+    &quot;6735a692-6eea-4ff7-a309-8dd38fbf00bf.executor&quot;: &quot;Debug&quot;,
+    &quot;7c93ec0e-d2e1-442e-8418-ad90b07a71b7.executor&quot;: &quot;Run&quot;,
+    &quot;7c964d5d-15cd-4425-a015-ad6d5f0fc580.executor&quot;: &quot;Debug&quot;,
+    &quot;89dda535-a689-4076-a660-df5d01541ebe.executor&quot;: &quot;Debug&quot;,
+    &quot;92c054ad-452f-41b6-a548-9856400a347d.executor&quot;: &quot;Debug&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;T4 Template Run Configuration.ModelFakes.tt.executor&quot;: &quot;Run&quot;,
+    &quot;e0ad4eed-3a6f-49ec-852e-59ba3136ace6.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;more-cleanup&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;DotCoverContinuousTestingPageId&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="Push.Settings">
     <force-push-targets>
       <force-push-target remote-path="origin" branch="net9" />
     </force-push-targets>
   </component>
-  <component name="RunManager" selected=".NET Project.Castle.Windsor.Tests">
+  <component name="RunManager">
     <configuration name="Castle.Windsor.Tests" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -189,15 +170,7 @@
       <workItem from="1755026350056" duration="4815000" />
       <workItem from="1755085691344" duration="1926000" />
       <workItem from="1755264280661" duration="3097000" />
-      <workItem from="1755267527802" duration="10559000" />
-    </task>
-    <task id="LOCAL-00063" summary="Replaced local variables with constants across multiple test cases to improve immutability and code clarity.">
-      <option name="closed" value="true" />
-      <created>1754423769701</created>
-      <option name="number" value="00063" />
-      <option name="presentableId" value="LOCAL-00063" />
-      <option name="project" value="LOCAL" />
-      <updated>1754423769701</updated>
+      <workItem from="1755267527802" duration="10643000" />
     </task>
     <task id="LOCAL-00064" summary="Made various methods `static` across multiple test cases to improve immutability, simplify usage, and ensure consistency.">
       <option name="closed" value="true" />
@@ -583,7 +556,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755292350087</updated>
     </task>
-    <option name="localTasksCounter" value="112" />
+    <task id="LOCAL-00112" summary="Simplified interfaces and test classes by replacing method/property definitions with concise syntax, removed unused members, and applied `[UsedImplicitly]` annotations where necessary to improve code clarity and maintainability.">
+      <option name="closed" value="true" />
+      <created>1755294090833</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1755294090833</updated>
+    </task>
+    <option name="localTasksCounter" value="113" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -618,7 +599,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Removed unused classes, interfaces, and methods across test and core files to simplify codebase and improve maintainability. Added `[UsedImplicitly]` annotations where applicable." />
     <MESSAGE value="Added `[UsedImplicitly]` annotations to properties in `CustomerImpl` to suppress ReSharper warnings and added suppressions for suspicious type conversions in `DefaultProxyFactory`." />
     <MESSAGE value="Refactored test utils and related test cases: replaced Regex declarations with `[GeneratedRegex]`, simplified constructors with property initializers, converted methods/classes to partial where needed, and replaced redundant conditionals with modern syntax for improved readability and maintainability." />
     <MESSAGE value="Replaced `Thread.CurrentThread.ManagedThreadId` with `Environment.CurrentManagedThreadId` in scoped lifestyle tests for improved API usage consistency." />
@@ -643,7 +623,8 @@
     <MESSAGE value="Updated `HasTwoConstructors` to use optional parameter for concise definition and removed redundant constructor implementation." />
     <MESSAGE value="Removed redundant `#if DEBUG` initializations and streamlined `RunManager` configuration for improved clarity and maintainability." />
     <MESSAGE value="Replaced static counters with `DataRepository` in tests, updated constructors to use dependency injection, and refactored related logic for improved consistency and functionality." />
-    <option name="LAST_COMMIT_MESSAGE" value="Replaced static counters with `DataRepository` in tests, updated constructors to use dependency injection, and refactored related logic for improved consistency and functionality." />
+    <MESSAGE value="Simplified interfaces and test classes by replacing method/property definitions with concise syntax, removed unused members, and applied `[UsedImplicitly]` annotations where necessary to improve code clarity and maintainability." />
+    <option name="LAST_COMMIT_MESSAGE" value="Simplified interfaces and test classes by replacing method/property definitions with concise syntax, removed unused members, and applied `[UsedImplicitly]` annotations where necessary to improve code clarity and maintainability." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
