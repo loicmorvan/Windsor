@@ -14,9 +14,4 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class ContravariantBase : IAmContravariant<EmptyBase>
-{
-    public void Method()
-    {
-    }
-}
+public class ContravariantBase : IAmContravariant<EmptyBase>;

@@ -16,12 +16,9 @@ namespace Castle.Windsor.Tests.Components;
 
 public class CameraService : ICameraService
 {
+#pragma warning disable CA1822
     public void Record()
+#pragma warning restore CA1822
     {
-    }
-
-    public ICamera Add()
-    {
-        return new Camera();
     }
 }

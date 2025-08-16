@@ -15,14 +15,4 @@
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
 /// <summary>Summary description for MirandaProtocolHandler.</summary>
-public class MirandaProtocolHandler : IProtocolHandler
-{
-    #region IProtocolHandler Members
-
-    public void Handle()
-    {
-        // TODO:  Add MirandaProtocolHandler.Handle implementation
-    }
-
-    #endregion
-}
+public class MirandaProtocolHandler : IProtocolHandler;
