@@ -17,10 +17,10 @@ using JetBrains.Annotations;
 namespace Castle.Windsor.Tests.Components;
 
 [UsedImplicitly]
+#pragma warning disable CS9113 // Parameter is unread.
 public class ResultFinderStringDecorator(IResultFinder<string> finder) : IResultFinder<string>
+#pragma warning restore CS9113 // Parameter is unread.
 {
-    public IResultFinder<string> Finder { get; } = finder;
-
     public string Process()
     {
         return string.Empty;

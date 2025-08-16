@@ -14,9 +14,8 @@
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
+// ReSharper disable once UnusedTypeParameter
 public class GenericComponentWithIntArg<T>(int arg)
 {
     public int Property { get; private set; } = arg;
-
-    public T Value { get; set; }
 }

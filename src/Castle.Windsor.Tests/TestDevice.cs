@@ -16,5 +16,5 @@ public class TestDevice : BaseDevice
         _children = new List<IDevice>(theChildren);
     }
 
-    public override IEnumerable<IDevice> Children => _children;
+    public virtual IEnumerable<IDevice> Children => _children;
 }

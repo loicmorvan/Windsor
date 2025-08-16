@@ -14,7 +14,5 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public interface IResultFinder<out T>
-{
-    T Process();
-}
+// ReSharper disable once UnusedTypeParameter
+public interface IResultFinder<out T>;

@@ -56,10 +56,9 @@ public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTest
         public event EventHandler Disposed;
     }
 
-    public interface IFactory<T>
+    public interface IFactory<out T>
     {
         T Resolve();
-        void Release(T instance);
     }
 
     public sealed class LongLivedService(IFactory<Foo> fooFactory)

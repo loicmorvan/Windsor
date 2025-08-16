@@ -16,13 +16,11 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
 public class Bar
 {
-    // ReSharper disable once UnusedParameter.Local
-    public Bar(Baz baz, string name)
+    public Bar(
+        // ReSharper disable once UnusedParameter.Local
+        Baz baz,
+        // ReSharper disable once UnusedParameter.Local
+        string name)
     {
-        Name = name;
     }
-
-    public string Description { get; set; }
-
-    public string Name { get; }
 }
