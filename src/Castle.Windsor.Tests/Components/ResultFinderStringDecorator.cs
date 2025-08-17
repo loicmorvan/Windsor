@@ -18,13 +18,5 @@ namespace Castle.Windsor.Tests.Components;
 
 [UsedImplicitly]
 #pragma warning disable CS9113 // Parameter is unread.
-public class ResultFinderStringDecorator(IResultFinder<string> finder) : IResultFinder<string>
+public class ResultFinderStringDecorator(IResultFinder<string> finder) : IResultFinder<string>;
 #pragma warning restore CS9113 // Parameter is unread.
-{
-#pragma warning disable CA1822
-    public string Process()
-#pragma warning restore CA1822
-    {
-        return string.Empty;
-    }
-}

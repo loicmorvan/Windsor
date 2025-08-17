@@ -26,8 +26,6 @@ public class HasThrowingPropertyDependency
         _dataRepository.RegisterCallerMemberName();
     }
 
-    public ThrowsInCtor Property { get; set; }
-
     public void Start()
     {
         _dataRepository.RegisterCallerMemberName();

@@ -23,15 +23,6 @@ namespace Castle.Windsor.Windsor.Configuration.Interpreters;
 /// <summary>Provides common methods for those who wants to implement <see cref="IConfigurationInterpreter" /></summary>
 public abstract class AbstractInterpreter : IConfigurationInterpreter
 {
-    protected const string ContainersNodeName = "containers";
-    protected const string ContainerNodeName = "container";
-    protected const string FacilitiesNodeName = "facilities";
-    protected const string FacilityNodeName = "facility";
-    protected const string ComponentsNodeName = "components";
-    protected const string ComponentNodeName = "component";
-    protected const string InstallersNodeName = "installers";
-    protected const string InstallNodeName = "install";
-
     private readonly Stack<IResource> _resourceStack = new();
 
     protected AbstractInterpreter(IResource source)

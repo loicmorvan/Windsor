@@ -37,10 +37,7 @@ public class IoC102
         Assert.Same(reader2, consumer.Reader);
     }
 
-    public interface IReader
-    {
-        string Read();
-    }
+    public interface IReader;
 
     public class AlphaReader : IReader
     {

@@ -16,7 +16,6 @@ using Castle.Windsor.Tests.Components;
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class HasCtorDependency(ISimpleService dependency)
-{
-    public ISimpleService Dependency { get; private set; } = dependency;
-}
+#pragma warning disable CS9113 // Parameter is unread.
+public class HasCtorDependency(ISimpleService dependency);
+#pragma warning restore CS9113 // Parameter is unread.

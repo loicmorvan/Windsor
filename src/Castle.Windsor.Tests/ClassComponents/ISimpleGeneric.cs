@@ -16,5 +16,6 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public interface ISimpleGeneric<out T>
 {
+    // ReSharper disable once UnusedMember.Global
     T Operation();
 }

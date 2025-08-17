@@ -41,14 +41,6 @@ public class ConfigurationInstaller : IWindsorInstaller
         _interpreter.ProcessResource(_interpreter.Source, store, container.Kernel);
     }
 
-    /// <summary>Sets the configuration environment name.</summary>
-    /// <param name="environmentName">The environment name.</param>
-    /// <returns></returns>
-    public ConfigurationInstaller Environment(string environmentName)
-    {
-        return Environment(() => environmentName);
-    }
-
     /// <summary>Set the configuration environment strategy.</summary>
     /// <param name="environment">The environment strategy.</param>
     /// <returns></returns>

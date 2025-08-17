@@ -18,5 +18,6 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class HasPropertyAndCtorParameterSameTypeDifferentName(IEmptyService emptyService)
 {
+    // ReSharper disable once UnusedMember.Global
     public IEmptyService SomeService { get; set; } = emptyService;
 }

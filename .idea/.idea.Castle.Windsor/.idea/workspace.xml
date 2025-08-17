@@ -8,34 +8,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CustomerValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CustomerValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CustomerValidatorAndRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CustomerValidatorAndRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/IValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/IValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/TwoEmptyServiceDependenciesConstructor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/TwoEmptyServiceDependenciesConstructor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/TwoEmptyServiceDependenciesProperty.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/TwoEmptyServiceDependenciesProperty.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/UsesArrayOfGeneric.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/UsesArrayOfGeneric.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ACycleProp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ACycleProp.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/APropCtor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/APropCtor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/BCycleProp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/BCycleProp.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/C.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/C.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CacheResultFinder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CacheResultFinder.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CacheWithClassConstraint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CacheWithClassConstraint.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CachingRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CachingRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CalculatorService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CalculatorService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/Camera.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ClassWithDoNotWireProperties.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ClassWithDoNotWireProperties.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CompA.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CompA.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ComponentWithConfigs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ComponentWithConfigs.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ComponentWithProperties.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ComponentWithProperties.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/DatabaseResultFinder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/DatabaseResultFinder.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/DemoRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/DemoRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/DictionaryCache.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/DictionaryCache.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/HasGenericConstraintsImpl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/HasGenericConstraintsImpl.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ICamera.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/NullCache.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/NullCache.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/WebServiceResultFinder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/WebServiceResultFinder.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/TestDevice.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/TestDevice.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/FACILITIES-ISSUE-111/Components/IAFacilitiesIssue111.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/FACILITIES-ISSUE-111/Components/IAFacilitiesIssue111.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/FACILITIES-ISSUE-111/Components/IBFacilitiesIssue111.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/FACILITIES-ISSUE-111/Components/IBFacilitiesIssue111.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC102.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC102.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/Presenter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/Presenter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ClassWithTwoParametersWithSameType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ClassWithTwoParametersWithSameType.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CommonServiceUser3.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CommonServiceUser3.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CustomerChainValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CustomerChainValidator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/DefaultCustomer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/DefaultCustomer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasByRefCtorArgument.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasByRefCtorArgument.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasCtorDependency.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasCtorDependency.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasObjectPropertyAndTypedCtorParameterDifferentName.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasObjectPropertyAndTypedCtorParameterDifferentName.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasObjectPropertyAndTypedCtorParameterWithSameName.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasObjectPropertyAndTypedCtorParameterWithSameName.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasPropertyAndCtorParameterSameTypeDifferentName.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasPropertyAndCtorParameterSameTypeDifferentName.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasThrowingPropertyDependency.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasThrowingPropertyDependency.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ISimpleGeneric.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ISimpleGeneric.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CameraService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CameraService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ResultFinderStringDecorator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ResultFinderStringDecorator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/AbstractInterpreter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/AbstractInterpreter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Installer/ConfigurationInstaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Installer/ConfigurationInstaller.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,7 +121,7 @@
       <force-push-target remote-path="origin" branch="net9" />
     </force-push-targets>
   </component>
-  <component name="RunManager" selected=".NET Project.Castle.Windsor.Tests">
+  <component name="RunManager">
     <configuration name="Castle.Windsor.Tests" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
