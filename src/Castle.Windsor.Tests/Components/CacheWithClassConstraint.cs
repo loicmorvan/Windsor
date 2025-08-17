@@ -14,9 +14,4 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class CacheWithClassConstraint<T> : ICache<T> where T : class
-{
-    public void Put(string key, T item)
-    {
-    }
-}
+public class CacheWithClassConstraint<T> : ICache<T> where T : class;

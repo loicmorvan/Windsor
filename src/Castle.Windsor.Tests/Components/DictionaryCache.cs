@@ -17,17 +17,4 @@ using JetBrains.Annotations;
 namespace Castle.Windsor.Tests.Components;
 
 [UsedImplicitly]
-public class DictionaryCache<T> : ICache<T>
-{
-    private readonly Dictionary<string, object> _hash = new();
-
-    public T Get(string key)
-    {
-        return (T)_hash[key];
-    }
-
-    public void Put(string key, T item)
-    {
-        _hash[key] = item;
-    }
-}
+public class DictionaryCache<T> : ICache<T>;

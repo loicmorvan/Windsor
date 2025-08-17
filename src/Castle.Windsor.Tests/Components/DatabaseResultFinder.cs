@@ -25,13 +25,5 @@ public class DatabaseResultFinder<T> : IResultFinder<T>
 
     public DatabaseResultFinder(IResultFinder<T> finder)
     {
-        Finder = finder;
-    }
-
-    public IResultFinder<T> Finder { get; }
-
-    public T Process()
-    {
-        return default;
     }
 }

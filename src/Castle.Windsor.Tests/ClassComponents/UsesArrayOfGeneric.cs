@@ -14,7 +14,6 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class UsesArrayOfGeneric<T>(IGeneric<T> items)
-{
-    public IGeneric<T> Items { get; private set; } = items;
-}
+#pragma warning disable CS9113 // Parameter is unread.
+public class UsesArrayOfGeneric<T>(IGeneric<T> items);
+#pragma warning restore CS9113 // Parameter is unread.

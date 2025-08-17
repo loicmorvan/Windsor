@@ -20,7 +20,9 @@ namespace Castle.Windsor.Tests.Components;
 [UsedImplicitly]
 public class ClassWithDoNotWireProperties
 {
+    // ReSharper disable once UnusedMember.Global
     [DoNotWire] public string Host { get; set; }
 
+    // ReSharper disable once UnusedMember.Global
     [DoNotWire] public int Port { get; set; }
 }

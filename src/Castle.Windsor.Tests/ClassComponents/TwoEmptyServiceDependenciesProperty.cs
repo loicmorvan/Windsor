@@ -13,11 +13,12 @@
 // limitations under the License.
 
 using Castle.Windsor.Tests.Components;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
 public class TwoEmptyServiceDependenciesProperty
 {
-    public IEmptyService One { get; set; }
-    public IEmptyService Two { get; set; }
+    [UsedImplicitly] public IEmptyService One { get; set; }
+    [UsedImplicitly] public IEmptyService Two { get; set; }
 }

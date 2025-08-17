@@ -14,12 +14,4 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class CustomerValidator : IValidator<ICustomer>
-{
-	/// <summary></summary>
-	/// <returns></returns>
-	public bool IsValid()
-	{
-		return true;
-	}
-}
+public class CustomerValidator : IValidator<ICustomer>;

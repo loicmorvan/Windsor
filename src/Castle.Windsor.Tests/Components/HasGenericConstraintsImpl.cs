@@ -16,7 +16,4 @@ namespace Castle.Windsor.Tests.Components;
 
 public class HasGenericConstraintsImpl<T1, T2> : IHasGenericConstraints<T1, T2>
     where T1 : EmptyBase, IMarkerInterface
-    where T2 : class
-{
-    public T1 Property { get; set; }
-}
+    where T2 : class;

@@ -16,8 +16,6 @@ using Castle.Windsor.Tests.Components;
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class TwoEmptyServiceDependenciesConstructor(IEmptyService one, IEmptyService two)
-{
-    public IEmptyService One { get; private set; } = one;
-    public IEmptyService Two { get; private set; } = two;
-}
+#pragma warning disable CS9113 // Parameter is unread.
+public class TwoEmptyServiceDependenciesConstructor(IEmptyService one, IEmptyService two);
+#pragma warning restore CS9113 // Parameter is unread.

@@ -18,13 +18,8 @@ using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.Components;
 
+#pragma warning disable CS9113 // Parameter is unread.
+
 [Transient]
 [UsedImplicitly]
-public class ComponentWithConfigs(string name, int port, IDictionary dict)
-{
-    public IDictionary Dict { get; } = dict;
-
-    public string Name { get; } = name;
-
-    public int Port { get; } = port;
-}
+public class ComponentWithConfigs(string name, int port, IDictionary dict);
