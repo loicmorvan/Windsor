@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.Generics;
 
 public class GenericB<T>
 {
-    public T Item { get; set; }
+    public T Item { get; [UsedImplicitly] set; }
 }

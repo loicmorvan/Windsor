@@ -16,9 +16,9 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class HasTwoConstructors2
 {
+    // ReSharper disable once UnusedParameter.Local
     public HasTwoConstructors2(ICommon common)
     {
-        Common = common;
     }
 
     public HasTwoConstructors2(string param)
@@ -28,5 +28,4 @@ public class HasTwoConstructors2
 
     // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
     public string Param { get; set; }
-    public ICommon Common { get; set; }
 }

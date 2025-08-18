@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.ClassComponents;
 
 public class GenericImpl2<T> : IGeneric<T>
 {
-    public int Value { get; set; }
+    public int Value { get; [UsedImplicitly] set; }
 }

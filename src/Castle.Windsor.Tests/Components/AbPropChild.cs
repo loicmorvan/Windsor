@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.Components;
 
 public class AbPropChild : AProp
 {
-    public B PropB { get; set; }
+    public B PropB { get; [UsedImplicitly] set; }
 }

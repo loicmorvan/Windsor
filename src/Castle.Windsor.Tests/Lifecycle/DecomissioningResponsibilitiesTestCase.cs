@@ -186,7 +186,7 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 
     public class GenA<T> : DisposableBase
     {
-        public GenB<T> GenBField { get; set; }
+        public GenB<T> GenBField { get; [UsedImplicitly] set; }
     }
 
     // ReSharper disable once UnusedTypeParameter

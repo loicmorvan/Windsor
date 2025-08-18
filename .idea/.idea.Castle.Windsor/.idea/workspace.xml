@@ -8,12 +8,43 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Core/PropertyDependencyModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Core/PropertyDependencyModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/AssemblyFilter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/AssemblyFilter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/BasedOnDescriptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/BasedOnDescriptor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ComponentRegistration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ComponentRegistration.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/AbstractInterpreter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/AbstractInterpreter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/XmlProcessor/XmlProcessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/XmlProcessor/XmlProcessor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC-78/MyChain3.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC-78/MyChain3.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CommonServiceUser2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CommonServiceUser2.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/DefaultSpamService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/DefaultSpamService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ExtendedCustomer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ExtendedCustomer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/GenericImpl2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/GenericImpl2.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/GenericImpl3.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/GenericImpl3.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors2.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ThreeEmptyServiceDependenciesPropertyAndManyCtors.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ThreeEmptyServiceDependenciesPropertyAndManyCtors.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/AProp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/AProp.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/AbPropChild.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/AbPropChild.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ArrayDepAsProperty.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ArrayDepAsProperty.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ClassWithDoNotSelectConstructors.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ClassWithDoNotSelectConstructors.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CollectionDepAsProperty.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CollectionDepAsProperty.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ComponentWithStringProperty.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ComponentWithStringProperty.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/Employee.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/Employee.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/EnumerableDepAsProperty.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/EnumerableDepAsProperty.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/HasDictionaryDependency.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/HasDictionaryDependency.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/HasNullableIntProperty.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/HasNullableIntProperty.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ListDepAsProperty.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ListDepAsProperty.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ReviewableEmployee.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ReviewableEmployee.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/UseChain.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/UseChain.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/UsesIEmptyServiceWithLifecycleCounter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/UsesIEmptyServiceWithLifecycleCounter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Config/Components/ClassWithComplexParameter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Config/Components/ClassWithComplexParameter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Config/Components/ClassWithConstructors.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Config/Components/ClassWithConstructors.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Dn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Dn.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/Startable/Components/StartableWithError.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/Startable/Components/StartableWithError.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/BurdenAddedToUnrelatedObjectTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/BurdenAddedToUnrelatedObjectTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Components/ComponentWithOptionalParameter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Components/ComponentWithOptionalParameter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Components/GenericComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Components/GenericComponent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Delegates/HasFuncProperty.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Delegates/HasFuncProperty.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Delegates/UsesBarDelegateProperty.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Delegates/UsesBarDelegateProperty.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Delegates/UsesFooAndBarDelegateProperties.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Facilities/TypedFactory/Delegates/UsesFooAndBarDelegateProperties.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Generics/GenericA.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Generics/GenericA.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Generics/GenericB.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Generics/GenericB.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifecycle/DecomissioningResponsibilitiesTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifecycle/DecomissioningResponsibilitiesTestCase.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -182,15 +213,7 @@
       <workItem from="1755267527802" duration="10643000" />
       <workItem from="1755374314710" duration="5715000" />
       <workItem from="1755443290577" duration="4203000" />
-      <workItem from="1755520754770" duration="1315000" />
-    </task>
-    <task id="LOCAL-00070" summary="Removed `XmlInterpreter` and related classes, tests, and implementation references to simplify and modernize the codebase.">
-      <option name="closed" value="true" />
-      <created>1754601428459</created>
-      <option name="number" value="00070" />
-      <option name="presentableId" value="LOCAL-00070" />
-      <option name="project" value="LOCAL" />
-      <updated>1754601428459</updated>
+      <workItem from="1755520754770" duration="6029000" />
     </task>
     <task id="LOCAL-00071" summary="Simplified conditional patterns across multiple classes to improve readability and reduce redundancy.">
       <option name="closed" value="true" />
@@ -576,7 +599,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755521483262</updated>
     </task>
-    <option name="localTasksCounter" value="119" />
+    <task id="LOCAL-00119" summary="Removed unused methods and imports across classes, added `[PublicAPI]` annotations to public members, and improved code maintainability by simplifying configurations and refactoring.">
+      <option name="closed" value="true" />
+      <created>1755522083845</created>
+      <option name="number" value="00119" />
+      <option name="presentableId" value="LOCAL-00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1755522083845</updated>
+    </task>
+    <option name="localTasksCounter" value="120" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -611,7 +642,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Marked multiple classes across test files as `sealed`, removed unused `InitializableDisposableComponent`, and applied `GC.SuppressFinalize` in `AbstractContainerTestCase` for improved reliability and maintainability." />
     <MESSAGE value="Refactored test files to use `var` for container and kernel declarations, replaced explicit types in initializers with implicit type expressions, and streamlined related code for improved readability and consistency." />
     <MESSAGE value="Made `DisposedCount` property readonly across fake disposable classes and updated `FilterByName` to be private in `AssemblyFilter` for improved encapsulation and clarity." />
     <MESSAGE value="Replaced null check with `ArgumentNullException.ThrowIfNull` in `GetFullPath` method for improved null safety and simplified logic." />
@@ -636,7 +666,8 @@
     <MESSAGE value="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and addressing warnings to improve code clarity and maintainability." />
     <MESSAGE value="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and addressing warnings to improve maintainability and readability." />
     <MESSAGE value="Refactored test classes and interfaces by replacing method definitions with concise syntax, removing unused members, and addressing configuration changes to improve maintainability and readability." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored test classes and interfaces by replacing method definitions with concise syntax, removing unused members, and addressing configuration changes to improve maintainability and readability." />
+    <MESSAGE value="Removed unused methods and imports across classes, added `[PublicAPI]` annotations to public members, and improved code maintainability by simplifying configurations and refactoring." />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed unused methods and imports across classes, added `[PublicAPI]` annotations to public members, and improved code maintainability by simplifying configurations and refactoring." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

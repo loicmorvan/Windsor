@@ -19,7 +19,7 @@ namespace Castle.Windsor.Tests.Config.Components;
 
 public class ClassWithComplexParameter
 {
-    public ComplexParameterType ComplexParam { get; set; }
+    public ComplexParameterType ComplexParam { get; [UsedImplicitly] set; }
 
     [Convertible]
     [UsedImplicitly]

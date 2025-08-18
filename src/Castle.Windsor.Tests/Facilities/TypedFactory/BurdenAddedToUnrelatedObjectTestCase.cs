@@ -77,12 +77,7 @@ public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTest
     {
         public ShortLivedViewModel(IFactory<Foo> fooFactory, LongLivedService longLivedService)
         {
-            FooFactory = fooFactory;
-            LongLivedService = longLivedService;
             longLivedService.StartSomething();
         }
-
-        public IFactory<Foo> FooFactory { get; }
-        public LongLivedService LongLivedService { get; }
     }
 }

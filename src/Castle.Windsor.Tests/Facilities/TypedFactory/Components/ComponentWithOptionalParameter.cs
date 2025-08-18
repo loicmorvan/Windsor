@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
 public class ComponentWithOptionalParameter
 {
-    public string Parameter { get; set; }
+    public string Parameter { get; [UsedImplicitly] set; }
 }

@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ReviewableEmployee : Employee, IReviewableEmployee
 {
-    public IReviewer Reviewer { get; set; }
+    public IReviewer Reviewer => null;
 
     public string ReviewerId => Reviewer.EmployeeId;
 

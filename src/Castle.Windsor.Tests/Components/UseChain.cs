@@ -12,10 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.Components;
 
 public class UseChain<T>(T dependency) : IUse<T>
 {
-    public IUse<T> Next { get; set; }
+    public IUse<T> Next { get; [UsedImplicitly] set; }
     public T Dependency { get; } = dependency;
 }

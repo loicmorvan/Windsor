@@ -19,17 +19,13 @@ namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 
 public class StartableWithError(DataRepository dataRepository) : IStartable
 {
-    public bool Started { get; private set; }
-
     public void Start()
     {
-        Started = true;
         dataRepository.RegisterCallerMemberName();
         throw new Exception("This should go bonk");
     }
 
     public void Stop()
     {
-        Started = false;
     }
 }

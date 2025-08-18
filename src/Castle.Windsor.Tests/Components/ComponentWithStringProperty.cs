@@ -23,10 +23,5 @@ public class ComponentWithStringProperty
 	/// <param name="name">The name.</param>
 	public ComponentWithStringProperty(string name)
 	{
-		Name = name;
 	}
-
-	/// <summary>Gets the name.</summary>
-	/// <value>The name.</value>
-	public string Name { get; }
 }

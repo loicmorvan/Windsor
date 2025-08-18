@@ -12,11 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.ClassComponents;
 
 public class DefaultSpamService
 {
-    public DefaultMailSenderService MailSender { get; set; }
+    public DefaultMailSenderService MailSender { get; [UsedImplicitly] set; }
 
-    public DefaultTemplateEngine TemplateEngine { get; set; }
+    public DefaultTemplateEngine TemplateEngine { get; [UsedImplicitly] set; }
 }

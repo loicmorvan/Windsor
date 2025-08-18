@@ -27,8 +27,5 @@ public class ClassWithDoNotSelectConstructors
     [DoNotSelect]
     public ClassWithDoNotSelectConstructors(string dependency)
     {
-        Dependency = dependency;
     }
-
-    public string Dependency { get; private set; }
 }

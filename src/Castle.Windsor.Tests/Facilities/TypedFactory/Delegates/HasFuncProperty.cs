@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
 public class HasFuncProperty<T>
 {
-    public Func<T> Function { get; set; }
+    public Func<T> Function => null;
 }
