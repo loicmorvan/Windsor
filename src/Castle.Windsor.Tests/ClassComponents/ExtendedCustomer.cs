@@ -1,3 +1,7 @@
+// ReSharper disable MemberCanBeMadeStatic.Global
+
+#pragma warning disable CA1822
+
 namespace Castle.Windsor.Tests.ClassComponents;
 
 public class ExtendedCustomer

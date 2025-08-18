@@ -14,7 +14,4 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class Employee : IEmployee
-{
-    public string EmployeeId => null;
-}
+public class Employee : IEmployee;
