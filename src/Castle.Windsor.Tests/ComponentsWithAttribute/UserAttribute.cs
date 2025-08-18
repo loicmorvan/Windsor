@@ -14,12 +14,8 @@
 
 namespace Castle.Windsor.Tests.ComponentsWithAttribute;
 
-public class UserAttribute : Attribute
+[AttributeUsage(AttributeTargets.Class)]
+public class UserAttribute(bool register) : Attribute
 {
-    public UserAttribute(bool register)
-    {
-        Register = register;
-    }
-
-    public bool Register { get; }
+    public bool Register { get; } = register;
 }

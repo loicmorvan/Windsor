@@ -16,12 +16,6 @@ using Castle.Windsor.Tests.Components;
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class HasByRefCtorArgument
-{
-    public HasByRefCtorArgument(ref A a)
-    {
-        A = a;
-    }
-
-    public A A { get; private set; }
-}
+#pragma warning disable CS9113 // Parameter is unread.
+public class HasByRefCtorArgument(ref A a);
+#pragma warning restore CS9113 // Parameter is unread.

@@ -46,12 +46,9 @@ public static class Component
     /// B
     public static ComponentRegistration For(params Type[] serviceTypes)
     {
-        if (serviceTypes.Length == 0)
-        {
-            throw new ArgumentException("At least one service type must be supplied");
-        }
-
-        return new ComponentRegistration(serviceTypes);
+        return serviceTypes.Length == 0
+            ? throw new ArgumentException("At least one service type must be supplied")
+            : new ComponentRegistration(serviceTypes);
     }
 
     /// <summary>Creates a component registration for the <paramref name="serviceTypes" /></summary>
@@ -73,12 +70,7 @@ public static class Component
             }
         }
 
-        if (registration == null)
-        {
-            throw new ArgumentException("At least one service type must be supplied");
-        }
-
-        return registration;
+        return registration ?? throw new ArgumentException("At least one service type must be supplied");
     }
 
     /// <summary>Creates a component registration for the service type.</summary>

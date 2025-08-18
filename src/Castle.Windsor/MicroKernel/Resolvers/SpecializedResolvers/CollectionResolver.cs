@@ -43,7 +43,7 @@ public class CollectionResolver(IKernel kernel, bool allowEmptyCollections = fal
 
         var itemType = GetItemType(dependency.TargetItemType);
         return itemType != null &&
-               HasParameter(dependency) == false &&
+               !HasParameter(dependency) &&
                CanSatisfy(itemType);
     }
 

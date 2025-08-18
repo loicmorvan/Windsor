@@ -14,16 +14,6 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class CommonServiceUser3
-{
-    public CommonServiceUser3()
-    {
-    }
-
-    public CommonServiceUser3(ICommon common)
-    {
-        CommonService = common;
-    }
-
-    public ICommon CommonService { get; }
-}
+#pragma warning disable CS9113 // Parameter is unread.
+public class CommonServiceUser3(ICommon common);
+#pragma warning restore CS9113 // Parameter is unread.

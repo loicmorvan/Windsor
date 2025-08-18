@@ -14,14 +14,4 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class CameraService : ICameraService
-{
-    public void Record()
-    {
-    }
-
-    public ICamera Add()
-    {
-        return new Camera();
-    }
-}
+public class CameraService : ICameraService;

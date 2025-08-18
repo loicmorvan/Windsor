@@ -14,12 +14,7 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class ReadOnlyCollectionDepAsConstructor
+public class ReadOnlyCollectionDepAsConstructor(IReadOnlyCollection<IEmptyService> services)
 {
-    public ReadOnlyCollectionDepAsConstructor(IReadOnlyCollection<IEmptyService> services)
-    {
-        Services = services;
-    }
-
-    public IReadOnlyCollection<IEmptyService> Services { get; }
+    public IReadOnlyCollection<IEmptyService> Services { get; } = services;
 }

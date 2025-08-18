@@ -227,7 +227,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
             foreach (var service in handler.ComponentModel.Services)
             {
                 var handlerForService = serviceSelector(service);
-                if (Service2Handler.TryGetValue(service, out var previous) == false ||
+                if (!Service2Handler.TryGetValue(service, out var previous) ||
                     handlerForService.Triumphs(previous))
                 {
                     Service2Handler[service] = handlerForService;
@@ -281,7 +281,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
         IHandler[] handlers = null; //only init if we have a selector with an opinion about this type
         foreach (var selector in Selectors)
         {
-            if (selector.HasOpinionAbout(name, type) == false)
+            if (!selector.HasOpinionAbout(name, type))
             {
                 continue;
             }

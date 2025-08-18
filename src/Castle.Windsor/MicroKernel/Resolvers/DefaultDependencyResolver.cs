@@ -131,7 +131,7 @@ public class DefaultDependencyResolver : IDependencyResolver
             {
                 value = dependency.DefaultValue;
             }
-            else if (dependency.IsOptional == false)
+            else if (!dependency.IsOptional)
             {
                 var message =
                     $"Could not resolve non-optional dependency for '{model.Name}' ({(model.Implementation != null ? model.Implementation.FullName : "-unknown-")}). Parameter '{dependency.DependencyKey}' type '{dependency.TargetType.FullName}'";
@@ -245,7 +245,7 @@ public class DefaultDependencyResolver : IDependencyResolver
             return false;
         }
 
-        if (context == null || firstHandler.IsBeingResolvedInContext(context) == false)
+        if (context == null || !firstHandler.IsBeingResolvedInContext(context))
         {
             if (IsHandlerInValidState(firstHandler))
             {
@@ -255,7 +255,7 @@ public class DefaultDependencyResolver : IDependencyResolver
 
         var handlers = _kernel.GetHandlers(service);
         var nonResolvingHandlers =
-            handlers.Where(handler => handler.IsBeingResolvedInContext(context) == false).ToList();
+            handlers.Where(handler => !handler.IsBeingResolvedInContext(context)).ToList();
         RebuildOpenGenericHandlersWithClosedGenericSubHandlers(service, context, nonResolvingHandlers);
         return nonResolvingHandlers.Any(IsHandlerInValidState);
     }
@@ -286,7 +286,7 @@ public class DefaultDependencyResolver : IDependencyResolver
         var handler = context is { IsResolving: true }
             ? _kernel.LoadHandlerByName(key, dependency.TargetItemType, context.AdditionalArguments)
             : _kernel.GetHandler(key);
-        return IsHandlerInValidState(handler) && handler.IsBeingResolvedInContext(context) == false;
+        return IsHandlerInValidState(handler) && !handler.IsBeingResolvedInContext(context);
     }
 
     private bool TryResolveCore(CreationContext context, ISubDependencyResolver contextHandlerResolver,
@@ -433,7 +433,7 @@ public class DefaultDependencyResolver : IDependencyResolver
             return false;
         }
 
-        if (handler.IsBeingResolvedInContext(context) == false)
+        if (!handler.IsBeingResolvedInContext(context))
         {
             return true;
         }

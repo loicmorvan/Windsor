@@ -308,7 +308,7 @@ public class CreationContext :
             return;
         }
 
-        if (burden.RequiresPolicyRelease == false)
+        if (!burden.RequiresPolicyRelease)
         {
             return;
         }

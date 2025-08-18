@@ -33,7 +33,7 @@ public class HandlerSelectorsTestCase
     [Fact]
     public void SelectUsingBusinessLogic_DirectSelection()
     {
-        IWindsorContainer container = new WindsorContainer();
+        var container = new WindsorContainer();
         container.Register(Component.For<IWatcher>().ImplementedBy<BirdWatcher>().Named("bird.watcher")).Register(
             Component.For<IWatcher>().ImplementedBy<SatiWatcher>().Named("astronomy.watcher"));
         var selector = new WatcherSelector();
@@ -49,7 +49,7 @@ public class HandlerSelectorsTestCase
     [Fact]
     public void SelectUsingBusinessLogic_SubDependency()
     {
-        IWindsorContainer container = new WindsorContainer();
+        var container = new WindsorContainer();
         container.Register(Component.For(typeof(Person)).LifeStyle.Is(LifestyleType.Transient)).Register(
             Component.For<IWatcher>().ImplementedBy<BirdWatcher>().Named("bird.watcher")).Register(
             Component.For<IWatcher>().ImplementedBy<SatiWatcher>().Named("astronomy.watcher"));
@@ -66,7 +66,7 @@ public class HandlerSelectorsTestCase
     [Fact]
     public void SubDependencyResolverHasHigherPriorityThanHandlerSelector()
     {
-        IWindsorContainer container = new WindsorContainer();
+        var container = new WindsorContainer();
         container.Register(Component.For(typeof(Person)).LifeStyle.Is(LifestyleType.Transient)).Register(
             Component.For<IWatcher>().ImplementedBy<BirdWatcher>().Named("bird.watcher")).Register(
             Component.For<IWatcher>().ImplementedBy<SatiWatcher>().Named("astronomy.watcher"));
@@ -89,14 +89,9 @@ public class HandlerSelectorsTestCase
         [UsedImplicitly] event Action<string> OnSomethingInterestingToWatch;
     }
 
-    private class Person
+    private class Person(IWatcher watcher)
     {
-        public readonly IWatcher Watcher;
-
-        public Person(IWatcher watcher)
-        {
-            Watcher = watcher;
-        }
+        public readonly IWatcher Watcher = watcher;
     }
 
     public class SatiWatcher : IWatcher

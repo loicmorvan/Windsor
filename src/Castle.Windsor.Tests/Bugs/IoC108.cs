@@ -31,16 +31,7 @@ public class IoC108 : AbstractContainerTestCase
     }
 
     [UsedImplicitly]
-    public class Service1
-    {
-        public void OpA()
-        {
-        }
-
-        public void OpB()
-        {
-        }
-    }
+    public class Service1;
 
     [UsedImplicitly]
     public class Service2(Service1 service1)

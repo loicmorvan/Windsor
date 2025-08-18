@@ -19,9 +19,9 @@ using Castle.Windsor.MicroKernel.Registration;
 
 namespace Castle.Windsor.Tests;
 
-public class CustomActivatorTestCase : IDisposable
+public sealed class CustomActivatorTestCase : IDisposable
 {
-    private readonly IKernel _kernel = new DefaultKernel();
+    private readonly DefaultKernel _kernel = new();
 
     public void Dispose()
     {

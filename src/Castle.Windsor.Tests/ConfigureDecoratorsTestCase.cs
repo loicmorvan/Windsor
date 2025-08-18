@@ -83,48 +83,16 @@ public class ConfigureDecoratorsTestCase
         Assert.IsType<DoNothingServiceDecorator>(service);
     }
 
-    private interface IDoNothingService
+    private interface IDoNothingService;
+
+    private interface IDoSomethingService;
+
+    private class DoNothingService : IDoNothingService;
+
+    private class DoNothingServiceDecorator(IDoNothingService inner) : IDoNothingService
     {
-        void DoNothing();
+        public IDoNothingService Inner { get; } = inner;
     }
 
-    private interface IDoSomethingService
-    {
-        void DoSomething();
-    }
-
-    private class DoNothingService : IDoNothingService
-    {
-        public void DoNothing()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    private class DoNothingServiceDecorator : IDoNothingService
-    {
-        public DoNothingServiceDecorator(IDoNothingService inner)
-        {
-            Inner = inner;
-        }
-
-        public IDoNothingService Inner { get; }
-
-        public void DoNothing()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    private class DoSomethingService : IDoSomethingService
-    {
-        public DoSomethingService(IDoNothingService service)
-        {
-        }
-
-        public void DoSomething()
-        {
-            throw new NotImplementedException();
-        }
-    }
+    private class DoSomethingService(IDoNothingService service) : IDoSomethingService;
 }

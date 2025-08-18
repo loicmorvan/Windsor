@@ -41,7 +41,7 @@ public class ChildContainerSupportTestCase : AbstractContainerTestCase
     [Fact]
     public void AddAndRemoveChildContainer()
     {
-        IWindsorContainer childcontainer = new WindsorContainer();
+        var childcontainer = new WindsorContainer();
         Container.AddChildContainer(childcontainer);
         Assert.Equal(Container, childcontainer.Parent);
 
@@ -55,7 +55,7 @@ public class ChildContainerSupportTestCase : AbstractContainerTestCase
     [Fact]
     public void AddAndRemoveChildContainerWithProperty()
     {
-        IWindsorContainer childcontainer = new WindsorContainer();
+        var childcontainer = new WindsorContainer();
         childcontainer.Parent = Container;
         Assert.Equal(Container, childcontainer.Parent);
 
@@ -69,8 +69,8 @@ public class ChildContainerSupportTestCase : AbstractContainerTestCase
     [Fact]
     public void AddingToTwoParentContainsThrowsKernelException()
     {
-        IWindsorContainer container3 = new WindsorContainer();
-        IWindsorContainer childcontainer = new WindsorContainer();
+        var container3 = new WindsorContainer();
+        var childcontainer = new WindsorContainer();
         Container.AddChildContainer(childcontainer);
         Assert.Throws<KernelException>(() => container3.AddChildContainer(childcontainer));
     }
@@ -78,8 +78,8 @@ public class ChildContainerSupportTestCase : AbstractContainerTestCase
     [Fact]
     public void AddingToTwoParentWithPropertyContainsThrowsKernelException()
     {
-        IWindsorContainer container3 = new WindsorContainer();
-        IWindsorContainer childcontainer = new WindsorContainer();
+        var container3 = new WindsorContainer();
+        var childcontainer = new WindsorContainer();
         childcontainer.Parent = Container;
         Assert.Throws<KernelException>(() => childcontainer.Parent = container3);
     }
@@ -92,7 +92,7 @@ public class ChildContainerSupportTestCase : AbstractContainerTestCase
     [Fact]
     public void ResolveAgainstParentContainer()
     {
-        IWindsorContainer childcontainer = new WindsorContainer();
+        var childcontainer = new WindsorContainer();
         Container.AddChildContainer(childcontainer);
 
         Assert.Equal(Container, childcontainer.Parent);
@@ -105,7 +105,7 @@ public class ChildContainerSupportTestCase : AbstractContainerTestCase
     [Fact]
     public void ResolveAgainstParentContainerWithProperty()
     {
-        IWindsorContainer childcontainer = new WindsorContainer { Parent = Container };
+        var childcontainer = new WindsorContainer { Parent = Container };
 
         Assert.Equal(Container, childcontainer.Parent);
 

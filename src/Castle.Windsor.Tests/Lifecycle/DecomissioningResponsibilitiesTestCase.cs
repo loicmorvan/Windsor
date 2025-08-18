@@ -16,6 +16,7 @@ using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Pools;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.Lifecycle;
 
@@ -185,9 +186,7 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
 
     public class GenA<T> : DisposableBase
     {
-        public B BField { get; set; }
-
-        public GenB<T> GenBField { get; set; }
+        public GenB<T> GenBField { get; [UsedImplicitly] set; }
     }
 
     // ReSharper disable once UnusedTypeParameter
@@ -198,9 +197,7 @@ public class DecomissioningResponsibilitiesTestCase : AbstractContainerTestCase
         PoolableComponent1 pool = null)
         : DisposableBase
     {
-        public DefaultMailSenderService MailSender { get; set; }
-
-        public PoolableComponent1 Pool { get; } = pool;
+        public DefaultMailSenderService MailSender { get; [UsedImplicitly] set; }
 
         public DisposableTemplateEngine TemplateEngine { get; } = templateEngine;
     }

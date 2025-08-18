@@ -24,7 +24,7 @@ public class ContainerProblem2
     [Fact]
     public void CausesStackOverflow()
     {
-        IWindsorContainer container = new WindsorContainer();
+        var container = new WindsorContainer();
 
         container.Register(Component.For(typeof(IS)).ImplementedBy<Bs>().Named("BS"));
         container.Register(Component.For(typeof(IC)).ImplementedBy<CImpl>().Named("C"));

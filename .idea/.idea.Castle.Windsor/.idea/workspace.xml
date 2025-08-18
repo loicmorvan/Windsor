@@ -8,8 +8,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/WindsorRegistrationExtensionsTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/WindsorRegistrationExtensionsTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Types.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/Types.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Directory.Build.props" beforeDir="false" afterPath="$PROJECT_DIR$/Directory.Build.props" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.Hosting/Extensions/HostBuilderExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.Hosting/Extensions/HostBuilderExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Core/CastleComponentAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Core/CastleComponentAttribute.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +33,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="a235622740a3b360c687491ecec1538acc0769be" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -50,20 +52,9 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/36b39d9659c148b293a2b21eb84fe01b5e000/22/de2cae40/FileResource.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/36b39d9659c148b293a2b21eb84fe01b5e000/e7/1818274a/StandardInterceptor.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/36b39d9659c148b293a2b21eb84fe01b5e000/fb/ce0405fa/IConfiguration.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/36b39d9659c148b293a2b21eb84fe01b5e000/fe/5a93bca3/ConfigurationCollection.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/76b26a7a511f48aeba3bce44a1ba437af82e00/3e/42da7db5/IEnumerable.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/76b26a7a511f48aeba3bce44a1ba437af82e00/cb/24d3c94a/IEnumerator.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/cc00f2b69bca4587b182863328c900713400/5e/ac09e302/ExtendedLog4netFactory.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/6265b4ecc5c0cdea8b21a229d131b222df9065102d3887b05b50b7e9a972b7/DependencyInjectionSpecificationTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/74a328368fe41d2091c5466d997e8a9748b142c81d46acca85d62465cdb0c145/StringAsserts.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9cf5f68d759deefc91b9c48c5ac3dd27708bb7dc38d0c485661fff5ce15b82/SafeFileHandle.Unix.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/de1dc94e26de2eb8cdb9b19e9451c6a0738025b875978dc863de7ba87ee78c4/ServiceCollectionServiceExtensions.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f21ed9b111a49d8b9fadc594d68f824f1ae398faf147dfd144e5051f7c7ed6e/ActivatorUtilitiesTests.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ef47bfb894c2469cb67553e5082a6f805ee00/3b/e208bf73/ProxyGenerationOptions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/Resolvers/LoggerDependencyResolver.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/loicmorvan/RiderProjects/Windsor/src/Castle.Windsor.Tests/Installers/CustomerInstaller.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/loicmorvan/RiderProjects/Windsor/src/Castle.Windsor.Tests/ClassComponents/TwoEmptyServiceDependenciesProperty.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProblemsViewState">
@@ -83,8 +74,15 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;1040357a-a374-4805-ae55-296a10391d40.executor&quot;: &quot;Debug&quot;,
+    &quot;2dc3fd48-7f19-46dc-9e61-9ca484058a3d.executor&quot;: &quot;Run&quot;,
+    &quot;36c383d8-1096-48c6-9b6c-8e57ac7b4b8d.executor&quot;: &quot;Run&quot;,
     &quot;457fe246-3a65-482c-9b97-436b5d6e2078.executor&quot;: &quot;Debug&quot;,
+    &quot;54437557-b30d-4a31-834c-387d565fefaf.executor&quot;: &quot;Run&quot;,
+    &quot;544ebf71-769d-49f6-88b1-47a73962a2b1.executor&quot;: &quot;Run&quot;,
+    &quot;58c56b00-f81e-48fd-a74f-c8e84271fcf4.executor&quot;: &quot;Run&quot;,
+    &quot;6356ce7a-e504-4c39-a7e4-fe4a2206522d.executor&quot;: &quot;Run&quot;,
     &quot;6735a692-6eea-4ff7-a309-8dd38fbf00bf.executor&quot;: &quot;Debug&quot;,
+    &quot;7c93ec0e-d2e1-442e-8418-ad90b07a71b7.executor&quot;: &quot;Run&quot;,
     &quot;7c964d5d-15cd-4425-a015-ad6d5f0fc580.executor&quot;: &quot;Debug&quot;,
     &quot;89dda535-a689-4076-a660-df5d01541ebe.executor&quot;: &quot;Debug&quot;,
     &quot;92c054ad-452f-41b6-a548-9856400a347d.executor&quot;: &quot;Debug&quot;,
@@ -93,12 +91,13 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;T4 Template Run Configuration.ModelFakes.tt.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;net9&quot;,
+    &quot;e0ad4eed-3a6f-49ec-852e-59ba3136ace6.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;more-cleanup&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C#&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;DotCoverContinuousTestingPageId&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -117,10 +116,10 @@
       <option name="ENV_FILE_PATHS" value="" />
       <option name="REDIRECT_INPUT_PATH" value="" />
       <option name="PTY_MODE" value="Auto" />
+      <option name="MIXED_MODE_DEBUG" value="0" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
       <option name="AUTO_ATTACH_CHILDREN" value="0" />
-      <option name="MIXED_MODE_DEBUG" value="0" />
       <option name="PROJECT_PATH" value="$PROJECT_DIR$/src/Castle.Windsor.Tests/Castle.Windsor.Tests.csproj" />
       <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
       <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
@@ -173,278 +172,16 @@
       <workItem from="1754508214767" duration="2002000" />
       <workItem from="1754769680087" duration="6008000" />
       <workItem from="1754854494950" duration="2579000" />
-    </task>
-    <task id="LOCAL-00039" summary="Replaced object initializer shorthand `new()` with explicit collection initializers `[]` for improved clarity and consistency across all applicable files.">
-      <option name="closed" value="true" />
-      <created>1754080944355</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1754080944355</updated>
-    </task>
-    <task id="LOCAL-00040" summary="Streamlined conditional logic by replacing `if-else` constructs with shorthand ternary expressions, improving code clarity and consistency across multiple files.">
-      <option name="closed" value="true" />
-      <created>1754081292901</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1754081292901</updated>
-    </task>
-    <task id="LOCAL-00041" summary="Replaced `string.Format` with modern string interpolation for improved code readability and consistency across multiple files.">
-      <option name="closed" value="true" />
-      <created>1754081589569</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1754081589569</updated>
-    </task>
-    <task id="LOCAL-00042" summary="Refactored loops to use LINQ-based filtering and simplified logic for improved readability and consistency across applicable files.">
-      <option name="closed" value="true" />
-      <created>1754164008291</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1754164008291</updated>
-    </task>
-    <task id="LOCAL-00043" summary="Refactored to replace `Substring` calls with range operators for improved readability and consistency across applicable files.">
-      <option name="closed" value="true" />
-      <created>1754164290686</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1754164290686</updated>
-    </task>
-    <task id="LOCAL-00044" summary="Streamlined type name parsing logic by simplifying conditional checks, improving code readability and consistency.">
-      <option name="closed" value="true" />
-      <created>1754164396671</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1754164396671</updated>
-    </task>
-    <task id="LOCAL-00045" summary="Refactored loops to use LINQ-based operations, improving code readability and consistency across multiple files.">
-      <option name="closed" value="true" />
-      <created>1754164731202</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1754164731202</updated>
-    </task>
-    <task id="LOCAL-00046" summary="Refactored loops to use LINQ-based operations, simplifying logic and improving code readability across multiple files.">
-      <option name="closed" value="true" />
-      <created>1754164934840</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1754164934840</updated>
-    </task>
-    <task id="LOCAL-00047" summary="Refactored `switch` statements to use expression syntax, added `[PublicAPI]` annotations, improved null checks with null-conditional operators, and streamlined formatting for improved clarity and consistency across multiple files.">
-      <option name="closed" value="true" />
-      <created>1754165232244</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1754165232244</updated>
-    </task>
-    <task id="LOCAL-00048" summary="Made private methods `static` in `ParametersDescriptor` and `ServiceOverrideDescriptor` to improve clarity and enforce non-reliance on instance state.">
-      <option name="closed" value="true" />
-      <created>1754165322717</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1754165322717</updated>
-    </task>
-    <task id="LOCAL-00049" summary="Added `[PublicAPI]` annotations, replaced null checks with null-conditional operators, and refactored to simplify logic and improve consistency across multiple files.">
-      <option name="closed" value="true" />
-      <created>1754165549834</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1754165549834</updated>
-    </task>
-    <task id="LOCAL-00050" summary="Replaced `static readonly` fields with `const` across applicable files to improve immutability and optimize performance.">
-      <option name="closed" value="true" />
-      <created>1754165948616</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1754165948616</updated>
-    </task>
-    <task id="LOCAL-00051" summary="Made classes `sealed` where applicable, added `[PublicAPI]` annotations, replaced virtual methods with concrete implementations, and simplified logic for improved consistency and readability across multiple files.">
-      <option name="closed" value="true" />
-      <created>1754166486514</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1754166486514</updated>
-    </task>
-    <task id="LOCAL-00052" summary="Added `[PublicAPI]` annotations to multiple methods, replaced `protected` fields with `private`, made applicable methods and constructors `private` or `static`, and improved consistency and readability across multiple files.">
-      <option name="closed" value="true" />
-      <created>1754166965484</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1754166965484</updated>
-    </task>
-    <task id="LOCAL-00053" summary="Removed unused parameters and associated logic from multiple methods and constructors, refactored method signatures, and streamlined related implementations for improved consistency and clarity across multiple files.">
-      <option name="closed" value="true" />
-      <created>1754168629469</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1754168629469</updated>
-    </task>
-    <task id="LOCAL-00054" summary="Refactored method signatures to remove unused parameters, updated logic for interceptor selection, and simplified constructor handling for improved clarity and consistency across multiple files.">
-      <option name="closed" value="true" />
-      <created>1754169832422</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1754169832422</updated>
-    </task>
-    <task id="LOCAL-00055" summary="Added `[PublicAPI]` annotations, replaced `override` with `virtual` for specific methods in `SlimReadWriteLock`, and updated interfaces to improve flexibility and ensure consistency across multiple files.">
-      <option name="closed" value="true" />
-      <created>1754247837493</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1754247837493</updated>
-    </task>
-    <task id="LOCAL-00056" summary="Made `SlimReadWriteLock` class `sealed`, changed specific methods from `public` to `private` to reduce surface area, and ensure stricter encapsulation.">
-      <option name="closed" value="true" />
-      <created>1754247997667</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1754247997667</updated>
-    </task>
-    <task id="LOCAL-00057" summary="Refactored constructors and methods across multiple files to use default parameter values, removed redundant overloads, and streamlined implementations for improved consistency and readability.">
-      <option name="closed" value="true" />
-      <created>1754248176978</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1754248176978</updated>
-    </task>
-    <task id="LOCAL-00058" summary="Refactored various methods to remove redundant parameters, updated default values, streamlined logic for clarity, and replaced deprecated syntax for improved consistency across multiple files.">
-      <option name="closed" value="true" />
-      <created>1754335533555</created>
-      <option name="number" value="00058" />
-      <option name="presentableId" value="LOCAL-00058" />
-      <option name="project" value="LOCAL" />
-      <updated>1754335533555</updated>
-    </task>
-    <task id="LOCAL-00059" summary="Added `[PublicAPI]` annotations to multiple methods across several classes to improve API discoverability and documentation.">
-      <option name="closed" value="true" />
-      <created>1754335979556</created>
-      <option name="number" value="00059" />
-      <option name="presentableId" value="LOCAL-00059" />
-      <option name="project" value="LOCAL" />
-      <updated>1754335979556</updated>
-    </task>
-    <task id="LOCAL-00060" summary="Added `GC.SuppressFinalize` calls to `Dispose` methods across multiple classes to improve finalization handling and resource management consistency.">
-      <option name="closed" value="true" />
-      <created>1754338237385</created>
-      <option name="number" value="00060" />
-      <option name="presentableId" value="LOCAL-00060" />
-      <option name="project" value="LOCAL" />
-      <updated>1754338237386</updated>
-    </task>
-    <task id="LOCAL-00061" summary="Refactored `FromDescriptor` and `ServiceDescriptor` to streamline type registration logic and improve code clarity.">
-      <option name="closed" value="true" />
-      <created>1754421729062</created>
-      <option name="number" value="00061" />
-      <option name="presentableId" value="LOCAL-00061" />
-      <option name="project" value="LOCAL" />
-      <updated>1754421729062</updated>
-    </task>
-    <task id="LOCAL-00062" summary="Replaced `string.Format` with string interpolation in test assertions to improve readability and consistency.">
-      <option name="closed" value="true" />
-      <created>1754422647661</created>
-      <option name="number" value="00062" />
-      <option name="presentableId" value="LOCAL-00062" />
-      <option name="project" value="LOCAL" />
-      <updated>1754422647661</updated>
-    </task>
-    <task id="LOCAL-00063" summary="Replaced local variables with constants across multiple test cases to improve immutability and code clarity.">
-      <option name="closed" value="true" />
-      <created>1754423769701</created>
-      <option name="number" value="00063" />
-      <option name="presentableId" value="LOCAL-00063" />
-      <option name="project" value="LOCAL" />
-      <updated>1754423769701</updated>
-    </task>
-    <task id="LOCAL-00064" summary="Made various methods `static` across multiple test cases to improve immutability, simplify usage, and ensure consistency.">
-      <option name="closed" value="true" />
-      <created>1754424607464</created>
-      <option name="number" value="00064" />
-      <option name="presentableId" value="LOCAL-00064" />
-      <option name="project" value="LOCAL" />
-      <updated>1754424607464</updated>
-    </task>
-    <task id="LOCAL-00065" summary="Refactored test cases to simplify logic using modern syntax, improved immutability, and enhanced code clarity across multiple files.">
-      <option name="closed" value="true" />
-      <created>1754425579031</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1754425579031</updated>
-    </task>
-    <task id="LOCAL-00066" summary="Made multiple properties and methods `private` across test cases to improve encapsulation, enhance immutability, and simplify code structure.">
-      <option name="closed" value="true" />
-      <created>1754427118980</created>
-      <option name="number" value="00066" />
-      <option name="presentableId" value="LOCAL-00066" />
-      <option name="project" value="LOCAL" />
-      <updated>1754427118980</updated>
-    </task>
-    <task id="LOCAL-00067" summary="Refactored classes to use record-like syntax for constructor initialization, added `[UsedImplicitly]` annotations, and streamlined code by removing redundant properties and logic.">
-      <option name="closed" value="true" />
-      <created>1754427633119</created>
-      <option name="number" value="00067" />
-      <option name="presentableId" value="LOCAL-00067" />
-      <option name="project" value="LOCAL" />
-      <updated>1754427633119</updated>
-    </task>
-    <task id="LOCAL-00068" summary="Added `[PublicAPI]` annotations to multiple methods and interfaces across test cases to improve API discoverability and documentation.">
-      <option name="closed" value="true" />
-      <created>1754428108542</created>
-      <option name="number" value="00068" />
-      <option name="presentableId" value="LOCAL-00068" />
-      <option name="project" value="LOCAL" />
-      <updated>1754428108542</updated>
-    </task>
-    <task id="LOCAL-00069" summary="Marked type parameters as `in` or `out` in multiple generic interfaces to improve covariance and contravariance support across test cases.">
-      <option name="closed" value="true" />
-      <created>1754508794855</created>
-      <option name="number" value="00069" />
-      <option name="presentableId" value="LOCAL-00069" />
-      <option name="project" value="LOCAL" />
-      <updated>1754508794855</updated>
-    </task>
-    <task id="LOCAL-00070" summary="Removed `XmlInterpreter` and related classes, tests, and implementation references to simplify and modernize the codebase.">
-      <option name="closed" value="true" />
-      <created>1754601428459</created>
-      <option name="number" value="00070" />
-      <option name="presentableId" value="LOCAL-00070" />
-      <option name="project" value="LOCAL" />
-      <updated>1754601428459</updated>
-    </task>
-    <task id="LOCAL-00071" summary="Simplified conditional patterns across multiple classes to improve readability and reduce redundancy.">
-      <option name="closed" value="true" />
-      <created>1754770737941</created>
-      <option name="number" value="00071" />
-      <option name="presentableId" value="LOCAL-00071" />
-      <option name="project" value="LOCAL" />
-      <updated>1754770737942</updated>
-    </task>
-    <task id="LOCAL-00072" summary="Refactored multiple classes to reduce redundancy, improve readability, and adopt modern syntax patterns across core files and test cases. Added `[UsedImplicitly]` annotations where necessary to enhance code clarity.">
-      <option name="closed" value="true" />
-      <created>1754771041930</created>
-      <option name="number" value="00072" />
-      <option name="presentableId" value="LOCAL-00072" />
-      <option name="project" value="LOCAL" />
-      <updated>1754771041930</updated>
+      <workItem from="1754940328318" duration="9469000" />
+      <workItem from="1755003593080" duration="3856000" />
+      <workItem from="1755026350056" duration="4815000" />
+      <workItem from="1755085691344" duration="1926000" />
+      <workItem from="1755264280661" duration="3097000" />
+      <workItem from="1755267527802" duration="10643000" />
+      <workItem from="1755374314710" duration="5715000" />
+      <workItem from="1755443290577" duration="4203000" />
+      <workItem from="1755520754770" duration="7198000" />
+      <workItem from="1755548877115" duration="510000" />
     </task>
     <task id="LOCAL-00073" summary="Simplified conditional logic and streamlined method structures in `MiddlewareComponentModelContributor` and `CrossWiringComponentModelContributor` to improve readability and maintainability. Updated test class constructors to adopt more concise parameter initialization.">
       <option name="closed" value="true" />
@@ -566,7 +303,279 @@
       <option name="project" value="LOCAL" />
       <updated>1754856343240</updated>
     </task>
-    <option name="localTasksCounter" value="88" />
+    <task id="LOCAL-00088" summary="Added `[UsedImplicitly]` annotations to properties in `CustomerImpl` to suppress ReSharper warnings and added suppressions for suspicious type conversions in `DefaultProxyFactory`.">
+      <option name="closed" value="true" />
+      <created>1754941057621</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1754941057622</updated>
+    </task>
+    <task id="LOCAL-00089" summary="Refactored test utils and related test cases: replaced Regex declarations with `[GeneratedRegex]`, simplified constructors with property initializers, converted methods/classes to partial where needed, and replaced redundant conditionals with modern syntax for improved readability and maintainability.">
+      <option name="closed" value="true" />
+      <created>1754942406746</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1754942406746</updated>
+    </task>
+    <task id="LOCAL-00090" summary="Replaced `Thread.CurrentThread.ManagedThreadId` with `Environment.CurrentManagedThreadId` in scoped lifestyle tests for improved API usage consistency.">
+      <option name="closed" value="true" />
+      <created>1754943274422</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1754943274422</updated>
+    </task>
+    <task id="LOCAL-00091" summary="Simplified string operations in `CustomToStringService` and adjusted `WithKeyToken` method signature in `AssemblyFilter` for improved consistency and clarity.">
+      <option name="closed" value="true" />
+      <created>1754943432043</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1754943432043</updated>
+    </task>
+    <task id="LOCAL-00092" summary="Replaced `Any()` with `Count == 0` for conditional checks and switched string `EndsWith` arguments to char literals across test and core files for improved performance and code clarity.">
+      <option name="closed" value="true" />
+      <created>1754943680788</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1754943680788</updated>
+    </task>
+    <task id="LOCAL-00093" summary="Refactored `DisposableHook` to use `LifecycleCounter` for improved readability and test reliability; updated dependent test case accordingly.">
+      <option name="closed" value="true" />
+      <created>1755005133437</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1755005133437</updated>
+    </task>
+    <task id="LOCAL-00094" summary="Marked multiple classes across test files as `sealed`, removed unused `InitializableDisposableComponent`, and applied `GC.SuppressFinalize` in `AbstractContainerTestCase` for improved reliability and maintainability.">
+      <option name="closed" value="true" />
+      <created>1755005509648</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1755005509648</updated>
+    </task>
+    <task id="LOCAL-00095" summary="Refactored test files to use `var` for container and kernel declarations, replaced explicit types in initializers with implicit type expressions, and streamlined related code for improved readability and consistency.">
+      <option name="closed" value="true" />
+      <created>1755007630153</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1755007630153</updated>
+    </task>
+    <task id="LOCAL-00096" summary="Made `DisposedCount` property readonly across fake disposable classes and updated `FilterByName` to be private in `AssemblyFilter` for improved encapsulation and clarity.">
+      <option name="closed" value="true" />
+      <created>1755026863266</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1755026863267</updated>
+    </task>
+    <task id="LOCAL-00097" summary="Replaced null check with `ArgumentNullException.ThrowIfNull` in `GetFullPath` method for improved null safety and simplified logic.">
+      <option name="closed" value="true" />
+      <created>1755027088194</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1755027088194</updated>
+    </task>
+    <task id="LOCAL-00098" summary="Removed obsolete test component classes and configurations for improved maintainability and to reduce project clutter. Added `[PublicAPI]` annotations to interfaces in `IKernel` and `IWindsorContainer` for better API clarity.">
+      <option name="closed" value="true" />
+      <created>1755027875699</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1755027875699</updated>
+    </task>
+    <task id="LOCAL-00099" summary="Removed obsolete test components and interfaces from `Castle.Windsor.Tests` and added `[UsedImplicitly]` annotations to several classes for improved maintainability and clarity.">
+      <option name="closed" value="true" />
+      <created>1755028740590</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1755028740590</updated>
+    </task>
+    <task id="LOCAL-00100" summary="Added `Debug.Assert` to ensure `FullName` is not null in test type filters for improved null safety and code reliability.">
+      <option name="closed" value="true" />
+      <created>1755028906952</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1755028906952</updated>
+    </task>
+    <task id="LOCAL-00101" summary="Removed obsolete installer and test component classes from the project to reduce clutter and improve maintainability.">
+      <option name="closed" value="true" />
+      <created>1755029226664</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1755029226664</updated>
+    </task>
+    <task id="LOCAL-00102" summary="Removed obsolete test interfaces and generic mapper class, and added `[UsedImplicitly]` annotations to specific mappers to improve maintainability and code clarity.">
+      <option name="closed" value="true" />
+      <created>1755029846464</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1755029846464</updated>
+    </task>
+    <task id="LOCAL-00103" summary="Removed obsolete test component implementations and interfaces, replacing them with concise definitions to reduce clutter and improve maintainability.">
+      <option name="closed" value="true" />
+      <created>1755030691027</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1755030691027</updated>
+    </task>
+    <task id="LOCAL-00104" summary="Marked multiple disposable and test classes as `sealed`, removed redundant constructors, replaced initializations with concise definitions, and applied `GC.SuppressFinalize` in disposable components for improved reliability and maintainability.">
+      <option name="closed" value="true" />
+      <created>1755086329034</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1755086329035</updated>
+    </task>
+    <task id="LOCAL-00105" summary="Updated all dependencies to latest versions.">
+      <option name="closed" value="true" />
+      <created>1755265110075</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1755265110075</updated>
+    </task>
+    <task id="LOCAL-00106" summary="Improved the equalities with false.">
+      <option name="closed" value="true" />
+      <created>1755265923179</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1755265923179</updated>
+    </task>
+    <task id="LOCAL-00107" summary="Updated possible null.">
+      <option name="closed" value="true" />
+      <created>1755267443418</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1755267443418</updated>
+    </task>
+    <task id="LOCAL-00108" summary="Refactored constructors to use concise definitions, replaced redundant initializations, applied `Debug.Assert` for improved null handling, and removed unnecessary checks and obsolete methods for better readability and maintainability.">
+      <option name="closed" value="true" />
+      <created>1755288805866</created>
+      <option name="number" value="00108" />
+      <option name="presentableId" value="LOCAL-00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1755288805866</updated>
+    </task>
+    <task id="LOCAL-00109" summary="Updated `HasTwoConstructors` to use optional parameter for concise definition and removed redundant constructor implementation.">
+      <option name="closed" value="true" />
+      <created>1755289246537</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1755289246538</updated>
+    </task>
+    <task id="LOCAL-00110" summary="Removed redundant `#if DEBUG` initializations and streamlined `RunManager` configuration for improved clarity and maintainability.">
+      <option name="closed" value="true" />
+      <created>1755289399212</created>
+      <option name="number" value="00110" />
+      <option name="presentableId" value="LOCAL-00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1755289399212</updated>
+    </task>
+    <task id="LOCAL-00111" summary="Replaced static counters with `DataRepository` in tests, updated constructors to use dependency injection, and refactored related logic for improved consistency and functionality.">
+      <option name="closed" value="true" />
+      <created>1755292350087</created>
+      <option name="number" value="00111" />
+      <option name="presentableId" value="LOCAL-00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1755292350087</updated>
+    </task>
+    <task id="LOCAL-00112" summary="Simplified interfaces and test classes by replacing method/property definitions with concise syntax, removed unused members, and applied `[UsedImplicitly]` annotations where necessary to improve code clarity and maintainability.">
+      <option name="closed" value="true" />
+      <created>1755294090833</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1755294090833</updated>
+    </task>
+    <task id="LOCAL-00113" summary="Simplified test classes by converting method/property definitions to concise syntax and removing unused members to enhance code maintainability and readability.">
+      <option name="closed" value="true" />
+      <created>1755374474674</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1755374474674</updated>
+    </task>
+    <task id="LOCAL-00114" summary="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, and adding necessary suppressions to improve maintainability and readability.">
+      <option name="closed" value="true" />
+      <created>1755375346111</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1755375346111</updated>
+    </task>
+    <task id="LOCAL-00115" summary="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and adding `[UsedImplicitly]` annotations to improve code maintainability and readability.">
+      <option name="closed" value="true" />
+      <created>1755377044306</created>
+      <option name="number" value="00115" />
+      <option name="presentableId" value="LOCAL-00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1755377044306</updated>
+    </task>
+    <task id="LOCAL-00116" summary="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and addressing warnings to improve code clarity and maintainability.">
+      <option name="closed" value="true" />
+      <created>1755378360310</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1755378360310</updated>
+    </task>
+    <task id="LOCAL-00117" summary="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and addressing warnings to improve maintainability and readability.">
+      <option name="closed" value="true" />
+      <created>1755465743572</created>
+      <option name="number" value="00117" />
+      <option name="presentableId" value="LOCAL-00117" />
+      <option name="project" value="LOCAL" />
+      <updated>1755465743572</updated>
+    </task>
+    <task id="LOCAL-00118" summary="Refactored test classes and interfaces by replacing method definitions with concise syntax, removing unused members, and addressing configuration changes to improve maintainability and readability.">
+      <option name="closed" value="true" />
+      <created>1755521483262</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1755521483262</updated>
+    </task>
+    <task id="LOCAL-00119" summary="Removed unused methods and imports across classes, added `[PublicAPI]` annotations to public members, and improved code maintainability by simplifying configurations and refactoring.">
+      <option name="closed" value="true" />
+      <created>1755522083845</created>
+      <option name="number" value="00119" />
+      <option name="presentableId" value="LOCAL-00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1755522083845</updated>
+    </task>
+    <task id="LOCAL-00120" summary="Refactored test classes by replacing property definitions with concise syntax, adding `[UsedImplicitly]` annotations, removing unused members, and applying suppressions to enhance readability and code maintainability.">
+      <option name="closed" value="true" />
+      <created>1755547820577</created>
+      <option name="number" value="00120" />
+      <option name="presentableId" value="LOCAL-00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1755547820577</updated>
+    </task>
+    <task id="LOCAL-00121" summary="Refactored test classes by replacing method/property definitions with concise syntax, removing unused members, adding suppressions, and handling warnings to enhance code maintainability and readability.">
+      <option name="closed" value="true" />
+      <created>1755548537171</created>
+      <option name="number" value="00121" />
+      <option name="presentableId" value="LOCAL-00121" />
+      <option name="project" value="LOCAL" />
+      <updated>1755548537171</updated>
+    </task>
+    <option name="localTasksCounter" value="122" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -601,32 +610,32 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Replaced local variables with constants across multiple test cases to improve immutability and code clarity." />
-    <MESSAGE value="Made various methods `static` across multiple test cases to improve immutability, simplify usage, and ensure consistency." />
-    <MESSAGE value="Refactored test cases to simplify logic using modern syntax, improved immutability, and enhanced code clarity across multiple files." />
-    <MESSAGE value="Made multiple properties and methods `private` across test cases to improve encapsulation, enhance immutability, and simplify code structure." />
-    <MESSAGE value="Refactored classes to use record-like syntax for constructor initialization, added `[UsedImplicitly]` annotations, and streamlined code by removing redundant properties and logic." />
-    <MESSAGE value="Added `[PublicAPI]` annotations to multiple methods and interfaces across test cases to improve API discoverability and documentation." />
-    <MESSAGE value="Marked type parameters as `in` or `out` in multiple generic interfaces to improve covariance and contravariance support across test cases." />
-    <MESSAGE value="Removed `XmlInterpreter` and related classes, tests, and implementation references to simplify and modernize the codebase." />
-    <MESSAGE value="Simplified conditional patterns across multiple classes to improve readability and reduce redundancy." />
-    <MESSAGE value="Refactored multiple classes to reduce redundancy, improve readability, and adopt modern syntax patterns across core files and test cases. Added `[UsedImplicitly]` annotations where necessary to enhance code clarity." />
-    <MESSAGE value="Simplified conditional logic and streamlined method structures in `MiddlewareComponentModelContributor` and `CrossWiringComponentModelContributor` to improve readability and maintainability. Updated test class constructors to adopt more concise parameter initialization." />
-    <MESSAGE value="Added `[PublicAPI]` annotations and replaced redundant null checks with modern conditional assignment operators to improve code clarity and consistency across core files." />
-    <MESSAGE value="Refactored properties in test classes to use read-only auto-properties where applicable, improved code clarity, and resolved inspection warnings." />
-    <MESSAGE value="Removed redundant static members and unused assignments from test classes to streamline the code and improve maintainability." />
-    <MESSAGE value="Added `[UsedImplicitly]` annotations and converted several classes to `static` to improve code clarity, ensure consistency, and align with best practices across test and core files." />
-    <MESSAGE value="Refactored multiple classes to replace `public` static members with `private` fields, updated access modifiers for methods and enums, and streamlined code consistency across core and test files." />
-    <MESSAGE value="Added `[PublicAPI]` annotations to multiple methods in `WindsorServiceProviderFactoryBase`. Removed redundant virtual methods in test classes and updated property to non-virtual in `CustomerImpl` for clarity and consistency." />
-    <MESSAGE value="Removed unused method parameters from multiple interfaces, classes, and test cases to simplify method signatures and improve code clarity. Consolidated parameter-less methods for consistency and maintainability across core and test files." />
-    <MESSAGE value="Added ReSharper suppression comments for unused type parameters in interfaces and removed unused method parameters in `WindsorContainerBuilder`. Simplified method signatures and resolved inspection warnings across test and core files." />
-    <MESSAGE value="Marked unused parameters with `#pragma warning` suppressions, removed redundant method bodies, and added `[PublicAPI]` annotations to enhance code clarity and maintainability across core files and test cases." />
-    <MESSAGE value="Removed unused method parameters in `ICatalog` and `SimpleCatalog`, refactored `RemoveItem` method to align with updated interface definitions, and suppressed ReSharper warnings for unused parameters." />
-    <MESSAGE value="Removed unused properties, methods, and interfaces across test files; converted multiple interfaces to single-line declarations and adjusted property accessors to read-only where applicable to simplify and streamline code." />
-    <MESSAGE value="Added `[PublicAPI]` annotation to `GetConfigurationForChildContainers` and updated test interface properties to read-only to improve code clarity and consistency." />
-    <MESSAGE value="Made properties in test fakes private set to enforce immutability and updated access modifiers in core and test files to improve consistency and code clarity." />
-    <MESSAGE value="Removed unused classes, interfaces, and methods across test and core files to simplify codebase and improve maintainability. Added `[UsedImplicitly]` annotations where applicable." />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed unused classes, interfaces, and methods across test and core files to simplify codebase and improve maintainability. Added `[UsedImplicitly]` annotations where applicable." />
+    <MESSAGE value="Replaced null check with `ArgumentNullException.ThrowIfNull` in `GetFullPath` method for improved null safety and simplified logic." />
+    <MESSAGE value="Removed obsolete test component classes and configurations for improved maintainability and to reduce project clutter. Added `[PublicAPI]` annotations to interfaces in `IKernel` and `IWindsorContainer` for better API clarity." />
+    <MESSAGE value="Removed obsolete test components and interfaces from `Castle.Windsor.Tests` and added `[UsedImplicitly]` annotations to several classes for improved maintainability and clarity." />
+    <MESSAGE value="Added `Debug.Assert` to ensure `FullName` is not null in test type filters for improved null safety and code reliability." />
+    <MESSAGE value="Removed obsolete installer and test component classes from the project to reduce clutter and improve maintainability." />
+    <MESSAGE value="Removed obsolete test interfaces and generic mapper class, and added `[UsedImplicitly]` annotations to specific mappers to improve maintainability and code clarity." />
+    <MESSAGE value="Removed obsolete test component implementations and interfaces, replacing them with concise definitions to reduce clutter and improve maintainability." />
+    <MESSAGE value="Marked multiple disposable and test classes as `sealed`, removed redundant constructors, replaced initializations with concise definitions, and applied `GC.SuppressFinalize` in disposable components for improved reliability and maintainability." />
+    <MESSAGE value="Updated all dependencies to latest versions." />
+    <MESSAGE value="Improved the equalities with false." />
+    <MESSAGE value="Updated possible null." />
+    <MESSAGE value="Refactored constructors to use concise definitions, replaced redundant initializations, applied `Debug.Assert` for improved null handling, and removed unnecessary checks and obsolete methods for better readability and maintainability." />
+    <MESSAGE value="Updated `HasTwoConstructors` to use optional parameter for concise definition and removed redundant constructor implementation." />
+    <MESSAGE value="Removed redundant `#if DEBUG` initializations and streamlined `RunManager` configuration for improved clarity and maintainability." />
+    <MESSAGE value="Replaced static counters with `DataRepository` in tests, updated constructors to use dependency injection, and refactored related logic for improved consistency and functionality." />
+    <MESSAGE value="Simplified interfaces and test classes by replacing method/property definitions with concise syntax, removed unused members, and applied `[UsedImplicitly]` annotations where necessary to improve code clarity and maintainability." />
+    <MESSAGE value="Simplified test classes by converting method/property definitions to concise syntax and removing unused members to enhance code maintainability and readability." />
+    <MESSAGE value="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, and adding necessary suppressions to improve maintainability and readability." />
+    <MESSAGE value="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and adding `[UsedImplicitly]` annotations to improve code maintainability and readability." />
+    <MESSAGE value="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and addressing warnings to improve code clarity and maintainability." />
+    <MESSAGE value="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and addressing warnings to improve maintainability and readability." />
+    <MESSAGE value="Refactored test classes and interfaces by replacing method definitions with concise syntax, removing unused members, and addressing configuration changes to improve maintainability and readability." />
+    <MESSAGE value="Removed unused methods and imports across classes, added `[PublicAPI]` annotations to public members, and improved code maintainability by simplifying configurations and refactoring." />
+    <MESSAGE value="Refactored test classes by replacing property definitions with concise syntax, adding `[UsedImplicitly]` annotations, removing unused members, and applying suppressions to enhance readability and code maintainability." />
+    <MESSAGE value="Refactored test classes by replacing method/property definitions with concise syntax, removing unused members, adding suppressions, and handling warnings to enhance code maintainability and readability." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored test classes by replacing method/property definitions with concise syntax, removing unused members, adding suppressions, and handling warnings to enhance code maintainability and readability." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -644,20 +653,14 @@
           <option name="timeStamp" value="3" />
         </breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/Castle.Facilities.Logging/LoggingFacility.cs</url>
-          <line>52</line>
-          <properties documentPath="$PROJECT_DIR$/src/Castle.Facilities.Logging/LoggingFacility.cs" containingFunctionPresentation="Constructor 'LoggingFacility'" />
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/DefaultDiagnosticsSubSystem.cs</url>
-          <line>31</line>
-          <properties documentPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/DefaultDiagnosticsSubSystem.cs" containingFunctionPresentation="Method 'GetDiagnostic'">
+          <line>27</line>
+          <properties documentPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/DefaultDiagnosticsSubSystem.cs" containingFunctionPresentation="Method 'AddDiagnostic'">
             <startOffsets>
-              <option value="1231" />
+              <option value="1122" />
             </startOffsets>
             <endOffsets>
-              <option value="1292" />
+              <option value="1123" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="13" />

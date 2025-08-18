@@ -134,11 +134,8 @@ public class MultiServiceComponentsTestCase : AbstractContainerTestCase
 #pragma warning restore CS9113
 
     [UsedImplicitly]
-    private class ServiceUsingRepository
+    private class ServiceUsingRepository(IRepository repos)
     {
         // ReSharper disable once UnusedParameter.Local
-        public ServiceUsingRepository(IRepository repos)
-        {
-        }
     }
 }

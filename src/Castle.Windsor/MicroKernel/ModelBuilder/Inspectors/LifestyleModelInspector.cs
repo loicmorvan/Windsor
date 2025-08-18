@@ -30,14 +30,9 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
 ///     components.
 /// </remarks>
 [Serializable]
-public class LifestyleModelInspector : IContributeComponentModelConstruction
+public class LifestyleModelInspector(IConversionManager converter) : IContributeComponentModelConstruction
 {
-    private readonly IConversionManager _converter;
-
-    public LifestyleModelInspector(IConversionManager converter)
-    {
-        _converter = converter;
-    }
+    private readonly IConversionManager _converter = converter;
 
     /// <summary>
     ///     Searches for the lifestyle in the configuration and, if unsuccessful look for the lifestyle attribute in the

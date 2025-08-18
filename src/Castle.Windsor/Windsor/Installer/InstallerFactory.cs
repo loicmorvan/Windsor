@@ -18,6 +18,7 @@ using JetBrains.Annotations;
 
 namespace Castle.Windsor.Windsor.Installer;
 
+[PublicAPI]
 public class InstallerFactory
 {
 	/// <summary>
@@ -25,7 +26,6 @@ public class InstallerFactory
 	///     <param name="installerType" />
 	/// </summary>
 	/// <remarks>Default implementation uses public parameterless constructor to create the instance.</remarks>
-	[PublicAPI]
 	public virtual IWindsorInstaller CreateInstance(Type installerType)
 	{
 		return installerType.CreateInstance<IWindsorInstaller>();

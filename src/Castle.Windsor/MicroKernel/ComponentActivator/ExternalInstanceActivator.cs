@@ -19,14 +19,13 @@ using JetBrains.Annotations;
 namespace Castle.Windsor.MicroKernel.ComponentActivator;
 
 [PublicAPI]
-public class ExternalInstanceActivator : AbstractComponentActivator, IDependencyAwareActivator
+public class ExternalInstanceActivator(
+    ComponentModel model,
+    IKernelInternal kernel,
+    ComponentInstanceDelegate onCreation,
+    ComponentInstanceDelegate onDestruction)
+    : AbstractComponentActivator(model, kernel, onCreation, onDestruction), IDependencyAwareActivator
 {
-    public ExternalInstanceActivator(ComponentModel model, IKernelInternal kernel, ComponentInstanceDelegate onCreation,
-        ComponentInstanceDelegate onDestruction)
-        : base(model, kernel, onCreation, onDestruction)
-    {
-    }
-
     public bool CanProvideRequiredDependencies(ComponentModel component)
     {
         //we already have an instance so we don't need to provide any dependencies at all

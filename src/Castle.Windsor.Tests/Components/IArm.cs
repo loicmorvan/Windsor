@@ -14,9 +14,4 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public interface IArm
-{
-    float GetLength();
-
-    void Rotate();
-}
+public interface IArm;

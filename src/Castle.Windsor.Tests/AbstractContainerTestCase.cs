@@ -33,6 +33,8 @@ public abstract class AbstractContainerTestCase : IDisposable
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         _container.Dispose();
     }
 

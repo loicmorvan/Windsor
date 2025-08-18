@@ -77,7 +77,7 @@ public class DefaultGenericHandler(
         }
 
         var openService = service.GetGenericTypeDefinition();
-        if (base.Supports(openService) == false)
+        if (!base.Supports(openService))
         {
             return false;
         }
@@ -93,7 +93,7 @@ public class DefaultGenericHandler(
             return true;
         }
 
-        if (service.GetTypeInfo().IsGenericType == false || service.GetTypeInfo().IsGenericTypeDefinition)
+        if (!service.GetTypeInfo().IsGenericType || service.GetTypeInfo().IsGenericTypeDefinition)
         {
             return false;
         }
@@ -181,7 +181,7 @@ public class DefaultGenericHandler(
         var implType = GetClosedImplementationType(context, instanceRequired);
         if (implType == null)
         {
-            Debug.Assert(instanceRequired == false);
+            Debug.Assert(!instanceRequired);
             return null;
         }
 
@@ -204,7 +204,7 @@ public class DefaultGenericHandler(
 
     protected bool SupportsAssignable(Type service, Type modelService, Type[] serviceArguments)
     {
-        if (modelService.GetTypeInfo().IsGenericTypeDefinition == false ||
+        if (!modelService.GetTypeInfo().IsGenericTypeDefinition ||
             modelService.GetGenericArguments().Length != serviceArguments.Length)
         {
             return false;
@@ -216,7 +216,7 @@ public class DefaultGenericHandler(
             return false;
         }
 
-        if (service.IsAssignableFrom(modelServiceClosed) == false)
+        if (!service.IsAssignableFrom(modelServiceClosed))
         {
             return false;
         }
@@ -306,7 +306,7 @@ public class DefaultGenericHandler(
         catch (ArgumentException e)
         {
             // may throw in some cases when impl has generic constraints that service hasn't
-            if (instanceRequired == false)
+            if (!instanceRequired)
             {
                 return null;
             }

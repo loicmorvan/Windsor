@@ -44,7 +44,7 @@ public class UsingContainerAsServiceLocatorDiagnostic(IKernel kernel) : IUsingCo
         var allHandlers = kernel.GetAssignableHandlers(typeof(object));
         var handlersWithContainerDependency = allHandlers.Where(HasDependencyOnTheContainer);
         return handlersWithContainerDependency
-            .Where(h => ExceptionsToTheRule.Any(e => e(h)) == false)
+            .Where(h => !ExceptionsToTheRule.Any(e => e(h)))
             .ToArray();
     }
 

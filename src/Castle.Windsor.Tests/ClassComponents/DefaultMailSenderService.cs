@@ -14,7 +14,7 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class DefaultMailSenderService : IDisposable
+public sealed class DefaultMailSenderService : IDisposable
 {
     public bool IsDisposed { get; private set; }
 

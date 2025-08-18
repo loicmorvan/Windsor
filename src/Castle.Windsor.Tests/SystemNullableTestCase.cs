@@ -57,11 +57,7 @@ public class SystemNullableTestCase : AbstractContainerTestCase
     [UsedImplicitly]
     public sealed class DependencyFromContainer;
 
-    private sealed class ComponentWithNonOptionalNullableParameter
-    {
-        public ComponentWithNonOptionalNullableParameter(int? nonOptionalNullableParameter,
-            DependencyFromContainer dependencyFromContainer)
-        {
-        }
-    }
+    private sealed class ComponentWithNonOptionalNullableParameter(
+        int? nonOptionalNullableParameter,
+        DependencyFromContainer dependencyFromContainer);
 }

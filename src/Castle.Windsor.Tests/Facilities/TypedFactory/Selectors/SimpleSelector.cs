@@ -18,10 +18,8 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
 
 public class SimpleSelector : DefaultTypedFactoryComponentSelector
 {
-    public static int InstancesCreated;
-
-    public SimpleSelector()
+    public SimpleSelector(DataRepository dataRepository)
     {
-        InstancesCreated++;
+        dataRepository.RegisterCallerMemberName();
     }
 }

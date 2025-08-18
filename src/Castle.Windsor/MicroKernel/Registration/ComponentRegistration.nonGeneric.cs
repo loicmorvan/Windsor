@@ -19,9 +19,4 @@ namespace Castle.Windsor.MicroKernel.Registration;
 ///     <para />
 ///     You can create a new registration with the <see cref="Component" /> factory.
 /// </summary>
-public class ComponentRegistration : ComponentRegistration<object>
-{
-    public ComponentRegistration(params Type[] serviceTypes) : base(serviceTypes)
-    {
-    }
-}
+public class ComponentRegistration(params Type[] serviceTypes) : ComponentRegistration<object>(serviceTypes);

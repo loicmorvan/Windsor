@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Core.Configuration;
 using Castle.Core.Resource;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.SubSystems.Configuration;
@@ -23,15 +22,6 @@ namespace Castle.Windsor.Windsor.Configuration.Interpreters;
 /// <summary>Provides common methods for those who wants to implement <see cref="IConfigurationInterpreter" /></summary>
 public abstract class AbstractInterpreter : IConfigurationInterpreter
 {
-    protected const string ContainersNodeName = "containers";
-    protected const string ContainerNodeName = "container";
-    protected const string FacilitiesNodeName = "facilities";
-    protected const string FacilityNodeName = "facility";
-    protected const string ComponentsNodeName = "components";
-    protected const string ComponentNodeName = "component";
-    protected const string InstallersNodeName = "installers";
-    protected const string InstallNodeName = "install";
-
     private readonly Stack<IResource> _resourceStack = new();
 
     protected AbstractInterpreter(IResource source)
@@ -75,48 +65,5 @@ public abstract class AbstractInterpreter : IConfigurationInterpreter
     protected void PopResource()
     {
         _resourceStack.Pop();
-    }
-
-    protected static void AddChildContainerConfig(string name, IConfiguration childContainer, IConfigurationStore store)
-    {
-        AssertValidId(name);
-
-        // TODO: Use import collection on type attribute (if it exists)
-
-        store.AddChildContainerConfiguration(name, childContainer);
-    }
-
-    protected static void AddFacilityConfig(string id, IConfiguration facility, IConfigurationStore store)
-    {
-        AssertValidId(id);
-
-        // TODO: Use import collection on type attribute (if it exists)
-
-        store.AddFacilityConfiguration(id, facility);
-    }
-
-    protected static void AddComponentConfig(string id, IConfiguration component, IConfigurationStore store)
-    {
-        AssertValidId(id);
-
-        // TODO: Use import collection on type and service attribute (if they exist)
-
-        store.AddComponentConfiguration(id, component);
-    }
-
-    protected static void AddInstallerConfig(IConfiguration installer, IConfigurationStore store)
-    {
-        store.AddInstallerConfiguration(installer);
-    }
-
-    private static void AssertValidId(string id)
-    {
-        if (!string.IsNullOrEmpty(id))
-        {
-            return;
-        }
-
-        const string message = "Component or Facility was declared without a proper 'id' or 'type' attribute.";
-        throw new ConfigurationProcessingException(message);
     }
 }

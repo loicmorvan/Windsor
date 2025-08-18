@@ -19,7 +19,7 @@ using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 namespace Castle.Windsor.Tests.TestInfrastructure;
 
 [Description("statically")]
-public class StaticScopeAccessor : IScopeAccessor
+public sealed class StaticScopeAccessor : IScopeAccessor
 {
     private static DefaultLifetimeScope Scope { get; set; } = new();
 

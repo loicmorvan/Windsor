@@ -223,10 +223,10 @@ public class LazyComponentsTestCase : AbstractContainerTestCase
     [Fact]
     public void Releasing_lazy_releases_requested_component()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
 
         Container.Register(
-            Component.For<LifecycleCounter>().Instance(counter),
+            Component.For<DataRepository>().Instance(counter),
             Component.For<DisposeTestCase.Disposable>().LifeStyle.Transient);
 
         var lazy = Container.Resolve<Lazy<DisposeTestCase.Disposable>>();

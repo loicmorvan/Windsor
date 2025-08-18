@@ -14,15 +14,9 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class Root
+public class Root(Branch branch, Leaf leaf)
 {
-    public Root(Branch branch, Leaf leaf)
-    {
-        Branch = branch;
-        Leaf = leaf;
-    }
+    public Branch Branch { get; } = branch;
 
-    public Branch Branch { get; }
-
-    public Leaf Leaf { get; }
+    public Leaf Leaf { get; } = leaf;
 }

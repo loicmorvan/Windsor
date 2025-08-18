@@ -12,20 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Windsor.Tests.Facilities.TypedFactory;
+
 namespace Castle.Windsor.Tests.Components;
 
-public class MyService2 : IService2
+public class MyService2(DataRepository dataRepository) : IService2
 {
-    public static string Staticname;
-
-    static MyService2()
-    {
-        Staticname = string.Empty;
-    }
-
     public string Name
     {
-        get => Staticname;
-        set => Staticname = value;
+        get => dataRepository["Name"];
+        set => dataRepository.RegisterValue("Name", value);
     }
 }

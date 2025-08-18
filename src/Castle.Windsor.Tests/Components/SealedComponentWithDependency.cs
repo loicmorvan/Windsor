@@ -14,14 +14,9 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public sealed class SealedComponentWithDependency : IComponent
+public sealed class SealedComponentWithDependency(ISimpleService dependency) : IComponent
 {
-    public SealedComponentWithDependency(ISimpleService dependency)
-    {
-        Dependency = dependency;
-    }
-
-    public ISimpleService Dependency { get; private set; }
+    public ISimpleService Dependency { get; private set; } = dependency;
 
     public int Id => 0;
 }

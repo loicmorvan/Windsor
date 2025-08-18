@@ -55,12 +55,9 @@ public class DefaultComplexConverter : AbstractTypeConverter
 
         if (string.IsNullOrEmpty(typeNode))
         {
-            if (type.GetTypeInfo().IsInterface)
-            {
-                throw new ConverterException("A type attribute must be specified for interfaces");
-            }
-
-            return type;
+            return type.GetTypeInfo().IsInterface
+                ? throw new ConverterException("A type attribute must be specified for interfaces")
+                : type;
         }
 
         var implType = Context.Composition.PerformConversion<Type>(typeNode);
@@ -187,7 +184,7 @@ public class DefaultComplexConverter : AbstractTypeConverter
 
     public override bool CanHandleType(Type type)
     {
-        return type.GetTypeInfo().IsPrimitive == false;
+        return !type.GetTypeInfo().IsPrimitive;
     }
 
     public override object PerformConversion(IConfiguration configuration, Type targetType)

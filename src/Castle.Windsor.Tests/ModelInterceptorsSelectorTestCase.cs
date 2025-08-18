@@ -118,12 +118,12 @@ public class ModelInterceptorsSelectorTestCase
     [Fact]
     public void Interceptor_selected_by_selector_gets_released_properly()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
         var container = new WindsorContainer();
         container.Kernel.ProxyFactory.AddInterceptorSelector(
             new ByTypeInterceptorSelector(typeof(DisposableInterceptor)));
         container.Register(
-            Component.For<LifecycleCounter>().Instance(counter),
+            Component.For<DataRepository>().Instance(counter),
             Component.For<DisposableInterceptor>(),
             Component.For<A>().LifeStyle.Transient);
 

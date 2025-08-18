@@ -19,14 +19,10 @@ using Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 namespace Castle.Windsor.MicroKernel.Registration.Lifestyle;
 
-public class LifestyleGroup<TService> : RegistrationGroup<TService>
+public class LifestyleGroup<TService>(ComponentRegistration<TService> registration)
+    : RegistrationGroup<TService>(registration)
     where TService : class
 {
-    public LifestyleGroup(ComponentRegistration<TService> registration)
-        : base(registration)
-    {
-    }
-
     public ComponentRegistration<TService> Transient =>
         AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Transient));
 
@@ -44,7 +40,7 @@ public class LifestyleGroup<TService> : RegistrationGroup<TService>
     /// <returns> </returns>
     public ComponentRegistration<TService> Is(LifestyleType type)
     {
-        if (Enum.IsDefined(type) == false)
+        if (!Enum.IsDefined(type))
         {
             throw InvalidValue(type, "Not a valid lifestyle");
         }
@@ -133,7 +129,7 @@ public class LifestyleGroup<TService> : RegistrationGroup<TService>
     /// <returns> </returns>
     public ComponentRegistration<TService> Custom(Type customLifestyleType)
     {
-        if (customLifestyleType.Is<ILifestyleManager>() == false)
+        if (!customLifestyleType.Is<ILifestyleManager>())
         {
             throw new ComponentRegistrationException(
                 $"The type {customLifestyleType.FullName} must implement {typeof(ILifestyleManager).FullName} to " +

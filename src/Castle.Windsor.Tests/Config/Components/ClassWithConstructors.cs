@@ -17,17 +17,13 @@ namespace Castle.Windsor.Tests.Config.Components;
 /// <summary>Summary description for ClassWithConstructors.</summary>
 public class ClassWithConstructors
 {
+    // ReSharper disable once UnusedParameter.Local
     public ClassWithConstructors(string host)
     {
-        Host = host;
     }
 
+    // ReSharper disable once UnusedParameter.Local
     public ClassWithConstructors(string[] hosts)
     {
-        Hosts = hosts;
     }
-
-    public string Host { get; }
-
-    public string[] Hosts { get; }
 }

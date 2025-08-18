@@ -17,7 +17,7 @@ using Castle.Windsor.MicroKernel.Lifestyle;
 namespace Castle.Windsor.Tests.ClassComponents;
 
 /// <summary>Summary description for MyLifestyleHandler.</summary>
-public class CustomLifestyleManager : AbstractLifestyleManager
+public sealed class CustomLifestyleManager : AbstractLifestyleManager
 {
     public override void Dispose()
     {

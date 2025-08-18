@@ -245,7 +245,7 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
     [Fact]
     public void Factory_does_not_reference_components_after_they_are_released()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
 
         Container.Register(
             Component
@@ -269,8 +269,10 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
     [Fact]
     public void Factory_explicitly_pick_registered_selector()
     {
-        SimpleSelector.InstancesCreated = 0;
+        var dataRepository = new DataRepository();
+        
         Container.Register(
+            Component.For<DataRepository>().Instance(dataRepository),
             Component.For<ITypedFactoryComponentSelector>().ImplementedBy<NotInstantiableSelector>().Named("1")
                 .LifeStyle.Transient,
             Component.For<ITypedFactoryComponentSelector>().ImplementedBy<SimpleSelector>().Named("2").LifeStyle
@@ -279,7 +281,7 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 
         Container.Resolve<Func<Foo>>();
 
-        Assert.Equal(1, SimpleSelector.InstancesCreated);
+        Assert.Equal(1, dataRepository[".ctor"]);
     }
 
     [Fact]
@@ -301,7 +303,7 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
         Container.Kernel.ReleasePolicy = new NoTrackingReleasePolicy();
 #pragma warning restore 612,618
         Container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Component.For<DisposableFoo>().LifeStyle.Transient,
             Component.For<UsesDisposableFooDelegate>().LifeStyle.Transient);
         var dependsOnFoo = Container.Resolve<UsesDisposableFooDelegate>();
@@ -315,7 +317,7 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
     public void Factory_obeys_release_policy_tracking()
     {
         Container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Component.For<DisposableFoo>().LifeStyle.Transient,
             Component.For<UsesDisposableFooDelegate>().LifeStyle.Transient);
 
@@ -368,7 +370,7 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
     [Fact]
     public void Registered_Delegate_prefered_over_factory()
     {
-        var foo = new DisposableFoo(new LifecycleCounter());
+        var foo = new DisposableFoo(new DataRepository());
         Container.Register(Component.For<DisposableFoo>().LifeStyle.Transient,
             Component.For<Func<int, DisposableFoo>>().Instance(_ => foo),
             Component.For<UsesDisposableFooDelegate>().LifeStyle.Transient);
@@ -412,7 +414,7 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
     [Fact]
     public void Releasing_component_depending_on_a_factory_releases_what_was_pulled_from_it()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
 
         Container.Register(
             Component
@@ -433,10 +435,10 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
     [Fact]
     public void Releasing_factory_releases_selector()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
 
         Container.Register(
-            Component.For<LifecycleCounter>().Instance(counter),
+            Component.For<DataRepository>().Instance(counter),
             Component.For<SelectorWithLifecycleCounter>().LifeStyle.Transient,
             Component.For<Func<Foo>>().LifeStyle.Transient
                 .AsFactory(x => x.SelectedWith<SelectorWithLifecycleCounter>()));
@@ -496,19 +498,19 @@ public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
     }
 
     [UsedImplicitly]
-    public class SelectorWithLifecycleCounter : ITypedFactoryComponentSelector, IDisposable
+    public sealed class SelectorWithLifecycleCounter : ITypedFactoryComponentSelector, IDisposable
     {
-        private readonly LifecycleCounter _counter;
+        private readonly DataRepository _counter;
 
-        public SelectorWithLifecycleCounter(LifecycleCounter counter)
+        public SelectorWithLifecycleCounter(DataRepository counter)
         {
             _counter = counter;
-            counter.Increment();
+            counter.RegisterCallerMemberName();
         }
 
         public void Dispose()
         {
-            _counter.Increment();
+            _counter.RegisterCallerMemberName();
         }
 
         public Func<IKernelInternal, IReleasePolicy, object> SelectComponent(MethodInfo method,

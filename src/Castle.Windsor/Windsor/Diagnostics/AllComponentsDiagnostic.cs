@@ -16,17 +16,10 @@ using Castle.Windsor.MicroKernel;
 
 namespace Castle.Windsor.Windsor.Diagnostics;
 
-public class AllComponentsDiagnostic : IAllComponentsDiagnostic
+public class AllComponentsDiagnostic(IKernel kernel) : IAllComponentsDiagnostic
 {
-    private readonly IKernel _kernel;
-
-    public AllComponentsDiagnostic(IKernel kernel)
-    {
-        _kernel = kernel;
-    }
-
     public IHandler[] Inspect()
     {
-        return _kernel.GetAssignableHandlers(typeof(object));
+        return kernel.GetAssignableHandlers(typeof(object));
     }
 }

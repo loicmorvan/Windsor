@@ -39,7 +39,7 @@ public class ReleasePolicyTrackedObjectsTestCase : AbstractContainerTestCase
     private void Register()
     {
         Container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Component.For<DisposableFoo>().LifeStyle.Transient);
     }
 

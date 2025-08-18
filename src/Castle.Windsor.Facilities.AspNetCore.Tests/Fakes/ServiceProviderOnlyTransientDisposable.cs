@@ -1,6 +1,7 @@
 namespace Castle.Windsor.Facilities.AspNetCore.Tests.Fakes;
 
-public class ServiceProviderOnlyTransientDisposable : ServiceProviderOnlyTransient, IDisposable, IDisposableObservable
+public sealed class ServiceProviderOnlyTransientDisposable : ServiceProviderOnlyTransient, IDisposable,
+    IDisposableObservable
 {
     public void Dispose()
     {
@@ -9,5 +10,5 @@ public class ServiceProviderOnlyTransientDisposable : ServiceProviderOnlyTransie
     }
 
     public bool Disposed { get; private set; }
-    public int DisposedCount { get; set; }
+    public int DisposedCount { get; private set; }
 }

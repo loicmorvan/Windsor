@@ -3,6 +3,7 @@
     <PropertyGroup>
         <ImplicitUsings>true</ImplicitUsings>
         <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <Import Project="$(MSBuildThisFileDirectory)\buildscripts\common.props"/>

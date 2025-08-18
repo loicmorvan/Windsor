@@ -21,7 +21,7 @@ public class MultithreadedPooledTestCase
 {
     private readonly ManualResetEvent _startEvent = new(false);
     private readonly ManualResetEvent _stopEvent = new(false);
-    private IKernel _kernel;
+    private DefaultKernel _kernel;
 
     private void ExecuteMethodUntilSignal()
     {

@@ -5,8 +5,8 @@ namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 // ReSharper disable once UnusedTypeParameter
 public class StartableChainGeneric<T>
 {
-    public StartableChainGeneric(LifecycleCounter lifecycleCounter)
+    public StartableChainGeneric(DataRepository dataRepository)
     {
-        lifecycleCounter.Increment();
+        dataRepository.RegisterCallerMemberName();
     }
 }

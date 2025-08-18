@@ -56,20 +56,14 @@ public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTest
         public event EventHandler Disposed;
     }
 
-    public interface IFactory<T>
+    public interface IFactory<out T>
     {
         T Resolve();
-        void Release(T instance);
     }
 
-    public sealed class LongLivedService
+    public sealed class LongLivedService(IFactory<Foo> fooFactory)
     {
-        public LongLivedService(IFactory<Foo> fooFactory)
-        {
-            FooFactory = fooFactory;
-        }
-
-        private IFactory<Foo> FooFactory { get; }
+        private IFactory<Foo> FooFactory { get; } = fooFactory;
 
         public Foo SqlConnection { get; private set; }
 
@@ -77,23 +71,13 @@ public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTest
         {
             SqlConnection = FooFactory.Resolve();
         }
-
-        public void Dispose()
-        {
-            FooFactory.Release(SqlConnection);
-        }
     }
 
     public sealed class ShortLivedViewModel
     {
         public ShortLivedViewModel(IFactory<Foo> fooFactory, LongLivedService longLivedService)
         {
-            FooFactory = fooFactory;
-            LongLivedService = longLivedService;
             longLivedService.StartSomething();
         }
-
-        public IFactory<Foo> FooFactory { get; }
-        public LongLivedService LongLivedService { get; }
     }
 }

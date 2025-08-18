@@ -14,12 +14,6 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class EnumerableDepAsConstructor
-{
-    public EnumerableDepAsConstructor(IEnumerable<IEmptyService> services)
-    {
-        Services = services;
-    }
-
-    public IEnumerable<IEmptyService> Services { get; }
-}
+#pragma warning disable CS9113 // Parameter is unread.
+public class EnumerableDepAsConstructor(IEnumerable<IEmptyService> services);
+#pragma warning restore CS9113 // Parameter is unread.

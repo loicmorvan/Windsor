@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace Castle.Windsor.Tests.Components;
 
 public class CollectionDepAsProperty
 {
-    public ICollection<IEmptyService> Services { get; set; }
+    public ICollection<IEmptyService> Services { get; [UsedImplicitly] set; }
 }

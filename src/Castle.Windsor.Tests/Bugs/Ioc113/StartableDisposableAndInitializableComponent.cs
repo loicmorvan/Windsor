@@ -2,14 +2,9 @@ using Castle.Windsor.Core;
 
 namespace Castle.Windsor.Tests.Bugs.Ioc113;
 
-public class StartableDisposableAndInitializableComponent : IInitializable, IDisposable, IStartable
+public sealed class StartableDisposableAndInitializableComponent : IInitializable, IDisposable, IStartable
 {
-    public readonly IList<SdiComponentMethods> CalledMethods;
-
-    public StartableDisposableAndInitializableComponent()
-    {
-        CalledMethods = new List<SdiComponentMethods>();
-    }
+    public readonly List<SdiComponentMethods> CalledMethods = [];
 
     public void Dispose()
     {

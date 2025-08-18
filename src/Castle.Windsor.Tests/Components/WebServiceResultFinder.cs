@@ -25,13 +25,5 @@ public class WebServiceResultFinder<T> : IResultFinder<T>
 
     public WebServiceResultFinder(IResultFinder<T> finder)
     {
-        Finder = finder;
-    }
-
-    public IResultFinder<T> Finder { get; }
-
-    public T Process()
-    {
-        return default;
     }
 }

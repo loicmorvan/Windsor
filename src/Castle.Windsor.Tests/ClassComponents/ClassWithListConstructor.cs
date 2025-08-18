@@ -16,12 +16,7 @@ using System.Collections;
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class ClassWithListConstructor
+public class ClassWithListConstructor(IList services)
 {
-    public ClassWithListConstructor(IList services)
-    {
-        Services = services;
-    }
-
-    public IList Services { get; }
+    public IList Services { get; } = services;
 }

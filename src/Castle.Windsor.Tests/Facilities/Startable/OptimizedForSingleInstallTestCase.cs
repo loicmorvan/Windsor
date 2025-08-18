@@ -32,7 +32,7 @@ public class OptimizedForSingleInstallTestCase : AbstractContainerTestCase
     [Fact]
     public void Appearing_missing_dependencies_dont_cause_component_to_be_started_before_the_end_of_Install()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
         Container.Install(
             new ActionBasedInstaller(c =>
                 c.Register(Component.For<Components.Startable>().DependsOn(Arguments.FromTyped([counter])))),
@@ -47,7 +47,7 @@ public class OptimizedForSingleInstallTestCase : AbstractContainerTestCase
     [Fact]
     public void Facility_wont_try_to_start_anything_before_the_end_of_Install()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
         Container.Install(
             new ActionBasedInstaller(c => c.Register(Component.For<ICustomer>().ImplementedBy<CustomerImpl>())),
             new ActionBasedInstaller(c =>
@@ -69,7 +69,7 @@ public class OptimizedForSingleInstallTestCase : AbstractContainerTestCase
     [Fact]
     public void Missing_dependencies_after_the_end_of_Install_no_exception_when_tryStart_true()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
         var container = new WindsorContainer();
         container.AddFacility<StartableFacility>(f => f.DeferredTryStart());
 
@@ -82,7 +82,7 @@ public class OptimizedForSingleInstallTestCase : AbstractContainerTestCase
     [Fact]
     public void Missing_dependencies_after_the_end_of_Install_starts_after_adding_missing_dependency_after_Install()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
         var container = new WindsorContainer();
         container.AddFacility<StartableFacility>(f => f.DeferredTryStart());
 

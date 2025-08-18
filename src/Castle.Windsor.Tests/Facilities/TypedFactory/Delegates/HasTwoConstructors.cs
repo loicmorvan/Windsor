@@ -14,20 +14,9 @@
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
-public class HasTwoConstructors
+#pragma warning disable CS9113 // Parameter is unread.
+public class HasTwoConstructors(Baz baz, string name = null)
+#pragma warning restore CS9113 // Parameter is unread.
 {
-    public HasTwoConstructors(Baz baz)
-    {
-        Baz = baz;
-    }
-
-    public HasTwoConstructors(Baz baz, string name)
-    {
-        Baz = baz;
-        Name = name;
-    }
-
-    public Baz Baz { get; }
-
-    public string Name { get; }
+    public string Name { get; } = name;
 }

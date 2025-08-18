@@ -17,10 +17,4 @@ using Castle.Windsor.Tests.ClassComponents;
 
 namespace Castle.Windsor.Tests.Components;
 
-public class CustomTestLifestyleAttribute : CustomLifestyleAttribute
-{
-    public CustomTestLifestyleAttribute()
-        : base(typeof(CustomLifestyleManager))
-    {
-    }
-}
+public class CustomTestLifestyleAttribute() : CustomLifestyleAttribute(typeof(CustomLifestyleManager));

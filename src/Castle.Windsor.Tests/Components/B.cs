@@ -14,12 +14,7 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class B
+public class B(A a)
 {
-    public B(A a)
-    {
-        A = a;
-    }
-
-    public A A { get; private set; }
+    public A A { get; private set; } = a;
 }

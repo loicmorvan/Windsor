@@ -18,24 +18,21 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Castle.Windsor.Facilities.AspNetCore.Activators;
 
-internal sealed class DelegatingTagHelperActivator : ITagHelperActivator
+internal sealed class DelegatingTagHelperActivator(
+    Predicate<Type> customCreatorSelector,
+    Func<Type, object> customTagHelperCreator,
+    ITagHelperActivator defaultTagHelperActivator)
+    : ITagHelperActivator
 {
-    private readonly Predicate<Type> _customCreatorSelector;
-    private readonly Func<Type, object> _customTagHelperCreator;
-    private readonly ITagHelperActivator _defaultTagHelperActivator;
+    private readonly Predicate<Type> _customCreatorSelector =
+        customCreatorSelector ?? throw new ArgumentNullException(nameof(customCreatorSelector));
 
-    public DelegatingTagHelperActivator(
-        Predicate<Type> customCreatorSelector,
-        Func<Type, object> customTagHelperCreator,
-        ITagHelperActivator defaultTagHelperActivator)
-    {
-        _customCreatorSelector =
-            customCreatorSelector ?? throw new ArgumentNullException(nameof(customCreatorSelector));
-        _customTagHelperCreator =
-            customTagHelperCreator ?? throw new ArgumentNullException(nameof(customTagHelperCreator));
-        _defaultTagHelperActivator = defaultTagHelperActivator ??
-                                     throw new ArgumentNullException(nameof(defaultTagHelperActivator));
-    }
+    private readonly Func<Type, object> _customTagHelperCreator =
+        customTagHelperCreator ?? throw new ArgumentNullException(nameof(customTagHelperCreator));
+
+    private readonly ITagHelperActivator _defaultTagHelperActivator = defaultTagHelperActivator ??
+                                                                      throw new ArgumentNullException(
+                                                                          nameof(defaultTagHelperActivator));
 
     public TTagHelper Create<TTagHelper>(ViewContext context) where TTagHelper : ITagHelper
     {

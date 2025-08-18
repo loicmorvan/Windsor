@@ -14,15 +14,6 @@
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class ClassWithTwoParametersWithSameType
-{
-    public ClassWithTwoParametersWithSameType(ICommon one, ICommon two)
-    {
-        One = one;
-        Two = two;
-    }
-
-    public ICommon One { get; }
-
-    public ICommon Two { get; }
-}
+#pragma warning disable CS9113 // Parameter is unread.
+public class ClassWithTwoParametersWithSameType(ICommon one, ICommon two);
+#pragma warning restore CS9113 // Parameter is unread.

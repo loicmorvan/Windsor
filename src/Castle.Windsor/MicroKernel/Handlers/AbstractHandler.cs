@@ -153,7 +153,7 @@ public abstract class AbstractHandler :
     public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
         ComponentModel model, DependencyModel dependency)
     {
-        if (_model.HasCustomDependencies == false)
+        if (!_model.HasCustomDependencies)
         {
             return false;
         }

@@ -17,12 +17,6 @@ using JetBrains.Annotations;
 namespace Castle.Windsor.Tests.Components;
 
 [UsedImplicitly]
-public class CompA
-{
-    public CompA(CompB compb)
-    {
-        Compb = compb;
-    }
-
-    public CompB Compb { get; private set; }
-}
+#pragma warning disable CS9113 // Parameter is unread.
+public class CompA(CompB compb);
+#pragma warning restore CS9113 // Parameter is unread.

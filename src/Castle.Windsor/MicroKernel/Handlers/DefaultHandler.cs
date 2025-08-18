@@ -102,7 +102,7 @@ public class DefaultHandler : AbstractHandler
                 }
             }
 
-            if (instanceRequired == false)
+            if (!instanceRequired)
             {
                 burden = null;
                 return null;
@@ -118,9 +118,9 @@ public class DefaultHandler : AbstractHandler
             throw new CircularDependencyException(message.ToString(), ComponentModel);
         }
 
-        if (CanResolvePendingDependencies(context) == false)
+        if (!CanResolvePendingDependencies(context))
         {
-            if (instanceRequired == false)
+            if (!instanceRequired)
             {
                 burden = null;
                 return null;

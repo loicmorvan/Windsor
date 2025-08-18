@@ -20,15 +20,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers;
 
-public class LoggerDependencyResolver : ISubDependencyResolver
+public class LoggerDependencyResolver(IKernel kernel) : ISubDependencyResolver
 {
-    private readonly IKernel _kernel;
-
-    public LoggerDependencyResolver(IKernel kernel)
-    {
-        _kernel = kernel;
-    }
-
     public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
@@ -38,7 +31,7 @@ public class LoggerDependencyResolver : ISubDependencyResolver
     public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
-        var factory = _kernel.Resolve<ILoggerFactory>();
+        var factory = kernel.Resolve<ILoggerFactory>();
         return factory.CreateLogger(RegistrationAdapter.OriginalComponentName(model.Name));
     }
 }

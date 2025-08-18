@@ -21,6 +21,8 @@ public class DisposableGeneric<T> : IDisposable
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         Disposed = true;
     }
 }

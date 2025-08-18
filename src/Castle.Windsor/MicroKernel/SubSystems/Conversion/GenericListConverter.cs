@@ -48,13 +48,9 @@ public class GenericListConverter : AbstractTypeConverter
 
         var newValue = ReferenceExpressionUtil.ExtractComponentName(value);
         var handler = Context.Kernel.LoadHandlerByName(newValue, targetType, null);
-        if (handler == null)
-        {
-            throw new ConverterException($"Component '{newValue}' was not found in the container.");
-        }
-
-        return handler.Resolve(Context.CurrentCreationContext ?? CreationContext.CreateEmpty());
-
+        return handler == null
+            ? throw new ConverterException($"Component '{newValue}' was not found in the container.")
+            : handler.Resolve(Context.CurrentCreationContext ?? CreationContext.CreateEmpty());
     }
 
     public override object PerformConversion(IConfiguration configuration, Type targetType)
@@ -81,19 +77,12 @@ public class GenericListConverter : AbstractTypeConverter
         return converterHelper.ConvertConfigurationToCollection(configuration);
     }
 
-    private class ListHelper<T> : IGenericCollectionConverterHelper
+    private class ListHelper<T>(GenericListConverter parent) : IGenericCollectionConverterHelper
     {
-        private readonly GenericListConverter _parent;
-
-        public ListHelper(GenericListConverter parent)
-        {
-            _parent = parent;
-        }
-
         public object ConvertConfigurationToCollection(IConfiguration configuration)
         {
             return configuration.Children
-                .Select(itemConfig => _parent.Context.Composition.PerformConversion<T>(itemConfig)).ToList();
+                .Select(itemConfig => parent.Context.Composition.PerformConversion<T>(itemConfig)).ToList();
         }
     }
 }

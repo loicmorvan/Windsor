@@ -13,17 +13,14 @@
 // limitations under the License.
 
 using System.Reflection;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Core;
 
 [Serializable]
-public class PropertyDependencyModel : DependencyModel
+public class PropertyDependencyModel(PropertyInfo property, bool isOptional) : DependencyModel(property.Name,
+    property.PropertyType,
+    isOptional)
 {
-    public PropertyDependencyModel(PropertyInfo property, bool isOptional) : base(property.Name, property.PropertyType,
-        isOptional)
-    {
-        Property = property;
-    }
-
-    public PropertyInfo Property { get; private set; }
+    [PublicAPI] public PropertyInfo Property { get; private set; } = property;
 }

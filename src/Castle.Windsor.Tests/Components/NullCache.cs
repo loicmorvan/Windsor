@@ -14,14 +14,4 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class NullCache<T> : ICache<T>
-{
-    public T Get(string key)
-    {
-        return default;
-    }
-
-    public void Put(string key, T item)
-    {
-    }
-}
+public class NullCache<T> : ICache<T>;

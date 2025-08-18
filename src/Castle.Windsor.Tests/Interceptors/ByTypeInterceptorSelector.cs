@@ -19,25 +19,18 @@ using Castle.Windsor.MicroKernel.Proxy;
 
 namespace Castle.Windsor.Tests.Interceptors;
 
-public class ByTypeInterceptorSelector : IModelInterceptorsSelector
+public class ByTypeInterceptorSelector(Type interceptorType) : IModelInterceptorsSelector
 {
-    private readonly Type _interceptorType;
-
-    public ByTypeInterceptorSelector(Type interceptorType)
-    {
-        _interceptorType = interceptorType;
-    }
-
     public bool HasInterceptors(ComponentModel model)
     {
-        return model.Services.All(s => s.Is<IInterceptor>() == false);
+        return model.Services.All(s => !s.Is<IInterceptor>());
     }
 
     public InterceptorReference[] SelectInterceptors(ComponentModel model)
     {
         return
         [
-            new InterceptorReference(_interceptorType)
+            new InterceptorReference(interceptorType)
         ];
     }
 }

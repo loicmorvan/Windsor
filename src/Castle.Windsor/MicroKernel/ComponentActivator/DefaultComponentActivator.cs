@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using System.Reflection;
 using Castle.DynamicProxy;
 using Castle.Windsor.Core;
@@ -82,7 +83,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
 
         var createProxy = Kernel.ProxyFactory.ShouldCreateProxy(Model);
 
-        if (createProxy == false && Model.Implementation.GetTypeInfo().IsAbstract)
+        if (!createProxy && Model.Implementation.GetTypeInfo().IsAbstract)
         {
             throw new ComponentRegistrationException(
                 string.Format(
@@ -179,7 +180,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
         var winnerPoints = 0;
         foreach (var candidate in Model.Constructors)
         {
-            if (CheckCtorCandidate(candidate, context, out var candidatePoints) == false)
+            if (!CheckCtorCandidate(candidate, context, out var candidatePoints))
             {
                 continue;
             }
@@ -199,12 +200,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
             winnerPoints = candidatePoints;
         }
 
-        if (winnerCandidate == null)
-        {
-            throw new NoResolvableConstructorFoundException(Model.Implementation, Model);
-        }
-
-        return winnerCandidate;
+        return winnerCandidate ?? throw new NoResolvableConstructorFoundException(Model.Implementation, Model);
     }
 
     private static bool BestScoreSoFar(int candidatePoints, int winnerPoints, ConstructorCandidate winnerCandidate)
@@ -296,6 +292,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
             var setMethod = property.Property.GetSetMethod();
             try
             {
+                Debug.Assert(setMethod != null, nameof(setMethod) + " != null");
                 setMethod.Invoke(instance, [value]);
             }
             catch (Exception ex)
@@ -329,7 +326,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
         }
         catch (Exception e)
         {
-            if (property.Dependency.IsOptional == false)
+            if (!property.Dependency.IsOptional)
             {
                 throw;
             }

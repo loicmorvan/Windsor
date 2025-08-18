@@ -14,22 +14,14 @@
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
-public class UsesFooAndDelegate
+public class UsesFooAndDelegate(Func<int, Foo> myFooFactory, Foo foo)
 {
-    private readonly Func<int, Foo> _myFooFactory;
     private int _counter;
 
-    public UsesFooAndDelegate(Func<int, Foo> myFooFactory, Foo foo)
-    {
-        Foo = foo;
-        _myFooFactory = myFooFactory;
-        _counter = 0;
-    }
-
-    public Foo Foo { get; private set; }
+    public Foo Foo { get; private set; } = foo;
 
     public Foo GetFoo()
     {
-        return _myFooFactory(++_counter);
+        return myFooFactory(++_counter);
     }
 }

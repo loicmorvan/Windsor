@@ -14,12 +14,7 @@
 
 namespace Castle.Windsor.Extensions.DependencyInjection.Tests.Components;
 
-public class DecoratedUserService : UserService
+public class DecoratedUserService(IUserService userService) : UserService
 {
-    public DecoratedUserService(IUserService userService)
-    {
-        UserService = userService;
-    }
-
-    public IUserService UserService { get; }
+    public IUserService UserService { get; } = userService;
 }

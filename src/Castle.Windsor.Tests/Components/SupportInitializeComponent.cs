@@ -35,7 +35,7 @@ public class SupportInitializeComponent : ISupportInitialize
 
     public void EndInit()
     {
-        if (InitBegun == false)
+        if (!InitBegun)
         {
             throw new InvalidOperationException("Can't End init before it begins");
         }

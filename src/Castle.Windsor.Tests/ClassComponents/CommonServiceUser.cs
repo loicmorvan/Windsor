@@ -15,12 +15,7 @@
 namespace Castle.Windsor.Tests.ClassComponents;
 
 /// <summary>Summary description for CommonServiceUser.</summary>
-public class CommonServiceUser
+public class CommonServiceUser(ICommon common)
 {
-    public CommonServiceUser(ICommon common)
-    {
-        CommonService = common;
-    }
-
-    public ICommon CommonService { get; }
+    public ICommon CommonService { get; } = common;
 }

@@ -27,11 +27,7 @@ public class DependencyModel(
     bool hasDefaultValue = false,
     object defaultValue = null)
 {
-#if DEBUG
-    protected bool Initialized;
-#endif
     protected ParameterModel ParameterModel;
-    protected string Reference;
 
     // TODO: add configuration so that information about override is attached to the dependency
 
@@ -59,39 +55,18 @@ public class DependencyModel(
 
     public ParameterModel Parameter
     {
-        get
-        {
-#if DEBUG
-            if (!Initialized)
-            {
-                throw new InvalidOperationException("Not initialized!");
-            }
-#endif
-            return ParameterModel;
-        }
+        get => ParameterModel;
         set
         {
             ParameterModel = value;
             if (ParameterModel != null)
             {
-                Reference = ReferenceExpressionUtil.ExtractComponentName(ParameterModel.Value);
+                ReferencedComponentName = ReferenceExpressionUtil.ExtractComponentName(ParameterModel.Value);
             }
         }
     }
 
-    public string ReferencedComponentName
-    {
-        get
-        {
-#if DEBUG
-            if (!Initialized)
-            {
-                throw new InvalidOperationException("Not initialized!");
-            }
-#endif
-            return Reference;
-        }
-    }
+    public string ReferencedComponentName { get; protected set; }
 
     /// <summary>
     ///     Gets the service type of the dependency. This is the same type as <see cref="TargetType" /> or if
@@ -138,9 +113,6 @@ public class DependencyModel(
 
     public virtual void Init(ParameterModelCollection parameters)
     {
-#if DEBUG
-        Initialized = true;
-#endif
         if (parameters == null)
         {
             return;

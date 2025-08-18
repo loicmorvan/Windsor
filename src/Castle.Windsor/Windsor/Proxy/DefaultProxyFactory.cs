@@ -71,11 +71,6 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
 
     private static void ReleaseHook(ProxyGenerationOptions proxyGenOptions, IKernel kernel)
     {
-        if (proxyGenOptions.Hook == null)
-        {
-            return;
-        }
-
         kernel.ReleaseComponent(proxyGenOptions.Hook);
     }
 
@@ -98,7 +93,7 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
         CustomizeOptions(proxyGenOptions, kernel, model, constructorArguments);
 
         var interfaces = proxyOptions.AdditionalInterfaces;
-        if (model.HasClassServices == false)
+        if (!model.HasClassServices)
         {
             var firstService = model.Services.First();
             var additionalInterfaces = model.Services.Skip(1).Concat(interfaces).ToArray();
@@ -150,6 +145,7 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
         if (proxyOptions.Hook != null)
         {
             var hook = proxyOptions.Hook.Resolve(kernel, context);
+            // ReSharper disable once SuspiciousTypeConversion.Global
             if (hook is IOnBehalfAware aware)
             {
                 aware.SetInterceptedComponentModel(model);
@@ -161,6 +157,7 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
         if (proxyOptions.Selector != null)
         {
             var selector = proxyOptions.Selector.Resolve(kernel, context);
+            // ReSharper disable once SuspiciousTypeConversion.Global
             if (selector is IOnBehalfAware aware)
             {
                 aware.SetInterceptedComponentModel(model);
@@ -198,7 +195,7 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
     {
         var proxyOptions = model.ObtainProxyOptions();
 
-        return model.HasClassServices == false &&
-               proxyOptions.OmitTarget == false;
+        return !model.HasClassServices &&
+               !proxyOptions.OmitTarget;
     }
 }

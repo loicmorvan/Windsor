@@ -20,15 +20,8 @@ using Microsoft.Extensions.Options;
 
 namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers;
 
-internal class OptionsSubResolver : ISubDependencyResolver
+internal class OptionsSubResolver(IKernel kernel) : ISubDependencyResolver
 {
-    private readonly IKernel _kernel;
-
-    public OptionsSubResolver(IKernel kernel)
-    {
-        _kernel = kernel;
-    }
-
     public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
@@ -40,6 +33,6 @@ internal class OptionsSubResolver : ISubDependencyResolver
     public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
-        return _kernel.Resolve(dependency.TargetType);
+        return kernel.Resolve(dependency.TargetType);
     }
 }

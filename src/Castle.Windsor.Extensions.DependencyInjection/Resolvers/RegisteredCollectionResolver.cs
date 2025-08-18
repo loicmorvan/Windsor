@@ -21,13 +21,10 @@ using Castle.Windsor.MicroKernel.Resolvers.SpecializedResolvers;
 namespace Castle.Windsor.Extensions.DependencyInjection.Resolvers;
 
 /// <summary>Use <see name="IKernel.ResolveAll" /> if there is no specific handler for IEnumerable service</summary>
-public class RegisteredCollectionResolver : CollectionResolver
+public class RegisteredCollectionResolver(IKernel kernel, bool allowEmptyCollections = true) : CollectionResolver(
+    kernel,
+    allowEmptyCollections)
 {
-    public RegisteredCollectionResolver(IKernel kernel, bool allowEmptyCollections = true) : base(kernel,
-        allowEmptyCollections)
-    {
-    }
-
     public override bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
         ComponentModel model,
         DependencyModel dependency)
@@ -40,6 +37,6 @@ public class RegisteredCollectionResolver : CollectionResolver
         ComponentModel model,
         DependencyModel dependency)
     {
-        return base.Resolve(context, contextHandlerResolver, model, dependency) as Array;
+        return (Array)base.Resolve(context, contextHandlerResolver, model, dependency);
     }
 }

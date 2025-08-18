@@ -1,9 +1,4 @@
 namespace Castle.Windsor.Tests.ClassComponents;
 
 [Serializable]
-public class CustomerChain9 : CustomerChain1
-{
-    public CustomerChain9(ICustomer customer) : base(customer)
-    {
-    }
-}
+public class CustomerChain9(ICustomer customer) : CustomerChain1(customer);

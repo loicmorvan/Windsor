@@ -21,16 +21,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Castle.Windsor.Facilities.AspNetCore.Contributors;
 
-public class CrossWiringComponentModelContributor : IContributeComponentModelConstruction
+public class CrossWiringComponentModelContributor(IServiceCollection services) : IContributeComponentModelConstruction
 {
-    public CrossWiringComponentModelContributor(IServiceCollection services)
-    {
-        Services = services ??
-                   throw new InvalidOperationException(
-                       "Please call `Container.AddFacility<AspNetCoreFacility>(f => f.CrossWiresInto(services));` first. This should happen before any cross wiring registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md");
-    }
-
-    public IServiceCollection Services { get; }
+    public IServiceCollection Services { get; } = services ??
+                                                  throw new InvalidOperationException(
+                                                      "Please call `Container.AddFacility<AspNetCoreFacility>(f => f.CrossWiresInto(services));` first. This should happen before any cross wiring registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md");
 
     public void ProcessModel(IKernel kernel, ComponentModel model)
     {

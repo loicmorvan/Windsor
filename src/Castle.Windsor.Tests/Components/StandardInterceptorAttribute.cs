@@ -17,9 +17,4 @@ using Castle.Windsor.Core;
 
 namespace Castle.Windsor.Tests.Components;
 
-public class StandardInterceptorAttribute : InterceptorAttribute
-{
-    public StandardInterceptorAttribute() : base(typeof(StandardInterceptor))
-    {
-    }
-}
+public class StandardInterceptorAttribute() : InterceptorAttribute(typeof(StandardInterceptor));

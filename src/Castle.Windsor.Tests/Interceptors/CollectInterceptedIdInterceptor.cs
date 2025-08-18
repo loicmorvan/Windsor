@@ -13,19 +13,26 @@
 // limitations under the License.
 
 using Castle.DynamicProxy;
+using Castle.Windsor.Tests.Facilities.TypedFactory;
 
 namespace Castle.Windsor.Tests.Interceptors;
 
-public class CollectInterceptedIdInterceptor : IInterceptor
+public class CollectInterceptedIdInterceptor(DataRepository counter) : IInterceptor
 {
-    public static int InterceptedId;
-
     public void Intercept(IInvocation invocation)
     {
         invocation.Proceed();
         if (invocation.Arguments.Length > 0)
         {
-            InterceptedId = (int)invocation.Arguments[0];
+            counter.RegisterValue("interceptedId", invocation.Arguments[0]);
         }
+    }
+}
+
+public class NoopInterceptor : IInterceptor
+{
+    public void Intercept(IInvocation invocation)
+    {
+        invocation.Proceed();
     }
 }

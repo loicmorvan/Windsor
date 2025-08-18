@@ -72,18 +72,7 @@ public class DisposeOrderTestFixture
     [UsedImplicitly]
     private class MyService : IMyService
     {
-        private bool IsInUse
-        {
-            get
-            {
-                if (IsInitialized == false)
-                {
-                    throw new Exception("Service must be initialized !!!");
-                }
-
-                return false;
-            }
-        }
+        private bool IsInUse => !IsInitialized ? throw new Exception("Service must be initialized !!!") : false;
 
         private bool IsInitialized { get; set; }
 

@@ -15,7 +15,4 @@
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
 /// <summary>Summary description for IProtocolHandler.</summary>
-public interface IProtocolHandler
-{
-    void Handle();
-}
+public interface IProtocolHandler;

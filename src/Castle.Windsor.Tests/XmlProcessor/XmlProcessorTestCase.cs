@@ -19,7 +19,7 @@ using Castle.Windsor.Windsor.Configuration.Interpreters;
 namespace Castle.Windsor.Tests.XmlProcessor;
 
 /// <summary>Summary description for Class1.</summary>
-public class XmlProcessorTestCase
+public partial class XmlProcessorTestCase
 {
     [Fact]
     public void InvalidFiles()
@@ -90,11 +90,14 @@ public class XmlProcessorTestCase
 
     private static string StripSpaces(string xml)
     {
-        return Regex.Replace(xml, "\\s+", "", RegexOptions.Compiled);
+        return MyRegex().Replace(xml, "");
     }
 
     private static string GetFullPath()
     {
         return Path.Combine(AppContext.BaseDirectory, ConfigHelper.ResolveConfigPath("XmlProcessor/TestFiles/"));
     }
+
+    [GeneratedRegex("\\s+", RegexOptions.Compiled)]
+    private static partial Regex MyRegex();
 }

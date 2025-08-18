@@ -48,7 +48,7 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
     [Fact]
     public void Ending_scope_releases_component()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
 
         Container.Register(Component.For<DisposableFoo>().LifestyleScoped().DependsOn(Arguments.FromTyped([counter])));
 
@@ -109,7 +109,7 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
     [Fact]
     public void Scoped_component_is_bound_to_the_innermost_scope()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
 
         Container.Register(Component.For<DisposableFoo>().LifeStyle.Scoped().DependsOn(Arguments.FromTyped([counter])));
 
@@ -130,7 +130,7 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
     [Fact]
     public void Scoped_component_is_not_released_by_call_to_container_Release()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
 
         Container.Register(Component.For<DisposableFoo>().LifeStyle.Scoped().DependsOn(Arguments.FromTyped([counter])));
 
@@ -146,7 +146,7 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
     public void Scoped_component_is_not_tracked_by_the_release_policy()
     {
         Container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Component.For<DisposableFoo>().LifeStyle.Scoped());
 
         using (Container.BeginScope())
@@ -160,7 +160,7 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
     public void Transient_depending_on_scoped_component_is_not_tracked_by_the_container()
     {
         Container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Component.For<DisposableFoo>().LifeStyle.Scoped(),
             Component.For<UsesDisposableFoo>().LifeStyle.Transient);
 
@@ -176,7 +176,7 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
     public void Transient_depending_on_scoped_component_is_not_tracked_by_the_release_policy()
     {
         Container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Component.For<DisposableFoo>().LifeStyle.Scoped(),
             Component.For<UsesDisposableFoo>().LifeStyle.Transient);
 
@@ -216,7 +216,7 @@ public class ScopedLifestyleTestCase : AbstractContainerTestCase
     [Bug("IOC-319")]
     public void Nested_container_and_scope_used_together_dont_cause_components_to_be_released_twice()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
 
         Container.Register(
             Component.For<IWindsorContainer>().LifeStyle.Scoped()

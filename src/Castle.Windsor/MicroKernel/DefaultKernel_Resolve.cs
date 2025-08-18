@@ -141,12 +141,9 @@ public sealed partial class DefaultKernel
     object IKernelInternal.Resolve(Type service, Arguments arguments, IReleasePolicy policy, bool ignoreParentContext)
     {
         var handler = (this as IKernelInternal).LoadHandlerByType(null, service, arguments);
-        if (handler == null)
-        {
-            throw new ComponentNotFoundException(service);
-        }
-
-        return ResolveComponent(handler, service, arguments, policy, ignoreParentContext);
+        return handler == null
+            ? throw new ComponentNotFoundException(service)
+            : ResolveComponent(handler, service, arguments, policy, ignoreParentContext);
     }
 
     Array IKernelInternal.ResolveAll(Type service, Arguments arguments, IReleasePolicy policy)

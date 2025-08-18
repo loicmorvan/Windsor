@@ -14,12 +14,6 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class C
-{
-    public C(B b)
-    {
-        B = b;
-    }
-
-    public B B { get; private set; }
-}
+#pragma warning disable CS9113 // Parameter is unread.
+public class C(B b);
+#pragma warning restore CS9113 // Parameter is unread.

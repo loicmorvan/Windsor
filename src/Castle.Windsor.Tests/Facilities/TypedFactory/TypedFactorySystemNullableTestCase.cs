@@ -59,13 +59,10 @@ public class TypedFactorySystemNullableTestCase : AbstractContainerTestCase
     [UsedImplicitly]
     public sealed class DependencyFromContainer;
 
-    public sealed class ComponentWithNonOptionalNullableParameter
+    public sealed class ComponentWithNonOptionalNullableParameter(
+        int? nonOptionalNullableParameter,
+        DependencyFromContainer dependencyFromContainer)
     {
         public delegate ComponentWithNonOptionalNullableParameter Factory(int? nonOptionalNullableParameter);
-
-        public ComponentWithNonOptionalNullableParameter(int? nonOptionalNullableParameter,
-            DependencyFromContainer dependencyFromContainer)
-        {
-        }
     }
 }

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using System.Reflection;
 using Castle.Core.Internal;
 using Castle.Windsor.Core;
@@ -247,7 +248,11 @@ public class AllTypesTestCase : AbstractContainerTestCase
     {
         Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
             .BasedOn<ICustomer>()
-            .If(t => t.FullName.Contains("Chain"))
+            .If(t =>
+            {
+                Debug.Assert(t.FullName != null);
+                return t.FullName.Contains("Chain");
+            })
         );
 
         var handlers = Kernel.GetAssignableHandlers(typeof(ICustomer));
@@ -264,8 +269,12 @@ public class AllTypesTestCase : AbstractContainerTestCase
     {
         Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
             .BasedOn<ICustomer>()
-            .If(t => t.Name.EndsWith("2"))
-            .If(t => t.FullName.Contains("Chain"))
+            .If(t => t.Name.EndsWith('2'))
+            .If(t =>
+            {
+                Debug.Assert(t.FullName != null);
+                return t.FullName.Contains("Chain");
+            })
         );
 
         var handlers = Kernel.GetAssignableHandlers(typeof(ICustomer));
@@ -292,8 +301,8 @@ public class AllTypesTestCase : AbstractContainerTestCase
     {
         Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
             .BasedOn<ICustomer>()
-            .Unless(t => t.Name.EndsWith("2"))
-            .Unless(t => t.Name.EndsWith("3"))
+            .Unless(t => t.Name.EndsWith('2'))
+            .Unless(t => t.Name.EndsWith('3'))
         );
 
         var handlers = Kernel.GetAssignableHandlers(typeof(ICustomer));
@@ -301,8 +310,8 @@ public class AllTypesTestCase : AbstractContainerTestCase
         foreach (var handler in handlers)
         {
             var name = handler.ComponentModel.Implementation.Name;
-            Assert.False(name.EndsWith("2"));
-            Assert.False(name.EndsWith("3"));
+            Assert.False(name.EndsWith('2'));
+            Assert.False(name.EndsWith('3'));
         }
     }
 
@@ -356,7 +365,11 @@ public class AllTypesTestCase : AbstractContainerTestCase
     {
         Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<ICommon>());
         Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<ICustomer>()
-            .If(t => t.FullName.Contains("Chain")));
+            .If(t =>
+            {
+                Debug.Assert(t.FullName != null);
+                return t.FullName.Contains("Chain");
+            }));
         Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<DefaultTemplateEngine>());
         Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<DefaultMailSenderService>());
         Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<DefaultSpamServiceWithConstructor>());

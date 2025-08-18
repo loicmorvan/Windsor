@@ -47,7 +47,7 @@ public class TypeName
 
     private bool HasGenericParameters => _genericTypes.Length > 0;
 
-    private bool HasNamespace => string.IsNullOrEmpty(_namespace) == false;
+    private bool HasNamespace => !string.IsNullOrEmpty(_namespace);
 
     private bool IsAssemblyQualified => _assemblyQualifiedName != null;
 
@@ -55,7 +55,7 @@ public class TypeName
 
     public string ExtractAssemblyName()
     {
-        if (IsAssemblyQualified == false)
+        if (!IsAssemblyQualified)
         {
             return null;
         }

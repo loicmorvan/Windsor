@@ -1,8 +1,3 @@
 namespace Castle.Windsor.Tests;
 
-public class Sp : ISp
-{
-    public void Save()
-    {
-    }
-}
+public class Sp : ISp;

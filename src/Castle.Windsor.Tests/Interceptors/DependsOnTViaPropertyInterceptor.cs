@@ -16,7 +16,5 @@ using Castle.DynamicProxy;
 
 namespace Castle.Windsor.Tests.Interceptors;
 
-public class DependsOnTViaPropertyInterceptor<T> : StandardInterceptor
-{
-    public T Tee { get; set; }
-}
+// ReSharper disable once UnusedTypeParameter
+public class DependsOnTViaPropertyInterceptor<T> : StandardInterceptor;

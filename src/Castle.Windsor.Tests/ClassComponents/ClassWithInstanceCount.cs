@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Windsor.Tests.Facilities.TypedFactory;
+
 namespace Castle.Windsor.Tests.ClassComponents;
 
 public class ClassWithInstanceCount
 {
-    public static int InstancesCount;
-
-    public ClassWithInstanceCount()
+    public ClassWithInstanceCount(DataRepository dataRepository)
     {
-        InstancesCount++;
+        dataRepository.RegisterCallerMemberName();
     }
 }

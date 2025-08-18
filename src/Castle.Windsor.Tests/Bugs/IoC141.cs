@@ -49,12 +49,7 @@ public class IoC141 : AbstractContainerTestCase
 
     public interface IAssembler<T>;
 
-    public class Service1 : IService
-    {
-        public Service1(IProcessor<object> processor)
-        {
-        }
-    }
+    public class Service1(IProcessor<object> processor) : IService;
 
     public class DefaultProcessor<T> : IProcessor<T>
     {

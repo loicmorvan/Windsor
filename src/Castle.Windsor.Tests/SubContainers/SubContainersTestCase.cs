@@ -31,9 +31,9 @@ public class SubContainersTestCase : AbstractContainerTestCase
         const string expectedMessage =
             "You can not change the kernel parent once set, use the RemoveChildKernel and AddChildKernel methods together to achieve this.";
 
-        IKernel kernel2 = new DefaultKernel();
+        var kernel2 = new DefaultKernel();
 
-        IKernel subkernel = new DefaultKernel();
+        var subkernel = new DefaultKernel();
 
         Kernel.AddChildKernel(subkernel);
         Assert.Equal(Kernel, subkernel.Parent);
@@ -60,7 +60,7 @@ public class SubContainersTestCase : AbstractContainerTestCase
     [Fact]
     public void ChildDependenciesSatisfiedAmongContainers()
     {
-        IKernel subkernel = new DefaultKernel();
+        var subkernel = new DefaultKernel();
 
         Kernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
         Kernel.Register(Component.For(typeof(DefaultMailSenderService)).Named("mailsender"));
@@ -78,7 +78,7 @@ public class SubContainersTestCase : AbstractContainerTestCase
     [Fact]
     public void ChildKernelFindsAndCreateParentComponent()
     {
-        IKernel subkernel = new DefaultKernel();
+        var subkernel = new DefaultKernel();
 
         Kernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
 
@@ -96,7 +96,7 @@ public class SubContainersTestCase : AbstractContainerTestCase
 
         // subkernel added with already registered components that overload parent components.
 
-        IKernel subkernel = new DefaultKernel();
+        var subkernel = new DefaultKernel();
         subkernel.Register(Component.For<DefaultTemplateEngine>().Named("engine").Instance(instance1));
         Assert.Equal(instance1, subkernel.Resolve<DefaultTemplateEngine>("engine"));
 
@@ -114,7 +114,7 @@ public class SubContainersTestCase : AbstractContainerTestCase
         var instance1 = new DefaultTemplateEngine();
         var instance2 = new DefaultTemplateEngine();
 
-        IKernel subkernel = new DefaultKernel();
+        var subkernel = new DefaultKernel();
         Kernel.AddChildKernel(subkernel);
 
         // subkernel added first, then populated with overloaded components after
@@ -131,7 +131,7 @@ public class SubContainersTestCase : AbstractContainerTestCase
     [Fact]
     public void DependenciesSatisfiedAmongContainers()
     {
-        IKernel subkernel = new DefaultKernel();
+        var subkernel = new DefaultKernel();
 
         Kernel.Register(Component.For(typeof(DefaultMailSenderService)).Named("mailsender"));
         Kernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
@@ -150,7 +150,7 @@ public class SubContainersTestCase : AbstractContainerTestCase
     [Fact]
     public void DependenciesSatisfiedAmongContainersUsingEvents()
     {
-        IKernel subkernel = new DefaultKernel();
+        var subkernel = new DefaultKernel();
 
         subkernel.Register(Component.For(typeof(DefaultSpamServiceWithConstructor)).Named("spamservice"));
 
@@ -170,7 +170,7 @@ public class SubContainersTestCase : AbstractContainerTestCase
     [Fact]
     public void ParentKernelFindsAndCreateChildComponent()
     {
-        IKernel subkernel = new DefaultKernel();
+        var subkernel = new DefaultKernel();
 
         subkernel.Register(Component.For(typeof(DefaultTemplateEngine)).Named("templateengine"));
 
@@ -184,7 +184,7 @@ public class SubContainersTestCase : AbstractContainerTestCase
     [Fact]
     public void RemoveChildKernelCleansUp()
     {
-        IKernel subkernel = new DefaultKernel();
+        var subkernel = new DefaultKernel();
         var eventCollector = new EventsCollector(subkernel);
         subkernel.RemovedAsChildKernel += eventCollector.RemovedAsChildKernel;
         subkernel.AddedAsChildKernel += eventCollector.AddedAsChildKernel;
@@ -268,7 +268,7 @@ public class SubContainersTestCase : AbstractContainerTestCase
     [Bug("IOC-345")]
     public void Do_NOT_UseChildComponentsForParentDependenciesWhenRequestedFromChild()
     {
-        IKernel subkernel = new DefaultKernel();
+        var subkernel = new DefaultKernel();
 
         Kernel.Register(Component.For(typeof(DefaultSpamService)).Named("spamservice").LifeStyle
             .Is(LifestyleType.Transient));

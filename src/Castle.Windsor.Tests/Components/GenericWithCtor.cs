@@ -14,12 +14,6 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class GenericWithCtor<T>
-{
-    public GenericWithCtor(T dependency)
-    {
-        Dependency = dependency;
-    }
-
-    public T Dependency { get; private set; }
-}
+#pragma warning disable CS9113 // Parameter is unread.
+public class GenericWithCtor<T>(T dependency);
+#pragma warning restore CS9113 // Parameter is unread.

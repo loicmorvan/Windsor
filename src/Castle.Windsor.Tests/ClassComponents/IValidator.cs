@@ -16,7 +16,4 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 /// <summary>Summary description for IValidator.</summary>
 // ReSharper disable once UnusedTypeParameter
-public interface IValidator<in T>
-{
-    bool IsValid();
-}
+public interface IValidator<in T>;

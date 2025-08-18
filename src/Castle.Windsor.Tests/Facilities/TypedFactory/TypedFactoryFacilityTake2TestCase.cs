@@ -491,7 +491,7 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
     public void Releasing_factory_releases_selector()
     {
         Container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Component.For<IDummyComponentFactory>()
                 .AsFactory(f => f.SelectedWith<TypedFactoryDelegatesTestCase.SelectorWithLifecycleCounter>())
                 .LifestyleTransient(),
@@ -500,7 +500,7 @@ public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 
         Container.Release(factory);
 
-        Assert.Equal(1, Container.Resolve<LifecycleCounter>()["Dispose"]);
+        Assert.Equal(1, Container.Resolve<DataRepository>()["Dispose"]);
     }
 
     [Fact]

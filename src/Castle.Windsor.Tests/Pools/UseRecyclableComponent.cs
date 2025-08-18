@@ -14,12 +14,7 @@
 
 namespace Castle.Windsor.Tests.Pools;
 
-public class UseRecyclableComponent
+public class UseRecyclableComponent(RecyclableComponent dependency)
 {
-    public UseRecyclableComponent(RecyclableComponent dependency)
-    {
-        Dependency = dependency;
-    }
-
-    public RecyclableComponent Dependency { get; private set; }
+    public RecyclableComponent Dependency { get; private set; } = dependency;
 }

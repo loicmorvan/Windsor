@@ -17,17 +17,10 @@ using Castle.DynamicProxy;
 
 namespace Castle.Windsor.Tests.Interceptors;
 
-public class InterceptorTypeSelector : IInterceptorSelector
+public class InterceptorTypeSelector(Type interceptorType) : IInterceptorSelector
 {
-    private readonly Type _interceptorType;
-
-    public InterceptorTypeSelector(Type interceptorType)
-    {
-        _interceptorType = interceptorType;
-    }
-
     public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
     {
-        return interceptors.Where(i => i.GetType() == _interceptorType).ToArray();
+        return interceptors.Where(i => i.GetType() == interceptorType).ToArray();
     }
 }

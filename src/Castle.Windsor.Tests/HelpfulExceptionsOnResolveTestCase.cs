@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.ComponentActivator;
@@ -168,6 +169,7 @@ public class HelpfulExceptionsOnResolveTestCase : AbstractContainerTestCase
             $"Type {typeof(HasInternalConstructor).FullName} does not have a public default constructor and could not be instantiated.";
 
         exception = exception.InnerException;
+        Debug.Assert(exception != null, nameof(exception) + " != null");
         Assert.Equal(message, exception.Message);
     }
 

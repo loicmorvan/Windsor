@@ -18,14 +18,9 @@ using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Registration.Proxy;
 
-public class ProxyGroup<TS> : RegistrationGroup<TS>
+public class ProxyGroup<TS>(ComponentRegistration<TS> registration) : RegistrationGroup<TS>(registration)
     where TS : class
 {
-    public ProxyGroup(ComponentRegistration<TS> registration)
-        : base(registration)
-    {
-    }
-
     [PublicAPI]
     public ComponentRegistration<TS> AsMarshalByRefClass =>
         AddAttributeDescriptor("marshalByRefProxy", bool.TrueString);

@@ -26,7 +26,7 @@ public class ManuallyTriggeredStartTestCase : AbstractContainerTestCase
     [Fact]
     public void Can_manually_trigger_start()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
         var flag = new StartFlag();
         Container.AddFacility<StartableFacility>(f => f.DeferredStart(flag));
         Container.Register(
@@ -46,7 +46,7 @@ public class ManuallyTriggeredStartTestCase : AbstractContainerTestCase
     [Fact]
     public void Can_manually_trigger_start_only_once()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
         var flag = new StartFlag();
         Container.AddFacility<StartableFacility>(f => f.DeferredStart(flag));
         Container.Register(Component.For<Components.Startable>().LifestyleTransient()
@@ -61,7 +61,7 @@ public class ManuallyTriggeredStartTestCase : AbstractContainerTestCase
     [Fact]
     public void Can_manually_trigger_start_when_using_Install()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
         var flag = new StartFlag();
         Container.AddFacility<StartableFacility>(f => f.DeferredStart(flag));
         Container.Install(

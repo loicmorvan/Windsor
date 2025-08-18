@@ -13,10 +13,11 @@
 // limitations under the License.
 
 using Castle.Windsor.Tests.Components;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
 public class GenericImpl3<T> : IGeneric<T>
 {
-    public IEmptyService Value { get; set; }
+    public IEmptyService Value { get; [UsedImplicitly] set; }
 }

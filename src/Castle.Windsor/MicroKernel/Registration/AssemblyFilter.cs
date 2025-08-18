@@ -15,6 +15,7 @@
 using System.Globalization;
 using System.Reflection;
 using Castle.Windsor.Core.Internal;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Registration;
 
@@ -46,6 +47,7 @@ public class AssemblyFilter : IAssemblyProvider
             select assembly;
     }
 
+    [PublicAPI]
     public AssemblyFilter FilterByAssembly(Predicate<Assembly> filter)
     {
         ArgumentNullException.ThrowIfNull(filter);
@@ -54,7 +56,7 @@ public class AssemblyFilter : IAssemblyProvider
         return this;
     }
 
-    public AssemblyFilter FilterByName(Predicate<AssemblyName> filter)
+    private AssemblyFilter FilterByName(Predicate<AssemblyName> filter)
     {
         ArgumentNullException.ThrowIfNull(filter);
 
@@ -62,9 +64,9 @@ public class AssemblyFilter : IAssemblyProvider
         return this;
     }
 
-    public AssemblyFilter WithKeyToken(string publicKeyToken)
+    public void WithKeyToken(string publicKeyToken)
     {
-        return WithKeyToken(ExtractKeyToken(publicKeyToken));
+        WithKeyToken(ExtractKeyToken(publicKeyToken));
     }
 
     private AssemblyFilter WithKeyToken(byte[] publicKeyToken)
@@ -73,11 +75,13 @@ public class AssemblyFilter : IAssemblyProvider
         return FilterByName(n => IsTokenEqual(n.GetPublicKeyToken(), publicKeyToken));
     }
 
+    [PublicAPI]
     public AssemblyFilter WithKeyToken(Type typeFromAssemblySignedWithKey)
     {
         return WithKeyToken(typeFromAssemblySignedWithKey.GetTypeInfo().Assembly);
     }
 
+    [PublicAPI]
     public AssemblyFilter WithKeyToken<TTypeFromAssemblySignedWithKey>()
     {
         return WithKeyToken(typeof(TTypeFromAssemblySignedWithKey).GetTypeInfo().Assembly);
@@ -121,7 +125,7 @@ public class AssemblyFilter : IAssemblyProvider
     {
         try
         {
-            if (Directory.Exists(_directoryName) == false)
+            if (!Directory.Exists(_directoryName))
             {
                 return [];
             }
@@ -165,15 +169,14 @@ public class AssemblyFilter : IAssemblyProvider
 
     private static string GetFullPath(string path)
     {
+        ArgumentNullException.ThrowIfNull(path);
+
         if (Path.IsPathRooted(path))
         {
             return Path.GetFullPath(path);
         }
 
-        if (path != null)
-        {
-            path = Path.Combine(AppContext.BaseDirectory, path);
-        }
+        path = Path.Combine(AppContext.BaseDirectory, path);
 
         return Path.GetFullPath(path);
     }

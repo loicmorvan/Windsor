@@ -47,11 +47,11 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
             var @event = new ManualResetEvent(false);
             var instanceFromOtherThread = default(A);
             var instance = Container.Resolve<A>();
-            var initialThreadId = Thread.CurrentThread.ManagedThreadId;
+            var initialThreadId = Environment.CurrentManagedThreadId;
             var exceptionFromTheOtherThread = default(Exception);
             ThreadPool.QueueUserWorkItem(_ =>
             {
-                Assert.NotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
+                Assert.NotEqual(Environment.CurrentManagedThreadId, initialThreadId);
                 try
                 {
                     instanceFromOtherThread = Container.Resolve<A>();
@@ -85,11 +85,11 @@ public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContain
             var @event = new ManualResetEvent(false);
             var instanceFromOtherThread = default(A);
             var instance = Container.Resolve<A>();
-            var initialThreadId = Thread.CurrentThread.ManagedThreadId;
+            var initialThreadId = Environment.CurrentManagedThreadId;
             var exceptionFromTheOtherThread = default(Exception);
             var otherThread = new Thread(() =>
             {
-                Assert.NotEqual(Thread.CurrentThread.ManagedThreadId, initialThreadId);
+                Assert.NotEqual(Environment.CurrentManagedThreadId, initialThreadId);
                 try
                 {
                     instanceFromOtherThread = Container.Resolve<A>();

@@ -56,26 +56,16 @@ public class IoC115 : AbstractContainerTestCase
 
     public interface IChildService1;
 
-    public class ChildService1 : IChildService1
-    {
-        public ChildService1(IChildService2 xxx)
-        {
-        }
-    }
+    public class ChildService1(IChildService2 xxx) : IChildService1;
 
     public interface IChildService2
     {
         IParentService Parent { get; }
     }
 
-    public class ChildService2 : IChildService2
+    public class ChildService2(IParentService xxx) : IChildService2
     {
-        public ChildService2(IParentService xxx)
-        {
-            Parent = xxx;
-        }
-
-        public IParentService Parent { get; }
+        public IParentService Parent { get; } = xxx;
     }
 
     public class AnotherParentService : IParentService;

@@ -17,17 +17,10 @@ using Castle.Windsor.Facilities.TypedFactory;
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Selectors;
 
-public class WithNameSelector : DefaultTypedFactoryComponentSelector
+public class WithNameSelector(string name) : DefaultTypedFactoryComponentSelector
 {
-    private readonly string _name;
-
-    public WithNameSelector(string name)
-    {
-        _name = name;
-    }
-
     protected override string GetComponentName(MethodInfo method, object[] arguments)
     {
-        return _name;
+        return name;
     }
 }

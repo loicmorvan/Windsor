@@ -16,12 +16,6 @@ using Castle.DynamicProxy;
 
 namespace Castle.Windsor.Tests.Interceptors;
 
-public class DependsOnTViaCtorInterceptor<T> : StandardInterceptor
-{
-    public DependsOnTViaCtorInterceptor(T tee)
-    {
-        Tee = tee;
-    }
-
-    public T Tee { get; }
-}
+#pragma warning disable CS9113 // Parameter is unread.
+public class DependsOnTViaCtorInterceptor<T>(T tee) : StandardInterceptor;
+#pragma warning restore CS9113 // Parameter is unread.

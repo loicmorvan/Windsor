@@ -17,7 +17,4 @@ using JetBrains.Annotations;
 namespace Castle.Windsor.Tests.Components;
 
 [UsedImplicitly]
-public class ExtendedComponentWithProperties : ComponentWithProperties
-{
-    public int Prop3 { get; set; }
-}
+public class ExtendedComponentWithProperties : ComponentWithProperties;

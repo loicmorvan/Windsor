@@ -117,6 +117,7 @@ public class MicroKernelTestCase : AbstractContainerTestCase
 
         var custImpl = customer as CustomerImpl;
 
+        Assert.NotNull(custImpl);
         Assert.NotNull(custImpl.ExtendedCustomer);
         Assert.Null(custImpl.ExtendedCustomer.Address);
         Assert.Null(custImpl.ExtendedCustomer.Name);

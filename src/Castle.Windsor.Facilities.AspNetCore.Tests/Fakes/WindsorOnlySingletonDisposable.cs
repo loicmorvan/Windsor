@@ -9,5 +9,5 @@ public sealed class WindsorOnlySingletonDisposable : WindsorOnlySingleton, IDisp
     }
 
     public bool Disposed { get; private set; }
-    public int DisposedCount { get; set; }
+    public int DisposedCount { get; private set; }
 }

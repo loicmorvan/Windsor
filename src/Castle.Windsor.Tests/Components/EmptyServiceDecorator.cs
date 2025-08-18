@@ -14,12 +14,6 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class EmptyServiceDecorator : IEmptyService
-{
-    public EmptyServiceDecorator(IEmptyService other)
-    {
-        Other = other;
-    }
-
-    public IEmptyService Other { get; private set; }
-}
+#pragma warning disable CS9113 // Parameter is unread.
+public class EmptyServiceDecorator(IEmptyService other) : IEmptyService;
+#pragma warning restore CS9113 // Parameter is unread.

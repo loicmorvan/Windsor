@@ -25,7 +25,7 @@ namespace Castle.Windsor.Core;
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class CastleComponentAttribute : LifestyleAttribute
 {
-    public CastleComponentAttribute(string name) : this(name, null)
+    public CastleComponentAttribute(string name) : this(name, Type.EmptyTypes)
     {
     }
 
@@ -34,22 +34,21 @@ public class CastleComponentAttribute : LifestyleAttribute
     {
     }
 
-    public CastleComponentAttribute(string name, params Type[] services)
+    public CastleComponentAttribute(string? name, params Type[] services)
         : this(name, LifestyleType.Undefined, services)
     {
     }
 
-    public CastleComponentAttribute(string name, LifestyleType lifestyle, params Type[] services) : base(lifestyle)
+    public CastleComponentAttribute(string? name, LifestyleType lifestyle, params Type[] services) : base(lifestyle)
     {
         Name = name;
-        Services = services ?? Type.EmptyTypes;
+        Services = services;
         ServicesSpecifiedExplicitly = Services.Length > 0;
     }
 
-    [PublicAPI]
-    public bool HasName => string.IsNullOrEmpty(Name) == false;
+    [PublicAPI] public bool HasName => !string.IsNullOrEmpty(Name);
 
-    public string Name { get; }
+    public string? Name { get; }
 
     public Type[] Services { get; private set; }
     public bool ServicesSpecifiedExplicitly { get; }
@@ -62,7 +61,7 @@ public class CastleComponentAttribute : LifestyleAttribute
             return new CastleComponentAttribute(type);
         }
 
-        if (attribute.ServicesSpecifiedExplicitly == false)
+        if (!attribute.ServicesSpecifiedExplicitly)
         {
             attribute.Services = [type];
         }

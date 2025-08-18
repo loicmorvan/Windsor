@@ -1,11 +1,6 @@
 namespace Castle.Windsor.Tests;
 
-public class UsingLazyComponent
+public class UsingLazyComponent(IHasDefaultImplementation dependency)
 {
-    public UsingLazyComponent(IHasDefaultImplementation dependency)
-    {
-        Dependency = dependency;
-    }
-
-    public IHasDefaultImplementation Dependency { get; }
+    public IHasDefaultImplementation Dependency { get; } = dependency;
 }

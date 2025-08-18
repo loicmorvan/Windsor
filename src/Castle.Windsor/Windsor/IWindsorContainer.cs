@@ -31,6 +31,7 @@ public interface IWindsorContainer : IDisposable
     string Name { get; }
 
     /// <summary>Gets or sets the parent container if this instance is a sub container.</summary>
+    [PublicAPI]
     IWindsorContainer Parent { get; set; }
 
     /// <summary>Registers a subcontainer. The components exposed by this container will be accessible from subcontainers.</summary>

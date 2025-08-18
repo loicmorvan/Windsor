@@ -19,14 +19,9 @@ namespace Castle.Windsor.MicroKernel.Registration;
 #region Node
 
 /// <summary>Represents a configuration child.</summary>
-public abstract class Node
+public abstract class Node(string name)
 {
-    protected Node(string name)
-    {
-        Name = name;
-    }
-
-    protected string Name { get; }
+    protected string Name { get; } = name;
 
     /// <summary>Applies the configuration node.</summary>
     /// <param name="configuration">The configuration.</param>

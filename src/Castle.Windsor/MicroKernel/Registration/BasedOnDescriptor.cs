@@ -186,6 +186,7 @@ public sealed class BasedOnDescriptor : IRegistration
     ///     than one interface!
     /// </summary>
     /// <returns> </returns>
+    [PublicAPI]
     public BasedOnDescriptor WithServiceFirstInterface()
     {
         return WithService.FirstInterface();
@@ -338,7 +339,7 @@ public sealed class BasedOnDescriptor : IRegistration
     {
         return IsBasedOn(type, out baseTypes)
                && ExecuteIfCondition(type)
-               && ExecuteUnlessCondition(type) == false;
+               && !ExecuteUnlessCondition(type);
     }
 
     private bool ExecuteIfCondition(Type type)

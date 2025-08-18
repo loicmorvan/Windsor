@@ -16,12 +16,7 @@ using Castle.Windsor.Tests.Facilities.TypedFactory.Components;
 
 namespace Castle.Windsor.Tests.Facilities.TypedFactory.Delegates;
 
-public class GenericUsesFuncOfGenerics<T>
+public class GenericUsesFuncOfGenerics<T>(Func<GenericComponent<T>> func)
 {
-    public GenericUsesFuncOfGenerics(Func<GenericComponent<T>> func)
-    {
-        Func = func;
-    }
-
-    public Func<GenericComponent<T>> Func { get; private set; }
+    public Func<GenericComponent<T>> Func { get; private set; } = func;
 }

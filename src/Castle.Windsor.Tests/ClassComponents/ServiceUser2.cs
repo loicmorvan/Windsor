@@ -16,22 +16,16 @@ using Castle.Windsor.Tests.Components;
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class ServiceUser2 : ServiceUser
+public class ServiceUser2(A a, string name, int port) : ServiceUser(a)
 {
-    public ServiceUser2(A a, string name, int port) : base(a)
-    {
-        Name = name;
-        Port = port;
-    }
-
     public ServiceUser2(A a, string name, int port, int scheduleinterval) : this(a, name, port)
     {
         ScheduleInterval = scheduleinterval;
     }
 
-    public string Name { get; }
+    public string Name { get; } = name;
 
-    public int Port { get; }
+    public int Port { get; } = port;
 
     public int ScheduleInterval { get; }
 }

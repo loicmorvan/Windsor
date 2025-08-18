@@ -14,15 +14,10 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class CachingRepository<T> : IRepository<T>
+#pragma warning disable CS9113 // Parameter is unread.
+public class CachingRepository<T>(ICache<T> cache) : IRepository<T>
+#pragma warning restore CS9113 // Parameter is unread.
 {
-    public CachingRepository(ICache<T> cache)
-    {
-        Cache = cache;
-    }
-
-    public ICache<T> Cache { get; private set; }
-
     public T Get(int id)
     {
         return Activator.CreateInstance<T>();

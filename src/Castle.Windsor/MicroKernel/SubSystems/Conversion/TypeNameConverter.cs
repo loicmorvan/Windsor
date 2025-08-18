@@ -140,6 +140,7 @@ public class TypeNameConverter : AbstractTypeConverter
         var anyAssemblyAdded = false;
 
         var context = DependencyContext.Default;
+        Debug.Assert(context != null, nameof(context) + " != null");
         var dependencies = context.RuntimeLibraries
             .SelectMany(library => library.GetDefaultAssemblyNames(context))
             .Distinct();
@@ -198,7 +199,7 @@ public class TypeNameConverter : AbstractTypeConverter
 
     private static void Insert(IDictionary<string, MultiType> collection, string key, Type value)
     {
-        if (collection.TryGetValue(key, out var existing) == false)
+        if (!collection.TryGetValue(key, out var existing))
         {
             collection[key] = new MultiType(value);
             return;

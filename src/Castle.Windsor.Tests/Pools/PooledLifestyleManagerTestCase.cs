@@ -212,18 +212,11 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
         Assert.Equal(0, kernel.ParallelCount);
     }
 
-    public class DisposableMockObject : IDisposable
+    public sealed class DisposableMockObject(Action disposeAction) : IDisposable
     {
-        private readonly Action _disposeAction;
-
-        public DisposableMockObject(Action disposeAction)
-        {
-            _disposeAction = disposeAction;
-        }
-
         public void Dispose()
         {
-            _disposeAction();
+            disposeAction();
         }
     }
 

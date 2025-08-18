@@ -14,14 +14,6 @@
 
 namespace Castle.Windsor.Tests.Components;
 
-public class APropCtor
-{
-    public APropCtor(A2 a)
-    {
-        A = a;
-    }
-
-    public A2 A { get; }
-
-    public A Prop { get; set; }
-}
+#pragma warning disable CS9113 // Parameter is unread.
+public class APropCtor(A2 a);
+#pragma warning restore CS9113 // Parameter is unread.

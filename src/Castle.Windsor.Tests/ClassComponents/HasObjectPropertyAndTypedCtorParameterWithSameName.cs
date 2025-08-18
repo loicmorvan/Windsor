@@ -16,12 +16,8 @@ using Castle.Windsor.Tests.Components;
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class HasObjectPropertyAndTypedCtorParameterWithSameName
+public class HasObjectPropertyAndTypedCtorParameterWithSameName(IEmptyService emptyService)
 {
-    public HasObjectPropertyAndTypedCtorParameterWithSameName(IEmptyService emptyService)
-    {
-        EmptyService = emptyService;
-    }
-
-    public object EmptyService { get; set; }
+    // ReSharper disable once UnusedMember.Global
+    public object EmptyService { get; set; } = emptyService;
 }

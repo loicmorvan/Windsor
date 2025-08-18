@@ -1,8 +1,3 @@
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class CustomerChain2 : CustomerChain1
-{
-    public CustomerChain2(ICustomer customer) : base(customer)
-    {
-    }
-}
+public class CustomerChain2(ICustomer customer) : CustomerChain1(customer);

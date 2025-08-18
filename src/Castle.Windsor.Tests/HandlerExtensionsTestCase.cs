@@ -65,7 +65,7 @@ public class HandlerExtensionsTestCase : AbstractContainerTestCase
     {
         var collector = new CollectItemsExtension();
         Kernel.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             WithReleaseExtensions(Component.For<DisposableFoo>(), collector));
         var a = Kernel.Resolve<DisposableFoo>();
         Kernel.Dispose();
@@ -78,7 +78,7 @@ public class HandlerExtensionsTestCase : AbstractContainerTestCase
     {
         var collector = new CollectItemsExtension();
         Kernel.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             WithReleaseExtensions(Component.For<DisposableFoo>().LifeStyle.Transient, collector));
         var a = Kernel.Resolve<DisposableFoo>();
         Kernel.ReleaseComponent(a);

@@ -35,6 +35,7 @@ public partial interface IKernel : IKernelEvents, IDisposable
 	IConfigurationStore ConfigurationStore { get; set; }
 
 	/// <summary>Graph of components and interactions.</summary>
+	[PublicAPI]
 	GraphNode[] GraphNodes { get; }
 
 	/// <summary>Returns the implementation of <see cref="IHandlerFactory" /></summary>
@@ -42,6 +43,7 @@ public partial interface IKernel : IKernelEvents, IDisposable
 	IHandlerFactory HandlerFactory { get; }
 
 	/// <summary>Returns the parent kernel</summary>
+	[PublicAPI]
 	IKernel Parent { get; set; }
 
 	/// <summary>

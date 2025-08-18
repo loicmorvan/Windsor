@@ -30,15 +30,11 @@ internal static class AspNetCoreExtensions
         services.AddSingleton<IStartupFilter>(new RequestScopingStartupFilter(requestScopeProvider));
     }
 
-    private sealed class RequestScopingStartupFilter : IStartupFilter
+    private sealed class RequestScopingStartupFilter(Func<IEnumerable<IDisposable>> requestScopeProvider)
+        : IStartupFilter
     {
-        private readonly Func<IEnumerable<IDisposable>> _requestScopeProvider;
-
-        public RequestScopingStartupFilter(Func<IEnumerable<IDisposable>> requestScopeProvider)
-        {
-            _requestScopeProvider =
-                requestScopeProvider ?? throw new ArgumentNullException(nameof(requestScopeProvider));
-        }
+        private readonly Func<IEnumerable<IDisposable>> _requestScopeProvider =
+            requestScopeProvider ?? throw new ArgumentNullException(nameof(requestScopeProvider));
 
         public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> nextFilter)
         {

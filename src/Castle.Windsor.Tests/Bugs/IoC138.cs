@@ -38,25 +38,16 @@ public class IoC138
         Assert.NotNull(component.Other);
     }
 
-    public class DependsOnStringTest2
-    {
-        public DependsOnStringTest2(string test2)
-        {
-        }
-    }
+    public class DependsOnStringTest2(string test2);
 
     public static class ServiceLocator
     {
         public static IWindsorContainer Container { get; set; }
     }
 
-    public class UsesServiceLocator
+    public class UsesServiceLocator(string test)
     {
-        public UsesServiceLocator(string test)
-        {
-            Other = ServiceLocator.Container.Resolve<DependsOnStringTest2>(new Arguments { { "test2", "bla" } });
-        }
-
-        public DependsOnStringTest2 Other { get; }
+        public DependsOnStringTest2 Other { get; } =
+            ServiceLocator.Container.Resolve<DependsOnStringTest2>(new Arguments { { "test2", "bla" } });
     }
 }

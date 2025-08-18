@@ -16,6 +16,7 @@
 // ReSharper disable UnusedType.Global : TODO missing tests
 // ReSharper disable UnusedMember.Global : TODO missing tests
 
+using System.Diagnostics;
 using Castle.Windsor.Extensions.DependencyInjection;
 using Castle.Windsor.Windsor;
 
@@ -40,7 +41,9 @@ public static class HostBuilderExtensions
         params object[] factoryArgs)
         where T : WindsorServiceProviderFactoryBase
     {
-        return hostBuilder.UseServiceProviderFactory((T)Activator.CreateInstance(typeof(T), factoryArgs));
+        var instance = Activator.CreateInstance(typeof(T), factoryArgs);
+        Debug.Assert(instance != null);
+        return hostBuilder.UseServiceProviderFactory((T)instance);
     }
 
     /// <summary>Uses <see name="IWindsorContainer" /> as the DI container for the host</summary>

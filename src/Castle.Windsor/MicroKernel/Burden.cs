@@ -64,7 +64,7 @@ public class Burden
     ///     detectable end of life (web-request end, disposal of the container etc), and
     ///     will be released externally.
     /// </summary>
-    public bool RequiresPolicyRelease => TrackedExternally == false && RequiresDecommission;
+    public bool RequiresPolicyRelease => !TrackedExternally && RequiresDecommission;
 
     private bool TrackedExternally { get; }
 
@@ -85,7 +85,7 @@ public class Burden
         var releasing = Releasing;
         releasing?.Invoke(this);
 
-        if (Handler.Release(this) == false)
+        if (!Handler.Release(this))
         {
             return false;
         }

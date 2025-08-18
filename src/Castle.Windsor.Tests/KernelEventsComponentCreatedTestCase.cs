@@ -21,8 +21,7 @@ namespace Castle.Windsor.Tests;
 
 public class KernelEventsComponentCreatedTestCase : AbstractContainerTestCase
 {
-    private readonly IList<KeyValuePair<ComponentModel, object>> _list =
-        new List<KeyValuePair<ComponentModel, object>>();
+    private readonly List<KeyValuePair<ComponentModel, object>> _list = [];
 
     protected override void AfterContainerCreated()
     {

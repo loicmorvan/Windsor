@@ -14,7 +14,6 @@
 
 using System.Diagnostics;
 using System.Xml;
-using Castle.Core.Resource;
 using Castle.Windsor.MicroKernel.SubSystems.Resource;
 using Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
 using JetBrains.Annotations;
@@ -69,39 +68,6 @@ public sealed class XmlProcessor
         {
             Debug.Assert(node != null);
             var message = $"Error processing node {node.Name}, inner content {node.InnerXml}";
-
-            throw new ConfigurationProcessingException(message, ex);
-        }
-    }
-
-    public XmlNode Process(IResource resource)
-    {
-        try
-        {
-            using (resource)
-            {
-                var doc = new XmlDocument();
-                using (var stream = resource.GetStreamReader())
-                {
-                    doc.Load(stream);
-                }
-
-                _engine.PushResource(resource);
-
-                var element = Process(doc.DocumentElement);
-
-                _engine.PopResource();
-
-                return element;
-            }
-        }
-        catch (ConfigurationProcessingException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            var message = $"Error processing node resource {resource}";
 
             throw new ConfigurationProcessingException(message, ex);
         }

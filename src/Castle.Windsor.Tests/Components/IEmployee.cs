@@ -15,7 +15,4 @@
 namespace Castle.Windsor.Tests.Components;
 
 /// <summary>Summary description for IEmployee.</summary>
-public interface IEmployee
-{
-    string EmployeeId { get; set; }
-}
+public interface IEmployee;

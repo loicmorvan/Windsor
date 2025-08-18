@@ -21,23 +21,23 @@ namespace Castle.Windsor.Tests.Facilities.Startable.Components;
 
 public class StartableChainParent : IStartable
 {
-    private readonly LifecycleCounter _lifecycleCounter;
+    private readonly DataRepository _dataRepository;
 
     public StartableChainParent(StartableChainDependency item1, StartableChainGeneric<string> item2,
-        LifecycleCounter lifecycleCounter)
+        DataRepository dataRepository)
     {
-        _lifecycleCounter = lifecycleCounter;
-        _lifecycleCounter.Increment();
+        _dataRepository = dataRepository;
+        _dataRepository.RegisterCallerMemberName();
     }
 
     public void Start()
     {
-        _lifecycleCounter.Increment();
+        _dataRepository.RegisterCallerMemberName();
     }
 
     public void Stop()
     {
-        _lifecycleCounter.Increment();
+        _dataRepository.RegisterCallerMemberName();
     }
 }
 

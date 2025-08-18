@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using System.Reflection;
 
 namespace Castle.Windsor.Core.Internal;
@@ -26,11 +27,13 @@ public class TypeByInheritanceDepthMostSpecificFirstComparer : IComparer<Type>
             return 0;
         }
 
+        Debug.Assert(x != null);
         if (x.GetTypeInfo().IsAssignableFrom(y))
         {
             return 1;
         }
 
+        Debug.Assert(y != null);
         if (y.GetTypeInfo().IsAssignableFrom(x))
         {
             return -1;

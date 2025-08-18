@@ -31,33 +31,33 @@ public class FailureCleanUpTestCase
     public void When_constructor_throws_ctor_dependencies_get_released()
     {
         _container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>().LifeStyle.Transient,
             Component.For<ThrowsInCtorWithDisposableDependency>()
         );
 
         Assert.Throws<ComponentActivatorException>(() => _container.Resolve<ThrowsInCtorWithDisposableDependency>());
-        Assert.Equal(1, _container.Resolve<LifecycleCounter>()["Dispose"]);
+        Assert.Equal(1, _container.Resolve<DataRepository>()["Dispose"]);
     }
 
     [Fact]
     public void When_constructor_dependency_throws_previous_dependencies_get_released()
     {
         _container.Register(
-            Component.For<LifecycleCounter>(),
+            Component.For<DataRepository>(),
             Component.For<ISimpleService>().ImplementedBy<SimpleServiceDisposable>().LifeStyle.Transient,
             Component.For<ThrowsInCtor>().LifeStyle.Transient,
             Component.For<DependsOnThrowingComponent>()
         );
 
         Assert.Throws<ComponentActivatorException>(() => _container.Resolve<DependsOnThrowingComponent>());
-        Assert.Equal(1, _container.Resolve<LifecycleCounter>()["Dispose"]);
+        Assert.Equal(1, _container.Resolve<DataRepository>()["Dispose"]);
     }
 
     [Fact]
     public void When_interceptor_throws_previous_dependencies_get_released()
     {
-        var counter = new LifecycleCounter();
+        var counter = new DataRepository();
 
         _container.Register(
             Component.For<ThrowInCtorInterceptor>().LifeStyle.Transient,

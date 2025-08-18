@@ -16,10 +16,6 @@ namespace Castle.Windsor.Tests.Components;
 
 public class DemoRepository<T> : IRepository<T>
 {
-    public ICache<T> Cache { get; set; }
-
-    public string Name { get; set; }
-
     public T Get(int id)
     {
         return Activator.CreateInstance<T>();
