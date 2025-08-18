@@ -8,11 +8,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC-78/MyChain3.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC-78/MyChain3.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ExtendedCustomer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ExtendedCustomer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/Employee.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/Employee.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/IEmployee.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/IEmployee.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ReviewableEmployee.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ReviewableEmployee.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Directory.Build.props" beforeDir="false" afterPath="$PROJECT_DIR$/Directory.Build.props" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.Hosting/Extensions/HostBuilderExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.Hosting/Extensions/HostBuilderExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Core/CastleComponentAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Core/CastleComponentAttribute.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +58,7 @@
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+    <option name="selectedTabId" value="SWEA" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -181,15 +180,8 @@
       <workItem from="1755267527802" duration="10643000" />
       <workItem from="1755374314710" duration="5715000" />
       <workItem from="1755443290577" duration="4203000" />
-      <workItem from="1755520754770" duration="6848000" />
-    </task>
-    <task id="LOCAL-00072" summary="Refactored multiple classes to reduce redundancy, improve readability, and adopt modern syntax patterns across core files and test cases. Added `[UsedImplicitly]` annotations where necessary to enhance code clarity.">
-      <option name="closed" value="true" />
-      <created>1754771041930</created>
-      <option name="number" value="00072" />
-      <option name="presentableId" value="LOCAL-00072" />
-      <option name="project" value="LOCAL" />
-      <updated>1754771041930</updated>
+      <workItem from="1755520754770" duration="7198000" />
+      <workItem from="1755548877115" duration="510000" />
     </task>
     <task id="LOCAL-00073" summary="Simplified conditional logic and streamlined method structures in `MiddlewareComponentModelContributor` and `CrossWiringComponentModelContributor` to improve readability and maintainability. Updated test class constructors to adopt more concise parameter initialization.">
       <option name="closed" value="true" />
@@ -575,7 +567,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755547820577</updated>
     </task>
-    <option name="localTasksCounter" value="121" />
+    <task id="LOCAL-00121" summary="Refactored test classes by replacing method/property definitions with concise syntax, removing unused members, adding suppressions, and handling warnings to enhance code maintainability and readability.">
+      <option name="closed" value="true" />
+      <created>1755548537171</created>
+      <option name="number" value="00121" />
+      <option name="presentableId" value="LOCAL-00121" />
+      <option name="project" value="LOCAL" />
+      <updated>1755548537171</updated>
+    </task>
+    <option name="localTasksCounter" value="122" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -610,7 +610,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Made `DisposedCount` property readonly across fake disposable classes and updated `FilterByName` to be private in `AssemblyFilter` for improved encapsulation and clarity." />
     <MESSAGE value="Replaced null check with `ArgumentNullException.ThrowIfNull` in `GetFullPath` method for improved null safety and simplified logic." />
     <MESSAGE value="Removed obsolete test component classes and configurations for improved maintainability and to reduce project clutter. Added `[PublicAPI]` annotations to interfaces in `IKernel` and `IWindsorContainer` for better API clarity." />
     <MESSAGE value="Removed obsolete test components and interfaces from `Castle.Windsor.Tests` and added `[UsedImplicitly]` annotations to several classes for improved maintainability and clarity." />
@@ -635,7 +634,8 @@
     <MESSAGE value="Refactored test classes and interfaces by replacing method definitions with concise syntax, removing unused members, and addressing configuration changes to improve maintainability and readability." />
     <MESSAGE value="Removed unused methods and imports across classes, added `[PublicAPI]` annotations to public members, and improved code maintainability by simplifying configurations and refactoring." />
     <MESSAGE value="Refactored test classes by replacing property definitions with concise syntax, adding `[UsedImplicitly]` annotations, removing unused members, and applying suppressions to enhance readability and code maintainability." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored test classes by replacing property definitions with concise syntax, adding `[UsedImplicitly]` annotations, removing unused members, and applying suppressions to enhance readability and code maintainability." />
+    <MESSAGE value="Refactored test classes by replacing method/property definitions with concise syntax, removing unused members, adding suppressions, and handling warnings to enhance code maintainability and readability." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored test classes by replacing method/property definitions with concise syntax, removing unused members, adding suppressions, and handling warnings to enhance code maintainability and readability." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

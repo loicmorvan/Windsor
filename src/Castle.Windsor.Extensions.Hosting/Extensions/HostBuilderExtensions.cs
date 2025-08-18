@@ -41,9 +41,9 @@ public static class HostBuilderExtensions
         params object[] factoryArgs)
         where T : WindsorServiceProviderFactoryBase
     {
-        var instance = (T)Activator.CreateInstance(typeof(T), factoryArgs);
+        var instance = Activator.CreateInstance(typeof(T), factoryArgs);
         Debug.Assert(instance != null);
-        return hostBuilder.UseServiceProviderFactory(instance);
+        return hostBuilder.UseServiceProviderFactory((T)instance);
     }
 
     /// <summary>Uses <see name="IWindsorContainer" /> as the DI container for the host</summary>
