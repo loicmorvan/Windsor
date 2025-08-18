@@ -66,11 +66,6 @@ internal static class RegistrationAdapter
 
     public static string OriginalComponentName(string uniqueComponentName)
     {
-        if (uniqueComponentName == null)
-        {
-            return null;
-        }
-
         return !uniqueComponentName.Contains('@') ? uniqueComponentName : uniqueComponentName.Split('@')[0];
     }
 
