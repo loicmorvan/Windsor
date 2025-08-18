@@ -37,6 +37,6 @@ public class RegisteredCollectionResolver(IKernel kernel, bool allowEmptyCollect
         ComponentModel model,
         DependencyModel dependency)
     {
-        return base.Resolve(context, contextHandlerResolver, model, dependency) as Array;
+        return (Array)base.Resolve(context, contextHandlerResolver, model, dependency);
     }
 }
