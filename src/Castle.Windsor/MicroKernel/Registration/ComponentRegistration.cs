@@ -174,6 +174,7 @@ public class ComponentRegistration<TService> : IRegistration
     /// <summary>Apply more complex configuration to this component registration.</summary>
     /// <param name="configuration"> The configuration <see cref="MutableConfiguration" /> . </param>
     /// <returns> </returns>
+    [PublicAPI]
     public ComponentRegistration<TService> Configuration(IConfiguration configuration)
     {
         return AddDescriptor(new ConfigurationDescriptor(configuration));

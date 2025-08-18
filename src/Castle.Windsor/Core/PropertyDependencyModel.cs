@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Reflection;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.Core;
 
@@ -21,5 +22,5 @@ public class PropertyDependencyModel(PropertyInfo property, bool isOptional) : D
     property.PropertyType,
     isOptional)
 {
-    public PropertyInfo Property { get; private set; } = property;
+    [PublicAPI] public PropertyInfo Property { get; private set; } = property;
 }

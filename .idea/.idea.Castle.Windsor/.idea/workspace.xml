@@ -8,10 +8,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/FACILITIES-ISSUE-111/Components/AFacilitiesIssue111.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/FACILITIES-ISSUE-111/Components/AFacilitiesIssue111.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/FACILITIES-ISSUE-111/Components/BFacilitiesIssue111.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/FACILITIES-ISSUE-111/Components/BFacilitiesIssue111.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC102.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC102.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Core/PropertyDependencyModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Core/PropertyDependencyModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/AssemblyFilter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/AssemblyFilter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/BasedOnDescriptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/BasedOnDescriptor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ComponentRegistration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/Registration/ComponentRegistration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/AbstractInterpreter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/AbstractInterpreter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/XmlProcessor/XmlProcessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/XmlProcessor/XmlProcessor.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,15 +182,7 @@
       <workItem from="1755267527802" duration="10643000" />
       <workItem from="1755374314710" duration="5715000" />
       <workItem from="1755443290577" duration="4203000" />
-      <workItem from="1755520754770" duration="719000" />
-    </task>
-    <task id="LOCAL-00069" summary="Marked type parameters as `in` or `out` in multiple generic interfaces to improve covariance and contravariance support across test cases.">
-      <option name="closed" value="true" />
-      <created>1754508794855</created>
-      <option name="number" value="00069" />
-      <option name="presentableId" value="LOCAL-00069" />
-      <option name="project" value="LOCAL" />
-      <updated>1754508794855</updated>
+      <workItem from="1755520754770" duration="1315000" />
     </task>
     <task id="LOCAL-00070" summary="Removed `XmlInterpreter` and related classes, tests, and implementation references to simplify and modernize the codebase.">
       <option name="closed" value="true" />
@@ -574,7 +568,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755465743572</updated>
     </task>
-    <option name="localTasksCounter" value="118" />
+    <task id="LOCAL-00118" summary="Refactored test classes and interfaces by replacing method definitions with concise syntax, removing unused members, and addressing configuration changes to improve maintainability and readability.">
+      <option name="closed" value="true" />
+      <created>1755521483262</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1755521483262</updated>
+    </task>
+    <option name="localTasksCounter" value="119" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -609,7 +611,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Refactored `DisposableHook` to use `LifecycleCounter` for improved readability and test reliability; updated dependent test case accordingly." />
     <MESSAGE value="Marked multiple classes across test files as `sealed`, removed unused `InitializableDisposableComponent`, and applied `GC.SuppressFinalize` in `AbstractContainerTestCase` for improved reliability and maintainability." />
     <MESSAGE value="Refactored test files to use `var` for container and kernel declarations, replaced explicit types in initializers with implicit type expressions, and streamlined related code for improved readability and consistency." />
     <MESSAGE value="Made `DisposedCount` property readonly across fake disposable classes and updated `FilterByName` to be private in `AssemblyFilter` for improved encapsulation and clarity." />
@@ -634,7 +635,8 @@
     <MESSAGE value="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and adding `[UsedImplicitly]` annotations to improve code maintainability and readability." />
     <MESSAGE value="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and addressing warnings to improve code clarity and maintainability." />
     <MESSAGE value="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and addressing warnings to improve maintainability and readability." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and addressing warnings to improve maintainability and readability." />
+    <MESSAGE value="Refactored test classes and interfaces by replacing method definitions with concise syntax, removing unused members, and addressing configuration changes to improve maintainability and readability." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored test classes and interfaces by replacing method definitions with concise syntax, removing unused members, and addressing configuration changes to improve maintainability and readability." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

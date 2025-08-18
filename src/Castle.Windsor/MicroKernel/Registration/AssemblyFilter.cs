@@ -15,6 +15,7 @@
 using System.Globalization;
 using System.Reflection;
 using Castle.Windsor.Core.Internal;
+using JetBrains.Annotations;
 
 namespace Castle.Windsor.MicroKernel.Registration;
 
@@ -46,6 +47,7 @@ public class AssemblyFilter : IAssemblyProvider
             select assembly;
     }
 
+    [PublicAPI]
     public AssemblyFilter FilterByAssembly(Predicate<Assembly> filter)
     {
         ArgumentNullException.ThrowIfNull(filter);
@@ -73,11 +75,13 @@ public class AssemblyFilter : IAssemblyProvider
         return FilterByName(n => IsTokenEqual(n.GetPublicKeyToken(), publicKeyToken));
     }
 
+    [PublicAPI]
     public AssemblyFilter WithKeyToken(Type typeFromAssemblySignedWithKey)
     {
         return WithKeyToken(typeFromAssemblySignedWithKey.GetTypeInfo().Assembly);
     }
 
+    [PublicAPI]
     public AssemblyFilter WithKeyToken<TTypeFromAssemblySignedWithKey>()
     {
         return WithKeyToken(typeof(TTypeFromAssemblySignedWithKey).GetTypeInfo().Assembly);

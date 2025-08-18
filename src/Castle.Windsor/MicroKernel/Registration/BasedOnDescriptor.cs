@@ -186,6 +186,7 @@ public sealed class BasedOnDescriptor : IRegistration
     ///     than one interface!
     /// </summary>
     /// <returns> </returns>
+    [PublicAPI]
     public BasedOnDescriptor WithServiceFirstInterface()
     {
         return WithService.FirstInterface();
