@@ -10,11 +10,6 @@ public class AFacilitiesIssue111 : IAFacilitiesIssue111, IStartable
     {
     }
 
-    public void Method()
-    {
-        Console.WriteLine(@"A: Method");
-    }
-
     public void Start()
     {
         Console.WriteLine(@"Started A");

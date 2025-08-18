@@ -8,25 +8,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/FACILITIES-ISSUE-111/Components/IAFacilitiesIssue111.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/FACILITIES-ISSUE-111/Components/IAFacilitiesIssue111.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/FACILITIES-ISSUE-111/Components/IBFacilitiesIssue111.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/FACILITIES-ISSUE-111/Components/IBFacilitiesIssue111.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/FACILITIES-ISSUE-111/Components/AFacilitiesIssue111.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/FACILITIES-ISSUE-111/Components/AFacilitiesIssue111.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/FACILITIES-ISSUE-111/Components/BFacilitiesIssue111.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/FACILITIES-ISSUE-111/Components/BFacilitiesIssue111.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC102.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC102.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/Presenter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/Presenter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ClassWithTwoParametersWithSameType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ClassWithTwoParametersWithSameType.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CommonServiceUser3.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CommonServiceUser3.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CustomerChainValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CustomerChainValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/DefaultCustomer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/DefaultCustomer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasByRefCtorArgument.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasByRefCtorArgument.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasCtorDependency.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasCtorDependency.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasObjectPropertyAndTypedCtorParameterDifferentName.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasObjectPropertyAndTypedCtorParameterDifferentName.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasObjectPropertyAndTypedCtorParameterWithSameName.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasObjectPropertyAndTypedCtorParameterWithSameName.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasPropertyAndCtorParameterSameTypeDifferentName.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasPropertyAndCtorParameterSameTypeDifferentName.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasThrowingPropertyDependency.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasThrowingPropertyDependency.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ISimpleGeneric.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ISimpleGeneric.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CameraService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/CameraService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ResultFinderStringDecorator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Components/ResultFinderStringDecorator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/AbstractInterpreter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/AbstractInterpreter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Installer/ConfigurationInstaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Installer/ConfigurationInstaller.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +106,7 @@
       <force-push-target remote-path="origin" branch="net9" />
     </force-push-targets>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected=".NET Project.Castle.Windsor.Tests">
     <configuration name="Castle.Windsor.Tests" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -195,14 +180,7 @@
       <workItem from="1755267527802" duration="10643000" />
       <workItem from="1755374314710" duration="5715000" />
       <workItem from="1755443290577" duration="4203000" />
-    </task>
-    <task id="LOCAL-00068" summary="Added `[PublicAPI]` annotations to multiple methods and interfaces across test cases to improve API discoverability and documentation.">
-      <option name="closed" value="true" />
-      <created>1754428108542</created>
-      <option name="number" value="00068" />
-      <option name="presentableId" value="LOCAL-00068" />
-      <option name="project" value="LOCAL" />
-      <updated>1754428108542</updated>
+      <workItem from="1755520754770" duration="719000" />
     </task>
     <task id="LOCAL-00069" summary="Marked type parameters as `in` or `out` in multiple generic interfaces to improve covariance and contravariance support across test cases.">
       <option name="closed" value="true" />
@@ -588,7 +566,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755378360310</updated>
     </task>
-    <option name="localTasksCounter" value="117" />
+    <task id="LOCAL-00117" summary="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and addressing warnings to improve maintainability and readability.">
+      <option name="closed" value="true" />
+      <created>1755465743572</created>
+      <option name="number" value="00117" />
+      <option name="presentableId" value="LOCAL-00117" />
+      <option name="project" value="LOCAL" />
+      <updated>1755465743572</updated>
+    </task>
+    <option name="localTasksCounter" value="118" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -623,7 +609,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Replaced `Any()` with `Count == 0` for conditional checks and switched string `EndsWith` arguments to char literals across test and core files for improved performance and code clarity." />
     <MESSAGE value="Refactored `DisposableHook` to use `LifecycleCounter` for improved readability and test reliability; updated dependent test case accordingly." />
     <MESSAGE value="Marked multiple classes across test files as `sealed`, removed unused `InitializableDisposableComponent`, and applied `GC.SuppressFinalize` in `AbstractContainerTestCase` for improved reliability and maintainability." />
     <MESSAGE value="Refactored test files to use `var` for container and kernel declarations, replaced explicit types in initializers with implicit type expressions, and streamlined related code for improved readability and consistency." />
@@ -648,7 +633,8 @@
     <MESSAGE value="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, and adding necessary suppressions to improve maintainability and readability." />
     <MESSAGE value="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and adding `[UsedImplicitly]` annotations to improve code maintainability and readability." />
     <MESSAGE value="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and addressing warnings to improve code clarity and maintainability." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and addressing warnings to improve code clarity and maintainability." />
+    <MESSAGE value="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and addressing warnings to improve maintainability and readability." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored test classes and interfaces by replacing method/property definitions with concise syntax, removing unused members, applying necessary suppressions, and addressing warnings to improve maintainability and readability." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

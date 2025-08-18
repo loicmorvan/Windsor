@@ -39,21 +39,9 @@ public class IoC102
 
     public interface IReader;
 
-    public class AlphaReader : IReader
-    {
-        public string Read()
-        {
-            return "Alpha";
-        }
-    }
+    public class AlphaReader : IReader;
 
-    public class BetaReader : IReader
-    {
-        public string Read()
-        {
-            return "Beta";
-        }
-    }
+    public class BetaReader : IReader;
 
     [UsedImplicitly]
     public class Consumer(IReader reader)
