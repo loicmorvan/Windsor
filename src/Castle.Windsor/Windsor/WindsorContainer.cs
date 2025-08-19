@@ -38,7 +38,7 @@ public sealed class WindsorContainer :
     private readonly Dictionary<string, IWindsorContainer> _childContainers = new(StringComparer.OrdinalIgnoreCase);
     private readonly Lock _childContainersLocker = new();
 
-    private IWindsorContainer _parent;
+    private IWindsorContainer? _parent;
 
     /// <summary>Constructs a container without any external configuration reference</summary>
     public WindsorContainer() : this(new DefaultKernel(), new DefaultComponentInstaller())
@@ -156,7 +156,7 @@ public sealed class WindsorContainer :
     /// <summary>Gets the container's name</summary>
     /// <remarks>Only useful when child containers are being used</remarks>
     /// <value>The container's name.</value>
-    public string Name { get; }
+    public string? Name { get; }
 
     /// <summary>Gets or sets the parent container if this instance is a sub container.</summary>
     public IWindsorContainer Parent

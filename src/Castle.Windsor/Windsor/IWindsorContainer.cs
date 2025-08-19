@@ -28,7 +28,7 @@ public interface IWindsorContainer : IDisposable
     /// <summary>Gets the container's name</summary>
     /// <remarks>Only useful when child containers are being used</remarks>
     /// <value>The container's name.</value>
-    string Name { get; }
+    string? Name { get; }
 
     /// <summary>Gets or sets the parent container if this instance is a sub container.</summary>
     [PublicAPI]

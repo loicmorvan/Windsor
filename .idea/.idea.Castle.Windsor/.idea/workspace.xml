@@ -9,9 +9,12 @@
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Directory.Build.props" beforeDir="false" afterPath="$PROJECT_DIR$/Directory.Build.props" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.Hosting/Extensions/HostBuilderExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.Hosting/Extensions/HostBuilderExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Core/CastleComponentAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Core/CastleComponentAttribute.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection.Tests/Castle.Windsor.Extensions.DependencyInjection.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection.Tests/Castle.Windsor.Extensions.DependencyInjection.Tests.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/RegistrationAdapter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/RegistrationAdapter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/Castle.Windsor.Facilities.AspNetCore.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/Castle.Windsor.Facilities.AspNetCore.Tests.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Castle.Windsor.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Castle.Windsor.Tests.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/IWindsorContainer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/IWindsorContainer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/WindsorContainer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/WindsorContainer.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +36,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="fix-nullability" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -52,13 +55,13 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Immediate Window" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ef47bfb894c2469cb67553e5082a6f805ee00/3b/e208bf73/ProxyGenerationOptions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/Resolvers/LoggerDependencyResolver.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/loicmorvan/RiderProjects/Windsor/src/Castle.Windsor.Tests/ClassComponents/TwoEmptyServiceDependenciesProperty.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="SWEA" />
+    <option name="selectedTabId" value="Toolset" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -71,42 +74,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;1040357a-a374-4805-ae55-296a10391d40.executor&quot;: &quot;Debug&quot;,
-    &quot;2dc3fd48-7f19-46dc-9e61-9ca484058a3d.executor&quot;: &quot;Run&quot;,
-    &quot;36c383d8-1096-48c6-9b6c-8e57ac7b4b8d.executor&quot;: &quot;Run&quot;,
-    &quot;457fe246-3a65-482c-9b97-436b5d6e2078.executor&quot;: &quot;Debug&quot;,
-    &quot;54437557-b30d-4a31-834c-387d565fefaf.executor&quot;: &quot;Run&quot;,
-    &quot;544ebf71-769d-49f6-88b1-47a73962a2b1.executor&quot;: &quot;Run&quot;,
-    &quot;58c56b00-f81e-48fd-a74f-c8e84271fcf4.executor&quot;: &quot;Run&quot;,
-    &quot;6356ce7a-e504-4c39-a7e4-fe4a2206522d.executor&quot;: &quot;Run&quot;,
-    &quot;6735a692-6eea-4ff7-a309-8dd38fbf00bf.executor&quot;: &quot;Debug&quot;,
-    &quot;7c93ec0e-d2e1-442e-8418-ad90b07a71b7.executor&quot;: &quot;Run&quot;,
-    &quot;7c964d5d-15cd-4425-a015-ad6d5f0fc580.executor&quot;: &quot;Debug&quot;,
-    &quot;89dda535-a689-4076-a660-df5d01541ebe.executor&quot;: &quot;Debug&quot;,
-    &quot;92c054ad-452f-41b6-a548-9856400a347d.executor&quot;: &quot;Debug&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;T4 Template Run Configuration.ModelFakes.tt.executor&quot;: &quot;Run&quot;,
-    &quot;e0ad4eed-3a6f-49ec-852e-59ba3136ace6.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;more-cleanup&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;DotCoverContinuousTestingPageId&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "1040357a-a374-4805-ae55-296a10391d40.executor": "Debug",
+    "2dc3fd48-7f19-46dc-9e61-9ca484058a3d.executor": "Run",
+    "36c383d8-1096-48c6-9b6c-8e57ac7b4b8d.executor": "Run",
+    "457fe246-3a65-482c-9b97-436b5d6e2078.executor": "Debug",
+    "54437557-b30d-4a31-834c-387d565fefaf.executor": "Run",
+    "544ebf71-769d-49f6-88b1-47a73962a2b1.executor": "Run",
+    "58c56b00-f81e-48fd-a74f-c8e84271fcf4.executor": "Debug",
+    "6356ce7a-e504-4c39-a7e4-fe4a2206522d.executor": "Run",
+    "6735a692-6eea-4ff7-a309-8dd38fbf00bf.executor": "Debug",
+    "7c93ec0e-d2e1-442e-8418-ad90b07a71b7.executor": "Run",
+    "7c964d5d-15cd-4425-a015-ad6d5f0fc580.executor": "Debug",
+    "89dda535-a689-4076-a660-df5d01541ebe.executor": "Debug",
+    "92c054ad-452f-41b6-a548-9856400a347d.executor": "Debug",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "T4 Template Run Configuration.ModelFakes.tt.executor": "Run",
+    "e0ad4eed-3a6f-49ec-852e-59ba3136ace6.executor": "Run",
+    "git-widget-placeholder": "master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "liveEdit",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="Push.Settings">
     <force-push-targets>
       <force-push-target remote-path="origin" branch="net9" />
     </force-push-targets>
   </component>
-  <component name="RunManager" selected=".NET Project.Castle.Windsor.Tests">
+  <component name="RunManager">
     <configuration name="Castle.Windsor.Tests" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -653,14 +656,20 @@
           <option name="timeStamp" value="3" />
         </breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/Castle.Facilities.Logging/LoggingFacility.cs</url>
+          <line>52</line>
+          <properties documentPath="$PROJECT_DIR$/src/Castle.Facilities.Logging/LoggingFacility.cs" containingFunctionPresentation="Constructor 'LoggingFacility'" />
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/DefaultDiagnosticsSubSystem.cs</url>
-          <line>27</line>
-          <properties documentPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/DefaultDiagnosticsSubSystem.cs" containingFunctionPresentation="Method 'AddDiagnostic'">
+          <line>31</line>
+          <properties documentPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Diagnostics/DefaultDiagnosticsSubSystem.cs" containingFunctionPresentation="Method 'GetDiagnostic'">
             <startOffsets>
-              <option value="1122" />
+              <option value="1231" />
             </startOffsets>
             <endOffsets>
-              <option value="1123" />
+              <option value="1292" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="13" />

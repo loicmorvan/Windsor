@@ -71,7 +71,7 @@ internal static class RegistrationAdapter
 
     private static string UniqueComponentName(ServiceDescriptor service)
     {
-        string result;
+        string? result;
         if (service.ImplementationType != null)
         {
             result = service.ImplementationType.FullName;
