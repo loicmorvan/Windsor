@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.ModelBuilder.Inspectors;
@@ -75,6 +76,8 @@ public sealed class DefaultComponentModelBuilder : IComponentModelBuilder
             }
 
             metaDescriptors ??= model.GetMetaDescriptors(true);
+
+            Debug.Assert(metaDescriptors != null, nameof(metaDescriptors) + " != null");
             metaDescriptors.Add(meta);
         });
         return model;

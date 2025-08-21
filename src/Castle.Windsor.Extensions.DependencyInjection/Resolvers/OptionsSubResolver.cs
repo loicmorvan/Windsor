@@ -25,8 +25,7 @@ internal class OptionsSubResolver(IKernel kernel) : ISubDependencyResolver
     public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
-        return dependency.TargetType != null &&
-               dependency.TargetType.GetTypeInfo().IsGenericType &&
+        return dependency.TargetType.GetTypeInfo().IsGenericType &&
                dependency.TargetType.GetGenericTypeDefinition() == typeof(IOptions<>);
     }
 

@@ -23,7 +23,7 @@ internal abstract class ExtensionContainerScopeBase : ILifetimeScope
     public const string TransientMarker = "Transient";
     private readonly ScopeCache _scopeCache = new();
 
-    internal virtual ExtensionContainerScopeBase RootScope { get; set; }
+    internal virtual ExtensionContainerScopeBase? RootScope { get; set; }
 
     public virtual void Dispose()
     {

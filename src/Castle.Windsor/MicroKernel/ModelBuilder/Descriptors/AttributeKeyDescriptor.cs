@@ -20,9 +20,9 @@ public class AttributeKeyDescriptor<TS>
     /// <summary>Builds the <see cref="AttributeKeyDescriptor{S}" /> with value.</summary>
     /// <param name="value">The attribute value.</param>
     /// <returns>The <see cref="ComponentRegistration{S}" /></returns>
-    public ComponentRegistration<TS> Eq(object value)
+    public ComponentRegistration<TS> Eq(object? value)
     {
-        var attribValue = value != null ? value.ToString() : "";
-        return _component.AddAttributeDescriptor(_name, attribValue);
+        var attribValue = value != null ? value.ToString() : string.Empty;
+        return _component.AddAttributeDescriptor(_name, attribValue ?? string.Empty);
     }
 }

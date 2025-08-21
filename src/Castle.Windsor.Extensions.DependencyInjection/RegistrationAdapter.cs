@@ -98,19 +98,22 @@ internal static class RegistrationAdapter
         {
             var serviceProvider = kernel.Resolve<IServiceProvider>();
             Debug.Assert(service.ImplementationFactory != null);
-            return service.ImplementationFactory(serviceProvider) as TService;
+            return (TService)service.ImplementationFactory(serviceProvider);
         });
     }
 
     private static ComponentRegistration<TService> UsingInstance<TService>(ComponentRegistration<TService> registration,
         ServiceDescriptor service) where TService : class
     {
-        return registration.Instance(service.ImplementationInstance as TService);
+        var serviceImplementationInstance = service.ImplementationInstance;
+        Debug.Assert(serviceImplementationInstance != null);
+        return registration.Instance((TService)serviceImplementationInstance);
     }
 
     private static ComponentRegistration<TService> UsingImplementation<TService>(
         ComponentRegistration<TService> registration, ServiceDescriptor service) where TService : class
     {
+        Debug.Assert(service.ImplementationType != null);
         return registration.ImplementedBy(service.ImplementationType);
     }
 

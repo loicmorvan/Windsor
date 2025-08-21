@@ -19,42 +19,30 @@ namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 public class ScopeCache : IScopeCache, IDisposable
 {
     // NOTE: does that need to be thread safe?
-    private IDictionary<object, Burden> _cache = new Dictionary<object, Burden>();
+    private Dictionary<object, Burden?>? _cache = [];
 
     public void Dispose()
     {
         GC.SuppressFinalize(this);
-        
+
         var localCache = Interlocked.Exchange(ref _cache, null);
-        localCache?.Values.Reverse().ForEach(b => b.Release());
+        localCache?.Values.Reverse().ForEach(b => b?.Release());
     }
 
-    public Burden this[object id]
+    public Burden? this[object id]
     {
         set
         {
-            try
-            {
-                _cache.Add(id, value);
-            }
-            catch (NullReferenceException)
-            {
-                throw new ObjectDisposedException(
-                    "Scope cache was already disposed. This is most likely a bug in the calling code.");
-            }
+            ObjectDisposedException.ThrowIf(_cache is null, this);
+
+            _cache.Add(id, value);
         }
         get
         {
-            try
-            {
-                _cache.TryGetValue(id, out var burden);
-                return burden;
-            }
-            catch (NullReferenceException)
-            {
-                throw new ObjectDisposedException(
-                    "Scope cache was already disposed. This is most likely a bug in the calling code.");
-            }
+            ObjectDisposedException.ThrowIf(_cache is null, this);
+
+            _cache.TryGetValue(id, out var burden);
+            return burden;
         }
     }
 }

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Core.Configuration;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
@@ -20,8 +21,8 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class ConfigurationDescriptor : IComponentModelDescriptor
 {
-    private readonly Node[] _configNodes;
-    private readonly IConfiguration _configuration;
+    private readonly Node[]? _configNodes;
+    private readonly IConfiguration? _configuration;
 
     public ConfigurationDescriptor(params Node[] configNodes)
     {
@@ -41,6 +42,7 @@ public class ConfigurationDescriptor : IComponentModelDescriptor
         }
         else
         {
+            Debug.Assert(_configNodes != null, nameof(_configNodes) + " != null");
             foreach (var configNode in _configNodes)
             {
                 configNode.ApplyTo(model.Configuration);

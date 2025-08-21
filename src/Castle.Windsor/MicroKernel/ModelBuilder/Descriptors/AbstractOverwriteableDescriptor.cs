@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Core.Configuration;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
@@ -21,9 +22,16 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 public abstract class AbstractOverwriteableDescriptor<TService> : IComponentModelDescriptor
     where TService : class
 {
-    protected bool IsOverWrite => Registration.IsOverWrite;
+    protected bool IsOverWrite
+    {
+        get
+        {
+            Debug.Assert(Registration != null, nameof(Registration) + " != null");
+            return Registration.IsOverWrite;
+        }
+    }
 
-    internal ComponentRegistration<TService> Registration { private get; set; }
+    internal ComponentRegistration<TService>? Registration { private get; set; }
 
     public virtual void BuildComponentModel(IKernel kernel, ComponentModel model)
     {

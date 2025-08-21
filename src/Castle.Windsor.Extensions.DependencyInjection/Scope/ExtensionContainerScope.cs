@@ -23,7 +23,7 @@ internal class ExtensionContainerScope : ExtensionContainerScopeBase
         _parent = ExtensionContainerScopeCache.Current;
     }
 
-    internal override ExtensionContainerScopeBase RootScope { get; set; }
+    internal override ExtensionContainerScopeBase? RootScope { get; set; }
 
 
     internal static ExtensionContainerScopeBase BeginScope()
