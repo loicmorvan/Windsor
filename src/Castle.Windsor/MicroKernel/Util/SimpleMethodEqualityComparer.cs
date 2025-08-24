@@ -20,7 +20,7 @@ namespace Castle.Windsor.MicroKernel.Util;
 [Serializable]
 public class SimpleMethodEqualityComparer : IEqualityComparer<MethodInfo>
 {
-    public bool Equals(MethodInfo x, MethodInfo y)
+    public bool Equals(MethodInfo? x, MethodInfo? y)
     {
         return ReferenceEquals(x, y);
     }

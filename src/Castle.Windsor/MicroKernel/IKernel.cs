@@ -44,7 +44,7 @@ public partial interface IKernel : IKernelEvents, IDisposable
 
 	/// <summary>Returns the parent kernel</summary>
 	[PublicAPI]
-	IKernel Parent { get; set; }
+	IKernel? Parent { get; set; }
 
 	/// <summary>
 	///     Gets or sets the implementation of <see cref="IProxyFactory" /> allowing different strategies for proxy

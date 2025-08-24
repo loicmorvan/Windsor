@@ -19,7 +19,7 @@ public class SimpleTypeEqualityComparer : IEqualityComparer<Type>
 {
     public static SimpleTypeEqualityComparer Instance { get; } = new();
 
-    public bool Equals(Type x, Type y)
+    public bool Equals(Type? x, Type? y)
     {
         return ReferenceEquals(x, y);
     }

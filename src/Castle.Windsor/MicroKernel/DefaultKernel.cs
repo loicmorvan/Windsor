@@ -64,7 +64,7 @@ public sealed partial class DefaultKernel :
     private ThreadSafeFlag _disposed;
 
     /// <summary>The parent kernel, if exists.</summary>
-    private IKernel _parentKernel;
+    private IKernel? _parentKernel;
 
     /// <summary>Constructs a DefaultKernel with no component proxy support.</summary>
     public DefaultKernel() : this(new NotSupportedProxyFactory())
@@ -130,7 +130,7 @@ public sealed partial class DefaultKernel :
 
     public IHandlerFactory HandlerFactory { get; private set; }
 
-    public IKernel Parent
+    public IKernel? Parent
     {
         get => _parentKernel;
         set
@@ -231,7 +231,7 @@ public sealed partial class DefaultKernel :
         return AddFacility(new T());
     }
 
-    public IKernel AddFacility<T>(Action<T> onCreate)
+    public IKernel AddFacility<T>(Action<T>? onCreate)
         where T : IFacility, new()
     {
         var facility = new T();

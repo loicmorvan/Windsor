@@ -53,7 +53,7 @@ public class DependencyInjectionNamingSubsystem : DefaultNamingSubSystem
         return result;
     }
 
-    public override IHandler GetHandler(Type service)
+    public override IHandler? GetHandler(Type service)
     {
         ArgumentNullException.ThrowIfNull(service);
         if (Selectors != null)

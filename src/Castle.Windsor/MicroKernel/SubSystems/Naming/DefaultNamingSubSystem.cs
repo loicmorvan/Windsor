@@ -43,11 +43,11 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
     /// </summary>
     protected readonly Dictionary<Type, HandlerWithPriority> Service2Handler = new(SimpleTypeEqualityComparer.Instance);
 
-    private Dictionary<string, IHandler> _handlerByNameCache;
-    private Dictionary<Type, IHandler> _handlerByServiceCache;
+    private Dictionary<string, IHandler>? _handlerByNameCache;
+    private Dictionary<Type, IHandler>? _handlerByServiceCache;
 
-    protected IList<IHandlersFilter> Filters;
-    protected IList<IHandlerSelector> Selectors;
+    protected IList<IHandlersFilter>? Filters;
+    protected IList<IHandlerSelector>? Selectors;
 
     protected IDictionary<string, IHandler> HandlerByNameCache
     {
@@ -149,7 +149,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
         return value;
     }
 
-    public virtual IHandler GetHandler(Type service)
+    public virtual IHandler? GetHandler(Type service)
     {
         ArgumentNullException.ThrowIfNull(service);
         if (Selectors != null)
@@ -270,7 +270,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
     }
 
     [PublicAPI]
-    protected virtual IHandler GetSelectorsOpinion(string name, Type type)
+    protected virtual IHandler? GetSelectorsOpinion(string? name, Type? type)
     {
         if (Selectors == null)
         {
@@ -278,7 +278,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
         }
 
         type ??= typeof(object); // if type is null, we want everything, so object does well for that
-        IHandler[] handlers = null; //only init if we have a selector with an opinion about this type
+        IHandler[]? handlers = null; //only init if we have a selector with an opinion about this type
         foreach (var selector in Selectors)
         {
             if (!selector.HasOpinionAbout(name, type))
