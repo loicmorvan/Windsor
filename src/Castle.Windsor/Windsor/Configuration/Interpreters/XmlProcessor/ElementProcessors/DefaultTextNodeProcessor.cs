@@ -28,9 +28,9 @@ public partial class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 
     public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
     {
-        var node = nodeList.Current as XmlCharacterData;
+        var node = (XmlCharacterData)nodeList.Current;
 
-        Debug.Assert(node != null);
+        Debug.Assert(node.Value != null);
         ProcessString(node, node.Value, engine);
     }
 
@@ -64,7 +64,7 @@ public partial class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
                 // we copy any attributes for the property into the parentNode
                 if (node.ParentNode != null)
                 {
-                    MoveAttributes(node.ParentNode as XmlElement, prop);
+                    MoveAttributes((XmlElement)node.ParentNode, prop);
                 }
 
                 AppendChild(fragment, prop.ChildNodes);
@@ -99,6 +99,7 @@ public partial class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
         }
         else
         {
+            Debug.Assert(node.ParentNode != null);
             ReplaceNode(node.ParentNode, fragment, node);
         }
     }

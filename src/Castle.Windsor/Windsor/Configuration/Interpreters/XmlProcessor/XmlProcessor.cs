@@ -41,7 +41,7 @@ public sealed class XmlProcessor
 
     /// <summary>Initializes a new instance of the <see cref="XmlProcessor" /> class.</summary>
     [PublicAPI]
-    public XmlProcessor(string environmentName)
+    public XmlProcessor(string? environmentName)
     {
         _engine = new DefaultXmlProcessorEngine(environmentName);
         RegisterProcessors();

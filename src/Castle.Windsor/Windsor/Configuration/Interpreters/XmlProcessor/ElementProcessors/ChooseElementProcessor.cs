@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Diagnostics;
 using System.Xml;
 
 namespace Castle.Windsor.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
@@ -26,11 +25,10 @@ public class ChooseElementProcessor : AbstractStatementElementProcessor
 
     public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
     {
-        var element = nodeList.Current as XmlElement;
+        var element = (XmlElement)nodeList.Current;
 
         var fragment = CreateFragment(element);
 
-        Debug.Assert(element != null);
         foreach (XmlNode child in element.ChildNodes)
         {
             if (IgnoreNode(child))

@@ -24,7 +24,7 @@ public class DefineElementProcessor : AbstractXmlNodeProcessor
 
     public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
     {
-        var element = nodeList.Current as XmlElement;
+        var element = (XmlElement)nodeList.Current;
 
         var flag = GetRequiredAttribute(element, FlagAttrName);
 

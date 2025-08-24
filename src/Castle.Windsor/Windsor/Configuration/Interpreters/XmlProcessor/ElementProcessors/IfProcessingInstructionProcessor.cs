@@ -31,11 +31,10 @@ public class IfProcessingInstructionProcessor : AbstractXmlNodeProcessor
 
     public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
     {
-        var node = nodeList.Current as XmlProcessingInstruction;
+        var node = (XmlProcessingInstruction)nodeList.Current;
 
         AssertData(node, true);
 
-        Debug.Assert(node != null);
         var state = engine.HasFlag(node.Data) ? StatementState.Collect : StatementState.Init;
 
         var nodesToProcess = new List<XmlNode>();

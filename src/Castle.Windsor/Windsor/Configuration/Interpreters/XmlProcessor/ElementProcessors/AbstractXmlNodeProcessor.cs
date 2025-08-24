@@ -100,9 +100,9 @@ public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
         return node.NodeType is XmlNodeType.Comment or XmlNodeType.Entity or XmlNodeType.EntityReference;
     }
 
-    protected static XmlNode ImportNode(XmlNode targetElement, XmlNode node)
+    protected static XmlNode ImportNode(XmlNode? targetElement, XmlNode node)
     {
-        Debug.Assert(targetElement.OwnerDocument != null);
+        Debug.Assert(targetElement?.OwnerDocument != null);
         return targetElement.OwnerDocument == node.OwnerDocument
             ? node
             : targetElement.OwnerDocument.ImportNode(node, true);
@@ -131,6 +131,7 @@ public abstract class AbstractXmlNodeProcessor : IXmlNodeProcessor
 
     protected static void ReplaceItself(XmlNode newNode, XmlNode oldNode)
     {
+        Debug.Assert(oldNode.ParentNode != null);
         ReplaceNode(oldNode.ParentNode, newNode, oldNode);
     }
 

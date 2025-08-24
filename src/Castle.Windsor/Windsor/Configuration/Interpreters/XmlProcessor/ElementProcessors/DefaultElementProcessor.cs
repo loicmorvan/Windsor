@@ -64,9 +64,6 @@ public class DefaultElementProcessor : AbstractXmlNodeProcessor
 
         var includeContent = IncludeElementProcessor.ProcessInclude(element, include.Value, engine);
 
-        if (includeContent != null)
-        {
-            element.PrependChild(includeContent);
-        }
+        element.PrependChild(includeContent);
     }
 }

@@ -28,7 +28,7 @@ public interface IXmlProcessorEngine
 
     void DispatchProcessCurrent(IXmlProcessorNodeList nodeList);
 
-    XmlElement GetProperty(string name);
+    XmlElement? GetProperty(string name);
 
     IResource GetResource(string uri);
 

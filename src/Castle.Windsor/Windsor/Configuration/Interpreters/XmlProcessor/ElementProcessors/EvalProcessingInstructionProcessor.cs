@@ -27,11 +27,10 @@ public class EvalProcessingInstructionProcessor : AbstractXmlNodeProcessor
 
     public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
     {
-        var node = nodeList.Current as XmlProcessingInstruction;
+        var node = (XmlProcessingInstruction)nodeList.Current;
 
         var fragment = CreateFragment(node);
 
-        Debug.Assert(node != null);
         var expression = node.Data;
 
         // We don't have an expression evaluator right now, so expression will 
@@ -47,6 +46,7 @@ public class EvalProcessingInstructionProcessor : AbstractXmlNodeProcessor
         Debug.Assert(node.OwnerDocument != null);
         fragment.AppendChild(node.OwnerDocument.CreateTextNode(evaluated.ToString()));
 
+        Debug.Assert(node.ParentNode != null);
         ReplaceNode(node.ParentNode, fragment, node);
     }
 }
