@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using System.Reflection;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
@@ -25,6 +26,7 @@ internal class OptionsSubResolver(IKernel kernel) : ISubDependencyResolver
     public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
+        Debug.Assert(dependency.TargetType != null);
         return dependency.TargetType.GetTypeInfo().IsGenericType &&
                dependency.TargetType.GetGenericTypeDefinition() == typeof(IOptions<>);
     }
@@ -32,6 +34,7 @@ internal class OptionsSubResolver(IKernel kernel) : ISubDependencyResolver
     public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
+        Debug.Assert(dependency.TargetType != null);
         return kernel.Resolve(dependency.TargetType);
     }
 }

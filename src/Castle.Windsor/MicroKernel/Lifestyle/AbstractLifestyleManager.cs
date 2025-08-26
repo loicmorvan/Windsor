@@ -22,11 +22,11 @@ namespace Castle.Windsor.MicroKernel.Lifestyle;
 [Serializable]
 public abstract class AbstractLifestyleManager : ILifestyleManager
 {
-    protected IComponentActivator ComponentActivator { get; private set; }
+    protected IComponentActivator? ComponentActivator { get; private set; }
 
-    protected IKernel Kernel { get; private set; }
+    protected IKernel? Kernel { get; private set; }
 
-    protected ComponentModel Model { get; private set; }
+    protected ComponentModel? Model { get; private set; }
 
     /// <summary>
     ///     Invoked when the container gets disposed. The container will not call it multiple times in multithreaded
@@ -44,7 +44,7 @@ public abstract class AbstractLifestyleManager : ILifestyleManager
 
     public virtual bool Release(object instance)
     {
-        ComponentActivator.Destroy(instance);
+        ComponentActivator?.Destroy(instance);
         return true;
     }
 
@@ -57,6 +57,7 @@ public abstract class AbstractLifestyleManager : ILifestyleManager
 
     protected virtual Burden CreateInstance(CreationContext context, bool trackedExternally)
     {
+        Debug.Assert(ComponentActivator != null, nameof(ComponentActivator) + " != null");
         var burden = context.CreateBurden(ComponentActivator, trackedExternally);
 
         var instance = ComponentActivator.Create(context, burden);

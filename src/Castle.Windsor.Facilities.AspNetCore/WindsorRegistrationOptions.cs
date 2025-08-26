@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using System.Reflection;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Registration;
@@ -29,7 +30,7 @@ public class WindsorRegistrationOptions
     internal readonly List<IRegistration> TagHelperComponentRegistrations = [];
     internal readonly List<(Assembly, LifestyleType)> ViewComponentAssemblyRegistrations = [];
     internal readonly List<IRegistration> ViewComponentComponentRegistrations = [];
-    private Assembly _entryAssembly;
+    private Assembly? _entryAssembly;
 
     internal Assembly EntryAssembly
     {
@@ -44,6 +45,8 @@ public class WindsorRegistrationOptions
                 _entryAssembly ??= Assembly.GetCallingAssembly();
             }
 
+
+            Debug.Assert(_entryAssembly != null, nameof(_entryAssembly) + " != null");
             return _entryAssembly;
         }
     }
@@ -75,7 +78,7 @@ public class WindsorRegistrationOptions
     /// </param>
     /// <param name="lifestyleType">The lifestyle of the controllers. Defaults to <see cref="LifestyleType.Scoped" />.</param>
     /// <returns><see cref="WindsorRegistrationOptions" /> as a fluent interface</returns>
-    public WindsorRegistrationOptions RegisterControllers(Assembly controllersAssembly = null,
+    public WindsorRegistrationOptions RegisterControllers(Assembly? controllersAssembly = null,
         LifestyleType lifestyleType = LifestyleType.Scoped)
     {
         ControllerAssemblyRegistrations.Add((controllersAssembly ?? EntryAssembly, lifestyleType));
@@ -96,7 +99,7 @@ public class WindsorRegistrationOptions
     /// <param name="tagHelpersAssembly">Assembly where the tag helpers are defined. Defaults to Assembly.GetCallingAssembly().</param>
     /// <param name="lifestyleType">The lifestyle of the controllers. Defaults to <see cref="LifestyleType.Scoped" />.</param>
     /// <returns><see cref="WindsorRegistrationOptions" /> as a fluent interface</returns>
-    public WindsorRegistrationOptions RegisterTagHelpers(Assembly tagHelpersAssembly = null,
+    public WindsorRegistrationOptions RegisterTagHelpers(Assembly? tagHelpersAssembly = null,
         LifestyleType lifestyleType = LifestyleType.Scoped)
     {
         TagHelperAssemblyRegistrations.Add((tagHelpersAssembly ?? EntryAssembly, lifestyleType));
@@ -121,7 +124,7 @@ public class WindsorRegistrationOptions
     /// <param name="lifestyleType">The lifestyle of the controllers. Defaults to <see cref="LifestyleType.Scoped" />.</param>
     /// <returns><see cref="WindsorRegistrationOptions" /> as a fluent interface</returns>
     [PublicAPI]
-    public WindsorRegistrationOptions RegisterViewComponents(Assembly viewComponentsAssembly = null,
+    public WindsorRegistrationOptions RegisterViewComponents(Assembly? viewComponentsAssembly = null,
         LifestyleType lifestyleType = LifestyleType.Scoped)
     {
         ViewComponentAssemblyRegistrations.Add((viewComponentsAssembly ?? EntryAssembly, lifestyleType));

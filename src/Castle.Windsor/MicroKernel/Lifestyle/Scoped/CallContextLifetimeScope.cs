@@ -101,7 +101,7 @@ public class CallContextLifetimeScope : ILifetimeScope
     }
 
     [SecuritySafeCritical]
-    public static CallContextLifetimeScope ObtainCurrentScope()
+    public static CallContextLifetimeScope? ObtainCurrentScope()
     {
         object scopeKey = AsyncLocal.Value;
         AllScopes.TryGetValue((Guid)scopeKey, out var scope);

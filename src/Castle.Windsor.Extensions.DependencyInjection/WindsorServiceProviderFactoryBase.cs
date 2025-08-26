@@ -28,11 +28,10 @@ namespace Castle.Windsor.Extensions.DependencyInjection;
 
 public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactory<IWindsorContainer>
 {
-    private IWindsorContainer _rootContainer;
-    private ExtensionContainerRootScope _rootScope;
+    private IWindsorContainer? _rootContainer;
+    private ExtensionContainerRootScope? _rootScope;
 
-    [PublicAPI]
-    public virtual IWindsorContainer Container => _rootContainer;
+    [PublicAPI] public virtual IWindsorContainer? Container => _rootContainer;
 
     public virtual IWindsorContainer CreateBuilder(IServiceCollection services)
     {
@@ -73,8 +72,9 @@ public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactor
     }
 
     [PublicAPI]
-    protected virtual IWindsorContainer BuildContainer(IServiceCollection serviceCollection,
-        IWindsorContainer windsorContainer)
+    protected virtual IWindsorContainer BuildContainer(
+        IServiceCollection? serviceCollection,
+        IWindsorContainer? windsorContainer)
     {
         if (_rootContainer is null)
         {
@@ -120,7 +120,10 @@ public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactor
     [PublicAPI]
     protected virtual void RegisterFactories(IWindsorContainer container)
     {
-        container.Register(Component
+        Debug.Assert(_rootScope != null, nameof(_rootScope) + " != null");
+
+        container.Register(
+            Component
                 .For<IServiceScopeFactory>()
                 .ImplementedBy<WindsorScopeFactory>()
                 .DependsOn(Dependency.OnValue<ExtensionContainerRootScope>(_rootScope))
@@ -132,10 +135,12 @@ public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactor
     }
 
     [PublicAPI]
-    protected virtual void RegisterServiceCollection(IServiceCollection serviceCollection, IWindsorContainer container)
+    protected virtual void RegisterServiceCollection(
+        IServiceCollection serviceCollection, IWindsorContainer? container)
     {
         foreach (var service in serviceCollection)
         {
+            Debug.Assert(_rootContainer != null, nameof(_rootContainer) + " != null");
             _rootContainer.Register(service.CreateWindsorRegistration());
         }
     }
@@ -143,6 +148,7 @@ public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactor
     [PublicAPI]
     protected virtual void AddSubResolvers()
     {
+        Debug.Assert(_rootContainer != null, nameof(_rootContainer) + " != null");
         _rootContainer.Kernel.Resolver.AddSubResolver(new RegisteredCollectionResolver(_rootContainer.Kernel));
         _rootContainer.Kernel.Resolver.AddSubResolver(new OptionsSubResolver(_rootContainer.Kernel));
         _rootContainer.Kernel.Resolver.AddSubResolver(new LoggerDependencyResolver(_rootContainer.Kernel));

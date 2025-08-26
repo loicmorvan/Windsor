@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using System.Reflection;
 using Castle.Windsor.Core.Internal;
 
@@ -39,9 +40,10 @@ public class ConstructorCandidate : IComparable<ConstructorCandidate>
     /// <value>The dependencies.</value>
     public ConstructorDependencyModel[] Dependencies { get; }
 
-    int IComparable<ConstructorCandidate>.CompareTo(ConstructorCandidate other)
+    int IComparable<ConstructorCandidate>.CompareTo(ConstructorCandidate? other)
     {
         // we sort greedier first
+        Debug.Assert(other != null, nameof(other) + " != null");
         var value = other.Dependencies.Length - Dependencies.Length;
         if (value != 0)
         {

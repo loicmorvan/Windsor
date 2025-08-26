@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Reflection;
 using Castle.Windsor.Core;
 
@@ -22,8 +23,8 @@ namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
 [Serializable]
 public abstract class LateBoundConcerns<TConcern>
 {
-    private Dictionary<Type, TConcern> _concerns;
-    private ConcurrentDictionary<Type, List<TConcern>> _concernsCache;
+    private Dictionary<Type, TConcern>? _concerns;
+    private ConcurrentDictionary<Type, List<TConcern>>? _concernsCache;
 
     public bool HasConcerns => _concerns != null;
 
@@ -42,6 +43,7 @@ public abstract class LateBoundConcerns<TConcern>
 
     private List<TConcern> BuildConcernCache(Type type)
     {
+        Debug.Assert(_concerns != null, nameof(_concerns) + " != null");
         var componentConcerns = new List<TConcern>(_concerns.Count);
         componentConcerns.AddRange(from concern in _concerns
             where concern.Key.GetTypeInfo().IsAssignableFrom(type)
@@ -52,6 +54,7 @@ public abstract class LateBoundConcerns<TConcern>
 
     protected List<TConcern> GetComponentConcerns(Type type)
     {
+        Debug.Assert(_concernsCache != null, nameof(_concernsCache) + " != null");
         return _concernsCache.GetOrAdd(type, BuildConcernCache);
     }
 }

@@ -44,7 +44,7 @@ public static class WindsorRegistrationExtensions
     /// <param name="serviceProviderFactory">Optional factory for creating a custom <see cref="IServiceProvider" /></param>
     [PublicAPI]
     public static IServiceProvider AddWindsor(this IServiceCollection services, IWindsorContainer container,
-        Action<WindsorRegistrationOptions> configure = null, Func<IServiceProvider> serviceProviderFactory = null)
+        Action<WindsorRegistrationOptions>? configure = null, Func<IServiceProvider>? serviceProviderFactory = null)
     {
         var options = new WindsorRegistrationOptions();
         configure?.Invoke(options);
@@ -175,7 +175,7 @@ public static class WindsorRegistrationExtensions
     }
 
     private static IServiceProvider InitialiseFrameworkServiceProvider(IServiceCollection services,
-        Func<IServiceProvider> serviceProviderFactory, IWindsorContainer container)
+        Func<IServiceProvider>? serviceProviderFactory, IWindsorContainer container)
     {
         var serviceProvider = serviceProviderFactory?.Invoke() ?? services.BuildServiceProvider(false);
         container.Register(Component.For<IServiceProvider>().Instance(serviceProvider));

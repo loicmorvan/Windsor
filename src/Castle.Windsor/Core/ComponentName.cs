@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.Core.Internal;
 
 namespace Castle.Windsor.Core;
@@ -51,6 +52,7 @@ public class ComponentName(string name, bool setByUser)
     /// <returns></returns>
     public static string DefaultNameFor(Type componentType)
     {
+        Debug.Assert(componentType.FullName != null);
         return componentType.FullName;
     }
 }

@@ -259,7 +259,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
     }
 
     [PublicAPI]
-    protected virtual IHandler[] GetFiltersOpinion(Type service)
+    protected virtual IHandler[]? GetFiltersOpinion(Type service)
     {
         return Filters == null
             ? null

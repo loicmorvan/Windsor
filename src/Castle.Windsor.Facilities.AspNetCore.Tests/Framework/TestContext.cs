@@ -28,10 +28,10 @@ public sealed class TestContext(
 {
     public IApplicationBuilder ApplicationBuilder { get; } = applicationBuilder;
     public IServiceCollection ServiceCollection { get; } = serviceCollection;
-    public IServiceProvider ServiceProvider { get; private set; } = serviceProvider;
+    public IServiceProvider? ServiceProvider { get; private set; } = serviceProvider;
 
-    private IDisposable WindsorScope { get; set; } = windsorScope;
-    public IWindsorContainer WindsorContainer { get; private set; } = container;
+    private IDisposable? WindsorScope { get; set; } = windsorScope;
+    public IWindsorContainer? WindsorContainer { get; private set; } = container;
 
     public void Dispose()
     {
@@ -48,13 +48,13 @@ public sealed class TestContext(
 
     public void DisposeWindsorContainer()
     {
-        WindsorContainer.Dispose();
+        WindsorContainer?.Dispose();
         WindsorContainer = null;
     }
 
     public void DisposeWindsorScope()
     {
-        WindsorScope.Dispose();
+        WindsorScope?.Dispose();
         WindsorScope = null;
     }
 }

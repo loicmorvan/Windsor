@@ -64,8 +64,7 @@ public static class LifestyleExtensions
 		return new CallContextLifetimeScope();
 	}
 
-	[CanBeNull]
-	private static CallContextLifetimeScope RequireScope()
+	private static CallContextLifetimeScope? RequireScope()
 	{
 		var current = CallContextLifetimeScope.ObtainCurrentScope();
 		return

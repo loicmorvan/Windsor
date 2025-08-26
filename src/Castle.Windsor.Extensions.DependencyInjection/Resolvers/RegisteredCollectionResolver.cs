@@ -13,6 +13,7 @@
 // limitations under the License.
 
 
+using System.Diagnostics;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Context;
@@ -29,6 +30,7 @@ public class RegisteredCollectionResolver(IKernel kernel, bool allowEmptyCollect
         ComponentModel model,
         DependencyModel dependency)
     {
+        Debug.Assert(dependency.TargetItemType != null);
         return !Kernel.HasComponent(dependency.TargetItemType) &&
                base.CanResolve(context, contextHandlerResolver, model, dependency);
     }

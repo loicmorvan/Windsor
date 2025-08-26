@@ -39,11 +39,11 @@ internal class WindsorScopedServiceProvider(IWindsorContainer container)
         }
 
         _disposing = true;
-        _scope?.Dispose();
+        _scope.Dispose();
         container.Dispose();
     }
 
-    public object GetService(Type serviceType)
+    public object? GetService(Type serviceType)
     {
         using (_ = new ForcedScope(_scope))
         {
@@ -55,11 +55,11 @@ internal class WindsorScopedServiceProvider(IWindsorContainer container)
     {
         using (_ = new ForcedScope(_scope))
         {
-            return ResolveInstanceOrNull(serviceType, false);
+            return ResolveInstanceOrNull(serviceType, false) ?? throw new InvalidOperationException();
         }
     }
 
-    private object ResolveInstanceOrNull(Type serviceType, bool isOptional)
+    private object? ResolveInstanceOrNull(Type serviceType, bool isOptional)
     {
         if (container.Kernel.HasComponent(serviceType))
         {
@@ -74,6 +74,5 @@ internal class WindsorScopedServiceProvider(IWindsorContainer container)
 
         var allObjects = container.ResolveAll(serviceType.GenericTypeArguments[0]);
         return allObjects;
-
     }
 }

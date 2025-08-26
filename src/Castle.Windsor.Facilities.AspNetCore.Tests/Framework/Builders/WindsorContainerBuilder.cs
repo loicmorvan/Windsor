@@ -26,8 +26,10 @@ public static class WindsorContainerBuilder
         return BuildWindsorContainer(services, configure, serviceProviderFactory);
     }
 
-    private static IWindsorContainer BuildWindsorContainer(IServiceCollection services,
-        Action<WindsorRegistrationOptions> configure = null, Func<IServiceProvider> serviceProviderFactory = null)
+    private static IWindsorContainer BuildWindsorContainer(
+        IServiceCollection services,
+        Action<WindsorRegistrationOptions>? configure = null,
+        Func<IServiceProvider>? serviceProviderFactory = null)
     {
         var container = new WindsorContainer().AddFacility<AspNetCoreFacility>(f => f.CrossWiresInto(services));
 

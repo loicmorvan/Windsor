@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Context;
@@ -22,7 +24,7 @@ namespace Castle.Windsor.Facilities.AspNetCore.Resolvers;
 public class FrameworkDependencyResolver(IServiceCollection serviceCollection)
     : ISubDependencyResolver, IAcceptServiceProvider
 {
-    private IServiceProvider _serviceProvider;
+    private IServiceProvider? _serviceProvider;
 
     public void AcceptServiceProvider(IServiceProvider serviceProvider)
     {
@@ -35,19 +37,21 @@ public class FrameworkDependencyResolver(IServiceCollection serviceCollection)
         return HasMatchingType(dependency.TargetType);
     }
 
-    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+    public object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
         ThrowIfServiceProviderIsNull();
+        Debug.Assert(dependency.TargetType != null);
         return _serviceProvider.GetService(dependency.TargetType);
     }
 
-    public bool HasMatchingType(Type dependencyType)
+    public bool HasMatchingType(Type? dependencyType)
     {
         return dependencyType != null &&
                serviceCollection.Any(x => x.ServiceType.MatchesType(dependencyType));
     }
 
+    [MemberNotNull(nameof(_serviceProvider))]
     private void ThrowIfServiceProviderIsNull()
     {
         if (_serviceProvider == null)

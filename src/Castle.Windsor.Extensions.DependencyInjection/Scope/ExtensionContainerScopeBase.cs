@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
@@ -38,6 +39,7 @@ internal abstract class ExtensionContainerScopeBase : ILifetimeScope
         lock (_scopeCache)
         {
             // Add transient's burden to scope so it gets released
+            Debug.Assert(model.Configuration != null);
             if (model.Configuration.Attributes.Get(TransientMarker) == bool.TrueString)
             {
                 var transientBurden = createInstance(_ => { });

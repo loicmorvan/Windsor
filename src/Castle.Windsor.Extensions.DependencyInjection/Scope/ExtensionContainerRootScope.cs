@@ -16,7 +16,7 @@ namespace Castle.Windsor.Extensions.DependencyInjection.Scope;
 
 internal class ExtensionContainerRootScope : ExtensionContainerScopeBase
 {
-    internal override ExtensionContainerScopeBase? RootScope => this;
+    internal override ExtensionContainerScopeBase RootScope => this;
 
     public static ExtensionContainerRootScope BeginRootScope()
     {

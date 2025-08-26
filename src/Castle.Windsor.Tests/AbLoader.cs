@@ -7,7 +7,7 @@ namespace Castle.Windsor.Tests;
 
 public class AbLoader : ILazyComponentLoader
 {
-    public IRegistration Load(string name, Type service, Arguments arguments)
+    public IRegistration? Load(string name, Type service, Arguments arguments)
     {
         if (service == typeof(A) || service == typeof(B))
         {

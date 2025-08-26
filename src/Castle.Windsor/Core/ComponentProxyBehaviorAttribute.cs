@@ -18,7 +18,7 @@ namespace Castle.Windsor.Core;
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class ComponentProxyBehaviorAttribute : Attribute
 {
-    private Type[] _additionalInterfaces;
+    private Type[]? _additionalInterfaces;
 
     /// <summary>Gets or sets the additional interfaces used during proxy generation.</summary>
     public Type[] AdditionalInterfaces

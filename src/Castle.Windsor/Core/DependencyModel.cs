@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using System.Reflection;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Util;
@@ -21,13 +22,13 @@ namespace Castle.Windsor.Core;
 /// <summary>Represents a dependency (other component or a fixed value available through external configuration).</summary>
 [Serializable]
 public class DependencyModel(
-    string dependencyKey,
+    string? dependencyKey,
     Type targetType,
     bool isOptional,
     bool hasDefaultValue = false,
-    object defaultValue = null)
+    object? defaultValue = null)
 {
-    protected ParameterModel ParameterModel;
+    protected ParameterModel? ParameterModel;
 
     // TODO: add configuration so that information about override is attached to the dependency
 
@@ -35,11 +36,11 @@ public class DependencyModel(
     ///     The default value of this dependency. Note that <c>null</c> is a valid default value. Use
     ///     <see cref="HasDefaultValue" /> to determine whether default value was provided.
     /// </summary>
-    public object DefaultValue { get; set; } = defaultValue;
+    public object? DefaultValue { get; set; } = defaultValue;
 
     /// <summary>Gets or sets the dependency key.</summary>
     /// <value> The dependency key. </value>
-    public string DependencyKey { get; } = dependencyKey;
+    public string? DependencyKey { get; } = dependencyKey;
 
     /// <summary>
     ///     Specifies whether dependency has a default value (<see cref="DefaultValue" />). Note that <c>null</c> is a
@@ -51,9 +52,16 @@ public class DependencyModel(
     /// <value> <c>true</c> if this dependency is optional; otherwise, <c>false</c> . </value>
     public bool IsOptional { get; set; } = isOptional;
 
-    public bool IsPrimitiveTypeDependency => TargetItemType.IsPrimitiveTypeOrCollection();
+    public bool IsPrimitiveTypeDependency
+    {
+        get
+        {
+            Debug.Assert(TargetItemType != null, nameof(TargetItemType) + " != null");
+            return TargetItemType.IsPrimitiveTypeOrCollection();
+        }
+    }
 
-    public ParameterModel Parameter
+    public ParameterModel? Parameter
     {
         get => ParameterModel;
         set
@@ -66,7 +74,7 @@ public class DependencyModel(
         }
     }
 
-    public string ReferencedComponentName { get; protected set; }
+    public string? ReferencedComponentName { get; protected set; }
 
     /// <summary>
     ///     Gets the service type of the dependency. This is the same type as <see cref="TargetType" /> or if
@@ -74,13 +82,13 @@ public class DependencyModel(
     ///     words if dependency is <c>out IFoo foo</c> this will be <c>IFoo</c>, while <see cref="TargetType" /> will be
     ///     <c>&amp;IFoo</c>);
     /// </summary>
-    public Type TargetItemType { get; } = targetType is { IsByRef: true } ? targetType.GetElementType() : targetType;
+    public Type? TargetItemType { get; } = targetType is { IsByRef: true } ? targetType.GetElementType() : targetType;
 
     /// <summary>Gets the type of the target.</summary>
     /// <value> The type of the target. </value>
-    public Type TargetType { get; } = targetType;
+    public Type? TargetType { get; } = targetType;
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {
@@ -111,7 +119,7 @@ public class DependencyModel(
         }
     }
 
-    public virtual void Init(ParameterModelCollection parameters)
+    public virtual void Init(ParameterModelCollection? parameters)
     {
         if (parameters == null)
         {
@@ -128,22 +136,22 @@ public class DependencyModel(
         return $"Dependency '{DependencyKey}' type '{TargetType}'";
     }
 
-    private static ParameterModel GetParameterModelByType(Type type, ParameterModelCollection parameters)
+    private static ParameterModel? GetParameterModelByType(Type type, ParameterModelCollection parameters)
     {
         var assemblyQualifiedName = type.AssemblyQualifiedName;
         return assemblyQualifiedName == null ? null : parameters[assemblyQualifiedName];
     }
 
-    private ParameterModel ObtainParameterModelByName(ParameterModelCollection parameters)
+    private ParameterModel? ObtainParameterModelByName(ParameterModelCollection parameters)
     {
         return DependencyKey == null ? null : parameters[DependencyKey];
     }
 
-    private ParameterModel ObtainParameterModelByType(ParameterModelCollection parameters)
+    private ParameterModel? ObtainParameterModelByType(ParameterModelCollection parameters)
     {
         var type = TargetItemType;
         if (type == null)
-            // for example it's an interceptor
+            // for example, it's an interceptor
         {
             return null;
         }

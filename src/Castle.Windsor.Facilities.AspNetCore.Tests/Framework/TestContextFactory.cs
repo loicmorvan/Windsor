@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.Facilities.AspNetCore.Tests.Framework.Builders;
 using Castle.Windsor.MicroKernel.Lifestyle;
 
@@ -19,10 +20,11 @@ namespace Castle.Windsor.Facilities.AspNetCore.Tests.Framework;
 
 public class TestContextFactory
 {
-    public static TestContext Get(Action<WindsorRegistrationOptions> configure = null,
-        Func<IServiceProvider> serviceProviderFactory = null)
+    public static TestContext Get(
+        Action<WindsorRegistrationOptions>? configure = null,
+        Func<IServiceProvider>? serviceProviderFactory = null)
     {
-        IServiceProvider serviceProvider = null;
+        IServiceProvider? serviceProvider = null;
 
         var serviceCollection = ServiceCollectionBuilder.New();
 
@@ -30,6 +32,7 @@ public class TestContextFactory
             configure ?? (opts => opts.UseEntryAssembly(typeof(TestContextFactory).Assembly)),
             serviceProviderFactory ?? (() => serviceProvider = ServiceProviderBuilder.New(serviceCollection)));
 
+        Debug.Assert(serviceProvider != null, nameof(serviceProvider) + " != null");
         var applicationBuilder = ApplicationBuilder.New(serviceProvider);
 
         return new TestContext(serviceCollection, serviceProvider, applicationBuilder, container,
