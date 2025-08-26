@@ -24,11 +24,11 @@ public class AssemblyFilter : IAssemblyProvider
     private static readonly Assembly CastleWindsorDll = typeof(AssemblyFilter).GetTypeInfo().Assembly;
 
     private readonly string _directoryName;
-    private readonly string _mask;
+    private readonly string? _mask;
     private Predicate<Assembly> _assemblyFilter;
-    private Predicate<AssemblyName> _nameFilter;
+    private Predicate<AssemblyName>? _nameFilter;
 
-    public AssemblyFilter(string directoryName, string mask = null)
+    public AssemblyFilter(string directoryName, string? mask = null)
     {
         ArgumentNullException.ThrowIfNull(directoryName);
 
@@ -181,7 +181,7 @@ public class AssemblyFilter : IAssemblyProvider
         return Path.GetFullPath(path);
     }
 
-    private static bool IsTokenEqual(byte[] actualToken, byte[] expectedToken)
+    private static bool IsTokenEqual(byte[]? actualToken, byte[] expectedToken)
     {
         if (actualToken == null)
         {

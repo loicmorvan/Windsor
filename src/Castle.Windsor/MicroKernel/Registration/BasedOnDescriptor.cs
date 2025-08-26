@@ -24,9 +24,9 @@ public sealed class BasedOnDescriptor : IRegistration
 {
     private readonly FromDescriptor _from;
     private readonly List<Type> _potentialBases;
-    private Action<ComponentRegistration> _configuration;
-    private Predicate<Type> _ifFilter;
-    private Predicate<Type> _unlessFilter;
+    private Action<ComponentRegistration>? _configuration;
+    private Predicate<Type>? _ifFilter;
+    private Predicate<Type>? _unlessFilter;
 
     /// <summary>Initializes a new instance of the BasedOnDescriptor.</summary>
     internal BasedOnDescriptor(IEnumerable<Type> basedOn, FromDescriptor from, Predicate<Type> additionalFilters)
@@ -414,18 +414,20 @@ public sealed class BasedOnDescriptor : IRegistration
         return true;
     }
 
-    private static bool IsBasedOnGenericClass(Type type, Type basedOn, out Type[] baseTypes)
+    private static bool IsBasedOnGenericClass(Type type, Type basedOn, out Type[]? baseTypes)
     {
-        while (type != null)
+        var type1 = type;
+        while (type1 != null)
         {
-            if (type.GetTypeInfo().IsGenericType &&
-                type.GetGenericTypeDefinition() == basedOn)
+            if (type1.GetTypeInfo().IsGenericType &&
+                type1.GetGenericTypeDefinition() == basedOn)
             {
-                baseTypes = [type];
+                baseTypes = [type1];
+                
                 return true;
             }
 
-            type = type.GetTypeInfo().BaseType;
+            type1 = type1.GetTypeInfo().BaseType;
         }
 
         baseTypes = null;

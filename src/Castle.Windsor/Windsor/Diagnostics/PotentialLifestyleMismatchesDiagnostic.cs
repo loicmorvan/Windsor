@@ -86,7 +86,7 @@ public class PotentialLifestyleMismatchesDiagnostic(IKernel kernel) : IPotential
     {
         private readonly HashSet<ComponentModel> _checkedComponents;
 
-        public MismatchedLifestyleDependency(IHandler handler, MismatchedLifestyleDependency parent = null)
+        public MismatchedLifestyleDependency(IHandler handler, MismatchedLifestyleDependency? parent = null)
         {
             Handler = handler;
             Parent = parent;
@@ -105,7 +105,7 @@ public class PotentialLifestyleMismatchesDiagnostic(IKernel kernel) : IPotential
         public IHandler Handler { get; }
 
         // ReSharper disable once MemberCanBePrivate.Local
-        public MismatchedLifestyleDependency Parent { get; }
+        public MismatchedLifestyleDependency? Parent { get; }
 
         public bool Checked(ComponentModel component)
         {

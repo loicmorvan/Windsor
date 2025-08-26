@@ -27,14 +27,14 @@ namespace Castle.Windsor.Windsor.Installer;
 /// <summary>Default <see cref="IComponentsInstaller" /> implementation.</summary>
 public sealed class DefaultComponentInstaller : IComponentsInstaller
 {
-    private string _assemblyName;
+    private string? _assemblyName;
 
     /// <summary>Perform installation.</summary>
     /// <param name="container">Target container</param>
     /// <param name="store">Configuration store</param>
     public void SetUp(IWindsorContainer container, IConfigurationStore store)
     {
-        var converter = container.Kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey) as IConversionManager;
+        var converter = (IConversionManager)container.Kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
         SetUpInstallers(store.GetInstallers(), container, converter);
         SetUpFacilities(store.GetFacilities(), container, converter);
         SetUpComponents(store.GetComponents(), container, converter);

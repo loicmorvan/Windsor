@@ -14,11 +14,11 @@
 
 namespace Castle.Windsor.Windsor.Diagnostics;
 
-/// <summary>Base inteface for exposing diagnostic information about container, its components and extensions</summary>
+/// <summary>Base interface for exposing diagnostic information about container, its components and extensions</summary>
 /// <typeparam name="T"> </typeparam>
 public interface IDiagnostic<out T>
 {
     /// <summary>Collects specified diagnostic information.</summary>
     /// <returns> </returns>
-    T Inspect();
+    T? Inspect();
 }

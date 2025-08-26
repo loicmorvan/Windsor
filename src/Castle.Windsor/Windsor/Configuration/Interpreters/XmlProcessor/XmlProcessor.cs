@@ -53,6 +53,7 @@ public sealed class XmlProcessor
         {
             if (node is XmlDocument xmlDocument)
             {
+                Debug.Assert(xmlDocument.DocumentElement != null);
                 node = xmlDocument.DocumentElement;
             }
 

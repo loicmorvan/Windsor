@@ -45,7 +45,7 @@ public sealed class ComponentModel : GraphNode
     private DependencyModelCollection _dependencies;
 
     [NonSerialized] [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private Arguments _extendedProperties;
+    private Arguments? _extendedProperties;
 
     /// <summary>Interceptors associated</summary>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
