@@ -18,7 +18,7 @@ internal class SlimUpgradeableReadLockHolder : IUpgradeableLockHolder
 {
     private readonly ReaderWriterLockSlim _locker;
     private readonly bool _wasLockAlreadySelf;
-    private SlimWriteLockHolder _writerLock;
+    private SlimWriteLockHolder? _writerLock;
 
     public SlimUpgradeableReadLockHolder(ReaderWriterLockSlim locker, bool waitForLock, bool wasLockAlreadySelf)
     {

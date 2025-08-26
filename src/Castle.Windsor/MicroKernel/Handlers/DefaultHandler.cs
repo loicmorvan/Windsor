@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using System.Text;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.ComponentActivator;
@@ -32,13 +33,13 @@ public class DefaultHandler : AbstractHandler
 
     /// <summary>Lifestyle manager instance</summary>
     [PublicAPI]
-    protected ILifestyleManager LifestyleManager { get; private set; }
+    protected ILifestyleManager? LifestyleManager { get; private set; }
 
     public override void Dispose()
     {
         GC.SuppressFinalize(this);
-        
-        LifestyleManager.Dispose();
+
+        LifestyleManager?.Dispose();
     }
 
     /// <summary>disposes the component instance (or recycle it)</summary>
@@ -46,7 +47,7 @@ public class DefaultHandler : AbstractHandler
     /// <returns> true if destroyed </returns>
     public override bool ReleaseCore(Burden burden)
     {
-        return LifestyleManager.Release(burden.Instance);
+        return LifestyleManager?.Release(burden.Instance) ?? false;
     }
 
     protected void AssertNotWaitingForDependency()
@@ -59,6 +60,7 @@ public class DefaultHandler : AbstractHandler
 
     protected override void InitDependencies()
     {
+        Debug.Assert(Kernel != null, nameof(Kernel) + " != null");
         var activator = Kernel.CreateComponentActivator(ComponentModel);
         LifestyleManager = Kernel.CreateLifestyleManager(ComponentModel, activator);
 

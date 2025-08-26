@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Context;
 
@@ -19,11 +20,13 @@ namespace Castle.Windsor.MicroKernel.Handlers;
 
 public class ExtendedHandler : DefaultHandler
 {
-    private readonly IReleaseExtension[] _releaseExtensions;
-    private readonly IResolveExtension[] _resolveExtensions;
+    private readonly IReleaseExtension[]? _releaseExtensions;
+    private readonly IResolveExtension[]? _resolveExtensions;
 
-    public ExtendedHandler(ComponentModel model, ICollection<IResolveExtension> resolveExtensions,
-        ICollection<IReleaseExtension> releaseExtensions)
+    public ExtendedHandler(
+        ComponentModel model,
+        ICollection<IResolveExtension>? resolveExtensions,
+        ICollection<IReleaseExtension>? releaseExtensions)
         : base(model)
     {
         if (resolveExtensions != null)
@@ -88,6 +91,7 @@ public class ExtendedHandler : DefaultHandler
 
     private void InvokeReleasePipeline(int extensionIndex, ReleaseInvocation invocation)
     {
+        Debug.Assert(_releaseExtensions != null, nameof(_releaseExtensions) + " != null");
         if (extensionIndex >= _releaseExtensions.Length)
         {
             invocation.ReturnValue = base.Release(invocation.Burden);
@@ -101,6 +105,7 @@ public class ExtendedHandler : DefaultHandler
 
     private void InvokeResolvePipeline(int extensionIndex, ResolveInvocation invocation)
     {
+        Debug.Assert(_resolveExtensions != null, nameof(_resolveExtensions) + " != null");
         if (extensionIndex >= _resolveExtensions.Length)
         {
             invocation.ResolvedInstance = ResolveCore(invocation.Context,

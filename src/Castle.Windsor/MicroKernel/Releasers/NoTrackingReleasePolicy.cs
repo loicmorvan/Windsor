@@ -30,7 +30,7 @@ public class NoTrackingReleasePolicy : IReleasePolicy
         return this;
     }
 
-    public bool HasTrack(object instance)
+    public bool HasTrack(object? instance)
     {
         return false;
     }

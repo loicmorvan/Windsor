@@ -114,7 +114,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
         return policy;
     }
 
-    public bool HasTrack(object instance)
+    public bool HasTrack(object? instance)
     {
         if (instance == null)
         {
@@ -127,14 +127,14 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
         }
     }
 
-    public void Release(object instance)
+    public void Release(object? instance)
     {
         if (instance == null)
         {
             return;
         }
 
-        Burden burden;
+        Burden? burden;
         using (_lock.ForWriting())
         {
             // NOTE: we don't physically remove the instance from the instance2Burden collection here.
@@ -152,7 +152,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
     {
         if (!burden.RequiresPolicyRelease)
         {
-            var lifestyle = (object)burden.Model.CustomLifestyle ?? burden.Model.LifestyleType;
+            var lifestyle = (object?)burden.Model.CustomLifestyle ?? burden.Model.LifestyleType;
             throw new ArgumentException(
                 $"Release policy was asked to track object '{instance}', but its burden has 'RequiresPolicyRelease' set to false. If object is to be tracked the flag must be true. This is likely a bug in the lifetime manager '{lifestyle}'.");
         }

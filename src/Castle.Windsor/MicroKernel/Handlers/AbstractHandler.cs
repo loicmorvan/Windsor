@@ -30,11 +30,11 @@ public abstract class AbstractHandler :
     private readonly ComponentModel _model;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private IKernelInternal _kernel;
+    private IKernelInternal? _kernel;
 
     /// <summary>Dictionary of key (string) to <see cref="DependencyModel" /></summary>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private SimpleThreadSafeSet<DependencyModel> _missingDependencies;
+    private SimpleThreadSafeSet<DependencyModel>? _missingDependencies;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private HandlerState _state = HandlerState.Valid;
@@ -47,7 +47,7 @@ public abstract class AbstractHandler :
     }
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    protected IKernelInternal Kernel => _kernel;
+    protected IKernelInternal? Kernel => _kernel;
 
     public virtual void Dispose()
     {

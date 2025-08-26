@@ -22,11 +22,11 @@ public abstract class AbstractFacility : IFacility, IDisposable
 {
 	/// <summary>Gets the facility configuration.</summary>
     /// <value>The <see cref="IConfiguration" /> representing the facility configuration.</value>
-	protected IConfiguration FacilityConfig { get; private set; }
+    protected IConfiguration? FacilityConfig { get; private set; }
 
     /// <summary>Gets the <see cref="IKernel" /> where the facility is registered.</summary>
     /// <value>The <see cref="IKernel" />.</value>
-	protected IKernel Kernel { get; private set; }
+    protected IKernel? Kernel { get; private set; }
 
     void IDisposable.Dispose()
     {

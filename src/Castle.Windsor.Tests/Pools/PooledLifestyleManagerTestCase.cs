@@ -312,7 +312,7 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
             throw new NotImplementedException();
         }
 
-        public ISubSystem GetSubSystem(string name)
+        public ISubSystem? GetSubSystem(string name)
         {
             throw new NotImplementedException();
         }

@@ -45,7 +45,7 @@ public static class LifestyleExtensions
 	/// <returns>Returns an <see cref="IDisposable" /> to be used in a <code>using</code> block.</returns>
 	// ReSharper disable once UnusedParameter.Global
 	[PublicAPI]
-	public static IDisposable RequireScope(this IKernel kernel)
+	public static IDisposable? RequireScope(this IKernel kernel)
 	{
 		return RequireScope();
 	}
@@ -54,7 +54,7 @@ public static class LifestyleExtensions
 	/// <param name="container">The <see cref="IWindsorContainer" />.</param>
 	/// <returns>Returns an <see cref="IDisposable" /> to be used in a <code>using</code> block.</returns>
 	// ReSharper disable once UnusedParameter.Global
-	public static IDisposable RequireScope(this IWindsorContainer container)
+	public static IDisposable? RequireScope(this IWindsorContainer container)
 	{
 		return RequireScope();
 	}

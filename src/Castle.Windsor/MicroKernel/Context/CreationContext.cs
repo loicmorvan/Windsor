@@ -294,7 +294,7 @@ public class CreationContext :
         return CanResolve(dependency, _additionalArguments[type]);
     }
 
-    private void ExitResolutionContext(Burden burden, bool trackContext)
+    private void ExitResolutionContext(Burden? burden, bool trackContext)
     {
         _handlerStack.Pop();
 
@@ -323,7 +323,7 @@ public class CreationContext :
         parent?.AddChild(burden);
     }
 
-    private object Resolve(DependencyModel dependency, object inlineArgument)
+    private object? Resolve(DependencyModel dependency, object? inlineArgument)
     {
         var targetType = dependency.TargetItemType;
         if (inlineArgument == null)
@@ -331,6 +331,7 @@ public class CreationContext :
             return null;
         }
 
+        Debug.Assert(targetType != null, nameof(targetType) + " != null");
         if (targetType.IsInstanceOfType(inlineArgument))
         {
             return inlineArgument;
@@ -373,9 +374,9 @@ public class CreationContext :
         bool trackContext)
         : IDisposable
     {
-        private Arguments _extendedProperties;
+        private Arguments? _extendedProperties;
 
-        public Burden Burden { get; private set; }
+        public Burden? Burden { get; private set; }
 
         private CreationContext Context { get; } = context;
 
@@ -401,7 +402,7 @@ public class CreationContext :
             return Burden;
         }
 
-        public object GetContextualProperty(object key)
+        public object? GetContextualProperty(object key)
         {
             var value = _extendedProperties?[key];
             return value;

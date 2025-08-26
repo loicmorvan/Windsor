@@ -41,11 +41,11 @@ public interface IKernelInternal : IKernel
 
     ILifestyleManager CreateLifestyleManager(ComponentModel model, IComponentActivator activator);
 
-    IHandler LoadHandlerByName(string key, Type service, Arguments arguments);
+    IHandler LoadHandlerByName(string key, Type service, Arguments? arguments);
 
     IHandler LoadHandlerByType(string key, Type service, Arguments arguments);
 
-    IDisposable OptimizeDependencyResolution();
+    IDisposable? OptimizeDependencyResolution();
 
     object Resolve(Type service, Arguments arguments, IReleasePolicy policy, bool ignoreParentContext = false);
 

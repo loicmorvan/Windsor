@@ -277,7 +277,7 @@ public class DefaultGenericHandler(
         return GetSubHandler(closedType, service);
     }
 
-    private Type GetClosedImplementationType(CreationContext context, bool instanceRequired)
+    private Type? GetClosedImplementationType(CreationContext context, bool instanceRequired)
     {
         if (ComponentModel.Implementation == typeof(LateBoundComponent))
         {

@@ -385,13 +385,13 @@ public sealed partial class DefaultKernel :
         return result;
     }
 
-    public ISubSystem GetSubSystem(string name)
+    public ISubSystem? GetSubSystem(string name)
     {
         _subsystems.TryGetValue(name, out var subsystem);
         return subsystem;
     }
 
-    public bool HasComponent(string name)
+    public bool HasComponent(string? name)
     {
         if (name == null)
         {
@@ -406,7 +406,7 @@ public sealed partial class DefaultKernel :
         return Parent != null && Parent.HasComponent(name);
     }
 
-    public bool HasComponent(Type serviceType)
+    public bool HasComponent(Type? serviceType)
     {
         if (serviceType == null)
         {

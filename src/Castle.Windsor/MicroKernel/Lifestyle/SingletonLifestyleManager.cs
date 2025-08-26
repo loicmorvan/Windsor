@@ -28,7 +28,7 @@ public class SingletonLifestyleManager : AbstractLifestyleManager, IContextLifes
     private readonly ThreadSafeInit _init = new();
     private Burden? _cachedBurden;
 
-    public object GetContextInstance(CreationContext context)
+    public object? GetContextInstance(CreationContext context)
     {
         return context.GetContextualProperty(DefaultComponentActivator.InstanceStash);
     }

@@ -31,7 +31,7 @@ public class ComponentConverter : AbstractTypeConverter, IKernelDependentConvert
         return Context.Kernel != null && Context.Kernel.HasComponent(type);
     }
 
-    public override object PerformConversion(string value, Type targetType)
+    public override object PerformConversion(string? value, Type targetType)
     {
         var componentName = ReferenceExpressionUtil.ExtractComponentName(value);
         if (componentName == null)

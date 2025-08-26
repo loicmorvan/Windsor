@@ -29,7 +29,7 @@ public interface IReleasePolicy : IDisposable
     /// </summary>
     /// <param name="instance"></param>
     /// <returns></returns>
-    bool HasTrack(object instance);
+    bool HasTrack(object? instance);
 
     /// <summary>
     ///     Releases <paramref name="instance" /> if it's being tracked by this release policy, invoking its

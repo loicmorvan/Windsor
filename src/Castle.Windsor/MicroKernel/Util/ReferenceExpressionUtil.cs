@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Castle.Windsor.MicroKernel.Util;
 
 public abstract class ReferenceExpressionUtil
@@ -21,12 +23,13 @@ public abstract class ReferenceExpressionUtil
         return IsReference(value) ? value : $"${{{value}}}";
     }
 
-    public static string? ExtractComponentName(string value)
+    public static string? ExtractComponentName(string? value)
     {
         return IsReference(value) ? value.Substring(2, value.Length - 3) : null;
     }
 
-    public static bool IsReference(string value)
+
+    public static bool IsReference([NotNullWhen(true)] string? value)
     {
         return value is { Length: > 3 } && value.StartsWith("${") && value.EndsWith('}');
     }

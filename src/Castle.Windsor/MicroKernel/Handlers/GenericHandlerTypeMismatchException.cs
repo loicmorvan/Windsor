@@ -41,7 +41,8 @@ public class GenericHandlerTypeMismatchException : HandlerException
 
     public GenericHandlerTypeMismatchException(IEnumerable<Type> argumentsUsed, ComponentModel componentModel,
         DefaultGenericHandler handler)
-        : base(BuildMessage(argumentsUsed.Select(a => a.FullName).ToArray(), componentModel, handler),
+        : base(BuildMessage(
+                argumentsUsed.Select(a => a.FullName).ToArray(), componentModel, handler),
             componentModel.ComponentName)
     {
     }
