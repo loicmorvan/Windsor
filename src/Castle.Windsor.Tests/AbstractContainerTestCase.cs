@@ -24,7 +24,8 @@ public abstract class AbstractContainerTestCase : IDisposable
 
     protected AbstractContainerTestCase()
     {
-        Init();
+        _container = BuildContainer();
+        AfterContainerCreated();
     }
 
     protected IWindsorContainer Container => _container;
@@ -36,12 +37,6 @@ public abstract class AbstractContainerTestCase : IDisposable
         GC.SuppressFinalize(this);
         
         _container.Dispose();
-    }
-
-    private void Init()
-    {
-        _container = BuildContainer();
-        AfterContainerCreated();
     }
 
     protected virtual void AfterContainerCreated()
@@ -56,7 +51,8 @@ public abstract class AbstractContainerTestCase : IDisposable
     protected void ResetContainer()
     {
         Dispose();
-        Init();
+        _container = BuildContainer();
+        AfterContainerCreated();
     }
 
     protected static Assembly GetCurrentAssembly()

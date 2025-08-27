@@ -23,7 +23,7 @@ public sealed class TestContext(
     IServiceProvider serviceProvider,
     IApplicationBuilder applicationBuilder,
     IWindsorContainer container,
-    IDisposable windsorScope)
+    IDisposable? windsorScope)
     : IDisposable
 {
     public IApplicationBuilder ApplicationBuilder { get; } = applicationBuilder;

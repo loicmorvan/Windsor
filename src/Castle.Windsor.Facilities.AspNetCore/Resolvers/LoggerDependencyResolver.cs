@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Context;
@@ -22,7 +24,7 @@ namespace Castle.Windsor.Facilities.AspNetCore.Resolvers;
 
 public class LoggerDependencyResolver : ISubDependencyResolver, IAcceptServiceProvider
 {
-    private IServiceProvider _serviceProvider;
+    private IServiceProvider? _serviceProvider;
 
     public void AcceptServiceProvider(IServiceProvider serviceProvider)
     {
@@ -39,9 +41,12 @@ public class LoggerDependencyResolver : ISubDependencyResolver, IAcceptServicePr
         DependencyModel dependency)
     {
         ThrowIfServiceProviderIsNull();
-        return _serviceProvider.GetService<ILoggerFactory>().CreateLogger(model.Name);
+        var loggerFactory = _serviceProvider.GetService<ILoggerFactory>();
+        Debug.Assert(loggerFactory != null, nameof(loggerFactory) + " != null");
+        return loggerFactory.CreateLogger(model.Name);
     }
 
+    [MemberNotNull(nameof(_serviceProvider))]
     private void ThrowIfServiceProviderIsNull()
     {
         if (_serviceProvider == null)

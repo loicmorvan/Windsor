@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Core.Configuration;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.Tests.ClassComponents;
@@ -27,6 +28,7 @@ public class IoC334
         using var c = new DefaultKernel();
         var facilityKey = typeof(HiperFacility).FullName;
         var config = new MutableConfiguration("facility");
+        Debug.Assert(facilityKey != null, nameof(facilityKey) + " != null");
         c.ConfigurationStore.AddFacilityConfiguration(facilityKey, config);
         var facility = new HiperFacility();
         c.AddFacility(facility);

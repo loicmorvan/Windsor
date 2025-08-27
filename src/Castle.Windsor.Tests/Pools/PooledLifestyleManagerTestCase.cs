@@ -351,7 +351,7 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
             throw new NotImplementedException();
         }
 
-        public object Resolve(Type service, Arguments arguments)
+        public object Resolve(Type service, Arguments? arguments)
         {
             throw new NotImplementedException();
         }

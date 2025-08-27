@@ -26,7 +26,7 @@ public class FrameworkDependencyResolver(IServiceCollection serviceCollection)
 {
     private IServiceProvider? _serviceProvider;
 
-    public void AcceptServiceProvider(IServiceProvider serviceProvider)
+    public void AcceptServiceProvider(IServiceProvider? serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }

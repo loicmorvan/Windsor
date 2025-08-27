@@ -40,6 +40,6 @@ public class IoC114 : AbstractContainerTestCase
     public class Service2 : IService2
     {
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
-        public IService1 S { get; private set; }
+        public IService1? S { get; private set; }
     }
 }

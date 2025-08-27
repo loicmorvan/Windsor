@@ -82,7 +82,7 @@ public sealed partial class DefaultKernel
     /// <param name="service"></param>
     /// <param name="arguments"></param>
     /// <returns></returns>
-    public object Resolve(Type service, Arguments arguments)
+    public object Resolve(Type service, Arguments? arguments)
     {
         return (this as IKernelInternal).Resolve(service, arguments, ReleasePolicy);
     }

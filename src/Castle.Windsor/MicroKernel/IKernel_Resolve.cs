@@ -23,7 +23,7 @@ public partial interface IKernel
     /// <param name="service"></param>
     /// <param name="arguments"></param>
     /// <returns></returns>
-    object Resolve(Type service, Arguments arguments);
+    object Resolve(Type service, Arguments? arguments);
 
     /// <summary>Returns a component instance by the key</summary>
     /// <param name="key"></param>

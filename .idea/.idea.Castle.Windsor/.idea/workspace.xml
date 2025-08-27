@@ -9,11 +9,21 @@
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/Scope/ExtensionContainerRootScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Extensions.DependencyInjection/Scope/ExtensionContainerRootScope.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Core/ComponentModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Core/ComponentModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Core/Internal/ComponentModelExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Core/Internal/ComponentModelExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Core/Internal/GraphNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Core/Internal/GraphNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Naming/DefaultNamingSubSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/SubSystems/Naming/DefaultNamingSubSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/Framework/TestContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/Framework/TestContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/Resolvers/FrameworkDependencyResolver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/Resolvers/FrameworkDependencyResolver.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/Resolvers/LoggerDependencyResolver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/Resolvers/LoggerDependencyResolver.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/WindsorContainerExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/WindsorContainerExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/AbLoaderWithGuardClause.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/AbLoaderWithGuardClause.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/AbstractContainerTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/AbstractContainerTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC-78/MyChain3.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC-78/MyChain3.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC114.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC114.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC138.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC138.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC334.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Bugs/IoC334.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Pools/PooledLifestyleManagerTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Pools/PooledLifestyleManagerTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/DefaultKernel_Resolve.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/DefaultKernel_Resolve.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/IKernel_Resolve.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/MicroKernel/IKernel_Resolve.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/IWindsorContainer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/IWindsorContainer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/WindsorContainer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/WindsorContainer.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,36 +83,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "1040357a-a374-4805-ae55-296a10391d40.executor": "Debug",
-    "2dc3fd48-7f19-46dc-9e61-9ca484058a3d.executor": "Run",
-    "36c383d8-1096-48c6-9b6c-8e57ac7b4b8d.executor": "Run",
-    "457fe246-3a65-482c-9b97-436b5d6e2078.executor": "Debug",
-    "54437557-b30d-4a31-834c-387d565fefaf.executor": "Run",
-    "544ebf71-769d-49f6-88b1-47a73962a2b1.executor": "Run",
-    "58c56b00-f81e-48fd-a74f-c8e84271fcf4.executor": "Debug",
-    "6356ce7a-e504-4c39-a7e4-fe4a2206522d.executor": "Run",
-    "6735a692-6eea-4ff7-a309-8dd38fbf00bf.executor": "Debug",
-    "7c93ec0e-d2e1-442e-8418-ad90b07a71b7.executor": "Run",
-    "7c964d5d-15cd-4425-a015-ad6d5f0fc580.executor": "Debug",
-    "89dda535-a689-4076-a660-df5d01541ebe.executor": "Debug",
-    "92c054ad-452f-41b6-a548-9856400a347d.executor": "Debug",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "T4 Template Run Configuration.ModelFakes.tt.executor": "Run",
-    "e0ad4eed-3a6f-49ec-852e-59ba3136ace6.executor": "Run",
-    "git-widget-placeholder": "nullability-cleanup",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "ml.llm.LLMConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;1040357a-a374-4805-ae55-296a10391d40.executor&quot;: &quot;Debug&quot;,
+    &quot;2dc3fd48-7f19-46dc-9e61-9ca484058a3d.executor&quot;: &quot;Run&quot;,
+    &quot;36c383d8-1096-48c6-9b6c-8e57ac7b4b8d.executor&quot;: &quot;Run&quot;,
+    &quot;457fe246-3a65-482c-9b97-436b5d6e2078.executor&quot;: &quot;Debug&quot;,
+    &quot;54437557-b30d-4a31-834c-387d565fefaf.executor&quot;: &quot;Run&quot;,
+    &quot;544ebf71-769d-49f6-88b1-47a73962a2b1.executor&quot;: &quot;Run&quot;,
+    &quot;58c56b00-f81e-48fd-a74f-c8e84271fcf4.executor&quot;: &quot;Debug&quot;,
+    &quot;6356ce7a-e504-4c39-a7e4-fe4a2206522d.executor&quot;: &quot;Run&quot;,
+    &quot;6735a692-6eea-4ff7-a309-8dd38fbf00bf.executor&quot;: &quot;Debug&quot;,
+    &quot;7c93ec0e-d2e1-442e-8418-ad90b07a71b7.executor&quot;: &quot;Run&quot;,
+    &quot;7c964d5d-15cd-4425-a015-ad6d5f0fc580.executor&quot;: &quot;Debug&quot;,
+    &quot;89dda535-a689-4076-a660-df5d01541ebe.executor&quot;: &quot;Debug&quot;,
+    &quot;92c054ad-452f-41b6-a548-9856400a347d.executor&quot;: &quot;Debug&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;T4 Template Run Configuration.ModelFakes.tt.executor&quot;: &quot;Run&quot;,
+    &quot;e0ad4eed-3a6f-49ec-852e-59ba3136ace6.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;nullability-cleanup&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="Push.Settings">
     <force-push-targets>
       <force-push-target remote-path="origin" branch="net9" />
@@ -188,23 +198,8 @@
       <workItem from="1756151038810" duration="641000" />
       <workItem from="1756152047514" duration="62000" />
       <workItem from="1756237329986" duration="629000" />
-      <workItem from="1756238033032" duration="27000" />
-    </task>
-    <task id="LOCAL-00077" summary="Added `[UsedImplicitly]` annotations and converted several classes to `static` to improve code clarity, ensure consistency, and align with best practices across test and core files.">
-      <option name="closed" value="true" />
-      <created>1754774058922</created>
-      <option name="number" value="00077" />
-      <option name="presentableId" value="LOCAL-00077" />
-      <option name="project" value="LOCAL" />
-      <updated>1754774058922</updated>
-    </task>
-    <task id="LOCAL-00078" summary="Refactored multiple classes to replace `public` static members with `private` fields, updated access modifiers for methods and enums, and streamlined code consistency across core and test files.">
-      <option name="closed" value="true" />
-      <created>1754774363154</created>
-      <option name="number" value="00078" />
-      <option name="presentableId" value="LOCAL-00078" />
-      <option name="project" value="LOCAL" />
-      <updated>1754774363154</updated>
+      <workItem from="1756238033032" duration="2923000" />
+      <workItem from="1756304559153" duration="603000" />
     </task>
     <task id="LOCAL-00079" summary="Added `[PublicAPI]` annotations to multiple methods in `WindsorServiceProviderFactoryBase`. Removed redundant virtual methods in test classes and updated property to non-virtual in `CustomerImpl` for clarity and consistency.">
       <option name="closed" value="true" />
@@ -582,7 +577,23 @@
       <option name="project" value="LOCAL" />
       <updated>1756237883846</updated>
     </task>
-    <option name="localTasksCounter" value="126" />
+    <task id="LOCAL-00126" summary="Enabled nullable reference types across the solution for improved type safety, added `Debug.Assert` checks where applicable, and adjusted method/property signatures to handle nullable types.">
+      <option name="closed" value="true" />
+      <created>1756240021690</created>
+      <option name="number" value="00126" />
+      <option name="presentableId" value="LOCAL-00126" />
+      <option name="project" value="LOCAL" />
+      <updated>1756240021691</updated>
+    </task>
+    <task id="LOCAL-00127" summary="Enabled nullable reference types across additional files, updated method and property signatures for type safety, and added `Debug.Assert` checks where necessary.">
+      <option name="closed" value="true" />
+      <created>1756240952788</created>
+      <option name="number" value="00127" />
+      <option name="presentableId" value="LOCAL-00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1756240952788</updated>
+    </task>
+    <option name="localTasksCounter" value="128" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -617,8 +628,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Removed obsolete installer and test component classes from the project to reduce clutter and improve maintainability." />
-    <MESSAGE value="Removed obsolete test interfaces and generic mapper class, and added `[UsedImplicitly]` annotations to specific mappers to improve maintainability and code clarity." />
     <MESSAGE value="Removed obsolete test component implementations and interfaces, replacing them with concise definitions to reduce clutter and improve maintainability." />
     <MESSAGE value="Marked multiple disposable and test classes as `sealed`, removed redundant constructors, replaced initializations with concise definitions, and applied `GC.SuppressFinalize` in disposable components for improved reliability and maintainability." />
     <MESSAGE value="Updated all dependencies to latest versions." />
@@ -642,7 +651,9 @@
     <MESSAGE value="Fixed some null." />
     <MESSAGE value="More nulability improvements." />
     <MESSAGE value="More cleanup" />
-    <option name="LAST_COMMIT_MESSAGE" value="More cleanup" />
+    <MESSAGE value="Enabled nullable reference types across the solution for improved type safety, added `Debug.Assert` checks where applicable, and adjusted method/property signatures to handle nullable types." />
+    <MESSAGE value="Enabled nullable reference types across additional files, updated method and property signatures for type safety, and added `Debug.Assert` checks where necessary." />
+    <option name="LAST_COMMIT_MESSAGE" value="Enabled nullable reference types across additional files, updated method and property signatures for type safety, and added `Debug.Assert` checks where necessary." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

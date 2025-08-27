@@ -159,7 +159,7 @@ public sealed class WindsorContainer :
     public string? Name { get; }
 
     /// <summary>Gets or sets the parent container if this instance is a sub container.</summary>
-    public IWindsorContainer Parent
+    public IWindsorContainer? Parent
     {
         get => _parent;
         set
@@ -203,6 +203,7 @@ public sealed class WindsorContainer :
 
         lock (_childContainersLocker)
         {
+            Debug.Assert(childContainer.Name != null);
             if (_childContainers.ContainsKey(childContainer.Name))
             {
                 return;
@@ -245,7 +246,7 @@ public sealed class WindsorContainer :
     /// <summary>Gets a child container instance by name.</summary>
     /// <param name="name">The container's name.</param>
     /// <returns>The child container instance or null</returns>
-    public IWindsorContainer GetChildContainer(string name)
+    public IWindsorContainer? GetChildContainer(string name)
     {
         lock (_childContainersLocker)
         {
@@ -339,6 +340,7 @@ public sealed class WindsorContainer :
 
         lock (_childContainersLocker)
         {
+            Debug.Assert(childContainer.Name != null);
             if (!_childContainers.ContainsKey(childContainer.Name))
             {
                 return;

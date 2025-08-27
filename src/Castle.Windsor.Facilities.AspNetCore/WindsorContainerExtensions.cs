@@ -26,8 +26,8 @@ public static class WindsorContainerExtensions
 	/// <typeparam name="T">The <see cref="IFacility" /> implementation</typeparam>
 	/// <param name="container">A reference to <see cref="IWindsorContainer" /></param>
 	/// <returns>An implementation of <see cref="IFacility" /></returns>
-	public static T GetFacility<T>(this IWindsorContainer container) where T : IFacility
+	public static T? GetFacility<T>(this IWindsorContainer container) where T : IFacility
 	{
-		return (T)container.Kernel.GetFacilities().FirstOrDefault(x => x.GetType() == typeof(T));
+		return (T?)container.Kernel.GetFacilities().FirstOrDefault(x => x.GetType() == typeof(T));
 	}
 }
