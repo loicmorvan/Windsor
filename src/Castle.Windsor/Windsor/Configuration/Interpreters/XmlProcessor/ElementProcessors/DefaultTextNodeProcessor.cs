@@ -71,9 +71,7 @@ public partial class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
             }
             else if (IsRequiredProperty(propRef))
             {
-                {
-                    throw new XmlProcessorException($"Required configuration property {propKey} not found");
-                }
+                throw new XmlProcessorException($"Required configuration property {propKey} not found");
             }
 
             pos = match.Index + match.Length;

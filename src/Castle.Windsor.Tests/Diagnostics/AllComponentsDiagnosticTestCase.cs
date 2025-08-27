@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
@@ -27,7 +28,8 @@ public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 
     protected override void AfterContainerCreated()
     {
-        var host = (IDiagnosticsHost)Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
+        var host = (IDiagnosticsHost?)Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
+        Debug.Assert(host != null, nameof(host) + " != null");
         _diagnostic = host.GetDiagnostic<IAllComponentsDiagnostic>();
     }
 
@@ -38,8 +40,9 @@ public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
         Container.Resolve<GenericImpl1<A>>();
         Container.Resolve<GenericImpl1<B>>();
 
+        Debug.Assert(_diagnostic != null, nameof(_diagnostic) + " != null");
         var handlers = _diagnostic.Inspect();
-
+        Assert.NotNull(handlers);
         Assert.Single(handlers);
     }
 
@@ -54,16 +57,20 @@ public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 
         parent.AddChildContainer(Container);
 
+        Debug.Assert(_diagnostic != null, nameof(_diagnostic) + " != null");
         var handlers = _diagnostic.Inspect();
 
+        Assert.NotNull(handlers);
         Assert.Equal(4, handlers.Length);
     }
 
     [Fact]
     public void Works_with_empty_container()
     {
+        Debug.Assert(_diagnostic != null, nameof(_diagnostic) + " != null");
         var handlers = _diagnostic.Inspect();
 
+        Assert.NotNull(handlers);
         Assert.Empty(handlers);
     }
 
@@ -72,8 +79,10 @@ public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
     {
         Container.Register(Component.For(typeof(GenericImpl1<>)));
 
+        Debug.Assert(_diagnostic != null, nameof(_diagnostic) + " != null");
         var handlers = _diagnostic.Inspect();
 
+        Assert.NotNull(handlers);
         Assert.Single(handlers);
     }
 
@@ -83,8 +92,10 @@ public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
         Container.Register(Component.For<IEmptyService, EmptyServiceA>()
             .ImplementedBy<EmptyServiceA>());
 
+        Debug.Assert(_diagnostic != null, nameof(_diagnostic) + " != null");
         var handlers = _diagnostic.Inspect();
 
+        Assert.NotNull(handlers);
         Assert.Single(handlers);
         Assert.Equal(2, handlers[0].ComponentModel.Services.Count());
     }
@@ -95,8 +106,10 @@ public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
         Container.Register(Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl1<>)),
             Component.For(typeof(IGeneric<>)).ImplementedBy(typeof(GenericImpl2<>)));
 
+        Debug.Assert(_diagnostic != null, nameof(_diagnostic) + " != null");
         var handlers = _diagnostic.Inspect();
 
+        Assert.NotNull(handlers);
         Assert.Equal(2, handlers.Length);
     }
 }

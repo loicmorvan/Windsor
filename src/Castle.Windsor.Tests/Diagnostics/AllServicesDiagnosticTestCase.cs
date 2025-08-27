@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
@@ -22,11 +23,12 @@ namespace Castle.Windsor.Tests.Diagnostics;
 
 public class AllServicesDiagnosticTestCase : AbstractContainerTestCase
 {
-    private IAllServicesDiagnostic _diagnostic;
+    private IAllServicesDiagnostic? _diagnostic;
 
     protected override void AfterContainerCreated()
     {
-        var host = (IDiagnosticsHost)Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
+        var host = (IDiagnosticsHost?)Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
+        Debug.Assert(host != null, nameof(host) + " != null");
         _diagnostic = host.GetDiagnostic<IAllServicesDiagnostic>();
     }
 
@@ -37,7 +39,10 @@ public class AllServicesDiagnosticTestCase : AbstractContainerTestCase
             Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
             Component.For<A>());
 
+        Debug.Assert(_diagnostic != null, nameof(_diagnostic) + " != null");
         var services = _diagnostic.Inspect();
+
+        Assert.NotNull(services);
         Assert.Equal(2, services.Count);
         Assert.Equal(2, services[typeof(IEmptyService)].Count());
         Assert.Single(services[typeof(A)]);
@@ -50,7 +55,10 @@ public class AllServicesDiagnosticTestCase : AbstractContainerTestCase
         Container.Resolve<GenericImpl1<A>>();
         Container.Resolve<GenericImpl1<B>>();
 
+        Debug.Assert(_diagnostic != null, nameof(_diagnostic) + " != null");
         var services = _diagnostic.Inspect();
+
+        Assert.NotNull(services);
         Assert.Equal(1, services.Count);
         Assert.True(services.Contains(typeof(GenericImpl1<>)));
     }
@@ -62,7 +70,10 @@ public class AllServicesDiagnosticTestCase : AbstractContainerTestCase
             Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
             Component.For<A>());
 
+        Debug.Assert(_diagnostic != null, nameof(_diagnostic) + " != null");
         var services = _diagnostic.Inspect();
+
+        Assert.NotNull(services);
         Assert.Equal(3, services.Count);
     }
 }

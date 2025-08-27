@@ -27,7 +27,7 @@ public class HasTwoConstructors3
         Y = y;
     }
 
-    public SimpleComponent1 X { get; private set; }
-    public SimpleComponent2 Y { get; private set; }
-    public SimpleComponent3 A { get; private set; }
+    public SimpleComponent1? X { get; private set; }
+    public SimpleComponent2? Y { get; private set; }
+    public SimpleComponent3? A { get; private set; }
 }

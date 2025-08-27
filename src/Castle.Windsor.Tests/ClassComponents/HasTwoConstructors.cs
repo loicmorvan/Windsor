@@ -28,6 +28,6 @@ public class HasTwoConstructors
         Common = common;
     }
 
-    public ICommon Common { get; }
-    public ICustomer Customer { [UsedImplicitly] get; set; }
+    public ICommon? Common { get; }
+    public ICustomer? Customer { [UsedImplicitly] get; set; }
 }

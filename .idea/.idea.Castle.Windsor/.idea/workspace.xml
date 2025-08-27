@@ -8,13 +8,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/Framework/TestContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/Framework/TestContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/Resolvers/FrameworkDependencyResolverTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/Resolvers/FrameworkDependencyResolverTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/WindsorRegistrationExtensionsTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/WindsorRegistrationExtensionsTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/WindsorRegistrationOptionsControllerTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore.Tests/WindsorRegistrationOptionsControllerTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/AspNetCoreFacility.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/AspNetCoreFacility.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/AspNetCoreMvcExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/AspNetCoreMvcExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CustomerRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CustomerRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CustomerValidatorAndRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CustomerValidatorAndRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/DefaultRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/DefaultRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ExtendedCustomer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ExtendedCustomer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/GenericImpl3.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/GenericImpl3.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors2.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors3.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors3.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Diagnostics/AllComponentsDiagnosticTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Diagnostics/AllComponentsDiagnosticTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Diagnostics/AllServicesDiagnosticTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Diagnostics/AllServicesDiagnosticTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Diagnostics/DuplicatedDependenciesDiagnosticTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Diagnostics/DuplicatedDependenciesDiagnosticTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/XmlProcessor/ElementProcessors/DefaultTextNodeProcessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/XmlProcessor/ElementProcessors/DefaultTextNodeProcessor.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +62,8 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5ee4e2db8cb642d8bc4a6567a75d8e9acef20/1a/259308d5/AssemblyName.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Castle.Windsor.Facilities.AspNetCore/Resolvers/LoggerDependencyResolver.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/loicmorvan/RiderProjects/Windsor/src/Castle.Windsor/Windsor/Diagnostics/DebuggerViews/ComponentDebuggerView.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/loicmorvan/RiderProjects/Windsor/src/Castle.Windsor.Tests/DefaultValueTestCase.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/loicmorvan/RiderProjects/Windsor/src/Castle.Windsor/Windsor/WindsorContainer.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProblemsViewState">
@@ -190,23 +196,7 @@
       <workItem from="1756152047514" duration="62000" />
       <workItem from="1756237329986" duration="629000" />
       <workItem from="1756238033032" duration="2923000" />
-      <workItem from="1756304559153" duration="1785000" />
-    </task>
-    <task id="LOCAL-00080" summary="Removed unused method parameters from multiple interfaces, classes, and test cases to simplify method signatures and improve code clarity. Consolidated parameter-less methods for consistency and maintainability across core and test files.">
-      <option name="closed" value="true" />
-      <created>1754775099561</created>
-      <option name="number" value="00080" />
-      <option name="presentableId" value="LOCAL-00080" />
-      <option name="project" value="LOCAL" />
-      <updated>1754775099561</updated>
-    </task>
-    <task id="LOCAL-00081" summary="Added ReSharper suppression comments for unused type parameters in interfaces and removed unused method parameters in `WindsorContainerBuilder`. Simplified method signatures and resolved inspection warnings across test and core files.">
-      <option name="closed" value="true" />
-      <created>1754775206793</created>
-      <option name="number" value="00081" />
-      <option name="presentableId" value="LOCAL-00081" />
-      <option name="project" value="LOCAL" />
-      <updated>1754775206793</updated>
+      <workItem from="1756304559153" duration="3278000" />
     </task>
     <task id="LOCAL-00082" summary="Marked unused parameters with `#pragma warning` suppressions, removed redundant method bodies, and added `[PublicAPI]` annotations to enhance code clarity and maintainability across core files and test cases.">
       <option name="closed" value="true" />
@@ -584,7 +574,23 @@
       <option name="project" value="LOCAL" />
       <updated>1756305270238</updated>
     </task>
-    <option name="localTasksCounter" value="129" />
+    <task id="LOCAL-00129" summary="Enabled nullable reference types across additional files, updated method and property signatures to improve type safety, and incorporated `Debug.Assert` checks where necessary.">
+      <option name="closed" value="true" />
+      <created>1756307095220</created>
+      <option name="number" value="00129" />
+      <option name="presentableId" value="LOCAL-00129" />
+      <option name="project" value="LOCAL" />
+      <updated>1756307095221</updated>
+    </task>
+    <task id="LOCAL-00130" summary="Enabled nullable reference types across additional files for improved type safety, updated method and property signatures, and added `Debug.Assert` checks where applicable.">
+      <option name="closed" value="true" />
+      <created>1756307843596</created>
+      <option name="number" value="00130" />
+      <option name="presentableId" value="LOCAL-00130" />
+      <option name="project" value="LOCAL" />
+      <updated>1756307843596</updated>
+    </task>
+    <option name="localTasksCounter" value="131" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -619,8 +625,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Marked multiple disposable and test classes as `sealed`, removed redundant constructors, replaced initializations with concise definitions, and applied `GC.SuppressFinalize` in disposable components for improved reliability and maintainability." />
-    <MESSAGE value="Updated all dependencies to latest versions." />
     <MESSAGE value="Improved the equalities with false." />
     <MESSAGE value="Updated possible null." />
     <MESSAGE value="Refactored constructors to use concise definitions, replaced redundant initializations, applied `Debug.Assert` for improved null handling, and removed unnecessary checks and obsolete methods for better readability and maintainability." />
@@ -644,7 +648,9 @@
     <MESSAGE value="Enabled nullable reference types across the solution for improved type safety, added `Debug.Assert` checks where applicable, and adjusted method/property signatures to handle nullable types." />
     <MESSAGE value="Enabled nullable reference types across additional files, updated method and property signatures for type safety, and added `Debug.Assert` checks where necessary." />
     <MESSAGE value="Enabled nullable reference types across additional files, updated method and property signatures for improved type safety, and added `Debug.Assert` and `MemberNotNull` annotations where applicable." />
-    <option name="LAST_COMMIT_MESSAGE" value="Enabled nullable reference types across additional files, updated method and property signatures for improved type safety, and added `Debug.Assert` and `MemberNotNull` annotations where applicable." />
+    <MESSAGE value="Enabled nullable reference types across additional files, updated method and property signatures to improve type safety, and incorporated `Debug.Assert` checks where necessary." />
+    <MESSAGE value="Enabled nullable reference types across additional files for improved type safety, updated method and property signatures, and added `Debug.Assert` checks where applicable." />
+    <option name="LAST_COMMIT_MESSAGE" value="Enabled nullable reference types across additional files for improved type safety, updated method and property signatures, and added `Debug.Assert` checks where applicable." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

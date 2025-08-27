@@ -17,7 +17,7 @@ namespace Castle.Windsor.Tests.ClassComponents;
 public class DefaultRepository<T> : IRepository<T>
     where T : class, new()
 {
-    public T? Find()
+    public T Find()
     {
         return new T();
     }

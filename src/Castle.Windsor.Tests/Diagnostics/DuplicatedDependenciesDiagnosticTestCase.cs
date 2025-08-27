@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
@@ -22,11 +23,12 @@ namespace Castle.Windsor.Tests.Diagnostics;
 
 public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCase
 {
-    private IDuplicatedDependenciesDiagnostic _diagnostic;
+    private IDuplicatedDependenciesDiagnostic? _diagnostic;
 
     protected override void AfterContainerCreated()
     {
-        var host = (IDiagnosticsHost)Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
+        var host = (IDiagnosticsHost?)Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
+        Debug.Assert(host != null, nameof(host) + " != null");
         _diagnostic = host.GetDiagnostic<IDuplicatedDependenciesDiagnostic>();
     }
 
@@ -35,7 +37,10 @@ public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCas
     {
         Container.Register(Component.For<HasObjectPropertyAndTypedCtorParameterWithSameName>());
 
+        Debug.Assert(_diagnostic != null, nameof(_diagnostic) + " != null");
         var result = _diagnostic.Inspect();
+
+        Assert.NotNull(result);
         Assert.NotEmpty(result);
     }
 
@@ -44,7 +49,10 @@ public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCas
     {
         Container.Register(Component.For<HasTwoConstructors>());
 
+        Debug.Assert(_diagnostic != null, nameof(_diagnostic) + " != null");
         var result = _diagnostic.Inspect();
+
+        Assert.NotNull(result);
         Assert.NotEmpty(result);
     }
 
@@ -52,7 +60,10 @@ public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCas
     public void Can_detect_components_having_duplicated_dependencies_same_type_different_name()
     {
         Container.Register(Component.For<HasPropertyAndCtorParameterSameTypeDifferentName>());
+        Debug.Assert(_diagnostic != null, nameof(_diagnostic) + " != null");
         var result = _diagnostic.Inspect();
+
+        Assert.NotNull(result);
         Assert.NotEmpty(result);
     }
 
@@ -60,7 +71,10 @@ public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCas
     public void Can_detect_components_having_duplicated_dependencies_same_type_via_constructor()
     {
         Container.Register(Component.For<TwoEmptyServiceDependenciesConstructor>());
+        Debug.Assert(_diagnostic != null, nameof(_diagnostic) + " != null");
         var result = _diagnostic.Inspect();
+
+        Assert.NotNull(result);
         Assert.NotEmpty(result);
     }
 
@@ -68,7 +82,10 @@ public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCas
     public void Can_detect_components_having_duplicated_dependencies_same_type_via_properties()
     {
         Container.Register(Component.For<TwoEmptyServiceDependenciesProperty>());
+        Debug.Assert(_diagnostic != null, nameof(_diagnostic) + " != null");
         var result = _diagnostic.Inspect();
+
+        Assert.NotNull(result);
         Assert.NotEmpty(result);
     }
 
@@ -78,7 +95,10 @@ public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCas
         Container.Register(Component.For<HasObjectPropertyAndTypedCtorParameterDifferentName>()
             .DependsOn(Dependency.OnComponent<object, EmptyService2Impl1>(),
                 Dependency.OnComponent<IEmptyService, EmptyService2Impl1>()));
+        Debug.Assert(_diagnostic != null, nameof(_diagnostic) + " != null");
         var result = _diagnostic.Inspect();
+
+        Assert.NotNull(result);
         Assert.NotEmpty(result);
     }
 
@@ -86,7 +106,10 @@ public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCas
     public void Can_detect_multiple_dependencies_between_properties_and_constructors()
     {
         Container.Register(Component.For<ThreeEmptyServiceDependenciesPropertyAndManyCtors>());
+        Debug.Assert(_diagnostic != null, nameof(_diagnostic) + " != null");
         var result = _diagnostic.Inspect();
+
+        Assert.NotNull(result);
         Assert.NotEmpty(result);
     }
 }
