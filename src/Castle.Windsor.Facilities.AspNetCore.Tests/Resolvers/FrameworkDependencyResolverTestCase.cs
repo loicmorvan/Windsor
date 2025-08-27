@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.Facilities.AspNetCore.Resolvers;
 using Castle.Windsor.Facilities.AspNetCore.Tests.Fakes;
 using Castle.Windsor.Facilities.AspNetCore.Tests.Framework;
@@ -126,6 +127,7 @@ public sealed class FrameworkDependencyResolverTestCase : IDisposable
     [Theory]
     public void Should_resolve_all_ServiceProviderOnly_services_from_ServiceProvider(Type serviceType)
     {
+        Debug.Assert(_testContext.ServiceProvider != null);
         _testContext.ServiceProvider.GetRequiredService(serviceType);
     }
 
@@ -147,6 +149,7 @@ public sealed class FrameworkDependencyResolverTestCase : IDisposable
     [Theory]
     public void Should_resolve_all_CrossWiredOnly_services_from_ServiceProvider(Type serviceType)
     {
+        Debug.Assert(_testContext.ServiceProvider != null);
         _testContext.ServiceProvider.GetRequiredService(serviceType);
     }
 
@@ -164,6 +167,7 @@ public sealed class FrameworkDependencyResolverTestCase : IDisposable
         Should_resolve_ServiceProviderOnly_and_WindsorOnly_and_CrossWired_registered_Controllers_TagHelpers_and_ViewComponents_from_WindsorContainer(
             Type serviceType)
     {
+        Debug.Assert(_testContext.WindsorContainer != null);
         _testContext.WindsorContainer.Resolve(serviceType);
     }
 }

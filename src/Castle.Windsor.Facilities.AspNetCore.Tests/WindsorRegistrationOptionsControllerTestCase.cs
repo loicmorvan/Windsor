@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.Facilities.AspNetCore.Tests.Framework;
 using Castle.Windsor.MicroKernel.Registration;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,7 @@ public abstract class WindsorRegistrationOptionsControllerTestCase
         using var testContext = TestContextFactory.Get(opts => opts
             .UseEntryAssembly(typeof(Uri).Assembly)
             .RegisterControllers(typeof(OverrideController).Assembly));
+        Debug.Assert(testContext.WindsorContainer != null);
         testContext.WindsorContainer.Resolve(optionsResolvableType);
     }
 

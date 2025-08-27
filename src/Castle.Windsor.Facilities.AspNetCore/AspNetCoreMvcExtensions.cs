@@ -46,14 +46,17 @@ internal static class AspNetCoreMvcExtensions
     }
 
     public static void AddCustomTagHelperActivation(this IServiceCollection services, Func<Type, object> activator,
-        Predicate<Type> applicationTypeSelector = null)
+        Predicate<Type>? applicationTypeSelector = null)
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(activator);
 
         applicationTypeSelector ??= type =>
-            !type.GetTypeInfo().Namespace.StartsWith("Microsoft") &&
-            !type.GetTypeInfo().Name.Contains("__Generated__");
+        {
+            var ns = type.GetTypeInfo().Namespace;
+            return (ns is null || !ns.StartsWith("Microsoft")) &&
+                   !type.GetTypeInfo().Name.Contains("__Generated__");
+        };
 
         services.AddSingleton<ITagHelperActivator>(provider =>
             new DelegatingTagHelperActivator(

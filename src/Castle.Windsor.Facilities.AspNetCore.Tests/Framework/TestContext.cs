@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.Windsor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,12 +32,22 @@ public sealed class TestContext(
     public IServiceProvider? ServiceProvider { get; private set; } = serviceProvider;
 
     private IDisposable? WindsorScope { get; set; } = windsorScope;
-    public IWindsorContainer? WindsorContainer { get; private set; } = container;
+
+    public IWindsorContainer WindsorContainer
+    {
+        get
+        {
+            Debug.Assert(_windsorContainer is not null);
+            return _windsorContainer;
+        }
+    }
+
+    private IWindsorContainer? _windsorContainer = container;
 
     public void Dispose()
     {
         WindsorScope?.Dispose();
-        WindsorContainer?.Dispose();
+        _windsorContainer?.Dispose();
         (ServiceProvider as IDisposable)?.Dispose();
     }
 
@@ -48,8 +59,8 @@ public sealed class TestContext(
 
     public void DisposeWindsorContainer()
     {
-        WindsorContainer?.Dispose();
-        WindsorContainer = null;
+        _windsorContainer?.Dispose();
+        _windsorContainer = null;
     }
 
     public void DisposeWindsorScope()

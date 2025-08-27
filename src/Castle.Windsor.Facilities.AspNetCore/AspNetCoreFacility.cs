@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.Facilities.AspNetCore.Contributors;
 using Castle.Windsor.MicroKernel.Facilities;
 using Castle.Windsor.Windsor;
@@ -29,11 +30,12 @@ public class AspNetCoreFacility : AbstractFacility
     internal const string IsRegisteredAsMiddlewareIntoApplicationBuilderKey =
         "windsor-registration-is-also-registered-as-middleware";
 
-    private CrossWiringComponentModelContributor _crossWiringComponentModelContributor;
-    private MiddlewareComponentModelContributor _middlewareComponentModelContributor;
+    private CrossWiringComponentModelContributor? _crossWiringComponentModelContributor;
+    private MiddlewareComponentModelContributor? _middlewareComponentModelContributor;
 
     protected override void Init()
     {
+        Debug.Assert(Kernel != null, nameof(Kernel) + " != null");
         Kernel.ComponentModelBuilder.AddContributor(_crossWiringComponentModelContributor ??
                                                     throw new InvalidOperationException(
                                                         "Please call `Container.AddFacility<AspNetCoreFacility>(f => f.CrossWiresInto(services));` first. This should happen before any cross wiring registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md"));
@@ -62,8 +64,11 @@ public class AspNetCoreFacility : AbstractFacility
     /// </param>
     public void RegistersMiddlewareInto(IApplicationBuilder applicationBuilder)
     {
+        Debug.Assert(_crossWiringComponentModelContributor != null,
+            nameof(_crossWiringComponentModelContributor) + " != null");
         _middlewareComponentModelContributor =
             new MiddlewareComponentModelContributor(_crossWiringComponentModelContributor.Services, applicationBuilder);
+        Debug.Assert(Kernel != null, nameof(Kernel) + " != null");
         Kernel.ComponentModelBuilder.AddContributor(
             _middlewareComponentModelContributor); // Happens after Init() in Startup.Configure(IApplicationBuilder, ...)
     }
