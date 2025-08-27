@@ -16,5 +16,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class MyService : IService
 {
-    public string Name { get; set; } = string.Empty;
+    public string? Name { get; set; } = string.Empty;
 }

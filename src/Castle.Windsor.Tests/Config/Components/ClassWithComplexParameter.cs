@@ -19,7 +19,7 @@ namespace Castle.Windsor.Tests.Config.Components;
 
 public class ClassWithComplexParameter
 {
-    public ComplexParameterType ComplexParam { get; [UsedImplicitly] set; }
+    public ComplexParameterType? ComplexParam { get; [UsedImplicitly] set; }
 
     [Convertible]
     [UsedImplicitly]
@@ -34,6 +34,6 @@ public class ClassWithComplexParameter
         public string MandatoryValue { get; } = mandatoryValue;
 
         // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
-        public string OptionalValue { get; set; }
+        public string? OptionalValue { get; set; }
     }
 }

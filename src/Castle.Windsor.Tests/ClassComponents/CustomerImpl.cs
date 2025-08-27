@@ -18,11 +18,11 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class CustomerImpl : ICustomer
 {
-    [UsedImplicitly] public ExtendedCustomer ExtendedCustomer { get; set; }
+    [UsedImplicitly] public ExtendedCustomer? ExtendedCustomer { get; set; }
 
-    public virtual string Name { get; init; }
+    public virtual string? Name { get; init; }
 
-    [UsedImplicitly] public virtual string Address { get; set; }
+    [UsedImplicitly] public virtual string? Address { get; set; }
 
     [UsedImplicitly] public virtual int Age { get; set; }
 }

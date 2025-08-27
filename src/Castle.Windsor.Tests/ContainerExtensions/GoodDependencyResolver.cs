@@ -35,6 +35,6 @@ public class GoodDependencyResolver : ISubDependencyResolver
     {
         return contextHandlerResolver.Resolve(context, contextHandlerResolver, model,
             new DependencyModel(typeof(IBookStore).FullName,
-                typeof(IBookStore), false));
+                typeof(IBookStore), false)) ?? throw new InvalidOperationException();
     }
 }

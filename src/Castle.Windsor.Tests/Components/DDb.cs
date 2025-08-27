@@ -29,5 +29,5 @@ public class DDb
     }
 
     // ReSharper disable once UnusedAutoPropertyAccessor.Global
-    public B B { get; private set; }
+    public B? B { get; private set; }
 }

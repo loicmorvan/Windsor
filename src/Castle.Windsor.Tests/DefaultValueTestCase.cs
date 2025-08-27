@@ -99,5 +99,5 @@ public class DefaultValueTestCase : AbstractContainerTestCase
         TestUtils.AssertNoFirstChanceExceptions(() => container.Resolve<HasCtorWithOptionalInterfaceParameter>());
     }
 
-    private sealed class HasCtorWithOptionalInterfaceParameter(IEqualityComparer<int> comparer = null);
+    private sealed class HasCtorWithOptionalInterfaceParameter(IEqualityComparer<int>? comparer = null);
 }

@@ -18,5 +18,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class ListDepAsProperty
 {
-    public IList<IEmptyService> Services { get; [UsedImplicitly] set; }
+    public IList<IEmptyService>? Services { get; [UsedImplicitly] set; }
 }

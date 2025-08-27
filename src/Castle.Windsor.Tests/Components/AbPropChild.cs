@@ -18,5 +18,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class AbPropChild : AProp
 {
-    public B PropB { get; [UsedImplicitly] set; }
+    public B? PropB { get; [UsedImplicitly] set; }
 }

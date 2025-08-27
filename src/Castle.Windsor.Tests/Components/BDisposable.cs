@@ -20,7 +20,7 @@ public sealed class BDisposable(A a) : B(a), IDisposable
 {
     public bool Disposed { get; private set; }
 
-    [DoNotWire] public Action OnDisposing { get; set; }
+    [DoNotWire] public Action? OnDisposing { get; set; }
 
     public void Dispose()
     {

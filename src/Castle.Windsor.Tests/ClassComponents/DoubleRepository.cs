@@ -19,7 +19,7 @@ public class DoubleRepository<T, T2> : IRepository<T>
     where T : class
     where T2 : struct
 {
-    public T Find()
+    public T? Find()
     {
         return null;
     }

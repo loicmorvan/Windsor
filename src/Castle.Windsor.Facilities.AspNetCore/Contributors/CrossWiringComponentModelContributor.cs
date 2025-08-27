@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.LifecycleConcerns;
@@ -29,6 +30,7 @@ public class CrossWiringComponentModelContributor(IServiceCollection services) :
 
     public void ProcessModel(IKernel kernel, ComponentModel model)
     {
+        Debug.Assert(model.Configuration != null);
         if (model.Configuration.Attributes.Get(AspNetCoreFacility.IsCrossWiredIntoServiceCollectionKey) !=
             bool.TrueString)
         {

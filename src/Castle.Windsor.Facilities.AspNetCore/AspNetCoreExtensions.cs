@@ -23,19 +23,12 @@ internal static class AspNetCoreExtensions
     public static void AddRequestScopingMiddleware(this IServiceCollection services,
         Func<IEnumerable<IDisposable>> requestScopeProvider)
     {
-        ArgumentNullException.ThrowIfNull(services);
-
-        ArgumentNullException.ThrowIfNull(requestScopeProvider);
-
         services.AddSingleton<IStartupFilter>(new RequestScopingStartupFilter(requestScopeProvider));
     }
 
     private sealed class RequestScopingStartupFilter(Func<IEnumerable<IDisposable>> requestScopeProvider)
         : IStartupFilter
     {
-        private readonly Func<IEnumerable<IDisposable>> _requestScopeProvider =
-            requestScopeProvider ?? throw new ArgumentNullException(nameof(requestScopeProvider));
-
         public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> nextFilter)
         {
             return builder =>
@@ -50,7 +43,7 @@ internal static class AspNetCoreExtensions
         {
             builder.Use(async (_, next) =>
             {
-                var scopes = _requestScopeProvider();
+                var scopes = requestScopeProvider();
                 try
                 {
                     await next();

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.Facilities.AspNetCore.Resolvers;
 using Castle.Windsor.MicroKernel.Lifestyle;
 using Castle.Windsor.MicroKernel.Registration;
@@ -190,7 +191,11 @@ public static class WindsorRegistrationExtensions
     private static void InstallFrameworkIntegration(IServiceCollection services, IWindsorContainer container)
     {
         services.AddRequestScopingMiddleware(() =>
-            [container.RequireScope(), container.Resolve<IServiceProvider>().CreateScope()]);
+        {
+            var requireScope = container.RequireScope();
+            Debug.Assert(requireScope != null, nameof(requireScope) + " != null");
+            return [requireScope, container.Resolve<IServiceProvider>().CreateScope()];
+        });
         services.AddCustomTagHelperActivation(container.Resolve);
         services.AddCustomControllerActivation(container.Resolve, container.Release);
         services.AddCustomViewComponentActivation(container.Resolve, container.Release);

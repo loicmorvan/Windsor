@@ -19,6 +19,6 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class TwoEmptyServiceDependenciesProperty
 {
-    [UsedImplicitly] public IEmptyService One { get; set; }
-    [UsedImplicitly] public IEmptyService Two { get; set; }
+    [UsedImplicitly] public IEmptyService? One { get; set; }
+    [UsedImplicitly] public IEmptyService? Two { get; set; }
 }

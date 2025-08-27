@@ -18,5 +18,5 @@ namespace Castle.Windsor.Tests.Components;
 
 public class HasDictionaryDependency
 {
-    public IDictionary<string, string> DictionaryProperty { get; [UsedImplicitly] set; }
+    public IDictionary<string, string>? DictionaryProperty { get; [UsedImplicitly] set; }
 }

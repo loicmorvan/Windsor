@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.ClassComponents;
 
 public class CustomerValidatorAndRepository : IValidator<ICustomer>, IRepository<ICustomer>
 {
-    public ICustomer Find()
+    public ICustomer? Find()
     {
         return new CustomerImpl();
     }

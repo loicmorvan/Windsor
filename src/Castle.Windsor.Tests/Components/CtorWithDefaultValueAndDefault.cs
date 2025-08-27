@@ -25,5 +25,5 @@ public class CtorWithDefaultValueAndDefault
     {
     }
 
-    public string Name { get; }
+    public string? Name { get; }
 }

@@ -23,7 +23,7 @@ namespace Castle.Windsor.Tests.Diagnostics;
 
 public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 {
-    private IAllComponentsDiagnostic _diagnostic;
+    private IAllComponentsDiagnostic? _diagnostic;
 
     protected override void AfterContainerCreated()
     {

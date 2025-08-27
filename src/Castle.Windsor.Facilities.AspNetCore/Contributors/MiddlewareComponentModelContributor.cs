@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Lifestyle;
@@ -30,10 +31,11 @@ public class MiddlewareComponentModelContributor(IServiceCollection services, IA
                                                                    "Please call `Container.GetFacility<AspNetCoreFacility>(f => f.RegistersMiddlewareInto(applicationBuilder));` first. This should happen before any middleware registration. Please see https://github.com/castleproject/Windsor/blob/master/docs/aspnetcore-facility.md");
 
     private readonly IServiceCollection _services = services ?? throw new ArgumentNullException(nameof(services));
-    private IServiceProvider _provider;
+    private IServiceProvider? _provider;
 
     public void ProcessModel(IKernel kernel, ComponentModel model)
     {
+        Debug.Assert(model.Configuration != null);
         if (model.Configuration.Attributes.Get(AspNetCoreFacility.IsRegisteredAsMiddlewareIntoApplicationBuilderKey) !=
             bool.TrueString)
         {

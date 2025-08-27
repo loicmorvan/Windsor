@@ -16,29 +16,21 @@ using Castle.Windsor.Tests.Components;
 
 namespace Castle.Windsor.Tests.ClassComponents;
 
-public class ServiceUser
+public class ServiceUser(A a)
 {
-    public ServiceUser(A a)
-    {
-        ArgumentNullException.ThrowIfNull(a);
-        AComponent = a;
-    }
-
     public ServiceUser(A a, B b) : this(a)
     {
-        ArgumentNullException.ThrowIfNull(b);
         BComponent = b;
     }
 
     public ServiceUser(A a, B b, C c) : this(a, b)
     {
-        ArgumentNullException.ThrowIfNull(c);
         CComponent = c;
     }
 
-    public A AComponent { get; }
+    public A? AComponent { get; } = a;
 
-    public B BComponent { get; }
+    public B? BComponent { get; }
 
-    public C CComponent { get; }
+    public C? CComponent { get; }
 }

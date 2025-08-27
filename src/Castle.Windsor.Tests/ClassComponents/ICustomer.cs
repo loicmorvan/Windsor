@@ -17,9 +17,9 @@ namespace Castle.Windsor.Tests.ClassComponents;
 /// <summary>Summary description for ICustomer.</summary>
 public interface ICustomer
 {
-    string Name { get; }
+    string? Name { get; }
 
-    string Address { get; }
+    string? Address { get; }
 
     int Age { get; }
 }

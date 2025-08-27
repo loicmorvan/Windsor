@@ -184,7 +184,7 @@ public class DefaultConversionManagerTestCase
         Assert.NotNull(dict);
 
         Assert.Equal(123, dict["intentry"]);
-        var values = (int[])dict["values"];
+        var values = (int[]?)dict["values"];
         Assert.NotNull(values);
         Assert.Single(values);
         Assert.Equal(400, values[0]);
