@@ -21,9 +21,9 @@ public abstract class AbstractContainerTestCase
 {
     private readonly WindsorContainer _container;
 
-    protected AbstractContainerTestCase()
+    protected AbstractContainerTestCase(WindsorContainer? container = null)
     {
-        _container = BuildContainer();
+        _container = container ?? new WindsorContainer();
         AfterContainerCreated();
     }
 
@@ -33,10 +33,5 @@ public abstract class AbstractContainerTestCase
 
     protected virtual void AfterContainerCreated()
     {
-    }
-
-    protected virtual WindsorContainer BuildContainer()
-    {
-        return new WindsorContainer();
     }
 }

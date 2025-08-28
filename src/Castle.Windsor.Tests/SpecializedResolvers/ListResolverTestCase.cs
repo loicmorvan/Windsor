@@ -22,9 +22,9 @@ using Castle.Windsor.Windsor;
 
 namespace Castle.Windsor.Tests.SpecializedResolvers;
 
-public class ListResolverTestCase : AbstractContainerTestCase
+public class ListResolverTestCase() : AbstractContainerTestCase(BuildContainer())
 {
-    protected override WindsorContainer BuildContainer()
+    private static WindsorContainer BuildContainer()
     {
         var container = new WindsorContainer();
         container.Kernel.Resolver.AddSubResolver(new ListResolver(container.Kernel));

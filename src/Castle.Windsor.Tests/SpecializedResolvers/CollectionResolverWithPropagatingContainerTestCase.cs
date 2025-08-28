@@ -23,21 +23,14 @@ using Castle.Windsor.Windsor.Proxy;
 
 namespace Castle.Windsor.Tests.SpecializedResolvers;
 
-public class CollectionResolverWithPropagatingContainerTestCase
-    : CollectionResolverTestCase
+public class CollectionResolverWithPropagatingContainerTestCase() :
+    CollectionResolverTestCase(
+        new WindsorContainer(
+            new DefaultKernel(
+                new InlineDependenciesPropagatingDependencyResolver(),
+                new DefaultProxyFactory()),
+            new DefaultComponentInstaller()))
 {
-    /// <summary>Build a container, where all <see cref="CreationContext" /> are propagating.</summary>
-    /// <returns>A Castle Windsor container</returns>
-    protected override WindsorContainer BuildContainer()
-    {
-        return
-            new WindsorContainer(
-                new DefaultKernel(
-                    new InlineDependenciesPropagatingDependencyResolver(),
-                    new DefaultProxyFactory()),
-                new DefaultComponentInstaller());
-    }
-
     [Fact]
     public void collection_sub_resolver_should_honor_composition_context_if_kernel_propagates_inline_dependencies()
     {

@@ -20,7 +20,7 @@ using Castle.Windsor.Windsor;
 
 namespace Castle.Windsor.Tests.SpecializedResolvers;
 
-public class CollectionResolverTestCase : AbstractContainerTestCase
+public class CollectionResolverTestCase(WindsorContainer? container = null) : AbstractContainerTestCase(container)
 {
     protected override void AfterContainerCreated()
     {
