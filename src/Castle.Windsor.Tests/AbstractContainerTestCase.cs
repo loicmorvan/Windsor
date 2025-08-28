@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Reflection;
 using Castle.Windsor.MicroKernel;
 using Castle.Windsor.Windsor;
 
 namespace Castle.Windsor.Tests;
 
-public abstract class AbstractContainerTestCase : IDisposable
+public abstract class AbstractContainerTestCase
 {
     private readonly WindsorContainer _container;
 
@@ -32,13 +31,6 @@ public abstract class AbstractContainerTestCase : IDisposable
 
     protected IKernel Kernel => _container.Kernel;
 
-    public void Dispose()
-    {
-        GC.SuppressFinalize(this);
-
-        _container.Dispose();
-    }
-
     protected virtual void AfterContainerCreated()
     {
     }
@@ -46,13 +38,5 @@ public abstract class AbstractContainerTestCase : IDisposable
     protected virtual WindsorContainer BuildContainer()
     {
         return new WindsorContainer();
-    }
-}
-
-public static class AssemblyHelper
-{
-    public static Assembly GetCurrentAssembly()
-    {
-        return typeof(AbstractContainerTestCase).GetTypeInfo().Assembly;
     }
 }
