@@ -24,7 +24,7 @@ public class IsDefaultTestCase : AbstractContainerTestCase
     public void Can_make_a_component_default_via_AllTypes_1()
     {
         Container.Register(
-            Classes.FromAssembly(GetCurrentAssembly())
+            Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
                 .BasedOn<IEmptyService>()
                 .WithService.Base()
                 .ConfigureFor<EmptyServiceB>(c => c.IsDefault()));
@@ -37,7 +37,7 @@ public class IsDefaultTestCase : AbstractContainerTestCase
     public void Can_make_a_component_default_via_AllTypes_2()
     {
         Container.Register(
-            Classes.FromAssembly(GetCurrentAssembly())
+            Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
                 .BasedOn<IEmptyService>()
                 .WithService.Base()
                 .ConfigureFor<EmptyServiceA>(c => c.IsDefault()));

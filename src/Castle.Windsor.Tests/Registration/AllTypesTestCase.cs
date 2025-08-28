@@ -27,7 +27,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     public void RegisterAssemblyTypes_BasedOn_RegisteredInContainer1()
     {
         Kernel.Register(Classes
-            .FromAssembly(GetCurrentAssembly())
+            .FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<ICommon>()
         );
 
@@ -56,7 +56,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     [Fact]
     public void RegisterAssemblyTypesFromThisAssembly_BasedOn_RegisteredInContainer()
     {
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<ICommon>());
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly()).BasedOn<ICommon>());
 
         var handlers = Kernel.GetHandlers(typeof(ICommon));
         Assert.Empty(handlers);
@@ -82,7 +82,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     [Fact]
     public void RegisterAssemblyTypes_NoService_RegisteredInContainer()
     {
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<ICommon>());
 
         var handlers = Kernel.GetHandlers(typeof(ICommon));
@@ -95,7 +95,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     [Fact]
     public void RegisterAssemblyTypes_FirstInterfaceService_RegisteredInContainer()
     {
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<ICommon>()
             .WithService.FirstInterface()
         );
@@ -110,7 +110,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     [Fact]
     public void RegisterAssemblyTypes_LookupInterfaceService_RegisteredInContainer()
     {
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<ICommon>()
             .WithService.FromInterface()
         );
@@ -134,7 +134,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     [Fact]
     public void RegisterAssemblyTypes_DefaultService_RegisteredInContainer()
     {
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<ICommon>()
             .WithService.Base()
         );
@@ -149,7 +149,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     [Fact]
     public void RegisterAssemblyTypes_WithConfiguration_RegisteredInContainer()
     {
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<ICommon>()
             .Configure(delegate(ComponentRegistration component)
             {
@@ -168,7 +168,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     [Fact]
     public void RegisterAssemblyTypes_WithConfigurationBasedOnImplementation_RegisteredInContainer()
     {
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<ICommon>()
             .Configure(delegate(ComponentRegistration component)
             {
@@ -212,7 +212,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     [Fact]
     public void RegisterGenericTypes_WithGenericDefinition_RegisteredInContainer()
     {
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn(typeof(IValidator<>))
             .WithService.Base()
         );
@@ -231,7 +231,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     [Fact]
     public void RegisterAssemblyTypes_ClosedGenericTypes_RegisteredInContainer()
     {
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn(typeof(IMapper<>))
             .WithService.FirstInterface()
         );
@@ -246,7 +246,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     [Fact]
     public void RegisterAssemblyTypes_IfCondition_RegisteredInContainer()
     {
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<ICustomer>()
             .If(t =>
             {
@@ -267,7 +267,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     [Fact]
     public void RegisterAssemblyTypes_MultipleIfCondition_RegisteredInContainer()
     {
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<ICustomer>()
             .If(t => t.Name.EndsWith('2'))
             .If(t =>
@@ -285,7 +285,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     [Fact]
     public void RegisterAssemblyTypes_UnlessCondition_RegisteredInContainer()
     {
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<ICustomer>()
             .Unless(t => typeof(CustomerChain1).IsAssignableFrom(t))
         );
@@ -299,7 +299,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     [Fact]
     public void RegisterAssemblyTypes_MultipleUnlessCondition_RegisteredInContainer()
     {
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<ICustomer>()
             .Unless(t => t.Name.EndsWith('2'))
             .Unless(t => t.Name.EndsWith('3'))
@@ -318,7 +318,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     [Fact]
     public void RegisterTypes_WithLinq_RegisteredInContainer()
     {
-        Kernel.Register(Classes.From(from type in GetCurrentAssembly().GetExportedTypes()
+        Kernel.Register(Classes.From(from type in AssemblyHelper.GetCurrentAssembly().GetExportedTypes()
             where type.GetTypeInfo().GetAttribute<SerializableAttribute>() is not null
             select type
         ).BasedOn<CustomerChain1>());
@@ -331,7 +331,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     public void RegisterAssemblyTypes_WithLinqConfiguration_RegisteredInContainer()
     {
         Kernel.Register(Classes
-            .FromAssembly(GetCurrentAssembly())
+            .FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<ICommon>()
             .Configure(component => component.LifeStyle.Transient
                 .Named(component.Implementation.FullName + "XYZ")
@@ -349,7 +349,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     public void RegisterAssemblyTypes_WithLinqConfigurationReturningValue_RegisteredInContainer()
     {
         Kernel.Register(Classes
-            .FromAssembly(GetCurrentAssembly())
+            .FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<ICommon>()
             .Configure(component => component.LifestyleTransient())
         );
@@ -363,16 +363,17 @@ public class AllTypesTestCase : AbstractContainerTestCase
     [Fact]
     public void RegisterMultipleAssemblyTypes_BasedOn_RegisteredInContainer()
     {
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<ICommon>());
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<ICustomer>()
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly()).BasedOn<ICommon>());
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly()).BasedOn<ICustomer>()
             .If(t =>
             {
                 Debug.Assert(t.FullName != null);
                 return t.FullName.Contains("Chain");
             }));
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<DefaultTemplateEngine>());
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<DefaultMailSenderService>());
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly()).BasedOn<DefaultSpamServiceWithConstructor>());
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly()).BasedOn<DefaultTemplateEngine>());
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly()).BasedOn<DefaultMailSenderService>());
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
+            .BasedOn<DefaultSpamServiceWithConstructor>());
 
         var handlers = Kernel.GetHandlers(typeof(ICommon));
         Assert.Empty(handlers);
@@ -396,7 +397,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     public void RegisterAssemblyTypes_WhereConditionSatisifed_RegisteredInContainer()
     {
         Kernel.Register(
-            Classes.FromAssembly(GetCurrentAssembly())
+            Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
                 .Where(t => t.Name == "CustomerImpl")
                 .WithService.FirstInterface()
         );
@@ -409,7 +410,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     public void RegisterAssemblyTypes_OnlyPublicTypes_WillNotRegisterNonPublicTypes()
     {
         Kernel.Register(
-            Classes.FromAssembly(GetCurrentAssembly())
+            Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
                 .BasedOn<NonPublicComponent>()
         );
 
@@ -421,7 +422,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     public void RegisterAssemblyTypes_IncludeNonPublicTypes_WillNRegisterNonPublicTypes()
     {
         Kernel.Register(
-            Classes.FromAssembly(GetCurrentAssembly())
+            Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
                 .IncludeNonPublicTypes()
                 .BasedOn<NonPublicComponent>()
         );
@@ -434,7 +435,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     public void RegisterAssemblyTypes_WhenTypeInNamespace_RegisteredInContainer()
     {
         Kernel.Register(
-            Classes.FromAssembly(GetCurrentAssembly())
+            Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
                 .Where(Component.IsInNamespace("Castle.Windsor.Tests.ClassComponents"))
                 .WithService.FirstInterface()
         );
@@ -447,7 +448,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     public void RegisterAssemblyTypes_WhenTypeInMissingNamespace_NotRegisteredInContainer()
     {
         Kernel.Register(
-            Classes.FromAssembly(GetCurrentAssembly())
+            Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
                 .Where(Component.IsInNamespace("Castle.Windsor.MicroKernel.Tests.AnyClass"))
                 .WithService.FirstInterface()
         );
@@ -459,7 +460,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     public void RegisterAssemblyTypes_WhenTypeInSameNamespaceAsComponent_RegisteredInContainer()
     {
         Kernel.Register(
-            Classes.FromAssembly(GetCurrentAssembly())
+            Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
                 .Where(Component.IsInSameNamespaceAs<CustomerImpl2>())
                 .WithService.FirstInterface()
         );
@@ -483,7 +484,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     [Fact]
     public void RegisterGenericTypes_BasedOnGenericDefinitionUsingSelect_RegisteredInContainer()
     {
-        Kernel.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Kernel.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<ITask>()
             .WithService.Select((t, _) =>
                 from type in t.GetInterfaces()
@@ -496,7 +497,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     public void RegisterAssemblyTypes_MultipleBasedOn_RegisteredInContainer()
     {
         Kernel.Register(Classes
-            .FromAssembly(GetCurrentAssembly())
+            .FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<ICommon>()
             .OrBasedOn(typeof(ICommon2))
         );
@@ -515,7 +516,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     public void RegisterAssemblyTypes_MultipleBasedOnWithServiceBase_RegisteredInContainer()
     {
         Kernel.Register(Classes
-            .FromAssembly(GetCurrentAssembly())
+            .FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<ICommon>()
             .OrBasedOn(typeof(ICommon2))
             .WithServiceBase()
@@ -532,7 +533,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     public void RegisterAssemblyTypes_MultipleBasedOnWithThreeBases_RegisteredInContainer()
     {
         Kernel.Register(Classes
-            .FromAssembly(GetCurrentAssembly())
+            .FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<ICommon>()
             .OrBasedOn(typeof(ICommon2))
             .OrBasedOn(typeof(IValidator<>))
@@ -553,7 +554,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     public void RegisterGenericTypes_MultipleBasedOnWithGenericDefinition_RegisteredInContainer()
     {
         Kernel.Register(Classes
-            .FromAssembly(GetCurrentAssembly())
+            .FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn(typeof(IValidator<>))
             .OrBasedOn(typeof(IRepository<>))
             .WithService.Base()
@@ -570,7 +571,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     public void RegisterGenericTypes_MultipleBasedOnImplementingBothInterfaces_RegisteredWithBothAsServices()
     {
         Kernel.Register(Classes
-            .FromAssembly(GetCurrentAssembly())
+            .FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn(typeof(IValidator<>))
             .OrBasedOn(typeof(IRepository<>))
             .WithService.Base()
@@ -588,7 +589,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     public void RegisterGenericTypes_MultipleBasedOnImplementingOneInterface_RegisteredWithOneService()
     {
         Kernel.Register(Classes
-            .FromAssembly(GetCurrentAssembly())
+            .FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn(typeof(IValidator<>))
             .OrBasedOn(typeof(IRepository<>))
             .WithService.Base()
@@ -607,7 +608,7 @@ public class AllTypesTestCase : AbstractContainerTestCase
     {
         Type[] services = null;
         Kernel.Register(Classes
-            .FromAssembly(GetCurrentAssembly())
+            .FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn(typeof(IValidator<>))
             .OrBasedOn(typeof(IValidator<>))
             .WithService.Select((_, b) =>

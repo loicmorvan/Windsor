@@ -20,7 +20,7 @@ namespace Castle.Windsor.Tests;
 
 public abstract class AbstractContainerTestCase : IDisposable
 {
-    private WindsorContainer _container;
+    private readonly WindsorContainer _container;
 
     protected AbstractContainerTestCase()
     {
@@ -35,7 +35,7 @@ public abstract class AbstractContainerTestCase : IDisposable
     public void Dispose()
     {
         GC.SuppressFinalize(this);
-        
+
         _container.Dispose();
     }
 
@@ -47,15 +47,11 @@ public abstract class AbstractContainerTestCase : IDisposable
     {
         return new WindsorContainer();
     }
+}
 
-    protected void ResetContainer()
-    {
-        Dispose();
-        _container = BuildContainer();
-        AfterContainerCreated();
-    }
-
-    protected static Assembly GetCurrentAssembly()
+public static class AssemblyHelper
+{
+    public static Assembly GetCurrentAssembly()
     {
         return typeof(AbstractContainerTestCase).GetTypeInfo().Assembly;
     }

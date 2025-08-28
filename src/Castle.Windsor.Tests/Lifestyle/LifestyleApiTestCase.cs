@@ -32,7 +32,7 @@ public class LifestyleApiTestCase : AbstractContainerTestCase
 
     private void LifestyleMany(Func<BasedOnDescriptor, IRegistration> assingLifestyle, LifestyleType expectedLifestyle)
     {
-        var registration = Classes.FromAssembly(GetCurrentAssembly()).BasedOn<A>();
+        var registration = Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly()).BasedOn<A>();
         Kernel.Register(assingLifestyle(registration));
         var handler = Kernel.GetHandler(typeof(A));
         Assert.Equal(expectedLifestyle, handler.ComponentModel.LifestyleType);

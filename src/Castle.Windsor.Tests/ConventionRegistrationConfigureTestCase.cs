@@ -29,7 +29,7 @@ public class ConventionRegistrationConfigureTestCase : AbstractContainerTestCase
     [Fact]
     public void ConfigureIf_can_be_applied_multiple_times()
     {
-        Container.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Container.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<IEmptyService>()
             .ConfigureIf(r => r.Implementation.Name.EndsWith('A'), r => r.Named("A"))
             .ConfigureIf(r => r.Implementation.Name.EndsWith('B'), r => r.Named("B")));
@@ -44,7 +44,7 @@ public class ConventionRegistrationConfigureTestCase : AbstractContainerTestCase
     [Fact]
     public void ConfigureIf_configures_all_matching_components()
     {
-        Container.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Container.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<IEmptyService>()
             .ConfigureIf(r => char.IsUpper(r.Implementation.Name.Last()),
                 r => r.Named(r.Implementation.Name.Last().ToString())));
@@ -59,7 +59,7 @@ public class ConventionRegistrationConfigureTestCase : AbstractContainerTestCase
     [Fact]
     public void ConfigureIf_configures_matching_components()
     {
-        Container.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Container.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<IEmptyService>()
             .ConfigureIf(r => r.Implementation.Name.EndsWith('A'), r => r.Named("A")));
 
@@ -72,7 +72,7 @@ public class ConventionRegistrationConfigureTestCase : AbstractContainerTestCase
     public void ConfigureIf_configures_matching_components_and_alternative_configuration_configures_the_rest()
     {
         var number = 0;
-        Container.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Container.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .BasedOn<IEmptyService>()
             .WithService.Base()
             .ConfigureIf(r => r.Implementation.Name.EndsWith('A'), r => r.Named("A"),

@@ -24,7 +24,7 @@ namespace Castle.Windsor.Tests.Diagnostics;
 
 public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerTestCase
 {
-    private IPotentialLifestyleMismatchesDiagnostic _diagnostic;
+    private IPotentialLifestyleMismatchesDiagnostic? _diagnostic;
 
     protected override void AfterContainerCreated()
     {

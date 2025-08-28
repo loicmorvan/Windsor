@@ -28,7 +28,7 @@ public class CompositePatternTestCase : AbstractContainerTestCase
             Component.For<IEmptyService2>()
                 .ImplementedBy<CompositeEmptyService2>()
                 .LifeStyle.Transient,
-            Classes.FromAssembly(GetCurrentAssembly())
+            Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
                 .BasedOn<IEmptyService2>()
                 .WithService.Base()
                 .Configure(c => c.LifestyleTransient()));

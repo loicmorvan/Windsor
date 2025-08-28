@@ -57,7 +57,7 @@ public class ResolveAllTestCase : AbstractContainerTestCase
     }
 
     [Fact]
-    public void ResolveAll_honors_order_and_kinf_of_registration()
+    public void ResolveAll_honors_order_and_kinf_of_registration_1()
     {
         Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
             Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().IsFallback(),
@@ -68,14 +68,16 @@ public class ResolveAllTestCase : AbstractContainerTestCase
         Assert.IsType<EmptyServiceC>(clocks[0]);
         Assert.IsType<EmptyServiceA>(clocks[1]);
         Assert.IsType<EmptyServiceB>(clocks[2]);
+    }
 
-        //reversing order
-        ResetContainer();
+    [Fact]
+    public void ResolveAll_honors_order_and_kinf_of_registration_2()
+    {
         Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>().IsFallback(),
             Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>().IsDefault(),
             Component.For<IEmptyService>().ImplementedBy<EmptyServiceC>().IsDefault());
 
-        clocks = Container.ResolveAll<IEmptyService>();
+        var clocks = Container.ResolveAll<IEmptyService>();
 
         Assert.IsType<EmptyServiceC>(clocks[0]);
         Assert.IsType<EmptyServiceB>(clocks[1]);
@@ -83,7 +85,7 @@ public class ResolveAllTestCase : AbstractContainerTestCase
     }
 
     [Fact]
-    public void ResolveAll_honors_order_of_registration()
+    public void ResolveAll_honors_order_of_registration_1()
     {
         Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
             Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>());
@@ -92,13 +94,15 @@ public class ResolveAllTestCase : AbstractContainerTestCase
 
         Assert.IsType<EmptyServiceA>(clocks[0]);
         Assert.IsType<EmptyServiceB>(clocks[1]);
+    }
 
-        //reversing order
-        ResetContainer();
+    [Fact]
+    public void ResolveAll_honors_order_of_registration_2()
+    {
         Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceB>(),
             Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>());
 
-        clocks = Container.ResolveAll<IEmptyService>();
+        var clocks = Container.ResolveAll<IEmptyService>();
 
         Assert.IsType<EmptyServiceB>(clocks[0]);
         Assert.IsType<EmptyServiceA>(clocks[1]);

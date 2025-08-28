@@ -49,7 +49,7 @@ public class ScopedLifetyleCustomScopesTestCase : AbstractContainerTestCase
     public void Can_use_custom_scope_accessor_with_scoped_lifestyle_multiple()
     {
         StaticScopeAccessor.ResetScope();
-        Container.Register(Classes.FromAssembly(GetCurrentAssembly())
+        Container.Register(Classes.FromAssembly(AssemblyHelper.GetCurrentAssembly())
             .Where(c => c.Is<A>())
             .LifestyleScoped<StaticScopeAccessor>());
 

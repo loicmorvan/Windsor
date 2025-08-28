@@ -8,18 +8,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43817e7-b7e0-408d-98aa-4cae39f1618b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CustomerRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CustomerRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CustomerValidatorAndRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/CustomerValidatorAndRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/DefaultRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/DefaultRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ExtendedCustomer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/ExtendedCustomer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/GenericImpl3.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/GenericImpl3.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors2.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors3.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ClassComponents/HasTwoConstructors3.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Diagnostics/AllComponentsDiagnosticTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Diagnostics/AllComponentsDiagnosticTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Diagnostics/AllServicesDiagnosticTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Diagnostics/AllServicesDiagnosticTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Diagnostics/DuplicatedDependenciesDiagnosticTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Diagnostics/DuplicatedDependenciesDiagnosticTestCase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/XmlProcessor/ElementProcessors/DefaultTextNodeProcessor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor/Windsor/Configuration/Interpreters/XmlProcessor/ElementProcessors/DefaultTextNodeProcessor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Castle.Windsor/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/AbstractContainerTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/AbstractContainerTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/CompositePatternTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/CompositePatternTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ConventionRegistrationConfigureTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ConventionRegistrationConfigureTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Diagnostics/PotentialLifestyleMismatchesDiagnosticTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Diagnostics/PotentialLifestyleMismatchesDiagnosticTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/GenericImplementationWithGreaterArityThanServiceTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/GenericImplementationWithGreaterArityThanServiceTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IsDefaultTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/IsDefaultTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifestyle/LifestyleApiTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifestyle/LifestyleApiTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifestyle/ScopedLifetyleCustomScopesTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Lifestyle/ScopedLifetyleCustomScopesTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Registration/AllTypesTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Registration/AllTypesTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Registration/ComponentRegistrationByNamespaceTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Registration/ComponentRegistrationByNamespaceTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Registration/WithServiceTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/Registration/WithServiceTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/RegistrationWithAttributeTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/RegistrationWithAttributeTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ResolveAllTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/ResolveAllTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/SpecializedResolvers/ArrayResolverTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/SpecializedResolvers/ArrayResolverTestCase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Castle.Windsor.Tests/SpecializedResolvers/CollectionResolverTestCase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Castle.Windsor.Tests/SpecializedResolvers/CollectionResolverTestCase.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,36 +84,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "1040357a-a374-4805-ae55-296a10391d40.executor": "Debug",
-    "2dc3fd48-7f19-46dc-9e61-9ca484058a3d.executor": "Run",
-    "36c383d8-1096-48c6-9b6c-8e57ac7b4b8d.executor": "Run",
-    "457fe246-3a65-482c-9b97-436b5d6e2078.executor": "Debug",
-    "54437557-b30d-4a31-834c-387d565fefaf.executor": "Run",
-    "544ebf71-769d-49f6-88b1-47a73962a2b1.executor": "Run",
-    "58c56b00-f81e-48fd-a74f-c8e84271fcf4.executor": "Debug",
-    "6356ce7a-e504-4c39-a7e4-fe4a2206522d.executor": "Run",
-    "6735a692-6eea-4ff7-a309-8dd38fbf00bf.executor": "Debug",
-    "7c93ec0e-d2e1-442e-8418-ad90b07a71b7.executor": "Run",
-    "7c964d5d-15cd-4425-a015-ad6d5f0fc580.executor": "Debug",
-    "89dda535-a689-4076-a660-df5d01541ebe.executor": "Debug",
-    "92c054ad-452f-41b6-a548-9856400a347d.executor": "Debug",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "T4 Template Run Configuration.ModelFakes.tt.executor": "Run",
-    "e0ad4eed-3a6f-49ec-852e-59ba3136ace6.executor": "Run",
-    "git-widget-placeholder": "nullability-cleanup",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;1040357a-a374-4805-ae55-296a10391d40.executor&quot;: &quot;Debug&quot;,
+    &quot;2dc3fd48-7f19-46dc-9e61-9ca484058a3d.executor&quot;: &quot;Run&quot;,
+    &quot;36c383d8-1096-48c6-9b6c-8e57ac7b4b8d.executor&quot;: &quot;Run&quot;,
+    &quot;457fe246-3a65-482c-9b97-436b5d6e2078.executor&quot;: &quot;Debug&quot;,
+    &quot;54437557-b30d-4a31-834c-387d565fefaf.executor&quot;: &quot;Run&quot;,
+    &quot;544ebf71-769d-49f6-88b1-47a73962a2b1.executor&quot;: &quot;Run&quot;,
+    &quot;58c56b00-f81e-48fd-a74f-c8e84271fcf4.executor&quot;: &quot;Debug&quot;,
+    &quot;6356ce7a-e504-4c39-a7e4-fe4a2206522d.executor&quot;: &quot;Run&quot;,
+    &quot;6735a692-6eea-4ff7-a309-8dd38fbf00bf.executor&quot;: &quot;Debug&quot;,
+    &quot;7c93ec0e-d2e1-442e-8418-ad90b07a71b7.executor&quot;: &quot;Run&quot;,
+    &quot;7c964d5d-15cd-4425-a015-ad6d5f0fc580.executor&quot;: &quot;Debug&quot;,
+    &quot;89dda535-a689-4076-a660-df5d01541ebe.executor&quot;: &quot;Debug&quot;,
+    &quot;92c054ad-452f-41b6-a548-9856400a347d.executor&quot;: &quot;Debug&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;T4 Template Run Configuration.ModelFakes.tt.executor&quot;: &quot;Run&quot;,
+    &quot;e0ad4eed-3a6f-49ec-852e-59ba3136ace6.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;nullability-cleanup&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="Push.Settings">
     <force-push-targets>
       <force-push-target remote-path="origin" branch="net9" />
@@ -196,15 +200,9 @@
       <workItem from="1756152047514" duration="62000" />
       <workItem from="1756237329986" duration="629000" />
       <workItem from="1756238033032" duration="2923000" />
-      <workItem from="1756304559153" duration="3278000" />
-    </task>
-    <task id="LOCAL-00082" summary="Marked unused parameters with `#pragma warning` suppressions, removed redundant method bodies, and added `[PublicAPI]` annotations to enhance code clarity and maintainability across core files and test cases.">
-      <option name="closed" value="true" />
-      <created>1754775655628</created>
-      <option name="number" value="00082" />
-      <option name="presentableId" value="LOCAL-00082" />
-      <option name="project" value="LOCAL" />
-      <updated>1754775655628</updated>
+      <workItem from="1756304559153" duration="3322000" />
+      <workItem from="1756320711575" duration="176000" />
+      <workItem from="1756398768501" duration="668000" />
     </task>
     <task id="LOCAL-00083" summary="Removed unused method parameters in `ICatalog` and `SimpleCatalog`, refactored `RemoveItem` method to align with updated interface definitions, and suppressed ReSharper warnings for unused parameters.">
       <option name="closed" value="true" />
@@ -590,7 +588,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756307843596</updated>
     </task>
-    <option name="localTasksCounter" value="131" />
+    <task id="LOCAL-00131" summary="Enabled nullable reference types across additional files, updated method and property signatures for improved type safety, and incorporated `Debug.Assert` checks to handle nullability.">
+      <option name="closed" value="true" />
+      <created>1756308399546</created>
+      <option name="number" value="00131" />
+      <option name="presentableId" value="LOCAL-00131" />
+      <option name="project" value="LOCAL" />
+      <updated>1756308399546</updated>
+    </task>
+    <option name="localTasksCounter" value="132" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -625,7 +631,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Improved the equalities with false." />
     <MESSAGE value="Updated possible null." />
     <MESSAGE value="Refactored constructors to use concise definitions, replaced redundant initializations, applied `Debug.Assert` for improved null handling, and removed unnecessary checks and obsolete methods for better readability and maintainability." />
     <MESSAGE value="Updated `HasTwoConstructors` to use optional parameter for concise definition and removed redundant constructor implementation." />
@@ -650,7 +655,8 @@
     <MESSAGE value="Enabled nullable reference types across additional files, updated method and property signatures for improved type safety, and added `Debug.Assert` and `MemberNotNull` annotations where applicable." />
     <MESSAGE value="Enabled nullable reference types across additional files, updated method and property signatures to improve type safety, and incorporated `Debug.Assert` checks where necessary." />
     <MESSAGE value="Enabled nullable reference types across additional files for improved type safety, updated method and property signatures, and added `Debug.Assert` checks where applicable." />
-    <option name="LAST_COMMIT_MESSAGE" value="Enabled nullable reference types across additional files for improved type safety, updated method and property signatures, and added `Debug.Assert` checks where applicable." />
+    <MESSAGE value="Enabled nullable reference types across additional files, updated method and property signatures for improved type safety, and incorporated `Debug.Assert` checks to handle nullability." />
+    <option name="LAST_COMMIT_MESSAGE" value="Enabled nullable reference types across additional files, updated method and property signatures for improved type safety, and incorporated `Debug.Assert` checks to handle nullability." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
