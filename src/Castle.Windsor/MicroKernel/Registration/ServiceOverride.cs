@@ -17,7 +17,7 @@ namespace Castle.Windsor.MicroKernel.Registration;
 /// <summary>Represents a service override.</summary>
 public class ServiceOverride
 {
-    internal ServiceOverride(object dependencyKey, object value, Type type = null)
+    internal ServiceOverride(object dependencyKey, object value, Type? type = null)
     {
         DependencyKey = dependencyKey;
         Value = value;
@@ -27,7 +27,7 @@ public class ServiceOverride
     public object DependencyKey { get; private set; }
 
     /// <summary>Gets the optional value type specifier.</summary>
-    public Type Type { get; private set; }
+    public Type? Type { get; private set; }
 
     public object Value { get; private set; }
 
@@ -58,7 +58,7 @@ public class ServiceOverride
     /// <summary>Implicitly converts service override to dependency. This is a API trick to keep the API clean and focused.</summary>
     /// <param name="item"></param>
     /// <returns></returns>
-    public static implicit operator Dependency(ServiceOverride item)
+    public static implicit operator Dependency?(ServiceOverride? item)
     {
         return item == null ? null : new Dependency(item);
     }

@@ -55,9 +55,9 @@ public interface IKernelInternal : IKernel
     /// <param name="arguments"> </param>
     /// <param name="policy"> </param>
     /// <returns> </returns>
-    object Resolve(string key, Type service, Arguments arguments, IReleasePolicy policy);
+    object Resolve(string key, Type service, Arguments? arguments, IReleasePolicy policy);
 
-    Array ResolveAll(Type service, Arguments arguments, IReleasePolicy policy);
+    Array ResolveAll(Type service, Arguments? arguments, IReleasePolicy policy);
 
     IHandler CreateHandler(ComponentModel model);
 

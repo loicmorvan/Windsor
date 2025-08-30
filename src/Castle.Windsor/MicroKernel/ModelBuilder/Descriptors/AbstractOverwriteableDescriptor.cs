@@ -42,7 +42,7 @@ public abstract class AbstractOverwriteableDescriptor<TService> : IComponentMode
     {
     }
 
-    protected virtual void ApplyToConfiguration(IConfiguration configuration)
+    protected virtual void ApplyToConfiguration(IConfiguration? configuration)
     {
     }
 }

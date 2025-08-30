@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Context;
 using Lock = Castle.Windsor.MicroKernel.Internal.Lock;
@@ -19,11 +20,11 @@ using Lock = Castle.Windsor.MicroKernel.Internal.Lock;
 namespace Castle.Windsor.MicroKernel.Lifestyle.Pool;
 
 [Serializable]
-public class DefaultPool(int initialSize, int maxsize, IComponentActivator componentActivator)
+public class DefaultPool(int initialSize, int maxsize, IComponentActivator? componentActivator)
     : IPool
 {
     private readonly Stack<Burden> _available = new(initialSize);
-    private readonly IComponentActivator _componentActivator = componentActivator;
+    private readonly IComponentActivator? _componentActivator = componentActivator;
     private readonly int _initialSize = initialSize;
     private readonly Dictionary<object, Burden> _inUse = new();
     private readonly int _maxsize = maxsize;
@@ -49,7 +50,7 @@ public class DefaultPool(int initialSize, int maxsize, IComponentActivator compo
     {
         using (_rwlock.ForWriting())
         {
-            Burden burden;
+            Burden? burden;
 
             if (!_initialized)
             {
@@ -77,6 +78,7 @@ public class DefaultPool(int initialSize, int maxsize, IComponentActivator compo
 
         // Pool is full or has been disposed.
 
+        Debug.Assert(_componentActivator != null, nameof(_componentActivator) + " != null");
         _componentActivator.Destroy(instance);
         return true;
     }

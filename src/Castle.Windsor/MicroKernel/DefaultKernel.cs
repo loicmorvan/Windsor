@@ -459,7 +459,7 @@ public sealed partial class DefaultKernel :
     ///     component instance.
     /// </summary>
     /// <param name="instance"> </param>
-    public void ReleaseComponent(object instance)
+    public void ReleaseComponent(object? instance)
     {
         if (ReleasePolicy.HasTrack(instance))
         {

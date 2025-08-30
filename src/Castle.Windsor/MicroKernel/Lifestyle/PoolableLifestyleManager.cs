@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Lifestyle.Pool;
@@ -28,7 +29,7 @@ public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLi
     private readonly ThreadSafeInit _init = new();
     private readonly int _initialSize = initialSize;
     private readonly int _maxSize = maxSize;
-    private IPool _pool;
+    private IPool? _pool;
 
     protected IPool Pool
     {
@@ -75,6 +76,7 @@ public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLi
 
     protected IPool CreatePool(int initialSize, int maxSize)
     {
+        Debug.Assert(Kernel != null, nameof(Kernel) + " != null");
         if (!Kernel.HasComponent(typeof(IPoolFactory)))
         {
             lock (PoolFactoryLock)

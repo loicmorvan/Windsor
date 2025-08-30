@@ -22,7 +22,7 @@ public class DataRepository
 
     public dynamic this[string key] => _countersByKeys.TryGetValue(key, out var value) ? value : 0;
 
-    public void RegisterCallerMemberName([CallerMemberName] string key = null)
+    public void RegisterCallerMemberName([CallerMemberName] string? key = null)
     {
         if (key == null)
         {

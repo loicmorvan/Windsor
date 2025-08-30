@@ -53,7 +53,7 @@ public interface IConfigurationStore : ISubSystem
     /// </summary>
     /// <param name="key">item key</param>
     /// <returns></returns>
-    IConfiguration GetComponentConfiguration(string key);
+    IConfiguration? GetComponentConfiguration(string key);
 
     /// <summary>Returns all configuration nodes for components</summary>
     /// <returns></returns>

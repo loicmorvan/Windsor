@@ -20,7 +20,7 @@ namespace Castle.Windsor.MicroKernel.ComponentActivator;
 [Serializable]
 public class ComponentActivatorException : ComponentResolutionException
 {
-    public ComponentActivatorException(string message, ComponentModel componentComponentModel) : base(message)
+    public ComponentActivatorException(string message, ComponentModel? componentComponentModel) : base(message)
     {
         ComponentModel = componentComponentModel;
     }
@@ -31,5 +31,5 @@ public class ComponentActivatorException : ComponentResolutionException
         ComponentModel = componentModel;
     }
 
-    public ComponentModel ComponentModel { get; private set; }
+    public ComponentModel? ComponentModel { get; private set; }
 }

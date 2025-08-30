@@ -120,7 +120,7 @@ public sealed class ParentHandlerWrapper : IHandler, IDisposable
         return canResolve;
     }
 
-    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    public object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
         ComponentModel model, DependencyModel dependency)
     {
         var value = _childResolver.Resolve(context, null, model, dependency) ??

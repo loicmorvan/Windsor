@@ -125,7 +125,7 @@ public sealed partial class DefaultKernel
     /// <param name="arguments"></param>
     /// <param name="policy"></param>
     /// <returns></returns>
-    object IKernelInternal.Resolve(string key, Type service, Arguments arguments, IReleasePolicy policy)
+    object IKernelInternal.Resolve(string key, Type service, Arguments? arguments, IReleasePolicy policy)
     {
         var handler = (this as IKernelInternal).LoadHandlerByName(key, service, arguments);
         if (handler != null)
@@ -146,7 +146,7 @@ public sealed partial class DefaultKernel
             : ResolveComponent(handler, service, arguments, policy, ignoreParentContext);
     }
 
-    Array IKernelInternal.ResolveAll(Type service, Arguments arguments, IReleasePolicy policy)
+    Array IKernelInternal.ResolveAll(Type service, Arguments? arguments, IReleasePolicy policy)
     {
         var resolved = new List<object>();
         foreach (var handler in GetHandlers(service))

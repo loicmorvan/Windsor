@@ -60,7 +60,7 @@ internal class PartialConfigurationStore : IConfigurationStore, IDisposable
         return _partial.GetChildContainerConfiguration(key);
     }
 
-    public IConfiguration GetComponentConfiguration(string key)
+    public IConfiguration? GetComponentConfiguration(string key)
     {
         return _partial.GetComponentConfiguration(key);
     }

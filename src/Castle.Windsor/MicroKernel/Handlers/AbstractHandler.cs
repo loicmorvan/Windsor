@@ -161,7 +161,7 @@ public abstract class AbstractHandler :
         return HasCustomParameter(dependency.DependencyKey) || HasCustomParameter(dependency.TargetItemType);
     }
 
-    public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    public virtual object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
         ComponentModel model,
         DependencyModel dependency)
     {

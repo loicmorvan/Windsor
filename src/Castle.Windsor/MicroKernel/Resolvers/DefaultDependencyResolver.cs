@@ -122,7 +122,7 @@ public class DefaultDependencyResolver : IDependencyResolver
     /// <param name="model">Model of the component that is requesting the dependency</param>
     /// <param name="dependency">The dependency model</param>
     /// <returns>The dependency resolved value or null</returns>
-    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+    public object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
         if (!TryResolveCore(context, contextHandlerResolver, model, dependency, out var value))

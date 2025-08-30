@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Core.Configuration;
 using Castle.Windsor.Core;
 
@@ -43,6 +44,7 @@ public abstract class AbstractPropertyDescriptor : IComponentModelDescriptor
 
     private static IConfiguration EnsureParametersConfiguration(ComponentModel model)
     {
+        Debug.Assert(model.Configuration != null);
         var parameters = model.Configuration.Children["parameters"];
         if (parameters != null)
         {

@@ -17,8 +17,8 @@ namespace Castle.Windsor.MicroKernel.Lifestyle.Pool;
 [Serializable]
 public class DefaultPoolFactory : IPoolFactory
 {
-    public IPool Create(int initialsize, int maxSize, IComponentActivator activator)
+    public IPool Create(int initialSize, int maxSize, IComponentActivator? activator)
     {
-        return new DefaultPool(initialsize, maxSize, activator);
+        return new DefaultPool(initialSize, maxSize, activator);
     }
 }

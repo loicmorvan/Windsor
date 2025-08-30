@@ -36,16 +36,18 @@ public class ConfigurationDescriptor : IComponentModelDescriptor
 
     public void BuildComponentModel(IKernel kernel, ComponentModel model)
     {
+        var modelConfiguration = model.Configuration;
+        Debug.Assert(modelConfiguration != null, nameof(modelConfiguration) + " != null");
         if (_configuration != null)
         {
-            model.Configuration.Children.Add(_configuration);
+            modelConfiguration.Children.Add(_configuration);
         }
         else
         {
             Debug.Assert(_configNodes != null, nameof(_configNodes) + " != null");
             foreach (var configNode in _configNodes)
             {
-                configNode.ApplyTo(model.Configuration);
+                configNode.ApplyTo(modelConfiguration);
             }
         }
     }

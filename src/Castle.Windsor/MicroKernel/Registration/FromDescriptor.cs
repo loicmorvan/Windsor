@@ -17,7 +17,7 @@ using JetBrains.Annotations;
 namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Describes the source of types to register.</summary>
-public abstract class FromDescriptor(Predicate<Type> additionalFilters) : IRegistration
+public abstract class FromDescriptor(Predicate<Type>? additionalFilters) : IRegistration
 {
     private readonly List<BasedOnDescriptor> _criterias = [];
     private bool _allowMultipleMatches;

@@ -94,7 +94,7 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
     /// </summary>
     /// <param name="key">item key</param>
     /// <returns></returns>
-    public IConfiguration GetComponentConfiguration(string key)
+    public IConfiguration? GetComponentConfiguration(string key)
     {
         lock (_syncLock)
         {

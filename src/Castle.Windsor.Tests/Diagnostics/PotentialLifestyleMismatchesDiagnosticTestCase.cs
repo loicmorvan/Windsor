@@ -28,6 +28,7 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : DiagnosticsContain
             Component.For<A>().LifeStyle.Transient);
 
         var mismatches = PotentialLifestyleMismatchesDiagnostic.Inspect();
+        Assert.NotNull(mismatches);
         Assert.Single(mismatches);
     }
 
@@ -39,6 +40,7 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : DiagnosticsContain
             Component.For<A>().LifeStyle.Transient);
 
         var items = PotentialLifestyleMismatchesDiagnostic.Inspect();
+        Assert.NotNull(items);
         Assert.Equal(3, items.Length);
         var cbaMismatches = items.Where(i => i.First().ComponentModel.Services.Single() == typeof(Cba)).ToArray();
         Assert.Equal(2, cbaMismatches.Length);
@@ -52,6 +54,7 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : DiagnosticsContain
             Component.For<A>().LifeStyle.Transient);
 
         var mismatches = PotentialLifestyleMismatchesDiagnostic.Inspect();
+        Assert.NotNull(mismatches);
         Assert.Equal(2, mismatches.Length);
     }
 
@@ -63,6 +66,7 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : DiagnosticsContain
             Component.For<A>().LifeStyle.Transient);
 
         var mismatches = PotentialLifestyleMismatchesDiagnostic.Inspect();
+        Assert.NotNull(mismatches);
         Assert.Single(mismatches);
     }
 
@@ -74,6 +78,7 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : DiagnosticsContain
             Component.For<A>().LifeStyle.Transient);
 
         var items = PotentialLifestyleMismatchesDiagnostic.Inspect();
+        Assert.NotNull(items);
         Assert.Equal(2, items.Length);
         var cbaMismatches = items.Where(i => i.First().ComponentModel.Services.Single() == typeof(Cba)).ToArray();
         Assert.Equal(2, cbaMismatches.Length);
@@ -86,6 +91,7 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : DiagnosticsContain
             Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>());
 
         var mismatches = PotentialLifestyleMismatchesDiagnostic.Inspect();
+        Assert.NotNull(mismatches);
         Assert.Empty(mismatches);
     }
 
@@ -96,6 +102,7 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : DiagnosticsContain
             Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
             Component.For<UsesIEmptyService>());
         var items = PotentialLifestyleMismatchesDiagnostic.Inspect();
+        Assert.NotNull(items);
         Assert.Empty(items);
     }
 
@@ -108,6 +115,7 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : DiagnosticsContain
             Component.For<ICameraService>().ImplementedBy<CameraService>()
                 .Named("ok to resolve - has no interceptors"));
         var items = PotentialLifestyleMismatchesDiagnostic.Inspect();
+        Assert.NotNull(items);
         Assert.Empty(items);
     }
 }

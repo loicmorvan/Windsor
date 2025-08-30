@@ -19,7 +19,7 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 /// <summary>Implements a conversion logic to a type of a set of types.</summary>
 public interface ITypeConverter
 {
-    ITypeConverterContext Context { get; set; }
+    ITypeConverterContext? Context { get; set; }
 
     /// <summary>Returns true if this instance of <c>ITypeConverter</c> is able to handle the specified type.</summary>
     /// <param name="type"></param>

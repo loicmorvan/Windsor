@@ -39,7 +39,7 @@ public class GenericListConverter : AbstractTypeConverter
                || genericDef == typeof(IEnumerable<>);
     }
 
-    public override object PerformConversion(string value, Type targetType)
+    public override object PerformConversion(string? value, Type targetType)
     {
         if (!ReferenceExpressionUtil.IsReference(value))
         {

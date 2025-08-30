@@ -69,7 +69,7 @@ public class FactoryMethodActivator<T> : DefaultComponentActivator, IDependencyA
         base.ApplyDecommissionConcerns(instance);
     }
 
-    protected override object Instantiate(CreationContext context)
+    protected override object? Instantiate(CreationContext context)
     {
         object instance = _creator(Kernel, Model, context);
         if (ShouldCreateProxy(instance))

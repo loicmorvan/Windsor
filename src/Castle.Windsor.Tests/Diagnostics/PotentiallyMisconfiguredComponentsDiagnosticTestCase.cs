@@ -26,6 +26,7 @@ public class PotentiallyMisconfiguredComponentsDiagnosticTestCase : DiagnosticsC
 
         var handlers = PotentiallyMisconfiguredComponentsDiagnostic.Inspect();
 
+        Assert.NotNull(handlers);
         Assert.Empty(handlers);
     }
 
@@ -36,6 +37,7 @@ public class PotentiallyMisconfiguredComponentsDiagnosticTestCase : DiagnosticsC
 
         var handlers = PotentiallyMisconfiguredComponentsDiagnostic.Inspect();
 
+        Assert.NotNull(handlers);
         Assert.Equal(2, handlers.Length);
     }
 }

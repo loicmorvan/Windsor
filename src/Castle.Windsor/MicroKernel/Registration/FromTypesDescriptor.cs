@@ -19,7 +19,7 @@ public class FromTypesDescriptor : FromDescriptor
 {
     private readonly IEnumerable<Type> _types;
 
-    internal FromTypesDescriptor(IEnumerable<Type> types, Predicate<Type> additionalFilters) : base(additionalFilters)
+    internal FromTypesDescriptor(IEnumerable<Type> types, Predicate<Type>? additionalFilters) : base(additionalFilters)
     {
         _types = types;
     }

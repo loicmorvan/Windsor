@@ -21,7 +21,8 @@ namespace Castle.Windsor.Tests.Facilities;
 
 public class FacilityTestCase
 {
-    private static readonly string FacilityKey = typeof(HiperFacility).FullName;
+    private static readonly string
+        FacilityKey = typeof(HiperFacility).FullName ?? throw new InvalidOperationException();
     private readonly HiperFacility _facility;
     private readonly DefaultKernel _kernel = new();
 
@@ -78,7 +79,7 @@ public class FacilityTestCase
     [Fact]
     public void OnCreationCallback()
     {
-        StartableFacility facility = null;
+        StartableFacility? facility = null;
 
         _kernel.AddFacility<StartableFacility>(f => facility = f);
 

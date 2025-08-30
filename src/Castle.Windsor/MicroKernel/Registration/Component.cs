@@ -56,7 +56,7 @@ public static class Component
     /// <returns>The component registration.</returns>
     public static ComponentRegistration For(IEnumerable<Type> serviceTypes)
     {
-        ComponentRegistration registration = null;
+        ComponentRegistration? registration = null;
 
         foreach (var serviceType in serviceTypes)
         {
@@ -152,7 +152,7 @@ public static class Component
     ///     container.Register( Classes.FromThisAssembly() .Where(Component.HasAttribute&lt;UserAttribute&gt;(u =>
     ///     u.SomeFlag)) );
     /// </example>
-    public static Predicate<Type> HasAttribute<TAttribute>(Predicate<TAttribute> filter) where TAttribute : Attribute
+    public static Predicate<Type> HasAttribute<TAttribute>(Predicate<TAttribute?> filter) where TAttribute : Attribute
     {
         return type => HasAttribute<TAttribute>(type) &&
                        filter(type.GetTypeInfo().GetCustomAttribute<TAttribute>());
@@ -173,7 +173,7 @@ public static class Component
     /// <param name="namespace">The namespace.</param>
     /// <param name="includeSubnamespaces">If set to true, will also include types from subnamespaces.</param>
     /// <returns>true if the component type is in the namespace.</returns>
-    public static Predicate<Type> IsInNamespace(string @namespace, bool includeSubnamespaces = false)
+    public static Predicate<Type> IsInNamespace(string? @namespace, bool includeSubnamespaces = false)
     {
         if (includeSubnamespaces)
         {

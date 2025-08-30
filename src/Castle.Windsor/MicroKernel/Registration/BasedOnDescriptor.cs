@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
@@ -29,7 +31,7 @@ public sealed class BasedOnDescriptor : IRegistration
     private Predicate<Type>? _unlessFilter;
 
     /// <summary>Initializes a new instance of the BasedOnDescriptor.</summary>
-    internal BasedOnDescriptor(IEnumerable<Type> basedOn, FromDescriptor from, Predicate<Type> additionalFilters)
+    internal BasedOnDescriptor(IEnumerable<Type> basedOn, FromDescriptor from, Predicate<Type>? additionalFilters)
     {
         _potentialBases = basedOn.ToList();
         _from = from;
@@ -140,7 +142,7 @@ public sealed class BasedOnDescriptor : IRegistration
     /// <summary>Assigns a conditional predication which must be satisfied.</summary>
     /// <param name="ifFilter"> The predicate to satisfy. </param>
     /// <returns> </returns>
-    public BasedOnDescriptor If(Predicate<Type> ifFilter)
+    public BasedOnDescriptor If(Predicate<Type>? ifFilter)
     {
         _ifFilter += ifFilter;
         return this;
@@ -335,7 +337,7 @@ public sealed class BasedOnDescriptor : IRegistration
         return WithService.Select(types);
     }
 
-    private bool Accepts(Type type, out Type[] baseTypes)
+    private bool Accepts(Type type, [NotNullWhen(true)] out Type[]? baseTypes)
     {
         return IsBasedOn(type, out baseTypes)
                && ExecuteIfCondition(type)
@@ -353,7 +355,8 @@ public sealed class BasedOnDescriptor : IRegistration
                _unlessFilter.GetInvocationList().Cast<Predicate<Type>>().Any(filter => filter(type));
     }
 
-    private bool IsBasedOn(Type type, out Type[] baseTypes)
+
+    private bool IsBasedOn(Type type, [NotNullWhen(true)] out Type[]? baseTypes)
     {
         var actuallyBasedOn = new List<Type>();
         foreach (var potentialBase in _potentialBases)
@@ -372,10 +375,13 @@ public sealed class BasedOnDescriptor : IRegistration
                     }
                 }
 
-                if (IsBasedOnGenericClass(type, potentialBase, out baseTypes))
+                if (!IsBasedOnGenericClass(type, potentialBase, out baseTypes))
                 {
-                    actuallyBasedOn.AddRange(baseTypes);
+                    continue;
                 }
+
+                Debug.Assert(baseTypes != null, nameof(baseTypes) + " != null");
+                actuallyBasedOn.AddRange(baseTypes);
             }
         }
 

@@ -336,7 +336,7 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
             return null;
         }
 
-        public void ReleaseComponent(object instance)
+        public void ReleaseComponent(object? instance)
         {
             throw new NotImplementedException();
         }
@@ -423,7 +423,7 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 
     private sealed class EmptyPoolFactory : IPoolFactory
     {
-        public IPool Create(int initialsize, int maxSize, IComponentActivator activator)
+        public IPool Create(int initialSize, int maxSize, IComponentActivator? activator)
         {
             return new EmptyPool();
         }

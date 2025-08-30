@@ -31,7 +31,7 @@ public class AttributeAwareConverter : AbstractTypeConverter
         return converter != null && converter.CanHandleType(type);
     }
 
-    public override object PerformConversion(string value, Type targetType)
+    public override object PerformConversion(string? value, Type targetType)
     {
         var converter = GetConverterInstance(targetType);
         return converter.PerformConversion(value, targetType);
@@ -51,7 +51,7 @@ public class AttributeAwareConverter : AbstractTypeConverter
                throw new InvalidOperationException("Type " + type.Name + " does not have a Convertible attribute.");
     }
 
-    private ITypeConverter TryGetConverterInstance(Type type)
+    private ITypeConverter? TryGetConverterInstance(Type type)
     {
         var attr = type.GetTypeInfo().GetCustomAttribute<ConvertibleAttribute>();
 

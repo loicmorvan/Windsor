@@ -37,6 +37,8 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : DiagnosticsConta
             Component.For<A>());
 
         var serviceLocators = UsingContainerAsServiceLocatorDiagnostic.Inspect();
+
+        Assert.NotNull(serviceLocators);
         Assert.Single(serviceLocators);
     }
 
@@ -54,6 +56,8 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : DiagnosticsConta
             Component.For<A>());
 
         var serviceLocators = UsingContainerAsServiceLocatorDiagnostic.Inspect();
+
+        Assert.NotNull(serviceLocators);
         Assert.Single(serviceLocators);
     }
 
@@ -67,6 +71,8 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : DiagnosticsConta
             Component.For<A>().Interceptors("b"));
 
         var serviceLocators = UsingContainerAsServiceLocatorDiagnostic.Inspect();
+
+        Assert.NotNull(serviceLocators);
         Assert.Empty(serviceLocators);
     }
 
@@ -81,6 +87,8 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : DiagnosticsConta
         Container.Resolve<Lazy<B>>(); // to trigger lazy registration of lazy
 
         var serviceLocators = UsingContainerAsServiceLocatorDiagnostic.Inspect();
+
+        Assert.NotNull(serviceLocators);
         Assert.Empty(serviceLocators);
     }
 
@@ -91,6 +99,8 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : DiagnosticsConta
             Component.For<A>());
 
         var serviceLocators = UsingContainerAsServiceLocatorDiagnostic.Inspect();
+
+        Assert.NotNull(serviceLocators);
         Assert.Empty(serviceLocators);
     }
 }

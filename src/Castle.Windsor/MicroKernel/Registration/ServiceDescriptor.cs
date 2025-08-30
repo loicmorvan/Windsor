@@ -20,10 +20,10 @@ namespace Castle.Windsor.MicroKernel.Registration;
 /// <summary>Describes how to select a types service.</summary>
 public class ServiceDescriptor
 {
-    public delegate IEnumerable<Type> ServiceSelector(Type type, Type[] baseTypes);
+    public delegate IEnumerable<Type>? ServiceSelector(Type type, Type[] baseTypes);
 
     private readonly BasedOnDescriptor _basedOnDescriptor;
-    private ServiceSelector _serviceSelector;
+    private ServiceSelector? _serviceSelector;
 
     internal ServiceDescriptor(BasedOnDescriptor basedOnDescriptor)
     {
@@ -83,7 +83,7 @@ public class ServiceDescriptor
     /// </summary>
     /// <param name="implements"></param>
     /// <returns></returns>
-    public BasedOnDescriptor FromInterface(Type implements = null)
+    public BasedOnDescriptor FromInterface(Type? implements = null)
     {
         return Select(delegate(Type type, Type[] baseTypes)
         {
@@ -123,7 +123,7 @@ public class ServiceDescriptor
     /// <summary>Assigns a custom service selection strategy.</summary>
     /// <param name="selector"></param>
     /// <returns></returns>
-    public BasedOnDescriptor Select(ServiceSelector selector)
+    public BasedOnDescriptor Select(ServiceSelector? selector)
     {
         _serviceSelector += selector;
         return _basedOnDescriptor;

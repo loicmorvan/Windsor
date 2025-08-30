@@ -32,7 +32,7 @@ namespace Castle.Windsor.MicroKernel.Context;
 public class CreationContext :
     ISubDependencyResolver
 {
-    private readonly ITypeConverter _converter;
+    private readonly ITypeConverter? _converter;
 
     /// <summary>
     ///     The list of handlers that are used to resolve the component. We track that in order to try to avoid attempts
@@ -41,9 +41,9 @@ public class CreationContext :
     private readonly Stack<IHandler> _handlerStack;
 
     private readonly Stack<ResolutionContext> _resolutionStack;
-    private Arguments _additionalArguments;
-    private Arguments _extendedProperties;
-    private Type[] _genericArguments;
+    private Arguments? _additionalArguments;
+    private Arguments? _extendedProperties;
+    private Type[]? _genericArguments;
     private bool _isResolving = true;
 
     /// <summary>Initializes a new instance of the <see cref="CreationContext" /> class.</summary>
@@ -63,10 +63,13 @@ public class CreationContext :
             _extendedProperties = new Arguments(parentContext._extendedProperties);
         }
 
-        if (propagateInlineDependencies && parentContext.HasAdditionalArguments)
+        if (!propagateInlineDependencies || !parentContext.HasAdditionalArguments)
         {
-            _additionalArguments = new Arguments(parentContext._additionalArguments);
+            return;
         }
+
+        Debug.Assert(parentContext._additionalArguments != null);
+        _additionalArguments = new Arguments(parentContext._additionalArguments);
     }
 
     /// <summary>Initializes a new instance of the <see cref="CreationContext" /> class.</summary>
@@ -76,9 +79,9 @@ public class CreationContext :
     /// <param name="additionalArguments"> The additional arguments. </param>
     /// <param name="converter"> The conversion manager. </param>
     /// <param name="parent"> Parent context </param>
-    public CreationContext(IHandler handler, IReleasePolicy releasePolicy, Type requestedType,
-        Arguments additionalArguments, ITypeConverter converter,
-        CreationContext parent)
+    public CreationContext(IHandler? handler, IReleasePolicy releasePolicy, Type requestedType,
+        Arguments? additionalArguments, ITypeConverter? converter,
+        CreationContext? parent)
     {
         RequestedType = requestedType;
         Handler = handler;
@@ -109,9 +112,16 @@ public class CreationContext :
 
     public Arguments AdditionalArguments => _additionalArguments ??= new Arguments();
 
-    public Type[] GenericArguments => _genericArguments ??= ExtractGenericArguments(RequestedType);
+    public Type[] GenericArguments
+    {
+        get
+        {
+            Debug.Assert(RequestedType != null, nameof(RequestedType) + " != null");
+            return _genericArguments ??= ExtractGenericArguments(RequestedType);
+        }
+    }
 
-    public IHandler Handler { get; }
+    public IHandler? Handler { get; }
 
     public bool HasAdditionalArguments => _additionalArguments != null && _additionalArguments.Count != 0;
 
@@ -119,7 +129,7 @@ public class CreationContext :
 
     public IReleasePolicy ReleasePolicy { get; set; }
 
-    public Type RequestedType { get; }
+    public Type? RequestedType { get; }
 
     public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
         ComponentModel model,
@@ -128,17 +138,19 @@ public class CreationContext :
         return HasAdditionalArguments && (CanResolveByKey(dependency) || CanResolveByType(dependency));
     }
 
-    public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    public virtual object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
         ComponentModel model,
         DependencyModel dependency)
     {
         Debug.Assert(CanResolve(context, contextHandlerResolver, model, dependency));
-        object result = null;
+        object? result = null;
+        Debug.Assert(_additionalArguments != null, nameof(_additionalArguments) + " != null");
         if (dependency.DependencyKey != null)
         {
             result = Resolve(dependency, _additionalArguments[dependency.DependencyKey]);
         }
 
+        Debug.Assert(dependency.TargetType != null);
         return result ?? Resolve(dependency, _additionalArguments[dependency.TargetType]);
     }
 
@@ -213,7 +225,7 @@ public class CreationContext :
         return resolutionContext;
     }
 
-    public object GetContextualProperty(object key)
+    public object? GetContextualProperty(object key)
     {
         return _extendedProperties?[key];
     }
@@ -230,7 +242,7 @@ public class CreationContext :
         return _handlerStack.Contains(handler);
     }
 
-    public ResolutionContext SelectScopeRoot(Func<IHandler[], IHandler> scopeRootSelector)
+    public ResolutionContext? SelectScopeRoot(Func<IHandler[], IHandler?> scopeRootSelector)
     {
         var scopes = _resolutionStack.Select(c => c.Handler).Reverse().ToArray();
         var selected = scopeRootSelector(scopes);
@@ -243,7 +255,7 @@ public class CreationContext :
         return resolutionContext;
     }
 
-    public void SetContextualProperty(object key, object value)
+    public void SetContextualProperty(object key, object? value)
     {
         ArgumentNullException.ThrowIfNull(key);
         _extendedProperties ??= new Arguments();
@@ -255,7 +267,7 @@ public class CreationContext :
         return _converter != null && _converter.CanHandleType(type);
     }
 
-    private bool CanResolve(DependencyModel dependency, object inlineArgument)
+    private bool CanResolve(DependencyModel dependency, object? inlineArgument)
     {
         var type = dependency.TargetItemType;
         if (type == null)
@@ -337,6 +349,7 @@ public class CreationContext :
             return inlineArgument;
         }
 
+        Debug.Assert(_converter != null, nameof(_converter) + " != null");
         return CanConvertParameter(targetType)
             ? _converter.PerformConversion(inlineArgument.ToString(), targetType)
             : null;

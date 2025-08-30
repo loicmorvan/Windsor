@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
 /// <remarks>This class is not thread safe like CallContextLifetimeScope.</remarks>
-public class DefaultLifetimeScope(IScopeCache scopeCache = null, Action<Burden> onAfterCreated = null)
+public class DefaultLifetimeScope(IScopeCache? scopeCache = null, Action<Burden>? onAfterCreated = null)
     : ILifetimeScope
 {
     private static readonly Action<Burden> EmptyOnAfterCreated = delegate { };
@@ -35,8 +36,9 @@ public class DefaultLifetimeScope(IScopeCache scopeCache = null, Action<Burden> 
         }
     }
 
-    public Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance)
+    public Burden GetCachedInstance(ComponentModel? model, ScopedInstanceActivationCallback createInstance)
     {
+        Debug.Assert(model != null, nameof(model) + " != null");
         var burden = _scopeCache[model];
         if (burden == null)
         {

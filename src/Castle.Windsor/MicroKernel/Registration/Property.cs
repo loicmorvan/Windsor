@@ -15,13 +15,13 @@
 namespace Castle.Windsor.MicroKernel.Registration;
 
 /// <summary>Represents a key/value pair.</summary>
-public class Property(object key, object value)
+public class Property(object key, object? value)
 {
     /// <summary>Gets the property key.</summary>
     public object Key { get; } = key;
 
     /// <summary>Gets the property value.</summary>
-    public object Value { get; } = value;
+    public object? Value { get; } = value;
 
     /// <summary>Create a <see cref="PropertyKey" /> with key.</summary>
     /// <param name="key">The property key.</param>
@@ -47,7 +47,7 @@ public class Property(object key, object value)
         return new PropertyKey(typeof(TKey));
     }
 
-    public static implicit operator Dependency(Property item)
+    public static implicit operator Dependency?(Property? item)
     {
         return item == null ? null : new Dependency(item);
     }

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Core.Configuration;
 using Castle.Windsor.MicroKernel.Context;
 using Castle.Windsor.MicroKernel.Util;
@@ -28,6 +29,7 @@ public class ComponentConverter : AbstractTypeConverter, IKernelDependentConvert
 
     public override bool CanHandleType(Type type)
     {
+        Debug.Assert(Context != null, nameof(Context) + " != null");
         return Context.Kernel != null && Context.Kernel.HasComponent(type);
     }
 

@@ -65,7 +65,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
         ApplyDecommissionConcerns(instance);
     }
 
-    protected virtual object Instantiate(CreationContext context)
+    protected virtual object? Instantiate(CreationContext context)
     {
         var candidate = SelectEligibleConstructor(context);
 
@@ -75,20 +75,21 @@ public class DefaultComponentActivator : AbstractComponentActivator
     }
 
     [PublicAPI]
-    protected virtual object CreateInstance(CreationContext context, object[] arguments)
+    protected virtual object? CreateInstance(CreationContext context, object[] arguments)
     {
-        object instance = null;
+        object? instance = null;
 
         var implType = Model.Implementation;
 
         var createProxy = Kernel.ProxyFactory.ShouldCreateProxy(Model);
 
-        if (!createProxy && Model.Implementation.GetTypeInfo().IsAbstract)
+        Debug.Assert(implType != null, nameof(implType) + " != null");
+        if (!createProxy && implType.GetTypeInfo().IsAbstract)
         {
             throw new ComponentRegistrationException(
                 string.Format(
                     "Type {0} is abstract.{2} As such, it is not possible to instantiate it as implementation of service '{1}'. Did you forget to proxy it?",
-                    Model.Implementation.FullName,
+                    implType.FullName,
                     Model.Name,
                     Environment.NewLine));
         }

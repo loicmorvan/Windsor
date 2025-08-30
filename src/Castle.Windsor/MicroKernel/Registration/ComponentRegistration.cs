@@ -49,7 +49,7 @@ public class ComponentRegistration<TService> : IRegistration
     private readonly HashSet<Type> _potentialServicesLookup = [];
 
     private bool _ifComponentRegisteredIgnore;
-    private ComponentName _name;
+    private ComponentName? _name;
     private bool _registered;
     private bool _registerNewServicesOnly;
 
@@ -70,7 +70,7 @@ public class ComponentRegistration<TService> : IRegistration
     ///     To set the implementation, use <see cref="ImplementedBy(System.Type)" /> .
     /// </summary>
     /// <value> The implementation of the service. </value>
-    public Type Implementation { get; private set; }
+    public Type? Implementation { get; private set; }
 
     /// <summary>Set the lifestyle of this component. For example singleton and transient (also known as 'factory').</summary>
     /// <value> The with lifestyle. </value>
@@ -86,7 +86,7 @@ public class ComponentRegistration<TService> : IRegistration
     ///     register the component.
     /// </summary>
     /// <value> The name. </value>
-    public string Name => _name?.Name;
+    public string? Name => _name?.Name;
 
     /// <summary>Set proxy for this component.</summary>
     /// <value> The proxy. </value>
@@ -135,7 +135,7 @@ public class ComponentRegistration<TService> : IRegistration
     /// <param name="key"> The key. </param>
     /// <param name="value"> The value. </param>
     /// <returns> </returns>
-    public ComponentRegistration<TService> AddAttributeDescriptor(string key, string value)
+    public ComponentRegistration<TService> AddAttributeDescriptor(string key, string? value)
     {
         AddDescriptor(new AttributeDescriptor<TService>(key, value));
         return this;

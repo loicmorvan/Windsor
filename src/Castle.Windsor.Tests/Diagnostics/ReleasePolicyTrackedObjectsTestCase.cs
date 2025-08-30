@@ -33,7 +33,10 @@ public class ReleasePolicyTrackedObjectsTestCase : AbstractContainerTestCase
     {
         var subSystem = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IContainerDebuggerExtensionHost;
         Debug.Assert(subSystem != null);
-        return subSystem.SelectMany(e => e.Attach()).SingleOrDefault(i => i.Name == ReleasePolicyTrackedObjects.Name);
+        var debuggerViewItem = subSystem.SelectMany(e => e.Attach())
+            .SingleOrDefault(i => i.Name == ReleasePolicyTrackedObjects.Name);
+        Debug.Assert(debuggerViewItem != null, nameof(debuggerViewItem) + " != null");
+        return debuggerViewItem;
     }
 
     private void Register()

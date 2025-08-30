@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.DynamicProxy;
 using Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 using JetBrains.Annotations;
@@ -45,6 +46,7 @@ public class ProxyGroup<TS>(ComponentRegistration<TS> registration) : Registrati
         var hook = new ItemRegistration<IProxyGenerationHook>();
         hookRegistration.Invoke(hook);
 
+        Debug.Assert(hook.Item != null);
         AddDescriptor(new ProxyHookDescriptor(hook.Item));
         return Registration;
     }

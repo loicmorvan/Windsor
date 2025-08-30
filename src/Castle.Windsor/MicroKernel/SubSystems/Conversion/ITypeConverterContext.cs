@@ -22,9 +22,9 @@ public interface ITypeConverterContext
 {
     ITypeConverter Composition { get; }
 
-    CreationContext CurrentCreationContext { get; }
+    CreationContext? CurrentCreationContext { get; }
 
-    [PublicAPI] ComponentModel CurrentModel { get; }
+    [PublicAPI] ComponentModel? CurrentModel { get; }
 
     IKernelInternal Kernel { get; }
 

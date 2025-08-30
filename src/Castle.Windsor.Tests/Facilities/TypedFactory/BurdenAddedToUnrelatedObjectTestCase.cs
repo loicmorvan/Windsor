@@ -39,6 +39,8 @@ public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTest
         var prematureDisposalHandler = new EventHandler((_, _) =>
             Assert.Fail("Long-lived service’s connection was disposed when short-lived view model was released."));
 
+        Assert.NotNull(longLivedService.SqlConnection);
+        
         longLivedService.SqlConnection.Disposed += prematureDisposalHandler;
         Container.Release(shortLivedViewModel);
         longLivedService.SqlConnection.Disposed -= prematureDisposalHandler;
@@ -53,7 +55,7 @@ public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTest
             Disposed?.Invoke(this, EventArgs.Empty);
         }
 
-        public event EventHandler Disposed;
+        public event EventHandler? Disposed;
     }
 
     public interface IFactory<out T>
@@ -65,7 +67,7 @@ public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTest
     {
         private IFactory<Foo> FooFactory { get; } = fooFactory;
 
-        public Foo SqlConnection { get; private set; }
+        public Foo? SqlConnection { get; private set; }
 
         public void StartSomething()
         {

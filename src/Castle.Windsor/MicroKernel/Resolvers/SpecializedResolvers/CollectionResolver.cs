@@ -47,7 +47,7 @@ public class CollectionResolver(IKernel kernel, bool allowEmptyCollections = fal
                CanSatisfy(itemType);
     }
 
-    public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    public virtual object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
         ComponentModel model,
         DependencyModel dependency)
     {

@@ -25,5 +25,5 @@ public class UsesBarDelegateTwoConstructors
     {
     }
 
-    public Func<Bar> BarFactory { get; private set; }
+    public Func<Bar>? BarFactory { get; private set; }
 }

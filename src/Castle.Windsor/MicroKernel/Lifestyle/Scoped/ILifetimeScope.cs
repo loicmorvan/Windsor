@@ -18,5 +18,5 @@ namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
 public interface ILifetimeScope : IDisposable
 {
-    Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance);
+    Burden GetCachedInstance(ComponentModel? model, ScopedInstanceActivationCallback createInstance);
 }

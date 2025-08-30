@@ -25,7 +25,7 @@ public class ArrayConverter : AbstractTypeConverter
         return type.IsArray;
     }
 
-    public override object PerformConversion(string value, Type targetType)
+    public override object PerformConversion(string? value, Type targetType)
     {
         throw new NotImplementedException();
     }
@@ -41,7 +41,10 @@ public class ArrayConverter : AbstractTypeConverter
 
         var index = 0;
         foreach (var value in configuration.Children.Select(itemConfig =>
-                     Context.Composition.PerformConversion(itemConfig, itemType)))
+                 {
+                     Debug.Assert(Context != null, nameof(Context) + " != null");
+                     return Context.Composition.PerformConversion(itemConfig, itemType);
+                 }))
         {
             array.SetValue(value, index++);
         }

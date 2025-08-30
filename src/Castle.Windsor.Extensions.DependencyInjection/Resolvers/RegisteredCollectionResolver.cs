@@ -35,10 +35,10 @@ public class RegisteredCollectionResolver(IKernel kernel, bool allowEmptyCollect
                base.CanResolve(context, contextHandlerResolver, model, dependency);
     }
 
-    public override object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    public override object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
         ComponentModel model,
         DependencyModel dependency)
     {
-        return (Array)base.Resolve(context, contextHandlerResolver, model, dependency);
+        return (Array?)base.Resolve(context, contextHandlerResolver, model, dependency);
     }
 }

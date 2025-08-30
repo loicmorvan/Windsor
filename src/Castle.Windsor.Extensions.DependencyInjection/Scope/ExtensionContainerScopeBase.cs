@@ -34,12 +34,12 @@ internal abstract class ExtensionContainerScopeBase : ILifetimeScope
         }
     }
 
-    public Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance)
+    public Burden GetCachedInstance(ComponentModel? model, ScopedInstanceActivationCallback createInstance)
     {
         lock (_scopeCache)
         {
             // Add transient's burden to scope so it gets released
-            Debug.Assert(model.Configuration != null);
+            Debug.Assert(model?.Configuration != null);
             if (model.Configuration.Attributes.Get(TransientMarker) == bool.TrueString)
             {
                 var transientBurden = createInstance(_ => { });

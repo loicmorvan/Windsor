@@ -16,5 +16,5 @@ namespace Castle.Windsor.MicroKernel.Lifestyle.Pool;
 
 public interface IPoolFactory
 {
-    IPool Create(int initialsize, int maxSize, IComponentActivator activator);
+    IPool Create(int initialSize, int maxSize, IComponentActivator? activator);
 }

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using System.Reflection;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Context;
@@ -37,7 +38,7 @@ public class CreationContextScopeAccessor(ComponentModel componentModel, Func<IH
                 $"Scope was not available for '{componentModel.Name}'. No component higher up in the resolution stack met the criteria specified for scoping the component. This usually indicates a bug in custom scope root selector or means that the component is being resolved in a unforseen context (a.k.a - it's probably a bug in how the dependencies in the application are wired).");
         }
 
-        var stash = (DefaultLifetimeScope)selected.GetContextualProperty(ScopeStash);
+        var stash = (DefaultLifetimeScope?)selected.GetContextualProperty(ScopeStash);
         if (stash is not null)
         {
             return stash;
@@ -51,6 +52,7 @@ public class CreationContextScopeAccessor(ComponentModel componentModel, Func<IH
                 return;
             }
 
+            Debug.Assert(selected.Burden != null);
             selected.Burden.RequiresDecommission = true;
             selected.Burden.GraphReleased += _ => newStash.Dispose();
         };
@@ -59,13 +61,13 @@ public class CreationContextScopeAccessor(ComponentModel componentModel, Func<IH
         return newStash;
     }
 
-    public static IHandler DefaultScopeRootSelector<TBaseForRoot>(IHandler[] resolutionStack)
+    public static IHandler? DefaultScopeRootSelector<TBaseForRoot>(IHandler[] resolutionStack)
     {
         return resolutionStack.FirstOrDefault(h =>
             typeof(TBaseForRoot).GetTypeInfo().IsAssignableFrom(h.ComponentModel.Implementation));
     }
 
-    public static IHandler NearestScopeRootSelector<TBaseForRoot>(IHandler[] resolutionStack)
+    public static IHandler? NearestScopeRootSelector<TBaseForRoot>(IHandler[] resolutionStack)
     {
         return resolutionStack.LastOrDefault(h =>
             typeof(TBaseForRoot).IsAssignableFrom(h.ComponentModel.Implementation));

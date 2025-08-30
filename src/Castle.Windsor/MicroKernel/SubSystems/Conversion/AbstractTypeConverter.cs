@@ -20,11 +20,11 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 [Serializable]
 public abstract class AbstractTypeConverter : ITypeConverter
 {
-    public ITypeConverterContext Context { get; set; }
+    public ITypeConverterContext? Context { get; set; }
 
     public abstract bool CanHandleType(Type type);
 
-    public abstract object PerformConversion(string value, Type targetType);
+    public abstract object PerformConversion(string? value, Type targetType);
 
     public abstract object PerformConversion(IConfiguration configuration, Type targetType);
 

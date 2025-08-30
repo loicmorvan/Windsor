@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Core.Configuration;
 
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
@@ -20,19 +21,20 @@ public class AttributeDescriptor<TS> : AbstractOverwriteableDescriptor<TS>
     where TS : class
 {
     private readonly string _name;
-    private readonly string _value;
+    private readonly string? _value;
 
     /// <summary>Constructs the <see cref="AttributeDescriptor{S}" /> descriptor with name and value.</summary>
     /// <param name="name">The attribute name.</param>
     /// <param name="value">The attribute value.</param>
-    public AttributeDescriptor(string name, string value)
+    public AttributeDescriptor(string name, string? value)
     {
         _name = name;
         _value = value;
     }
 
-    protected override void ApplyToConfiguration(IConfiguration configuration)
+    protected override void ApplyToConfiguration(IConfiguration? configuration)
     {
+        Debug.Assert(configuration != null, nameof(configuration) + " != null");
         if (configuration.Attributes[_name] == null || IsOverWrite)
         {
             configuration.Attributes[_name] = _value;
