@@ -23,9 +23,8 @@ public class KernelEventsComponentCreatedTestCase : AbstractContainerTestCase
 {
     private readonly List<KeyValuePair<ComponentModel, object>> _list = [];
 
-    protected override void AfterContainerCreated()
+    public KernelEventsComponentCreatedTestCase()
     {
-        _list.Clear();
         Container.Kernel.ComponentCreated += Kernel_ComponentCreated;
     }
 

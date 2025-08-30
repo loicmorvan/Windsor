@@ -12,34 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Diagnostics;
-using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Interceptors;
-using Castle.Windsor.Windsor.Diagnostics;
 
 namespace Castle.Windsor.Tests.Diagnostics;
 
-public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerTestCase
+public class PotentialLifestyleMismatchesDiagnosticTestCase : DiagnosticsContainerTestCase
 {
-    private IPotentialLifestyleMismatchesDiagnostic? _diagnostic;
-
-    protected override void AfterContainerCreated()
-    {
-        var host = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IDiagnosticsHost;
-        Debug.Assert(host != null);
-        _diagnostic = host.GetDiagnostic<IPotentialLifestyleMismatchesDiagnostic>();
-    }
-
     [Fact]
     public void Can_detect_singleton_depending_on_transient()
     {
         Container.Register(Component.For<B>().LifeStyle.Singleton,
             Component.For<A>().LifeStyle.Transient);
 
-        var mismatches = _diagnostic.Inspect();
+        var mismatches = PotentialLifestyleMismatchesDiagnostic.Inspect();
         Assert.Single(mismatches);
     }
 
@@ -50,7 +38,7 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerT
             Component.For<B>().LifeStyle.Singleton,
             Component.For<A>().LifeStyle.Transient);
 
-        var items = _diagnostic.Inspect();
+        var items = PotentialLifestyleMismatchesDiagnostic.Inspect();
         Assert.Equal(3, items.Length);
         var cbaMismatches = items.Where(i => i.First().ComponentModel.Services.Single() == typeof(Cba)).ToArray();
         Assert.Equal(2, cbaMismatches.Length);
@@ -63,7 +51,7 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerT
             Component.For<B>().LifeStyle.Singleton,
             Component.For<A>().LifeStyle.Transient);
 
-        var mismatches = _diagnostic.Inspect();
+        var mismatches = PotentialLifestyleMismatchesDiagnostic.Inspect();
         Assert.Equal(2, mismatches.Length);
     }
 
@@ -74,7 +62,7 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerT
             Component.For<B>().LifeStyle.Custom<CustomLifestyleManager>(),
             Component.For<A>().LifeStyle.Transient);
 
-        var mismatches = _diagnostic.Inspect();
+        var mismatches = PotentialLifestyleMismatchesDiagnostic.Inspect();
         Assert.Single(mismatches);
     }
 
@@ -85,7 +73,7 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerT
             Component.For<B>().LifeStyle.Transient,
             Component.For<A>().LifeStyle.Transient);
 
-        var items = _diagnostic.Inspect();
+        var items = PotentialLifestyleMismatchesDiagnostic.Inspect();
         Assert.Equal(2, items.Length);
         var cbaMismatches = items.Where(i => i.First().ComponentModel.Services.Single() == typeof(Cba)).ToArray();
         Assert.Equal(2, cbaMismatches.Length);
@@ -97,7 +85,7 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerT
         Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
             Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecoratorViaProperty>());
 
-        var mismatches = _diagnostic.Inspect();
+        var mismatches = PotentialLifestyleMismatchesDiagnostic.Inspect();
         Assert.Empty(mismatches);
     }
 
@@ -107,7 +95,7 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerT
         Container.Register(Component.For<IEmptyService>().ImplementedBy<EmptyServiceDecorator>(),
             Component.For<IEmptyService>().ImplementedBy<EmptyServiceA>(),
             Component.For<UsesIEmptyService>());
-        var items = _diagnostic.Inspect();
+        var items = PotentialLifestyleMismatchesDiagnostic.Inspect();
         Assert.Empty(items);
     }
 
@@ -119,7 +107,7 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerT
                 .Interceptors<InterceptorThatCauseStackOverflow>(),
             Component.For<ICameraService>().ImplementedBy<CameraService>()
                 .Named("ok to resolve - has no interceptors"));
-        var items = _diagnostic.Inspect();
+        var items = PotentialLifestyleMismatchesDiagnostic.Inspect();
         Assert.Empty(items);
     }
 }

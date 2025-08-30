@@ -20,7 +20,7 @@ namespace Castle.Windsor.Tests;
 
 public class ConventionRegistrationConfigureTestCase : AbstractContainerTestCase
 {
-    protected override void AfterContainerCreated()
+    public ConventionRegistrationConfigureTestCase()
     {
         // because some IEmptyService depend on collections
         Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel));

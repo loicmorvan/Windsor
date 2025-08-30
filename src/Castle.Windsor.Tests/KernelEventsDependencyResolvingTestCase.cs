@@ -24,7 +24,7 @@ public class KernelEventsDependencyResolvingTestCase : AbstractContainerTestCase
     private ComponentModel _expectedClient;
     private List<DependencyModel> _expectedModels;
 
-    protected override void AfterContainerCreated()
+    public KernelEventsDependencyResolvingTestCase()
     {
         Kernel.DependencyResolving += AssertEvent;
     }

@@ -23,7 +23,7 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public class TypedFactorySelectorsTestCase : AbstractContainerTestCase
 {
-    protected override void AfterContainerCreated()
+    public TypedFactorySelectorsTestCase()
     {
         Container.AddFacility<TypedFactoryFacility>();
     }

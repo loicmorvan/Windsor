@@ -12,29 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.Tests.Components;
-using Castle.Windsor.Windsor.Diagnostics;
 
 namespace Castle.Windsor.Tests.Diagnostics;
 
-public class PotentiallyMisconfiguredComponentsDiagnosticTestCase : AbstractContainerTestCase
+public class PotentiallyMisconfiguredComponentsDiagnosticTestCase : DiagnosticsContainerTestCase
 {
-    private IPotentiallyMisconfiguredComponentsDiagnostic _diagnostic;
-
-    protected override void AfterContainerCreated()
-    {
-        var host = (IDiagnosticsHost)Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
-        _diagnostic = host.GetDiagnostic<IPotentiallyMisconfiguredComponentsDiagnostic>();
-    }
-
     [Fact]
     public void Empty_when_all_components_healthy()
     {
         Container.Register(Component.For<A>(), Component.For<B>(), Component.For<C>());
 
-        var handlers = _diagnostic.Inspect();
+        var handlers = PotentiallyMisconfiguredComponentsDiagnostic.Inspect();
 
         Assert.Empty(handlers);
     }
@@ -44,7 +34,7 @@ public class PotentiallyMisconfiguredComponentsDiagnosticTestCase : AbstractCont
     {
         Container.Register(Component.For<B>(), Component.For<C>());
 
-        var handlers = _diagnostic.Inspect();
+        var handlers = PotentiallyMisconfiguredComponentsDiagnostic.Inspect();
 
         Assert.Equal(2, handlers.Length);
     }

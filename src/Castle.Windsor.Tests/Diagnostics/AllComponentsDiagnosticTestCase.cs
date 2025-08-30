@@ -24,13 +24,13 @@ namespace Castle.Windsor.Tests.Diagnostics;
 
 public class AllComponentsDiagnosticTestCase : AbstractContainerTestCase
 {
-    private IAllComponentsDiagnostic? _diagnostic;
+    private readonly IAllComponentsDiagnostic _diagnostic;
 
-    protected override void AfterContainerCreated()
+    public AllComponentsDiagnosticTestCase()
     {
         var host = (IDiagnosticsHost?)Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
         Debug.Assert(host != null, nameof(host) + " != null");
-        _diagnostic = host.GetDiagnostic<IAllComponentsDiagnostic>();
+        _diagnostic = host.GetDiagnostic<IAllComponentsDiagnostic>() ?? throw new InvalidOperationException();
     }
 
     [Fact]

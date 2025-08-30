@@ -17,21 +17,11 @@ using Castle.Windsor.Windsor;
 
 namespace Castle.Windsor.Tests;
 
-public abstract class AbstractContainerTestCase
+public abstract class AbstractContainerTestCase(WindsorContainer? container = null)
 {
-    private readonly WindsorContainer _container;
-
-    protected AbstractContainerTestCase(WindsorContainer? container = null)
-    {
-        _container = container ?? new WindsorContainer();
-        AfterContainerCreated();
-    }
+    private readonly WindsorContainer _container = container ?? new WindsorContainer();
 
     protected IWindsorContainer Container => _container;
 
     protected IKernel Kernel => _container.Kernel;
-
-    protected virtual void AfterContainerCreated()
-    {
-    }
 }

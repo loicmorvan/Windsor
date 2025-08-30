@@ -23,7 +23,7 @@ namespace Castle.Windsor.Tests;
 
 public class GenericMultipleServicesComponentResolutionTestCase : AbstractContainerTestCase
 {
-    protected override void AfterContainerCreated()
+    public GenericMultipleServicesComponentResolutionTestCase()
     {
         Container.Register(
             Component.For<CountingInterceptor>().LifeStyle.Transient,

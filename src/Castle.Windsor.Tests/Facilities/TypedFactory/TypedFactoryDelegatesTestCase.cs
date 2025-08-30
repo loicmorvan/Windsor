@@ -35,7 +35,7 @@ using ServiceFactory = ServiceFactory;
 
 public class TypedFactoryDelegatesTestCase : AbstractContainerTestCase
 {
-    protected override void AfterContainerCreated()
+    public TypedFactoryDelegatesTestCase()
     {
         Container.AddFacility<TypedFactoryFacility>();
     }

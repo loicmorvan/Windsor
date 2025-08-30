@@ -20,7 +20,7 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public sealed class TypedFactoryDisposeOrderTestCase : AbstractContainerTestCase
 {
-    protected override void AfterContainerCreated()
+    public TypedFactoryDisposeOrderTestCase()
     {
         Container.AddFacility<TypedFactoryFacility>();
     }

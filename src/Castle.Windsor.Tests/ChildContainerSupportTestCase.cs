@@ -84,7 +84,7 @@ public class ChildContainerSupportTestCase : AbstractContainerTestCase
         Assert.Throws<KernelException>(() => childcontainer.Parent = container3);
     }
 
-    protected override void AfterContainerCreated()
+    public ChildContainerSupportTestCase()
     {
         Container.Register(Component.For(typeof(A)).Named("A"));
     }

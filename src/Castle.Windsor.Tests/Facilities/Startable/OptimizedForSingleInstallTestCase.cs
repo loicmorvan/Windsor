@@ -24,7 +24,7 @@ namespace Castle.Windsor.Tests.Facilities.Startable;
 
 public class OptimizedForSingleInstallTestCase : AbstractContainerTestCase
 {
-    protected override void AfterContainerCreated()
+    public OptimizedForSingleInstallTestCase()
     {
         Container.AddFacility<StartableFacility>(f => f.DeferredStart());
     }

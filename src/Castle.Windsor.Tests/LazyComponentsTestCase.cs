@@ -257,7 +257,7 @@ public class LazyComponentsTestCase : AbstractContainerTestCase
         Assert.Equal(1, HasInstanceCount.InstancesCreated);
     }
 
-    protected override void AfterContainerCreated()
+    public LazyComponentsTestCase()
     {
         Container.Register(Component.For<ILazyComponentLoader>()
             .ImplementedBy<LazyOfTComponentLoader>());

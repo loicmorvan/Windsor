@@ -23,13 +23,14 @@ namespace Castle.Windsor.Tests.Diagnostics;
 
 public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCase
 {
-    private IDuplicatedDependenciesDiagnostic? _diagnostic;
+    private readonly IDuplicatedDependenciesDiagnostic _diagnostic;
 
-    protected override void AfterContainerCreated()
+    public DuplicatedDependenciesDiagnosticTestCase()
     {
         var host = (IDiagnosticsHost?)Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
         Debug.Assert(host != null, nameof(host) + " != null");
-        _diagnostic = host.GetDiagnostic<IDuplicatedDependenciesDiagnostic>();
+        _diagnostic = host.GetDiagnostic<IDuplicatedDependenciesDiagnostic>()
+                      ?? throw new InvalidOperationException();
     }
 
     [Fact]

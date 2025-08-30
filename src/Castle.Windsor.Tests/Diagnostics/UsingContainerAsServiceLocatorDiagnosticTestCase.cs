@@ -18,20 +18,11 @@ using Castle.Windsor.MicroKernel.Resolvers;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.Interceptors;
 using Castle.Windsor.Windsor;
-using Castle.Windsor.Windsor.Diagnostics;
 
 namespace Castle.Windsor.Tests.Diagnostics;
 
-public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContainerTestCase
+public class UsingContainerAsServiceLocatorDiagnosticTestCase : DiagnosticsContainerTestCase
 {
-    private IUsingContainerAsServiceLocatorDiagnostic _diagnostic;
-
-    protected override void AfterContainerCreated()
-    {
-        var host = (IDiagnosticsHost)Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
-        _diagnostic = host.GetDiagnostic<IUsingContainerAsServiceLocatorDiagnostic>();
-    }
-
     [Theory]
     [InlineData(typeof(IKernel))]
     [InlineData(typeof(IKernelInternal))]
@@ -45,7 +36,7 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContaine
         Container.Register(Component.For(generic),
             Component.For<A>());
 
-        var serviceLocators = _diagnostic.Inspect();
+        var serviceLocators = UsingContainerAsServiceLocatorDiagnostic.Inspect();
         Assert.Single(serviceLocators);
     }
 
@@ -62,7 +53,7 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContaine
         Container.Register(Component.For(generic),
             Component.For<A>());
 
-        var serviceLocators = _diagnostic.Inspect();
+        var serviceLocators = UsingContainerAsServiceLocatorDiagnostic.Inspect();
         Assert.Single(serviceLocators);
     }
 
@@ -75,7 +66,7 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContaine
             Component.For<B>().Interceptors("a"),
             Component.For<A>().Interceptors("b"));
 
-        var serviceLocators = _diagnostic.Inspect();
+        var serviceLocators = UsingContainerAsServiceLocatorDiagnostic.Inspect();
         Assert.Empty(serviceLocators);
     }
 
@@ -89,7 +80,7 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContaine
 
         Container.Resolve<Lazy<B>>(); // to trigger lazy registration of lazy
 
-        var serviceLocators = _diagnostic.Inspect();
+        var serviceLocators = UsingContainerAsServiceLocatorDiagnostic.Inspect();
         Assert.Empty(serviceLocators);
     }
 
@@ -99,7 +90,7 @@ public class UsingContainerAsServiceLocatorDiagnosticTestCase : AbstractContaine
         Container.Register(Component.For<B>(),
             Component.For<A>());
 
-        var serviceLocators = _diagnostic.Inspect();
+        var serviceLocators = UsingContainerAsServiceLocatorDiagnostic.Inspect();
         Assert.Empty(serviceLocators);
     }
 }

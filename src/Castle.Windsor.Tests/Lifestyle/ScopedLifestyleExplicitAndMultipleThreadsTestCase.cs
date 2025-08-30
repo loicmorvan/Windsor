@@ -21,7 +21,7 @@ namespace Castle.Windsor.Tests.Lifestyle;
 
 public class ScopedLifestyleExplicitAndMultipleThreadsTestCase : AbstractContainerTestCase
 {
-    protected override void AfterContainerCreated()
+    public ScopedLifestyleExplicitAndMultipleThreadsTestCase()
     {
         Container.Register(Component.For<A>().LifestyleScoped());
     }

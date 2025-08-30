@@ -21,7 +21,7 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public class TypedFactoryObsoleteApiTestCase : AbstractContainerTestCase
 {
-    private TypedFactoryFacility _facility;
+    private readonly TypedFactoryFacility _facility;
 
     [Fact]
     public void Factory1()
@@ -121,7 +121,7 @@ public class TypedFactoryObsoleteApiTestCase : AbstractContainerTestCase
         Assert.NotNull(comp2);
     }
 
-    protected override void AfterContainerCreated()
+    public TypedFactoryObsoleteApiTestCase()
     {
         _facility = new TypedFactoryFacility();
         Container.AddFacility(_facility);

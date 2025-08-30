@@ -27,7 +27,7 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public class TypedFactoryFacilityTake2TestCase : AbstractContainerTestCase
 {
-    protected override void AfterContainerCreated()
+    public TypedFactoryFacilityTake2TestCase()
     {
         Container.AddFacility<TypedFactoryFacility>();
         Container.Register(Component.For<IDummyComponent>().ImplementedBy<Component1>().LifestyleTransient());

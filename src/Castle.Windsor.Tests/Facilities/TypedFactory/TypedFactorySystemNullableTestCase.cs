@@ -23,7 +23,7 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public class TypedFactorySystemNullableTestCase : AbstractContainerTestCase
 {
-    protected override void AfterContainerCreated()
+    public TypedFactorySystemNullableTestCase()
     {
         Container.AddFacility<TypedFactoryFacility>();
     }

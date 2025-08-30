@@ -19,7 +19,7 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public sealed class BurdenAddedToUnrelatedObjectTestCase : AbstractContainerTestCase
 {
-    protected override void AfterContainerCreated()
+    public BurdenAddedToUnrelatedObjectTestCase()
     {
         Container.AddFacility<TypedFactoryFacility>();
     }

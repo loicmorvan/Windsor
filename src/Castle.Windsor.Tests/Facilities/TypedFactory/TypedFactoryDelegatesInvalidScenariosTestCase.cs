@@ -21,7 +21,7 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public class TypedFactoryDelegatesInvalidScenariosTestCase : AbstractContainerTestCase
 {
-    protected override void AfterContainerCreated()
+    public TypedFactoryDelegatesInvalidScenariosTestCase()
     {
         Container.AddFacility<TypedFactoryFacility>();
     }

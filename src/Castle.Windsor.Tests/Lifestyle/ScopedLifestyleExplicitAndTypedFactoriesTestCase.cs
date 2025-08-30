@@ -23,7 +23,7 @@ namespace Castle.Windsor.Tests.Lifestyle;
 
 public class ScopedLifestyleExplicitAndTypedFactoriesTestCase : AbstractContainerTestCase
 {
-    protected override void AfterContainerCreated()
+    public ScopedLifestyleExplicitAndTypedFactoriesTestCase()
     {
         Container.AddFacility<TypedFactoryFacility>();
     }

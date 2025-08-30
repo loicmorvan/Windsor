@@ -21,7 +21,7 @@ namespace Castle.Windsor.Tests.Facilities.TypedFactory;
 
 public class TypedFactoryOpenGenericFactoriesTestCase : AbstractContainerTestCase
 {
-    protected override void AfterContainerCreated()
+    public TypedFactoryOpenGenericFactoriesTestCase()
     {
         Container.AddFacility<TypedFactoryFacility>();
     }
