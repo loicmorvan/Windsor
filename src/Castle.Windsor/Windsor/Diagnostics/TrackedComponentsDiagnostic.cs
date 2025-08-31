@@ -18,7 +18,7 @@ namespace Castle.Windsor.Windsor.Diagnostics;
 
 public class TrackedComponentsDiagnostic : ITrackedComponentsDiagnostic
 {
-    public ILookup<IHandler, object> Inspect()
+    public ILookup<IHandler, object>? Inspect()
     {
         var @event = TrackedInstancesRequested;
         if (@event == null)
@@ -32,5 +32,5 @@ public class TrackedComponentsDiagnostic : ITrackedComponentsDiagnostic
         return args.Items.ToLookup(k => k.Handler, b => b.Instance);
     }
 
-    public event EventHandler<TrackedInstancesEventArgs> TrackedInstancesRequested;
+    public event EventHandler<TrackedInstancesEventArgs>? TrackedInstancesRequested;
 }

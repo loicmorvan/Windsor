@@ -25,7 +25,7 @@ public class DependencyDuplicate(
     public DependencyModel Dependency2 { get; } = dependency2;
     public DependencyDuplicationReason Reason { get; } = reason;
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {
@@ -44,8 +44,8 @@ public class DependencyDuplicate(
     {
         unchecked
         {
-            var hashCode = Dependency1 != null ? Dependency1.GetHashCode() : 0;
-            hashCode = (hashCode * 397) ^ (Dependency2 != null ? Dependency2.GetHashCode() : 0);
+            var hashCode = Dependency1.GetHashCode();
+            hashCode = (hashCode * 397) ^ Dependency2.GetHashCode();
             hashCode = (hashCode * 397) ^ Reason.GetHashCode();
             return hashCode;
         }

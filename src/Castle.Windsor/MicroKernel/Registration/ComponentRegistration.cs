@@ -469,7 +469,7 @@ public class ComponentRegistration<TService> : IRegistration
         return ImplementedBy(typeof(TImpl));
     }
 
-    public ComponentRegistration<TService> ImplementedBy(Type type)
+    public ComponentRegistration<TService> ImplementedBy(Type? type)
     {
         return ImplementedBy(type, null, null);
     }
@@ -697,7 +697,7 @@ public class ComponentRegistration<TService> : IRegistration
     /// <param name="name"> The name of this registration. </param>
     /// <returns> </returns>
     /// <remarks>Names have to be globally unique in the scope of the container.</remarks>
-    public ComponentRegistration<TService> Named(string name)
+    public ComponentRegistration<TService> Named(string? name)
     {
         if (_name != null)
         {

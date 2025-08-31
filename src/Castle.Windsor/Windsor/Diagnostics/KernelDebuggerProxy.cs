@@ -31,7 +31,7 @@ internal class KernelDebuggerProxy
     {
         ArgumentNullException.ThrowIfNull(kernel);
         _extensions =
-            (IEnumerable<IContainerDebuggerExtension>)(kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as
+            (IEnumerable<IContainerDebuggerExtension>?)(kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as
                 IContainerDebuggerExtensionHost) ?? [];
     }
 

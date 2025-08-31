@@ -27,14 +27,14 @@ namespace Castle.Windsor.Windsor.Installer;
 /// <summary>Default <see cref="IComponentsInstaller" /> implementation.</summary>
 public sealed class DefaultComponentInstaller : IComponentsInstaller
 {
-    private string _assemblyName;
+    private string? _assemblyName;
 
     /// <summary>Perform installation.</summary>
     /// <param name="container">Target container</param>
     /// <param name="store">Configuration store</param>
     public void SetUp(IWindsorContainer container, IConfigurationStore store)
     {
-        var converter = container.Kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey) as IConversionManager;
+        var converter = (IConversionManager)container.Kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
         SetUpInstallers(store.GetInstallers(), container, converter);
         SetUpFacilities(store.GetFacilities(), container, converter);
         SetUpComponents(store.GetComponents(), container, converter);
@@ -82,10 +82,9 @@ public sealed class DefaultComponentInstaller : IComponentsInstaller
             return;
         }
 
-        var directory = installer.Attributes["directory"];
-        var mask = installer.Attributes["fileMask"];
+        var directory = installer.Attributes["directory"] ?? throw new InvalidOperationException();
+        var mask = installer.Attributes["fileMask"] ?? throw new InvalidOperationException();
         var token = installer.Attributes["publicKeyToken"];
-        Debug.Assert(directory != null);
         var assemblyFilter = new AssemblyFilter(directory, mask);
         if (token != null)
         {
@@ -142,7 +141,8 @@ public sealed class DefaultComponentInstaller : IComponentsInstaller
     {
         foreach (var facility in configurations)
         {
-            var type = converter.PerformConversion<Type>(facility.Attributes["type"]);
+            var type = converter.PerformConversion<Type>(facility.Attributes["type"] ??
+                                                         throw new InvalidOperationException());
             var facilityInstance = type.CreateInstance<IFacility>();
             Debug.Assert(facilityInstance != null);
 
@@ -150,7 +150,7 @@ public sealed class DefaultComponentInstaller : IComponentsInstaller
         }
     }
 
-    private static void AssertImplementsService(IConfiguration id, Type service, Type implementation)
+    private static void AssertImplementsService(IConfiguration id, Type? service, Type implementation)
     {
         if (service == null)
         {
@@ -210,14 +210,14 @@ public sealed class DefaultComponentInstaller : IComponentsInstaller
         }
     }
 
-    private static string GetName(CastleComponentAttribute defaults, IConfiguration component)
+    private static string? GetName(CastleComponentAttribute defaults, IConfiguration component)
     {
         return component.Attributes["id-automatic"] != bool.TrueString
             ? component.Attributes["id"]
             : defaults.Name;
     }
 
-    private static Type GetType(IConversionManager converter, string typeName)
+    private static Type? GetType(IConversionManager converter, string? typeName)
     {
         return typeName == null
             ? null
@@ -234,7 +234,7 @@ public sealed class DefaultComponentInstaller : IComponentsInstaller
         }
 
         foreach (var forwardedServiceTypeName in forwardedTypes.Children.Select(forwardedType =>
-                     forwardedType.Attributes["service"]))
+                     forwardedType.Attributes["service"] ?? throw new InvalidOperationException()))
         {
             try
             {

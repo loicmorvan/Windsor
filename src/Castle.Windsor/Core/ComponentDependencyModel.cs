@@ -18,7 +18,7 @@ namespace Castle.Windsor.Core;
 public class ComponentDependencyModel(string referencedComponentName, Type serviceType = null)
     : DependencyModel(referencedComponentName, serviceType, false)
 {
-    public override void Init(ParameterModelCollection parameters)
+    public override void Init(ParameterModelCollection? parameters)
     {
         ReferencedComponentName = DependencyKey;
     }

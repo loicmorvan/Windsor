@@ -22,7 +22,7 @@ namespace Castle.Windsor.Windsor.Installer;
 public class ConfigurationInstaller : IWindsorInstaller
 {
     private readonly IConfigurationInterpreter _interpreter;
-    private EnvironmentDelegate _environment;
+    private EnvironmentDelegate? _environment;
 
     /// <summary>Initializes a new instance of the ConfigurationInstaller class.</summary>
     public ConfigurationInstaller(IConfigurationInterpreter interpreter)

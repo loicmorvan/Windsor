@@ -186,7 +186,7 @@ public static class ReflectionUtil
         return (item.Attributes & ParameterAttributes.HasDefault) != 0;
     }
 
-    public static bool Is<TType>(this Type type)
+    public static bool Is<TType>(this Type? type)
     {
         return typeof(TType).IsAssignableFrom(type);
     }

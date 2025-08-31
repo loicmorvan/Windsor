@@ -20,5 +20,5 @@ public interface IDiagnostic<out T>
 {
     /// <summary>Collects specified diagnostic information.</summary>
     /// <returns> </returns>
-    T Inspect();
+    T? Inspect();
 }
