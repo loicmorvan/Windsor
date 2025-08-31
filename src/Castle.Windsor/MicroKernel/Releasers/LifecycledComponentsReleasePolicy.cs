@@ -27,7 +27,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 
     private readonly Lock _lock = Lock.Create();
     private readonly ITrackedComponentsPerformanceCounter _perfCounter;
-    private ITrackedComponentsDiagnostic _trackedComponentsDiagnostic;
+    private ITrackedComponentsDiagnostic? _trackedComponentsDiagnostic;
 
     /// <param name="kernel">Used to obtain <see cref="ITrackedComponentsDiagnostic" /> if present.</param>
     public LifecycledComponentsReleasePolicy(IKernel kernel)
@@ -46,8 +46,9 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
     /// </summary>
     /// <param name="trackedComponentsDiagnostic"></param>
     /// <param name="trackedComponentsPerformanceCounter"></param>
-    public LifecycledComponentsReleasePolicy(ITrackedComponentsDiagnostic trackedComponentsDiagnostic,
-        ITrackedComponentsPerformanceCounter trackedComponentsPerformanceCounter)
+    public LifecycledComponentsReleasePolicy(
+        ITrackedComponentsDiagnostic? trackedComponentsDiagnostic,
+        ITrackedComponentsPerformanceCounter? trackedComponentsPerformanceCounter)
     {
         _trackedComponentsDiagnostic = trackedComponentsDiagnostic;
         _perfCounter = trackedComponentsPerformanceCounter ?? NullPerformanceCounter.Instance;
@@ -192,7 +193,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
         _perfCounter.DecrementTrackedInstancesCount();
     }
 
-    private void trackedComponentsDiagnostic_TrackedInstancesRequested(object sender, TrackedInstancesEventArgs e)
+    private void trackedComponentsDiagnostic_TrackedInstancesRequested(object? sender, TrackedInstancesEventArgs e)
     {
         e.AddRange(TrackedObjects);
     }
@@ -200,9 +201,9 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
     /// <summary>Obtains <see cref="ITrackedComponentsDiagnostic" /> from given <see cref="IKernel" /> if present.</summary>
     /// <param name="kernel"></param>
     /// <returns></returns>
-    public static ITrackedComponentsDiagnostic GetTrackedComponentsDiagnostic(IKernel kernel)
+    public static ITrackedComponentsDiagnostic? GetTrackedComponentsDiagnostic(IKernel kernel)
     {
-        var diagnosticsHost = (IDiagnosticsHost)kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
+        var diagnosticsHost = (IDiagnosticsHost?)kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
         return diagnosticsHost?.GetDiagnostic<ITrackedComponentsDiagnostic>();
     }
 }

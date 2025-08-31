@@ -303,7 +303,7 @@ public sealed partial class DefaultKernel :
         return _facilities.ToArray();
     }
 
-    public IHandler GetHandler(string name)
+    public IHandler? GetHandler(string? name)
     {
         ArgumentNullException.ThrowIfNull(name);
 
@@ -621,7 +621,7 @@ public sealed partial class DefaultKernel :
         }
     }
 
-    IHandler IKernelInternal.LoadHandlerByType(string name, Type service, Arguments arguments)
+    IHandler? IKernelInternal.LoadHandlerByType(string? name, Type service, Arguments? arguments)
     {
         ArgumentNullException.ThrowIfNull(service);
 

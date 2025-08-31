@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Core.Configuration;
 using Castle.Windsor.Core;
 
@@ -22,6 +23,7 @@ public class LifestyleDescriptor<TS>(LifestyleType lifestyle) : AbstractOverwrit
 {
     protected override void ApplyToConfiguration(IConfiguration? configuration)
     {
+        Debug.Assert(configuration != null, nameof(configuration) + " != null");
         if (configuration.Attributes["lifestyle"] == null || IsOverWrite)
         {
             configuration.Attributes["lifestyle"] = lifestyle.ToString();

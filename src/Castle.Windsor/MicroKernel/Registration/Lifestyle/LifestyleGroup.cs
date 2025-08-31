@@ -88,7 +88,7 @@ public class LifestyleGroup<TService>(ComponentRegistration<TService> registrati
     ///     or default accessor otherwise.
     /// </summary>
     /// <returns> </returns>
-    public ComponentRegistration<TService> Scoped(Type scopeAccessorType)
+    public ComponentRegistration<TService> Scoped(Type? scopeAccessorType)
     {
         var registration = AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Scoped));
         if (scopeAccessorType == null)
@@ -118,7 +118,7 @@ public class LifestyleGroup<TService>(ComponentRegistration<TService> registrati
         return BoundTo(CreationContextScopeAccessor.NearestScopeRootSelector<TBaseForRoot>);
     }
 
-    public ComponentRegistration<TService> BoundTo(Func<IHandler[], IHandler> scopeRootBinder)
+    public ComponentRegistration<TService> BoundTo(Func<IHandler[], IHandler?> scopeRootBinder)
     {
         return AddDescriptor(new LifestyleDescriptor<TService>(LifestyleType.Bound))
             .ExtendedProperties(new Property(Constants.ScopeRootSelector, scopeRootBinder));

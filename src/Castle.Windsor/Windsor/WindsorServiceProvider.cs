@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using Castle.Core;
 using Castle.Windsor.MicroKernel;
 
@@ -25,7 +26,7 @@ namespace Castle.Windsor.Windsor;
 /// </summary>
 public class WindsorServiceProvider : IServiceProviderEx
 {
-    private readonly IKernelInternal _kernel;
+    private readonly IKernelInternal? _kernel;
 
     public WindsorServiceProvider(IWindsorContainer container)
     {
@@ -37,10 +38,11 @@ public class WindsorServiceProvider : IServiceProviderEx
     }
 
     // ReSharper disable once UnusedMember.Global
-    public IKernel Kernel => _kernel;
+    public IKernel? Kernel => _kernel;
 
-    public object GetService(Type serviceType)
+    public object? GetService(Type serviceType)
     {
+        Debug.Assert(_kernel != null, nameof(_kernel) + " != null");
         return _kernel.LoadHandlerByType(null, serviceType, null) != null
             ? _kernel.Resolve(serviceType)
             : null;

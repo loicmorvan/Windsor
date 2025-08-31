@@ -23,5 +23,5 @@ namespace Castle.Windsor.MicroKernel.Handlers;
 /// </summary>
 public interface IDependencyInspector
 {
-    void Inspect(IHandler handler, DependencyModel[] missingDependencies, IKernel kernel);
+    void Inspect(IHandler handler, DependencyModel[] missingDependencies, IKernel? kernel);
 }

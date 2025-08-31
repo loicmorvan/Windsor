@@ -54,7 +54,7 @@ public class ConstructorCandidate : IComparable<ConstructorCandidate>
         {
             var mine = Dependencies[index];
             var othr = other.Dependencies[index];
-            value = string.Compare(mine.TargetItemType.FullName, othr.TargetItemType.FullName,
+            value = string.Compare(mine.TargetItemType?.FullName, othr.TargetItemType?.FullName,
                 StringComparison.OrdinalIgnoreCase);
             if (value != 0)
             {

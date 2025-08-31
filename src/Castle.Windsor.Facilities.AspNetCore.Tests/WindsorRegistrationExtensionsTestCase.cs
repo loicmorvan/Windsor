@@ -355,8 +355,10 @@ public sealed class WindsorRegistrationExtensionsTestCase : IDisposable
         Debug.Assert(aspNetCoreFacility != null, nameof(aspNetCoreFacility) + " != null");
         aspNetCoreFacility.RegistersMiddlewareInto(_testContext.ApplicationBuilder);
 
+        var dependenciesAsAnonymousType = Dependency.OnValue<AnyComponent>(new AnyComponent());
+        Debug.Assert(dependenciesAsAnonymousType != null, nameof(dependenciesAsAnonymousType) + " != null");
         _testContext.WindsorContainer.Register(Component.For<AnyMiddleware>()
-            .DependsOn(Dependency.OnValue<AnyComponent>(new AnyComponent())).LifestyleScoped().AsMiddleware());
+            .DependsOn(dependenciesAsAnonymousType).LifestyleScoped().AsMiddleware());
 
         _testContext.WindsorContainer.Resolve<AnyMiddleware>();
     }

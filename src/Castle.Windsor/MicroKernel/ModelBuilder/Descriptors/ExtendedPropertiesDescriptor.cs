@@ -21,8 +21,8 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class ExtendedPropertiesDescriptor : IComponentModelDescriptor
 {
-    private readonly IDictionary _dictionary;
-    private readonly Property[] _properties;
+    private readonly IDictionary? _dictionary;
+    private readonly Property[]? _properties;
 
     public ExtendedPropertiesDescriptor(params Property[] properties)
     {

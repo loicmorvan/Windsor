@@ -43,7 +43,7 @@ public interface IKernelInternal : IKernel
 
     IHandler LoadHandlerByName(string key, Type service, Arguments? arguments);
 
-    IHandler LoadHandlerByType(string key, Type service, Arguments arguments);
+    IHandler? LoadHandlerByType(string? key, Type service, Arguments? arguments);
 
     IDisposable? OptimizeDependencyResolution();
 

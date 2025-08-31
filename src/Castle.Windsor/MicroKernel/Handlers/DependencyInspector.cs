@@ -24,7 +24,7 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
 
     public string Message => message.ToString();
 
-    public void Inspect(IHandler handler, DependencyModel[] missingDependencies, IKernel kernel)
+    public void Inspect(IHandler handler, DependencyModel[] missingDependencies, IKernel? kernel)
     {
         if (!_handlersChecked.Add(handler))
         {

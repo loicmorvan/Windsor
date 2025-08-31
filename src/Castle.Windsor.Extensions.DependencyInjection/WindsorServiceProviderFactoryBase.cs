@@ -122,11 +122,14 @@ public abstract class WindsorServiceProviderFactoryBase : IServiceProviderFactor
     {
         Debug.Assert(_rootScope != null, nameof(_rootScope) + " != null");
 
+        var dependenciesAsAnonymousType = Dependency.OnValue<ExtensionContainerRootScope>(_rootScope);
+        Debug.Assert(dependenciesAsAnonymousType != null);
+        
         container.Register(
             Component
                 .For<IServiceScopeFactory>()
                 .ImplementedBy<WindsorScopeFactory>()
-                .DependsOn(Dependency.OnValue<ExtensionContainerRootScope>(_rootScope))
+                .DependsOn(dependenciesAsAnonymousType)
                 .LifestyleSingleton(),
             Component
                 .For<IServiceProviderFactory<IWindsorContainer>>()

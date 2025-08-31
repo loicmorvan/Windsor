@@ -33,11 +33,11 @@ public class DynamicParametersDescriptor(DynamicParametersWithContextResolveDele
     {
     }
 
-    private static ComponentLifecycleExtension GetDynamicParametersExtension(ComponentModel model)
+    private static ComponentLifecycleExtension? GetDynamicParametersExtension(ComponentModel model)
     {
         if (model.ExtendedProperties.Contains(Key))
         {
-            return (ComponentLifecycleExtension)model.ExtendedProperties[Key];
+            return (ComponentLifecycleExtension?)model.ExtendedProperties[Key];
         }
 
         var dynamicParameters = new ComponentLifecycleExtension();

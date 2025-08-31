@@ -27,7 +27,7 @@ namespace Castle.Windsor.MicroKernel.Handlers;
 public class DefaultGenericHandler(
     ComponentModel model,
     IGenericImplementationMatchingStrategy implementationMatchingStrategy,
-    IGenericServiceStrategy serviceStrategy)
+    IGenericServiceStrategy? serviceStrategy)
     : AbstractHandler(model)
 {
     private readonly SimpleThreadSafeDictionary<Type, IHandler> _type2SubHandler = new();
@@ -35,7 +35,7 @@ public class DefaultGenericHandler(
     public IGenericImplementationMatchingStrategy ImplementationMatchingStrategy { get; } =
         implementationMatchingStrategy;
 
-    public IGenericServiceStrategy ServiceStrategy { get; } = serviceStrategy;
+    public IGenericServiceStrategy? ServiceStrategy { get; } = serviceStrategy;
 
     public override void Dispose()
     {
@@ -130,6 +130,7 @@ public class DefaultGenericHandler(
     protected virtual IHandler BuildSubHandler(Type closedImplementationType, Type requestedType)
     {
         // TODO: we should probably match the requested type to existing services and close them over its generic arguments
+        Debug.Assert(Kernel != null, nameof(Kernel) + " != null");
         var newModel = Kernel.ComponentModelBuilder.BuildModel(
             ComponentModel.ComponentName,
             AdaptServices(closedImplementationType, requestedType),

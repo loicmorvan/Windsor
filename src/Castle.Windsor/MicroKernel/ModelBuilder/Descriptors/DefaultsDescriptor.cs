@@ -18,7 +18,7 @@ using Castle.Windsor.Core.Internal;
 
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
-public class DefaultsDescriptor(ComponentName name, Type? implementation) : IComponentModelDescriptor
+public class DefaultsDescriptor(ComponentName? name, Type? implementation) : IComponentModelDescriptor
 {
     public void BuildComponentModel(IKernel kernel, ComponentModel model)
     {

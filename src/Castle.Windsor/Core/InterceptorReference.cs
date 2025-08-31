@@ -31,7 +31,7 @@ public class InterceptorReference : IReference<IInterceptor>, IEquatable<Interce
     private readonly string _referencedComponentName;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private readonly Type _referencedComponentType;
+    private readonly Type? _referencedComponentType;
 
     /// <summary>Initializes a new instance of the <see cref="InterceptorReference" /> class.</summary>
     /// <param name="referencedComponentName">The component key.</param>
@@ -53,7 +53,7 @@ public class InterceptorReference : IReference<IInterceptor>, IEquatable<Interce
         _referencedComponentType = componentType;
     }
 
-    public bool Equals(InterceptorReference other)
+    public bool Equals(InterceptorReference? other)
     {
         return other != null && Equals(_referencedComponentName, other._referencedComponentName);
     }
@@ -126,7 +126,7 @@ public class InterceptorReference : IReference<IInterceptor>, IEquatable<Interce
         return message;
     }
 
-    private IHandler GetInterceptorHandler(IKernel kernel)
+    private IHandler? GetInterceptorHandler(IKernel kernel)
     {
         if (_referencedComponentType == null)
         {

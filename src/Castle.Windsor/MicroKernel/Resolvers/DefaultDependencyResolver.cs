@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using System.Reflection;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
@@ -30,9 +31,9 @@ namespace Castle.Windsor.MicroKernel.Resolvers;
 public class DefaultDependencyResolver : IDependencyResolver
 {
     private readonly List<ISubDependencyResolver> _subResolvers = [];
-    private ITypeConverter _converter;
-    private DependencyDelegate _dependencyResolvingDelegate;
-    private IKernelInternal _kernel;
+    private ITypeConverter? _converter;
+    private DependencyDelegate? _dependencyResolvingDelegate;
+    private IKernelInternal? _kernel;
 
     /// <summary>Registers a sub resolver instance</summary>
     /// <param name="subResolver">The subresolver instance</param>
@@ -122,7 +123,7 @@ public class DefaultDependencyResolver : IDependencyResolver
     /// <param name="model">Model of the component that is requesting the dependency</param>
     /// <param name="dependency">The dependency model</param>
     /// <returns>The dependency resolved value or null</returns>
-    public object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
         if (!TryResolveCore(context, contextHandlerResolver, model, dependency, out var value))
@@ -140,6 +141,7 @@ public class DefaultDependencyResolver : IDependencyResolver
             }
         }
 
+        Debug.Assert(_dependencyResolvingDelegate != null, nameof(_dependencyResolvingDelegate) + " != null");
         _dependencyResolvingDelegate(model, dependency, value);
         return value;
     }

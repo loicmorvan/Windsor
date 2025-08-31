@@ -51,7 +51,7 @@ public sealed class ParentHandlerWrapper : IHandler, IDisposable
     {
     }
 
-    public bool IsBeingResolvedInContext(CreationContext context)
+    public bool IsBeingResolvedInContext(CreationContext? context)
     {
         return (context != null && context.IsInResolutionContext(this)) ||
                _parentHandler.IsBeingResolvedInContext(context);

@@ -211,7 +211,7 @@ public class ComponentRegistration<TService> : IRegistration
     /// 		Dependency.OnComponent(typeof(IRepository), typeof(IntranetRepository)),
     /// 		Dependency.OnValue("applicationName", "My Application"));</code>
     /// </example>
-    public ComponentRegistration<TService> DependsOn(params Dependency[] dependencies)
+    public ComponentRegistration<TService> DependsOn(params Dependency[]? dependencies)
     {
         if (dependencies == null || dependencies.Length == 0)
         {

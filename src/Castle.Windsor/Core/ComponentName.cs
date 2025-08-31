@@ -39,7 +39,7 @@ public class ComponentName(string name, bool setByUser)
     /// </summary>
     /// <param name="componentType"></param>
     /// <returns></returns>
-    public static ComponentName DefaultFor(Type componentType)
+    public static ComponentName DefaultFor(Type? componentType)
     {
         return new ComponentName(DefaultNameFor(componentType), false);
     }
@@ -50,9 +50,9 @@ public class ComponentName(string name, bool setByUser)
     /// </summary>
     /// <param name="componentType"></param>
     /// <returns></returns>
-    public static string DefaultNameFor(Type componentType)
+    public static string DefaultNameFor(Type? componentType)
     {
-        Debug.Assert(componentType.FullName != null);
+        Debug.Assert(componentType?.FullName != null);
         return componentType.FullName;
     }
 }

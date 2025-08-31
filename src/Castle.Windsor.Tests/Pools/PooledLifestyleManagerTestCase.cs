@@ -292,7 +292,7 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
             throw new NotImplementedException();
         }
 
-        public IHandler GetHandler(string name)
+        public IHandler? GetHandler(string? name)
         {
             throw new NotImplementedException();
         }
