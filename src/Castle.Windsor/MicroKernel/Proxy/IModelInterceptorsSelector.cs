@@ -33,5 +33,5 @@ public interface IModelInterceptorsSelector
 	/// </summary>
 	/// <param name="model">The model to select the interceptors for</param>
 	/// <returns>The interceptor for this model (in the current context) or a null reference</returns>
-	InterceptorReference[] SelectInterceptors(ComponentModel model);
+	InterceptorReference[]? SelectInterceptors(ComponentModel model);
 }

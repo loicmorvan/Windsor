@@ -47,7 +47,7 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
     {
     }
 
-    public void OnDeserialization(object sender)
+    public void OnDeserialization(object? sender)
     {
         Generator = new ProxyGenerator();
     }

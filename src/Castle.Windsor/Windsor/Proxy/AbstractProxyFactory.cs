@@ -24,7 +24,7 @@ namespace Castle.Windsor.Windsor.Proxy;
 
 public abstract class AbstractProxyFactory : IProxyFactory
 {
-    private List<IModelInterceptorsSelector> _selectors;
+    private List<IModelInterceptorsSelector>? _selectors;
 
     public abstract object Create(IKernel kernel, object instance, ComponentModel model, CreationContext context,
         params object[] constructorArguments);
@@ -106,7 +106,7 @@ public abstract class AbstractProxyFactory : IProxyFactory
         return interceptors.ToArray();
     }
 
-    private static void SetOnBehalfAware(IOnBehalfAware onBehalfAware, ComponentModel target)
+    private static void SetOnBehalfAware(IOnBehalfAware? onBehalfAware, ComponentModel target)
     {
         onBehalfAware?.SetInterceptedComponentModel(target);
     }

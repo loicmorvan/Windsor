@@ -26,7 +26,7 @@ public class ByTypeInterceptorSelector(Type interceptorType) : IModelInterceptor
         return model.Services.All(s => !s.Is<IInterceptor>());
     }
 
-    public InterceptorReference[] SelectInterceptors(ComponentModel model)
+    public InterceptorReference[]? SelectInterceptors(ComponentModel model)
     {
         return
         [

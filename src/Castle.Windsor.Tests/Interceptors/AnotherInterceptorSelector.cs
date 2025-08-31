@@ -24,7 +24,7 @@ public class AnotherInterceptorSelector : IModelInterceptorsSelector
         return model.Services.Any(s => s == typeof(IWatcher));
     }
 
-    public InterceptorReference[] SelectInterceptors(ComponentModel model)
+    public InterceptorReference[]? SelectInterceptors(ComponentModel model)
     {
         return [new InterceptorReference(typeof(WasCalledInterceptor))];
     }
