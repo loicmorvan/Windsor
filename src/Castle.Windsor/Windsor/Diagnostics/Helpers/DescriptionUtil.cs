@@ -26,6 +26,12 @@ public static class DescriptionUtil
     public static string GetComponentName(this IHandler handler)
     {
         var componentName = handler.ComponentModel.ComponentName;
+
+        if (componentName is null)
+        {
+            throw new InvalidOperationException("Component name is not set");
+        }
+
         return componentName.SetByUser
             ? $"\"{componentName.Name}\" {handler.GetServicesDescription()}"
             : handler.GetServicesDescription();
@@ -40,7 +46,8 @@ public static class DescriptionUtil
 
         return componentModel.LifestyleType != LifestyleType.Custom
             ? componentModel.LifestyleType.ToString()
-            : componentModel.CustomLifestyle.Name;
+            : componentModel.CustomLifestyle?.Name
+              ?? throw new InvalidOperationException("The custom lifestyle is not set");
     }
 
     public static string GetLifestyleDescriptionLong(this ComponentModel componentModel)
@@ -67,7 +74,8 @@ public static class DescriptionUtil
                 return "Scoped via " + accessorType.ToCSharpString();
             }
             case LifestyleType.Custom:
-                return "Custom: " + componentModel.CustomLifestyle.Name;
+                return "Custom: " + componentModel.CustomLifestyle?.Name ??
+                       throw new InvalidOperationException("The custom lifestyle is not set");
             case LifestyleType.Singleton:
             case LifestyleType.Thread:
             case LifestyleType.Transient:

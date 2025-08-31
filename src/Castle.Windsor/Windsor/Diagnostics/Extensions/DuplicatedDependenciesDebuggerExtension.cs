@@ -23,11 +23,11 @@ public class DuplicatedDependenciesDebuggerExtension : AbstractContainerDebugger
 {
     private const string Name = "Components with potentially duplicated dependencies";
 
-    private DuplicatedDependenciesDiagnostic _diagnostic;
+    private DuplicatedDependenciesDiagnostic? _diagnostic;
 
     public override IEnumerable<DebuggerViewItem> Attach()
     {
-        var result = _diagnostic.Inspect();
+        var result = _diagnostic?.Inspect()??[];
         if (result.Length == 0)
         {
             return [];

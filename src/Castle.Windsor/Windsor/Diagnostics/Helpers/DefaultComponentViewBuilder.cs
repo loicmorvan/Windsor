@@ -24,7 +24,12 @@ public class DefaultComponentViewBuilder(IHandler handler) : IComponentDebuggerE
 {
     public IEnumerable<object> Attach()
     {
-        yield return new DebuggerViewItem("Implementation", GetImplementation());
+        var implementation = GetImplementation();
+        if (implementation is not null)
+        {
+            yield return new DebuggerViewItem("Implementation", implementation);
+        }
+
         foreach (var service in handler.ComponentModel.Services)
         {
             yield return new DebuggerViewItem("Service", service);
@@ -43,7 +48,7 @@ public class DefaultComponentViewBuilder(IHandler handler) : IComponentDebuggerE
         yield return new DebuggerViewItem("Raw handler/component", handler);
     }
 
-    private object GetImplementation()
+    private object? GetImplementation()
     {
         var implementation = handler.ComponentModel.Implementation;
         return implementation != typeof(LateBoundComponent) ? implementation : LateBoundComponent.Instance;
@@ -60,7 +65,7 @@ public class DefaultComponentViewBuilder(IHandler handler) : IComponentDebuggerE
             GetStatusDetails(handler as IExposeDependencyInfo));
     }
 
-    private static string GetStatusDetails(IExposeDependencyInfo info)
+    private static string GetStatusDetails(IExposeDependencyInfo? info)
     {
         var message = new StringBuilder("Some dependencies of this component could not be statically resolved.");
         if (info == null)

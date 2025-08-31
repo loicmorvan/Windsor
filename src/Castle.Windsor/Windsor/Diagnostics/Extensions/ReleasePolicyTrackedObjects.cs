@@ -21,23 +21,18 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 public class ReleasePolicyTrackedObjects : AbstractContainerDebuggerExtension
 {
     public const string Name = "Objects tracked by release policy";
-    private TrackedComponentsDiagnostic _diagnostic;
+    private TrackedComponentsDiagnostic? _diagnostic;
 
     public override IEnumerable<DebuggerViewItem> Attach()
     {
-        var result = _diagnostic.Inspect();
+        var result = _diagnostic?.Inspect();
         if (result == null)
         {
             return [];
         }
 
         var item = BuildItem(result);
-        if (item != null)
-        {
-            return [item];
-        }
-
-        return [];
+        return [item];
     }
 
     public override void Init(IKernel kernel, IDiagnosticsHost diagnosticsHost)

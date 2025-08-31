@@ -22,11 +22,11 @@ public class AllComponents : AbstractContainerDebuggerExtension
 {
     private const string Name = "All components";
 
-    private AllComponentsDiagnostic _diagnostic;
+    private AllComponentsDiagnostic? _diagnostic;
 
     public override IEnumerable<DebuggerViewItem> Attach()
     {
-        var handlers = _diagnostic.Inspect();
+        var handlers = _diagnostic?.Inspect() ?? [];
 
         var items = handlers.ConvertAll(DefaultComponentView);
         Array.Sort(items, (c1, c2) => string.Compare(c1.Name, c2.Name, StringComparison.Ordinal));

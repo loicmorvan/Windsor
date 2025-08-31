@@ -21,11 +21,11 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 public class PotentiallyMisconfiguredComponents : AbstractContainerDebuggerExtension
 {
     private const string Name = "Potentially misconfigured components";
-    private PotentiallyMisconfiguredComponentsDiagnostic _diagnostic;
+    private PotentiallyMisconfiguredComponentsDiagnostic? _diagnostic;
 
     public override IEnumerable<DebuggerViewItem> Attach()
     {
-        var handlers = _diagnostic.Inspect();
+        var handlers = _diagnostic?.Inspect()??[];
         if (handlers.Length == 0)
         {
             return [];

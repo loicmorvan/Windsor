@@ -22,11 +22,11 @@ public class UsingContainerAsServiceLocator : AbstractContainerDebuggerExtension
 {
     private const string Name = "Potential Service Locator usages";
 
-    private UsingContainerAsServiceLocatorDiagnostic _diagnostic;
+    private UsingContainerAsServiceLocatorDiagnostic? _diagnostic;
 
     public override IEnumerable<DebuggerViewItem> Attach()
     {
-        var handlers = _diagnostic.Inspect();
+        var handlers = _diagnostic?.Inspect()??[];
         if (handlers.Length == 0)
         {
             return [];

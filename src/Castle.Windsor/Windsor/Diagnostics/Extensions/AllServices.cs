@@ -21,10 +21,15 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 public class AllServices : AbstractContainerDebuggerExtension
 {
     private const string Name = "All services";
-    private AllServicesDiagnostic _diagnostic;
+    private AllServicesDiagnostic? _diagnostic;
 
     public override IEnumerable<DebuggerViewItem> Attach()
     {
+        if (_diagnostic == null)
+        {
+            return [];
+        }
+
         var map = _diagnostic.Inspect();
         var items = map.Select(p => BuildServiceView(p, p.Key.ToCSharpString())).ToArray();
         Array.Sort(items, (i1, i2) => string.Compare(i1.Name, i2.Name, StringComparison.Ordinal));

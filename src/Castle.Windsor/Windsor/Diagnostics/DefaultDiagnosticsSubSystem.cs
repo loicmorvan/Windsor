@@ -27,10 +27,10 @@ public partial class DefaultDiagnosticsSubSystem :
         _diagnostics.Add(typeof(TDiagnostic), diagnostic);
     }
 
-    public TDiagnostic GetDiagnostic<TDiagnostic>() where TDiagnostic : IDiagnostic<object>
+    public TDiagnostic? GetDiagnostic<TDiagnostic>() where TDiagnostic : IDiagnostic<object>
     {
         _diagnostics.TryGetValue(typeof(TDiagnostic), out var value);
-        return (TDiagnostic)value;
+        return (TDiagnostic?)value;
     }
 
     public override void Terminate()

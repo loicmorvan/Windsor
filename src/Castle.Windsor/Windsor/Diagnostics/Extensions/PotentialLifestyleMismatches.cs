@@ -25,11 +25,11 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 public class PotentialLifestyleMismatches : AbstractContainerDebuggerExtension
 {
     private const string Name = "Potential lifestyle mismatches";
-    private PotentialLifestyleMismatchesDiagnostic _diagnostic;
+    private PotentialLifestyleMismatchesDiagnostic? _diagnostic;
 
     public override IEnumerable<DebuggerViewItem> Attach()
     {
-        var mismatches = _diagnostic.Inspect();
+        var mismatches = _diagnostic?.Inspect() ?? [];
         if (mismatches.Length == 0)
         {
             return [];
@@ -89,7 +89,9 @@ public class PotentialLifestyleMismatches : AbstractContainerDebuggerExtension
 
     private static string GetNameDescription(ComponentModel componentModel)
     {
-        return componentModel.ComponentName.SetByUser ? componentModel.ComponentName.Name : componentModel.ToString();
+        return componentModel.ComponentName is not null && componentModel.ComponentName.SetByUser
+            ? componentModel.ComponentName.Name
+            : componentModel.ToString();
     }
 
     private static object MismatchedComponentView(IHandler[] handlers)

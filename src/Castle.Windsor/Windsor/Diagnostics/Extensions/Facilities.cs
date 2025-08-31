@@ -19,11 +19,11 @@ namespace Castle.Windsor.Windsor.Diagnostics.Extensions;
 
 public class Facilities : IContainerDebuggerExtension
 {
-    private IKernel _kernel;
+    private IKernel? _kernel;
 
     public IEnumerable<DebuggerViewItem> Attach()
     {
-        var facilities = _kernel.GetFacilities();
+        var facilities = _kernel?.GetFacilities() ?? [];
         if (facilities.Length == 0)
         {
             yield break;

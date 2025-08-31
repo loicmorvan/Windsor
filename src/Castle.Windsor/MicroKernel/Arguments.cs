@@ -29,12 +29,12 @@ public sealed class Arguments
 {
     private static readonly ArgumentsComparer Comparer = new();
 
-    private readonly Dictionary<object, object> _dictionary;
+    private readonly Dictionary<object, object?> _dictionary;
 
     /// <summary>Initializes a new instance of the <see cref="Arguments" /> class that is empty.</summary>
     public Arguments()
     {
-        _dictionary = new Dictionary<object, object>(Comparer);
+        _dictionary = new Dictionary<object, object?>(Comparer);
     }
 
     /// <summary>
@@ -43,12 +43,12 @@ public sealed class Arguments
     /// </summary>
     public Arguments(Arguments arguments)
     {
-        _dictionary = new Dictionary<object, object>(arguments._dictionary, Comparer);
+        _dictionary = new Dictionary<object, object?>(arguments._dictionary, Comparer);
     }
 
     public int Count => _dictionary.Count;
 
-    public object this[object key]
+    public object? this[object key]
     {
         get
         {
@@ -72,7 +72,7 @@ public sealed class Arguments
         return _dictionary.GetEnumerator();
     }
 
-    public void Add(object key, object value)
+    public void Add(object key, object? value)
     {
         CheckKeyType(key);
         _dictionary.Add(key, value);
@@ -133,7 +133,7 @@ public sealed class Arguments
 
     /// <summary>Adds a typed argument.</summary>
     [PublicAPI]
-    public Arguments AddTyped(Type key, object value)
+    public Arguments AddTyped(Type key, object? value)
     {
         Add(key, value);
         return this;
@@ -213,7 +213,7 @@ public sealed class Arguments
 
     private sealed class ArgumentsComparer : IEqualityComparer<object>
     {
-        bool IEqualityComparer<object>.Equals(object x, object y)
+        bool IEqualityComparer<object>.Equals(object? x, object? y)
         {
             if (x is string a)
             {

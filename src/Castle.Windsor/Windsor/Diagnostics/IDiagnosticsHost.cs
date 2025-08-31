@@ -27,5 +27,5 @@ public interface IDiagnosticsHost
 	/// <summary>Returns diagnostic registered with <typeparamref name="TDiagnostic" /> or <c>null</c> if not present.</summary>
 	/// <typeparam name="TDiagnostic"> </typeparam>
 	/// <returns> </returns>
-	TDiagnostic GetDiagnostic<TDiagnostic>() where TDiagnostic : IDiagnostic<object>;
+	TDiagnostic? GetDiagnostic<TDiagnostic>() where TDiagnostic : IDiagnostic<object>;
 }
