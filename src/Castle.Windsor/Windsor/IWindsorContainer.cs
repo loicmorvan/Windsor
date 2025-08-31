@@ -32,7 +32,7 @@ public interface IWindsorContainer : IDisposable
 
     /// <summary>Gets or sets the parent container if this instance is a sub container.</summary>
     [PublicAPI]
-    IWindsorContainer Parent { get; set; }
+    IWindsorContainer? Parent { get; set; }
 
     /// <summary>Registers a subcontainer. The components exposed by this container will be accessible from subcontainers.</summary>
     /// <param name="childContainer"></param>
@@ -58,7 +58,7 @@ public interface IWindsorContainer : IDisposable
     /// <param name="name">The container's name.</param>
     /// <returns>The child container instance or null</returns>
     [PublicAPI]
-    IWindsorContainer GetChildContainer(string name);
+    IWindsorContainer? GetChildContainer(string name);
 
     /// <summary>Runs the <paramref name="installers" /> so that they can register components in the container.</summary>
     /// <returns>The container.</returns>

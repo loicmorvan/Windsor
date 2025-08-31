@@ -22,11 +22,11 @@ namespace Castle.Windsor.MicroKernel.Proxy;
 public class ProxyOptions
 {
     private readonly ComponentModel _component;
-    private IReference<IProxyGenerationHook> _hook;
-    private List<Type> _interfaceList;
-    private List<IReference<object>> _mixInList;
+    private IReference<IProxyGenerationHook>? _hook;
+    private List<Type>? _interfaceList;
+    private List<IReference<object>>? _mixInList;
 
-    private IReference<IInterceptorSelector> _selector;
+    private IReference<IInterceptorSelector>? _selector;
 
     /// <summary>Initializes a new instance of the <see cref="ProxyOptions" /> class.</summary>
     public ProxyOptions(ComponentModel component)
@@ -43,7 +43,7 @@ public class ProxyOptions
     public bool AllowChangeTarget { get; set; }
 
     /// <summary>Gets or sets the proxy hook.</summary>
-    public IReference<IProxyGenerationHook> Hook
+    public IReference<IProxyGenerationHook>? Hook
     {
         get => _hook;
         set => SetReferenceValue(ref _hook, value);
@@ -57,7 +57,7 @@ public class ProxyOptions
     public bool OmitTarget { get; set; }
 
     /// <summary>Gets or sets the interceptor selector.</summary>
-    public IReference<IInterceptorSelector> Selector
+    public IReference<IInterceptorSelector>? Selector
     {
         get => _selector;
         set => SetReferenceValue(ref _selector, value);
@@ -67,7 +67,7 @@ public class ProxyOptions
 
     /// <summary>Adds the additional interfaces to proxy.</summary>
     /// <param name="interfaces"> The interfaces. </param>
-    public void AddAdditionalInterfaces(params Type[] interfaces)
+    public void AddAdditionalInterfaces(params Type[]? interfaces)
     {
         if (interfaces == null || interfaces.Length == 0)
         {
@@ -82,7 +82,7 @@ public class ProxyOptions
     /// <summary>Adds the additional mix ins to integrate.</summary>
     /// <param name="mixIns"> The mix ins. </param>
     [PublicAPI]
-    public void AddMixIns(params object[] mixIns)
+    public void AddMixIns(params object[]? mixIns)
     {
         if (mixIns == null || mixIns.Length == 0)
         {
@@ -114,7 +114,7 @@ public class ProxyOptions
     /// <summary>Equals the specified obj.</summary>
     /// <param name="obj"> The obj. </param>
     /// <returns> true if equal. </returns>
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (this == obj)
         {
@@ -192,7 +192,7 @@ public class ProxyOptions
         return _mixInList.All(t => proxyOptions._mixInList == null || proxyOptions._mixInList.Contains(t));
     }
 
-    private void SetReferenceValue<T>(ref IReference<T> reference, IReference<T> value)
+    private void SetReferenceValue<T>(ref IReference<T>? reference, IReference<T>? value)
     {
         reference?.Detach(_component);
         value?.Attach(_component);

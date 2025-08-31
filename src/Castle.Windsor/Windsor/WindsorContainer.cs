@@ -159,7 +159,7 @@ public sealed class WindsorContainer :
     public string? Name { get; }
 
     /// <summary>Gets or sets the parent container if this instance is a sub container.</summary>
-    public IWindsorContainer Parent
+    public IWindsorContainer? Parent
     {
         get => _parent;
         set
@@ -200,6 +200,7 @@ public sealed class WindsorContainer :
     public void AddChildContainer(IWindsorContainer childContainer)
     {
         ArgumentNullException.ThrowIfNull(childContainer);
+        ArgumentNullException.ThrowIfNull(childContainer.Name);
 
         lock (_childContainersLocker)
         {
@@ -245,7 +246,7 @@ public sealed class WindsorContainer :
     /// <summary>Gets a child container instance by name.</summary>
     /// <param name="name">The container's name.</param>
     /// <returns>The child container instance or null</returns>
-    public IWindsorContainer GetChildContainer(string name)
+    public IWindsorContainer? GetChildContainer(string name)
     {
         lock (_childContainersLocker)
         {
@@ -285,7 +286,7 @@ public sealed class WindsorContainer :
         {
             var token = internalKernel.OptimizeDependencyResolution();
             Install(installers, scope);
-            token?.Dispose();
+            token.Dispose();
         }
 
         return this;
@@ -336,6 +337,7 @@ public sealed class WindsorContainer :
     public void RemoveChildContainer(IWindsorContainer childContainer)
     {
         ArgumentNullException.ThrowIfNull(childContainer);
+        ArgumentNullException.ThrowIfNull(childContainer.Name);
 
         lock (_childContainersLocker)
         {
@@ -456,7 +458,7 @@ public sealed class WindsorContainer :
 
     private void RunInstaller()
     {
-        Installer?.SetUp(this, Kernel.ConfigurationStore);
+        Installer.SetUp(this, Kernel.ConfigurationStore);
     }
 
     private void Install(IWindsorInstaller[] installers, DefaultComponentInstaller scope)

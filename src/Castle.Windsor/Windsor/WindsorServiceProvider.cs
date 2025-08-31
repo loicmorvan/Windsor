@@ -25,7 +25,7 @@ namespace Castle.Windsor.Windsor;
 /// </summary>
 public class WindsorServiceProvider : IServiceProviderEx
 {
-    private readonly IKernelInternal _kernel;
+    private readonly IKernelInternal? _kernel;
 
     public WindsorServiceProvider(IWindsorContainer container)
     {
@@ -37,17 +37,17 @@ public class WindsorServiceProvider : IServiceProviderEx
     }
 
     // ReSharper disable once UnusedMember.Global
-    public IKernel Kernel => _kernel;
+    public IKernel? Kernel => _kernel;
 
-    public object GetService(Type serviceType)
+    public object? GetService(Type serviceType)
     {
-        return _kernel.LoadHandlerByType(null, serviceType, null) != null
+        return _kernel?.LoadHandlerByType(null, serviceType, null) != null
             ? _kernel.Resolve(serviceType)
             : null;
     }
 
-    public T GetService<T>() where T : class
+    public T? GetService<T>() where T : class
     {
-        return (T)GetService(typeof(T));
+        return (T?)GetService(typeof(T));
     }
 }

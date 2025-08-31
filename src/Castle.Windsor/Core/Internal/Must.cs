@@ -37,7 +37,7 @@ public static class Must
     }
 
     [return: NotNull]
-    public static T NotBeNull<T>(T arg, string name) where T : class
+    public static T NotBeNull<T>(T? arg, string name) where T : class
     {
         return arg ?? throw new ArgumentNullException(name);
     }

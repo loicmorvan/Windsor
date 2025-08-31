@@ -35,29 +35,29 @@ public sealed class ComponentModel : GraphNode
     private readonly List<Type> _services = new(4);
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ComponentName _componentName;
+    private ComponentName? _componentName;
 
     [NonSerialized] [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private Arguments _customDependencies;
+    private Arguments? _customDependencies;
 
     /// <summary>Dependencies the kernel must resolve</summary>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private DependencyModelCollection _dependencies;
+    private DependencyModelCollection? _dependencies;
 
     [NonSerialized] [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private Arguments _extendedProperties;
+    private Arguments? _extendedProperties;
 
     /// <summary>Interceptors associated</summary>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private InterceptorReferenceCollection _interceptors;
+    private InterceptorReferenceCollection? _interceptors;
 
     /// <summary>External parameters</summary>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ParameterModelCollection _parameters;
+    private ParameterModelCollection? _parameters;
 
     /// <summary>All potential properties that can be setted by the kernel</summary>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private PropertySetCollection _properties;
+    private PropertySetCollection? _properties;
 
     /// <summary>Constructs a ComponentModel</summary>
     public ComponentModel(ComponentName name, ICollection<Type> services, Type implementation,
@@ -77,7 +77,7 @@ public sealed class ComponentModel : GraphNode
     {
     }
 
-    public ComponentName ComponentName
+    public ComponentName? ComponentName
     {
         get => _componentName;
         internal set => _componentName = Must.NotBeNull(value, "value");
@@ -85,7 +85,7 @@ public sealed class ComponentModel : GraphNode
 
     /// <summary>Gets or sets the configuration.</summary>
     /// <value> The configuration. </value>
-    public IConfiguration Configuration { get; set; }
+    public IConfiguration? Configuration { get; set; }
 
     /// <summary>Gets the constructors candidates.</summary>
     /// <value> The constructors. </value>
@@ -94,7 +94,7 @@ public sealed class ComponentModel : GraphNode
 
     /// <summary>Gets or sets the custom component activator.</summary>
     /// <value> The custom component activator. </value>
-    public Type CustomComponentActivator { get; set; }
+    public Type? CustomComponentActivator { get; set; }
 
     /// <summary>Gets the custom dependencies.</summary>
     /// <value> The custom dependencies. </value>
@@ -117,7 +117,7 @@ public sealed class ComponentModel : GraphNode
 
     /// <summary>Gets or sets the custom lifestyle.</summary>
     /// <value> The custom lifestyle. </value>
-    public Type CustomLifestyle { get; set; }
+    public Type? CustomLifestyle { get; set; }
 
     /// <summary>
     ///     Dependencies are kept within constructors and properties. Others dependencies must be registered here, so the
@@ -194,7 +194,7 @@ public sealed class ComponentModel : GraphNode
 
     /// <summary>Gets or sets the component implementation.</summary>
     /// <value> The implementation. </value>
-    public Type Implementation { get; set; }
+    public Type? Implementation { get; set; }
 
     /// <summary>Gets or sets the strategy for inspecting public properties on the components</summary>
     public PropertiesInspectionBehavior InspectionBehavior { get; set; }
@@ -232,8 +232,18 @@ public sealed class ComponentModel : GraphNode
     /// <summary>Sets or returns the component key</summary>
     public string Name
     {
-        get => _componentName.Name;
-        set => _componentName.SetName(value);
+        get => _componentName == null
+            ? throw new InvalidOperationException("Component name is not set")
+            : _componentName.Name;
+        set
+        {
+            if (_componentName == null)
+            {
+                throw new InvalidOperationException("Component name is not set");
+            }
+
+            _componentName.SetName(value);
+        }
     }
 
     /// <summary>Gets the parameter collection.</summary>
@@ -283,7 +293,7 @@ public sealed class ComponentModel : GraphNode
     internal HashSet<Type> ServicesLookup { get; } = [];
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    internal ParameterModelCollection ParametersInternal => _parameters;
+    internal ParameterModelCollection? ParametersInternal => _parameters;
 
     /// <summary>Adds constructor dependency to this <see cref="ComponentModel" /></summary>
     /// <param name="constructor"> </param>
@@ -306,7 +316,7 @@ public sealed class ComponentModel : GraphNode
 
     /// <summary>Add service to be exposed by this <see cref="ComponentModel" /></summary>
     /// <param name="type"> </param>
-    public void AddService(Type type)
+    public void AddService(Type? type)
     {
         if (type == null)
         {
