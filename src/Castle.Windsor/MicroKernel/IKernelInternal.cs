@@ -45,7 +45,7 @@ public interface IKernelInternal : IKernel
 
     IHandler? LoadHandlerByType(string? key, Type service, Arguments? arguments);
 
-    IDisposable OptimizeDependencyResolution();
+    IDisposable? OptimizeDependencyResolution();
 
     object Resolve(Type service, Arguments? arguments, IReleasePolicy policy, bool ignoreParentContext = false);
 

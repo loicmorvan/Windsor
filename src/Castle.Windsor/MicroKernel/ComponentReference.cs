@@ -29,10 +29,10 @@ public class ComponentReference<T> : IReference<T>
     protected readonly string ReferencedComponentName;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    protected readonly Type ReferencedComponentType;
+    protected readonly Type? ReferencedComponentType;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    protected DependencyModel DependencyModel;
+    protected DependencyModel? DependencyModel;
 
     /// <summary>
     ///     Creates a new instance of <see cref="ComponentReference{T}" /> referencing default component implemented by
@@ -75,7 +75,7 @@ public class ComponentReference<T> : IReference<T>
                 $"Cycle detected - referenced component {handler.ComponentModel.Name} wants to use itself as its dependency. This usually signifies a bug in your code.");
         }
 
-        var contextForInterceptor = RebuildContext(handler, context);
+        var contextForInterceptor = RebuildContext(context);
 
         try
         {
@@ -104,15 +104,15 @@ public class ComponentReference<T> : IReference<T>
         component.Dependencies.Remove(DependencyModel);
     }
 
-    private IHandler GetHandler(IKernel kernel)
+    private IHandler? GetHandler(IKernel kernel)
     {
         var handler = kernel.GetHandler(ReferencedComponentName);
         return handler;
     }
 
-    private CreationContext RebuildContext(IHandler handler, CreationContext current)
+    private CreationContext RebuildContext(CreationContext current)
     {
-        var handlerType = ComponentType ?? handler.ComponentModel.Services.First();
+        var handlerType = ComponentType;
         return handlerType.GetTypeInfo().ContainsGenericParameters
             ? current
             : new CreationContext(handlerType, current, false);

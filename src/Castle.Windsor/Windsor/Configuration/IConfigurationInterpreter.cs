@@ -37,5 +37,5 @@ public interface IConfigurationInterpreter
     /// <param name="resource"></param>
     /// <param name="store"></param>
     /// <param name="kernel"></param>
-    void ProcessResource(IResource resource, IConfigurationStore? store, IKernel kernel);
+    void ProcessResource(IResource resource, IConfigurationStore store, IKernel kernel);
 }

@@ -34,7 +34,7 @@ public interface IHandler : ISubDependencyResolver
     void Init(IKernelInternal kernel);
 
     /// <summary>Tests whether the handler is already being resolved in given context.</summary>
-    bool IsBeingResolvedInContext(CreationContext context);
+    bool IsBeingResolvedInContext(CreationContext? context);
 
     /// <summary>Implementors should dispose the component instance</summary>
     /// <param name="burden"></param>

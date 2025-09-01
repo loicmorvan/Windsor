@@ -53,5 +53,5 @@ public class ComponentResolutionException : Exception
         Component = component;
     }
 
-    public ComponentModel Component { get; private set; }
+    public ComponentModel? Component { get; private set; }
 }

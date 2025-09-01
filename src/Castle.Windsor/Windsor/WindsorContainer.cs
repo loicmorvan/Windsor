@@ -286,7 +286,7 @@ public sealed class WindsorContainer :
         {
             var token = internalKernel.OptimizeDependencyResolution();
             Install(installers, scope);
-            token.Dispose();
+            token?.Dispose();
         }
 
         return this;
