@@ -21,7 +21,7 @@ public abstract class ReferenceExpressionUtil
         return IsReference(value) ? value : $"${{{value}}}";
     }
 
-    public static string ExtractComponentName(string value)
+    public static string? ExtractComponentName(string value)
     {
         return IsReference(value) ? value.Substring(2, value.Length - 3) : null;
     }

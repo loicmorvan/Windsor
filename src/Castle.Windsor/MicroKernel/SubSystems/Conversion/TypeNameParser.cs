@@ -16,11 +16,11 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 public class TypeNameParser : ITypeNameParser
 {
-    public TypeName Parse(string name)
+    public TypeName? Parse(string name)
     {
         var isPotentiallyFullyQualifiedName = name.Contains(',');
         var genericIndex = name.IndexOf('`');
-        var genericTypes = Array.Empty<TypeName>();
+        var genericTypes = Array.Empty<TypeName?>();
         if (genericIndex <= -1)
         {
             return isPotentiallyFullyQualifiedName
@@ -53,21 +53,17 @@ public class TypeNameParser : ITypeNameParser
         genericTypes =
             ParseNames(name.Substring(start + 2, name.LastIndexOf("]]", StringComparison.Ordinal) - 2 - start),
                 count);
-        if (genericTypes == null)
-        {
-            return null;
-        }
 
         name = name[..start];
 
         return BuildName(name, genericTypes);
     }
 
-    private static TypeName BuildName(string name, TypeName[] genericTypes)
+    private static TypeName BuildName(string name, TypeName?[] genericTypes)
     {
         var typeStartsHere = name.LastIndexOf('.');
         string typeName;
-        string @namespace = null;
+        string? @namespace = null;
 
         if (typeStartsHere > -1 && typeStartsHere < name.Length - 1)
         {
@@ -128,7 +124,7 @@ public class TypeNameParser : ITypeNameParser
         return currentLocation;
     }
 
-    private TypeName[] ParseNames(string substring, int count)
+    private TypeName?[] ParseNames(string substring, int count)
     {
         if (count == 1)
         {
@@ -141,7 +137,7 @@ public class TypeNameParser : ITypeNameParser
             return [name];
         }
 
-        var names = new TypeName[count];
+        var names = new TypeName?[count];
 
         var location = 0;
         for (var i = 0; i < count; i++)

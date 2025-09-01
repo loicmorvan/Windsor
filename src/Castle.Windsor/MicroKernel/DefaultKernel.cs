@@ -426,7 +426,8 @@ public sealed partial class DefaultKernel :
     {
         _subsystems.TryGetValue(name, out var subsystem);
         return subsystem as TSubSystem ??
-               throw new InvalidOperationException($"The kernel does not have a subsystem named '{name}' of type '{typeof(TSubSystem).FullName}'.");
+               throw new InvalidOperationException(
+                   $"The kernel does not have a subsystem named '{name}' of type '{typeof(TSubSystem).FullName}'.");
     }
 
     public bool HasComponent(string? name)
@@ -651,7 +652,9 @@ public sealed partial class DefaultKernel :
             {
                 foreach (var loader in ResolveAll<ILazyComponentLoader>())
                 {
-                    var registration = loader.Load(name, service, arguments);
+                    var registration = service is null
+                        ? loader.Load(name, arguments)
+                        : loader.Load(name, service, arguments);
                     if (registration == null)
                     {
                         continue;
@@ -698,7 +701,9 @@ public sealed partial class DefaultKernel :
             {
                 foreach (var loader in ResolveAll<ILazyComponentLoader>())
                 {
-                    var registration = loader.Load(name, service, arguments);
+                    var registration = name is null
+                        ? loader.Load(service, arguments)
+                        : loader.Load(name, service, arguments);
                     if (registration == null)
                     {
                         continue;

@@ -16,11 +16,11 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 public class TypeName
 {
-    private readonly string _assemblyQualifiedName;
-    private readonly TypeName[] _genericTypes;
-    private readonly string _namespace;
+    private readonly string? _assemblyQualifiedName;
+    private readonly TypeName?[]? _genericTypes;
+    private readonly string? _namespace;
 
-    public TypeName(string @namespace, string name, TypeName[] genericTypes)
+    public TypeName(string? @namespace, string name, TypeName?[] genericTypes)
     {
         Name = name;
         _genericTypes = genericTypes;
@@ -51,9 +51,9 @@ public class TypeName
 
     private bool IsAssemblyQualified => _assemblyQualifiedName != null;
 
-    private string Name { get; }
+    private string? Name { get; }
 
-    public string ExtractAssemblyName()
+    public string? ExtractAssemblyName()
     {
         if (!IsAssemblyQualified)
         {

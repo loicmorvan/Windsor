@@ -18,11 +18,13 @@ namespace Castle.Windsor.MicroKernel;
 public abstract class AbstractSubSystem :
     ISubSystem
 {
-    protected IKernelInternal Kernel { get; private set; }
+    private IKernelInternal? _kernel;
+    
+    protected IKernelInternal Kernel => _kernel ?? throw new InvalidOperationException("Kernel not initialized");
 
     public virtual void Init(IKernelInternal kernel)
     {
-        Kernel = kernel;
+        _kernel = kernel;
     }
 
     public virtual void Terminate()

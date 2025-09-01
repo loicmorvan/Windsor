@@ -19,29 +19,29 @@ namespace Castle.Windsor.MicroKernel;
 
 public sealed partial class DefaultKernel
 {
-	/// <summary>Returns a component instance by the key</summary>
+    /// <summary>Returns a component instance by the key</summary>
     /// <param name="key"></param>
     /// <param name="service"></param>
-	/// <returns></returns>
-	public object Resolve(string key, Type service)
+    /// <returns></returns>
+    public object Resolve(string key, Type service)
     {
         return (this as IKernelInternal).Resolve(key, service, null, ReleasePolicy);
     }
 
-	/// <summary>Returns a component instance by the key</summary>
+    /// <summary>Returns a component instance by the key</summary>
     /// <param name="key"></param>
     /// <param name="service"></param>
     /// <param name="arguments"></param>
-	/// <returns></returns>
-	public object Resolve(string key, Type service, Arguments? arguments)
+    /// <returns></returns>
+    public object Resolve(string key, Type service, Arguments? arguments)
     {
         return (this as IKernelInternal).Resolve(key, service, arguments, ReleasePolicy);
     }
 
-	/// <summary>Returns the component instance by the service type using dynamic arguments</summary>
+    /// <summary>Returns the component instance by the service type using dynamic arguments</summary>
     /// <param name="arguments"></param>
-	/// <returns></returns>
-	public T Resolve<T>(Arguments arguments)
+    /// <returns></returns>
+    public T Resolve<T>(Arguments arguments)
     {
         return (T)Resolve(typeof(T), arguments);
     }
@@ -134,8 +134,7 @@ public sealed partial class DefaultKernel
         }
 
         var otherHandlers = GetHandlers(service).Length;
-        throw new ComponentNotFoundException(key, service, otherHandlers);
-
+        throw new ComponentNotFoundException(key, service ?? typeof(object), otherHandlers);
     }
 
     object IKernelInternal.Resolve(Type service, Arguments? arguments, IReleasePolicy policy, bool ignoreParentContext)
