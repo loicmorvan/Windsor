@@ -17,6 +17,7 @@ using Castle.Windsor.MicroKernel;
 using Castle.Windsor.MicroKernel.Handlers;
 using Castle.Windsor.MicroKernel.Registration;
 using Castle.Windsor.MicroKernel.Resolvers;
+using Castle.Windsor.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Tests.MicroKernel;
@@ -354,9 +355,9 @@ public class MicroKernelTestCase : AbstractContainerTestCase
     [Fact]
     public void Subsystems_are_case_insensitive()
     {
-        Assert.NotNull(Kernel.GetSubSystem(SubSystemConstants.ConfigurationStoreKey));
-        Assert.NotNull(Kernel.GetSubSystem(SubSystemConstants.ConfigurationStoreKey.ToLower()));
-        Assert.NotNull(Kernel.GetSubSystem(SubSystemConstants.ConfigurationStoreKey.ToUpper()));
+        Kernel.GetSubSystem<IConfigurationStore>(SubSystemConstants.ConfigurationStoreKey);
+        Kernel.GetSubSystem<IConfigurationStore>(SubSystemConstants.ConfigurationStoreKey.ToLower());
+        Kernel.GetSubSystem<IConfigurationStore>(SubSystemConstants.ConfigurationStoreKey.ToUpper());
     }
 
     [Fact]

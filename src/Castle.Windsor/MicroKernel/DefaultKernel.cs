@@ -104,14 +104,10 @@ public sealed partial class DefaultKernel :
 
     public IComponentModelBuilder ComponentModelBuilder { get; set; }
 
-    public IConfigurationStore? ConfigurationStore
+    public IConfigurationStore ConfigurationStore
     {
-        get => GetSubSystem(SubSystemConstants.ConfigurationStoreKey) as IConfigurationStore;
-        set
-        {
-            ArgumentNullException.ThrowIfNull(value);
-            AddSubSystem(SubSystemConstants.ConfigurationStoreKey, value);
-        }
+        get => GetSubSystem<IConfigurationStore>(SubSystemConstants.ConfigurationStoreKey);
+        set => AddSubSystem(SubSystemConstants.ConfigurationStoreKey, value);
     }
 
     /// <summary>Graph of components and interactions.</summary>
@@ -426,11 +422,11 @@ public sealed partial class DefaultKernel :
         return result;
     }
 
-    public ISubSystem GetSubSystem(string name)
+    public TSubSystem GetSubSystem<TSubSystem>(string name) where TSubSystem : class
     {
         _subsystems.TryGetValue(name, out var subsystem);
-        return subsystem ??
-               throw new InvalidOperationException($"The kernel does not have a subsystem named '{name}'.");
+        return subsystem as TSubSystem ??
+               throw new InvalidOperationException($"The kernel does not have a subsystem named '{name}' of type '{typeof(TSubSystem).FullName}'.");
     }
 
     public bool HasComponent(string? name)

@@ -32,7 +32,7 @@ public partial interface IKernel : IKernelEvents, IDisposable
 	IComponentModelBuilder ComponentModelBuilder { get; }
 
 	/// <summary>Gets or sets the implementation of <see cref="IConfigurationStore" /></summary>
-	IConfigurationStore? ConfigurationStore { get; set; }
+	IConfigurationStore ConfigurationStore { get; set; }
 
 	/// <summary>Graph of components and interactions.</summary>
 	[PublicAPI]
@@ -127,7 +127,7 @@ public partial interface IKernel : IKernelEvents, IDisposable
 	/// </summary>
 	/// <param name="name"></param>
 	/// <returns></returns>
-	ISubSystem GetSubSystem(string name);
+	TSubSystem GetSubSystem<TSubSystem>(string name) where TSubSystem : class;
 
 	/// <summary>Returns <c>true</c> if a component with given <paramref name="name" /> was registered, otherwise <c>false</c>.</summary>
 	/// <param name="name"></param>

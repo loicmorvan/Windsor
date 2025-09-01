@@ -26,7 +26,7 @@ public class DuplicatedDependenciesDiagnosticTestCase : AbstractContainerTestCas
 
     protected override void AfterContainerCreated()
     {
-        var host = (IDiagnosticsHost)Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
+        var host = Kernel.GetSubSystem<IDiagnosticsHost>(SubSystemConstants.DiagnosticsKey);
         _diagnostic = host.GetDiagnostic<IDuplicatedDependenciesDiagnostic>();
     }
 

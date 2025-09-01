@@ -163,7 +163,7 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
             return resource.CreateRelative(resourceUri);
         }
 
-        var subSystem = (IResourceSubSystem)Kernel.GetSubSystem(SubSystemConstants.ResourceKey);
+        var subSystem = Kernel.GetSubSystem<IResourceSubSystem>(SubSystemConstants.ResourceKey);
 
         return subSystem.CreateResource(resourceUri, resource.FileBasePath);
     }

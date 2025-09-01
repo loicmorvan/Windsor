@@ -165,8 +165,8 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
             return;
         }
 
-        _converter = (ITypeConverter)
-            kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
+        _converter = 
+            kernel.GetSubSystem<ITypeConverter>(SubSystemConstants.ConversionManagerKey);
     }
 
     private IList<MethodInfo> GetMethods(Type implementation, string name, string signature)

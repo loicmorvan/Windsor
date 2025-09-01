@@ -19,20 +19,12 @@ using Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
 namespace Castle.Windsor.Windsor.Diagnostics;
 
 [DebuggerDisplay("")]
-internal class KernelDebuggerProxy
+internal class KernelDebuggerProxy(IKernel kernel)
 {
-    private readonly IEnumerable<IContainerDebuggerExtension> _extensions;
+    private readonly IEnumerable<IContainerDebuggerExtension> _extensions = (IEnumerable<IContainerDebuggerExtension>?)kernel.GetSubSystem<IContainerDebuggerExtensionHost>(SubSystemConstants.DiagnosticsKey) ?? [];
 
     public KernelDebuggerProxy(IWindsorContainer container) : this(container.Kernel)
     {
-    }
-
-    public KernelDebuggerProxy(IKernel kernel)
-    {
-        ArgumentNullException.ThrowIfNull(kernel);
-        _extensions =
-            (IEnumerable<IContainerDebuggerExtension>?)(kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as
-                IContainerDebuggerExtensionHost) ?? [];
     }
 
     [DebuggerDisplay("")]

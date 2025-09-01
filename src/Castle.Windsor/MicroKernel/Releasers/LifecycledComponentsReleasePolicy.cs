@@ -202,7 +202,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
     /// <returns></returns>
     public static ITrackedComponentsDiagnostic GetTrackedComponentsDiagnostic(IKernel kernel)
     {
-        var diagnosticsHost = (IDiagnosticsHost)kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
-        return diagnosticsHost?.GetDiagnostic<ITrackedComponentsDiagnostic>();
+        var diagnosticsHost = kernel.GetSubSystem<IDiagnosticsHost>(SubSystemConstants.DiagnosticsKey);
+        return diagnosticsHost.GetDiagnostic<ITrackedComponentsDiagnostic>();
     }
 }

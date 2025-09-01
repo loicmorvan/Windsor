@@ -31,8 +31,7 @@ public class ReleasePolicyTrackedObjectsTestCase : AbstractContainerTestCase
 {
     private DebuggerViewItem GetTrackedObjects()
     {
-        var subSystem = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IContainerDebuggerExtensionHost;
-        Debug.Assert(subSystem != null);
+        var subSystem = Kernel.GetSubSystem<IContainerDebuggerExtensionHost>(SubSystemConstants.DiagnosticsKey);
         return subSystem.SelectMany(e => e.Attach()).SingleOrDefault(i => i.Name == ReleasePolicyTrackedObjects.Name);
     }
 

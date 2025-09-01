@@ -34,7 +34,7 @@ public sealed class DefaultComponentInstaller : IComponentsInstaller
     /// <param name="store">Configuration store</param>
     public void SetUp(IWindsorContainer container, IConfigurationStore store)
     {
-        var converter = (IConversionManager)container.Kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
+        var converter = container.Kernel.GetSubSystem<IConversionManager>(SubSystemConstants.ConversionManagerKey);
 
         SetUpInstallers(store.GetInstallers(), container, converter);
         SetUpFacilities(store.GetFacilities(), container, converter);

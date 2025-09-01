@@ -28,8 +28,7 @@ public class PotentialLifestyleMismatchesDiagnosticTestCase : AbstractContainerT
 
     protected override void AfterContainerCreated()
     {
-        var host = Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey) as IDiagnosticsHost;
-        Debug.Assert(host != null);
+        var host = Kernel.GetSubSystem<IDiagnosticsHost>(SubSystemConstants.DiagnosticsKey);
         _diagnostic = host.GetDiagnostic<IPotentialLifestyleMismatchesDiagnostic>();
     }
 

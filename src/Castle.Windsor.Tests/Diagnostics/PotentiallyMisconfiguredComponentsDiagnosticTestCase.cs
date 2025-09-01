@@ -25,7 +25,7 @@ public class PotentiallyMisconfiguredComponentsDiagnosticTestCase : AbstractCont
 
     protected override void AfterContainerCreated()
     {
-        var host = (IDiagnosticsHost)Kernel.GetSubSystem(SubSystemConstants.DiagnosticsKey);
+        var host = Kernel.GetSubSystem<IDiagnosticsHost>(SubSystemConstants.DiagnosticsKey);
         _diagnostic = host.GetDiagnostic<IPotentiallyMisconfiguredComponentsDiagnostic>();
     }
 
