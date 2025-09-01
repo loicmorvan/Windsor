@@ -30,7 +30,7 @@ public abstract class AbstractContainerDebuggerExtension : IContainerDebuggerExt
     }
 
     [PublicAPI]
-    protected static ComponentDebuggerView DefaultComponentView(IHandler handler, string description)
+    protected static ComponentDebuggerView DefaultComponentView(IHandler handler, string? description)
     {
         return ComponentDebuggerView.BuildFor(handler, description);
     }

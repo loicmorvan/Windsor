@@ -36,14 +36,14 @@ public partial class DefaultXmlProcessorEngine : IXmlProcessorEngine
 
     /// <summary>Initializes a new instance of the <see cref="DefaultXmlProcessorEngine" /> class.</summary>
     /// <param name="environmentName">Name of the environment.</param>
-    public DefaultXmlProcessorEngine(string environmentName) : this(environmentName, new DefaultResourceSubSystem())
+    public DefaultXmlProcessorEngine(string? environmentName) : this(environmentName, new DefaultResourceSubSystem())
     {
     }
 
     /// <summary>Initializes a new instance of the <see cref="DefaultXmlProcessorEngine" /> class.</summary>
     /// <param name="environmentName">Name of the environment.</param>
     /// <param name="resourceSubSystem">The resource sub system.</param>
-    public DefaultXmlProcessorEngine(string environmentName, IResourceSubSystem resourceSubSystem)
+    public DefaultXmlProcessorEngine(string? environmentName, IResourceSubSystem resourceSubSystem)
     {
         AddEnvNameAsFlag(environmentName);
         _resourceSubSystem = resourceSubSystem;
@@ -53,23 +53,6 @@ public partial class DefaultXmlProcessorEngine : IXmlProcessorEngine
     public void AddFlag(string flag)
     {
         _flags[GetCanonicalFlagName(flag)] = true;
-    }
-
-    public void AddNodeProcessor(Type type)
-    {
-        if (type.Is<IXmlNodeProcessor>())
-        {
-            var processor = type.CreateInstance<IXmlNodeProcessor>();
-            foreach (var nodeType in processor.AcceptNodeTypes)
-            {
-                RegisterProcessor(nodeType, processor);
-            }
-        }
-        else
-        {
-            throw new XmlProcessorException("{0} does not implement {1} interface", type.FullName,
-                typeof(IXmlNodeProcessor).FullName);
-        }
     }
 
     public void AddProperty(XmlElement content)
@@ -98,7 +81,7 @@ public partial class DefaultXmlProcessorEngine : IXmlProcessorEngine
         processor?.Process(nodeList, this);
     }
 
-    public XmlElement GetProperty(string key)
+    public XmlElement? GetProperty(string key)
     {
         if (!_properties.TryGetValue(key, out var property))
         {
@@ -154,7 +137,24 @@ public partial class DefaultXmlProcessorEngine : IXmlProcessorEngine
         _flags.Remove(GetCanonicalFlagName(flag));
     }
 
-    private void AddEnvNameAsFlag(string environmentName)
+    public void AddNodeProcessor(Type type)
+    {
+        if (type.Is<IXmlNodeProcessor>())
+        {
+            var processor = type.CreateInstance<IXmlNodeProcessor>();
+            foreach (var nodeType in processor.AcceptNodeTypes)
+            {
+                RegisterProcessor(nodeType, processor);
+            }
+        }
+        else
+        {
+            throw new XmlProcessorException(
+                $"{type.FullName} does not implement {typeof(IXmlNodeProcessor).FullName} interface");
+        }
+    }
+
+    private void AddEnvNameAsFlag(string? environmentName)
     {
         if (environmentName != null)
         {
@@ -167,11 +167,11 @@ public partial class DefaultXmlProcessorEngine : IXmlProcessorEngine
         flag = flag.Trim().ToLower();
 
         return !GetFlagPattern().IsMatch(flag)
-            ? throw new XmlProcessorException("Invalid flag name '{0}'", flag)
+            ? throw new XmlProcessorException($"Invalid flag name '{flag}'")
             : flag;
     }
 
-    private IXmlNodeProcessor GetProcessor(XmlNode node)
+    private IXmlNodeProcessor? GetProcessor(XmlNode node)
     {
         if (!_nodeProcessors.TryGetValue(node.NodeType, out var processors))
         {
@@ -202,8 +202,8 @@ public partial class DefaultXmlProcessorEngine : IXmlProcessorEngine
 
         if (typeProcessors.ContainsKey(processor.Name))
         {
-            throw new XmlProcessorException("There is already a processor register for {0} with name {1} ", type,
-                processor.Name);
+            throw new XmlProcessorException(
+                $"There is already a processor register for {type} with name {processor.Name} ");
         }
 
         typeProcessors.Add(processor.Name, processor);

@@ -45,7 +45,7 @@ public class ChooseElementProcessor : AbstractStatementElementProcessor
                 WhenElemName => ProcessStatement(elem, engine),
                 OtherwiseElemName => true,
                 _ => throw new XmlProcessorException(
-                    "'{0} can not contain only 'when' and 'otherwise' elements found '{1}'", element.Name, elem.Name)
+                    $"'{element.Name} can not contain only 'when' and 'otherwise' elements found '{elem.Name}'")
             };
 
             if (!found)

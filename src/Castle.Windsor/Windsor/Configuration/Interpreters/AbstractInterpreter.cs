@@ -35,7 +35,7 @@ public abstract class AbstractInterpreter : IConfigurationInterpreter
     {
     }
 
-    [PublicAPI] protected IResource CurrentResource => _resourceStack.Count == 0 ? null : _resourceStack.Peek();
+    [PublicAPI] protected IResource? CurrentResource => _resourceStack.Count == 0 ? null : _resourceStack.Peek();
 
 
     /// <summary>
@@ -53,7 +53,7 @@ public abstract class AbstractInterpreter : IConfigurationInterpreter
 
     /// <summary>Gets or sets the name of the environment.</summary>
     /// <value>The name of the environment.</value>
-    public string EnvironmentName { get; set; }
+    public string? EnvironmentName { get; set; }
 
     [PublicAPI]
     protected void PushResource(IResource resource)

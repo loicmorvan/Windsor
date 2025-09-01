@@ -102,14 +102,14 @@ public class IfProcessingInstructionProcessor : AbstractXmlNodeProcessor
         switch (data)
         {
             case "" when requireData:
-                throw new XmlProcessorException("Element '{0}' must have a flag attribute", pi.Name);
+                throw new XmlProcessorException($"Element '{pi.Name}' must have a flag attribute");
             case "":
                 return;
         }
 
         if (!requireData)
         {
-            throw new XmlProcessorException("Element '{0}' cannot have any attributes", pi.Name);
+            throw new XmlProcessorException($"Element '{pi.Name}' cannot have any attributes");
         }
     }
 

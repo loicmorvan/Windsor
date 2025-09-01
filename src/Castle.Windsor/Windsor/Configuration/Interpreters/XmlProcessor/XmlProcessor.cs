@@ -41,7 +41,7 @@ public sealed class XmlProcessor
 
     /// <summary>Initializes a new instance of the <see cref="XmlProcessor" /> class.</summary>
     [PublicAPI]
-    public XmlProcessor(string environmentName)
+    public XmlProcessor(string? environmentName)
     {
         _engine = new DefaultXmlProcessorEngine(environmentName);
         RegisterProcessors();
@@ -51,14 +51,20 @@ public sealed class XmlProcessor
     {
         try
         {
-            if (node is XmlDocument xmlDocument)
+            var candidate = node;
+            
+            if (candidate is XmlDocument xmlDocument)
             {
-                node = xmlDocument.DocumentElement;
+                candidate = xmlDocument.DocumentElement;
+                if (candidate is null)
+                {
+                    throw new ConfigurationProcessingException("Document is empty");
+                }
             }
 
-            _engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(node));
+            _engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(candidate));
 
-            return node;
+            return candidate;
         }
         catch (ConfigurationProcessingException)
         {

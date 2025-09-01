@@ -43,7 +43,7 @@ public class ComponentDebuggerView(
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public string Name { get; } = handler.GetComponentName();
 
-    public static ComponentDebuggerView BuildFor(IHandler handler, string description = null)
+    public static ComponentDebuggerView BuildFor(IHandler handler, string? description = null)
     {
         var extensions = new List<IComponentDebuggerExtension> { new DefaultComponentViewBuilder(handler) };
         extensions.AddRange(GetExtensions(handler));
@@ -66,7 +66,6 @@ public class ComponentDebuggerView(
     private static IEnumerable<IComponentDebuggerExtension> GetExtensions(IHandler handler)
     {
         var handlerExtensions = handler.ComponentModel.ExtendedProperties["DebuggerExtensions"];
-        return (IEnumerable<IComponentDebuggerExtension>)handlerExtensions ??
-               [];
+        return (IEnumerable<IComponentDebuggerExtension>?)handlerExtensions ?? [];
     }
 }

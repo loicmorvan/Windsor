@@ -25,7 +25,7 @@ public interface IConfigurationInterpreter
     /// <summary>Gets or sets the name of the environment.</summary>
     /// <value>The name of the environment.</value>
     [PublicAPI]
-    string EnvironmentName { get; set; }
+    string? EnvironmentName { get; set; }
 
     /// <summary>Exposes the reference to <see cref="IResource" /> which the interpreter is likely to hold</summary>
     IResource Source { get; }
