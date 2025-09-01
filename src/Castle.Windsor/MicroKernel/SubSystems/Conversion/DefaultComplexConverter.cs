@@ -23,7 +23,7 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 [Serializable]
 public class DefaultComplexConverter : AbstractTypeConverter
 {
-    private IConversionManager _conversionManager;
+    private IConversionManager? _conversionManager;
 
     /// <summary>Gets the conversion manager.</summary>
     /// <value>The conversion manager.</value>
@@ -39,7 +39,7 @@ public class DefaultComplexConverter : AbstractTypeConverter
 
         var constructor = ChooseConstructor(type);
 
-        object[] args = null;
+        object[]? args = null;
         if (constructor != null)
         {
             args = ConvertConstructorParameters(constructor, configuration);
@@ -78,9 +78,9 @@ public class DefaultComplexConverter : AbstractTypeConverter
     /// </summary>
     /// <param name="type"></param>
     /// <returns>The chosen constructor, or <c>null</c> if none was found</returns>
-    private static ConstructorInfo ChooseConstructor(Type type)
+    private static ConstructorInfo? ChooseConstructor(Type type)
     {
-        ConstructorInfo chosen = null;
+        ConstructorInfo? chosen = null;
         var constructors = type.GetConstructors();
         foreach (var candidate in constructors)
         {
@@ -162,19 +162,20 @@ public class DefaultComplexConverter : AbstractTypeConverter
 
     private object ConvertChildParameter(IConfiguration config, Type type)
     {
-        if (config.Value == null && config.Children.Count != 0)
+        var configValue = config.Value;
+        if (configValue == null && config.Children.Count != 0)
         {
             return Context.Composition.PerformConversion(config, type);
         }
 
-        return Context.Composition.PerformConversion(config.Value, type);
+        return Context.Composition.PerformConversion(configValue ?? throw new InvalidOperationException(), type);
     }
 
     /// <summary>Finds the child (case insensitive).</summary>
     /// <param name="config">The config.</param>
     /// <param name="name">The name.</param>
     /// <returns></returns>
-    private static IConfiguration FindChildIgnoreCase(IConfiguration config, string name)
+    private static IConfiguration? FindChildIgnoreCase(IConfiguration config, string? name)
     {
         return config.Children.FirstOrDefault(child =>
             CultureInfo.CurrentCulture.CompareInfo.Compare(child.Name, name, CompareOptions.IgnoreCase) == 0);

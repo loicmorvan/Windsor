@@ -66,9 +66,10 @@ public class DictionaryConverter : AbstractTypeConverter
 
             var convertKeyTo = defaultKeyType;
 
-            if (itemConfig.Attributes["keyType"] != null)
+            var itemConfigAttribute = itemConfig.Attributes["keyType"];
+            if (itemConfigAttribute != null)
             {
-                convertKeyTo = Context.Composition.PerformConversion<Type>(itemConfig.Attributes["keyType"]);
+                convertKeyTo = Context.Composition.PerformConversion<Type>(itemConfigAttribute);
             }
 
             var key = Context.Composition.PerformConversion(keyValue, convertKeyTo);
@@ -77,9 +78,10 @@ public class DictionaryConverter : AbstractTypeConverter
 
             var convertValueTo = defaultValueType;
 
-            if (itemConfig.Attributes["valueType"] != null)
+            var configAttribute = itemConfig.Attributes["valueType"];
+            if (configAttribute != null)
             {
-                convertValueTo = Context.Composition.PerformConversion<Type>(itemConfig.Attributes["valueType"]);
+                convertValueTo = Context.Composition.PerformConversion<Type>(configAttribute);
             }
 
             var value = Context.Composition.PerformConversion(itemConfig.Children.Count == 0

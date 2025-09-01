@@ -31,7 +31,7 @@ public static class ReflectionUtil
 
     private static readonly ConcurrentDictionary<ConstructorInfo, Func<object[], object>> Factories = new();
 
-    public static TBase CreateInstance<TBase>(this Type subtypeofTBase, params object[] ctorArgs)
+    public static TBase CreateInstance<TBase>(this Type subtypeofTBase, params object[]? ctorArgs)
     {
         EnsureIsAssignable<TBase>(subtypeofTBase);
 
