@@ -12,15 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 public class TypeName
 {
     private readonly string? _assemblyQualifiedName;
-    private readonly TypeName?[]? _genericTypes;
+    private readonly TypeName[]? _genericTypes;
     private readonly string? _namespace;
 
-    public TypeName(string? @namespace, string name, TypeName?[] genericTypes)
+    public TypeName(string? @namespace, string name, TypeName[] genericTypes)
     {
         Name = name;
         _genericTypes = genericTypes;
@@ -45,10 +47,12 @@ public class TypeName
         }
     }
 
-    private bool HasGenericParameters => _genericTypes.Length > 0;
+    [MemberNotNullWhen(true, nameof(_genericTypes))]
+    private bool HasGenericParameters => _genericTypes?.Length > 0;
 
     private bool HasNamespace => !string.IsNullOrEmpty(_namespace);
 
+    [MemberNotNullWhen(true, nameof(_assemblyQualifiedName))]
     private bool IsAssemblyQualified => _assemblyQualifiedName != null;
 
     private string? Name { get; }
@@ -65,7 +69,7 @@ public class TypeName
         return indexOfVersion <= 0 ? tokens.Last().Trim() : tokens[indexOfVersion - 1].Trim();
     }
 
-    public Type GetType(TypeNameConverter converter)
+    public Type? GetType(TypeNameConverter converter)
     {
         ArgumentNullException.ThrowIfNull(converter);
         if (IsAssemblyQualified)
@@ -73,7 +77,14 @@ public class TypeName
             return Type.GetType(_assemblyQualifiedName, false, true);
         }
 
-        var type = HasNamespace ? converter.GetTypeByFullName(FullName) : converter.GetTypeByName(Name);
+        var type = HasNamespace
+            ? converter.GetTypeByFullName(FullName)
+            : converter.GetTypeByName(Name ?? throw new InvalidOperationException());
+
+        if (type == null)
+        {
+            return null;
+        }
 
         if (!HasGenericParameters)
         {
@@ -83,7 +94,7 @@ public class TypeName
         var genericArgs = new Type[_genericTypes.Length];
         for (var i = 0; i < genericArgs.Length; i++)
         {
-            genericArgs[i] = _genericTypes[i].GetType(converter);
+            genericArgs[i] = _genericTypes[i].GetType(converter) ?? throw new InvalidOperationException();
         }
 
         return type.MakeGenericType(genericArgs);

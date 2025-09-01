@@ -187,7 +187,7 @@ public class TypeNameConverter : AbstractTypeConverter
             var exportedTypes = assembly.GetAvailableTypes();
             foreach (var type in exportedTypes)
             {
-                Insert(_fullName2Type, type.FullName, type);
+                Insert(_fullName2Type, type.FullName ?? throw new InvalidOperationException(), type);
                 Insert(_justName2Type, type.Name, type);
             }
         }
@@ -208,7 +208,7 @@ public class TypeNameConverter : AbstractTypeConverter
         existing.AddInnerType(value);
     }
 
-    private TypeName ParseName(string name)
+    private TypeName? ParseName(string name)
     {
         return _parser.Parse(name);
     }
@@ -218,17 +218,17 @@ public class TypeNameConverter : AbstractTypeConverter
         return PerformConversion(configuration.Value, targetType);
     }
 
-    public Type GetTypeByFullName(string fullName)
+    public Type? GetTypeByFullName(string fullName)
     {
         return GetUniqueType(fullName, _fullName2Type, "assembly qualified name");
     }
 
-    public Type GetTypeByName(string justName)
+    public Type? GetTypeByName(string justName)
     {
         return GetUniqueType(justName, _justName2Type, "full name, or assembly qualified name");
     }
 
-    private static Type GetUniqueType(string name, IDictionary<string, MultiType> map, string description)
+    private static Type? GetUniqueType(string name, IDictionary<string, MultiType> map, string description)
     {
         if (!map.TryGetValue(name, out var type))
         {
