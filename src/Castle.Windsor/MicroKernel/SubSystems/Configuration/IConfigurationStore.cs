@@ -74,7 +74,7 @@ public interface IConfigurationStore : ISubSystem
     /// </summary>
     /// <param name="key">item key</param>
     /// <returns></returns>
-    IConfiguration GetFacilityConfiguration(string key);
+    IConfiguration? GetFacilityConfiguration(string key);
 
     /// <summary>Returns all configuration nodes for installers</summary>
     /// <returns></returns>

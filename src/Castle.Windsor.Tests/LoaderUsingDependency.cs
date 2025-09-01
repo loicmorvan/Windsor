@@ -6,7 +6,7 @@ namespace Castle.Windsor.Tests;
 
 public class LoaderUsingDependency : ILazyComponentLoader
 {
-    public IRegistration Load(string name, Type service, Arguments arguments)
+    public IRegistration? Load(string name, Type? service, Arguments? arguments)
     {
         return Component.For(service).DependsOn(arguments);
     }

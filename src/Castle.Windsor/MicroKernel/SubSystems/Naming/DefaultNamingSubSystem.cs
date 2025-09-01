@@ -132,7 +132,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
             : GetAssignableHandlersNoFiltering(service);
     }
 
-    public virtual IHandler GetHandler(string name)
+    public virtual IHandler? GetHandler(string name)
     {
         ArgumentNullException.ThrowIfNull(name);
 
@@ -149,7 +149,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
         return value;
     }
 
-    public virtual IHandler GetHandler(Type service)
+    public virtual IHandler? GetHandler(Type service)
     {
         ArgumentNullException.ThrowIfNull(service);
         if (Selectors != null)
@@ -181,7 +181,7 @@ public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
         return handlerCandidates.FirstOrDefault(handlerCandidate => handlerCandidate.Supports(service));
     }
 
-    public virtual IHandler[] GetHandlers(Type service)
+    public virtual IHandler[] GetHandlers(Type? service)
     {
         ArgumentNullException.ThrowIfNull(service);
         if (Filters != null)

@@ -77,8 +77,8 @@ public class CreationContext :
     /// <param name="converter"> The conversion manager. </param>
     /// <param name="parent"> Parent context </param>
     public CreationContext(IHandler handler, IReleasePolicy releasePolicy, Type requestedType,
-        Arguments additionalArguments, ITypeConverter converter,
-        CreationContext parent)
+        Arguments? additionalArguments, ITypeConverter? converter,
+        CreationContext? parent)
     {
         RequestedType = requestedType;
         Handler = handler;

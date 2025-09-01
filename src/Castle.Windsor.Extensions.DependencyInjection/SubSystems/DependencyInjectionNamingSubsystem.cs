@@ -27,7 +27,7 @@ public class DependencyInjectionNamingSubsystem : DefaultNamingSubSystem
         return Name2Handler.Values.Where(handler => handler.Supports(service)).ToArray();
     }
 
-    public override IHandler[] GetHandlers(Type service)
+    public override IHandler[] GetHandlers(Type? service)
     {
         ArgumentNullException.ThrowIfNull(service);
         if (Filters != null)
@@ -53,7 +53,7 @@ public class DependencyInjectionNamingSubsystem : DefaultNamingSubSystem
         return result;
     }
 
-    public override IHandler GetHandler(Type service)
+    public override IHandler? GetHandler(Type service)
     {
         ArgumentNullException.ThrowIfNull(service);
         if (Selectors != null)

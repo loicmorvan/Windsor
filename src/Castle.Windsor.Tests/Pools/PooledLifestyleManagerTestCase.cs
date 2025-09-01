@@ -242,7 +242,7 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
         public GraphNode[] GraphNodes { get; }
 
         public IHandlerFactory HandlerFactory { get; }
-        public IKernel Parent { get; set; }
+        public IKernel? Parent { get; set; }
         public IProxyFactory ProxyFactory { get; set; }
         public IReleasePolicy ReleasePolicy { get; set; }
         public IDependencyResolver Resolver { get; }
@@ -262,7 +262,7 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
             throw new NotImplementedException();
         }
 
-        public IKernel AddFacility<T>(Action<T> onCreate) where T : IFacility, new()
+        public IKernel AddFacility<T>(Action<T>? onCreate) where T : IFacility, new()
         {
             throw new NotImplementedException();
         }
@@ -292,7 +292,7 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
             throw new NotImplementedException();
         }
 
-        public IHandler GetHandler(string name)
+        public IHandler? GetHandler(string name)
         {
             throw new NotImplementedException();
         }
@@ -302,22 +302,22 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
             throw new NotImplementedException();
         }
 
-        public IHandler GetHandler(Type service)
+        public IHandler? GetHandler(Type service)
         {
             throw new NotImplementedException();
         }
 
-        public IHandler[] GetHandlers(Type service)
+        public IHandler[] GetHandlers(Type? service)
         {
             throw new NotImplementedException();
         }
 
-        public ISubSystem GetSubSystem(string name)
+        public ISubSystem? GetSubSystem(string name)
         {
             throw new NotImplementedException();
         }
 
-        public bool HasComponent(string name)
+        public bool HasComponent(string? name)
         {
             throw new NotImplementedException();
         }

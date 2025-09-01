@@ -8,7 +8,7 @@ namespace Castle.Windsor.Tests;
 
 public class LoaderForDefaultImplementations : ILazyComponentLoader
 {
-    public IRegistration Load(string name, Type service, Arguments arguments)
+    public IRegistration? Load(string name, Type? service, Arguments? arguments)
     {
         if (!service.GetTypeInfo().IsDefined(typeof(DefaultImplementationAttribute)))
         {

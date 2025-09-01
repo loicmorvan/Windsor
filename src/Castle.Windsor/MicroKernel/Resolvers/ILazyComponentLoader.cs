@@ -41,5 +41,5 @@ public interface ILazyComponentLoader
 	///     is null, it should be ignored as well). When implementer does not want to
 	///     register the requested component it must return null.
 	/// </remarks>
-	IRegistration Load(string name, Type service, Arguments arguments);
+	IRegistration? Load(string? name, Type? service, Arguments? arguments);
 }

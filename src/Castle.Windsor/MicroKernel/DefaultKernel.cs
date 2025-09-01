@@ -45,7 +45,7 @@ namespace Castle.Windsor.MicroKernel;
 public sealed partial class DefaultKernel :
     IKernelInternal
 {
-    [ThreadStatic] private static CreationContext _currentCreationContext;
+    [ThreadStatic] private static CreationContext? _currentCreationContext;
 
     [ThreadStatic] private static bool _isCheckingLazyLoaders;
 
@@ -64,7 +64,7 @@ public sealed partial class DefaultKernel :
     private ThreadSafeFlag _disposed;
 
     /// <summary>The parent kernel, if exists.</summary>
-    private IKernel _parentKernel;
+    private IKernel? _parentKernel;
 
     /// <summary>Constructs a DefaultKernel with no component proxy support.</summary>
     public DefaultKernel() : this(new NotSupportedProxyFactory())
@@ -98,16 +98,20 @@ public sealed partial class DefaultKernel :
     {
     }
 
-    private IConversionManager ConversionSubSystem { get; set; }
+    private IConversionManager? ConversionSubSystem { get; set; }
 
-    private INamingSubSystem NamingSubSystem { get; set; }
+    private INamingSubSystem? NamingSubSystem { get; set; }
 
     public IComponentModelBuilder ComponentModelBuilder { get; set; }
 
-    public IConfigurationStore ConfigurationStore
+    public IConfigurationStore? ConfigurationStore
     {
         get => GetSubSystem(SubSystemConstants.ConfigurationStoreKey) as IConfigurationStore;
-        set => AddSubSystem(SubSystemConstants.ConfigurationStoreKey, value);
+        set
+        {
+            ArgumentNullException.ThrowIfNull(value);
+            AddSubSystem(SubSystemConstants.ConfigurationStoreKey, value);
+        }
     }
 
     /// <summary>Graph of components and interactions.</summary>
@@ -115,10 +119,10 @@ public sealed partial class DefaultKernel :
     {
         get
         {
-            var nodes = new GraphNode[NamingSubSystem.ComponentCount];
+            var nodes = new GraphNode[NamingSubSystem?.ComponentCount ?? 0];
             var index = 0;
 
-            var handlers = NamingSubSystem.GetAllHandlers();
+            var handlers = NamingSubSystem?.GetAllHandlers() ?? [];
             foreach (var handler in handlers)
             {
                 nodes[index++] = handler.ComponentModel;
@@ -130,7 +134,7 @@ public sealed partial class DefaultKernel :
 
     public IHandlerFactory HandlerFactory { get; private set; }
 
-    public IKernel Parent
+    public IKernel? Parent
     {
         get => _parentKernel;
         set
@@ -195,7 +199,7 @@ public sealed partial class DefaultKernel :
     public IHandler AddCustomComponent(ComponentModel model)
     {
         var handler = (this as IKernelInternal).CreateHandler(model);
-        NamingSubSystem.Register(handler);
+        NamingSubSystem?.Register(handler);
         (this as IKernelInternal).RaiseEventsOnHandlerCreated(handler);
         return handler;
     }
@@ -212,8 +216,23 @@ public sealed partial class DefaultKernel :
 
     public IKernel AddFacility(IFacility facility)
     {
-        ArgumentNullException.ThrowIfNull(facility);
+        // ArgumentNullException.ThrowIfNull(facility);
+
+        if (ConfigurationStore is null)
+        {
+            throw new InvalidOperationException(
+                "Cannot add a facility to the container when no configuration store is available. " +
+                "Please make sure that the container is configured with a configuration store.");
+        }
+
         var facilityType = facility.GetType();
+        if (facilityType.FullName is null)
+        {
+            throw new InvalidOperationException(
+                "Cannot add a facility to the container when the facility type does not have a full name. " +
+                "Please make sure that the facility type has a full name.");
+        }
+
         if (_facilities.Any(f => f.GetType() == facilityType))
         {
             throw new ArgumentException(
@@ -221,7 +240,7 @@ public sealed partial class DefaultKernel :
         }
 
         _facilities.Add(facility);
-        facility.Init(this, ConfigurationStore.GetFacilityConfiguration(facility.GetType().FullName));
+        facility.Init(this, ConfigurationStore.GetFacilityConfiguration(facilityType.FullName));
 
         return this;
     }
@@ -231,7 +250,7 @@ public sealed partial class DefaultKernel :
         return AddFacility(new T());
     }
 
-    public IKernel AddFacility<T>(Action<T> onCreate)
+    public IKernel AddFacility<T>(Action<T>? onCreate)
         where T : IFacility, new()
     {
         var facility = new T();
@@ -242,19 +261,16 @@ public sealed partial class DefaultKernel :
 
     public void AddHandlerSelector(IHandlerSelector selector)
     {
-        NamingSubSystem.AddHandlerSelector(selector);
+        NamingSubSystem?.AddHandlerSelector(selector);
     }
 
     public void AddHandlersFilter(IHandlersFilter filter)
     {
-        NamingSubSystem.AddHandlersFilter(filter);
+        NamingSubSystem?.AddHandlersFilter(filter);
     }
 
     public void AddSubSystem(string name, ISubSystem subsystem)
     {
-        ArgumentNullException.ThrowIfNull(name);
-        ArgumentNullException.ThrowIfNull(subsystem);
-
         subsystem.Init(this);
         _subsystems[name] = subsystem;
         switch (name)
@@ -273,6 +289,11 @@ public sealed partial class DefaultKernel :
     /// <returns> </returns>
     public IHandler[] GetAssignableHandlers(Type service)
     {
+        if (NamingSubSystem == null)
+        {
+            throw new InvalidOperationException("The kernel does not have a naming subsystem.");
+        }
+
         var result = NamingSubSystem.GetAssignableHandlers(service);
 
         // If a parent kernel exists, we merge both results
@@ -303,9 +324,14 @@ public sealed partial class DefaultKernel :
         return _facilities.ToArray();
     }
 
-    public IHandler GetHandler(string name)
+    public IHandler? GetHandler(string name)
     {
         ArgumentNullException.ThrowIfNull(name);
+
+        if (NamingSubSystem == null)
+        {
+            throw new InvalidOperationException("The kernel does not have a naming subsystem.");
+        }
 
         var handler = NamingSubSystem.GetHandler(name);
 
@@ -317,9 +343,14 @@ public sealed partial class DefaultKernel :
         return handler;
     }
 
-    public IHandler GetHandler(Type service)
+    public IHandler? GetHandler(Type service)
     {
         ArgumentNullException.ThrowIfNull(service);
+
+        if (NamingSubSystem == null)
+        {
+            throw new InvalidOperationException("The kernel does not have a naming subsystem.");
+        }
 
         var handler = NamingSubSystem.GetHandler(service);
         if (handler == null && Parent != null)
@@ -335,6 +366,11 @@ public sealed partial class DefaultKernel :
     /// <returns> </returns>
     public IHandler[] GetHandlers(Type? service)
     {
+        if (NamingSubSystem == null)
+        {
+            throw new InvalidOperationException("The kernel does not have a naming subsystem.");
+        }
+
         var result = NamingSubSystem.GetHandlers(service);
 
         // If a parent kernel exists, we merge both results
@@ -362,6 +398,11 @@ public sealed partial class DefaultKernel :
     /// <returns>Handler which is a sub dependency resolver for a component</returns>
     public IHandler[] GetHandlers()
     {
+        if (NamingSubSystem == null)
+        {
+            throw new InvalidOperationException("The kernel does not have a naming subsystem.");
+        }
+
         var result = NamingSubSystem.GetAllHandlers();
 
         // If a parent kernel exists, we merge both results
@@ -385,17 +426,22 @@ public sealed partial class DefaultKernel :
         return result;
     }
 
-    public ISubSystem GetSubSystem(string name)
+    public ISubSystem? GetSubSystem(string name)
     {
         _subsystems.TryGetValue(name, out var subsystem);
         return subsystem;
     }
 
-    public bool HasComponent(string name)
+    public bool HasComponent(string? name)
     {
         if (name == null)
         {
             return false;
+        }
+
+        if (NamingSubSystem == null)
+        {
+            throw new InvalidOperationException("The kernel does not have a naming subsystem.");
         }
 
         if (NamingSubSystem.Contains(name))
@@ -406,11 +452,16 @@ public sealed partial class DefaultKernel :
         return Parent != null && Parent.HasComponent(name);
     }
 
-    public bool HasComponent(Type serviceType)
+    public bool HasComponent(Type? serviceType)
     {
         if (serviceType == null)
         {
             return false;
+        }
+
+        if (NamingSubSystem == null)
+        {
+            throw new InvalidOperationException("The kernel does not have a naming subsystem.");
         }
 
         if (NamingSubSystem.Contains(serviceType))
@@ -507,7 +558,8 @@ public sealed partial class DefaultKernel :
                 manager = new TransientLifestyleManager();
                 break;
             case LifestyleType.Custom:
-                manager = model.CustomLifestyle.CreateInstance<ILifestyleManager>();
+                manager = (model.CustomLifestyle ?? throw new InvalidOperationException())
+                    .CreateInstance<ILifestyleManager>();
                 break;
             case LifestyleType.Pooled:
                 var initial = ExtendedPropertiesConstants.PoolDefaultInitialPoolSize;
@@ -515,12 +567,14 @@ public sealed partial class DefaultKernel :
 
                 if (model.ExtendedProperties.Contains(ExtendedPropertiesConstants.PoolInitialPoolSize))
                 {
-                    initial = (int)model.ExtendedProperties[ExtendedPropertiesConstants.PoolInitialPoolSize];
+                    initial = (int)(model.ExtendedProperties[ExtendedPropertiesConstants.PoolInitialPoolSize] ??
+                                    throw new InvalidOperationException());
                 }
 
                 if (model.ExtendedProperties.Contains(ExtendedPropertiesConstants.PoolMaxPoolSize))
                 {
-                    maxSize = (int)model.ExtendedProperties[ExtendedPropertiesConstants.PoolMaxPoolSize];
+                    maxSize = (int)(model.ExtendedProperties[ExtendedPropertiesConstants.PoolMaxPoolSize] ??
+                                    throw new InvalidOperationException());
                 }
 
                 manager = new PoolableLifestyleManager(initial, maxSize);
@@ -574,7 +628,7 @@ public sealed partial class DefaultKernel :
         RaiseComponentRegistered(handler.ComponentModel.Name, handler);
     }
 
-    IHandler? IKernelInternal.LoadHandlerByName(string name, Type service, Arguments arguments)
+    IHandler? IKernelInternal.LoadHandlerByName(string name, Type? service, Arguments? arguments)
     {
         ArgumentNullException.ThrowIfNull(name);
 
@@ -678,7 +732,7 @@ public sealed partial class DefaultKernel :
 
     private static CreationContextScopeAccessor CreateScopeAccessorForBoundLifestyle(ComponentModel model)
     {
-        var selector = (Func<IHandler[], IHandler>)model.ExtendedProperties[Constants.ScopeRootSelector];
+        var selector = (Func<IHandler[], IHandler>?)model.ExtendedProperties[Constants.ScopeRootSelector];
         if (selector == null)
         {
             throw new ComponentRegistrationException(
@@ -688,15 +742,15 @@ public sealed partial class DefaultKernel :
         return new CreationContextScopeAccessor(model, selector);
     }
 
-    private CreationContext CreateCreationContext(IHandler handler, Type requestedType, Arguments additionalArguments,
-        CreationContext parent,
+    private CreationContext CreateCreationContext(IHandler handler, Type requestedType, Arguments? additionalArguments,
+        CreationContext? parent,
         IReleasePolicy policy)
     {
         return new CreationContext(handler, policy, requestedType, additionalArguments, ConversionSubSystem, parent);
     }
 
     /// <remarks>It is the responsibility of the kernel to ensure that handler is only ever disposed once.</remarks>
-    private static void DisposeHandler(IHandler handler)
+    private static void DisposeHandler(IHandler? handler)
     {
         var disposable = handler as IDisposable;
 
@@ -740,11 +794,16 @@ public sealed partial class DefaultKernel :
         }
     }
 
-    private ParentHandlerWrapper WrapParentHandler(IHandler parentHandler)
+    private ParentHandlerWrapper? WrapParentHandler(IHandler? parentHandler)
     {
         if (parentHandler == null)
         {
             return null;
+        }
+
+        if (Parent == null)
+        {
+            throw new InvalidOperationException("The parent kernel does not exist.");
         }
 
         var handler = new ParentHandlerWrapper(parentHandler, Parent.Resolver, Parent.ReleasePolicy);
@@ -760,6 +819,16 @@ public sealed partial class DefaultKernel :
     private void DisposeHandlers()
     {
         var vertices = TopologicalSortAlgo.Sort(GraphNodes);
+
+        if (vertices.Length == 0)
+        {
+            return;
+        }
+
+        if (NamingSubSystem == null)
+        {
+            throw new InvalidOperationException("The kernel does not have a naming subsystem.");
+        }
 
         foreach (var t in vertices)
         {

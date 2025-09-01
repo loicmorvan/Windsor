@@ -80,7 +80,7 @@ internal class PartialConfigurationStore : IConfigurationStore, IDisposable
         return _partial.GetFacilities();
     }
 
-    public IConfiguration GetFacilityConfiguration(string key)
+    public IConfiguration? GetFacilityConfiguration(string key)
     {
         return _partial.GetFacilityConfiguration(key);
     }

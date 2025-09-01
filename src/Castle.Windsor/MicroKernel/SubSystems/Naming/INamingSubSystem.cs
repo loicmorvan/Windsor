@@ -53,15 +53,15 @@ public interface INamingSubSystem : ISubSystem
     /// <summary>Returns the <see cref="IHandler" /> associated with the specified name.</summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    IHandler GetHandler(string name);
+    IHandler? GetHandler(string name);
 
     /// <summary>Returns the <see cref="IHandler" /> associated with the specified service.</summary>
-    IHandler GetHandler(Type service);
+    IHandler? GetHandler(Type service);
 
     /// <summary>Returns an array of <see cref="IHandler" /> associated with the specified service.</summary>
     /// <param name="service"></param>
     /// <returns></returns>
-    IHandler[] GetHandlers(Type service);
+    IHandler[] GetHandlers(Type? service);
 
     /// <summary>
     ///     Implementors should register the <see cref="IHandler" /> with all <see cref="ComponentModel.Services" /> its

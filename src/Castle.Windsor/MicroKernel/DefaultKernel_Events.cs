@@ -27,7 +27,7 @@ public sealed partial class DefaultKernel
     private volatile bool _handlersChangedDeferred;
 
 
-    public IDisposable OptimizeDependencyResolution()
+    public IDisposable? OptimizeDependencyResolution()
     {
         if (_handlersChangedDeferred)
         {

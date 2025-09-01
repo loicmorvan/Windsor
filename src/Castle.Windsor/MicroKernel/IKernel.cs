@@ -32,7 +32,7 @@ public partial interface IKernel : IKernelEvents, IDisposable
 	IComponentModelBuilder ComponentModelBuilder { get; }
 
 	/// <summary>Gets or sets the implementation of <see cref="IConfigurationStore" /></summary>
-	IConfigurationStore ConfigurationStore { get; set; }
+	IConfigurationStore? ConfigurationStore { get; set; }
 
 	/// <summary>Graph of components and interactions.</summary>
 	[PublicAPI]
@@ -44,7 +44,7 @@ public partial interface IKernel : IKernelEvents, IDisposable
 
 	/// <summary>Returns the parent kernel</summary>
 	[PublicAPI]
-	IKernel Parent { get; set; }
+	IKernel? Parent { get; set; }
 
 	/// <summary>
 	///     Gets or sets the implementation of <see cref="IProxyFactory" /> allowing different strategies for proxy
@@ -76,7 +76,7 @@ public partial interface IKernel : IKernelEvents, IDisposable
 	/// <typeparam name="T">The facility type.</typeparam>
 	/// <param name="onCreate">The callback for creation.</param>
 	/// <returns></returns>
-	IKernel AddFacility<T>(Action<T> onCreate)
+	IKernel AddFacility<T>(Action<T>? onCreate)
 		where T : IFacility, new();
 
 	/// <summary>Register a new component resolver that can take part in the decision making about which handler to resolve</summary>
@@ -105,12 +105,12 @@ public partial interface IKernel : IKernelEvents, IDisposable
 	/// <summary>Returns the <see cref="IHandler" /> for the specified component name.</summary>
 	/// <param name="name"></param>
 	/// <returns></returns>
-	IHandler GetHandler(string name);
+	IHandler? GetHandler(string name);
 
 	/// <summary>Returns the <see cref="IHandler" /> for the specified service.</summary>
 	/// <param name="service"></param>
 	/// <returns></returns>
-	IHandler GetHandler(Type service);
+	IHandler? GetHandler(Type service);
 
 	/// <summary>Returns the <see cref="IHandler" /> for the all components.</summary>
 	/// <returns>Handlers which implement sub dependency resolvers</returns>
@@ -119,7 +119,7 @@ public partial interface IKernel : IKernelEvents, IDisposable
 	/// <summary>Return handlers for components that implements the specified service.</summary>
 	/// <param name="service"></param>
 	/// <returns></returns>
-	IHandler[] GetHandlers(Type service);
+	IHandler[] GetHandlers(Type? service);
 
 	/// <summary>
 	///     Returns an implementation of <see cref="ISubSystem" /> for the specified name.
@@ -127,12 +127,12 @@ public partial interface IKernel : IKernelEvents, IDisposable
 	/// </summary>
 	/// <param name="name"></param>
 	/// <returns></returns>
-	ISubSystem GetSubSystem(string name);
+	ISubSystem? GetSubSystem(string name);
 
 	/// <summary>Returns <c>true</c> if a component with given <paramref name="name" /> was registered, otherwise <c>false</c>.</summary>
 	/// <param name="name"></param>
 	/// <returns></returns>
-	bool HasComponent(string name);
+	bool HasComponent(string? name);
 
 	/// <summary>Returns true if the specified service was registered</summary>
 	/// <param name="service"></param>

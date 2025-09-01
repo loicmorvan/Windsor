@@ -25,7 +25,7 @@ public interface IFacility
 	/// <summary></summary>
 	/// <param name="kernel"></param>
 	/// <param name="facilityConfig"></param>
-	void Init(IKernel kernel, IConfiguration facilityConfig);
+	void Init(IKernel kernel, IConfiguration? facilityConfig);
 
 	/// <summary></summary>
 	void Terminate();

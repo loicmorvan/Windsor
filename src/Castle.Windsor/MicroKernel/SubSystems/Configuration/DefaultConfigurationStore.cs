@@ -139,7 +139,7 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
     /// </summary>
     /// <param name="key">item key</param>
     /// <returns></returns>
-    public IConfiguration GetFacilityConfiguration(string key)
+    public IConfiguration? GetFacilityConfiguration(string key)
     {
         lock (_syncLock)
         {
