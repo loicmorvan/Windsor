@@ -74,6 +74,11 @@ public class IncludeElementProcessor : AbstractXmlNodeProcessor
 
             engine.PushResource(resource);
 
+            if (doc.DocumentElement == null)
+            {
+                continue;
+            }
+
             engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(doc.DocumentElement));
 
             engine.PopResource();

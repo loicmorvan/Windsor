@@ -22,7 +22,7 @@ public class IfElementProcessor : AbstractStatementElementProcessor
 
     public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
     {
-        var element = nodeList.Current as XmlElement;
+        var element = (XmlElement)nodeList.Current;
 
         var processContents = ProcessStatement(element, engine);
 
