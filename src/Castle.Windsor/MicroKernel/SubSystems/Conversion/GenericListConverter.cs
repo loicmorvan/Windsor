@@ -41,12 +41,12 @@ public class GenericListConverter : AbstractTypeConverter
 
     public override object PerformConversion(string value, Type targetType)
     {
-        if (!ReferenceExpressionUtil.IsReference(value))
+        var newValue = ReferenceExpressionUtil.ExtractComponentName(value);
+        if (newValue == null)
         {
             throw new NotImplementedException();
         }
 
-        var newValue = ReferenceExpressionUtil.ExtractComponentName(value);
         var handler = Context.Kernel.LoadHandlerByName(newValue, targetType, null);
         return handler == null
             ? throw new ConverterException($"Component '{newValue}' was not found in the container.")

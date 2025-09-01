@@ -20,7 +20,7 @@ public class TypeNameParser : ITypeNameParser
     {
         var isPotentiallyFullyQualifiedName = name.Contains(',');
         var genericIndex = name.IndexOf('`');
-        var genericTypes = Array.Empty<TypeName?>();
+        var genericTypes = Array.Empty<TypeName>();
         if (genericIndex <= -1)
         {
             return isPotentiallyFullyQualifiedName
@@ -59,7 +59,7 @@ public class TypeNameParser : ITypeNameParser
         return BuildName(name, genericTypes);
     }
 
-    private static TypeName BuildName(string name, TypeName?[] genericTypes)
+    private static TypeName BuildName(string name, TypeName[] genericTypes)
     {
         var typeStartsHere = name.LastIndexOf('.');
         string typeName;
@@ -124,7 +124,7 @@ public class TypeNameParser : ITypeNameParser
         return currentLocation;
     }
 
-    private TypeName?[] ParseNames(string substring, int count)
+    private TypeName[] ParseNames(string substring, int count)
     {
         if (count == 1)
         {
@@ -137,13 +137,14 @@ public class TypeNameParser : ITypeNameParser
             return [name];
         }
 
-        var names = new TypeName?[count];
+        var names = new TypeName[count];
 
         var location = 0;
         for (var i = 0; i < count; i++)
         {
             var newLocation = MoveToEnd(location, substring);
-            names[i] = Parse(substring.Substring(location, newLocation - location));
+            names[i] = Parse(substring.Substring(location, newLocation - location)) ??
+                       throw new InvalidOperationException();
             location = MoveToBeginning(newLocation, substring) + 1;
         }
 

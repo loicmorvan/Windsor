@@ -22,7 +22,7 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 [Serializable]
 public sealed class DefaultConversionManager : AbstractSubSystem, IConversionManager, ITypeConverterContext
 {
-    [ThreadStatic] private static Stack<Tuple<ComponentModel, CreationContext>> _slot;
+    [ThreadStatic] private static Stack<Tuple<ComponentModel, CreationContext>>? _slot;
 
     private readonly List<ITypeConverter> _converters = [];
     private readonly List<ITypeConverter> _standAloneConverters = [];
@@ -109,9 +109,9 @@ public sealed class DefaultConversionManager : AbstractSubSystem, IConversionMan
         CurrentStack.Pop();
     }
 
-    public ComponentModel CurrentModel => CurrentStack.Count == 0 ? null : CurrentStack.Peek().Item1;
+    public ComponentModel? CurrentModel => CurrentStack.Count == 0 ? null : CurrentStack.Peek().Item1;
 
-    public CreationContext CurrentCreationContext => CurrentStack.Count == 0 ? null : CurrentStack.Peek().Item2;
+    public CreationContext? CurrentCreationContext => CurrentStack.Count == 0 ? null : CurrentStack.Peek().Item2;
 
     public ITypeConverter Composition => this;
 

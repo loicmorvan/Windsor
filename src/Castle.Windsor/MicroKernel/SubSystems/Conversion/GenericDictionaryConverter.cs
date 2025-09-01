@@ -72,7 +72,7 @@ public class GenericDictionaryConverter : AbstractTypeConverter
         return collectionConverterHelper.ConvertConfigurationToCollection(configuration);
     }
 
-    private class DictionaryHelper<TKey, TValue>(GenericDictionaryConverter parent) : IGenericCollectionConverterHelper
+    private class DictionaryHelper<TKey, TValue>(GenericDictionaryConverter parent) : IGenericCollectionConverterHelper where TKey : notnull
     {
         public object ConvertConfigurationToCollection(IConfiguration configuration)
         {
@@ -90,10 +90,11 @@ public class GenericDictionaryConverter : AbstractTypeConverter
 
                 var convertKeyTo = typeof(TKey);
 
-                if (itemConfig.Attributes["keyType"] != null)
+                var itemConfigAttribute = itemConfig.Attributes["keyType"];
+                if (itemConfigAttribute != null)
                 {
                     convertKeyTo =
-                        parent.Context.Composition.PerformConversion<Type>(itemConfig.Attributes["keyType"]);
+                        parent.Context.Composition.PerformConversion<Type>(itemConfigAttribute);
                 }
 
                 if (!convertKeyTo.Is<TKey>())
@@ -111,10 +112,11 @@ public class GenericDictionaryConverter : AbstractTypeConverter
 
                 var convertValueTo = typeof(TValue);
 
-                if (itemConfig.Attributes["valueType"] != null)
+                var configAttribute = itemConfig.Attributes["valueType"];
+                if (configAttribute != null)
                 {
                     convertValueTo =
-                        parent.Context.Composition.PerformConversion<Type>(itemConfig.Attributes["valueType"]);
+                        parent.Context.Composition.PerformConversion<Type>(configAttribute);
                 }
 
                 if (!convertValueTo.Is<TValue>())
