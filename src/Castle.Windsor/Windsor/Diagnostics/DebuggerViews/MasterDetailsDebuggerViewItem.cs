@@ -19,7 +19,7 @@ using System.Diagnostics;
 
 namespace Castle.Windsor.Windsor.Diagnostics.DebuggerViews;
 
-public class MasterDetailsDebuggerViewItem(object master, string masterDescription, string masterName, object[] details)
+public class MasterDetailsDebuggerViewItem(object master, string masterDescription, string masterName, object?[] details)
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly string _masterDescription = masterDescription;
@@ -37,5 +37,5 @@ public class MasterDetailsDebuggerViewItem(object master, string masterDescripti
     public object AMaster { get; } = master;
 
     [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-    public object[] Details { get; } = details;
+    public object?[] Details { get; } = details;
 }

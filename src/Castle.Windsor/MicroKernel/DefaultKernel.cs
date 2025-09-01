@@ -627,8 +627,6 @@ public sealed partial class DefaultKernel :
 
     IHandler? IKernelInternal.LoadHandlerByName(string name, Type? service, Arguments? arguments)
     {
-        ArgumentNullException.ThrowIfNull(name);
-
         var handler = GetHandler(name);
         if (handler != null)
         {

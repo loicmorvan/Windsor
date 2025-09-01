@@ -21,7 +21,7 @@ namespace Castle.Windsor.MicroKernel;
 [Serializable]
 public class ComponentNotFoundException : ComponentResolutionException
 {
-    public ComponentNotFoundException(string name, Type? service, int countOfHandlersForTheService)
+    public ComponentNotFoundException(string name, Type service, int countOfHandlersForTheService)
         : base(BuildMessage(name, service, countOfHandlersForTheService))
     {
         Name = name;
@@ -54,8 +54,8 @@ public class ComponentNotFoundException : ComponentResolutionException
     }
 
 
-    public string Name { get; private set; }
-    public Type Service { get; private set; }
+    public string? Name { get; private set; }
+    public Type? Service { get; private set; }
 
     private static string BuildMessage(string name, Type service, int countOfHandlersForTheService)
     {

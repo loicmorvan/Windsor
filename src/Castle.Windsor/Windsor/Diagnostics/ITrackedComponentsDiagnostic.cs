@@ -16,7 +16,7 @@ using Castle.Windsor.MicroKernel;
 
 namespace Castle.Windsor.Windsor.Diagnostics;
 
-public interface ITrackedComponentsDiagnostic : IDiagnostic<ILookup<IHandler, object>>
+public interface ITrackedComponentsDiagnostic : IDiagnostic<ILookup<IHandler, object?>>
 {
     event EventHandler<TrackedInstancesEventArgs> TrackedInstancesRequested;
 }

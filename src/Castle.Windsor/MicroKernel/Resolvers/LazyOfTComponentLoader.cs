@@ -23,13 +23,18 @@ namespace Castle.Windsor.MicroKernel.Resolvers;
 [Singleton]
 public class LazyOfTComponentLoader : ILazyComponentLoader
 {
-    public IRegistration? Load(string name, Type? service, Arguments? arguments)
+    public IRegistration? Load(string name, Type service, Arguments? arguments)
     {
-        if (service == null)
-        {
-            return null;
-        }
+        return Load(service, arguments);
+    }
 
+    public IRegistration? Load(string name, Arguments? arguments)
+    {
+        return null;
+    }
+
+    public IRegistration? Load(Type service, Arguments? arguments)
+    {
         if (!service.GetTypeInfo().IsGenericType)
         {
             return null;

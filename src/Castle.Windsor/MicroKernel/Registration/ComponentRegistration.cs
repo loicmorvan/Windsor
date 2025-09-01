@@ -257,7 +257,7 @@ public class ComponentRegistration<TService> : IRegistration
     }
 
     /// <summary>Uses a dictionary of key/value pairs, to specify custom dependencies.</summary>
-    public ComponentRegistration<TService> DependsOn(Arguments dependencies)
+    public ComponentRegistration<TService> DependsOn(Arguments? dependencies)
     {
         return AddDescriptor(new CustomDependencyDescriptor(dependencies));
     }

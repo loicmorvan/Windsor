@@ -20,10 +20,10 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class CustomDependencyDescriptor : IComponentModelDescriptor
 {
-    private readonly Arguments _arguments;
-    private readonly Property[] _properties;
+    private readonly Arguments? _arguments;
+    private readonly Property[]? _properties;
 
-    public CustomDependencyDescriptor(Arguments arguments)
+    public CustomDependencyDescriptor(Arguments? arguments)
     {
         _arguments = arguments;
     }

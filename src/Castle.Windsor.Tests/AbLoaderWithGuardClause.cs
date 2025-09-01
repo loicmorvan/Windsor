@@ -9,7 +9,21 @@ public class AbLoaderWithGuardClause : ILazyComponentLoader
 {
     public bool CanLoadNow { get; set; }
 
-    public IRegistration? Load(string name, Type? service, Arguments? arguments)
+    public IRegistration? Load(string name, Type service, Arguments? arguments)
+    {
+        Assert.True(CanLoadNow);
+
+        return Load(service, arguments);
+    }
+
+    public IRegistration? Load(string name, Arguments? arguments)
+    {
+        Assert.True(CanLoadNow);
+
+        return null;
+    }
+
+    public IRegistration? Load(Type service, Arguments? arguments)
     {
         Assert.True(CanLoadNow);
 

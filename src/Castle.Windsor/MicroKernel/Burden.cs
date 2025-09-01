@@ -23,7 +23,7 @@ public class Burden
 {
     private Decommission _decommission = Decommission.No;
 
-    private List<Burden> _dependencies;
+    private List<Burden>? _dependencies;
 
     internal Burden(IHandler handler, bool requiresDecommission, bool trackedExternally)
     {
@@ -49,7 +49,7 @@ public class Burden
 
     public IHandler Handler { get; }
 
-    public object Instance { get; private set; }
+    public object? Instance { get; private set; }
 
     public ComponentModel Model => Handler.ComponentModel;
 
@@ -116,9 +116,9 @@ public class Burden
         return arg is LateBoundConcerns<IDecommissionConcern>;
     }
 
-    public event BurdenReleaseDelegate Released;
-    public event BurdenReleaseDelegate Releasing;
-    public event BurdenReleaseDelegate GraphReleased;
+    public event BurdenReleaseDelegate? Released;
+    public event BurdenReleaseDelegate? Releasing;
+    public event BurdenReleaseDelegate? GraphReleased;
 
     private enum Decommission : byte
     {

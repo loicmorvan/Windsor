@@ -9,7 +9,17 @@ namespace Castle.Windsor.Tests;
 public class LoaderWithDependency(IEmployee employee) : ILazyComponentLoader
 #pragma warning restore CS9113 // Parameter is unread.
 {
-    public IRegistration? Load(string name, Type? service, Arguments? arguments)
+    public IRegistration? Load(string? name, Type? service, Arguments? arguments)
+    {
+        return null;
+    }
+
+    public IRegistration? Load(string name, Arguments? arguments)
+    {
+        return null;
+    }
+
+    public IRegistration? Load(Type service, Arguments? arguments)
     {
         return null;
     }

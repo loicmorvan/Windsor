@@ -25,13 +25,18 @@ namespace Castle.Windsor.Facilities.TypedFactory.Internal;
 [Singleton]
 public class DelegateFactory : ILazyComponentLoader
 {
-    public IRegistration? Load(string name, Type? service, Arguments? arguments)
+    public IRegistration? Load(string name, Type service, Arguments? arguments)
     {
-        if (service == null)
-        {
-            return null;
-        }
+       return Load(service, arguments);
+    }
 
+    public IRegistration? Load(string name, Arguments? arguments)
+    {
+        return null;
+    }
+
+    public IRegistration? Load(Type service, Arguments? arguments)
+    {
         var invoke = ExtractInvokeMethod(service);
         if (invoke == null)
         {
@@ -75,7 +80,7 @@ public class DelegateFactory : ILazyComponentLoader
         return "auto-factory: " + defaultName;
     }
 
-    public static MethodInfo ExtractInvokeMethod(Type service)
+    public static MethodInfo? ExtractInvokeMethod(Type service)
     {
         if (!service.Is<MulticastDelegate>())
         {
