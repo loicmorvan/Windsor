@@ -21,7 +21,7 @@ namespace Castle.Windsor.MicroKernel;
 [Serializable]
 public class ComponentNotFoundException : ComponentResolutionException
 {
-    public ComponentNotFoundException(string name, Type service, int countOfHandlersForTheService)
+    public ComponentNotFoundException(string name, Type? service, int countOfHandlersForTheService)
         : base(BuildMessage(name, service, countOfHandlersForTheService))
     {
         Name = name;

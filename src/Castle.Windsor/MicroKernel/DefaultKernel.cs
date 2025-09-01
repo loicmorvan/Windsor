@@ -333,7 +333,7 @@ public sealed partial class DefaultKernel :
     /// <summary>Return handlers for components that implements the specified service.</summary>
     /// <param name="service"> </param>
     /// <returns> </returns>
-    public IHandler[] GetHandlers(Type service)
+    public IHandler[] GetHandlers(Type? service)
     {
         var result = NamingSubSystem.GetHandlers(service);
 
@@ -574,7 +574,7 @@ public sealed partial class DefaultKernel :
         RaiseComponentRegistered(handler.ComponentModel.Name, handler);
     }
 
-    IHandler IKernelInternal.LoadHandlerByName(string name, Type service, Arguments arguments)
+    IHandler? IKernelInternal.LoadHandlerByName(string name, Type service, Arguments arguments)
     {
         ArgumentNullException.ThrowIfNull(name);
 
@@ -721,7 +721,7 @@ public sealed partial class DefaultKernel :
             new DefaultDiagnosticsSubSystem());
     }
 
-    private object ResolveComponent(IHandler handler, Type service, Arguments additionalArguments,
+    private object ResolveComponent(IHandler handler, Type service, Arguments? additionalArguments,
         IReleasePolicy policy, bool ignoreParentContext = false)
     {
         Debug.Assert(handler != null);

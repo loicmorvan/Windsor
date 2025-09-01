@@ -41,13 +41,13 @@ public interface IKernelInternal : IKernel
 
     ILifestyleManager CreateLifestyleManager(ComponentModel model, IComponentActivator activator);
 
-    IHandler LoadHandlerByName(string key, Type service, Arguments arguments);
+    IHandler? LoadHandlerByName(string key, Type? service, Arguments? arguments);
 
     IHandler? LoadHandlerByType(string? key, Type service, Arguments? arguments);
 
     IDisposable OptimizeDependencyResolution();
 
-    object Resolve(Type service, Arguments arguments, IReleasePolicy policy, bool ignoreParentContext = false);
+    object Resolve(Type service, Arguments? arguments, IReleasePolicy policy, bool ignoreParentContext = false);
 
     /// <summary>Returns a component instance by the key</summary>
     /// <param name="key"> </param>
@@ -55,9 +55,9 @@ public interface IKernelInternal : IKernel
     /// <param name="arguments"> </param>
     /// <param name="policy"> </param>
     /// <returns> </returns>
-    object Resolve(string key, Type service, Arguments arguments, IReleasePolicy policy);
+    object Resolve(string key, Type? service, Arguments? arguments, IReleasePolicy policy);
 
-    Array ResolveAll(Type service, Arguments arguments, IReleasePolicy policy);
+    Array ResolveAll(Type service, Arguments? arguments, IReleasePolicy policy);
 
     IHandler CreateHandler(ComponentModel model);
 

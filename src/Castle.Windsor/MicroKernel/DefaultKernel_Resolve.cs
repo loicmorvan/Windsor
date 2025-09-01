@@ -33,7 +33,7 @@ public sealed partial class DefaultKernel
     /// <param name="service"></param>
     /// <param name="arguments"></param>
 	/// <returns></returns>
-	public object Resolve(string key, Type service, Arguments arguments)
+	public object Resolve(string key, Type service, Arguments? arguments)
     {
         return (this as IKernelInternal).Resolve(key, service, arguments, ReleasePolicy);
     }
@@ -82,7 +82,7 @@ public sealed partial class DefaultKernel
     /// <param name="service"></param>
     /// <param name="arguments"></param>
     /// <returns></returns>
-    public object Resolve(Type service, Arguments arguments)
+    public object Resolve(Type service, Arguments? arguments)
     {
         return (this as IKernelInternal).Resolve(service, arguments, ReleasePolicy);
     }
@@ -125,7 +125,7 @@ public sealed partial class DefaultKernel
     /// <param name="arguments"></param>
     /// <param name="policy"></param>
     /// <returns></returns>
-    object IKernelInternal.Resolve(string key, Type service, Arguments arguments, IReleasePolicy policy)
+    object IKernelInternal.Resolve(string key, Type? service, Arguments? arguments, IReleasePolicy policy)
     {
         var handler = (this as IKernelInternal).LoadHandlerByName(key, service, arguments);
         if (handler != null)
@@ -138,7 +138,7 @@ public sealed partial class DefaultKernel
 
     }
 
-    object IKernelInternal.Resolve(Type service, Arguments arguments, IReleasePolicy policy, bool ignoreParentContext)
+    object IKernelInternal.Resolve(Type service, Arguments? arguments, IReleasePolicy policy, bool ignoreParentContext)
     {
         var handler = (this as IKernelInternal).LoadHandlerByType(null, service, arguments);
         return handler == null
@@ -146,7 +146,7 @@ public sealed partial class DefaultKernel
             : ResolveComponent(handler, service, arguments, policy, ignoreParentContext);
     }
 
-    Array IKernelInternal.ResolveAll(Type service, Arguments arguments, IReleasePolicy policy)
+    Array IKernelInternal.ResolveAll(Type service, Arguments? arguments, IReleasePolicy policy)
     {
         var resolved = new List<object>();
         foreach (var handler in GetHandlers(service))

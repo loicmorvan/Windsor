@@ -31,7 +31,7 @@ public interface IHandlerSelector
     /// <param name="key">The service key - can be null</param>
     /// <param name="service">The service interface that we want to resolve</param>
     [PublicAPI]
-    bool HasOpinionAbout([CanBeNull] string key, Type service);
+    bool HasOpinionAbout(string? key, Type service);
 
     /// <summary>
     ///     Select the appropriate handler from the list of defined handlers. The returned handler should be a member from
@@ -42,6 +42,5 @@ public interface IHandlerSelector
     /// <param name="handlers">The defined handlers</param>
     /// <returns>The selected handler, or null</returns>
     [PublicAPI]
-    [CanBeNull]
-    IHandler SelectHandler([CanBeNull] string key, Type service, IHandler[] handlers);
+    IHandler? SelectHandler(string? key, Type service, IHandler[] handlers);
 }
