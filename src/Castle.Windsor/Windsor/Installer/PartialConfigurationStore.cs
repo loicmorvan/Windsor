@@ -26,7 +26,8 @@ internal class PartialConfigurationStore : IConfigurationStore, IDisposable
 
     public PartialConfigurationStore(IKernelInternal kernel)
     {
-        _inner = kernel.ConfigurationStore;
+        _inner = kernel.ConfigurationStore ??
+                 throw new InvalidOperationException("The kernel does not have a configuration store.");
         _partial = new DefaultConfigurationStore();
         _partial.Init(kernel);
     }

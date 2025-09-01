@@ -426,10 +426,11 @@ public sealed partial class DefaultKernel :
         return result;
     }
 
-    public ISubSystem? GetSubSystem(string name)
+    public ISubSystem GetSubSystem(string name)
     {
         _subsystems.TryGetValue(name, out var subsystem);
-        return subsystem;
+        return subsystem ??
+               throw new InvalidOperationException($"The kernel does not have a subsystem named '{name}'.");
     }
 
     public bool HasComponent(string? name)

@@ -127,7 +127,7 @@ public partial interface IKernel : IKernelEvents, IDisposable
 	/// </summary>
 	/// <param name="name"></param>
 	/// <returns></returns>
-	ISubSystem? GetSubSystem(string name);
+	ISubSystem GetSubSystem(string name);
 
 	/// <summary>Returns <c>true</c> if a component with given <paramref name="name" /> was registered, otherwise <c>false</c>.</summary>
 	/// <param name="name"></param>
