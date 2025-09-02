@@ -33,7 +33,7 @@ public class ComponentModelConverter : AbstractTypeConverter
         return converter.CanConvertFrom(typeof(string));
     }
 
-    public override object PerformConversion(string value, Type targetType)
+    public override object? PerformConversion(string value, Type targetType)
     {
         var converter = TypeDescriptor.GetConverter(targetType);
 
@@ -49,7 +49,7 @@ public class ComponentModelConverter : AbstractTypeConverter
         }
     }
 
-    public override object PerformConversion(IConfiguration configuration, Type targetType)
+    public override object? PerformConversion(IConfiguration configuration, Type targetType)
     {
         return PerformConversion(configuration.Value, targetType);
     }

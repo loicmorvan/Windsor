@@ -31,13 +31,13 @@ public class AttributeAwareConverter : AbstractTypeConverter
         return converter != null && converter.CanHandleType(type);
     }
 
-    public override object PerformConversion(string value, Type targetType)
+    public override object? PerformConversion(string value, Type targetType)
     {
         var converter = GetConverterInstance(targetType);
         return converter.PerformConversion(value, targetType);
     }
 
-    public override object PerformConversion(IConfiguration configuration, Type targetType)
+    public override object? PerformConversion(IConfiguration configuration, Type targetType)
     {
         var converter = GetConverterInstance(targetType);
         return converter.PerformConversion(configuration, targetType);
