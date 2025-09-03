@@ -19,7 +19,7 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 /// <summary>Implements all standard conversions.</summary>
 [Serializable]
-public class PrimitiveConverter : AbstractTypeConverter
+public class PrimitiveConverter(ITypeConverterContext context) : AbstractTypeConverter(context)
 {
     private readonly Type[] _types =
     [

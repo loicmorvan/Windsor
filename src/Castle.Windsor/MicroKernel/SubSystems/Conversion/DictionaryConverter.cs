@@ -19,7 +19,7 @@ using Castle.Core.Configuration;
 namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 [Serializable]
-public class DictionaryConverter : AbstractTypeConverter
+public class DictionaryConverter(ITypeConverterContext context) : AbstractTypeConverter(context)
 {
     public override bool CanHandleType(Type type)
     {
@@ -35,7 +35,7 @@ public class DictionaryConverter : AbstractTypeConverter
     {
         Debug.Assert(CanHandleType(targetType));
 
-        var dict = new Dictionary<object, object>();
+        var dict = new Dictionary<object, object?>();
 
         var keyTypeName = configuration.Attributes["keyType"];
         var defaultKeyType = typeof(string);
@@ -73,6 +73,10 @@ public class DictionaryConverter : AbstractTypeConverter
             }
 
             var key = Context.Composition.PerformConversion(keyValue, convertKeyTo);
+            if (key is null)
+            {
+                throw new ConverterException("Could not convert key to type " + defaultKeyType);           
+            }
 
             // Preparing the value
 

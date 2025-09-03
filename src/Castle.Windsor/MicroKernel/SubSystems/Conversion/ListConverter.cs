@@ -19,7 +19,7 @@ using Castle.Core.Configuration;
 namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 [Serializable]
-public class ListConverter : AbstractTypeConverter
+public class ListConverter(ITypeConverterContext context) : AbstractTypeConverter(context)
 {
     public override bool CanHandleType(Type type)
     {

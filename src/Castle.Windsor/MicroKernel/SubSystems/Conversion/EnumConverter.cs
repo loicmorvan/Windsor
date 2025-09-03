@@ -19,7 +19,7 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 /// <summary>Converts a string representation to an enum value</summary>
 [Serializable]
-public class EnumConverter : AbstractTypeConverter
+public class EnumConverter(ITypeConverterContext context) : AbstractTypeConverter(context)
 {
     public override bool CanHandleType(Type type)
     {

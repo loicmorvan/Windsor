@@ -18,15 +18,15 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 /// <summary>Base implementation of <see cref="ITypeConverter" /></summary>
 [Serializable]
-public abstract class AbstractTypeConverter : ITypeConverter
+public abstract class AbstractTypeConverter(ITypeConverterContext context) : ITypeConverter
 {
-    public ITypeConverterContext Context { get; set; }
+    public ITypeConverterContext Context { get; set; } = context;
 
     public abstract bool CanHandleType(Type type);
 
-    public abstract object? PerformConversion(string value, Type targetType);
+    public abstract object PerformConversion(string value, Type targetType);
 
-    public abstract object? PerformConversion(IConfiguration configuration, Type targetType);
+    public abstract object PerformConversion(IConfiguration configuration, Type targetType);
 
     /// <summary>
     ///     Returns true if this instance of <c>ITypeConverter</c> is able to handle the specified type with the specified

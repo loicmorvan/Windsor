@@ -19,12 +19,19 @@ using Castle.Windsor.MicroKernel.SubSystems.Conversion;
 using Castle.Windsor.Tests.ClassComponents;
 using Castle.Windsor.Tests.Components;
 using JetBrains.Annotations;
+using Moq;
 
 namespace Castle.Windsor.Tests;
 
 public class TypeNameConverterTestCase
 {
-    private readonly TypeNameConverter _converter = new(new TypeNameParser());
+    private readonly Mock<ITypeConverterContext> _contextMock = new();
+    private readonly TypeNameConverter _converter;
+
+    public TypeNameConverterTestCase()
+    {
+        _converter = new TypeNameConverter(_contextMock.Object,new TypeNameParser());
+    }
 
     [Fact]
     public void Can_handle_generic_of_generics_properly()

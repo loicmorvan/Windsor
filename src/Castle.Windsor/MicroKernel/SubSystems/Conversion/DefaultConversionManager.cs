@@ -63,7 +63,7 @@ public sealed class DefaultConversionManager : AbstractSubSystem, IConversionMan
         return _converters.Any(converter => converter.CanHandleType(type, configuration));
     }
 
-    public object? PerformConversion(string value, Type targetType)
+    public object PerformConversion(string value, Type targetType)
     {
         foreach (var converter in _converters.Where(converter => converter.CanHandleType(targetType)))
         {
@@ -75,7 +75,7 @@ public sealed class DefaultConversionManager : AbstractSubSystem, IConversionMan
         throw new ConverterException(message);
     }
 
-    public object? PerformConversion(IConfiguration configuration, Type targetType)
+    public object PerformConversion(IConfiguration configuration, Type targetType)
     {
         foreach (var converter in _converters.Where(converter => converter.CanHandleType(targetType, configuration)))
         {
@@ -87,14 +87,15 @@ public sealed class DefaultConversionManager : AbstractSubSystem, IConversionMan
         throw new ConverterException(message);
     }
 
+
     public TTarget PerformConversion<TTarget>(string value)
     {
         return (TTarget)PerformConversion(value, typeof(TTarget));
     }
 
-    public TTarget PerformConversion<TTarget>(IConfiguration configuration)
+    public TTarget? PerformConversion<TTarget>(IConfiguration configuration)
     {
-        return (TTarget)PerformConversion(configuration, typeof(TTarget));
+        return (TTarget?)PerformConversion(configuration, typeof(TTarget));
     }
 
     IKernelInternal ITypeConverterContext.Kernel => Kernel;
@@ -117,17 +118,17 @@ public sealed class DefaultConversionManager : AbstractSubSystem, IConversionMan
 
     private void InitDefaultConverters()
     {
-        Add(new PrimitiveConverter());
-        Add(new TimeSpanConverter());
-        Add(new TypeNameConverter(new TypeNameParser()));
-        Add(new EnumConverter());
-        Add(new ListConverter());
-        Add(new DictionaryConverter());
-        Add(new GenericDictionaryConverter());
-        Add(new GenericListConverter());
-        Add(new ArrayConverter());
-        Add(new ComponentConverter());
-        Add(new AttributeAwareConverter());
-        Add(new ComponentModelConverter());
+        Add(new PrimitiveConverter(this));
+        Add(new TimeSpanConverter(this));
+        Add(new TypeNameConverter(this,new TypeNameParser()));
+        Add(new EnumConverter(this));
+        Add(new ListConverter(this));
+        Add(new DictionaryConverter(this));
+        Add(new GenericDictionaryConverter(this));
+        Add(new GenericListConverter(this));
+        Add(new ArrayConverter(this));
+        Add(new ComponentConverter(this));
+        Add(new AttributeAwareConverter(this));
+        Add(new ComponentModelConverter(this));
     }
 }

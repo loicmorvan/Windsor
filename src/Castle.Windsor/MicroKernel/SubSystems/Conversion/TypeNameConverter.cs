@@ -38,7 +38,7 @@ public class TypeNameConverter : AbstractTypeConverter
 
     private readonly ITypeNameParser _parser;
 
-    public TypeNameConverter(ITypeNameParser parser)
+    public TypeNameConverter(ITypeConverterContext context,ITypeNameParser parser) : base(context)
     {
         ArgumentNullException.ThrowIfNull(parser);
 

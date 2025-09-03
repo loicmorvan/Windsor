@@ -22,7 +22,7 @@ using Castle.Windsor.MicroKernel.Util;
 namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 [Serializable]
-public class GenericListConverter : AbstractTypeConverter
+public class GenericListConverter(ITypeConverterContext context) : AbstractTypeConverter(context)
 {
     public override bool CanHandleType(Type type)
     {

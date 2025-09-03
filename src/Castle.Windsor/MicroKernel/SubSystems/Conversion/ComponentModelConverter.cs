@@ -20,7 +20,7 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 /// <summary>Attempts to utilize an existing <see cref="TypeConverter" /> for conversion</summary>
 [Serializable]
-public class ComponentModelConverter : AbstractTypeConverter
+public class ComponentModelConverter(ITypeConverterContext context) : AbstractTypeConverter(context)
 {
     public override bool CanHandleType(Type type)
     {
@@ -33,13 +33,14 @@ public class ComponentModelConverter : AbstractTypeConverter
         return converter.CanConvertFrom(typeof(string));
     }
 
-    public override object? PerformConversion(string value, Type targetType)
+    public override object PerformConversion(string value, Type targetType)
     {
         var converter = TypeDescriptor.GetConverter(targetType);
 
         try
         {
-            return converter.ConvertFrom(value);
+            return converter.ConvertFrom(value) 
+                   ?? throw new ConverterException($"Could not convert from '{value}' to {targetType.FullName}");
         }
         catch (Exception ex)
         {
@@ -49,7 +50,7 @@ public class ComponentModelConverter : AbstractTypeConverter
         }
     }
 
-    public override object? PerformConversion(IConfiguration configuration, Type targetType)
+    public override object PerformConversion(IConfiguration configuration, Type targetType)
     {
         return PerformConversion(configuration.Value, targetType);
     }

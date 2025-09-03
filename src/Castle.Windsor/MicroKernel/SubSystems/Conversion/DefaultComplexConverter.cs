@@ -21,7 +21,7 @@ using Castle.Windsor.Core.Internal;
 namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 [Serializable]
-public class DefaultComplexConverter : AbstractTypeConverter
+public class DefaultComplexConverter(ITypeConverterContext context) : AbstractTypeConverter(context)
 {
     private IConversionManager? _conversionManager;
 

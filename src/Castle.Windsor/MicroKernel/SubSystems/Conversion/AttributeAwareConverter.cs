@@ -22,7 +22,7 @@ namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 ///     Looks for a <see cref="ConvertibleAttribute" /> on the type to be converted. If found, the TypeConverter
 ///     defined by the attribute is used to perform the conversion.
 /// </summary>
-public class AttributeAwareConverter : AbstractTypeConverter
+public class AttributeAwareConverter(ITypeConverterContext context) : AbstractTypeConverter(context)
 {
     public override bool CanHandleType(Type type)
     {
@@ -31,13 +31,13 @@ public class AttributeAwareConverter : AbstractTypeConverter
         return converter != null && converter.CanHandleType(type);
     }
 
-    public override object? PerformConversion(string value, Type targetType)
+    public override object PerformConversion(string value, Type targetType)
     {
         var converter = GetConverterInstance(targetType);
         return converter.PerformConversion(value, targetType);
     }
 
-    public override object? PerformConversion(IConfiguration configuration, Type targetType)
+    public override object PerformConversion(IConfiguration configuration, Type targetType)
     {
         var converter = GetConverterInstance(targetType);
         return converter.PerformConversion(configuration, targetType);
@@ -51,17 +51,11 @@ public class AttributeAwareConverter : AbstractTypeConverter
                throw new InvalidOperationException("Type " + type.Name + " does not have a Convertible attribute.");
     }
 
-    private ITypeConverter TryGetConverterInstance(Type type)
+    private ITypeConverter? TryGetConverterInstance(Type type)
     {
         var attr = type.GetTypeInfo().GetCustomAttribute<ConvertibleAttribute>();
 
-        if (attr == null)
-        {
-            return null;
-        }
-
-        var converter = attr.ConverterType.CreateInstance<ITypeConverter>();
-        converter.Context = Context;
+        var converter = attr?.ConverterType.CreateInstance<ITypeConverter>(Context);
 
         return converter;
     }

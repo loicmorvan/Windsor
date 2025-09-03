@@ -20,7 +20,7 @@ using Castle.Windsor.Core.Internal;
 namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 [Serializable]
-public class GenericDictionaryConverter : AbstractTypeConverter
+public class GenericDictionaryConverter(ITypeConverterContext context) : AbstractTypeConverter(context)
 {
     public override bool CanHandleType(Type type)
     {
@@ -76,7 +76,7 @@ public class GenericDictionaryConverter : AbstractTypeConverter
     {
         public object ConvertConfigurationToCollection(IConfiguration configuration)
         {
-            var dict = new Dictionary<TKey, TValue>();
+            var dict = new Dictionary<TKey, TValue?>();
             foreach (var itemConfig in configuration.Children)
             {
                 // Preparing the key
@@ -106,7 +106,11 @@ public class GenericDictionaryConverter : AbstractTypeConverter
                             typeof(TValue), convertKeyTo));
                 }
 
-                var key = (TKey)parent.Context.Composition.PerformConversion(keyValue, convertKeyTo);
+                var key = (TKey?)parent.Context.Composition.PerformConversion(keyValue, convertKeyTo);
+                if (key is null)
+                {
+                    throw new ConverterException("Could not convert key to type " + typeof(TKey));
+                }
 
                 // Preparing the value
 
@@ -130,12 +134,12 @@ public class GenericDictionaryConverter : AbstractTypeConverter
                 if (itemConfig.Children.Count == 1)
                 {
                     dict.Add(key,
-                        (TValue)parent.Context.Composition.PerformConversion(itemConfig.Children[0], convertValueTo));
+                        (TValue?)parent.Context.Composition.PerformConversion(itemConfig.Children[0], convertValueTo));
                 }
                 else
                 {
                     dict.Add(key,
-                        (TValue)parent.Context.Composition.PerformConversion(itemConfig.Value, convertValueTo));
+                        (TValue?)parent.Context.Composition.PerformConversion(itemConfig.Value, convertValueTo));
                 }
             }
 

@@ -17,7 +17,7 @@ using Castle.Core.Configuration;
 namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 [Serializable]
-public class TimeSpanConverter : AbstractTypeConverter
+public class TimeSpanConverter(ITypeConverterContext context) : AbstractTypeConverter(context)
 {
     public override bool CanHandleType(Type type)
     {

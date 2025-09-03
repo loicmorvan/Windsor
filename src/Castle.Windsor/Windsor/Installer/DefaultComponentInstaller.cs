@@ -64,6 +64,12 @@ public sealed class DefaultComponentInstaller : IComponentsInstaller
         if (!string.IsNullOrEmpty(typeName))
         {
             var type = conversionManager.PerformConversion<Type>(typeName);
+            if (type is null)
+            {
+                throw new ConverterException(
+                    $"Could not set up installer '{installer.Attributes["id"]}'. Type is null.");
+            }
+
             AddInstaller(cache, type);
             return;
         }
@@ -144,6 +150,11 @@ public sealed class DefaultComponentInstaller : IComponentsInstaller
         {
             var type = converter.PerformConversion<Type>(facility.Attributes["type"] ??
                                                          throw new InvalidOperationException());
+            if (type is null)
+            {
+                throw new ConverterException($"Could not set up facility '{facility.Attributes["id"]}'. Type is null.");
+            }
+
             var facilityInstance = type.CreateInstance<IFacility>();
             Debug.Assert(facilityInstance != null);
 
@@ -239,7 +250,9 @@ public sealed class DefaultComponentInstaller : IComponentsInstaller
         {
             try
             {
-                services.Add(converter.PerformConversion<Type>(forwardedServiceTypeName));
+                services.Add(converter.PerformConversion<Type>(forwardedServiceTypeName)
+                             ?? throw new ConverterException(
+                                 $"Could not set up component '{component.Attributes["id"]}'. Type is null."));
             }
             catch (ConverterException e)
             {

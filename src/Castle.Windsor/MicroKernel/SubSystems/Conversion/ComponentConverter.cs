@@ -19,7 +19,7 @@ using Castle.Windsor.MicroKernel.Util;
 namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 [Serializable]
-public class ComponentConverter : AbstractTypeConverter, IKernelDependentConverter
+public class ComponentConverter(ITypeConverterContext context) : AbstractTypeConverter(context), IKernelDependentConverter
 {
     public override bool CanHandleType(Type type, IConfiguration configuration)
     {
@@ -28,7 +28,7 @@ public class ComponentConverter : AbstractTypeConverter, IKernelDependentConvert
 
     public override bool CanHandleType(Type type)
     {
-        return Context.Kernel != null && Context.Kernel.HasComponent(type);
+        return Context.Kernel.HasComponent(type);
     }
 
     public override object PerformConversion(string value, Type targetType)

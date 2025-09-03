@@ -18,7 +18,7 @@ using Castle.Core.Configuration;
 namespace Castle.Windsor.MicroKernel.SubSystems.Conversion;
 
 [Serializable]
-public class ArrayConverter : AbstractTypeConverter
+public class ArrayConverter(ITypeConverterContext context) : AbstractTypeConverter(context)
 {
     public override bool CanHandleType(Type type)
     {
