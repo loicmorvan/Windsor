@@ -179,7 +179,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
     }
 
     [PublicAPI]
-    protected virtual object ResolveFromKernel(CreationContext context, ComponentModel model,
+    protected virtual object? ResolveFromKernel(CreationContext context, ComponentModel model,
         DependencyModel dependency)
     {
         if (dependency.ReferencedComponentName != null)
