@@ -30,7 +30,8 @@ public class BestConstructorTestCase : AbstractContainerTestCase
     [Fact]
     public void ConstructorWithMoreArguments()
     {
-        Container.Register(Component.For<A>(),
+        Container.Register(
+            Component.For<A>(),
             Component.For<B>(),
             Component.For<C>(),
             Component.For<ServiceUser>());
@@ -98,7 +99,8 @@ public class BestConstructorTestCase : AbstractContainerTestCase
 
         Kernel.ConfigurationStore = store;
 
-        Container.Register(Component.For<A>().Named("a"),
+        Container.Register(
+            Component.For<A>().Named("a"),
             Component.For<ServiceUser2>().Named("service"));
 
         var service = Container.Resolve<ServiceUser2>("service");

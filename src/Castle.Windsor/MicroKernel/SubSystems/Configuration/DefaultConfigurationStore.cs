@@ -19,16 +19,16 @@ using Castle.Windsor.MicroKernel.SubSystems.Resource;
 namespace Castle.Windsor.MicroKernel.SubSystems.Configuration;
 
 /// <summary>
-///     This implementation of <see cref="IConfigurationStore" /> does not try to obtain an external configuration by any
-///     means. Its only purpose is to serve as a base class for subclasses that might
-///     obtain the configuration node from anywhere.
+///     This implementation of <see cref="IConfigurationStore" /> does not try to get an external configuration by any
+///     means. Its only purpose is to serve as a base class for subclasses that might get the configuration node from
+///     anywhere.
 /// </summary>
 [Serializable]
 public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 {
-    private readonly IDictionary<string, IConfiguration> _childContainers = new Dictionary<string, IConfiguration>();
-    private readonly IDictionary<string, IConfiguration> _components = new Dictionary<string, IConfiguration>();
-    private readonly IDictionary<string, IConfiguration> _facilities = new Dictionary<string, IConfiguration>();
+    private readonly Dictionary<string, IConfiguration> _childContainers = new();
+    private readonly Dictionary<string, IConfiguration> _components = new();
+    private readonly Dictionary<string, IConfiguration> _facilities = new();
     private readonly List<IConfiguration> _installers = [];
     private readonly Lock _syncLock = new();
 
@@ -79,7 +79,7 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
     /// </summary>
     /// <param name="key">item key</param>
     /// <returns></returns>
-    public IConfiguration GetChildContainerConfiguration(string key)
+    public IConfiguration? GetChildContainerConfiguration(string key)
     {
         lock (_syncLock)
         {
@@ -94,7 +94,7 @@ public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
     /// </summary>
     /// <param name="key">item key</param>
     /// <returns></returns>
-    public IConfiguration GetComponentConfiguration(string key)
+    public IConfiguration? GetComponentConfiguration(string key)
     {
         lock (_syncLock)
         {

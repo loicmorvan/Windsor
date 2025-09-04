@@ -42,8 +42,7 @@ namespace Castle.Windsor.MicroKernel;
 /// </summary>
 [Serializable]
 [DebuggerTypeProxy(typeof(KernelDebuggerProxy))]
-public sealed partial class DefaultKernel :
-    IKernelInternal
+public sealed partial class DefaultKernel : IKernelInternal
 {
     [ThreadStatic] private static CreationContext? _currentCreationContext;
 
@@ -87,15 +86,20 @@ public sealed partial class DefaultKernel :
         Resolver = resolver;
         Resolver.Initialize(this, RaiseDependencyResolving);
 
-        {
-            Logger = NullLogger.Instance;
-        }
+        Logger = NullLogger.Instance;
     }
 
     /// <summary>Constructs a DefaultKernel with the specified implementation of <see cref="IProxyFactory" /></summary>
     public DefaultKernel(IProxyFactory proxyFactory)
-        : this(new DefaultDependencyResolver(), proxyFactory)
     {
+        RegisterSubSystems();
+        ReleasePolicy = new LifecycledComponentsReleasePolicy(this);
+        HandlerFactory = new DefaultHandlerFactory(this);
+        ComponentModelBuilder = new DefaultComponentModelBuilder(this);
+        ProxyFactory = proxyFactory;
+        Resolver = new DefaultDependencyResolver(this, RaiseDependencyResolving);
+
+        Logger = NullLogger.Instance;
     }
 
     private IConversionManager? ConversionSubSystem { get; set; }

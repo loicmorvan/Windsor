@@ -20,6 +20,7 @@ using Castle.Windsor.MicroKernel.Resolvers;
 using Castle.Windsor.Windsor;
 using Castle.Windsor.Windsor.Installer;
 using Castle.Windsor.Windsor.Proxy;
+using Moq;
 
 namespace Castle.Windsor.Tests.SpecializedResolvers;
 
@@ -57,12 +58,10 @@ public class CollectionResolverWithPropagatingContainerTestCase
         }
     }
 
-    private class InlineDependenciesPropagatingDependencyResolver
-        : DefaultDependencyResolver
+    private class InlineDependenciesPropagatingDependencyResolver() :
+        DefaultDependencyResolver(Mock.Of<IKernelInternal>(), Mock.Of<DependencyDelegate>())
     {
-        protected override CreationContext RebuildContextForParameter(
-            CreationContext current,
-            Type parameterType)
+        protected override CreationContext RebuildContextForParameter(CreationContext current, Type parameterType)
         {
             return parameterType.GetTypeInfo().ContainsGenericParameters
                 ? current

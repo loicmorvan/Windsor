@@ -56,12 +56,12 @@ internal class PartialConfigurationStore : IConfigurationStore, IDisposable
         _partial.AddInstallerConfiguration(config);
     }
 
-    public IConfiguration GetChildContainerConfiguration(string key)
+    public IConfiguration? GetChildContainerConfiguration(string key)
     {
         return _partial.GetChildContainerConfiguration(key);
     }
 
-    public IConfiguration GetComponentConfiguration(string key)
+    public IConfiguration? GetComponentConfiguration(string key)
     {
         return _partial.GetComponentConfiguration(key);
     }

@@ -27,12 +27,13 @@ namespace Castle.Windsor.MicroKernel.Resolvers;
 ///     should be useful for 99% of situations.
 /// </summary>
 [Serializable]
-public class DefaultDependencyResolver : IDependencyResolver
+public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegate dependencyResolvingDelegate)
+    : IDependencyResolver
 {
     private readonly List<ISubDependencyResolver> _subResolvers = [];
-    private ITypeConverter _converter;
-    private DependencyDelegate _dependencyResolvingDelegate;
-    private IKernelInternal _kernel;
+    private ITypeConverter _converter = kernel.GetConversionManager();
+    private DependencyDelegate _dependencyResolvingDelegate = dependencyResolvingDelegate;
+    private IKernelInternal _kernel = kernel;
 
     /// <summary>Registers a sub resolver instance</summary>
     /// <param name="subResolver">The subresolver instance</param>
@@ -41,16 +42,6 @@ public class DefaultDependencyResolver : IDependencyResolver
         ArgumentNullException.ThrowIfNull(subResolver);
 
         _subResolvers.Add(subResolver);
-    }
-
-    /// <summary>Initializes this instance with the specified dependency delegate.</summary>
-    /// <param name="kernel">kernel</param>
-    /// <param name="dependencyDelegate">The dependency delegate.</param>
-    public void Initialize(IKernelInternal kernel, DependencyDelegate dependencyDelegate)
-    {
-        _kernel = kernel;
-        _converter = kernel.GetConversionManager();
-        _dependencyResolvingDelegate = dependencyDelegate;
     }
 
     /// <summary>Unregisters a sub resolver instance previously registered</summary>
@@ -134,7 +125,8 @@ public class DefaultDependencyResolver : IDependencyResolver
             else if (!dependency.IsOptional)
             {
                 var message =
-                    $"Could not resolve non-optional dependency for '{model.Name}' ({(model.Implementation != null ? model.Implementation.FullName : "-unknown-")}). Parameter '{dependency.DependencyKey}' type '{dependency.TargetType.FullName}'";
+                    $"Could not resolve non-optional dependency for '{model.Name}' ({(model.Implementation != null ? model.Implementation.FullName : "-unknown-")})." +
+                    $" Parameter '{dependency.DependencyKey}' type '{dependency.TargetType.FullName}'";
 
                 throw new DependencyResolverException(message);
             }
@@ -142,6 +134,16 @@ public class DefaultDependencyResolver : IDependencyResolver
 
         _dependencyResolvingDelegate(model, dependency, value);
         return value;
+    }
+
+    /// <summary>Initializes this instance with the specified dependency delegate.</summary>
+    /// <param name="kernel">kernel</param>
+    /// <param name="dependencyDelegate">The dependency delegate.</param>
+    public void Initialize(IKernelInternal kernel, DependencyDelegate dependencyDelegate)
+    {
+        _kernel = kernel;
+        _converter = kernel.GetConversionManager();
+        _dependencyResolvingDelegate = dependencyDelegate;
     }
 
     [PublicAPI]

@@ -45,7 +45,7 @@ public interface IConfigurationStore : ISubSystem
     /// <param name="key">item key</param>
     /// <returns></returns>
     [PublicAPI]
-    IConfiguration GetChildContainerConfiguration(string key);
+    IConfiguration? GetChildContainerConfiguration(string key);
 
     /// <summary>
     ///     Returns the configuration node associated with the specified component key. Should return null if no
@@ -53,7 +53,7 @@ public interface IConfigurationStore : ISubSystem
     /// </summary>
     /// <param name="key">item key</param>
     /// <returns></returns>
-    IConfiguration GetComponentConfiguration(string key);
+    IConfiguration? GetComponentConfiguration(string key);
 
     /// <summary>Returns all configuration nodes for components</summary>
     /// <returns></returns>
