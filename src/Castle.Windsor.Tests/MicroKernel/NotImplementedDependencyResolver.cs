@@ -43,7 +43,7 @@ public class NotImplementedDependencyResolver : IDependencyResolver
         throw new NotImplementedException();
     }
 
-    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+    public object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
         throw new NotImplementedException();

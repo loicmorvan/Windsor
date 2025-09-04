@@ -68,7 +68,7 @@ public class SubResolverTestCase
             return Result != null;
         }
 
-        public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+        public object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
             ComponentModel model, DependencyModel dependency)
         {
             Assert.NotNull(Result);
@@ -94,7 +94,7 @@ public class SubResolverTestCase
             return true;
         }
 
-        public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+        public object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
             ComponentModel model, DependencyModel dependency)
         {
             return null;

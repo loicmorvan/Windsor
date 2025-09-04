@@ -30,7 +30,7 @@ internal class OptionsSubResolver(IKernel kernel) : ISubDependencyResolver
                dependency.TargetType.GetGenericTypeDefinition() == typeof(IOptions<>);
     }
 
-    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+    public object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
         return kernel.Resolve(dependency.TargetType);

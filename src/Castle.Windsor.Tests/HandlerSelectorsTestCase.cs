@@ -108,7 +108,7 @@ public class HandlerSelectorsTestCase
             return dependency.TargetType == typeof(IWatcher);
         }
 
-        public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+        public object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
             ComponentModel model,
             DependencyModel dependency)
         {

@@ -27,7 +27,7 @@ public class BadDependencyResolver(IKernel kernel) : ISubDependencyResolver
         return dependency.TargetType == typeof(IBookStore);
     }
 
-    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+    public object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
         return kernel.Resolve<IBookStore>();

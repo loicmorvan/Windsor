@@ -128,7 +128,7 @@ public class CreationContext :
         return HasAdditionalArguments && (CanResolveByKey(dependency) || CanResolveByType(dependency));
     }
 
-    public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    public virtual object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
         ComponentModel model,
         DependencyModel dependency)
     {

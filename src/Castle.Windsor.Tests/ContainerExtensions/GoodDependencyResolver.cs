@@ -30,7 +30,7 @@ public class GoodDependencyResolver : ISubDependencyResolver
                 typeof(IBookStore), false));
     }
 
-    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+    public object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
         return contextHandlerResolver.Resolve(context, contextHandlerResolver, model,

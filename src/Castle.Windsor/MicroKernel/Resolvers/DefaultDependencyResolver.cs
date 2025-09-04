@@ -113,7 +113,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
     /// <param name="model">Model of the component that is requesting the dependency</param>
     /// <param name="dependency">The dependency model</param>
     /// <returns>The dependency resolved value or null</returns>
-    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+    public object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
         if (!TryResolveCore(context, contextHandlerResolver, model, dependency, out var value))
@@ -126,7 +126,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
             {
                 var message =
                     $"Could not resolve non-optional dependency for '{model.Name}' ({(model.Implementation != null ? model.Implementation.FullName : "-unknown-")})." +
-                    $" Parameter '{dependency.DependencyKey}' type '{dependency.TargetType.FullName}'";
+                    $" Parameter '{dependency.DependencyKey}' type '{dependency.TargetType?.FullName ?? "nothing?"}'";
 
                 throw new DependencyResolverException(message);
             }

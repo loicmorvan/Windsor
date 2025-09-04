@@ -28,7 +28,7 @@ public class LoggerDependencyResolver(IKernel kernel) : ISubDependencyResolver
         return dependency.TargetType == typeof(ILogger);
     }
 
-    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+    public object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
         var factory = kernel.Resolve<ILoggerFactory>();

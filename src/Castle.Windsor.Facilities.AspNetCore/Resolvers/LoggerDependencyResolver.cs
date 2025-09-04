@@ -35,7 +35,7 @@ public class LoggerDependencyResolver : ISubDependencyResolver, IAcceptServicePr
         return dependency.TargetType == typeof(ILogger);
     }
 
-    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+    public object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
         ThrowIfServiceProviderIsNull();

@@ -35,7 +35,7 @@ public class FrameworkDependencyResolver(IServiceCollection serviceCollection)
         return HasMatchingType(dependency.TargetType);
     }
 
-    public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+    public object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
         ThrowIfServiceProviderIsNull();

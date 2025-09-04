@@ -53,7 +53,7 @@ public class ListResolver : CollectionResolver
     {
     }
 
-    public override object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    public override object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
         ComponentModel model,
         DependencyModel dependency)
     {
