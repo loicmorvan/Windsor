@@ -86,7 +86,7 @@ public sealed partial class DefaultKernel
         ComponentRegistered(key, handler);
     }
 
-    private void RaiseDependencyResolving(ComponentModel client, DependencyModel model, object dependency)
+    private void RaiseDependencyResolving(ComponentModel client, DependencyModel model, object? dependency)
     {
         DependencyResolving(client, model, dependency);
     }
