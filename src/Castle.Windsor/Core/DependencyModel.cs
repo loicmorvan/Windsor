@@ -51,7 +51,7 @@ public class DependencyModel(
     /// <value> <c>true</c> if this dependency is optional; otherwise, <c>false</c> . </value>
     public bool IsOptional { get; set; } = isOptional;
 
-    public bool IsPrimitiveTypeDependency => TargetItemType != null && TargetItemType.IsPrimitiveTypeOrCollection();
+    public bool IsPrimitiveTypeDependency => TargetItemType.IsPrimitiveTypeOrCollection();
 
     public ParameterModel? Parameter
     {
@@ -74,7 +74,10 @@ public class DependencyModel(
     ///     words if dependency is <c>out IFoo foo</c> this will be <c>IFoo</c>, while <see cref="TargetType" /> will be
     ///     <c>&amp;IFoo</c>);
     /// </summary>
-    public Type? TargetItemType { get; } = targetType is { IsByRef: true } ? targetType.GetElementType() : targetType;
+    public Type TargetItemType { get; } = targetType is { IsByRef: true }
+        ? targetType.GetElementType() ??
+          throw new InvalidOperationException("Cannot determine item type of by ref type")
+        : targetType;
 
     /// <summary>Gets the type of the target.</summary>
     /// <value> The type of the target. </value>
@@ -141,17 +144,10 @@ public class DependencyModel(
 
     private ParameterModel? ObtainParameterModelByType(ParameterModelCollection parameters)
     {
-        var type = TargetItemType;
-        if (type == null)
-            // for example it's an interceptor
+        var found = GetParameterModelByType(TargetItemType, parameters);
+        if (found == null && TargetItemType.GetTypeInfo().IsGenericType)
         {
-            return null;
-        }
-
-        var found = GetParameterModelByType(type, parameters);
-        if (found == null && type.GetTypeInfo().IsGenericType)
-        {
-            found = GetParameterModelByType(type.GetGenericTypeDefinition(), parameters);
+            found = GetParameterModelByType(TargetItemType.GetGenericTypeDefinition(), parameters);
         }
 
         return found;
