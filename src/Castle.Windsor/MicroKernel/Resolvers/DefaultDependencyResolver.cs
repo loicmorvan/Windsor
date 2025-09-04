@@ -353,7 +353,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
         return handler.Resolve(contextRebuilt);
     }
 
-    private object ResolveFromKernelByType(CreationContext context, ComponentModel model, DependencyModel dependency)
+    private object? ResolveFromKernelByType(CreationContext context, ComponentModel model, DependencyModel dependency)
     {
         if (!TryGetHandlerFromKernel(dependency, context, out var handler))
         {
@@ -416,7 +416,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
         }
     }
 
-    private bool TryGetHandlerFromKernel(DependencyModel dependency, CreationContext context, out IHandler handler)
+    private bool TryGetHandlerFromKernel(DependencyModel dependency, CreationContext context, out IHandler? handler)
     {
         // we are doing it in two stages because it is likely to be faster to a lookup
         // by key than a linear search
@@ -466,7 +466,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
         return true;
     }
 
-    private static bool IsHandlerInValidState(IHandler handler)
+    private static bool IsHandlerInValidState(IHandler? handler)
     {
         if (handler == null)
         {
