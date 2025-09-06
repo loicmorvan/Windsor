@@ -26,7 +26,7 @@ public class ListConverter(ITypeConverterContext context) : AbstractTypeConverte
         return type == typeof(IList) || type == typeof(ArrayList);
     }
 
-    public override object PerformConversion(string? value, Type targetType)
+    public override object PerformConversion(string value, Type targetType)
     {
         throw new NotImplementedException();
     }

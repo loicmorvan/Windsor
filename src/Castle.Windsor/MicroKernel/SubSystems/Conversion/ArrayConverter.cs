@@ -25,7 +25,7 @@ public class ArrayConverter(ITypeConverterContext context) : AbstractTypeConvert
         return type.IsArray;
     }
 
-    public override object PerformConversion(string? value, Type targetType)
+    public override object PerformConversion(string value, Type targetType)
     {
         throw new NotImplementedException();
     }

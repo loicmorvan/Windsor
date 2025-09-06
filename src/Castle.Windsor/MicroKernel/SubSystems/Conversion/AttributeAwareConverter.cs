@@ -31,7 +31,7 @@ public class AttributeAwareConverter(ITypeConverterContext context) : AbstractTy
         return converter != null && converter.CanHandleType(type);
     }
 
-    public override object PerformConversion(string? value, Type targetType)
+    public override object PerformConversion(string value, Type targetType)
     {
         var converter = GetConverterInstance(targetType);
         return converter.PerformConversion(value, targetType);

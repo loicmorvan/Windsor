@@ -26,7 +26,7 @@ public class EnumConverter(ITypeConverterContext context) : AbstractTypeConverte
         return type.GetTypeInfo().IsEnum;
     }
 
-    public override object PerformConversion(string? value, Type targetType)
+    public override object PerformConversion(string value, Type targetType)
     {
         try
         {

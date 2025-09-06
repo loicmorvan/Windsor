@@ -63,7 +63,7 @@ public sealed class DefaultConversionManager : AbstractSubSystem, IConversionMan
         return _converters.Any(converter => converter.CanHandleType(type, configuration));
     }
 
-    public object PerformConversion(string? value, Type targetType)
+    public object PerformConversion(string value, Type targetType)
     {
         foreach (var converter in _converters.Where(converter => converter.CanHandleType(targetType)))
         {

@@ -45,7 +45,7 @@ public class PrimitiveConverter(ITypeConverterContext context) : AbstractTypeCon
         return Array.IndexOf(_types, type) != -1;
     }
 
-    public override object PerformConversion(string? value, Type targetType)
+    public override object PerformConversion(string value, Type targetType)
     {
         if (targetType == typeof(string))
         {

@@ -24,7 +24,7 @@ public abstract class AbstractTypeConverter(ITypeConverterContext context) : ITy
 
     public abstract bool CanHandleType(Type type);
 
-    public abstract object PerformConversion(string? value, Type targetType);
+    public abstract object PerformConversion(string value, Type targetType);
 
     public abstract object PerformConversion(IConfiguration configuration, Type targetType);
 
