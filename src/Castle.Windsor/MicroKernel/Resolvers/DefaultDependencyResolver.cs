@@ -190,7 +190,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
 
         if (dependency.Parameter != null)
         {
-            return ResolveFromParameter(context, model, dependency);
+            return ResolveFromParameter(context, model, dependency.Parameter, dependency.TargetItemType);
         }
 
         if (typeof(IKernel).IsAssignableFrom(dependency.TargetItemType))
@@ -392,24 +392,25 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
         return handler.Resolve(context);
     }
 
-    private object ResolveFromParameter(CreationContext context, ComponentModel model, DependencyModel dependency)
+    private object ResolveFromParameter(CreationContext context, ComponentModel model, ParameterModel parameter, Type targetItemType)
     {
         _converter.Context.Push(model, context);
+        
         try
         {
-            if (dependency.Parameter.Value != null || dependency.Parameter.ConfigValue == null)
+            if (parameter.Value != null || parameter.ConfigValue == null)
             {
-                return _converter.PerformConversion(dependency.Parameter.Value, dependency.TargetItemType);
+                return _converter.PerformConversion(parameter.Value, targetItemType);
             }
             else
             {
-                return _converter.PerformConversion(dependency.Parameter.ConfigValue, dependency.TargetItemType);
+                return _converter.PerformConversion(parameter.ConfigValue, targetItemType);
             }
         }
         catch (ConverterException e)
         {
             throw new DependencyResolverException(
-                $"Could not convert parameter '{dependency.Parameter.Name}' to type '{dependency.TargetItemType.Name}'.",
+                $"Could not convert parameter '{parameter.Name}' to type '{targetItemType.Name}'.",
                 e);
         }
         finally
