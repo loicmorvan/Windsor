@@ -206,7 +206,8 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
             : ResolveFromKernelByType(context, model, dependency);
     }
 
-    private static bool CanResolveFromContext([NotNullWhen(true)]CreationContext? context, ISubDependencyResolver contextHandlerResolver,
+    private static bool CanResolveFromContext([NotNullWhen(true)] CreationContext? context,
+        ISubDependencyResolver contextHandlerResolver,
         ComponentModel model,
         DependencyModel dependency)
     {
@@ -405,17 +406,20 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
         Type targetItemType)
     {
         _converter.Context.Push(model, context);
-
+        
         try
         {
-            if (parameter.Value != null || parameter.ConfigValue == null)
+            if (parameter.Value is not null)
             {
                 return _converter.PerformConversion(parameter.Value, targetItemType);
             }
-            else
+
+            if (parameter.ConfigValue is not null)
             {
                 return _converter.PerformConversion(parameter.ConfigValue, targetItemType);
             }
+
+            throw new InvalidOperationException("parameter.Value and parameter.ConfigValue are both null.");
         }
         catch (ConverterException e)
         {
