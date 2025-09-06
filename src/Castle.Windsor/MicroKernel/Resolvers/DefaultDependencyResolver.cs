@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
@@ -288,6 +289,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
         var handler = context is { IsResolving: true }
             ? _kernel.LoadHandlerByName(key, dependency.TargetItemType, context.AdditionalArguments)
             : _kernel.GetHandler(key);
+        
         return IsHandlerInValidState(handler) && !handler.IsBeingResolvedInContext(context);
     }
 
@@ -466,7 +468,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
         return true;
     }
 
-    private static bool IsHandlerInValidState(IHandler? handler)
+    private static bool IsHandlerInValidState([NotNullWhen(true)] IHandler? handler)
     {
         if (handler == null)
         {

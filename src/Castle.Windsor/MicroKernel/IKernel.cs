@@ -104,7 +104,7 @@ public partial interface IKernel : IKernelEvents, IDisposable
 
 	/// <summary>Returns the <see cref="IHandler" /> for the specified component name.</summary>
 	/// <param name="name"></param>
-	/// <returns></returns>
+	/// <returns>The <see cref="IHandler" /> for the specified component name; or <c>null</c> if none was found.</returns>
 	IHandler? GetHandler(string name);
 
 	/// <summary>Returns the <see cref="IHandler" /> for the specified service.</summary>
