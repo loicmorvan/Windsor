@@ -58,7 +58,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
     /// <param name="model">Model of the component that is requesting the dependency</param>
     /// <param name="dependency">The dependency model</param>
     /// <returns><c>true</c> if the dependency can be satisfied</returns>
-    public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+    public bool CanResolve(CreationContext? context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
         DependencyModel dependency)
     {
         // 1 - check for the dependency on CreationContext, if present
@@ -204,7 +204,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
             : ResolveFromKernelByType(context, model, dependency);
     }
 
-    private static bool CanResolveFromContext(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    private static bool CanResolveFromContext(CreationContext? context, ISubDependencyResolver contextHandlerResolver,
         ComponentModel model,
         DependencyModel dependency)
     {
@@ -212,7 +212,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
     }
 
     private static bool CanResolveFromContextHandlerResolver(CreationContext context,
-        ISubDependencyResolver contextHandlerResolver,
+        ISubDependencyResolver? contextHandlerResolver,
         ComponentModel model, DependencyModel dependency)
     {
         return contextHandlerResolver != null &&
@@ -237,7 +237,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
                _subResolvers.Any(s => s.CanResolve(context, contextHandlerResolver, model, dependency));
     }
 
-    private bool HasAnyComponentInValidState(Type service, DependencyModel dependency, CreationContext context)
+    private bool HasAnyComponentInValidState(Type service, DependencyModel dependency, CreationContext? context)
     {
         var firstHandler = context is { IsResolving: true }
             ? _kernel.LoadHandlerByType(dependency.DependencyKey, service, context.AdditionalArguments)
@@ -259,7 +259,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
         var handlers = _kernel.GetHandlers(service);
         var nonResolvingHandlers =
             handlers.Where(handler => !handler.IsBeingResolvedInContext(context)).ToList();
-        RebuildOpenGenericHandlersWithClosedGenericSubHandlers(service, context, nonResolvingHandlers);
+        RebuildOpenGenericHandlersWithClosedGenericSubHandlers(service, context??throw new InvalidOperationException(), nonResolvingHandlers);
         return nonResolvingHandlers.Any(IsHandlerInValidState);
     }
 
@@ -294,7 +294,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
     }
 
     private bool TryResolveCore(CreationContext context, ISubDependencyResolver contextHandlerResolver,
-        ComponentModel model, DependencyModel dependency, out object value)
+        ComponentModel model, DependencyModel dependency, out object? value)
     {
         // 1 - check for the dependency on CreationContext, if present
         if (CanResolveFromContext(context, contextHandlerResolver, model, dependency))
@@ -305,6 +305,11 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
 
         // 2 - check with the model's handler, if not the same as the parent resolver
         var handler = _kernel.GetHandler(model.Name);
+        if (handler is null)
+        {
+            throw new NullReferenceException($"It is not expected that {handler} is null at this point.");
+        }
+
         if (handler != contextHandlerResolver && handler.CanResolve(context, contextHandlerResolver, model, dependency))
         {
             value = handler.Resolve(context, contextHandlerResolver, model, dependency);
