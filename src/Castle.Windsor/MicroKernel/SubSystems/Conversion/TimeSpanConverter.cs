@@ -24,7 +24,7 @@ public class TimeSpanConverter(ITypeConverterContext context) : AbstractTypeConv
         return type == typeof(TimeSpan);
     }
 
-    public override object PerformConversion(string value, Type targetType)
+    public override object PerformConversion(string? value, Type targetType)
     {
         try
         {

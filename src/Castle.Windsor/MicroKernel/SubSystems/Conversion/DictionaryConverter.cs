@@ -26,7 +26,7 @@ public class DictionaryConverter(ITypeConverterContext context) : AbstractTypeCo
         return type == typeof(IDictionary) || type == typeof(Hashtable);
     }
 
-    public override object PerformConversion(string value, Type targetType)
+    public override object PerformConversion(string? value, Type targetType)
     {
         throw new NotImplementedException();
     }

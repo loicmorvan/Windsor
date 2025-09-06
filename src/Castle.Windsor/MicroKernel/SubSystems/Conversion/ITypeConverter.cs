@@ -39,7 +39,7 @@ public interface ITypeConverter
     /// <param name="value"></param>
     /// <param name="targetType"></param>
     /// <returns></returns>
-    object PerformConversion(string value, Type targetType);
+    object PerformConversion(string? value, Type targetType);
 
     /// <summary>Should perform the conversion from the configuration node specified to the type specified.</summary>
     /// <param name="configuration"></param>

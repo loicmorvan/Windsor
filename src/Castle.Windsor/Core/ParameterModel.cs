@@ -40,7 +40,7 @@ public class ParameterModel
 
 	/// <summary>Gets the config value.</summary>
 	/// <value>The config value.</value>
-	public IConfiguration ConfigValue { get; }
+	public IConfiguration? ConfigValue { get; }
 
 	/// <summary>Gets the name.</summary>
 	/// <value>The name.</value>
@@ -48,5 +48,5 @@ public class ParameterModel
 
 	/// <summary>Gets the value.</summary>
 	/// <value>The value.</value>
-	public string Value { get; }
+	public string? Value { get; }
 }

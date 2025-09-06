@@ -196,7 +196,7 @@ public class DefaultComplexConverter(ITypeConverterContext context) : AbstractTy
         return instance;
     }
 
-    public override object PerformConversion(string value, Type targetType)
+    public override object PerformConversion(string? value, Type targetType)
     {
         throw new NotImplementedException();
     }

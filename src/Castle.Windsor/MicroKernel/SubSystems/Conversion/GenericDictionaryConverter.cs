@@ -34,7 +34,7 @@ public class GenericDictionaryConverter(ITypeConverterContext context) : Abstrac
         return genericDef == typeof(IDictionary<,>) || genericDef == typeof(Dictionary<,>);
     }
 
-    public override object PerformConversion(string value, Type targetType)
+    public override object PerformConversion(string? value, Type targetType)
     {
         throw new NotImplementedException();
     }

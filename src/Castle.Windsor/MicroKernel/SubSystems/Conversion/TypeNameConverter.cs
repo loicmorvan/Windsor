@@ -50,7 +50,7 @@ public class TypeNameConverter : AbstractTypeConverter
         return type == typeof(Type);
     }
 
-    public override object PerformConversion(string value, Type targetType)
+    public override object PerformConversion(string? value, Type targetType)
     {
         try
         {
