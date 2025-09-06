@@ -29,9 +29,9 @@ public static class ReflectionUtil
         .Select(i => i.GetGenericTypeDefinition())
         .ToArray();
 
-    private static readonly ConcurrentDictionary<ConstructorInfo, Func<object[], object>> Factories = new();
+    private static readonly ConcurrentDictionary<ConstructorInfo, Func<object?[], object>> Factories = new();
 
-    public static TBase CreateInstance<TBase>(this Type subtypeofTBase, params object[]? ctorArgs)
+    public static TBase CreateInstance<TBase>(this Type subtypeofTBase, params object?[]? ctorArgs)
     {
         EnsureIsAssignable<TBase>(subtypeofTBase);
 
@@ -209,7 +209,7 @@ public static class ReflectionUtil
         return IsDll(extension) || IsExe(extension);
     }
 
-    private static Func<object[], object> BuildFactory(ConstructorInfo ctor)
+    private static Func<object?[], object> BuildFactory(ConstructorInfo ctor)
     {
         var parameterInfos = ctor.GetParameters();
         var parameterExpressions = new Expression[parameterInfos.Length];
@@ -223,7 +223,7 @@ public static class ReflectionUtil
                     : parameterInfos[i].ParameterType);
         }
 
-        return Expression.Lambda<Func<object[], object>>(
+        return Expression.Lambda<Func<object?[], object>>(
             Expression.New(ctor, parameterExpressions), argument).Compile();
     }
 
@@ -247,7 +247,7 @@ public static class ReflectionUtil
         return assemblyName;
     }
 
-    private static TBase Instantiate<TBase>(Type subtypeofTBase, object[] ctorArgs)
+    private static TBase Instantiate<TBase>(Type subtypeofTBase, object?[] ctorArgs)
     {
         ctorArgs ??= [];
         var types = ctorArgs.ConvertAll(a => a == null ? typeof(object) : a.GetType());
@@ -292,7 +292,7 @@ public static class ReflectionUtil
     }
 
     [PublicAPI]
-    public static object Instantiate(this ConstructorInfo ctor, object[] ctorArgs)
+    public static object Instantiate(this ConstructorInfo ctor, object?[] ctorArgs)
     {
         var factory = Factories.GetOrAdd(ctor, BuildFactory);
 

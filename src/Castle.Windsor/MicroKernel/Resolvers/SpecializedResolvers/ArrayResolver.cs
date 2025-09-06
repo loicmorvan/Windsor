@@ -48,7 +48,7 @@ public class ArrayResolver : CollectionResolver
     {
     }
 
-    protected override Type GetItemType(Type targetItemType)
+    protected override Type? GetItemType(Type targetItemType)
     {
         return targetItemType.IsArray ? targetItemType.GetElementType() : null;
     }

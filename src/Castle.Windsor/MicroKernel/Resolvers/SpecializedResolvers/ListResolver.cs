@@ -53,7 +53,9 @@ public class ListResolver : CollectionResolver
     {
     }
 
-    public override object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    public override object Resolve(
+        CreationContext context,
+        ISubDependencyResolver contextHandlerResolver,
         ComponentModel model,
         DependencyModel dependency)
     {
@@ -62,7 +64,7 @@ public class ListResolver : CollectionResolver
         return listType.CreateInstance<object>(items);
     }
 
-    protected override Type GetItemType(Type targetItemType)
+    protected override Type? GetItemType(Type targetItemType)
     {
         if (!targetItemType.GetTypeInfo().IsGenericType ||
             targetItemType.GetGenericTypeDefinition() != typeof(IList<>))
@@ -75,6 +77,8 @@ public class ListResolver : CollectionResolver
 
     private Type BuildListType(DependencyModel dependency)
     {
-        return typeof(List<>).MakeGenericType(GetItemType(dependency.TargetItemType));
+        return typeof(List<>).MakeGenericType(
+            GetItemType(dependency.TargetItemType)
+            ?? throw new InvalidOperationException());
     }
 }

@@ -60,7 +60,7 @@ public class CollectionResolver(IKernel kernel, bool allowEmptyCollections = fal
         return AllowEmptyCollections || Kernel.HasComponent(itemType);
     }
 
-    protected virtual Type GetItemType(Type targetItemType)
+    protected virtual Type? GetItemType(Type targetItemType)
     {
         return targetItemType.GetCompatibleArrayItemType();
     }
