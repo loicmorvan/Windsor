@@ -256,7 +256,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
             return null;
         }
 
-        var arguments = new object[dependencyCount];
+        var arguments = new object?[dependencyCount];
         try
         {
             for (var i = 0; i < dependencyCount; i++)
@@ -270,7 +270,7 @@ public class DefaultComponentActivator : AbstractComponentActivator
         {
             foreach (var argument in arguments)
             {
-                Kernel.ReleaseComponent(argument);
+                    Kernel.ReleaseComponent(argument);
             }
 
             throw;

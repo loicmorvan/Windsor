@@ -170,7 +170,7 @@ public partial interface IKernel : IKernelEvents, IDisposable
 	///     component instance.
 	/// </summary>
 	/// <param name="instance"></param>
-	void ReleaseComponent(object instance);
+	void ReleaseComponent(object? instance);
 
 	/// <summary>Remove child kernel</summary>
 	/// <param name="kernel"></param>

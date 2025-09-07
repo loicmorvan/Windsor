@@ -27,11 +27,11 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 
     private readonly Lock _lock = Lock.Create();
     private readonly ITrackedComponentsPerformanceCounter _perfCounter;
-    private ITrackedComponentsDiagnostic _trackedComponentsDiagnostic;
+    private ITrackedComponentsDiagnostic? _trackedComponentsDiagnostic;
 
     /// <param name="kernel">Used to obtain <see cref="ITrackedComponentsDiagnostic" /> if present.</param>
     public LifecycledComponentsReleasePolicy(IKernel kernel)
-        : this(GetTrackedComponentsDiagnostic(kernel), null)
+        : this(GetTrackedComponentsDiagnostic(kernel), NullPerformanceCounter.Instance)
     {
     }
 
@@ -46,11 +46,11 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
     /// </summary>
     /// <param name="trackedComponentsDiagnostic"></param>
     /// <param name="trackedComponentsPerformanceCounter"></param>
-    public LifecycledComponentsReleasePolicy(ITrackedComponentsDiagnostic trackedComponentsDiagnostic,
+    public LifecycledComponentsReleasePolicy(ITrackedComponentsDiagnostic? trackedComponentsDiagnostic,
         ITrackedComponentsPerformanceCounter trackedComponentsPerformanceCounter)
     {
         _trackedComponentsDiagnostic = trackedComponentsDiagnostic;
-        _perfCounter = trackedComponentsPerformanceCounter ?? NullPerformanceCounter.Instance;
+        _perfCounter = trackedComponentsPerformanceCounter;
 
         if (trackedComponentsDiagnostic != null)
         {
@@ -84,7 +84,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
     public void Dispose()
     {
         GC.SuppressFinalize(this);
-        
+
         KeyValuePair<object, Burden>[] burdens;
         using (_lock.ForWriting())
         {
@@ -116,11 +116,6 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 
     public bool HasTrack(object instance)
     {
-        if (instance == null)
-        {
-            return false;
-        }
-
         using (_lock.ForReading())
         {
             return _instance2Burden.ContainsKey(instance);
@@ -129,12 +124,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
 
     public void Release(object instance)
     {
-        if (instance == null)
-        {
-            return;
-        }
-
-        Burden burden;
+        Burden? burden;
         using (_lock.ForWriting())
         {
             // NOTE: we don't physically remove the instance from the instance2Burden collection here.
@@ -152,7 +142,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
     {
         if (!burden.RequiresPolicyRelease)
         {
-            var lifestyle = (object)burden.Model.CustomLifestyle ?? burden.Model.LifestyleType;
+            var lifestyle = (object?)burden.Model.CustomLifestyle ?? burden.Model.LifestyleType;
             throw new ArgumentException(
                 $"Release policy was asked to track object '{instance}', but its burden has 'RequiresPolicyRelease' set to false. If object is to be tracked the flag must be true. This is likely a bug in the lifetime manager '{lifestyle}'.");
         }
@@ -182,7 +172,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
     {
         using (_lock.ForWriting())
         {
-            if (!_instance2Burden.Remove(burden.Instance))
+            if (burden.Instance is null || !_instance2Burden.Remove(burden.Instance))
             {
                 return;
             }
@@ -192,7 +182,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
         _perfCounter.DecrementTrackedInstancesCount();
     }
 
-    private void trackedComponentsDiagnostic_TrackedInstancesRequested(object sender, TrackedInstancesEventArgs e)
+    private void trackedComponentsDiagnostic_TrackedInstancesRequested(object? sender, TrackedInstancesEventArgs e)
     {
         e.AddRange(TrackedObjects);
     }
@@ -200,7 +190,7 @@ public class LifecycledComponentsReleasePolicy : IReleasePolicy
     /// <summary>Obtains <see cref="ITrackedComponentsDiagnostic" /> from given <see cref="IKernel" /> if present.</summary>
     /// <param name="kernel"></param>
     /// <returns></returns>
-    public static ITrackedComponentsDiagnostic GetTrackedComponentsDiagnostic(IKernel kernel)
+    public static ITrackedComponentsDiagnostic? GetTrackedComponentsDiagnostic(IKernel kernel)
     {
         var diagnosticsHost = kernel.GetSubSystem<IDiagnosticsHost>(SubSystemConstants.DiagnosticsKey);
         return diagnosticsHost.GetDiagnostic<ITrackedComponentsDiagnostic>();

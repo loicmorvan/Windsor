@@ -512,8 +512,13 @@ public sealed partial class DefaultKernel : IKernelInternal
     ///     component instance.
     /// </summary>
     /// <param name="instance"> </param>
-    public void ReleaseComponent(object instance)
+    public void ReleaseComponent(object? instance)
     {
+        if (instance is null)
+        {
+            return;
+        }
+
         if (ReleasePolicy.HasTrack(instance))
         {
             ReleasePolicy.Release(instance);

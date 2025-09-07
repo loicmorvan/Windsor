@@ -35,7 +35,7 @@ public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryCompon
     public void Dispose()
     {
         GC.SuppressFinalize(this);
-        
+
         if (_disposed)
         {
             return;
@@ -91,7 +91,10 @@ public class TypedFactoryInterceptor(IKernelInternal kernel, ITypedFactoryCompon
 
         foreach (var t in invocation.Arguments)
         {
-            _scope.Release(t);
+            if (t is not null)
+            {
+                _scope.Release(t);
+            }
         }
     }
 

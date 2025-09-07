@@ -336,7 +336,7 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
             return null;
         }
 
-        public void ReleaseComponent(object instance)
+        public void ReleaseComponent(object? instance)
         {
             throw new NotImplementedException();
         }
