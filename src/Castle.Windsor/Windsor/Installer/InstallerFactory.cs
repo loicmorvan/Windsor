@@ -28,7 +28,8 @@ public class InstallerFactory
 	/// <remarks>Default implementation uses public parameterless constructor to create the instance.</remarks>
 	public virtual IWindsorInstaller CreateInstance(Type installerType)
 	{
-		return installerType.CreateInstance<IWindsorInstaller>();
+		return Activator.CreateInstance(installerType) as IWindsorInstaller ??
+			   throw new InvalidOperationException($"Unable to create instance of {installerType.FullName}");
 	}
 
 	/// <summary>Performs custom filtering/ordering of given set of types.</summary>
