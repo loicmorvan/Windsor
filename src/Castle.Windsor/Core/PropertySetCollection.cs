@@ -50,7 +50,7 @@ public class PropertySetCollection : IMutableCollection<PropertySet>
     /// <summary>Finds a PropertySet the by PropertyInfo.</summary>
     /// <param name="info">The info.</param>
     /// <returns></returns>
-    public PropertySet FindByPropertyInfo(PropertyInfo info)
+    public PropertySet? FindByPropertyInfo(PropertyInfo info)
     {
         return this.FirstOrDefault(prop => info == prop.Property);
     }

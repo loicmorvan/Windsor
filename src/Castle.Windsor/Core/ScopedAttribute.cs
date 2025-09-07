@@ -25,5 +25,5 @@ public class ScopedAttribute : LifestyleAttribute
     }
 
     // ReSharper disable once UnusedAutoPropertyAccessor.Global
-    public Type ScopeAccessorType { get; set; }
+    public Type? ScopeAccessorType { get; set; }
 }

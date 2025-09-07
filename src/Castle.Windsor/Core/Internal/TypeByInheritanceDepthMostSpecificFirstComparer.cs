@@ -20,7 +20,7 @@ namespace Castle.Windsor.Core.Internal;
 public class TypeByInheritanceDepthMostSpecificFirstComparer : IComparer<Type>
 {
     // TODO: make sure generics (open?) are also handled
-    public int Compare(Type x, Type y)
+    public int Compare(Type? x, Type? y)
     {
         if (x == y)
         {

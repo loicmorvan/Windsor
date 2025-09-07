@@ -16,7 +16,7 @@ namespace Castle.Windsor.Core.Internal;
 
 public class SegmentedList<T>(int segmentCount)
 {
-    private readonly List<T>[] _segments = new List<T>[segmentCount];
+    private readonly List<T>?[] _segments = new List<T>?[segmentCount];
 
     public void AddFirst(int segmentIndex, T item)
     {
@@ -30,7 +30,9 @@ public class SegmentedList<T>(int segmentCount)
 
     public T[] ToArray()
     {
-        return _segments.Where(l => l != null)
+        return _segments
+            .Where(l => l != null)
+            .Cast<List<T>>()
             .SelectMany(l => l)
             .ToArray();
     }

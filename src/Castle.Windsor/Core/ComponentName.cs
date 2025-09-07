@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Windsor.Core.Internal;
-
 namespace Castle.Windsor.Core;
 
 public class ComponentName(string name, bool setByUser)
 {
-    public string Name { get; private set; } = Must.NotBeEmpty(name, "name");
+    public string Name { get; private set; } = string.IsNullOrEmpty(name) ? throw new ArgumentException() : name;
     public bool SetByUser { get; private set; } = setByUser;
 
     public override string ToString()
@@ -28,7 +26,9 @@ public class ComponentName(string name, bool setByUser)
 
     internal void SetName(string value)
     {
-        Name = Must.NotBeEmpty(value, "value");
+        ArgumentException.ThrowIfNullOrEmpty(value, nameof(value));
+
+        Name = value;
         SetByUser = true;
     }
 
@@ -51,6 +51,7 @@ public class ComponentName(string name, bool setByUser)
     /// <returns></returns>
     public static string DefaultNameFor(Type componentType)
     {
-        return componentType.FullName;
+        return componentType.FullName ??
+               throw new ArgumentException("Unable to get the full name of the type", nameof(componentType));
     }
 }

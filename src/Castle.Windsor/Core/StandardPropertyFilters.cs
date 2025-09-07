@@ -60,11 +60,11 @@ public class StandardPropertyFilters
         };
     }
 
-    public static ICollection<PropertyDependencyFilter> GetPropertyFilters(ComponentModel componentModel,
+    public static ICollection<PropertyDependencyFilter>? GetPropertyFilters(ComponentModel componentModel,
         bool createIfMissing)
     {
         var filters =
-            (ICollection<PropertyDependencyFilter>)componentModel.ExtendedProperties[Constants.PropertyFilters];
+            (ICollection<PropertyDependencyFilter>?)componentModel.ExtendedProperties[Constants.PropertyFilters];
         if (filters != null || !createIfMissing)
         {
             return filters;

@@ -21,8 +21,8 @@ namespace Castle.Windsor.Core;
 /// <summary>Represents a dependency (other component or a fixed value available through external configuration).</summary>
 [Serializable]
 public class DependencyModel(
-    string dependencyKey,
-    Type targetType,
+    string? dependencyKey,
+    Type? targetType,
     bool isOptional,
     bool hasDefaultValue = false,
     object? defaultValue = null)
@@ -51,7 +51,7 @@ public class DependencyModel(
     /// <value> <c>true</c> if this dependency is optional; otherwise, <c>false</c> . </value>
     public bool IsOptional { get; set; } = isOptional;
 
-    public bool IsPrimitiveTypeDependency => TargetItemType.IsPrimitiveTypeOrCollection();
+    public bool IsPrimitiveTypeDependency => TargetItemType?.IsPrimitiveTypeOrCollection() ?? false;
 
     public ParameterModel? Parameter
     {
@@ -74,7 +74,7 @@ public class DependencyModel(
     ///     words if dependency is <c>out IFoo foo</c> this will be <c>IFoo</c>, while <see cref="TargetType" /> will be
     ///     <c>&amp;IFoo</c>);
     /// </summary>
-    public Type TargetItemType { get; } = targetType is { IsByRef: true }
+    public Type? TargetItemType { get; } = targetType is { IsByRef: true }
         ? targetType.GetElementType() ??
           throw new InvalidOperationException("Cannot determine item type of by ref type")
         : targetType;
@@ -144,7 +144,9 @@ public class DependencyModel(
 
     private ParameterModel? ObtainParameterModelByType(ParameterModelCollection parameters)
     {
-        var found = GetParameterModelByType(TargetItemType, parameters);
+        var found = GetParameterModelByType(
+            TargetItemType ?? throw new InvalidOperationException("TargetItemType is not supposed to be null???"),
+            parameters);
         if (found == null && TargetItemType.GetTypeInfo().IsGenericType)
         {
             found = GetParameterModelByType(TargetItemType.GetGenericTypeDefinition(), parameters);

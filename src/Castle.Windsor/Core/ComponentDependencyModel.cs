@@ -15,7 +15,7 @@
 namespace Castle.Windsor.Core;
 
 [Serializable]
-public class ComponentDependencyModel(string referencedComponentName, Type serviceType = null)
+public class ComponentDependencyModel(string referencedComponentName, Type? serviceType = null)
     : DependencyModel(referencedComponentName, serviceType, false)
 {
     public override void Init(ParameterModelCollection? parameters)

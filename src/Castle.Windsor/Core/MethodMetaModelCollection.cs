@@ -22,7 +22,7 @@ namespace Castle.Windsor.Core;
 [Serializable]
 public class MethodMetaModelCollection : Collection<MethodMetaModel>
 {
-    private IDictionary _methodInfo2Model;
+    private IDictionary? _methodInfo2Model;
 
     /// <summary>Gets the method info2 model.</summary>
     /// <value>The method info2 model.</value>

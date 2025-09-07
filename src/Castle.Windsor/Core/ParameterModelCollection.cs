@@ -34,7 +34,7 @@ public class ParameterModelCollection : IEnumerable<ParameterModel>
 
     /// <summary>Gets the <see cref="ParameterModel" /> with the specified key.</summary>
     /// <value></value>
-    public ParameterModel this[string key]
+    public ParameterModel? this[string key]
     {
         get
         {

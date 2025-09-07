@@ -23,7 +23,7 @@ namespace Castle.Windsor.Core.Internal;
 /// </summary>
 /// <typeparam name="TKey"> </typeparam>
 /// <typeparam name="TValue"> </typeparam>
-public class SimpleThreadSafeDictionary<TKey, TValue>
+public class SimpleThreadSafeDictionary<TKey, TValue> where TKey : notnull
 {
     private readonly Dictionary<TKey, TValue> _inner = new();
     private readonly Lock _lock = Lock.Create();

@@ -15,7 +15,7 @@ namespace Castle.Windsor.Core.Internal;
 public class GraphNode :
     IVertex
 {
-    private SimpleThreadSafeCollection<GraphNode> _outgoing;
+    private SimpleThreadSafeCollection<GraphNode>? _outgoing;
 
     /// <summary>The nodes that this node depends on</summary>
     public GraphNode[] Dependents

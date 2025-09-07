@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Castle.Windsor.Core;
 
@@ -21,10 +22,10 @@ namespace Castle.Windsor.Core;
 public class LifecycleConcernsCollection
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private List<ICommissionConcern> _commission;
+    private List<ICommissionConcern>? _commission;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private List<IDecommissionConcern> _decommission;
+    private List<IDecommissionConcern>? _decommission;
 
     /// <summary>Returns all concerns for the commission phase</summary>
     /// <value></value>
@@ -38,11 +39,13 @@ public class LifecycleConcernsCollection
     /// <summary>Gets a value indicating whether this instance has commission steps.</summary>
     /// <value><c>true</c> if this instance has commission steps; otherwise, <c>false</c>.</value>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    [MemberNotNullWhen(true, nameof(_commission))]
     public bool HasCommissionConcerns => _commission != null && _commission.Count != 0;
 
     /// <summary>Gets a value indicating whether this instance has decommission steps.</summary>
     /// <value><c>true</c> if this instance has decommission steps; otherwise, <c>false</c>.</value>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    [MemberNotNullWhen(true, nameof(_decommission))]
     public bool HasDecommissionConcerns => _decommission != null && _decommission.Count != 0;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

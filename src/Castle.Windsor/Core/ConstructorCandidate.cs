@@ -39,8 +39,10 @@ public class ConstructorCandidate : IComparable<ConstructorCandidate>
     /// <value>The dependencies.</value>
     public ConstructorDependencyModel[] Dependencies { get; }
 
-    int IComparable<ConstructorCandidate>.CompareTo(ConstructorCandidate other)
+    int IComparable<ConstructorCandidate>.CompareTo(ConstructorCandidate? other)
     {
+        ArgumentNullException.ThrowIfNull(other, nameof(other));
+
         // we sort greedier first
         var value = other.Dependencies.Length - Dependencies.Length;
         if (value != 0)
@@ -52,7 +54,7 @@ public class ConstructorCandidate : IComparable<ConstructorCandidate>
         {
             var mine = Dependencies[index];
             var othr = other.Dependencies[index];
-            value = string.Compare(mine.TargetItemType.FullName, othr.TargetItemType.FullName,
+            value = string.Compare(mine.TargetItemType?.FullName, othr.TargetItemType?.FullName,
                 StringComparison.OrdinalIgnoreCase);
             if (value != 0)
             {

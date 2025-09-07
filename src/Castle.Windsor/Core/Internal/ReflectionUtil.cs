@@ -31,7 +31,7 @@ public static class ReflectionUtil
 
     private static readonly ConcurrentDictionary<ConstructorInfo, Func<object?[], object>> Factories = new();
 
-    public static TBase CreateInstance<TBase>(this Type subtypeofTBase, params object?[]? ctorArgs)
+    public static TBase? CreateInstance<TBase>(this Type subtypeofTBase, params object?[]? ctorArgs)
     {
         EnsureIsAssignable<TBase>(subtypeofTBase);
 
@@ -94,8 +94,8 @@ public static class ReflectionUtil
         }
     }
 
-    public static Assembly GetAssemblyNamed(string filePath, Predicate<AssemblyName> nameFilter,
-        Predicate<Assembly> assemblyFilter)
+    public static Assembly? GetAssemblyNamed(string filePath, Predicate<AssemblyName>? nameFilter,
+        Predicate<Assembly>? assemblyFilter)
     {
         var assemblyName = GetAssemblyName(filePath);
         if (nameFilter != null)
@@ -127,7 +127,7 @@ public static class ReflectionUtil
         }
         catch (ReflectionTypeLoadException e)
         {
-            return e.Types.Where(t => t != null).ToArray();
+            return e.Types.Where(t => t != null).Cast<Type>().ToArray();
             // NOTE: perhaps we should not ignore the exceptions here, and log them?
         }
     }
@@ -160,7 +160,7 @@ public static class ReflectionUtil
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    public static Type GetCompatibleArrayItemType(this Type type)
+    public static Type? GetCompatibleArrayItemType(this Type? type)
     {
         if (type == null)
         {
@@ -247,7 +247,7 @@ public static class ReflectionUtil
         return assemblyName;
     }
 
-    private static TBase Instantiate<TBase>(Type subtypeofTBase, object?[] ctorArgs)
+    private static TBase? Instantiate<TBase>(Type subtypeofTBase, object?[]? ctorArgs)
     {
         ctorArgs ??= [];
         var types = ctorArgs.ConvertAll(a => a == null ? typeof(object) : a.GetType());
@@ -259,7 +259,7 @@ public static class ReflectionUtil
 
         try
         {
-            return (TBase)Activator.CreateInstance(subtypeofTBase, ctorArgs);
+            return (TBase?)Activator.CreateInstance(subtypeofTBase, ctorArgs);
         }
         catch (MissingMethodException ex)
         {
@@ -274,7 +274,7 @@ public static class ReflectionUtil
                 var messageBuilder = new StringBuilder();
                 messageBuilder.AppendLine(
                     $"Type {subtypeofTBase.FullName} does not have a public constructor matching arguments of the following types:");
-                foreach (var type in ctorArgs.Select(o => o.GetType()))
+                foreach (var type in ctorArgs.Select(o => o == null ? typeof(object) : o.GetType()))
                 {
                     messageBuilder.AppendLine(type.FullName);
                 }

@@ -63,10 +63,15 @@ public sealed class ComponentModel : GraphNode
     public ComponentModel(ComponentName name, ICollection<Type> services, Type implementation,
         Arguments extendedProperties)
     {
-        _componentName = Must.NotBeNull(name, "name");
-        Implementation = Must.NotBeNull(implementation, "implementation");
+        _componentName = name;
+        Implementation = implementation;
         _extendedProperties = extendedProperties;
-        services = Must.NotBeEmpty(services, "services");
+
+        if (services.Count == 0)
+        {
+            throw new ArgumentException("services must contain at least one service", nameof(services));
+        }
+
         foreach (var type in services)
         {
             AddService(type);
@@ -80,7 +85,11 @@ public sealed class ComponentModel : GraphNode
     public ComponentName? ComponentName
     {
         get => _componentName;
-        internal set => _componentName = Must.NotBeNull(value, "value");
+        internal set
+        {
+            ArgumentNullException.ThrowIfNull(value);
+            _componentName = value;
+        }
     }
 
     /// <summary>Gets or sets the configuration.</summary>

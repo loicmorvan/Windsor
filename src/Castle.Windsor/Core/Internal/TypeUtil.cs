@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
 
@@ -58,12 +59,12 @@ public static class TypeUtil
     /// </summary>
     /// <param name="type"> </param>
     /// <returns> </returns>
-    public static bool IsPrimitiveType(this Type type)
+    public static bool IsPrimitiveType([NotNullWhen(false)] this Type? type)
     {
         return type == null || type.GetTypeInfo().IsValueType || type == typeof(string);
     }
 
-    public static string ToCSharpString(this Type? type)
+    public static string ToCSharpString(this Type type)
     {
         try
         {
@@ -89,7 +90,7 @@ public static class TypeUtil
     /// <param name="arguments"> </param>
     /// <returns> </returns>
     [DebuggerHidden]
-    public static Type TryMakeGenericType(this Type openGeneric, Type[] arguments)
+    public static Type? TryMakeGenericType(this Type openGeneric, Type[] arguments)
     {
         try
         {
@@ -152,7 +153,7 @@ public static class TypeUtil
         name.Append('>');
     }
 
-    private static void ToCSharpString(Type type, StringBuilder name, Type startType = null)
+    private static void ToCSharpString(Type type, StringBuilder name, Type? startType = null)
     {
         var inheritedGenericArgs = 0;
 
@@ -160,7 +161,8 @@ public static class TypeUtil
 
         if (type.IsArray)
         {
-            var elementType = type.GetElementType();
+            var elementType = type.GetElementType()
+                              ?? throw new InvalidOperationException("Array element type is null");
             ToCSharpString(elementType, name);
             Debug.Assert(elementType != null);
             name.Append(type.Name.AsSpan(elementType.Name.Length));
