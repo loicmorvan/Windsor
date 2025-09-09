@@ -31,11 +31,12 @@ public static class ReflectionUtil
 
     private static readonly ConcurrentDictionary<ConstructorInfo, Func<object?[], object>> Factories = new();
 
-    public static TBase? CreateInstance<TBase>(this Type subtypeofTBase, params object?[]? ctorArgs)
+
+    public static TBase CreateInstance<TBase>(this Type subtypeofTBase, params object?[]? ctorArgs)
     {
         EnsureIsAssignable<TBase>(subtypeofTBase);
 
-        return Instantiate<TBase>(subtypeofTBase, ctorArgs ?? []);
+        return Instantiate<TBase>(subtypeofTBase, ctorArgs??[]);
     }
 
     public static IEnumerable<Assembly> GetApplicationAssemblies(Assembly rootAssembly)
@@ -247,9 +248,8 @@ public static class ReflectionUtil
         return assemblyName;
     }
 
-    private static TBase? Instantiate<TBase>(Type subtypeofTBase, object?[]? ctorArgs)
+    private static TBase Instantiate<TBase>(Type subtypeofTBase, object?[] ctorArgs)
     {
-        ctorArgs ??= [];
         var types = ctorArgs.ConvertAll(a => a == null ? typeof(object) : a.GetType());
         var constructor = subtypeofTBase.GetConstructor(BindingFlags.Instance | BindingFlags.Public, null, types, null);
         if (constructor != null)
@@ -259,7 +259,7 @@ public static class ReflectionUtil
 
         try
         {
-            return (TBase?)Activator.CreateInstance(subtypeofTBase, ctorArgs);
+            return (TBase)(Activator.CreateInstance(subtypeofTBase, ctorArgs) ?? throw new Exception());
         }
         catch (MissingMethodException ex)
         {

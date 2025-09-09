@@ -34,13 +34,13 @@ public class Parameter
     }
 
     /// <summary>Gets the parameter configuration.</summary>
-    public IConfiguration ConfigNode => _value as IConfiguration;
+    public IConfiguration? ConfigNode => _value as IConfiguration;
 
     /// <summary>Gets the parameter key.</summary>
     public string Key { get; }
 
     /// <summary>Gets the parameter value.</summary>
-    public string Value => _value as string;
+    public string? Value => _value as string;
 
     /// <summary>Create a <see cref="ParameterKey" /> with key.</summary>
     /// <param name="key">The parameter key.</param>
@@ -50,7 +50,7 @@ public class Parameter
         return new ParameterKey(key);
     }
 
-    public static implicit operator Dependency(Parameter parameter)
+    public static implicit operator Dependency?(Parameter? parameter)
     {
         return parameter == null ? null : new Dependency(parameter);
     }

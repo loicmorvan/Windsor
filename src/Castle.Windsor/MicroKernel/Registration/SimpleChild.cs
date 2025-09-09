@@ -5,9 +5,9 @@ namespace Castle.Windsor.MicroKernel.Registration;
 /// <summary>Represents a simple child node.</summary>
 public class SimpleChild : Node
 {
-    private readonly string _value;
+    private readonly string? _value;
 
-    internal SimpleChild(string name, string value)
+    internal SimpleChild(string name, string? value)
         : base(name)
     {
         _value = value;

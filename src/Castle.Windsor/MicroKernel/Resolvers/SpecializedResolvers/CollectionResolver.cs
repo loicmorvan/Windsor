@@ -51,7 +51,8 @@ public class CollectionResolver(IKernel kernel, bool allowEmptyCollections = fal
         ComponentModel model,
         DependencyModel dependency)
     {
-        return Kernel.ResolveAll(GetItemType(dependency.TargetItemType), context.AdditionalArguments);
+        return Kernel.ResolveAll(GetItemType(dependency.TargetItemType ?? throw new InvalidOperationException())
+                                 ?? throw new InvalidOperationException(), context.AdditionalArguments);
     }
 
     [PublicAPI]

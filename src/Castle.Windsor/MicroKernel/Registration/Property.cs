@@ -47,7 +47,7 @@ public class Property(object key, object value)
         return new PropertyKey(typeof(TKey));
     }
 
-    public static implicit operator Dependency(Property item)
+    public static implicit operator Dependency?(Property? item)
     {
         return item == null ? null : new Dependency(item);
     }

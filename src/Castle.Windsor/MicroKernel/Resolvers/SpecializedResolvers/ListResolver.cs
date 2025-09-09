@@ -78,7 +78,7 @@ public class ListResolver : CollectionResolver
     private Type BuildListType(DependencyModel dependency)
     {
         return typeof(List<>).MakeGenericType(
-            GetItemType(dependency.TargetItemType)
+            GetItemType(dependency.TargetItemType ?? throw new InvalidOperationException())
             ?? throw new InvalidOperationException());
     }
 }

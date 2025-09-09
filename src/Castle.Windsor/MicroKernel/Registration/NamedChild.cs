@@ -31,7 +31,7 @@ public class NamedChild : Node
     /// <param name="value">The child value.</param>
     /// <returns>The new <see cref="SimpleChild" /></returns>
     [PublicAPI]
-    public SimpleChild Eq(object value)
+    public SimpleChild Eq(object? value)
     {
         var valueStr = value != null ? value.ToString() : string.Empty;
         return new SimpleChild(Name, valueStr);

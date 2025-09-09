@@ -119,7 +119,7 @@ public class CreationContext :
 
     public IReleasePolicy ReleasePolicy { get; set; }
 
-    public Type RequestedType { get; }
+    public Type? RequestedType { get; }
 
     public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
         ComponentModel model,

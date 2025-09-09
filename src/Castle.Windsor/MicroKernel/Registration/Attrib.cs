@@ -5,9 +5,9 @@ namespace Castle.Windsor.MicroKernel.Registration;
 /// <summary>Represents a configuration attribute.</summary>
 public class Attrib : Node
 {
-    private readonly string _value;
+    private readonly string? _value;
 
-    internal Attrib(string name, string value)
+    internal Attrib(string name, string? value)
         : base(name)
     {
         _value = value;

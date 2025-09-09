@@ -192,7 +192,8 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
 
         if (dependency.Parameter != null)
         {
-            return ResolveFromParameter(context, model, dependency.Parameter, dependency.TargetItemType);
+            return ResolveFromParameter(context, model, dependency.Parameter,
+                dependency.TargetItemType ?? throw new InvalidOperationException());
         }
 
         if (typeof(IKernel).IsAssignableFrom(dependency.TargetItemType))
@@ -344,7 +345,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
     }
 
     private object ResolveFromKernelByName(CreationContext context, ComponentModel model,
-        string dependencyReferencedComponentName, Type targetItemType)
+        string dependencyReferencedComponentName, Type? targetItemType)
     {
         var handler = _kernel.LoadHandlerByName(dependencyReferencedComponentName, targetItemType,
             context.AdditionalArguments);
@@ -360,7 +361,8 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
                     Environment.NewLine));
         }
 
-        var contextRebuilt = RebuildContextForParameter(context, targetItemType);
+        var contextRebuilt =
+            RebuildContextForParameter(context, targetItemType ?? throw new InvalidOperationException());
 
         return handler.Resolve(contextRebuilt);
     }
@@ -397,7 +399,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
                     Environment.NewLine));
         }
 
-        context = RebuildContextForParameter(context, dependency.TargetItemType);
+        context = RebuildContextForParameter(context, dependency.TargetItemType ?? throw new NullReferenceException());
 
         return handler.Resolve(context);
     }
@@ -406,7 +408,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
         Type targetItemType)
     {
         _converter.Context.Push(model, context);
-        
+
         try
         {
             if (parameter.Value is not null)
@@ -439,7 +441,8 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
         // by key than a linear search
         try
         {
-            handler = _kernel.LoadHandlerByType(dependency.DependencyKey, dependency.TargetItemType,
+            handler = _kernel.LoadHandlerByType(dependency.DependencyKey,
+                dependency.TargetItemType ?? throw new NullReferenceException(),
                 context.AdditionalArguments);
         }
         catch (HandlerException)
