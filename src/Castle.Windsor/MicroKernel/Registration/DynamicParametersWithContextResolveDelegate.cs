@@ -17,5 +17,5 @@ using Castle.Windsor.MicroKernel.Handlers;
 
 namespace Castle.Windsor.MicroKernel.Registration;
 
-public delegate ComponentReleasingDelegate DynamicParametersWithContextResolveDelegate(
+public delegate ComponentReleasingDelegate? DynamicParametersWithContextResolveDelegate(
     IKernel kernel, CreationContext creationContext, Arguments arguments);

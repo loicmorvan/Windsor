@@ -29,7 +29,7 @@ public sealed class BasedOnDescriptor : IRegistration
     private Predicate<Type> _unlessFilter;
 
     /// <summary>Initializes a new instance of the BasedOnDescriptor.</summary>
-    internal BasedOnDescriptor(IEnumerable<Type> basedOn, FromDescriptor from, Predicate<Type> additionalFilters)
+    internal BasedOnDescriptor(IEnumerable<Type> basedOn, FromDescriptor from, Predicate<Type>? additionalFilters)
     {
         _potentialBases = basedOn.ToList();
         _from = from;

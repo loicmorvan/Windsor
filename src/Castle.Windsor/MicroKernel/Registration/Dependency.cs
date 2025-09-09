@@ -214,7 +214,7 @@ public sealed class Dependency
         ResourceManager resourceManager;
         try
         {
-            resourceManager = (ResourceManager)resourceManagerProperty.GetValue(null, null);
+            resourceManager = (ResourceManager)(resourceManagerProperty.GetValue(null, null)?? throw new NullReferenceException());
         }
         catch (Exception e)
         {

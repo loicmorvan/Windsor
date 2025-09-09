@@ -19,7 +19,7 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 /// <summary>Adds the actions to ExtendedProperties.</summary>
 /// <typeparam name="TS"></typeparam>
-public class OnCreateComponentDescriptor<TS>(LifecycleActionDelegate<TS> action)
+public class OnCreateComponentDescriptor<TS>(LifecycleActionDelegate<TS>? action)
     : IComponentModelDescriptor, IMetaComponentModelDescriptor
     where TS : class
 {

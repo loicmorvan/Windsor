@@ -49,7 +49,7 @@ public class ComponentRegistration<TService> : IRegistration
     private readonly HashSet<Type> _potentialServicesLookup = [];
 
     private bool _ifComponentRegisteredIgnore;
-    private ComponentName _name;
+    private ComponentName? _name;
     private bool _registered;
     private bool _registerNewServicesOnly;
 
@@ -70,7 +70,7 @@ public class ComponentRegistration<TService> : IRegistration
     ///     To set the implementation, use <see cref="ImplementedBy(System.Type)" /> .
     /// </summary>
     /// <value> The implementation of the service. </value>
-    public Type Implementation { get; private set; }
+    public Type? Implementation { get; private set; }
 
     /// <summary>Set the lifestyle of this component. For example singleton and transient (also known as 'factory').</summary>
     /// <value> The with lifestyle. </value>
@@ -86,7 +86,7 @@ public class ComponentRegistration<TService> : IRegistration
     ///     register the component.
     /// </summary>
     /// <value> The name. </value>
-    public string Name => _name?.Name;
+    public string? Name => _name?.Name;
 
     /// <summary>Set proxy for this component.</summary>
     /// <value> The proxy. </value>
@@ -135,7 +135,7 @@ public class ComponentRegistration<TService> : IRegistration
     /// <param name="key"> The key. </param>
     /// <param name="value"> The value. </param>
     /// <returns> </returns>
-    public ComponentRegistration<TService> AddAttributeDescriptor(string key, string value)
+    public ComponentRegistration<TService> AddAttributeDescriptor(string key, string? value)
     {
         AddDescriptor(new AttributeDescriptor<TService>(key, value));
         return this;
@@ -211,7 +211,7 @@ public class ComponentRegistration<TService> : IRegistration
     /// 		Dependency.OnComponent(typeof(IRepository), typeof(IntranetRepository)),
     /// 		Dependency.OnValue("applicationName", "My Application"));</code>
     /// </example>
-    public ComponentRegistration<TService> DependsOn(params Dependency[] dependencies)
+    public ComponentRegistration<TService> DependsOn(params Dependency[]? dependencies)
     {
         if (dependencies == null || dependencies.Length == 0)
         {
@@ -508,9 +508,10 @@ public class ComponentRegistration<TService> : IRegistration
     /// </param>
     /// <returns> </returns>
     [PublicAPI]
-    public ComponentRegistration<TService> ImplementedBy(Type type,
-        IGenericImplementationMatchingStrategy genericImplementationMatchingStrategy,
-        IGenericServiceStrategy genericServiceStrategy = null)
+    public ComponentRegistration<TService> ImplementedBy(
+        Type? type,
+        IGenericImplementationMatchingStrategy? genericImplementationMatchingStrategy,
+        IGenericServiceStrategy? genericServiceStrategy = null)
     {
         if (Implementation != null && Implementation != typeof(LateBoundComponent))
         {
@@ -614,7 +615,7 @@ public class ComponentRegistration<TService> : IRegistration
     ///     accessor will be used.
     /// </summary>
     /// <returns> </returns>
-    public ComponentRegistration<TService> LifestyleScoped(Type scopeAccessorType = null)
+    public ComponentRegistration<TService> LifestyleScoped(Type? scopeAccessorType = null)
     {
         return LifeStyle.Scoped(scopeAccessorType);
     }
@@ -748,7 +749,7 @@ public class ComponentRegistration<TService> : IRegistration
     ///     A set of actions to be executed right after the component is created and before it's returned
     ///     from the container.
     /// </param>
-    public ComponentRegistration<TService> OnCreate(params Action<TService>[] actions)
+    public ComponentRegistration<TService> OnCreate(params Action<TService>[]? actions)
     {
         if (actions != null && actions.Length != 0)
         {
@@ -766,14 +767,14 @@ public class ComponentRegistration<TService> : IRegistration
     ///     A set of actions to be executed right after the component is created and before it's returned
     ///     from the container.
     /// </param>
-    public ComponentRegistration<TService> OnCreate(params LifecycleActionDelegate<TService>[] actions)
+    public ComponentRegistration<TService> OnCreate(params LifecycleActionDelegate<TService>[]? actions)
     {
         if (actions == null || actions.Length == 0)
         {
             return this;
         }
 
-        var action = (LifecycleActionDelegate<TService>)Delegate.Combine(actions.Cast<Delegate>().ToArray());
+        var action = (LifecycleActionDelegate<TService>?)Delegate.Combine(actions.Cast<Delegate>().ToArray());
         AddDescriptor(new OnCreateComponentDescriptor<TService>(action));
 
         return this;
@@ -787,7 +788,7 @@ public class ComponentRegistration<TService> : IRegistration
     ///     A set of actions to be executed right after the component is created and before it's returned
     ///     from the container.
     /// </param>
-    public ComponentRegistration<TService> OnDestroy(params Action<TService>[] actions)
+    public ComponentRegistration<TService> OnDestroy(params Action<TService>[]? actions)
     {
         if (actions != null && actions.Length != 0)
         {
@@ -803,14 +804,14 @@ public class ComponentRegistration<TService> : IRegistration
     ///     this method will cause instances of the component to be tracked, even if they wouldn't be otherwise.
     /// </summary>
     /// <param name="actions"> A set of actions to be executed when the component is destroyed. </param>
-    public ComponentRegistration<TService> OnDestroy(params LifecycleActionDelegate<TService>[] actions)
+    public ComponentRegistration<TService> OnDestroy(params LifecycleActionDelegate<TService>[]? actions)
     {
         if (actions == null || actions.Length == 0)
         {
             return this;
         }
 
-        var action = (LifecycleActionDelegate<TService>)Delegate.Combine(actions.Cast<Delegate>().ToArray());
+        var action = (LifecycleActionDelegate<TService>?)Delegate.Combine(actions.Cast<Delegate>().ToArray());
         AddDescriptor(new OnDestroyComponentDescriptor<TService>(action));
 
         return this;
@@ -1072,7 +1073,7 @@ public class ComponentRegistration<TService> : IRegistration
     {
         return AddDescriptor(new DelegatingModelDescriptor((_, c) =>
         {
-            var filters = StandardPropertyFilters.GetPropertyFilters(c, true);
+            var filters = StandardPropertyFilters.GetPropertyFilters(c, true) ?? throw new NullReferenceException();
             filters.Add(StandardPropertyFilters.IgnoreSelected(propertySelector));
         }));
     }
@@ -1091,7 +1092,7 @@ public class ComponentRegistration<TService> : IRegistration
     {
         return AddDescriptor(new DelegatingModelDescriptor((_, c) =>
         {
-            var filters = StandardPropertyFilters.GetPropertyFilters(c, true);
+            var filters = StandardPropertyFilters.GetPropertyFilters(c, true) ?? throw new NullReferenceException();
             filters.Add(StandardPropertyFilters.RequireSelected(propertySelector));
         }));
     }
@@ -1110,7 +1111,7 @@ public class ComponentRegistration<TService> : IRegistration
     {
         return AddDescriptor(new DelegatingModelDescriptor((_, c) =>
         {
-            var filters = StandardPropertyFilters.GetPropertyFilters(c, true);
+            var filters = StandardPropertyFilters.GetPropertyFilters(c, true) ?? throw new NullReferenceException();
             filters.Add(StandardPropertyFilters.Create(filter));
         }));
     }

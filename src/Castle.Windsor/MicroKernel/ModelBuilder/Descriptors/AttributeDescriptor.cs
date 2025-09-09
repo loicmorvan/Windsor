@@ -25,7 +25,7 @@ public class AttributeDescriptor<TS> : AbstractOverwriteableDescriptor<TS>
     /// <summary>Constructs the <see cref="AttributeDescriptor{S}" /> descriptor with name and value.</summary>
     /// <param name="name">The attribute name.</param>
     /// <param name="value">The attribute value.</param>
-    public AttributeDescriptor(string name, string value)
+    public AttributeDescriptor(string name, string? value)
     {
         _name = name;
         _value = value;

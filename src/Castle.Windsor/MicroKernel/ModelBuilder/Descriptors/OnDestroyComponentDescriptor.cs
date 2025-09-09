@@ -17,7 +17,7 @@ using Castle.Windsor.MicroKernel.LifecycleConcerns;
 
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
-public class OnDestroyComponentDescriptor<TS>(LifecycleActionDelegate<TS> action)
+public class OnDestroyComponentDescriptor<TS>(LifecycleActionDelegate<TS>? action)
     : IComponentModelDescriptor, IMetaComponentModelDescriptor
     where TS : class
 {

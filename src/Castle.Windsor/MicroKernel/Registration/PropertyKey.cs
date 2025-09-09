@@ -18,7 +18,7 @@ public class PropertyKey
     /// <summary>Builds the <see cref="Property" /> with key/value.</summary>
     /// <param name="value">The property value.</param>
     /// <returns>The new <see cref="Property" /></returns>
-    public Property Eq(object value)
+    public Property Eq(object? value)
     {
         return new Property(Key, value);
     }

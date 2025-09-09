@@ -18,7 +18,7 @@ namespace Castle.Windsor.MicroKernel.Registration.Proxy;
 
 public class ItemRegistration<TItem>
 {
-    internal IReference<TItem> Item { get; private set; }
+    internal IReference<TItem>? Item { get; private set; }
 
     [PublicAPI]
     public ItemRegistration<TItem> Instance(TItem instance)
