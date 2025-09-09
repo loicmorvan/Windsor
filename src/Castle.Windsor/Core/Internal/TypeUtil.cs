@@ -64,8 +64,13 @@ public static class TypeUtil
         return type == null || type.GetTypeInfo().IsValueType || type == typeof(string);
     }
 
-    public static string ToCSharpString(this Type type)
+    public static string ToCSharpString(this Type? type)
     {
+        if (type == null)
+        {
+            return "no type";
+        }
+
         try
         {
             var name = new StringBuilder();

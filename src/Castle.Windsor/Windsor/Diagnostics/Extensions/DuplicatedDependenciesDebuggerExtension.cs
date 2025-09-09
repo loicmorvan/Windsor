@@ -27,7 +27,7 @@ public class DuplicatedDependenciesDebuggerExtension : AbstractContainerDebugger
 
     public override IEnumerable<DebuggerViewItem> Attach()
     {
-        var result = _diagnostic?.Inspect()??[];
+        var result = _diagnostic?.Inspect() ?? [];
         if (result.Length == 0)
         {
             return [];
@@ -69,6 +69,6 @@ public class DuplicatedDependenciesDebuggerExtension : AbstractContainerDebugger
 
     private static string Description(DependencyModel dependencyModel)
     {
-        return dependencyModel.TargetItemType.ToCSharpString() + " " + dependencyModel.DependencyKey;
+        return dependencyModel.TargetItemType?.ToCSharpString() ?? "no type" + " " + dependencyModel.DependencyKey;
     }
 }

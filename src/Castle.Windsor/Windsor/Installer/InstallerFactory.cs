@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Registration;
 using JetBrains.Annotations;
 
@@ -25,19 +24,18 @@ public class InstallerFactory
 	///     Performs custom instantiation of given
 	///     <param name="installerType" />
 	/// </summary>
-	/// <remarks>Default implementation uses public parameterless constructor to create the instance.</remarks>
 	public virtual IWindsorInstaller CreateInstance(Type installerType)
-	{
-		return Activator.CreateInstance(installerType) as IWindsorInstaller ??
-			   throw new InvalidOperationException($"Unable to create instance of {installerType.FullName}");
-	}
+    {
+        return Activator.CreateInstance(installerType) as IWindsorInstaller ??
+               throw new InvalidOperationException($"Unable to create instance of {installerType.FullName}");
+    }
 
-	/// <summary>Performs custom filtering/ordering of given set of types.</summary>
-	/// <param name="installerTypes">Set of concrete class types implementing <see cref="IWindsorInstaller" /> interface.</param>
-	/// <returns>Transformed <paramref name="installerTypes" />.</returns>
-	/// <remarks>Default implementation simply returns types passed into it.</remarks>
-	public virtual IEnumerable<Type> Select(IEnumerable<Type> installerTypes)
-	{
-		return installerTypes;
-	}
+    /// <summary>Performs custom filtering/ordering of given set of types.</summary>
+    /// <param name="installerTypes">Set of concrete class types implementing <see cref="IWindsorInstaller" /> interface.</param>
+    /// <returns>Transformed <paramref name="installerTypes" />.</returns>
+    /// <remarks>Default implementation simply returns types passed into it.</remarks>
+    public virtual IEnumerable<Type> Select(IEnumerable<Type> installerTypes)
+    {
+        return installerTypes;
+    }
 }

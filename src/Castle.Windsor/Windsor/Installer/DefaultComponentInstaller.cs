@@ -139,7 +139,8 @@ public sealed class DefaultComponentInstaller : IComponentsInstaller
             return;
         }
 
-        var installerInstance = type.CreateInstance<IWindsorInstaller>();
+        var installerInstance =
+            Activator.CreateInstance(type) as IWindsorInstaller ?? throw new InvalidOperationException();
         cache.Add(type, installerInstance);
     }
 
