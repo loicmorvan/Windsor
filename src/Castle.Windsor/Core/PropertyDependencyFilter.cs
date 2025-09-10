@@ -16,5 +16,5 @@ using System.Reflection;
 
 namespace Castle.Windsor.Core;
 
-public delegate PropertySet[] PropertyDependencyFilter(ComponentModel model, ICollection<PropertyInfo> properties,
+public delegate PropertySet[]? PropertyDependencyFilter(ComponentModel model, ICollection<PropertyInfo> properties,
     PropertySetBuilder buildDependencyCallback);

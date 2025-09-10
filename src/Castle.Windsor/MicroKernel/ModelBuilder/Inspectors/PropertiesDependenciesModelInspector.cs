@@ -90,7 +90,7 @@ public class PropertiesDependenciesModelInspector(IConversionManager converter) 
         return new PropertySet(property, dependency);
     }
 
-    private PropertiesInspectionBehavior GetInspectionBehaviorFromTheConfiguration(IConfiguration config)
+    private PropertiesInspectionBehavior GetInspectionBehaviorFromTheConfiguration(IConfiguration? config)
     {
         if (config?.Attributes["inspectionBehavior"] == null)
             // return default behavior
@@ -102,22 +102,21 @@ public class PropertiesDependenciesModelInspector(IConversionManager converter) 
 
         try
         {
-            return _converter.PerformConversion<PropertiesInspectionBehavior>(enumStringVal);
+            return enumStringVal is null
+                ? throw new NullReferenceException()
+                : _converter.PerformConversion<PropertiesInspectionBehavior>(enumStringVal);
         }
         catch (Exception)
         {
             var message =
-                string.Format(
-                    "Error on properties inspection. Could not convert the inspectionBehavior attribute value into an expected enum value. " +
-                    "Value found is '{0}' while possible values are '{1}'",
-                    enumStringVal,
-                    string.Join(", ", Enum.GetNames<PropertiesInspectionBehavior>()));
+                "Error on properties inspection. Could not convert the inspectionBehavior attribute value into an expected enum value. " +
+                $"Value found is '{enumStringVal}' while possible values are '{string.Join(", ", Enum.GetNames<PropertiesInspectionBehavior>())}'";
 
             throw new ConverterException(message);
         }
     }
 
-    private static List<PropertyInfo> GetProperties(ComponentModel model, Type targetType)
+    private static List<PropertyInfo> GetProperties(ComponentModel model, Type? targetType)
     {
         BindingFlags bindingFlags;
         if (model.InspectionBehavior == PropertiesInspectionBehavior.DeclaredOnly)
@@ -129,7 +128,7 @@ public class PropertiesDependenciesModelInspector(IConversionManager converter) 
             bindingFlags = BindingFlags.Public | BindingFlags.Instance;
         }
 
-        var properties = targetType.GetProperties(bindingFlags);
+        var properties = targetType?.GetProperties(bindingFlags) ?? [];
         return properties.Where(IsValidPropertyDependency).ToList();
     }
 
