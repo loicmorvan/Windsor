@@ -26,7 +26,7 @@ public class ProxyMixInsDescriptor(IEnumerable<IReference<object>> mixIns) : ICo
             return;
         }
 
-        var options = model.ObtainProxyOptions();
+        var options = model.GetOrCreateProxyOptions();
         foreach (var mixIn in mixIns)
         {
             options.AddMixinReference(mixIn);

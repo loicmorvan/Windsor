@@ -49,7 +49,7 @@ public class MixinInspector : IContributeComponentModelConstruction
             return;
         }
 
-        var options = model.ObtainProxyOptions();
+        var options = model.GetOrCreateProxyOptions();
         mixinReferences.ForEach(options.AddMixinReference);
     }
 }

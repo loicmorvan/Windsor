@@ -21,13 +21,11 @@ public static class ProxyOptionsUtil
 {
 	/// <summary>Obtains the <see cref="ProxyOptions" /> associated with the <see cref="ComponentModel" />.</summary>
 	/// <param name="model">The component model.</param>
-	/// <param name="createOnDemand">true if the options should be created if not present.</param>
 	/// <returns>The associated proxy options for the component model.</returns>
-	public static ProxyOptions ObtainProxyOptions(this ComponentModel model, bool createOnDemand = true)
+	public static ProxyOptions GetOrCreateProxyOptions(this ComponentModel model)
 	{
-		var options = model.ExtendedProperties[ProxyConstants.ProxyOptionsKey] as ProxyOptions;
-
-		if (options != null || !createOnDemand)
+		var options = model.GetProxyOptions();
+		if (options is not null)
 		{
 			return options;
 		}
@@ -36,5 +34,10 @@ public static class ProxyOptionsUtil
 		model.ExtendedProperties[ProxyConstants.ProxyOptionsKey] = options;
 
 		return options;
+	}
+	
+	public static ProxyOptions? GetProxyOptions(this ComponentModel model)
+	{
+		return model.ExtendedProperties[ProxyConstants.ProxyOptionsKey] as ProxyOptions;
 	}
 }

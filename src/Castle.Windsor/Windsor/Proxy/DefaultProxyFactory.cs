@@ -57,7 +57,7 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
         params object[] constructorArguments)
     {
         var interceptors = ObtainInterceptors(kernel, model, context);
-        var proxyOptions = model.ObtainProxyOptions();
+        var proxyOptions = model.GetOrCreateProxyOptions();
         var proxyGenOptions = CreateProxyGenerationOptionsFrom(proxyOptions, kernel, context, model);
 
         CustomizeOptions(proxyGenOptions, kernel, model, constructorArguments);
@@ -87,7 +87,7 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
         object proxy;
 
         var interceptors = ObtainInterceptors(kernel, model, context);
-        var proxyOptions = model.ObtainProxyOptions();
+        var proxyOptions = model.GetOrCreateProxyOptions();
         var proxyGenOptions = CreateProxyGenerationOptionsFrom(proxyOptions, kernel, context, model);
 
         CustomizeOptions(proxyGenOptions, kernel, model, constructorArguments);
@@ -193,7 +193,7 @@ public class DefaultProxyFactory(ProxyGenerator generator) : AbstractProxyFactor
     /// <returns> true if an instance is required. </returns>
     public override bool RequiresTargetInstance(IKernel kernel, ComponentModel model)
     {
-        var proxyOptions = model.ObtainProxyOptions();
+        var proxyOptions = model.GetOrCreateProxyOptions();
 
         return !model.HasClassServices &&
                !proxyOptions.OmitTarget;

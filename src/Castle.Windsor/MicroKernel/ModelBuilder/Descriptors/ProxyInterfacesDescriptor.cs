@@ -21,7 +21,7 @@ public class ProxyInterfacesDescriptor(Type[] interfaces) : IComponentModelDescr
 {
     public void BuildComponentModel(IKernel kernel, ComponentModel model)
     {
-        var options = model.ObtainProxyOptions();
+        var options = model.GetOrCreateProxyOptions();
         options.AddAdditionalInterfaces(interfaces);
     }
 

@@ -55,7 +55,7 @@ public class InterceptorInspector : IContributeComponentModelConstruction
         }
 
         CollectInterceptors(model, interceptors);
-        var options = model.ObtainProxyOptions();
+        var options = model.GetOrCreateProxyOptions();
         CollectSelector(interceptors, options);
         CollectHook(interceptors, options);
     }

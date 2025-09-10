@@ -82,7 +82,7 @@ public class ComponentProxyInspector(IConversionManager converter) : IContribute
 
     private static void ApplyProxyBehavior(ComponentProxyBehaviorAttribute behavior, ComponentModel model)
     {
-        var options = model.ObtainProxyOptions();
+        var options = model.GetOrCreateProxyOptions();
         options.AddAdditionalInterfaces(behavior.AdditionalInterfaces);
         if (model.Implementation.GetTypeInfo().IsInterface)
         {

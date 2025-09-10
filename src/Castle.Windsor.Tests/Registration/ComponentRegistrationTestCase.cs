@@ -65,7 +65,7 @@ public class ComponentRegistrationTestCase : AbstractContainerTestCase
 
         var handler = Kernel.GetHandler(typeof(ICustomer));
 
-        var proxyOptions = handler.ComponentModel.ObtainProxyOptions(false);
+        var proxyOptions = handler.ComponentModel.GetProxyOptions();
 
         Assert.NotNull(proxyOptions);
         Assert.Equal(selector, proxyOptions.Selector.Resolve(null, null));
@@ -79,7 +79,7 @@ public class ComponentRegistrationTestCase : AbstractContainerTestCase
 
         var handler = Kernel.GetHandler(typeof(ICustomer));
 
-        var proxyOptions = handler.ComponentModel.ObtainProxyOptions(false);
+        var proxyOptions = handler.ComponentModel.GetProxyOptions();
 
         Assert.NotNull(proxyOptions);
         Assert.True(proxyOptions.OmitTarget);

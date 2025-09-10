@@ -24,11 +24,11 @@ public class AssemblyFilter : IAssemblyProvider
     private static readonly Assembly CastleWindsorDll = typeof(AssemblyFilter).GetTypeInfo().Assembly;
 
     private readonly string _directoryName;
-    private readonly string _mask;
+    private readonly string? _mask;
     private Predicate<Assembly> _assemblyFilter;
-    private Predicate<AssemblyName> _nameFilter;
+    private Predicate<AssemblyName>? _nameFilter;
 
-    public AssemblyFilter(string directoryName, string mask = null)
+    public AssemblyFilter(string directoryName, string? mask = null)
     {
         ArgumentNullException.ThrowIfNull(directoryName);
 
@@ -69,7 +69,7 @@ public class AssemblyFilter : IAssemblyProvider
         WithKeyToken(ExtractKeyToken(publicKeyToken));
     }
 
-    private AssemblyFilter WithKeyToken(byte[] publicKeyToken)
+    private AssemblyFilter WithKeyToken(byte[]? publicKeyToken)
     {
         ArgumentNullException.ThrowIfNull(publicKeyToken);
         return FilterByName(n => IsTokenEqual(n.GetPublicKeyToken(), publicKeyToken));
@@ -140,7 +140,7 @@ public class AssemblyFilter : IAssemblyProvider
         }
     }
 
-    private Assembly LoadAssemblyIgnoringErrors(string file)
+    private Assembly? LoadAssemblyIgnoringErrors(string file)
     {
         // based on MEF DirectoryCatalog
         try
@@ -156,11 +156,11 @@ public class AssemblyFilter : IAssemblyProvider
         }
         catch (BadImageFormatException)
         {
-            // Dlls that contain native code or assemblies for wrong runtime (like .NET 4 asembly when we're in CLR2 process)
+            // Dlls that contain native code or assemblies for the wrong runtime (like .NET 4 assembly when we're in the CLR2 process)
         }
         catch (ReflectionTypeLoadException)
         {
-            // Dlls that have missing Managed dependencies are not loaded, but do not invalidate the Directory 
+            // Dlls that have missing Managed dependencies are not loaded but do not invalidate the Directory 
         }
 
         // TODO: log
@@ -181,7 +181,7 @@ public class AssemblyFilter : IAssemblyProvider
         return Path.GetFullPath(path);
     }
 
-    private static bool IsTokenEqual(byte[] actualToken, byte[] expectedToken)
+    private static bool IsTokenEqual(byte[]? actualToken, byte[] expectedToken)
     {
         if (actualToken == null)
         {

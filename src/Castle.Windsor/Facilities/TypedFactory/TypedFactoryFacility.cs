@@ -55,7 +55,7 @@ public sealed class TypedFactoryFacility : AbstractFacility
 
         model.Interceptors.Add(new InterceptorReference("typed.fac.interceptor"));
 
-        var proxyOptions = model.ObtainProxyOptions();
+        var proxyOptions = model.GetOrCreateProxyOptions();
         proxyOptions.OmitTarget = true;
 
         ((IKernelInternal)Kernel).AddCustomComponent(model);

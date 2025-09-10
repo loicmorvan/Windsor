@@ -22,7 +22,7 @@ public class InterceptorSelectorDescriptor(IReference<IInterceptorSelector>? sel
 {
     public void BuildComponentModel(IKernel kernel, ComponentModel model)
     {
-        var options = model.ObtainProxyOptions();
+        var options = model.GetOrCreateProxyOptions();
         options.Selector = selector;
     }
 

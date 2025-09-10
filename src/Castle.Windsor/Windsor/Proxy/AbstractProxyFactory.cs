@@ -47,7 +47,7 @@ public abstract class AbstractProxyFactory : IProxyFactory
             return true;
         }
 
-        var options = model.ObtainProxyOptions(false);
+        var options = model.GetProxyOptions();
         if (options is { RequiresProxy: true })
         {
             return true;

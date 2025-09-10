@@ -22,7 +22,7 @@ public class ProxyHookDescriptor(IReference<IProxyGenerationHook>? hook) : IComp
 {
     public void BuildComponentModel(IKernel kernel, ComponentModel model)
     {
-        var options = model.ObtainProxyOptions();
+        var options = model.GetOrCreateProxyOptions();
         options.Hook = hook;
     }
 
