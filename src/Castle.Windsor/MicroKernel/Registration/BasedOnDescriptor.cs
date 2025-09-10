@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
@@ -24,9 +25,9 @@ public sealed class BasedOnDescriptor : IRegistration
 {
     private readonly FromDescriptor _from;
     private readonly List<Type> _potentialBases;
-    private Action<ComponentRegistration> _configuration;
-    private Predicate<Type> _ifFilter;
-    private Predicate<Type> _unlessFilter;
+    private Action<ComponentRegistration>? _configuration;
+    private Predicate<Type>? _ifFilter;
+    private Predicate<Type>? _unlessFilter;
 
     /// <summary>Initializes a new instance of the BasedOnDescriptor.</summary>
     internal BasedOnDescriptor(IEnumerable<Type> basedOn, FromDescriptor from, Predicate<Type>? additionalFilters)
@@ -34,7 +35,11 @@ public sealed class BasedOnDescriptor : IRegistration
         _potentialBases = basedOn.ToList();
         _from = from;
         WithService = new ServiceDescriptor(this);
-        If(additionalFilters);
+
+        if (additionalFilters is not null)
+        {
+            If(additionalFilters);
+        }
     }
 
     /// <summary>Gets the service descriptor.</summary>
@@ -335,7 +340,7 @@ public sealed class BasedOnDescriptor : IRegistration
         return WithService.Select(types);
     }
 
-    private bool Accepts(Type type, out Type[] baseTypes)
+    private bool Accepts(Type type, [NotNullWhen(true)] out Type[]? baseTypes)
     {
         return IsBasedOn(type, out baseTypes)
                && ExecuteIfCondition(type)
@@ -353,7 +358,7 @@ public sealed class BasedOnDescriptor : IRegistration
                _unlessFilter.GetInvocationList().Cast<Predicate<Type>>().Any(filter => filter(type));
     }
 
-    private bool IsBasedOn(Type type, out Type[] baseTypes)
+    private bool IsBasedOn(Type type, out Type[]? baseTypes)
     {
         var actuallyBasedOn = new List<Type>();
         foreach (var potentialBase in _potentialBases)
@@ -414,18 +419,19 @@ public sealed class BasedOnDescriptor : IRegistration
         return true;
     }
 
-    private static bool IsBasedOnGenericClass(Type type, Type basedOn, out Type[] baseTypes)
+    private static bool IsBasedOnGenericClass(Type type, Type basedOn, [NotNullWhen(true)] out Type[]? baseTypes)
     {
-        while (type != null)
+        var candidate = type;
+        while (candidate != null)
         {
-            if (type.GetTypeInfo().IsGenericType &&
-                type.GetGenericTypeDefinition() == basedOn)
+            if (candidate.GetTypeInfo().IsGenericType &&
+                candidate.GetGenericTypeDefinition() == basedOn)
             {
-                baseTypes = [type];
+                baseTypes = [candidate];
                 return true;
             }
 
-            type = type.GetTypeInfo().BaseType;
+            candidate = candidate.GetTypeInfo().BaseType;
         }
 
         baseTypes = null;
