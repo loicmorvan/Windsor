@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 using Castle.Windsor.Core;
@@ -43,7 +44,7 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
         BindingFlags.Instance | BindingFlags.Static |
         BindingFlags.IgnoreCase;
 
-    private ITypeConverter _converter;
+    private ITypeConverter? _converter;
 
     protected virtual bool ShouldUseMetaModel => false;
 
@@ -90,7 +91,7 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
 
             var signature = methodNode.Attributes["signature"];
 
-            var methods = GetMethods(model.Implementation, name, signature);
+            var methods = GetMethods(model.Implementation, name, signature, _converter);
 
             if (methods.Count == 0)
             {
@@ -120,7 +121,8 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
     {
     }
 
-    private static void AssertNameIsNotNull(string name, ComponentModel model)
+    private static void AssertNameIsNotNull([System.Diagnostics.CodeAnalysis.NotNull] string? name,
+        ComponentModel model)
     {
         if (name != null)
         {
@@ -134,7 +136,7 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
         throw new Exception(message);
     }
 
-    private Type[] ConvertSignature(string signature)
+    private Type[] ConvertSignature(string signature, ITypeConverter converter)
     {
         var parameters = signature.Split(';');
 
@@ -144,7 +146,7 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
         {
             try
             {
-                types.Add(_converter.PerformConversion<Type>(param));
+                types.Add(converter.PerformConversion<Type>(param));
             }
             catch (Exception)
             {
@@ -158,6 +160,7 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
         return types.ToArray();
     }
 
+    [MemberNotNull(nameof(_converter))]
     private void EnsureHasReferenceToConverter(IKernel kernel)
     {
         if (_converter != null)
@@ -165,11 +168,11 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
             return;
         }
 
-        _converter = 
+        _converter =
             kernel.GetSubSystem<ITypeConverter>(SubSystemConstants.ConversionManagerKey);
     }
 
-    private IList<MethodInfo> GetMethods(Type implementation, string name, string signature)
+    private IList<MethodInfo> GetMethods(Type implementation, string name, string? signature, ITypeConverter converter)
     {
         if (string.IsNullOrEmpty(signature))
         {
@@ -180,7 +183,7 @@ public abstract class MethodMetaInspector : IContributeComponentModelConstructio
                 .ToList();
         }
 
-        var methodInfo = implementation.GetMethod(name, AllMethods, null, ConvertSignature(signature), null);
+        var methodInfo = implementation.GetMethod(name, AllMethods, null, ConvertSignature(signature, converter), null);
 
         if (methodInfo == null)
         {
