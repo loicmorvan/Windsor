@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Castle.Core.Configuration;
 using Castle.Windsor.Core.Internal;
@@ -389,5 +390,14 @@ public sealed class ComponentModel : GraphNode
         }
 
         return value;
+    }
+
+    [MemberNotNull(nameof(Implementation))]
+    public void EnsureInitialized()
+    {
+        if (Implementation == null)
+        {
+            throw new InvalidOperationException("Implementation is not set");       
+        }
     }
 }

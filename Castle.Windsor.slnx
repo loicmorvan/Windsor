@@ -1,0 +1,31 @@
+﻿<Solution>
+  <Folder Name="/Castle Build/">
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="CHANGELOG.md" />
+    <File Path="CONTRIBUTING.md" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Castle Build/BuildScripts/">
+    <File Path="buildscripts\CastleKey.snk" />
+    <File Path="buildscripts\common.props" />
+  </Folder>
+  <Folder Name="/Castle Docs/">
+    <Project Path="docs\Documentation.csproj" />
+  </Folder>
+  <Folder Name="/Castle.Windsor.Facilities/">
+    <Project Path="src\Castle.Windsor.Extensions.DependencyInjection.Tests\Castle.Windsor.Extensions.DependencyInjection.Tests.csproj" />
+    <Project Path="src\Castle.Windsor.Extensions.DependencyInjection\Castle.Windsor.Extensions.DependencyInjection.csproj" />
+    <Project Path="src\Castle.Windsor.Extensions.Hosting\Castle.Windsor.Extensions.Hosting.csproj" />
+    <Project Path="src\Castle.Windsor.Facilities.AspNetCore.Tests\Castle.Windsor.Facilities.AspNetCore.Tests.csproj" />
+    <Project Path="src\Castle.Windsor.Facilities.AspNetCore\Castle.Windsor.Facilities.AspNetCore.csproj" />
+  </Folder>
+  <Folder Name="/_msbuild/">
+    <File Path="Directory.Build.props" />
+    <File Path="buildscripts\common.props" />
+    <File Path="buildscripts\CastleKey.snk" />
+  </Folder>
+  <Project Path="src\Castle.Windsor.Tests\Castle.Windsor.Tests.csproj" />
+  <Project Path="src\Castle.Windsor\Castle.Windsor.csproj" />
+</Solution>

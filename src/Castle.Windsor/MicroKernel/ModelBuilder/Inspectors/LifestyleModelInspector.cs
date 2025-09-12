@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Reflection;
+using Castle.Core.Configuration;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.Lifestyle.Scoped;
@@ -52,12 +53,13 @@ public class LifestyleModelInspector(IConversionManager converter) : IContribute
     /// </summary>
     protected virtual bool ReadLifestyleFromConfiguration(ComponentModel model)
     {
-        if (model.Configuration == null)
+        var configuration = model.Configuration;
+        if (configuration == null)
         {
             return false;
         }
 
-        var lifestyleRaw = model.Configuration.Attributes["lifestyle"];
+        var lifestyleRaw = configuration.Attributes["lifestyle"];
         if (lifestyleRaw != null)
         {
             var lifestyleType = _converter.PerformConversion<LifestyleType>(lifestyleRaw);
@@ -69,16 +71,17 @@ public class LifestyleModelInspector(IConversionManager converter) : IContribute
                 case LifestyleType.Thread:
                     return true;
                 case LifestyleType.Pooled:
-                    ExtractPoolConfig(model);
+                    ExtractPoolConfig(model, configuration);
                     return true;
                 case LifestyleType.Custom:
-                    var lifestyle = GetMandatoryTypeFromAttribute(model, "customLifestyleType", lifestyleType);
+                    var lifestyle =
+                        GetMandatoryTypeFromAttribute(model, "customLifestyleType", lifestyleType, configuration);
                     ValidateTypeFromAttribute(lifestyle, typeof(ILifestyleManager), "customLifestyleType");
                     model.CustomLifestyle = lifestyle;
 
                     return true;
                 case LifestyleType.Scoped:
-                    var scopeAccessorType = GetTypeFromAttribute(model, "scopeAccessorType");
+                    var scopeAccessorType = GetTypeFromAttribute("scopeAccessorType", configuration);
                     if (scopeAccessorType == null)
                     {
                         return true;
@@ -89,7 +92,7 @@ public class LifestyleModelInspector(IConversionManager converter) : IContribute
 
                     return true;
                 case LifestyleType.Bound:
-                    var binderType = GetTypeFromAttribute(model, "scopeRootBinderType");
+                    var binderType = GetTypeFromAttribute("scopeRootBinderType", configuration);
                     if (binderType == null)
                     {
                         return true;
@@ -108,7 +111,7 @@ public class LifestyleModelInspector(IConversionManager converter) : IContribute
 
         {
             // type was not present, but we might figure out the lifestyle based on presence of some attributes related to some lifestyles
-            var binderType = GetTypeFromAttribute(model, "scopeRootBinderType");
+            var binderType = GetTypeFromAttribute("scopeRootBinderType", configuration);
             if (binderType != null)
             {
                 var binder = ExtractBinder(binderType, model.Name);
@@ -117,7 +120,7 @@ public class LifestyleModelInspector(IConversionManager converter) : IContribute
                 return true;
             }
 
-            var scopeAccessorType = GetTypeFromAttribute(model, "scopeAccessorType");
+            var scopeAccessorType = GetTypeFromAttribute("scopeAccessorType", configuration);
             if (scopeAccessorType != null)
             {
                 ValidateTypeFromAttribute(scopeAccessorType, typeof(IScopeAccessor), "scopeAccessorType");
@@ -126,7 +129,7 @@ public class LifestyleModelInspector(IConversionManager converter) : IContribute
                 return true;
             }
 
-            var customLifestyleType = GetTypeFromAttribute(model, "customLifestyleType");
+            var customLifestyleType = GetTypeFromAttribute("customLifestyleType", configuration);
             if (customLifestyleType == null)
             {
                 return false;
@@ -142,6 +145,8 @@ public class LifestyleModelInspector(IConversionManager converter) : IContribute
     /// <summary>Check if the type expose one of the lifestyle attributes defined in Castle.Model namespace.</summary>
     protected virtual void ReadLifestyleFromType(ComponentModel model)
     {
+        model.EnsureInitialized();
+
         var attributes = model.Implementation.GetAttributes<LifestyleAttribute>(true);
         if (attributes.Length == 0)
         {
@@ -194,7 +199,7 @@ public class LifestyleModelInspector(IConversionManager converter) : IContribute
         }
     }
 
-    protected virtual void ValidateTypeFromAttribute(Type typeFromAttribute, Type expectedInterface, string attribute)
+    protected virtual void ValidateTypeFromAttribute(Type? typeFromAttribute, Type expectedInterface, string attribute)
     {
         if (expectedInterface.IsAssignableFrom(typeFromAttribute))
         {
@@ -223,10 +228,10 @@ public class LifestyleModelInspector(IConversionManager converter) : IContribute
         return methodInfo.CreateDelegate<Func<IHandler[], IHandler>>(instance);
     }
 
-    private void ExtractPoolConfig(ComponentModel model)
+    private void ExtractPoolConfig(ComponentModel model, IConfiguration configuration)
     {
-        var initialRaw = model.Configuration.Attributes["initialPoolSize"];
-        var maxRaw = model.Configuration.Attributes["maxPoolSize"];
+        var initialRaw = configuration.Attributes["initialPoolSize"];
+        var maxRaw = configuration.Attributes["maxPoolSize"];
 
         if (initialRaw != null)
         {
@@ -243,9 +248,10 @@ public class LifestyleModelInspector(IConversionManager converter) : IContribute
         model.ExtendedProperties[ExtendedPropertiesConstants.PoolMaxPoolSize] = max;
     }
 
-    private Type GetMandatoryTypeFromAttribute(ComponentModel model, string attribute, LifestyleType lifestyleType)
+    private Type GetMandatoryTypeFromAttribute(ComponentModel model, string attribute, LifestyleType lifestyleType,
+        IConfiguration configuration)
     {
-        var rawAttribute = model.Configuration.Attributes[attribute];
+        var rawAttribute = configuration.Attributes[attribute];
         if (rawAttribute == null)
         {
             throw new InvalidOperationException(
@@ -255,13 +261,13 @@ public class LifestyleModelInspector(IConversionManager converter) : IContribute
         return _converter.PerformConversion<Type>(rawAttribute);
     }
 
-    private Type GetTypeFromAttribute(ComponentModel model, string attribute)
+    private Type? GetTypeFromAttribute(string attribute, IConfiguration configuration)
     {
-        var rawAttribute = model.Configuration.Attributes[attribute];
+        var rawAttribute = configuration.Attributes[attribute];
         return rawAttribute == null ? null : _converter.PerformConversion<Type>(rawAttribute);
     }
 
-    private bool IsBindMethod(MemberInfo methodMember, object _)
+    private bool IsBindMethod(MemberInfo methodMember, object? _)
     {
         var method = (MethodInfo)methodMember;
         if (method.ReturnType != typeof(IHandler))
