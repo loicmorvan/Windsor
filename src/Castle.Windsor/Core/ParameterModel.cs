@@ -23,7 +23,7 @@ public class ParameterModel
 	/// <summary>Initializes a new instance of the <see cref="ParameterModel" /> class.</summary>
 	/// <param name="name">The name.</param>
 	/// <param name="value">The value.</param>
-	public ParameterModel(string name, string value)
+	public ParameterModel(string name, string? value)
 	{
 		Name = name;
 		Value = value;

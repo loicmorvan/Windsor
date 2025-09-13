@@ -73,6 +73,8 @@ public class ComponentActivatorInspector(IConversionManager converter) : IContri
     /// <param name="model"></param>
     protected virtual void ReadComponentActivatorFromType(ComponentModel model)
     {
+        model.EnsureInitialized();
+        
         var attributes = model.Implementation.GetAttributes<ComponentActivatorAttribute>(true);
         if (attributes.Length == 0)
         {

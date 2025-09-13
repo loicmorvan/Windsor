@@ -60,7 +60,7 @@ public class ParameterModelCollection : IEnumerable<ParameterModel>
     /// <summary>Adds the specified name.</summary>
     /// <param name="name">The name.</param>
     /// <param name="value">The value.</param>
-    public void Add(string name, string value)
+    public void Add(string name, string? value)
     {
         Add(name, new ParameterModel(name, value));
     }

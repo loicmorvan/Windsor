@@ -39,6 +39,8 @@ public class InterceptorInspector : IContributeComponentModelConstruction
 
     protected virtual void CollectFromAttributes(ComponentModel model)
     {
+        model.EnsureInitialized();
+        
         var attributes = model.Implementation.GetAttributes<InterceptorAttribute>(true);
         foreach (var attribute in attributes)
         {

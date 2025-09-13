@@ -85,7 +85,7 @@ public class ConfigurationParametersInspector : IContributeComponentModelConstru
         {
             if (parameter.ConfigValue != null)
             {
-                if (IsArray(parameter) || IsList(parameter))
+                if (parameter.ConfigValue.Name.EqualsText("array") || parameter.ConfigValue.Name.EqualsText("list"))
                 {
                     AddAnyServiceOverrides(model, parameter.ConfigValue);
                 }
@@ -96,15 +96,5 @@ public class ConfigurationParametersInspector : IContributeComponentModelConstru
                 model.Dependencies.Add(new DependencyModel(parameter.Name, null, false));
             }
         }
-    }
-
-    private static bool IsArray(ParameterModel parameter)
-    {
-        return parameter.ConfigValue.Name.EqualsText("array");
-    }
-
-    private static bool IsList(ParameterModel parameter)
-    {
-        return parameter.ConfigValue.Name.EqualsText("list");
     }
 }

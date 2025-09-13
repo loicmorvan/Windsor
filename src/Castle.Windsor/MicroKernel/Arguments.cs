@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using Castle.Core;
 using Castle.Windsor.Windsor;
 using JetBrains.Annotations;
@@ -60,6 +61,12 @@ public sealed class Arguments
             CheckKeyType(key);
             _dictionary[key] = value;
         }
+    }
+    
+    public bool TryGetValue(object key, [NotNullWhen(true)]out object? value)
+    {
+        CheckKeyType(key);
+        return _dictionary.TryGetValue(key, out value);
     }
 
     IEnumerator IEnumerable.GetEnumerator()

@@ -16,7 +16,7 @@ using Castle.Windsor.Core;
 
 namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
 
-public class OnCreatedConcern<TComponent>(LifecycleActionDelegate<TComponent> action, IKernel kernel)
+public class OnCreatedConcern<TComponent>(LifecycleActionDelegate<TComponent>? action, IKernel kernel)
     : ICommissionConcern
 {
     public void Apply(ComponentModel model, object component)

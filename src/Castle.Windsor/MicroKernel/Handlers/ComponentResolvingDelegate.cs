@@ -16,4 +16,4 @@ using Castle.Windsor.MicroKernel.Context;
 
 namespace Castle.Windsor.MicroKernel.Handlers;
 
-public delegate ComponentReleasingDelegate ComponentResolvingDelegate(IKernel kernel, CreationContext context);
+public delegate ComponentReleasingDelegate? ComponentResolvingDelegate(IKernel kernel, CreationContext context);

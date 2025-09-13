@@ -53,8 +53,8 @@ public class ServiceOverrideDescriptor : AbstractPropertyDescriptor
         }
     }
 
-    private static void Apply(ComponentModel model, object dependencyKey, object dependencyValue,
-        ServiceOverride @override)
+    private static void Apply(ComponentModel model, object dependencyKey, object? dependencyValue,
+        ServiceOverride? @override)
     {
         switch (dependencyValue)
         {
@@ -74,7 +74,7 @@ public class ServiceOverrideDescriptor : AbstractPropertyDescriptor
     }
 
     private static void ApplyReferenceList(ComponentModel model, object name, IEnumerable<string> items,
-        ServiceOverride serviceOverride)
+        ServiceOverride? serviceOverride)
     {
         var list = new MutableConfiguration("list");
 
@@ -98,7 +98,7 @@ public class ServiceOverrideDescriptor : AbstractPropertyDescriptor
         AddParameter(model, GetNameString(dependencyName), reference);
     }
 
-    private static string GetNameString(object key)
+    private static string? GetNameString(object key)
     {
         if (key is Type type)
         {

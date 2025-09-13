@@ -47,7 +47,7 @@ public class ComponentProxyInspector(IConversionManager converter) : IContribute
     ///     returns null.
     /// </summary>
     /// <param name="implementation"></param>
-    protected virtual ComponentProxyBehaviorAttribute ReadProxyBehaviorFromType(Type implementation)
+    protected virtual ComponentProxyBehaviorAttribute? ReadProxyBehaviorFromType(Type implementation)
     {
         return implementation.GetAttributes<ComponentProxyBehaviorAttribute>(true).FirstOrDefault();
     }
@@ -57,6 +57,8 @@ public class ComponentProxyInspector(IConversionManager converter) : IContribute
     /// <param name="model"></param>
     protected virtual void ReadProxyBehavior(ComponentModel model)
     {
+        model.EnsureInitialized();
+
         var proxyBehaviorAttribute =
             ReadProxyBehaviorFromType(model.Implementation) ?? new ComponentProxyBehaviorAttribute();
 
@@ -74,14 +76,20 @@ public class ComponentProxyInspector(IConversionManager converter) : IContribute
         }
 
         var list = new List<Type>(behavior.AdditionalInterfaces);
-        list.AddRange(interfaces.Children.Select(node => node.Attributes["interface"])
-            .Select(interfaceTypeName => _converter.PerformConversion<Type>(interfaceTypeName)));
+        list.AddRange(
+            interfaces
+                .Children
+                .Select(node => node.Attributes["interface"])
+                .OfType<string>()
+                .Select(interfaceTypeName => _converter.PerformConversion<Type>(interfaceTypeName)));
 
         behavior.AdditionalInterfaces = list.ToArray();
     }
 
     private static void ApplyProxyBehavior(ComponentProxyBehaviorAttribute behavior, ComponentModel model)
     {
+        model.EnsureInitialized();
+
         var options = model.GetOrCreateProxyOptions();
         options.AddAdditionalInterfaces(behavior.AdditionalInterfaces);
         if (model.Implementation.GetTypeInfo().IsInterface)
@@ -97,7 +105,7 @@ public class ComponentProxyInspector(IConversionManager converter) : IContribute
             return;
         }
 
-        var message = $"The class {model.Implementation.FullName} requested a single interface proxy, " +
+        var message = $"The class {model.Implementation?.FullName} requested a single interface proxy, " +
                       $"however the service {model.Services.First().FullName} does not represent an interface";
 
         throw new ComponentRegistrationException(message);
