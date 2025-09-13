@@ -59,7 +59,7 @@ public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLi
     public override void Dispose()
     {
         GC.SuppressFinalize(this);
-        
+
         _pool?.Dispose();
     }
 
@@ -75,6 +75,11 @@ public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLi
 
     protected IPool CreatePool(int initialSize, int maxSize)
     {
+        if (Kernel == null)
+        {
+            throw new InvalidOperationException("Kernel is not set");
+        }
+
         if (!Kernel.HasComponent(typeof(IPoolFactory)))
         {
             lock (PoolFactoryLock)
@@ -89,6 +94,7 @@ public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLi
         }
 
         var factory = Kernel.Resolve<IPoolFactory>();
+        
         return factory.Create(initialSize, maxSize, ComponentActivator);
     }
 

@@ -22,19 +22,13 @@ namespace Castle.Windsor.MicroKernel.LifecycleConcerns;
 [Serializable]
 public abstract class LateBoundConcerns<TConcern>
 {
-    private Dictionary<Type, TConcern> _concerns;
-    private ConcurrentDictionary<Type, List<TConcern>> _concernsCache;
+    private Dictionary<Type, TConcern> _concerns = new(2);
+    private ConcurrentDictionary<Type, List<TConcern>> _concernsCache = new(2, 2);
 
-    public bool HasConcerns => _concerns != null;
+    public bool HasConcerns => _concerns.Count > 0;
 
     public void AddConcern<TForType>(TConcern lifecycleConcern)
     {
-        if (_concerns == null)
-        {
-            _concerns = new Dictionary<Type, TConcern>(2);
-            _concernsCache = new ConcurrentDictionary<Type, List<TConcern>>(2, 2);
-        }
-
         _concerns.Add(typeof(TForType), lifecycleConcern);
     }
 

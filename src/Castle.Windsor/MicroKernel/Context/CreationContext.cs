@@ -117,7 +117,7 @@ public class CreationContext :
 
     public virtual bool IsResolving => _isResolving;
 
-    public IReleasePolicy ReleasePolicy { get; set; }
+    public IReleasePolicy? ReleasePolicy { get; set; }
 
     public Type? RequestedType { get; }
 

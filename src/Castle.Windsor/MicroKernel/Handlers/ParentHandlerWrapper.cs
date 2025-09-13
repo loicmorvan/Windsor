@@ -17,7 +17,7 @@ using Castle.Windsor.MicroKernel.Context;
 
 namespace Castle.Windsor.MicroKernel.Handlers;
 
-public sealed class ParentHandlerWrapper : IHandler, IDisposable
+public sealed class ParentHandlerWrapper : IHandler
 {
     private readonly ISubDependencyResolver _childResolver;
     private readonly IHandler _parentHandler;
@@ -36,11 +36,6 @@ public sealed class ParentHandlerWrapper : IHandler, IDisposable
         _parentHandler = parentHandler;
         _childResolver = childResolver;
         _parentReleasePolicy = parentReleasePolicy;
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
     }
 
     public ComponentModel ComponentModel => _parentHandler.ComponentModel;
@@ -102,7 +97,7 @@ public sealed class ParentHandlerWrapper : IHandler, IDisposable
         }
     }
 
-    public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    public bool CanResolve(CreationContext context, ISubDependencyResolver? contextHandlerResolver,
         ComponentModel model, DependencyModel dependency)
     {
         var canResolve = false;
@@ -120,24 +115,12 @@ public sealed class ParentHandlerWrapper : IHandler, IDisposable
         return canResolve;
     }
 
-    public object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    public object? Resolve(CreationContext context, ISubDependencyResolver? contextHandlerResolver,
         ComponentModel model, DependencyModel dependency)
     {
         var value = _childResolver.Resolve(context, null, model, dependency) ??
                     _parentHandler.Resolve(context, contextHandlerResolver, model, dependency);
 
         return value;
-    }
-
-    private void Dispose(bool disposing)
-    {
-        if (!disposing)
-        {
-            return;
-        }
-
-        if (_parentHandler != null)
-        {
-        }
     }
 }

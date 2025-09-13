@@ -18,20 +18,20 @@ namespace Castle.Windsor.MicroKernel.Handlers;
 
 public class ResolveInvocation(CreationContext context, bool instanceRequired)
 {
-    private Action _proceed;
+    private Action? _proceed;
 
-    public Burden Burden { get; set; }
+    public Burden? Burden { get; set; }
 
     public CreationContext Context { get; private set; } = context;
     public bool InstanceRequired { get; private set; } = instanceRequired;
 
-    public object ResolvedInstance { get; set; }
+    public object? ResolvedInstance { get; set; }
 
     internal bool DecommissionRequired { get; private set; }
 
     public void Proceed()
     {
-        _proceed.Invoke();
+        _proceed?.Invoke();
     }
 
     public void RequireDecommission()

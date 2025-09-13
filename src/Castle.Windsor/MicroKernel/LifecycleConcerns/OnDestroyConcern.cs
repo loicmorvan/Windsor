@@ -22,6 +22,6 @@ public class OnDestroyConcern<TComponent>(LifecycleActionDelegate<TComponent>? a
     public void Apply(ComponentModel model, object component)
     {
         var item = (TComponent)component;
-        action(kernel, item);
+        action?.Invoke(kernel, item);
     }
 }

@@ -423,7 +423,7 @@ public class PooledLifestyleManagerTestCase : AbstractContainerTestCase
 
     private sealed class EmptyPoolFactory : IPoolFactory
     {
-        public IPool Create(int initialsize, int maxSize, IComponentActivator activator)
+        public IPool Create(int initialsize, int maxSize, IComponentActivator? activator)
         {
             return new EmptyPool();
         }

@@ -16,17 +16,17 @@ namespace Castle.Windsor.MicroKernel.Handlers;
 
 public class ReleaseInvocation(Burden burden)
 {
-    private Action _proceed;
+    private Action? _proceed;
 
     public Burden Burden { get; } = burden;
 
-    public object Instance => Burden.Instance;
+    public object? Instance => Burden.Instance;
 
     public bool ReturnValue { get; set; }
 
     public void Proceed()
     {
-        _proceed.Invoke();
+        _proceed?.Invoke();
     }
 
     internal void SetProceedDelegate(Action value)
