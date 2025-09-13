@@ -17,7 +17,7 @@ using Castle.Windsor.Core;
 namespace Castle.Windsor.MicroKernel.Lifestyle.Scoped;
 
 /// <remarks>This class is not thread safe like CallContextLifetimeScope.</remarks>
-public class DefaultLifetimeScope(IScopeCache scopeCache = null, Action<Burden> onAfterCreated = null)
+public class DefaultLifetimeScope(IScopeCache? scopeCache = null, Action<Burden>? onAfterCreated = null)
     : ILifetimeScope
 {
     private static readonly Action<Burden> EmptyOnAfterCreated = delegate { };

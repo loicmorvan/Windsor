@@ -37,8 +37,8 @@ public class CallContextLifetimeScope : ILifetimeScope
 
     private readonly Guid _contextId;
     private readonly Lock _lock = Lock.Create();
-    private readonly CallContextLifetimeScope _parentScope;
-    private ScopeCache _cache = new();
+    private readonly CallContextLifetimeScope? _parentScope;
+    private ScopeCache? _cache = new();
 
     public CallContextLifetimeScope()
     {
@@ -79,6 +79,8 @@ public class CallContextLifetimeScope : ILifetimeScope
 
     public Burden GetCachedInstance(ComponentModel model, ScopedInstanceActivationCallback createInstance)
     {
+        ObjectDisposedException.ThrowIf(_cache is null, this);
+        
         using var token = _lock.ForReadingUpgradeable();
         var burden = _cache[model];
         if (burden != null)
@@ -101,7 +103,7 @@ public class CallContextLifetimeScope : ILifetimeScope
     }
 
     [SecuritySafeCritical]
-    public static CallContextLifetimeScope ObtainCurrentScope()
+    public static CallContextLifetimeScope? ObtainCurrentScope()
     {
         object scopeKey = AsyncLocal.Value;
         AllScopes.TryGetValue((Guid)scopeKey, out var scope);

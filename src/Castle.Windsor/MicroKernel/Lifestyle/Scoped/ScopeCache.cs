@@ -26,7 +26,7 @@ public class ScopeCache : IScopeCache, IDisposable
         GC.SuppressFinalize(this);
 
         var localCache = Interlocked.Exchange(ref _cache, null);
-        localCache?.Values.Reverse().ForEach(b => b.Release());
+        localCache?.Values.Reverse().ForEach(b => b?.Release());
     }
 
     public Burden? this[object id]

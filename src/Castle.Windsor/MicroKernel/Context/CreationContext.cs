@@ -401,7 +401,7 @@ public class CreationContext :
             return Burden;
         }
 
-        public object GetContextualProperty(object key)
+        public object? GetContextualProperty(object key)
         {
             var value = _extendedProperties?[key];
             return value;

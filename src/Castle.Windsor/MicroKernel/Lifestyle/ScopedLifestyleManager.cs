@@ -21,7 +21,7 @@ namespace Castle.Windsor.MicroKernel.Lifestyle;
 
 public class ScopedLifestyleManager(IScopeAccessor accessor) : AbstractLifestyleManager
 {
-    private IScopeAccessor _accessor = accessor;
+    private IScopeAccessor? _accessor = accessor;
 
     [PublicAPI]
     public ScopedLifestyleManager()
@@ -47,6 +47,8 @@ public class ScopedLifestyleManager(IScopeAccessor accessor) : AbstractLifestyle
             Track(localBurden, releasePolicy);
             return localBurden;
         });
+
+        burden.EnsureInstanceIsSet();
         return burden.Instance;
     }
 
