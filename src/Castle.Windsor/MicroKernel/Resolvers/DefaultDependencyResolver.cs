@@ -58,7 +58,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
     /// <param name="model">Model of the component that is requesting the dependency</param>
     /// <param name="dependency">The dependency model</param>
     /// <returns><c>true</c> if the dependency can be satisfied</returns>
-    public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    public bool CanResolve(CreationContext context, ISubDependencyResolver? contextHandlerResolver,
         ComponentModel model,
         DependencyModel dependency)
     {
@@ -115,7 +115,8 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
     /// <param name="model">Model of the component that is requesting the dependency</param>
     /// <param name="dependency">The dependency model</param>
     /// <returns>The dependency resolved value or null</returns>
-    public object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
+    public object? Resolve(CreationContext context, ISubDependencyResolver? contextHandlerResolver,
+        ComponentModel model,
         DependencyModel dependency)
     {
         if (!TryResolveCore(context, contextHandlerResolver, model, dependency, out var value))
@@ -208,7 +209,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
     }
 
     private static bool CanResolveFromContext([NotNullWhen(true)] CreationContext? context,
-        ISubDependencyResolver contextHandlerResolver,
+        ISubDependencyResolver? contextHandlerResolver,
         ComponentModel model,
         DependencyModel dependency)
     {
@@ -216,14 +217,14 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
     }
 
     private static bool CanResolveFromContextHandlerResolver(CreationContext context,
-        ISubDependencyResolver? contextHandlerResolver,
+        [NotNullWhen(true)] ISubDependencyResolver? contextHandlerResolver,
         ComponentModel model, DependencyModel dependency)
     {
         return contextHandlerResolver != null &&
                contextHandlerResolver.CanResolve(context, contextHandlerResolver, model, dependency);
     }
 
-    private bool CanResolveFromHandler(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    private bool CanResolveFromHandler(CreationContext context, ISubDependencyResolver? contextHandlerResolver,
         ComponentModel model,
         DependencyModel dependency)
     {
@@ -233,7 +234,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
                handler.CanResolve(context, contextHandlerResolver, model, dependency);
     }
 
-    private bool CanResolveFromSubResolvers(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    private bool CanResolveFromSubResolvers(CreationContext context, ISubDependencyResolver? contextHandlerResolver,
         ComponentModel model,
         DependencyModel dependency)
     {
@@ -298,7 +299,7 @@ public class DefaultDependencyResolver(IKernelInternal kernel, DependencyDelegat
         return IsHandlerInValidState(handler) && !handler.IsBeingResolvedInContext(context);
     }
 
-    private bool TryResolveCore(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    private bool TryResolveCore(CreationContext context, ISubDependencyResolver? contextHandlerResolver,
         ComponentModel model, DependencyModel dependency, out object? value)
     {
         // 1 - check for the dependency on CreationContext, if present

@@ -121,14 +121,14 @@ public class CreationContext :
 
     public Type? RequestedType { get; }
 
-    public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    public virtual bool CanResolve(CreationContext context, ISubDependencyResolver? contextHandlerResolver,
         ComponentModel model,
         DependencyModel dependency)
     {
         return HasAdditionalArguments && (CanResolveByKey(dependency) || CanResolveByType(dependency));
     }
 
-    public virtual object? Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
+    public virtual object? Resolve(CreationContext context, ISubDependencyResolver? contextHandlerResolver,
         ComponentModel model,
         DependencyModel dependency)
     {

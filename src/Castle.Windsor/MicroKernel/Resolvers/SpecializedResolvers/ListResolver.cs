@@ -55,7 +55,7 @@ public class ListResolver : CollectionResolver
 
     public override object Resolve(
         CreationContext context,
-        ISubDependencyResolver contextHandlerResolver,
+        ISubDependencyResolver? contextHandlerResolver,
         ComponentModel model,
         DependencyModel dependency)
     {

@@ -21,7 +21,7 @@ public static class HandlerExtensionsUtil
     private const string ReleaseExtensionsKey = "Castle.ReleaseExtensions";
     public const string ResolveExtensionsKey = "Castle.ResolveExtensions";
 
-    public static ICollection<IReleaseExtension> ReleaseExtensions(this ComponentModel model, bool ensureExists)
+    public static ICollection<IReleaseExtension>? ReleaseExtensions(this ComponentModel model, bool ensureExists)
     {
         ArgumentNullException.ThrowIfNull(model);
 
@@ -37,7 +37,7 @@ public static class HandlerExtensionsUtil
         return releaseExtensions;
     }
 
-    public static ICollection<IResolveExtension> ResolveExtensions(this ComponentModel model, bool ensureExists)
+    public static ICollection<IResolveExtension>? ResolveExtensions(this ComponentModel model, bool ensureExists)
     {
         ArgumentNullException.ThrowIfNull(model);
 
