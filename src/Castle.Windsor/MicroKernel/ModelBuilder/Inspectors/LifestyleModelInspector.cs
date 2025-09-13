@@ -145,7 +145,7 @@ public class LifestyleModelInspector(IConversionManager converter) : IContribute
     /// <summary>Check if the type expose one of the lifestyle attributes defined in Castle.Model namespace.</summary>
     protected virtual void ReadLifestyleFromType(ComponentModel model)
     {
-        model.EnsureInitialized();
+        model.EnsureImplementationIsSet();
 
         var attributes = model.Implementation.GetAttributes<LifestyleAttribute>(true);
         if (attributes.Length == 0)

@@ -43,6 +43,8 @@ public abstract class AbstractPropertyDescriptor : IComponentModelDescriptor
 
     private static IConfiguration EnsureParametersConfiguration(ComponentModel model)
     {
+        model.EnsureConfigurationIsSet();
+        
         var parameters = model.Configuration.Children["parameters"];
         if (parameters != null)
         {

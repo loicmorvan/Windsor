@@ -20,7 +20,7 @@ public class AttributeDescriptor<TS> : AbstractOverwriteableDescriptor<TS>
     where TS : class
 {
     private readonly string _name;
-    private readonly string _value;
+    private readonly string? _value;
 
     /// <summary>Constructs the <see cref="AttributeDescriptor{S}" /> descriptor with name and value.</summary>
     /// <param name="name">The attribute name.</param>

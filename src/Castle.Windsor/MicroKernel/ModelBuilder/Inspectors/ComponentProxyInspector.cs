@@ -57,7 +57,7 @@ public class ComponentProxyInspector(IConversionManager converter) : IContribute
     /// <param name="model"></param>
     protected virtual void ReadProxyBehavior(ComponentModel model)
     {
-        model.EnsureInitialized();
+        model.EnsureImplementationIsSet();
 
         var proxyBehaviorAttribute =
             ReadProxyBehaviorFromType(model.Implementation) ?? new ComponentProxyBehaviorAttribute();
@@ -88,7 +88,7 @@ public class ComponentProxyInspector(IConversionManager converter) : IContribute
 
     private static void ApplyProxyBehavior(ComponentProxyBehaviorAttribute behavior, ComponentModel model)
     {
-        model.EnsureInitialized();
+        model.EnsureImplementationIsSet();
 
         var options = model.GetOrCreateProxyOptions();
         options.AddAdditionalInterfaces(behavior.AdditionalInterfaces);

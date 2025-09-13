@@ -28,7 +28,7 @@ public class ConstructorDependenciesModelInspector : IContributeComponentModelCo
 {
     public virtual void ProcessModel(IKernel kernel, ComponentModel model)
     {
-        model.EnsureInitialized();
+        model.EnsureImplementationIsSet();
         
         var targetType = model.Implementation;
         var constructors = targetType.GetConstructors(BindingFlags.Public | BindingFlags.Instance)

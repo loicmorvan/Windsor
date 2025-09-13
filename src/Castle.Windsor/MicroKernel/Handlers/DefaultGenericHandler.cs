@@ -259,7 +259,7 @@ public class DefaultGenericHandler(
             }
         }
 
-        var metaDescriptors = ComponentModel.GetMetaDescriptors(false);
+        var metaDescriptors = ComponentModel.GetMetaDescriptors();
         if (metaDescriptors == null)
         {
             return;

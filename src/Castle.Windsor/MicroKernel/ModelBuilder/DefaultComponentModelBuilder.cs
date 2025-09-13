@@ -74,7 +74,7 @@ public sealed class DefaultComponentModelBuilder : IComponentModelBuilder
                 return;
             }
 
-            metaDescriptors ??= model.GetMetaDescriptors(true);
+            metaDescriptors ??= model.GetOrCreateMetaDescriptors();
             metaDescriptors.Add(meta);
         });
         return model;

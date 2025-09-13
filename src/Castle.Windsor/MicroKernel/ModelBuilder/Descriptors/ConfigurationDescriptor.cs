@@ -20,8 +20,8 @@ namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class ConfigurationDescriptor : IComponentModelDescriptor
 {
-    private readonly Node[] _configNodes;
-    private readonly IConfiguration _configuration;
+    private readonly Node[]? _configNodes;
+    private readonly IConfiguration? _configuration;
 
     public ConfigurationDescriptor(params Node[] configNodes)
     {
@@ -35,16 +35,22 @@ public class ConfigurationDescriptor : IComponentModelDescriptor
 
     public void BuildComponentModel(IKernel kernel, ComponentModel model)
     {
+        model.EnsureConfigurationIsSet();
+        
         if (_configuration != null)
         {
             model.Configuration.Children.Add(_configuration);
         }
-        else
+        else if (_configNodes != null)
         {
             foreach (var configNode in _configNodes)
             {
                 configNode.ApplyTo(model.Configuration);
             }
+        }
+        else
+        {
+            throw new InvalidOperationException("Either configuration or configNodes must be specified.");
         }
     }
 

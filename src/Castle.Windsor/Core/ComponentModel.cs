@@ -97,6 +97,15 @@ public sealed class ComponentModel : GraphNode
     /// <value> The configuration. </value>
     public IConfiguration? Configuration { get; set; }
 
+    [MemberNotNull(nameof(Configuration))]   
+    public void EnsureConfigurationIsSet()
+    {
+        if (Configuration == null)
+        {
+            throw new InvalidOperationException("Configuration is not set");
+        }   
+    }
+
     /// <summary>Gets the constructors candidates.</summary>
     /// <value> The constructors. </value>
     [DebuggerDisplay("Count = {constructors.Count}")]
@@ -393,7 +402,7 @@ public sealed class ComponentModel : GraphNode
     }
 
     [MemberNotNull(nameof(Implementation))]
-    public void EnsureInitialized()
+    public void EnsureImplementationIsSet()
     {
         if (Implementation == null)
         {

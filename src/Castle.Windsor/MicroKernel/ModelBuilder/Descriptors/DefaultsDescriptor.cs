@@ -63,6 +63,7 @@ public class DefaultsDescriptor(ComponentName? name, Type? implementation) : ICo
             return;
         }
 
+        model.EnsureImplementationIsSet();
         model.ComponentName = ComponentName.DefaultFor(model.Implementation);
     }
 

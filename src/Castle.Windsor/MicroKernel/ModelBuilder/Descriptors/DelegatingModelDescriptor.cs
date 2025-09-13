@@ -17,8 +17,8 @@ using Castle.Windsor.Core;
 namespace Castle.Windsor.MicroKernel.ModelBuilder.Descriptors;
 
 public class DelegatingModelDescriptor(
-    Action<IKernel, ComponentModel> builder = null,
-    Action<IKernel, ComponentModel> configurer = null)
+    Action<IKernel, ComponentModel>? builder = null,
+    Action<IKernel, ComponentModel>? configurer = null)
     : IComponentModelDescriptor
 {
     public void BuildComponentModel(IKernel kernel, ComponentModel model)

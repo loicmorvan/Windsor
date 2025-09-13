@@ -22,14 +22,17 @@ public static class ComponentModelDescriptorUtil
 {
     private const string MetaDescriptorsKey = "Castle.meta-descriptors";
 
-    public static ICollection<IMetaComponentModelDescriptor> GetMetaDescriptors(this ComponentModel model,
-        bool ensureExists)
+    public static ICollection<IMetaComponentModelDescriptor>? GetMetaDescriptors(this ComponentModel model)
     {
         ArgumentNullException.ThrowIfNull(model);
 
-        var metaDescriptors =
-            model.ExtendedProperties[MetaDescriptorsKey] as ICollection<IMetaComponentModelDescriptor>;
-        if (metaDescriptors != null || !ensureExists)
+        return model.ExtendedProperties[MetaDescriptorsKey] as ICollection<IMetaComponentModelDescriptor>;
+    }
+
+    public static ICollection<IMetaComponentModelDescriptor> GetOrCreateMetaDescriptors(this ComponentModel model)
+    {
+        var metaDescriptors = GetMetaDescriptors(model);
+        if (metaDescriptors != null)
         {
             return metaDescriptors;
         }
