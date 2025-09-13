@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
 using Castle.Windsor.Core;
 using Castle.Windsor.Core.Internal;
 using Castle.Windsor.MicroKernel.LifecycleConcerns;
@@ -50,6 +51,15 @@ public class Burden
     public IHandler Handler { get; }
 
     public object? Instance { get; private set; }
+
+    [MemberNotNull(nameof(Instance))]
+    public void EnsureInstanceIsSet()
+    {
+        if (Instance is null)
+        {
+            throw new InvalidOperationException("Instance is not set");
+        }
+    }
 
     public ComponentModel Model => Handler.ComponentModel;
 

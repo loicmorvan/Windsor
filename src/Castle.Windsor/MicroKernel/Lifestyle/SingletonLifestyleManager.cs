@@ -36,7 +36,7 @@ public class SingletonLifestyleManager : AbstractLifestyleManager, IContextLifes
     public override void Dispose()
     {
         GC.SuppressFinalize(this);
-        
+
         var localInstance = _cachedBurden;
         if (localInstance == null)
         {
@@ -52,6 +52,8 @@ public class SingletonLifestyleManager : AbstractLifestyleManager, IContextLifes
         // 1. read from cache
         if (_cachedBurden != null)
         {
+            _cachedBurden.EnsureInstanceIsSet();
+
             return _cachedBurden.Instance;
         }
 
@@ -61,12 +63,14 @@ public class SingletonLifestyleManager : AbstractLifestyleManager, IContextLifes
             initializing = _init.ExecuteThreadSafeOnce();
             if (_cachedBurden != null)
             {
+                _cachedBurden.EnsureInstanceIsSet();
                 return _cachedBurden.Instance;
             }
 
             var burden = CreateInstance(context, true);
             _cachedBurden = burden;
             Track(burden, releasePolicy);
+            burden.EnsureInstanceIsSet();
             return burden.Instance;
         }
         finally

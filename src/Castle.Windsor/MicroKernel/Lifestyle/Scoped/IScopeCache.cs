@@ -35,5 +35,5 @@ public interface IScopeCache
 	///     The interface gives no thread safety guarantees. When the scope can be accessed from multiple threads the
 	///     implementor should ensure thread safety.
 	/// </remarks>
-	Burden this[object id] { set; get; }
+	Burden? this[object id] { set; get; }
 }
