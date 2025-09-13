@@ -28,7 +28,7 @@ public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLi
     private readonly ThreadSafeInit _init = new();
     private readonly int _initialSize = initialSize;
     private readonly int _maxSize = maxSize;
-    private IPool _pool;
+    private IPool? _pool;
 
     protected IPool Pool
     {
@@ -103,6 +103,8 @@ public class PoolableLifestyleManager(int initialSize, int maxSize) : AbstractLi
     protected override void Track(Burden burden, IReleasePolicy releasePolicy)
     {
         burden.RequiresDecommission = true;
+
+        burden.EnsureInstanceIsSet();
         releasePolicy.Track(burden.Instance, burden);
     }
 }

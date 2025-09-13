@@ -49,7 +49,7 @@ public class DefaultPool(int initialSize, int maxsize, IComponentActivator compo
     {
         using (_rwlock.ForWriting())
         {
-            Burden burden;
+            Burden? burden;
 
             if (!_initialized)
             {
@@ -103,6 +103,7 @@ public class DefaultPool(int initialSize, int maxsize, IComponentActivator compo
 
             try
             {
+                burden.EnsureInstanceIsSet();
                 _inUse.Add(burden.Instance, burden);
             }
             catch (NullReferenceException)
