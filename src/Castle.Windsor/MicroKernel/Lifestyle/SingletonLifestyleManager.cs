@@ -26,7 +26,7 @@ namespace Castle.Windsor.MicroKernel.Lifestyle;
 public class SingletonLifestyleManager : AbstractLifestyleManager, IContextLifestyleManager
 {
     private readonly ThreadSafeInit _init = new();
-    private Burden _cachedBurden;
+    private Burden? _cachedBurden;
 
     public object GetContextInstance(CreationContext context)
     {
