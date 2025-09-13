@@ -22,11 +22,11 @@ namespace Castle.Windsor.MicroKernel.Lifestyle;
 [Serializable]
 public abstract class AbstractLifestyleManager : ILifestyleManager
 {
-    protected IComponentActivator ComponentActivator { get; private set; }
+    protected IComponentActivator? ComponentActivator { get; private set; }
 
-    protected IKernel Kernel { get; private set; }
+    protected IKernel? Kernel { get; private set; }
 
-    protected ComponentModel Model { get; private set; }
+    protected ComponentModel? Model { get; private set; }
 
     /// <summary>
     ///     Invoked when the container gets disposed. The container will not call it multiple times in multithreaded
@@ -44,6 +44,11 @@ public abstract class AbstractLifestyleManager : ILifestyleManager
 
     public virtual bool Release(object instance)
     {
+        if (ComponentActivator == null)
+        {
+            return false;
+        }
+
         ComponentActivator.Destroy(instance);
         return true;
     }
@@ -52,11 +57,18 @@ public abstract class AbstractLifestyleManager : ILifestyleManager
     {
         var burden = CreateInstance(context, false);
         Track(burden, releasePolicy);
+
+        burden.EnsureInstanceIsSet();
         return burden.Instance;
     }
 
     protected virtual Burden CreateInstance(CreationContext context, bool trackedExternally)
     {
+        if (ComponentActivator == null)
+        {
+            throw new InvalidOperationException("ComponentActivator is not initialized");
+        }
+
         var burden = context.CreateBurden(ComponentActivator, trackedExternally);
 
         var instance = ComponentActivator.Create(context, burden);
@@ -66,9 +78,12 @@ public abstract class AbstractLifestyleManager : ILifestyleManager
 
     protected virtual void Track(Burden burden, IReleasePolicy releasePolicy)
     {
-        if (burden.RequiresPolicyRelease)
+        if (!burden.RequiresPolicyRelease)
         {
-            releasePolicy.Track(burden.Instance, burden);
+            return;
         }
+
+        burden.EnsureInstanceIsSet();
+        releasePolicy.Track(burden.Instance, burden);
     }
 }
