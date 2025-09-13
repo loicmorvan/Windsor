@@ -42,6 +42,14 @@ public abstract class AbstractLifestyleManager : ILifestyleManager
         Model = model;
     }
 
+    public void EnsureInitialized()
+    {
+        if (ComponentActivator == null || Kernel == null || Model == null)
+        {
+            throw new InvalidOperationException("ComponentActivator is not initialized");
+        }
+    }
+
     public virtual bool Release(object instance)
     {
         if (ComponentActivator == null)

@@ -32,7 +32,7 @@ public class ScopedLifestyleManager(IScopeAccessor accessor) : AbstractLifestyle
     public override void Dispose()
     {
         GC.SuppressFinalize(this);
-        
+
         var scope = Interlocked.Exchange(ref _accessor, null);
         scope?.Dispose();
     }
@@ -40,6 +40,12 @@ public class ScopedLifestyleManager(IScopeAccessor accessor) : AbstractLifestyle
     public override object Resolve(CreationContext context, IReleasePolicy releasePolicy)
     {
         var scope = GetScope(context);
+
+        if (Model == null)
+        {
+            throw new InvalidOperationException();
+        }
+
         var burden = scope.GetCachedInstance(Model, afterCreated =>
         {
             var localBurden = base.CreateInstance(context, true);
@@ -61,7 +67,10 @@ public class ScopedLifestyleManager(IScopeAccessor accessor) : AbstractLifestyle
         if (scope == null)
         {
             throw new ComponentResolutionException(
-                $"Could not obtain scope for component {Model.Name}. This is most likely either a bug in custom {typeof(IScopeAccessor).ToCSharpString()} or you're trying to access scoped component outside of the scope (like a per-web-request component outside of web request etc)",
+                $"Could not obtain scope for component {Model?.Name ?? string.Empty}. " +
+                $"This is most likely either a bug in custom {typeof(IScopeAccessor).ToCSharpString()} or you're " +
+                $"trying to access scoped component outside of the scope (like a per-web-request component outside " +
+                $"of web request etc)",
                 Model);
         }
 

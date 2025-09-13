@@ -33,7 +33,7 @@ public class ComponentResolutionException : Exception
         this.SetUp();
     }
 
-    public ComponentResolutionException(string message, ComponentModel component)
+    public ComponentResolutionException(string message, ComponentModel? component)
         : base(message)
     {
         this.SetUp();
