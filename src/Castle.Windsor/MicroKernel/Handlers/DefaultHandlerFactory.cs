@@ -42,8 +42,8 @@ public class DefaultHandlerFactory(IKernelInternal kernel) : IHandlerFactory
         // meta descriptors only apply to open generic handlers so we cam safely let go of them, save some memory
         ComponentModelDescriptorUtil.RemoveMetaDescriptors(model);
 
-        var resolveExtensions = model.ResolveExtensions();
-        var releaseExtensions = model.ReleaseExtensions(false);
+        var resolveExtensions = model.GetResolveExtensions();
+        var releaseExtensions = model.GetReleaseExtensions();
         if (releaseExtensions == null && resolveExtensions == null)
         {
             return new DefaultHandler(model);

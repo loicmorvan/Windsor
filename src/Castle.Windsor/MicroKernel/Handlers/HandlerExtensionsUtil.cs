@@ -21,27 +21,18 @@ public static class HandlerExtensionsUtil
     private const string ReleaseExtensionsKey = "Castle.ReleaseExtensions";
     public const string ResolveExtensionsKey = "Castle.ResolveExtensions";
 
-    public static ICollection<IReleaseExtension>? ReleaseExtensions(this ComponentModel model, bool ensureExists)
+    public static ICollection<IReleaseExtension>? GetReleaseExtensions(this ComponentModel model)
     {
         ArgumentNullException.ThrowIfNull(model);
 
-        var releaseExtensions = model.ExtendedProperties[ReleaseExtensionsKey] as ICollection<IReleaseExtension>;
-        if (releaseExtensions != null || !ensureExists)
-        {
-            return releaseExtensions;
-        }
-
-        releaseExtensions = new HashSet<IReleaseExtension>();
-        model.ExtendedProperties[ReleaseExtensionsKey] = releaseExtensions;
-
-        return releaseExtensions;
+        return model.ExtendedProperties[ReleaseExtensionsKey] as ICollection<IReleaseExtension>;
     }
 
-    public static ICollection<IResolveExtension> ResolveOrCreateExtensions(this ComponentModel model)
+    public static ICollection<IResolveExtension> GetOrCreateResolveExtensions(this ComponentModel model)
     {
         ArgumentNullException.ThrowIfNull(model);
 
-        var resolveExtensions = model.ResolveExtensions();
+        var resolveExtensions = model.GetResolveExtensions();
         if (resolveExtensions != null)
         {
             return resolveExtensions;
@@ -53,7 +44,7 @@ public static class HandlerExtensionsUtil
         return resolveExtensions;
     }
 
-    public static ICollection<IResolveExtension>? ResolveExtensions(this ComponentModel model)
+    public static ICollection<IResolveExtension>? GetResolveExtensions(this ComponentModel model)
     {
         ArgumentNullException.ThrowIfNull(model);
 
