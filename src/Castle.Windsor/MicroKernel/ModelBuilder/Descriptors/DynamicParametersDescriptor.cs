@@ -43,7 +43,7 @@ public class DynamicParametersDescriptor(DynamicParametersWithContextResolveDele
 
         dynamicParameters = new ComponentLifecycleExtension();
         model.ExtendedProperties[Key] = dynamicParameters;
-        model.ResolveExtensions(true).Add(dynamicParameters);
+        model.ResolveOrCreateExtensions().Add(dynamicParameters);
 
         return dynamicParameters;
     }

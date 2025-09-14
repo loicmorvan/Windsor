@@ -37,12 +37,12 @@ public static class HandlerExtensionsUtil
         return releaseExtensions;
     }
 
-    public static ICollection<IResolveExtension>? ResolveExtensions(this ComponentModel model, bool ensureExists)
+    public static ICollection<IResolveExtension> ResolveOrCreateExtensions(this ComponentModel model)
     {
         ArgumentNullException.ThrowIfNull(model);
 
-        var resolveExtensions = model.ExtendedProperties[ResolveExtensionsKey] as ICollection<IResolveExtension>;
-        if (resolveExtensions != null || !ensureExists)
+        var resolveExtensions = model.ResolveExtensions();
+        if (resolveExtensions != null)
         {
             return resolveExtensions;
         }
@@ -51,5 +51,12 @@ public static class HandlerExtensionsUtil
         model.ExtendedProperties[ResolveExtensionsKey] = resolveExtensions;
 
         return resolveExtensions;
+    }
+
+    public static ICollection<IResolveExtension>? ResolveExtensions(this ComponentModel model)
+    {
+        ArgumentNullException.ThrowIfNull(model);
+
+        return model.ExtendedProperties[ResolveExtensionsKey] as ICollection<IResolveExtension>;
     }
 }
