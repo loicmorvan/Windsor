@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Castle.Windsor.Core;
 using Castle.Windsor.MicroKernel.ComponentActivator;
@@ -32,13 +33,13 @@ public class DefaultHandler : AbstractHandler
 
     /// <summary>Lifestyle manager instance</summary>
     [PublicAPI]
-    protected ILifestyleManager LifestyleManager { get; private set; }
+    protected ILifestyleManager? LifestyleManager { get; private set; }
 
     public override void Dispose()
     {
         GC.SuppressFinalize(this);
-        
-        LifestyleManager.Dispose();
+
+        LifestyleManager?.Dispose();
     }
 
     /// <summary>disposes the component instance (or recycle it)</summary>
@@ -46,7 +47,19 @@ public class DefaultHandler : AbstractHandler
     /// <returns> true if destroyed </returns>
     public override bool ReleaseCore(Burden burden)
     {
+        EnsureLifestyleManagerIsSet();
+        burden.EnsureInstanceIsSet();
+
         return LifestyleManager.Release(burden.Instance);
+    }
+
+    [MemberNotNull(nameof(LifestyleManager))]
+    public void EnsureLifestyleManagerIsSet()
+    {
+        if (LifestyleManager is null)
+        {
+            throw new InvalidOperationException("Lifestyle manager is not set");
+        }
     }
 
     protected void AssertNotWaitingForDependency()
@@ -87,8 +100,8 @@ public class DefaultHandler : AbstractHandler
     /// <param name="instanceRequired"> </param>
     /// <param name="burden"> </param>
     /// <returns> </returns>
-    protected object ResolveCore(CreationContext context, bool requiresDecommission, bool instanceRequired,
-        out Burden burden)
+    protected object? ResolveCore(CreationContext context, bool requiresDecommission, bool instanceRequired,
+        out Burden? burden)
     {
         if (IsBeingResolvedInContext(context))
         {
@@ -132,6 +145,7 @@ public class DefaultHandler : AbstractHandler
         try
         {
             using var ctx = context.EnterResolutionContext(this, requiresDecommission);
+            EnsureLifestyleManagerIsSet();
             var instance = LifestyleManager.Resolve(context, context.ReleasePolicy);
             burden = ctx.Burden;
             return instance;

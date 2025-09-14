@@ -59,10 +59,10 @@ public sealed class ParentHandlerWrapper : IHandler
 
     public object Resolve(CreationContext context)
     {
-        var releasePolicy = default(IReleasePolicy);
+        var releasePolicy = context.ReleasePolicy;
+
         try
         {
-            releasePolicy = context.ReleasePolicy;
             context.ReleasePolicy = _parentReleasePolicy;
             return _parentHandler.Resolve(context);
         }
@@ -84,10 +84,9 @@ public sealed class ParentHandlerWrapper : IHandler
 
     public object TryResolve(CreationContext context)
     {
-        var releasePolicy = default(IReleasePolicy);
+        var releasePolicy = context.ReleasePolicy;
         try
         {
-            releasePolicy = context.ReleasePolicy;
             context.ReleasePolicy = _parentReleasePolicy;
             return _parentHandler.TryResolve(context);
         }

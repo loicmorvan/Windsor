@@ -52,14 +52,14 @@ public class DefaultHandlerFactory(IKernelInternal kernel) : IHandlerFactory
         return new ExtendedHandler(model, resolveExtensions, releaseExtensions);
     }
 
-    private static IGenericImplementationMatchingStrategy GenericImplementationMatchingStrategy(ComponentModel model)
+    private static IGenericImplementationMatchingStrategy? GenericImplementationMatchingStrategy(ComponentModel model)
     {
-        return (IGenericImplementationMatchingStrategy)model.ExtendedProperties[
+        return (IGenericImplementationMatchingStrategy?)model.ExtendedProperties[
             Constants.GenericImplementationMatchingStrategy];
     }
 
-    private static IGenericServiceStrategy GenericServiceStrategy(ComponentModel model)
+    private static IGenericServiceStrategy? GenericServiceStrategy(ComponentModel model)
     {
-        return (IGenericServiceStrategy)model.ExtendedProperties[Constants.GenericServiceStrategy];
+        return (IGenericServiceStrategy?)model.ExtendedProperties[Constants.GenericServiceStrategy];
     }
 }

@@ -45,5 +45,5 @@ public interface IComponentActivator
 
     /// <summary>Should perform all necessary work to dispose the instance and/or any resource related to it.</summary>
     /// <param name="instance"></param>
-    void Destroy(object instance);
+    void Destroy(object? instance);
 }

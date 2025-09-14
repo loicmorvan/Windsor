@@ -26,8 +26,8 @@ namespace Castle.Windsor.MicroKernel.Handlers;
 [Serializable]
 public class DefaultGenericHandler(
     ComponentModel model,
-    IGenericImplementationMatchingStrategy implementationMatchingStrategy,
-    IGenericServiceStrategy serviceStrategy)
+    IGenericImplementationMatchingStrategy? implementationMatchingStrategy,
+    IGenericServiceStrategy? serviceStrategy)
     : AbstractHandler(model)
 {
     private readonly SimpleThreadSafeDictionary<Type, IHandler> _type2SubHandler = new();
@@ -35,7 +35,7 @@ public class DefaultGenericHandler(
     public IGenericImplementationMatchingStrategy? ImplementationMatchingStrategy { get; } =
         implementationMatchingStrategy;
 
-    public IGenericServiceStrategy ServiceStrategy { get; } = serviceStrategy;
+    public IGenericServiceStrategy? ServiceStrategy { get; } = serviceStrategy;
 
     public override void Dispose()
     {

@@ -345,8 +345,6 @@ public sealed partial class DefaultKernel : IKernelInternal
 
     public IHandler? GetHandler(Type service)
     {
-        ArgumentNullException.ThrowIfNull(service);
-
         if (NamingSubSystem == null)
         {
             throw new InvalidOperationException("The kernel does not have a naming subsystem.");

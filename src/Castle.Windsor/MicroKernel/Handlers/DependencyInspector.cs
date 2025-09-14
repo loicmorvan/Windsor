@@ -53,7 +53,8 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
             }
             else
             {
-                InspectServiceDependency(handler, dependency, kernel);
+                var type = dependency.TargetItemType ?? throw new InvalidOperationException();
+                InspectServiceDependency(handler, kernel, type);
             }
         }
     }
@@ -65,9 +66,8 @@ public class DependencyInspector(StringBuilder message) : IDependencyInspector
         message.AppendLine();
     }
 
-    private void InspectServiceDependency(IHandler inspectingHandler, DependencyModel dependency, IKernel kernel)
+    private void InspectServiceDependency(IHandler inspectingHandler, IKernel kernel, Type type)
     {
-        var type = dependency.TargetItemType;
         var handler = kernel.GetHandler(type);
         if (handler == null)
         {
