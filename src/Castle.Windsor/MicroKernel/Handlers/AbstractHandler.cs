@@ -183,7 +183,7 @@ public abstract class AbstractHandler :
     ///     instead
     /// </param>
     /// <returns> </returns>
-    protected abstract object Resolve(CreationContext context, bool instanceRequired);
+    protected abstract object? Resolve(CreationContext context, bool instanceRequired);
 
     public override string ToString()
     {

@@ -19,11 +19,11 @@ namespace Castle.Windsor.MicroKernel.Handlers;
 
 public class ExtendedHandler : DefaultHandler
 {
-    private readonly IReleaseExtension[] _releaseExtensions;
-    private readonly IResolveExtension[] _resolveExtensions;
+    private readonly IReleaseExtension[]? _releaseExtensions;
+    private readonly IResolveExtension[]? _resolveExtensions;
 
-    public ExtendedHandler(ComponentModel model, ICollection<IResolveExtension> resolveExtensions,
-        ICollection<IReleaseExtension> releaseExtensions)
+    public ExtendedHandler(ComponentModel model, ICollection<IResolveExtension>? resolveExtensions,
+        ICollection<IReleaseExtension>? releaseExtensions)
         : base(model)
     {
         if (resolveExtensions != null)
@@ -70,11 +70,11 @@ public class ExtendedHandler : DefaultHandler
         }
 
         var invocation = new ReleaseInvocation(burden);
-        InvokeReleasePipeline(0, invocation);
+        InvokeReleasePipeline(0, invocation, _releaseExtensions);
         return invocation.ReturnValue;
     }
 
-    protected override object Resolve(CreationContext context, bool instanceRequired)
+    protected override object? Resolve(CreationContext context, bool instanceRequired)
     {
         if (_resolveExtensions == null)
         {
@@ -82,26 +82,28 @@ public class ExtendedHandler : DefaultHandler
         }
 
         var invocation = new ResolveInvocation(context, instanceRequired);
-        InvokeResolvePipeline(0, invocation);
+        InvokeResolvePipeline(0, invocation, _resolveExtensions);
         return invocation.ResolvedInstance;
     }
 
-    private void InvokeReleasePipeline(int extensionIndex, ReleaseInvocation invocation)
+    private void InvokeReleasePipeline(int extensionIndex, ReleaseInvocation invocation,
+        IReleaseExtension[] releaseExtensions)
     {
-        if (extensionIndex >= _releaseExtensions.Length)
+        if (extensionIndex >= releaseExtensions.Length)
         {
             invocation.ReturnValue = base.Release(invocation.Burden);
             return;
         }
 
         var nextIndex = extensionIndex + 1;
-        invocation.SetProceedDelegate(() => InvokeReleasePipeline(nextIndex, invocation));
-        _releaseExtensions[extensionIndex].Intercept(invocation);
+        invocation.SetProceedDelegate(() => InvokeReleasePipeline(nextIndex, invocation, releaseExtensions));
+        releaseExtensions[extensionIndex].Intercept(invocation);
     }
 
-    private void InvokeResolvePipeline(int extensionIndex, ResolveInvocation invocation)
+    private void InvokeResolvePipeline(int extensionIndex, ResolveInvocation invocation,
+        IResolveExtension[] resolveExtensions)
     {
-        if (extensionIndex >= _resolveExtensions.Length)
+        if (extensionIndex >= resolveExtensions.Length)
         {
             invocation.ResolvedInstance = ResolveCore(invocation.Context,
                 invocation.DecommissionRequired,
@@ -112,7 +114,7 @@ public class ExtendedHandler : DefaultHandler
         }
 
         var nextIndex = extensionIndex + 1;
-        invocation.SetProceedDelegate(() => InvokeResolvePipeline(nextIndex, invocation));
-        _resolveExtensions[extensionIndex].Intercept(invocation);
+        invocation.SetProceedDelegate(() => InvokeResolvePipeline(nextIndex, invocation, resolveExtensions));
+        resolveExtensions[extensionIndex].Intercept(invocation);
     }
 }

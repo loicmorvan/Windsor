@@ -32,7 +32,7 @@ public class DefaultGenericHandler(
 {
     private readonly SimpleThreadSafeDictionary<Type, IHandler> _type2SubHandler = new();
 
-    public IGenericImplementationMatchingStrategy ImplementationMatchingStrategy { get; } =
+    public IGenericImplementationMatchingStrategy? ImplementationMatchingStrategy { get; } =
         implementationMatchingStrategy;
 
     public IGenericServiceStrategy ServiceStrategy { get; } = serviceStrategy;
@@ -176,7 +176,7 @@ public class DefaultGenericHandler(
         base.InitDependencies();
     }
 
-    protected override object Resolve(CreationContext context, bool instanceRequired)
+    protected override object? Resolve(CreationContext context, bool instanceRequired)
     {
         var implType = GetClosedImplementationType(context, instanceRequired);
         if (implType == null)

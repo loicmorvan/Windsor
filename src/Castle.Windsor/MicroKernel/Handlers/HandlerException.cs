@@ -24,7 +24,7 @@ public class HandlerException : Exception
 	/// <summary>Initializes a new instance of the <see cref="HandlerException" /> class.</summary>
 	/// <param name="message">The message.</param>
 	/// <param name="name"></param>
-	public HandlerException(string message, ComponentName name) : base(message)
+	public HandlerException(string message, ComponentName? name) : base(message)
 	{
 		this.SetUp();
 		Name = name;
@@ -42,5 +42,5 @@ public class HandlerException : Exception
 	}
 
 
-	public ComponentName Name { get; private set; }
+	public ComponentName? Name { get; private set; }
 }

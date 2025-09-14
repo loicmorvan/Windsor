@@ -76,7 +76,7 @@ public class DefaultHandler : AbstractHandler
         base.InitDependencies();
     }
 
-    protected override object Resolve(CreationContext context, bool instanceRequired)
+    protected override object? Resolve(CreationContext context, bool instanceRequired)
     {
         return ResolveCore(context, false, instanceRequired, out _);
     }
